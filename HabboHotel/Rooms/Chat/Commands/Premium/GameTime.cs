@@ -1,0 +1,20 @@
+﻿using Butterfly.HabboHotel.GameClients;
+
+namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
+{
+    internal class GameTime : IChatCommand
+    {
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        {
+            if (ButterflyEnvironment.GetGame().GetAnimationManager().IsActivate())
+            {
+                string Time = ButterflyEnvironment.GetGame().GetAnimationManager().GetTime();
+                UserRoom.SendWhisperChat("Prochaine animation de Jack & Daisy dans " + Time);
+            }
+            else
+            {
+                UserRoom.SendWhisperChat("Animation de Jack & Daisy désactiver");
+            }
+        }
+    }
+}

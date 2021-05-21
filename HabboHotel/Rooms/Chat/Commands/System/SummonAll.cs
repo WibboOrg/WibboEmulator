@@ -1,0 +1,4 @@
+﻿using Butterfly.Communication.Packets.Outgoing.Structure;
+using Butterfly.HabboHotel.GameClients;using System.Linq;
+
+namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class SummonAll : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            foreach (GameClient Client in ButterflyEnvironment.GetGame().GetClientManager().GetClients.ToList())            {                if (Client.GetHabbo() != null)                {                    Client.GetHabbo().IsTeleporting = true;                    Client.GetHabbo().TeleportingRoomID = Room.RoomData.Id;                    Client.GetHabbo().TeleporterId = 0;                    Client.SendPacket(new GetGuestRoomResultComposer(Client, Room.RoomData, false, true));                }            }        }    }}
