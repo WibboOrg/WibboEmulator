@@ -18,6 +18,7 @@ namespace Butterfly.HabboHotel.GameClients
         public ConcurrentDictionary<string, int> _usernameRegister;
         public ConcurrentDictionary<int, int> _userIDRegister;
 
+        public int OnlineNitroUsers;
         public int OnlineUsersFr;
         public int OnlineUsersEn;
         public int OnlineUsersBr;
@@ -113,7 +114,7 @@ namespace Butterfly.HabboHotel.GameClients
             string username = "";
             using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT username FROM users WHERE id = " + Id);
+                queryreactor.SetQuery("SELECT username FROM users WHERE id = '" + Id + "';");
                 username = queryreactor.GetString();
             }
 

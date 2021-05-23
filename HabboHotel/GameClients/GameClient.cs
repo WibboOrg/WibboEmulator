@@ -82,6 +82,11 @@ namespace Butterfly.HabboHotel.GameClients
                         ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersBr++;
                     }
 
+                    if(this.Connection.IsWebSocket)
+                    {
+                        ButterflyEnvironment.GetGame().GetClientManager().OnlineNitroUsers++;
+                    }
+
                     if (this.Habbo.MachineId != this.MachineId)
                     {
                         using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())

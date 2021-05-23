@@ -11,6 +11,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             TimeSpan Uptime = DateTime.Now - ButterflyEnvironment.ServerStarted;
 
             int OnlineUsers = ButterflyEnvironment.GetGame().GetClientManager().Count;
+            int OnlineNitroUsers = ButterflyEnvironment.GetGame().GetClientManager().OnlineNitroUsers;
+            int OnlineFlashUsers = OnlineUsers - OnlineNitroUsers;
             int OnlineUsersFr = ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersFr;
             int OnlineUsersEn = ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersEn;
             int OnlineUsersBr = ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersBr;
@@ -19,20 +21,21 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             int RoomCount = ButterflyEnvironment.GetGame().GetRoomManager().Count;
 
 
-            Session.SendPacket(new RoomNotificationComposer("Butterfly Edition Kodamas",
+            Session.SendHugeNotif("<b>Butterfly Edition Wibbo</b>\n\n" +
                  "   <b>Credits</b>:\n" +
                  "   Meth0d, Matinmine, Carlos, Super0ca,\n" +
                  "   Mike, Sledmore, Joopie, Tweeny, \n" +
-                 "   Kodamas, Leenster, Moogly, Niels, AKllX, rbi0s\n\n" +
+                 "   JasonDhose, Leenster, Moogly, Niels, AKllX, rbi0s\n\n" +
                  "   <b>Information sur le serveur</b>:\n" +
-                 "   Joueurs en ligne: " + OnlineUsers + "\n" +
-                 "   Joueurs en ligne (FR): " + OnlineUsersFr + "\n" +
-                 "   Joueurs en ligne (EN): " + OnlineUsersEn + "\n" +
-                 "   Joueurs en ligne (BR): " + OnlineUsersBr + "\n" +
-                 "   WebSocket en ligne: " + OnlineWeb + "\n" +
+                 "   Joueurs en ligne total: " + OnlineUsers + "\n" +
+                 "   Joueurs en ligne sur Flash: " + OnlineFlashUsers + "\n" +
+                 "   Joueurs en ligne sur Nitro: " + OnlineNitroUsers + "\n" +
+                 //"   Joueurs en ligne (FR): " + OnlineUsersFr + "\n" +
+                 //"   Joueurs en ligne (EN): " + OnlineUsersEn + "\n" +
+                 //"   Joueurs en ligne (BR): " + OnlineUsersBr + "\n" +
+                 //"   WebSocket en ligne: " + OnlineWeb + "\n" +
                  "   Appartements actifs: " + RoomCount + "\n" +
-                 "   Uptime: " + Uptime.Days + " day(s), " + Uptime.Hours + " hours and " + Uptime.Minutes + " minutes.\n\n"
-                    , "staff", "", ""));
+                 "   Uptime: " + Uptime.Days + " jour(s), " + Uptime.Hours + " heure(s) et " + Uptime.Minutes + " minutes.\n\n");
 
         }
     }
