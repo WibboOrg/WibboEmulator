@@ -42,6 +42,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class User
                 stringBuilder.Append("IP Web: " + clientByUsername.GetHabbo().IP + "\r");
                 stringBuilder.Append("IP Emu: " + clientByUsername.GetConnection().GetIp() + "\r");
                 stringBuilder.Append("Langue: " + clientByUsername.Langue.ToString() + "\r");
+                stringBuilder.Append("Client: " + ((clientByUsername.GetConnection().IsWebSocket) ? "Nitro" : "Flash") + "\r");
 
                 WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(Habbo.Id);
                 if (ClientWeb != null)
