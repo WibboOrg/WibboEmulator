@@ -1,4 +1,5 @@
-﻿using Butterfly.HabboHotel.GameClients;
+﻿using Butterfly.Communication.Packets.Outgoing.Structure;
+using Butterfly.HabboHotel.GameClients;
 
 namespace Butterfly.Communication.RCON.Commands.User
 {
@@ -38,7 +39,7 @@ namespace Butterfly.Communication.RCON.Commands.User
             }
 
             Client.GetHabbo().WibboPoints += NbWb;
-            Client.GetHabbo().UpdateWPBalance();
+            Client.SendPacket(new ActivityPointsComposer(Client.GetHabbo().WibboPoints));
 
             return true;
         }

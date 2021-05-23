@@ -55,7 +55,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 else if (Exchange.GetBaseItem().ItemName.StartsWith("PntEx_"))
                 {
                     Session.GetHabbo().WibboPoints += Value;
-                    Session.GetHabbo().UpdateWPBalance();
+                    Session.SendPacket(new ActivityPointsComposer(Session.GetHabbo().WibboPoints));
 
                     using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {

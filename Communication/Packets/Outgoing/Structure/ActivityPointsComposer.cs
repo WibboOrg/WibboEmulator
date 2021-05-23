@@ -2,16 +2,13 @@ namespace Butterfly.Communication.Packets.Outgoing.Structure
 {
     internal class ActivityPointsComposer : ServerPacket
     {
-        public ActivityPointsComposer(int PixelsBalance, int SeasionalCurrency)
+        public ActivityPointsComposer(int WibboPoints)
             : base(ServerPacketHeader.USER_CURRENCY)
         {
             this.WriteInteger(1);//Count
             {
-                //WriteInteger(0);//Pixels
-                //WriteInteger(PixelsBalance);
-
-                this.WriteInteger(105);//Diamonds
-                this.WriteInteger(SeasionalCurrency);
+                this.WriteInteger(105);//Icon
+                this.WriteInteger(WibboPoints);
             }
         }
     }

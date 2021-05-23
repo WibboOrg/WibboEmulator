@@ -21,13 +21,13 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             }
 
             Session.GetHabbo().WibboPoints -= Room.RoomData.SellPrice;
-            Session.GetHabbo().UpdateWPBalance();
+            Session.SendPacket(new ActivityPointsComposer(Session.GetHabbo().WibboPoints));
 
             GameClient ClientOwner = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Room.RoomData.OwnerId);
             if (ClientOwner != null && ClientOwner.GetHabbo() != null)
             {
                 ClientOwner.GetHabbo().WibboPoints += Room.RoomData.SellPrice;
-                ClientOwner.GetHabbo().UpdateWPBalance();
+                ClientOwner.SendPacket(new ActivityPointsComposer(ClientOwner.GetHabbo().WibboPoints));
             }
 
             using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())

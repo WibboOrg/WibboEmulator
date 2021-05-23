@@ -504,6 +504,11 @@ namespace Butterfly.HabboHotel.Users
                 ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersBr--;
             }
 
+            if (this.GetClient().GetConnection().IsWebSocket)
+            {
+                ButterflyEnvironment.GetGame().GetClientManager().OnlineNitroUsers--;
+            }
+
             if (this.HasFuse("fuse_mod"))
             {
                 ButterflyEnvironment.GetGame().GetClientManager().RemoveUserStaff(this.Id);
@@ -604,21 +609,6 @@ namespace Butterfly.HabboHotel.Users
             }
 
             client.SendPacket(new CreditBalanceComposer(this.Credits));
-        }
-
-        public void UpdateWPBalance()
-        {
-            GameClient client = this.GetClient();
-            if (client == null)
-            {
-                return;
-            }
-
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.USER_CURRENCY);
-            Message.WriteInteger(1);
-            Message.WriteInteger(105);
-            Message.WriteInteger(this.WibboPoints);
-            client.SendPacket(Message);
         }
 
         public void UpdateActivityPointsBalance()

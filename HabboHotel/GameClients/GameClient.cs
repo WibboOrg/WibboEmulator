@@ -110,14 +110,13 @@ namespace Butterfly.HabboHotel.GameClients
                     this.SendPacket(new AvailabilityStatusComposer());
                     this.SendPacket(new AchievementScoreComposer(this.Habbo.AchievementPoints));
                     this.SendPacket(new BuildersClubMembershipComposer());
-                    this.SendPacket(new ActivityPointsComposer(this.Habbo.Duckets, this.Habbo.WibboPoints));
+                    this.SendPacket(new ActivityPointsComposer(this.Habbo.WibboPoints));
                     this.SendPacket(new CfhTopicsInitComposer(ButterflyEnvironment.GetGame().GetModerationManager().UserActionPresets));
                     this.SendPacket(new SoundSettingsComposer(this.Habbo.ClientVolume, false, false, false, 1));
                     this.SendPacket(new AvatarEffectsComposer(ButterflyEnvironment.GetGame().GetEffectsInventoryManager().GetEffects()));
 
                     this.Habbo.UpdateActivityPointsBalance();
                     this.Habbo.UpdateCreditsBalance();
-                    this.Habbo.UpdateWPBalance();
 
                     if (this.Habbo.HasFuse("fuse_mod"))
                     {
