@@ -29,13 +29,6 @@ namespace Butterfly.Communication.Packets.Outgoing.Structure
 
             this.WriteInteger(string.IsNullOrEmpty(Item.Badge) || Item.Data.Type.ToString() == "b" ? 1 : 2);
 
-            if (!string.IsNullOrEmpty(Item.Badge))
-            {
-                this.WriteString("b");
-                this.WriteString(Item.Badge);
-            }
-
-
             if (Item.Data.Type.ToString().ToLower() != "b")
             {
                 this.WriteString(Item.Data.Type.ToString());
@@ -67,6 +60,13 @@ namespace Butterfly.Communication.Packets.Outgoing.Structure
                     this.WriteInteger(Item.LimitedEditionStack - Item.LimitedEditionSells);
                 }
             }
+
+            if (!string.IsNullOrEmpty(Item.Badge))
+            {
+                this.WriteString("b");
+                this.WriteString(Item.Badge);
+            }
+
             this.WriteInteger(0); //club_level
             this.WriteBoolean(ItemUtility.CanSelectAmount(Item));
 

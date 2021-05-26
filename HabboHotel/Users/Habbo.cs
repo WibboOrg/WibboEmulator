@@ -54,6 +54,7 @@ namespace Butterfly.HabboHotel.Users
         public List<int> ClientVolume;
         public string MachineId;
         public Language Langue;
+        public bool IsWebSocket;
 
         public List<RoomData> RoomRightsList;
         public List<RoomData> FavoriteRooms;
@@ -110,7 +111,6 @@ namespace Butterfly.HabboHotel.Users
         public bool SessionGiftBlocked;
 
         public int RolePlayId;
-
         public bool IgnoreAll;
 
         public DateTime LastGiftPurchaseTime;
@@ -490,24 +490,6 @@ namespace Butterfly.HabboHotel.Users
             this.Disconnected = true;
 
             ButterflyEnvironment.GetGame().GetClientManager().UnregisterClient(this.Id, this.Username);
-
-            if (this.Langue == Language.FRANCAIS)
-            {
-                ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersFr--;
-            }
-            else if (this.Langue == Language.ANGLAIS)
-            {
-                ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersEn--;
-            }
-            else if (this.Langue == Language.PORTUGAIS)
-            {
-                ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersBr--;
-            }
-
-            if (this.GetClient().GetConnection().IsWebSocket)
-            {
-                ButterflyEnvironment.GetGame().GetClientManager().OnlineNitroUsers--;
-            }
 
             if (this.HasFuse("fuse_mod"))
             {
