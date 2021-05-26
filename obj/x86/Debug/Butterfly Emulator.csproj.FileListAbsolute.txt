@@ -1,8 +1,0 @@
-C:\laragon\www\WibboEmulator\bin\ButterflyEmulator.exe.config
-C:\laragon\www\WibboEmulator\bin\ButterflyEmulator.exe
-C:\laragon\www\WibboEmulator\bin\ButterflyEmulator.pdb
-C:\laragon\www\WibboEmulator\bin\MySql.Data.dll
-C:\laragon\www\WibboEmulator\obj\x86\Debug\Butterfly Emulator.csproj.CoreCompileInputs.cache
-C:\laragon\www\WibboEmulator\obj\x86\Debug\Butterfly Emulator.csproj.CopyComplete
-C:\laragon\www\WibboEmulator\obj\x86\Debug\ButterflyEmulator.exe
-C:\laragon\www\WibboEmulator\obj\x86\Debug\ButterflyEmulator.pdb
