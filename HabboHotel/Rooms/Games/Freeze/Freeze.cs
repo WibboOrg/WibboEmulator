@@ -230,7 +230,7 @@ namespace Butterfly.HabboHotel.Rooms.Games
         {
             foreach (Item roomItem in this.room.GetGameMap().GetCoordinatedItems(new Point(x, y)))
             {
-                if (roomItem.GetBaseItem().InteractionType == InteractionType.freezetile)
+                if (roomItem.GetBaseItem().InteractionType == InteractionType.FREEZETILE)
                 {
                     return roomItem;
                 }
@@ -278,11 +278,11 @@ namespace Butterfly.HabboHotel.Rooms.Games
             {
                 switch (roomItem.GetBaseItem().InteractionType)
                 {
-                    case InteractionType.freezetileblock:
+                    case InteractionType.FREEZETILEBLOCK:
                         this.SetRandomPowerUp(roomItem);
                         roomItem.UpdateState(false, true);
                         continue;
-                    case InteractionType.freezetile:
+                    case InteractionType.FREEZETILE:
                         roomItem.ExtraData = "11000";
                         roomItem.UpdateState(false, true);
                         continue;
@@ -638,7 +638,7 @@ namespace Butterfly.HabboHotel.Rooms.Games
         {
             foreach (Item roomItem in items)
             {
-                if (roomItem.GetBaseItem().InteractionType == InteractionType.freezetile)
+                if (roomItem.GetBaseItem().InteractionType == InteractionType.FREEZETILE)
                 {
                     return true;
                 }
@@ -650,7 +650,7 @@ namespace Butterfly.HabboHotel.Rooms.Games
         {
             foreach (Item roomItem in items)
             {
-                if (roomItem.GetBaseItem().InteractionType == InteractionType.freezetileblock)
+                if (roomItem.GetBaseItem().InteractionType == InteractionType.FREEZETILEBLOCK)
                 {
                     return true;
                 }

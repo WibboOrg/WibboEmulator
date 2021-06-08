@@ -13,158 +13,158 @@
         SCOREBOARD,
         VENDINGMACHINE,
         ALERT,
-        onewaygate,
-        loveshuffler,
-        habbowheel,
+        ONEWAYGATE,
+        LOVESHUFFLER,
+        HABBOWHEEL,
         DICE,
         bottle,
         TELEPORT,
         ARROW,
         rentals,
-        pet,
-        pool,
-        roller,
-        fbgate,
-        iceskates,
-        normslaskates,
-        lowpool,
-        haloweenpool,
+        PET,
+        POOL,
+        ROLLER,
+        FBGATE,
+        ICESKATES,
+        NORMSLASKATES,
+        LOWPOOL,
+        HALOWEENPOOL,
         WALLPAPER,
         FLOOR,
         LANDSCAPE,
-        football,
-        footballgoalgreen,
-        footballgoalyellow,
+        FOOTBALL,
+        FOOTBALLGOALGREEN,
+        FOOTBALLGOALYELLOW,
         footballgoalblue,
-        footballgoalred,
-        footballcountergreen,
-        footballcounteryellow,
-        footballcounterblue,
-        footballcounterred,
-        banzaigateblue,
-        banzaigatered,
-        banzaigateyellow,
-        banzaigategreen,
-        banzaifloor,
-        banzaiscoreblue,
-        banzaiscorered,
-        banzaiscoreyellow,
-        banzaiscoregreen,
-        banzaitele,
-        banzaipuck,
-        banzaipyramid,
-        banzaiblo,
-        banzaiblob,
-        ChronoTimer,
-        freezeexit,
-        freezeredcounter,
-        freezebluecounter,
-        freezeyellowcounter,
-        freezegreencounter,
-        freezeyellowgate,
-        freezeredgate,
-        freezegreengate,
-        freezebluegate,
-        freezetileblock,
-        freezetile,
-        jukebox,
-        puzzlebox,
-        triggertimer,
-        triggerroomenter,
-        triggergameend,
-        triggergamestart,
-        triggerrepeater,
-        triggerrepeaterlong,
-        triggeronusersay,
-        triggercommand,
+        FOOTBALLGOALRED,
+        FOOTBALLCOUNTERGREEN,
+        FOOTBALLCOUNTERYELLOW,
+        FOOTBALLCOUNTERBLUE,
+        FOOTBALLCOUNTERRED,
+        BANZAIGATEBLUE,
+        BANZAIGATERED,
+        BANZAIGATEYELLOW,
+        BANZAIGATEGREEN,
+        BANZAIFLOOR,
+        BANZAISCOREBLUE,
+        BANZAISCORERED,
+        BANZAISCOREYELLOW,
+        BANZAISCOREGREEN,
+        BANZAITELE,
+        BANZAIPUCK,
+        BANZAIPYRAMID,
+        BANZAIBLO,
+        BANZAIBLOB,
+        CHRONOTIMER,
+        FREEZEEXIT,
+        FREEZEREDCOUNTER,
+        FREEZEBLUECOUNTER,
+        FREEZEYELLOWCOUNTER,
+        FREEZEGREENCOUNTER,
+        FREEZEYELLOWGATE,
+        FREEZEREDGATE,
+        FREEZEGREENGATE,
+        FREEZEBLUEGATE,
+        FREEZETILEBLOCK,
+        FREEZETILE,
+        JUKEBOX,
+        PUZZLEBOX,
+        TRIGGERTIMER,
+        TRIGGERROOMENTER,
+        TRIGGERGAMEEND,
+        TRIGGERGAMESTART,
+        TRIGGERREPEATER,
+        TRIGGERREPEATERLONG,
+        TRIGGERONUSERSAY,
+        TRIGGERCOMMAND,
         WIRED_TRIGGER_SELF,
-        triggercollisionuser,
-        triggerscoreachieved,
-        triggerstatechanged,
-        triggerwalkonfurni,
-        triggerwalkofffurni,
-        triggercollision,
-        actiongivescore,
-        actionposreset,
-        actionmoverotate,
-        actionresettimer,
-        actionshowmessage,
-        actionteleportto,
-        wf_act_endgame_team,
-        wf_act_call_stacks,
-        actiontogglestate,
-        actionkickuser,
-        actionflee,
-        actionchase,
-        collisioncase,
-        collisionteam,
-        actiongivereward,
-        actionmovetodir,
-        conditionfurnishaveusers,
-        wf_cnd_stuff_is,
-        wf_cnd_not_stuff_is,
-        conditionstatepos,
-        conditionstateposNegative,
-        conditiontimelessthan,
-        conditiontimemorethan,
-        conditiontriggeronfurni,
-        conditiontriggeronfurniNegative,
-        conditionhasfurnionfurni,
-        conditionhasfurnionfurniNegative,
-        conditionfurnishavenousers,
-        conditionactoringroup,
-        conditionnotingroup,
-        ringplate,
-        colortile,
-        colorwheel,
-        floorswitch1,
-        firegate,
-        glassfoor,
-        specialrandom,
-        specialunseen,
-        wire,
-        wireCenter,
-        wireCorner,
-        wireSplitter,
-        wireStandard,
+        TRIGGERCOLLISIONUSER,
+        TRIGGERSCOREACHIEVED,
+        TRIGGERSTATECHANGED,
+        TRIGGERWALKONFURNI,
+        TRIGGERWALKOFFFURNI,
+        TRIGGERCOLLISION,
+        ACTIONGIVESCORE,
+        ACTIONPOSRESET,
+        ACTIONMOVEROTATE,
+        ACTIONRESETTIMER,
+        ACTIONSHOWMESSAGE,
+        ACTIONTELEPORTTO,
+        WF_ACT_ENDGAME_TEAM,
+        WF_ACT_CALL_STACKS,
+        ACTIONTOGGLESTATE,
+        ACTIONKICKUSER,
+        ACTIONFLEE,
+        ACTIONCHASE,
+        COLLISIONCASE,
+        COLLISIONTEAM,
+        ACTIONGIVEREWARD,
+        ACTIONMOVETODIR,
+        CONDITIONFURNISHAVEUSERS,
+        WF_CND_STUFF_IS,
+        WF_CND_NOT_STUFF_IS,
+        CONDITIONSTATEPOS,
+        CONDITIONSTATEPOSNEGATIVE,
+        CONDITIONTIMELESSTHAN,
+        CONDITIONTIMEMORETHAN,
+        CONDITIONTRIGGERONFURNI,
+        CONDITIONTRIGGERONFURNINEGATIVE,
+        CONDITIONHASFURNIONFURNI,
+        CONDITIONHASFURNIONFURNINEGATIVE,
+        CONDITIONFURNISHAVENOUSERS,
+        CONDITIONACTORINGROUP,
+        CONDITIONNOTINGROUP,
+        RINGPLATE,
+        COLORTILE,
+        COLORWHEEL,
+        FLOORSWITCH1,
+        FIREGATE,
+        GLASSFOOR,
+        SPECIALRANDOM,
+        SPECIALUNSEEN,
+        WIRE,
+        WIRECENTER,
+        WIRECORNER,
+        WIRESPLITTER,
+        WIRESTANDARD,
         GIFT,
         MANNEQUIN,
         TONER,
-        bot,
-        adsbackground,
+        BOT,
+        ADSBACKGROUND,
         BADGE_DISPLAY,
         BADGE_TROC,
-        tvyoutube,
-        pilemagic,
-        superwired,
-        superwiredcondition,
-        jmphorse,
+        TVYOUTUBE,
+        PILEMAGIC,
+        SUPERWIRED,
+        SUPERWIREDCONDITION,
+        JMPHORSE,
         GUILD_ITEM,
         GUILD_GATE,
-        pressurepad,
-        gnomebox,
-        monstergraine,
-        highscore,
-        highscorepoints,
-        vendingenablemachine,
-        wf_trg_bot_reached_stf,
-        wf_trg_bot_reached_avtr,
-        wf_act_bot_clothes,
-        wf_act_bot_teleport,
-        wf_act_bot_follow_avatar,
-        wf_act_bot_give_handitem,
-        wf_act_bot_move,
-        wf_act_bot_talk_to_avatar,
-        wf_act_bot_talk,
-        wf_cnd_has_handitem,
-        wf_act_join_team,
-        wf_act_leave_team,
-        wf_act_give_score_tm,
-        wf_cnd_actor_in_team,
-        wf_cnd_not_in_team,
-        wf_cnd_not_user_count,
-        wf_cnd_user_count_in,
-        wf_act_user_move,
+        PRESSUREPAD,
+        GNOMEBOX,
+        MONSTERGRAINE,
+        HIGHSCORE,
+        HIGHSCOREPOINTS,
+        VENDINGENABLEMACHINE,
+        WF_TRG_BOT_REACHED_STF,
+        WF_TRG_BOT_REACHED_AVTR,
+        WF_ACT_BOT_CLOTHES,
+        WF_ACT_BOT_TELEPORT,
+        WF_ACT_BOT_FOLLOW_AVATAR,
+        WF_ACT_BOT_GIVE_HANDITEM,
+        WF_ACT_BOT_MOVE,
+        WF_ACT_BOT_TALK_TO_AVATAR,
+        WF_ACT_BOT_TALK,
+        WF_CND_HAS_HANDITEM,
+        WF_ACT_JOIN_TEAM,
+        WF_ACT_LEAVE_TEAM,
+        WF_ACT_GIVE_SCORE_TM,
+        WF_CND_ACTOR_IN_TEAM,
+        WF_CND_NOT_IN_TEAM,
+        WF_CND_NOT_USER_COUNT,
+        WF_CND_USER_COUNT_IN,
+        WF_ACT_USER_MOVE,
         CRACKABLE,
         LOVELOCK,
         EXTRABOX,
@@ -210,15 +210,15 @@
                 case "vendingmachine":
                     return InteractionType.VENDINGMACHINE;
                 case "vendingenablemachine":
-                    return InteractionType.vendingenablemachine;
+                    return InteractionType.VENDINGENABLEMACHINE;
                 case "alert":
                     return InteractionType.ALERT;
                 case "onewaygate":
-                    return InteractionType.onewaygate;
+                    return InteractionType.ONEWAYGATE;
                 case "loveshuffler":
-                    return InteractionType.loveshuffler;
+                    return InteractionType.LOVESHUFFLER;
                 case "habbowheel":
-                    return InteractionType.habbowheel;
+                    return InteractionType.HABBOWHEEL;
                 case "dice":
                     return InteractionType.DICE;
                 case "bottle":
@@ -230,247 +230,247 @@
                 case "rentals":
                     return InteractionType.rentals;
                 case "pet":
-                    return InteractionType.pet;
+                    return InteractionType.PET;
                 case "pool":
                 case "water":
-                    return InteractionType.pool;
+                    return InteractionType.POOL;
                 case "roller":
-                    return InteractionType.roller;
+                    return InteractionType.ROLLER;
                 case "fbgate":
-                    return InteractionType.fbgate;
+                    return InteractionType.FBGATE;
                 case "iceskates":
-                    return InteractionType.iceskates;
+                    return InteractionType.ICESKATES;
                 case "normalskates":
-                    return InteractionType.normslaskates;
+                    return InteractionType.NORMSLASKATES;
                 case "lowpool":
-                    return InteractionType.lowpool;
+                    return InteractionType.LOWPOOL;
                 case "haloweenpool":
-                    return InteractionType.haloweenpool;
+                    return InteractionType.HALOWEENPOOL;
                 case "football":
                 case "ball":
-                    return InteractionType.football;
+                    return InteractionType.FOOTBALL;
                 case "footballgoalgreen":
                 case "green_goal":
-                    return InteractionType.footballgoalgreen;
+                    return InteractionType.FOOTBALLGOALGREEN;
                 case "footballgoalyellow":
                 case "yellow_goal":
-                    return InteractionType.footballgoalyellow;
+                    return InteractionType.FOOTBALLGOALYELLOW;
                 case "footballgoalred":
                 case "red_goal":
-                    return InteractionType.footballgoalred;
+                    return InteractionType.FOOTBALLGOALRED;
                 case "footballgoalblue":
                 case "blue_goal":
                     return InteractionType.footballgoalblue;
                 case "footballcountergreen":
-                    return InteractionType.footballcountergreen;
+                    return InteractionType.FOOTBALLCOUNTERGREEN;
                 case "footballcounteryellow":
-                    return InteractionType.footballcounteryellow;
+                    return InteractionType.FOOTBALLCOUNTERYELLOW;
                 case "footballcounterblue":
-                    return InteractionType.footballcounterblue;
+                    return InteractionType.FOOTBALLCOUNTERBLUE;
                 case "footballcountered":
-                    return InteractionType.footballcounterred;
+                    return InteractionType.FOOTBALLCOUNTERRED;
                 case "banzaigateblue":
                 case "bb_blue_gate":
-                    return InteractionType.banzaigateblue;
+                    return InteractionType.BANZAIGATEBLUE;
                 case "banzaigatered":
                 case "bb_red_gate":
-                    return InteractionType.banzaigatered;
+                    return InteractionType.BANZAIGATERED;
                 case "banzaigateyellow":
                 case "bb_yellow_gate":
-                    return InteractionType.banzaigateyellow;
+                    return InteractionType.BANZAIGATEYELLOW;
                 case "banzaigategreen":
                 case "bb_green_gate":
-                    return InteractionType.banzaigategreen;
+                    return InteractionType.BANZAIGATEGREEN;
                 case "banzaifloor":
                 case "bb_patch":
-                    return InteractionType.banzaifloor;
+                    return InteractionType.BANZAIFLOOR;
                 case "banzaiscoreblue":
-                    return InteractionType.banzaiscoreblue;
+                    return InteractionType.BANZAISCOREBLUE;
                 case "banzaiscorered":
-                    return InteractionType.banzaiscorered;
+                    return InteractionType.BANZAISCORERED;
                 case "banzaiscoreyellow":
-                    return InteractionType.banzaiscoreyellow;
+                    return InteractionType.BANZAISCOREYELLOW;
                 case "banzaiscoregreen":
-                    return InteractionType.banzaiscoregreen;
+                    return InteractionType.BANZAISCOREGREEN;
                 case "banzaitele":
                 case "bb_teleport":
-                    return InteractionType.banzaitele;
+                    return InteractionType.BANZAITELE;
                 case "banzaipuck":
-                    return InteractionType.banzaipuck;
+                    return InteractionType.BANZAIPUCK;
                 case "banzaipyramid":
-                    return InteractionType.banzaipyramid;
+                    return InteractionType.BANZAIPYRAMID;
                 case "wf_blob2":
-                    return InteractionType.banzaiblo;
+                    return InteractionType.BANZAIBLO;
                 case "wf_blob":
-                    return InteractionType.banzaiblob;
+                    return InteractionType.BANZAIBLOB;
                 case "freezetimer":
                 case "banzaicounter":
                 case "counter":
-                    return InteractionType.ChronoTimer;
+                    return InteractionType.CHRONOTIMER;
                 case "freezeexit":
-                    return InteractionType.freezeexit;
+                    return InteractionType.FREEZEEXIT;
                 case "freezeredcounter":
-                    return InteractionType.freezeredcounter;
+                    return InteractionType.FREEZEREDCOUNTER;
                 case "freezebluecounter":
-                    return InteractionType.freezebluecounter;
+                    return InteractionType.FREEZEBLUECOUNTER;
                 case "freezeyellowcounter":
-                    return InteractionType.freezeyellowcounter;
+                    return InteractionType.FREEZEYELLOWCOUNTER;
                 case "freezegreencounter":
-                    return InteractionType.freezegreencounter;
+                    return InteractionType.FREEZEGREENCOUNTER;
                 case "freezeyellowgate":
-                    return InteractionType.freezeyellowgate;
+                    return InteractionType.FREEZEYELLOWGATE;
                 case "freezeredgate":
-                    return InteractionType.freezeredgate;
+                    return InteractionType.FREEZEREDGATE;
                 case "freezegreengate":
-                    return InteractionType.freezegreengate;
+                    return InteractionType.FREEZEGREENGATE;
                 case "freezebluegate":
-                    return InteractionType.freezebluegate;
+                    return InteractionType.FREEZEBLUEGATE;
                 case "freezetileblock":
-                    return InteractionType.freezetileblock;
+                    return InteractionType.FREEZETILEBLOCK;
                 case "freezetile":
-                    return InteractionType.freezetile;
+                    return InteractionType.FREEZETILE;
                 case "jukebox":
-                    return InteractionType.jukebox;
+                    return InteractionType.JUKEBOX;
                 case "triggertimer":
                 case "wf_trg_attime":
-                    return InteractionType.triggertimer;
+                    return InteractionType.TRIGGERTIMER;
                 case "wf_trg_collision":
-                    return InteractionType.triggercollision;
+                    return InteractionType.TRIGGERCOLLISION;
                 case "triggerroomenter":
                 case "wf_trg_enterroom":
-                    return InteractionType.triggerroomenter;
+                    return InteractionType.TRIGGERROOMENTER;
                 case "triggergameend":
                 case "wf_trg_gameend":
-                    return InteractionType.triggergameend;
+                    return InteractionType.TRIGGERGAMEEND;
                 case "triggergamestart":
                 case "wf_trg_gamestart":
-                    return InteractionType.triggergamestart;
+                    return InteractionType.TRIGGERGAMESTART;
                 case "triggerrepeater":
                 case "wf_trg_timer":
-                    return InteractionType.triggerrepeater;
+                    return InteractionType.TRIGGERREPEATER;
                 case "wf_trg_period_long":
-                    return InteractionType.triggerrepeaterlong;
+                    return InteractionType.TRIGGERREPEATERLONG;
                 case "triggeronusersay":
                 case "wf_trg_onsay":
-                    return InteractionType.triggeronusersay;
+                    return InteractionType.TRIGGERONUSERSAY;
                 case "wf_trg_cmd":
-                    return InteractionType.triggercommand;
+                    return InteractionType.TRIGGERCOMMAND;
                 case "wf_trg_cls_user":
-                    return InteractionType.triggercollisionuser;
+                    return InteractionType.TRIGGERCOLLISIONUSER;
                 case "triggerscoreachieved":
                 case "wf_trg_atscore":
-                    return InteractionType.triggerscoreachieved;
+                    return InteractionType.TRIGGERSCOREACHIEVED;
                 case "triggerstatechanged":
                 case "wf_trg_furnistate":
-                    return InteractionType.triggerstatechanged;
+                    return InteractionType.TRIGGERSTATECHANGED;
                 case "triggerwalkonfurni":
                 case "wf_trg_onfurni":
-                    return InteractionType.triggerwalkonfurni;
+                    return InteractionType.TRIGGERWALKONFURNI;
                 case "triggerwalkofffurni":
                 case "wf_trg_offfurni":
-                    return InteractionType.triggerwalkofffurni;
+                    return InteractionType.TRIGGERWALKOFFFURNI;
                 case "actiongivescore":
                 case "wf_act_givepoints":
-                    return InteractionType.actiongivescore;
+                    return InteractionType.ACTIONGIVESCORE;
                 case "actionposreset":
                 case "wf_act_matchfurni":
-                    return InteractionType.actionposreset;
+                    return InteractionType.ACTIONPOSRESET;
                 case "actionmoverotate":
                 case "wf_act_moverotate":
-                    return InteractionType.actionmoverotate;
+                    return InteractionType.ACTIONMOVEROTATE;
                 case "actionresettimer":
-                    return InteractionType.actionresettimer;
+                    return InteractionType.ACTIONRESETTIMER;
                 case "actionshowmessage":
                 case "wf_act_saymsg":
-                    return InteractionType.actionshowmessage;
+                    return InteractionType.ACTIONSHOWMESSAGE;
                 case "wf_act_give_reward":
-                    return InteractionType.actiongivereward;
+                    return InteractionType.ACTIONGIVEREWARD;
                 case "superwired":
-                    return InteractionType.superwired;
+                    return InteractionType.SUPERWIRED;
                 case "superwiredcondition":
-                    return InteractionType.superwiredcondition;
+                    return InteractionType.SUPERWIREDCONDITION;
                 case "actionteleportto":
                 case "wf_act_moveuser":
-                    return InteractionType.actionteleportto;
+                    return InteractionType.ACTIONTELEPORTTO;
                 case "wf_act_endgame_team":
-                    return InteractionType.wf_act_endgame_team;
+                    return InteractionType.WF_ACT_ENDGAME_TEAM;
                 case "wf_act_call_stacks":
-                    return InteractionType.wf_act_call_stacks;
+                    return InteractionType.WF_ACT_CALL_STACKS;
                 case "actiontogglestate":
                 case "wf_act_togglefurni":
-                    return InteractionType.actiontogglestate;
+                    return InteractionType.ACTIONTOGGLESTATE;
                 case "wf_act_kick_user":
                 case "wf_act_kickuser":
                 case "wf_act_kick":
-                    return InteractionType.actionkickuser;
+                    return InteractionType.ACTIONKICKUSER;
                 case "wf_act_flee":
-                    return InteractionType.actionflee;
+                    return InteractionType.ACTIONFLEE;
                 case "wf_act_chase":
-                    return InteractionType.actionchase;
+                    return InteractionType.ACTIONCHASE;
                 case "wf_act_collisioncase":
-                    return InteractionType.collisioncase;
+                    return InteractionType.COLLISIONCASE;
                 case "wf_act_collisionteam":
-                    return InteractionType.collisionteam;
+                    return InteractionType.COLLISIONTEAM;
                 case "wf_act_move_to_dir":
-                    return InteractionType.actionmovetodir;
+                    return InteractionType.ACTIONMOVETODIR;
                 case "conditionfurnishaveusers":
                 case "wf_cnd_furnis_hv_avtrs":
-                    return InteractionType.conditionfurnishaveusers;
+                    return InteractionType.CONDITIONFURNISHAVEUSERS;
                 case "wf_cnd_furnis_hv_prsn":
                 case "wf_cnd_not_hv_avtrs":
-                    return InteractionType.conditionfurnishavenousers;
+                    return InteractionType.CONDITIONFURNISHAVENOUSERS;
                 case "conditionstatepos":
-                    return InteractionType.conditionstatepos;
+                    return InteractionType.CONDITIONSTATEPOS;
                 case "wf_cnd_stuff_is":
-                    return InteractionType.wf_cnd_stuff_is;
+                    return InteractionType.WF_CND_STUFF_IS;
                 case "wf_cnd_not_stuff_is":
-                    return InteractionType.wf_cnd_not_stuff_is;
+                    return InteractionType.WF_CND_NOT_STUFF_IS;
                 case "wf_cnd_not_match_snap":
-                    return InteractionType.conditionstateposNegative;
+                    return InteractionType.CONDITIONSTATEPOSNEGATIVE;
                 case "conditiontimelessthan":
-                    return InteractionType.conditiontimelessthan;
+                    return InteractionType.CONDITIONTIMELESSTHAN;
                 case "conditiontimemorethan":
-                    return InteractionType.conditiontimemorethan;
+                    return InteractionType.CONDITIONTIMEMORETHAN;
                 case "conditiontriggeronfurni":
                 case "wf_cnd_trggrer_on_frn":
-                    return InteractionType.conditiontriggeronfurni;
+                    return InteractionType.CONDITIONTRIGGERONFURNI;
                 case "wf_cnd_not_trggrer_on":
-                    return InteractionType.conditiontriggeronfurniNegative;
+                    return InteractionType.CONDITIONTRIGGERONFURNINEGATIVE;
                 case "wf_cnd_has_furni_on":
-                    return InteractionType.conditionhasfurnionfurni;
+                    return InteractionType.CONDITIONHASFURNIONFURNI;
                 case "wf_cnd_not_furni_on":
-                    return InteractionType.conditionhasfurnionfurniNegative;
+                    return InteractionType.CONDITIONHASFURNIONFURNINEGATIVE;
                 case "ringplate":
-                    return InteractionType.ringplate;
+                    return InteractionType.RINGPLATE;
                 case "colortile":
-                    return InteractionType.colortile;
+                    return InteractionType.COLORTILE;
                 case "colorwheel":
-                    return InteractionType.colorwheel;
+                    return InteractionType.COLORWHEEL;
                 case "floorswitch1":
                 case "floorswitch2":
-                    return InteractionType.floorswitch1;
+                    return InteractionType.FLOORSWITCH1;
                 case "firegate":
-                    return InteractionType.firegate;
+                    return InteractionType.FIREGATE;
                 case "glassfoor":
-                    return InteractionType.glassfoor;
+                    return InteractionType.GLASSFOOR;
                 case "specialrandom":
                 case "wf_xtra_random":
-                    return InteractionType.specialrandom;
+                    return InteractionType.SPECIALRANDOM;
                 case "specialunseen":
                 case "wf_xtra_unseen":
-                    return InteractionType.specialunseen;
+                    return InteractionType.SPECIALUNSEEN;
                 case "wire":
-                    return InteractionType.wire;
+                    return InteractionType.WIRE;
                 case "wireCenter":
-                    return InteractionType.wireCenter;
+                    return InteractionType.WIRECENTER;
                 case "wireCorner":
-                    return InteractionType.wireCorner;
+                    return InteractionType.WIRECORNER;
                 case "wireSplitter":
-                    return InteractionType.wireSplitter;
+                    return InteractionType.WIRESPLITTER;
                 case "wireStandard":
-                    return InteractionType.wireStandard;
+                    return InteractionType.WIRESTANDARD;
                 case "puzzlebox":
-                    return InteractionType.puzzlebox;
+                    return InteractionType.PUZZLEBOX;
                 case "gift":
                     return InteractionType.GIFT;
                 case "extrabox":
@@ -486,19 +486,19 @@
                 case "bgupdater":
                     return InteractionType.TONER;
                 case "bot":
-                    return InteractionType.bot;
+                    return InteractionType.BOT;
                 case "adsbackground":
-                    return InteractionType.adsbackground;
+                    return InteractionType.ADSBACKGROUND;
                 case "badge_display":
                     return InteractionType.BADGE_DISPLAY;
                 case "badge_troc":
                     return InteractionType.BADGE_TROC;
                 case "tvyoutube":
-                    return InteractionType.tvyoutube;
+                    return InteractionType.TVYOUTUBE;
                 case "pilemagic":
-                    return InteractionType.pilemagic;
+                    return InteractionType.PILEMAGIC;
                 case "jmphorse":
-                    return InteractionType.jmphorse;
+                    return InteractionType.JMPHORSE;
                 case "groupfurni":
                     return InteractionType.GUILD_ITEM;
                 case "groupgate":
@@ -510,59 +510,59 @@
                 case "landscape":
                     return InteractionType.LANDSCAPE;
                 case "wf_cnd_actor_in_group":
-                    return InteractionType.conditionactoringroup;
+                    return InteractionType.CONDITIONACTORINGROUP;
                 case "wf_cnd_not_in_group":
-                    return InteractionType.conditionnotingroup;
+                    return InteractionType.CONDITIONNOTINGROUP;
                 case "pressurepad":
                 case "arrowplate":
                 case "pressure_pad":
-                    return InteractionType.pressurepad;
+                    return InteractionType.PRESSUREPAD;
                 case "gnomebox":
-                    return InteractionType.gnomebox;
+                    return InteractionType.GNOMEBOX;
                 case "monstergraine":
-                    return InteractionType.monstergraine;
+                    return InteractionType.MONSTERGRAINE;
                 case "highscore":
-                    return InteractionType.highscore;
+                    return InteractionType.HIGHSCORE;
                 case "hightscorepoints":
-                    return InteractionType.highscorepoints;
+                    return InteractionType.HIGHSCOREPOINTS;
                 case "wf_trg_bot_reached_stf":
-                    return InteractionType.wf_trg_bot_reached_stf;
+                    return InteractionType.WF_TRG_BOT_REACHED_STF;
                 case "wf_trg_bot_reached_avtr":
-                    return InteractionType.wf_trg_bot_reached_avtr;
+                    return InteractionType.WF_TRG_BOT_REACHED_AVTR;
                 case "wf_act_bot_clothes":
-                    return InteractionType.wf_act_bot_clothes;
+                    return InteractionType.WF_ACT_BOT_CLOTHES;
                 case "wf_trg_trigger_self":
                     return InteractionType.WIRED_TRIGGER_SELF;
                 case "wf_act_bot_teleport":
-                    return InteractionType.wf_act_bot_teleport;
+                    return InteractionType.WF_ACT_BOT_TELEPORT;
                 case "wf_act_bot_follow_avatar":
-                    return InteractionType.wf_act_bot_follow_avatar;
+                    return InteractionType.WF_ACT_BOT_FOLLOW_AVATAR;
                 case "wf_act_bot_give_handitem":
-                    return InteractionType.wf_act_bot_give_handitem;
+                    return InteractionType.WF_ACT_BOT_GIVE_HANDITEM;
                 case "wf_act_bot_move":
-                    return InteractionType.wf_act_bot_move;
+                    return InteractionType.WF_ACT_BOT_MOVE;
                 case "wf_act_user_move":
-                    return InteractionType.wf_act_user_move;
+                    return InteractionType.WF_ACT_USER_MOVE;
                 case "wf_act_bot_talk_to_avatar":
-                    return InteractionType.wf_act_bot_talk_to_avatar;
+                    return InteractionType.WF_ACT_BOT_TALK_TO_AVATAR;
                 case "wf_act_bot_talk":
-                    return InteractionType.wf_act_bot_talk;
+                    return InteractionType.WF_ACT_BOT_TALK;
                 case "wf_cnd_has_handitem":
-                    return InteractionType.wf_cnd_has_handitem;
+                    return InteractionType.WF_CND_HAS_HANDITEM;
                 case "wf_act_join_team":
-                    return InteractionType.wf_act_join_team;
+                    return InteractionType.WF_ACT_JOIN_TEAM;
                 case "wf_act_leave_team":
-                    return InteractionType.wf_act_leave_team;
+                    return InteractionType.WF_ACT_LEAVE_TEAM;
                 case "wf_act_give_score_tm":
-                    return InteractionType.wf_act_give_score_tm;
+                    return InteractionType.WF_ACT_GIVE_SCORE_TM;
                 case "wf_cnd_actor_in_team":
-                    return InteractionType.wf_cnd_actor_in_team;
+                    return InteractionType.WF_CND_ACTOR_IN_TEAM;
                 case "wf_cnd_not_in_team":
-                    return InteractionType.wf_cnd_not_in_team;
+                    return InteractionType.WF_CND_NOT_IN_TEAM;
                 case "wf_cnd_not_user_count":
-                    return InteractionType.wf_cnd_not_user_count;
+                    return InteractionType.WF_CND_NOT_USER_COUNT;
                 case "wf_cnd_user_count_in":
-                    return InteractionType.wf_cnd_user_count_in;
+                    return InteractionType.WF_CND_USER_COUNT_IN;
                 case "crackable":
                     return InteractionType.CRACKABLE;
                 case "lovelock":

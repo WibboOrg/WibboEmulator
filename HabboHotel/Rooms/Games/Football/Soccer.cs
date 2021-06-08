@@ -69,10 +69,10 @@ namespace Butterfly.HabboHotel.Rooms.Games
             {
                 switch (roomItem.GetBaseItem().InteractionType)
                 {
-                    case InteractionType.footballcounterblue:
-                    case InteractionType.footballcountergreen:
-                    case InteractionType.footballcounterred:
-                    case InteractionType.footballcounteryellow:
+                    case InteractionType.FOOTBALLCOUNTERBLUE:
+                    case InteractionType.FOOTBALLCOUNTERGREEN:
+                    case InteractionType.FOOTBALLCOUNTERRED:
+                    case InteractionType.FOOTBALLCOUNTERYELLOW:
                         int.TryParse(roomItem.ExtraData, out int num);
                         num++;
                         if (num >= 100)
@@ -107,7 +107,7 @@ namespace Butterfly.HabboHotel.Rooms.Games
 
             foreach (Item Ball in roomItemForSquare)
             {
-                if (Ball.GetBaseItem().InteractionType != InteractionType.football)
+                if (Ball.GetBaseItem().InteractionType != InteractionType.FOOTBALL)
                 {
                     continue;
                 }

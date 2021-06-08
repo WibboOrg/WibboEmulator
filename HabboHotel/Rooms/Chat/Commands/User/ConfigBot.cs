@@ -29,7 +29,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
                         int.TryParse(Params[3], out int IntValue);
 
-                        if (!ButterflyEnvironment.GetGame().GetEffectsInventoryManager().HaveEffect(IntValue, false))
+                        if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
                         {
                             return;
                         }

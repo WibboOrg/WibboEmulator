@@ -9,7 +9,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Structure
             : base(ServerPacketHeader.FURNITURE_FLOOR_UPDATE)
         {
             this.WriteInteger(Item.Id);
-            this.WriteInteger((HideWired && WiredUtillity.TypeIsWired(Item.GetBaseItem().InteractionType) && (Item.GetBaseItem().InteractionType != InteractionType.highscore && Item.GetBaseItem().InteractionType != InteractionType.highscorepoints)) ? 31294061 : Item.GetBaseItem().SpriteId);
+            this.WriteInteger((HideWired && WiredUtillity.TypeIsWired(Item.GetBaseItem().InteractionType) && (Item.GetBaseItem().InteractionType != InteractionType.HIGHSCORE && Item.GetBaseItem().InteractionType != InteractionType.HIGHSCOREPOINTS)) ? 31294061 : Item.GetBaseItem().SpriteId);
             this.WriteInteger(Item.GetX);
             this.WriteInteger(Item.GetY);
             this.WriteInteger(Item.Rotation);

@@ -10,23 +10,23 @@ namespace Butterfly.HabboHotel.Rooms.Wired
         {
             switch (type)
             {
-                case InteractionType.triggercollision:
-                case InteractionType.triggertimer:
-                case InteractionType.triggerroomenter:
-                case InteractionType.triggergameend:
-                case InteractionType.triggergamestart:
-                case InteractionType.triggerrepeater:
-                case InteractionType.triggerrepeaterlong:
-                case InteractionType.triggeronusersay:
-                case InteractionType.triggercommand:
+                case InteractionType.TRIGGERCOLLISION:
+                case InteractionType.TRIGGERTIMER:
+                case InteractionType.TRIGGERROOMENTER:
+                case InteractionType.TRIGGERGAMEEND:
+                case InteractionType.TRIGGERGAMESTART:
+                case InteractionType.TRIGGERREPEATER:
+                case InteractionType.TRIGGERREPEATERLONG:
+                case InteractionType.TRIGGERONUSERSAY:
+                case InteractionType.TRIGGERCOMMAND:
                 case InteractionType.WIRED_TRIGGER_SELF:
-                case InteractionType.triggercollisionuser:
-                case InteractionType.triggerscoreachieved:
-                case InteractionType.triggerstatechanged:
-                case InteractionType.triggerwalkonfurni:
-                case InteractionType.triggerwalkofffurni:
-                case InteractionType.wf_trg_bot_reached_avtr:
-                case InteractionType.wf_trg_bot_reached_stf:
+                case InteractionType.TRIGGERCOLLISIONUSER:
+                case InteractionType.TRIGGERSCOREACHIEVED:
+                case InteractionType.TRIGGERSTATECHANGED:
+                case InteractionType.TRIGGERWALKONFURNI:
+                case InteractionType.TRIGGERWALKOFFFURNI:
+                case InteractionType.WF_TRG_BOT_REACHED_AVTR:
+                case InteractionType.WF_TRG_BOT_REACHED_STF:
                     return true;
                 default:
                     return false;
@@ -37,36 +37,36 @@ namespace Butterfly.HabboHotel.Rooms.Wired
         {
             switch (type)
             {
-                case InteractionType.actiongivescore:
-                case InteractionType.actionposreset:
-                case InteractionType.actionmoverotate:
-                case InteractionType.actionresettimer:
-                case InteractionType.actionshowmessage:
-                case InteractionType.highscore:
-                case InteractionType.highscorepoints:
-                case InteractionType.superwired:
-                case InteractionType.actionkickuser:
-                case InteractionType.actionteleportto:
-                case InteractionType.wf_act_endgame_team:
-                case InteractionType.actiontogglestate:
-                case InteractionType.wf_act_call_stacks:
-                case InteractionType.actionflee:
-                case InteractionType.actionchase:
-                case InteractionType.collisioncase:
-                case InteractionType.collisionteam:
-                case InteractionType.actiongivereward:
-                case InteractionType.actionmovetodir:
-                case InteractionType.wf_act_bot_clothes:
-                case InteractionType.wf_act_bot_teleport:
-                case InteractionType.wf_act_bot_follow_avatar:
-                case InteractionType.wf_act_bot_give_handitem:
-                case InteractionType.wf_act_bot_move:
-                case InteractionType.wf_act_user_move:
-                case InteractionType.wf_act_bot_talk_to_avatar:
-                case InteractionType.wf_act_bot_talk:
-                case InteractionType.wf_act_join_team:
-                case InteractionType.wf_act_leave_team:
-                case InteractionType.wf_act_give_score_tm:
+                case InteractionType.ACTIONGIVESCORE:
+                case InteractionType.ACTIONPOSRESET:
+                case InteractionType.ACTIONMOVEROTATE:
+                case InteractionType.ACTIONRESETTIMER:
+                case InteractionType.ACTIONSHOWMESSAGE:
+                case InteractionType.HIGHSCORE:
+                case InteractionType.HIGHSCOREPOINTS:
+                case InteractionType.SUPERWIRED:
+                case InteractionType.ACTIONKICKUSER:
+                case InteractionType.ACTIONTELEPORTTO:
+                case InteractionType.WF_ACT_ENDGAME_TEAM:
+                case InteractionType.ACTIONTOGGLESTATE:
+                case InteractionType.WF_ACT_CALL_STACKS:
+                case InteractionType.ACTIONFLEE:
+                case InteractionType.ACTIONCHASE:
+                case InteractionType.COLLISIONCASE:
+                case InteractionType.COLLISIONTEAM:
+                case InteractionType.ACTIONGIVEREWARD:
+                case InteractionType.ACTIONMOVETODIR:
+                case InteractionType.WF_ACT_BOT_CLOTHES:
+                case InteractionType.WF_ACT_BOT_TELEPORT:
+                case InteractionType.WF_ACT_BOT_FOLLOW_AVATAR:
+                case InteractionType.WF_ACT_BOT_GIVE_HANDITEM:
+                case InteractionType.WF_ACT_BOT_MOVE:
+                case InteractionType.WF_ACT_USER_MOVE:
+                case InteractionType.WF_ACT_BOT_TALK_TO_AVATAR:
+                case InteractionType.WF_ACT_BOT_TALK:
+                case InteractionType.WF_ACT_JOIN_TEAM:
+                case InteractionType.WF_ACT_LEAVE_TEAM:
+                case InteractionType.WF_ACT_GIVE_SCORE_TM:
                     return true;
                 default:
                     return false;
@@ -77,26 +77,26 @@ namespace Butterfly.HabboHotel.Rooms.Wired
         {
             switch (type)
             {
-                case InteractionType.conditionfurnishaveusers:
-                case InteractionType.conditionfurnishavenousers:
-                case InteractionType.conditionstatepos:
-                case InteractionType.wf_cnd_stuff_is:
-                case InteractionType.wf_cnd_not_stuff_is:
-                case InteractionType.conditionstateposNegative:
-                case InteractionType.conditiontimelessthan:
-                case InteractionType.conditiontimemorethan:
-                case InteractionType.conditiontriggeronfurni:
-                case InteractionType.conditiontriggeronfurniNegative:
-                case InteractionType.conditionhasfurnionfurni:
-                case InteractionType.conditionhasfurnionfurniNegative:
-                case InteractionType.conditionactoringroup:
-                case InteractionType.conditionnotingroup:
-                case InteractionType.superwiredcondition:
-                case InteractionType.wf_cnd_has_handitem:
-                case InteractionType.wf_cnd_actor_in_team:
-                case InteractionType.wf_cnd_not_in_team:
-                case InteractionType.wf_cnd_not_user_count:
-                case InteractionType.wf_cnd_user_count_in:
+                case InteractionType.CONDITIONFURNISHAVEUSERS:
+                case InteractionType.CONDITIONFURNISHAVENOUSERS:
+                case InteractionType.CONDITIONSTATEPOS:
+                case InteractionType.WF_CND_STUFF_IS:
+                case InteractionType.WF_CND_NOT_STUFF_IS:
+                case InteractionType.CONDITIONSTATEPOSNEGATIVE:
+                case InteractionType.CONDITIONTIMELESSTHAN:
+                case InteractionType.CONDITIONTIMEMORETHAN:
+                case InteractionType.CONDITIONTRIGGERONFURNI:
+                case InteractionType.CONDITIONTRIGGERONFURNINEGATIVE:
+                case InteractionType.CONDITIONHASFURNIONFURNI:
+                case InteractionType.CONDITIONHASFURNIONFURNINEGATIVE:
+                case InteractionType.CONDITIONACTORINGROUP:
+                case InteractionType.CONDITIONNOTINGROUP:
+                case InteractionType.SUPERWIREDCONDITION:
+                case InteractionType.WF_CND_HAS_HANDITEM:
+                case InteractionType.WF_CND_ACTOR_IN_TEAM:
+                case InteractionType.WF_CND_NOT_IN_TEAM:
+                case InteractionType.WF_CND_NOT_USER_COUNT:
+                case InteractionType.WF_CND_USER_COUNT_IN:
                     return true;
                 default:
                     return false;
@@ -117,11 +117,11 @@ namespace Butterfly.HabboHotel.Rooms.Wired
             {
                 return true;
             }
-            else if (type == InteractionType.specialrandom)
+            else if (type == InteractionType.SPECIALRANDOM)
             {
                 return true;
             }
-            else if (type == InteractionType.specialunseen)
+            else if (type == InteractionType.SPECIALUNSEEN)
             {
                 return true;
             }

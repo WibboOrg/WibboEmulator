@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             Item roomItem = room.GetRoomItemHandler().GetItem(ItemId);
-            if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.adsbackground)
+            if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.ADSBACKGROUND)
             {
                 return;
             }

@@ -640,7 +640,7 @@ namespace Butterfly.HabboHotel.Rooms
             double ConstruitHeigth = 1.0;
             bool PileMagic = false;
 
-            if (Item.GetBaseItem().InteractionType == InteractionType.pilemagic)
+            if (Item.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
             {
                 PileMagic = true;
             }
@@ -669,7 +669,7 @@ namespace Butterfly.HabboHotel.Rooms
             {
                 foreach (Item roomItem in ItemsComplete)
                 {
-                    if (roomItem.GetBaseItem().InteractionType == InteractionType.pilemagic)
+                    if (roomItem.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
                     {
                         pZ = roomItem.GetZ;
                         PileMagic = true;

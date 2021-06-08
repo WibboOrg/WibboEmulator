@@ -712,7 +712,7 @@
     <Compile Include="Core\FigureData\Types\SetType.cs" />
     <Compile Include="Core\FigureData\Types\SetTypeUtility.cs" />
     <Compile Include="HabboHotel\Catalogs\CatalogPromotion.cs" />
-    <Compile Include="HabboHotel\EffectsInventory\EffectsInventoryManager.cs" />
+    <Compile Include="HabboHotel\Effects\EffectManager.cs" />
     <Compile Include="HabboHotel\Groups\GroupBadgeParts.cs" />
     <Compile Include="HabboHotel\Groups\GroupColours.cs" />
     <Compile Include="HabboHotel\HotelView\SmallPromo.cs" />

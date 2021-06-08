@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
             }
 
             Item item = room.GetRoomItemHandler().GetItem(ItemId);
-            if (item == null || item.GetBaseItem().InteractionType != InteractionType.tvyoutube)
+            if (item == null || item.GetBaseItem().InteractionType != InteractionType.TVYOUTUBE)
             {
                 return;
             }

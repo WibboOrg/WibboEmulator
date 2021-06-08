@@ -4,7 +4,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Achievements;
 using Butterfly.HabboHotel.Animations;
 using Butterfly.HabboHotel.Catalog;
-using Butterfly.HabboHotel.EffectsInventory;
+using Butterfly.HabboHotel.Effects;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Groups;
 using Butterfly.HabboHotel.Guides;
@@ -41,7 +41,7 @@ namespace Butterfly.HabboHotel
         private readonly GuideManager _guideManager;
         private readonly PacketManager _packetManager;
         private readonly ChatManager _chatManager;
-        private readonly EffectsInventoryManager _effectsInventory;
+        private readonly EffectManager _effectManager;
         private readonly RoleplayManager _roleplayManager;
         private readonly AnimationManager _animationManager;
 
@@ -89,8 +89,8 @@ namespace Butterfly.HabboHotel
             this._packetManager = new PacketManager();
             this._chatManager = new ChatManager();
 
-            this._effectsInventory = new EffectsInventoryManager();
-            this._effectsInventory.Init();
+            this._effectManager = new EffectManager();
+            this._effectManager.Init();
 
             this._achievementManager = new AchievementManager();
 
@@ -111,9 +111,9 @@ namespace Butterfly.HabboHotel
         }
 
 
-        public EffectsInventoryManager GetEffectsInventoryManager()
+        public EffectManager GetEffectManager()
         {
-            return this._effectsInventory;
+            return this._effectManager;
         }
 
         public ChatManager GetChatManager()

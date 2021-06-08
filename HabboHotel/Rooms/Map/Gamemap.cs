@@ -338,19 +338,19 @@ namespace Butterfly.HabboHotel.Rooms
 
                     switch (Item.GetBaseItem().InteractionType)
                     {
-                        case InteractionType.pool:
+                        case InteractionType.POOL:
                             this.EffectMap[Coord.X, Coord.Y] = 1;
                             break;
-                        case InteractionType.iceskates:
+                        case InteractionType.ICESKATES:
                             this.EffectMap[Coord.X, Coord.Y] = 3;
                             break;
-                        case InteractionType.normslaskates:
+                        case InteractionType.NORMSLASKATES:
                             this.EffectMap[Coord.X, Coord.Y] = 2;
                             break;
-                        case InteractionType.lowpool:
+                        case InteractionType.LOWPOOL:
                             this.EffectMap[Coord.X, Coord.Y] = 4;
                             break;
-                        case InteractionType.haloweenpool:
+                        case InteractionType.HALOWEENPOOL:
                             this.EffectMap[Coord.X, Coord.Y] = 5;
                             break;
                         case InteractionType.TRAMPOLINE:
@@ -367,14 +367,14 @@ namespace Butterfly.HabboHotel.Rooms
                             break;
                     }
 
-                    if (Item.GetBaseItem().InteractionType == InteractionType.freezetileblock && Item.ExtraData != "")
+                    if (Item.GetBaseItem().InteractionType == InteractionType.FREEZETILEBLOCK && Item.ExtraData != "")
                     {
                         if (this.GameMap[Coord.X, Coord.Y] != 3)
                         {
                             this.GameMap[Coord.X, Coord.Y] = 1;
                         }
                     }
-                    else if (Item.GetBaseItem().InteractionType == InteractionType.banzaipyramid && Item.ExtraData == "1")
+                    else if (Item.GetBaseItem().InteractionType == InteractionType.BANZAIPYRAMID && Item.ExtraData == "1")
                     {
                         if (this.GameMap[Coord.X, Coord.Y] != 3)
                         {
@@ -466,27 +466,27 @@ namespace Butterfly.HabboHotel.Rooms
                 case InteractionType.GUILD_GATE:
                     this.room.GetGameItemHandler().AddGroupGate(item);
                     break;
-                case InteractionType.banzaifloor:
+                case InteractionType.BANZAIFLOOR:
                     this.room.GetBanzai().AddTile(item, item.Id);
                     break;
-                case InteractionType.banzaitele:
+                case InteractionType.BANZAITELE:
                     this.room.GetGameItemHandler().AddTeleport(item, item.Id);
                     item.ExtraData = "";
                     break;
                 //case InteractionType.banzaipuck:
                 //this.room.GetBanzai().AddPuck(item);
                 //break;
-                case InteractionType.banzaipyramid:
+                case InteractionType.BANZAIPYRAMID:
                     this.room.GetGameItemHandler().AddPyramid(item, item.Id);
                     break;
-                case InteractionType.banzaiblo:
-                case InteractionType.banzaiblob:
+                case InteractionType.BANZAIBLO:
+                case InteractionType.BANZAIBLOB:
                     this.room.GetGameItemHandler().AddBlob(item, item.Id);
                     break;
-                case InteractionType.freezeexit:
+                case InteractionType.FREEZEEXIT:
                     this.room.GetGameItemHandler().AddExitTeleport(item);
                     break;
-                case InteractionType.freezetileblock:
+                case InteractionType.FREEZETILEBLOCK:
                     this.room.GetFreeze().AddFreezeBlock(item);
                     break;
             }
@@ -499,58 +499,58 @@ namespace Butterfly.HabboHotel.Rooms
                 case InteractionType.GUILD_GATE:
                     this.room.GetGameItemHandler().RemoveGroupGate(item);
                     break;
-                case InteractionType.banzaifloor:
+                case InteractionType.BANZAIFLOOR:
                     this.room.GetBanzai().RemoveTile(item.Id);
                     break;
-                case InteractionType.banzaitele:
+                case InteractionType.BANZAITELE:
                     this.room.GetGameItemHandler().RemoveTeleport(item.Id);
                     break;
                 //case InteractionType.banzaipuck:
                 //this.room.GetBanzai().RemovePuck(item.Id);
                 //break;
-                case InteractionType.banzaipyramid:
+                case InteractionType.BANZAIPYRAMID:
                     this.room.GetGameItemHandler().RemovePyramid(item.Id);
                     break;
-                case InteractionType.banzaiblo:
-                case InteractionType.banzaiblob:
+                case InteractionType.BANZAIBLO:
+                case InteractionType.BANZAIBLOB:
                     this.room.GetGameItemHandler().RemoveBlob(item.Id);
                     break;
-                case InteractionType.freezetileblock:
+                case InteractionType.FREEZETILEBLOCK:
                     this.room.GetFreeze().RemoveFreezeBlock(item.Id);
                     break;
-                case InteractionType.footballgoalgreen:
-                case InteractionType.footballcountergreen:
-                case InteractionType.banzaiscoregreen:
-                case InteractionType.banzaigategreen:
-                case InteractionType.freezegreencounter:
-                case InteractionType.freezegreengate:
+                case InteractionType.FOOTBALLGOALGREEN:
+                case InteractionType.FOOTBALLCOUNTERGREEN:
+                case InteractionType.BANZAISCOREGREEN:
+                case InteractionType.BANZAIGATEGREEN:
+                case InteractionType.FREEZEGREENCOUNTER:
+                case InteractionType.FREEZEGREENGATE:
                     this.room.GetGameManager().RemoveFurnitureFromTeam(item, Team.green);
                     break;
-                case InteractionType.footballgoalyellow:
-                case InteractionType.footballcounteryellow:
-                case InteractionType.banzaiscoreyellow:
-                case InteractionType.banzaigateyellow:
-                case InteractionType.freezeyellowcounter:
-                case InteractionType.freezeyellowgate:
+                case InteractionType.FOOTBALLGOALYELLOW:
+                case InteractionType.FOOTBALLCOUNTERYELLOW:
+                case InteractionType.BANZAISCOREYELLOW:
+                case InteractionType.BANZAIGATEYELLOW:
+                case InteractionType.FREEZEYELLOWCOUNTER:
+                case InteractionType.FREEZEYELLOWGATE:
                     this.room.GetGameManager().RemoveFurnitureFromTeam(item, Team.yellow);
                     break;
                 case InteractionType.footballgoalblue:
-                case InteractionType.footballcounterblue:
-                case InteractionType.banzaiscoreblue:
-                case InteractionType.banzaigateblue:
-                case InteractionType.freezebluecounter:
-                case InteractionType.freezebluegate:
+                case InteractionType.FOOTBALLCOUNTERBLUE:
+                case InteractionType.BANZAISCOREBLUE:
+                case InteractionType.BANZAIGATEBLUE:
+                case InteractionType.FREEZEBLUECOUNTER:
+                case InteractionType.FREEZEBLUEGATE:
                     this.room.GetGameManager().RemoveFurnitureFromTeam(item, Team.blue);
                     break;
-                case InteractionType.footballgoalred:
-                case InteractionType.footballcounterred:
-                case InteractionType.banzaiscorered:
-                case InteractionType.banzaigatered:
-                case InteractionType.freezeredcounter:
-                case InteractionType.freezeredgate:
+                case InteractionType.FOOTBALLGOALRED:
+                case InteractionType.FOOTBALLCOUNTERRED:
+                case InteractionType.BANZAISCORERED:
+                case InteractionType.BANZAIGATERED:
+                case InteractionType.FREEZEREDCOUNTER:
+                case InteractionType.FREEZEREDGATE:
                     this.room.GetGameManager().RemoveFurnitureFromTeam(item, Team.red);
                     break;
-                case InteractionType.freezeexit:
+                case InteractionType.FREEZEEXIT:
                     this.room.GetGameItemHandler().RemoveExitTeleport(item);
                     break;
             }
@@ -619,43 +619,43 @@ namespace Butterfly.HabboHotel.Rooms
 
             switch (Item.GetBaseItem().InteractionType)
             {
-                case InteractionType.roller:
+                case InteractionType.ROLLER:
                     if (!this.room.GetRoomItemHandler().GetRollers().Contains(Item))
                     {
                         this.room.GetRoomItemHandler().TryAddRoller(Item.Id, Item);
                     }
 
                     break;
-                case InteractionType.footballgoalgreen:
-                case InteractionType.footballcountergreen:
-                case InteractionType.banzaiscoregreen:
-                case InteractionType.banzaigategreen:
-                case InteractionType.freezegreencounter:
-                case InteractionType.freezegreengate:
+                case InteractionType.FOOTBALLGOALGREEN:
+                case InteractionType.FOOTBALLCOUNTERGREEN:
+                case InteractionType.BANZAISCOREGREEN:
+                case InteractionType.BANZAIGATEGREEN:
+                case InteractionType.FREEZEGREENCOUNTER:
+                case InteractionType.FREEZEGREENGATE:
                     this.room.GetGameManager().AddFurnitureToTeam(Item, Team.green);
                     break;
-                case InteractionType.footballgoalyellow:
-                case InteractionType.footballcounteryellow:
-                case InteractionType.banzaiscoreyellow:
-                case InteractionType.banzaigateyellow:
-                case InteractionType.freezeyellowcounter:
-                case InteractionType.freezeyellowgate:
+                case InteractionType.FOOTBALLGOALYELLOW:
+                case InteractionType.FOOTBALLCOUNTERYELLOW:
+                case InteractionType.BANZAISCOREYELLOW:
+                case InteractionType.BANZAIGATEYELLOW:
+                case InteractionType.FREEZEYELLOWCOUNTER:
+                case InteractionType.FREEZEYELLOWGATE:
                     this.room.GetGameManager().AddFurnitureToTeam(Item, Team.yellow);
                     break;
                 case InteractionType.footballgoalblue:
-                case InteractionType.footballcounterblue:
-                case InteractionType.banzaiscoreblue:
-                case InteractionType.banzaigateblue:
-                case InteractionType.freezebluecounter:
-                case InteractionType.freezebluegate:
+                case InteractionType.FOOTBALLCOUNTERBLUE:
+                case InteractionType.BANZAISCOREBLUE:
+                case InteractionType.BANZAIGATEBLUE:
+                case InteractionType.FREEZEBLUECOUNTER:
+                case InteractionType.FREEZEBLUEGATE:
                     this.room.GetGameManager().AddFurnitureToTeam(Item, Team.blue);
                     break;
-                case InteractionType.footballgoalred:
-                case InteractionType.footballcounterred:
-                case InteractionType.banzaiscorered:
-                case InteractionType.banzaigatered:
-                case InteractionType.freezeredcounter:
-                case InteractionType.freezeredgate:
+                case InteractionType.FOOTBALLGOALRED:
+                case InteractionType.FOOTBALLCOUNTERRED:
+                case InteractionType.BANZAISCORERED:
+                case InteractionType.BANZAIGATERED:
+                case InteractionType.FREEZEREDCOUNTER:
+                case InteractionType.FREEZEREDGATE:
                     this.room.GetGameManager().AddFurnitureToTeam(Item, Team.red);
                     break;
             }
@@ -669,7 +669,7 @@ namespace Butterfly.HabboHotel.Rooms
                 this.AddCoordinatedItem(Item, new Point(point.X, point.Y));
             }
 
-            if (Item.GetBaseItem().InteractionType == InteractionType.football)
+            if (Item.GetBaseItem().InteractionType == InteractionType.FOOTBALL)
             {
                 return true;
             }

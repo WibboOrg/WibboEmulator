@@ -13,7 +13,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             int.TryParse(Params[1], out int EnableNum);
 
-            if (!ButterflyEnvironment.GetGame().GetEffectsInventoryManager().HaveEffect(EnableNum, Session.GetHabbo().HasFuse("fuse_sysadmin")))
+            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(EnableNum, Session.GetHabbo().HasFuse("fuse_sysadmin")))
             {
                 return;
             }

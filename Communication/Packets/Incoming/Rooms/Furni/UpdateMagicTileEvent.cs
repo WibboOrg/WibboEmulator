@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 if ((room == null ? false : room.CheckRights(Session)))
                 {
                     Item item = room.GetRoomItemHandler().GetItem(ItemId);
-                    if ((item == null ? false : item.GetBaseItem().InteractionType == InteractionType.pilemagic))
+                    if ((item == null ? false : item.GetBaseItem().InteractionType == InteractionType.PILEMAGIC))
                     {
                         if (HeightToSet > 5000)
                         {

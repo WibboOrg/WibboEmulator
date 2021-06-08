@@ -166,21 +166,21 @@ namespace Butterfly.HabboHotel.Items
                 switch (this.GetBaseItem().InteractionType)
                 {
                     case InteractionType.GATE:
-                    case InteractionType.banzaipyramid:
+                    case InteractionType.BANZAIPYRAMID:
                         return new InteractorGate();
                     case InteractionType.SCOREBOARD:
                         return new InteractorScoreboard();
                     case InteractionType.VENDINGMACHINE:
                         return new InteractorVendor();
-                    case InteractionType.vendingenablemachine:
+                    case InteractionType.VENDINGENABLEMACHINE:
                         return new InteractorVendorEnable();
                     case InteractionType.ALERT:
                         return new InteractorAlert();
-                    case InteractionType.onewaygate:
+                    case InteractionType.ONEWAYGATE:
                         return new InteractorOneWayGate();
-                    case InteractionType.loveshuffler:
+                    case InteractionType.LOVESHUFFLER:
                         return new InteractorLoveShuffler();
-                    case InteractionType.habbowheel:
+                    case InteractionType.HABBOWHEEL:
                         return new InteractorHabboWheel();
                     case InteractionType.DICE:
                         return new InteractorDice();
@@ -188,109 +188,109 @@ namespace Butterfly.HabboHotel.Items
                         return new InteractorSpinningBottle();
                     case InteractionType.TELEPORT:
                         return new InteractorTeleport();
-                    case InteractionType.football:
+                    case InteractionType.FOOTBALL:
                         return new InteractorFootball();
-                    case InteractionType.footballcountergreen:
-                    case InteractionType.footballcounteryellow:
-                    case InteractionType.footballcounterblue:
-                    case InteractionType.footballcounterred:
+                    case InteractionType.FOOTBALLCOUNTERGREEN:
+                    case InteractionType.FOOTBALLCOUNTERYELLOW:
+                    case InteractionType.FOOTBALLCOUNTERBLUE:
+                    case InteractionType.FOOTBALLCOUNTERRED:
                         return new InteractorScoreCounter();
-                    case InteractionType.banzaiscoreblue:
-                    case InteractionType.banzaiscorered:
-                    case InteractionType.banzaiscoreyellow:
-                    case InteractionType.banzaiscoregreen:
+                    case InteractionType.BANZAISCOREBLUE:
+                    case InteractionType.BANZAISCORERED:
+                    case InteractionType.BANZAISCOREYELLOW:
+                    case InteractionType.BANZAISCOREGREEN:
                         return new InteractorBanzaiScoreCounter();
-                    case InteractionType.ChronoTimer:
+                    case InteractionType.CHRONOTIMER:
                         return new InteractorTimer();
-                    case InteractionType.banzaiblo:
-                    case InteractionType.banzaiblob:
+                    case InteractionType.BANZAIBLO:
+                    case InteractionType.BANZAIBLOB:
                         return new InteractorBlob();
-                    case InteractionType.banzaipuck:
+                    case InteractionType.BANZAIPUCK:
                         return new InteractorBanzaiPuck();
-                    case InteractionType.freezetileblock:
-                    case InteractionType.freezetile:
+                    case InteractionType.FREEZETILEBLOCK:
+                    case InteractionType.FREEZETILE:
                         return new InteractorFreezeTile();
-                    case InteractionType.jukebox:
+                    case InteractionType.JUKEBOX:
                         return new InteractorJukebox();
-                    case InteractionType.triggertimer:
-                    case InteractionType.triggerroomenter:
-                    case InteractionType.triggergameend:
-                    case InteractionType.triggergamestart:
-                    case InteractionType.triggerrepeater:
-                    case InteractionType.triggerrepeaterlong:
-                    case InteractionType.triggeronusersay:
-                    case InteractionType.triggercommand:
+                    case InteractionType.TRIGGERTIMER:
+                    case InteractionType.TRIGGERROOMENTER:
+                    case InteractionType.TRIGGERGAMEEND:
+                    case InteractionType.TRIGGERGAMESTART:
+                    case InteractionType.TRIGGERREPEATER:
+                    case InteractionType.TRIGGERREPEATERLONG:
+                    case InteractionType.TRIGGERONUSERSAY:
+                    case InteractionType.TRIGGERCOMMAND:
                     case InteractionType.WIRED_TRIGGER_SELF:
-                    case InteractionType.triggercollisionuser:
-                    case InteractionType.triggerscoreachieved:
-                    case InteractionType.triggerstatechanged:
-                    case InteractionType.triggerwalkonfurni:
-                    case InteractionType.triggerwalkofffurni:
-                    case InteractionType.triggercollision:
-                    case InteractionType.actiongivescore:
-                    case InteractionType.actionposreset:
-                    case InteractionType.actionmoverotate:
-                    case InteractionType.actionresettimer:
-                    case InteractionType.actionshowmessage:
-                    case InteractionType.highscore:
-                    case InteractionType.highscorepoints:
-                    case InteractionType.actiongivereward:
-                    case InteractionType.superwired:
-                    case InteractionType.superwiredcondition:
-                    case InteractionType.actionteleportto:
-                    case InteractionType.wf_act_endgame_team:
-                    case InteractionType.wf_act_call_stacks:
-                    case InteractionType.actiontogglestate:
-                    case InteractionType.actionkickuser:
-                    case InteractionType.actionflee:
-                    case InteractionType.actionchase:
-                    case InteractionType.collisioncase:
-                    case InteractionType.collisionteam:
-                    case InteractionType.actionmovetodir:
-                    case InteractionType.conditionfurnishaveusers:
-                    case InteractionType.conditionfurnishavenousers:
-                    case InteractionType.conditionhasfurnionfurni:
-                    case InteractionType.conditionhasfurnionfurniNegative:
-                    case InteractionType.conditionstatepos:
-                    case InteractionType.wf_cnd_stuff_is:
-                    case InteractionType.wf_cnd_not_stuff_is:
-                    case InteractionType.conditionstateposNegative:
-                    case InteractionType.conditiontimelessthan:
-                    case InteractionType.conditiontimemorethan:
-                    case InteractionType.conditiontriggeronfurni:
-                    case InteractionType.conditiontriggeronfurniNegative:
-                    case InteractionType.conditionactoringroup:
-                    case InteractionType.conditionnotingroup:
-                    case InteractionType.wf_trg_bot_reached_stf:
-                    case InteractionType.wf_trg_bot_reached_avtr:
-                    case InteractionType.wf_act_bot_clothes:
-                    case InteractionType.wf_act_bot_teleport:
-                    case InteractionType.wf_act_bot_follow_avatar:
-                    case InteractionType.wf_act_bot_give_handitem:
-                    case InteractionType.wf_act_bot_move:
-                    case InteractionType.wf_act_user_move:
-                    case InteractionType.wf_act_bot_talk_to_avatar:
-                    case InteractionType.wf_act_bot_talk:
-                    case InteractionType.wf_cnd_has_handitem:
-                    case InteractionType.wf_act_join_team:
-                    case InteractionType.wf_act_leave_team:
-                    case InteractionType.wf_act_give_score_tm:
-                    case InteractionType.wf_cnd_actor_in_team:
-                    case InteractionType.wf_cnd_not_in_team:
-                    case InteractionType.wf_cnd_not_user_count:
-                    case InteractionType.wf_cnd_user_count_in:
+                    case InteractionType.TRIGGERCOLLISIONUSER:
+                    case InteractionType.TRIGGERSCOREACHIEVED:
+                    case InteractionType.TRIGGERSTATECHANGED:
+                    case InteractionType.TRIGGERWALKONFURNI:
+                    case InteractionType.TRIGGERWALKOFFFURNI:
+                    case InteractionType.TRIGGERCOLLISION:
+                    case InteractionType.ACTIONGIVESCORE:
+                    case InteractionType.ACTIONPOSRESET:
+                    case InteractionType.ACTIONMOVEROTATE:
+                    case InteractionType.ACTIONRESETTIMER:
+                    case InteractionType.ACTIONSHOWMESSAGE:
+                    case InteractionType.HIGHSCORE:
+                    case InteractionType.HIGHSCOREPOINTS:
+                    case InteractionType.ACTIONGIVEREWARD:
+                    case InteractionType.SUPERWIRED:
+                    case InteractionType.SUPERWIREDCONDITION:
+                    case InteractionType.ACTIONTELEPORTTO:
+                    case InteractionType.WF_ACT_ENDGAME_TEAM:
+                    case InteractionType.WF_ACT_CALL_STACKS:
+                    case InteractionType.ACTIONTOGGLESTATE:
+                    case InteractionType.ACTIONKICKUSER:
+                    case InteractionType.ACTIONFLEE:
+                    case InteractionType.ACTIONCHASE:
+                    case InteractionType.COLLISIONCASE:
+                    case InteractionType.COLLISIONTEAM:
+                    case InteractionType.ACTIONMOVETODIR:
+                    case InteractionType.CONDITIONFURNISHAVEUSERS:
+                    case InteractionType.CONDITIONFURNISHAVENOUSERS:
+                    case InteractionType.CONDITIONHASFURNIONFURNI:
+                    case InteractionType.CONDITIONHASFURNIONFURNINEGATIVE:
+                    case InteractionType.CONDITIONSTATEPOS:
+                    case InteractionType.WF_CND_STUFF_IS:
+                    case InteractionType.WF_CND_NOT_STUFF_IS:
+                    case InteractionType.CONDITIONSTATEPOSNEGATIVE:
+                    case InteractionType.CONDITIONTIMELESSTHAN:
+                    case InteractionType.CONDITIONTIMEMORETHAN:
+                    case InteractionType.CONDITIONTRIGGERONFURNI:
+                    case InteractionType.CONDITIONTRIGGERONFURNINEGATIVE:
+                    case InteractionType.CONDITIONACTORINGROUP:
+                    case InteractionType.CONDITIONNOTINGROUP:
+                    case InteractionType.WF_TRG_BOT_REACHED_STF:
+                    case InteractionType.WF_TRG_BOT_REACHED_AVTR:
+                    case InteractionType.WF_ACT_BOT_CLOTHES:
+                    case InteractionType.WF_ACT_BOT_TELEPORT:
+                    case InteractionType.WF_ACT_BOT_FOLLOW_AVATAR:
+                    case InteractionType.WF_ACT_BOT_GIVE_HANDITEM:
+                    case InteractionType.WF_ACT_BOT_MOVE:
+                    case InteractionType.WF_ACT_USER_MOVE:
+                    case InteractionType.WF_ACT_BOT_TALK_TO_AVATAR:
+                    case InteractionType.WF_ACT_BOT_TALK:
+                    case InteractionType.WF_CND_HAS_HANDITEM:
+                    case InteractionType.WF_ACT_JOIN_TEAM:
+                    case InteractionType.WF_ACT_LEAVE_TEAM:
+                    case InteractionType.WF_ACT_GIVE_SCORE_TM:
+                    case InteractionType.WF_CND_ACTOR_IN_TEAM:
+                    case InteractionType.WF_CND_NOT_IN_TEAM:
+                    case InteractionType.WF_CND_NOT_USER_COUNT:
+                    case InteractionType.WF_CND_USER_COUNT_IN:
                         return new WiredInteractor();
                     case InteractionType.MANNEQUIN:
                         return new InteractorManiqui();
                     case InteractionType.TONER:
                         return new InteractorChangeBackgrounds();
-                    case InteractionType.puzzlebox:
+                    case InteractionType.PUZZLEBOX:
                         return new InteractorPuzzleBox();
-                    case InteractionType.floorswitch1:
+                    case InteractionType.FLOORSWITCH1:
                         return new InteractorSwitch1(this.GetBaseItem().Modes);
                     case InteractionType.CRACKABLE:
                         return new InteractorCrackable(this.GetBaseItem().Modes);
-                    case InteractionType.tvyoutube:
+                    case InteractionType.TVYOUTUBE:
                         return new InteractorTvYoutube();
                     case InteractionType.LOVELOCK:
                         return new InteractorLoveLock();
@@ -340,38 +340,38 @@ namespace Butterfly.HabboHotel.Items
 
                 switch (this.GetBaseItem().InteractionType)
                 {
-                    case InteractionType.roller:
+                    case InteractionType.ROLLER:
                         this.IsRoller = true;
                         break;
-                    case InteractionType.footballcountergreen:
-                    case InteractionType.banzaigategreen:
-                    case InteractionType.banzaiscoregreen:
-                    case InteractionType.freezegreencounter:
-                    case InteractionType.freezegreengate:
+                    case InteractionType.FOOTBALLCOUNTERGREEN:
+                    case InteractionType.BANZAIGATEGREEN:
+                    case InteractionType.BANZAISCOREGREEN:
+                    case InteractionType.FREEZEGREENCOUNTER:
+                    case InteractionType.FREEZEGREENGATE:
                         this.Team = Team.green;
                         break;
-                    case InteractionType.footballcounteryellow:
-                    case InteractionType.banzaigateyellow:
-                    case InteractionType.banzaiscoreyellow:
-                    case InteractionType.freezeyellowcounter:
-                    case InteractionType.freezeyellowgate:
+                    case InteractionType.FOOTBALLCOUNTERYELLOW:
+                    case InteractionType.BANZAIGATEYELLOW:
+                    case InteractionType.BANZAISCOREYELLOW:
+                    case InteractionType.FREEZEYELLOWCOUNTER:
+                    case InteractionType.FREEZEYELLOWGATE:
                         this.Team = Team.yellow;
                         break;
-                    case InteractionType.footballcounterblue:
-                    case InteractionType.banzaigateblue:
-                    case InteractionType.banzaiscoreblue:
-                    case InteractionType.freezebluecounter:
-                    case InteractionType.freezebluegate:
+                    case InteractionType.FOOTBALLCOUNTERBLUE:
+                    case InteractionType.BANZAIGATEBLUE:
+                    case InteractionType.BANZAISCOREBLUE:
+                    case InteractionType.FREEZEBLUECOUNTER:
+                    case InteractionType.FREEZEBLUEGATE:
                         this.Team = Team.blue;
                         break;
-                    case InteractionType.footballcounterred:
-                    case InteractionType.banzaigatered:
-                    case InteractionType.banzaiscorered:
-                    case InteractionType.freezeredcounter:
-                    case InteractionType.freezeredgate:
+                    case InteractionType.FOOTBALLCOUNTERRED:
+                    case InteractionType.BANZAIGATERED:
+                    case InteractionType.BANZAISCORERED:
+                    case InteractionType.FREEZEREDCOUNTER:
+                    case InteractionType.FREEZEREDGATE:
                         this.Team = Team.red;
                         break;
-                    case InteractionType.banzaitele:
+                    case InteractionType.BANZAITELE:
                         this.ExtraData = "";
                         break;
                     case InteractionType.GUILD_ITEM:
@@ -646,7 +646,7 @@ namespace Butterfly.HabboHotel.Items
 
             switch (this.GetBaseItem().InteractionType)
             {
-                case InteractionType.football:
+                case InteractionType.FOOTBALL:
                     if (this.InteractionCountHelper <= 0 || this.InteractionCountHelper > 6)
                     {
                         this.ExtraData = "0";
@@ -761,7 +761,7 @@ namespace Butterfly.HabboHotel.Items
 
                     this.UpdateCounter = 1;
                     break;
-                case InteractionType.ChronoTimer:
+                case InteractionType.CHRONOTIMER:
                     if (string.IsNullOrEmpty(this.ExtraData))
                     {
                         break;
@@ -805,7 +805,7 @@ namespace Butterfly.HabboHotel.Items
                         this.GetRoom().GetGameManager().StopGame();
                         break;
                     }
-                case InteractionType.banzaitele:
+                case InteractionType.BANZAITELE:
                     if (this.InteractingUser == 0)
                     {
                         this.ExtraData = string.Empty;
@@ -828,7 +828,7 @@ namespace Butterfly.HabboHotel.Items
                     this.InteractingUser = 0;
 
                     break;
-                case InteractionType.freezetile:
+                case InteractionType.FREEZETILE:
                     if (this.InteractingUser <= 0)
                     {
                         break;
@@ -897,7 +897,7 @@ namespace Butterfly.HabboHotel.Items
                     this.ExtraData = "0";
                     this.UpdateState(false, true);
                     break;
-                case InteractionType.vendingenablemachine:
+                case InteractionType.VENDINGENABLEMACHINE:
                     if (!(this.ExtraData == "1"))
                     {
                         break;
@@ -922,7 +922,7 @@ namespace Butterfly.HabboHotel.Items
                     this.ExtraData = "0";
                     this.UpdateState(false, true);
                     break;
-                case InteractionType.onewaygate:
+                case InteractionType.ONEWAYGATE:
                     RoomUser roomUser3 = null;
                     if (this.InteractingUser > 0)
                     {
@@ -952,7 +952,7 @@ namespace Butterfly.HabboHotel.Items
                     }
 
                     break;
-                case InteractionType.loveshuffler:
+                case InteractionType.LOVESHUFFLER:
                     if (this.ExtraData == "0")
                     {
                         this.ExtraData = ButterflyEnvironment.GetRandomNumber(1, 4).ToString();
@@ -965,7 +965,7 @@ namespace Butterfly.HabboHotel.Items
 
                     this.UpdateState(false, true);
                     break;
-                case InteractionType.habbowheel:
+                case InteractionType.HABBOWHEEL:
                     this.ExtraData = ButterflyEnvironment.GetRandomNumber(1, 10).ToString();
                     this.UpdateState();
                     break;
@@ -1135,38 +1135,38 @@ namespace Butterfly.HabboHotel.Items
 
             switch (this.GetBaseItem().InteractionType)
             {
-                case InteractionType.roller:
+                case InteractionType.ROLLER:
                     this.IsRoller = true;
                     break;
-                case InteractionType.footballcountergreen:
-                case InteractionType.banzaigategreen:
-                case InteractionType.banzaiscoregreen:
-                case InteractionType.freezegreencounter:
-                case InteractionType.freezegreengate:
+                case InteractionType.FOOTBALLCOUNTERGREEN:
+                case InteractionType.BANZAIGATEGREEN:
+                case InteractionType.BANZAISCOREGREEN:
+                case InteractionType.FREEZEGREENCOUNTER:
+                case InteractionType.FREEZEGREENGATE:
                     this.Team = Team.green;
                     break;
-                case InteractionType.footballcounteryellow:
-                case InteractionType.banzaigateyellow:
-                case InteractionType.banzaiscoreyellow:
-                case InteractionType.freezeyellowcounter:
-                case InteractionType.freezeyellowgate:
+                case InteractionType.FOOTBALLCOUNTERYELLOW:
+                case InteractionType.BANZAIGATEYELLOW:
+                case InteractionType.BANZAISCOREYELLOW:
+                case InteractionType.FREEZEYELLOWCOUNTER:
+                case InteractionType.FREEZEYELLOWGATE:
                     this.Team = Team.yellow;
                     break;
-                case InteractionType.footballcounterblue:
-                case InteractionType.banzaigateblue:
-                case InteractionType.banzaiscoreblue:
-                case InteractionType.freezebluecounter:
-                case InteractionType.freezebluegate:
+                case InteractionType.FOOTBALLCOUNTERBLUE:
+                case InteractionType.BANZAIGATEBLUE:
+                case InteractionType.BANZAISCOREBLUE:
+                case InteractionType.FREEZEBLUECOUNTER:
+                case InteractionType.FREEZEBLUEGATE:
                     this.Team = Team.blue;
                     break;
-                case InteractionType.footballcounterred:
-                case InteractionType.banzaigatered:
-                case InteractionType.banzaiscorered:
-                case InteractionType.freezeredcounter:
-                case InteractionType.freezeredgate:
+                case InteractionType.FOOTBALLCOUNTERRED:
+                case InteractionType.BANZAIGATERED:
+                case InteractionType.BANZAISCORERED:
+                case InteractionType.FREEZEREDCOUNTER:
+                case InteractionType.FREEZEREDGATE:
                     this.Team = Team.red;
                     break;
-                case InteractionType.banzaitele:
+                case InteractionType.BANZAITELE:
                     this.ExtraData = "";
                     break;
                 case InteractionType.GUILD_ITEM:

@@ -17,7 +17,7 @@ using Butterfly.HabboHotel.GameClients;namespace Butterfly.HabboHotel.Rooms.Ch
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetEffectsInventoryManager().HaveEffect(NumEnable, Session.GetHabbo().HasFuse("fuse_sysadmin")))
+            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, Session.GetHabbo().HasFuse("fuse_sysadmin")))
             {
                 return;
             }

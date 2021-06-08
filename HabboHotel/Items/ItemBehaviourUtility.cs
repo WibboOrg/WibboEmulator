@@ -16,7 +16,7 @@ namespace Butterfly.HabboHotel.Items
                 default:
                     Message.WriteInteger(1);
                     Message.WriteInteger(0);
-                    Message.WriteString((Item.GetBaseItem().InteractionType != InteractionType.TONER && Item.GetBaseItem().InteractionType != InteractionType.fbgate) ? Item.ExtraData : string.Empty);
+                    Message.WriteString((Item.GetBaseItem().InteractionType != InteractionType.TONER && Item.GetBaseItem().InteractionType != InteractionType.FBGATE) ? Item.ExtraData : string.Empty);
                     break;
 
                 case InteractionType.WALLPAPER:
@@ -59,8 +59,8 @@ namespace Butterfly.HabboHotel.Items
                     }
                     break;
 
-                case InteractionType.highscore:
-                case InteractionType.highscorepoints:
+                case InteractionType.HIGHSCORE:
+                case InteractionType.HIGHSCOREPOINTS:
                     Message.WriteInteger(0);
 
                     Message.WriteInteger(6); //Type
@@ -116,7 +116,7 @@ namespace Butterfly.HabboHotel.Items
                     Message.WriteInteger(Item.GetBaseItem().Modes - 1); //Type de duré
                     break;
 
-                case InteractionType.adsbackground:
+                case InteractionType.ADSBACKGROUND:
                     if (!string.IsNullOrEmpty(Item.ExtraData))
                     {
                         Message.WriteInteger(0);
@@ -307,7 +307,7 @@ namespace Butterfly.HabboHotel.Items
                     }
                     break;
 
-                case InteractionType.tvyoutube:
+                case InteractionType.TVYOUTUBE:
                     Message.WriteInteger(0);
                     Message.WriteInteger(1);
                     Message.WriteInteger(2);

@@ -87,7 +87,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                     }
                 case "effet":
                     {
-                        ButterflyEnvironment.GetGame().GetEffectsInventoryManager().Init();
+                        ButterflyEnvironment.GetGame().GetEffectManager().Init();
                         break;
                     }
                 case "rp":

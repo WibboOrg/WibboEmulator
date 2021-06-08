@@ -1103,7 +1103,7 @@ namespace Butterfly.HabboHotel.Rooms
                         User.RotBody = roomItem.Rotation;
                         User.UpdateNeeded = true;
                         break;
-                    case InteractionType.pressurepad:
+                    case InteractionType.PRESSUREPAD:
                     case InteractionType.TRAMPOLINE:
                     case InteractionType.TREADMILL:
                     case InteractionType.CROSSTRAINER:
@@ -1129,10 +1129,10 @@ namespace Butterfly.HabboHotel.Rooms
                         roomItem.InteractingUser = User.GetClient().GetHabbo().Id;
                         roomItem.ReqUpdate(2);
                         break;
-                    case InteractionType.banzaigateblue:
-                    case InteractionType.banzaigatered:
-                    case InteractionType.banzaigateyellow:
-                    case InteractionType.banzaigategreen:
+                    case InteractionType.BANZAIGATEBLUE:
+                    case InteractionType.BANZAIGATERED:
+                    case InteractionType.BANZAIGATEYELLOW:
+                    case InteractionType.BANZAIGATEGREEN:
                         if (cyclegameitems && !User.IsBot)
                         {
                             int EffectId = ((int)roomItem.Team + 32);
@@ -1177,29 +1177,29 @@ namespace Butterfly.HabboHotel.Rooms
                             }
                         }
                         break;
-                    case InteractionType.banzaiblo:
+                    case InteractionType.BANZAIBLO:
                         if (cyclegameitems && User.Team != Team.none && !User.IsBot)
                         {
                             this._room.GetGameItemHandler().OnWalkableBanzaiBlo(User, roomItem);
                         }
                         break;
-                    case InteractionType.banzaiblob:
+                    case InteractionType.BANZAIBLOB:
                         if (cyclegameitems && User.Team != Team.none && !User.IsBot)
                         {
                             this._room.GetGameItemHandler().OnWalkableBanzaiBlob(User, roomItem);
                         }
                         break;
-                    case InteractionType.banzaitele:
+                    case InteractionType.BANZAITELE:
                         if (cyclegameitems)
                         {
                             this._room.GetGameItemHandler().onTeleportRoomUserEnter(User, roomItem);
                         }
 
                         break;
-                    case InteractionType.freezeyellowgate:
-                    case InteractionType.freezeredgate:
-                    case InteractionType.freezegreengate:
-                    case InteractionType.freezebluegate:
+                    case InteractionType.FREEZEYELLOWGATE:
+                    case InteractionType.FREEZEREDGATE:
+                    case InteractionType.FREEZEGREENGATE:
+                    case InteractionType.FREEZEBLUEGATE:
                         if (cyclegameitems && !User.IsBot)
                         {
                             int EffectId = ((int)roomItem.Team + 39);
@@ -1242,7 +1242,7 @@ namespace Butterfly.HabboHotel.Rooms
                             }
                         }
                         break;
-                    case InteractionType.fbgate:
+                    case InteractionType.FBGATE:
                         if (cyclegameitems || string.IsNullOrEmpty(roomItem.ExtraData) || !roomItem.ExtraData.Contains(',') || User == null || User.IsBot || User.transformation || User.IsSpectator)
                         {
                             break;
@@ -1301,7 +1301,7 @@ namespace Butterfly.HabboHotel.Rooms
                             this._room.SendPacket(new UserChangeComposer(User, false));
                         }
                         break;
-                    case InteractionType.freezetileblock:
+                    case InteractionType.FREEZETILEBLOCK:
                         if (!cyclegameitems)
                         {
                             break;
@@ -1721,7 +1721,7 @@ namespace Butterfly.HabboHotel.Rooms
                     roomItem.ExtraData = "0;" + roomItem.GroupId;
                     roomItem.UpdateState(false, true);
                 }
-                else if (roomItem.GetBaseItem().InteractionType == InteractionType.pressurepad
+                else if (roomItem.GetBaseItem().InteractionType == InteractionType.PRESSUREPAD
                     || roomItem.GetBaseItem().InteractionType == InteractionType.TRAMPOLINE
                     || roomItem.GetBaseItem().InteractionType == InteractionType.TREADMILL
                     || roomItem.GetBaseItem().InteractionType == InteractionType.CROSSTRAINER)
@@ -1729,7 +1729,7 @@ namespace Butterfly.HabboHotel.Rooms
                     roomItem.ExtraData = "0";
                     roomItem.UpdateState(false, true);
                 }
-                else if (roomItem.GetBaseItem().InteractionType == InteractionType.football)
+                else if (roomItem.GetBaseItem().InteractionType == InteractionType.FOOTBALL)
                 {
                     if (!User.AllowMoveToRoller || roomItem.InteractionCountHelper > 0 || this._room.OldFoot)
                     {

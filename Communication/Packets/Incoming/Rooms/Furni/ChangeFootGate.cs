@@ -19,7 +19,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             Item item = room.GetRoomItemHandler().GetItem(Id);
-            if (item == null || item.GetBaseItem().InteractionType != InteractionType.fbgate)
+            if (item == null || item.GetBaseItem().InteractionType != InteractionType.FBGATE)
             {
                 return;
             }

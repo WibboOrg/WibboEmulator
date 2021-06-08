@@ -3,7 +3,7 @@ using Butterfly.HabboHotel.GameClients;using System.Linq;namespace Butterfly.
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetEffectsInventoryManager().HaveEffect(NumEnable, Session.GetHabbo().HasFuse("fuse_sysadmin")))
+            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, Session.GetHabbo().HasFuse("fuse_sysadmin")))
             {
                 return;
             }

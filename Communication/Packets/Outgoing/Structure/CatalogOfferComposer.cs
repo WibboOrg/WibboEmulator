@@ -37,7 +37,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Structure
                 {
                     this.WriteString(Item.Name.Split('_')[2]);
                 }
-                else if (Item.Data.InteractionType == InteractionType.bot)//Bots
+                else if (Item.Data.InteractionType == InteractionType.BOT)//Bots
                 {
                     if (!ButterflyEnvironment.GetGame().GetCatalog().TryGetBot(Item.ItemId, out CatalogBot CatalogBot))
                     {

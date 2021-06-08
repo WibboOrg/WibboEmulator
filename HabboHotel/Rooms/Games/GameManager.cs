@@ -140,7 +140,7 @@ namespace Butterfly.HabboHotel.Rooms.Games
 
         private static bool isSoccerGoal(InteractionType type)
         {
-            if (type != InteractionType.footballgoalblue && type != InteractionType.footballgoalgreen && type != InteractionType.footballgoalred && type != InteractionType.footballgoalyellow)
+            if (type != InteractionType.footballgoalblue && type != InteractionType.FOOTBALLGOALGREEN && type != InteractionType.FOOTBALLGOALRED && type != InteractionType.FOOTBALLGOALYELLOW)
             {
                 return false;
             }
@@ -154,15 +154,15 @@ namespace Butterfly.HabboHotel.Rooms.Games
         {
             switch (type)
             {
-                case InteractionType.banzaiscoreblue:
-                case InteractionType.banzaiscorered:
-                case InteractionType.banzaiscoreyellow:
-                case InteractionType.banzaiscoregreen:
+                case InteractionType.BANZAISCOREBLUE:
+                case InteractionType.BANZAISCORERED:
+                case InteractionType.BANZAISCOREYELLOW:
+                case InteractionType.BANZAISCOREGREEN:
 
-                case InteractionType.freezebluecounter:
-                case InteractionType.freezegreencounter:
-                case InteractionType.freezeredcounter:
-                case InteractionType.freezeyellowcounter:
+                case InteractionType.FREEZEBLUECOUNTER:
+                case InteractionType.FREEZEGREENCOUNTER:
+                case InteractionType.FREEZEREDCOUNTER:
+                case InteractionType.FREEZEYELLOWCOUNTER:
                     return true;
             }
             return false;
@@ -250,14 +250,14 @@ namespace Butterfly.HabboHotel.Rooms.Games
         {
             switch (item.GetBaseItem().InteractionType)
             {
-                case InteractionType.freezebluegate:
-                case InteractionType.freezegreengate:
-                case InteractionType.freezeredgate:
-                case InteractionType.freezeyellowgate:
-                case InteractionType.banzaigateblue:
-                case InteractionType.banzaigategreen:
-                case InteractionType.banzaigatered:
-                case InteractionType.banzaigateyellow:
+                case InteractionType.FREEZEBLUEGATE:
+                case InteractionType.FREEZEGREENGATE:
+                case InteractionType.FREEZEREDGATE:
+                case InteractionType.FREEZEYELLOWGATE:
+                case InteractionType.BANZAIGATEBLUE:
+                case InteractionType.BANZAIGATEGREEN:
+                case InteractionType.BANZAIGATERED:
+                case InteractionType.BANZAIGATEYELLOW:
                     //this.room.GetGameMap().UpdateGameMap(item, false);
                     break;
             }
@@ -290,23 +290,23 @@ namespace Butterfly.HabboHotel.Rooms.Games
         {
             switch (item.GetBaseItem().InteractionType)
             {
-                case InteractionType.banzaigateblue:
-                case InteractionType.freezebluegate:
+                case InteractionType.BANZAIGATEBLUE:
+                case InteractionType.FREEZEBLUEGATE:
                     item.ExtraData = this.room.GetTeamManager().BlueTeam.Count.ToString();
                     item.UpdateState();
                     break;
-                case InteractionType.banzaigatered:
-                case InteractionType.freezeredgate:
+                case InteractionType.BANZAIGATERED:
+                case InteractionType.FREEZEREDGATE:
                     item.ExtraData = this.room.GetTeamManager().RedTeam.Count.ToString();
                     item.UpdateState();
                     break;
-                case InteractionType.banzaigategreen:
-                case InteractionType.freezegreengate:
+                case InteractionType.BANZAIGATEGREEN:
+                case InteractionType.FREEZEGREENGATE:
                     item.ExtraData = this.room.GetTeamManager().GreenTeam.Count.ToString();
                     item.UpdateState();
                     break;
-                case InteractionType.banzaigateyellow:
-                case InteractionType.freezeyellowgate:
+                case InteractionType.BANZAIGATEYELLOW:
+                case InteractionType.FREEZEYELLOWGATE:
                     item.ExtraData = this.room.GetTeamManager().YellowTeam.Count.ToString();
                     item.UpdateState();
                     break;
@@ -317,14 +317,14 @@ namespace Butterfly.HabboHotel.Rooms.Games
         {
             switch (item.GetBaseItem().InteractionType)
             {
-                case InteractionType.banzaigateblue:
-                case InteractionType.freezebluegate:
-                case InteractionType.freezegreengate:
-                case InteractionType.banzaigategreen:
-                case InteractionType.freezeredgate:
-                case InteractionType.banzaigatered:
-                case InteractionType.freezeyellowgate:
-                case InteractionType.banzaigateyellow:
+                case InteractionType.BANZAIGATEBLUE:
+                case InteractionType.FREEZEBLUEGATE:
+                case InteractionType.FREEZEGREENGATE:
+                case InteractionType.BANZAIGATEGREEN:
+                case InteractionType.FREEZEREDGATE:
+                case InteractionType.BANZAIGATERED:
+                case InteractionType.FREEZEYELLOWGATE:
+                case InteractionType.BANZAIGATEYELLOW:
                     //this.room.GetGameMap().UpdateGameMap(item, true);
                     break;
             }

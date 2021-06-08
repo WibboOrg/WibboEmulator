@@ -115,7 +115,7 @@ namespace Butterfly.HabboHotel.GameClients
                     this.SendPacket(new ActivityPointsComposer(this._habbo.WibboPoints));
                     this.SendPacket(new CfhTopicsInitComposer(ButterflyEnvironment.GetGame().GetModerationManager().UserActionPresets));
                     this.SendPacket(new SoundSettingsComposer(this._habbo.ClientVolume, false, false, false, 1));
-                    this.SendPacket(new AvatarEffectsComposer(ButterflyEnvironment.GetGame().GetEffectsInventoryManager().GetEffects()));
+                    this.SendPacket(new AvatarEffectsComposer(ButterflyEnvironment.GetGame().GetEffectManager().GetEffects()));
 
                     this._habbo.UpdateActivityPointsBalance();
                     this._habbo.UpdateCreditsBalance();

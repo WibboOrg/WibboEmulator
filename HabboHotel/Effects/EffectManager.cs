@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Butterfly.HabboHotel.EffectsInventory
+namespace Butterfly.HabboHotel.Effects
 {
-    public class EffectsInventoryManager
+    public class EffectManager
     {
         private readonly List<int> _effects;
         private readonly List<int> _effectsStaff;
@@ -15,7 +15,7 @@ namespace Butterfly.HabboHotel.EffectsInventory
             return this._effects;
         }
 
-        public EffectsInventoryManager()
+        public EffectManager()
         {
             this._effects = new List<int>();
             this._effectsStaff = new List<int>();

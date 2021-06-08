@@ -18,37 +18,37 @@ namespace Butterfly.HabboHotel.Rooms.Wired
             switch (item.GetBaseItem().InteractionType)
             {
                 #region Trigger
-                case InteractionType.triggertimer:
+                case InteractionType.TRIGGERTIMER:
                     handler = new Timer(item, room.GetWiredHandler(), 2, room.GetGameManager());
                     handler.LoadFromDatabase(dbClient, room);
                     break;
-                case InteractionType.triggerroomenter:
+                case InteractionType.TRIGGERROOMENTER:
                     handler = new EntersRoom(item, room.GetWiredHandler(), room.GetRoomUserManager(), false, string.Empty);
                     handler.LoadFromDatabase(dbClient, room);
                     break;
-                case InteractionType.triggercollision:
+                case InteractionType.TRIGGERCOLLISION:
                     handler = new Collision(item, room.GetWiredHandler(), room.GetRoomUserManager());
                     handler.LoadFromDatabase(dbClient, room);
                     break;
-                case InteractionType.triggergameend:
+                case InteractionType.TRIGGERGAMEEND:
                     HandleItemLoad(new GameEnds(item, room.GetWiredHandler(), room.GetGameManager()), item);
                     break;
-                case InteractionType.triggergamestart:
+                case InteractionType.TRIGGERGAMESTART:
                     HandleItemLoad(new GameStarts(item, room.GetWiredHandler(), room.GetGameManager()), item);
                     break;
-                case InteractionType.triggerrepeater:
+                case InteractionType.TRIGGERREPEATER:
                     handler = new Repeater(room.GetWiredHandler(), item, 0);
                     handler.LoadFromDatabase(dbClient, room);
                     break;
-                case InteractionType.triggerrepeaterlong:
+                case InteractionType.TRIGGERREPEATERLONG:
                     handler = new Repeaterlong(room.GetWiredHandler(), item, 0);
                     handler.LoadFromDatabase(dbClient, room);
                     break;
-                case InteractionType.triggeronusersay:
+                case InteractionType.TRIGGERONUSERSAY:
                     handler = new UserSays(item, room.GetWiredHandler(), false, string.Empty, room);
                     handler.LoadFromDatabase(dbClient, room);
                     break;
-                case InteractionType.triggercommand:
+                case InteractionType.TRIGGERCOMMAND:
                     handler = new UserCommand(item, room.GetWiredHandler(), room);
                     handler.LoadFromDatabase(dbClient, room);
                     break;
@@ -56,280 +56,280 @@ namespace Butterfly.HabboHotel.Rooms.Wired
                     handler = new UserTriggerSelf(item, room.GetWiredHandler(), room);
                     handler.LoadFromDatabase(dbClient, room);
                     break;
-                case InteractionType.wf_trg_bot_reached_avtr:
+                case InteractionType.WF_TRG_BOT_REACHED_AVTR:
                     handler = new BotReadchedAvatar(item, room.GetWiredHandler(), "");
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.triggercollisionuser:
+                case InteractionType.TRIGGERCOLLISIONUSER:
                     handler = new UserCollision(item, room.GetWiredHandler(), room);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.triggerscoreachieved:
+                case InteractionType.TRIGGERSCOREACHIEVED:
                     handler = new ScoreAchieved(item, room.GetWiredHandler(), 0, room.GetGameManager());
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.triggerstatechanged:
+                case InteractionType.TRIGGERSTATECHANGED:
                     handler = new SateChanged(room.GetWiredHandler(), item, new List<Item>(), 0);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.triggerwalkonfurni:
+                case InteractionType.TRIGGERWALKONFURNI:
                     handler = new WalksOnFurni(item, room.GetWiredHandler(), new List<Item>(), 0);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.triggerwalkofffurni:
+                case InteractionType.TRIGGERWALKOFFFURNI:
                     handler = new WalksOffFurni(item, room.GetWiredHandler(), new List<Item>(), 0);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
                 #endregion
                 #region Action
-                case InteractionType.actiongivescore:
+                case InteractionType.ACTIONGIVESCORE:
                     handler = new GiveScore(0, 0, room.GetGameManager(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_act_give_score_tm:
+                case InteractionType.WF_ACT_GIVE_SCORE_TM:
                     handler = new GiveScoreTeam(0, 0, 0, room.GetGameManager(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.actionposreset:
+                case InteractionType.ACTIONPOSRESET:
                     handler = new PositionReset(new List<Item>(), 0, room.GetRoomItemHandler(), room.GetWiredHandler(), item.Id, 0, 0, 0);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.actionmoverotate:
+                case InteractionType.ACTIONMOVEROTATE:
                     handler = new MoveRotate(MovementState.none, RotationState.NONE, new List<Item>(), 0, room, room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.actionresettimer:
+                case InteractionType.ACTIONRESETTIMER:
                     handler = new TimerReset(room, room.GetWiredHandler(), 1, item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.highscore:
+                case InteractionType.HIGHSCORE:
                     handler = new HighScore(item);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.highscorepoints:
+                case InteractionType.HIGHSCOREPOINTS:
                     handler = new HighScorePoints(item);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.actionshowmessage:
+                case InteractionType.ACTIONSHOWMESSAGE:
                     handler = new ShowMessage(string.Empty, room.GetWiredHandler(), item.Id, 0);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.actiongivereward:
+                case InteractionType.ACTIONGIVEREWARD:
                     //handlergr = (IWiredTrigger) new GiveReward(string.Empty, room.GetWiredHandler(), item.Id);
                     //handlergr.LoadFromDatabase(dbClient, room);
                     //WiredLoader.HandleItemLoad(handlergr, item);
                     break;
-                case InteractionType.superwired:
+                case InteractionType.SUPERWIRED:
                     handler = new SuperWired(string.Empty, 0, false, false, room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.actionteleportto:
+                case InteractionType.ACTIONTELEPORTTO:
                     handler = new TeleportToItem(room.GetGameMap(), room.GetWiredHandler(), new List<Item>(), 0, item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_act_endgame_team:
+                case InteractionType.WF_ACT_ENDGAME_TEAM:
                     handler = new TeamGameOver(1, item.Id, room);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.actiontogglestate:
+                case InteractionType.ACTIONTOGGLESTATE:
                     handler = new ToggleItemState(room.GetGameMap(), room.GetWiredHandler(), new List<Item>(), 0, item);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_act_call_stacks:
+                case InteractionType.WF_ACT_CALL_STACKS:
                     handler = new ExecutePile(new List<Item>(), 0, room.GetWiredHandler(), item);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.actionkickuser:
+                case InteractionType.ACTIONKICKUSER:
                     handler = new KickUser(string.Empty, room.GetWiredHandler(), item.Id, room);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.actionflee:
+                case InteractionType.ACTIONFLEE:
                     handler = new Escape(new List<Item>(), room, room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.actionchase:
+                case InteractionType.ACTIONCHASE:
                     handler = new Chase(new List<Item>(), room, room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.collisionteam:
+                case InteractionType.COLLISIONTEAM:
                     handler = new CollisionTeam(1, room, room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.collisioncase:
+                case InteractionType.COLLISIONCASE:
                     handler = new CollisionCase(new List<Item>(), room, room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.actionmovetodir:
+                case InteractionType.ACTIONMOVETODIR:
                     handler = new MoveToDir(new List<Item>(), room, room.GetWiredHandler(), item.Id, MovementDirection.up, WhenMovementBlock.none);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_act_bot_clothes:
+                case InteractionType.WF_ACT_BOT_CLOTHES:
                     handler = new BotClothes("", "", room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_act_bot_teleport:
+                case InteractionType.WF_ACT_BOT_TELEPORT:
                     handler = new BotTeleport("", new List<Item>(), room.GetGameMap(), room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_act_bot_follow_avatar:
+                case InteractionType.WF_ACT_BOT_FOLLOW_AVATAR:
                     handler = new BotFollowAvatar("", false, room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_act_bot_give_handitem:
+                case InteractionType.WF_ACT_BOT_GIVE_HANDITEM:
                     handler = new BotGiveHanditem("", room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_act_bot_move:
+                case InteractionType.WF_ACT_BOT_MOVE:
                     handler = new BotMove("", new List<Item>(), room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
 
-                case InteractionType.wf_act_user_move:
+                case InteractionType.WF_ACT_USER_MOVE:
                     handler = new UserMove(new List<Item>(), 0, room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_act_bot_talk_to_avatar:
+                case InteractionType.WF_ACT_BOT_TALK_TO_AVATAR:
                     handler = new BotTalkToAvatar("", "", false, room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_act_bot_talk:
+                case InteractionType.WF_ACT_BOT_TALK:
                     handler = new BotTalk("", "", false, room.GetWiredHandler(), item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_act_leave_team:
+                case InteractionType.WF_ACT_LEAVE_TEAM:
                     handler = new TeamLeave(item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_act_join_team:
+                case InteractionType.WF_ACT_JOIN_TEAM:
                     handler = new TeamJoin(1, item.Id);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
                 #endregion
                 #region Condition
-                case InteractionType.superwiredcondition:
+                case InteractionType.SUPERWIREDCONDITION:
                     handler = new SuperWiredCondition(item, string.Empty, false);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.conditionfurnishaveusers:
+                case InteractionType.CONDITIONFURNISHAVEUSERS:
                     handler = new FurniHasUser(item, new List<Item>());
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.conditionfurnishavenousers:
+                case InteractionType.CONDITIONFURNISHAVENOUSERS:
                     handler = new FurniHasNoUser(item, new List<Item>());
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.conditionstatepos:
+                case InteractionType.CONDITIONSTATEPOS:
                     handler = new FurniStatePosMatch(item, new List<Item>(), 0, 0, 0);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_cnd_stuff_is:
+                case InteractionType.WF_CND_STUFF_IS:
                     handler = new FurniStuffIs(item, new List<Item>());
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_cnd_not_stuff_is:
+                case InteractionType.WF_CND_NOT_STUFF_IS:
                     handler = new FurniNotStuffIs(item, new List<Item>());
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.conditionstateposNegative:
+                case InteractionType.CONDITIONSTATEPOSNEGATIVE:
                     handler = new FurniStatePosMatchNegative(item, new List<Item>(), 0, 0, 0);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.conditiontimelessthan:
+                case InteractionType.CONDITIONTIMELESSTHAN:
                     handler = new LessThanTimer(0, room, item);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.conditiontimemorethan:
+                case InteractionType.CONDITIONTIMEMORETHAN:
                     handler = new MoreThanTimer(0, room, item);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.conditiontriggeronfurni:
+                case InteractionType.CONDITIONTRIGGERONFURNI:
                     handler = new TriggerUserIsOnFurni(item, new List<Item>());
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.conditiontriggeronfurniNegative:
+                case InteractionType.CONDITIONTRIGGERONFURNINEGATIVE:
                     handler = new TriggerUserIsOnFurniNegative(item, new List<Item>());
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.conditionhasfurnionfurni:
+                case InteractionType.CONDITIONHASFURNIONFURNI:
                     handler = new HasFurniOnFurni(item, new List<Item>());
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.conditionhasfurnionfurniNegative:
+                case InteractionType.CONDITIONHASFURNIONFURNINEGATIVE:
                     handler = new HasFurniOnFurniNegative(item, new List<Item>());
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.conditionactoringroup:
+                case InteractionType.CONDITIONACTORINGROUP:
                     handler = new HasUserInGroup(item);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.conditionnotingroup:
+                case InteractionType.CONDITIONNOTINGROUP:
                     handler = new HasUserNotInGroup(item);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_cnd_actor_in_team:
+                case InteractionType.WF_CND_ACTOR_IN_TEAM:
                     handler = new ActorInTeam(item.Id, 1);
                     handler.LoadFromDatabase(dbClient, room);
 
                     break;
-                case InteractionType.wf_cnd_not_in_team:
+                case InteractionType.WF_CND_NOT_IN_TEAM:
                     handler = new ActorNotInTeam(item.Id, 1);
                     handler.LoadFromDatabase(dbClient, room);
                     break;
-                case InteractionType.wf_cnd_not_user_count:
+                case InteractionType.WF_CND_NOT_USER_COUNT:
                     handler = new RoomUserNotCount(item, 1, 1);
                     handler.LoadFromDatabase(dbClient, room);
                     break;
-                case InteractionType.wf_cnd_user_count_in:
+                case InteractionType.WF_CND_USER_COUNT_IN:
                     handler = new RoomUserCount(item, 1, 1);
                     handler.LoadFromDatabase(dbClient, room);
                     break;

@@ -64,14 +64,14 @@ namespace Butterfly.HabboHotel.Rooms.Wired
                     this.ConditionStacks.TryAdd(itemCoord, new List<Item>() { item });
                 }
             }
-            else if (item.GetBaseItem().InteractionType == InteractionType.specialrandom)
+            else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
             {
                 if (!this.SpecialRandom.Contains(itemCoord))
                 {
                     this.SpecialRandom.Add(itemCoord);
                 }
             }
-            else if (item.GetBaseItem().InteractionType == InteractionType.specialunseen)
+            else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALUNSEEN)
             {
                 if (!this.SpecialUnseen.ContainsKey(itemCoord))
                 {
@@ -110,14 +110,14 @@ namespace Butterfly.HabboHotel.Rooms.Wired
                     this.ConditionStacks.TryRemove(itemCoord, out NewList);
                 }
             }
-            else if (item.GetBaseItem().InteractionType == InteractionType.specialrandom)
+            else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
             {
                 if (this.SpecialRandom.Contains(itemCoord))
                 {
                     this.SpecialRandom.Remove(itemCoord);
                 }
             }
-            else if (item.GetBaseItem().InteractionType == InteractionType.specialunseen)
+            else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALUNSEEN)
             {
                 if (this.SpecialUnseen.ContainsKey(itemCoord))
                 {

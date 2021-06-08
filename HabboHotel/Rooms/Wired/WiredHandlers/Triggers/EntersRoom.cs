@@ -22,11 +22,11 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
             this.handler = handler;
             this.isOneUser = isOneUser;
             this.userName = userName;
-            this.delegateFunction = new RoomEventDelegate(this.roomUserManager_OnUserEnter);
+            this.delegateFunction = new RoomEventDelegate(this.OnUserEnter);
             roomUserManager.OnUserEnter += this.delegateFunction;
         }
 
-        private void roomUserManager_OnUserEnter(object sender, EventArgs e)
+        private void OnUserEnter(object sender, EventArgs e)
         {
             RoomUser user = (RoomUser)sender;
             if (user == null)

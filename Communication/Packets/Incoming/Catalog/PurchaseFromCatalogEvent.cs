@@ -105,7 +105,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 #region Pet handling
 
-                case InteractionType.pet:
+                case InteractionType.PET:
                     try
                     {
                         string[] Bits = ExtraData.Split('\n');

@@ -55,7 +55,7 @@ namespace Butterfly.HabboHotel.Rooms.Games
 
             foreach (Item Ball in roomItemForSquare)
             {
-                if (Ball.GetBaseItem().InteractionType != InteractionType.banzaipuck)
+                if (Ball.GetBaseItem().InteractionType != InteractionType.BANZAIPUCK)
                 {
                     continue;
                 }
@@ -304,7 +304,7 @@ namespace Butterfly.HabboHotel.Rooms.Games
         {
             foreach (Item roomItem in this.room.GetGameMap().GetCoordinatedItems(new Point(x, y)))
             {
-                if (roomItem.GetBaseItem().InteractionType == InteractionType.banzaifloor)
+                if (roomItem.GetBaseItem().InteractionType == InteractionType.BANZAIFLOOR)
                 {
                     return roomItem;
                 }

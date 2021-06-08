@@ -23,7 +23,7 @@ namespace Butterfly.HabboHotel.Catalog.Utilities
                 return false;
             }
 
-            if (Item.Data.InteractionType == InteractionType.pet)
+            if (Item.Data.InteractionType == InteractionType.PET)
             {
                 return false;
             }

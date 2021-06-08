@@ -127,7 +127,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     #region Pet handling
 
-                    case InteractionType.pet:
+                    case InteractionType.PET:
 
                         try
                         {

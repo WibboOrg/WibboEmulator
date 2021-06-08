@@ -10,7 +10,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Enab
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetEffectsInventoryManager().HaveEffect(NumEnable, Session.GetHabbo().HasFuse("fuse_sysadmin")))
+            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, Session.GetHabbo().HasFuse("fuse_sysadmin")))
             {
                 return;
             }

@@ -1236,7 +1236,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
                             return;
                         }
 
-                        if (!ButterflyEnvironment.GetGame().GetEffectsInventoryManager().HaveEffect(NumEnable, false))
+                        if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, false))
                         {
                             return;
                         }
@@ -1353,7 +1353,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     int.TryParse(Params[2], out int IntValue);
 
-                                    if (!ButterflyEnvironment.GetGame().GetEffectsInventoryManager().HaveEffect(IntValue, false))
+                                    if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
                                     {
                                         return;
                                     }
@@ -2129,7 +2129,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
                             return;
                         }
 
-                        if (!ButterflyEnvironment.GetGame().GetEffectsInventoryManager().HaveEffect(NumEnable, false))
+                        if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, false))
                         {
                             return;
                         }
@@ -2144,7 +2144,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
                             return;
                         }
 
-                        if (!ButterflyEnvironment.GetGame().GetEffectsInventoryManager().HaveEffect(NumEnable, true))
+                        if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, true))
                         {
                             return;
                         }
