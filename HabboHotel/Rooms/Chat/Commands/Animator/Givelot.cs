@@ -3,7 +3,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;using Butterfly.HabboHotel.Items;
 using System.Collections.Generic;
 
-namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class givelot : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
+namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Givelot : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
             {
                 return;
             }
@@ -60,4 +60,6 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class give
             {
                 queryreactor.RunQuery("UPDATE users SET game_points = game_points + 1, game_points_month = game_points_month + 1 WHERE id = '" + roomUserByHabbo.GetClient().GetHabbo().Id + "';");
             }
+
+            ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByHabbo.GetClient(), "ACH_Extrabox", 1);
         }    }}

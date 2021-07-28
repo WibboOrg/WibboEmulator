@@ -111,7 +111,6 @@ namespace Butterfly.HabboHotel.Rooms
             this._rollerSpeed = p;
         }
 
-
         public void LoadFurniture(int RoomId = 0)
         {
             if (RoomId == 0)
@@ -140,7 +139,6 @@ namespace Butterfly.HabboHotel.Rooms
 
                 foreach (DataRow dataRow in queryreactor.GetTable().Rows)
                 {
-
                     itemID = Convert.ToInt32(dataRow[0]);
                     UserId = Convert.ToInt32(dataRow[1]);
                     baseID = Convert.ToInt32(dataRow[3]);
@@ -210,7 +208,6 @@ namespace Butterfly.HabboHotel.Rooms
         }
 
         public ICollection<Item> GetFloor => this._floorItems.Values;
-
 
         public ItemTemp GetFirstTempDrop(int x, int y)
         {
@@ -289,10 +286,12 @@ namespace Butterfly.HabboHotel.Rooms
                 {
                     roomItem.WiredHandler.DeleteFromDatabase(queryreactor);
                 }
+
                 roomItem.WiredHandler.Dispose();
                 this._room.GetWiredHandler().RemoveFurniture(roomItem);
                 roomItem.WiredHandler = null;
             }
+
             roomItem.Destroy();
         }
 

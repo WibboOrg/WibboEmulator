@@ -88,7 +88,7 @@ namespace Butterfly.HabboHotel.Navigators
                                 DataTable Table = null;
                                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                 {
-                                    dbClient.SetQuery("SELECT * FROM rooms WHERE caption LIKE @query OR owner LIKE '@query' ORDER BY users_now DESC LIMIT 50");
+                                    dbClient.SetQuery("SELECT * FROM rooms WHERE caption LIKE @query OR owner LIKE @query ORDER BY users_now DESC LIMIT 50");
                                     dbClient.AddParameter("query", SearchData.Replace("%", "\\%").Replace("_", "\\_") + "%");
                                     Table = dbClient.GetTable();
                                 }

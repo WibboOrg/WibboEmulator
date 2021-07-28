@@ -1229,13 +1229,7 @@ namespace Butterfly.HabboHotel.Rooms
             this.RoomData.UsersMax = MaxUsers;
             using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery(string.Concat(new object[4]
-                {
-                   "UPDATE rooms SET users_max = ",
-                   MaxUsers,
-                   " WHERE id = ",
-                   this.Id
-                }));
+                queryreactor.RunQuery("UPDATE rooms SET users_max = '" + MaxUsers + "' WHERE id = '" + this.Id + "';");
             }
         }
     }

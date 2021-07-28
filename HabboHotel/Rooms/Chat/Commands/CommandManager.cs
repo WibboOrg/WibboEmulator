@@ -269,7 +269,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands
             this.Register(119, new SetTransf());
             this.Register(120, new SetTransfStop());
             this.Register(121, new SetEnable());
-            this.Register(122, new givelot());
+            this.Register(122, new Givelot());
             this.Register(123, new extrabox());
             this.Register(124, new SayBot());
             this.Register(126, new SetZ());

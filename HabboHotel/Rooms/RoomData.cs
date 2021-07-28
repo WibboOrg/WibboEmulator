@@ -49,8 +49,6 @@ namespace Butterfly.HabboHotel.Rooms
         public Group Group;
         public bool HideWireds;
         public int SellPrice;
-
-
         public int TagCount => this.Tags.Count;
 
         public RoomModel Model
@@ -117,6 +115,7 @@ namespace Butterfly.HabboHotel.Rooms
             this.OwnerName = (string)Row["owner"];
             this.OwnerId = 0;
             this.Langue = Language.FRANCAIS;
+
             using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 queryreactor.SetQuery("SELECT id, langue FROM users WHERE username = @owner");
@@ -128,6 +127,7 @@ namespace Butterfly.HabboHotel.Rooms
                     this.Langue = LanguageManager.ParseLanguage(UserRow["langue"].ToString());
                 }
             }
+
             switch (Row["state"].ToString().ToLower())
             {
                 case "open":
@@ -143,6 +143,7 @@ namespace Butterfly.HabboHotel.Rooms
                     this.State = 1;
                     break;
             }
+
             this.Category = Convert.ToInt32(Row["category"]);
             this.UsersNow = Convert.ToInt32(Row["users_now"]);
             this.UsersMax = Convert.ToInt32(Row["users_max"]);
@@ -187,73 +188,6 @@ namespace Butterfly.HabboHotel.Rooms
             this.SellPrice = Convert.ToInt32(Row["price"]);
 
             this.mModel = ButterflyEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, this.Id);
-        }
-
-        public void SerializeRoomData(ServerPacket Message, GameClient Session)
-        {
-            this.SerializeRoomData(Message, Session, true);
-        }
-
-        public void SerializeRoomData(ServerPacket Message, GameClient Session, bool show)
-        {
-            Message.WriteBoolean(show);
-
-            this.Serialize(Message, (Session != null) ? (Session.GetHabbo().HasFuse("fuse_enter_any_room")) ? true : Session.GetHabbo().IsTeleporting : false);
-
-            Message.WriteBoolean((Session != null) ? (this.Id != Session.GetHabbo().CurrentRoomId) : false);
-            Message.WriteBoolean(false);
-            Message.WriteBoolean(false);
-            Message.WriteBoolean(false);
-
-            Message.WriteInteger(this.MuteFuse); // who can mute
-            Message.WriteInteger(this.WhoCanKick); // who can kick
-            Message.WriteInteger(this.BanFuse); // who can ban
-
-            Message.WriteBoolean((Session != null) ? this.OwnerName.ToLower() != Session.GetHabbo().Username.ToLower() : false);
-            Message.WriteInteger(this.ChatType);  //ChatMode, ChatSize, ChatSpeed, HearingDistance, ExtraFlood is the order.
-            Message.WriteInteger(this.ChatBalloon);
-            Message.WriteInteger(this.ChatSpeed);
-            Message.WriteInteger(this.ChatMaxDistance);
-            Message.WriteInteger(this.ChatFloodProtection);
-        }
-
-        public void Serialize(ServerPacket Message, bool Summon = false)
-        {
-            try
-            {
-                Message.WriteInteger(this.Id);
-                Message.WriteString(this.Name);
-                Message.WriteInteger(this.OwnerId);
-                Message.WriteString(this.OwnerName);
-                Message.WriteInteger((Summon) ? 0 : this.State);
-                Message.WriteInteger(this.UsersNow);
-                Message.WriteInteger(this.UsersMax);
-                Message.WriteString(this.Description);
-                Message.WriteInteger(this.TrocStatus); //trading
-                Message.WriteInteger(this.Score);
-                Message.WriteInteger(0); //Raking ?
-                Message.WriteInteger(this.Category);
-
-                Message.WriteInteger(this.TagCount);
-                foreach (string s in this.Tags)
-                {
-                    Message.WriteString(s);
-                }
-
-                Message.WriteInteger((this.GroupId > 0 && this.Group != null) ? 58 : (this.OwnerName == "LieuPublic") ? 56 : 56); // 8 = Public room, 2 = appart de groupe, 4 = PromotedRoom
-
-                if (this.GroupId > 0 && this.Group != null)
-                {
-                    Message.WriteInteger(this.GroupId);
-                    Message.WriteString(this.Group.Name);
-                    Message.WriteString(this.Group.Badge);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
         }
     }
 }

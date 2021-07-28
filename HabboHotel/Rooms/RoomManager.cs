@@ -34,7 +34,7 @@ namespace Butterfly.HabboHotel.Rooms
             DataRow row;
             using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT door_x,door_y,door_z,door_dir,heightmap, wall_height FROM room_models_customs WHERE room_id = " + roomID);
+                queryreactor.SetQuery("SELECT door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = " + roomID);
                 row = queryreactor.GetRow();
             }
 
@@ -90,7 +90,7 @@ namespace Butterfly.HabboHotel.Rooms
             DataRow Row = null;
             using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT * FROM rooms WHERE id = " + RoomId);
+                queryreactor.SetQuery("SELECT * FROM rooms WHERE id = '" + RoomId + "';");
                 Row = queryreactor.GetRow();
             }
 
@@ -231,7 +231,7 @@ namespace Butterfly.HabboHotel.Rooms
             this._roomModels.Clear();
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id,door_x,door_y,door_z,door_dir,heightmap FROM room_models");
+                dbClient.SetQuery("SELECT id, door_x, door_y, door_z, door_dir, heightmap FROM room_models");
                 DataTable table = dbClient.GetTable();
                 if (table == null)
                 {
