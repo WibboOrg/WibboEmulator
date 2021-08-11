@@ -1,4 +1,4 @@
-using Butterfly.Communication.Packets.Outgoing.Structure;
+using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.HabboHotel.GameClients;
 
 namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd

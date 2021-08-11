@@ -1,4 +1,4 @@
-using Butterfly.Communication.Packets.Outgoing.Structure;
+using Butterfly.Communication.Packets.Outgoing.Avatar;
 using Butterfly.HabboHotel.GameClients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

@@ -1,4 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Structure;
+﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;

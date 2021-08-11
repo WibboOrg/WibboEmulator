@@ -1,29 +1,53 @@
-using Butterfly.Communication.Packets.Outgoing.Structure;
+using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.GameClients;using Butterfly.HabboHotel.Items;
+using Butterfly.HabboHotel.GameClients;
+using Butterfly.HabboHotel.Items;
 using System.Collections.Generic;
 
-namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Givelot : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
+namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
+{
+    internal class Givelot : IChatCommand
+    {
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        {
+            if (Params.Length != 2)
             {
                 return;
             }
 
-            Room room = Session.GetHabbo().CurrentRoom;            if (room == null)
+            Room room = Session.GetHabbo().CurrentRoom;
+            if (room == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByName(Params[1]);            if (roomUserByHabbo == null || roomUserByHabbo.GetClient() == null)            {                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));                return;            }            if (roomUserByHabbo.GetUsername() == Session.GetHabbo().Username || roomUserByHabbo.GetClient().GetHabbo().IP == Session.GetHabbo().IP)            {                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", Session.Langue));                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetHabbo().Id, Session.GetHabbo().Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + roomUserByHabbo.GetUsername());                return;            }            int NbLot = ButterflyEnvironment.GetRandomNumber(1, 3);            if (roomUserByHabbo.GetClient().GetHabbo().Rank > 1)
+            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByName(Params[1]);
+            if (roomUserByHabbo == null || roomUserByHabbo.GetClient() == null)
+            {
+                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
+                return;
+            }
+            if (roomUserByHabbo.GetUsername() == Session.GetHabbo().Username || roomUserByHabbo.GetClient().GetHabbo().IP == Session.GetHabbo().IP)
+            {
+                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", Session.Langue));
+                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetHabbo().Id, Session.GetHabbo().Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + roomUserByHabbo.GetUsername());
+                return;
+            }
+
+            int NbLot = ButterflyEnvironment.GetRandomNumber(1, 3);
+            if (roomUserByHabbo.GetClient().GetHabbo().Rank > 1)
             {
                 NbLot = ButterflyEnvironment.GetRandomNumber(3, 5);
             }
 
-            int NbLotDeluxe = ButterflyEnvironment.GetRandomNumber(1, 4);            if (roomUserByHabbo.GetClient().GetHabbo().Rank > 1)
+            int NbLotDeluxe = ButterflyEnvironment.GetRandomNumber(1, 4);
+            if (roomUserByHabbo.GetClient().GetHabbo().Rank > 1)
             {
                 NbLotDeluxe = ButterflyEnvironment.GetRandomNumber(3, 4);
             }
 
-            int NbBadge = ButterflyEnvironment.GetRandomNumber(1, 2);            if (roomUserByHabbo.GetClient().GetHabbo().Rank > 1)
+            int NbBadge = ButterflyEnvironment.GetRandomNumber(1, 2);
+            if (roomUserByHabbo.GetClient().GetHabbo().Rank > 1)
             {
                 NbBadge = ButterflyEnvironment.GetRandomNumber(2, 3);
             }
@@ -43,7 +67,9 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Give
                 return;
             }
 
-            List<Item> Items = ItemFactory.CreateMultipleItems(ItemData, roomUserByHabbo.GetClient().GetHabbo(), "", NbLot);            Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataBadge, roomUserByHabbo.GetClient().GetHabbo(), "", NbBadge));            if (NbLotDeluxe == 4)
+            List<Item> Items = ItemFactory.CreateMultipleItems(ItemData, roomUserByHabbo.GetClient().GetHabbo(), "", NbLot);
+            Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataBadge, roomUserByHabbo.GetClient().GetHabbo(), "", NbBadge));
+            if (NbLotDeluxe == 4)
             {
                 Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataDeluxe, roomUserByHabbo.GetClient().GetHabbo(), "", 1));
             }
@@ -56,10 +82,16 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Give
                 }
             }
 
-            string DeluxeMessage = (NbLotDeluxe == 4) ? " Et une RareBox Deluxe !" : "";            roomUserByHabbo.GetClient().SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByHabbo.GetClient().Langue), NbLot, NbBadge) + DeluxeMessage);            UserRoom.SendWhisperChat(roomUserByHabbo.GetUsername() + " à reçu " + NbLot + " RareBox et " + NbBadge + " BadgeBox!" + DeluxeMessage);            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            string DeluxeMessage = (NbLotDeluxe == 4) ? " Et une RareBox Deluxe !" : "";
+            roomUserByHabbo.GetClient().SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByHabbo.GetClient().Langue), NbLot, NbBadge) + DeluxeMessage);
+            UserRoom.SendWhisperChat(roomUserByHabbo.GetUsername() + " à reçu " + NbLot + " RareBox et " + NbBadge + " BadgeBox!" + DeluxeMessage);
+
+            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 queryreactor.RunQuery("UPDATE users SET game_points = game_points + 1, game_points_month = game_points_month + 1 WHERE id = '" + roomUserByHabbo.GetClient().GetHabbo().Id + "';");
             }
 
             ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByHabbo.GetClient(), "ACH_Extrabox", 1);
-        }    }}
+        }
+    }
+}
