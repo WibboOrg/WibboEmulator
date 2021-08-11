@@ -1,8 +1,8 @@
 ﻿using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Roleplay.Player;
+using System;
 using System.Collections.Concurrent;
 using System.Data;
-using System;
 
 namespace Butterfly.HabboHotel.Roleplay
 {

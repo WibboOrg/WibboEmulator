@@ -1,6 +1,6 @@
-﻿using System;
-using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Pets;
+using System;
 
 namespace Butterfly.HabboHotel.Catalog.Utilities
 {
@@ -36,7 +36,7 @@ namespace Butterfly.HabboHotel.Catalog.Utilities
                 dbClient.AddParameter(pet.PetId + "color", pet.Color);
                 pet.PetId = Convert.ToInt32(dbClient.InsertQuery());
             }
-            
+
             return pet;
         }
     }

@@ -29,7 +29,6 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands
             this.RegisterCommand();
         }
 
-
         public bool Parse(GameClient Session, RoomUser User, Room Room, string Message)
         {
             if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().CurrentRoom == null)

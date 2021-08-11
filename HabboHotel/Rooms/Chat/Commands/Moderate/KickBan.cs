@@ -1,6 +1,4 @@
-using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Users;
 
 namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 {
@@ -30,16 +28,16 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             {
                 int banMinutes = 2;
 
-                if(Params.Length >= 3) 
+                if (Params.Length >= 3)
                 {
                     int.TryParse(Params[2], out banMinutes);
                 }
 
-                if(banMinutes <= 0) 
+                if (banMinutes <= 0)
                 {
                     banMinutes = 2;
                 }
-                
+
                 Room.AddBan(clientByUsername.GetHabbo().Id, banMinutes * 60);
                 Room.GetRoomUserManager().RemoveUserFromRoom(clientByUsername, true, true);
             }

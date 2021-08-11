@@ -26,7 +26,7 @@ namespace Butterfly.HabboHotel.WebClients
         public int ConnectionID;
 
         public bool ShowGameAlert { get => this._showGameAlert; set => this._showGameAlert = value; }
-        public Language Langue { get => _langue; set => _langue = value; }
+        public Language Langue { get => this._langue; set => this._langue = value; }
 
         public WebClient(int id, ConnectionInformation connection)
         {
