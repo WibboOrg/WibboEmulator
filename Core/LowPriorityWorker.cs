@@ -48,8 +48,8 @@ namespace Butterfly.Core
 
                     TimeSpan Uptime = DateTime.Now - ButterflyEnvironment.ServerStarted;
 
-                    Console.Title = "Butterfly | Uptime: " + Uptime.Days + " day " + Uptime.Hours + " hours " + Uptime.Minutes + " minutes | " +
-                        "Online users: " + UsersOnline + " | Loaded rooms: " + RoomsLoaded;
+                    Console.Title = "Butterfly | Démarré depuis : " + Uptime.Days + " jours " + Uptime.Hours + " heures " + Uptime.Minutes + " minutes | "
+                         + UsersOnline + " Joueurs en ligne " + " | " + RoomsLoaded + " Appartement en ligne";
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {

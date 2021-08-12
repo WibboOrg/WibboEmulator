@@ -57,12 +57,25 @@ namespace Butterfly
             Console.Clear();
 
             ServerStarted = DateTime.Now;
-
             Console.ForegroundColor = ConsoleColor.Gray;
 
             PatchDir = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/";
 
             Console.Title = "Butterfly Emulator";
+
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+
+            Console.WriteLine("                                Butterfly Emulator Edition Wibbo");
+            Console.WriteLine("                                https://www.wibbo.org/");
+            //Console.WriteLine("                                Credits : Butterfly and Plus Emulator.");
+            //Console.WriteLine("                                - Jason Dhose, developor of Wibbo Hotel");
+            Console.WriteLine("                                ");
+            Console.WriteLine("                                ");
+            Console.WriteLine("                                ");
+            Console.WriteLine("                                ");
+
+
+            Console.ForegroundColor = ConsoleColor.White;
 
             try
             {
@@ -110,13 +123,13 @@ namespace Butterfly
 
                 StaticEvents = _configuration.data["static.events"] == "true";
 
-                Logging.WriteLine("ENVIRONMENT -> READY!");
+                Logging.WriteLine("EMULATOR -> READY!");
 
                 if (Debugger.IsAttached)
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Logging.WriteLine("Server is debugging: Console writing enabled");
-                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ForegroundColor = ConsoleColor.Red;
                 }
                 else
                 {
