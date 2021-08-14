@@ -122,6 +122,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         break;
                     }
                 case "items":
+                case "furni":
                     {
                         ButterflyEnvironment.GetGame().GetItemManager().Init();
                         break;
