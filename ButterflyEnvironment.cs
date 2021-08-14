@@ -65,14 +65,10 @@ namespace Butterfly
 
             Console.ForegroundColor = ConsoleColor.DarkBlue;
 
-            Console.WriteLine("                                Butterfly Emulator Edition Wibbo");
-            Console.WriteLine("                                https://www.wibbo.org/");
-            //Console.WriteLine("                                Credits : Butterfly and Plus Emulator.");
-            //Console.WriteLine("                                - Jason Dhose, developor of Wibbo Hotel");
-            Console.WriteLine("                                ");
-            Console.WriteLine("                                ");
-            Console.WriteLine("                                ");
-            Console.WriteLine("                                ");
+            Console.WriteLine("Butterfly Emulator Edition Wibbo");
+            Console.WriteLine("https://www.wibbo.org/");
+            Console.WriteLine("Credits : Butterfly and Plus Emulator.");
+            Console.WriteLine("- Jason Dhose, developor of Wibbo Hotel");
 
 
             Console.ForegroundColor = ConsoleColor.White;

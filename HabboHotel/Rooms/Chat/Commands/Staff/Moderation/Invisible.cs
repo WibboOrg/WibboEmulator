@@ -1,3 +1,4 @@
+using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.HabboHotel.GameClients;
 
 namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
@@ -26,6 +27,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             }
 
+            Session.SendPacket(new GetGuestRoomResultComposer(Session, Room.RoomData, false, true));
         }
     }
 }

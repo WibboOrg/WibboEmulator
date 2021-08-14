@@ -47,7 +47,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 RoomUser User = Staff.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(Staff.GetHabbo().Id);
 
                 ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
-                Message.WriteInteger(0);
+                Message.WriteInteger(User.VirtualId);
                 Message.WriteString("[STAFF ALERT] " + MessageTxt + " - " + UserRoom.GetUsername());
                 Message.WriteInteger(0);
                 Message.WriteInteger(23);

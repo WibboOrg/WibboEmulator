@@ -7,6 +7,8 @@ using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using System.Data;
 
 namespace Butterfly.HabboHotel.Achievements
 {
@@ -22,7 +24,35 @@ namespace Butterfly.HabboHotel.Achievements
 
         public void LoadAchievements()
         {
-            AchievementLevelFactory.GetAchievementLevels(out this.Achievements);
+            this.Achievements.Clear();
+
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            {
+                dbClient.SetQuery("SELECT id, category, group_name, level, reward_pixels, reward_points, progress_needed FROM achievements");
+                foreach (DataRow dataRow in dbClient.GetTable().Rows)
+                {
+                    int Id = Convert.ToInt32(dataRow["id"]);
+                    string Category = (string)dataRow["category"];
+                    string GroupName = (string)dataRow["group_name"];
+
+                    if (!GroupName.StartsWith("ACH_"))
+                    {
+                        GroupName = "ACH_" + GroupName;
+                    }
+
+                    AchievementLevel Level = new AchievementLevel(Convert.ToInt32(dataRow["level"]), Convert.ToInt32(dataRow["reward_pixels"]), Convert.ToInt32(dataRow["reward_points"]), Convert.ToInt32(dataRow["progress_needed"]));
+                    if (!this.Achievements.ContainsKey(GroupName))
+                    {
+                        Achievement achievement = new Achievement(Id, GroupName, Category);
+                        achievement.AddLevel(Level);
+                        this.Achievements.Add(GroupName, achievement);
+                    }
+                    else
+                    {
+                        this.Achievements[GroupName].AddLevel(Level);
+                    }
+                }
+            }
         }
 
         public void GetList(GameClient Session)
@@ -93,8 +123,7 @@ namespace Butterfly.HabboHotel.Achievements
                 Session.GetHabbo().Duckets += TargetLevelData.RewardPixels;
                 Session.GetHabbo().UpdateActivityPointsBalance();
 
-                Session.SendPacket(new AchievementUnlockedMessageComposer(AchievementData, TargetLevel, TargetLevelData.RewardPoints,
-                    TargetLevelData.RewardPixels));
+                Session.SendPacket(new AchievementUnlockedMessageComposer(AchievementData, TargetLevel, TargetLevelData.RewardPoints, TargetLevelData.RewardPixels));
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {

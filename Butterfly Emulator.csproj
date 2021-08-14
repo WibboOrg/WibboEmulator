@@ -935,7 +935,6 @@
     <Compile Include="HabboHotel\Game.cs" />
     <Compile Include="HabboHotel\Achievements\Achievement.cs" />
     <Compile Include="HabboHotel\Achievements\AchievementLevel.cs" />
-    <Compile Include="HabboHotel\Achievements\AchievementLevelFactory.cs" />
     <Compile Include="HabboHotel\Achievements\AchievementManager.cs" />
     <Compile Include="HabboHotel\Achievements\UserAchievement.cs" />
     <Compile Include="HabboHotel\Groups\Group.cs" />

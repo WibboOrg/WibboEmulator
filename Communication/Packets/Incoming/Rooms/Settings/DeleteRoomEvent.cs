@@ -38,9 +38,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 queryreactor.RunQuery("UPDATE bots SET room_id = '0' WHERE room_id = '" + RoomId + "'");
                 queryreactor.RunQuery("UPDATE pets SET room_id = '0' WHERE room_id = '" + RoomId + "'");
             }
-            RoomData removedRoom = (from p in Session.GetHabbo().UsersRooms
-                                    where p.Id == RoomId
-                                    select p).SingleOrDefault();
+
+            RoomData removedRoom = (from p in Session.GetHabbo().UsersRooms where p.Id == RoomId select p).SingleOrDefault();
             if (removedRoom != null)
             {
                 Session.GetHabbo().UsersRooms.Remove(removedRoom);
