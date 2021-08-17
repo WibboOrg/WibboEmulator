@@ -15,7 +15,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             ClientWeb.ShowGameAlert = !ClientWeb.ShowGameAlert;
 
-            UserRoom.SendWhisperChat(ClientWeb.ShowGameAlert ? "Alerte d'animation activer" : "Alerte d'animation désactiver", true);
+            UserRoom.SendWhisperChat(ClientWeb.ShowGameAlert ? "Alerte d'animation activée" : "Alerte d'animation désactivée", true);
         }
     }
 }

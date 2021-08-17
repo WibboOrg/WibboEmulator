@@ -1,4 +1,5 @@
-﻿using Butterfly.HabboHotel.GameClients;
+﻿using Butterfly.Communication.Packets.Outgoing.Navigator;
+using Butterfly.HabboHotel.GameClients;
 
 namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 {
@@ -18,7 +19,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             Room.GetRoomItemHandler().LoadFurniture(RoomId);
             Room.GetGameMap().GenerateMaps();
-            UserRoom.SendWhisperChat("Mobi de l'appart " + RoomId + " chargé!");
+            UserRoom.SendWhisperChat("Mobi de l'appart n° " + RoomId + " chargé!");
+            Session.SendPacket(new GetGuestRoomResultComposer(Session, Room.RoomData, false, true));
         }
     }
 }

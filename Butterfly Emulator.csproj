@@ -647,6 +647,7 @@
     <Compile Include="HabboHotel\Roleplay\Weapon\RPWeaponInteraction.cs" />
     <Compile Include="HabboHotel\Roleplay\Weapon\RPWeaponManager.cs" />
     <Compile Include="HabboHotel\Roleplay\Enemy\RoleBot.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Moderation\Murmur.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Premium\GameTime.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\AllFriends.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\OpenWeb.cs" />
@@ -781,7 +782,6 @@
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\MassBadge.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Mazo.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\User\MoonWalk.cs" />
-    <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Moderation\Murmur.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Moderation\Mute.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\User\NoFace.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Override.cs" />

@@ -7,7 +7,11 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
     {
         public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("ADM"))
+            if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("PRWRD1"))
+            {
+                UserRoom.CurrentEffect = 999;
+            }
+            else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("ADM"))
             {
                 UserRoom.CurrentEffect = 540;
             }
