@@ -56,7 +56,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int TotalCreditsCost = Item.CostCredits;
             int TotalPixelCost = Item.CostDuckets;
-            int TotalDiamondCost = Item.CostDiamonds;
+            int TotalDiamondCost = Item.CostWibboPoints;
 
             if (Session.GetHabbo().Credits < TotalCreditsCost || Session.GetHabbo().Duckets < TotalPixelCost || Session.GetHabbo().WibboPoints < TotalDiamondCost)
             {
@@ -304,7 +304,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, Session.GetHabbo().Duckets));
             }
 
-            if (Item.CostDiamonds > 0)
+            if (Item.CostWibboPoints > 0)
             {
                 Session.GetHabbo().WibboPoints -= TotalDiamondCost;
                 Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().WibboPoints, 0, 105));

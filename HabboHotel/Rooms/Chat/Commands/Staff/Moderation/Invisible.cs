@@ -24,9 +24,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             }
 
-            UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("invisible.waiting", Session.Langue));
+            //UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("invisible.waiting", Session.Langue));
 
-            Thread.Sleep(10000);
             Session.SendPacket(new GetGuestRoomResultComposer(Session, Room.RoomData, false, true));
         }
     }

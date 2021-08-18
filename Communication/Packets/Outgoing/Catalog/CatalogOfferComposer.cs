@@ -14,9 +14,9 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
             this.WriteBoolean(false);//IsRentable
             this.WriteInteger(Item.CostCredits);
 
-            if (Item.CostDiamonds > 0)
+            if (Item.CostWibboPoints > 0)
             {
-                this.WriteInteger(Item.CostDiamonds);
+                this.WriteInteger(Item.CostWibboPoints);
                 this.WriteInteger(105); // Diamonds
             }
             else

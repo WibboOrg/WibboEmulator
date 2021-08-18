@@ -16,11 +16,11 @@ namespace Butterfly.HabboHotel.Catalog
         public int CostDuckets;
         public int LimitedEditionStack;
         public int LimitedEditionSells;
-        public int CostDiamonds;
+        public int CostWibboPoints;
         public string Badge;
 
         public CatalogItem(int Id, int ItemId, ItemData Data, string CatalogName, int PageId, int CostCredits, int CostPixels,
-            int CostDiamonds, int Amount, int LimitedEditionSells, int LimitedEditionStack, bool HaveOffer, string Badge)
+            int CostWibboPoints, int Amount, int LimitedEditionSells, int LimitedEditionStack, bool HaveOffer, string Badge)
         {
             this.Id = Id;
             this.Name = CatalogName;
@@ -29,7 +29,7 @@ namespace Butterfly.HabboHotel.Catalog
             this.PageID = PageId;
             this.CostCredits = CostCredits;
             this.CostDuckets = CostPixels;
-            this.CostDiamonds = CostDiamonds;
+            this.CostWibboPoints = CostWibboPoints;
             this.Amount = Amount;
             this.LimitedEditionSells = LimitedEditionSells;
             this.LimitedEditionStack = LimitedEditionStack;
