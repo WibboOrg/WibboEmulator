@@ -1062,7 +1062,6 @@
     <Compile Include="HabboHotel\Rooms\Wired\WiredHandlers\Triggers\WalksOnFurni.cs" />
     <Compile Include="HabboHotel\Support\HelpCategory.cs" />
     <Compile Include="HabboHotel\Support\HelpTopic.cs" />
-    <Compile Include="HabboHotel\Support\ModerationBanManager.cs" />
     <Compile Include="HabboHotel\Support\ModerationManager.cs" />
     <Compile Include="HabboHotel\Support\TicketStatus.cs" />
     <Compile Include="HabboHotel\Support\SupportTicket.cs" />

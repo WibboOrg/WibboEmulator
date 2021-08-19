@@ -341,6 +341,11 @@ namespace Butterfly.HabboHotel.GameClients
 
             using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
+                if (str == "user")
+                {
+                    queryreactor.RunQuery("UPDATE users SET is_banned = '1' WHERE id = '" + Client.GetHabbo().Id + "'");
+                }
+
                 queryreactor.SetQuery("INSERT INTO bans (bantype,value,reason,expire,added_by,added_date) VALUES (@rawvar, @var, @reason, '" + Expire + "', @mod, UNIX_TIMESTAMP())");
                 queryreactor.AddParameter("rawvar", str);
                 queryreactor.AddParameter("var", Variable);
@@ -348,6 +353,7 @@ namespace Butterfly.HabboHotel.GameClients
                 queryreactor.AddParameter("mod", Moderator);
                 queryreactor.RunQuery();
             }
+
             if (MachineBan)
             {
                 this.BanUser(Client, Moderator, LengthSeconds, Reason, true, false);
