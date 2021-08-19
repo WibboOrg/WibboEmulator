@@ -209,7 +209,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     case InteractionType.BADGE_TROC:
                         {
-                            string[] BadgeNotAllowedTroc = { "WBASSO", "ADM", "GPHWIB", "wibbo.helpeur", "WIBARC", "CRPOFFI", "ZEERSWS", "PRWRD1", "WBI1", "WBI2", "WBI3", "WBI4", "WBI5", "WBI6", "WBI7", "WBI8", "WBI9", "CASINOB", "WPREMIUM", "VIPFREE" };
+                            string[] BadgeNotAllowedTroc = { "WBASSO", "ADM", "PRWRD1", "GPHWIB", "wibbo.helpeur", "WIBARC", "CRPOFFI", "ZEERSWS", "PRWRD1", "WBI1", "WBI2", "WBI3", "WBI4", "WBI5", "WBI6", "WBI7", "WBI8", "WBI9", "CASINOB", "WPREMIUM", "VIPFREE" };
                             if (BadgeNotAllowedTroc.Contains(Data) || !ButterflyEnvironment.GetGame().GetCatalog().HasBadge(Data) || Data.StartsWith("MRUN"))
                             {
                                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", Session.Langue));
@@ -233,7 +233,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         }
 
                     case InteractionType.BADGE_DISPLAY:
-                        string[] BadgeNotAllowed = { "WBASSO", "ADM", "GPHWIB", "wibbo.helpeur", "WIBARC", "CRPOFFI", "ZEERSWS", "PRWRD1", "WBI1", "WBI2", "WBI3", "WBI4", "WBI5", "WBI6", "WBI7", "CASINOB" };
+                        string[] BadgeNotAllowed = { "WBASSO", "ADM", "PRWRD1", "GPHWIB", "wibbo.helpeur", "WIBARC", "CRPOFFI", "ZEERSWS", "PRWRD1", "WBI1", "WBI2", "WBI3", "WBI4", "WBI5", "WBI6", "WBI7", "CASINOB" };
                         if (BadgeNotAllowed.Contains(Data))
                         {
                             Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", Session.Langue));

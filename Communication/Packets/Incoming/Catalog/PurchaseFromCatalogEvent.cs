@@ -191,7 +191,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 case InteractionType.BADGE_TROC:
                     {
-                        string[] BadgeNotAllowedTroc = { "WBASSO", "ADM", "GPHWIB", "wibbo.helpeur", "WIBARC", "CRPOFFI", "ZEERSWS", "PRWRD1", "WBI1", "WBI2", "WBI3", "WBI4", "WBI5", "WBI6", "WBI7", "CASINOB" };
+                        string[] BadgeNotAllowedTroc = { "WBASSO", "ADM", "PRWRD1", "GPHWIB", "wibbo.helpeur", "WIBARC", "CRPOFFI", "ZEERSWS", "PRWRD1", "WBI1", "WBI2", "WBI3", "WBI4", "WBI5", "WBI6", "WBI7", "CASINOB" };
                         if (BadgeNotAllowedTroc.Contains(ExtraData) || !ButterflyEnvironment.GetGame().GetCatalog().HasBadge(ExtraData) || ExtraData.StartsWith("MRUN"))
                         {
                             Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", Session.Langue));

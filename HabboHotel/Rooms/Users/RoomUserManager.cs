@@ -537,6 +537,10 @@ namespace Butterfly.HabboHotel.Rooms
                 {
                     User.CurrentEffect = 540;
                 }
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("PRWRD1"))
+                {
+                    User.CurrentEffect = 580;
+                }
                 else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("GPHWIB"))
                 {
                     User.CurrentEffect = 557;
