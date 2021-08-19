@@ -65,11 +65,20 @@ namespace Butterfly
 
             Console.ForegroundColor = ConsoleColor.DarkBlue;
 
+            Console.WriteLine(@"  ____  _    _ _______ _______ ______ _____  ______ _  __     __ ");
+            Console.WriteLine(@" |  _ \| |  | |__   __|__   __|  ____|  __ \|  ____| | \ \   / / ");
+            Console.WriteLine(@" | |_) | |  | |  | |     | |  | |__  | |__) | |__  | |  \ \_/ /  ");
+            Console.WriteLine(@" |  _ <| |  | |  | |     | |  |  __| |  _  /|  __| | |   \   /   ");
+            Console.WriteLine(@" | |_) | |__| |  | |     | |  | |____| | \ \| |    | |____| |    ");
+            Console.WriteLine(@" |____/ \____/   |_|     |_|  |______|_|  \_\_|    |______|_|    ");
+            Console.WriteLine("");
+
             Console.WriteLine("Butterfly Emulator Edition Wibbo");
             Console.WriteLine("https://www.wibbo.org/");
             Console.WriteLine("Credits : Butterfly and Plus Emulator.");
             Console.WriteLine("- Jason Dhose, developor of Wibbo Hotel");
-
+            Console.WriteLine("");
+            Console.WriteLine("");
 
             Console.ForegroundColor = ConsoleColor.White;
 
