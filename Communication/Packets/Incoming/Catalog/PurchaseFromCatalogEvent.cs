@@ -205,6 +205,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                             Session.SendPacket(new PurchaseOKComposer());
                             return;
                         }
+
                         if (!ExtraData.StartsWith("perso_"))
                         {
                             Session.GetHabbo().GetBadgeComponent().RemoveBadge(ExtraData);

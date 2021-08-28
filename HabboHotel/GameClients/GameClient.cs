@@ -46,7 +46,7 @@ namespace Butterfly.HabboHotel.GameClients
 
         private void SwitchParserRequest()
         {
-            this._packetParser.OnNewPacket += new GamePacketParser.HandlePacket(this.onNewPacket);
+            this._packetParser.OnNewPacket += new GamePacketParser.HandlePacket(this.OnNewPacket);
 
             byte[] packet = (this._connection.Parser as InitialPacketParser).CurrentData;
             this._connection.Parser.Dispose();
@@ -179,7 +179,7 @@ namespace Butterfly.HabboHotel.GameClients
             }
         }
 
-        private void onNewPacket(ClientPacket Message)
+        private void OnNewPacket(ClientPacket Message)
         {
             try
             {

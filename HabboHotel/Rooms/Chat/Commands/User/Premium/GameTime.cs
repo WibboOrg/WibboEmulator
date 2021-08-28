@@ -13,7 +13,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             }
             else
             {
-                UserRoom.SendWhisperChat("Animation de Jack & Daisy désactiver");
+                UserRoom.SendWhisperChat("Les animations de Jack & Daisy sont désactivées");
             }
         }
     }
