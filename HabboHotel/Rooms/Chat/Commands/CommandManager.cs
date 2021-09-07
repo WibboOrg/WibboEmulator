@@ -333,6 +333,10 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands
             this.Register(192, new RoomEffect());
             this.Register(193, new KickBan());
             this.Register(194, new StartGameJD());
+            this.Register(195, new RegenMaps());
+            this.Register(196, new AllAroundMe());
+            this.Register(197, new AllEyesOnMe());
+            this.Register(198, new DeleteGroup());
         }
     }
 }
