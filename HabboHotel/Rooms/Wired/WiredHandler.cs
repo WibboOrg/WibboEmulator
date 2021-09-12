@@ -3,6 +3,7 @@ using Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Interfaces;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Butterfly.HabboHotel.Rooms.Wired
 {
@@ -106,8 +107,8 @@ namespace Butterfly.HabboHotel.Rooms.Wired
                 this.ConditionStacks[itemCoord].Remove(item);
                 if (this.ConditionStacks[itemCoord].Count == 0)
                 {
-                    List<Item> NewList = new List<Item>();
-                    this.ConditionStacks.TryRemove(itemCoord, out NewList);
+                    List<Item> newList = new List<Item>();
+                    this.ConditionStacks.TryRemove(itemCoord, out newList);
                 }
             }
             else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
@@ -249,7 +250,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired
                 }
             }
 
-            List<Item> ActionStack = this.ActionStacks[coordinate];
+            List<Item> ActionStack = this.ActionStacks[coordinate].OrderBy(p => p.GetZ).ToList();
 
             if (this.SpecialRandom.Contains(coordinate))
             {
@@ -269,6 +270,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired
                     NextWired = 0;
                     this.SpecialUnseen[coordinate] = 0;
                 }
+
                 this.SpecialUnseen[coordinate]++;
 
                 Item ActNext = ActionStack[NextWired];
