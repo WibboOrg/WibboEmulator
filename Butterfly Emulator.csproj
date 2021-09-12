@@ -114,15 +114,20 @@
     <Reference Include="Colorful.Console, Version=1.2.9.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Colorful.Console.1.2.9\lib\net461\Colorful.Console.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MySql.Data, Version=6.5.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -631,6 +636,10 @@
     <Compile Include="HabboHotel\Items\ItemExtrabox.cs" />
     <Compile Include="HabboHotel\Items\ItemFactory.cs" />
     <Compile Include="HabboHotel\Items\ItemTemp.cs" />
+    <Compile Include="HabboHotel\Permissions\Permission.cs" />
+    <Compile Include="HabboHotel\Permissions\PermissionCommand.cs" />
+    <Compile Include="HabboHotel\Permissions\PermissionGroup.cs" />
+    <Compile Include="HabboHotel\Permissions\PermissionManager.cs" />
     <Compile Include="HabboHotel\Roleplay\Enemy\RPEnemy.cs" />
     <Compile Include="HabboHotel\Roleplay\Enemy\RPEnemyManager.cs" />
     <Compile Include="HabboHotel\Roleplay\Item\RPItemCategory.cs" />
@@ -647,6 +656,8 @@
     <Compile Include="HabboHotel\Roleplay\Weapon\RPWeaponInteraction.cs" />
     <Compile Include="HabboHotel\Roleplay\Weapon\RPWeaponManager.cs" />
     <Compile Include="HabboHotel\Roleplay\Enemy\RoleBot.cs" />
+    <Compile Include="HabboHotel\Roles\RoleManager.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\CommandManager.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\AllAroundMe.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\AllEyesOnMe.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\DeleteGroup.cs" />
@@ -670,8 +681,8 @@
     <Compile Include="HabboHotel\Rooms\Chat\Mentions\MentionManager.cs" />
     <Compile Include="HabboHotel\Rooms\Games\Freeze\FreezePowerUp.cs" />
     <Compile Include="HabboHotel\Rooms\Games\Teams\Team.cs" />
-    <Compile Include="HabboHotel\Rooms\RoomBots\RoleplayBot.cs" />
-    <Compile Include="HabboHotel\Rooms\RoomBots\SuperBot.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\Types\RoleplayBot.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\Types\SuperBot.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\User\RP\Vole.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\User\RP\GiveMoney.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\User\RP\Cac.cs" />
@@ -710,6 +721,7 @@
     <Compile Include="HabboHotel\Rooms\Wired\WiredHandlers\Effects\UserMove.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\WiredHandlers\Triggers\BotReadchedAvatar.cs" />
     <Compile Include="HabboHotel\Users\Inventory\Bots\Bot.cs" />
+    <Compile Include="HabboHotel\Users\Permissions\PermissionComponent.cs" />
     <Compile Include="HabboHotel\WebClients\WebClient.cs" />
     <Compile Include="Communication\PacketParser\WebPacketParser.cs" />
     <Compile Include="Communication\WebSocket\WebSocketManager.cs" />
@@ -1003,12 +1015,11 @@
     <Compile Include="HabboHotel\Rooms\Pathfinding\SquareInformation.cs" />
     <Compile Include="HabboHotel\Rooms\Pathfinding\SquarePoint.cs" />
     <Compile Include="HabboHotel\Rooms\Pathfinding\Rotation.cs" />
-    <Compile Include="HabboHotel\Roles\RoleManager.cs" />
-    <Compile Include="HabboHotel\Rooms\RoomBots\BotAI.cs" />
-    <Compile Include="HabboHotel\Rooms\RoomBots\GenericBot.cs" />
-    <Compile Include="HabboHotel\Rooms\RoomBots\PetBot.cs" />
-    <Compile Include="HabboHotel\Rooms\RoomBots\RoomBot.cs" />
-    <Compile Include="HabboHotel\Rooms\RoomBots\AIType.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\BotAI.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\Types\GenericBot.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\Types\PetBot.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\RoomBot.cs" />
+    <Compile Include="HabboHotel\Rooms\AI\AIType.cs" />
     <Compile Include="HabboHotel\Rooms\Games\Teams\TeamScoreChangedDelegate.cs" />
     <Compile Include="HabboHotel\Rooms\Users\UserSaysArgs.cs" />
     <Compile Include="HabboHotel\Items\ItemTriggeredArgs.cs" />
@@ -1082,7 +1093,6 @@
     <Compile Include="HabboHotel\Users\UserData\UserData.cs" />
     <Compile Include="HabboHotel\Users\UserData\UserDataFactory.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\ChatCommand.cs" />
-    <Compile Include="HabboHotel\Rooms\Chat\Commands\CommandManager.cs" />
     <Compile Include="Communication\Packets\Outgoing\ServerPacket.cs" />
     <Compile Include="Communication\Packets\PacketManager.cs" />
     <Compile Include="Communication\PacketParser\GamePacketParser.cs" />

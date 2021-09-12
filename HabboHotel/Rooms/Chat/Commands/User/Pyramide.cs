@@ -2,7 +2,20 @@ using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
 using System.Linq;
 
-namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Pyramide : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {
+namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Pyramide : IChatCommand    {        public string PermissionRequired
+        {
+            get { return ""; }
+        }
+
+        public string Parameters
+        {
+            get { return ""; }
+        }
+
+        public string Description
+        {
+            get { return ""; }
+        }        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)        {
             foreach (Item Item in Room.GetRoomItemHandler().GetFloor.ToList())
             {
                 if (Item == null || Item.GetBaseItem() == null)

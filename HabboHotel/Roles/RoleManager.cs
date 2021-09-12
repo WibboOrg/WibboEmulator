@@ -20,7 +20,7 @@ namespace Butterfly.HabboHotel.Roles
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT fuse, rank FROM fuserights");
+                dbClient.SetQuery("SELECT fuse, rank FROM permissions");
                 DataTable table1 = dbClient.GetTable();
 
                 if (table1 == null)

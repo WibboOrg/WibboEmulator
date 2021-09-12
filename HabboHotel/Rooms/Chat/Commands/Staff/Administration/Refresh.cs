@@ -5,7 +5,21 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 {
     internal class Refresh : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public string PermissionRequired
+        {
+            get { return ""; }
+        }
+
+        public string Parameters
+        {
+            get { return ""; }
+        }
+
+        public string Description
+        {
+            get { return ""; }
+        }
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             if (Params.Length != 2)
             {
@@ -80,11 +94,18 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         ButterflyEnvironment.GetGame().GetChatManager().GetCommands().Init();
                         break;
                     }
+                //case "role":
+                    //{
+                        //ButterflyEnvironment.GetGame().GetRoleManager().Init();
+                        //break;
+                    //}
+                case "permissions":
                 case "role":
                     {
                         ButterflyEnvironment.GetGame().GetRoleManager().Init();
                         break;
                     }
+
                 case "effet":
                     {
                         ButterflyEnvironment.GetGame().GetEffectManager().Init();

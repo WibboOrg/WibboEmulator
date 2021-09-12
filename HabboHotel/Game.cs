@@ -11,6 +11,7 @@ using Butterfly.HabboHotel.Guides;
 using Butterfly.HabboHotel.HotelView;
 using Butterfly.HabboHotel.Items;
 using Butterfly.HabboHotel.Navigators;
+using Butterfly.HabboHotel.Permissions;
 using Butterfly.HabboHotel.Quests;
 using Butterfly.HabboHotel.Roleplay;
 using Butterfly.HabboHotel.Roles;
@@ -44,6 +45,7 @@ namespace Butterfly.HabboHotel
         private readonly EffectManager _effectManager;
         private readonly RoleplayManager _roleplayManager;
         private readonly AnimationManager _animationManager;
+        private readonly PermissionManager _permissionManager;
 
         private Thread gameLoop;
         public static bool gameLoopEnabled = true;
@@ -97,14 +99,19 @@ namespace Butterfly.HabboHotel
             this._animationManager = new AnimationManager();
             this._animationManager.Init();
 
+            this._permissionManager = new PermissionManager();
+            this._permissionManager.Init();
+
             DatabaseCleanup();
             LowPriorityWorker.Init();
 
             this.moduleWatch = new Stopwatch();
         }
 
-        #region Return values
-
+        public PermissionManager GetPermissionManager()
+        {
+            return _permissionManager;
+        }
         public AnimationManager GetAnimationManager()
         {
             return this._animationManager;
@@ -195,7 +202,6 @@ namespace Butterfly.HabboHotel
         {
             return this._hotelViewManager;
         }
-        #endregion
 
         public void StartGameLoop()
         {

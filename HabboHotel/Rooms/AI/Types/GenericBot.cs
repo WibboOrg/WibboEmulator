@@ -1,7 +1,7 @@
 ﻿using Butterfly.HabboHotel.GameClients;
 using System.Drawing;
 
-namespace Butterfly.HabboHotel.Rooms.RoomBots
+namespace Butterfly.HabboHotel.Rooms.AI.Types
 {
     public class GenericBot : BotAI
     {

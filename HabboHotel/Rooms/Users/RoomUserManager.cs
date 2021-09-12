@@ -20,7 +20,7 @@ using Butterfly.HabboHotel.Roleplay.Player;
 using Butterfly.HabboHotel.Rooms.Games;
 using Butterfly.HabboHotel.Rooms.Map.Movement;
 using Butterfly.HabboHotel.Rooms.Pathfinding;
-using Butterfly.HabboHotel.Rooms.RoomBots;
+using Butterfly.HabboHotel.Rooms.AI;
 using Butterfly.Utilities;
 using System;
 using System.Collections.Concurrent;

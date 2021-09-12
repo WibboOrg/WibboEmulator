@@ -4,7 +4,7 @@ using Butterfly.HabboHotel.Pets;
 using Butterfly.HabboHotel.Roleplay;
 using Butterfly.HabboHotel.Roleplay.Player;
 using Butterfly.HabboHotel.Rooms.Games;
-using Butterfly.HabboHotel.Rooms.RoomBots;
+using Butterfly.HabboHotel.Rooms.AI;
 using Butterfly.HabboHotel.Rooms.Utils;
 using System;
 using System.Collections.Generic;

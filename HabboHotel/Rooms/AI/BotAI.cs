@@ -1,6 +1,6 @@
 ﻿using Butterfly.HabboHotel.GameClients;
 
-namespace Butterfly.HabboHotel.Rooms.RoomBots
+namespace Butterfly.HabboHotel.Rooms.AI
 {
     public abstract class BotAI
     {

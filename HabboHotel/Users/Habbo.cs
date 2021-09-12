@@ -12,9 +12,11 @@ using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Roleplay;
 using Butterfly.HabboHotel.Roleplay.Player;
 using Butterfly.HabboHotel.Rooms;
+using Butterfly.HabboHotel.Rooms.Chat.Commands;
 using Butterfly.HabboHotel.Users.Badges;
 using Butterfly.HabboHotel.Users.Inventory;
 using Butterfly.HabboHotel.Users.Messenger;
+using Butterfly.HabboHotel.Users.Permissions;
 using Butterfly.HabboHotel.WebClients;
 using System;
 using System.Collections.Generic;
@@ -117,10 +119,13 @@ namespace Butterfly.HabboHotel.Users
         public int RolePlayId;
         public bool IgnoreAll;
 
+        private PermissionComponent _permissions;
+        private IChatCommand _iChatCommand;
+
         public DateTime LastGiftPurchaseTime;
 
         public bool InRoom => this.CurrentRoomId >= 1;
-
+         
         public Room CurrentRoom
         {
             get
@@ -134,6 +139,13 @@ namespace Butterfly.HabboHotel.Users
                     return ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.CurrentRoomId);
                 }
             }
+        }
+
+        private bool InitPermissions()
+        {
+            _permissions = new PermissionComponent();
+
+            return _permissions.Init(this);
         }
 
         public bool SendWebPacket(IServerPacket Message)
@@ -196,6 +208,7 @@ namespace Butterfly.HabboHotel.Users
             this.CanChangeName = ChangeName;
             this.Langue = Langue;
             this.IgnoreAll = IgnoreAll;
+            this.IChatCommand = IChatCommand;
 
             if (clientVolume.Contains(','))
             {
@@ -264,7 +277,15 @@ namespace Butterfly.HabboHotel.Users
             this.UpdateRooms();
         }
 
-
+        public PermissionComponent GetPermissions()
+        {
+            return _permissions;
+        }
+        public IChatCommand IChatCommand
+        {
+            get { return _iChatCommand; }
+            set { _iChatCommand = value; }
+        }
         public void UpdateRooms()
         {
             try

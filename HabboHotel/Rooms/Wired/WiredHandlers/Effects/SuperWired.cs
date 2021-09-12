@@ -620,14 +620,14 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
                         {
                             ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().RemoveEnemyBot(BotOrPet.BotData.Id);
                             BotOrPet.BotData.RoleBot = null;
-                            BotOrPet.BotData.AiType = RoomBots.AIType.Generic;
+                            BotOrPet.BotData.AiType = Rooms.AI.AIType.Generic;
                             BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                         }
                         else
                         {
                             ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().RemoveEnemyPet(BotOrPet.BotData.Id);
                             BotOrPet.BotData.RoleBot = null;
-                            BotOrPet.BotData.AiType = RoomBots.AIType.Pet;
+                            BotOrPet.BotData.AiType = Rooms.AI.AIType.Pet;
                             BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                         }
                         break;
@@ -646,7 +646,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
                             if (RPEnemyConfig != null)
                             {
                                 BotOrPet.BotData.RoleBot = new RoleBot(RPEnemyConfig);
-                                BotOrPet.BotData.AiType = RoomBots.AIType.RolePlayBot;
+                                BotOrPet.BotData.AiType = Rooms.AI.AIType.RolePlayBot;
                                 BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                             }
                         }
@@ -656,7 +656,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
                             if (RPEnemyConfig != null)
                             {
                                 BotOrPet.BotData.RoleBot = new RoleBot(RPEnemyConfig);
-                                BotOrPet.BotData.AiType = RoomBots.AIType.RolePlayPet;
+                                BotOrPet.BotData.AiType = Rooms.AI.AIType.RolePlayPet;
                                 BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                             }
                         }

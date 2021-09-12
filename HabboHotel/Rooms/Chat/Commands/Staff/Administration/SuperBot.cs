@@ -1,5 +1,5 @@
 using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Rooms.RoomBots;
+using Butterfly.HabboHotel.Rooms.AI;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -7,7 +7,21 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 {
     internal class SuperBot : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public string PermissionRequired
+        {
+            get { return ""; }
+        }
+
+        public string Parameters
+        {
+            get { return ""; }
+        }
+
+        public string Description
+        {
+            get { return ""; }
+        }
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
 
             if (Params.Length > 1)

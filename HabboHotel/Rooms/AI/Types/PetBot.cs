@@ -5,7 +5,7 @@ using Butterfly.HabboHotel.Rooms.Pathfinding;
 using System;
 using System.Drawing;
 
-namespace Butterfly.HabboHotel.Rooms.RoomBots
+namespace Butterfly.HabboHotel.Rooms.AI.Types
 {
     public class PetBot : BotAI
     {

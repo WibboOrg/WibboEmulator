@@ -1,7 +1,8 @@
 ﻿using Butterfly.HabboHotel.Roleplay.Enemy;
+using Butterfly.HabboHotel.Rooms.AI.Types;
 using System.Collections.Generic;
 
-namespace Butterfly.HabboHotel.Rooms.RoomBots
+namespace Butterfly.HabboHotel.Rooms.AI
 {
     public class RoomBot
     {

@@ -4,7 +4,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.Rooms.RoomBots;
+using Butterfly.HabboHotel.Rooms.AI;
 using System;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

@@ -1,4 +1,17 @@
-using Butterfly.HabboHotel.GameClients;using System.Linq;namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class RoomEnable : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (!int.TryParse(Params[1], out int NumEnable))
+using Butterfly.HabboHotel.GameClients;using System.Linq;namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class RoomEnable : IChatCommand    {        public string PermissionRequired
+        {
+            get { return ""; }
+        }
+
+        public string Parameters
+        {
+            get { return ""; }
+        }
+
+        public string Description
+        {
+            get { return ""; }
+        }        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)        {            if (!int.TryParse(Params[1], out int NumEnable))
             {
                 return;
             }

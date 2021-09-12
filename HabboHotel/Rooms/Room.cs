@@ -14,7 +14,7 @@ using Butterfly.HabboHotel.Roleplay;
 using Butterfly.HabboHotel.Rooms.Games;
 using Butterfly.HabboHotel.Rooms.Janken;
 using Butterfly.HabboHotel.Rooms.Projectile;
-using Butterfly.HabboHotel.Rooms.RoomBots;
+using Butterfly.HabboHotel.Rooms.AI;
 using Butterfly.HabboHotel.Rooms.Wired;
 using System;
 using System.Collections.Generic;
