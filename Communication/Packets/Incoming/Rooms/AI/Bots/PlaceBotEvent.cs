@@ -2,7 +2,7 @@ using Butterfly.Communication.Packets.Outgoing.Inventory.Bots;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.Rooms.RoomBots;
+using Butterfly.HabboHotel.Rooms.AI;
 using Butterfly.HabboHotel.Users.Inventory.Bots;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

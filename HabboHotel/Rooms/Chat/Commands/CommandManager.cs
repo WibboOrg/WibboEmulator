@@ -336,7 +336,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands
             this.Register(195, new RegenMaps());
             this.Register(196, new AllAroundMe());
             this.Register(197, new AllEyesOnMe());
-            this.Register(198, new DeleteGroup());
+            this.Register(198, new StaffsOnline());
         }
     }
 }

@@ -1,5 +1,6 @@
 using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Rooms.RoomBots;
+using Butterfly.HabboHotel.Rooms.AI;
+using Butterfly.HabboHotel.Rooms.AI.Types;
 using System.Collections.Generic;
 using System.Drawing;
 

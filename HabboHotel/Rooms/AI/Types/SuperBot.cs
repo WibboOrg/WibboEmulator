@@ -4,7 +4,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.HabboHotel.GameClients;
 using System.Drawing;
 
-namespace Butterfly.HabboHotel.Rooms.RoomBots
+namespace Butterfly.HabboHotel.Rooms.AI.Types
 {
     public class SuperBot : BotAI
     {

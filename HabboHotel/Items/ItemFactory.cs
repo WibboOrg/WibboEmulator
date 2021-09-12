@@ -2,7 +2,7 @@
 using Butterfly.HabboHotel.Users;
 using System;
 using System.Collections.Generic;
-
+using System.Text;
 
 namespace Butterfly.HabboHotel.Items
 {
@@ -68,26 +68,29 @@ namespace Butterfly.HabboHotel.Items
 
         public static List<Item> CreateMultipleItems(ItemData Data, Habbo Habbo, string ExtraData, int Amount)
         {
-            if (Data == null)
-            {
-                throw new InvalidOperationException("Data cannot be null.");
-            }
+            if (Data == null) throw new InvalidOperationException("Data cannot be null.");
 
             List<Item> Items = new List<Item>();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                for (int i = 0; i < Amount; i++)
+                // lets build the query
+                StringBuilder Query = new StringBuilder();
+                Query.Append("INSERT INTO `items` (base_item,user_id,extra_data) VALUES (@did,@uid,@flags);");
+                for (int i = 0; i < Amount - 1; i++)
                 {
-                    dbClient.SetQuery("INSERT INTO `items` (base_item,user_id,extra_data) VALUES (@did,@uid,@flags);");
-                    dbClient.AddParameter("did", Data.Id);
-                    dbClient.AddParameter("uid", Habbo.Id);
-                    dbClient.AddParameter("flags", ExtraData);
-
-                    Item Item = new Item(Convert.ToInt32(dbClient.InsertQuery()), 0, Data.Id, ExtraData, 0, 0, 0, 0, 0, 0, "", null);
-
-                    Items.Add(Item);
+                    Query.Append(",(@did,@uid,@flags)");
                 }
+                Query.Append(";");
+
+                dbClient.SetQuery(Query.ToString());
+                dbClient.AddParameter("did", Data.Id);
+                dbClient.AddParameter("uid", Habbo.Id);
+                dbClient.AddParameter("flags", ExtraData);
+                //execute query
+                Item Item = new Item(Convert.ToInt32(dbClient.InsertQuery()), 0, Data.Id, ExtraData, 0, 0, 0, 0, 0, 0, "", null);
+
+                Items.Add(Item);
             }
             return Items;
         }

@@ -20,7 +20,7 @@ using Butterfly.HabboHotel.Roleplay.Player;
 using Butterfly.HabboHotel.Rooms.Games;
 using Butterfly.HabboHotel.Rooms.Map.Movement;
 using Butterfly.HabboHotel.Rooms.Pathfinding;
-using Butterfly.HabboHotel.Rooms.RoomBots;
+using Butterfly.HabboHotel.Rooms.AI;
 using Butterfly.Utilities;
 using System;
 using System.Collections.Concurrent;
@@ -716,7 +716,7 @@ namespace Butterfly.HabboHotel.Rooms
                         {
                             if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetHabbo() != null && StaffUser.GetClient().GetHabbo().HasFuse("fuse_show_invisible")))
                             {
-                                StaffUser.SendWhisperChat(User.GetUsername() + " qui était en mode invisible est partie de l'appartement", true);
+                                StaffUser.SendWhisperChat(User.GetUsername() + " était en mode invisible. Il vient de partir de l'appartement.", true);
                             }
                         }
                     }

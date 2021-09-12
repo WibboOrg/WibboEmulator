@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
-using Butterfly.HabboHotel.Rooms.RoomBots;
+using Butterfly.HabboHotel.Rooms.AI;
 using Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Interfaces;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿namespace Butterfly.HabboHotel.Rooms.RoomBots
+﻿namespace Butterfly.HabboHotel.Rooms.AI
 {
     public enum AIType
     {

@@ -67,13 +67,13 @@ namespace Butterfly.HabboHotel.Users.UserData
                         queryreactor.RunQuery(string.Concat(new object[4] { "UPDATE users SET lastdailycredits = '", lastDaily, "' WHERE id = ", userId }));
                         dUserInfo["credits"] = (Convert.ToInt32(dUserInfo["credits"]) + 3000);
 
-                        if (Convert.ToInt32(dUserInfo["rank"]) == 1)
+                        if (Convert.ToInt32(dUserInfo["rank"]) <= 2)
                         {
                             queryreactor.RunQuery("UPDATE user_stats SET daily_respect_points = 3, daily_pet_respect_points = 3 WHERE id = '" + userId + "' LIMIT 1");
                         }
                         else
                         {
-                            queryreactor.RunQuery("UPDATE user_stats SET daily_respect_points = 10, daily_pet_respect_points = 10 WHERE id = '" + userId + "' LIMIT 1");
+                            queryreactor.RunQuery("UPDATE user_stats SET daily_respect_points = 20, daily_pet_respect_points = 10 WHERE id = '" + userId + "' LIMIT 1");
                         }
 
                         ChangeName = true;
