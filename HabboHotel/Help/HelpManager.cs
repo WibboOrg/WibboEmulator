@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-namespace Butterfly.HabboHotel.Guides
+namespace Butterfly.HabboHotel.Help
 {
-    public class GuideManager
+    public class HelpManager
     {
         public Dictionary<int, bool> GuidesOnDuty = new Dictionary<int, bool>();
 

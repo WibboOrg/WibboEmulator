@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 
-namespace Butterfly.HabboHotel.HotelView
+namespace Butterfly.HabboHotel.LandingView
 {
     public class SmallPromo
     {

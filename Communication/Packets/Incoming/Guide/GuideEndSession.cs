@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.GetHabbo().GuideOtherUserId = 0;
             if (Session.GetHabbo().OnDuty)
             {
-                ButterflyEnvironment.GetGame().GetGuideManager().EndService(Session.GetHabbo().Id);
+                ButterflyEnvironment.GetGame().GetHelpManager().EndService(Session.GetHabbo().Id);
             }
 
             if (requester != null)
@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 if (requester.GetHabbo().OnDuty)
                 {
-                    ButterflyEnvironment.GetGame().GetGuideManager().EndService(requester.GetHabbo().Id);
+                    ButterflyEnvironment.GetGame().GetHelpManager().EndService(requester.GetHabbo().Id);
                 }
             }
         }

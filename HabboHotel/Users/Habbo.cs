@@ -547,7 +547,7 @@ namespace Butterfly.HabboHotel.Users
             }
             if (this.OnDuty)
             {
-                ButterflyEnvironment.GetGame().GetGuideManager().RemoveGuide(this.Id);
+                ButterflyEnvironment.GetGame().GetHelpManager().RemoveGuide(this.Id);
             }
 
             if (this.Messenger != null)

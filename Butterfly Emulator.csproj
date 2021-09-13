@@ -725,7 +725,7 @@
     <Compile Include="HabboHotel\Effects\EffectManager.cs" />
     <Compile Include="HabboHotel\Groups\GroupBadgeParts.cs" />
     <Compile Include="HabboHotel\Groups\GroupColours.cs" />
-    <Compile Include="HabboHotel\HotelView\SmallPromo.cs" />
+    <Compile Include="HabboHotel\LandingView\SmallPromo.cs" />
     <Compile Include="HabboHotel\Items\Interactors\InteractorLoveLock.cs" />
     <Compile Include="HabboHotel\Items\ItemBehaviourUtility.cs" />
     <Compile Include="HabboHotel\Navigators\FeaturedRoom.cs" />
@@ -872,7 +872,7 @@
     <Compile Include="Utilities\Enclosure\Algorithm\GametileUpdate.cs" />
     <Compile Include="Utilities\Enclosure\GameField.cs" />
     <Compile Include="Utilities\Enclosure\PointField.cs" />
-    <Compile Include="HabboHotel\Guides\GuideManager.cs" />
+    <Compile Include="HabboHotel\Help\HelpManager.cs" />
     <Compile Include="HabboHotel\Items\Interactors\InteractorBlob.cs" />
     <Compile Include="HabboHotel\Items\Interactors\InteractorCrackable.cs" />
     <Compile Include="HabboHotel\Items\Interactors\InteractorTvYoutube.cs" />
@@ -916,7 +916,7 @@
     <Compile Include="Communication\Packets\Outgoing\ServerPacketHeader.cs" />
     <Compile Include="HabboHotel\Items\Interactors\InteractorTimer.cs" />
     <Compile Include="Core\FigureData\FigureDataManager.cs" />
-    <Compile Include="HabboHotel\HotelView\HotelViewManager.cs" />
+    <Compile Include="HabboHotel\LandingView\LandingViewManager.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\WiredHandlers\Conditions\FurniHasNoUser.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\WiredHandlers\Conditions\FurniStatePosMatchNegative.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\WiredHandlers\Conditions\HasUserNotInGroup.cs" />

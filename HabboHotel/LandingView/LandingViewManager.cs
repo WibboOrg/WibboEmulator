@@ -1,17 +1,18 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Interfaces;
+using Butterfly.HabboHotel.LandingView;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
 
-namespace Butterfly.HabboHotel.HotelView
+namespace Butterfly.HabboHotel.LandingView
 {
-    public class HotelViewManager
+    public class LandingViewManager
     {
-        public List<SmallPromo> HotelViewPromosIndexers = new List<SmallPromo>();
+        public List <SmallPromo> HotelViewPromosIndexers = new List<SmallPromo>();
 
-        public HotelViewManager()
+        public LandingViewManager()
         {
             this.InitHotelViewPromo();
         }
