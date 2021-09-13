@@ -1,6 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.GameClients;
-using System.Data;
+﻿using Butterfly.HabboHotel.GameClients;
+using System.Collections.Generic;
 
 namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 {
@@ -10,26 +9,21 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
         {
             string Output = "Les staffs en ligne\n";
 
-            using (IQueryAdapter dbclient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            List<GameClient> Staffs = ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers();
+
+            if (Staffs.Count > 0)
             {
-                //dbclient.SetQuery("SELECT username FROM users WHERE online ='1'");
-                dbclient.SetQuery("SELECT username FROM users WHERE online = '1' AND rank > '2'");
-                dbclient.RunQuery();
-
-                DataTable Table = dbclient.GetTable();
-
-                if (Table != null)
+                foreach (GameClient Client in Staffs)
                 {
-                    foreach (DataRow Row in Table.Rows)
-                    {
-                        Output += Row["username"].ToString() + "\n";
-                    }
-                }
-                else
-                {
-                    Output += "Aucun staffs en ligne!";
+                    if (Client != null && Client.GetHabbo() != null)
+                        Output += Client.GetHabbo().Username + "\n";
                 }
             }
+            else
+            {
+                Output += "Aucun staffs en ligne!";
+            }
+
             Session.SendNotification(Output);
         }
     }

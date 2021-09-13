@@ -74,23 +74,17 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                // lets build the query
-                StringBuilder Query = new StringBuilder();
-                Query.Append("INSERT INTO `items` (base_item,user_id,extra_data) VALUES (@did,@uid,@flags);");
-                for (int i = 0; i < Amount - 1; i++)
+                for (int i = 0; i < Amount; i++)
                 {
-                    Query.Append(",(@did,@uid,@flags)");
+                    dbClient.SetQuery("INSERT INTO `items` (base_item,user_id,extra_data) VALUES (@did,@uid,@flags);");
+                    dbClient.AddParameter("did", Data.Id);
+                    dbClient.AddParameter("uid", Habbo.Id);
+                    dbClient.AddParameter("flags", ExtraData);
+
+                    Item Item = new Item(Convert.ToInt32(dbClient.InsertQuery()), 0, Data.Id, ExtraData, 0, 0, 0, 0, 0, 0, "", null);
+
+                    Items.Add(Item);
                 }
-                Query.Append(";");
-
-                dbClient.SetQuery(Query.ToString());
-                dbClient.AddParameter("did", Data.Id);
-                dbClient.AddParameter("uid", Habbo.Id);
-                dbClient.AddParameter("flags", ExtraData);
-                //execute query
-                Item Item = new Item(Convert.ToInt32(dbClient.InsertQuery()), 0, Data.Id, ExtraData, 0, 0, 0, 0, 0, 0, "", null);
-
-                Items.Add(Item);
             }
             return Items;
         }
