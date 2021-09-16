@@ -628,15 +628,6 @@ namespace Butterfly.HabboHotel.Support
             return serverMessage;
         }
 
-        /*public static ServerMessage SerializeRoomVisits(int UserId)
-        {
-            ServerMessage serverMessage = new ServerMessage(537);
-            serverMessage.WriteInteger(UserId);
-            serverMessage.WriteString(ButterflyEnvironment.GetGame().GetClientManager().GetNameById(UserId));
-            serverMessage.WriteInteger(0);
-            return serverMessage;
-        }*/
-
         public static ServerPacket SerializeUserChatlog(int UserId, int RoomId)
         {
             GameClient clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);

@@ -9,13 +9,13 @@ namespace Butterfly.HabboHotel.Rooms.Wired
 {
     public class WiredHandler
     {
-        private readonly ConcurrentDictionary<Point, List<Item>> ActionStacks;
-        private readonly ConcurrentDictionary<Point, List<Item>> ConditionStacks;
+        private readonly ConcurrentDictionary<Point, List<Item>> _actionStacks;
+        private readonly ConcurrentDictionary<Point, List<Item>> _conditionStacks;
 
         private readonly ConcurrentDictionary<Point, List<RoomUser>> _wiredUsed;
 
-        private readonly List<Point> SpecialRandom;
-        private readonly Dictionary<Point, int> SpecialUnseen;
+        private readonly List<Point> _specialRandom;
+        private readonly Dictionary<Point, int> _specialUnseen;
 
         private ConcurrentQueue<WiredCycle> _requestingUpdates;
 
@@ -28,14 +28,14 @@ namespace Butterfly.HabboHotel.Rooms.Wired
 
         public WiredHandler(Room room)
         {
-            this.ActionStacks = new ConcurrentDictionary<Point, List<Item>>();
-            this.ConditionStacks = new ConcurrentDictionary<Point, List<Item>>();
+            this._actionStacks = new ConcurrentDictionary<Point, List<Item>>();
+            this._conditionStacks = new ConcurrentDictionary<Point, List<Item>>();
             this._requestingUpdates = new ConcurrentQueue<WiredCycle>();
             this._wiredUsed = new ConcurrentDictionary<Point, List<RoomUser>>();
 
 
-            this.SpecialRandom = new List<Point>();
-            this.SpecialUnseen = new Dictionary<Point, int>();
+            this._specialRandom = new List<Point>();
+            this._specialUnseen = new Dictionary<Point, int>();
 
             this._room = room;
         }
@@ -45,38 +45,38 @@ namespace Butterfly.HabboHotel.Rooms.Wired
             Point itemCoord = item.Coordinate;
             if (WiredUtillity.TypeIsWiredAction(item.GetBaseItem().InteractionType))
             {
-                if (this.ActionStacks.ContainsKey(itemCoord))
+                if (this._actionStacks.ContainsKey(itemCoord))
                 {
-                    this.ActionStacks[itemCoord].Add(item);
+                    this._actionStacks[itemCoord].Add(item);
                 }
                 else
                 {
-                    this.ActionStacks.TryAdd(itemCoord, new List<Item>() { item });
+                    this._actionStacks.TryAdd(itemCoord, new List<Item>() { item });
                 }
             }
             else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
             {
-                if (this.ConditionStacks.ContainsKey(itemCoord))
+                if (this._conditionStacks.ContainsKey(itemCoord))
                 {
-                    this.ConditionStacks[itemCoord].Add(item);
+                    this._conditionStacks[itemCoord].Add(item);
                 }
                 else
                 {
-                    this.ConditionStacks.TryAdd(itemCoord, new List<Item>() { item });
+                    this._conditionStacks.TryAdd(itemCoord, new List<Item>() { item });
                 }
             }
             else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
             {
-                if (!this.SpecialRandom.Contains(itemCoord))
+                if (!this._specialRandom.Contains(itemCoord))
                 {
-                    this.SpecialRandom.Add(itemCoord);
+                    this._specialRandom.Add(itemCoord);
                 }
             }
             else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALUNSEEN)
             {
-                if (!this.SpecialUnseen.ContainsKey(itemCoord))
+                if (!this._specialUnseen.ContainsKey(itemCoord))
                 {
-                    this.SpecialUnseen.Add(itemCoord, 0);
+                    this._specialUnseen.Add(itemCoord, 0);
                 }
             }
         }
@@ -87,42 +87,42 @@ namespace Butterfly.HabboHotel.Rooms.Wired
             if (WiredUtillity.TypeIsWiredAction(item.GetBaseItem().InteractionType))
             {
                 Point coordinate = item.Coordinate;
-                if (!this.ActionStacks.ContainsKey(coordinate))
+                if (!this._actionStacks.ContainsKey(coordinate))
                 {
                     return;
                 }
-                this.ActionStacks[coordinate].Remove(item);
-                if (this.ActionStacks[coordinate].Count == 0)
+                this._actionStacks[coordinate].Remove(item);
+                if (this._actionStacks[coordinate].Count == 0)
                 {
                     List<Item> NewList = new List<Item>();
-                    this.ActionStacks.TryRemove(coordinate, out NewList);
+                    this._actionStacks.TryRemove(coordinate, out NewList);
                 }
             }
             else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
             {
-                if (!this.ConditionStacks.ContainsKey(itemCoord))
+                if (!this._conditionStacks.ContainsKey(itemCoord))
                 {
                     return;
                 }
-                this.ConditionStacks[itemCoord].Remove(item);
-                if (this.ConditionStacks[itemCoord].Count == 0)
+                this._conditionStacks[itemCoord].Remove(item);
+                if (this._conditionStacks[itemCoord].Count == 0)
                 {
                     List<Item> newList = new List<Item>();
-                    this.ConditionStacks.TryRemove(itemCoord, out newList);
+                    this._conditionStacks.TryRemove(itemCoord, out newList);
                 }
             }
             else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
             {
-                if (this.SpecialRandom.Contains(itemCoord))
+                if (this._specialRandom.Contains(itemCoord))
                 {
-                    this.SpecialRandom.Remove(itemCoord);
+                    this._specialRandom.Remove(itemCoord);
                 }
             }
             else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALUNSEEN)
             {
-                if (this.SpecialUnseen.ContainsKey(itemCoord))
+                if (this._specialUnseen.ContainsKey(itemCoord))
                 {
-                    this.SpecialUnseen.Remove(itemCoord);
+                    this._specialUnseen.Remove(itemCoord);
                 }
             }
         }
@@ -168,7 +168,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired
 
         private void ClearWired()
         {
-            foreach (List<Item> list in this.ActionStacks.Values)
+            foreach (List<Item> list in this._actionStacks.Values)
             {
                 foreach (Item roomItem in list)
                 {
@@ -180,7 +180,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired
                 }
             }
 
-            foreach (List<Item> list in this.ConditionStacks.Values)
+            foreach (List<Item> list in this._conditionStacks.Values)
             {
                 foreach (Item roomItem in list)
                 {
@@ -192,8 +192,8 @@ namespace Butterfly.HabboHotel.Rooms.Wired
                 }
             }
 
-            this.ConditionStacks.Clear();
-            this.ActionStacks.Clear();
+            this._conditionStacks.Clear();
+            this._actionStacks.Clear();
             this._wiredUsed.Clear();
             this._doCleanup = false;
         }
@@ -205,7 +205,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired
 
         public void ExecutePile(Point coordinate, RoomUser user, Item item)
         {
-            if (!this.ActionStacks.ContainsKey(coordinate))
+            if (!this._actionStacks.ContainsKey(coordinate))
             {
                 return;
             }
@@ -226,9 +226,9 @@ namespace Butterfly.HabboHotel.Rooms.Wired
                 this._wiredUsed.TryAdd(coordinate, new List<RoomUser>() { user });
             }
 
-            if (this.ConditionStacks.ContainsKey(coordinate))
+            if (this._conditionStacks.ContainsKey(coordinate))
             {
-                List<Item> ConditionStack = this.ConditionStacks[coordinate];
+                List<Item> ConditionStack = this._conditionStacks[coordinate];
                 int CycleCountCdt = 0;
                 foreach (Item roomItem in ConditionStack.ToArray())
                 {
@@ -250,9 +250,9 @@ namespace Butterfly.HabboHotel.Rooms.Wired
                 }
             }
 
-            List<Item> ActionStack = this.ActionStacks[coordinate].OrderBy(p => p.GetZ).ToList();
+            List<Item> ActionStack = this._actionStacks[coordinate].OrderBy(p => p.GetZ).ToList();
 
-            if (this.SpecialRandom.Contains(coordinate))
+            if (this._specialRandom.Contains(coordinate))
             {
                 int CountAct = ActionStack.Count - 1;
 
@@ -260,18 +260,18 @@ namespace Butterfly.HabboHotel.Rooms.Wired
                 Item ActRand = ActionStack[RdnWired];
                 ((IWiredEffect)ActRand.WiredHandler).Handle(user, item);
             }
-            else if (this.SpecialUnseen.ContainsKey(coordinate))
+            else if (this._specialUnseen.ContainsKey(coordinate))
             {
                 int CountAct = ActionStack.Count - 1;
 
-                int NextWired = this.SpecialUnseen[coordinate];
+                int NextWired = this._specialUnseen[coordinate];
                 if (NextWired > CountAct)
                 {
                     NextWired = 0;
-                    this.SpecialUnseen[coordinate] = 0;
+                    this._specialUnseen[coordinate] = 0;
                 }
 
-                this.SpecialUnseen[coordinate]++;
+                this._specialUnseen[coordinate]++;
 
                 Item ActNext = ActionStack[NextWired];
                 if (ActNext != null && ActNext.WiredHandler != null)
@@ -311,14 +311,14 @@ namespace Butterfly.HabboHotel.Rooms.Wired
 
         public void Destroy()
         {
-            if (this.ActionStacks != null)
+            if (this._actionStacks != null)
             {
-                this.ActionStacks.Clear();
+                this._actionStacks.Clear();
             }
 
-            if (this.ConditionStacks != null)
+            if (this._conditionStacks != null)
             {
-                this.ConditionStacks.Clear();
+                this._conditionStacks.Clear();
             }
 
             if (this._requestingUpdates != null)

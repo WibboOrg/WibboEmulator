@@ -297,11 +297,11 @@ namespace Butterfly.HabboHotel.Rooms
 
                     switch (itemEffectType)
                     {
-                        case ItemEffectType.None:
+                        case ItemEffectType.NONE:
                             User.ApplyEffect(0);
                             User.CurrentItemEffect = itemEffectType;
                             break;
-                        case ItemEffectType.Swim:
+                        case ItemEffectType.SWIM:
                             User.ApplyEffect(29);
                             if (User.GetClient() != null)
                             {
@@ -310,15 +310,15 @@ namespace Butterfly.HabboHotel.Rooms
 
                             User.CurrentItemEffect = itemEffectType;
                             break;
-                        case ItemEffectType.SwimLow:
+                        case ItemEffectType.SWIMLOW:
                             User.ApplyEffect(30);
                             User.CurrentItemEffect = itemEffectType;
                             break;
-                        case ItemEffectType.SwimHalloween:
+                        case ItemEffectType.SWIMHALLOWEEN:
                             User.ApplyEffect(37);
                             User.CurrentItemEffect = itemEffectType;
                             break;
-                        case ItemEffectType.Iceskates:
+                        case ItemEffectType.ICESKATES:
                             if (User.GetClient() != null)
                             {
                                 if (User.GetClient().GetHabbo().Gender == "M")
@@ -335,14 +335,14 @@ namespace Butterfly.HabboHotel.Rooms
                                 User.ApplyEffect(38);
                             }
 
-                            User.CurrentItemEffect = ItemEffectType.Iceskates;
+                            User.CurrentItemEffect = ItemEffectType.ICESKATES;
                             if (User.GetClient() != null)
                             {
                                 ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 1413);
                             }
 
                             break;
-                        case ItemEffectType.Normalskates:
+                        case ItemEffectType.NORMALSKATES:
                             if (User.GetClient() != null)
                             {
                                 if (User.GetClient().GetHabbo().Gender == "M")
@@ -366,15 +366,15 @@ namespace Butterfly.HabboHotel.Rooms
                             }
 
                             break;
-                        case ItemEffectType.Trampoline:
+                        case ItemEffectType.TRAMPOLINE:
                             User.ApplyEffect(193);
                             User.CurrentItemEffect = itemEffectType;
                             break;
-                        case ItemEffectType.TreadMill:
+                        case ItemEffectType.TREADMILL:
                             User.ApplyEffect(194);
                             User.CurrentItemEffect = itemEffectType;
                             break;
-                        case ItemEffectType.CrossTrainer:
+                        case ItemEffectType.CROSSTRAINER:
                             User.ApplyEffect(195);
                             User.CurrentItemEffect = itemEffectType;
                             break;
@@ -383,13 +383,13 @@ namespace Butterfly.HabboHotel.Rooms
                 }
                 else
                 {
-                    if (User.CurrentItemEffect == ItemEffectType.None || pByte != 0)
+                    if (User.CurrentItemEffect == ItemEffectType.NONE || pByte != 0)
                     {
                         return;
                     }
 
                     User.ApplyEffect(0);
-                    User.CurrentItemEffect = ItemEffectType.None;
+                    User.CurrentItemEffect = ItemEffectType.NONE;
                 }
             }
             catch (Exception ex)

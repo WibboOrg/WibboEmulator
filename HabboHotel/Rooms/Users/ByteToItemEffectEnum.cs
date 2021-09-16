@@ -1,18 +1,17 @@
 ﻿namespace Butterfly.HabboHotel.Rooms
 {
-
     public enum ItemEffectType
     {
-        None,
-        Swim,
-        SwimLow,
-        SwimHalloween,
-        Iceskates,
-        Normalskates,
-        PublicPool,
-        Trampoline,
-        TreadMill,
-        CrossTrainer,
+        NONE,
+        SWIM,
+        SWIMLOW,
+        SWIMHALLOWEEN,
+        ICESKATES,
+        NORMALSKATES,
+        PUBLICPOOL,
+        TRAMPOLINE,
+        TREADMILL,
+        CROSSTRAINER,
     }
 
     public static class ByteToItemEffectEnum
@@ -22,27 +21,27 @@
             switch (pByte)
             {
                 case 0:
-                    return ItemEffectType.None;
+                    return ItemEffectType.NONE;
                 case 1:
-                    return ItemEffectType.Swim;
+                    return ItemEffectType.SWIM;
                 case 2:
-                    return ItemEffectType.Normalskates;
+                    return ItemEffectType.NORMALSKATES;
                 case 3:
-                    return ItemEffectType.Iceskates;
+                    return ItemEffectType.ICESKATES;
                 case 4:
-                    return ItemEffectType.SwimLow;
+                    return ItemEffectType.SWIMLOW;
                 case 5:
-                    return ItemEffectType.SwimHalloween;
+                    return ItemEffectType.SWIMHALLOWEEN;
                 case 6:
-                    return ItemEffectType.PublicPool;
+                    return ItemEffectType.PUBLICPOOL;
                 case 7:
-                    return ItemEffectType.Trampoline;
+                    return ItemEffectType.TRAMPOLINE;
                 case 8:
-                    return ItemEffectType.TreadMill;
+                    return ItemEffectType.TREADMILL;
                 case 9:
-                    return ItemEffectType.CrossTrainer;
+                    return ItemEffectType.CROSSTRAINER;
                 default:
-                    return ItemEffectType.None;
+                    return ItemEffectType.NONE;
             }
         }
     }

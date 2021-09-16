@@ -5,6 +5,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
 using System;
+using Butterfly.Utilities;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -87,6 +88,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomEntry", 1);
             }
+
+
+            double timeStampNow = UnixTimestamp.GetNow();
+
+            if (!Session.GetHabbo().Visits.ContainsKey(timeStampNow))
+                Session.GetHabbo().Visits.Add(timeStampNow, Room.RoomData);
         }
     }
 }

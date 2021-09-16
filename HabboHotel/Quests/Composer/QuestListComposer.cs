@@ -10,6 +10,7 @@ namespace Butterfly.HabboHotel.Quests.Composer
         {
             Dictionary<string, int> dictionary1 = new Dictionary<string, int>();
             Dictionary<string, Quest> dictionary2 = new Dictionary<string, Quest>();
+
             foreach (Quest quest in Quests)
             {
                 if (!dictionary1.ContainsKey(quest.Category))
@@ -26,6 +27,7 @@ namespace Butterfly.HabboHotel.Quests.Composer
                     }
                 }
             }
+
             foreach (Quest quest in Quests)
             {
                 foreach (KeyValuePair<string, int> keyValuePair in dictionary1)
@@ -37,6 +39,7 @@ namespace Butterfly.HabboHotel.Quests.Composer
                     }
                 }
             }
+
             ServerPacket Message = new ServerPacket(ServerPacketHeader.QuestListMessageComposer);
             Message.WriteInteger(dictionary2.Count);
             foreach (KeyValuePair<string, Quest> keyValuePair in dictionary2)
@@ -46,6 +49,7 @@ namespace Butterfly.HabboHotel.Quests.Composer
                     SerializeQuest(Message, Session, keyValuePair.Value, keyValuePair.Key);
                 }
             }
+
             foreach (KeyValuePair<string, Quest> keyValuePair in dictionary2)
             {
                 if (keyValuePair.Value == null)
@@ -53,6 +57,7 @@ namespace Butterfly.HabboHotel.Quests.Composer
                     SerializeQuest(Message, Session, keyValuePair.Value, keyValuePair.Key);
                 }
             }
+            
             Message.WriteBoolean(Send);
             return Message;
         }

@@ -12,7 +12,6 @@ namespace Butterfly.HabboHotel.Catalog
 {
     public class CatalogManager
     {
-
         private readonly MarketplaceManager _marketplace;
         private readonly VoucherManager _voucherManager;
 

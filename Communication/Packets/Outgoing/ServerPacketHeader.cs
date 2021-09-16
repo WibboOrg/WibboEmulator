@@ -56,6 +56,7 @@
         public const int MODTOOL_ROOM_INFO = 1333;
         public const int MODTOOL_ROOM_CHATLOG = 3434;
         public const int MODTOOL_USER_CHATLOG = 3377;
+        public const int MODTOOL_VISITED_ROOMS_USER = 1752;
         public const int BOT_COMMAND_CONFIGURATION = 1618;
         public const int REDEEM_VOUCHER_ERROR = 714;
         public const int LOVELOCK_FURNI_FINISHED = 770;

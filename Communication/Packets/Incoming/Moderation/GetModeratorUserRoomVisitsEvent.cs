@@ -1,4 +1,5 @@
 using Butterfly.HabboHotel.GameClients;
+using Butterfly.Communication.Packets.Outgoing.Moderation;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -11,7 +12,16 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            //Session.SendMessage(ModerationTool.SerializeRoomVisits(Packet.PopInt()));
+            int userId = Packet.PopInt();
+
+            GameClient clientTarget = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+
+            if(clientTarget == null)
+            {
+                return;
+            }
+
+            Session.SendPacket(new ModeratorUserRoomVisitsComposer(clientTarget.GetHabbo(), clientTarget.GetHabbo().Visits));
         }
     }
 }

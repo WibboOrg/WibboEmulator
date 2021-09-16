@@ -21,6 +21,11 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 return;
             }
 
+            if(Session.GetHabbo().WibboPoints - Room.RoomData.SellPrice <= 0)
+            {
+                return;
+            }
+
             Session.GetHabbo().WibboPoints -= Room.RoomData.SellPrice;
             Session.SendPacket(new ActivityPointsComposer(Session.GetHabbo().WibboPoints));
 

@@ -329,6 +329,7 @@
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorTicketChatlogMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserChatlogMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserInfoMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserRoomVisitsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModResponseMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Navigator\CanCreateRoomComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Navigator\DoorbellComposer.cs" />
@@ -1092,6 +1093,7 @@
     <Compile Include="Utilities\QueryChunk.cs" />
     <Compile Include="Utilities\EndingType.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Utilities\UnixTimestamp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="w.ico" />

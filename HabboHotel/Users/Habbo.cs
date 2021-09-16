@@ -59,6 +59,7 @@ namespace Butterfly.HabboHotel.Users
         public string MachineId;
         public Language Langue;
         public bool IsWebSocket;
+        public Dictionary<double, RoomData> Visits;
 
         public List<RoomData> RoomRightsList;
         public List<RoomData> FavoriteRooms;
@@ -243,6 +244,7 @@ namespace Butterfly.HabboHotel.Users
 
             this.Nuxenable = nuxenable;
             this.NewUser = nuxenable;
+            this.Visits = new Dictionary<double, RoomData>();
         }
 
         public void Init(GameClient client, UserData.UserData data)
