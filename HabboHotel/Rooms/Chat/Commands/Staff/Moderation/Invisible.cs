@@ -19,7 +19,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 Session.GetHabbo().SpectatorMode = true;
                 Session.GetHabbo().HideInRoom = true;
             }
-            Session.SendPacket(new GetGuestRoomResultComposer(Session, Room.RoomData, false, true));
+            ///Session.SendPacket(new GetGuestRoomResultComposer(Session, Room.RoomData, false, true));
         }
     }
 }
