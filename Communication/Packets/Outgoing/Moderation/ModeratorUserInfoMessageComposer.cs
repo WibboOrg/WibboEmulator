@@ -1,3 +1,6 @@
+using System;
+using System.Data;
+
 namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorUserInfoMessageComposer : ServerPacket
@@ -5,7 +8,6 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
         public ModeratorUserInfoMessageComposer()
             : base(ServerPacketHeader.MODERATION_USER_INFO)
         {
-
         }
     }
 }

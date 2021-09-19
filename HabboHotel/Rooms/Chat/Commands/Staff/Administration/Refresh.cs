@@ -80,6 +80,11 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         ButterflyEnvironment.GetGame().GetChatManager().GetCommands().Init();
                         break;
                     }
+                case "moderation":
+                    {
+                        ButterflyEnvironment.GetGame().GetModerationManager().Init();
+                        return;
+                    }
                 case "role":
                     {
                         ButterflyEnvironment.GetGame().GetRoleManager().Init();
