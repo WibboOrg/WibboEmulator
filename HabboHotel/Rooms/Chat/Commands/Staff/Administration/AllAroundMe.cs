@@ -18,7 +18,9 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 if (U == null || Session.GetHabbo().Id == U.UserId)
                     continue;
 
-                U.MoveTo(User.X, User.Y, true);
+                //U.MoveTo(User.X, User.Y, true);
+                U.MoveTo(User.X, User.Z, true);
+                U.UnlockWalking();
             }
         }
     }

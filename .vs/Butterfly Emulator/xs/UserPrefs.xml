@@ -1,0 +1,41 @@
+﻿<Properties StartupConfiguration="{6C37DB6F-DA4A-4078-9B8C-2F2F5C10AC09}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HabboHotel/Rooms/Chat/Commands/Staff/Administration/AllAroundMe.cs">
+    <Files>
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/AllAroundMe.cs" Line="22" Column="17" />
+      <File FileName="HabboHotel/Rooms/Users/RoomUser.cs" Line="329" Column="14" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Butterfly Emulator" expanded="True">
+            <Node name="Butterfly Emulator" expanded="True">
+              <Node name="HabboHotel" expanded="True">
+                <Node name="Animations" expanded="True" />
+                <Node name="GameClients" expanded="True" />
+                <Node name="Rooms" expanded="True">
+                  <Node name="Chat" expanded="True">
+                    <Node name="Commands" expanded="True">
+                      <Node name="Staff" expanded="True">
+                        <Node name="Administration" expanded="True">
+                          <Node name="AllAroundMe.cs" selected="True" />
+                        </Node>
+                      </Node>
+                    </Node>
+                  </Node>
+                  <Node name="Users" expanded="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Butterfly_220Emulator PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

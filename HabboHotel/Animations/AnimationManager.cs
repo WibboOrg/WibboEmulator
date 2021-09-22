@@ -11,7 +11,7 @@ namespace Butterfly.HabboHotel.Animations
 {
     public class AnimationManager
     {
-        private const int MIN_USERS = 100;
+        private const int MIN_USERS = 100; // mettre 80 co's
         private const int START_TIME = 20;
         private const int NOTIF_TIME = 2;
         private const int CLOSE_TIME = 1;
