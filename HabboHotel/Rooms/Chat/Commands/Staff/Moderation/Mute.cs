@@ -12,4 +12,4 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Mute
             }
             else if (clientByUsername.GetHabbo().Rank >= Session.GetHabbo().Rank)            {                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));            }            else            {                Habbo habbo = clientByUsername.GetHabbo();
 
-                habbo.spamProtectionTime = 300;                habbo.spamEnable = true;                clientByUsername.SendPacket(new FloodControlComposer(habbo.spamProtectionTime));            }        }    }}
+                habbo.spamProtectionTime = 300;                habbo.spamEnable = true;                clientByUsername.SendPacket(new FloodControlComposer(habbo.spamProtectionTime));            }        }    }}

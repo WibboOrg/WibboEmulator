@@ -1,10 +1,81 @@
 ﻿<Properties StartupConfiguration="{6C37DB6F-DA4A-4078-9B8C-2F2F5C10AC09}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Invisible.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HabboHotel/Rooms/Chat/Mentions/MentionManager.cs">
     <Files>
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/AllAroundMe.cs" Line="23" Column="19" />
-      <File FileName="HabboHotel/Rooms/Users/RoomUser.cs" />
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Invisible.cs" Line="22" Column="13" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/StaffAlert.cs" Line="23" Column="97" />
+      <File FileName="HabboHotel/GameClients/GameClientManager.cs" Line="40" Column="31" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Premium/GameTime.cs" Line="15" Column="14" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Construction/Construit.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Construction/ConstruitStop.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Construction/Coords.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Construction/ForceRot.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Construction/SetZ.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/About.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Big.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/CopyLook.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/EmptyBots.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Emblem.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/FollowMe.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/ForceOpenGift.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/GameAlert.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/GiveItem.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/HandItem.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/MaxFloor.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/LoadVideo.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Little.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Mazo.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/NoFace.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/MoonWalk.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Override.cs" Line="16" Column="29" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/RoomMutePet.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/RoomRemoveSell.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/RoomSell.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/RoomBuy.cs" Line="55" Column="41" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/SetSpeed.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Sit.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Teleport.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/StopQuestion.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/StartQuestion.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/TransfStop.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Transf.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Tir.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Unload.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Warp.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/WarpAll.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Alert.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Ban.cs" Line="23" Column="101" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Mute.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Invisible.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/RoomKick.cs" Line="43" Column="2" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/UserInfo.cs" Line="53" Column="14" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/WarpStaff.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Murmur.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/KickBan.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Kick.cs" Line="28" Column="9" />
       <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Freeze.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/AllEyesOnMe.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/AllFriends.cs" Line="15" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/DupliRoom.cs" Line="19" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/OpenWeb.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/PlaySoundRoom.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/PushNotif.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/Refresh.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/RegenLTD.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/RoomEffect.cs" Line="28" Column="41" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/RoomEnable.cs" Line="24" Column="32" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/RegenMaps.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/SetCopyLook.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/SayBot.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/SetTransfBot.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/SetTransfStop.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/Shutdown.cs" Line="10" Column="73" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/ShowGuide.cs" Line="1" Column="1" />
+      <File FileName="ButterflyEnvironment.cs" Line="370" Column="28" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/ChatCommand.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/CommandManager.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/IChatCommand.cs" Line="7" Column="33" />
+      <File FileName="HabboHotel/Rooms/Chat/Emotions/ChatEmotions.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Filter/WordFilterManager.cs" Line="195" Column="65" />
+      <File FileName="HabboHotel/Rooms/Chat/Mentions/MentionManager.cs" Line="97" Column="37" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -18,13 +89,19 @@
                   <Node name="Chat" expanded="True">
                     <Node name="Commands" expanded="True">
                       <Node name="Staff" expanded="True">
-                        <Node name="Moderation" expanded="True">
-                          <Node name="Invisible.cs" selected="True" />
-                        </Node>
+                        <Node name="Administration" expanded="True" />
                       </Node>
+                      <Node name="User" expanded="True" />
+                    </Node>
+                    <Node name="Filter" expanded="True" />
+                    <Node name="Mentions" expanded="True">
+                      <Node name="MentionManager.cs" selected="True" />
                     </Node>
                   </Node>
                   <Node name="Users" expanded="True" />
+                </Node>
+                <Node name="Users" expanded="True">
+                  <Node name="Badges" expanded="True" />
                 </Node>
               </Node>
             </Node>

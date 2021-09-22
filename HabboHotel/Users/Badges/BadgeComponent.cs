@@ -135,6 +135,22 @@ namespace Butterfly.HabboHotel.Users.Badges
             this._badges.Remove(this.GetBadge(Badge).Code);
         }
 
+        public void DeleteBadge(string Badge)
+        {
+            if (!this.HasBadge(Badge))
+            {
+                return;
+            }
+
+            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            {
+                queryreactor.SetQuery("DELETE FROM user_badges WHERE badge_id = @badge AND user_id = " + this._userId + " LIMIT 1");
+                queryreactor.SetQuery("DELETE FROM user_badges WHERE badge_id = " + this._badges + "");
+                queryreactor.AddParameter("badge", Badge);
+                queryreactor.RunQuery();
+            }
+        }
+
         public ServerPacket Serialize()
         {
             List<Badge> list = new List<Badge>();

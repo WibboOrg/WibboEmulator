@@ -8,6 +8,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
         public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             Task ShutdownTask = new Task(ButterflyEnvironment.PreformShutDown);
+            //ButterflyEnvironment.PreformShutDown();
             ShutdownTask.Start();
         }
     }
