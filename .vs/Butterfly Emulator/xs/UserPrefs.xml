@@ -1,8 +1,10 @@
 ﻿<Properties StartupConfiguration="{6C37DB6F-DA4A-4078-9B8C-2F2F5C10AC09}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="HabboHotel/Rooms/Chat/Commands/Staff/Administration/AllAroundMe.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Invisible.cs">
     <Files>
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/AllAroundMe.cs" Line="21" Column="50" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/AllAroundMe.cs" Line="23" Column="19" />
       <File FileName="HabboHotel/Rooms/Users/RoomUser.cs" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Invisible.cs" Line="22" Column="13" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Freeze.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -16,8 +18,8 @@
                   <Node name="Chat" expanded="True">
                     <Node name="Commands" expanded="True">
                       <Node name="Staff" expanded="True">
-                        <Node name="Administration" expanded="True">
-                          <Node name="AllAroundMe.cs" selected="True" />
+                        <Node name="Moderation" expanded="True">
+                          <Node name="Invisible.cs" selected="True" />
                         </Node>
                       </Node>
                     </Node>
