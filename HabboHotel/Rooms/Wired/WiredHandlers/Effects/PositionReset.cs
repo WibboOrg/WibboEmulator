@@ -196,7 +196,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
                 }
 
                 Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(Item2[0]));
-                if (roomItem != null && !this.items.ContainsKey(roomItem.Id) && roomItem.Id != this.itemID)
+                if (roomItem != null && !this.items.ContainsKey(roomItem.Id))
                 {
                     this.items.TryAdd(roomItem.Id, new ItemsPosReset(roomItem, Convert.ToInt32(Item2[1]), Convert.ToInt32(Item2[2]), Convert.ToDouble(Item2[3]), Convert.ToInt32(Item2[4]), Item2[5]));
                 }
