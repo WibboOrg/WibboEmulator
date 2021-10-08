@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             string look = Packet.PopString();
             string gender = Packet.PopString();
 
-            if (slotId < 1 || slotId > 10)
+            if (slotId < 1 || slotId > 24)
             {
                 return;
             }

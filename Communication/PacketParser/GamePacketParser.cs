@@ -18,6 +18,7 @@ namespace Butterfly.Net
         private bool _halfDataRecieved = false;
         private byte[] _halfData = null;
         private bool _isWebSocket = false;
+        private bool _policySended = false;
 
         public GamePacketParser(GameClient me)
         {
@@ -34,35 +35,40 @@ namespace Butterfly.Net
                     return;
                 }
 
-                if (Data[0] == 71 && Data[1] == 69)
+                if (!this._policySended && (Data[0] == 71 && Data[1] == 69))
                 {
                     this.PolicyRequest(Data);
 
                     this._isWebSocket = true;
+                    this._policySended = true;
                     this._currentClient.GetConnection().IsWebSocket = true;
+
                     return;
                 }
 
-                if (Data.Length == 23 || Data.Length == 22)
+                if (!this._policySended && (Data[0] == 60 && Data[1] == 112))
                 {
-                    if (Data[0] == 60 && Data[1] == 112)
-                    {
-                        this._currentClient.GetConnection().SendData(Encoding.Default.GetBytes(GetXmlPolicy()));
+                    this._currentClient.GetConnection().SendData(Encoding.Default.GetBytes(GetXmlPolicy()));
 
-                        return;
-                    }
+                    this._isWebSocket = false;
+                    this._policySended = true;
+                    this._currentClient.GetConnection().IsWebSocket = false;
+
+                    return;
                 }
 
-                try
+
+                if (this._isWebSocket)
                 {
-                    if (this._isWebSocket)
+                    try
                     {
                         Data = EncodeDecode.DecodeMessage(Data);
                     }
-                }
-                catch
-                {
-                    return;
+                    catch (Exception e)
+                    {
+                        ConsoleWriter.Writer.LogException($"Length: {Data.Length} Message: {e.Message}");
+                        return;
+                    }
                 }
 
                 if (this._currentClient != null && this._currentClient.RC4Client != null && !deciphered)
@@ -89,14 +95,18 @@ namespace Butterfly.Net
                     }
 
                     int MsgLen = HabboEncoding.DecodeInt32(Reader.ReadBytes(4));
-                    if ((Reader.BaseStream.Length - 4) < MsgLen)
+                    if (MsgLen < 2)
                     {
-                        this._halfData = Data;
-                        this._halfDataRecieved = true;
                         return;
                     }
-                    else if (MsgLen < 2)
+                    else if ((Reader.BaseStream.Length - 4) < MsgLen)
                     {
+                        if (!this._isWebSocket)
+                        {
+                            this._halfData = Data;
+                            this._halfDataRecieved = true;
+                        }
+
                         return;
                     }
 
@@ -124,7 +134,7 @@ namespace Butterfly.Net
             }
             catch (Exception e)
             {
-                Console.WriteLine("Packet Error! " + e);
+                ConsoleWriter.Writer.LogException("Packet Erro : " + e.Message);
             }
         }
 
