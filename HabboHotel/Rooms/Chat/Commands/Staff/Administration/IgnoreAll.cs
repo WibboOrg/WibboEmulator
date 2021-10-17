@@ -7,7 +7,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
     {
         public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Params.Length != 2)
+            if (Params.Length < 2)
             {
                 return;
             }
@@ -17,20 +17,34 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            clientByUsername.GetHabbo().IgnoreAll = !clientByUsername.GetHabbo().IgnoreAll;
+            if (clientByUsername.GetHabbo().Rank >= Session.GetHabbo().Rank)            {                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));                ButterflyEnvironment.GetGame().GetClientManager().BanUser(Session, "Robot", 788922000, "Votre compte à été banni par sécurité", false, false);                return;            }
 
-            if (clientByUsername.GetHabbo().IgnoreAll)
+            int lengthSeconds = 788922000;
+            if (Params.Length == 3)
             {
-                UserRoom.SendWhisperChat("IgnoreAll activé");
+                int.TryParse(Params[2], out lengthSeconds);
             }
-            else
+
+            if (lengthSeconds <= 600)
             {
-                UserRoom.SendWhisperChat("IgnoreAll désactivé");
+                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("ban.toolesstime", Session.Langue));
+                return;
             }
+
+            int expireTime = ButterflyEnvironment.GetUnixTimestamp() + lengthSeconds;
+
+            string reason = CommandManager.MergeParams(Params, 3);
+
+            clientByUsername.GetHabbo().IgnoreAllExpireTime = expireTime;
 
             using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE users SET ignoreall = '" + ButterflyEnvironment.BoolToEnum(clientByUsername.GetHabbo().IgnoreAll) + "' WHERE id = " + clientByUsername.GetHabbo().Id);
+                queryreactor.SetQuery("INSERT INTO bans (bantype,value,reason,expire,added_by,added_date) VALUES (@rawvar, @var, @reason, '" + expireTime + "', @mod, UNIX_TIMESTAMP())");
+                queryreactor.AddParameter("rawvar", "ignoreall");
+                queryreactor.AddParameter("var", clientByUsername.GetHabbo().Username);
+                queryreactor.AddParameter("reason", reason);
+                queryreactor.AddParameter("mod", Session.GetHabbo().Username);
+                queryreactor.RunQuery();
             }
         }
     }

@@ -26,8 +26,9 @@ namespace Butterfly.HabboHotel.Users.UserData
                 DataTable Requests;
                 DataTable Quests;
                 DataTable GroupMemberships;
-
+                int ignoreAllExpire = 0;
                 bool ChangeName = false;
+
                 using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     queryreactor.SetQuery("SELECT * FROM users WHERE auth_ticket = @sso LIMIT 1");
@@ -50,6 +51,14 @@ namespace Butterfly.HabboHotel.Users.UserData
                     if (IsBanned != null)
                     {
                         return null;
+                    }
+
+                    queryreactor.SetQuery("SELECT expire FROM bans WHERE bantype = 'ignoreall' AND value = @username");
+                    queryreactor.AddParameter("username", dUserInfo["username"]);
+                    DataRow IgnoreAll = queryreactor.GetRow();
+                    if(IgnoreAll != null)
+                    {
+                        ignoreAllExpire = (int)IgnoreAll["expire"];
                     }
 
                     userId = Convert.ToInt32(dUserInfo["id"]);
@@ -209,7 +218,7 @@ namespace Butterfly.HabboHotel.Users.UserData
                 {
                     MyGroups.Add(Convert.ToInt32(dRow["group_id"]));
                 }
-                Habbo user = GenerateHabbo(dUserInfo, row2, ChangeName);
+                Habbo user = GenerateHabbo(dUserInfo, row2, ChangeName, ignoreAllExpire);
 
                 return new UserData(userId, achievements, favouritedRooms, badges, friends, requests, quests, MyGroups, user, Relationships, RoomRightsList);
             }
@@ -283,11 +292,11 @@ namespace Butterfly.HabboHotel.Users.UserData
             Dictionary<int, int> quests = new Dictionary<int, int>();
             List<int> MyGroups = new List<int>();
 
-            Habbo user = GenerateHabbo(row, row2, false);
+            Habbo user = GenerateHabbo(row, row2, false, 0);
             return new UserData(userID, achievements, favouritedRooms, badges, friends, requests, quests, MyGroups, user, Relationships, RoomRight);
         }
 
-        public static Habbo GenerateHabbo(DataRow dRow, DataRow dRow2, bool ChangeName)
+        public static Habbo GenerateHabbo(DataRow dRow, DataRow dRow2, bool ChangeName, int ignoreAllExpire)
         {
             int Id = Convert.ToInt32(dRow["id"]);
             string Username = (string)dRow["username"];
@@ -318,9 +327,8 @@ namespace Butterfly.HabboHotel.Users.UserData
             bool NuxEnable = ButterflyEnvironment.EnumToBool(dRow["nux_enable"].ToString());
             string MachineId = (string)dRow["machine_id"];
             Language Langue = LanguageManager.ParseLanguage((string)dRow["langue"]);
-            bool IgnoreAll = ButterflyEnvironment.EnumToBool(dRow["ignoreall"].ToString());
 
-            return new Habbo(Id, Username, Rank, Motto, Look, Gender, Credits, Diamonds, ActivityPoints, HomeRoom, Respect, DailyRespectPoints, DailyPetRespectPoints, HasFriendRequestsDisabled, currentQuestID, achievementPoints, LastOnline, FavoriteGroup, accountCreated, AcceptTrading, Ip, HideInroom, HideOnline, MazoHighScore, Mazo, clientVolume, NuxEnable, MachineId, ChangeName, Langue, IgnoreAll);
+            return new Habbo(Id, Username, Rank, Motto, Look, Gender, Credits, Diamonds, ActivityPoints, HomeRoom, Respect, DailyRespectPoints, DailyPetRespectPoints, HasFriendRequestsDisabled, currentQuestID, achievementPoints, LastOnline, FavoriteGroup, accountCreated, AcceptTrading, Ip, HideInroom, HideOnline, MazoHighScore, Mazo, clientVolume, NuxEnable, MachineId, ChangeName, Langue, ignoreAllExpire);
         }
     }
 }

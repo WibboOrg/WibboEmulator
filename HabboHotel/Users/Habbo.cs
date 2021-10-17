@@ -116,7 +116,14 @@ namespace Butterfly.HabboHotel.Users
         public bool SessionGiftBlocked;
 
         public int RolePlayId;
-        public bool IgnoreAll;
+        public int IgnoreAllExpireTime;
+        public bool IgnoreAll
+        {
+            get
+            {
+                return this.IgnoreAllExpireTime < ButterflyEnvironment.GetUnixTimestamp();
+            }
+        }
 
         public DateTime LastGiftPurchaseTime;
 
@@ -166,7 +173,7 @@ namespace Butterfly.HabboHotel.Users
             int WPoint, int ActivityPoints, int HomeRoom, int Respect, int DailyRespectPoints,
             int DailyPetRespectPoints, bool HasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
             int LastOnline, int FavoriteGroup, int accountCreated, bool accepttrading, string ip, bool HideInroom,
-            bool HideOnline, int MazoHighScore, int Mazo, string clientVolume, bool nuxenable, string MachineId, bool ChangeName, Language Langue, bool IgnoreAll)
+            bool HideOnline, int MazoHighScore, int Mazo, string clientVolume, bool nuxenable, string MachineId, bool ChangeName, Language Langue, int ignoreAllExpire)
         {
             this.Id = Id;
             this.Username = Username;
@@ -196,7 +203,7 @@ namespace Butterfly.HabboHotel.Users
             this.ClientVolume = new List<int>(3);
             this.CanChangeName = ChangeName;
             this.Langue = Langue;
-            this.IgnoreAll = IgnoreAll;
+            this.IgnoreAllExpireTime = ignoreAllExpire;
 
             if (clientVolume.Contains(','))
             {
