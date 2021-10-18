@@ -16,7 +16,4 @@ using Butterfly.HabboHotel.GameClients;namespace Butterfly.HabboHotel.Rooms.Ch
                 {
                     Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("ban.toolesstime", Session.Langue));
                 }
-                else                {                    string Raison = CommandManager.MergeParams(Params, 3);                    ButterflyEnvironment.GetGame().GetClientManager().BanUser(clientByUsername, Session.GetHabbo().Username, num, Raison, false, false);                    Session.Antipub(Raison, "<CMD>");                }                if (clientByUsername.GetHabbo().Rank > 5 && Session.GetHabbo().Rank < 12)
-                {
-                    ButterflyEnvironment.GetGame().GetClientManager().BanUser(Session, "Robot", 788922000, "Votre compte à été banni par sécurité", false, false);
-                }            }        }    }}
+                else                {                    string Raison = CommandManager.MergeParams(Params, 3);                    ButterflyEnvironment.GetGame().GetClientManager().BanUser(clientByUsername, Session.GetHabbo().Username, num, Raison, false, false);                    Session.Antipub(Raison, "<CMD>");                }            }        }    }}

@@ -19,10 +19,10 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             if (clientByUsername.GetHabbo().Rank >= Session.GetHabbo().Rank)            {                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));                ButterflyEnvironment.GetGame().GetClientManager().BanUser(Session, "Robot", 788922000, "Votre compte à été banni par sécurité", false, false);                return;            }
 
-            int lengthSeconds = 788922000;
+            double lengthSeconds = 788922000;
             if (Params.Length == 3)
             {
-                int.TryParse(Params[2], out lengthSeconds);
+                double.TryParse(Params[2], out lengthSeconds);
             }
 
             if (lengthSeconds <= 600)
@@ -31,7 +31,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            int expireTime = ButterflyEnvironment.GetUnixTimestamp() + lengthSeconds;
+            double expireTime = ButterflyEnvironment.GetUnixTimestamp() + lengthSeconds;
 
             string reason = CommandManager.MergeParams(Params, 3);
 

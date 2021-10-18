@@ -116,7 +116,7 @@ namespace Butterfly.HabboHotel.Users
         public bool SessionGiftBlocked;
 
         public int RolePlayId;
-        public int IgnoreAllExpireTime;
+        public double IgnoreAllExpireTime;
         public bool IgnoreAll
         {
             get
