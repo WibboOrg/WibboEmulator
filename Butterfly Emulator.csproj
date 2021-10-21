@@ -1032,7 +1032,6 @@
     <Compile Include="HabboHotel\Rooms\Games\Football\Soccer.cs" />
     <Compile Include="HabboHotel\Rooms\Games\Teams\TeamManager.cs" />
     <Compile Include="HabboHotel\Rooms\RoomIvokedItems\RoomAlert.cs" />
-    <Compile Include="HabboHotel\Rooms\RoomIvokedItems\RoomKick.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\RotationState.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\WiredLoader.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\WiredHandler.cs" />

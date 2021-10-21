@@ -20,6 +20,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Butterfly.HabboHotel.Rooms
 {
@@ -80,6 +82,8 @@ namespace Butterfly.HabboHotel.Rooms
         //Question
         public int VotedYesCount;
         public int VotedNoCount;
+        private List<CancellationTokenSource> cancellationTokenSources;
+
         public int UserCount => this.roomUserManager.GetRoomUserCount();
 
         public int Id => this.RoomData.Id;
@@ -133,6 +137,7 @@ namespace Butterfly.HabboHotel.Rooms
             this.LoadBots();
             this.InitPets();
             this.lastTimerReset = DateTime.Now;
+            this.cancellationTokenSources = new List<CancellationTokenSource>();
         }
 
         public Gamemap GetGameMap()
@@ -1082,6 +1087,12 @@ namespace Butterfly.HabboHotel.Rooms
             this.Disposed = true;
             this.mCycleEnded = true;
 
+            foreach (CancellationTokenSource tokenSource in this.cancellationTokenSources)
+            {
+                tokenSource.Cancel();
+            }
+            this.cancellationTokenSources.Clear();
+
             using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 this.GetRoomItemHandler().SaveFurniture(queryreactor);
@@ -1235,6 +1246,27 @@ namespace Butterfly.HabboHotel.Rooms
             {
                 queryreactor.RunQuery("UPDATE rooms SET users_max = '" + MaxUsers + "' WHERE id = '" + this.Id + "';");
             }
+        }
+
+        public void SetTimeout(int delay, Action callBack)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+            Task.Delay(delay).ContinueWith((t) =>
+            {
+                if (this.cancellationTokenSources.Contains(cancellationTokenSource))
+                    this.cancellationTokenSources.Remove(cancellationTokenSource);
+
+                if (this.Disposed) return;
+
+                callBack();
+
+            }, cancellationToken);
+
+
+            if(!this.cancellationTokenSources.Contains(cancellationTokenSource))
+                this.cancellationTokenSources.Add(cancellationTokenSource);
         }
     }
 }

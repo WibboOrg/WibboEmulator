@@ -33,14 +33,9 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 }
             }
 
-            //TODO: Faire un système de setTimeout qui ce clean quand on dispose l'appartement
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            CancellationToken cancellationToken = cancellationTokenSource.Token;
 
-            Task.Delay(5000).ContinueWith((t) =>
+            room.SetTimeout(5000, () =>
             {
-                if (currentRoom == null || currentRoom.Disposed) return;
-
                 foreach (RoomUser User in currentRoom.GetRoomUserManager().GetUserList().ToList())
                 {
                     if (User != null && !User.IsBot && !User.GetClient().GetHabbo().HasFuse("fuse_no_kick"))
@@ -53,9 +48,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         currentRoom.GetRoomUserManager().RemoveUserFromRoom(User.GetClient(), true, false);
                     }
                 }
-            }, cancellationToken);
-
-            //cancellationTokenSource.Cancel();
+            });
         }
     }
 }

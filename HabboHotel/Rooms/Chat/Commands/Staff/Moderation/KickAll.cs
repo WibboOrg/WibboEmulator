@@ -15,16 +15,12 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            RoomIvokedItems.RoomKick kick = new RoomIvokedItems.RoomKick("Tu as été exclu de cet appart.", Session.GetHabbo().Id);
             List<RoomUser> local_1 = new List<RoomUser>();
             foreach (RoomUser user in room.GetRoomUserManager().GetUserList().ToList())
             {
-                if (!user.IsBot && !user.GetClient().GetHabbo().HasFuse("fuse_no_kick") && kick.SaufId != user.GetClient().GetHabbo().Id)
+                if (!user.IsBot && !user.GetClient().GetHabbo().HasFuse("fuse_no_kick") && Session.GetHabbo().Id != user.GetClient().GetHabbo().Id)
                 {
-                    if (kick.Alert.Length > 0)
-                    {
-                        user.GetClient().SendNotification(kick.Alert);
-                    }
+                    user.GetClient().SendNotification("Tu as été exclu de cet appart.");
 
                     local_1.Add(user);
                 }
