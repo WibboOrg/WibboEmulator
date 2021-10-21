@@ -1,5 +1,7 @@
 using Butterfly.HabboHotel.GameClients;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 {
@@ -24,20 +26,36 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             {
                 if (User != null && !User.IsBot && !User.GetClient().GetHabbo().HasFuse("fuse_no_kick"))
                 {
-                    if (MessageAlert.Length > 0)
-                    {
-                        User.GetClient().SendNotification(MessageAlert);
-                    }
-
                     User.AllowMoveTo = false;
                     User.IsWalking = true;
                     User.GoalX = Room.GetGameMap().Model.DoorX;
                     User.GoalY = Room.GetGameMap().Model.DoorY;
-
-                    currentRoom.GetRoomUserManager().RemoveUserFromRoom(User.GetClient(), true, false);
                 }
             }
 
+            //TODO: Faire un système de setTimeout qui ce clean quand on dispose l'appartement
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+            Task.Delay(5000).ContinueWith((t) =>
+            {
+                if (currentRoom == null || currentRoom.Disposed) return;
+
+                foreach (RoomUser User in currentRoom.GetRoomUserManager().GetUserList().ToList())
+                {
+                    if (User != null && !User.IsBot && !User.GetClient().GetHabbo().HasFuse("fuse_no_kick"))
+                    {
+                        if (MessageAlert.Length > 0)
+                        {
+                            User.GetClient().SendNotification(MessageAlert);
+                        }
+
+                        currentRoom.GetRoomUserManager().RemoveUserFromRoom(User.GetClient(), true, false);
+                    }
+                }
+            }, cancellationToken);
+
+            //cancellationTokenSource.Cancel();
         }
     }
 }

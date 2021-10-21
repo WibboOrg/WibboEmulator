@@ -80,7 +80,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Mentions
                 return false;
             }
 
-            if (!TargetClient.GetHabbo().GetMessenger().FriendshipExists(Session.GetHabbo().Id))
+            if (!TargetClient.GetHabbo().GetMessenger().FriendshipExists(Session.GetHabbo().Id) && !Session.GetHabbo().HasFuse("fuse_mention"))
             {
                 Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Tu as besoin d'être ami avec {TargetUsername} pour pouvoir le taguer"));
                 return false;

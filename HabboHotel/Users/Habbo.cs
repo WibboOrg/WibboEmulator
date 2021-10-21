@@ -121,7 +121,7 @@ namespace Butterfly.HabboHotel.Users
         {
             get
             {
-                return this.IgnoreAllExpireTime < ButterflyEnvironment.GetUnixTimestamp();
+                return this.IgnoreAllExpireTime > ButterflyEnvironment.GetUnixTimestamp();
             }
         }
 

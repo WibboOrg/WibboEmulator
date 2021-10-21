@@ -17,7 +17,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            if (clientByUsername.GetHabbo().Rank >= Session.GetHabbo().Rank)            {                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));                ButterflyEnvironment.GetGame().GetClientManager().BanUser(Session, "Robot", 788922000, "Votre compte à été banni par sécurité", false, false);                return;            }
+            if (clientByUsername.GetHabbo().Rank >= Session.GetHabbo().Rank)            {                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));                return;            }
 
             double lengthSeconds = 788922000;
             if (Params.Length == 3)
