@@ -366,7 +366,7 @@ namespace Butterfly.HabboHotel.Users
                 }
             }
 
-            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "SeasonRunOff", "WibboParty", "MovieRunOff", "officialrooms" };
+            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "SeasonRunOff", "WibboParty", "MovieRunOff", "officialrooms", "Seonsaengnim"};
 
             if (this.GetClient().GetHabbo().Rank < 8)
             {
