@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Camera;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -46,12 +47,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Session.GetHabbo().LastPhotoId = PhotoId;
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                queryreactor.SetQuery("INSERT INTO user_photos (user_id,photo,time) VALUES ('" + Session.GetHabbo().Id + "', @photoid, '" + Time + "');");
-                queryreactor.AddParameter("photoid", PhotoId);
-                queryreactor.RunQuery();
-            }
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                UserPhotoDao.InsertPhoto(dbClient, Session.GetHabbo().Id, PhotoId, Time);
         }
     }
 }

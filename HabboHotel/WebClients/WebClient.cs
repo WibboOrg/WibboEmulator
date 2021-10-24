@@ -3,6 +3,7 @@ using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Communication.WebSocket;
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Net;
 using ConnectionManager;
@@ -46,22 +47,19 @@ namespace Butterfly.HabboHotel.WebClients
 
             string ip = this.GetConnection().GetIp();
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT id FROM bans WHERE expire > @nowtime AND (bantype = 'ip' AND value = @IP1) LIMIT 1");
-                queryreactor.AddParameter("nowtime", ButterflyEnvironment.GetUnixTimestamp());
-                queryreactor.AddParameter("IP1", ip);
+                bool isBanned = BanDao.IsBanned(dbClient, ButterflyEnvironment.GetUnixTimestamp(), ip);
 
-                DataRow IsBanned = queryreactor.GetRow();
-                if (IsBanned != null)
+                if (isBanned)
                 {
                     return;
                 }
 
-                queryreactor.SetQuery("SELECT user_id, is_staff, langue FROM user_websocket WHERE auth_ticket = @sso");
-                queryreactor.AddParameter("sso", AuthTicket);
+                dbClient.SetQuery("SELECT user_id, is_staff, langue FROM user_websocket WHERE auth_ticket = @sso");
+                dbClient.AddParameter("sso", AuthTicket);
 
-                DataRow dUserInfo = queryreactor.GetRow();
+                DataRow dUserInfo = dbClient.GetRow();
                 if (dUserInfo == null)
                 {
                     return;
@@ -70,9 +68,9 @@ namespace Butterfly.HabboHotel.WebClients
                 this.UserId = Convert.ToInt32(dUserInfo["user_id"]);
                 this._isStaff = ButterflyEnvironment.EnumToBool((string)dUserInfo["is_staff"]);
                 this._langue = LanguageManager.ParseLanguage(Convert.ToString(dUserInfo["langue"]));
-                queryreactor.RunQuery("UPDATE user_websocket SET auth_ticket = '' WHERE user_id = '" + this.UserId + "'");
+                dbClient.RunQuery("UPDATE user_websocket SET auth_ticket = '' WHERE user_id = '" + this.UserId + "'");
 
-                this.SendSettingSound(queryreactor);
+                this.SendSettingSound(dbClient);
             }
 
             ButterflyEnvironment.GetGame().GetClientWebManager().LogClonesOut(this.UserId);

@@ -5,6 +5,7 @@ using Butterfly.Communication.WebSocket;
 using Butterfly.Core;
 using Butterfly.Core.FigureData;
 using Butterfly.Database;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel;
 using Butterfly.HabboHotel.GameClients;
@@ -223,19 +224,16 @@ namespace Butterfly
 
         public static bool UsernameExists(string username)
         {
-            int integer;
-            using (IQueryAdapter queryreactor = GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT id FROM users WHERE username = @username LIMIT 1");
-                queryreactor.AddParameter("username", username);
-                integer = queryreactor.GetInteger();
-            }
-            if (integer <= 0)
-            {
-                return false;
-            }
+                int integer = UserDao.GetIdByName(queryreactor, username);
+                if (integer <= 0)
+                {
+                    return false;
+                }
 
-            return true;
+                return true;
+            }
         }
 
         public static string GetUsernameById(int UserId)
@@ -253,12 +251,8 @@ namespace Butterfly
                 return _usersCached[UserId].Username;
             }
 
-            using (IQueryAdapter dbClient = GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("SELECT `username` FROM `users` WHERE `id` = @id LIMIT 1");
-                dbClient.AddParameter("id", UserId);
-                Name = dbClient.GetString();
-            }
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                Name = UserDao.GetNameById(dbClient, UserId);
 
             if (string.IsNullOrEmpty(Name))
             {
@@ -270,21 +264,16 @@ namespace Butterfly
 
         public static Habbo GetHabboByUsername(string UserName)
         {
-            try
+            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                using (IQueryAdapter dbClient = GetDatabaseManager().GetQueryReactor())
+                int id = UserDao.GetIdByName(queryreactor, UserName);
+                if (id > 0)
                 {
-                    dbClient.SetQuery("SELECT `id` FROM `users` WHERE `username` = @user LIMIT 1");
-                    dbClient.AddParameter("user", UserName);
-                    int id = dbClient.GetInteger();
-                    if (id > 0)
-                    {
-                        return GetHabboById(Convert.ToInt32(id));
-                    }
+                    return GetHabboById(Convert.ToInt32(id));
                 }
+
                 return null;
             }
-            catch { return null; }
         }
 
         public static Habbo GetHabboById(int UserId)
