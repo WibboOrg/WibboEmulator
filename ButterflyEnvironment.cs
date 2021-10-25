@@ -1,6 +1,7 @@
 ﻿using Buttefly.Communication.Encryption;
 using Buttefly.Communication.Encryption.Keys;
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Communication.WebSocket;
 using Butterfly.Core;
 using Butterfly.Core.FigureData;
@@ -356,12 +357,12 @@ namespace Butterfly
             return _datebasemanager;
         }
 
-        public static void PreformShutDown()
+        /*public static void PreformShutDown()
         {
             PreformShutDown(true);
-        }
+        }*/
 
-        public static void PreformShutDown(bool ExitWhenDone)
+        /*public static void PreformShutDown(bool ExitWhenDone)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -369,10 +370,10 @@ namespace Butterfly
             DateTime now2 = DateTime.Now;
 
             ServerPacket message = new ServerPacket(ServerPacketHeader.GENERIC_ALERT);
-            message.WriteString("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 10 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes.");
+            message.WriteString("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes.");
             GetGame().GetClientManager().SendMessage(message);
 
-            Thread.Sleep(10000);
+            Thread.Sleep(20000); // le temps de finir un échange, une discussion ou un au revoir
 
             AppendTimeStampWithComment(ref builder, now2, "Hotel pre-warning");
 
@@ -427,6 +428,30 @@ namespace Butterfly
             }
 
             Environment.Exit(Environment.ExitCode);
+        }*/
+
+        public static void PreformShutDown()
+        {
+            Console.Clear();
+            Console.WriteLine("Extinction du serveur...");
+
+            Console.Title = "BUTTERFLY : EXTINCTION";
+
+            GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
+            GetGame().Destroy();
+            Thread.Sleep(3000);
+            GetConnectionManager().Destroy();
+            GetGame().GetPacketManager().UnregisterAll();
+            GetGame().GetPacketManager().WaitForAllToComplete();
+            GetGame().GetClientManager().CloseAll();
+            GetGame().GetRoomManager().RemoveAllRooms();
+
+            Console.WriteLine("Butterfly Emulateur s'est parfaitement éteind...");
+
+            Thread.Sleep(1000);
+            Environment.Exit(0);
+
+
         }
 
         public static string TimeSpanToString(TimeSpan span)
