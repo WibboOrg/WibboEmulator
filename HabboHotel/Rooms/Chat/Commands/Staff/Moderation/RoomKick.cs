@@ -28,6 +28,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 {
                     User.AllowMoveTo = false;
                     User.IsWalking = true;
+                    User.AllowOverride = true;
                     User.GoalX = Room.GetGameMap().Model.DoorX;
                     User.GoalY = Room.GetGameMap().Model.DoorY;
                 }
