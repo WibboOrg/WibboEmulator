@@ -1,20 +1,20 @@
 ﻿<Properties StartupConfiguration="{6C37DB6F-DA4A-4078-9B8C-2F2F5C10AC09}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/RoomKick.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Alert.cs">
     <Files>
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/RoomAlert.cs" Line="21" Column="20" />
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/RoomKick.cs" Line="24" Column="1" />
-      <File FileName="HabboHotel/Rooms/Users/RoomUserManager.cs" />
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Invisible.cs" />
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/SetEnable.cs" />
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/SetTransf.cs" />
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/SetTransfBot.cs" />
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/SetEffect.cs" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Murmur.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/KickBan.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/KickAll.cs" Line="1" Column="1" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Kick.cs" Line="12" Column="14" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Alert.cs" Line="18" Column="14" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Butterfly Emulator" expanded="True">
             <Node name="Butterfly Emulator" expanded="True">
+              <Node name="Communication" expanded="True">
+                <Node name="Packets" expanded="True" />
+              </Node>
               <Node name="HabboHotel" expanded="True">
                 <Node name="Animations" expanded="True" />
                 <Node name="Rooms" expanded="True">
@@ -23,9 +23,10 @@
                       <Node name="Staff" expanded="True">
                         <Node name="Administration" expanded="True" />
                         <Node name="Moderation" expanded="True">
-                          <Node name="RoomKick.cs" selected="True" />
+                          <Node name="Alert.cs" selected="True" />
                         </Node>
                       </Node>
+                      <Node name="User" expanded="True" />
                     </Node>
                   </Node>
                   <Node name="Users" expanded="True" />
