@@ -61,10 +61,10 @@ namespace Butterfly.HabboHotel.Support
         public string GetNameById(int Id)
         {
             string username = "";
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT username FROM users WHERE id = " + Id);
-                username = queryreactor.GetString();
+                dbClient.SetQuery("SELECT username FROM users WHERE id = '" + Id + "'");
+                username = dbClient.GetString();
             }
 
             return username;
@@ -103,9 +103,9 @@ namespace Butterfly.HabboHotel.Support
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE moderation_tickets SET status = 'picked', moderator_id = " + pModeratorId + ", timestamp = '" + ButterflyEnvironment.GetUnixTimestamp() + "' WHERE id = " + this.Id);
+                dbClient.RunQuery("UPDATE moderation_tickets SET status = 'picked', moderator_id = '" + pModeratorId + "', timestamp = '" + ButterflyEnvironment.GetUnixTimestamp() + "' WHERE id = '" + this.Id + "'");
             }
         }
 
@@ -131,9 +131,9 @@ namespace Butterfly.HabboHotel.Support
                     break;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE moderation_tickets SET status = '" + str + "' WHERE id = '" + this.Id + "';");
+                dbClient.RunQuery("UPDATE moderation_tickets SET status = '" + str + "' WHERE id = '" + this.Id + "'");
             }
         }
 
@@ -146,9 +146,9 @@ namespace Butterfly.HabboHotel.Support
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE moderation_tickets SET status = 'open' WHERE id = " + this.Id);
+                dbClient.RunQuery("UPDATE moderation_tickets SET status = 'open' WHERE id = '" + this.Id + "'");
             }
         }
 
@@ -161,9 +161,9 @@ namespace Butterfly.HabboHotel.Support
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE moderation_tickets SET status = 'deleted' WHERE id = " + this.Id);
+                dbClient.RunQuery("UPDATE moderation_tickets SET status = 'deleted' WHERE id = '" + this.Id + "'");
             }
         }
 

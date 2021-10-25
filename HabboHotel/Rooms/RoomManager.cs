@@ -32,10 +32,10 @@ namespace Butterfly.HabboHotel.Rooms
         private static RoomModel GetCustomData(int roomID)
         {
             DataRow row;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = " + roomID);
-                row = queryreactor.GetRow();
+                dbClient.SetQuery("SELECT door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = '" + roomID + "'");
+                row = dbClient.GetRow();
             }
 
             if (row == null)
@@ -88,10 +88,10 @@ namespace Butterfly.HabboHotel.Rooms
             }
 
             DataRow Row = null;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT * FROM rooms WHERE id = '" + RoomId + "';");
-                Row = queryreactor.GetRow();
+                dbClient.SetQuery("SELECT * FROM rooms WHERE id = '" + RoomId + "'");
+                Row = dbClient.GetRow();
             }
 
             if (Row == null)
@@ -210,7 +210,7 @@ namespace Butterfly.HabboHotel.Rooms
                 int RoomId = 0;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("INSERT INTO `rooms` (`caption`,`description`,`owner`,`model_name`,`category`,`users_max`,`troc_status`) VALUES (@caption, @desc, @username, @model, @cat, @usmax, '" + TradeSettings + "');");
+                    dbClient.SetQuery("INSERT INTO `rooms` (`caption`,`description`,`owner`,`model_name`,`category`,`users_max`,`troc_status`) VALUES (@caption, @desc, @username, @model, @cat, @usmax, '" + TradeSettings + "')");
                     dbClient.AddParameter("caption", Name);
                     dbClient.AddParameter("desc", Desc);
                     dbClient.AddParameter("username", Session.GetHabbo().Username);

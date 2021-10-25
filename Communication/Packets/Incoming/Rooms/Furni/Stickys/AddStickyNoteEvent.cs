@@ -38,9 +38,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE items SET room_id = " + room.Id + ", user_id = " + room.RoomData.OwnerId + " WHERE id = " + Id);
+                dbClient.RunQuery("UPDATE items SET room_id = '" + room.Id + "', user_id = '" + room.RoomData.OwnerId + "' WHERE id = '" + Id + "'");
             }
 
             Session.GetHabbo().GetInventoryComponent().RemoveItem(Id);

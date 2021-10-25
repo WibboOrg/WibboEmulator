@@ -28,9 +28,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Response.WriteBoolean(true);
                 Session.SendPacket(Response);
                 Session.GetHabbo().FavoriteRooms.Add(roomData);
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("INSERT INTO user_favorites (user_id,room_id) VALUES (" + Session.GetHabbo().Id + "," + num + ")");
+                    dbClient.RunQuery("INSERT INTO user_favorites (user_id,room_id) VALUES ('" + Session.GetHabbo().Id + "','" + num + "')");
                 }
             }
         }

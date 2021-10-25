@@ -224,9 +224,9 @@ namespace Butterfly
 
         public static bool UsernameExists(string username)
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                int integer = UserDao.GetIdByName(queryreactor, username);
+                int integer = UserDao.GetIdByName(dbClient, username);
                 if (integer <= 0)
                 {
                     return false;
@@ -264,9 +264,9 @@ namespace Butterfly
 
         public static Habbo GetHabboByUsername(string UserName)
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                int id = UserDao.GetIdByName(queryreactor, UserName);
+                int id = UserDao.GetIdByName(dbClient, UserName);
                 if (id > 0)
                 {
                     return GetHabboById(Convert.ToInt32(id));

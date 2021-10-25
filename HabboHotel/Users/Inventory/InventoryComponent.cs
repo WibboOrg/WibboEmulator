@@ -36,28 +36,28 @@ namespace Butterfly.HabboHotel.Users.Inventory
         {
             if (All)
             {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("DELETE items, items_limited, user_presents, room_items_moodlight, tele_links, wired_items FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) LEFT JOIN user_presents ON (user_presents.item_id = items.id) LEFT JOIN room_items_moodlight ON (room_items_moodlight.item_id = items.id) LEFT JOIN tele_links ON (tele_one_id = items.id) LEFT JOIN wired_items ON (trigger_id = items.id) WHERE room_id = '0' AND user_id = '" + this.UserId + "'");
+                    dbClient.RunQuery("DELETE items, items_limited, user_presents, room_items_moodlight, tele_links, wired_items FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) LEFT JOIN user_presents ON (user_presents.item_id = items.id) LEFT JOIN room_items_moodlight ON (room_items_moodlight.item_id = items.id) LEFT JOIN tele_links ON (tele_one_id = items.id) LEFT JOIN wired_items ON (trigger_id = items.id) WHERE room_id = '0' AND user_id = '" + this.UserId + "'");
                 }
 
                 this._UserItems.Clear();
             }
             else
             {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("DELETE items, items_limited, user_presents, room_items_moodlight, tele_links, wired_items FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) LEFT JOIN user_presents ON (user_presents.item_id = items.id) LEFT JOIN room_items_moodlight ON (room_items_moodlight.item_id = items.id) LEFT JOIN tele_links ON (tele_one_id = items.id) LEFT JOIN wired_items ON (trigger_id = items.id) WHERE room_id = '0' AND user_id = '" + this.UserId + "' AND base_item NOT IN (SELECT id FROM furniture WHERE is_rare = '1');");
+                    dbClient.RunQuery("DELETE items, items_limited, user_presents, room_items_moodlight, tele_links, wired_items FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) LEFT JOIN user_presents ON (user_presents.item_id = items.id) LEFT JOIN room_items_moodlight ON (room_items_moodlight.item_id = items.id) LEFT JOIN tele_links ON (tele_one_id = items.id) LEFT JOIN wired_items ON (trigger_id = items.id) WHERE room_id = '0' AND user_id = '" + this.UserId + "' AND base_item NOT IN (SELECT id FROM furniture WHERE is_rare = '1')");
                 }
 
                 this._UserItems.Clear();
                 DataTable table1;
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("SELECT items.id, items.base_item, items.extra_data, items_limited.limited_number, items_limited.limited_stack FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.user_id = @userid AND items.room_id = '0'");
+                    dbClient.SetQuery("SELECT items.id, items.base_item, items.extra_data, items_limited.limited_number, items_limited.limited_stack FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.user_id = @userid AND items.room_id = '0'");
 
-                    queryreactor.AddParameter("userid", this.UserId);
-                    table1 = queryreactor.GetTable();
+                    dbClient.AddParameter("userid", this.UserId);
+                    table1 = dbClient.GetTable();
                 }
 
                 foreach (DataRow dataRow in table1.Rows)
@@ -78,9 +78,9 @@ namespace Butterfly.HabboHotel.Users.Inventory
 
         public void ClearPets()
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE FROM pets WHERE room_id = '0' AND user_id = " + this.UserId);
+                dbClient.RunQuery("DELETE FROM pets WHERE room_id = '0' AND user_id = '" + this.UserId + "'");
             }
 
             this._petsItems.Clear();
@@ -88,9 +88,9 @@ namespace Butterfly.HabboHotel.Users.Inventory
 
         public void ClearBots()
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE FROM bots WHERE room_id = '0' AND user_id = " + this.UserId);
+                dbClient.RunQuery("DELETE FROM bots WHERE room_id = '0' AND user_id = '" + this.UserId + "'");
             }
 
             this._botItems.Clear();
@@ -198,12 +198,12 @@ namespace Butterfly.HabboHotel.Users.Inventory
         {
             this._UserItems.Clear();
             DataTable table1;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT items.id, items.base_item, items.extra_data, items_limited.limited_number, items_limited.limited_stack FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.user_id = @userid AND items.room_id = '0'");
+                dbClient.SetQuery("SELECT items.id, items.base_item, items.extra_data, items_limited.limited_number, items_limited.limited_stack FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.user_id = @userid AND items.room_id = '0'");
 
-                queryreactor.AddParameter("userid", this.UserId);
-                table1 = queryreactor.GetTable();
+                dbClient.AddParameter("userid", this.UserId);
+                table1 = dbClient.GetTable();
             }
 
             foreach (DataRow dataRow in table1.Rows)
@@ -220,10 +220,10 @@ namespace Butterfly.HabboHotel.Users.Inventory
 
             this._petsItems.Clear();
             DataTable table2;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM pets WHERE user_id = " + this.UserId + " AND room_id = 0");
-                table2 = queryreactor.GetTable();
+                dbClient.SetQuery("SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM pets WHERE user_id = '" + this.UserId + "' AND room_id = 0");
+                table2 = dbClient.GetTable();
             }
             if (table2 != null)
             {
@@ -236,10 +236,10 @@ namespace Butterfly.HabboHotel.Users.Inventory
 
             this._botItems.Clear();
             DataTable dBots;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT * FROM bots WHERE user_id = " + this.UserId + " AND room_id = 0");
-                dBots = queryreactor.GetTable();
+                dbClient.SetQuery("SELECT * FROM bots WHERE user_id = '" + this.UserId + "' AND room_id = '0'");
+                dBots = dbClient.GetTable();
             }
             if (dBots == null)
             {
@@ -272,9 +272,9 @@ namespace Butterfly.HabboHotel.Users.Inventory
 
         public Item AddNewItem(int Id, int BaseItem, string ExtraData, int Limited = 0, int LimitedStack = 0)
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE items SET room_id = '0', user_id = '" + this.UserId + "' WHERE id = " + Id);
+                dbClient.RunQuery("UPDATE items SET room_id = '0', user_id = '" + this.UserId + "' WHERE id = '" + Id + "'");
             }
 
             Item userItem = new Item(Id, 0, BaseItem, ExtraData, Limited, LimitedStack, 0, 0, 0.0, 0, "", null);
@@ -325,9 +325,9 @@ namespace Butterfly.HabboHotel.Users.Inventory
 
         public void AddItem(Item item)
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE items SET room_id = '0', user_id = '" + this.UserId + "' WHERE id = " + item.Id);
+                dbClient.RunQuery("UPDATE items SET room_id = '0', user_id = '" + this.UserId + "' WHERE id = '" + item.Id + "'");
             }
 
             Item userItem = new Item(item.Id, 0, item.BaseItem, item.ExtraData, item.Limited, item.LimitedStack, 0, 0, 0.0, 0, "", null);

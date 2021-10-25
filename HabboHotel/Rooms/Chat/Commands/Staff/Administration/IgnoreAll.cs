@@ -37,14 +37,14 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             clientByUsername.GetHabbo().IgnoreAllExpireTime = expireTime;
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("INSERT INTO bans (bantype,value,reason,expire,added_by,added_date) VALUES (@rawvar, @var, @reason, '" + expireTime + "', @mod, UNIX_TIMESTAMP())");
-                queryreactor.AddParameter("rawvar", "ignoreall");
-                queryreactor.AddParameter("var", clientByUsername.GetHabbo().Username);
-                queryreactor.AddParameter("reason", reason);
-                queryreactor.AddParameter("mod", Session.GetHabbo().Username);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("INSERT INTO bans (bantype,value,reason,expire,added_by,added_date) VALUES (@rawvar, @var, @reason, '" + expireTime + "', @mod, UNIX_TIMESTAMP())");
+                dbClient.AddParameter("rawvar", "ignoreall");
+                dbClient.AddParameter("var", clientByUsername.GetHabbo().Username);
+                dbClient.AddParameter("reason", reason);
+                dbClient.AddParameter("mod", Session.GetHabbo().Username);
+                dbClient.RunQuery();
             }
         }
     }

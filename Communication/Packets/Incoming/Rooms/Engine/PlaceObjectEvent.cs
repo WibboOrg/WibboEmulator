@@ -60,9 +60,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     return;
                 }
 
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("DELETE FROM items WHERE id = " + ItemId);
+                    dbClient.RunQuery("DELETE FROM items WHERE id = '" + ItemId + "'");
                 }
 
                 Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
@@ -104,9 +104,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Item roomItem = new Item(userItem.Id, Room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, X, Y, 0.0, Rotation, "", Room);
                 if (Room.GetRoomItemHandler().SetFloorItem(Session, roomItem, X, Y, Rotation, true, false, true))
                 {
-                    using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        queryreactor.RunQuery("UPDATE items SET room_id = " + Room.Id + ", user_id = " + Room.RoomData.OwnerId + " WHERE id = " + ItemId);
+                        dbClient.RunQuery("UPDATE items SET room_id = '" + Room.Id + "', user_id = '" + Room.RoomData.OwnerId + "' WHERE id = '" + ItemId + "'");
                     }
 
                     Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
@@ -166,9 +166,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     Item roomItem = new Item(userItem.Id, Room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, WallPos, Room);
                     if (Room.GetRoomItemHandler().SetWallItem(Session, roomItem))
                     {
-                        using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            queryreactor.RunQuery("UPDATE items SET room_id = " + Room.Id + ", user_id = " + Room.RoomData.OwnerId + " WHERE id = " + ItemId);
+                            dbClient.RunQuery("UPDATE items SET room_id = '" + Room.Id + "', user_id = '" + Room.RoomData.OwnerId + "' WHERE id = '" + ItemId + "'");
                         }
 
                         Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);

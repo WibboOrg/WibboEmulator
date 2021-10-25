@@ -114,11 +114,11 @@ namespace Butterfly.HabboHotel.Rooms
             this.OwnerId = 0;
             this.Langue = Language.FRANCAIS;
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT id, langue FROM users WHERE username = @owner");
-                queryreactor.AddParameter("owner", this.OwnerName);
-                DataRow UserRow = queryreactor.GetRow();
+                dbClient.SetQuery("SELECT id, langue FROM users WHERE username = @owner");
+                dbClient.AddParameter("owner", this.OwnerName);
+                DataRow UserRow = dbClient.GetRow();
                 if (UserRow != null)
                 {
                     this.OwnerId = Convert.ToInt32(UserRow["id"]);

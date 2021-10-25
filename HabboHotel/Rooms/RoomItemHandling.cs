@@ -92,9 +92,9 @@ namespace Butterfly.HabboHotel.Rooms
             this._itemsTemp.Clear();
             this._updateItems.Clear();
             this._rollers.Clear();
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE items SET room_id = '0', user_id = '" + this._room.RoomData.OwnerId + "' WHERE room_id = " + this._room.Id);
+                dbClient.RunQuery("UPDATE items SET room_id = '0', user_id = '" + this._room.RoomData.OwnerId + "' WHERE room_id = '" + this._room.Id + "'");
             }
 
             this._room.GetGameMap().GenerateMaps();
@@ -120,10 +120,10 @@ namespace Butterfly.HabboHotel.Rooms
                 this._wallItems.Clear();
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT items.id, items.user_id, items.room_id, items.base_item, items.extra_data, items.x, items.y, items.z, items.rot, items.wall_pos, items_limited.limited_number, items_limited.limited_stack FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.room_id = @roomid");
-                queryreactor.AddParameter("roomid", (RoomId == 0) ? this._room.Id : RoomId);
+                dbClient.SetQuery("SELECT items.id, items.user_id, items.room_id, items.base_item, items.extra_data, items.x, items.y, items.z, items.rot, items.wall_pos, items_limited.limited_number, items_limited.limited_stack FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.room_id = @roomid");
+                dbClient.AddParameter("roomid", (RoomId == 0) ? this._room.Id : RoomId);
 
                 int itemID;
                 int UserId;
@@ -138,7 +138,7 @@ namespace Butterfly.HabboHotel.Rooms
                 int LimitedTo;
                 string wallCoord;
 
-                foreach (DataRow dataRow in queryreactor.GetTable().Rows)
+                foreach (DataRow dataRow in dbClient.GetTable().Rows)
                 {
                     itemID = Convert.ToInt32(dataRow[0]);
                     UserId = Convert.ToInt32(dataRow[1]);
@@ -201,7 +201,7 @@ namespace Butterfly.HabboHotel.Rooms
                     {
                         if (WiredUtillity.TypeIsWired(Item.GetBaseItem().InteractionType))
                         {
-                            WiredLoader.LoadWiredItem(Item, this._room, queryreactor);
+                            WiredLoader.LoadWiredItem(Item, this._room, dbClient);
                         }
                     }
                 }
@@ -283,9 +283,9 @@ namespace Butterfly.HabboHotel.Rooms
 
             if (roomItem.WiredHandler != null)
             {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    roomItem.WiredHandler.DeleteFromDatabase(queryreactor);
+                    roomItem.WiredHandler.DeleteFromDatabase(dbClient);
                 }
 
                 roomItem.WiredHandler.Dispose();

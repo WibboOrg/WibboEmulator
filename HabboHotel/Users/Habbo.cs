@@ -281,11 +281,11 @@ namespace Butterfly.HabboHotel.Users
                 this.UsersRooms.Clear();
 
                 DataTable table;
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("SELECT * FROM rooms WHERE owner = @name ORDER BY id ASC");
-                    queryreactor.AddParameter("name", this.Username);
-                    table = queryreactor.GetTable();
+                    dbClient.SetQuery("SELECT * FROM rooms WHERE owner = @name ORDER BY id ASC");
+                    dbClient.AddParameter("name", this.Username);
+                    table = dbClient.GetTable();
                 }
 
                 foreach (DataRow dRow in table.Rows)
@@ -516,10 +516,10 @@ namespace Butterfly.HabboHotel.Users
                 this.HabboinfoSaved = true;
                 TimeSpan TimeOnline = DateTime.Now - this.OnlineTime;
                 int TimeOnlineSec = (int)TimeOnline.TotalSeconds;
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("UPDATE users SET online = '0', last_online = '" + ButterflyEnvironment.GetUnixTimestamp() + "', activity_points = " + this.Duckets + ", credits = " + this.Credits + " WHERE id = " + this.Id + " ;");
-                    queryreactor.RunQuery("UPDATE user_stats SET group_id = " + this.FavouriteGroupId + ",  online_time = online_time + " + TimeOnlineSec + ", quest_id = '" + this.CurrentQuestId + "', Respect = '" + this.Respect + "', daily_respect_points = '" + this.DailyRespectPoints + "', daily_pet_respect_points = '" + this.DailyPetRespectPoints + "' WHERE id = " + this.Id + " ;");
+                    dbClient.RunQuery("UPDATE users SET online = '0', last_online = '" + ButterflyEnvironment.GetUnixTimestamp() + "', activity_points = '" + this.Duckets + "', credits = '" + this.Credits + "' WHERE id = '" + this.Id + "'");
+                    dbClient.RunQuery("UPDATE user_stats SET group_id = '" + this.FavouriteGroupId + "',  online_time = online_time + '" + TimeOnlineSec + "', quest_id = '" + this.CurrentQuestId + "', Respect = '" + this.Respect + "', daily_respect_points = '" + this.DailyRespectPoints + "', daily_pet_respect_points = '" + this.DailyPetRespectPoints + "' WHERE id = '" + this.Id + "'");
                 }
             }
 

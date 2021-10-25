@@ -125,7 +125,7 @@ namespace Butterfly.HabboHotel.Items
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO `room_items_moodlight` (`item_id`, `enabled`, `current_preset`, `preset_one`, `preset_two`, `preset_three`) VALUES (@id, '0', 1, @preset, @preset, @preset);");
+                dbClient.SetQuery("INSERT INTO `room_items_moodlight` (`item_id`, `enabled`, `current_preset`, `preset_one`, `preset_two`, `preset_three`) VALUES (@id, '0', 1, @preset, @preset, @preset)");
                 dbClient.AddParameter("id", Item.Id);
                 dbClient.AddParameter("preset", "#000000,255,0");
                 dbClient.RunQuery();

@@ -148,14 +148,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 str5 = "hide";
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE rooms SET caption = @caption, description = @description, password = @password, category = '" + CategoryId + "', state = '" + str5 + "', tags = @tags, users_max = '" + MaxUsers + "', allow_pets = '" + (AllowPets ? 1 : 0) + "', allow_pets_eat = '" + (AllowPetsEat ? 1 : 0) + "', allow_walkthrough = '" + (AllowWalkthrough ? 1 : 0) + "', allow_hidewall = '" + (room.RoomData.Hidewall ? 1 : 0) + "', floorthick = '" + room.RoomData.FloorThickness + "', wallthick = '" + room.RoomData.WallThickness + "', moderation_mute_fuse = '" + mutefuse + "', moderation_kick_fuse = '" + kickfuse + "', moderation_ban_fuse = '" + banfuse + "', chat_type = '" + ChatType + "', chat_balloon = '" + ChatBalloon + "', chat_speed = '" + ChatSpeed + "', chat_max_distance = '" + ChatMaxDistance + "', chat_flood_protection = '" + ChatFloodProtection + "', troc_status = '" + TrocStatus + "' WHERE id = " + room.Id);
-                queryreactor.AddParameter("caption", room.RoomData.Name);
-                queryreactor.AddParameter("description", room.RoomData.Description);
-                queryreactor.AddParameter("password", room.RoomData.Password);
-                queryreactor.AddParameter("tags", (stringBuilder).ToString());
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE rooms SET caption = @caption, description = @description, password = @password, category = '" + CategoryId + "', state = '" + str5 + "', tags = @tags, users_max = '" + MaxUsers + "', allow_pets = '" + (AllowPets ? 1 : 0) + "', allow_pets_eat = '" + (AllowPetsEat ? 1 : 0) + "', allow_walkthrough = '" + (AllowWalkthrough ? 1 : 0) + "', allow_hidewall = '" + (room.RoomData.Hidewall ? 1 : 0) + "', floorthick = '" + room.RoomData.FloorThickness + "', wallthick = '" + room.RoomData.WallThickness + "', moderation_mute_fuse = '" + mutefuse + "', moderation_kick_fuse = '" + kickfuse + "', moderation_ban_fuse = '" + banfuse + "', chat_type = '" + ChatType + "', chat_balloon = '" + ChatBalloon + "', chat_speed = '" + ChatSpeed + "', chat_max_distance = '" + ChatMaxDistance + "', chat_flood_protection = '" + ChatFloodProtection + "', troc_status = '" + TrocStatus + "' WHERE id = '" + room.Id + "'");
+                dbClient.AddParameter("caption", room.RoomData.Name);
+                dbClient.AddParameter("description", room.RoomData.Description);
+                dbClient.AddParameter("password", room.RoomData.Password);
+                dbClient.AddParameter("tags", (stringBuilder).ToString());
+                dbClient.RunQuery();
             }
 
             ServerPacket Response = new ServerPacket(ServerPacketHeader.ROOM_SETTINGS_SAVE);

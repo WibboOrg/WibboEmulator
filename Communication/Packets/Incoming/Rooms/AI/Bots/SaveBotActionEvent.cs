@@ -140,9 +140,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 case 3:
                     {
                         Bot.BotData.WalkingEnabled = !Bot.BotData.WalkingEnabled;
-                        using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            queryreactor.RunQuery("UPDATE bots SET walk_enabled = '" + ButterflyEnvironment.BoolToEnum(Bot.BotData.WalkingEnabled) + "' WHERE id = " + Bot.BotData.Id);
+                            dbClient.RunQuery("UPDATE bots SET walk_enabled = '" + ButterflyEnvironment.BoolToEnum(Bot.BotData.WalkingEnabled) + "' WHERE id = '" + Bot.BotData.Id + "'");
                         }
                         break;
                     }
@@ -165,9 +165,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         Room.SendPacket(new DanceComposer(Bot, Bot.DanceId));
 
-                        using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            queryreactor.RunQuery("UPDATE bots SET is_dancing = '" + ButterflyEnvironment.BoolToEnum(Bot.BotData.IsDancing) + "' WHERE id = " + Bot.BotData.Id);
+                            dbClient.RunQuery("UPDATE bots SET is_dancing = '" + ButterflyEnvironment.BoolToEnum(Bot.BotData.IsDancing) + "' WHERE id = '" + Bot.BotData.Id + "'");
                         }
 
                         break;

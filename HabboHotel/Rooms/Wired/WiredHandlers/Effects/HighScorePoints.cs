@@ -53,9 +53,9 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
         public void Dispose()
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                this.SaveToDatabase(queryreactor);
+                this.SaveToDatabase(dbClient);
             }
         }
 

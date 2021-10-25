@@ -612,7 +612,11 @@
     <Compile Include="Communication\RCON\Commands\User\UserAlertCommand.cs" />
     <Compile Include="Communication\WebSocket\EncodeDecode.cs" />
     <Compile Include="Core\IDGenerator.cs" />
+    <Compile Include="Database\Daos\BanDao.cs" />
     <Compile Include="Database\Daos\UserDao.cs" />
+    <Compile Include="Database\Daos\UserPhotoDao.cs" />
+    <Compile Include="Database\Daos\UserVoucherDao.cs" />
+    <Compile Include="Database\Daos\UserWardrobeDao.cs" />
     <Compile Include="HabboHotel\Animations\AnimationManager.cs" />
     <Compile Include="HabboHotel\Catalogs\CatalogBot.cs" />
     <Compile Include="HabboHotel\Catalogs\Marketplace\MarketOffer.cs" />

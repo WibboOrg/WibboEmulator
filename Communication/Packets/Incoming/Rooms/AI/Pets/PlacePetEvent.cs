@@ -70,9 +70,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Pet.DBState = DatabaseUpdateState.NeedsUpdate;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE pets SET room_id = '" + Pet.RoomId + "' WHERE id ='" + Pet.PetId + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE pets SET room_id = '" + Pet.RoomId + "' WHERE id = '" + Pet.PetId + "' LIMIT 1");
             }
 
             if (!Session.GetHabbo().GetInventoryComponent().TryRemovePet(Pet.PetId, out Pet ToRemove))

@@ -35,7 +35,7 @@ namespace Butterfly.Core
             DataTable table;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM system_locale");
+                dbClient.SetQuery("SELECT identifiant, value_fr, value_en, value_br FROM system_locale");
                 table = dbClient.GetTable();
             }
             if (table == null)

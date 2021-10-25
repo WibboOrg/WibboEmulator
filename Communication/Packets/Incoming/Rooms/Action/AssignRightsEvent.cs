@@ -44,9 +44,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 room.UsersWithRights.Add(UserId);
 
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("INSERT INTO room_rights (room_id,user_id) VALUES (" + room.Id + "," + UserId + ")");
+                    dbClient.RunQuery("INSERT INTO room_rights (room_id, user_id) VALUES ('" + room.Id + "', '" + UserId + "')");
                 }
 
                 ServerPacket Response = new ServerPacket(ServerPacketHeader.ROOM_RIGHTS_LIST_ADD);

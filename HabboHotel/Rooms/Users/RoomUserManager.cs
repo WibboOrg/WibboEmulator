@@ -761,15 +761,9 @@ namespace Butterfly.HabboHotel.Rooms
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery(string.Concat(new object[4]
-                    {
-                       "UPDATE rooms SET users_now = ",
-                       count,
-                       " WHERE id = ",
-                       this._room.Id
-             }));
+                dbClient.RunQuery("UPDATE rooms SET users_now = '" + count + "' WHERE id = '" + this._room.Id + "'");
             }
 
             this._room.RoomData.UsersNow = count;

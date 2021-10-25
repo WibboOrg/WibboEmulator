@@ -56,11 +56,11 @@ namespace Butterfly.HabboHotel.Items
 
             Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE items SET base_item = @baseid WHERE id = " + Present.Id);
-                queryreactor.AddParameter("baseid", LotData.Id);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE items SET base_item = @baseid WHERE id = '" + Present.Id + "'");
+                dbClient.AddParameter("baseid", LotData.Id);
+                dbClient.RunQuery();
             }
 
             string FurniType = Present.GetBaseItem().Type.ToString().ToLower();
@@ -136,11 +136,11 @@ namespace Butterfly.HabboHotel.Items
 
             Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE items SET base_item = @baseid WHERE id = " + Present.Id);
-                queryreactor.AddParameter("baseid", LotData.Id);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE items SET base_item = @baseid WHERE id = '" + Present.Id + "'");
+                dbClient.AddParameter("baseid", LotData.Id);
+                dbClient.RunQuery();
             }
 
             string FurniType = Present.GetBaseItem().Type.ToString().ToLower();
@@ -219,12 +219,12 @@ namespace Butterfly.HabboHotel.Items
             Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
 
             string ExtraData = BadgeCode + Convert.ToChar(9) + Session.GetHabbo().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE items SET base_item = @baseid, extra_data = @extradata WHERE id = " + Present.Id);
-                queryreactor.AddParameter("baseid", LotData.Id);
-                queryreactor.AddParameter("extradata", ExtraData);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE items SET base_item = @baseid, extra_data = @extradata WHERE id = '" + Present.Id + "'");
+                dbClient.AddParameter("baseid", LotData.Id);
+                dbClient.AddParameter("extradata", ExtraData);
+                dbClient.RunQuery();
             }
             Present.ExtraData = ExtraData;
 
@@ -371,9 +371,9 @@ namespace Butterfly.HabboHotel.Items
             int WinWin = ButterflyEnvironment.GetRandomNumber(100, 1000);
             Session.GetHabbo().AchievementPoints += WinWin;
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE user_stats SET achievement_score = achievement_score + '" + WinWin + "' WHERE id = '" + Session.GetHabbo().Id + "'");
+                dbClient.RunQuery("UPDATE user_stats SET achievement_score = achievement_score + '" + WinWin + "' WHERE id = '" + Session.GetHabbo().Id + "'");
             }
 
             Session.SendPacket(new AchievementScoreComposer(Session.GetHabbo().AchievementPoints));
@@ -397,11 +397,11 @@ namespace Butterfly.HabboHotel.Items
 
             Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE items SET base_item = @baseid WHERE id = " + Present.Id);
-                queryreactor.AddParameter("baseid", LotData.Id);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE items SET base_item = @baseid WHERE id = '" + Present.Id + "'");
+                dbClient.AddParameter("baseid", LotData.Id);
+                dbClient.RunQuery();
             }
             string FurniType = Present.GetBaseItem().Type.ToString().ToLower();
             Present.BaseItem = LotData.Id;

@@ -99,11 +99,11 @@ namespace Butterfly.HabboHotel.GameClients
 
                     if (this._habbo.MachineId != this.MachineId)
                     {
-                        using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            queryreactor.SetQuery("UPDATE users SET machine_id = @machineid WHERE id = '" + this._habbo.Id + "'");
-                            queryreactor.AddParameter("machineid", (this.MachineId != null) ? this.MachineId : "");
-                            queryreactor.RunQuery();
+                            dbClient.SetQuery("UPDATE users SET machine_id = @machineid WHERE id = '" + this._habbo.Id + "'");
+                            dbClient.AddParameter("machineid", (this.MachineId != null) ? this.MachineId : "");
+                            dbClient.RunQuery();
                         }
                     }
 
@@ -159,7 +159,7 @@ namespace Butterfly.HabboHotel.GameClients
                     dbClient.AddParameter("model", "model_welcome");
                     RoomId = Convert.ToInt32(dbClient.InsertQuery());
 
-                    dbClient.RunQuery("UPDATE users SET nux_enable = '0', home_room = '" + RoomId + "' WHERE id = '" + this.GetHabbo().Id + "';");
+                    dbClient.RunQuery("UPDATE users SET nux_enable = '0', home_room = '" + RoomId + "' WHERE id = '" + this.GetHabbo().Id + "'");
                     if (RoomId == 0)
                     {
                         return;
@@ -230,25 +230,25 @@ namespace Butterfly.HabboHotel.GameClients
 
             Message = Encoding.GetEncoding("UTF-8").GetString(Encoding.GetEncoding("Windows-1252").GetBytes(Message));
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("INSERT INTO chatlogs (user_id, room_id, user_name, timestamp, message, type) VALUES ('" + this.GetHabbo().Id + "', '" + RoomId + "', @username, UNIX_TIMESTAMP(), @message, @type)");
-                queryreactor.AddParameter("message", Message);
-                queryreactor.AddParameter("type", type);
-                queryreactor.AddParameter("username", this.GetHabbo().Username);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("INSERT INTO chatlogs (user_id, room_id, user_name, timestamp, message, type) VALUES ('" + this.GetHabbo().Id + "', '" + RoomId + "', @username, UNIX_TIMESTAMP(), @message, @type)");
+                dbClient.AddParameter("message", Message);
+                dbClient.AddParameter("type", type);
+                dbClient.AddParameter("username", this.GetHabbo().Username);
+                dbClient.RunQuery();
             }
 
             if (!ButterflyEnvironment.GetGame().GetChatManager().GetFilter().Ispub(Message))
             {
                 if (ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessageWord(Message))
                 {
-                    using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        queryreactor.SetQuery("INSERT INTO chatlogs_pub (user_id, user_name, timestamp, message) VALUES ('" + this.GetHabbo().Id + "', @pseudo, UNIX_TIMESTAMP(), @message)");
-                        queryreactor.AddParameter("message", "A vérifié: " + type + Message);
-                        queryreactor.AddParameter("pseudo", this.GetHabbo().Username);
-                        queryreactor.RunQuery();
+                        dbClient.SetQuery("INSERT INTO chatlogs_pub (user_id, user_name, timestamp, message) VALUES ('" + this.GetHabbo().Id + "', @pseudo, UNIX_TIMESTAMP(), @message)");
+                        dbClient.AddParameter("message", "A vérifié: " + type + Message);
+                        dbClient.AddParameter("pseudo", this.GetHabbo().Username);
+                        dbClient.RunQuery();
                     }
 
                     foreach (GameClient Client in ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers())
@@ -277,45 +277,45 @@ namespace Butterfly.HabboHotel.GameClients
             if (PubCount < 3 && PubCount > 0)
             {
                 this.SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.1", this.Langue), PubCount));
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("INSERT INTO chatlogs_pub (user_id,user_name,timestamp,message) VALUES ('" + this.GetHabbo().Id + "',@pseudo,UNIX_TIMESTAMP(),@message)");
-                    queryreactor.AddParameter("message", "Pub numero " + PubCount + ": " + type + Message);
-                    queryreactor.AddParameter("pseudo", this.GetHabbo().Username);
-                    queryreactor.RunQuery();
+                    dbClient.SetQuery("INSERT INTO chatlogs_pub (user_id,user_name,timestamp,message) VALUES ('" + this.GetHabbo().Id + "',@pseudo,UNIX_TIMESTAMP(),@message)");
+                    dbClient.AddParameter("message", "Pub numero " + PubCount + ": " + type + Message);
+                    dbClient.AddParameter("pseudo", this.GetHabbo().Username);
+                    dbClient.RunQuery();
                 }
             }
             else if (PubCount == 3)
             {
                 this.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.2", this.Langue));
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("INSERT INTO chatlogs_pub (user_id,user_name,timestamp,message) VALUES ('" + this.GetHabbo().Id + "',@pseudo,UNIX_TIMESTAMP(),@message)");
-                    queryreactor.AddParameter("message", "Pub numero " + PubCount + ": " + type + Message);
-                    queryreactor.AddParameter("pseudo", this.GetHabbo().Username);
-                    queryreactor.RunQuery();
+                    dbClient.SetQuery("INSERT INTO chatlogs_pub (user_id,user_name,timestamp,message) VALUES ('" + this.GetHabbo().Id + "',@pseudo,UNIX_TIMESTAMP(),@message)");
+                    dbClient.AddParameter("message", "Pub numero " + PubCount + ": " + type + Message);
+                    dbClient.AddParameter("pseudo", this.GetHabbo().Username);
+                    dbClient.RunQuery();
                 }
             }
             else if (PubCount == 4)
             {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("INSERT INTO chatlogs_pub (user_id,user_name,timestamp,message) VALUES ('" + this.GetHabbo().Id + "',@pseudo,UNIX_TIMESTAMP(),@message)");
-                    queryreactor.AddParameter("message", "Pub numero " + PubCount + " bannisement: " + type + Message);
-                    queryreactor.AddParameter("pseudo", this.GetHabbo().Username);
-                    queryreactor.RunQuery();
+                    dbClient.SetQuery("INSERT INTO chatlogs_pub (user_id,user_name,timestamp,message) VALUES ('" + this.GetHabbo().Id + "',@pseudo,UNIX_TIMESTAMP(),@message)");
+                    dbClient.AddParameter("message", "Pub numero " + PubCount + " bannisement: " + type + Message);
+                    dbClient.AddParameter("pseudo", this.GetHabbo().Username);
+                    dbClient.RunQuery();
                 }
 
                 ButterflyEnvironment.GetGame().GetClientManager().BanUser(this, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.GetHabbo().Username, true, false);
             }
             else
             {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("INSERT INTO chatlogs_pub (user_id,user_name,timestamp,message) VALUES ('" + this.GetHabbo().Id + "',@pseudo,UNIX_TIMESTAMP(),@message)");
-                    queryreactor.AddParameter("message", "Pub numero " + PubCount + ": " + type + Message);
-                    queryreactor.AddParameter("pseudo", this.GetHabbo().Username);
-                    queryreactor.RunQuery();
+                    dbClient.SetQuery("INSERT INTO chatlogs_pub (user_id,user_name,timestamp,message) VALUES ('" + this.GetHabbo().Id + "',@pseudo,UNIX_TIMESTAMP(),@message)");
+                    dbClient.AddParameter("message", "Pub numero " + PubCount + ": " + type + Message);
+                    dbClient.AddParameter("pseudo", this.GetHabbo().Username);
+                    dbClient.RunQuery();
                 }
             }
 

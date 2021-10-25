@@ -19,10 +19,10 @@ namespace Butterfly.HabboHotel.ChatMessageStorage
 
         public void LoadUserChatlogs(int UserId)
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT user_id, user_name, room_id, type, message FROM chatlogs WHERE user_id = '" + UserId + "' ORDER BY id DESC LIMIT 100");
-                DataTable table = queryreactor.GetTable();
+                dbClient.SetQuery("SELECT user_id, user_name, room_id, type, message FROM chatlogs WHERE user_id = '" + UserId + "' ORDER BY id DESC LIMIT 100");
+                DataTable table = dbClient.GetTable();
                 if (table == null)
                 {
                     return;
@@ -38,10 +38,10 @@ namespace Butterfly.HabboHotel.ChatMessageStorage
         public void LoadRoomChatlogs(int RoomId)
         {
             DataTable table;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT user_id, user_name, room_id, type, message FROM chatlogs WHERE room_id = '" + RoomId + "' ORDER BY id DESC LIMIT 100");
-                table = queryreactor.GetTable();
+                dbClient.SetQuery("SELECT user_id, user_name, room_id, type, message FROM chatlogs WHERE room_id = '" + RoomId + "' ORDER BY id DESC LIMIT 100");
+                table = dbClient.GetTable();
                 if (table == null)
                 {
                     return;

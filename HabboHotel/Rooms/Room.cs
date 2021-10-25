@@ -378,10 +378,10 @@ namespace Butterfly.HabboHotel.Rooms
         private void LoadBots()
         {
             DataTable table;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT * FROM bots WHERE room_id = " + this.Id);
-                table = queryreactor.GetTable();
+                dbClient.SetQuery("SELECT * FROM bots WHERE room_id = '" + this.Id + "'");
+                table = dbClient.GetTable();
                 if (table == null)
                 {
                     return;
@@ -401,10 +401,10 @@ namespace Butterfly.HabboHotel.Rooms
 
         public void InitPets()
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM pets WHERE room_id = " + this.Id);
-                DataTable table = queryreactor.GetTable();
+                dbClient.SetQuery("SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM pets WHERE room_id = '" + this.Id + "'");
+                DataTable table = dbClient.GetTable();
                 if (table == null)
                 {
                     return;
@@ -450,10 +450,10 @@ namespace Butterfly.HabboHotel.Rooms
         {
             this.UsersWithRights = new List<int>();
             DataTable dataTable = new DataTable();
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT room_rights.user_id FROM room_rights WHERE room_id = " + this.RoomData.Id);
-                dataTable = queryreactor.GetTable();
+                dbClient.SetQuery("SELECT room_rights.user_id FROM room_rights WHERE room_id = '" + this.RoomData.Id + "'");
+                dataTable = dbClient.GetTable();
             }
             if (dataTable == null)
             {
@@ -664,9 +664,9 @@ namespace Butterfly.HabboHotel.Rooms
                     else
                     {
                         this.SaveTimer = 0;
-                        using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            this.GetRoomItemHandler().SaveFurniture(queryreactor);
+                            this.GetRoomItemHandler().SaveFurniture(dbClient);
                         }
                     }
                 }
@@ -1093,9 +1093,9 @@ namespace Butterfly.HabboHotel.Rooms
             }
             this.cancellationTokenSources.Clear();
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                this.GetRoomItemHandler().SaveFurniture(queryreactor);
+                this.GetRoomItemHandler().SaveFurniture(dbClient);
             }
             this.RoomData.Tags.Clear();
 
@@ -1242,9 +1242,9 @@ namespace Butterfly.HabboHotel.Rooms
         public void SetMaxUsers(int MaxUsers)
         {
             this.RoomData.UsersMax = MaxUsers;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE rooms SET users_max = '" + MaxUsers + "' WHERE id = '" + this.Id + "';");
+                dbClient.RunQuery("UPDATE rooms SET users_max = '" + MaxUsers + "' WHERE id = '" + this.Id + "'");
             }
         }
 

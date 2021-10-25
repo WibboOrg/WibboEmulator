@@ -42,12 +42,12 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE rooms SET price= @price WHERE id = @roomid LIMIT 1");
-                queryreactor.AddParameter("roomid", Room.Id);
-                queryreactor.AddParameter("price", Prix);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE rooms SET price= @price WHERE id = @roomid LIMIT 1");
+                dbClient.AddParameter("roomid", Room.Id);
+                dbClient.AddParameter("price", Prix);
+                dbClient.RunQuery();
             }
 
             Room.RoomData.SellPrice = Prix;

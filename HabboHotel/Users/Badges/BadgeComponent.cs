@@ -101,11 +101,11 @@ namespace Butterfly.HabboHotel.Users.Badges
 
             if (InDatabase)
             {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("INSERT INTO user_badges (user_id,badge_id,badge_slot) VALUES (" + this._userId + ",@badge," + Slot + ")");
-                    queryreactor.AddParameter("badge", Badge);
-                    queryreactor.RunQuery();
+                    dbClient.SetQuery("INSERT INTO user_badges (user_id,badge_id,badge_slot) VALUES (" + this._userId + ",@badge," + Slot + ")");
+                    dbClient.AddParameter("badge", Badge);
+                    dbClient.RunQuery();
                 }
             }
             this._badges.Add(Badge, new Badge(Badge, Slot));
@@ -126,11 +126,11 @@ namespace Butterfly.HabboHotel.Users.Badges
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("DELETE FROM user_badges WHERE badge_id = @badge AND user_id = " + this._userId + " LIMIT 1");
-                queryreactor.AddParameter("badge", Badge);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("DELETE FROM user_badges WHERE badge_id = @badge AND user_id = '" + this._userId + "' LIMIT 1");
+                dbClient.AddParameter("badge", Badge);
+                dbClient.RunQuery();
             }
             this._badges.Remove(this.GetBadge(Badge).Code);
         }
@@ -142,12 +142,12 @@ namespace Butterfly.HabboHotel.Users.Badges
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("DELETE FROM user_badges WHERE badge_id = @badge AND user_id = " + this._userId + " LIMIT 1");
-                queryreactor.SetQuery("DELETE FROM user_badges WHERE badge_id = " + this._badges + "");
-                queryreactor.AddParameter("badge", Badge);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("DELETE FROM user_badges WHERE badge_id = @badge AND user_id = '" + this._userId + "' LIMIT 1");
+                dbClient.SetQuery("DELETE FROM user_badges WHERE badge_id = '" + this._badges + "'");
+                dbClient.AddParameter("badge", Badge);
+                dbClient.RunQuery();
             }
         }
 

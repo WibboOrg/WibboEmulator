@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Catalog;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Catalog;
 using Butterfly.HabboHotel.Catalog.Utilities;
@@ -93,12 +93,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int NewItemId = 0;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                //Insert the dummy item.
-                dbClient.SetQuery("INSERT INTO `items` (`base_item`,`user_id`,`extra_data`) VALUES (@baseId, @habboId, @extra_data)");
-                dbClient.AddParameter("baseId", PresentData.Id);
-                dbClient.AddParameter("habboId", Habbo.Id);
-                dbClient.AddParameter("extra_data", ED);
-                NewItemId = Convert.ToInt32(dbClient.InsertQuery());
+                NewItemId = ItemDao.insertItem(dbClient, PresentData.Id, Habbo.Id, ED);
 
                 string ItemExtraData = null;
                 switch (Item.Data.InteractionType)
@@ -254,17 +249,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         break;
                 }
 
-                //Insert the present, forever.
                 dbClient.SetQuery("INSERT INTO `user_presents` (`item_id`,`base_id`,`extra_data`) VALUES (@itemId, @baseId, @extra_data)");
                 dbClient.AddParameter("itemId", NewItemId);
                 dbClient.AddParameter("baseId", Item.Data.Id);
                 dbClient.AddParameter("extra_data", (string.IsNullOrEmpty(ItemExtraData) ? "" : ItemExtraData));
                 dbClient.RunQuery();
+                //UserPresentDao.InsertPresent(dbClient)
 
-                //Here we're clearing up a record, this is dumb, but okay.
-                dbClient.SetQuery("DELETE FROM `items` WHERE `id` = @deleteId LIMIT 1");
-                dbClient.AddParameter("deleteId", NewItemId);
-                dbClient.RunQuery();
+                ItemDao.deleteItem(dbClient, NewItemId);
             }
 
 
@@ -309,10 +301,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.GetHabbo().WibboPoints -= TotalDiamondCost;
                 Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().WibboPoints, 0, 105));
 
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("UPDATE users SET vip_points = vip_points - " + TotalDiamondCost + " WHERE id = " + Session.GetHabbo().Id);
+                    dbClient.RunQuery("UPDATE users SET vip_points = vip_points - " + TotalDiamondCost + " WHERE id = '" + Session.GetHabbo().Id + "'");
                 }
+                //UserDao.UpdateWP
             }
 
             Session.GetHabbo().LastGiftPurchaseTime = DateTime.Now;

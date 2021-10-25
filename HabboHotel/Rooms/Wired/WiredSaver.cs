@@ -736,9 +736,9 @@ namespace Butterfly.HabboHotel.Rooms.Wired
             manager.RemoveFurniture(roomItem);
             manager.AddFurniture(roomItem);
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                handler.SaveToDatabase(queryreactor);
+                handler.SaveToDatabase(dbClient);
             }
         }
     }

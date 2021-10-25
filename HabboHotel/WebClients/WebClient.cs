@@ -89,11 +89,11 @@ namespace Butterfly.HabboHotel.WebClients
             ButterflyEnvironment.GetGame().GetClientWebManager().UnregisterClient(this.UserId);
         }
 
-        private void SendSettingSound(IQueryAdapter queryreactor)
+        private void SendSettingSound(IQueryAdapter dbClient)
         {
-            queryreactor.SetQuery("SELECT volume FROM users WHERE id = '" + this.UserId + "'");
+            dbClient.SetQuery("SELECT volume FROM users WHERE id = '" + this.UserId + "'");
 
-            DataRow dUserVolume = queryreactor.GetRow();
+            DataRow dUserVolume = dbClient.GetRow();
             if (dUserVolume == null)
             {
                 return;

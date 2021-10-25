@@ -268,6 +268,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     dbClient.AddParameter("limitSells", Item.LimitedEditionSells);
                     dbClient.AddParameter("itemId", Item.Id);
                     dbClient.RunQuery();
+                    //CatalogItemDao.UpdateLimited();
 
                     LimitedEditionSells = Item.LimitedEditionSells;
                     LimitedEditionStack = Item.LimitedEditionStack;
@@ -291,9 +292,10 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.GetHabbo().WibboPoints -= TotalDiamondCost;
                 Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().WibboPoints, 0, 105));
 
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("UPDATE users SET vip_points = vip_points - " + TotalDiamondCost + " WHERE id = " + Session.GetHabbo().Id);
+                    dbClient.RunQuery("UPDATE users SET vip_points = vip_points - '" + TotalDiamondCost + "' WHERE id = '" + Session.GetHabbo().Id + "'");
+                    //UserDao.UpdateWP
                 }
             }
 

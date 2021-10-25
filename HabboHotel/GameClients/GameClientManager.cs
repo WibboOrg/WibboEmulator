@@ -113,10 +113,10 @@ namespace Butterfly.HabboHotel.GameClients
             }
 
             string username = "";
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT username FROM users WHERE id = '" + Id + "';");
-                username = queryreactor.GetString();
+                dbClient.SetQuery("SELECT username FROM users WHERE id = '" + Id + "'");
+                username = dbClient.GetString();
             }
 
             return username;
@@ -272,9 +272,9 @@ namespace Butterfly.HabboHotel.GameClients
             {
                 if (stringBuilder.Length > 0)
                 {
-                    using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        queryreactor.RunQuery((stringBuilder).ToString());
+                        dbClient.RunQuery((stringBuilder).ToString());
                     }
                 }
             }
@@ -339,19 +339,19 @@ namespace Butterfly.HabboHotel.GameClients
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 if (str == "user")
                 {
-                    queryreactor.RunQuery("UPDATE users SET is_banned = '1' WHERE id = '" + Client.GetHabbo().Id + "'");
+                    dbClient.RunQuery("UPDATE users SET is_banned = '1' WHERE id = '" + Client.GetHabbo().Id + "'");
                 }
 
-                queryreactor.SetQuery("INSERT INTO bans (bantype,value,reason,expire,added_by,added_date) VALUES (@rawvar, @var, @reason, '" + Expire + "', @mod, UNIX_TIMESTAMP())");
-                queryreactor.AddParameter("rawvar", str);
-                queryreactor.AddParameter("var", Variable);
-                queryreactor.AddParameter("reason", Reason);
-                queryreactor.AddParameter("mod", Moderator);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("INSERT INTO bans (bantype,value,reason,expire,added_by,added_date) VALUES (@rawvar, @var, @reason, '" + Expire + "', @mod, UNIX_TIMESTAMP())");
+                dbClient.AddParameter("rawvar", str);
+                dbClient.AddParameter("var", Variable);
+                dbClient.AddParameter("reason", Reason);
+                dbClient.AddParameter("mod", Moderator);
+                dbClient.RunQuery();
             }
 
             if (MachineBan)

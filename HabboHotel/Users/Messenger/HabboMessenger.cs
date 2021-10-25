@@ -124,15 +124,9 @@ namespace Butterfly.HabboHotel.Users.Messenger
 
         public void HandleAllRequests()
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery(string.Concat(new object[4]
-                {
-                   "DELETE FROM messenger_requests WHERE from_id = ",
-                   this.UserId,
-                   " OR to_id = ",
-                   this.UserId
-                }));
+                dbClient.RunQuery("DELETE FROM messenger_requests WHERE from_id = '" + this.UserId + "' OR to_id = '" + this.UserId + "'");
             }
 
             this.ClearRequests();
@@ -140,9 +134,9 @@ namespace Butterfly.HabboHotel.Users.Messenger
 
         public void HandleRequest(int sender)
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE FROM messenger_requests WHERE (from_id = " + this.UserId + " AND to_id = " + sender + ") OR (to_id = " + this.UserId + " AND from_id = " + sender + ")");
+                dbClient.RunQuery("DELETE FROM messenger_requests WHERE (from_id = '" + this.UserId + "' AND to_id = '" + sender + "') OR (to_id = '" + this.UserId + "' AND from_id = '" + sender + "')");
             }
 
             this.requests.Remove(sender);
@@ -150,10 +144,10 @@ namespace Butterfly.HabboHotel.Users.Messenger
 
         public void CreateFriendship(int friendID)
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("REPLACE INTO messenger_friendships (user_one_id,user_two_id) VALUES (" + this.UserId + "," + friendID + ");");
-                queryreactor.RunQuery("REPLACE INTO messenger_friendships (user_one_id,user_two_id) VALUES (" + friendID + "," + this.UserId + ");");
+                dbClient.RunQuery("REPLACE INTO messenger_friendships (user_one_id,user_two_id) VALUES ('" + this.UserId + "','" + friendID + "')");
+                dbClient.RunQuery("REPLACE INTO messenger_friendships (user_one_id,user_two_id) VALUES ('" + friendID + "','" + this.UserId + "')");
             }
             this.OnNewFriendship(friendID);
             GameClient clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
@@ -172,9 +166,9 @@ namespace Butterfly.HabboHotel.Users.Messenger
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE FROM messenger_friendships WHERE (user_one_id = " + this.UserId + " AND user_two_id = " + friendID + ") OR (user_two_id = " + this.UserId + " AND user_one_id = " + friendID + ")");
+                dbClient.RunQuery("DELETE FROM messenger_friendships WHERE (user_one_id = '" + this.UserId + "' AND user_two_id = '" + friendID + "') OR (user_two_id = '" + this.UserId + "' AND user_one_id = '" + friendID + "')");
             }
 
             this.OnDestroyFriendship(friendID);
@@ -194,10 +188,10 @@ namespace Butterfly.HabboHotel.Users.Messenger
             if (clientByUserId == null || clientByUserId.GetHabbo() == null)
             {
                 DataRow row;
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("SELECT username FROM users WHERE id = " + friendID);
-                    row = queryreactor.GetRow();
+                    dbClient.SetQuery("SELECT username FROM users WHERE id = '" + friendID + "'");
+                    row = dbClient.GetRow();
                 }
                 if (row == null)
                 {
@@ -227,12 +221,12 @@ namespace Butterfly.HabboHotel.Users.Messenger
                 return true;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT user_one_id FROM messenger_friendships WHERE user_one_id = @myID AND user_two_id = @friendID");
-                queryreactor.AddParameter("myID", this.UserId);
-                queryreactor.AddParameter("friendID", requestID);
-                return queryreactor.FindsResult();
+                dbClient.SetQuery("SELECT user_one_id FROM messenger_friendships WHERE user_one_id = @myID AND user_two_id = @friendID");
+                dbClient.AddParameter("myID", this.UserId);
+                dbClient.AddParameter("friendID", requestID);
+                return dbClient.FindsResult();
             }
         }
 
@@ -262,11 +256,11 @@ namespace Butterfly.HabboHotel.Users.Messenger
             if (clientByUsername == null)
             {
                 DataRow dataRow = null;
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("SELECT id, block_newfriends FROM users WHERE username = @query");
-                    queryreactor.AddParameter("query", UserQuery.ToLower());
-                    dataRow = queryreactor.GetRow();
+                    dbClient.SetQuery("SELECT id, block_newfriends FROM users WHERE username = @query");
+                    dbClient.AddParameter("query", UserQuery.ToLower());
+                    dataRow = dbClient.GetRow();
                 }
 
                 if (dataRow == null)
@@ -303,9 +297,9 @@ namespace Butterfly.HabboHotel.Users.Messenger
                     return false;
                 }
 
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("REPLACE INTO messenger_requests (from_id,to_id) VALUES (" + this.UserId + "," + num2 + ")");
+                    dbClient.RunQuery("REPLACE INTO messenger_requests (from_id,to_id) VALUES (" + this.UserId + "," + num2 + ")");
                 }
 
                 GameClient clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(num2);
@@ -449,7 +443,7 @@ namespace Butterfly.HabboHotel.Users.Messenger
             DataTable GetMessages = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM `messenger_offline_messages` WHERE `to_id` = @id;");
+                dbClient.SetQuery("SELECT * FROM `messenger_offline_messages` WHERE `to_id` = @id");
                 dbClient.AddParameter("id", this.UserId);
                 GetMessages = dbClient.GetTable();
 

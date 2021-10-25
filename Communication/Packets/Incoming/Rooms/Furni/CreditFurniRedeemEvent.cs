@@ -38,9 +38,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = " + Exchange.Id);
+                dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Exchange.Id + "'");
             }
 
             Room.GetRoomItemHandler().RemoveFurniture(null, Exchange.Id);
@@ -59,16 +59,16 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     Session.GetHabbo().WibboPoints += Value;
                     Session.SendPacket(new ActivityPointsComposer(Session.GetHabbo().WibboPoints));
 
-                    using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        queryreactor.RunQuery("UPDATE users SET vip_points = vip_points + " + Value + " WHERE id = '" + Session.GetHabbo().Id + "' LIMIT 1");
+                        dbClient.RunQuery("UPDATE users SET vip_points = vip_points + '" + Value + "' WHERE id = '" + Session.GetHabbo().Id + "' LIMIT 1");
                     }
                 }
                 else if (Exchange.GetBaseItem().ItemName.StartsWith("WwnEx_"))
                 {
-                    using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        queryreactor.RunQuery("UPDATE user_stats SET achievement_score = achievement_score + '" + Value + "' WHERE id = '" + Session.GetHabbo().Id + "'");
+                        dbClient.RunQuery("UPDATE user_stats SET achievement_score = achievement_score + '" + Value + "' WHERE id = '" + Session.GetHabbo().Id + "'");
                     }
 
                     Session.GetHabbo().AchievementPoints += Value;

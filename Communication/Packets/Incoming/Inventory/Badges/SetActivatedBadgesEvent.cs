@@ -12,9 +12,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             Session.GetHabbo().GetBadgeComponent().ResetSlots();
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE user_badges SET badge_slot = '0' WHERE user_id = '" + Session.GetHabbo().Id + "' AND badge_slot != '0'");
+                dbClient.RunQuery("UPDATE user_badges SET badge_slot = '0' WHERE user_id = '" + Session.GetHabbo().Id + "' AND badge_slot != '0'");
             }
 
             for (int i = 0; i < 5; i++)
@@ -34,11 +34,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 Session.GetHabbo().GetBadgeComponent().GetBadge(Badge).Slot = Slot;
 
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery(string.Concat(new object[4] { "UPDATE user_badges SET badge_slot = ", Slot, " WHERE badge_id = @badge AND user_id = ", Session.GetHabbo().Id }));
-                    queryreactor.AddParameter("badge", Badge);
-                    queryreactor.RunQuery();
+                    dbClient.SetQuery("UPDATE user_badges SET badge_slot = '" + Slot + "' WHERE badge_id = @badge AND user_id = '" + Session.GetHabbo().Id + "'");
+                    dbClient.AddParameter("badge", Badge);
+                    dbClient.RunQuery();
                 }
             }
 

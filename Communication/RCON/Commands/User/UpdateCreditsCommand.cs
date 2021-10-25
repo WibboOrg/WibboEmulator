@@ -31,11 +31,11 @@ namespace Butterfly.Communication.RCON.Commands.User
             }
 
             DataRow row;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT credits FROM users WHERE id = @userid");
-                queryreactor.AddParameter("userid", Client.GetHabbo().Id);
-                row = queryreactor.GetRow();
+                dbClient.SetQuery("SELECT credits FROM users WHERE id = @userid");
+                dbClient.AddParameter("userid", Client.GetHabbo().Id);
+                row = dbClient.GetRow();
             }
             Client.GetHabbo().Credits = Convert.ToInt32(row["credits"]);
             Client.GetHabbo().UpdateCreditsBalance();

@@ -48,23 +48,23 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE rooms SET owner = @newname WHERE owner = @oldname");
-                queryreactor.AddParameter("newname", NewUsername);
-                queryreactor.AddParameter("oldname", Session.GetHabbo().Username);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE rooms SET owner = @newname WHERE owner = @oldname");
+                dbClient.AddParameter("newname", NewUsername);
+                dbClient.AddParameter("oldname", Session.GetHabbo().Username);
+                dbClient.RunQuery();
 
-                queryreactor.SetQuery("UPDATE users SET username = @newname WHERE id = @userid");
-                queryreactor.AddParameter("newname", NewUsername);
-                queryreactor.AddParameter("userid", Session.GetHabbo().Id);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE users SET username = @newname WHERE id = @userid");
+                dbClient.AddParameter("newname", NewUsername);
+                dbClient.AddParameter("userid", Session.GetHabbo().Id);
+                dbClient.RunQuery();
 
-                queryreactor.SetQuery("INSERT INTO `logs_flagme` (`user_id`, `oldusername`, `newusername`, `time`) VALUES (@userid, @oldusername, @newusername, '" + ButterflyEnvironment.GetUnixTimestamp() + "');");
-                queryreactor.AddParameter("userid", Session.GetHabbo().Id);
-                queryreactor.AddParameter("oldusername", Session.GetHabbo().Username);
-                queryreactor.AddParameter("newusername", NewUsername);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("INSERT INTO `logs_flagme` (`user_id`, `oldusername`, `newusername`, `time`) VALUES (@userid, @oldusername, @newusername, '" + ButterflyEnvironment.GetUnixTimestamp() + "');");
+                dbClient.AddParameter("userid", Session.GetHabbo().Id);
+                dbClient.AddParameter("oldusername", Session.GetHabbo().Username);
+                dbClient.AddParameter("newusername", NewUsername);
+                dbClient.RunQuery();
             }
 
             ButterflyEnvironment.GetGame().GetClientManager().UpdateClientUsername(Session.ConnectionID, Session.GetHabbo().Username, NewUsername);

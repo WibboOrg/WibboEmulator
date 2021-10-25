@@ -59,13 +59,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     break;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE `rooms` SET " + DecorationKey + " = @extradata WHERE `id` = '" + room.Id + "' LIMIT 1");
-                queryreactor.AddParameter("extradata", userItem.ExtraData);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE `rooms` SET '" + DecorationKey + "' = @extradata WHERE `id` = '" + room.Id + "' LIMIT 1");
+                dbClient.AddParameter("extradata", userItem.ExtraData);
+                dbClient.RunQuery();
 
-                queryreactor.RunQuery("DELETE FROM items WHERE id = " + userItem.Id);
+                dbClient.RunQuery("DELETE FROM items WHERE id = " + userItem.Id);
             }
 
             Session.GetHabbo().GetInventoryComponent().RemoveItem(userItem.Id);

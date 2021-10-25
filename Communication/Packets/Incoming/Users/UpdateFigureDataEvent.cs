@@ -31,12 +31,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.GetHabbo().Look = Look;
             Session.GetHabbo().Gender = Gender.ToLower();
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE users SET look = @look, gender = @gender WHERE id = " + Session.GetHabbo().Id);
-                queryreactor.AddParameter("look", Look);
-                queryreactor.AddParameter("gender", Gender);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE users SET look = @look, gender = @gender WHERE id = '" + Session.GetHabbo().Id + "'");
+                dbClient.AddParameter("look", Look);
+                dbClient.AddParameter("gender", Gender);
+                dbClient.RunQuery();
             }
 
             ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_AvatarLooks", 1);

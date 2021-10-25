@@ -40,11 +40,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Session.GetHabbo().Motto = newMotto;
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE users SET motto = @motto WHERE id = '" + Session.GetHabbo().Id + "'");
-                queryreactor.AddParameter("motto", newMotto);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE users SET motto = @motto WHERE id = '" + Session.GetHabbo().Id + "'");
+                dbClient.AddParameter("motto", newMotto);
+                dbClient.RunQuery();
             }
 
             ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_CHANGE_MOTTO, 0);

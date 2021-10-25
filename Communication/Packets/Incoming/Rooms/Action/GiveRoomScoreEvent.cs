@@ -35,9 +35,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE rooms SET score = '" + room.RoomData.Score + "' WHERE id = '" + room.Id + "';");
+                dbClient.RunQuery("UPDATE rooms SET score = '" + room.RoomData.Score + "' WHERE id = '" + room.Id + "'");
             }
 
             Session.GetHabbo().RatedRooms.Add(room.Id);

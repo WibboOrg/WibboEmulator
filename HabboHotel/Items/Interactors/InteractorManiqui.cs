@@ -41,11 +41,11 @@ namespace Butterfly.HabboHotel.Items.Interactors
             string str3 = str1 + Item.ExtraData.Split(new char[1] { ';' })[1];
             Session.GetHabbo().Look = str3;
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE users SET look = @look WHERE id = " + Session.GetHabbo().Id);
-                queryreactor.AddParameter("look", str3);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE users SET look = @look WHERE id = '" + Session.GetHabbo().Id + "'");
+                dbClient.AddParameter("look", str3);
+                dbClient.RunQuery();
             }
 
             if (room == null)

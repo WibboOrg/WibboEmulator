@@ -31,7 +31,7 @@ namespace Butterfly.HabboHotel.Roleplay
             this._items.Clear();
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM roleplay_items");
+                dbClient.SetQuery("SELECT id, name, desc, price, type, value, allowstack, category FROM roleplay_items");
                 DataTable table1 = dbClient.GetTable();
                 if (table1 != null)
                 {

@@ -91,9 +91,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 pet.DBState = DatabaseUpdateState.NeedsUpdate;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE pets SET room_id = '0' WHERE id ='" + pet.PetId + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE pets SET room_id = '0' WHERE id = '" + pet.PetId + "' LIMIT 1");
             }
 
             if (pet.OwnerId != Session.GetHabbo().Id)

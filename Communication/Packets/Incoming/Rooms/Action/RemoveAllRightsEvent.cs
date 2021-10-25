@@ -45,9 +45,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.SendPacket(Response3);
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE FROM room_rights WHERE room_id = " + room.Id);
+                dbClient.RunQuery("DELETE FROM room_rights WHERE room_id = '" + room.Id + "'");
             }
 
             room.UsersWithRights.Clear();

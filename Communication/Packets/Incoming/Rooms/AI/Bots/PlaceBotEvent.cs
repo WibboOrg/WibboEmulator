@@ -42,9 +42,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE bots SET room_id = '" + Room.Id + "', x = '" + X + "', y = '" + Y + "' WHERE id = '" + Bot.Id + "'");
+                dbClient.RunQuery("UPDATE bots SET room_id = '" + Room.Id + "', x = '" + X + "', y = '" + Y + "' WHERE id = '" + Bot.Id + "'");
             }
 
             RoomUser roomUser = Room.GetRoomUserManager().DeployBot(new RoomBot(Bot.Id, Bot.OwnerId, Room.Id, AIType.Generic, Bot.WalkingEnabled, Bot.Name, Bot.Motto, Bot.Gender, Bot.Figure, X, Y, 0, 2, Bot.ChatEnabled, Bot.ChatText, Bot.ChatSeconds, Bot.IsDancing, Bot.Enable, Bot.Handitem, Bot.Status), null);

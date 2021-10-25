@@ -36,14 +36,14 @@ namespace Butterfly.HabboHotel.Roleplay
 
             RolePlayer player = null;
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT * FROM user_rp WHERE user_id = '" + UserId + "' AND roleplay_id = '" + this._id + "'");
+                dbClient.SetQuery("SELECT * FROM user_rp WHERE user_id = '" + UserId + "' AND roleplay_id = '" + this._id + "'");
 
-                DataRow dRow = queryreactor.GetRow();
+                DataRow dRow = dbClient.GetRow();
                 if (dRow == null)
                 {
-                    queryreactor.RunQuery("INSERT INTO `user_rp` (`user_id`, `roleplay_id`) VALUES ('" + UserId + "', '" + this._id + "')");
+                    dbClient.RunQuery("INSERT INTO `user_rp` (`user_id`, `roleplay_id`) VALUES ('" + UserId + "', '" + this._id + "')");
                     player = new RolePlayer(this._id, UserId, 100, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0);
                 }
                 else

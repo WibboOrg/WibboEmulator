@@ -71,9 +71,9 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
                 Session.GetHabbo().WibboPoints -= Convert.ToInt32(Row["total_price"]);
                 Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().WibboPoints, 0, 105));
 
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("UPDATE users SET vip_points = vip_points - " + Convert.ToInt32(Row["total_price"]) + " WHERE id = " + Session.GetHabbo().Id);
+                    dbClient.RunQuery("UPDATE users SET vip_points = vip_points - '" + Convert.ToInt32(Row["total_price"]) + "' WHERE id = '" + Session.GetHabbo().Id + "'");
                 }
 
                 Item GiveItem = ItemFactory.CreateSingleItem(Item, Session.GetHabbo(), Convert.ToString(Row["extra_data"]), Convert.ToInt32(Row["furni_id"]), Convert.ToInt32(Row["limited_number"]), Convert.ToInt32(Row["limited_stack"]));

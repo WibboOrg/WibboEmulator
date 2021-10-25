@@ -18,9 +18,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             Session.GetHabbo().HomeRoom = RoomId;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE users SET home_room = '" + RoomId + "' WHERE id = '" + Session.GetHabbo().Id + "';");
+                dbClient.RunQuery("UPDATE users SET home_room = '" + RoomId + "' WHERE id = '" + Session.GetHabbo().Id + "'");
             }
 
             Session.SendPacket(new NavigatorSettingsComposer(RoomId));

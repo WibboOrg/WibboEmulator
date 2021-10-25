@@ -28,7 +28,7 @@ namespace Butterfly.HabboHotel.Quests
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM quests");
+                dbClient.SetQuery("SELECT id, category, series_number, goal_type, goal_data, name, reward, data_bit FROM quests");
                 foreach (DataRow dataRow in dbClient.GetTable().Rows)
                 {
                     int num1 = Convert.ToInt32(dataRow["id"]);
@@ -106,9 +106,9 @@ namespace Butterfly.HabboHotel.Quests
                 num = quest.GoalData;
                 flag = true;
             }
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE user_quests SET progress = " + num + " WHERE user_id = " + Session.GetHabbo().Id + " AND quest_id =  " + quest.Id);
+                dbClient.RunQuery("UPDATE user_quests SET progress = '" + num + "' WHERE user_id = '" + Session.GetHabbo().Id + "' AND quest_id = '" + quest.Id + "'");
             }
 
             Session.GetHabbo().quests[Session.GetHabbo().CurrentQuestId] = num;
@@ -153,9 +153,9 @@ namespace Butterfly.HabboHotel.Quests
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("REPLACE INTO user_quests VALUES (" + Session.GetHabbo().Id + ", " + quest.Id + ", 0)");
+                dbClient.RunQuery("REPLACE INTO user_quests VALUES (" + Session.GetHabbo().Id + ", " + quest.Id + ", 0)");
             }
 
             Session.GetHabbo().CurrentQuestId = quest.Id;
@@ -177,9 +177,9 @@ namespace Butterfly.HabboHotel.Quests
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("REPLACE INTO user_quests VALUES (" + Session.GetHabbo().Id + ", " + nextQuestInSeries.Id + ", 0)");
+                dbClient.RunQuery("REPLACE INTO user_quests VALUES (" + Session.GetHabbo().Id + ", " + nextQuestInSeries.Id + ", 0)");
             }
 
             Session.GetHabbo().CurrentQuestId = nextQuestInSeries.Id;
@@ -196,9 +196,9 @@ namespace Butterfly.HabboHotel.Quests
             }
 
             Session.GetHabbo().CurrentQuestId = 0;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE FROM user_quests WHERE user_id = '" + Session.GetHabbo().Id + "' AND quest_id = '" + quest.Id + "';");
+                dbClient.RunQuery("DELETE FROM user_quests WHERE user_id = '" + Session.GetHabbo().Id + "' AND quest_id = '" + quest.Id + "'");
             }
 
             Session.SendPacket(new QuestAbortedMessageComposer());

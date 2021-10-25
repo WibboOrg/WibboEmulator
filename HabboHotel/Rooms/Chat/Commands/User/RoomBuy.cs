@@ -36,18 +36,18 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 ClientOwner.SendPacket(new ActivityPointsComposer(ClientOwner.GetHabbo().WibboPoints));
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE users SET vip_points = vip_points - '" + Room.RoomData.SellPrice + "' WHERE id = '" + Session.GetHabbo().Id + "';");
-                queryreactor.RunQuery("UPDATE users SET vip_points = vip_points + '" + Room.RoomData.SellPrice + "' WHERE id = '" + Room.RoomData.OwnerId + "';");
+                dbClient.RunQuery("UPDATE users SET vip_points = vip_points - '" + Room.RoomData.SellPrice + "' WHERE id = '" + Session.GetHabbo().Id + "'");
+                dbClient.RunQuery("UPDATE users SET vip_points = vip_points + '" + Room.RoomData.SellPrice + "' WHERE id = '" + Room.RoomData.OwnerId + "'");
 
-                queryreactor.RunQuery("DELETE FROM room_rights WHERE room_id = '" + Room.Id + "';");
+                dbClient.RunQuery("DELETE FROM room_rights WHERE room_id = '" + Room.Id + "'");
 
-                queryreactor.SetQuery("UPDATE rooms SET owner = @newowner WHERE id = '" + Room.Id + "';");
-                queryreactor.AddParameter("newowner", Session.GetHabbo().Username);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("UPDATE rooms SET owner = @newowner WHERE id = '" + Room.Id + "'");
+                dbClient.AddParameter("newowner", Session.GetHabbo().Username);
+                dbClient.RunQuery();
 
-                queryreactor.RunQuery("UPDATE rooms SET price = '0' WHERE id = '" + Room.Id + "' LIMIT 1;");
+                dbClient.RunQuery("UPDATE rooms SET price = '0' WHERE id = '" + Room.Id + "' LIMIT 1");
             }
 
             Session.SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("roombuy.sucess", Session.Langue), Room.RoomData.SellPrice));

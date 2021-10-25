@@ -62,11 +62,11 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Filter
             {
                 this._pubWords.Add(Word);
 
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("INSERT INTO word_filter_retro (word) VALUES (@word)");
-                    queryreactor.AddParameter("word", Word);
-                    queryreactor.RunQuery();
+                    dbClient.SetQuery("INSERT INTO word_filter_retro (word) VALUES (@word)");
+                    dbClient.AddParameter("word", Word);
+                    dbClient.RunQuery();
                 }
             }
         }

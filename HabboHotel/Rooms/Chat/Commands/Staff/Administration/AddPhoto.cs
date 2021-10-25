@@ -27,11 +27,11 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             Session.GetHabbo().GetInventoryComponent().TryAddItem(Item);
             //Session.SendPacket(new FurniListUpdateComposer());
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("INSERT INTO user_photos (user_id,photo,time) VALUES ('" + Session.GetHabbo().Id + "', @photoid, '" + Time + "');");
-                queryreactor.AddParameter("photoid", PhotoId);
-                queryreactor.RunQuery();
+                dbClient.SetQuery("INSERT INTO user_photos (user_id,photo,time) VALUES ('" + Session.GetHabbo().Id + "', @photoid, '" + Time + "');");
+                dbClient.AddParameter("photoid", PhotoId);
+                dbClient.RunQuery();
             }
 
             Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.valide", Session.Langue));

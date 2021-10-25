@@ -7,7 +7,7 @@ namespace Butterfly.Database.Daos
     {
         internal static int GetIdByName(IQueryAdapter dbClient, string name)
         {
-            dbClient.SetQuery("SELECT id FROM users WHERE username = @username LIMIT 1");
+            dbClient.SetQuery("SELECT `id` FROM `users` WHERE `username` = @username LIMIT 1");
             dbClient.AddParameter("username", name);
 
             return dbClient.GetInteger();
@@ -19,6 +19,11 @@ namespace Butterfly.Database.Daos
             dbClient.AddParameter("id", userId);
 
             return dbClient.GetString();
+        }
+
+        internal static void UpdateWP(IQueryAdapter dbClient)
+        {
+            dbClient.RunQuery("UPDATE users SET vip_points = vip_points - " + TotalDiamondCost + " WHERE id = '" + Session.GetHabbo().Id + "'");
         }
     }
 }

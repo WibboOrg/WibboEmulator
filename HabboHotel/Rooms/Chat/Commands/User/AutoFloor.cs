@@ -53,7 +53,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 dbClient.AddParameter("heightmap", Map);
                 dbClient.AddParameter("murheight", Room.GetGameMap().Model.MurHeight);
                 dbClient.RunQuery();
-                dbClient.RunQuery("UPDATE rooms SET model_name = 'model_custom' WHERE id = " + Room.Id + " LIMIT 1");
+                dbClient.RunQuery("UPDATE rooms SET model_name = 'model_custom' WHERE id = '" + Room.Id + "' LIMIT 1");
             }
 
             List<RoomUser> UsersToReturn = Room.GetRoomUserManager().GetRoomUsers().ToList();
