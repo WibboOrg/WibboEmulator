@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Groups;
@@ -124,18 +125,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         }
 
-        private List<int> GetSearchRequests(int GroupeId, string SearchVal)
+        private List<int> GetSearchRequests(int groupeId, string searchVal)
         {
             List<int> MembersId = new List<int>();
 
             DataTable MembresTable = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("SELECT users.id FROM group_requests INNER JOIN users ON group_requests.user_id = users.id WHERE group_requests.group_id = @gid AND users.username LIKE @username LIMIT 14;");
-                dbClient.AddParameter("gid", GroupeId);
-                dbClient.AddParameter("username", SearchVal.Replace("%", "\\%").Replace("_", "\\_") + "%");
-                MembresTable = dbClient.GetTable();
-            }
+                MembresTable = AllDao.Query6(dbClient, groupeId, searchVal);
 
             foreach (DataRow row in MembresTable.Rows)
             {

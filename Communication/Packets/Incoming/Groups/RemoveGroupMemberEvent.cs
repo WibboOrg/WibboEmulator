@@ -64,6 +64,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     dbClient.AddParameter("GroupId", GroupId);
                     dbClient.AddParameter("UserId", UserId);
                     dbClient.RunQuery();
+
+                    //GuildMembershipDao.deleteGuild
                 }
 
                 Session.SendPacket(new GroupInfoComposer(Group, Session));
