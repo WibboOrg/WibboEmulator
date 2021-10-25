@@ -1,9 +1,9 @@
 ﻿<Properties StartupConfiguration="{6C37DB6F-DA4A-4078-9B8C-2F2F5C10AC09}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="HabboHotel/Rooms/Users/RoomUserManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/RoomKick.cs">
     <Files>
       <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/RoomAlert.cs" Line="27" Column="2" />
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/RoomKick.cs" Line="34" Column="14" />
-      <File FileName="HabboHotel/Rooms/Users/RoomUserManager.cs" Line="17" Column="28" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/RoomKick.cs" Line="37" Column="31" />
+      <File FileName="HabboHotel/Rooms/Users/RoomUserManager.cs" Line="29" Column="3" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -16,13 +16,13 @@
                   <Node name="Chat" expanded="True">
                     <Node name="Commands" expanded="True">
                       <Node name="Staff" expanded="True">
-                        <Node name="Moderation" expanded="True" />
+                        <Node name="Moderation" expanded="True">
+                          <Node name="RoomKick.cs" selected="True" />
+                        </Node>
                       </Node>
                     </Node>
                   </Node>
-                  <Node name="Users" expanded="True">
-                    <Node name="RoomUserManager.cs" selected="True" />
-                  </Node>
+                  <Node name="Users" expanded="True" />
                 </Node>
               </Node>
             </Node>

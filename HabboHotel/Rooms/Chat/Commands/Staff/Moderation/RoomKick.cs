@@ -34,7 +34,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             }
 
 
-            room.SetTimeout(5000, () =>
+            room.SetTimeout(2500, () =>
             {
                 foreach (RoomUser User in currentRoom.GetRoomUserManager().GetUserList().ToList())
                 {
