@@ -1,11 +1,12 @@
 ﻿<Properties StartupConfiguration="{6C37DB6F-DA4A-4078-9B8C-2F2F5C10AC09}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Alert.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Communication/Packets/Incoming/Moderation/SubmitNewTicketEvent.cs">
     <Files>
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Murmur.cs" Line="1" Column="1" />
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/KickBan.cs" Line="1" Column="1" />
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/KickAll.cs" Line="1" Column="1" />
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Kick.cs" Line="12" Column="14" />
-      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Moderation/Alert.cs" Line="18" Column="14" />
+      <File FileName="Communication/Packets/Incoming/Moderation/SubmitNewTicketEvent.cs" Line="23" Column="15" />
+      <File FileName="HabboHotel/Support/ModerationManager.cs" Line="408" Column="63" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/Staff/Administration/StaffAlert.cs" Line="33" Column="18" />
+      <File FileName="Communication/Packets/Incoming/Rooms/Engine/AnswerPollEvent.cs" Line="59" Column="22" />
+      <File FileName="HabboHotel/Rooms/Chat/Commands/User/Premium/GameTime.cs" Line="12" Column="34" />
+      <File FileName="HabboHotel/Rooms/Users/RoomUser.cs" Line="263" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -13,24 +14,33 @@
           <Node name="Butterfly Emulator" expanded="True">
             <Node name="Butterfly Emulator" expanded="True">
               <Node name="Communication" expanded="True">
-                <Node name="Packets" expanded="True" />
+                <Node name="Packets" expanded="True">
+                  <Node name="Incoming" expanded="True">
+                    <Node name="Moderation" expanded="True">
+                      <Node name="SubmitNewTicketEvent.cs" selected="True" />
+                    </Node>
+                    <Node name="Rooms" expanded="True">
+                      <Node name="Engine" expanded="True" />
+                    </Node>
+                  </Node>
+                </Node>
               </Node>
               <Node name="HabboHotel" expanded="True">
-                <Node name="Animations" expanded="True" />
+                <Node name="GameClients" expanded="True" />
                 <Node name="Rooms" expanded="True">
                   <Node name="Chat" expanded="True">
                     <Node name="Commands" expanded="True">
                       <Node name="Staff" expanded="True">
                         <Node name="Administration" expanded="True" />
-                        <Node name="Moderation" expanded="True">
-                          <Node name="Alert.cs" selected="True" />
-                        </Node>
                       </Node>
-                      <Node name="User" expanded="True" />
+                      <Node name="User" expanded="True">
+                        <Node name="Premium" expanded="True" />
+                      </Node>
                     </Node>
                   </Node>
                   <Node name="Users" expanded="True" />
                 </Node>
+                <Node name="Support" expanded="True" />
               </Node>
             </Node>
           </Node>

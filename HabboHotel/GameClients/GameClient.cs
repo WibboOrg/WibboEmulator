@@ -345,6 +345,7 @@ namespace Butterfly.HabboHotel.GameClients
             this.SendPacket(MessageNotif);
         }
 
+
         public void Dispose()
         {
             if (this.Langue == Language.FRANCAIS)
