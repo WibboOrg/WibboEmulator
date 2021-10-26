@@ -465,16 +465,9 @@ namespace Butterfly.HabboHotel.Support
             int i = 0;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                try
-                {
                     dbClient.SetQuery("SELECT id FROM users WHERE username = @owner");
                     dbClient.AddParameter("owner", Data.OwnerName);
                     i = Convert.ToInt32(dbClient.GetRow()[0]);
-                }
-                catch (Exception ex)
-                {
-                    Logging.HandleException(ex, "ModerationTool.SerializeRoomTool");
-                }
             }
             ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.MODTOOL_ROOM_INFO);
             serverMessage.WriteInteger(Data.Id);

@@ -70,7 +70,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.GetHabbo().GetBadgeComponent().GiveBadge(userItem.ExtraData, true);
                 Session.SendPacket(new ReceiveBadgeComposer(userItem.ExtraData));
 
-                Session.SendNotification("Vous avez re�u le badge: " + userItem.ExtraData + " !");
+                Session.SendNotification("Vous avez reçu le badge: " + userItem.ExtraData + " !");
                 return;
             }
 

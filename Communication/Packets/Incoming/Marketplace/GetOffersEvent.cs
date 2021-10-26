@@ -51,7 +51,6 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             {
                 dbClient.SetQuery("SELECT `offer_id`, `item_type`, `sprite_id`, `total_price`, `limited_number`,`limited_stack` FROM `catalog_marketplace_offers` " + builder.ToString() + " " + str + " LIMIT 500");
                 dbClient.AddParameter("search_query", SearchQuery.Replace("%", "\\%").Replace("_", "\\_") + "%");
-
                 table = dbClient.GetTable();
             }
 
