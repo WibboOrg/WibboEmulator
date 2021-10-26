@@ -1,4 +1,11 @@
- internal static void Query8(IQueryAdapter dbClient)
+using Butterfly.Database;
+using Butterfly.Database.Interfaces;
+
+namespace Butterfly.Database.Daos
+{
+    class CatalogMarketplaceDataDao
+    {
+         internal static void Query8(IQueryAdapter dbClient)
         {
             int Id = 0;
             dbClient.SetQuery("SELECT id FROM catalog_marketplace_data WHERE sprite = " + Item.SpriteId + " LIMIT 1;");
@@ -31,3 +38,5 @@
             dbClient.SetQuery("SELECT sold FROM catalog_marketplace_data WHERE sprite = '" + SpriteID + "' LIMIT 1");
             num2 = dbClient.GetInteger();
         }
+    }
+}
