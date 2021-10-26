@@ -386,7 +386,6 @@ namespace Butterfly.HabboHotel.Users
                             this.GetClient().GetHabbo().LoadingRoomId = Id;
                             this.GetClient().GetHabbo().AllowDoorBell = false;
                         }
-
                         return;
                     }
                     else if (room.RoomData.State == 2 && Password.ToLower() != room.RoomData.Password.ToLower())
