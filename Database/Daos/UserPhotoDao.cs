@@ -1,7 +1,6 @@
 ﻿using Butterfly.Database;
 using Butterfly.Database.Interfaces;
 using System;
-
 namespace Butterfly.Database.Daos
 {
     class UserPhotoDao

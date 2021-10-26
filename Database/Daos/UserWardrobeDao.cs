@@ -26,5 +26,18 @@ namespace Butterfly.Database.Daos
                 dbClient.RunQuery();
             }
         }
+
+        internal static void Query8(IQueryAdapter dbClient)
+        {
+            dbClient.SetQuery("SELECT slot_id,look,gender FROM user_wardrobe WHERE user_id = '" + Session.GetHabbo().Id + "' LIMIT 24");
+            DataTable WardrobeData = dbClient.GetTable();
+        }
+
+
+        internal static void Query8(IQueryAdapter dbClient)
+        {
+            dbClient.SetQuery("SELECT look FROM user_wardrobe WHERE user_id IN (SELECT user_id FROM (SELECT user_id FROM user_wardrobe WHERE user_id >= ROUND(RAND() * (SELECT max(user_id) FROM user_wardrobe)) LIMIT 1) tmp) ORDER BY RAND() LIMIT 1");
+            Session.GetHabbo().Look = dbClient.GetString();
+        }
     }
 }

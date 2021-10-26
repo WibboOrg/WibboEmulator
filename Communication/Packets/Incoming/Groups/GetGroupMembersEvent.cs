@@ -155,6 +155,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 dbClient.AddParameter("gid", GroupeId);
                 dbClient.AddParameter("username", SearchVal.Replace("%", "\\%").Replace("_", "\\_") + "%");
                 MembresTable = dbClient.GetTable();
+
+                //AllDao.Query7(dbClient);
             }
 
             foreach (DataRow row in MembresTable.Rows)
@@ -179,6 +181,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 dbClient.AddParameter("gid", GroupeId);
                 dbClient.AddParameter("username", SearchVal.Replace("%", "\\%").Replace("_", "\\_") + "%");
                 MembresTable = dbClient.GetTable();
+                //Query8
             }
 
             foreach (DataRow row in MembresTable.Rows)

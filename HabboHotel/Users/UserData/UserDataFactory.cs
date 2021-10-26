@@ -73,7 +73,7 @@ namespace Butterfly.HabboHotel.Users.UserData
                     string lastDaily = DateTime.Today.ToString("MM/dd");
                     if (lastDailyCredits != lastDaily)
                     {
-                        dbClient.RunQuery(string.Concat(new object[4] { "UPDATE users SET lastdailycredits = '", lastDaily, "' WHERE id = ", userId }));
+                        dbClient.RunQuery("UPDATE users SET lastdailycredits = '" + lastDaily + "' WHERE id = '" + userId + "'");
                         dUserInfo["credits"] = (Convert.ToInt32(dUserInfo["credits"]) + 3000);
 
                         if (Convert.ToInt32(dUserInfo["rank"]) <= 1)

@@ -539,13 +539,7 @@ namespace Butterfly.HabboHotel.Rooms
                     {
                         if (!string.IsNullOrEmpty(roomItem.ExtraData))
                         {
-                            standardQueries.AddQuery(string.Concat(new object[4]
-                              {
-                                 "UPDATE items SET extra_data = @data",
-                                 roomItem.Id,
-                                 " WHERE id = ",
-                                 roomItem.Id
-                              }));
+                            standardQueries.AddQuery("UPDATE items SET extra_data = @data" + roomItem.Id + " WHERE id = '" + roomItem.Id + "'");
                             standardQueries.AddParameter("data" + roomItem.Id, roomItem.ExtraData);
                         }
 
