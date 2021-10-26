@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Groups;
 using Butterfly.HabboHotel.Rooms;
@@ -37,11 +38,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("DELETE FROM `groups` WHERE `id` = '" + Group.Id + "'");
-                dbClient.RunQuery("DELETE FROM `group_memberships` WHERE `group_id` = '" + Group.Id + "'");
-                dbClient.RunQuery("DELETE FROM `group_requests` WHERE `group_id` = '" + Group.Id + "'");
-                dbClient.RunQuery("UPDATE `rooms` SET `group_id` = '0' WHERE `group_id` = '" + Group.Id + "' LIMIT 1");
-                dbClient.RunQuery("UPDATE `user_stats` SET `group_id` = '0' WHERE `group_id` = '" + Group.Id + "' LIMIT 1");
+                AllDao.Query1(dbClient, Group.Id);
+                AllDao.Query2(dbClient, Group.Id);
+                AllDao.Query3(dbClient, Group.Id);
+                AllDao.Query4(dbClient, Group.Id);
+                AllDao.Query5(dbClient, Group.Id);
             }
 
             ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
