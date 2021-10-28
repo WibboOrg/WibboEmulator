@@ -5,17 +5,19 @@ namespace Butterfly.Database.Daos
 {
     class MessengerRequestDao
     {
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void Delete(IQueryAdapter dbClient, int userId)
         {
-            dbClient.RunQuery("DELETE FROM messenger_requests WHERE from_id = '" + this.UserId + "' OR to_id = '" + this.UserId + "'");
+            dbClient.RunQuery("DELETE FROM messenger_requests WHERE from_id = '" + userId + "' OR to_id = '" + userId + "'");
         }
-        internal static void Query8(IQueryAdapter dbClient)
+
+        internal static void Delete(IQueryAdapter dbClient, int userId, int sender)
         {
-            dbClient.RunQuery("DELETE FROM messenger_requests WHERE (from_id = '" + this.UserId + "' AND to_id = '" + sender + "') OR (to_id = '" + this.UserId + "' AND from_id = '" + sender + "')");
+            dbClient.RunQuery("DELETE FROM messenger_requests WHERE (from_id = '" + userId + "' AND to_id = '" + sender + "') OR (to_id = '" + userId + "' AND from_id = '" + sender + "')");
         }
-        internal static void Query8(IQueryAdapter dbClient)
+
+        internal static void Replace(IQueryAdapter dbClient, int userId, int sender)
         {
-            dbClient.RunQuery("REPLACE INTO messenger_requests (from_id,to_id) VALUES (" + this.UserId + "," + num2 + ")");
+            dbClient.RunQuery("REPLACE INTO messenger_requests (from_id,to_id) VALUES (" + userId + "," + sender + ")");
         }
     }
 }

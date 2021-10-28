@@ -81,7 +81,7 @@ namespace Butterfly.HabboHotel.Roleplay.Enemy
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("INSERT INTO `roleplay_enemy` (`id`, `type`) VALUES ('" + BotId + "', 'bot')");
+                dbClient.RunQuery("INSERT INTO roleplay_enemy (id, type) VALUES ('" + BotId + "', 'bot')");
             }
 
             RPEnemy EnemyConfig = new RPEnemy(BotId, 100, 1, 4, 30, 0, 0, 5461, 0, 0, 0, true, 12, false);
@@ -98,7 +98,7 @@ namespace Butterfly.HabboHotel.Roleplay.Enemy
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("INSERT INTO `roleplay_enemy` (`id`, `type`, `weapon_far_id`) VALUES ('" + PetId + "', 'pet', '0');");
+                dbClient.RunQuery("INSERT INTO roleplay_enemy (id, type, weapon_far_id) VALUES ('" + PetId + "', 'pet', '0');");
             }
 
             RPEnemy EnemyConfig = new RPEnemy(PetId, 100, 0, 0, 0, 0, 0, 5461, 0, 0, 0, true, 12, false);

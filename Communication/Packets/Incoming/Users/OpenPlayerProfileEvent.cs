@@ -32,7 +32,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("SELECT COUNT(0) FROM `messenger_friendships` WHERE (`user_one_id` = @userid);");
+                    dbClient.SetQuery("SELECT COUNT(0) FROM messenger_friendships WHERE (user_one_id = @userid);");
                     dbClient.AddParameter("userid", userID);
                     friendCount = dbClient.GetInteger();
                 }

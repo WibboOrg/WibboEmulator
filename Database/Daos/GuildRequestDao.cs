@@ -1,3 +1,4 @@
+using System.Data;
 using Butterfly.Database;
 using Butterfly.Database.Interfaces;
 
@@ -5,12 +6,12 @@ namespace Butterfly.Database.Daos
 {
     class GuildRequestDao
     {
-        internal static void Query3(IQueryAdapter dbClient, int groupId)
+        internal static void Delete(IQueryAdapter dbClient, int groupId)
         {
             dbClient.RunQuery("DELETE FROM group_requests WHERE group_id = '" + groupId + "'");
         }
 
-        internal static DataTable Query6(IQueryAdapter dbClient, int groupeId, string searchVal)
+        internal static DataTable GetAll(IQueryAdapter dbClient, int groupeId, string searchVal)
         {
             dbClient.SetQuery("SELECT users.id FROM group_requests INNER JOIN users ON group_requests.user_id = users.id WHERE group_requests.group_id = @gid AND users.username LIKE @username LIMIT 14;");
             dbClient.AddParameter("gid", groupeId);
@@ -19,19 +20,19 @@ namespace Butterfly.Database.Daos
             return dbClient.GetTable();
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void Insert(IQueryAdapter dbClient, int groupId, int userId)
         {
             dbClient.SetQuery("INSERT INTO group_requests (user_id, group_id) VALUES (@uid, @gid)");
-            dbClient.AddParameter("gid", this.Id);
-            dbClient.AddParameter("uid", Id);
+            dbClient.AddParameter("gid", groupId);
+            dbClient.AddParameter("uid", userId);
             dbClient.RunQuery();
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void DeleteByUserId(IQueryAdapter dbClient, int groupId, int userId)
         {
             dbClient.SetQuery("DELETE FROM group_requests WHERE user_id=@uid AND group_id=@gid LIMIT 1");
-            dbClient.AddParameter("gid", this.Id);
-            dbClient.AddParameter("uid", Id);
+            dbClient.AddParameter("gid", groupId);
+            dbClient.AddParameter("uid", userId);
             dbClient.RunQuery();
         }
     }

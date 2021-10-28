@@ -118,7 +118,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE `items` SET `extra_data` = @extraData WHERE `id` = @ID LIMIT 1");
+                        dbClient.SetQuery("UPDATE items SET extra_data = @extraData WHERE id = @ID LIMIT 1");
                         dbClient.AddParameter("extraData", Item.ExtraData);
                         dbClient.AddParameter("ID", Item.Id);
                         dbClient.RunQuery();

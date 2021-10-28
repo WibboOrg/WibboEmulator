@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             DataRow Row = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `avgprice` FROM `catalog_marketplace_data` WHERE `sprite` = @SpriteId LIMIT 1");
+                dbClient.SetQuery("SELECT avgprice FROM catalog_marketplace_data WHERE sprite = @SpriteId LIMIT 1");
                 dbClient.AddParameter("SpriteId", SpriteId);
                 Row = dbClient.GetRow();
             }

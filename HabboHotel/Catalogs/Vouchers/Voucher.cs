@@ -25,7 +25,7 @@ namespace Butterfly.HabboHotel.Catalog.Vouchers
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE `catalog_vouchers` SET `current_uses` = `current_uses` + '1' WHERE `voucher` = '" + this._code + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE catalog_vouchers SET current_uses = current_uses + '1' WHERE voucher = '" + this._code + "' LIMIT 1");
             }
         }
 

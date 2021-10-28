@@ -1,14 +1,14 @@
-using Butterfly.Database;
+using System.Data;
 using Butterfly.Database.Interfaces;
 
 namespace Butterfly.Database.Daos
 {
     class ModerationTopicDao
     {
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static DataTable GetAll(IQueryAdapter dbClient)
         {
             dbClient.SetQuery("SELECT id, caption FROM moderation_topics");
-            ModerationTopics = dbClient.GetTable();
+            return dbClient.GetTable();
         }
     }
 }

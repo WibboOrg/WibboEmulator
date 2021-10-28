@@ -75,7 +75,7 @@ namespace Butterfly.HabboHotel.Items
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE `items` SET `room_id` = '0' WHERE `id` = @itemId LIMIT 1");
+                        dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
                         dbClient.AddParameter("itemId", Present.Id);
                         dbClient.RunQuery();
                     }
@@ -87,7 +87,7 @@ namespace Butterfly.HabboHotel.Items
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("UPDATE `items` SET `room_id` = '0' WHERE `id` = @itemId LIMIT 1");
+                    dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
                     dbClient.AddParameter("itemId", Present.Id);
                     dbClient.RunQuery();
                 }
@@ -155,7 +155,7 @@ namespace Butterfly.HabboHotel.Items
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE `items` SET `room_id` = '0' WHERE `id` = @itemId LIMIT 1");
+                        dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
                         dbClient.AddParameter("itemId", Present.Id);
                         dbClient.RunQuery();
                     }
@@ -167,7 +167,7 @@ namespace Butterfly.HabboHotel.Items
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("UPDATE `items` SET `room_id` = '0' WHERE `id` = @itemId LIMIT 1");
+                    dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
                     dbClient.AddParameter("itemId", Present.Id);
                     dbClient.RunQuery();
                 }
@@ -239,7 +239,7 @@ namespace Butterfly.HabboHotel.Items
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE `items` SET `room_id` = '0' WHERE `id` = @itemId LIMIT 1");
+                        dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
                         dbClient.AddParameter("itemId", Present.Id);
                         dbClient.RunQuery();
                     }
@@ -251,7 +251,7 @@ namespace Butterfly.HabboHotel.Items
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("UPDATE `items` SET `room_id` = '0' WHERE `id` = @itemId LIMIT 1");
+                    dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
                     dbClient.AddParameter("itemId", Present.Id);
                     dbClient.RunQuery();
                 }
@@ -415,7 +415,7 @@ namespace Butterfly.HabboHotel.Items
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE `items` SET `room_id` = '0' WHERE `id` = @itemId LIMIT 1");
+                        dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
                         dbClient.AddParameter("itemId", Present.Id);
                         dbClient.RunQuery();
                     }
@@ -427,7 +427,7 @@ namespace Butterfly.HabboHotel.Items
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("UPDATE `items` SET `room_id` = '0' WHERE `id` = @itemId LIMIT 1");
+                    dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
                     dbClient.AddParameter("itemId", Present.Id);
                     dbClient.RunQuery();
                 }

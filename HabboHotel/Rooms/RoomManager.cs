@@ -210,7 +210,7 @@ namespace Butterfly.HabboHotel.Rooms
                 int RoomId = 0;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("INSERT INTO `rooms` (`caption`,`description`,`owner`,`model_name`,`category`,`users_max`,`troc_status`) VALUES (@caption, @desc, @username, @model, @cat, @usmax, '" + TradeSettings + "')");
+                    dbClient.SetQuery("INSERT INTO rooms (caption,description,owner,model_name,category,users_max,troc_status) VALUES (@caption, @desc, @username, @model, @cat, @usmax, '" + TradeSettings + "')");
                     dbClient.AddParameter("caption", Name);
                     dbClient.AddParameter("desc", Desc);
                     dbClient.AddParameter("username", Session.GetHabbo().Username);

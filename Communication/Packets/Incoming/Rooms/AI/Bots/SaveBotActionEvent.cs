@@ -69,7 +69,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            dbClient.SetQuery("UPDATE `bots` SET `look` = @look, `gender` = '" + Session.GetHabbo().Gender + "' WHERE `id` = '" + Bot.BotData.Id + "' LIMIT 1");
+                            dbClient.SetQuery("UPDATE bots SET look = @look, gender = '" + Session.GetHabbo().Gender + "' WHERE id = '" + Bot.BotData.Id + "' LIMIT 1");
                             dbClient.AddParameter("look", Session.GetHabbo().Look);
                             dbClient.RunQuery();
                         }
@@ -123,7 +123,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            dbClient.SetQuery("UPDATE `bots` SET `chat_enabled` = @AutomaticChat, `chat_seconds` = @SpeakingInterval, `is_mixchat` = @MixChat, `chat_text` = @ChatText WHERE `id` = @id LIMIT 1");
+                            dbClient.SetQuery("UPDATE bots SET chat_enabled = @AutomaticChat, chat_seconds = @SpeakingInterval, is_mixchat = @MixChat, chat_text = @ChatText WHERE id = @id LIMIT 1");
                             dbClient.AddParameter("id", BotId);
                             dbClient.AddParameter("AutomaticChat", ButterflyEnvironment.BoolToEnum(Convert.ToBoolean(AutomaticChat)));
                             dbClient.AddParameter("SpeakingInterval", Convert.ToInt32(SpeakingInterval));
@@ -194,7 +194,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         Bot.BotData.Name = DataString;
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            dbClient.SetQuery("UPDATE `bots` SET `name` = @name WHERE `id` = '" + Bot.BotData.Id + "' LIMIT 1");
+                            dbClient.SetQuery("UPDATE bots SET name = @name WHERE id = '" + Bot.BotData.Id + "' LIMIT 1");
                             dbClient.AddParameter("name", DataString);
                             dbClient.RunQuery();
                         }

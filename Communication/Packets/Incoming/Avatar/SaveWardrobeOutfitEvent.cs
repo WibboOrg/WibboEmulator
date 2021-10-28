@@ -25,7 +25,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             look = ButterflyEnvironment.GetFigureManager().ProcessFigure(look, gender, true);
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                UserWardrobeDao.InsertLook(dbClient, Session.GetHabbo().Id, slotId, look, gender.ToUpper());
+                UserWardrobeDao.Insert(dbClient, Session.GetHabbo().Id, slotId, look, gender.ToUpper());
         }
     }
 }

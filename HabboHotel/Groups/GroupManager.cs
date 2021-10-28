@@ -38,7 +38,7 @@ namespace Butterfly.HabboHotel.Groups
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `id`,`type`,`firstvalue`,`secondvalue` FROM `groups_items` WHERE `enabled` = '1'");
+                dbClient.SetQuery("SELECT id,type,firstvalue,secondvalue FROM groups_items WHERE enabled = '1'");
                 DataTable dItems = dbClient.GetTable();
 
                 foreach (DataRow dRow in dItems.Rows)
@@ -80,7 +80,7 @@ namespace Butterfly.HabboHotel.Groups
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM `groups` WHERE `id` = @id LIMIT 1");
+                dbClient.SetQuery("SELECT * FROM groups WHERE id = @id LIMIT 1");
                 dbClient.AddParameter("id", id);
                 DataRow Row = dbClient.GetRow();
 
@@ -109,7 +109,7 @@ namespace Butterfly.HabboHotel.Groups
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO `groups` (`name`, `desc`, `badge`, `owner_id`, `created`, `room_id`, `state`, `colour1`, `colour2`, `admindeco`) VALUES (@name, @desc, @badge, @owner, UNIX_TIMESTAMP(), @room, '0', @colour1, @colour2, '1')");
+                dbClient.SetQuery("INSERT INTO groups (name, desc, badge, owner_id, created, room_id, state, colour1, colour2, admindeco) VALUES (@name, @desc, @badge, @owner, UNIX_TIMESTAMP(), @room, '0', @colour1, @colour2, '1')");
                 dbClient.AddParameter("name", Group.Name);
                 dbClient.AddParameter("desc", Group.Description);
                 dbClient.AddParameter("owner", Group.CreatorId);
@@ -130,12 +130,12 @@ namespace Butterfly.HabboHotel.Groups
                 }
                 else
                 {
-                    dbClient.SetQuery("UPDATE `rooms` SET `group_id` = @gid WHERE `id` = @rid LIMIT 1");
+                    dbClient.SetQuery("UPDATE rooms SET group_id = @gid WHERE id = @rid LIMIT 1");
                     dbClient.AddParameter("gid", Group.Id);
                     dbClient.AddParameter("rid", Group.RoomId);
                     dbClient.RunQuery();
 
-                    dbClient.RunQuery("DELETE FROM `room_rights` WHERE `room_id` = '" + RoomId + "'");
+                    dbClient.RunQuery("DELETE FROM room_rights WHERE room_id = '" + RoomId + "'");
                 }
             }
             return true;

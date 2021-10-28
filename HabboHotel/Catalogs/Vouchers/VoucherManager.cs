@@ -24,7 +24,7 @@ namespace Butterfly.HabboHotel.Catalog.Vouchers
             DataTable GetVouchers = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `voucher`,`type`,`value`,`current_uses`,`max_uses` FROM `catalog_vouchers` WHERE `enabled` = '1'");
+                dbClient.SetQuery("SELECT voucher,type,value,current_uses,max_uses FROM catalog_vouchers WHERE enabled = '1'");
                 GetVouchers = dbClient.GetTable();
             }
 

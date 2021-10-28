@@ -27,7 +27,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             DataRow GetRow = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM `user_voucher` WHERE `user_id` = @userId AND `voucher` = @Voucher LIMIT 1");
+                dbClient.SetQuery("SELECT * FROM user_voucher WHERE user_id = @userId AND voucher = @Voucher LIMIT 1");
                 dbClient.AddParameter("userId", Session.GetHabbo().Id);
                 dbClient.AddParameter("Voucher", VoucherCode);
                 GetRow = dbClient.GetRow();
@@ -42,7 +42,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("INSERT INTO `user_voucher` (`user_id`,`voucher`) VALUES (@userId, @Voucher)");
+                    dbClient.SetQuery("INSERT INTO user_voucher (user_id,voucher) VALUES (@userId, @Voucher)");
                     dbClient.AddParameter("userId", Session.GetHabbo().Id);
                     dbClient.AddParameter("Voucher", VoucherCode);
                     dbClient.RunQuery();

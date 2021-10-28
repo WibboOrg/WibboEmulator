@@ -1,3 +1,4 @@
+using System.Data;
 using Butterfly.Database;
 using Butterfly.Database.Interfaces;
 
@@ -5,52 +6,29 @@ namespace Butterfly.Database.Daos
 {
     class RoomModelCustomDao
     {
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void Replace(IQueryAdapter dbClient, int roomId, int doorX, int doorY, double doorZ, int doorDirection, string map, int wallHeight)
         {
             dbClient.SetQuery("REPLACE INTO room_models_customs VALUES (@id, @doorX, @doorY, @doorZ, @doorDir, @heightmap, @murheight)");
-            dbClient.AddParameter("id", Room.Id);
-            dbClient.AddParameter("doorX", DoorX);
-            dbClient.AddParameter("doorY", DoorY);
-            dbClient.AddParameter("doorZ", DoorZ);
-            dbClient.AddParameter("doorDir", DoorDirection);
-            dbClient.AddParameter("heightmap", Map);
-            dbClient.AddParameter("murheight", WallHeight);
-            dbClient.RunQuery();
-        }
-        internal static void Query8(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("INSERT INTO room_models_customs (room_id, door_x, door_y, door_z, door_dir, heightmap, wall_height) " +
-                "SELECT '" + RoomId + "', door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = '" + OldRoomId + "'");
-        }
-        internal static void Query8(IQueryAdapter dbClient)
-        {
-            dbClient.SetQuery("REPLACE INTO room_models_customs VALUES (@id, @doorX, @doorY, @doorZ, @doorDir, @heightmap, @murheight)");
-            dbClient.AddParameter("id", Room.Id);
-            dbClient.AddParameter("doorX", Room.GetGameMap().Model.DoorX);
-            dbClient.AddParameter("doorY", Room.GetGameMap().Model.DoorY);
-            dbClient.AddParameter("doorZ", Room.GetGameMap().Model.DoorZ);
-            dbClient.AddParameter("doorDir", Room.GetGameMap().Model.DoorOrientation);
-            dbClient.AddParameter("heightmap", Map);
-            dbClient.AddParameter("murheight", Room.GetGameMap().Model.MurHeight);
+            dbClient.AddParameter("id", roomId);
+            dbClient.AddParameter("doorX", doorX);
+            dbClient.AddParameter("doorY", doorY);
+            dbClient.AddParameter("doorZ", doorZ);
+            dbClient.AddParameter("doorDir", doorDirection);
+            dbClient.AddParameter("heightmap", map);
+            dbClient.AddParameter("murheight", wallHeight);
             dbClient.RunQuery();
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void InsertDuplicate(IQueryAdapter dbClient, int roomId, int oldRoomId)
         {
-            dbClient.SetQuery("REPLACE INTO room_models_customs VALUES (@id, @doorX, @doorY, @doorZ, @doorDir, @heightmap, @murheight)");
-            dbClient.AddParameter("id", Room.Id);
-            dbClient.AddParameter("doorX", Room.GetGameMap().Model.DoorX);
-            dbClient.AddParameter("doorY", Room.GetGameMap().Model.DoorY);
-            dbClient.AddParameter("doorZ", Room.GetGameMap().Model.DoorZ);
-            dbClient.AddParameter("doorDir", Room.GetGameMap().Model.DoorOrientation);
-            dbClient.AddParameter("heightmap", Map);
-            dbClient.AddParameter("murheight", Room.GetGameMap().Model.MurHeight);
-            dbClient.RunQuery();
+            dbClient.RunQuery("INSERT INTO room_models_customs (room_id, door_x, door_y, door_z, door_dir, heightmap, wall_height) " +
+                "SELECT '" + roomId + "', door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = '" + oldRoomId + "'");
         }
-        internal static void Query8(IQueryAdapter dbClient)
+        
+        internal static DataRow GetOne(IQueryAdapter dbClient, int roomId)
         {
-            dbClient.SetQuery("SELECT door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = '" + roomID + "'");
-            row = dbClient.GetRow();
+            dbClient.SetQuery("SELECT door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = '" + roomId + "'");
+            return dbClient.GetRow();
         }
     }
 }

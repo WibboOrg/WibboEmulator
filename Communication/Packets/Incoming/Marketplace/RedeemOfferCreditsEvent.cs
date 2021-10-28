@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             DataTable Table = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `asking_price` FROM `catalog_marketplace_offers` WHERE `user_id` = '" + Session.GetHabbo().Id + "' AND `state` = '2'");
+                dbClient.SetQuery("SELECT asking_price FROM catalog_marketplace_offers WHERE user_id = '" + Session.GetHabbo().Id + "' AND state = '2'");
                 Table = dbClient.GetTable();
             }
 
@@ -32,7 +32,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.RunQuery("DELETE FROM `catalog_marketplace_offers` WHERE `user_id` = '" + Session.GetHabbo().Id + "' AND `state` = '2'");
+                        dbClient.RunQuery("DELETE FROM catalog_marketplace_offers WHERE user_id = '" + Session.GetHabbo().Id + "' AND state = '2'");
                         dbClient.RunQuery("UPDATE users SET vip_points = vip_points + '" + CreditsOwed + "' WHERE id = '" + Session.GetHabbo().Id + "'");
                     }
                 }

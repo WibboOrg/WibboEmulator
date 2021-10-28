@@ -20,36 +20,36 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             DataTable table = null;
             StringBuilder builder = new StringBuilder();
             string str = "";
-            builder.Append("WHERE `state` = '1' AND `timestamp` >= " + ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp().ToString());
+            builder.Append("WHERE state = '1' AND timestamp >= " + ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp().ToString());
             if (MinCost >= 0)
             {
-                builder.Append(" AND `total_price` > " + MinCost);
+                builder.Append(" AND total_price > " + MinCost);
             }
 
             if (MaxCost >= 0)
             {
-                builder.Append(" AND `total_price` < " + MaxCost);
+                builder.Append(" AND total_price < " + MaxCost);
             }
 
             switch (FilterMode)
             {
                 case 1:
-                    str = "ORDER BY `asking_price` DESC";
+                    str = "ORDER BY asking_price DESC";
                     break;
 
                 default:
-                    str = "ORDER BY `asking_price` ASC";
+                    str = "ORDER BY asking_price ASC";
                     break;
             }
 
             if (SearchQuery.Length >= 1)
             {
-                builder.Append(" AND `public_name` LIKE @search_query");
+                builder.Append(" AND public_name LIKE @search_query");
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `offer_id`, `item_type`, `sprite_id`, `total_price`, `limited_number`,`limited_stack` FROM `catalog_marketplace_offers` " + builder.ToString() + " " + str + " LIMIT 500");
+                dbClient.SetQuery("SELECT offer_id, item_type, sprite_id, total_price, limited_number,limited_stack FROM catalog_marketplace_offers " + builder.ToString() + " " + str + " LIMIT 500");
                 dbClient.AddParameter("search_query", SearchQuery.Replace("%", "\\%").Replace("_", "\\_") + "%");
                 table = dbClient.GetTable();
             }

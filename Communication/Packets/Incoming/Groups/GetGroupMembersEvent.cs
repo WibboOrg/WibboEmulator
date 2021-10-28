@@ -131,7 +131,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             DataTable MembresTable = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                MembresTable = AllDao.Query6(dbClient, groupeId, searchVal);
+                MembresTable = GuildRequestDao.GetAll(dbClient, groupeId, searchVal);
 
             foreach (DataRow row in MembresTable.Rows)
             {

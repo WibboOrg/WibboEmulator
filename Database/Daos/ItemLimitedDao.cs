@@ -5,14 +5,9 @@ namespace Butterfly.Database.Daos
 {
     class ItemLimitedDao
     {
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void Insert(IQueryAdapter dbClient, int itemId, int limitedNumber, int limitedStack)
         {
-            dbClient.RunQuery("INSERT INTO items_limited VALUES (" + Item.Id + "," + LimitedNumber + "," + LimitedStack + ")");
-        }
-
-        internal static void Query8(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("INSERT INTO items_limited VALUES (" + ItemId + "," + LimitedNumber + "," + LimitedStack + ")");
+            dbClient.RunQuery("INSERT INTO items_limited VALUES (" + itemId + "," + limitedNumber + "," + limitedStack + ")");
         }
     }
 }

@@ -103,7 +103,7 @@ namespace Butterfly.HabboHotel.Users.UserData
                         row2 = dbClient.GetRow();
                     }
 
-                    dbClient.SetQuery("SELECT `group`, `level`, `progress` FROM user_achievement WHERE user_id = '" + userId + "';");
+                    dbClient.SetQuery("SELECT group, level, progress FROM user_achievement WHERE user_id = '" + userId + "';");
                     Achievement = dbClient.GetTable();
 
                     dbClient.SetQuery("SELECT room_id FROM user_favorites WHERE user_id = '" + userId + "';");

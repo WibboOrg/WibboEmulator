@@ -49,7 +49,7 @@ namespace Butterfly.HabboHotel.WebClients
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                bool isBanned = BanDao.IsBanned(dbClient, ButterflyEnvironment.GetUnixTimestamp(), ip);
+                bool isBanned = BanDao.IsBannedByIP(dbClient, ButterflyEnvironment.GetUnixTimestamp(), ip);
 
                 if (isBanned)
                 {
