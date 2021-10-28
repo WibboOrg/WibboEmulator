@@ -6,7 +6,7 @@ namespace Butterfly.Database.Daos
 {
     class WordFilterRetroDao
     {
-        internal static DataTable Query8(IQueryAdapter dbClient)
+        internal static DataTable GetAll(IQueryAdapter dbClient)
         {
             dbClient.SetQuery("SELECT word FROM word_filter_retro");
             return dbClient.GetTable();

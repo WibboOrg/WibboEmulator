@@ -24,7 +24,7 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void UpdateModel(IQueryAdapter dbClient, int roomId, int wallThick, int floorThick)
+        internal static void UpdateModelWallThickFloorThick(IQueryAdapter dbClient, int roomId, int wallThick, int floorThick)
         {
             dbClient.RunQuery("UPDATE rooms SET model_name = 'model_custom', wallthick = '" + wallThick + "', floorthick = '" + floorThick + "' WHERE id = " + roomId + " LIMIT 1");
         }
@@ -34,7 +34,7 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery("DELETE FROM rooms WHERE id = '" + roomId + "'");
         }
 
-        internal static void UpdateAll(IQueryAdapter dbClient, int roomId, string name, string description, string password, string tags, int categoryId, int state, int maxUsers, bool allowPets, bool allowPetsEat, bool allowWalkthrough, bool hidewall, , int floorThickness, int wallThickness, int mutefuse, int kickfuse, int banfuse, int chatType, int chatBalloon, int chatSpeed, int chatMaxDistance, int chatFloodProtection, int trocStatus)
+        internal static void UpdateAll(IQueryAdapter dbClient, int roomId, string name, string description, string password, string tags, int categoryId, int state, int maxUsers, bool allowPets, bool allowPetsEat, bool allowWalkthrough, bool hidewall, int floorThickness, int wallThickness, int mutefuse, int kickfuse, int banfuse, int chatType, int chatBalloon, int chatSpeed, int chatMaxDistance, int chatFloodProtection, int trocStatus)
         {
             dbClient.SetQuery("UPDATE rooms SET caption = @caption, description = @description, password = @password, category = '" + categoryId + "', state = '" + state + "', tags = @tags, users_max = '" + maxUsers + "', allow_pets = '" + (allowPets ? 1 : 0) + "', allow_pets_eat = '" + (allowPetsEat ? 1 : 0) + "', allow_walkthrough = '" + (allowWalkthrough ? 1 : 0) + "', allow_hidewall = '" + (hidewall ? 1 : 0) + "', floorthick = '" + floorThickness + "', wallthick = '" + wallThickness + "', moderation_mute_fuse = '" + mutefuse + "', moderation_kick_fuse = '" + kickfuse + "', moderation_ban_fuse = '" + banfuse + "', chat_type = '" + chatType + "', chat_balloon = '" + chatBalloon + "', chat_speed = '" + chatSpeed + "', chat_max_distance = '" + chatMaxDistance + "', chat_flood_protection = '" + chatFloodProtection + "', troc_status = '" + trocStatus + "' WHERE id = '" + roomId + "'");
             dbClient.AddParameter("caption", name);
@@ -52,7 +52,7 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static DataTable GetAllByOwner(IQueryAdapter dbClient)
+        internal static DataTable GetAllByOwnerWibboGame(IQueryAdapter dbClient)
         {
             dbClient.SetQuery("SELECT id FROM rooms WHERE owner = 'WibboGame'");
 
@@ -95,7 +95,7 @@ namespace Butterfly.Database.Daos
             return Convert.ToInt32(dbClient.InsertQuery());
         }
 
-        internal static void Query8(IQueryAdapter dbClient, int roomId)
+        internal static void UpdateModel(IQueryAdapter dbClient, int roomId)
         {
             dbClient.RunQuery("UPDATE rooms SET model_name = 'model_custom' WHERE id = '" + roomId + "' LIMIT 1");
         }
@@ -105,79 +105,69 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery("UPDATE rooms SET allow_hidewireds = '" + (hideWireds ? 1 : 0) + "' WHERE id = '" + roomId + "'");
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void UpdateOwner(IQueryAdapter dbClient, int roomId, string username)
         {
-            dbClient.RunQuery("UPDATE rooms SET model_name = 'model_custom' WHERE id = '" + Room.Id + "' LIMIT 1");
-        }
-
-        internal static void Query8(IQueryAdapter dbClient)
-        {
-            dbClient.SetQuery("UPDATE rooms SET owner = @newowner WHERE id = '" + Room.Id + "'");
-            dbClient.AddParameter("newowner", Session.GetHabbo().Username);
+            dbClient.SetQuery("UPDATE rooms SET owner = @newowner WHERE id = '" + roomId + "'");
+            dbClient.AddParameter("newowner", username);
             dbClient.RunQuery();
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void UpdatePrice0(IQueryAdapter dbClient, int roomId)
         {
-            dbClient.RunQuery("UPDATE rooms SET price = '0' WHERE id = '" + Room.Id + "' LIMIT 1");
+            dbClient.RunQuery("UPDATE rooms SET price = '0' WHERE id = '" + roomId + "' LIMIT 1");
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("UPDATE rooms SET price = '0' WHERE id = '" + Room.Id + "' LIMIT 1");
-        }
-
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void UpdatePrice(IQueryAdapter dbClient, int roomId, int price)
         {
             dbClient.SetQuery("UPDATE rooms SET price= @price WHERE id = @roomid LIMIT 1");
-            dbClient.AddParameter("roomid", Room.Id);
-            dbClient.AddParameter("price", Prix);
+            dbClient.AddParameter("roomid", roomId);
+            dbClient.AddParameter("price", price);
             dbClient.RunQuery();
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void UpdateUsersMax(IQueryAdapter dbClient, int roomId, int maxUsers)
         {
-            dbClient.RunQuery("UPDATE rooms SET users_max = '" + MaxUsers + "' WHERE id = '" + this.Id + "'");
+            dbClient.RunQuery("UPDATE rooms SET users_max = '" + maxUsers + "' WHERE id = '" + roomId + "'");
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static DataRow GetOne(IQueryAdapter dbClient, int roomId)
         {
-            dbClient.SetQuery("SELECT * FROM rooms WHERE id = '" + RoomId + "'");
-            Row = dbClient.GetRow();
+            dbClient.SetQuery("SELECT * FROM rooms WHERE id = '" + roomId + "'");
+            return dbClient.GetRow();
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static int Insert(IQueryAdapter dbClient, string name, string desc, string username, string model, int category, int maxVisitors, int tradeSettings)
         {
-            dbClient.SetQuery("INSERT INTO rooms (caption,description,owner,model_name,category,users_max,troc_status) VALUES (@caption, @desc, @username, @model, @cat, @usmax, '" + TradeSettings + "')");
-            dbClient.AddParameter("caption", Name);
-            dbClient.AddParameter("desc", Desc);
-            dbClient.AddParameter("username", Session.GetHabbo().Username);
-            dbClient.AddParameter("model", Model);
-            dbClient.AddParameter("cat", Category);
-            dbClient.AddParameter("usmax", MaxVisitors);
-            RoomId = Convert.ToInt32(dbClient.InsertQuery());
+            dbClient.SetQuery("INSERT INTO rooms (caption,description,owner,model_name,category,users_max,troc_status) VALUES (@caption, @desc, @username, @model, @cat, @usmax, '" + tradeSettings + "')");
+            dbClient.AddParameter("caption", name);
+            dbClient.AddParameter("desc", desc);
+            dbClient.AddParameter("username", username);
+            dbClient.AddParameter("model", model);
+            dbClient.AddParameter("cat", category);
+            dbClient.AddParameter("usmax", maxVisitors);
+            return Convert.ToInt32(dbClient.InsertQuery());
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void UpdateUsersNow(IQueryAdapter dbClient, int roomId, int count)
         {
-            dbClient.RunQuery("UPDATE rooms SET users_now = '" + count + "' WHERE id = '" + this._room.Id + "'");
+            dbClient.RunQuery("UPDATE rooms SET users_now = '" + count + "' WHERE id = '" + roomId + "'");
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void UpdateState(IQueryAdapter dbClient, int roomId)
         {
-            dbClient.RunQuery("UPDATE rooms SET state = 'locked' WHERE id = '" + room.Id + "'");
+            dbClient.RunQuery("UPDATE rooms SET state = 'locked' WHERE id = '" + roomId + "'");
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void UpdateCaptionDesc(IQueryAdapter dbClient, int roomId)
         {
-            dbClient.RunQuery("UPDATE rooms SET caption = 'Cet appart ne respect par les conditions dutilisation', description = 'Cet appart ne respect par les conditions dutilisation', tags = '' WHERE id = '" + room.Id + "'");
+            dbClient.RunQuery("UPDATE rooms SET caption = 'Cet appart ne respect par les conditions dutilisation', description = 'Cet appart ne respect par les conditions dutilisation', tags = '' WHERE id = '" + roomId + "'");
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static DataTable GetAllByOwner(IQueryAdapter dbClient, string username)
         {
             dbClient.SetQuery("SELECT * FROM rooms WHERE owner = @name ORDER BY id ASC");
-            dbClient.AddParameter("name", this.Username);
-            table = dbClient.GetTable();
+            dbClient.AddParameter("name", username);
+            return dbClient.GetTable();
         }
     }
 }

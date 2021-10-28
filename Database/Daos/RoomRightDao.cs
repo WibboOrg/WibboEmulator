@@ -1,3 +1,4 @@
+using System.Data;
 using Butterfly.Database;
 using Butterfly.Database.Interfaces;
 
@@ -5,44 +6,34 @@ namespace Butterfly.Database.Daos
 {
     class RoomRightDao
     {
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void Insert(IQueryAdapter dbClient, int roomId, int userId)
         {
-            dbClient.RunQuery("INSERT INTO room_rights (room_id, user_id) VALUES ('" + room.Id + "', '" + UserId + "')");
+            dbClient.RunQuery("INSERT INTO room_rights (room_id, user_id) VALUES ('" + roomId + "', '" + userId + "')");
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void Delete(IQueryAdapter dbClient, int roomId)
         {
-            dbClient.RunQuery("DELETE FROM room_rights WHERE room_id = '" + room.Id + "'");
+            dbClient.RunQuery("DELETE FROM room_rights WHERE room_id = '" + roomId + "'");
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void Delete(IQueryAdapter dbClient, int roomId, int userId)
         {
             dbClient.SetQuery("DELETE FROM room_rights WHERE user_id = @uid AND room_id = @rid LIMIT 1");
-            dbClient.AddParameter("uid", Session.GetHabbo().Id);
-            dbClient.AddParameter("rid", Room.Id);
+            dbClient.AddParameter("uid", userId);
+            dbClient.AddParameter("rid", roomId);
             dbClient.RunQuery();
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static DataTable GetAllByRoomId(IQueryAdapter dbClient, int roomId)
         {
-            dbClient.RunQuery("DELETE FROM room_rights WHERE room_id = '" + RoomId + "'");
+            dbClient.SetQuery("SELECT room_rights.user_id FROM room_rights WHERE room_id = '" + roomId + "'");
+            return dbClient.GetTable();
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM room_rights WHERE room_id = '" + Room.Id + "'");
-        }
-
-        internal static void Query8(IQueryAdapter dbClient)
-        {
-            dbClient.SetQuery("SELECT room_rights.user_id FROM room_rights WHERE room_id = '" + this.RoomData.Id + "'");
-            dataTable = dbClient.GetTable();
-        }
-
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId)
         {
             dbClient.SetQuery("SELECT room_id FROM room_rights WHERE user_id = '" + userId + "';");
-            RoomRights = dbClient.GetTable();
+            return dbClient.GetTable();
         }
     }
 }

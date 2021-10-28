@@ -7,7 +7,7 @@ namespace Butterfly.Database.Daos
 {
     class UserWardrobeDao
     {
-        internal static void InsertLook(IQueryAdapter dbClient, int userId, int slotId, string look, string gender)
+        internal static void Insert(IQueryAdapter dbClient, int userId, int slotId, string look, string gender)
         {
             dbClient.SetQuery("SELECT null FROM user_wardrobe WHERE user_id = '" + userId + "' AND slot_id = '" + slotId + "';");
             dbClient.AddParameter("look", look);
