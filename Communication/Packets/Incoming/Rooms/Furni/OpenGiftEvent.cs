@@ -104,7 +104,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 dbClient.SetQuery("UPDATE `items` SET `base_item` = @BaseItem, `extra_data` = @edata WHERE `id` = @itemId LIMIT 1");
                 dbClient.AddParameter("itemId", Present.Id);
                 dbClient.AddParameter("BaseItem", Row["base_id"]);
-                dbClient.AddParameter("edata", Row"extr_data]);
+                dbClient.AddParameter("edata", Row["extr_data"]);
                 dbClient.RunQuery();
 
                 dbClient.RunQuery("DELETE FROM `user_presents` WHERE `item_id` = " + Present.Id + " LIMIT 1");

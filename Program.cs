@@ -39,7 +39,7 @@ namespace Butterfly
             Logging.DisablePrimaryWriting(true);
             Logging.LogCriticalException("SYSTEM CRITICAL EXCEPTION: " + ((Exception)args.ExceptionObject).ToString());
 
-            ButterflyEnvironment.PreformShutDown(true);
+            ButterflyEnvironment.PreformShutDown();
         }
     }
 }

@@ -38,11 +38,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                AllDao.Query1(dbClient, Group.Id);
-                AllDao.Query2(dbClient, Group.Id);
-                AllDao.Query3(dbClient, Group.Id);
-                AllDao.Query4(dbClient, Group.Id);
-                AllDao.Query5(dbClient, Group.Id);
+                GuildDao.Delete(dbClient, Group.Id);
+                GuildMembershipDao.Delete(dbClient, Group.Id);
+                GuildRequestDao.Delete(dbClient, Group.Id);
+                RoomDao.UpdateGroupId(dbClient, Group.Id);
+                UserStatsDao.UpdateRemoveAllGroupId(dbClient, Group.Id);
             }
 
             ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);

@@ -450,8 +450,6 @@ namespace Butterfly
 
             Thread.Sleep(1000);
             Environment.Exit(0);
-
-
         }
 
         public static string TimeSpanToString(TimeSpan span)
