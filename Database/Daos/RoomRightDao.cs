@@ -14,6 +14,7 @@ namespace Butterfly.Database.Daos
         {
             dbClient.RunQuery("DELETE FROM room_rights WHERE room_id = '" + room.Id + "'");
         }
+
         internal static void Query8(IQueryAdapter dbClient)
         {
             dbClient.SetQuery("DELETE FROM room_rights WHERE user_id = @uid AND room_id = @rid LIMIT 1");
@@ -37,7 +38,6 @@ namespace Butterfly.Database.Daos
             dbClient.SetQuery("SELECT room_rights.user_id FROM room_rights WHERE room_id = '" + this.RoomData.Id + "'");
             dataTable = dbClient.GetTable();
         }
-
 
         internal static void Query8(IQueryAdapter dbClient)
         {

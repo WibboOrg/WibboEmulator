@@ -1,14 +1,14 @@
-using Butterfly.Database;
+using System.Data;
 using Butterfly.Database.Interfaces;
 
 namespace Butterfly.Database.Daos
 {
     class EmulatorHotelviewPromoDao
     {
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static DataTable GetAll(IQueryAdapter dbClient)
         {
-            DbClient.SetQuery("SELECT * from hotelview_promos WHERE enabled = '1' ORDER BY index ASC");
-            DataTable dTable = DbClient.GetTable();
+            dbClient.SetQuery("SELECT * from hotelview_promos WHERE enabled = '1' ORDER BY index ASC");
+            return dbClient.GetTable();
         }
     }
 }

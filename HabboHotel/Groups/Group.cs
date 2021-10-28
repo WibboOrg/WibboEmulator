@@ -66,7 +66,7 @@ namespace Butterfly.HabboHotel.Groups
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 DataTable GetMembers = null;
-                dbClient.SetQuery("SELECT `user_id`, `rank` FROM `group_memberships` WHERE `group_id` = @id");
+                dbClient.SetQuery("SELECT user_id, rank FROM group_memberships WHERE group_id = @id");
                 dbClient.AddParameter("id", this.Id);
                 GetMembers = dbClient.GetTable();
 
@@ -95,7 +95,7 @@ namespace Butterfly.HabboHotel.Groups
                 }
 
                 DataTable GetRequests = null;
-                dbClient.SetQuery("SELECT `user_id` FROM `group_requests` WHERE `group_id` = @id");
+                dbClient.SetQuery("SELECT user_id FROM group_requests WHERE group_id = @id");
                 dbClient.AddParameter("id", this.Id);
                 GetRequests = dbClient.GetTable();
 
@@ -107,7 +107,7 @@ namespace Butterfly.HabboHotel.Groups
 
                         if (this._members.Contains(UserId) || this._administrators.Contains(UserId))
                         {
-                            dbClient.RunQuery("DELETE FROM `group_requests` WHERE `group_id` = '" + this.Id + "' AND `user_id` = '" + UserId + "'");
+                            dbClient.RunQuery("DELETE FROM group_requests WHERE group_id = '" + this.Id + "' AND user_id = '" + UserId + "'");
                         }
                         else if (!this._requests.Contains(UserId))
                         {
@@ -170,7 +170,7 @@ namespace Butterfly.HabboHotel.Groups
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE group_memberships SET `rank` = '1' WHERE `user_id` = @uid AND `group_id` = @gid LIMIT 1");
+                dbClient.SetQuery("UPDATE group_memberships SET rank = '1' WHERE user_id = @uid AND group_id = @gid LIMIT 1");
                 dbClient.AddParameter("gid", this.Id);
                 dbClient.AddParameter("uid", Id);
                 dbClient.RunQuery();
@@ -193,7 +193,7 @@ namespace Butterfly.HabboHotel.Groups
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE group_memberships SET `rank` = '0' WHERE user_id = @uid AND group_id = @gid");
+                dbClient.SetQuery("UPDATE group_memberships SET rank = '0' WHERE user_id = @uid AND group_id = @gid");
                 dbClient.AddParameter("gid", this.Id);
                 dbClient.AddParameter("uid", UserId);
                 dbClient.RunQuery();
@@ -206,13 +206,13 @@ namespace Butterfly.HabboHotel.Groups
             {
                 if (this.IsAdmin(Id))
                 {
-                    dbClient.SetQuery("UPDATE `group_memberships` SET `rank` = '0' WHERE user_id = @uid AND group_id = @gid");
+                    dbClient.SetQuery("UPDATE group_memberships SET rank = '0' WHERE user_id = @uid AND group_id = @gid");
                     this._administrators.Remove(Id);
                     this._members.Add(Id);
                 }
                 else if (this.GroupType == GroupType.LOCKED)
                 {
-                    dbClient.SetQuery("INSERT INTO `group_requests` (user_id, group_id) VALUES (@uid, @gid)");
+                    dbClient.SetQuery("INSERT INTO group_requests (user_id, group_id) VALUES (@uid, @gid)");
                     if (!this._requests.Contains(Id))
                     {
                         this._requests.Add(Id);
@@ -220,7 +220,7 @@ namespace Butterfly.HabboHotel.Groups
                 }
                 else
                 {
-                    dbClient.SetQuery("INSERT INTO `group_memberships` (user_id, group_id) VALUES (@uid, @gid)");
+                    dbClient.SetQuery("INSERT INTO group_memberships (user_id, group_id) VALUES (@uid, @gid)");
                     if (!this._members.Contains(Id))
                     {
                         this._members.Add(Id);

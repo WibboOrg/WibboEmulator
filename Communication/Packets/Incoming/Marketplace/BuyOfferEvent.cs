@@ -23,7 +23,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             DataRow Row = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `state`,`timestamp`,`total_price`,`extra_data`,`item_id`,`furni_id`,`user_id`,`limited_number`,`limited_stack` FROM `catalog_marketplace_offers` WHERE `offer_id` = @OfferId LIMIT 1");
+                dbClient.SetQuery("SELECT state,timestamp,total_price,extra_data,item_id,furni_id,user_id,limited_number,limited_stack FROM catalog_marketplace_offers WHERE offer_id = @OfferId LIMIT 1");
                 dbClient.AddParameter("OfferId", OfferId);
                 Row = dbClient.GetRow();
             }
@@ -88,19 +88,19 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE `catalog_marketplace_offers` SET `state` = '2' WHERE `offer_id` = '" + OfferId + "' LIMIT 1");
+                    dbClient.RunQuery("UPDATE catalog_marketplace_offers SET state = '2' WHERE offer_id = '" + OfferId + "' LIMIT 1");
 
                     int Id = 0;
-                    dbClient.SetQuery("SELECT `id` FROM `catalog_marketplace_data` WHERE `sprite` = " + Item.SpriteId + " LIMIT 1;");
+                    dbClient.SetQuery("SELECT id FROM catalog_marketplace_data WHERE sprite = " + Item.SpriteId + " LIMIT 1;");
                     Id = dbClient.GetInteger();
 
                     if (Id > 0)
                     {
-                        dbClient.RunQuery("UPDATE `catalog_marketplace_data` SET `sold` = `sold` + 1, `avgprice` = (avgprice + " + Convert.ToInt32(Row["total_price"]) + ") WHERE `id` = " + Id + " LIMIT 1;");
+                        dbClient.RunQuery("UPDATE catalog_marketplace_data SET sold = sold + 1, avgprice = (avgprice + " + Convert.ToInt32(Row["total_price"]) + ") WHERE id = " + Id + " LIMIT 1;");
                     }
                     else
                     {
-                        dbClient.RunQuery("INSERT INTO `catalog_marketplace_data` (`sprite`, `sold`, `avgprice`) VALUES ('" + Item.SpriteId + "', '1', '" + Convert.ToInt32(Row["total_price"]) + "')");
+                        dbClient.RunQuery("INSERT INTO catalog_marketplace_data (sprite, sold, avgprice) VALUES ('" + Item.SpriteId + "', '1', '" + Convert.ToInt32(Row["total_price"]) + "')");
                     }
 
                     if (ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.ContainsKey(Item.SpriteId) && ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(Item.SpriteId))
@@ -141,34 +141,34 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             DataTable table = null;
             StringBuilder builder = new StringBuilder();
             string str = "";
-            builder.Append("WHERE `state` = '1' AND `timestamp` >= " + ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp().ToString());
+            builder.Append("WHERE state = '1' AND timestamp >= " + ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp().ToString());
             if (MinCost >= 0)
             {
-                builder.Append(" AND `total_price` > " + MinCost);
+                builder.Append(" AND total_price > " + MinCost);
             }
             if (MaxCost >= 0)
             {
-                builder.Append(" AND `total_price` < " + MaxCost);
+                builder.Append(" AND total_price < " + MaxCost);
             }
             switch (FilterMode)
             {
                 case 1:
-                    str = "ORDER BY `asking_price` DESC";
+                    str = "ORDER BY asking_price DESC";
                     break;
 
                 default:
-                    str = "ORDER BY `asking_price` ASC";
+                    str = "ORDER BY asking_price ASC";
                     break;
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
 
-                dbClient.SetQuery("SELECT `offer_id`,`item_type`,`sprite_id`,`total_price`,`limited_number`,`limited_stack` FROM `catalog_marketplace_offers` " + builder.ToString() + " " + str + " LIMIT 500");
+                dbClient.SetQuery("SELECT offer_id,item_type,sprite_id,total_price,limited_number,limited_stack FROM catalog_marketplace_offers " + builder.ToString() + " " + str + " LIMIT 500");
                 dbClient.AddParameter("search_query", SearchQuery.Replace("%", "\\%").Replace("_", "\\_") + "%");
                 if (SearchQuery.Length >= 1)
                 {
-                    builder.Append(" AND `public_name` LIKE @search_query");
+                    builder.Append(" AND public_name LIKE @search_query");
                 }
                 table = dbClient.GetTable();
             }

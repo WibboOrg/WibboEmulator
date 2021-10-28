@@ -5,9 +5,9 @@ namespace Butterfly.Database.Daos
 {
     class EmulatorStatsDao
     {
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void Insert(IQueryAdapter dbClient, int usersOnline, int roomsLoaded)
         {
-            dbClient.RunQuery("INSERT INTO system_stats (online, time, room) VALUES ('" + UsersOnline + "', UNIX_TIMESTAMP(), '" + RoomsLoaded + "')");
+            dbClient.RunQuery("INSERT INTO system_stats (online, time, room) VALUES ('" + usersOnline + "', UNIX_TIMESTAMP(), '" + roomsLoaded + "')");
         }
     }
 }

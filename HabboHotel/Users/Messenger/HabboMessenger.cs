@@ -347,7 +347,7 @@ namespace Butterfly.HabboHotel.Users.Messenger
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("INSERT INTO `messenger_offline_messages` (`to_id`, `from_id`, `message`, `timestamp`) VALUES (@tid, @fid, @msg, UNIX_TIMESTAMP())");
+                    dbClient.SetQuery("INSERT INTO messenger_offline_messages (to_id, from_id, message, timestamp) VALUES (@tid, @fid, @msg, UNIX_TIMESTAMP())");
                     dbClient.AddParameter("tid", ToId);
                     dbClient.AddParameter("fid", this.GetClient().GetHabbo().Id);
                     dbClient.AddParameter("msg", Message);
@@ -443,7 +443,7 @@ namespace Butterfly.HabboHotel.Users.Messenger
             DataTable GetMessages = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM `messenger_offline_messages` WHERE `to_id` = @id");
+                dbClient.SetQuery("SELECT * FROM messenger_offline_messages WHERE to_id = @id");
                 dbClient.AddParameter("id", this.UserId);
                 GetMessages = dbClient.GetTable();
 
@@ -460,7 +460,7 @@ namespace Butterfly.HabboHotel.Users.Messenger
                         Client.SendPacket(new NewConsoleMessageComposer(Convert.ToInt32(Row["from_id"]), Convert.ToString(Row["message"]), (ButterflyEnvironment.GetUnixTimestamp() - Convert.ToInt32(Row["timestamp"]))));
                     }
 
-                    dbClient.SetQuery("DELETE FROM `messenger_offline_messages` WHERE `to_id` = @id");
+                    dbClient.SetQuery("DELETE FROM messenger_offline_messages WHERE to_id = @id");
                     dbClient.AddParameter("id", this.UserId);
                     dbClient.RunQuery();
                 }

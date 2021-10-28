@@ -43,7 +43,7 @@ namespace Butterfly.HabboHotel.Roleplay
                 DataRow dRow = dbClient.GetRow();
                 if (dRow == null)
                 {
-                    dbClient.RunQuery("INSERT INTO `user_rp` (`user_id`, `roleplay_id`) VALUES ('" + UserId + "', '" + this._id + "')");
+                    dbClient.RunQuery("INSERT INTO user_rp (user_id, roleplay_id) VALUES ('" + UserId + "', '" + this._id + "')");
                     player = new RolePlayer(this._id, UserId, 100, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0);
                 }
                 else

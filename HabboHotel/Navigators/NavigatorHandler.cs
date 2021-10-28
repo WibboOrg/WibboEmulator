@@ -33,7 +33,7 @@ namespace Butterfly.HabboHotel.Navigators
                                 {
                                     if (SearchData.ToLower().StartsWith("owner:"))
                                     {
-                                        dbClient.SetQuery("SELECT * FROM `rooms` WHERE `owner` = @username and `state` != 'invisible' ORDER BY `users_now` DESC");
+                                        dbClient.SetQuery("SELECT * FROM rooms WHERE owner = @username and state != 'invisible' ORDER BY users_now DESC");
                                         dbClient.AddParameter("username", SearchData.Remove(0, 6));
                                         GetRooms = dbClient.GetTable();
                                     }

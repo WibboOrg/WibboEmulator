@@ -54,7 +54,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE `bots` SET `room_id` = '0' WHERE `id` = @id LIMIT 1");
+                dbClient.SetQuery("UPDATE bots SET room_id = '0' WHERE id = @id LIMIT 1");
                 dbClient.AddParameter("id", BotId);
                 dbClient.RunQuery();
             }

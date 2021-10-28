@@ -1,3 +1,4 @@
+using System.Data;
 using Butterfly.Database;
 using Butterfly.Database.Interfaces;
 
@@ -5,16 +6,16 @@ namespace Butterfly.Database.Daos
 {
     class UserPresentsDao
     {
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static DataRow GetOne(IQueryAdapter dbClient, int itemId)
         {
             dbClient.SetQuery("SELECT base_id,extra_data FROM user_presents WHERE item_id = @presentId LIMIT 1");
-            dbClient.AddParameter("presentId", Present.Id);
-            Data = dbClient.GetRow();
+            dbClient.AddParameter("presentId", itemId);
+            return dbClient.GetRow();
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void Delete(IQueryAdapter dbClient, int itemId)
         {
-            dbClient.RunQuery("DELETE FROM user_presents WHERE item_id = '" + Present.Id + "' LIMIT 1");
+            dbClient.RunQuery("DELETE FROM user_presents WHERE item_id = '" + itemId + "' LIMIT 1");
         }
     }
 }

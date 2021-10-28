@@ -38,7 +38,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE `groups` SET `colour1` = @colour1, `colour2` = @colour2 WHERE `id` = @groupId LIMIT 1");
+                dbClient.SetQuery("UPDATE groups SET colour1 = @colour1, colour2 = @colour2 WHERE id = @groupId LIMIT 1");
                 dbClient.AddParameter("colour1", Colour1);
                 dbClient.AddParameter("colour2", Colour2);
                 dbClient.AddParameter("groupId", Group.Id);

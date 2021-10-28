@@ -1,6 +1,7 @@
 ﻿using Butterfly.Database;
 using Butterfly.Database.Interfaces;
 using System;
+using System.Data;
 
 namespace Butterfly.Database.Daos
 {
@@ -27,17 +28,16 @@ namespace Butterfly.Database.Daos
             }
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static DataTable GetAll(IQueryAdapter dbClient, int userId)
         {
-            dbClient.SetQuery("SELECT slot_id,look,gender FROM user_wardrobe WHERE user_id = '" + Session.GetHabbo().Id + "' LIMIT 24");
-            DataTable WardrobeData = dbClient.GetTable();
+            dbClient.SetQuery("SELECT slot_id,look,gender FROM user_wardrobe WHERE user_id = '" + userId + "' LIMIT 24");
+            return dbClient.GetTable();
         }
 
-
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static string GetOneRandomLook(IQueryAdapter dbClient)
         {
             dbClient.SetQuery("SELECT look FROM user_wardrobe WHERE user_id IN (SELECT user_id FROM (SELECT user_id FROM user_wardrobe WHERE user_id >= ROUND(RAND() * (SELECT max(user_id) FROM user_wardrobe)) LIMIT 1) tmp) ORDER BY RAND() LIMIT 1");
-            Session.GetHabbo().Look = dbClient.GetString();
+            return dbClient.GetString();
         }
     }
 }

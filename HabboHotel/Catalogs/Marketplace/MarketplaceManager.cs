@@ -34,10 +34,10 @@ namespace Butterfly.HabboHotel.Catalog.Marketplace
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `avgprice` FROM `catalog_marketplace_data` WHERE `sprite` = '" + SpriteID + "' LIMIT 1");
+                dbClient.SetQuery("SELECT avgprice FROM catalog_marketplace_data WHERE sprite = '" + SpriteID + "' LIMIT 1");
                 num = dbClient.GetInteger();
 
-                dbClient.SetQuery("SELECT `sold` FROM `catalog_marketplace_data` WHERE `sprite` = '" + SpriteID + "' LIMIT 1");
+                dbClient.SetQuery("SELECT sold FROM catalog_marketplace_data WHERE sprite = '" + SpriteID + "' LIMIT 1");
                 num2 = dbClient.GetInteger();
             }
 

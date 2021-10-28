@@ -23,7 +23,7 @@ namespace Butterfly.HabboHotel.LandingView
 
             using (IQueryAdapter DbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                DbClient.SetQuery("SELECT * from hotelview_promos WHERE hotelview_promos.enabled = '1' ORDER BY hotelview_promos.`index` ASC");
+                DbClient.SetQuery("SELECT * from hotelview_promos WHERE hotelview_promos.enabled = '1' ORDER BY hotelview_promos.index ASC");
                 DataTable dTable = DbClient.GetTable();
 
                 foreach (DataRow dRow in dTable.Rows)

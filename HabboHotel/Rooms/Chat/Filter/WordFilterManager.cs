@@ -32,7 +32,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Filter
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT word FROM `room_swearword_filter`");
+                dbClient.SetQuery("SELECT word FROM room_swearword_filter");
                 DataTable Data = dbClient.GetTable();
 
                 if (Data != null)
@@ -43,7 +43,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Filter
                     }
                 }
 
-                dbClient.SetQuery("SELECT word FROM `word_filter_retro`");
+                dbClient.SetQuery("SELECT word FROM word_filter_retro");
                 DataTable Data2 = dbClient.GetTable();
 
                 if (Data2 != null)

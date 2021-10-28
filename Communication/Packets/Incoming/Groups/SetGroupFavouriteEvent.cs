@@ -31,7 +31,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.GetHabbo().FavouriteGroupId = Group.Id;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE `user_stats` SET `group_id` = @groupId WHERE `id` = @userId LIMIT 1");
+                dbClient.SetQuery("UPDATE user_stats SET group_id = @groupId WHERE id = @userId LIMIT 1");
                 dbClient.AddParameter("groupId", Session.GetHabbo().FavouriteGroupId);
                 dbClient.AddParameter("userId", Session.GetHabbo().Id);
                 dbClient.RunQuery();

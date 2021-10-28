@@ -22,7 +22,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `furni_id`, `item_id`, `user_id`, `extra_data`, `offer_id`, `state`, `timestamp`, `limited_number`, `limited_stack` FROM `catalog_marketplace_offers` WHERE `offer_id` = @OfferId LIMIT 1");
+                dbClient.SetQuery("SELECT furni_id, item_id, user_id, extra_data, offer_id, state, timestamp, limited_number, limited_stack FROM catalog_marketplace_offers WHERE offer_id = @OfferId LIMIT 1");
                 dbClient.AddParameter("OfferId", OfferId);
                 Row = dbClient.GetRow();
             }
@@ -53,7 +53,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("DELETE FROM `catalog_marketplace_offers` WHERE `offer_id` = @OfferId AND `user_id` = @UserId LIMIT 1");
+                dbClient.SetQuery("DELETE FROM catalog_marketplace_offers WHERE offer_id = @OfferId AND user_id = @UserId LIMIT 1");
                 dbClient.AddParameter("OfferId", OfferId);
                 dbClient.AddParameter("UserId", Session.GetHabbo().Id);
                 dbClient.RunQuery();

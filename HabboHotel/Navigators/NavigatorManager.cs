@@ -43,7 +43,7 @@ namespace Butterfly.HabboHotel.Navigators
             {
                 DataTable Table = null;
 
-                dbClient.SetQuery("SELECT * FROM `navigator_categories` ORDER BY `id` ASC");
+                dbClient.SetQuery("SELECT * FROM navigator_categories ORDER BY id ASC");
                 Table = dbClient.GetTable();
 
                 if (Table != null)
@@ -60,7 +60,7 @@ namespace Butterfly.HabboHotel.Navigators
                     }
                 }
 
-                dbClient.SetQuery("SELECT `room_id`,`image_url`,`enabled`, `langue`, `game` FROM `navigator_publics` ORDER BY `order_num` ASC");
+                dbClient.SetQuery("SELECT room_id,image_url,enabled, langue, game FROM navigator_publics ORDER BY order_num ASC");
                 DataTable GetPublics = dbClient.GetTable();
 
                 if (GetPublics != null)

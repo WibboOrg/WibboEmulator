@@ -1,3 +1,4 @@
+using System.Data;
 using Butterfly.Database;
 using Butterfly.Database.Interfaces;
 
@@ -5,27 +6,30 @@ namespace Butterfly.Database.Daos
 {
     class UserQuestDao
     {
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static void Update(IQueryAdapter dbClient)
         {
             dbClient.RunQuery("UPDATE user_quests SET progress = '" + num + "' WHERE user_id = '" + Session.GetHabbo().Id + "' AND quest_id = '" + quest.Id + "'");
         }
-        internal static void Query8(IQueryAdapter dbClient)
+
+        internal static void Replace(IQueryAdapter dbClient)
         {
             dbClient.RunQuery("REPLACE INTO user_quests VALUES (" + Session.GetHabbo().Id + ", " + quest.Id + ", 0)");
         }
-        internal static void Query8(IQueryAdapter dbClient)
+
+        internal static void Replace(IQueryAdapter dbClient)
         {
             dbClient.RunQuery("REPLACE INTO user_quests VALUES (" + Session.GetHabbo().Id + ", " + nextQuestInSeries.Id + ", 0)");
         }
-        internal static void Query8(IQueryAdapter dbClient)
+
+        internal static void Delete(IQueryAdapter dbClient)
         {
             dbClient.RunQuery("DELETE FROM user_quests WHERE user_id = '" + Session.GetHabbo().Id + "' AND quest_id = '" + quest.Id + "'");
         }
 
-        internal static void Query8(IQueryAdapter dbClient)
+        internal static DataTable GetAll(IQueryAdapter dbClient, int userId)
         {
             dbClient.SetQuery("SELECT * FROM user_quests WHERE user_id = '" + userId + "';");
-            Quests = dbClient.GetTable();
+            return dbClient.GetTable();
         }
     }
 }

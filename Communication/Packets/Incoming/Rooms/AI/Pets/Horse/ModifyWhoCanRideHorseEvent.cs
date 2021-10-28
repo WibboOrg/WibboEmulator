@@ -62,7 +62,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE `pets` SET `anyone_ride` = '" + ButterflyEnvironment.BoolToEnum(Pet.PetData.AnyoneCanRide) + "' WHERE `id` = '" + PetId + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE pets SET anyone_ride = '" + ButterflyEnvironment.BoolToEnum(Pet.PetData.AnyoneCanRide) + "' WHERE id = '" + PetId + "' LIMIT 1");
             }
 
             Room.SendPacket(new PetInformationComposer(Pet.PetData, Pet.RidingHorse));

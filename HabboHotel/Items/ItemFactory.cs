@@ -19,7 +19,7 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO `items` (base_item,user_id,extra_data) VALUES (@did,@uid,@extra_data)");
+                dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES (@did,@uid,@extra_data)");
                 dbClient.AddParameter("did", Data.Id);
                 dbClient.AddParameter("uid", Habbo.Id);
                 dbClient.AddParameter("extra_data", ExtraData);
@@ -44,7 +44,7 @@ namespace Butterfly.HabboHotel.Items
             int InsertId = 0;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO `items` (`id`,base_item,user_id,extra_data) VALUES (@id, @did,@uid,@extra_data)");
+                dbClient.SetQuery("INSERT INTO items (id,base_item,user_id,extra_data) VALUES (@id, @did,@uid,@extra_data)");
                 dbClient.AddParameter("id", ItemId);
                 dbClient.AddParameter("did", Data.Id);
                 dbClient.AddParameter("uid", Habbo.Id);
@@ -76,7 +76,7 @@ namespace Butterfly.HabboHotel.Items
             {
                 for (int i = 0; i < Amount; i++)
                 {
-                    dbClient.SetQuery("INSERT INTO `items` (base_item,user_id,extra_data) VALUES (@did,@uid,@flags);");
+                    dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES (@did,@uid,@flags);");
                     dbClient.AddParameter("did", Data.Id);
                     dbClient.AddParameter("uid", Habbo.Id);
                     dbClient.AddParameter("flags", ExtraData);
@@ -95,14 +95,14 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO `items` (base_item,user_id,extra_data) VALUES(@did,@uid,@flags);");
+                dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES(@did,@uid,@flags);");
                 dbClient.AddParameter("did", Data.Id);
                 dbClient.AddParameter("uid", Habbo.Id);
                 dbClient.AddParameter("flags", "");
 
                 int Item1Id = Convert.ToInt32(dbClient.InsertQuery());
 
-                dbClient.SetQuery("INSERT INTO `items` (base_item,user_id,extra_data) VALUES(@did,@uid,@flags);");
+                dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES(@did,@uid,@flags);");
                 dbClient.AddParameter("did", Data.Id);
                 dbClient.AddParameter("uid", Habbo.Id);
                 dbClient.AddParameter("flags", Item1Id.ToString());
@@ -112,7 +112,7 @@ namespace Butterfly.HabboHotel.Items
                 Item Item1 = new Item(Item1Id, 0, Data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
                 Item Item2 = new Item(Item2Id, 0, Data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
 
-                dbClient.SetQuery("INSERT INTO `tele_links` (`tele_one_id`, `tele_two_id`) VALUES (" + Item1Id + ", " + Item2Id + "), (" + Item2Id + ", " + Item1Id + ")");
+                dbClient.SetQuery("INSERT INTO tele_links (tele_one_id, tele_two_id) VALUES (" + Item1Id + ", " + Item2Id + "), (" + Item2Id + ", " + Item1Id + ")");
                 dbClient.RunQuery();
 
                 Items.Add(Item1);
@@ -125,7 +125,7 @@ namespace Butterfly.HabboHotel.Items
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO `room_items_moodlight` (`item_id`, `enabled`, `current_preset`, `preset_one`, `preset_two`, `preset_three`) VALUES (@id, '0', 1, @preset, @preset, @preset)");
+                dbClient.SetQuery("INSERT INTO room_items_moodlight (item_id, enabled, current_preset, preset_one, preset_two, preset_three) VALUES (@id, '0', 1, @preset, @preset, @preset)");
                 dbClient.AddParameter("id", Item.Id);
                 dbClient.AddParameter("preset", "#000000,255,0");
                 dbClient.RunQuery();

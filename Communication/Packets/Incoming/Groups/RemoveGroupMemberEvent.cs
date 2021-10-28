@@ -60,7 +60,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("DELETE FROM `group_memberships` WHERE `group_id` = @GroupId AND `user_id` = @UserId");
+                    dbClient.SetQuery("DELETE FROM group_memberships WHERE group_id = @GroupId AND user_id = @UserId");
                     dbClient.AddParameter("GroupId", GroupId);
                     dbClient.AddParameter("UserId", UserId);
                     dbClient.RunQuery();
@@ -74,7 +74,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     Session.GetHabbo().FavouriteGroupId = 0;
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE `user_stats` SET `group_id` = '0' WHERE `id` = @userId LIMIT 1");
+                        dbClient.SetQuery("UPDATE user_stats SET group_id = '0' WHERE id = @userId LIMIT 1");
                         dbClient.AddParameter("userId", UserId);
                         dbClient.RunQuery();
                     }

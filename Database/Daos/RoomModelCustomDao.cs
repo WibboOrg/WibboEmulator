@@ -17,11 +17,13 @@ namespace Butterfly.Database.Daos
             dbClient.AddParameter("murheight", WallHeight);
             dbClient.RunQuery();
         }
+
         internal static void Query8(IQueryAdapter dbClient)
         {
             dbClient.RunQuery("INSERT INTO room_models_customs (room_id, door_x, door_y, door_z, door_dir, heightmap, wall_height) " +
                 "SELECT '" + RoomId + "', door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = '" + OldRoomId + "'");
         }
+
         internal static void Query8(IQueryAdapter dbClient)
         {
             dbClient.SetQuery("REPLACE INTO room_models_customs VALUES (@id, @doorX, @doorY, @doorZ, @doorDir, @heightmap, @murheight)");
@@ -47,6 +49,7 @@ namespace Butterfly.Database.Daos
             dbClient.AddParameter("murheight", Room.GetGameMap().Model.MurHeight);
             dbClient.RunQuery();
         }
+        
         internal static void Query8(IQueryAdapter dbClient)
         {
             dbClient.SetQuery("SELECT door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = '" + roomID + "'");

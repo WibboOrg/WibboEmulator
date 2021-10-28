@@ -125,7 +125,7 @@ namespace Butterfly.HabboHotel.Roleplay.Player
                 dbClient.RunQuery("DELETE FROM user_rpitems WHERE user_id = '" + this._id + "' AND rp_id = '" + this._rpId + "'");
                 dbClient.RunQuery("DELETE FROM user_rp WHERE user_id = '" + this._id + "' AND roleplay_id = '" + this._rpId + "'");
 
-                dbClient.RunQuery("UPDATE `user_rp` SET `health`='" + this.Health + "', `energy`='" + this.Energy + "', `hygiene`='" + this.Hygiene + "', `money`='" + this.Money + "', `money_1`='" + this.Money1 + "', `money_2`='" + this.Money2 + "', `money_3`='" + this.Money3 + "', `money_4`='" + this.Money4 + "', `munition`='" + this.Munition + "', `exp`='" + this.Exp + "', `weapon_far`='" + this.WeaponGun.Id + "', `weapon_cac`='" + this.WeaponCac.Id + "' WHERE `user_id`='" + this._id + "' AND roleplay_id = '" + this._rpId + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE user_rp SET health='" + this.Health + "', energy='" + this.Energy + "', hygiene='" + this.Hygiene + "', money='" + this.Money + "', money_1='" + this.Money1 + "', money_2='" + this.Money2 + "', money_3='" + this.Money3 + "', money_4='" + this.Money4 + "', munition='" + this.Munition + "', exp='" + this.Exp + "', weapon_far='" + this.WeaponGun.Id + "', weapon_cac='" + this.WeaponCac.Id + "' WHERE user_id='" + this._id + "' AND roleplay_id = '" + this._rpId + "' LIMIT 1");
             }
 
             this.SendWebPacket(new LoadInventoryRpComposer(this._inventory));
@@ -174,7 +174,7 @@ namespace Butterfly.HabboHotel.Roleplay.Player
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("INSERT INTO `user_rpitems` (`user_id`, `rp_id`, `item_id`, `count`) VALUES ('" + this._id + "', '" + this._rpId + "', '" + pItemId + "', '" + pCount + "')");
+                    dbClient.SetQuery("INSERT INTO user_rpitems (user_id, rp_id, item_id, count) VALUES ('" + this._id + "', '" + this._rpId + "', '" + pItemId + "', '" + pCount + "')");
                     int Id = Convert.ToInt32(dbClient.InsertQuery());
                     this._inventory.TryAdd(pItemId, new RolePlayInventoryItem(Id, pItemId, pCount));
                 }
@@ -600,7 +600,7 @@ namespace Butterfly.HabboHotel.Roleplay.Player
             this.Dispose = true;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE `user_rp` SET `health`='" + this.Health + "', `energy`='" + this.Energy + "', `hygiene`='" + this.Hygiene + "', `money`='" + this.Money + "', `money_1`='" + this.Money1 + "', `money_2`='" + this.Money2 + "', `money_3`='" + this.Money3 + "', `money_4`='" + this.Money4 + "', `munition`='" + this.Munition + "', `exp`='" + this.Exp + "', `weapon_far`='" + this.WeaponGun.Id + "', `weapon_cac`='" + this.WeaponCac.Id + "' WHERE `user_id`='" + this._id + "' AND roleplay_id = '" + this._rpId + "' LIMIT 1");
+                dbClient.RunQuery("UPDATE user_rp SET health='" + this.Health + "', energy='" + this.Energy + "', hygiene='" + this.Hygiene + "', money='" + this.Money + "', money_1='" + this.Money1 + "', money_2='" + this.Money2 + "', money_3='" + this.Money3 + "', money_4='" + this.Money4 + "', munition='" + this.Munition + "', exp='" + this.Exp + "', weapon_far='" + this.WeaponGun.Id + "', weapon_cac='" + this.WeaponCac.Id + "' WHERE user_id='" + this._id + "' AND roleplay_id = '" + this._rpId + "' LIMIT 1");
             }
 
             this.SendWebPacket(new RpStatsComposer(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));

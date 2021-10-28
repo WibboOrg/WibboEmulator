@@ -400,7 +400,7 @@ namespace Butterfly.HabboHotel.Rooms
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO `logs_trade` (`user_one_id`, `user_two_id`, `user_one_items`, `user_two_items`, `room_id`, `time`) VALUES (@userone, @usertwo, @itemsone, @itemstwo, @roomid, UNIX_TIMESTAMP())");
+                dbClient.SetQuery("INSERT INTO logs_trade (user_one_id, user_two_id, user_one_items, user_two_items, room_id, time) VALUES (@userone, @usertwo, @itemsone, @itemstwo, @roomid, UNIX_TIMESTAMP())");
                 dbClient.AddParameter("userone", this.oneId);
                 dbClient.AddParameter("usertwo", this.twoId);
                 dbClient.AddParameter("itemsone", LogsOneString);

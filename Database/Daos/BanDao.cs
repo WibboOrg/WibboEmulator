@@ -24,6 +24,7 @@ namespace Butterfly.Database.Daos
 
             return dbClient.FindsResult();
         }
+        
         internal static bool isIgnoreAll(IQueryAdapter dbClient, string username)
         {
             dbClient.SetQuery("SELECT expire FROM bans WHERE bantype = 'ignoreall' AND value = @username");

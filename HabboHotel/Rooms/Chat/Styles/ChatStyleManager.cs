@@ -24,7 +24,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Styles
             DataTable Table = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id, name, required_right FROM `room_chat_styles`");
+                dbClient.SetQuery("SELECT id, name, required_right FROM room_chat_styles");
                 Table = dbClient.GetTable();
 
                 if (Table != null)
