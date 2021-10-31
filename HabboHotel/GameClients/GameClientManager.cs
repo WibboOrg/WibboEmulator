@@ -26,7 +26,6 @@ namespace Butterfly.HabboHotel.GameClients
 
         private readonly List<int> _userStaff;
 
-
         public int Count => this._userIDRegister.Count;
 
         public GameClientManager()

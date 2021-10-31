@@ -1,4 +1,5 @@
 ﻿using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Achievements;
 using Butterfly.HabboHotel.Users.Badges;
@@ -31,34 +32,22 @@ namespace Butterfly.HabboHotel.Users.UserData
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("SELECT * FROM users WHERE auth_ticket = @sso LIMIT 1");
-                    dbClient.AddParameter("sso", sessionTicket);
-
-                    dUserInfo = dbClient.GetRow();
+                    dUserInfo = UserDao.GetOneByTicket(dbClient, sessionTicket);
                     if (dUserInfo == null)
                     {
                         return null;
                     }
 
-                    dbClient.SetQuery("SELECT id FROM bans WHERE expire > @nowtime AND ((bantype = 'user' AND value = @username) OR (bantype = 'ip' AND value = @IP1) OR (bantype = 'ip' AND value = @IP2) OR (bantype = 'machine' AND value = @machineid)) LIMIT 1");
-                    dbClient.AddParameter("nowtime", ButterflyEnvironment.GetUnixTimestamp());
-                    dbClient.AddParameter("username", dUserInfo["username"]);
-                    dbClient.AddParameter("IP1", ip);
-                    dbClient.AddParameter("IP2", dUserInfo["ip_last"]);
-                    dbClient.AddParameter("machineid", machineid);
-
-                    DataRow IsBanned = dbClient.GetRow();
-                    if (IsBanned != null)
+                    bool IsBanned = BanDao.IsBanned(dbClient, dUserInfo["username"].ToString(), ip, dUserInfo["ip_last"].ToString(), machineid);
+                    if (IsBanned)
                     {
                         return null;
                     }
-
-                    dbClient.SetQuery("SELECT expire FROM bans WHERE bantype = 'ignoreall' AND value = @username");
-                    dbClient.AddParameter("username", dUserInfo["username"]);
-                    DataRow IgnoreAll = dbClient.GetRow();
-                    if(IgnoreAll != null)
+                    
+                    int IgnoreAll = BanDao.GetOneIgnoreAll(dbClient, dUserInfo["username"].ToString());
+                    if(IgnoreAll > 0)
                     {
-                        ignoreAllExpire = (int)IgnoreAll["expire"];
+                        ignoreAllExpire = IgnoreAll;
                     }
 
                     userId = Convert.ToInt32(dUserInfo["id"]);
@@ -73,16 +62,16 @@ namespace Butterfly.HabboHotel.Users.UserData
                     string lastDaily = DateTime.Today.ToString("MM/dd");
                     if (lastDailyCredits != lastDaily)
                     {
-                        dbClient.RunQuery("UPDATE users SET lastdailycredits = '" + lastDaily + "' WHERE id = '" + userId + "'");
+                        UserDao.UpdateLastDailyCredits(dbClient, userId, lastDaily);
                         dUserInfo["credits"] = (Convert.ToInt32(dUserInfo["credits"]) + 3000);
 
                         if (Convert.ToInt32(dUserInfo["rank"]) <= 1)
                         {
-                            dbClient.RunQuery("UPDATE user_stats SET daily_respect_points = 5, daily_pet_respect_points = 5 WHERE id = '" + userId + "' LIMIT 1");
+                            UserStatsDao.UpdateRespectPoint5(dbClient, userId);
                         }
                         else
                         {
-                            dbClient.RunQuery("UPDATE user_stats SET daily_respect_points = 20, daily_pet_respect_points = 20 WHERE id = '" + userId + "' LIMIT 1");
+                            UserStatsDao.UpdateRespectPoint20(dbClient, userId);
                         }
 
                         ChangeName = true;
@@ -90,17 +79,15 @@ namespace Butterfly.HabboHotel.Users.UserData
 
                     if (!sessionTicket.StartsWith("monticket"))
                     {
-                        dbClient.RunQuery("UPDATE users SET online = '1', auth_ticket = ''  WHERE id = '" + userId + "'");
+                        UserDao.UpdateOnline(dbClient, userId);
                     }
 
-                    dbClient.SetQuery("SELECT * FROM user_stats WHERE id = '" + userId + "';");
-                    row2 = dbClient.GetRow();
+                    row2 = UserStatsDao.GetOne(dbClient, userId);
 
                     if (row2 == null)
                     {
                         dbClient.RunQuery("INSERT INTO user_stats (id) VALUES ('" + userId + "')");
-                        dbClient.SetQuery("SELECT * FROM user_stats WHERE id =  '" + userId + "';");
-                        row2 = dbClient.GetRow();
+                        row2 = UserStatsDao.GetOne(dbClient, userId);
                     }
 
                     dbClient.SetQuery("SELECT group, level, progress FROM user_achievement WHERE user_id = '" + userId + "';");
@@ -229,41 +216,34 @@ namespace Butterfly.HabboHotel.Users.UserData
             }
         }
 
-        public static UserData GetUserData(int UserId)
+        public static UserData GetUserData(int userId)
         {
             DataRow row;
             DataRow row2;
             DataTable FrienShips;
-            int userID;
+
+            if (ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId) != null)
+            {
+                return null;
+            }
+
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM users WHERE id = @id LIMIT 1");
-                dbClient.AddParameter("id", UserId);
-                row = dbClient.GetRow();
+                row = UserDao.GetOne(dbClient, userId);
                 if (row == null)
                 {
                     return null;
                 }
 
-                userID = Convert.ToInt32(row["id"]);
-                if (ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userID) != null)
-                {
-                    return null;
-                }
-
-                dbClient.SetQuery("SELECT * FROM user_stats WHERE id = @id");
-                dbClient.AddParameter("id", UserId);
-                row2 = dbClient.GetRow();
+                row2 = UserStatsDao.GetOne(dbClient, userId);
 
                 if (row2 == null)
                 {
-                    dbClient.RunQuery("INSERT INTO user_stats (id) VALUES ('" + UserId + "')");
-                    dbClient.SetQuery("SELECT * FROM user_stats WHERE id = " + UserId);
-                    row2 = dbClient.GetRow();
+                    dbClient.RunQuery("INSERT INTO user_stats (id) VALUES ('" + userId + "')");
+                    row2 = UserStatsDao.GetOne(dbClient, userId);
                 }
 
-                dbClient.SetQuery("SELECT users.id, messenger_friendships.relation FROM users JOIN messenger_friendships ON users.id = messenger_friendships.user_two_id WHERE messenger_friendships.user_one_id = '" + UserId + "' AND messenger_friendships.relation != '0'");
-                FrienShips = dbClient.GetTable();
+                FrienShips = UserDao.GetAllFriendRelation(dbClient, userId);
             }
 
             Dictionary<int, MessengerBuddy> friends = new Dictionary<int, MessengerBuddy>();
@@ -272,7 +252,7 @@ namespace Butterfly.HabboHotel.Users.UserData
             {
                 int num3 = Convert.ToInt32(dataRow["id"]);
                 int Relation = Convert.ToInt32(dataRow["relation"]);
-                if (num3 != UserId)
+                if (num3 != userId)
                 {
                     if (!friends.ContainsKey(num3))
                     {
@@ -293,7 +273,7 @@ namespace Butterfly.HabboHotel.Users.UserData
             List<int> MyGroups = new List<int>();
 
             Habbo user = GenerateHabbo(row, row2, false, 0);
-            return new UserData(userID, achievements, favouritedRooms, badges, friends, requests, quests, MyGroups, user, Relationships, RoomRight);
+            return new UserData(userId, achievements, favouritedRooms, badges, friends, requests, quests, MyGroups, user, Relationships, RoomRight);
         }
 
         public static Habbo GenerateHabbo(DataRow dRow, DataRow dRow2, bool ChangeName, int ignoreAllExpire)

@@ -1,5 +1,6 @@
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.Utilities;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -20,8 +21,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             ButterflyEnvironment.GetGame().GetModerationManager().SendNewTicket(Session, TicketType, ReporterId, Message);
             ButterflyEnvironment.GetGame().GetModerationManager().ApplySanction(Session, ReporterId);
-            //ButterflyEnvironment.GetGame().GetClientManager().SendWhisperChat("Un nouveau ticket vient d'arriver sur le support");
-
+            ButterflyEnvironment.GetGame().GetClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", "Un nouveau ticket vient d'arriver sur le support"));
         }
     }
 }

@@ -179,14 +179,14 @@ namespace Butterfly.Database.Daos
             return dbClient.GetTable();
         }
 
-        internal static DataRow GetOne(IQueryAdapter dbClient, string sessionTicket)
+        internal static DataRow GetOneByTicket(IQueryAdapter dbClient, string sessionTicket)
         {
             dbClient.SetQuery("SELECT * FROM users WHERE auth_ticket = @sso LIMIT 1");
             dbClient.AddParameter("sso", sessionTicket);
             return dbClient.GetRow();
         }
 
-        internal static void UpdateLastDailyCredits(IQueryAdapter dbClient, int userId, int lastDailyCredits)
+        internal static void UpdateLastDailyCredits(IQueryAdapter dbClient, int userId, string lastDailyCredits)
         {
             dbClient.RunQuery("UPDATE users SET lastdailycredits = '" + lastDailyCredits + "' WHERE id = '" + userId + "'");
         }
@@ -217,7 +217,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataTable GetAllFriendRelation(IQueryAdapter dbClient, int userId)
         {
-            dbClient.SetQuery("SELECT users.id,messenger_friendships.relation FROM users JOIN messenger_friendships ON users.id = messenger_friendships.user_two_id WHERE messenger_friendships.user_one_id = '" + userId + "' AND messenger_friendships.relation != '0'");
+            dbClient.SetQuery("SELECT users.id, messenger_friendships.relation FROM users JOIN messenger_friendships ON users.id = messenger_friendships.user_two_id WHERE messenger_friendships.user_one_id = '" + userId + "' AND messenger_friendships.relation != '0'");
             return dbClient.GetTable();
         }
 

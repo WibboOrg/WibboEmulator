@@ -20,14 +20,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            List<GameClient> Staffs = ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers();
-
-            if (Staffs == null)
-            {
-                return;
-            }
-
-            foreach (GameClient Staff in Staffs)
+            foreach (GameClient Staff in ButterflyEnvironment.GetGame().GetClientManager().GetClients)
             {
                 if (Staff == null)
                 {
@@ -40,6 +33,11 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 }
 
                 if (Staff.GetHabbo().CurrentRoom == null)
+                {
+                    continue;
+                }
+
+                if(Staff.GetHabbo().Rank < 3)
                 {
                     continue;
                 }

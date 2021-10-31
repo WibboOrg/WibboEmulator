@@ -7,7 +7,7 @@ namespace Butterfly.Database.Daos
 {
     class BotDao
     {
-        internal static void UpdateRoom(IQueryAdapter dbClient, int botId)
+        internal static void UpdateRoomId(IQueryAdapter dbClient, int botId)
         {
             dbClient.SetQuery("UPDATE bots SET room_id = '0' WHERE id = @id LIMIT 1");
             dbClient.AddParameter("id", botId);
@@ -26,7 +26,7 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void UpdateConfig(IQueryAdapter dbClient, int botId, bool automaticChat, int speakingInterval, bool mixChat, string chatText)
+        internal static void UpdateChat(IQueryAdapter dbClient, int botId, bool automaticChat, int speakingInterval, bool mixChat, string chatText)
         {
             dbClient.SetQuery("UPDATE bots SET chat_enabled = @AutomaticChat, chat_seconds = @SpeakingInterval, is_mixchat = @MixChat, chat_text = @ChatText WHERE id = @id LIMIT 1");
             dbClient.AddParameter("id", botId);
