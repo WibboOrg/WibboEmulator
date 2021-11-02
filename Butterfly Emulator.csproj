@@ -695,6 +695,7 @@
     <Compile Include="HabboHotel\Items\ItemExtrabox.cs" />
     <Compile Include="HabboHotel\Items\ItemFactory.cs" />
     <Compile Include="HabboHotel\Items\ItemTemp.cs" />
+    <Compile Include="HabboHotel\Moderation\ModerationTicket.cs" />
     <Compile Include="HabboHotel\Roleplay\Enemy\RPEnemy.cs" />
     <Compile Include="HabboHotel\Roleplay\Enemy\RPEnemyManager.cs" />
     <Compile Include="HabboHotel\Roleplay\Item\RPItemCategory.cs" />
