@@ -2,7 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.MarketPlace;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Catalog.Marketplace;
 using Butterfly.HabboHotel.GameClients;
@@ -90,18 +90,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
                 {
                     dbClient.RunQuery("UPDATE catalog_marketplace_offers SET state = '2' WHERE offer_id = '" + OfferId + "' LIMIT 1");
 
-                    int Id = 0;
-                    dbClient.SetQuery("SELECT id FROM catalog_marketplace_data WHERE sprite = " + Item.SpriteId + " LIMIT 1;");
-                    Id = dbClient.GetInteger();
-
-                    if (Id > 0)
-                    {
-                        dbClient.RunQuery("UPDATE catalog_marketplace_data SET sold = sold + 1, avgprice = (avgprice + " + Convert.ToInt32(Row["total_price"]) + ") WHERE id = " + Id + " LIMIT 1;");
-                    }
-                    else
-                    {
-                        dbClient.RunQuery("INSERT INTO catalog_marketplace_data (sprite, sold, avgprice) VALUES ('" + Item.SpriteId + "', '1', '" + Convert.ToInt32(Row["total_price"]) + "')");
-                    }
+                    CatalogMarketplaceDataDao.Replace(dbClient, Item.SpriteId, Convert.ToInt32(Row["total_price"]));
 
                     if (ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.ContainsKey(Item.SpriteId) && ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(Item.SpriteId))
                     {

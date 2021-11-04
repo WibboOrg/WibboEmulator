@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System;
 using System.Collections.Generic;
 
@@ -34,11 +35,9 @@ namespace Butterfly.HabboHotel.Catalog.Marketplace
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT avgprice FROM catalog_marketplace_data WHERE sprite = '" + SpriteID + "' LIMIT 1");
-                num = dbClient.GetInteger();
+                num = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, SpriteID);
 
-                dbClient.SetQuery("SELECT sold FROM catalog_marketplace_data WHERE sprite = '" + SpriteID + "' LIMIT 1");
-                num2 = dbClient.GetInteger();
+                num2 = CatalogMarketplaceDataDao.GetSoldBySprite(dbClient, SpriteID);
             }
 
             this.MarketAverages.Add(SpriteID, num);

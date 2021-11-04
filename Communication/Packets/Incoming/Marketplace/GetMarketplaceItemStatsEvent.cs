@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.MarketPlace;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using System;
 using System.Data;
@@ -14,11 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
             DataRow Row = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("SELECT avgprice FROM catalog_marketplace_data WHERE sprite = @SpriteId LIMIT 1");
-                dbClient.AddParameter("SpriteId", SpriteId);
-                Row = dbClient.GetRow();
-            }
+                Row = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, SpriteId);
 
             Session.SendPacket(new MarketplaceItemStatsComposer(ItemId, SpriteId, (Row != null ? Convert.ToInt32(Row["avgprice"]) : 0)));
         }

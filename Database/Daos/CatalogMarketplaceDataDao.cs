@@ -7,7 +7,7 @@ namespace Butterfly.Database.Daos
 {
     class CatalogMarketplaceDataDao
     {
-         internal static void Replace(IQueryAdapter dbClient, int spriteId, int totalPrice)
+        internal static void Replace(IQueryAdapter dbClient, int spriteId, int totalPrice)
         {
             int Id = 0;
             dbClient.SetQuery("SELECT id FROM catalog_marketplace_data WHERE sprite = " + spriteId + " LIMIT 1;");
@@ -23,11 +23,11 @@ namespace Butterfly.Database.Daos
             }
         }
 
-        internal static DataRow GetPriceBySprite(IQueryAdapter dbClient, int spriteId)
+        internal static int GetPriceBySprite(IQueryAdapter dbClient, int spriteId)
         {
             dbClient.SetQuery("SELECT avgprice FROM catalog_marketplace_data WHERE sprite = @SpriteId LIMIT 1");
             dbClient.AddParameter("SpriteId", spriteId);
-            return dbClient.GetRow();
+            return dbClient.GetInteger();
         }
 
         internal static int GetSoldBySprite(IQueryAdapter dbClient, int spriteID)
