@@ -22,11 +22,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
             DataRow Row = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("SELECT state,timestamp,total_price,extra_data,item_id,furni_id,user_id,limited_number,limited_stack FROM catalog_marketplace_offers WHERE offer_id = @OfferId LIMIT 1");
-                dbClient.AddParameter("OfferId", OfferId);
-                Row = dbClient.GetRow();
-            }
+                Row = CatalogMarketplaceOfferDao.GetOneByOfferId(dbClient, OfferId);
 
             if (Row == null)
             {
@@ -88,7 +84,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE catalog_marketplace_offers SET state = '2' WHERE offer_id = '" + OfferId + "' LIMIT 1");
+                    CatalogMarketplaceOfferDao.UpdateState(dbClient, OfferId);
 
                     CatalogMarketplaceDataDao.Replace(dbClient, Item.SpriteId, Convert.ToInt32(Row["total_price"]));
 
@@ -128,39 +124,9 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             int FilterMode = 1;
 
             DataTable table = null;
-            StringBuilder builder = new StringBuilder();
-            string str = "";
-            builder.Append("WHERE state = '1' AND timestamp >= " + ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp().ToString());
-            if (MinCost >= 0)
-            {
-                builder.Append(" AND total_price > " + MinCost);
-            }
-            if (MaxCost >= 0)
-            {
-                builder.Append(" AND total_price < " + MaxCost);
-            }
-            switch (FilterMode)
-            {
-                case 1:
-                    str = "ORDER BY asking_price DESC";
-                    break;
-
-                default:
-                    str = "ORDER BY asking_price ASC";
-                    break;
-            }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-
-                dbClient.SetQuery("SELECT offer_id,item_type,sprite_id,total_price,limited_number,limited_stack FROM catalog_marketplace_offers " + builder.ToString() + " " + str + " LIMIT 500");
-                dbClient.AddParameter("search_query", SearchQuery.Replace("%", "\\%").Replace("_", "\\_") + "%");
-                if (SearchQuery.Length >= 1)
-                {
-                    builder.Append(" AND public_name LIKE @search_query");
-                }
-                table = dbClient.GetTable();
-            }
+                table = CatalogMarketplaceOfferDao.GetAll(dbClient, SearchQuery, MinCost, MaxCost, FilterMode);
 
             ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();
             ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Clear();

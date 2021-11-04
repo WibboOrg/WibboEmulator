@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.Communication.Packets.Outgoing.MarketPlace;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Items;
 using System;
@@ -21,11 +21,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             int OfferId = Packet.PopInt();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("SELECT furni_id, item_id, user_id, extra_data, offer_id, state, timestamp, limited_number, limited_stack FROM catalog_marketplace_offers WHERE offer_id = @OfferId LIMIT 1");
-                dbClient.AddParameter("OfferId", OfferId);
-                Row = dbClient.GetRow();
-            }
+                Row = CatalogMarketplaceOfferDao.GetByOfferId(dbClient, OfferId);
 
             if (Row == null)
             {
@@ -52,12 +48,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("DELETE FROM catalog_marketplace_offers WHERE offer_id = @OfferId AND user_id = @UserId LIMIT 1");
-                dbClient.AddParameter("OfferId", OfferId);
-                dbClient.AddParameter("UserId", Session.GetHabbo().Id);
-                dbClient.RunQuery();
-            }
+                CatalogMarketplaceOfferDao.DeleteUserOffer(dbClient, OfferId, Session.GetHabbo().Id);
 
             Item GiveItem = ItemFactory.CreateSingleItem(Item, Session.GetHabbo(), Convert.ToString(Row["extra_data"]), Convert.ToInt32(Row["furni_id"]), Convert.ToInt32(Row["limited_number"]), Convert.ToInt32(Row["limited_stack"]));
 

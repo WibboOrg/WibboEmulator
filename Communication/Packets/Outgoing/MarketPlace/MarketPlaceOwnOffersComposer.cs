@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System;
 using System.Data;
 
@@ -13,11 +14,9 @@ namespace Butterfly.Communication.Packets.Outgoing.MarketPlace
             DataTable table = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT timestamp, state, offer_id, item_type, sprite_id, total_price, limited_number, limited_stack FROM catalog_marketplace_offers WHERE user_id = '" + UserId + "'");
-                table = dbClient.GetTable();
+                table = CatalogMarketplaceOfferDao.GetOneByUserId(dbClient, UserId);
 
-                dbClient.SetQuery("SELECT SUM(asking_price) FROM catalog_marketplace_offers WHERE state = '2' AND user_id = '" + UserId + "'");
-                i = dbClient.GetInteger();
+                i = CatalogMarketplaceOfferDao.GetSunPrice(dbClient, UserId);
 
                 this.WriteInteger(i);
                 if (table != null)
