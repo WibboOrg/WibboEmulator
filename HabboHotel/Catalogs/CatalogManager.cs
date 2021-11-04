@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Catalog.Marketplace;
 using Butterfly.HabboHotel.Catalog.Pets;
 using Butterfly.HabboHotel.Catalog.Vouchers;
@@ -78,8 +79,7 @@ namespace Butterfly.HabboHotel.Catalog
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id,item_id,catalog_name,cost_credits,cost_pixels,cost_diamonds,amount,page_id,limited_sells,limited_stack,offer_active,badge FROM catalog_items ORDER by ID DESC");
-                DataTable CatalogueItems = dbClient.GetTable();
+                DataTable CatalogueItems = CatalogItemDao.GetAll(dbClient);
 
                 if (CatalogueItems != null)
                 {

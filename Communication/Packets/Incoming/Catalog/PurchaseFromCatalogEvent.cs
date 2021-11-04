@@ -6,6 +6,7 @@ using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Users;
 
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Catalog;
 using Butterfly.HabboHotel.Catalog.Utilities;
@@ -264,11 +265,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Interlocked.Increment(ref Item.LimitedEditionSells);
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("UPDATE catalog_items SET limited_sells = @limitSells WHERE id = @itemId LIMIT 1");
-                    dbClient.AddParameter("limitSells", Item.LimitedEditionSells);
-                    dbClient.AddParameter("itemId", Item.Id);
-                    dbClient.RunQuery();
-                    //CatalogItemDao.UpdateLimited();
+                    CatalogItemDao.UpdateLimited(dbClient, Item.Id, Item.LimitedEditionSells);
 
                     LimitedEditionSells = Item.LimitedEditionSells;
                     LimitedEditionStack = Item.LimitedEditionStack;

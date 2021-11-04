@@ -28,10 +28,10 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 dbClient.RunQuery("INSERT INTO room_models_customs (room_id, door_x, door_y, door_z, door_dir, heightmap, wall_height) " +
                     "SELECT '" + RoomId + "', door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = '" + OldRoomId + "'");
 
-                dbClient.SetQuery("SELECT item_id FROM catalog_items WHERE page_id IN (SELECT id FROM catalog_pages WHERE min_rank <= '" + Session.GetHabbo().Rank + "') AND cost_pixels = '0' AND cost_diamonds = '0' AND limited_sells = '0' AND limited_stack = '0' AND offer_active = '1' GROUP BY item_id");
                 List<int> furniIdAllow = new List<int>();
 
-                foreach (DataRow dataRow in dbClient.GetTable().Rows)
+                DataTable catalogItemTable = CatalogItemDao.GetItemIdByRank(dbClient, Session.GetHabbo().Rank);
+                foreach (DataRow dataRow in catalogItemTable.Rows)
                 {
                     int.TryParse(dataRow["item_id"].ToString(), out int itemId);
                     if (!furniIdAllow.Contains(itemId))
