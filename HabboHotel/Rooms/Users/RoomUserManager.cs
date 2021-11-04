@@ -567,7 +567,7 @@ namespace Butterfly.HabboHotel.Rooms
                 }
                 else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WIBBOCOM")) // AGENT DE COMMUNICATION
                 {
-                    User.CurrentEffect = 0;
+                    User.CurrentEffect = 581;
                 }
                 //else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("BALTIOFFI")) // IDK ?
                 //User.CurrentEffect = 578;

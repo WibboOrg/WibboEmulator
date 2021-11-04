@@ -41,7 +41,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             }
             else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WIBBOCOM"))
             {
-                UserRoom.CurrentEffect = 0;
+                UserRoom.CurrentEffect = 581;
             }
             //else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("BALTIOFFI"))
             //UserRoom.CurrentEffect = 578;
