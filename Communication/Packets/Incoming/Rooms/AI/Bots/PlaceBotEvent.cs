@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Inventory.Bots;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -44,7 +45,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE bots SET room_id = '" + Room.Id + "', x = '" + X + "', y = '" + Y + "' WHERE id = '" + Bot.Id + "'");
+                BotDao.UpdatePosition(dbClient, Bot.Id, Room.Id, X, Y);
             }
 
             RoomUser roomUser = Room.GetRoomUserManager().DeployBot(new RoomBot(Bot.Id, Bot.OwnerId, Room.Id, AIType.Generic, Bot.WalkingEnabled, Bot.Name, Bot.Motto, Bot.Gender, Bot.Figure, X, Y, 0, 2, Bot.ChatEnabled, Bot.ChatText, Bot.ChatSeconds, Bot.IsDancing, Bot.Enable, Bot.Handitem, Bot.Status), null);

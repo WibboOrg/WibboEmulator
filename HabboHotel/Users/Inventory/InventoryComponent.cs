@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -89,9 +90,7 @@ namespace Butterfly.HabboHotel.Users.Inventory
         public void ClearBots()
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.RunQuery("DELETE FROM bots WHERE room_id = '0' AND user_id = '" + this.UserId + "'");
-            }
+                BotDao.Delete(dbClient, this.UserId);
 
             this._botItems.Clear();
         }
@@ -237,10 +236,8 @@ namespace Butterfly.HabboHotel.Users.Inventory
             this._botItems.Clear();
             DataTable dBots;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("SELECT * FROM bots WHERE user_id = '" + this.UserId + "' AND room_id = '0'");
-                dBots = dbClient.GetTable();
-            }
+                dBots = BotDao.GetAllByUserId(dbClient, this.UserId);
+                
             if (dBots == null)
             {
                 return;

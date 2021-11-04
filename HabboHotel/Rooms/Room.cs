@@ -22,6 +22,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading;
+using Butterfly.Database.Daos;
 
 namespace Butterfly.HabboHotel.Rooms
 {
@@ -380,8 +381,7 @@ namespace Butterfly.HabboHotel.Rooms
             DataTable table;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM bots WHERE room_id = '" + this.Id + "'");
-                table = dbClient.GetTable();
+                table = BotDao.GetOneByRoomId(dbClient, this.Id);
                 if (table == null)
                 {
                     return;

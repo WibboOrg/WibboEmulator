@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Navigator;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -176,8 +176,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                     dbClient.RunQuery();
                 }
 
-                dbClient.RunQuery("INSERT INTO bots (user_id, name, motto, gender, look, room_id, walk_enabled, x, y, z, rotation, chat_enabled, chat_text, chat_seconds, is_dancing, is_mixchat) " +
-                    "SELECT '" + Session.GetHabbo().Id + "', name, motto, gender, look, '" + RoomId + "', walk_enabled, x, y, z, rotation, chat_enabled, chat_text, chat_seconds, is_dancing, is_mixchat FROM bots WHERE room_id = '" + OldRoomId + "'");
+                BotDao.DupliqueAllBotInRoomId(dbClient, Session.GetHabbo().Id , RoomId, OldRoomId);
 
                 dbClient.RunQuery("INSERT INTO pets (user_id, room_id, name, race, color, type, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride) " +
                     "SELECT '" + Session.GetHabbo().Id + "', '" + RoomId + "', name, race, color, type, experience, energy, nutrition, respect, '" + ButterflyEnvironment.GetUnixTimestamp() + "', x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM pets WHERE room_id = '" + OldRoomId + "'");
