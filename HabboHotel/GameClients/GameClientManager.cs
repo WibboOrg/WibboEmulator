@@ -2,6 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Users.Messenger;
 using ConnectionManager;
@@ -345,12 +346,7 @@ namespace Butterfly.HabboHotel.GameClients
                     dbClient.RunQuery("UPDATE users SET is_banned = '1' WHERE id = '" + Client.GetHabbo().Id + "'");
                 }
 
-                dbClient.SetQuery("INSERT INTO bans (bantype,value,reason,expire,added_by,added_date) VALUES (@rawvar, @var, @reason, '" + Expire + "', @mod, UNIX_TIMESTAMP())");
-                dbClient.AddParameter("rawvar", str);
-                dbClient.AddParameter("var", Variable);
-                dbClient.AddParameter("reason", Reason);
-                dbClient.AddParameter("mod", Moderator);
-                dbClient.RunQuery();
+                BanDao.InsertBan(dbClient, Expire, str, Variable, Reason, Moderator);
             }
 
             if (MachineBan)

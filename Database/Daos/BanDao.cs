@@ -32,10 +32,10 @@ namespace Butterfly.Database.Daos
             return dbClient.GetInteger();
         }
 
-        internal static void InsertBan(IQueryAdapter dbClient, int expireTime, string username, string reason, string modName)
+        internal static void InsertBan(IQueryAdapter dbClient, double expireTime, string banType,  string username, string reason, string modName)
         {
             dbClient.SetQuery("INSERT INTO bans (bantype,value,reason,expire,added_by,added_date) VALUES (@rawvar, @var, @reason, '" + expireTime + "', @mod, UNIX_TIMESTAMP())");
-            dbClient.AddParameter("rawvar", "ignoreall");
+            dbClient.AddParameter("rawvar", banType);
             dbClient.AddParameter("var", username);
             dbClient.AddParameter("reason", reason);
             dbClient.AddParameter("mod", modName);
