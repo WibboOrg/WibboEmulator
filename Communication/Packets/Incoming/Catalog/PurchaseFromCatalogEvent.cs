@@ -57,7 +57,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
             }
 
-            if (Amount < 1 || Amount > 100 || !Item.HaveOffer)
+            if (Amount < 1 || Amount > 100 || !ItemUtility.CanSelectAmount(Item))
             {
                 Amount = 1;
             }

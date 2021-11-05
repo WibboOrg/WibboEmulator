@@ -6,6 +6,7 @@ using Butterfly.HabboHotel.Roleplay.Player;
 using Butterfly.HabboHotel.Rooms.Games;
 using Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Interfaces;
 using System;
+using System.Data;
 
 namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
 {
@@ -1263,11 +1264,9 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.Effet + ":" + this.Value, false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.item.Id);
-            string message = dbClient.GetString();
+            string message = row["trigger_data"].ToString();
 
             if (message.Contains(":"))
             {
@@ -1298,11 +1297,6 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
             Message15.WriteInteger(0);
 
             Session.SendPacket(Message15);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
         }
 
         public void Dispose()

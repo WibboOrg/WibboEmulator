@@ -58,25 +58,12 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.scoreLevel.ToString(), false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.item.Id);
-            DataRow row = dbClient.GetRow();
-            if (row != null)
-            {
-                this.scoreLevel = Convert.ToInt32(row[0].ToString());
-            }
-            else
-            {
-                this.scoreLevel = 200;
-            }
+            if(int.TryParse(row["trigger_data"].ToString(), out int score))
+                this.scoreLevel = score;
         }
 
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
-        }
         public void OnTrigger(GameClient Session, int SpriteId)
         {
             ServerPacket Message7 = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);

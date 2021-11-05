@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -22,10 +23,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Pets.Commands
 
             DataTable table;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("SELECT id, command FROM system_commands_pets");
-                table = dbClient.GetTable();
-            }
+                table = EmulatorCommandPetDao.GetAll(dbClient);
+                
             if (table == null)
             {
                 return;

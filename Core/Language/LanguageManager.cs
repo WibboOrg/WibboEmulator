@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System.Collections.Generic;
 using System.Data;
 
@@ -34,10 +35,8 @@ namespace Butterfly.Core
 
             DataTable table;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("SELECT identifiant, value_fr, value_en, value_br FROM system_locale");
-                table = dbClient.GetTable();
-            }
+                table = EmulatorTextDao.GetAll(dbClient);
+                
             if (table == null)
             {
                 return;

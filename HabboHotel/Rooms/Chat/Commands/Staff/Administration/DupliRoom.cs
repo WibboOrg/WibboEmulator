@@ -80,17 +80,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
                     if (WiredUtillity.TypeIsWired(Data.InteractionType))
                     {
-                        /*if(Data.InteractionType == InteractionType.superwired)
-                        {
-                            //trigger_data check
-                            dbClient.RunQuery("INSERT INTO wired_items (trigger_id, trigger_data_2, trigger_data, all_user_triggerable, triggers_item) " +
-                            "SELECT '" + ItemId + "', trigger_data_2, '', all_user_triggerable, triggers_item FROM wired_items WHERE trigger_id = '" + OldItemId + "'");
-
-                        } else
-                        {*/
-                        dbClient.RunQuery("INSERT INTO wired_items (trigger_id, trigger_data_2, trigger_data, all_user_triggerable, triggers_item) " +
-                        "SELECT '" + ItemId + "', trigger_data_2, trigger_data, all_user_triggerable, triggers_item FROM wired_items WHERE trigger_id = '" + OldItemId + "'");
-                        //}
+                        ItemWiredDao.InsertDuplicate(dbClient, ItemId, OldItemId);
 
                         wiredId.Add(ItemId);
                     }
@@ -103,8 +93,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         continue;
                     }
 
-                    dbClient.SetQuery("SELECT tele_two_id FROM tele_links WHERE tele_one_id = '" + oldId + "'");
-                    DataRow rowTele = dbClient.GetRow();
+                    DataRow rowTele = ItemTeleportDao.GetOne(dbClient, oldId);
                     if (rowTele == null)
                     {
                         continue;
@@ -115,13 +104,12 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         continue;
                     }
 
-                    dbClient.RunQuery("INSERT INTO tele_links (tele_one_id, tele_two_id) VALUES ('" + newId + "', '" + newIdTwo + "');");
+                    ItemTeleportDao.Insert(dbClient, newId, newIdTwo);
                 }
 
                 foreach (int id in wiredId)
                 {
-                    dbClient.SetQuery("SELECT triggers_item FROM wired_items WHERE trigger_id = '" + id + "' AND triggers_item != ''");
-                    DataRow wiredRow = dbClient.GetRow();
+                    DataRow wiredRow = ItemWiredDao.GetOne(dbClient, id);
 
                     if (wiredRow == null)
                     {
@@ -171,9 +159,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         triggerItems = triggerItems.Remove(triggerItems.Length - 1);
                     }
 
-                    dbClient.SetQuery("UPDATE wired_items SET triggers_item=@triggeritems WHERE trigger_id = '" + id + "' LIMIT 1");
-                    dbClient.AddParameter("triggeritems", triggerItems);
-                    dbClient.RunQuery();
+                    ItemWiredDao.UpdateTriggerItem(dbClient, triggerItems, id);
                 }
 
                 BotDao.DupliqueAllBotInRoomId(dbClient, Session.GetHabbo().Id , RoomId, OldRoomId);

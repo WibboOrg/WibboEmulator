@@ -5,6 +5,7 @@ using Butterfly.HabboHotel.Items;
 using Butterfly.HabboHotel.Rooms.Games;
 using Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Interfaces;
 using System;
+using System.Data;
 
 namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
 {
@@ -38,13 +39,10 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
         {
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
         }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-        }
+        
         public void OnTrigger(GameClient Session, int SpriteId)
         {
             ServerPacket Message3 = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);

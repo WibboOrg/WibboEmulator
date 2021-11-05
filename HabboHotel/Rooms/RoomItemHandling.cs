@@ -2,6 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -284,9 +285,7 @@ namespace Butterfly.HabboHotel.Rooms
             if (roomItem.WiredHandler != null)
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    roomItem.WiredHandler.DeleteFromDatabase(dbClient);
-                }
+                    ItemWiredDao.Delete(dbClient, roomItem.Id);
 
                 roomItem.WiredHandler.Dispose();
                 this._room.GetWiredHandler().RemoveFurniture(roomItem);

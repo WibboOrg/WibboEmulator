@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Users;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace Butterfly.HabboHotel.Items
 
                 if (LimitedNumber > 0)
                 {
-                    dbClient.RunQuery("INSERT INTO items_limited VALUES (" + Item.Id + "," + LimitedNumber + "," + LimitedStack + ")");
+                    ItemLimitedDao.Insert(dbClient, Item.Id, LimitedNumber, LimitedStack);
                 }
 
                 return Item;
@@ -53,7 +54,7 @@ namespace Butterfly.HabboHotel.Items
 
                 if (LimitedNumber > 0 && InsertId > 0)
                 {
-                    dbClient.RunQuery("INSERT INTO items_limited VALUES (" + ItemId + "," + LimitedNumber + "," + LimitedStack + ")");
+                    ItemLimitedDao.Insert(dbClient, ItemId, LimitedNumber, LimitedStack);
                 }
             }
 
@@ -112,8 +113,8 @@ namespace Butterfly.HabboHotel.Items
                 Item Item1 = new Item(Item1Id, 0, Data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
                 Item Item2 = new Item(Item2Id, 0, Data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
 
-                dbClient.SetQuery("INSERT INTO tele_links (tele_one_id, tele_two_id) VALUES (" + Item1Id + ", " + Item2Id + "), (" + Item2Id + ", " + Item1Id + ")");
-                dbClient.RunQuery();
+                ItemTeleportDao.Insert(dbClient, Item1Id, Item2Id);
+                ItemTeleportDao.Insert(dbClient, Item2Id, Item1Id);
 
                 Items.Add(Item1);
                 Items.Add(Item2);

@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Rooms;
 using System;
 using System.Data;
@@ -11,8 +12,7 @@ namespace Butterfly.HabboHotel.Items
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT tele_two_id FROM tele_links WHERE tele_one_id = '" + TeleId + "'");
-                DataRow row = dbClient.GetRow();
+                DataRow row = ItemTeleportDao.GetOne(dbClient, TeleId);
                 if (row == null)
                 {
                     return 0;

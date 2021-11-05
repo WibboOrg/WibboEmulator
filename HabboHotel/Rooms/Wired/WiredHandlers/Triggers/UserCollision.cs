@@ -4,6 +4,7 @@ using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
 using Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Interfaces;
 using System;
+using System.Data;
 
 namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
 {
@@ -43,9 +44,8 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, string.Empty, false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-
         }
 
         public void OnTrigger(GameClient Session, int SpriteId)
@@ -64,11 +64,6 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
             Message.WriteInteger(0);
             Message.WriteInteger(0);
             Session.SendPacket(Message);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
         }
     }
 }

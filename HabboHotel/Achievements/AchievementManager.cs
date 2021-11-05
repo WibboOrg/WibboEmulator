@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Data;
+using Butterfly.Database.Daos;
 
 namespace Butterfly.HabboHotel.Achievements
 {
@@ -28,8 +29,8 @@ namespace Butterfly.HabboHotel.Achievements
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id, category, group_name, level, reward_pixels, reward_points, progress_needed FROM achievements");
-                foreach (DataRow dataRow in dbClient.GetTable().Rows)
+                DataTable table = EmulatorAchievementDao.GetAll(dbClient);
+                foreach (DataRow dataRow in table.Rows)
                 {
                     int Id = Convert.ToInt32(dataRow["id"]);
                     string Category = (string)dataRow["category"];

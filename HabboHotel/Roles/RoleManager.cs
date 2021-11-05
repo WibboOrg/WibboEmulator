@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,15 +21,14 @@ namespace Butterfly.HabboHotel.Roles
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT fuse, rank FROM fuserights");
-                DataTable table1 = dbClient.GetTable();
+                DataTable table = EmulatorFuserightDao.GetAll(dbClient);
 
-                if (table1 == null)
+                if (table == null)
                 {
                     return;
                 }
 
-                foreach (DataRow dataRow in table1.Rows)
+                foreach (DataRow dataRow in table.Rows)
                 {
                     this.Rights.Add((string)dataRow["fuse"], Convert.ToInt32(dataRow["rank"]));
                 }

@@ -60,44 +60,28 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.triggerMessage, this.isOwnerOnly, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data,  all_user_triggerable FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.item.Id);
-            DataRow row = dbClient.GetRow();
-            if (row != null)
-            {
-                this.triggerMessage = row[0].ToString();
-                this.isOwnerOnly = row[1].ToString() == "1";
-            }
-            else
-            {
-                this.triggerMessage = string.Empty;
-                this.isOwnerOnly = false;
-            }
+            this.triggerMessage = row["trigger_data"].ToString();
+            this.isOwnerOnly = row["all_user_triggerable"].ToString() == "1";
         }
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message6 = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message6.WriteBoolean(false);
-            Message6.WriteInteger(0);
-            Message6.WriteInteger(0);
-            Message6.WriteInteger(SpriteId);
-            Message6.WriteInteger(this.item.Id);
-            Message6.WriteString(this.triggerMessage);
-            Message6.WriteInteger(0);
-            Message6.WriteInteger(0);
-            Message6.WriteInteger(0);
-            Message6.WriteInteger(0);
-            Message6.WriteInteger(0);
-            Message6.WriteInteger(0);
-            Session.SendPacket(Message6);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.item.Id);
+            Message.WriteString(this.triggerMessage);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
     }
 }

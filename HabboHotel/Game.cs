@@ -1,5 +1,6 @@
 ﻿using Butterfly.Communication.Packets;
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Achievements;
 using Butterfly.HabboHotel.Animations;
@@ -267,7 +268,7 @@ namespace Butterfly.HabboHotel
                 dbClient.RunQuery("UPDATE users SET auth_ticket = '' WHERE auth_ticket != ''");
                 dbClient.RunQuery("UPDATE user_websocket SET auth_ticket = '' WHERE auth_ticket != ''");
                 dbClient.RunQuery("UPDATE rooms SET users_now = '0' WHERE users_now > '0'");
-                dbClient.RunQuery("UPDATE server_status SET status = '1', users_online = '0', rooms_loaded = '0', stamp = '" + ButterflyEnvironment.GetUnixTimestamp() + "'");
+                EmulatorStatusDao.UpdateReset(dbClient);
             }
         }
 

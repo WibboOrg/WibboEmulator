@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Users;
 using System;
 using System.Collections.Concurrent;
@@ -38,8 +39,7 @@ namespace Butterfly.HabboHotel.Groups
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id,type,firstvalue,secondvalue FROM groups_items WHERE enabled = '1'");
-                DataTable dItems = dbClient.GetTable();
+                DataTable dItems = GuildItemDao.GetAll(dbClient);
 
                 foreach (DataRow dRow in dItems.Rows)
                 {

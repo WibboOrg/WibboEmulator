@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.LandingView;
 using System;
@@ -21,10 +22,9 @@ namespace Butterfly.HabboHotel.LandingView
         {
             this.HotelViewPromosIndexers.Clear();
 
-            using (IQueryAdapter DbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                DbClient.SetQuery("SELECT * from hotelview_promos WHERE hotelview_promos.enabled = '1' ORDER BY hotelview_promos.index ASC");
-                DataTable dTable = DbClient.GetTable();
+                DataTable dTable = EmulatorHotelviewPromoDao.GetAll(dbClient);
 
                 foreach (DataRow dRow in dTable.Rows)
                 {

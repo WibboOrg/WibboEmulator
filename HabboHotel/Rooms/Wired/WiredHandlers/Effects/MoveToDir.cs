@@ -1271,42 +1271,30 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
             WiredUtillity.SaveTriggerItem(dbClient, this.itemID, Convert.ToInt32(this.startDirection).ToString(), Convert.ToInt32(this.whenMoveIsBlocked).ToString(), false, this.items);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            try
+            string triggerItem = row["triggers_item"].ToString();
+
+            if(int.TryParse(row["trigger_data_2"].ToString(), out int startDirection))
+                this.startDirection = (MovementDirection)startDirection;
+                
+            this.movetodirMovement = this.startDirection;
+
+            if(int.TryParse(row["trigger_data"].ToString(), out int whenMoveIsBlocked))
+                this.whenMoveIsBlocked = (WhenMovementBlock)whenMoveIsBlocked;
+
+            if (triggerItem == "")
             {
-                string wireditem = null;
-
-                dbClient.SetQuery("SELECT trigger_data, trigger_data_2, triggers_item FROM wired_items WHERE trigger_id = @id ");
-                dbClient.AddParameter("id", this.itemID);
-                DataRow row = dbClient.GetRow();
-                if (row != null)
-                {
-                    wireditem = row["triggers_item"].ToString();
-
-                    this.startDirection = (MovementDirection)Convert.ToInt32(row["trigger_data_2"]);
-                    this.movetodirMovement = this.startDirection;
-                    this.whenMoveIsBlocked = (WhenMovementBlock)Convert.ToInt32(row["trigger_data"]);
-
-                }
-
-                if (wireditem == "" || wireditem == null)
-                {
-                    return;
-                }
-
-                foreach (string itemid in wireditem.Split(';'))
-                {
-                    Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(itemid));
-                    if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.itemID)
-                    {
-                        this.items.Add(roomItem);
-                    }
-                }
+                return;
             }
-            catch (Exception ex)
+
+            foreach (string itemid in triggerItem.Split(';'))
             {
-                Console.WriteLine("Wired id : " + this.itemID + " erreur :" + ex);
+                Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(itemid));
+                if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.itemID)
+                {
+                    this.items.Add(roomItem);
+                }
             }
         }
 
@@ -1334,11 +1322,6 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
             Message.WriteInteger(0);
             Message.WriteInteger(0);
             Session.SendPacket(Message);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.itemID + "'");
         }
 
         public bool Disposed()

@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,8 +25,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Styles
             DataTable Table = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id, name, required_right FROM room_chat_styles");
-                Table = dbClient.GetTable();
+                Table = EmulatorChatStyleDao.GetAll(dbClient);
 
                 if (Table != null)
                 {

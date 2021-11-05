@@ -1,5 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Incoming;
 using Butterfly.Communication.Packets.Outgoing.Quests;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Quests.Composer;
@@ -28,8 +29,8 @@ namespace Butterfly.HabboHotel.Quests
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id, category, series_number, goal_type, goal_data, name, reward, data_bit FROM quests");
-                foreach (DataRow dataRow in dbClient.GetTable().Rows)
+                DataTable table = EmulatorQuestDao.GetAll(dbClient);
+                foreach (DataRow dataRow in table.Rows)
                 {
                     int num1 = Convert.ToInt32(dataRow["id"]);
                     string str = (string)dataRow["category"];
