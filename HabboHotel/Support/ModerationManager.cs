@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Navigator;
 
 using Butterfly.Core;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.ChatMessageStorage;
+using Butterfly.HabboHotel.Rooms.Chat.Logs;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
 using Butterfly.HabboHotel.Users;
@@ -650,7 +650,7 @@ namespace Butterfly.HabboHotel.Support
             }
             else
             {
-                List<ChatMessage> sortedMessages = clientByUserId.GetHabbo().GetChatMessageManager().GetSortedMessages(0);
+                List<ChatlogEntry> sortedMessages = clientByUserId.GetHabbo().GetChatMessageManager().GetSortedMessages(0);
                 ServerPacket packet = new ServerPacket(ServerPacketHeader.MODTOOL_USER_CHATLOG);
                 packet.WriteInteger(UserId);
                 packet.WriteString(clientByUserId.GetHabbo().Username);
@@ -666,7 +666,7 @@ namespace Butterfly.HabboHotel.Support
                 packet.WriteInteger(RoomId);
 
                 packet.WriteShort(sortedMessages.Count);
-                foreach (ChatMessage chatMessage2 in sortedMessages)
+                foreach (ChatlogEntry chatMessage2 in sortedMessages)
                 {
                     chatMessage2.Serialize(ref packet);
                 }
@@ -694,7 +694,7 @@ namespace Butterfly.HabboHotel.Support
             }
             else
             {
-                ChatMessageManager chatMessageManager = room.GetChatMessageManager();
+                ChatlogManager chatMessageManager = room.GetChatMessageManager();
                 message.WriteInteger(chatMessageManager.messageCount);
                 chatMessageManager.Serialize(ref message);
                 return message;
@@ -725,7 +725,7 @@ namespace Butterfly.HabboHotel.Support
             }
             else
             {
-                ChatMessageManager chatMessageManager = room.GetChatMessageManager();
+                ChatlogManager chatMessageManager = room.GetChatMessageManager();
                 Message.WriteShort(chatMessageManager.messageCount);
                 chatMessageManager.Serialize(ref Message);
                 return Message;

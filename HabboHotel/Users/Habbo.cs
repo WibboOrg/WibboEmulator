@@ -7,7 +7,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Core;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Achievements;
-using Butterfly.HabboHotel.ChatMessageStorage;
+using Butterfly.HabboHotel.Rooms.Chat.Logs;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Roleplay;
 using Butterfly.HabboHotel.Roleplay.Player;
@@ -72,7 +72,7 @@ namespace Butterfly.HabboHotel.Users
         private HabboMessenger Messenger;
         private BadgeComponent BadgeComponent;
         private InventoryComponent InventoryComponent;
-        private ChatMessageManager chatMessageManager;
+        private ChatlogManager chatMessageManager;
         private GameClient mClient;
         public bool SpectatorMode;
         public bool Disconnected;
@@ -265,7 +265,7 @@ namespace Butterfly.HabboHotel.Users
             this.InventoryComponent = new InventoryComponent(this.Id, client);
             this.InventoryComponent.SetActiveState(client);
             this.quests = data.quests;
-            this.chatMessageManager = new ChatMessageManager();
+            this.chatMessageManager = new ChatlogManager();
             this.chatMessageManager.LoadUserChatlogs(this.Id);
             this.Messenger = new HabboMessenger(this.Id)
             {
@@ -649,7 +649,7 @@ namespace Butterfly.HabboHotel.Users
             return this.InventoryComponent;
         }
 
-        public ChatMessageManager GetChatMessageManager()
+        public ChatlogManager GetChatMessageManager()
         {
             return this.chatMessageManager;
         }

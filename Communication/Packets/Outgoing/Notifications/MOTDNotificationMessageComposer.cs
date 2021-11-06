@@ -7,6 +7,10 @@ namespace Butterfly.Communication.Packets.Outgoing.Notifications
         {
             WriteInteger(1);
             WriteString(Message);
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         }
     }
 }

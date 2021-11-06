@@ -331,6 +331,7 @@
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorRoomChatlogMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorRoomInfoMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorSupportTicketMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorSupportTicketResponseMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorTicketChatlogMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserChatlogMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserInfoMessageComposer.cs" />
@@ -636,10 +637,15 @@
     <Compile Include="HabboHotel\Items\ItemExtrabox.cs" />
     <Compile Include="HabboHotel\Items\ItemFactory.cs" />
     <Compile Include="HabboHotel\Items\ItemTemp.cs" />
+<<<<<<< Updated upstream
     <Compile Include="HabboHotel\Permissions\Permission.cs" />
     <Compile Include="HabboHotel\Permissions\PermissionCommand.cs" />
     <Compile Include="HabboHotel\Permissions\PermissionGroup.cs" />
     <Compile Include="HabboHotel\Permissions\PermissionManager.cs" />
+=======
+    <Compile Include="HabboHotel\LandingView\Promotions\Promotion.cs" />
+    <Compile Include="HabboHotel\Moderation\ModerationTicket.cs" />
+>>>>>>> Stashed changes
     <Compile Include="HabboHotel\Roleplay\Enemy\RPEnemy.cs" />
     <Compile Include="HabboHotel\Roleplay\Enemy\RPEnemyManager.cs" />
     <Compile Include="HabboHotel\Roleplay\Item\RPItemCategory.cs" />
@@ -734,7 +740,7 @@
     <Compile Include="Core\FigureData\Types\SetType.cs" />
     <Compile Include="Core\FigureData\Types\SetTypeUtility.cs" />
     <Compile Include="HabboHotel\Catalogs\CatalogPromotion.cs" />
-    <Compile Include="HabboHotel\Effects\EffectManager.cs" />
+    <Compile Include="HabboHotel\Users\Effects\EffectManager.cs" />
     <Compile Include="HabboHotel\Groups\GroupBadgeParts.cs" />
     <Compile Include="HabboHotel\Groups\GroupColours.cs" />
     <Compile Include="HabboHotel\HotelView\SmallPromo.cs" />
@@ -1002,8 +1008,8 @@
     <Compile Include="HabboHotel\Catalogs\CatalogManager.cs" />
     <Compile Include="HabboHotel\Catalogs\CatalogItem.cs" />
     <Compile Include="HabboHotel\Catalogs\CatalogPage.cs" />
-    <Compile Include="HabboHotel\ChatMessageStorage\ChatMessage.cs" />
-    <Compile Include="HabboHotel\ChatMessageStorage\ChatMessageManager.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Logs\ChatlogEntry.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Logs\ChatlogManager.cs" />
     <Compile Include="HabboHotel\GameClients\GameClient.cs" />
     <Compile Include="HabboHotel\GameClients\GameClientManager.cs" />
     <Compile Include="Core\LowPriorityWorker.cs" />
