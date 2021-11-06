@@ -1,4 +1,5 @@
 ﻿using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -43,8 +44,7 @@ namespace Butterfly.HabboHotel.Navigators
             {
                 DataTable Table = null;
 
-                dbClient.SetQuery("SELECT * FROM navigator_categories ORDER BY id ASC");
-                Table = dbClient.GetTable();
+                Table = NavigatorCategoryDao.GetAll(dbClient);
 
                 if (Table != null)
                 {
@@ -60,8 +60,7 @@ namespace Butterfly.HabboHotel.Navigators
                     }
                 }
 
-                dbClient.SetQuery("SELECT room_id,image_url,enabled, langue, game FROM navigator_publics ORDER BY order_num ASC");
-                DataTable GetPublics = dbClient.GetTable();
+                DataTable GetPublics = NavigatorPublicDao.GetAll(dbClient);
 
                 if (GetPublics != null)
                 {

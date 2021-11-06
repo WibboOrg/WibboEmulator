@@ -13,7 +13,7 @@ namespace Butterfly.Database.Daos
             return dbClient.GetRow();
         }
 
-        internal static void Update(IQueryAdapter dbClient, int userId)
+        internal static void UpdateTicket(IQueryAdapter dbClient, int userId)
         {
             dbClient.RunQuery("UPDATE user_websocket SET auth_ticket = '' WHERE user_id = '" + userId + "'");
         }

@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -22,17 +23,15 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT enabled,current_preset,preset_one,preset_two,preset_three FROM room_items_moodlight WHERE item_id = '" + ItemId + "' LIMIT 1");
-                Row = dbClient.GetRow();
+                Row = ItemMoodlightDao.GetOne(dbClient, ItemId);
             }
 
             if (Row == null)
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("INSERT INTO room_items_moodlight (item_id,enabled,current_preset,preset_one,preset_two,preset_three) VALUES ('" + ItemId + "','0','1','#000000,255,0','#000000,255,0','#000000,255,0')");
-                    dbClient.SetQuery("SELECT enabled,current_preset,preset_one,preset_two,preset_three FROM room_items_moodlight WHERE item_id=" + ItemId + " LIMIT 1");
-                    Row = dbClient.GetRow();
+                    ItemMoodlightDao.Insert(dbClient, ItemId);
+                    Row = ItemMoodlightDao.GetOne(dbClient, ItemId);
                 }
             }
 
@@ -52,7 +51,7 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE room_items_moodlight SET enabled = 1 WHERE item_id = '" + this.ItemId + "' LIMIT 1");
+                ItemMoodlightDao.UpdateEnable(dbClient, this.ItemId, 1);
             }
         }
 
@@ -62,7 +61,7 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE room_items_moodlight SET enabled = 0 WHERE item_id = '" + this.ItemId + "' LIMIT 1");
+                ItemMoodlightDao.UpdateEnable(dbClient, this.ItemId, 0);
             }
         }
 
@@ -96,9 +95,7 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE room_items_moodlight SET preset_" + Pr + " = '@color," + Intensity + "," + ButterflyEnvironment.BoolToEnum(BgOnly) + "' WHERE item_id = '" + this.ItemId + "' LIMIT 1");
-                dbClient.AddParameter("color", Color);
-                dbClient.RunQuery();
+                ItemMoodlightDao.Update(dbClient, this.ItemId, Color, Pr, Intensity, BgOnly);
             }
 
             this.GetPreset(Preset).ColorCode = Color;

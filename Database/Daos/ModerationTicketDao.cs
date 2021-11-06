@@ -13,7 +13,7 @@ namespace Butterfly.Database.Daos
             return dbClient.GetTable();
         }
 
-        internal static int Insert(IQueryAdapter dbClient, string message, string roomname, string category, int userId, int reportedUser, int roomId)
+        internal static int Insert(IQueryAdapter dbClient, string message, string roomname, int category, int userId, int reportedUser, int roomId)
         {
             dbClient.SetQuery("INSERT INTO moderation_tickets (score,type,status,sender_id,reported_id,moderator_id,message,room_id,room_name,timestamp) VALUES (1,'" + category + "','open','" + userId + "','" + reportedUser + "','0',@message,'" + roomId + "',@name,'" + ButterflyEnvironment.GetUnixTimestamp() + "')");
             dbClient.AddParameter("message", message);

@@ -66,20 +66,20 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message7 = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message7.WriteBoolean(false);
-            Message7.WriteInteger(5);
-            Message7.WriteInteger(0);
-            Message7.WriteInteger(SpriteId);
-            Message7.WriteInteger(this.item.Id);
-            Message7.WriteString("");
-            Message7.WriteInteger(1);
-            Message7.WriteInteger(this.scoreLevel);
-            Message7.WriteInteger(0);
-            Message7.WriteInteger(10);
-            Message7.WriteInteger(0);
-            Message7.WriteInteger(0);
-            Session.SendPacket(Message7);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(5);
+            Message.WriteInteger(0);
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.item.Id);
+            Message.WriteString("");
+            Message.WriteInteger(1);
+            Message.WriteInteger(this.scoreLevel);
+            Message.WriteInteger(0);
+            Message.WriteInteger(10);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
     }
 }

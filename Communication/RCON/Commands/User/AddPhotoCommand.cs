@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
 
@@ -44,9 +45,7 @@ namespace Butterfly.Communication.RCON.Commands.User
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO user_photos (user_id,photo,time) VALUES ('" + Client.GetHabbo().Id + "', @photoid, '" + Time + "')");
-                dbClient.AddParameter("photoid", PhotoId);
-                dbClient.RunQuery();
+                UserPhotoDao.Insert(dbClient, Client.GetHabbo().Id, PhotoId, Time);
             }
 
             Client.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.valide", Client.Langue));

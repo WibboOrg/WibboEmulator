@@ -1,3 +1,4 @@
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -25,13 +26,10 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             Item Item = ItemFactory.CreateSingleItemNullable(ItemData, Session.GetHabbo(), ExtraData);
             Session.GetHabbo().GetInventoryComponent().TryAddItem(Item);
-            //Session.SendPacket(new FurniListUpdateComposer());
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO user_photos (user_id,photo,time) VALUES ('" + Session.GetHabbo().Id + "', @photoid, '" + Time + "');");
-                dbClient.AddParameter("photoid", PhotoId);
-                dbClient.RunQuery();
+                UserPhotoDao.Insert(dbClient, Session.GetHabbo().Id, PhotoId, Time);
             }
 
             Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.valide", Session.Langue));

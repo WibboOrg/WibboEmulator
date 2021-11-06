@@ -25,8 +25,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 "SELECT 'Appart " + OldRoomId + " copie', '" + Session.GetHabbo().Username + "', description, model_name, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick, allow_rightsoverride, allow_hidewireds FROM rooms WHERE id = '" + OldRoomId + "'; ");
                 RoomId = Convert.ToInt32(dbClient.InsertQuery());
 
-                dbClient.RunQuery("INSERT INTO room_models_customs (room_id, door_x, door_y, door_z, door_dir, heightmap, wall_height) " +
-                    "SELECT '" + RoomId + "', door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = '" + OldRoomId + "'");
+                RoomModelCustomDao.InsertDuplicate(dbClient, RoomId, OldRoomId);
 
                 List<int> furniIdAllow = new List<int>();
 
@@ -74,8 +73,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
                     if (Data.InteractionType == InteractionType.MOODLIGHT)
                     {
-                        dbClient.RunQuery("INSERT INTO room_items_moodlight (item_id, enabled, current_preset, preset_one, preset_two, preset_three)" +
-                        "SELECT '" + ItemId + "', enabled, current_preset, preset_one, preset_two, preset_three FROM room_items_moodlight WHERE item_id = '" + OldItemId + "'");
+                        ItemMoodlightDao.InsertDuplicate(dbClient, ItemId, OldItemId);
                     }
 
                     if (WiredUtillity.TypeIsWired(Data.InteractionType))

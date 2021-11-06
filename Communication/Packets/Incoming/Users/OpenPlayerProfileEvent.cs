@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Users;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Groups;
@@ -11,10 +12,10 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(GameClient Session, ClientPacket Packet)
         {
-            int userID = Packet.PopInt();
+            int userId = Packet.PopInt();
             bool IsMe = Packet.PopBoolean();
 
-            Habbo targetData = ButterflyEnvironment.GetHabboById(userID);
+            Habbo targetData = ButterflyEnvironment.GetHabboById(userId);
             if (targetData == null)
             {
                 return;
@@ -32,9 +33,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("SELECT COUNT(0) FROM messenger_friendships WHERE (user_one_id = @userid);");
-                    dbClient.AddParameter("userid", userID);
-                    friendCount = dbClient.GetInteger();
+                    friendCount = MessengerFriendshipDao.GetCount(dbClient, userId);
                 }
             }
 

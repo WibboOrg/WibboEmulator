@@ -71,11 +71,6 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
             Session.SendPacket(Message);
         }
 
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.ItemId + "'");
-        }
-
         public void Dispose()
         {
             this.isDisposed = true;

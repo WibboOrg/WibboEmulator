@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -32,8 +33,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Filter
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT word FROM room_swearword_filter");
-                DataTable Data = dbClient.GetTable();
+                DataTable Data = RoomSwearwordFilterDao.GetAll(dbClient);
 
                 if (Data != null)
                 {
@@ -43,8 +43,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Filter
                     }
                 }
 
-                dbClient.SetQuery("SELECT word FROM word_filter_retro");
-                DataTable Data2 = dbClient.GetTable();
+                DataTable Data2 = WordFilterRetroDao.GetAll(dbClient);
 
                 if (Data2 != null)
                 {
@@ -63,11 +62,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Filter
                 this._pubWords.Add(Word);
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    dbClient.SetQuery("INSERT INTO word_filter_retro (word) VALUES (@word)");
-                    dbClient.AddParameter("word", Word);
-                    dbClient.RunQuery();
-                }
+                    WordFilterRetroDao.Insert(dbClient, Word);
             }
         }
 

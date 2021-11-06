@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Furni;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -52,7 +53,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Present.Id + "'");
-                        dbClient.RunQuery("DELETE FROM `user_presents` WHERE `item_id` = '" + Present.Id + "' LIMIT 1");
+                        UserPresentDao.Delete(dbClient, Present.Id);
                     }
 
                     Session.GetHabbo().GetInventoryComponent().RemoveItem(Present.Id);
@@ -66,7 +67,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Present.Id + "'");
-                        dbClient.RunQuery("DELETE FROM `user_presents` WHERE `item_id` = '" + Present.Id + "' LIMIT 1");
+                        UserPresentDao.Delete(dbClient, Present.Id);
                     }
 
                     Session.GetHabbo().GetInventoryComponent().RemoveItem(Present.Id);
@@ -107,7 +108,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 dbClient.AddParameter("edata", Row["extr_data"]);
                 dbClient.RunQuery();
 
-                dbClient.RunQuery("DELETE FROM `user_presents` WHERE `item_id` = " + Present.Id + " LIMIT 1");
+                UserPresentDao.Delete(dbClient, Present.Id);
             }
 
             Present.BaseItem = Convert.ToInt32(Row["base_id"]);

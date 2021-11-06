@@ -1,5 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Catalog;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Catalog.Vouchers;
 using Butterfly.HabboHotel.GameClients;
@@ -24,30 +25,18 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            DataRow GetRow = null;
+            bool haveVoucher = false;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("SELECT * FROM user_voucher WHERE user_id = @userId AND voucher = @Voucher LIMIT 1");
-                dbClient.AddParameter("userId", Session.GetHabbo().Id);
-                dbClient.AddParameter("Voucher", VoucherCode);
-                GetRow = dbClient.GetRow();
-                //UserVoucherDao.haveVoucher
-            }
+                haveVoucher = UserVoucherDao.HaveVoucher(dbClient, Session.GetHabbo().Id, VoucherCode);
 
-            if (GetRow != null)
+            if (!haveVoucher)
             {
                 return;
             }
             else
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    dbClient.SetQuery("INSERT INTO user_voucher (user_id,voucher) VALUES (@userId, @Voucher)");
-                    dbClient.AddParameter("userId", Session.GetHabbo().Id);
-                    dbClient.AddParameter("Voucher", VoucherCode);
-                    dbClient.RunQuery();
-                    //UserVoucherDao.insertVoucher
-                }
+                    UserVoucherDao.Insert(dbClient, Session.GetHabbo().Id, VoucherCode);
             }
 
             Voucher.UpdateUses();
@@ -63,7 +52,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, Voucher.Value));
             }
 
-            //Session.SendPacket(new VoucherRedeemOkComposer());
+            // Session.SendPacket(new VoucherRedeemOkComposer());
         }
     }
 }

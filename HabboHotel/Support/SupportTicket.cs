@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 
 namespace Butterfly.HabboHotel.Support
@@ -92,10 +93,10 @@ namespace Butterfly.HabboHotel.Support
             return message;
         }
 
-        public void Pick(int pModeratorId, bool UpdateInDb)
+        public void Pick(int moderatorId, bool UpdateInDb)
         {
             this.Status = TicketStatus.PICKED;
-            this.ModeratorId = pModeratorId;
+            this.ModeratorId = moderatorId;
             this.Timestamp = ButterflyEnvironment.GetUnixTimestamp();
 
             if (!UpdateInDb)
@@ -105,7 +106,7 @@ namespace Butterfly.HabboHotel.Support
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE moderation_tickets SET status = 'picked', moderator_id = '" + pModeratorId + "', timestamp = '" + ButterflyEnvironment.GetUnixTimestamp() + "' WHERE id = '" + this.Id + "'");
+                ModerationTicketDao.UpdateStatusPicked(dbClient, moderatorId, this.Id);
             }
         }
 
@@ -133,7 +134,7 @@ namespace Butterfly.HabboHotel.Support
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE moderation_tickets SET status = '" + str + "' WHERE id = '" + this.Id + "'");
+                ModerationTicketDao.UpdateStatus(dbClient, str, this.Id);
             }
         }
 
@@ -148,7 +149,7 @@ namespace Butterfly.HabboHotel.Support
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE moderation_tickets SET status = 'open' WHERE id = '" + this.Id + "'");
+                ModerationTicketDao.UpdateStatusOpen(dbClient, this.Id);
             }
         }
 
@@ -163,7 +164,7 @@ namespace Butterfly.HabboHotel.Support
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE moderation_tickets SET status = 'deleted' WHERE id = '" + this.Id + "'");
+                ModerationTicketDao.UpdateStatusDeleted(dbClient, this.Id);
             }
         }
 

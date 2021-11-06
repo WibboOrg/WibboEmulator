@@ -105,25 +105,25 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message8 = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message8.WriteBoolean(false);
-            Message8.WriteInteger(10);
-            Message8.WriteInteger(this.items.Count);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(10);
+            Message.WriteInteger(this.items.Count);
             foreach (Item roomItem in this.items)
             {
-                Message8.WriteInteger(roomItem.Id);
+                Message.WriteInteger(roomItem.Id);
             }
 
-            Message8.WriteInteger(SpriteId);
-            Message8.WriteInteger(this.item.Id);
-            Message8.WriteString("");
-            Message8.WriteInteger(0);
-            Message8.WriteInteger(8);
-            Message8.WriteInteger(0);
-            Message8.WriteInteger(this.Delay);
-            Message8.WriteInteger(0);
-            Message8.WriteInteger(0);
-            Session.SendPacket(Message8);
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.item.Id);
+            Message.WriteString("");
+            Message.WriteInteger(0);
+            Message.WriteInteger(8);
+            Message.WriteInteger(0);
+            Message.WriteInteger(this.Delay);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
 
         public bool Disposed()

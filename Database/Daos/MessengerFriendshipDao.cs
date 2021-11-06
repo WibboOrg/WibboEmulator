@@ -12,18 +12,17 @@ namespace Butterfly.Database.Daos
             return dbClient.GetInteger();
         }
 
-        internal static void UpdateRelation(IQueryAdapter dbClient, int type, int userId, string username)
+        internal static void UpdateRelation(IQueryAdapter dbClient, int type, int userId, int targetId)
         {
-            dbClient.SetQuery("UPDATE messenger_friendships SET relation = '" + type + "' WHERE user_one_id=@id AND user_two_id=@target LIMIT 1");
+            dbClient.SetQuery("UPDATE messenger_friendships SET relation = '" + type + "' WHERE user_one_id = @id AND user_two_id = @target LIMIT 1");
             dbClient.AddParameter("id", userId);
-            dbClient.AddParameter("target", username);
+            dbClient.AddParameter("target", targetId);
             dbClient.RunQuery();
         }
 
         internal static void Replace(IQueryAdapter dbClient, int userId, int friendId)
         {
             dbClient.RunQuery("REPLACE INTO messenger_friendships (user_one_id,user_two_id) VALUES ('" + userId + "','" + friendId + "')");
-            dbClient.RunQuery("REPLACE INTO messenger_friendships (user_one_id,user_two_id) VALUES ('" + friendId + "','" + userId + "')");
         }
 
         internal static void Delete(IQueryAdapter dbClient, int userId, int friendId)

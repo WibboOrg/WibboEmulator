@@ -128,9 +128,8 @@ namespace Butterfly.HabboHotel.Achievements
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("REPLACE INTO user_achievement VALUES ('" + Session.GetHabbo().Id + "', @group, '" + NewLevel + "', '" + NewProgress + "')");
-                    dbClient.AddParameter("group", AchievementGroup);
-                    dbClient.RunQuery();
+                    UserAchievementDao.Replace(dbClient, Session.GetHabbo().Id, NewLevel, NewProgress, AchievementGroup);
+
                     dbClient.RunQuery("UPDATE user_stats SET achievement_score = achievement_score + '" + TargetLevelData.RewardPoints + "' WHERE id = '" + Session.GetHabbo().Id + "'");
                 }
 
@@ -166,9 +165,7 @@ namespace Butterfly.HabboHotel.Achievements
                 UserData.Progress = NewProgress;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("REPLACE INTO user_achievement VALUES ('" + Session.GetHabbo().Id + "', @group, '" + NewLevel + "', '" + NewProgress + "')");
-                    dbClient.AddParameter("group", AchievementGroup);
-                    dbClient.RunQuery();
+                    UserAchievementDao.Replace(dbClient, Session.GetHabbo().Id, NewLevel, NewProgress, AchievementGroup);
                 }
 
                 Session.SendPacket(new AchievementProgressedComposer(AchievementData, TargetLevel, TargetLevelData,

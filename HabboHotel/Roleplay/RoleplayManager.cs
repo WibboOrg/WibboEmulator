@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Roleplay.Enemy;
 using Butterfly.HabboHotel.Roleplay.Troc;
 using Butterfly.HabboHotel.Roleplay.Weapon;
@@ -65,8 +66,7 @@ namespace Butterfly.HabboHotel.Roleplay
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT owner_id, hopital_id, prison_id FROM roleplay");
-                DataTable table1 = dbClient.GetTable();
+                DataTable table1 = RoleplayDao.GetAll(dbClient);
                 if (table1 != null)
                 {
                     foreach (DataRow dataRow in table1.Rows)

@@ -1,4 +1,5 @@
 ﻿using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using System;
@@ -34,8 +35,7 @@ namespace Butterfly.HabboHotel.Rooms
             DataRow row;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = '" + roomID + "'");
-                row = dbClient.GetRow();
+                row = RoomModelCustomDao.GetOne(dbClient, roomID);
             }
 
             if (row == null)
@@ -231,8 +231,7 @@ namespace Butterfly.HabboHotel.Rooms
             this._roomModels.Clear();
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id, door_x, door_y, door_z, door_dir, heightmap FROM room_models");
-                DataTable table = dbClient.GetTable();
+                DataTable table = RoomModelDao.GetAll(dbClient);
                 if (table == null)
                 {
                     return;

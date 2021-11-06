@@ -1281,22 +1281,22 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message15 = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message15.WriteBoolean(false);
-            Message15.WriteInteger(0); //Max count item
-            Message15.WriteInteger(0); //Item Count
-            Message15.WriteInteger(SpriteId);
-            Message15.WriteInteger(this.item.Id);
-            Message15.WriteString(this.Effet + ":" + this.Value);
-            Message15.WriteInteger(0); //Loop
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(0); //Max count item
+            Message.WriteInteger(0); //Item Count
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.item.Id);
+            Message.WriteString(this.Effet + ":" + this.Value);
+            Message.WriteInteger(0); //Loop
 
-            Message15.WriteInteger(0);
-            Message15.WriteInteger(7);
-            Message15.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(7);
+            Message.WriteInteger(0);
 
-            Message15.WriteInteger(0);
+            Message.WriteInteger(0);
 
-            Session.SendPacket(Message15);
+            Session.SendPacket(Message);
         }
 
         public void Dispose()

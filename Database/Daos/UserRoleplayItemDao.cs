@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using Butterfly.Database;
 using Butterfly.Database.Interfaces;
@@ -18,9 +19,11 @@ namespace Butterfly.Database.Daos
             return dbClient.GetTable();
         }
 
-        internal static void Insert(IQueryAdapter dbClient, int userId, int roleplayId, int itemId, int count)
+        internal static int Insert(IQueryAdapter dbClient, int userId, int roleplayId, int itemId, int count)
         {
             dbClient.SetQuery("INSERT INTO user_rpitems (user_id, rp_id, item_id, count) VALUES ('" + userId + "', '" + roleplayId + "', '" + itemId + "', '" + count + "')");
+
+            return Convert.ToInt32(dbClient.InsertQuery());
         }
 
         internal static void UpdateAddCount(IQueryAdapter dbClient, int itemId, int count)

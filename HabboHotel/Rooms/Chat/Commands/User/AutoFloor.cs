@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using System;
@@ -44,15 +44,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("REPLACE INTO room_models_customs VALUES (@id, @doorX, @doorY, @doorZ, @doorDir, @heightmap, @murheight)");
-                dbClient.AddParameter("id", Room.Id);
-                dbClient.AddParameter("doorX", Room.GetGameMap().Model.DoorX);
-                dbClient.AddParameter("doorY", Room.GetGameMap().Model.DoorY);
-                dbClient.AddParameter("doorZ", Room.GetGameMap().Model.DoorZ);
-                dbClient.AddParameter("doorDir", Room.GetGameMap().Model.DoorOrientation);
-                dbClient.AddParameter("heightmap", Map);
-                dbClient.AddParameter("murheight", Room.GetGameMap().Model.MurHeight);
-                dbClient.RunQuery();
+                RoomModelCustomDao.Replace(dbClient, Room.Id, Room.GetGameMap().Model.DoorX, Room.GetGameMap().Model.DoorY, Room.GetGameMap().Model.DoorZ, Room.GetGameMap().Model.DoorOrientation, Map, Room.GetGameMap().Model.MurHeight);
+      
                 dbClient.RunQuery("UPDATE rooms SET model_name = 'model_custom' WHERE id = '" + Room.Id + "' LIMIT 1");
             }
 

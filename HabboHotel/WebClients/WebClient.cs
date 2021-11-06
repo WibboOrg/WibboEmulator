@@ -56,10 +56,7 @@ namespace Butterfly.HabboHotel.WebClients
                     return;
                 }
 
-                dbClient.SetQuery("SELECT user_id, is_staff, langue FROM user_websocket WHERE auth_ticket = @sso");
-                dbClient.AddParameter("sso", AuthTicket);
-
-                DataRow dUserInfo = dbClient.GetRow();
+                DataRow dUserInfo = UserWebsocketDao.GetOne(dbClient, AuthTicket);
                 if (dUserInfo == null)
                 {
                     return;
@@ -68,7 +65,7 @@ namespace Butterfly.HabboHotel.WebClients
                 this.UserId = Convert.ToInt32(dUserInfo["user_id"]);
                 this._isStaff = ButterflyEnvironment.EnumToBool((string)dUserInfo["is_staff"]);
                 this._langue = LanguageManager.ParseLanguage(Convert.ToString(dUserInfo["langue"]));
-                dbClient.RunQuery("UPDATE user_websocket SET auth_ticket = '' WHERE user_id = '" + this.UserId + "'");
+                UserWebsocketDao.UpdateTicket(dbClient, this.UserId);
 
                 this.SendSettingSound(dbClient);
             }

@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -31,7 +32,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("DELETE FROM user_favorites WHERE user_id = '" + Session.GetHabbo().Id + "' AND room_id = '" + RoomId + "'");
+                UserFavoriteDao.Delete(dbClient, Session.GetHabbo().Id, RoomId);
             }
         }
     }

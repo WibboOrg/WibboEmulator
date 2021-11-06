@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,8 +22,7 @@ namespace Butterfly.HabboHotel.ChatMessageStorage
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT user_id, user_name, room_id, type, message FROM chatlogs WHERE user_id = '" + UserId + "' ORDER BY id DESC LIMIT 100");
-                DataTable table = dbClient.GetTable();
+                DataTable table = LogChatDao.GetAllByUserId(dbClient, UserId);
                 if (table == null)
                 {
                     return;
@@ -40,8 +40,7 @@ namespace Butterfly.HabboHotel.ChatMessageStorage
             DataTable table;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT user_id, user_name, room_id, type, message FROM chatlogs WHERE room_id = '" + RoomId + "' ORDER BY id DESC LIMIT 100");
-                table = dbClient.GetTable();
+                table = LogChatDao.GetAllByRoomId(dbClient, RoomId);
                 if (table == null)
                 {
                     return;

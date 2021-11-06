@@ -18,7 +18,7 @@ namespace Butterfly.Database.Daos
             return dbClient.GetTable();
         }
 
-        internal static void Insert(IQueryAdapter dbClient, int userId, int roomId, string message, int type, string username)
+        internal static void Insert(IQueryAdapter dbClient, int userId, int roomId, string message, string type, string username)
         {
             dbClient.SetQuery("INSERT INTO chatlogs (user_id, room_id, user_name, timestamp, message, type) VALUES ('" + userId + "', '" + roomId + "', @username, UNIX_TIMESTAMP(), @message, @type)");
             dbClient.AddParameter("message", message);

@@ -2,6 +2,7 @@ using Butterfly.Communication.Packets.Outgoing.Handshake;
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Communication.Packets.Outgoing.Users;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -60,11 +61,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 dbClient.AddParameter("userid", Session.GetHabbo().Id);
                 dbClient.RunQuery();
 
-                dbClient.SetQuery("INSERT INTO logs_flagme (user_id, oldusername, newusername, time) VALUES (@userid, @oldusername, @newusername, '" + ButterflyEnvironment.GetUnixTimestamp() + "');");
-                dbClient.AddParameter("userid", Session.GetHabbo().Id);
-                dbClient.AddParameter("oldusername", Session.GetHabbo().Username);
-                dbClient.AddParameter("newusername", NewUsername);
-                dbClient.RunQuery();
+                LogFlagmeDao.Insert(dbClient, Session.GetHabbo().Id, Session.GetHabbo().Username, NewUsername);
             }
 
             ButterflyEnvironment.GetGame().GetClientManager().UpdateClientUsername(Session.ConnectionID, Session.GetHabbo().Username, NewUsername);

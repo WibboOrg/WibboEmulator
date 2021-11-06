@@ -90,11 +90,9 @@ namespace Butterfly.HabboHotel.Users.UserData
                         row2 = UserStatsDao.GetOne(dbClient, userId);
                     }
 
-                    dbClient.SetQuery("SELECT group, level, progress FROM user_achievement WHERE user_id = '" + userId + "';");
-                    Achievement = dbClient.GetTable();
+                    Achievement = UserAchievementDao.GetAll(dbClient, userId);
 
-                    dbClient.SetQuery("SELECT room_id FROM user_favorites WHERE user_id = '" + userId + "';");
-                    Favorites = dbClient.GetTable();
+                    Favorites = UserFavoriteDao.GetAll(dbClient, userId);
 
                     dbClient.SetQuery("SELECT room_id FROM room_rights WHERE user_id = '" + userId + "';");
                     RoomRights = dbClient.GetTable();
@@ -108,8 +106,7 @@ namespace Butterfly.HabboHotel.Users.UserData
                     dbClient.SetQuery("SELECT messenger_requests.from_id,messenger_requests.to_id,users.username FROM users JOIN messenger_requests ON users.id = messenger_requests.from_id WHERE messenger_requests.to_id = '" + userId + "'");
                     Requests = dbClient.GetTable();
 
-                    dbClient.SetQuery("SELECT * FROM user_quests WHERE user_id = '" + userId + "';");
-                    Quests = dbClient.GetTable();
+                    Quests = UserQuestDao.GetAll(dbClient, userId);
 
                     dbClient.SetQuery("SELECT group_id FROM group_memberships WHERE user_id = '" + userId + "';");
                     GroupMemberships = dbClient.GetTable();

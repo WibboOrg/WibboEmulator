@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -146,14 +147,8 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
             string triggerData2 = this.EtatActuel + ";" + this.DirectionActuel + ";" + this.PositionActuel;
 
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = " + this.itemID);
-            dbClient.SetQuery("INSERT INTO wired_items (trigger_id,trigger_data,trigger_data_2,all_user_triggerable,triggers_item) VALUES (@id,@trigger_data,@trigger_data_2,@triggerable,@triggers_item)");
-            dbClient.AddParameter("id", this.itemID);
-            dbClient.AddParameter("trigger_data", this.Delay.ToString());
-            dbClient.AddParameter("trigger_data_2", triggerData2);
-            dbClient.AddParameter("triggerable", 0);
-            dbClient.AddParameter("triggers_item", triggersitem);
-            dbClient.RunQuery();
+            ItemWiredDao.Delete(dbClient, this.itemID);
+            ItemWiredDao.Insert(dbClient, this.itemID, "", triggerData2, false, triggersitem);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
