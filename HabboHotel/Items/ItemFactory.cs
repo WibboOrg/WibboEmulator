@@ -20,11 +20,7 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES (@did,@uid,@extra_data)");
-                dbClient.AddParameter("did", Data.Id);
-                dbClient.AddParameter("uid", Habbo.Id);
-                dbClient.AddParameter("extra_data", ExtraData);
-                Item.Id = Convert.ToInt32(dbClient.InsertQuery());
+                Item.Id = ItemDao.Insert(dbClient, Data.Id, Habbo.Id, ExtraData);
 
                 if (LimitedNumber > 0)
                 {
@@ -45,12 +41,7 @@ namespace Butterfly.HabboHotel.Items
             int InsertId = 0;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO items (id,base_item,user_id,extra_data) VALUES (@id, @did,@uid,@extra_data)");
-                dbClient.AddParameter("id", ItemId);
-                dbClient.AddParameter("did", Data.Id);
-                dbClient.AddParameter("uid", Habbo.Id);
-                dbClient.AddParameter("extra_data", ExtraData);
-                InsertId = Convert.ToInt32(dbClient.InsertQuery());
+                InsertId = ItemDao.Insert(dbClient, ItemId, Data.Id, Habbo.Id, ExtraData);
 
                 if (LimitedNumber > 0 && InsertId > 0)
                 {
@@ -77,12 +68,9 @@ namespace Butterfly.HabboHotel.Items
             {
                 for (int i = 0; i < Amount; i++)
                 {
-                    dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES (@did,@uid,@flags);");
-                    dbClient.AddParameter("did", Data.Id);
-                    dbClient.AddParameter("uid", Habbo.Id);
-                    dbClient.AddParameter("flags", ExtraData);
+                    int itemId = ItemDao.Insert(dbClient, Data.Id, Habbo.Id, ExtraData);
 
-                    Item Item = new Item(Convert.ToInt32(dbClient.InsertQuery()), 0, Data.Id, ExtraData, 0, 0, 0, 0, 0, 0, "", null);
+                    Item Item = new Item(itemId, 0, Data.Id, ExtraData, 0, 0, 0, 0, 0, 0, "", null);
 
                     Items.Add(Item);
                 }
@@ -96,19 +84,8 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES(@did,@uid,@flags);");
-                dbClient.AddParameter("did", Data.Id);
-                dbClient.AddParameter("uid", Habbo.Id);
-                dbClient.AddParameter("flags", "");
-
-                int Item1Id = Convert.ToInt32(dbClient.InsertQuery());
-
-                dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES(@did,@uid,@flags);");
-                dbClient.AddParameter("did", Data.Id);
-                dbClient.AddParameter("uid", Habbo.Id);
-                dbClient.AddParameter("flags", Item1Id.ToString());
-
-                int Item2Id = Convert.ToInt32(dbClient.InsertQuery());
+                int Item1Id = ItemDao.Insert(dbClient, Data.Id, Habbo.Id, "");
+                int Item2Id = ItemDao.Insert(dbClient, Data.Id, Habbo.Id, Item1Id.ToString());
 
                 Item Item1 = new Item(Item1Id, 0, Data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
                 Item Item2 = new Item(Item2Id, 0, Data.Id, "", 0, 0, 0, 0, 0, 0, "", null);

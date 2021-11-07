@@ -41,8 +41,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 List<int> wiredId = new List<int>();
                 List<int> teleportId = new List<int>();
 
-                dbClient.SetQuery("SELECT id, base_item FROM items WHERE room_id = '" + OldRoomId + "'");
-                foreach (DataRow dataRow in dbClient.GetTable().Rows)
+                DataTable itemTable = ItemDao.GetAll(dbClient, OldRoomId);
+                foreach (DataRow dataRow in itemTable.Rows)
                 {
                     int OldItemId = Convert.ToInt32(dataRow[0]);
                     int baseID = Convert.ToInt32(dataRow[1]);
@@ -58,9 +58,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         continue;
                     }
 
-                    dbClient.SetQuery("INSERT INTO items (user_id, room_id, base_item, extra_data, x, y, z, rot, wall_pos)" +
-                        " SELECT '" + Session.GetHabbo().Id + "', '" + RoomId + "', base_item, extra_data, x, y, z, rot, wall_pos FROM items WHERE id = '" + OldItemId + "'");
-                    int ItemId = Convert.ToInt32(dbClient.InsertQuery());
+                    int ItemId = ItemDao.InsertDuplicate(dbClient, Session.GetHabbo().Id, RoomId, OldItemId);
 
                     newItemsId.Add(OldItemId, ItemId);
 

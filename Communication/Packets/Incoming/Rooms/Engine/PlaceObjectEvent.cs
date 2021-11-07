@@ -1,5 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Users;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -106,7 +107,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.RunQuery("UPDATE items SET room_id = '" + Room.Id + "', user_id = '" + Room.RoomData.OwnerId + "' WHERE id = '" + ItemId + "'");
+                        ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, Room.Id, Room.RoomData.OwnerId);
                     }
 
                     Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
@@ -168,7 +169,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     {
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            dbClient.RunQuery("UPDATE items SET room_id = '" + Room.Id + "', user_id = '" + Room.RoomData.OwnerId + "' WHERE id = '" + ItemId + "'");
+                            ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, Room.Id, Room.RoomData.OwnerId);
                         }
 
                         Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);

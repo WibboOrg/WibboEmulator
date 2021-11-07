@@ -95,7 +95,7 @@ namespace Butterfly.HabboHotel.Rooms
             this._rollers.Clear();
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE items SET room_id = '0', user_id = '" + this._room.RoomData.OwnerId + "' WHERE room_id = '" + this._room.Id + "'");
+                ItemDao.UpdateRoomIdAndUserId(dbClient, this._room.RoomData.OwnerId, this._room.Id);
             }
 
             this._room.GetGameMap().GenerateMaps();

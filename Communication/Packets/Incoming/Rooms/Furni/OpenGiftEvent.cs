@@ -52,7 +52,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Present.Id + "'");
+                        ItemDao.Delete(dbClient, Present.Id);
                         UserPresentDao.Delete(dbClient, Present.Id);
                     }
 
@@ -66,7 +66,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Present.Id + "'");
+                        ItemDao.Delete(dbClient, Present.Id);
                         UserPresentDao.Delete(dbClient, Present.Id);
                     }
 

@@ -161,7 +161,7 @@ namespace Butterfly.HabboHotel.GameClients
                         return;
                     }
 
-                    dbClient.RunQuery("INSERT INTO items (user_id, room_id, base_item, extra_data, x, y, z, rot) SELECT '" + this.GetHabbo().Id + "', '" + RoomId + "', base_item, extra_data, x, y, z, rot FROM items WHERE room_id = '5328079'");
+                    ItemDao.InsertDuplicate(dbClient, this.GetHabbo().Id, RoomId);
                 }
 
                 this.GetHabbo().UsersRooms.Add(ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId));

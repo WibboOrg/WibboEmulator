@@ -43,8 +43,7 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT room_id FROM items WHERE id = '" + TeleId + "' LIMIT 1");
-                DataRow row = dbClient.GetRow();
+                DataRow row = ItemDao.GetOneRoomId(dbClient, TeleId);
                 if (row == null)
                 {
                     return 0;

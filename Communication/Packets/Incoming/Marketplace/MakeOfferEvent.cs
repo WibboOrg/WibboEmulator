@@ -42,7 +42,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON(items_limited.item_id = items.id) WHERE id = '" + ItemId + "'");
+                ItemDao.Delete(dbClient, ItemId);
 
                 CatalogMarketplaceOfferDao.Insert(dbClient, Item.GetBaseItem().ItemName, Item.ExtraData, ItemId, Item.BaseItem, Session.GetHabbo().Id ,SellingPrice, TotalPrice, Item.GetBaseItem().SpriteId, ItemType, Item.Limited, Item.LimitedStack);
 

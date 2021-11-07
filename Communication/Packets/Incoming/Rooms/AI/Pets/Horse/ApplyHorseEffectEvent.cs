@@ -47,7 +47,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     PetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 1);
-                    dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Item.Id + "'");
+                    ItemDao.Delete(dbClient, Item.Id);
                 }
 
                 //We only want to use this if we're successful. 
@@ -59,7 +59,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     PetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 2);
-                    dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Item.Id + "'");
+                    ItemDao.Delete(dbClient, Item.Id);
                 }
 
                 //We only want to use this if we're successful. 
@@ -76,7 +76,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     PetDao.UpdatePethair(dbClient, PetUser.PetData.PetId, PetUser.PetData.PetHair);
-                    dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Item.Id + "'");
+                    ItemDao.Delete(dbClient, Item.Id);
                 }
 
                 //We only want to use this if we're successful. 
@@ -93,7 +93,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     PetDao.UpdateHairdye(dbClient, PetUser.PetData.PetId, PetUser.PetData.HairDye);
-                    dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Item.Id + "'");
+                    ItemDao.Delete(dbClient, Item.Id);
                 }
 
                 //We only want to use this if we're successful. 
@@ -126,7 +126,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     PetDao.UpdateRace(dbClient, PetUser.PetData.PetId, PetUser.PetData.Race);
-                    dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Item.Id + "'");
+                    ItemDao.Delete(dbClient, Item.Id);
                 }
 
                 //We only want to use this if we're successful. 

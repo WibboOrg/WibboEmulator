@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Furni;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Items;
 using Butterfly.HabboHotel.Rooms;
@@ -118,10 +118,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE items SET extra_data = @extraData WHERE id = @ID LIMIT 1");
-                        dbClient.AddParameter("extraData", Item.ExtraData);
-                        dbClient.AddParameter("ID", Item.Id);
-                        dbClient.RunQuery();
+                        ItemDao.UpdateExtradata(dbClient, Item.Id, Item.ExtraData);
                     }
 
                     UserOne = null;

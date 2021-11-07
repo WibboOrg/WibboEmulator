@@ -58,9 +58,7 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE items SET base_item = @baseid WHERE id = '" + Present.Id + "'");
-                dbClient.AddParameter("baseid", LotData.Id);
-                dbClient.RunQuery();
+                ItemDao.UpdateBaseItem(dbClient, Present.Id, LotData.Id);
             }
 
             string FurniType = Present.GetBaseItem().Type.ToString().ToLower();
@@ -75,9 +73,7 @@ namespace Butterfly.HabboHotel.Items
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-                        dbClient.AddParameter("itemId", Present.Id);
-                        dbClient.RunQuery();
+                        ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                     }
 
                     ItemIsInRoom = false;
@@ -87,9 +83,7 @@ namespace Butterfly.HabboHotel.Items
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-                    dbClient.AddParameter("itemId", Present.Id);
-                    dbClient.RunQuery();
+                    ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                 }
 
                 ItemIsInRoom = false;
@@ -138,9 +132,7 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE items SET base_item = @baseid WHERE id = '" + Present.Id + "'");
-                dbClient.AddParameter("baseid", LotData.Id);
-                dbClient.RunQuery();
+                ItemDao.UpdateBaseItem(dbClient, Present.Id, LotData.Id);
             }
 
             string FurniType = Present.GetBaseItem().Type.ToString().ToLower();
@@ -155,9 +147,7 @@ namespace Butterfly.HabboHotel.Items
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-                        dbClient.AddParameter("itemId", Present.Id);
-                        dbClient.RunQuery();
+                        ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                     }
 
                     ItemIsInRoom = false;
@@ -167,9 +157,7 @@ namespace Butterfly.HabboHotel.Items
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-                    dbClient.AddParameter("itemId", Present.Id);
-                    dbClient.RunQuery();
+                    ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                 }
 
                 ItemIsInRoom = false;
@@ -221,11 +209,9 @@ namespace Butterfly.HabboHotel.Items
             string ExtraData = BadgeCode + Convert.ToChar(9) + Session.GetHabbo().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE items SET base_item = @baseid, extra_data = @extradata WHERE id = '" + Present.Id + "'");
-                dbClient.AddParameter("baseid", LotData.Id);
-                dbClient.AddParameter("extradata", ExtraData);
-                dbClient.RunQuery();
+                ItemDao.UpdateBaseItemAndExtraData(dbClient, Present.Id, LotData.Id, ExtraData);
             }
+
             Present.ExtraData = ExtraData;
 
             Present.BaseItem = LotData.Id;
@@ -239,9 +225,7 @@ namespace Butterfly.HabboHotel.Items
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-                        dbClient.AddParameter("itemId", Present.Id);
-                        dbClient.RunQuery();
+                        ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                     }
 
                     ItemIsInRoom = false;
@@ -251,9 +235,7 @@ namespace Butterfly.HabboHotel.Items
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-                    dbClient.AddParameter("itemId", Present.Id);
-                    dbClient.RunQuery();
+                    ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                 }
 
                 ItemIsInRoom = false;
@@ -399,9 +381,7 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE items SET base_item = @baseid WHERE id = '" + Present.Id + "'");
-                dbClient.AddParameter("baseid", LotData.Id);
-                dbClient.RunQuery();
+                ItemDao.UpdateBaseItem(dbClient, Present.Id, LotData.Id);
             }
             string FurniType = Present.GetBaseItem().Type.ToString().ToLower();
             Present.BaseItem = LotData.Id;
@@ -415,9 +395,7 @@ namespace Butterfly.HabboHotel.Items
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-                        dbClient.AddParameter("itemId", Present.Id);
-                        dbClient.RunQuery();
+                        ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                     }
 
                     ItemIsInRoom = false;
@@ -427,9 +405,7 @@ namespace Butterfly.HabboHotel.Items
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-                    dbClient.AddParameter("itemId", Present.Id);
-                    dbClient.RunQuery();
+                    ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                 }
 
                 ItemIsInRoom = false;
