@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using Butterfly.Database;
 using Butterfly.Database.Interfaces;
@@ -12,24 +13,16 @@ namespace Butterfly.Database.Daos
             return dbClient.GetTable();
         }
 
-        internal static void InsertBot(IQueryAdapter dbClient, int botId)
+        internal static void Insert(IQueryAdapter dbClient, int botId, string type)
         {
-            dbClient.RunQuery("INSERT INTO roleplay_enemy (id, type) VALUES ('" + botId + "', 'bot')");
+            dbClient.SetQuery("INSERT INTO roleplay_enemy (id, type) VALUES ('" + botId + "', @type)");
+            dbClient.AddParameter("type", type);
+            dbClient.RunQuery();
         }
 
-        internal static void InsertPet(IQueryAdapter dbClient, int petId)
+        internal static void Delete(IQueryAdapter dbClient, int id)
         {
-            dbClient.RunQuery("INSERT INTO roleplay_enemy (id, type, weapon_far_id) VALUES ('" + petId + "', 'pet', '0');");
-        }
-
-        internal static void DeleteBot(IQueryAdapter dbClient, int botId)
-        {
-            dbClient.RunQuery("DELETE FROM roleplay_enemy WHERE id = '" + botId + "'");
-        }
-
-        internal static void DeletePet(IQueryAdapter dbClient, int petId)
-        {
-            dbClient.RunQuery("DELETE FROM roleplay_enemy WHERE id = '" + petId + "'");
+            dbClient.RunQuery("DELETE FROM roleplay_enemy WHERE id = '" + id + "'");
         }
 
         internal static void UpdateHealth(IQueryAdapter dbClient, int rpId, int health)

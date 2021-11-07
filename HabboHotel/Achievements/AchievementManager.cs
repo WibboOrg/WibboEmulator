@@ -129,8 +129,7 @@ namespace Butterfly.HabboHotel.Achievements
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserAchievementDao.Replace(dbClient, Session.GetHabbo().Id, NewLevel, NewProgress, AchievementGroup);
-
-                    dbClient.RunQuery("UPDATE user_stats SET achievement_score = achievement_score + '" + TargetLevelData.RewardPoints + "' WHERE id = '" + Session.GetHabbo().Id + "'");
+                    UserStatsDao.UpdateAchievementScore(dbClient, Session.GetHabbo().Id, TargetLevelData.RewardPoints);
                 }
 
 

@@ -1,6 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Inventory.Achievements;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -68,7 +69,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.RunQuery("UPDATE user_stats SET achievement_score = achievement_score + '" + Value + "' WHERE id = '" + Session.GetHabbo().Id + "'");
+                        UserStatsDao.UpdateAchievementScore(dbClient, Session.GetHabbo().Id, Value);
                     }
 
                     Session.GetHabbo().AchievementPoints += Value;

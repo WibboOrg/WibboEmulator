@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 
 using System.Collections;
@@ -103,9 +104,7 @@ namespace Butterfly.HabboHotel.Users.Badges
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("INSERT INTO user_badges (user_id,badge_id,badge_slot) VALUES (" + this._userId + ",@badge," + Slot + ")");
-                    dbClient.AddParameter("badge", Badge);
-                    dbClient.RunQuery();
+                    UserBadgeDao.Insert(dbClient, this._userId, Slot, Badge);
                 }
             }
             this._badges.Add(Badge, new Badge(Badge, Slot));
@@ -127,28 +126,9 @@ namespace Butterfly.HabboHotel.Users.Badges
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("DELETE FROM user_badges WHERE badge_id = @badge AND user_id = '" + this._userId + "' LIMIT 1");
-                dbClient.AddParameter("badge", Badge);
-                dbClient.RunQuery();
-            }
+                UserBadgeDao.Delete(dbClient, this._userId, Badge);
+                
             this._badges.Remove(this.GetBadge(Badge).Code);
-        }
-
-        public void DeleteBadge(string Badge)
-        {
-            if (!this.HasBadge(Badge))
-            {
-                return;
-            }
-
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("DELETE FROM user_badges WHERE badge_id = @badge AND user_id = '" + this._userId + "' LIMIT 1");
-                dbClient.SetQuery("DELETE FROM user_badges WHERE badge_id = '" + this._badges + "'");
-                dbClient.AddParameter("badge", Badge);
-                dbClient.RunQuery();
-            }
         }
 
         public ServerPacket Serialize()

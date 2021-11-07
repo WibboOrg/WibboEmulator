@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -65,10 +66,7 @@ namespace Butterfly.HabboHotel.Groups
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                DataTable GetMembers = null;
-                dbClient.SetQuery("SELECT user_id, rank FROM group_memberships WHERE group_id = @id");
-                dbClient.AddParameter("id", this.Id);
-                GetMembers = dbClient.GetTable();
+                DataTable GetMembers = GuildMembershipDao.GetAll(dbClient, this.Id);
 
                 if (GetMembers != null)
                 {
@@ -94,10 +92,7 @@ namespace Butterfly.HabboHotel.Groups
                     }
                 }
 
-                DataTable GetRequests = null;
-                dbClient.SetQuery("SELECT user_id FROM group_requests WHERE group_id = @id");
-                dbClient.AddParameter("id", this.Id);
-                GetRequests = dbClient.GetTable();
+                DataTable GetRequests = GuildRequestDao.GetAll(dbClient, this.Id);
 
                 if (GetRequests != null)
                 {
@@ -107,7 +102,7 @@ namespace Butterfly.HabboHotel.Groups
 
                         if (this._members.Contains(UserId) || this._administrators.Contains(UserId))
                         {
-                            dbClient.RunQuery("DELETE FROM group_requests WHERE group_id = '" + this.Id + "' AND user_id = '" + UserId + "'");
+                            GuildRequestDao.Delete(dbClient, this.Id, UserId);
                         }
                         else if (!this._requests.Contains(UserId))
                         {
@@ -154,99 +149,89 @@ namespace Butterfly.HabboHotel.Groups
             return this._requests.Contains(Id);
         }
 
-        public void MakeAdmin(int Id)
+        public void MakeAdmin(int userId)
         {
-            if (this._members.Contains(Id))
+            if (this._members.Contains(userId))
             {
-                this._members.Remove(Id);
+                this._members.Remove(userId);
             }
 
-            if (this._administrators.Contains(Id))
+            if (this._administrators.Contains(userId))
             {
                 return;
             }
 
-            this._administrators.Add(Id);
+            this._administrators.Add(userId);
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE group_memberships SET rank = '1' WHERE user_id = @uid AND group_id = @gid LIMIT 1");
-                dbClient.AddParameter("gid", this.Id);
-                dbClient.AddParameter("uid", Id);
-                dbClient.RunQuery();
+                GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 1);
             }
         }
 
-        public void TakeAdmin(int UserId)
+        public void TakeAdmin(int userId)
         {
-            if (!this._administrators.Contains(UserId))
+            if (!this._administrators.Contains(userId))
             {
                 return;
             }
 
-            this._administrators.Remove(UserId);
+            this._administrators.Remove(userId);
 
-            if (!this._members.Contains(UserId))
+            if (!this._members.Contains(userId))
             {
-                this._members.Add(UserId);
+                this._members.Add(userId);
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE group_memberships SET rank = '0' WHERE user_id = @uid AND group_id = @gid");
-                dbClient.AddParameter("gid", this.Id);
-                dbClient.AddParameter("uid", UserId);
-                dbClient.RunQuery();
+                GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 0);
             }
         }
 
-        public void AddMember(int Id)
+        public void AddMember(int userId)
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                if (this.IsAdmin(Id))
+                if (this.IsAdmin(userId))
                 {
-                    dbClient.SetQuery("UPDATE group_memberships SET rank = '0' WHERE user_id = @uid AND group_id = @gid");
-                    this._administrators.Remove(Id);
-                    this._members.Add(Id);
+                    GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 0);
+                    this._administrators.Remove(userId);
+                    this._members.Add(userId);
                 }
                 else if (this.GroupType == GroupType.LOCKED)
                 {
-                    dbClient.SetQuery("INSERT INTO group_requests (user_id, group_id) VALUES (@uid, @gid)");
-                    if (!this._requests.Contains(Id))
+                    GuildRequestDao.Insert(dbClient, this.Id, userId);
+                    if (!this._requests.Contains(userId))
                     {
-                        this._requests.Add(Id);
+                        this._requests.Add(userId);
                     }
                 }
                 else
                 {
-                    dbClient.SetQuery("INSERT INTO group_memberships (user_id, group_id) VALUES (@uid, @gid)");
-                    if (!this._members.Contains(Id))
+                    GuildMembershipDao.Insert(dbClient, this.Id, userId);
+                    if (!this._members.Contains(userId))
                     {
-                        this._members.Add(Id);
+                        this._members.Add(userId);
                     }
                 }
-
-                dbClient.AddParameter("gid", this.Id);
-                dbClient.AddParameter("uid", Id);
-                dbClient.RunQuery();
             }
         }
 
-        public void DeleteMember(int Id)
+        public void DeleteMember(int userId)
         {
-            if (this.IsMember(Id))
+            if (this.IsMember(userId))
             {
-                if (this._members.Contains(Id))
+                if (this._members.Contains(userId))
                 {
-                    this._members.Remove(Id);
+                    this._members.Remove(userId);
                 }
             }
-            else if (this.IsAdmin(Id))
+            else if (this.IsAdmin(userId))
             {
-                if (this._administrators.Contains(Id))
+                if (this._administrators.Contains(userId))
                 {
-                    this._administrators.Remove(Id);
+                    this._administrators.Remove(userId);
                 }
             }
             else
@@ -256,39 +241,30 @@ namespace Butterfly.HabboHotel.Groups
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("DELETE FROM group_memberships WHERE user_id=@uid AND group_id=@gid LIMIT 1");
-                dbClient.AddParameter("gid", this.Id);
-                dbClient.AddParameter("uid", Id);
-                dbClient.RunQuery();
+                GuildMembershipDao.Delete(dbClient, this.Id, userId);
             }
         }
 
-        public void HandleRequest(int Id, bool Accepted)
+        public void HandleRequest(int userId, bool Accepted)
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 if (Accepted)
                 {
-                    dbClient.SetQuery("INSERT INTO group_memberships (user_id, group_id) VALUES (@uid, @gid)");
-                    dbClient.AddParameter("gid", this.Id);
-                    dbClient.AddParameter("uid", Id);
-                    dbClient.RunQuery();
+                    GuildMembershipDao.Insert(dbClient, this.Id, userId);
 
-                    if (!this._members.Contains(Id))
+                    if (!this._members.Contains(userId))
                     {
-                        this._members.Add(Id);
+                        this._members.Add(userId);
                     }
                 }
 
-                dbClient.SetQuery("DELETE FROM group_requests WHERE user_id=@uid AND group_id=@gid LIMIT 1");
-                dbClient.AddParameter("gid", this.Id);
-                dbClient.AddParameter("uid", Id);
-                dbClient.RunQuery();
+                GuildRequestDao.Delete(dbClient, this.Id, userId);
             }
 
-            if (this._requests.Contains(Id))
+            if (this._requests.Contains(userId))
             {
-                this._requests.Remove(Id);
+                this._requests.Remove(userId);
             }
         }
 

@@ -11,7 +11,14 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery("DELETE FROM group_requests WHERE group_id = '" + groupId + "'");
         }
 
-        internal static DataTable GetAll(IQueryAdapter dbClient, int groupeId, string searchVal)
+        internal static DataTable GetAll(IQueryAdapter dbClient, int groupId)
+        {
+            dbClient.SetQuery("SELECT user_id FROM group_requests WHERE group_id = @id");
+            dbClient.AddParameter("id", groupId);
+            return dbClient.GetTable();
+        }
+
+        internal static DataTable GetAllBySearch(IQueryAdapter dbClient, int groupeId, string searchVal)
         {
             dbClient.SetQuery("SELECT users.id FROM group_requests INNER JOIN users ON group_requests.user_id = users.id WHERE group_requests.group_id = @gid AND users.username LIKE @username LIMIT 14;");
             dbClient.AddParameter("gid", groupeId);
@@ -28,7 +35,7 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void DeleteByUserId(IQueryAdapter dbClient, int groupId, int userId)
+        internal static void Delete(IQueryAdapter dbClient, int groupId, int userId)
         {
             dbClient.SetQuery("DELETE FROM group_requests WHERE user_id=@uid AND group_id=@gid LIMIT 1");
             dbClient.AddParameter("gid", groupId);

@@ -452,9 +452,9 @@ namespace Butterfly.HabboHotel.Rooms
             DataTable dataTable = new DataTable();
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT room_rights.user_id FROM room_rights WHERE room_id = '" + this.RoomData.Id + "'");
-                dataTable = dbClient.GetTable();
+                dataTable = RoomRightDao.GetAllByRoomId(dbClient, this.RoomData.Id);
             }
+            
             if (dataTable == null)
             {
                 return;

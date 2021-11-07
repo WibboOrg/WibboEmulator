@@ -67,11 +67,11 @@ namespace Butterfly.HabboHotel.Users.UserData
 
                         if (Convert.ToInt32(dUserInfo["rank"]) <= 1)
                         {
-                            UserStatsDao.UpdateRespectPoint5(dbClient, userId);
+                            UserStatsDao.UpdateRespectPoint(dbClient, userId, 5);
                         }
                         else
                         {
-                            UserStatsDao.UpdateRespectPoint20(dbClient, userId);
+                            UserStatsDao.UpdateRespectPoint(dbClient, userId, 20);
                         }
 
                         ChangeName = true;
@@ -86,7 +86,7 @@ namespace Butterfly.HabboHotel.Users.UserData
 
                     if (row2 == null)
                     {
-                        dbClient.RunQuery("INSERT INTO user_stats (id) VALUES ('" + userId + "')");
+                        UserStatsDao.Insert(dbClient, userId);
                         row2 = UserStatsDao.GetOne(dbClient, userId);
                     }
 
@@ -94,11 +94,9 @@ namespace Butterfly.HabboHotel.Users.UserData
 
                     Favorites = UserFavoriteDao.GetAll(dbClient, userId);
 
-                    dbClient.SetQuery("SELECT room_id FROM room_rights WHERE user_id = '" + userId + "';");
-                    RoomRights = dbClient.GetTable();
+                    RoomRights = RoomRightDao.GetAllByUserId(dbClient, userId);
 
-                    dbClient.SetQuery("SELECT * FROM user_badges WHERE user_id = '" + userId + "';");
-                    Badges = dbClient.GetTable();
+                    Badges = UserBadgeDao.GetAll(dbClient, userId);
 
                     dbClient.SetQuery("SELECT users.id,users.username,messenger_friendships.relation FROM users JOIN messenger_friendships ON users.id = messenger_friendships.user_two_id WHERE messenger_friendships.user_one_id = '" + userId + "'");
                     FrienShips = dbClient.GetTable();
@@ -108,8 +106,7 @@ namespace Butterfly.HabboHotel.Users.UserData
 
                     Quests = UserQuestDao.GetAll(dbClient, userId);
 
-                    dbClient.SetQuery("SELECT group_id FROM group_memberships WHERE user_id = '" + userId + "';");
-                    GroupMemberships = dbClient.GetTable();
+                    GroupMemberships = GuildMembershipDao.GetOneByUserId(dbClient, userId);
                 }
 
                 Dictionary<string, UserAchievement> achievements = new Dictionary<string, UserAchievement>();
@@ -236,7 +233,7 @@ namespace Butterfly.HabboHotel.Users.UserData
 
                 if (row2 == null)
                 {
-                    dbClient.RunQuery("INSERT INTO user_stats (id) VALUES ('" + userId + "')");
+                    UserStatsDao.Insert(dbClient, userId);
                     row2 = UserStatsDao.GetOne(dbClient, userId);
                 }
 

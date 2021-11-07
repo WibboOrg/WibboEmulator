@@ -5,6 +5,7 @@ using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Achievements;
 using Butterfly.HabboHotel.ChatMessageStorage;
@@ -518,7 +519,7 @@ namespace Butterfly.HabboHotel.Users
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     dbClient.RunQuery("UPDATE users SET online = '0', last_online = '" + ButterflyEnvironment.GetUnixTimestamp() + "', activity_points = '" + this.Duckets + "', credits = '" + this.Credits + "' WHERE id = '" + this.Id + "'");
-                    dbClient.RunQuery("UPDATE user_stats SET group_id = '" + this.FavouriteGroupId + "',  online_time = online_time + '" + TimeOnlineSec + "', quest_id = '" + this.CurrentQuestId + "', Respect = '" + this.Respect + "', daily_respect_points = '" + this.DailyRespectPoints + "', daily_pet_respect_points = '" + this.DailyPetRespectPoints + "' WHERE id = '" + this.Id + "'");
+                    UserStatsDao.UpdateAll(dbClient, this.Id, this.FavouriteGroupId, TimeOnlineSec, this.CurrentQuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
                 }
             }
 

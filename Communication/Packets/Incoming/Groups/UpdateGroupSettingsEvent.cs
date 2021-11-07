@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Groups;
@@ -57,11 +57,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE groups SET state = @GroupState, admindeco = @AdminDeco WHERE id = @groupId LIMIT 1");
-                dbClient.AddParameter("GroupState", (Group.GroupType == GroupType.OPEN ? 0 : Group.GroupType == GroupType.LOCKED ? 1 : 2).ToString());
-                dbClient.AddParameter("AdminDeco", (FurniOptions == 1 ? 1 : 0).ToString());
-                dbClient.AddParameter("groupId", Group.Id);
-                dbClient.RunQuery();
+                GuildDao.UpdateStateAndDeco(dbClient, Group.Id, (Group.GroupType == GroupType.OPEN ? 0 : Group.GroupType == GroupType.LOCKED ? 1 : 2), FurniOptions);
             }
 
             Group.AdminOnlyDeco = FurniOptions;

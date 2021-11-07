@@ -6,7 +6,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Communication.Packets.Outgoing.WebSocket;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -333,7 +333,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
-                                        dbClient.RunQuery("UPDATE roleplay_enemy SET health = '" + ParamInt + "' WHERE id = '" + RPEnemyConfig.Id + "'");
+                                        RoleplayEnemyDao.UpdateHealth(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
 
                                     break;
@@ -360,7 +360,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
-                                        dbClient.RunQuery("UPDATE roleplay_enemy SET weapon_far_id = '" + ParamInt + "' WHERE id = '" + RPEnemyConfig.Id + "'");
+                                        RoleplayEnemyDao.UpdateWeaponFarId(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
 
                                     break;
@@ -387,7 +387,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
-                                        dbClient.RunQuery("UPDATE roleplay_enemy SET weapon_cac_id = '" + ParamInt + "' WHERE id = '" + RPEnemyConfig.Id + "'");
+                                        RoleplayEnemyDao.UpdateWeaponCacId(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
 
                                     break;
@@ -414,7 +414,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
-                                        dbClient.RunQuery("UPDATE roleplay_enemy SET dead_timer = '" + ParamInt + "' WHERE id = '" + RPEnemyConfig.Id + "'");
+                                        RoleplayEnemyDao.UpdateDeadTimer(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
 
                                     break;
@@ -441,7 +441,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
-                                        dbClient.RunQuery("UPDATE roleplay_enemy SET loot_item_id = '" + ParamInt + "' WHERE id = '" + RPEnemyConfig.Id + "'");
+                                        RoleplayEnemyDao.UpdateLootItemId(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
 
                                     break;
@@ -468,7 +468,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
-                                        dbClient.RunQuery("UPDATE roleplay_enemy SET money_drop = '" + ParamInt + "' WHERE id = '" + RPEnemyConfig.Id + "'");
+                                        RoleplayEnemyDao.UpdateMoneyDrop(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
 
                                     break;
@@ -495,7 +495,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
-                                        dbClient.RunQuery("UPDATE roleplay_enemy SET team_id = '" + ParamInt + "' WHERE id = '" + RPEnemyConfig.Id + "'");
+                                        RoleplayEnemyDao.UpdateTeamId(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
 
                                     break;
@@ -522,7 +522,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
-                                        dbClient.RunQuery("UPDATE roleplay_enemy SET aggro_distance = '" + ParamInt + "' WHERE id = '" + RPEnemyConfig.Id + "'");
+                                        RoleplayEnemyDao.UpdateAggroDistance(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
 
                                     break;
@@ -549,7 +549,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
-                                        dbClient.RunQuery("UPDATE roleplay_enemy SET zone_distance = '" + ParamInt + "' WHERE id = '" + RPEnemyConfig.Id + "'");
+                                        RoleplayEnemyDao.UpdateZoneDistance(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
 
                                     break;
@@ -561,7 +561,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
-                                        dbClient.RunQuery("UPDATE roleplay_enemy SET reset_position = '" + ButterflyEnvironment.BoolToEnum(RPEnemyConfig.ResetPosition) + "' WHERE id = '" + RPEnemyConfig.Id + "'");
+                                        RoleplayEnemyDao.UpdateResetPosition(dbClient, RPEnemyConfig.Id, RPEnemyConfig.ResetPosition);
                                     }
 
                                     break;
@@ -588,7 +588,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
-                                        dbClient.RunQuery("UPDATE roleplay_enemy SET lost_aggro_distance = '" + ParamInt + "' WHERE id = '" + RPEnemyConfig.Id + "'");
+                                        RoleplayEnemyDao.UpdateLostAggroDistance(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
 
                                     break;
@@ -600,7 +600,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
-                                        dbClient.RunQuery("UPDATE roleplay_enemy SET zombie_mode = '" + ButterflyEnvironment.BoolToEnum(RPEnemyConfig.ZombieMode) + "' WHERE id = '" + RPEnemyConfig.Id + "'");
+                                        RoleplayEnemyDao.UpdateZombieMode(dbClient, RPEnemyConfig.Id, RPEnemyConfig.ZombieMode);
                                     }
 
                                     break;

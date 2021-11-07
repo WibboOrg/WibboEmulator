@@ -6,7 +6,7 @@ namespace Butterfly.Database.Daos
 {
     class ItemDao
     {
-        internal static int insertItem(IQueryAdapter dbClient, int itemId, int userId, string extraData)
+        internal static int insert(IQueryAdapter dbClient, int itemId, int userId, string extraData)
         {
             dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES (@baseId, @habboId, @extra_data)");
             dbClient.AddParameter("baseId", itemId);
@@ -16,33 +16,6 @@ namespace Butterfly.Database.Daos
             return Convert.ToInt32(dbClient.InsertQuery());
         }
 
-        // internal static int deleteItem(IQueryAdapter dbClient, int itemId)
-        // {
-        //     dbClient.SetQuery("DELETE FROM items WHERE id = @deleteId LIMIT 1");
-        //     dbClient.AddParameter("deleteId", itemId);
-        //     dbClient.RunQuery();
-        // }
-
-        internal static void deleteItem(IQueryAdapter dbClient, int itemId)
-        {
-            dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE id = '" + itemId + "'");
-        }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.RunQuery("DELETE FROM items WHERE id = '" + ItemId + "'");
-        // }
-
-        internal static void Update(IQueryAdapter dbClient, int itemId, int roomId, int ownerId)
-        {
-            dbClient.RunQuery("UPDATE items SET room_id = '" + roomId + "', user_id = '" + ownerId + "' WHERE id = '" + itemId + "'");
-        }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Exchange.Id + "'");
-        // }
-
         internal static void UpdateExtradata(IQueryAdapter dbClient, int itemId, string extraData)
         {
             dbClient.SetQuery("UPDATE items SET extra_data = @extraData WHERE id = @ID LIMIT 1");
@@ -50,37 +23,6 @@ namespace Butterfly.Database.Daos
             dbClient.AddParameter("ID", itemId);
             dbClient.RunQuery();
         }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Present.Id + "'");
-        // }
-
-        internal static void Query8(IQueryAdapter dbClient, int itemId, int baseItem, string extraData)
-        {
-            dbClient.SetQuery("UPDATE items SET base_item = @BaseItem, extra_data = @edata WHERE id = @itemId LIMIT 1");
-            dbClient.AddParameter("itemId", itemId);
-            dbClient.AddParameter("BaseItem", baseItem);
-            dbClient.AddParameter("edata", extraData);
-            dbClient.RunQuery();
-        }
-
-        internal static void Query8(IQueryAdapter dbClient, int itemId)
-        {
-            dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-            dbClient.AddParameter("itemId", itemId);
-            dbClient.RunQuery();
-        }
-
-        internal static void Query8(IQueryAdapter dbClient, int id, int roomId, int ownerId)
-        {
-            dbClient.RunQuery("UPDATE items SET room_id = '" + roomId + "', user_id = '" + ownerId + "' WHERE id = '" + id + "'");
-        }
-
-        // internal static void Query8(IQueryAdapter dbClient, int id)
-        // {
-        //     dbClient.RunQuery("DELETE FROM items WHERE items.id = '" + id + "'");
-        // }
 
         internal static void DeleteAllByRoomId(IQueryAdapter dbClient, int roomId)
         {
@@ -99,92 +41,12 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery();
         }
 
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-        //     dbClient.AddParameter("itemId", Present.Id);
-        //     dbClient.RunQuery();
-        // }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-        //     dbClient.AddParameter("itemId", Present.Id);
-        //     dbClient.RunQuery();
-        // }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("UPDATE items SET base_item = @baseid WHERE id = '" + Present.Id + "'");
-        //     dbClient.AddParameter("baseid", LotData.Id);
-        //     dbClient.RunQuery();
-        // }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-        //     dbClient.AddParameter("itemId", Present.Id);
-        //     dbClient.RunQuery();
-        // }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-        //     dbClient.AddParameter("itemId", Present.Id);
-        //     dbClient.RunQuery();
-        // }
-
         internal static void Update(IQueryAdapter dbClient, int itemId, int baseItem, string extraData)
         {
             dbClient.SetQuery("UPDATE items SET base_item = @baseid, extra_data = @extradata WHERE id = '" + itemId + "'");
             dbClient.AddParameter("baseid", baseItem);
             dbClient.AddParameter("extradata", extraData);
             dbClient.RunQuery();
-        }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-        //     dbClient.AddParameter("itemId", Present.Id);
-        //     dbClient.RunQuery();
-        // }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-        //     dbClient.AddParameter("itemId", Present.Id);
-        //     dbClient.RunQuery();
-        // }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("UPDATE items SET base_item = @baseid WHERE id = '" + Present.Id + "'");
-        //     dbClient.AddParameter("baseid", LotData.Id);
-        //     dbClient.RunQuery();
-        // }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-        //     dbClient.AddParameter("itemId", Present.Id);
-        //     dbClient.RunQuery();
-        // }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
-        //     dbClient.AddParameter("itemId", Present.Id);
-        //     dbClient.RunQuery();
-        // }
-
-        internal static int Insert(IQueryAdapter dbClient, int baseItem, int userId, string extraData)
-        {
-            dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES (@did,@uid,@extra_data)");
-            dbClient.AddParameter("did", baseItem);
-            dbClient.AddParameter("uid", userId);
-            dbClient.AddParameter("extra_data", extraData);
-
-            return Convert.ToInt32(dbClient.InsertQuery());
         }
 
         internal static int Insert(IQueryAdapter dbClient, int itemId, int baseItem, int userId, string extraData)
@@ -198,33 +60,6 @@ namespace Butterfly.Database.Daos
             return Convert.ToInt32(dbClient.InsertQuery());
         }
 
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES (@did,@uid,@flags);");
-        //     dbClient.AddParameter("did", Data.Id);
-        //     dbClient.AddParameter("uid", Habbo.Id);
-        //     dbClient.AddParameter("flags", ExtraData);
-        //     Convert.ToInt32(dbClient.InsertQuery())
-        // }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES(@did,@uid,@flags);");
-        //     dbClient.AddParameter("did", Data.Id);
-        //     dbClient.AddParameter("uid", Habbo.Id);
-        //     dbClient.AddParameter("flags", "");
-        //     int Item1Id = Convert.ToInt32(dbClient.InsertQuery());
-        // }
-
-        // internal static void Query8(IQueryAdapter dbClient)
-        // {
-        //     dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES(@did,@uid,@flags);");
-        //     dbClient.AddParameter("did", Data.Id);
-        //     dbClient.AddParameter("uid", Habbo.Id);
-        //     dbClient.AddParameter("flags", Item1Id.ToString());
-        //     int Item2Id = Convert.ToInt32(dbClient.InsertQuery());
-        // }
-
         internal static DataRow GetOneRoomId(IQueryAdapter dbClient, int itemId)
         {
             dbClient.SetQuery("SELECT room_id FROM items WHERE id = '" + itemId + "' LIMIT 1");
@@ -237,22 +72,17 @@ namespace Butterfly.Database.Daos
             return dbClient.GetTable();
         }
 
-        internal static int InsertGetId(IQueryAdapter dbClient, int userId, int roomId, int itemId)
+        internal static int InsertDuplicate(IQueryAdapter dbClient, int userId, int roomId, int itemId)
         {
             dbClient.SetQuery("INSERT INTO items (user_id, room_id, base_item, extra_data, x, y, z, rot, wall_pos)" +
                     " SELECT '" + userId + "', '" + roomId + "', base_item, extra_data, x, y, z, rot, wall_pos FROM items WHERE id = '" + itemId + "'");
             return Convert.ToInt32(dbClient.InsertQuery());
         }
 
-        internal static DataRow GetOne(IQueryAdapter dbClient, int limitedNumber, int limitedStack, int itemId)
+        internal static DataRow GetOneLimitedId(IQueryAdapter dbClient, int limitedNumber, int limitedStack, int itemId)
         {
             dbClient.SetQuery("SELECT id FROM items WHERE id IN (SELECT item_id FROM items_limited WHERE limited_number = '" + limitedNumber + "' AND limited_stack = '" + limitedStack + "') AND base_item = '" + itemId + "' LIMIT 1");
             return dbClient.GetRow();
-        }
-
-        internal static void Update(IQueryAdapter dbClient, int ownerId, int roomId)
-        {
-            dbClient.RunQuery("UPDATE items SET room_id = '0', user_id = '" + ownerId + "' WHERE room_id = '" + roomId + "'");
         }
 
         internal static void DeleteAll(IQueryAdapter dbClient, int userId)
@@ -272,21 +102,26 @@ namespace Butterfly.Database.Daos
             return dbClient.GetTable();
         }
 
-        // internal static DataTable GetAll(IQueryAdapter dbClient, int userId)
-        // {
-        //     dbClient.SetQuery("SELECT items.id, items.base_item, items.extra_data, items_limited.limited_number, items_limited.limited_stack FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.user_id = @userid AND items.room_id = '0'");
-        //     dbClient.AddParameter("userid", userId);
-        //     return dbClient.GetTable();
-        // }
+        internal static void Update(IQueryAdapter dbClient, int itemId, int roomId, int ownerId)
+        {
+            dbClient.RunQuery("UPDATE items SET room_id = '" + roomId + "', user_id = '" + ownerId + "' WHERE id = '" + itemId + "'");
+        }
+
+        internal static void UpdateRoomIdAndUserIdByRoomId(IQueryAdapter dbClient, int ownerId, int roomId)
+        {
+            dbClient.RunQuery("UPDATE items SET room_id = '0', user_id = '" + ownerId + "' WHERE room_id = '" + roomId + "'");
+        }
+
+         internal static void UpdateRoomId(IQueryAdapter dbClient, int itemId)
+        {
+            dbClient.SetQuery("UPDATE items SET room_id = '0' WHERE id = @itemId LIMIT 1");
+            dbClient.AddParameter("itemId", itemId);
+            dbClient.RunQuery();
+        }
 
         internal static void UpdateUserId(IQueryAdapter dbClient, int userId, int itemId)
         {
             dbClient.RunQuery("UPDATE items SET room_id = '0', user_id = '" + userId + "' WHERE id = '" + itemId + "'");
         }
-
-        // internal static void Update(IQueryAdapter dbClient, int userId, int itemId)
-        // {
-        //     dbClient.RunQuery("UPDATE items SET room_id = '0', user_id = '" + userId + "' WHERE id = '" + itemId + "'");
-        // }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Data;
 using Butterfly.Database;
 using Butterfly.Database.Interfaces;
@@ -6,7 +7,7 @@ namespace Butterfly.Database.Daos
 {
     class GuildDao
     {
-        internal static void UpdatBadge(IQueryAdapter dbClient, int groupId, string badge)
+        internal static void UpdateBadge(IQueryAdapter dbClient, int groupId, string badge)
         {
             dbClient.SetQuery("UPDATE groups SET badge = @badge WHERE id = @groupId LIMIT 1");
             dbClient.AddParameter("badge", badge);
@@ -53,7 +54,7 @@ namespace Butterfly.Database.Daos
             return dbClient.GetRow();
         }
 
-        internal static int Insert(IQueryAdapter dbClient, string name, string description, int creatorId, string badge, int roomId, string colour1, string colour2)
+        internal static int Insert(IQueryAdapter dbClient, string name, string description, int creatorId, string badge, int roomId, int colour1, int colour2)
         {
             dbClient.SetQuery("INSERT INTO groups (name, desc, badge, owner_id, created, room_id, state, colour1, colour2, admindeco) VALUES (@name, @desc, @badge, @owner, UNIX_TIMESTAMP(), @room, '0', @colour1, @colour2, '1')");
             dbClient.AddParameter("name", name);
@@ -63,7 +64,7 @@ namespace Butterfly.Database.Daos
             dbClient.AddParameter("room", roomId);
             dbClient.AddParameter("colour1", colour1);
             dbClient.AddParameter("colour2", colour2);
-            return dbClient.GetInteger();
+            return Convert.ToInt32(dbClient.InsertQuery());
         }
     }
 }

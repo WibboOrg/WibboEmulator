@@ -1,5 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 dbClient.RunQuery("UPDATE users SET vip_points = vip_points - '" + Room.RoomData.SellPrice + "' WHERE id = '" + Session.GetHabbo().Id + "'");
                 dbClient.RunQuery("UPDATE users SET vip_points = vip_points + '" + Room.RoomData.SellPrice + "' WHERE id = '" + Room.RoomData.OwnerId + "'");
 
-                dbClient.RunQuery("DELETE FROM room_rights WHERE room_id = '" + Room.Id + "'");
+                RoomRightDao.Delete(dbClient, Room.Id);
 
                 dbClient.SetQuery("UPDATE rooms SET owner = @newowner WHERE id = '" + Room.Id + "'");
                 dbClient.AddParameter("newowner", Session.GetHabbo().Username);

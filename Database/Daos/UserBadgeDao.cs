@@ -6,7 +6,7 @@ namespace Butterfly.Database.Daos
 {
     class UserBadgeDao
     {
-        internal static void UpdateSlot0(IQueryAdapter dbClient, int userId)
+        internal static void UpdateResetSlot(IQueryAdapter dbClient, int userId)
         {
             dbClient.RunQuery("UPDATE user_badges SET badge_slot = '0' WHERE user_id = '" + userId + "' AND badge_slot != '0'");
         }
@@ -28,18 +28,6 @@ namespace Butterfly.Database.Daos
         internal static void Delete(IQueryAdapter dbClient, int userId, string badge)
         {
             dbClient.SetQuery("DELETE FROM user_badges WHERE badge_id = @badge AND user_id = '" + userId + "' LIMIT 1");
-            dbClient.AddParameter("badge", badge);
-            dbClient.RunQuery();
-        }
-
-        internal static void Delete(IQueryAdapter dbClient, int userId)
-        {
-            dbClient.SetQuery("DELETE FROM user_badges WHERE badge_id = @badge AND user_id = '" + userId + "' LIMIT 1");
-        }
-
-        internal static void DeleteAll(IQueryAdapter dbClient, int badgeId, string badge)
-        {
-            dbClient.SetQuery("DELETE FROM user_badges WHERE badge_id = '" + badgeId + "'");
             dbClient.AddParameter("badge", badge);
             dbClient.RunQuery();
         }

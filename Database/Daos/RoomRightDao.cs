@@ -26,7 +26,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataTable GetAllByRoomId(IQueryAdapter dbClient, int roomId)
         {
-            dbClient.SetQuery("SELECT room_rights.user_id FROM room_rights WHERE room_id = '" + roomId + "'");
+            dbClient.SetQuery("SELECT user_id FROM room_rights WHERE room_id = '" + roomId + "'");
             return dbClient.GetTable();
         }
 

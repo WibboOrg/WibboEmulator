@@ -150,14 +150,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             DataTable MembresTable = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dbClient.SetQuery("SELECT users.id FROM group_memberships INNER JOIN users ON group_memberships.user_id = users.id WHERE group_memberships.group_id = @gid AND group_memberships.rank > '0' AND users.username LIKE @username LIMIT 14;");
-                dbClient.AddParameter("gid", GroupeId);
-                dbClient.AddParameter("username", SearchVal.Replace("%", "\\%").Replace("_", "\\_") + "%");
-                MembresTable = dbClient.GetTable();
-
-                //AllDao.Query7(dbClient);
-            }
+                MembresTable = GuildMembershipDao.GetAllUserIdBySearchAndStaff(dbClient, GroupeId, SearchVal);
 
             foreach (DataRow row in MembresTable.Rows)
             {
@@ -177,11 +170,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             DataTable MembresTable = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT users.id AS id FROM group_memberships INNER JOIN users ON group_memberships.user_id = users.id WHERE group_memberships.group_id = @gid AND users.username LIKE @username LIMIT 14;");
-                dbClient.AddParameter("gid", GroupeId);
-                dbClient.AddParameter("username", SearchVal.Replace("%", "\\%").Replace("_", "\\_") + "%");
-                MembresTable = dbClient.GetTable();
-                //Query8
+                MembresTable = GuildMembershipDao.GetAllUserIdBySearch(dbClient, GroupeId, SearchVal);
             }
 
             foreach (DataRow row in MembresTable.Rows)

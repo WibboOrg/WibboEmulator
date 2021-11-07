@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Quests;
@@ -14,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE user_badges SET badge_slot = '0' WHERE user_id = '" + Session.GetHabbo().Id + "' AND badge_slot != '0'");
+                UserBadgeDao.UpdateResetSlot(dbClient, Session.GetHabbo().Id);
             }
 
             for (int i = 0; i < 5; i++)
@@ -36,9 +37,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("UPDATE user_badges SET badge_slot = '" + Slot + "' WHERE badge_id = @badge AND user_id = '" + Session.GetHabbo().Id + "'");
-                    dbClient.AddParameter("badge", Badge);
-                    dbClient.RunQuery();
+                    UserBadgeDao.UpdateSlot(dbClient, Session.GetHabbo().Id, Slot, Badge);
                 }
             }
 

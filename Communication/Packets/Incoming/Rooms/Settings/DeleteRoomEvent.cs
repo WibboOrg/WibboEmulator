@@ -33,7 +33,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 dbClient.RunQuery("DELETE FROM rooms WHERE id = '" + RoomId + "'");
                 UserFavoriteDao.Delete(dbClient, RoomId);
-                dbClient.RunQuery("DELETE FROM room_rights WHERE room_id = '" + RoomId + "'");
+                RoomRightDao.Delete(dbClient, RoomId);
                 dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) LEFT JOIN user_presents ON (user_presents.item_id = items.id) LEFT JOIN room_items_moodlight ON (room_items_moodlight.item_id = items.id) LEFT JOIN tele_links ON (tele_one_id = items.id) LEFT JOIN wired_items ON (trigger_id = items.id) WHERE room_id = '" + RoomId + "'");
                 dbClient.RunQuery("UPDATE users SET home_room = '0' WHERE id = '" + Session.GetHabbo().Id + "'");
                 BotDao.UpdateRoomBot(dbClient, RoomId);

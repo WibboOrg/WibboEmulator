@@ -1,5 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Groups;
@@ -38,11 +39,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE groups SET colour1 = @colour1, colour2 = @colour2 WHERE id = @groupId LIMIT 1");
-                dbClient.AddParameter("colour1", Colour1);
-                dbClient.AddParameter("colour2", Colour2);
-                dbClient.AddParameter("groupId", Group.Id);
-                dbClient.RunQuery();
+                GuildDao.UpdateColors(dbClient, Colour1, Colour2, Group.Id);
             }
 
             Group.Colour1 = Colour1;

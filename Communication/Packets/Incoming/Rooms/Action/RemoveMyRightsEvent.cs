@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -42,10 +43,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("DELETE FROM room_rights WHERE user_id = @uid AND room_id = @rid LIMIT 1");
-                    dbClient.AddParameter("uid", Session.GetHabbo().Id);
-                    dbClient.AddParameter("rid", Room.Id);
-                    dbClient.RunQuery();
+                    RoomRightDao.Delete(dbClient, Room.Id, Session.GetHabbo().Id);
                 }
 
                 if (Room.UsersWithRights.Contains(Session.GetHabbo().Id))

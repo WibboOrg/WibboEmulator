@@ -35,14 +35,9 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery("UPDATE user_stats SET group_id = '" + groupId + "',  online_time = online_time + '" + onlineTime + "', quest_id = '" + questId + "', Respect = '" + respect + "', daily_respect_points = '" + dailyRespectPoints + "', daily_pet_respect_points = '" + dailyPetRespectPoints + "' WHERE id = '" + userId + "'");
         }
 
-        internal static void UpdateRespectPoint5(IQueryAdapter dbClient, int userId)
+        internal static void UpdateRespectPoint(IQueryAdapter dbClient, int userId, int count)
         {
-            dbClient.RunQuery("UPDATE user_stats SET daily_respect_points = 5, daily_pet_respect_points = 5 WHERE id = '" + userId + "' LIMIT 1");
-        }
-
-        internal static void UpdateRespectPoint20(IQueryAdapter dbClient, int userId)
-        {
-            dbClient.RunQuery("UPDATE user_stats SET daily_respect_points = 20, daily_pet_respect_points = 20 WHERE id = '" + userId + "' LIMIT 1");
+            dbClient.RunQuery("UPDATE user_stats SET daily_respect_points = '" + count + "', daily_pet_respect_points = '" + count + "' WHERE id = '" + userId + "' LIMIT 1");
         }
 
         internal static void Insert(IQueryAdapter dbClient, int userId)

@@ -2,7 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Furni;
 using Butterfly.Communication.Packets.Outgoing.Users;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Catalog;
 using Butterfly.HabboHotel.GameClients;
@@ -373,7 +373,7 @@ namespace Butterfly.HabboHotel.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE user_stats SET achievement_score = achievement_score + '" + WinWin + "' WHERE id = '" + Session.GetHabbo().Id + "'");
+                UserStatsDao.UpdateAchievementScore(dbClient, Session.GetHabbo().Id, WinWin);
             }
 
             Session.SendPacket(new AchievementScoreComposer(Session.GetHabbo().AchievementPoints));
