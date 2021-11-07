@@ -27,6 +27,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Butterfly.Database.Daos;
 
 namespace Butterfly.HabboHotel.Rooms
 {
@@ -767,7 +768,7 @@ namespace Butterfly.HabboHotel.Rooms
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE rooms SET users_now = '" + count + "' WHERE id = '" + this._room.Id + "'");
+                RoomDao.UpdateUsersNow(dbClient, this._room.Id, count);
             }
 
             this._room.RoomData.UsersNow = count;

@@ -51,10 +51,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE rooms SET owner = @newname WHERE owner = @oldname");
-                dbClient.AddParameter("newname", NewUsername);
-                dbClient.AddParameter("oldname", Session.GetHabbo().Username);
-                dbClient.RunQuery();
+                RoomDao.UpdateOwner(dbClient, NewUsername, Session.GetHabbo().Username);
 
                 dbClient.SetQuery("UPDATE users SET username = @newname WHERE id = @userid");
                 dbClient.AddParameter("newname", NewUsername);

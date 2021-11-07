@@ -153,12 +153,7 @@ namespace Butterfly.HabboHotel.GameClients
                 int RoomId = 0;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("INSERT INTO rooms (caption,description,owner,model_name,category,state, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick) SELECT @caption, @desc, @username, @model, category, state, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick FROM rooms WHERE id = '5328079'");
-                    dbClient.AddParameter("caption", this.GetHabbo().Username);
-                    dbClient.AddParameter("desc", ButterflyEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
-                    dbClient.AddParameter("username", this.GetHabbo().Username);
-                    dbClient.AddParameter("model", "model_welcome");
-                    RoomId = Convert.ToInt32(dbClient.InsertQuery());
+                    RoomId = RoomDao.InsertDuplicate(dbClient, this.GetHabbo().Username, ButterflyEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
 
                     dbClient.RunQuery("UPDATE users SET nux_enable = '0', home_room = '" + RoomId + "' WHERE id = '" + this.GetHabbo().Id + "'");
                     if (RoomId == 0)

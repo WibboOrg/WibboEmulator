@@ -21,9 +21,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             {
                 Room.GetRoomItemHandler().SaveFurniture(dbClient);
 
-                dbClient.SetQuery("INSERT INTO rooms (caption, owner, description, model_name, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick, allow_rightsoverride, allow_hidewireds)" +
-                "SELECT 'Appart " + OldRoomId + " copie', '" + Session.GetHabbo().Username + "', description, model_name, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick, allow_rightsoverride, allow_hidewireds FROM rooms WHERE id = '" + OldRoomId + "'; ");
-                RoomId = Convert.ToInt32(dbClient.InsertQuery());
+                RoomId = RoomDao.InsertDuplicate(dbClient, OldRoomId, Session.GetHabbo().Username);
 
                 RoomModelCustomDao.InsertDuplicate(dbClient, RoomId, OldRoomId);
 
@@ -161,9 +159,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 }
 
                 BotDao.DupliqueAllBotInRoomId(dbClient, Session.GetHabbo().Id , RoomId, OldRoomId);
-
-                dbClient.RunQuery("INSERT INTO pets (user_id, room_id, name, race, color, type, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride) " +
-                    "SELECT '" + Session.GetHabbo().Id + "', '" + RoomId + "', name, race, color, type, experience, energy, nutrition, respect, '" + ButterflyEnvironment.GetUnixTimestamp() + "', x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM pets WHERE room_id = '" + OldRoomId + "'");
+                
+                PetDao.InsertDuplicate(dbClient, Session.GetHabbo().Id, RoomId, OldRoomId);
             }
 
             RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);

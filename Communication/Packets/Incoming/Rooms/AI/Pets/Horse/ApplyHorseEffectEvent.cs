@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -46,7 +46,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 PetUser.PetData.Saddle = 9;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE pets SET have_saddle = '1' WHERE id = '" + PetUser.PetData.PetId + "' LIMIT 1");
+                    PetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 1);
                     dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Item.Id + "'");
                 }
 
@@ -58,7 +58,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 PetUser.PetData.Saddle = 10;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE pets SET have_saddle = '2' WHERE id = '" + PetUser.PetData.PetId + "' LIMIT 1");
+                    PetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 2);
                     dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Item.Id + "'");
                 }
 
@@ -75,7 +75,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 PetUser.PetData.PetHair = Parse;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE pets SET pethair = '" + PetUser.PetData.PetHair + "' WHERE id = '" + PetUser.PetData.PetId + "' LIMIT 1");
+                    PetDao.UpdatePethair(dbClient, PetUser.PetData.PetId, PetUser.PetData.PetHair);
                     dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Item.Id + "'");
                 }
 
@@ -92,7 +92,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE pets SET hairdye = '" + PetUser.PetData.HairDye + "' WHERE id = '" + PetUser.PetData.PetId + "' LIMIT 1");
+                    PetDao.UpdateHairdye(dbClient, PetUser.PetData.PetId, PetUser.PetData.HairDye);
                     dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Item.Id + "'");
                 }
 
@@ -125,7 +125,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE pets SET race = '" + PetUser.PetData.Race + "' WHERE id = '" + PetUser.PetData.PetId + "' LIMIT 1");
+                    PetDao.UpdateRace(dbClient, PetUser.PetData.PetId, PetUser.PetData.Race);
                     dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = '" + Item.Id + "'");
                 }
 

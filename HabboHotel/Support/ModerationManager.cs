@@ -425,9 +425,10 @@ namespace Butterfly.HabboHotel.Support
                 room.RoomData.Name = "Cet appart ne respect par les conditions d'utilisation";
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE rooms SET state = 'locked' WHERE id = '" + room.Id + "'");
+                    RoomDao.UpdateState(dbClient, room.Id);
                 }
             }
+            
             if (InappropriateRoom)
             {
                 room.RoomData.Name = ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.room.roomclosed", ModSession.Langue);
@@ -436,9 +437,10 @@ namespace Butterfly.HabboHotel.Support
                 room.RoomData.Tags.Clear();
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE rooms SET caption = 'Cet appart ne respect par les conditions dutilisation', description = 'Cet appart ne respect par les conditions dutilisation', tags = '' WHERE id = '" + room.Id + "'");
+                    RoomDao.UpdateCaptionDescTags(dbClient, room.Id);
                 }
             }
+
             if (KickUsers)
             {
                 room.onRoomKick();

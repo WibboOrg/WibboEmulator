@@ -90,8 +90,7 @@ namespace Butterfly.HabboHotel.Rooms
             DataRow Row = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM rooms WHERE id = '" + RoomId + "'");
-                Row = dbClient.GetRow();
+                Row = RoomDao.GetOne(dbClient, RoomId);
             }
 
             if (Row == null)
@@ -210,14 +209,7 @@ namespace Butterfly.HabboHotel.Rooms
                 int RoomId = 0;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("INSERT INTO rooms (caption,description,owner,model_name,category,users_max,troc_status) VALUES (@caption, @desc, @username, @model, @cat, @usmax, '" + TradeSettings + "')");
-                    dbClient.AddParameter("caption", Name);
-                    dbClient.AddParameter("desc", Desc);
-                    dbClient.AddParameter("username", Session.GetHabbo().Username);
-                    dbClient.AddParameter("model", Model);
-                    dbClient.AddParameter("cat", Category);
-                    dbClient.AddParameter("usmax", MaxVisitors);
-                    RoomId = Convert.ToInt32(dbClient.InsertQuery());
+                    RoomId = RoomDao.Insert(dbClient, Name, Desc, Session.GetHabbo().Username, Model, Category, MaxVisitors, TradeSettings);
                 }
                 RoomData roomData = this.GenerateRoomData(RoomId);
                 Session.GetHabbo().UsersRooms.Add(roomData);

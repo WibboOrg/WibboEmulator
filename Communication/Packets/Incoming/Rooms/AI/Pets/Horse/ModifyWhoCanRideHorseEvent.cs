@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -62,7 +63,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE pets SET anyone_ride = '" + ButterflyEnvironment.BoolToEnum(Pet.PetData.AnyoneCanRide) + "' WHERE id = '" + PetId + "' LIMIT 1");
+                PetDao.UpdateAnyoneRide(dbClient, PetId, Pet.PetData.AnyoneCanRide);
             }
 
             Room.SendPacket(new PetInformationComposer(Pet.PetData, Pet.RidingHorse));

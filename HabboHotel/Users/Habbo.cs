@@ -284,9 +284,7 @@ namespace Butterfly.HabboHotel.Users
                 DataTable table;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("SELECT * FROM rooms WHERE owner = @name ORDER BY id ASC");
-                    dbClient.AddParameter("name", this.Username);
-                    table = dbClient.GetTable();
+                    table = RoomDao.GetAllByOwner(dbClient, this.Username);
                 }
 
                 foreach (DataRow dRow in table.Rows)

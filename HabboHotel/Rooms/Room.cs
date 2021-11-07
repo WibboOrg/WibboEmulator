@@ -403,8 +403,7 @@ namespace Butterfly.HabboHotel.Rooms
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM pets WHERE room_id = '" + this.Id + "'");
-                DataTable table = dbClient.GetTable();
+                DataTable table = PetDao.GetAllByRoomId(dbClient, this.Id);
                 if (table == null)
                 {
                     return;
@@ -1244,7 +1243,7 @@ namespace Butterfly.HabboHotel.Rooms
             this.RoomData.UsersMax = MaxUsers;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE rooms SET users_max = '" + MaxUsers + "' WHERE id = '" + this.Id + "'");
+                RoomDao.UpdateUsersMax(dbClient, this.Id, MaxUsers);
             }
         }
 

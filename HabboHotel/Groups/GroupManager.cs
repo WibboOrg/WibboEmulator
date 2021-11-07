@@ -120,11 +120,7 @@ namespace Butterfly.HabboHotel.Groups
                 }
                 else
                 {
-                    dbClient.SetQuery("UPDATE rooms SET group_id = @gid WHERE id = @rid LIMIT 1");
-                    dbClient.AddParameter("gid", Group.Id);
-                    dbClient.AddParameter("rid", Group.RoomId);
-                    dbClient.RunQuery();
-
+                    RoomDao.UpdateGroupId(dbClient, Group.Id, Group.RoomId);
                     RoomRightDao.Delete(dbClient, RoomId);
                 }
             }

@@ -2,7 +2,7 @@ using Butterfly.Communication.Packets.Outgoing.Catalog;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Catalog.Utilities;
 using Butterfly.HabboHotel.GameClients;
@@ -43,7 +43,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE pets SET have_saddle = '0' WHERE id = '" + PetUser.PetData.PetId + "' LIMIT 1");
+                PetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 0);
             }
 
             //Give the saddle back to the user.

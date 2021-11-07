@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Pets;
 using System;
 
@@ -30,11 +31,7 @@ namespace Butterfly.HabboHotel.Catalog.Utilities
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO pets (user_id, name,type, race,color, experience, energy, createstamp) VALUES (" + pet.OwnerId + ",@" + pet.PetId + "name," + pet.Type + ",@" + pet.PetId + "race,@" + pet.PetId + "color,0,100,'" + pet.CreationStamp + "')");
-                dbClient.AddParameter(pet.PetId + "name", pet.Name);
-                dbClient.AddParameter(pet.PetId + "race", pet.Race);
-                dbClient.AddParameter(pet.PetId + "color", pet.Color);
-                pet.PetId = Convert.ToInt32(dbClient.InsertQuery());
+                pet.PetId = PetDao.InsertGetId(dbClient,  pet.PetId, pet.Name, pet.Race, pet.Color, pet.OwnerId, pet.Type, pet.CreationStamp);
             }
 
             return pet;

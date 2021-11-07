@@ -7,14 +7,9 @@ namespace Butterfly.Database.Daos
 {
     class PetDao
     {
-        internal static void UpdateHaveSaddleOne(IQueryAdapter dbClient, int petId)
+        internal static void UpdateHaveSaddle(IQueryAdapter dbClient, int petId, int statut)
         {
-            dbClient.RunQuery("UPDATE pets SET have_saddle = '1' WHERE id = '" + petId + "' LIMIT 1");
-        }
-
-        internal static void UpdateHaveSaddleOff(IQueryAdapter dbClient, int petId)
-        {
-            dbClient.RunQuery("UPDATE pets SET have_saddle = '2' WHERE id = '" + petId + "' LIMIT 1");
+            dbClient.RunQuery("UPDATE pets SET have_saddle = '" + statut + "' WHERE id = '" + petId + "' LIMIT 1");
         }
 
         internal static void UpdatePethair(IQueryAdapter dbClient, int petId, int petHair)
@@ -27,9 +22,11 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery("UPDATE pets SET hairdye = '" + hairDye + "' WHERE id = '" + petId + "' LIMIT 1");
         }
 
-        internal static void UpdateRace(IQueryAdapter dbClient, int petId, int race)
+        internal static void UpdateRace(IQueryAdapter dbClient, int petId, string race)
         {
-            dbClient.RunQuery("UPDATE pets SET race = '" + race + "' WHERE id = '" + petId + "' LIMIT 1");
+            dbClient.SetQuery("UPDATE pets SET race = @race WHERE id = '" + petId + "' LIMIT 1");
+            dbClient.AddParameter("race", race);
+            dbClient.RunQuery();
         }
 
         internal static void UpdateAnyoneRide(IQueryAdapter dbClient, int petId, bool anyoneCanRide)
@@ -37,12 +34,7 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery("UPDATE pets SET anyone_ride = '" + ButterflyEnvironment.BoolToEnum(anyoneCanRide) + "' WHERE id = '" + petId + "' LIMIT 1");
         }
 
-        internal static void UpdateRoomId(IQueryAdapter dbClient, int petId)
-        {
-            dbClient.RunQuery("UPDATE pets SET room_id = '0' WHERE id = '" + petId + "' LIMIT 1");
-        }
-
-        internal static void Update(IQueryAdapter dbClient, int petId, int roomId)
+        internal static void UpdateRoomId(IQueryAdapter dbClient, int petId, int roomId)
         {
             dbClient.RunQuery("UPDATE pets SET room_id = '" + roomId + "' WHERE id = '" + petId + "' LIMIT 1");
         }
@@ -52,7 +44,7 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery("UPDATE pets SET room_id = '0' WHERE room_id = '" + roomId + "'");
         }
 
-        internal static int InsertGetId(IQueryAdapter dbClient, int petId, string petName, string petRace, string petColor, int ownerId, int petType, int petCreationStamp)
+        internal static int InsertGetId(IQueryAdapter dbClient, int petId, string petName, string petRace, string petColor, int ownerId, int petType, double petCreationStamp)
         {
             dbClient.SetQuery("INSERT INTO pets (user_id, name,type, race,color, experience, energy, createstamp) VALUES (" + ownerId + ",@" + petId + "name," + petType + ",@" + petId + "race,@" + petId + "color,0,100,'" + petCreationStamp + "')");
             dbClient.AddParameter(petId + "name", petName);

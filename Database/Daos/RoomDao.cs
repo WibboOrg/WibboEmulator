@@ -7,9 +7,17 @@ namespace Butterfly.Database.Daos
 {
     class RoomDao
     {
-        internal static void UpdateGroupId(IQueryAdapter dbClient, int groupId)
+        internal static void UpdateResetGroupId(IQueryAdapter dbClient, int groupId)
         {
             dbClient.RunQuery("UPDATE rooms SET group_id = '0' WHERE group_id = '" + groupId + "' LIMIT 1");
+        }
+
+        internal static void UpdateGroupId(IQueryAdapter dbClient, int groupId, int roomId)
+        {
+            dbClient.SetQuery("UPDATE rooms SET group_id = @gid WHERE id = @rid LIMIT 1");
+            dbClient.AddParameter("gid", groupId);
+            dbClient.AddParameter("rid", roomId);
+            dbClient.RunQuery();
         }
 
         internal static void UpdateScore(IQueryAdapter dbClient, int roomId, int score)
@@ -17,7 +25,7 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery("UPDATE rooms SET score = '" + score + "' WHERE id = '" + roomId + "'");
         }
 
-        internal static void UpdateDecoration(IQueryAdapter dbClient, int roomId, int decorationKey, string extraData)
+        internal static void UpdateDecoration(IQueryAdapter dbClient, int roomId, string decorationKey, string extraData)
         {
             dbClient.SetQuery("UPDATE rooms SET '" + decorationKey + "' = @extradata WHERE id = '" + roomId + "' LIMIT 1");
             dbClient.AddParameter("extradata", extraData);
@@ -34,7 +42,7 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery("DELETE FROM rooms WHERE id = '" + roomId + "'");
         }
 
-        internal static void UpdateAll(IQueryAdapter dbClient, int roomId, string name, string description, string password, string tags, int categoryId, int state, int maxUsers, bool allowPets, bool allowPetsEat, bool allowWalkthrough, bool hidewall, int floorThickness, int wallThickness, int mutefuse, int kickfuse, int banfuse, int chatType, int chatBalloon, int chatSpeed, int chatMaxDistance, int chatFloodProtection, int trocStatus)
+        internal static void UpdateAll(IQueryAdapter dbClient, int roomId, string name, string description, string password, string tags, int categoryId, string state, int maxUsers, bool allowPets, bool allowPetsEat, bool allowWalkthrough, bool hidewall, int floorThickness, int wallThickness, int mutefuse, int kickfuse, int banfuse, int chatType, int chatBalloon, int chatSpeed, int chatMaxDistance, int chatFloodProtection, int trocStatus)
         {
             dbClient.SetQuery("UPDATE rooms SET caption = @caption, description = @description, password = @password, category = '" + categoryId + "', state = '" + state + "', tags = @tags, users_max = '" + maxUsers + "', allow_pets = '" + (allowPets ? 1 : 0) + "', allow_pets_eat = '" + (allowPetsEat ? 1 : 0) + "', allow_walkthrough = '" + (allowWalkthrough ? 1 : 0) + "', allow_hidewall = '" + (hidewall ? 1 : 0) + "', floorthick = '" + floorThickness + "', wallthick = '" + wallThickness + "', moderation_mute_fuse = '" + mutefuse + "', moderation_kick_fuse = '" + kickfuse + "', moderation_ban_fuse = '" + banfuse + "', chat_type = '" + chatType + "', chat_balloon = '" + chatBalloon + "', chat_speed = '" + chatSpeed + "', chat_max_distance = '" + chatMaxDistance + "', chat_flood_protection = '" + chatFloodProtection + "', troc_status = '" + trocStatus + "' WHERE id = '" + roomId + "'");
             dbClient.AddParameter("caption", name);
@@ -59,7 +67,7 @@ namespace Butterfly.Database.Daos
             return dbClient.GetTable();
         }
 
-        internal static void UpdateUsersNow(IQueryAdapter dbClient)
+        internal static void UpdateResetUsersNow(IQueryAdapter dbClient)
         {
             dbClient.RunQuery("UPDATE rooms SET users_now = '0' WHERE users_now > '0'");
         }
@@ -77,7 +85,7 @@ namespace Butterfly.Database.Daos
         internal static DataTable GetAllSearchByUsername(IQueryAdapter dbClient, string searchData)
         {
             dbClient.SetQuery("SELECT * FROM rooms WHERE owner = @username and state != 'invisible' ORDER BY users_now DESC");
-            dbClient.AddParameter("username", searchData.Remove(0, 6));
+            dbClient.AddParameter("username", searchData);
             return dbClient.GetTable();
         }
 
@@ -100,7 +108,7 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery("UPDATE rooms SET model_name = 'model_custom' WHERE id = '" + roomId + "' LIMIT 1");
         }
 
-        internal static void Query8(IQueryAdapter dbClient, int roomId, bool hideWireds)
+        internal static void UpdateHideWireds(IQueryAdapter dbClient, int roomId, bool hideWireds)
         {
             dbClient.RunQuery("UPDATE rooms SET allow_hidewireds = '" + (hideWireds ? 1 : 0) + "' WHERE id = '" + roomId + "'");
         }
@@ -112,14 +120,9 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void UpdatePrice0(IQueryAdapter dbClient, int roomId)
-        {
-            dbClient.RunQuery("UPDATE rooms SET price = '0' WHERE id = '" + roomId + "' LIMIT 1");
-        }
-
         internal static void UpdatePrice(IQueryAdapter dbClient, int roomId, int price)
         {
-            dbClient.SetQuery("UPDATE rooms SET price= @price WHERE id = @roomid LIMIT 1");
+            dbClient.SetQuery("UPDATE rooms SET price = @price WHERE id = @roomid LIMIT 1");
             dbClient.AddParameter("roomid", roomId);
             dbClient.AddParameter("price", price);
             dbClient.RunQuery();
@@ -158,7 +161,7 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery("UPDATE rooms SET state = 'locked' WHERE id = '" + roomId + "'");
         }
 
-        internal static void UpdateCaptionDesc(IQueryAdapter dbClient, int roomId)
+        internal static void UpdateCaptionDescTags(IQueryAdapter dbClient, int roomId)
         {
             dbClient.RunQuery("UPDATE rooms SET caption = 'Cet appart ne respect par les conditions dutilisation', description = 'Cet appart ne respect par les conditions dutilisation', tags = '' WHERE id = '" + roomId + "'");
         }

@@ -81,7 +81,7 @@ namespace Butterfly.HabboHotel.Users.Inventory
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("DELETE FROM pets WHERE room_id = '0' AND user_id = '" + this.UserId + "'");
+                PetDao.Delete(dbClient, this.UserId);
             }
 
             this._petsItems.Clear();
@@ -221,8 +221,7 @@ namespace Butterfly.HabboHotel.Users.Inventory
             DataTable table2;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM pets WHERE user_id = '" + this.UserId + "' AND room_id = 0");
-                table2 = dbClient.GetTable();
+                table2 = PetDao.GetAllByUserId(dbClient, this.UserId);
             }
             if (table2 != null)
             {

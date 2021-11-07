@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.WebSocket;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Rooms;
 using System;
@@ -103,9 +104,7 @@ namespace Butterfly.HabboHotel.Animations
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id FROM rooms WHERE owner = 'WibboGame'");
-
-                DataTable table = dbClient.GetTable();
+                DataTable table = RoomDao.GetAllByOwnerWibboGame(dbClient);
                 if (table == null)
                 {
                     return;

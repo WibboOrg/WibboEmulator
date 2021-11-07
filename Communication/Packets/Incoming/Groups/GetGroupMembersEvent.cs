@@ -116,13 +116,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     break;
             }
 
-            //if (!string.IsNullOrEmpty(SearchVal))
-            //{
-            //Members = Members.Where(x => x.Username.StartsWith(SearchVal)).ToList();
-            //}
-
             Session.SendPacket(new GroupMembersComposer(Group, Members.ToList(), MemberCount, Page, (Group.CreatorId == Session.GetHabbo().Id || Group.IsAdmin(Session.GetHabbo().Id)), RequestType, SearchVal));
-
         }
 
         private List<int> GetSearchRequests(int groupeId, string searchVal)
@@ -131,7 +125,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             DataTable MembresTable = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                MembresTable = GuildRequestDao.GetAll(dbClient, groupeId, searchVal);
+                MembresTable = GuildRequestDao.GetAllBySearch(dbClient, groupeId, searchVal);
 
             foreach (DataRow row in MembresTable.Rows)
             {

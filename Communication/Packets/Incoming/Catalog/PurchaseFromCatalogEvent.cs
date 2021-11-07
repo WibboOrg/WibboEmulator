@@ -113,37 +113,32 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 #region Pet handling
 
                 case InteractionType.PET:
-                    try
+                    string[] Bits = ExtraData.Split('\n');
+                    string PetName = Bits[0];
+                    string Race = Bits[1];
+                    string Color = Bits[2];
+
+                    if (!int.TryParse(Race, out int result))
                     {
-                        string[] Bits = ExtraData.Split('\n');
-                        string PetName = Bits[0];
-                        string Race = Bits[1];
-                        string Color = Bits[2];
-
-                        int.Parse(Race); // to trigger any possible errors
-
-                        if (!PetUtility.CheckPetName(PetName))
-                        {
-                            return;
-                        }
-
-                        if (Race.Length > 2)
-                        {
-                            return;
-                        }
-
-                        if (Color.Length != 6)
-                        {
-                            return;
-                        }
-
-                        ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_PetLover", 1);
-                    }
-                    catch (Exception e)
-                    {
-                        Logging.LogException((e).ToString());
                         return;
                     }
+
+                    if (!PetUtility.CheckPetName(PetName))
+                    {
+                        return;
+                    }
+
+                    if (Race.Length > 2)
+                    {
+                        return;
+                    }
+
+                    if (Color.Length != 6)
+                    {
+                        return;
+                    }
+
+                    ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_PetLover", 1);
 
                     break;
 

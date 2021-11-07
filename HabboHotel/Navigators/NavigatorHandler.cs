@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Groups;
@@ -33,9 +34,7 @@ namespace Butterfly.HabboHotel.Navigators
                                 {
                                     if (SearchData.ToLower().StartsWith("owner:"))
                                     {
-                                        dbClient.SetQuery("SELECT * FROM rooms WHERE owner = @username and state != 'invisible' ORDER BY users_now DESC");
-                                        dbClient.AddParameter("username", SearchData.Remove(0, 6));
-                                        GetRooms = dbClient.GetTable();
+                                        GetRooms = RoomDao.GetAllSearchByUsername(dbClient, SearchData.Remove(0, 6));
                                     }
                                 }
 
@@ -88,9 +87,7 @@ namespace Butterfly.HabboHotel.Navigators
                                 DataTable Table = null;
                                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                                 {
-                                    dbClient.SetQuery("SELECT * FROM rooms WHERE caption LIKE @query OR owner LIKE @query ORDER BY users_now DESC LIMIT 50");
-                                    dbClient.AddParameter("query", SearchData.Replace("%", "\\%").Replace("_", "\\_") + "%");
-                                    Table = dbClient.GetTable();
+                                    Table = RoomDao.GetAllSearch(dbClient, SearchData);
                                 }
 
                                 List<RoomData> Results = new List<RoomData>();

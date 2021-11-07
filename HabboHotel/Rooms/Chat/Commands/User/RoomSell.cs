@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using System.Linq;
 
@@ -44,22 +45,22 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE rooms SET price= @price WHERE id = @roomid LIMIT 1");
-                dbClient.AddParameter("roomid", Room.Id);
-                dbClient.AddParameter("price", Prix);
-                dbClient.RunQuery();
+                RoomDao.UpdatePrice(dbClient, Room.Id, Prix);
             }
 
             Room.RoomData.SellPrice = Prix;
 
             UserRoom.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.valide", Session.Langue), Prix));
 
-            foreach (RoomUser user in Room.GetRoomUserManager().GetUserList().ToList())            {                if (user == null || user.IsBot)
+            foreach (RoomUser user in Room.GetRoomUserManager().GetUserList().ToList())
+            {
+                if (user == null || user.IsBot)
                 {
                     continue;
                 }
 
-                user.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.warn", Session.Langue), Prix));            }
+                user.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.warn", Session.Langue), Prix));
+            }
         }
     }
 }

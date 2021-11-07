@@ -134,7 +134,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoomModelCustomDao.Replace(dbClient, Room.Id, DoorX, DoorY, DoorZ, DoorDirection, Map, WallHeight);
-                dbClient.RunQuery("UPDATE rooms SET model_name = 'model_custom', wallthick = '" + WallThick + "', floorthick = '" + FloorThick + "' WHERE id = " + Room.Id + " LIMIT 1");
+                RoomDao.UpdateModelWallThickFloorThick(dbClient, Room.Id, WallThick, FloorThick);
             }
 
             List<RoomUser> UsersToReturn = Room.GetRoomUserManager().GetRoomUsers().ToList();

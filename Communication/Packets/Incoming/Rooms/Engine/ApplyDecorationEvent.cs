@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -61,9 +62,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE rooms SET '" + DecorationKey + "' = @extradata WHERE id = '" + room.Id + "' LIMIT 1");
-                dbClient.AddParameter("extradata", userItem.ExtraData);
-                dbClient.RunQuery();
+                RoomDao.UpdateDecoration(dbClient, room.Id, DecorationKey, userItem.ExtraData);
 
                 dbClient.RunQuery("DELETE FROM items WHERE id = " + userItem.Id);
             }
