@@ -102,9 +102,7 @@ namespace Butterfly.HabboHotel.GameClients
                     {
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            dbClient.SetQuery("UPDATE users SET machine_id = @machineid WHERE id = '" + this._habbo.Id + "'");
-                            dbClient.AddParameter("machineid", (this.MachineId != null) ? this.MachineId : "");
-                            dbClient.RunQuery();
+                            UserDao.UpdateMachineId(dbClient, this._habbo.Id, this.MachineId);
                         }
                     }
 
@@ -155,7 +153,7 @@ namespace Butterfly.HabboHotel.GameClients
                 {
                     RoomId = RoomDao.InsertDuplicate(dbClient, this.GetHabbo().Username, ButterflyEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
 
-                    dbClient.RunQuery("UPDATE users SET nux_enable = '0', home_room = '" + RoomId + "' WHERE id = '" + this.GetHabbo().Id + "'");
+                    UserDao.UpdateNuxEnable(dbClient, this.GetHabbo().Id, RoomId);
                     if (RoomId == 0)
                     {
                         return;

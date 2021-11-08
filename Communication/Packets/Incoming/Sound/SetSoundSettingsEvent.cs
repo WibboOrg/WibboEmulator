@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.WebSocket;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 
@@ -25,7 +26,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE users SET volume = '" + Volume1 + "," + Volume2 + "," + Volume3 + "' WHERE id = '" + Session.GetHabbo().Id + "' LIMIT 1");
+                UserDao.UpdateVolume(dbClient, Session.GetHabbo().Id, Volume1, + Volume2, + Volume3);
             }
 
             Session.GetHabbo().ClientVolume.Clear();

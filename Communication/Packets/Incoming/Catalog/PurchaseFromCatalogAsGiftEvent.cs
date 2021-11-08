@@ -93,7 +93,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int NewItemId = 0;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                NewItemId = ItemDao.insertItem(dbClient, PresentData.Id, Habbo.Id, ED);
+                NewItemId = ItemDao.Insert(dbClient, PresentData.Id, Habbo.Id, ED);
 
                 string ItemExtraData = null;
                 switch (Item.Data.InteractionType)
@@ -251,7 +251,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 UserPresentDao.Insert(dbClient, NewItemId, Item.Data.Id, ItemExtraData);
 
-                ItemDao.deleteItem(dbClient, NewItemId);
+                ItemDao.Delete(dbClient, NewItemId);
             }
 
 
@@ -298,9 +298,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE users SET vip_points = vip_points - " + TotalDiamondCost + " WHERE id = '" + Session.GetHabbo().Id + "'");
+                    UserDao.UpdateRemovePoints(dbClient, Session.GetHabbo().Id, TotalDiamondCost);
                 }
-                //UserDao.UpdateWP
             }
 
             Session.GetHabbo().LastGiftPurchaseTime = DateTime.Now;

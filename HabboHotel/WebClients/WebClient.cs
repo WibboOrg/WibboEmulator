@@ -88,9 +88,7 @@ namespace Butterfly.HabboHotel.WebClients
 
         private void SendSettingSound(IQueryAdapter dbClient)
         {
-            dbClient.SetQuery("SELECT volume FROM users WHERE id = '" + this.UserId + "'");
-
-            DataRow dUserVolume = dbClient.GetRow();
+            DataRow dUserVolume = UserDao.GetOneVolume(dbClient, this.UserId);
             if (dUserVolume == null)
             {
                 return;

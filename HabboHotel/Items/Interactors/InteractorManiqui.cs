@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -43,9 +44,7 @@ namespace Butterfly.HabboHotel.Items.Interactors
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE users SET look = @look WHERE id = '" + Session.GetHabbo().Id + "'");
-                dbClient.AddParameter("look", str3);
-                dbClient.RunQuery();
+                UserDao.UpdateLook(dbClient, Session.GetHabbo().Id, str3);
             }
 
             if (room == null)

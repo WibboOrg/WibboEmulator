@@ -41,7 +41,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 List<int> wiredId = new List<int>();
                 List<int> teleportId = new List<int>();
 
-                DataTable itemTable = ItemDao.GetAll(dbClient, OldRoomId);
+                DataTable itemTable = ItemDao.GetAllIdAndBaseItem(dbClient, OldRoomId);
                 foreach (DataRow dataRow in itemTable.Rows)
                 {
                     int OldItemId = Convert.ToInt32(dataRow[0]);

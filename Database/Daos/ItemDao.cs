@@ -107,6 +107,14 @@ namespace Butterfly.Database.Daos
 
         internal static DataTable GetAll(IQueryAdapter dbClient, int roomId)
         {
+            dbClient.SetQuery("SELECT items.id, items.user_id, items.room_id, items.base_item, items.extra_data, items.x, items.y, items.z, items.rot, items.wall_pos, items_limited.limited_number, items_limited.limited_stack FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.room_id = @roomid");
+            dbClient.AddParameter("roomid", roomId);
+
+            return dbClient.GetTable();
+        }
+
+        internal static DataTable GetAllIdAndBaseItem(IQueryAdapter dbClient, int roomId)
+        {
             dbClient.SetQuery("SELECT id, base_item FROM items WHERE room_id = '" + roomId + "'");
             return dbClient.GetTable();
         }

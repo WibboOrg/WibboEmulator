@@ -123,9 +123,6 @@ namespace Butterfly.HabboHotel.Rooms
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT items.id, items.user_id, items.room_id, items.base_item, items.extra_data, items.x, items.y, items.z, items.rot, items.wall_pos, items_limited.limited_number, items_limited.limited_stack FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.room_id = @roomid");
-                dbClient.AddParameter("roomid", (RoomId == 0) ? this._room.Id : RoomId);
-
                 int itemID;
                 int UserId;
                 int baseID;
@@ -139,7 +136,9 @@ namespace Butterfly.HabboHotel.Rooms
                 int LimitedTo;
                 string wallCoord;
 
-                foreach (DataRow dataRow in dbClient.GetTable().Rows)
+                DataTable itemTable = ItemDao.GetAll(dbClient, (RoomId == 0) ? this._room.Id : RoomId);
+
+                foreach (DataRow dataRow in itemTable.Rows)
                 {
                     itemID = Convert.ToInt32(dataRow[0]);
                     UserId = Convert.ToInt32(dataRow[1]);

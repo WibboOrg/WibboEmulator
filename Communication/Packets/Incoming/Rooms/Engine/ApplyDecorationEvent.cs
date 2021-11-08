@@ -64,7 +64,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 RoomDao.UpdateDecoration(dbClient, room.Id, DecorationKey, userItem.ExtraData);
 
-                dbClient.RunQuery("DELETE FROM items WHERE id = " + userItem.Id);
+                ItemDao.Delete(dbClient, userItem.Id);
             }
 
             Session.GetHabbo().GetInventoryComponent().RemoveItem(userItem.Id);

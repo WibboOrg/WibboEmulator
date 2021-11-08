@@ -286,8 +286,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE users SET vip_points = vip_points - '" + TotalDiamondCost + "' WHERE id = '" + Session.GetHabbo().Id + "'");
-                    //UserDao.UpdateWP
+                    UserDao.UpdateRemovePoints(dbClient, Session.GetHabbo().Id, TotalDiamondCost);
                 }
             }
 

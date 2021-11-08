@@ -115,8 +115,7 @@ namespace Butterfly.HabboHotel.GameClients
             string username = "";
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT username FROM users WHERE id = '" + Id + "'");
-                username = dbClient.GetString();
+                username = UserDao.GetNameById(dbClient, Id);
             }
 
             return username;
@@ -343,7 +342,7 @@ namespace Butterfly.HabboHotel.GameClients
             {
                 if (str == "user")
                 {
-                    dbClient.RunQuery("UPDATE users SET is_banned = '1' WHERE id = '" + Client.GetHabbo().Id + "'");
+                    UserDao.UpdateIsBanned(dbClient, Client.GetHabbo().Id);
                 }
 
                 BanDao.InsertBan(dbClient, Expire, str, Variable, Reason, Moderator);

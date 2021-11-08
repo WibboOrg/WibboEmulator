@@ -64,8 +64,7 @@ namespace Butterfly.HabboHotel.Support
             string username = "";
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT username FROM users WHERE id = '" + Id + "'");
-                username = dbClient.GetString();
+                username = UserDao.GetNameById(dbClient, Id);
             }
 
             return username;

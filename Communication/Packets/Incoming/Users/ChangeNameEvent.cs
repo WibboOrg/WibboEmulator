@@ -53,10 +53,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 RoomDao.UpdateOwner(dbClient, NewUsername, Session.GetHabbo().Username);
 
-                dbClient.SetQuery("UPDATE users SET username = @newname WHERE id = @userid");
-                dbClient.AddParameter("newname", NewUsername);
-                dbClient.AddParameter("userid", Session.GetHabbo().Id);
-                dbClient.RunQuery();
+                UserDao.UpdateName(dbClient, Session.GetHabbo().Id, NewUsername);
 
                 LogFlagmeDao.Insert(dbClient, Session.GetHabbo().Id, Session.GetHabbo().Username, NewUsername);
             }

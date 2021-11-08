@@ -189,18 +189,18 @@ namespace Butterfly.HabboHotel.Users.Messenger
             MessengerBuddy friend;
             if (clientByUserId == null || clientByUserId.GetHabbo() == null)
             {
-                DataRow row;
+                string username;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("SELECT username FROM users WHERE id = '" + friendID + "'");
-                    row = dbClient.GetRow();
+                    username = UserDao.GetNameById(dbClient, friendID);
                 }
-                if (row == null)
+
+                if (username == "")
                 {
                     return;
                 }
 
-                friend = new MessengerBuddy(friendID, (string)row["username"], "", 0);
+                friend = new MessengerBuddy(friendID, username, "", 0);
             }
             else
             {
@@ -257,9 +257,7 @@ namespace Butterfly.HabboHotel.Users.Messenger
                 DataRow dataRow = null;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("SELECT id, block_newfriends FROM users WHERE username = @query");
-                    dbClient.AddParameter("query", UserQuery.ToLower());
-                    dataRow = dbClient.GetRow();
+                    dataRow = UserDao.GetOneIdAndBlockNewFriend(dbClient, UserQuery.ToLower());
                 }
 
                 if (dataRow == null)
@@ -298,7 +296,6 @@ namespace Butterfly.HabboHotel.Users.Messenger
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     MessengerRequestDao.Replace(dbClient, this.UserId, sender);
-                    dbClient.RunQuery("REPLACE INTO messenger_requests (from_id,to_id) VALUES (" + this.UserId + "," + sender + ")");
                 }
 
                 GameClient clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(sender);

@@ -57,13 +57,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 if (Session.GetHabbo().GetBadgeComponent().HasBadge(userItem.ExtraData))
                 {
-                    Session.SendNotification("Vous poss�der d�j� ce badge !");
+                    Session.SendNotification("Vous posséder déjà ce badge !");
                     return;
                 }
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("DELETE FROM items WHERE id = '" + ItemId + "'");
+                    ItemDao.Delete(dbClient, ItemId);
                 }
 
                 Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);

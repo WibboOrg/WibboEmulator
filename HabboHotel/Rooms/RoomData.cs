@@ -1,4 +1,5 @@
 ﻿using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Groups;
 using System;
@@ -116,9 +117,7 @@ namespace Butterfly.HabboHotel.Rooms
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id, langue FROM users WHERE username = @owner");
-                dbClient.AddParameter("owner", this.OwnerName);
-                DataRow UserRow = dbClient.GetRow();
+                DataRow UserRow = UserDao.GetIdAndLangue(dbClient, this.OwnerName);
                 if (UserRow != null)
                 {
                     this.OwnerId = Convert.ToInt32(UserRow["id"]);

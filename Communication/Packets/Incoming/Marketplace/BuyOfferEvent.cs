@@ -69,7 +69,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE users SET vip_points = vip_points - '" + Convert.ToInt32(Row["total_price"]) + "' WHERE id = '" + Session.GetHabbo().Id + "'");
+                    UserDao.UpdateRemovePoints(dbClient, Session.GetHabbo().Id, Convert.ToInt32(Row["total_price"]));
                 }
 
                 Item GiveItem = ItemFactory.CreateSingleItem(Item, Session.GetHabbo(), Convert.ToString(Row["extra_data"]), Convert.ToInt32(Row["furni_id"]), Convert.ToInt32(Row["limited_number"]), Convert.ToInt32(Row["limited_stack"]));

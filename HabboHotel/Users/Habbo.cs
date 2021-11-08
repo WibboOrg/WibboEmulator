@@ -516,7 +516,7 @@ namespace Butterfly.HabboHotel.Users
                 int TimeOnlineSec = (int)TimeOnline.TotalSeconds;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE users SET online = '0', last_online = '" + ButterflyEnvironment.GetUnixTimestamp() + "', activity_points = '" + this.Duckets + "', credits = '" + this.Credits + "' WHERE id = '" + this.Id + "'");
+                    UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits);
                     UserStatsDao.UpdateAll(dbClient, this.Id, this.FavouriteGroupId, TimeOnlineSec, this.CurrentQuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
                 }
             }

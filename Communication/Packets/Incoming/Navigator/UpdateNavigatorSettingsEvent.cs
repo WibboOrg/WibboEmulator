@@ -1,5 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Navigator;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -20,7 +20,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.GetHabbo().HomeRoom = RoomId;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE users SET home_room = '" + RoomId + "' WHERE id = '" + Session.GetHabbo().Id + "'");
+                UserDao.UpdateHomeRoom(dbClient, Session.GetHabbo().Id, RoomId);
             }
 
             Session.SendPacket(new NavigatorSettingsComposer(RoomId));

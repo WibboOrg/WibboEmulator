@@ -1,5 +1,15 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
-using Butterfly.Database.Interfaces;using Butterfly.HabboHotel.GameClients;using Butterfly.HabboHotel.Groups;namespace Butterfly.Communication.Packets.Incoming.Structure{    internal class UpdateGroupIdentityEvent : IPacketEvent    {        public void Parse(GameClient Session, ClientPacket Packet)        {
+using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
+using Butterfly.HabboHotel.GameClients;
+using Butterfly.HabboHotel.Groups;
+
+namespace Butterfly.Communication.Packets.Incoming.Structure
+{
+    internal class UpdateGroupIdentityEvent : IPacketEvent
+    {
+        public void Parse(GameClient Session, ClientPacket Packet)
+        {
             int GroupId = Packet.PopInt();
             string Name = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
             string Desc = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
@@ -26,14 +36,14 @@ using Butterfly.Database.Interfaces;using Butterfly.HabboHotel.GameClients;usi
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE `groups` SET `name`= @name, `desc` = @desc WHERE `id` = @groupId LIMIT 1");
-                dbClient.AddParameter("name", Name);
-                dbClient.AddParameter("desc", Desc);
-                dbClient.AddParameter("groupId", GroupId);
-                dbClient.RunQuery();
+                GuildDao.UpdateNameAndDesc(dbClient, GroupId, Name, Desc);
             }
 
             Group.Name = Name;
             Group.Description = Desc;
 
-            Session.SendPacket(new GroupInfoComposer(Group, Session));        }    }}
+            Session.SendPacket(new GroupInfoComposer(Group, Session));
+
+        }
+    }
+}

@@ -31,7 +31,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         CatalogMarketplaceOfferDao.Delete(dbClient, Session.GetHabbo().Id);
-                        dbClient.RunQuery("UPDATE users SET vip_points = vip_points + '" + CreditsOwed + "' WHERE id = '" + Session.GetHabbo().Id + "'");
+                        UserDao.UpdateAddPoints(dbClient, Session.GetHabbo().Id, CreditsOwed);
                     }
                 }
             }

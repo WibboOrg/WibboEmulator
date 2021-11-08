@@ -2318,7 +2318,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            dbClient.RunQuery("UPDATE users SET run_points = run_points + 1, run_points_month = run_points_month + 1 WHERE id = '" + User.GetClient().GetHabbo().Id + "'");
+                            UserDao.UpdateAddRunPoints(dbClient, User.GetClient().GetHabbo().Id);
                         }
 
                         break;
@@ -2391,7 +2391,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            dbClient.RunQuery("UPDATE users SET game_points = game_points + 1, game_points_month = game_points_month + 1 WHERE id = '" + User.GetClient().GetHabbo().Id + "'");
+                            UserDao.UpdateAddGamePoints(dbClient, User.GetClient().GetHabbo().Id);
                         }
 
                         ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(User.GetClient(), "ACH_Extrabox", 1);

@@ -35,7 +35,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 UserFavoriteDao.Delete(dbClient, RoomId);
                 RoomRightDao.Delete(dbClient, RoomId);
                 ItemDao.DeleteAllByRoomId(dbClient, RoomId);
-                dbClient.RunQuery("UPDATE users SET home_room = '0' WHERE id = '" + Session.GetHabbo().Id + "'");
+                UserDao.UpdateHomeRoom(dbClient, Session.GetHabbo().Id, 0);
                 BotDao.UpdateRoomBot(dbClient, RoomId);
                 PetDao.UpdateRoomIdByRoomId(dbClient, RoomId);
             }

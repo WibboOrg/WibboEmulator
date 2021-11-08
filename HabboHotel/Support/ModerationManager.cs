@@ -452,13 +452,13 @@ namespace Butterfly.HabboHotel.Support
         public static ServerPacket SerializeRoomTool(RoomData Data)
         {
             Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Data.Id);
-            int i = 0;
+
+            int userId = 0;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                    dbClient.SetQuery("SELECT id FROM users WHERE username = @owner");
-                    dbClient.AddParameter("owner", Data.OwnerName);
-                    i = Convert.ToInt32(dbClient.GetRow()[0]);
+                userId = UserDao.GetIdByName(dbClient, Data.OwnerName);
             }
+            
             ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.MODTOOL_ROOM_INFO);
             serverMessage.WriteInteger(Data.Id);
             serverMessage.WriteInteger(Data.UsersNow);
@@ -471,7 +471,7 @@ namespace Butterfly.HabboHotel.Support
                 serverMessage.WriteBoolean(false);
             }
 
-            serverMessage.WriteInteger(i);
+            serverMessage.WriteInteger(userId);
             serverMessage.WriteString(Data.OwnerName);
             serverMessage.WriteBoolean(room != null);
             if (room != null)
@@ -571,23 +571,22 @@ namespace Butterfly.HabboHotel.Support
         public static ServerPacket SerializeUserInfo(int UserId)
         {
             GameClient User = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
-            DataRow row1 = null;
+            DataRow row = null;
             if (User == null)
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("SELECT id, username FROM users WHERE id = '" + UserId + "'");
-                    row1 = dbClient.GetRow();
+                    row = UserDao.GetOneIdAndName(dbClient, UserId);
                 }
-                if (row1 == null)
+                if (row == null)
                 {
                     return null;
                 }
             }
 
             ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.MODERATION_USER_INFO);
-            serverMessage.WriteInteger((row1 == null) ? User.GetHabbo().Id : Convert.ToInt32(row1["id"]));
-            serverMessage.WriteString((row1 == null) ? User.GetHabbo().Username : (string)row1["username"]);
+            serverMessage.WriteInteger((row == null) ? User.GetHabbo().Id : Convert.ToInt32(row["id"]));
+            serverMessage.WriteString((row == null) ? User.GetHabbo().Username : (string)row["username"]);
             serverMessage.WriteString("Unknown");
 
             serverMessage.WriteInteger(0);

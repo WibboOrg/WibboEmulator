@@ -98,11 +98,9 @@ namespace Butterfly.HabboHotel.Users.UserData
 
                     Badges = UserBadgeDao.GetAll(dbClient, userId);
 
-                    dbClient.SetQuery("SELECT users.id,users.username,messenger_friendships.relation FROM users JOIN messenger_friendships ON users.id = messenger_friendships.user_two_id WHERE messenger_friendships.user_one_id = '" + userId + "'");
-                    FrienShips = dbClient.GetTable();
+                    FrienShips = UserDao.GetAllFriendShips(dbClient, userId);
 
-                    dbClient.SetQuery("SELECT messenger_requests.from_id,messenger_requests.to_id,users.username FROM users JOIN messenger_requests ON users.id = messenger_requests.from_id WHERE messenger_requests.to_id = '" + userId + "'");
-                    Requests = dbClient.GetTable();
+                    Requests = UserDao.GetAllFriendRequests(dbClient, userId);
 
                     Quests = UserQuestDao.GetAll(dbClient, userId);
 

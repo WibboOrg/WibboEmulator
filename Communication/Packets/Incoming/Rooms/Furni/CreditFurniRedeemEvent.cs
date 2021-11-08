@@ -62,7 +62,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.RunQuery("UPDATE users SET vip_points = vip_points + '" + Value + "' WHERE id = '" + Session.GetHabbo().Id + "' LIMIT 1");
+                        UserDao.UpdateAddPoints(dbClient, Session.GetHabbo().Id, Value);
                     }
                 }
                 else if (Exchange.GetBaseItem().ItemName.StartsWith("WwnEx_"))

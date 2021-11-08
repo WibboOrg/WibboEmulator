@@ -41,7 +41,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 DataRow Data = null;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("SELECT `base_id``extra_data` ROM `usr_presets` WHERE `item_id` = @presentId LIMIT 1");
+                    dbClient.SetQuery("SELECT base_idextra_data ROM usr_presets WHERE item_id = @presentId LIMIT 1");
                     dbClient.AddParameter("presentId", Present.Id);
                     Data = dbClient.GetRow();
                 }
@@ -102,11 +102,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE `items` SET `base_item` = @BaseItem, `extra_data` = @edata WHERE `id` = @itemId LIMIT 1");
-                dbClient.AddParameter("itemId", Present.Id);
-                dbClient.AddParameter("BaseItem", Row["base_id"]);
-                dbClient.AddParameter("edata", Row["extr_data"]);
-                dbClient.RunQuery();
+                ItemDao.UpdateBaseItemAndExtraData(dbClient, Present.Id, Convert.ToInt32(Row["base_id"]), Row["extr_data"].ToString());
 
                 UserPresentDao.Delete(dbClient, Present.Id);
             }
@@ -122,9 +118,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE `items` SET `room_id` = '0' WHERE `id` = @itemId LIMIT 1");
-                        dbClient.AddParameter("itemId", Present.Id);
-                        dbClient.RunQuery();
+                        ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                     }
 
                     Session.GetHabbo().GetInventoryComponent().TryAddItem(Present);
@@ -136,9 +130,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("UPDATE `items` SET `room_id` = '0' WHERE `id` = @itemId LIMIT 1");
-                    dbClient.AddParameter("itemId", Present.Id);
-                    dbClient.RunQuery();
+                    ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                 }
 
                 Session.GetHabbo().GetInventoryComponent().TryAddItem(Present);

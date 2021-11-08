@@ -264,8 +264,8 @@ namespace Butterfly.HabboHotel
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE users SET online = '0' WHERE online = '1'");
-                dbClient.RunQuery("UPDATE users SET auth_ticket = '' WHERE auth_ticket != ''");
+                UserDao.UpdateAllOnline(dbClient);
+                UserDao.UpdateAllTicket(dbClient);
                 UserWebsocketDao.UpdateReset(dbClient);
                 RoomDao.UpdateResetUsersNow(dbClient);
                 EmulatorStatusDao.UpdateReset(dbClient);

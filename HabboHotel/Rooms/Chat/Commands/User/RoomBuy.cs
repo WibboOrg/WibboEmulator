@@ -39,8 +39,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE users SET vip_points = vip_points - '" + Room.RoomData.SellPrice + "' WHERE id = '" + Session.GetHabbo().Id + "'");
-                dbClient.RunQuery("UPDATE users SET vip_points = vip_points + '" + Room.RoomData.SellPrice + "' WHERE id = '" + Room.RoomData.OwnerId + "'");
+                UserDao.UpdateRemovePoints(dbClient, Session.GetHabbo().Id, Room.RoomData.SellPrice);
+                UserDao.UpdateAddPoints(dbClient, Room.RoomData.OwnerId, Room.RoomData.SellPrice);
 
                 RoomRightDao.Delete(dbClient, Room.Id);
                 RoomDao.UpdateOwner(dbClient, Room.Id, Session.GetHabbo().Username);
