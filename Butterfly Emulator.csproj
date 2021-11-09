@@ -614,9 +614,13 @@
     <Compile Include="Core\IDGenerator.cs" />
     <Compile Include="Database\Daos\BanDao.cs" />
     <Compile Include="Database\Daos\BotDao.cs" />
+    <Compile Include="Database\Daos\CatalogBotPresetDao.cs" />
     <Compile Include="Database\Daos\CatalogItemDao.cs" />
     <Compile Include="Database\Daos\CatalogMarketplaceDataDao.cs" />
     <Compile Include="Database\Daos\CatalogMarketplaceOfferDao.cs" />
+    <Compile Include="Database\Daos\CatalogPageDao.cs" />
+    <Compile Include="Database\Daos\CatalogPetRaceDao.cs" />
+    <Compile Include="Database\Daos\CatalogPromotionDao.cs" />
     <Compile Include="Database\Daos\CatalogVoucherDao.cs" />
     <Compile Include="Database\Daos\EmulatorAchievementDao.cs" />
     <Compile Include="Database\Daos\EmulatorChatStyleDao.cs" />
