@@ -1,5 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Daos;
+
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 
@@ -7,7 +7,21 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 {
     internal class DeleteMission : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public string PermissionRequired
+        {
+            get { return ""; }
+        }
+
+        public string Parameters
+        {
+            get { return ""; }
+        }
+
+        public string Description
+        {
+            get { return ""; }
+        }
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
         {
             if (Params.Length != 2)
             {
@@ -27,11 +41,12 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             else
             {
                 clientByUsername.GetHabbo().Motto = ButterflyEnvironment.GetLanguageManager().TryGetValue("user.unacceptable_motto", clientByUsername.Langue);
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserDao.UpdateMotto(dbClient, clientByUsername.GetHabbo().Id, clientByUsername.GetHabbo().Motto);
+                    queryreactor.SetQuery("UPDATE users SET motto = @motto WHERE id = '" + clientByUsername.GetHabbo().Id + "'");
+                    queryreactor.AddParameter("motto", clientByUsername.GetHabbo().Motto);
+                    queryreactor.RunQuery();
                 }
-                
                 Room currentRoom2 = clientByUsername.GetHabbo().CurrentRoom;
                 if (currentRoom2 == null)
                 {

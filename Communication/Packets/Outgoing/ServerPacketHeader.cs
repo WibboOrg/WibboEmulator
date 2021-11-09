@@ -33,6 +33,7 @@
         public const int NewGroupInfoMessageComposer = 2808;
         public const int ModeratorTicketChatlogMessageComposer = 607;
         public const int ModeratorSupportTicketMessageComposer = 3609;
+        public const int ModeratorSupportTicketResponseMessageComposer = 3796; //new
         public const int RespectPetNotificationMessageComposer = 2788;
         public const int PetLevelUpComposer = 859;
         public const int AddExperiencePointsMessageComposer = 2156;

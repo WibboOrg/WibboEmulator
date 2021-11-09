@@ -5,7 +5,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Help
         public OpenHelpToolMessageComposer()
             : base(ServerPacketHeader.OpenHelpToolMessageComposer)
         {
-
+            WriteInteger(0);
         }
     }
 }

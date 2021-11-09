@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Butterfly.HabboHotel.Effects
+namespace Butterfly.HabboHotel.Users.Effect
 {
     public class EffectManager
     {
