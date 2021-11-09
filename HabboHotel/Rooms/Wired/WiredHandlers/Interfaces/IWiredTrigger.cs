@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using System.Data;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 
 namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Interfaces
@@ -9,9 +10,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Interfaces
 
         void SaveToDatabase(IQueryAdapter dbClient);
 
-        void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom);
-
-        void DeleteFromDatabase(IQueryAdapter dbClient);
+        void LoadFromDatabase(DataRow row, Room insideRoom);
 
         void OnTrigger(GameClient Session, int SpriteId);
     }

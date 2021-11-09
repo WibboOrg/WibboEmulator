@@ -62,36 +62,28 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.userName, false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.item.Id);
-            DataRow row = dbClient.GetRow();
-            this.userName = row == null ? string.Empty : row[0].ToString();
+            this.userName = row["trigger_data"].ToString();
             this.isOneUser = !string.IsNullOrEmpty(this.userName);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
         }
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message2 = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message2.WriteBoolean(false);
-            Message2.WriteInteger(0);
-            Message2.WriteInteger(0);
-            Message2.WriteInteger(SpriteId);
-            Message2.WriteInteger(this.item.Id);
-            Message2.WriteString(this.userName);
-            Message2.WriteInteger(0);
-            Message2.WriteInteger(0);
-            Message2.WriteInteger(7);
-            Message2.WriteInteger(0);
-            Message2.WriteInteger(0);
-            Message2.WriteInteger(0);
-            Session.SendPacket(Message2);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.item.Id);
+            Message.WriteString(this.userName);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(7);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
 
     }

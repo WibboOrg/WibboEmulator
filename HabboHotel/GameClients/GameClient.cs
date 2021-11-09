@@ -12,6 +12,7 @@ using Butterfly.Communication.Packets.Outgoing.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Sound;
 using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Users;
 using Butterfly.HabboHotel.Users.UserData;
@@ -99,11 +100,9 @@ namespace Butterfly.HabboHotel.GameClients
 
                     if (this._habbo.MachineId != this.MachineId)
                     {
-                        using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            queryreactor.SetQuery("UPDATE users SET machine_id = @machineid WHERE id = '" + this._habbo.Id + "'");
-                            queryreactor.AddParameter("machineid", (this.MachineId != null) ? this.MachineId : "");
-                            queryreactor.RunQuery();
+                            UserDao.UpdateMachineId(dbClient, this._habbo.Id, this.MachineId);
                         }
                     }
 
@@ -152,20 +151,15 @@ namespace Butterfly.HabboHotel.GameClients
                 int RoomId = 0;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("INSERT INTO rooms (caption,description,owner,model_name,category,state, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick) SELECT @caption, @desc, @username, @model, category, state, wallpaper, floor, landscape, allow_hidewall, wallthick, floorthick FROM rooms WHERE id = '5328079'");
-                    dbClient.AddParameter("caption", this.GetHabbo().Username);
-                    dbClient.AddParameter("desc", ButterflyEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
-                    dbClient.AddParameter("username", this.GetHabbo().Username);
-                    dbClient.AddParameter("model", "model_welcome");
-                    RoomId = Convert.ToInt32(dbClient.InsertQuery());
+                    RoomId = RoomDao.InsertDuplicate(dbClient, this.GetHabbo().Username, ButterflyEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
 
-                    dbClient.RunQuery("UPDATE users SET nux_enable = '0', home_room = '" + RoomId + "' WHERE id = '" + this.GetHabbo().Id + "';");
+                    UserDao.UpdateNuxEnable(dbClient, this.GetHabbo().Id, RoomId);
                     if (RoomId == 0)
                     {
                         return;
                     }
 
-                    dbClient.RunQuery("INSERT INTO items (user_id, room_id, base_item, extra_data, x, y, z, rot) SELECT '" + this.GetHabbo().Id + "', '" + RoomId + "', base_item, extra_data, x, y, z, rot FROM items WHERE room_id = '5328079'");
+                    ItemDao.InsertDuplicate(dbClient, this.GetHabbo().Id, RoomId);
                 }
 
                 this.GetHabbo().UsersRooms.Add(ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId));
@@ -230,25 +224,18 @@ namespace Butterfly.HabboHotel.GameClients
 
             Message = Encoding.GetEncoding("UTF-8").GetString(Encoding.GetEncoding("Windows-1252").GetBytes(Message));
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("INSERT INTO chatlogs (user_id, room_id, user_name, timestamp, message, type) VALUES ('" + this.GetHabbo().Id + "', '" + RoomId + "', @username, UNIX_TIMESTAMP(), @message, @type)");
-                queryreactor.AddParameter("message", Message);
-                queryreactor.AddParameter("type", type);
-                queryreactor.AddParameter("username", this.GetHabbo().Username);
-                queryreactor.RunQuery();
+                LogChatDao.Insert(dbClient, this.GetHabbo().Id, RoomId, Message, type, this.GetHabbo().Username);
             }
 
             if (!ButterflyEnvironment.GetGame().GetChatManager().GetFilter().Ispub(Message))
             {
                 if (ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessageWord(Message))
                 {
-                    using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        queryreactor.SetQuery("INSERT INTO chatlogs_pub (user_id, user_name, timestamp, message) VALUES ('" + this.GetHabbo().Id + "', @pseudo, UNIX_TIMESTAMP(), @message)");
-                        queryreactor.AddParameter("message", "A vérifié: " + type + Message);
-                        queryreactor.AddParameter("pseudo", this.GetHabbo().Username);
-                        queryreactor.RunQuery();
+                        LogChatPubDao.Insert(dbClient, this.GetHabbo().Id, "A vérifié: " + type + Message, this.GetHabbo().Username);
                     }
 
                     foreach (GameClient Client in ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers())
@@ -274,49 +261,20 @@ namespace Butterfly.HabboHotel.GameClients
                 PubCount = 4;
             }
 
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                LogChatPubDao.Insert(dbClient, this.GetHabbo().Id, "Pub numero " + PubCount + ": " + type + Message, this.GetHabbo().Username);
+
             if (PubCount < 3 && PubCount > 0)
             {
                 this.SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.1", this.Langue), PubCount));
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    queryreactor.SetQuery("INSERT INTO chatlogs_pub (user_id,user_name,timestamp,message) VALUES ('" + this.GetHabbo().Id + "',@pseudo,UNIX_TIMESTAMP(),@message)");
-                    queryreactor.AddParameter("message", "Pub numero " + PubCount + ": " + type + Message);
-                    queryreactor.AddParameter("pseudo", this.GetHabbo().Username);
-                    queryreactor.RunQuery();
-                }
             }
             else if (PubCount == 3)
             {
                 this.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.2", this.Langue));
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    queryreactor.SetQuery("INSERT INTO chatlogs_pub (user_id,user_name,timestamp,message) VALUES ('" + this.GetHabbo().Id + "',@pseudo,UNIX_TIMESTAMP(),@message)");
-                    queryreactor.AddParameter("message", "Pub numero " + PubCount + ": " + type + Message);
-                    queryreactor.AddParameter("pseudo", this.GetHabbo().Username);
-                    queryreactor.RunQuery();
-                }
             }
             else if (PubCount == 4)
             {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    queryreactor.SetQuery("INSERT INTO chatlogs_pub (user_id,user_name,timestamp,message) VALUES ('" + this.GetHabbo().Id + "',@pseudo,UNIX_TIMESTAMP(),@message)");
-                    queryreactor.AddParameter("message", "Pub numero " + PubCount + " bannisement: " + type + Message);
-                    queryreactor.AddParameter("pseudo", this.GetHabbo().Username);
-                    queryreactor.RunQuery();
-                }
-
                 ButterflyEnvironment.GetGame().GetClientManager().BanUser(this, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.GetHabbo().Username, true, false);
-            }
-            else
-            {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    queryreactor.SetQuery("INSERT INTO chatlogs_pub (user_id,user_name,timestamp,message) VALUES ('" + this.GetHabbo().Id + "',@pseudo,UNIX_TIMESTAMP(),@message)");
-                    queryreactor.AddParameter("message", "Pub numero " + PubCount + ": " + type + Message);
-                    queryreactor.AddParameter("pseudo", this.GetHabbo().Username);
-                    queryreactor.RunQuery();
-                }
             }
 
             foreach (GameClient Client in ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers())
@@ -344,6 +302,7 @@ namespace Butterfly.HabboHotel.GameClients
             MessageNotif.WriteString(Message);
             this.SendPacket(MessageNotif);
         }
+
 
         public void Dispose()
         {

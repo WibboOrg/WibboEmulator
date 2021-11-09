@@ -47,17 +47,9 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
             WiredUtillity.SaveTriggerItem(dbClient, this.ItemId, string.Empty, ((int)this.team).ToString(), false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.ItemId);
-            DataRow row = dbClient.GetRow();
-            if (row == null)
-            {
-                return;
-            }
-
-            if (int.TryParse(row[0].ToString(), out int Number))
+            if (int.TryParse(row["trigger_data"].ToString(), out int Number))
             {
                 this.team = (Team)Number;
             }
@@ -78,11 +70,6 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
 
             Message.WriteInteger(6);
             Session.SendPacket(Message);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.ItemId + "'");
         }
 
         public void Dispose()

@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,11 +12,9 @@ namespace Butterfly.HabboHotel.Users.Messenger
         {
             List<SearchResult> list = new List<SearchResult>();
             DataTable table;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT id, username, look FROM users WHERE username LIKE @query LIMIT 50");
-                queryreactor.AddParameter("query", (query.Replace("%", "\\%").Replace("_", "\\_") + "%"));
-                table = queryreactor.GetTable();
+                table = UserDao.GetAllSearchUsers(dbClient, query);
             }
 
             foreach (DataRow dataRow in table.Rows)

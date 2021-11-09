@@ -57,46 +57,33 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
             WiredUtillity.SaveTriggerItem(dbClient, this.itemID, this.scoreToGive.ToString(), this.maxCountPerGame.ToString(), false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data, trigger_data_2 FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.itemID);
-            DataRow row = dbClient.GetRow();
-            if (row != null)
-            {
-                this.maxCountPerGame = Convert.ToInt32(row[0].ToString());
-                this.scoreToGive = Convert.ToInt32(row[1].ToString());
-            }
-            else
-            {
-                this.maxCountPerGame = 0;
-                this.scoreToGive = 0;
-            }
+            if(int.TryParse(row["trigger_data"].ToString(), out int maxCount))
+                this.maxCountPerGame = maxCount;
+
+            if(int.TryParse(row["trigger_data_2"].ToString(), out int score))
+                this.scoreToGive = score;
         }
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message11 = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message11.WriteBoolean(false);
-            Message11.WriteInteger(5);
-            Message11.WriteInteger(0);
-            Message11.WriteInteger(SpriteId);
-            Message11.WriteInteger(this.itemID);
-            Message11.WriteString("");
-            Message11.WriteInteger(2);
-            Message11.WriteInteger(this.scoreToGive);
-            Message11.WriteInteger(this.maxCountPerGame);
-            Message11.WriteInteger(0);
-            Message11.WriteInteger(6);
-            Message11.WriteInteger(0);
-            Message11.WriteInteger(0);
-            Message11.WriteInteger(0);
-            Session.SendPacket(Message11);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.itemID + "'");
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(5);
+            Message.WriteInteger(0);
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.itemID);
+            Message.WriteString("");
+            Message.WriteInteger(2);
+            Message.WriteInteger(this.scoreToGive);
+            Message.WriteInteger(this.maxCountPerGame);
+            Message.WriteInteger(0);
+            Message.WriteInteger(6);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
     }
 }

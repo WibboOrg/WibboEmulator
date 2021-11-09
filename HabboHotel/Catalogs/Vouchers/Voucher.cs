@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 
 namespace Butterfly.HabboHotel.Catalog.Vouchers
 {
@@ -25,7 +26,7 @@ namespace Butterfly.HabboHotel.Catalog.Vouchers
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE `catalog_vouchers` SET `current_uses` = `current_uses` + '1' WHERE `voucher` = '" + this._code + "' LIMIT 1");
+                CatalogVoucherDao.Update(dbClient, this._code);
             }
         }
 

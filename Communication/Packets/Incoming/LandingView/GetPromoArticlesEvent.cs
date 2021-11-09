@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.HotelView;
+using Butterfly.HabboHotel.LandingView;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(GameClient Session, ClientPacket Packet)
         {
-            HotelViewManager currentView = ButterflyEnvironment.GetGame().GetHotelView();            if (Session == null || Session.GetHabbo() == null)
+            LandingViewManager currentView = ButterflyEnvironment.GetGame().GetHotelView();            if (Session == null || Session.GetHabbo() == null)
             {
                 return;
             }

@@ -6,6 +6,7 @@ using Butterfly.HabboHotel.Roleplay.Player;
 using Butterfly.HabboHotel.Rooms.Games;
 using Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Interfaces;
 using System;
+using System.Data;
 
 namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
 {
@@ -1263,11 +1264,9 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.Effet + ":" + this.Value, false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.item.Id);
-            string message = dbClient.GetString();
+            string message = row["trigger_data"].ToString();
 
             if (message.Contains(":"))
             {
@@ -1282,27 +1281,22 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message15 = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message15.WriteBoolean(false);
-            Message15.WriteInteger(0); //Max count item
-            Message15.WriteInteger(0); //Item Count
-            Message15.WriteInteger(SpriteId);
-            Message15.WriteInteger(this.item.Id);
-            Message15.WriteString(this.Effet + ":" + this.Value);
-            Message15.WriteInteger(0); //Loop
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(0); //Max count item
+            Message.WriteInteger(0); //Item Count
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.item.Id);
+            Message.WriteString(this.Effet + ":" + this.Value);
+            Message.WriteInteger(0); //Loop
 
-            Message15.WriteInteger(0);
-            Message15.WriteInteger(7);
-            Message15.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(7);
+            Message.WriteInteger(0);
 
-            Message15.WriteInteger(0);
+            Message.WriteInteger(0);
 
-            Session.SendPacket(Message15);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
+            Session.SendPacket(Message);
         }
 
         public void Dispose()

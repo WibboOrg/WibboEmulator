@@ -1,6 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Items;
 using System;
@@ -400,13 +401,7 @@ namespace Butterfly.HabboHotel.Rooms
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO `logs_trade` (`user_one_id`, `user_two_id`, `user_one_items`, `user_two_items`, `room_id`, `time`) VALUES (@userone, @usertwo, @itemsone, @itemstwo, @roomid, UNIX_TIMESTAMP())");
-                dbClient.AddParameter("userone", this.oneId);
-                dbClient.AddParameter("usertwo", this.twoId);
-                dbClient.AddParameter("itemsone", LogsOneString);
-                dbClient.AddParameter("itemstwo", LogsTwoString);
-                dbClient.AddParameter("roomid", this.RoomId);
-                dbClient.RunQuery();
+                LogTradeDao.Insert(dbClient, this.oneId, this.twoId, LogsOneString, LogsTwoString, this.RoomId);
             }
         }
 

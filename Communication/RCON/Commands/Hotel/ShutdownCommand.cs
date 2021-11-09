@@ -4,7 +4,7 @@
     {
         public bool TryExecute(string[] parameters)
         {
-            ButterflyEnvironment.PreformShutDown(true);
+            ButterflyEnvironment.PreformShutDown();
 
             return true;
         }

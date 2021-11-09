@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Users;
 using System;
 using System.Collections.Concurrent;
@@ -38,8 +39,7 @@ namespace Butterfly.HabboHotel.Groups
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `id`,`type`,`firstvalue`,`secondvalue` FROM `groups_items` WHERE `enabled` = '1'");
-                DataTable dItems = dbClient.GetTable();
+                DataTable dItems = GuildItemDao.GetAll(dbClient);
 
                 foreach (DataRow dRow in dItems.Rows)
                 {
@@ -80,9 +80,7 @@ namespace Butterfly.HabboHotel.Groups
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM `groups` WHERE `id` = @id LIMIT 1");
-                dbClient.AddParameter("id", id);
-                DataRow Row = dbClient.GetRow();
+                DataRow Row = GuildDao.GetOne(dbClient, id);
 
                 if (Row == null)
                 {
@@ -109,15 +107,7 @@ namespace Butterfly.HabboHotel.Groups
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("INSERT INTO `groups` (`name`, `desc`, `badge`, `owner_id`, `created`, `room_id`, `state`, `colour1`, `colour2`, `admindeco`) VALUES (@name, @desc, @badge, @owner, UNIX_TIMESTAMP(), @room, '0', @colour1, @colour2, '1')");
-                dbClient.AddParameter("name", Group.Name);
-                dbClient.AddParameter("desc", Group.Description);
-                dbClient.AddParameter("owner", Group.CreatorId);
-                dbClient.AddParameter("badge", Group.Badge);
-                dbClient.AddParameter("room", Group.RoomId);
-                dbClient.AddParameter("colour1", Group.Colour1);
-                dbClient.AddParameter("colour2", Group.Colour2);
-                Group.Id = Convert.ToInt32(dbClient.InsertQuery());
+                Group.Id = GuildDao.Insert(dbClient, Group.Name, Group.Description, Group.CreatorId, Group.Badge, Group.RoomId, Group.Colour1, Group.Colour2);
 
                 Group.AddMember(Player.Id);
                 Group.MakeAdmin(Player.Id);
@@ -130,12 +120,8 @@ namespace Butterfly.HabboHotel.Groups
                 }
                 else
                 {
-                    dbClient.SetQuery("UPDATE `rooms` SET `group_id` = @gid WHERE `id` = @rid LIMIT 1");
-                    dbClient.AddParameter("gid", Group.Id);
-                    dbClient.AddParameter("rid", Group.RoomId);
-                    dbClient.RunQuery();
-
-                    dbClient.RunQuery("DELETE FROM `room_rights` WHERE `room_id` = '" + RoomId + "'");
+                    RoomDao.UpdateGroupId(dbClient, Group.Id, Group.RoomId);
+                    RoomRightDao.Delete(dbClient, RoomId);
                 }
             }
             return true;

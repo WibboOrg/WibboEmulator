@@ -59,22 +59,9 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.NameBot, false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.item.Id);
-            DataRow row = dbClient.GetRow();
-            if (row == null)
-            {
-                return;
-            }
-
             this.NameBot = row["trigger_data"].ToString();
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
         }
 
         public void OnTrigger(GameClient Session, int SpriteId)

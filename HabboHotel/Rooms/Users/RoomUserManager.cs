@@ -27,6 +27,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Butterfly.Database.Daos;
 
 namespace Butterfly.HabboHotel.Rooms
 {
@@ -297,11 +298,11 @@ namespace Butterfly.HabboHotel.Rooms
 
                     switch (itemEffectType)
                     {
-                        case ItemEffectType.None:
+                        case ItemEffectType.NONE:
                             User.ApplyEffect(0);
                             User.CurrentItemEffect = itemEffectType;
                             break;
-                        case ItemEffectType.Swim:
+                        case ItemEffectType.SWIM:
                             User.ApplyEffect(29);
                             if (User.GetClient() != null)
                             {
@@ -310,15 +311,15 @@ namespace Butterfly.HabboHotel.Rooms
 
                             User.CurrentItemEffect = itemEffectType;
                             break;
-                        case ItemEffectType.SwimLow:
+                        case ItemEffectType.SWIMLOW:
                             User.ApplyEffect(30);
                             User.CurrentItemEffect = itemEffectType;
                             break;
-                        case ItemEffectType.SwimHalloween:
+                        case ItemEffectType.SWIMHALLOWEEN:
                             User.ApplyEffect(37);
                             User.CurrentItemEffect = itemEffectType;
                             break;
-                        case ItemEffectType.Iceskates:
+                        case ItemEffectType.ICESKATES:
                             if (User.GetClient() != null)
                             {
                                 if (User.GetClient().GetHabbo().Gender == "M")
@@ -335,14 +336,14 @@ namespace Butterfly.HabboHotel.Rooms
                                 User.ApplyEffect(38);
                             }
 
-                            User.CurrentItemEffect = ItemEffectType.Iceskates;
+                            User.CurrentItemEffect = ItemEffectType.ICESKATES;
                             if (User.GetClient() != null)
                             {
                                 ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 1413);
                             }
 
                             break;
-                        case ItemEffectType.Normalskates:
+                        case ItemEffectType.NORMALSKATES:
                             if (User.GetClient() != null)
                             {
                                 if (User.GetClient().GetHabbo().Gender == "M")
@@ -366,15 +367,15 @@ namespace Butterfly.HabboHotel.Rooms
                             }
 
                             break;
-                        case ItemEffectType.Trampoline:
+                        case ItemEffectType.TRAMPOLINE:
                             User.ApplyEffect(193);
                             User.CurrentItemEffect = itemEffectType;
                             break;
-                        case ItemEffectType.TreadMill:
+                        case ItemEffectType.TREADMILL:
                             User.ApplyEffect(194);
                             User.CurrentItemEffect = itemEffectType;
                             break;
-                        case ItemEffectType.CrossTrainer:
+                        case ItemEffectType.CROSSTRAINER:
                             User.ApplyEffect(195);
                             User.CurrentItemEffect = itemEffectType;
                             break;
@@ -383,13 +384,13 @@ namespace Butterfly.HabboHotel.Rooms
                 }
                 else
                 {
-                    if (User.CurrentItemEffect == ItemEffectType.None || pByte != 0)
+                    if (User.CurrentItemEffect == ItemEffectType.NONE || pByte != 0)
                     {
                         return;
                     }
 
                     User.ApplyEffect(0);
-                    User.CurrentItemEffect = ItemEffectType.None;
+                    User.CurrentItemEffect = ItemEffectType.NONE;
                 }
             }
             catch (Exception ex)
@@ -533,41 +534,45 @@ namespace Butterfly.HabboHotel.Rooms
 
             if (!User.IsBot)
             {
-                if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("ADM"))
+                if (Session.GetHabbo().GetBadgeComponent().HasBadge("ADM")) // STAFF
                 {
                     User.CurrentEffect = 540;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("PRWRD1"))
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("PRWRD1")) // PROWIRED
                 {
                     User.CurrentEffect = 580;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("GPHWIB"))
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("GPHWIB")) //GRAPHISTE
                 {
                     User.CurrentEffect = 557;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("wibbo.helpeur"))
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("wibbo.helpeur")) //HELPEUR
                 {
                     User.CurrentEffect = 544;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WIBARC"))
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WIBARC")) //ARCHI
                 {
                     User.CurrentEffect = 546;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("CRPOFFI"))
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("CRPOFFI")) // CROUPIER
                 {
                     User.CurrentEffect = 570;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("ZEERSWS"))
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("ZEERSWS")) // WIBBOSTATIONORIGINERADIO
                 {
                     User.CurrentEffect = 552;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WBASSO"))
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WBASSO")) //IDK ?
                 {
                     User.CurrentEffect = 576;
                 }
-                //else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("BALTIOFFI"))
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WIBBOCOM")) // AGENT DE COMMUNICATION
+                {
+                    User.CurrentEffect = 581;
+                }
+                //else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("BALTIOFFI")) // IDK ?
                 //User.CurrentEffect = 578;
-                //else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WFMEM"))
+                //else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WFMEM")) // WIBBO FAMILLY
                 //User.CurrentEffect = 579;
 
                 if (User.CurrentEffect > 0)
@@ -716,7 +721,7 @@ namespace Butterfly.HabboHotel.Rooms
                         {
                             if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetHabbo() != null && StaffUser.GetClient().GetHabbo().HasFuse("fuse_show_invisible")))
                             {
-                                StaffUser.SendWhisperChat(User.GetUsername() + " qui était en mode invisible est partie de l'appartement", true);
+                                StaffUser.SendWhisperChat(User.GetUsername() + " était en mode invisible. Il vient de partir de l'appartement.", true);
                             }
                         }
                     }
@@ -761,15 +766,9 @@ namespace Butterfly.HabboHotel.Rooms
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery(string.Concat(new object[4]
-                    {
-                       "UPDATE rooms SET users_now = ",
-                       count,
-                       " WHERE id = ",
-                       this._room.Id
-             }));
+                RoomDao.UpdateUsersNow(dbClient, this._room.Id, count);
             }
 
             this._room.RoomData.UsersNow = count;

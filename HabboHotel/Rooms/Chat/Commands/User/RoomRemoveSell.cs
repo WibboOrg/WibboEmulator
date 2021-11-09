@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 
 namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
@@ -33,9 +34,9 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             Room.RoomData.SellPrice = 0;
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE rooms SET price = '0' WHERE id = '" + Room.Id + "' LIMIT 1;");
+                RoomDao.UpdatePrice(dbClient, Room.Id, 0);
             }
 
             Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.remove", Session.Langue));

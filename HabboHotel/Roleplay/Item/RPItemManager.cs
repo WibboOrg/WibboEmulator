@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Roleplay.Item;
 using System;
 using System.Collections.Generic;
@@ -31,11 +32,10 @@ namespace Butterfly.HabboHotel.Roleplay
             this._items.Clear();
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM roleplay_items");
-                DataTable table1 = dbClient.GetTable();
-                if (table1 != null)
+                DataTable table = RoleplayItemDao.GetAll(dbClient);
+                if (table != null)
                 {
-                    foreach (DataRow dataRow in table1.Rows)
+                    foreach (DataRow dataRow in table.Rows)
                     {
                         if (!this._items.ContainsKey(Convert.ToInt32(dataRow["id"])))
                         {

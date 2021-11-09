@@ -182,7 +182,7 @@ namespace Butterfly.HabboHotel.Rooms
             this.Room = room;
             this.AllowOverride = false;
             this.CanWalk = true;
-            this.CurrentItemEffect = ItemEffectType.None;
+            this.CurrentItemEffect = ItemEffectType.NONE;
             this.BreakWalkEnable = false;
             this.AllowShoot = false;
             this.AllowBuyItems = new List<int>();

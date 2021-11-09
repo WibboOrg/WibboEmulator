@@ -53,9 +53,9 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
         public void Dispose()
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                this.SaveToDatabase(queryreactor);
+                this.SaveToDatabase(dbClient);
             }
         }
 
@@ -79,51 +79,41 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, triggerdata, false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            string triggerdata = null;
+            string triggerData = row["trigger_data"].ToString();
 
-            dbClient.SetQuery("SELECT trigger_data FROM wired_items WHERE trigger_id = @id");
-            dbClient.AddParameter("id", this.item.Id);
-            DataRow row = dbClient.GetRow();
-            if (row != null)
-            {
-                triggerdata = row["trigger_data"].ToString();
-            }
-
-            if (string.IsNullOrEmpty(triggerdata))
+            if (triggerData == "")
             {
                 return;
             }
 
-            foreach (string score in triggerdata.Split(';'))
+            foreach (string score in triggerData.Split(';'))
             {
                 string[] score2 = score.Split(':');
                 int.TryParse(score2[score2.Count() - 1], out int ScoreNum);
-                string Pseudo = "";
+                string username = "";
                 for (int i = 0; i < score2.Count() - 1; i++)
                 {
                     if (i == 0)
                     {
-                        Pseudo = score2[i];
+                        username = score2[i];
                     }
                     else
                     {
-                        Pseudo += ':' + score2[i];
+                        username += ':' + score2[i];
                     }
                 }
 
-                //List<string> ListUsernameScore = new List<string>() { score2[0] };
-                if (!this.item.Scores.ContainsKey(Pseudo))
+                if (!this.item.Scores.ContainsKey(username))
                 {
-                    this.item.Scores.Add(Pseudo, ScoreNum);
+                    this.item.Scores.Add(username, ScoreNum);
                 }
             }
         }
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-
             int.TryParse(this.item.ExtraData, out int NumMode);
 
             if (NumMode != 1)
@@ -137,11 +127,6 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
             this.item.ExtraData = NumMode.ToString();
             this.item.UpdateState(false, true);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
         }
     }
 }

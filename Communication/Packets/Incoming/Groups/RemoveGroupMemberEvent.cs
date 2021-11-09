@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Groups;
@@ -60,10 +60,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("DELETE FROM `group_memberships` WHERE `group_id` = @GroupId AND `user_id` = @UserId");
-                    dbClient.AddParameter("GroupId", GroupId);
-                    dbClient.AddParameter("UserId", UserId);
-                    dbClient.RunQuery();
+                    GuildMembershipDao.Delete(dbClient, GroupId, UserId);
                 }
 
                 Session.SendPacket(new GroupInfoComposer(Group, Session));
@@ -72,9 +69,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     Session.GetHabbo().FavouriteGroupId = 0;
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.SetQuery("UPDATE `user_stats` SET `group_id` = '0' WHERE `id` = @userId LIMIT 1");
-                        dbClient.AddParameter("userId", UserId);
-                        dbClient.RunQuery();
+                        UserStatsDao.UpdateRemoveGroupId(dbClient, UserId);
                     }
 
                     if (Group.AdminOnlyDeco == 0)

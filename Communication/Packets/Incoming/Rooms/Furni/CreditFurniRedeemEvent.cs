@@ -1,6 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Inventory.Achievements;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -38,9 +39,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.id = " + Exchange.Id);
+                ItemDao.Delete(dbClient, Exchange.Id);
             }
 
             Room.GetRoomItemHandler().RemoveFurniture(null, Exchange.Id);
@@ -59,16 +60,16 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     Session.GetHabbo().WibboPoints += Value;
                     Session.SendPacket(new ActivityPointsComposer(Session.GetHabbo().WibboPoints));
 
-                    using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        queryreactor.RunQuery("UPDATE users SET vip_points = vip_points + " + Value + " WHERE id = '" + Session.GetHabbo().Id + "' LIMIT 1");
+                        UserDao.UpdateAddPoints(dbClient, Session.GetHabbo().Id, Value);
                     }
                 }
                 else if (Exchange.GetBaseItem().ItemName.StartsWith("WwnEx_"))
                 {
-                    using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        queryreactor.RunQuery("UPDATE user_stats SET achievement_score = achievement_score + '" + Value + "' WHERE id = '" + Session.GetHabbo().Id + "'");
+                        UserStatsDao.UpdateAchievementScore(dbClient, Session.GetHabbo().Id, Value);
                     }
 
                     Session.GetHabbo().AchievementPoints += Value;

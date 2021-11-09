@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Rooms.Chat.Logs;
 using System;
@@ -20,10 +21,9 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Logs
 
         public void LoadUserChatlogs(int UserId)
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT user_id, user_name, room_id, type, message FROM chatlogs WHERE user_id = '" + UserId + "' ORDER BY id DESC LIMIT 100");
-                DataTable table = queryreactor.GetTable();
+                DataTable table = LogChatDao.GetAllByUserId(dbClient, UserId);
                 if (table == null)
                 {
                     return;
@@ -39,10 +39,9 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Logs
         public void LoadRoomChatlogs(int RoomId)
         {
             DataTable table;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT user_id, user_name, room_id, type, message FROM chatlogs WHERE room_id = '" + RoomId + "' ORDER BY id DESC LIMIT 100");
-                table = queryreactor.GetTable();
+                table = LogChatDao.GetAllByRoomId(dbClient, RoomId);
                 if (table == null)
                 {
                     return;

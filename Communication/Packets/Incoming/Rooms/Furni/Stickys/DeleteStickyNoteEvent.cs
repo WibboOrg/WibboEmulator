@@ -1,3 +1,4 @@
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -23,9 +24,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             room.GetRoomItemHandler().RemoveFurniture(Session, roomItem.Id);
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE FROM items WHERE items.id = " + roomItem.Id);
+                ItemDao.Delete(dbClient, roomItem.Id);
             }
         }
     }

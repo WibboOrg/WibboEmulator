@@ -113,87 +113,61 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
             WiredUtillity.SaveTriggerItem(dbClient, this.itemID, rotationandmove, this.Delay.ToString(), false, this.items);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            try
+            this.Delay = Convert.ToInt32(row["trigger_data"]);
+
+            string triggerData2 = row["trigger_data_2"].ToString();
+            string triggerItem = row["triggers_item"].ToString();
+
+            if (triggerData2.Contains(";"))
             {
-                string data2 = null;
-                string wireditem = null;
+                int.TryParse(triggerData2.Split(';')[0], out int rotationint);
 
-                dbClient.SetQuery("SELECT trigger_data, trigger_data_2, triggers_item FROM wired_items WHERE trigger_id = @id ");
-                dbClient.AddParameter("id", this.itemID);
-                DataRow row = dbClient.GetRow();
-                if (row != null)
-                {
-                    this.Delay = Convert.ToInt32(row["trigger_data"]);
+                int.TryParse(triggerData2.Split(';')[1], out int movementint);
 
-                    data2 = row["trigger_data_2"].ToString();
-
-                    wireditem = row["triggers_item"].ToString();
-                }
-                if (data2 != null)
-                {
-                    int.TryParse(data2.Split(';')[0], out int rotationint);
-
-                    int.TryParse(data2.Split(';')[1], out int movementint);
-
-                    this.rotation = (RotationState)rotationint;
-                    this.movement = (MovementState)movementint;
-                }
-                else
-                {
-                    this.rotation = RotationState.NONE;
-                    this.movement = MovementState.none;
-                }
-
-                if (wireditem == "" || wireditem == null)
-                {
-                    return;
-                }
-
-                foreach (string itemid in wireditem.Split(';'))
-                {
-                    Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(itemid));
-                    if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.itemID)
-                    {
-                        this.items.Add(roomItem);
-                    }
-                }
+                this.rotation = (RotationState)rotationint;
+                this.movement = (MovementState)movementint;
             }
-            catch (Exception ex)
+
+            if (triggerItem == "")
             {
-                Console.WriteLine("Wired id : " + this.itemID + " erreur :" + ex);
+                return;
+            }
+
+            foreach (string itemid in triggerItem.Split(';'))
+            {
+                Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(itemid));
+                if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.itemID)
+                {
+                    this.items.Add(roomItem);
+                }
             }
         }
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message13 = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message13.WriteBoolean(false);
-            Message13.WriteInteger(10);
-            Message13.WriteInteger(this.items.Count);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(10);
+            Message.WriteInteger(this.items.Count);
             foreach (Item roomItem in this.items)
             {
-                Message13.WriteInteger(roomItem.Id);
+                Message.WriteInteger(roomItem.Id);
             }
 
-            Message13.WriteInteger(SpriteId);
-            Message13.WriteInteger(this.itemID);
-            Message13.WriteString("");
-            Message13.WriteInteger(2);
-            Message13.WriteInteger((int)this.movement);
-            Message13.WriteInteger((int)this.rotation);
-            Message13.WriteInteger(0);
-            Message13.WriteInteger(4);
-            Message13.WriteInteger(this.Delay);
-            Message13.WriteInteger(0);
-            Message13.WriteInteger(0);
-            Session.SendPacket(Message13);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.itemID + "'");
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.itemID);
+            Message.WriteString("");
+            Message.WriteInteger(2);
+            Message.WriteInteger((int)this.movement);
+            Message.WriteInteger((int)this.rotation);
+            Message.WriteInteger(0);
+            Message.WriteInteger(4);
+            Message.WriteInteger(this.Delay);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
 
         public bool Disposed()

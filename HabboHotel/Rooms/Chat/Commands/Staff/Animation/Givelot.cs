@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -100,9 +101,9 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             roomUserByHabbo.GetClient().SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByHabbo.GetClient().Langue), NbLot, NbBadge) + DeluxeMessage);
             UserRoom.SendWhisperChat(roomUserByHabbo.GetUsername() + " à reçu " + NbLot + " RareBox et " + NbBadge + " BadgeBox!" + DeluxeMessage);
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE users SET game_points = game_points + 1, game_points_month = game_points_month + 1 WHERE id = '" + roomUserByHabbo.GetClient().GetHabbo().Id + "';");
+                UserDao.UpdateAddGamePoints(dbClient, roomUserByHabbo.GetClient().GetHabbo().Id);
             }
 
             ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByHabbo.GetClient(), "ACH_Extrabox", 1);

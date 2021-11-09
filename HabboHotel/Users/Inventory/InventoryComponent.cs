@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -36,37 +37,34 @@ namespace Butterfly.HabboHotel.Users.Inventory
         {
             if (All)
             {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("DELETE items, items_limited, user_presents, room_items_moodlight, tele_links, wired_items FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) LEFT JOIN user_presents ON (user_presents.item_id = items.id) LEFT JOIN room_items_moodlight ON (room_items_moodlight.item_id = items.id) LEFT JOIN tele_links ON (tele_one_id = items.id) LEFT JOIN wired_items ON (trigger_id = items.id) WHERE room_id = '0' AND user_id = '" + this.UserId + "'");
+                    ItemDao.DeleteAll(dbClient, this.UserId);
                 }
 
                 this._UserItems.Clear();
             }
             else
             {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("DELETE items, items_limited, user_presents, room_items_moodlight, tele_links, wired_items FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) LEFT JOIN user_presents ON (user_presents.item_id = items.id) LEFT JOIN room_items_moodlight ON (room_items_moodlight.item_id = items.id) LEFT JOIN tele_links ON (tele_one_id = items.id) LEFT JOIN wired_items ON (trigger_id = items.id) WHERE room_id = '0' AND user_id = '" + this.UserId + "' AND base_item NOT IN (SELECT id FROM furniture WHERE is_rare = '1');");
+                    ItemDao.DeleteAllWithoutRare(dbClient, this.UserId);
                 }
 
                 this._UserItems.Clear();
                 DataTable table1;
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("SELECT items.id, items.base_item, items.extra_data, items_limited.limited_number, items_limited.limited_stack FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.user_id = @userid AND items.room_id = '0'");
-
-                    queryreactor.AddParameter("userid", this.UserId);
-                    table1 = queryreactor.GetTable();
+                    table1 = ItemDao.GetAllByUserId(dbClient, this.UserId);
                 }
 
                 foreach (DataRow dataRow in table1.Rows)
                 {
-                    int Id = Convert.ToInt32(dataRow[0]);
-                    int BaseItem = Convert.ToInt32(dataRow[1]);
-                    string ExtraData = DBNull.Value.Equals(dataRow[2]) ? string.Empty : (string)dataRow[2];
-                    int Limited = DBNull.Value.Equals(dataRow[3]) ? 0 : Convert.ToInt32(dataRow[3]);
-                    int LimitedTo = DBNull.Value.Equals(dataRow[4]) ? 0 : Convert.ToInt32(dataRow[4]);
+                    int Id = Convert.ToInt32(dataRow["id"]);
+                    int BaseItem = Convert.ToInt32(dataRow["base_item"]);
+                    string ExtraData = DBNull.Value.Equals(dataRow["extra_data"]) ? string.Empty : (string)dataRow["extra_data"];
+                    int Limited = DBNull.Value.Equals(dataRow["limited_number"]) ? 0 : Convert.ToInt32(dataRow["limited_number"]);
+                    int LimitedTo = DBNull.Value.Equals(dataRow["limited_stack"]) ? 0 : Convert.ToInt32(dataRow["limited_stack"]);
 
                     Item userItem = new Item(Id, 0, BaseItem, ExtraData, Limited, LimitedTo, 0, 0, 0.0, 0, "", null);
                     this._UserItems.TryAdd(Id, userItem);
@@ -78,9 +76,9 @@ namespace Butterfly.HabboHotel.Users.Inventory
 
         public void ClearPets()
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE FROM pets WHERE room_id = '0' AND user_id = " + this.UserId);
+                PetDao.Delete(dbClient, this.UserId);
             }
 
             this._petsItems.Clear();
@@ -88,10 +86,8 @@ namespace Butterfly.HabboHotel.Users.Inventory
 
         public void ClearBots()
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                queryreactor.RunQuery("DELETE FROM bots WHERE room_id = '0' AND user_id = " + this.UserId);
-            }
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                BotDao.Delete(dbClient, this.UserId);
 
             this._botItems.Clear();
         }
@@ -197,16 +193,13 @@ namespace Butterfly.HabboHotel.Users.Inventory
         public void LoadInventory()
         {
             this._UserItems.Clear();
-            DataTable table1;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable table;
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT items.id, items.base_item, items.extra_data, items_limited.limited_number, items_limited.limited_stack FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.user_id = @userid AND items.room_id = '0'");
-
-                queryreactor.AddParameter("userid", this.UserId);
-                table1 = queryreactor.GetTable();
+                table = ItemDao.GetAllByUserId(dbClient, this.UserId);
             }
 
-            foreach (DataRow dataRow in table1.Rows)
+            foreach (DataRow dataRow in table.Rows)
             {
                 int Id = Convert.ToInt32(dataRow[0]);
                 int BaseItem = Convert.ToInt32(dataRow[1]);
@@ -220,10 +213,9 @@ namespace Butterfly.HabboHotel.Users.Inventory
 
             this._petsItems.Clear();
             DataTable table2;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM pets WHERE user_id = " + this.UserId + " AND room_id = 0");
-                table2 = queryreactor.GetTable();
+                table2 = PetDao.GetAllByUserId(dbClient, this.UserId);
             }
             if (table2 != null)
             {
@@ -236,11 +228,9 @@ namespace Butterfly.HabboHotel.Users.Inventory
 
             this._botItems.Clear();
             DataTable dBots;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                queryreactor.SetQuery("SELECT * FROM bots WHERE user_id = " + this.UserId + " AND room_id = 0");
-                dBots = queryreactor.GetTable();
-            }
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                dBots = BotDao.GetAllByUserId(dbClient, this.UserId);
+                
             if (dBots == null)
             {
                 return;
@@ -272,9 +262,9 @@ namespace Butterfly.HabboHotel.Users.Inventory
 
         public Item AddNewItem(int Id, int BaseItem, string ExtraData, int Limited = 0, int LimitedStack = 0)
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE items SET room_id = '0', user_id = '" + this.UserId + "' WHERE id = " + Id);
+                ItemDao.UpdateRoomIdAndUserId(dbClient, Id, 0, this.UserId);
             }
 
             Item userItem = new Item(Id, 0, BaseItem, ExtraData, Limited, LimitedStack, 0, 0, 0.0, 0, "", null);
@@ -325,9 +315,9 @@ namespace Butterfly.HabboHotel.Users.Inventory
 
         public void AddItem(Item item)
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE items SET room_id = '0', user_id = '" + this.UserId + "' WHERE id = " + item.Id);
+                ItemDao.UpdateRoomIdAndUserId(dbClient, item.Id, 0, this.UserId);
             }
 
             Item userItem = new Item(item.Id, 0, item.BaseItem, item.ExtraData, item.Limited, item.LimitedStack, 0, 0, 0.0, 0, "", null);

@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -69,9 +69,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            dbClient.SetQuery("UPDATE `bots` SET `look` = @look, `gender` = '" + Session.GetHabbo().Gender + "' WHERE `id` = '" + Bot.BotData.Id + "' LIMIT 1");
-                            dbClient.AddParameter("look", Session.GetHabbo().Look);
-                            dbClient.RunQuery();
+                            BotDao.UpdateLookGender(dbClient, Bot.BotData.Id, Session.GetHabbo().Gender, Session.GetHabbo().Look);
                         }
                         break;
                     }
@@ -123,13 +121,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            dbClient.SetQuery("UPDATE `bots` SET `chat_enabled` = @AutomaticChat, `chat_seconds` = @SpeakingInterval, `is_mixchat` = @MixChat, `chat_text` = @ChatText WHERE `id` = @id LIMIT 1");
-                            dbClient.AddParameter("id", BotId);
-                            dbClient.AddParameter("AutomaticChat", ButterflyEnvironment.BoolToEnum(Convert.ToBoolean(AutomaticChat)));
-                            dbClient.AddParameter("SpeakingInterval", Convert.ToInt32(SpeakingInterval));
-                            dbClient.AddParameter("MixChat", ButterflyEnvironment.BoolToEnum(Convert.ToBoolean(MixChat)));
-                            dbClient.AddParameter("ChatText", Text);
-                            dbClient.RunQuery();
+                            BotDao.UpdateChat(dbClient, BotId, RoomBot.AutomaticChat, RoomBot.SpeakingInterval, RoomBot.MixSentences, RoomBot.ChatText);
                         }
 
                         break;
@@ -140,9 +132,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 case 3:
                     {
                         Bot.BotData.WalkingEnabled = !Bot.BotData.WalkingEnabled;
-                        using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            queryreactor.RunQuery("UPDATE bots SET walk_enabled = '" + ButterflyEnvironment.BoolToEnum(Bot.BotData.WalkingEnabled) + "' WHERE id = " + Bot.BotData.Id);
+                            BotDao.UpdateWalkEnabled(dbClient, Bot.BotData.Id, Bot.BotData.WalkingEnabled);
                         }
                         break;
                     }
@@ -165,9 +157,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         Room.SendPacket(new DanceComposer(Bot, Bot.DanceId));
 
-                        using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            queryreactor.RunQuery("UPDATE bots SET is_dancing = '" + ButterflyEnvironment.BoolToEnum(Bot.BotData.IsDancing) + "' WHERE id = " + Bot.BotData.Id);
+                            BotDao.UpdateIsDancing(dbClient, Bot.BotData.Id, Bot.BotData.IsDancing);
                         }
 
                         break;
@@ -192,12 +184,10 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         }
 
                         Bot.BotData.Name = DataString;
+                        
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                        {
-                            dbClient.SetQuery("UPDATE `bots` SET `name` = @name WHERE `id` = '" + Bot.BotData.Id + "' LIMIT 1");
-                            dbClient.AddParameter("name", DataString);
-                            dbClient.RunQuery();
-                        }
+                            BotDao.UpdateName(dbClient, Bot.BotData.Id, DataString);
+
                         Room.SendPacket(new UserNameChangeMessageComposer(Bot.BotData.Name, Bot.VirtualId));
                         break;
                     }

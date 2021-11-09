@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Catalog;
 using Butterfly.HabboHotel.GameClients;
@@ -38,8 +39,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
                     for (int LimitedNumber = 1; LimitedNumber < LimitedStack + 1; LimitedNumber++)
                     {
-                        dbClient.SetQuery("SELECT id FROM items WHERE id IN (SELECT item_id FROM items_limited WHERE limited_number = '" + LimitedNumber + "' AND limited_stack = '" + LimitedStack + "') AND base_item = '" + Item.ItemId + "' LIMIT 1");
-                        DataRow Row = dbClient.GetRow();
+                        DataRow Row = ItemDao.GetOneLimitedId(dbClient, LimitedNumber, LimitedStack, Item.ItemId);
 
                         if (Row != null)
                         {

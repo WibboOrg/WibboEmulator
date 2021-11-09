@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -148,14 +148,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 str5 = "hide";
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE rooms SET caption = @caption, description = @description, password = @password, category = '" + CategoryId + "', state = '" + str5 + "', tags = @tags, users_max = '" + MaxUsers + "', allow_pets = '" + (AllowPets ? 1 : 0) + "', allow_pets_eat = '" + (AllowPetsEat ? 1 : 0) + "', allow_walkthrough = '" + (AllowWalkthrough ? 1 : 0) + "', allow_hidewall = '" + (room.RoomData.Hidewall ? 1 : 0) + "', floorthick = '" + room.RoomData.FloorThickness + "', wallthick = '" + room.RoomData.WallThickness + "', moderation_mute_fuse = '" + mutefuse + "', moderation_kick_fuse = '" + kickfuse + "', moderation_ban_fuse = '" + banfuse + "', chat_type = '" + ChatType + "', chat_balloon = '" + ChatBalloon + "', chat_speed = '" + ChatSpeed + "', chat_max_distance = '" + ChatMaxDistance + "', chat_flood_protection = '" + ChatFloodProtection + "', troc_status = '" + TrocStatus + "' WHERE id = " + room.Id);
-                queryreactor.AddParameter("caption", room.RoomData.Name);
-                queryreactor.AddParameter("description", room.RoomData.Description);
-                queryreactor.AddParameter("password", room.RoomData.Password);
-                queryreactor.AddParameter("tags", (stringBuilder).ToString());
-                queryreactor.RunQuery();
+                RoomDao.UpdateAll(dbClient, room.Id, room.RoomData.Name, room.RoomData.Description, room.RoomData.Password, (stringBuilder).ToString(), CategoryId, str5, MaxUsers, AllowPets, AllowPetsEat, AllowWalkthrough, room.RoomData.Hidewall, room.RoomData.FloorThickness, room.RoomData.WallThickness, mutefuse, kickfuse, banfuse, ChatType, ChatBalloon, ChatSpeed, ChatMaxDistance, ChatFloodProtection, TrocStatus);
             }
 
             ServerPacket Response = new ServerPacket(ServerPacketHeader.ROOM_SETTINGS_SAVE);

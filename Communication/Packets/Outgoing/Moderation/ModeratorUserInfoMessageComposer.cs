@@ -1,3 +1,6 @@
+using System;
+using System.Data;
+
 namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorUserInfoMessageComposer : ServerPacket
@@ -5,9 +8,6 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
         public ModeratorUserInfoMessageComposer(DataRow User, DataRow Info)
             : base(ServerPacketHeader.MODERATION_USER_INFO)
         {
-
-<<<<<<< Updated upstream
-=======
             DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Convert.ToDouble(Info["trading_locked"]));
 
             WriteInteger(User != null ? Convert.ToInt32(User["id"]) : 0);
@@ -27,7 +27,6 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
             WriteInteger(0);//Id bans.
             WriteString(User != null ? Convert.ToString(User["mail"]) : "Unknown");
             WriteString("");//user_classification
->>>>>>> Stashed changes
         }
 
     }

@@ -14,7 +14,7 @@ namespace Butterfly.Database
         public DatabaseConnection(string ConnectionStr)
         {
             this._con = new MySqlConnection(ConnectionStr);
-            this._adapter = new NormalQueryReactor(this);
+            this._adapter = new NormaldbClient(this);
         }
 
         public void Dispose()

@@ -1,4 +1,5 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
+﻿using System.Data;
+using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -40,16 +41,10 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.Delay.ToString(), false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.item.Id);
-            this.Delay = dbClient.GetInteger();
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
+            if(int.TryParse(row["trigger_data"].ToString(), out int delay))
+                this.Delay = delay;
         }
 
         public bool Disposed()
@@ -58,20 +53,20 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers
         }
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message5 = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message5.WriteBoolean(false);
-            Message5.WriteInteger(5);
-            Message5.WriteInteger(0);
-            Message5.WriteInteger(SpriteId);
-            Message5.WriteInteger(this.item.Id);
-            Message5.WriteString("");
-            Message5.WriteInteger(1);
-            Message5.WriteInteger(this.Delay);
-            Message5.WriteInteger(0);
-            Message5.WriteInteger(6); //6
-            Message5.WriteInteger(0);
-            Message5.WriteInteger(0);
-            Session.SendPacket(Message5);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(5);
+            Message.WriteInteger(0);
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.item.Id);
+            Message.WriteString("");
+            Message.WriteInteger(1);
+            Message.WriteInteger(this.Delay);
+            Message.WriteInteger(0);
+            Message.WriteInteger(6); //6
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
     }
 }

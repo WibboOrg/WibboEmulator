@@ -1,5 +1,7 @@
 using Butterfly.HabboHotel.GameClients;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 {
@@ -38,20 +40,30 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             {
                 if (User != null && !User.IsBot && !User.GetClient().GetHabbo().HasFuse("fuse_no_kick"))
                 {
-                    if (MessageAlert.Length > 0)
-                    {
-                        User.GetClient().SendNotification(MessageAlert);
-                    }
-
                     User.AllowMoveTo = false;
                     User.IsWalking = true;
+                    User.AllowOverride = true;
                     User.GoalX = Room.GetGameMap().Model.DoorX;
                     User.GoalY = Room.GetGameMap().Model.DoorY;
-
-                    currentRoom.GetRoomUserManager().RemoveUserFromRoom(User.GetClient(), true, false);
                 }
             }
 
+
+            room.SetTimeout(2500, () =>
+            {
+                foreach (RoomUser User in currentRoom.GetRoomUserManager().GetUserList().ToList())
+                {
+                    if (User != null && !User.IsBot && !User.GetClient().GetHabbo().HasFuse("fuse_no_kick"))
+                    {
+                        if (MessageAlert.Length > 0)
+                        {
+                            User.GetClient().SendNotification(MessageAlert);
+                        }
+
+                        currentRoom.GetRoomUserManager().RemoveUserFromRoom(User.GetClient(), true, false);
+                    }
+                }
+            });
         }
     }
 }

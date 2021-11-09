@@ -1,4 +1,5 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
+﻿using System.Data;
+using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -48,11 +49,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
         {
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
-        {
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
         }
 

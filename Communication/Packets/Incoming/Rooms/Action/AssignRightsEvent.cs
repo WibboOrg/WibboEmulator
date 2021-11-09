@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -44,9 +44,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 room.UsersWithRights.Add(UserId);
 
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("INSERT INTO room_rights (room_id,user_id) VALUES (" + room.Id + "," + UserId + ")");
+                    RoomRightDao.Insert(dbClient, room.Id, UserId);
                 }
 
                 ServerPacket Response = new ServerPacket(ServerPacketHeader.ROOM_RIGHTS_LIST_ADD);

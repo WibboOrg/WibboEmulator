@@ -2,6 +2,7 @@ using Butterfly.Communication.Packets.Outgoing.Handshake;
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Communication.Packets.Outgoing.Users;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -48,23 +49,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE rooms SET owner = @newname WHERE owner = @oldname");
-                queryreactor.AddParameter("newname", NewUsername);
-                queryreactor.AddParameter("oldname", Session.GetHabbo().Username);
-                queryreactor.RunQuery();
+                RoomDao.UpdateOwner(dbClient, NewUsername, Session.GetHabbo().Username);
 
-                queryreactor.SetQuery("UPDATE users SET username = @newname WHERE id = @userid");
-                queryreactor.AddParameter("newname", NewUsername);
-                queryreactor.AddParameter("userid", Session.GetHabbo().Id);
-                queryreactor.RunQuery();
+                UserDao.UpdateName(dbClient, Session.GetHabbo().Id, NewUsername);
 
-                queryreactor.SetQuery("INSERT INTO `logs_flagme` (`user_id`, `oldusername`, `newusername`, `time`) VALUES (@userid, @oldusername, @newusername, '" + ButterflyEnvironment.GetUnixTimestamp() + "');");
-                queryreactor.AddParameter("userid", Session.GetHabbo().Id);
-                queryreactor.AddParameter("oldusername", Session.GetHabbo().Username);
-                queryreactor.AddParameter("newusername", NewUsername);
-                queryreactor.RunQuery();
+                LogFlagmeDao.Insert(dbClient, Session.GetHabbo().Id, Session.GetHabbo().Username, NewUsername);
             }
 
             ButterflyEnvironment.GetGame().GetClientManager().UpdateClientUsername(Session.ConnectionID, Session.GetHabbo().Username, NewUsername);

@@ -2,6 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -92,9 +93,9 @@ namespace Butterfly.HabboHotel.Rooms
             this._itemsTemp.Clear();
             this._updateItems.Clear();
             this._rollers.Clear();
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE items SET room_id = '0', user_id = '" + this._room.RoomData.OwnerId + "' WHERE room_id = " + this._room.Id);
+                ItemDao.UpdateRoomIdAndUserId(dbClient, this._room.RoomData.OwnerId, this._room.Id);
             }
 
             this._room.GetGameMap().GenerateMaps();
@@ -120,11 +121,8 @@ namespace Butterfly.HabboHotel.Rooms
                 this._wallItems.Clear();
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT items.id, items.user_id, items.room_id, items.base_item, items.extra_data, items.x, items.y, items.z, items.rot, items.wall_pos, items_limited.limited_number, items_limited.limited_stack FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) WHERE items.room_id = @roomid");
-                queryreactor.AddParameter("roomid", (RoomId == 0) ? this._room.Id : RoomId);
-
                 int itemID;
                 int UserId;
                 int baseID;
@@ -138,7 +136,9 @@ namespace Butterfly.HabboHotel.Rooms
                 int LimitedTo;
                 string wallCoord;
 
-                foreach (DataRow dataRow in queryreactor.GetTable().Rows)
+                DataTable itemTable = ItemDao.GetAll(dbClient, (RoomId == 0) ? this._room.Id : RoomId);
+
+                foreach (DataRow dataRow in itemTable.Rows)
                 {
                     itemID = Convert.ToInt32(dataRow[0]);
                     UserId = Convert.ToInt32(dataRow[1]);
@@ -201,7 +201,7 @@ namespace Butterfly.HabboHotel.Rooms
                     {
                         if (WiredUtillity.TypeIsWired(Item.GetBaseItem().InteractionType))
                         {
-                            WiredLoader.LoadWiredItem(Item, this._room, queryreactor);
+                            WiredLoader.LoadWiredItem(Item, this._room, dbClient);
                         }
                     }
                 }
@@ -283,10 +283,8 @@ namespace Butterfly.HabboHotel.Rooms
 
             if (roomItem.WiredHandler != null)
             {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    roomItem.WiredHandler.DeleteFromDatabase(queryreactor);
-                }
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    ItemWiredDao.Delete(dbClient, roomItem.Id);
 
                 roomItem.WiredHandler.Dispose();
                 this._room.GetWiredHandler().RemoveFurniture(roomItem);
@@ -539,13 +537,7 @@ namespace Butterfly.HabboHotel.Rooms
                     {
                         if (!string.IsNullOrEmpty(roomItem.ExtraData))
                         {
-                            standardQueries.AddQuery(string.Concat(new object[4]
-                              {
-                                 "UPDATE items SET extra_data = @data",
-                                 roomItem.Id,
-                                 " WHERE id = ",
-                                 roomItem.Id
-                              }));
+                            standardQueries.AddQuery("UPDATE items SET extra_data = @data" + roomItem.Id + " WHERE id = '" + roomItem.Id + "'");
                             standardQueries.AddParameter("data" + roomItem.Id, roomItem.ExtraData);
                         }
 

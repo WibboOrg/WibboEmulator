@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Catalog.Marketplace;
 using Butterfly.HabboHotel.Catalog.Pets;
 using Butterfly.HabboHotel.Catalog.Vouchers;
@@ -12,7 +13,6 @@ namespace Butterfly.HabboHotel.Catalog
 {
     public class CatalogManager
     {
-
         private readonly MarketplaceManager _marketplace;
         private readonly VoucherManager _voucherManager;
 
@@ -79,8 +79,7 @@ namespace Butterfly.HabboHotel.Catalog
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `id`,`item_id`,`catalog_name`,`cost_credits`,`cost_pixels`,`cost_diamonds`,`amount`,`page_id`,`limited_sells`,`limited_stack`,`offer_active`,`badge` FROM `catalog_items` ORDER by ID DESC");
-                DataTable CatalogueItems = dbClient.GetTable();
+                DataTable CatalogueItems = CatalogItemDao.GetAll(dbClient);
 
                 if (CatalogueItems != null)
                 {
@@ -140,7 +139,7 @@ namespace Butterfly.HabboHotel.Catalog
                     }
                 }
 
-                dbClient.SetQuery("SELECT `id`,`name`,`figure`,`motto`,`gender`,`ai_type` FROM `catalog_bot_presets`");
+                dbClient.SetQuery("SELECT id, name, figure, motto, gender, ai_type FROM catalog_bot_presets");
                 DataTable bots = dbClient.GetTable();
 
                 if (bots != null)
@@ -151,7 +150,7 @@ namespace Butterfly.HabboHotel.Catalog
                     }
                 }
 
-                dbClient.SetQuery("SELECT * FROM `catalog_promotions`");
+                dbClient.SetQuery("SELECT * FROM catalog_promotions");
                 DataTable GetPromotions = dbClient.GetTable();
 
                 if (GetPromotions != null)
@@ -166,7 +165,7 @@ namespace Butterfly.HabboHotel.Catalog
                 }
 
 
-                dbClient.SetQuery("SELECT * FROM `catalog_pet_races`");
+                dbClient.SetQuery("SELECT * FROM catalog_pet_races");
                 DataTable GetRaces = dbClient.GetTable();
 
                 if (GetRaces != null)

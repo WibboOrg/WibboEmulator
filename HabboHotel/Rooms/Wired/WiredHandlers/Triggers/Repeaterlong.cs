@@ -1,4 +1,5 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
+﻿using System.Data;
+using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -40,34 +41,28 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, (this.Delay / 10).ToString(), false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data FROM wired_items WHERE trigger_id = @id");
-            dbClient.AddParameter("id", this.item.Id);
-            this.Delay = dbClient.GetInteger() * 10;
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
+            if(int.TryParse(row["trigger_data"].ToString(), out int delay))
+                this.Delay = delay * 10;
         }
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Messagelong = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Messagelong.WriteBoolean(false);
-            Messagelong.WriteInteger(5);
-            Messagelong.WriteInteger(0);
-            Messagelong.WriteInteger(SpriteId);
-            Messagelong.WriteInteger(this.item.Id);
-            Messagelong.WriteString("");
-            Messagelong.WriteInteger(1);
-            Messagelong.WriteInteger(this.Delay / 10);
-            Messagelong.WriteInteger(0);
-            Messagelong.WriteInteger(12);
-            Messagelong.WriteInteger(0);
-            Messagelong.WriteInteger(0);
-            Session.SendPacket(Messagelong);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(5);
+            Message.WriteInteger(0);
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.item.Id);
+            Message.WriteString("");
+            Message.WriteInteger(1);
+            Message.WriteInteger(this.Delay / 10);
+            Message.WriteInteger(0);
+            Message.WriteInteger(12);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
 
         public bool Disposed()

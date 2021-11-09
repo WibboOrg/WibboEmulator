@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -133,16 +133,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("REPLACE INTO room_models_customs VALUES (@id, @doorX, @doorY, @doorZ, @doorDir, @heightmap, @murheight)");
-                dbClient.AddParameter("id", Room.Id);
-                dbClient.AddParameter("doorX", DoorX);
-                dbClient.AddParameter("doorY", DoorY);
-                dbClient.AddParameter("doorZ", DoorZ);
-                dbClient.AddParameter("doorDir", DoorDirection);
-                dbClient.AddParameter("heightmap", Map);
-                dbClient.AddParameter("murheight", WallHeight);
-                dbClient.RunQuery();
-                dbClient.RunQuery("UPDATE rooms SET model_name = 'model_custom', wallthick = '" + WallThick + "', floorthick = '" + FloorThick + "' WHERE id = " + Room.Id + " LIMIT 1");
+                RoomModelCustomDao.Replace(dbClient, Room.Id, DoorX, DoorY, DoorZ, DoorDirection, Map, WallHeight);
+                RoomDao.UpdateModelWallThickFloorThick(dbClient, Room.Id, WallThick, FloorThick);
             }
 
             List<RoomUser> UsersToReturn = Room.GetRoomUserManager().GetRoomUsers().ToList();

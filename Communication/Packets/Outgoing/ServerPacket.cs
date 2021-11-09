@@ -67,6 +67,8 @@ namespace Butterfly.Communication.Packets.Outgoing
             }
         }
 
+        public int Id { get; }
+
         public byte[] GetBytes()
         {
             List<byte> Final = new List<byte>();

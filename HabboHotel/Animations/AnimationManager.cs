@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.WebSocket;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Rooms;
 using System;
@@ -11,7 +12,7 @@ namespace Butterfly.HabboHotel.Animations
 {
     public class AnimationManager
     {
-        private const int MIN_USERS = 100;
+        private const int MIN_USERS = 100; // mettre 80 co's
         private const int START_TIME = 20;
         private const int NOTIF_TIME = 2;
         private const int CLOSE_TIME = 1;
@@ -103,9 +104,7 @@ namespace Butterfly.HabboHotel.Animations
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id FROM rooms WHERE owner = 'WibboGame'");
-
-                DataTable table = dbClient.GetTable();
+                DataTable table = RoomDao.GetAllByOwnerWibboGame(dbClient);
                 if (table == null)
                 {
                     return;

@@ -1,3 +1,4 @@
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 
@@ -29,9 +30,9 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
             currentRoom.RoomData.HideWireds = !currentRoom.RoomData.HideWireds;
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE rooms SET allow_hidewireds = '" + (currentRoom.RoomData.HideWireds ? 1 : 0) + "' WHERE id = " + currentRoom.Id);
+                RoomDao.UpdateHideWireds(dbClient, currentRoom.Id, currentRoom.RoomData.HideWireds);
             }
 
             if (currentRoom.RoomData.HideWireds)

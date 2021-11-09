@@ -85,28 +85,17 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.Delay.ToString(), false, this.items);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data, triggers_item FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.item.Id);
-            DataRow row = dbClient.GetRow();
+            if (int.TryParse(row["trigger_data"].ToString(), out int delay))
+                this.Delay = delay;
 
-            if (row == null)
-            {
+            string triggerItem = row["triggers_item"].ToString();
+
+            if (triggerItem == "")
                 return;
-            }
 
-            this.Delay = row["trigger_data"] == null ? 0 : Convert.ToInt32(row["trigger_data"].ToString());
-
-
-            string itemlist = row["triggers_item"] == null ? "" : row["triggers_item"].ToString();
-
-            if (itemlist == "")
-            {
-                return;
-            }
-
-            foreach (string item in itemlist.Split(';'))
+            foreach (string item in triggerItem.Split(';'))
             {
                 Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(item));
                 if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.item.Id)
@@ -118,30 +107,25 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message17 = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message17.WriteBoolean(false);
-            Message17.WriteInteger(10);
-            Message17.WriteInteger(this.items.Count);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(10);
+            Message.WriteInteger(this.items.Count);
             foreach (Item roomItem in this.items)
             {
-                Message17.WriteInteger(roomItem.Id);
+                Message.WriteInteger(roomItem.Id);
             }
 
-            Message17.WriteInteger(SpriteId);
-            Message17.WriteInteger(this.item.Id);
-            Message17.WriteString(this.Delay.ToString());
-            Message17.WriteInteger(0);
-            Message17.WriteInteger(8);
-            Message17.WriteInteger(0);
-            Message17.WriteInteger(this.Delay); //Seconde
-            Message17.WriteInteger(0);
-            Message17.WriteInteger(0);
-            Session.SendPacket(Message17);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.item.Id);
+            Message.WriteString(this.Delay.ToString());
+            Message.WriteInteger(0);
+            Message.WriteInteger(8);
+            Message.WriteInteger(0);
+            Message.WriteInteger(this.Delay); //Seconde
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
 
         public bool Disposed()

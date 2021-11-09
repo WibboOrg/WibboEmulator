@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Items;
 using System.Collections.Generic;
 
@@ -131,7 +132,7 @@ namespace Butterfly.HabboHotel.Rooms.Wired
             }
         }
 
-        public static void SaveTriggerItem(IQueryAdapter dbClient, int triggerID, string triggerData2, string triggerData, bool allUsertriggerable, List<Item> itemslist)
+        public static void SaveTriggerItem(IQueryAdapter dbClient, int triggerId, string triggerData2, string triggerData, bool allUsertriggerable, List<Item> itemslist)
         {
             string triggersitem = "";
 
@@ -151,14 +152,8 @@ namespace Butterfly.HabboHotel.Rooms.Wired
                 }
             }
 
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = " + triggerID);
-            dbClient.SetQuery("INSERT INTO wired_items (trigger_id, trigger_data, trigger_data_2, all_user_triggerable, triggers_item) VALUES (@id, @trigger_data, @trigger_data_2, @triggerable, @triggers_item)");
-            dbClient.AddParameter("id", triggerID);
-            dbClient.AddParameter("trigger_data", triggerData);
-            dbClient.AddParameter("trigger_data_2", triggerData2);
-            dbClient.AddParameter("triggerable", (allUsertriggerable ? 1 : 0));
-            dbClient.AddParameter("triggers_item", triggersitem);
-            dbClient.RunQuery();
+            ItemWiredDao.Delete(dbClient, triggerId);
+            ItemWiredDao.Insert(dbClient, triggerId, triggerData, triggerData2, allUsertriggerable, triggersitem);
         }
     }
 }

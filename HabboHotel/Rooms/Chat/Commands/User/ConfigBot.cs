@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 
 namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
@@ -57,10 +58,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         {
                             Bot.BotData.Enable = IntValue;
 
-                            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                            {
-                                queryreactor.RunQuery("UPDATE bots SET enable = '" + IntValue + "' WHERE id = " + Bot.BotData.Id);
-                            }
+                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                BotDao.UpdateEnable(dbClient, Bot.BotData.Id, IntValue);
                         }
                         break;
                     }
@@ -82,10 +81,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         {
                             Bot.BotData.Handitem = IntValue;
 
-                            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                            {
-                                queryreactor.RunQuery("UPDATE bots SET handitem = '" + IntValue + "' WHERE id = " + Bot.BotData.Id);
-                            }
+                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                BotDao.UpdateHanditem(dbClient, Bot.BotData.Id, IntValue);
                         }
                         break;
                     }
@@ -110,10 +107,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         {
                             Bot.BotData.Rot = IntValue;
 
-                            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                            {
-                                queryreactor.RunQuery("UPDATE bots SET rotation = '" + Bot.RotBody + "' WHERE id = " + Bot.BotData.Id);
-                            }
+                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                BotDao.UpdateRotation(dbClient, Bot.BotData.Id, Bot.RotBody);
                         }
                         break;
                     }
@@ -127,9 +122,9 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                             Bot.IsSit = false;
                             Bot.UpdateNeeded = true;
 
-                            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                             {
-                                queryreactor.RunQuery("UPDATE bots SET status = '0' WHERE id = " + Bot.BotData.Id);
+                                BotDao.UpdateStatus0(dbClient, Bot.BotData.Id);
                             }
                         }
                         else
@@ -143,9 +138,9 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
                             Bot.BotData.Status = 1;
 
-                            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                             {
-                                queryreactor.RunQuery("UPDATE bots SET status = '1' WHERE id = " + Bot.BotData.Id);
+                                BotDao.UpdateStatus1(dbClient, Bot.BotData.Id);
                             }
                         }
                         break;
@@ -160,9 +155,9 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                             Bot.IsSit = false;
                             Bot.UpdateNeeded = true;
 
-                            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                             {
-                                queryreactor.RunQuery("UPDATE bots SET status = '0' WHERE id = " + Bot.BotData.Id);
+                                BotDao.UpdateStatus0(dbClient, Bot.BotData.Id);
                             }
                         }
                         else
@@ -176,10 +171,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
                             Bot.BotData.Status = 2;
 
-                            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                            {
-                                queryreactor.RunQuery("UPDATE bots SET status = '2' WHERE id = " + Bot.BotData.Id);
-                            }
+                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                BotDao.UpdateStatus2(dbClient, Bot.BotData.Id);
                         }
                         break;
                     }

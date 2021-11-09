@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -28,8 +29,7 @@ namespace Butterfly.HabboHotel.Users.Effect
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id, only_staff FROM systeme_effects ORDER by id ASC");
-                DataTable table = dbClient.GetTable();
+                DataTable table = EmulatorEffectDao.GetAll(dbClient);
                 if (table == null)
                 {
                     return;

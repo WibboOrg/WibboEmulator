@@ -5,6 +5,7 @@ using Butterfly.HabboHotel.Items;
 using Butterfly.HabboHotel.Rooms.Games;
 using Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Interfaces;
 using System;
+using System.Data;
 
 namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
 {
@@ -38,29 +39,26 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Triggers
         {
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
         }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-        }
+        
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message3 = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message3.WriteBoolean(false);
-            Message3.WriteInteger(0);
-            Message3.WriteInteger(0);
-            Message3.WriteInteger(SpriteId);
-            Message3.WriteInteger(this.item.Id);
-            Message3.WriteString("");
-            Message3.WriteInteger(0);
-            Message3.WriteInteger(0);
-            Message3.WriteInteger(8);
-            Message3.WriteInteger(0);
-            Message3.WriteInteger(0);
-            Message3.WriteInteger(0);
-            Session.SendPacket(Message3);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.item.Id);
+            Message.WriteString("");
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(8);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
     }
 }

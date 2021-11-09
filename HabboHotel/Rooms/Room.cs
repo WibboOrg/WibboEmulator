@@ -20,6 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Threading;
+using Butterfly.Database.Daos;
 
 namespace Butterfly.HabboHotel.Rooms
 {
@@ -80,6 +83,8 @@ namespace Butterfly.HabboHotel.Rooms
         //Question
         public int VotedYesCount;
         public int VotedNoCount;
+        private List<CancellationTokenSource> cancellationTokenSources;
+
         public int UserCount => this.roomUserManager.GetRoomUserCount();
 
         public int Id => this.RoomData.Id;
@@ -134,6 +139,7 @@ namespace Butterfly.HabboHotel.Rooms
             this.LoadBots();
             this.InitPets();
             this.lastTimerReset = DateTime.Now;
+            this.cancellationTokenSources = new List<CancellationTokenSource>();
         }
 
         public Gamemap GetGameMap()
@@ -374,10 +380,9 @@ namespace Butterfly.HabboHotel.Rooms
         private void LoadBots()
         {
             DataTable table;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT * FROM bots WHERE room_id = " + this.Id);
-                table = queryreactor.GetTable();
+                table = BotDao.GetOneByRoomId(dbClient, this.Id);
                 if (table == null)
                 {
                     return;
@@ -397,10 +402,9 @@ namespace Butterfly.HabboHotel.Rooms
 
         public void InitPets()
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT id, user_id, room_id, name, type, race, color, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM pets WHERE room_id = " + this.Id);
-                DataTable table = queryreactor.GetTable();
+                DataTable table = PetDao.GetAllByRoomId(dbClient, this.Id);
                 if (table == null)
                 {
                     return;
@@ -446,11 +450,11 @@ namespace Butterfly.HabboHotel.Rooms
         {
             this.UsersWithRights = new List<int>();
             DataTable dataTable = new DataTable();
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT room_rights.user_id FROM room_rights WHERE room_id = " + this.RoomData.Id);
-                dataTable = queryreactor.GetTable();
+                dataTable = RoomRightDao.GetAllByRoomId(dbClient, this.RoomData.Id);
             }
+            
             if (dataTable == null)
             {
                 return;
@@ -660,9 +664,9 @@ namespace Butterfly.HabboHotel.Rooms
                     else
                     {
                         this.SaveTimer = 0;
-                        using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            this.GetRoomItemHandler().SaveFurniture(queryreactor);
+                            this.GetRoomItemHandler().SaveFurniture(dbClient);
                         }
                     }
                 }
@@ -1083,9 +1087,15 @@ namespace Butterfly.HabboHotel.Rooms
             this.Disposed = true;
             this.mCycleEnded = true;
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            foreach (CancellationTokenSource tokenSource in this.cancellationTokenSources)
             {
-                this.GetRoomItemHandler().SaveFurniture(queryreactor);
+                tokenSource.Cancel();
+            }
+            this.cancellationTokenSources.Clear();
+
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            {
+                this.GetRoomItemHandler().SaveFurniture(dbClient);
             }
             this.RoomData.Tags.Clear();
 
@@ -1232,10 +1242,31 @@ namespace Butterfly.HabboHotel.Rooms
         public void SetMaxUsers(int MaxUsers)
         {
             this.RoomData.UsersMax = MaxUsers;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE rooms SET users_max = '" + MaxUsers + "' WHERE id = '" + this.Id + "';");
+                RoomDao.UpdateUsersMax(dbClient, this.Id, MaxUsers);
             }
+        }
+
+        public void SetTimeout(int delay, Action callBack)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+            Task.Delay(delay).ContinueWith((t) =>
+            {
+                if (this.cancellationTokenSources.Contains(cancellationTokenSource))
+                    this.cancellationTokenSources.Remove(cancellationTokenSource);
+
+                if (this.Disposed) return;
+
+                callBack();
+
+            }, cancellationToken);
+
+
+            if(!this.cancellationTokenSources.Contains(cancellationTokenSource))
+                this.cancellationTokenSources.Add(cancellationTokenSource);
         }
     }
 }

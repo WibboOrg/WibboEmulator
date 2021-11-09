@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using System.Linq;
 
@@ -6,21 +7,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 {
     internal class RoomSell : IChatCommand
     {
-        public string PermissionRequired
-        {
-            get { return ""; }
-        }
-
-        public string Parameters
-        {
-            get { return ""; }
-        }
-
-        public string Description
-        {
-            get { return ""; }
-        }
-        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (Params.Length != 2)
             {
@@ -56,24 +43,24 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE rooms SET price= @price WHERE id = @roomid LIMIT 1");
-                queryreactor.AddParameter("roomid", Room.Id);
-                queryreactor.AddParameter("price", Prix);
-                queryreactor.RunQuery();
+                RoomDao.UpdatePrice(dbClient, Room.Id, Prix);
             }
 
             Room.RoomData.SellPrice = Prix;
 
             UserRoom.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.valide", Session.Langue), Prix));
 
-            foreach (RoomUser user in Room.GetRoomUserManager().GetUserList().ToList())            {                if (user == null || user.IsBot)
+            foreach (RoomUser user in Room.GetRoomUserManager().GetUserList().ToList())
+            {
+                if (user == null || user.IsBot)
                 {
                     continue;
                 }
 
-                user.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.warn", Session.Langue), Prix));            }
+                user.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.warn", Session.Langue), Prix));
+            }
         }
     }
 }

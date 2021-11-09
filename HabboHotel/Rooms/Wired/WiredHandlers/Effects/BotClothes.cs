@@ -1,4 +1,5 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
+﻿using System.Data;
+using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 
 using Butterfly.Database.Interfaces;
@@ -53,12 +54,9 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
             WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.NameBot + '\t' + this.Look, false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.itemID);
-
-            string Data = dbClient.GetString();
+            string Data = row["trigger_data"].ToString();
 
             if (string.IsNullOrWhiteSpace(Data) || !Data.Contains("\t"))
             {
@@ -73,25 +71,20 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Effects
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message15 = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message15.WriteBoolean(false);
-            Message15.WriteInteger(0);
-            Message15.WriteInteger(0);
-            Message15.WriteInteger(SpriteId);
-            Message15.WriteInteger(this.itemID);
-            Message15.WriteString(this.NameBot + '\t' + this.Look);
-            Message15.WriteInteger(0);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.itemID);
+            Message.WriteString(this.NameBot + '\t' + this.Look);
+            Message.WriteInteger(0);
 
-            Message15.WriteInteger(0);
-            Message15.WriteInteger(26); //7
-            Message15.WriteInteger(0);
-            Message15.WriteInteger(0);
-            Session.SendPacket(Message15);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.itemID + "'");
+            Message.WriteInteger(0);
+            Message.WriteInteger(26); //7
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
     }
 }

@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Handshake;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Quests;
@@ -31,12 +31,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.GetHabbo().Look = Look;
             Session.GetHabbo().Gender = Gender.ToLower();
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE users SET look = @look, gender = @gender WHERE id = " + Session.GetHabbo().Id);
-                queryreactor.AddParameter("look", Look);
-                queryreactor.AddParameter("gender", Gender);
-                queryreactor.RunQuery();
+                UserDao.UpdateLookAndGender(dbClient, Session.GetHabbo().Id, Look, Gender);
             }
 
             ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_AvatarLooks", 1);

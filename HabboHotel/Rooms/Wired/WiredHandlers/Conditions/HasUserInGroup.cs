@@ -1,4 +1,5 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
+﻿using System.Data;
+using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -42,33 +43,28 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, string.Empty, false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
 
         }
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Messagegroup = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
-            Messagegroup.WriteBoolean(false);
-            Messagegroup.WriteInteger(5);
-            Messagegroup.WriteInteger(0);
-            Messagegroup.WriteInteger(SpriteId);
-            Messagegroup.WriteInteger(this.item.Id);
-            Messagegroup.WriteString("");
-            Messagegroup.WriteInteger(0);
-            Messagegroup.WriteInteger(0);
-            Messagegroup.WriteInteger(10);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(5);
+            Message.WriteInteger(0);
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.item.Id);
+            Message.WriteString("");
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(10);
 
-            Messagegroup.WriteInteger(0);
-            Messagegroup.WriteInteger(0);
-            Messagegroup.WriteInteger(0);
-            Session.SendPacket(Messagegroup);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
 
         public void Dispose()

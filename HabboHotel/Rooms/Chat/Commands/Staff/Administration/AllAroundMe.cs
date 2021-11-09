@@ -33,6 +33,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                     continue;
 
                 U.MoveTo(User.X, User.Y, true);
+                //U.MoveTo(User.X, User.Z, true);
+                //U.UnlockWalking();
             }
         }
     }

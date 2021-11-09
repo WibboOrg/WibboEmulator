@@ -31,8 +31,13 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 return;
             }
 
+            if (Room.Id == RoomId)
+            {
+                return;
+            }
+
             Room.GetRoomItemHandler().LoadFurniture(RoomId);
-            Room.GetGameMap().GenerateMaps();
+            Room.GetGameMap().GenerateMaps(true);
             UserRoom.SendWhisperChat("Mobi de l'appart n° " + RoomId + " chargé!");
             Session.SendPacket(new GetGuestRoomResultComposer(Session, Room.RoomData, false, true));
         }

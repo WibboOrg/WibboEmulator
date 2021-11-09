@@ -22,14 +22,17 @@ namespace Butterfly.Core
                         Logging.LogMessage("Server exiting at " + DateTime.Now);
                         Logging.DisablePrimaryWriting(true);
                         Console.WriteLine("The server is saving users furniture, rooms, etc. WAIT FOR THE SERVER TO CLOSE, DO NOT EXIT THE PROCESS IN TASK MANAGER!!");
-                        ButterflyEnvironment.PreformShutDown(true);
+                        ButterflyEnvironment.PreformShutDown();
                         break;
+
                     case "forceshutdown":
                         ButterflyEnvironment.GetGame().gameLoopEnded = true;
                         break;
+
                     case "clear":
                         Console.Clear();
                         break;
+
                     default:
                         Logging.LogMessage(parameters[0].ToLower() + " is an unknown or unsupported command. Type help for more information");
                         break;

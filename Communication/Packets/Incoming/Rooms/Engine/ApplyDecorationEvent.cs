@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -59,13 +60,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     break;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("UPDATE `rooms` SET " + DecorationKey + " = @extradata WHERE `id` = '" + room.Id + "' LIMIT 1");
-                queryreactor.AddParameter("extradata", userItem.ExtraData);
-                queryreactor.RunQuery();
+                RoomDao.UpdateDecoration(dbClient, room.Id, DecorationKey, userItem.ExtraData);
 
-                queryreactor.RunQuery("DELETE FROM items WHERE id = " + userItem.Id);
+                ItemDao.Delete(dbClient, userItem.Id);
             }
 
             Session.GetHabbo().GetInventoryComponent().RemoveItem(userItem.Id);

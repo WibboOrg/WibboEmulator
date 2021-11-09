@@ -1,8 +1,13 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.GameClients;using Butterfly.HabboHotel.Rooms.Games;
+using Butterfly.HabboHotel.GameClients;
+using Butterfly.HabboHotel.Rooms.Games;
 
-namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class RandomLook : IChatCommand    {        public string PermissionRequired
+namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
+{
+    internal class RandomLook : IChatCommand
+    {
+        public string PermissionRequired
         {
             get { return ""; }
         }
@@ -15,7 +20,10 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Rand
         public string Description
         {
             get { return ""; }
-        }        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)        {            if (UserRoom.Team != Team.none || UserRoom.InGame)
+        }
+        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
+        {
+            if (UserRoom.Team != Team.none || UserRoom.InGame)
             {
                 return;
             }
@@ -29,7 +37,13 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Rand
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())            {                queryreactor.SetQuery("SELECT look FROM user_wardrobe WHERE user_id IN (SELECT user_id FROM (SELECT user_id FROM user_wardrobe WHERE user_id >= ROUND(RAND() * (SELECT max(user_id) FROM user_wardrobe)) LIMIT 1) tmp) ORDER BY RAND() LIMIT 1");                Session.GetHabbo().Look = queryreactor.GetString();            }            if (UserRoom.transformation || UserRoom.IsSpectator)
+            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            {
+                queryreactor.SetQuery("SELECT look FROM user_wardrobe WHERE user_id IN (SELECT user_id FROM (SELECT user_id FROM user_wardrobe WHERE user_id >= ROUND(RAND() * (SELECT max(user_id) FROM user_wardrobe)) LIMIT 1) tmp) ORDER BY RAND() LIMIT 1");
+                Session.GetHabbo().Look = queryreactor.GetString();
+            }
+
+            if (UserRoom.transformation || UserRoom.IsSpectator)
             {
                 return;
             }
@@ -39,14 +53,21 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Rand
                 return;
             }
 
-            Room currentRoom = Session.GetHabbo().CurrentRoom;            if (currentRoom == null)
+            Room currentRoom = Session.GetHabbo().CurrentRoom;
+            if (currentRoom == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = UserRoom;            if (roomUserByHabbo == null)
+            RoomUser roomUserByHabbo = UserRoom;
+            if (roomUserByHabbo == null)
             {
                 return;
             }
 
-            Session.SendPacket(new UserChangeComposer(roomUserByHabbo, true));            currentRoom.SendPacket(new UserChangeComposer(roomUserByHabbo, false));        }    }}
+            Session.SendPacket(new UserChangeComposer(roomUserByHabbo, true));
+            currentRoom.SendPacket(new UserChangeComposer(roomUserByHabbo, false));
+
+        }
+    }
+}

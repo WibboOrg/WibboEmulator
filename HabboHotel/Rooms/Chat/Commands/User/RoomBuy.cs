@@ -1,5 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using System.Collections.Generic;
@@ -35,6 +36,11 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 return;
             }
 
+            if(Session.GetHabbo().WibboPoints - Room.RoomData.SellPrice <= 0)
+            {
+                return;
+            }
+
             Session.GetHabbo().WibboPoints -= Room.RoomData.SellPrice;
             Session.SendPacket(new ActivityPointsComposer(Session.GetHabbo().WibboPoints));
 
@@ -45,18 +51,14 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 ClientOwner.SendPacket(new ActivityPointsComposer(ClientOwner.GetHabbo().WibboPoints));
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE users SET vip_points = vip_points - '" + Room.RoomData.SellPrice + "' WHERE id = '" + Session.GetHabbo().Id + "';");
-                queryreactor.RunQuery("UPDATE users SET vip_points = vip_points + '" + Room.RoomData.SellPrice + "' WHERE id = '" + Room.RoomData.OwnerId + "';");
+                UserDao.UpdateRemovePoints(dbClient, Session.GetHabbo().Id, Room.RoomData.SellPrice);
+                UserDao.UpdateAddPoints(dbClient, Room.RoomData.OwnerId, Room.RoomData.SellPrice);
 
-                queryreactor.RunQuery("DELETE FROM room_rights WHERE room_id = '" + Room.Id + "';");
-
-                queryreactor.SetQuery("UPDATE rooms SET owner = @newowner WHERE id = '" + Room.Id + "';");
-                queryreactor.AddParameter("newowner", Session.GetHabbo().Username);
-                queryreactor.RunQuery();
-
-                queryreactor.RunQuery("UPDATE rooms SET price = '0' WHERE id = '" + Room.Id + "' LIMIT 1;");
+                RoomRightDao.Delete(dbClient, Room.Id);
+                RoomDao.UpdateOwner(dbClient, Room.Id, Session.GetHabbo().Username);
+                RoomDao.UpdatePrice(dbClient, Room.Id, 0);
             }
 
             Session.SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("roombuy.sucess", Session.Langue), Room.RoomData.SellPrice));

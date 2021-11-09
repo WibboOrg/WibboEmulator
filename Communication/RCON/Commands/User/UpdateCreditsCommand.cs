@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using System;
 using System.Data;
@@ -30,14 +31,13 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            DataRow row;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            int credits;
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT credits FROM users WHERE id = @userid");
-                queryreactor.AddParameter("userid", Client.GetHabbo().Id);
-                row = queryreactor.GetRow();
+                credits = UserDao.GetCredits(dbClient, Client.GetHabbo().Id);
             }
-            Client.GetHabbo().Credits = Convert.ToInt32(row["credits"]);
+            
+            Client.GetHabbo().Credits = credits;
             Client.GetHabbo().UpdateCreditsBalance();
 
             return true;

@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Rooms;
 using System;
 using System.Data;
@@ -9,10 +10,9 @@ namespace Butterfly.HabboHotel.Items
     {
         public static int GetLinkedTele(int TeleId)
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT tele_two_id FROM tele_links WHERE tele_one_id = " + TeleId);
-                DataRow row = queryreactor.GetRow();
+                DataRow row = ItemTeleportDao.GetOne(dbClient, TeleId);
                 if (row == null)
                 {
                     return 0;
@@ -41,10 +41,9 @@ namespace Butterfly.HabboHotel.Items
                 return pRoom.Id;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT room_id FROM items WHERE id = " + TeleId + " LIMIT 1");
-                DataRow row = queryreactor.GetRow();
+                DataRow row = ItemDao.GetOneRoomId(dbClient, TeleId);
                 if (row == null)
                 {
                     return 0;

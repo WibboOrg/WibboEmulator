@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -14,24 +15,24 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            int num = Packet.PopInt();
-            RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(num);
+            int roomId = Packet.PopInt();
+
+            RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
             if (roomData == null || Session.GetHabbo().FavoriteRooms.Count >= 30 || (Session.GetHabbo().FavoriteRooms.Contains(roomData)))
             {
-                ServerPacket Response = new ServerPacket(33);
-                Response.WriteInteger(-9001);
+                return;
             }
             else
             {
                 ServerPacket Response = new ServerPacket(ServerPacketHeader.USER_FAVORITE_ROOM);
-                Response.WriteInteger(num);
+                Response.WriteInteger(roomId);
                 Response.WriteBoolean(true);
                 Session.SendPacket(Response);
+
                 Session.GetHabbo().FavoriteRooms.Add(roomData);
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    queryreactor.RunQuery("INSERT INTO user_favorites (user_id,room_id) VALUES (" + Session.GetHabbo().Id + "," + num + ")");
-                }
+
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    UserFavoriteDao.Insert(dbClient, Session.GetHabbo().Id, roomId);
             }
         }
     }

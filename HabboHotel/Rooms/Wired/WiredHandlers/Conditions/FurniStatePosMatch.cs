@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -84,7 +85,6 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            //WiredUtillity.SaveTriggerItem(dbClient, this.itemID, "integer", rotationandmove, this.delay.ToString(), false, this.items);
             string triggersitem = "";
 
             int i = 0;
@@ -102,43 +102,34 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
 
             string triggerData2 = this.EtatActuel + ";" + this.DirectionActuel + ";" + this.PositionActuel;
 
-            dbClient.SetQuery("DELETE FROM wired_items WHERE trigger_id = " + this.itemID + ";INSERT INTO wired_items (trigger_id,trigger_data,trigger_data_2,all_user_triggerable,triggers_item) VALUES (@id,@trigger_data,@trigger_data_2,@triggerable,@triggers_item);");
-            dbClient.AddParameter("id", this.itemID);
-            dbClient.AddParameter("trigger_data", "");
-            dbClient.AddParameter("trigger_data_2", triggerData2);
-            dbClient.AddParameter("triggerable", 0);
-            dbClient.AddParameter("triggers_item", triggersitem);
-            dbClient.RunQuery();
+            ItemWiredDao.Delete(dbClient, this.itemID);
+            ItemWiredDao.Insert(dbClient, this.itemID, "", triggerData2, false, triggersitem);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data, trigger_data_2, triggers_item FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.itemID);
-            DataRow row = dbClient.GetRow();
+            string triggerItem = row["triggers_item"].ToString();
 
-            if (row == null)
+            string triggerDataTwo = row["trigger_data_2"].ToString();
+
+            if (triggerDataTwo.Length == 5)
+            {
+                string[] dataSplit = triggerDataTwo.Split(';');
+
+                if(int.TryParse(dataSplit[0], out int state))
+                    this.EtatActuel = state;
+                if(int.TryParse(dataSplit[1], out int direct))
+                    this.DirectionActuel = direct;
+                if(int.TryParse(dataSplit[2], out int position))
+                    this.PositionActuel = position;
+            }
+
+            if (triggerItem == "")
             {
                 return;
             }
 
-            string itemslist = row["triggers_item"].ToString();
-
-            string data2 = row["trigger_data_2"].ToString();
-
-            if (data2.Length == 5)
-            {
-                this.EtatActuel = Convert.ToInt32(data2.Split(';')[0]);
-                this.DirectionActuel = Convert.ToInt32(data2.Split(';')[1]);
-                this.PositionActuel = Convert.ToInt32(data2.Split(';')[2]);
-            }
-
-            if (itemslist == "")
-            {
-                return;
-            }
-
-            foreach (string item in itemslist.Split(';'))
+            foreach (string item in triggerItem.Split(';'))
             {
                 string[] Item2 = item.Split(':');
                 if (Item2.Length != 6)
@@ -156,32 +147,27 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message19 = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
-            Message19.WriteBoolean(false);
-            Message19.WriteInteger(10);
-            Message19.WriteInteger(this.items.Count);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(10);
+            Message.WriteInteger(this.items.Count);
             foreach (int roomItemid in this.items.Keys)
             {
-                Message19.WriteInteger(roomItemid);
+                Message.WriteInteger(roomItemid);
             }
 
-            Message19.WriteInteger(SpriteId);
-            Message19.WriteInteger(this.itemID);
-            Message19.WriteString("");
-            Message19.WriteInteger(3);
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.itemID);
+            Message.WriteString("");
+            Message.WriteInteger(3);
 
-            Message19.WriteInteger(this.EtatActuel); //Etat actuel du mobi
-            Message19.WriteInteger(this.DirectionActuel); //Direction  actuelle
-            Message19.WriteInteger(this.PositionActuel); //position actuelle dans l'appart
+            Message.WriteInteger(this.EtatActuel); //Etat actuel du mobi
+            Message.WriteInteger(this.DirectionActuel); //Direction  actuelle
+            Message.WriteInteger(this.PositionActuel); //position actuelle dans l'appart
 
-            Message19.WriteInteger(0);
-            Message19.WriteInteger(0);
-            Session.SendPacket(Message19);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.itemID + "'");
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
 
         public void Dispose()

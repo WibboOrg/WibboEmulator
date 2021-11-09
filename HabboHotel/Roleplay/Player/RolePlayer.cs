@@ -1,5 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.WebSocket;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Items;
 using Butterfly.HabboHotel.Roleplay.Weapon;
@@ -120,12 +121,11 @@ namespace Butterfly.HabboHotel.Roleplay.Player
 
             this._inventory.Clear();
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE FROM user_rpitems WHERE user_id = '" + this._id + "' AND rp_id = '" + this._rpId + "'");
-                queryreactor.RunQuery("DELETE FROM user_rp WHERE user_id = '" + this._id + "' AND roleplay_id = '" + this._rpId + "'");
-
-                queryreactor.RunQuery("UPDATE `user_rp` SET `health`='" + this.Health + "', `energy`='" + this.Energy + "', `hygiene`='" + this.Hygiene + "', `money`='" + this.Money + "', `money_1`='" + this.Money1 + "', `money_2`='" + this.Money2 + "', `money_3`='" + this.Money3 + "', `money_4`='" + this.Money4 + "', `munition`='" + this.Munition + "', `exp`='" + this.Exp + "', `weapon_far`='" + this.WeaponGun.Id + "', `weapon_cac`='" + this.WeaponCac.Id + "' WHERE `user_id`='" + this._id + "' AND roleplay_id = '" + this._rpId + "' LIMIT 1");
+                UserRoleplayItemDao.Delete(dbClient, this._id, this._rpId);
+                UserRoleplayDao.Delete(dbClient, this._id, this._rpId);
+                UserRoleplayDao.Update(dbClient, this._id, this._rpId, this.Health, this.Energy, this.Hygiene, this.Money, this.Money1, this.Money2, this.Money3, this.Money4, this.Munition, this.Exp, this.WeaponGun.Id, this.WeaponCac.Id);
             }
 
             this.SendWebPacket(new LoadInventoryRpComposer(this._inventory));
@@ -135,13 +135,9 @@ namespace Butterfly.HabboHotel.Roleplay.Player
         public void LoadInventory()
         {
             DataTable Table;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                queryreactor.SetQuery("SELECT * FROM user_rpitems WHERE user_id = '" + this._id + "' AND rp_id = '" + this._rpId + "'");
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                Table = UserRoleplayItemDao.GetAll(dbClient, this._id, this._rpId);
 
-                queryreactor.AddParameter("userid", this._id);
-                Table = queryreactor.GetTable();
-            }
             foreach (DataRow dataRow in Table.Rows)
             {
                 if (!this._inventory.ContainsKey(Convert.ToInt32(dataRow["item_id"])))
@@ -161,35 +157,34 @@ namespace Butterfly.HabboHotel.Roleplay.Player
             return Item;
         }
 
-        internal void AddInventoryItem(int pItemId, int pCount = 1)
+        internal void AddInventoryItem(int itemId, int count = 1)
         {
-            RPItem RPItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(pItemId);
+            RPItem RPItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
             if (RPItem == null)
             {
                 return;
             }
 
-            RolePlayInventoryItem Item = this.GetInventoryItem(pItemId);
+            RolePlayInventoryItem Item = this.GetInventoryItem(itemId);
             if (Item == null)
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("INSERT INTO `user_rpitems` (`user_id`, `rp_id`, `item_id`, `count`) VALUES ('" + this._id + "', '" + this._rpId + "', '" + pItemId + "', '" + pCount + "')");
-                    int Id = Convert.ToInt32(dbClient.InsertQuery());
-                    this._inventory.TryAdd(pItemId, new RolePlayInventoryItem(Id, pItemId, pCount));
+                    int Id = UserRoleplayItemDao.Insert(dbClient, this._id, this._rpId, itemId, count);
+                    this._inventory.TryAdd(itemId, new RolePlayInventoryItem(Id, itemId, count));
                 }
             }
             else
             {
-                Item.Count += pCount;
+                Item.Count += count;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE user_rpitems SET count = count + '" + pCount + "' WHERE id = '" + Item.Id + "' LIMIT 1");
+                    UserRoleplayItemDao.UpdateAddCount(dbClient, Item.Id, count);
                 }
             }
 
 
-            this.SendWebPacket(new AddInventoryItemRpComposer(RPItem, pCount));
+            this.SendWebPacket(new AddInventoryItemRpComposer(RPItem, count));
         }
 
         internal void RemoveInventoryItem(int ItemId, int Count = 1)
@@ -206,7 +201,7 @@ namespace Butterfly.HabboHotel.Roleplay.Player
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("UPDATE user_rpitems SET count = count - '" + Count + "' WHERE id = '" + Item.Id + "' LIMIT 1");
+                    UserRoleplayItemDao.UpdateRemoveCount(dbClient, Item.Id, Count);
                 }
             }
             else
@@ -215,7 +210,7 @@ namespace Butterfly.HabboHotel.Roleplay.Player
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.RunQuery("DELETE FROM user_rpitems WHERE id = '" + Item.Id + "' LIMIT 1");
+                    UserRoleplayItemDao.Delete(dbClient, this._id);
                 }
             }
 
@@ -598,9 +593,9 @@ namespace Butterfly.HabboHotel.Roleplay.Player
             }
 
             this.Dispose = true;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE `user_rp` SET `health`='" + this.Health + "', `energy`='" + this.Energy + "', `hygiene`='" + this.Hygiene + "', `money`='" + this.Money + "', `money_1`='" + this.Money1 + "', `money_2`='" + this.Money2 + "', `money_3`='" + this.Money3 + "', `money_4`='" + this.Money4 + "', `munition`='" + this.Munition + "', `exp`='" + this.Exp + "', `weapon_far`='" + this.WeaponGun.Id + "', `weapon_cac`='" + this.WeaponCac.Id + "' WHERE `user_id`='" + this._id + "' AND roleplay_id = '" + this._rpId + "' LIMIT 1");
+                UserRoleplayDao.Update(dbClient, this._id, this._rpId, this.Health, this.Energy, this.Hygiene, this.Money, this.Money1, this.Money2, this.Money3, this.Money4, this.Munition, this.Exp, this.WeaponGun.Id, this.WeaponCac.Id);
             }
 
             this.SendWebPacket(new RpStatsComposer(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));

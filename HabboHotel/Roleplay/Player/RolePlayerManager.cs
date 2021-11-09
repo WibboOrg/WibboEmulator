@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Roleplay.Player;
 using System;
 using System.Collections.Concurrent;
@@ -36,14 +37,12 @@ namespace Butterfly.HabboHotel.Roleplay
 
             RolePlayer player = null;
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT * FROM user_rp WHERE user_id = '" + UserId + "' AND roleplay_id = '" + this._id + "'");
-
-                DataRow dRow = queryreactor.GetRow();
+                DataRow dRow = UserRoleplayDao.GetOne(dbClient, UserId, this._id);
                 if (dRow == null)
                 {
-                    queryreactor.RunQuery("INSERT INTO `user_rp` (`user_id`, `roleplay_id`) VALUES ('" + UserId + "', '" + this._id + "')");
+                    UserRoleplayDao.Insert(dbClient, UserId, this._id);
                     player = new RolePlayer(this._id, UserId, 100, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0);
                 }
                 else

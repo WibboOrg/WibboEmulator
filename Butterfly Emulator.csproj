@@ -111,12 +111,6 @@
     <StartupObject>Butterfly.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Colorful.Console, Version=1.2.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Colorful.Console.1.2.9\lib\net461\Colorful.Console.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=2.0.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MySql.Data, Version=6.5.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -335,6 +329,7 @@
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorTicketChatlogMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserChatlogMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserInfoMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserRoomVisitsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModResponseMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Navigator\CanCreateRoomComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Navigator\DoorbellComposer.cs" />
@@ -620,6 +615,72 @@
     <Compile Include="Communication\RCON\Commands\User\UserAlertCommand.cs" />
     <Compile Include="Communication\WebSocket\EncodeDecode.cs" />
     <Compile Include="Core\IDGenerator.cs" />
+    <Compile Include="Database\Daos\BanDao.cs" />
+    <Compile Include="Database\Daos\BotDao.cs" />
+    <Compile Include="Database\Daos\CatalogItemDao.cs" />
+    <Compile Include="Database\Daos\CatalogMarketplaceDataDao.cs" />
+    <Compile Include="Database\Daos\CatalogMarketplaceOfferDao.cs" />
+    <Compile Include="Database\Daos\CatalogVoucherDao.cs" />
+    <Compile Include="Database\Daos\EmulatorAchievementDao.cs" />
+    <Compile Include="Database\Daos\EmulatorChatStyleDao.cs" />
+    <Compile Include="Database\Daos\EmulatorCommandDao.cs" />
+    <Compile Include="Database\Daos\EmulatorCommandPetDao.cs" />
+    <Compile Include="Database\Daos\EmulatorEffectDao.cs" />
+    <Compile Include="Database\Daos\EmulatorFuserightDao.cs" />
+    <Compile Include="Database\Daos\EmulatorHotelviewPromoDao.cs" />
+    <Compile Include="Database\Daos\EmulatorQuestDao.cs" />
+    <Compile Include="Database\Daos\EmulatorStatsDao.cs" />
+    <Compile Include="Database\Daos\EmulatorStatusDao.cs" />
+    <Compile Include="Database\Daos\EmulatorTextDao.cs" />
+    <Compile Include="Database\Daos\GuildDao.cs" />
+    <Compile Include="Database\Daos\GuildItemDao.cs" />
+    <Compile Include="Database\Daos\GuildMembershipDao.cs" />
+    <Compile Include="Database\Daos\GuildRequestDao.cs" />
+    <Compile Include="Database\Daos\ItemBaseDao.cs" />
+    <Compile Include="Database\Daos\ItemDao.cs" />
+    <Compile Include="Database\Daos\ItemLimitedDao.cs" />
+    <Compile Include="Database\Daos\ItemMoodlightDao.cs" />
+    <Compile Include="Database\Daos\ItemTeleportDao.cs" />
+    <Compile Include="Database\Daos\ItemWiredDao.cs" />
+    <Compile Include="Database\Daos\LogChatDao.cs" />
+    <Compile Include="Database\Daos\LogChatPubDao.cs" />
+    <Compile Include="Database\Daos\LogCommandDao.cs" />
+    <Compile Include="Database\Daos\LogFlagmeDao.cs" />
+    <Compile Include="Database\Daos\LogTradeDao.cs" />
+    <Compile Include="Database\Daos\MessengerFriendshipDao.cs" />
+    <Compile Include="Database\Daos\MessengerOfflineMessageDao.cs" />
+    <Compile Include="Database\Daos\MessengerRequestDao.cs" />
+    <Compile Include="Database\Daos\ModerationPresetDao.cs" />
+    <Compile Include="Database\Daos\ModerationResolutionDao.cs" />
+    <Compile Include="Database\Daos\ModerationTicketDao.cs" />
+    <Compile Include="Database\Daos\ModerationTopicActionDao.cs" />
+    <Compile Include="Database\Daos\ModerationTopicDao.cs" />
+    <Compile Include="Database\Daos\NavigatorCategoryDao.cs" />
+    <Compile Include="Database\Daos\NavigatorPublicDao.cs" />
+    <Compile Include="Database\Daos\PetDao.cs" />
+    <Compile Include="Database\Daos\RoleplayDao.cs" />
+    <Compile Include="Database\Daos\RoleplayEnemyDao.cs" />
+    <Compile Include="Database\Daos\RoleplayItemDao.cs" />
+    <Compile Include="Database\Daos\RoleplayWeaponDao.cs" />
+    <Compile Include="Database\Daos\RoomDao.cs" />
+    <Compile Include="Database\Daos\RoomModelCustomDao.cs" />
+    <Compile Include="Database\Daos\RoomModelDao.cs" />
+    <Compile Include="Database\Daos\RoomRightDao.cs" />
+    <Compile Include="Database\Daos\RoomSwearwordFilterDao.cs" />
+    <Compile Include="Database\Daos\UserAchievementDao.cs" />
+    <Compile Include="Database\Daos\UserBadgeDao.cs" />
+    <Compile Include="Database\Daos\UserDao.cs" />
+    <Compile Include="Database\Daos\UserFavoriteDao.cs" />
+    <Compile Include="Database\Daos\UserPhotoDao.cs" />
+    <Compile Include="Database\Daos\UserPresentDao.cs" />
+    <Compile Include="Database\Daos\UserQuestDao.cs" />
+    <Compile Include="Database\Daos\UserRoleplayDao.cs" />
+    <Compile Include="Database\Daos\UserRoleplayItemDao.cs" />
+    <Compile Include="Database\Daos\UserStatsDao.cs" />
+    <Compile Include="Database\Daos\UserVoucherDao.cs" />
+    <Compile Include="Database\Daos\UserWardrobeDao.cs" />
+    <Compile Include="Database\Daos\UserWebsocketDao.cs" />
+    <Compile Include="Database\Daos\WordFilterRetroDao.cs" />
     <Compile Include="HabboHotel\Animations\AnimationManager.cs" />
     <Compile Include="HabboHotel\Catalogs\CatalogBot.cs" />
     <Compile Include="HabboHotel\Catalogs\Marketplace\MarketOffer.cs" />
@@ -637,15 +698,13 @@
     <Compile Include="HabboHotel\Items\ItemExtrabox.cs" />
     <Compile Include="HabboHotel\Items\ItemFactory.cs" />
     <Compile Include="HabboHotel\Items\ItemTemp.cs" />
-<<<<<<< Updated upstream
     <Compile Include="HabboHotel\Permissions\Permission.cs" />
     <Compile Include="HabboHotel\Permissions\PermissionCommand.cs" />
     <Compile Include="HabboHotel\Permissions\PermissionGroup.cs" />
     <Compile Include="HabboHotel\Permissions\PermissionManager.cs" />
-=======
     <Compile Include="HabboHotel\LandingView\Promotions\Promotion.cs" />
     <Compile Include="HabboHotel\Moderation\ModerationTicket.cs" />
->>>>>>> Stashed changes
+    <Compile Include="HabboHotel\Moderation\ModerationTicket.cs" />
     <Compile Include="HabboHotel\Roleplay\Enemy\RPEnemy.cs" />
     <Compile Include="HabboHotel\Roleplay\Enemy\RPEnemyManager.cs" />
     <Compile Include="HabboHotel\Roleplay\Item\RPItemCategory.cs" />
@@ -666,10 +725,10 @@
     <Compile Include="HabboHotel\Rooms\Chat\Commands\CommandManager.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\AllAroundMe.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\AllEyesOnMe.cs" />
-    <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\DeleteGroup.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\RegenMaps.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\StartGameJD.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Moderation\Murmur.cs" />
+    <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Moderation\StaffsOnline.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\User\Premium\GameTime.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\AllFriends.cs" />
     <Compile Include="HabboHotel\Rooms\Chat\Commands\Staff\Administration\OpenWeb.cs" />
@@ -743,7 +802,7 @@
     <Compile Include="HabboHotel\Users\Effects\EffectManager.cs" />
     <Compile Include="HabboHotel\Groups\GroupBadgeParts.cs" />
     <Compile Include="HabboHotel\Groups\GroupColours.cs" />
-    <Compile Include="HabboHotel\HotelView\SmallPromo.cs" />
+    <Compile Include="HabboHotel\LandingView\SmallPromo.cs" />
     <Compile Include="HabboHotel\Items\Interactors\InteractorLoveLock.cs" />
     <Compile Include="HabboHotel\Items\ItemBehaviourUtility.cs" />
     <Compile Include="HabboHotel\Navigators\FeaturedRoom.cs" />
@@ -890,7 +949,7 @@
     <Compile Include="Utilities\Enclosure\Algorithm\GametileUpdate.cs" />
     <Compile Include="Utilities\Enclosure\GameField.cs" />
     <Compile Include="Utilities\Enclosure\PointField.cs" />
-    <Compile Include="HabboHotel\Guides\GuideManager.cs" />
+    <Compile Include="HabboHotel\Help\HelpManager.cs" />
     <Compile Include="HabboHotel\Items\Interactors\InteractorBlob.cs" />
     <Compile Include="HabboHotel\Items\Interactors\InteractorCrackable.cs" />
     <Compile Include="HabboHotel\Items\Interactors\InteractorTvYoutube.cs" />
@@ -934,7 +993,7 @@
     <Compile Include="Communication\Packets\Outgoing\ServerPacketHeader.cs" />
     <Compile Include="HabboHotel\Items\Interactors\InteractorTimer.cs" />
     <Compile Include="Core\FigureData\FigureDataManager.cs" />
-    <Compile Include="HabboHotel\HotelView\HotelViewManager.cs" />
+    <Compile Include="HabboHotel\LandingView\LandingViewManager.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\WiredHandlers\Conditions\FurniHasNoUser.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\WiredHandlers\Conditions\FurniStatePosMatchNegative.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\WiredHandlers\Conditions\HasUserNotInGroup.cs" />
@@ -1051,7 +1110,6 @@
     <Compile Include="HabboHotel\Rooms\Games\Football\Soccer.cs" />
     <Compile Include="HabboHotel\Rooms\Games\Teams\TeamManager.cs" />
     <Compile Include="HabboHotel\Rooms\RoomIvokedItems\RoomAlert.cs" />
-    <Compile Include="HabboHotel\Rooms\RoomIvokedItems\RoomKick.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\RotationState.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\WiredLoader.cs" />
     <Compile Include="HabboHotel\Rooms\Wired\WiredHandler.cs" />
@@ -1108,14 +1166,13 @@
     <Compile Include="Utilities\QueryChunk.cs" />
     <Compile Include="Utilities\EndingType.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Utilities\UnixTimestamp.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="w.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
-    <None Include="Settings\configuration.ini" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
@@ -1138,7 +1195,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="HabboHotel\Rooms\Chat\Pets\Locale\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

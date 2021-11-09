@@ -1,5 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Inventory.Pets;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Pets;
@@ -91,9 +92,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 pet.DBState = DatabaseUpdateState.NeedsUpdate;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE pets SET room_id = '0' WHERE id ='" + pet.PetId + "' LIMIT 1");
+                PetDao.UpdateRoomId(dbClient, pet.PetId, 0);
             }
 
             if (pet.OwnerId != Session.GetHabbo().Id)

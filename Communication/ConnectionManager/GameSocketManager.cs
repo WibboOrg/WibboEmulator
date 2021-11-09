@@ -17,7 +17,6 @@ namespace ConnectionManager
         private IDataParser _parser;
         private ConcurrentDictionary<string, int> _ipConnectionsCount;
         private ConcurrentDictionary<string, int> _lastTimeConnection;
-        private readonly string _lastConnetionIP;
         private List<string> _bannedIp;
 
         public event ConnectionEvent connectionEvent;

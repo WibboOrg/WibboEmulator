@@ -1,14 +1,15 @@
 ﻿using Butterfly.Communication.Packets;
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Achievements;
 using Butterfly.HabboHotel.Animations;
 using Butterfly.HabboHotel.Catalog;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Groups;
-using Butterfly.HabboHotel.Guides;
-using Butterfly.HabboHotel.HotelView;
+using Butterfly.HabboHotel.Help;
 using Butterfly.HabboHotel.Items;
+using Butterfly.HabboHotel.LandingView;
 using Butterfly.HabboHotel.Navigators;
 using Butterfly.HabboHotel.Permissions;
 using Butterfly.HabboHotel.Quests;
@@ -38,8 +39,8 @@ namespace Butterfly.HabboHotel
         private readonly ModerationManager _moderationManager;
         private readonly QuestManager _questManager;
         private readonly GroupManager _groupManager;
-        private readonly HotelViewManager _hotelViewManager;
-        private readonly GuideManager _guideManager;
+        private readonly LandingViewManager _landingViewManager;
+        private readonly HelpManager _helpManager;
         private readonly PacketManager _packetManager;
         private readonly ChatManager _chatManager;
         private readonly EffectManager _effectManager;
@@ -86,8 +87,8 @@ namespace Butterfly.HabboHotel
             this._questManager = new QuestManager();
             this._questManager.Init();
 
-            this._hotelViewManager = new HotelViewManager();
-            this._guideManager = new GuideManager();
+            this._landingViewManager = new LandingViewManager();
+            this._helpManager = new HelpManager();
             this._packetManager = new PacketManager();
             this._chatManager = new ChatManager();
 
@@ -133,9 +134,9 @@ namespace Butterfly.HabboHotel
             return this._packetManager;
         }
 
-        public GuideManager GetGuideManager()
+        public HelpManager GetHelpManager()
         {
-            return this._guideManager;
+            return this._helpManager;
         }
 
         public RoleplayManager GetRoleplayManager()
@@ -198,9 +199,9 @@ namespace Butterfly.HabboHotel
             return this._groupManager;
         }
 
-        public HotelViewManager GetHotelView()
+        public LandingViewManager GetHotelView()
         {
-            return this._hotelViewManager;
+            return this._landingViewManager;
         }
 
         public void StartGameLoop()
@@ -269,11 +270,11 @@ namespace Butterfly.HabboHotel
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("UPDATE users SET online = '0' WHERE online = '1'");
-                dbClient.RunQuery("UPDATE users SET auth_ticket = '' WHERE auth_ticket != ''");
-                dbClient.RunQuery("UPDATE user_websocket SET auth_ticket = '' WHERE auth_ticket != ''");
-                dbClient.RunQuery("UPDATE rooms SET users_now = '0' WHERE users_now > '0'");
-                dbClient.RunQuery("UPDATE server_status SET status = '1', users_online = '0', rooms_loaded = '0', stamp = '" + ButterflyEnvironment.GetUnixTimestamp() + "'");
+                UserDao.UpdateAllOnline(dbClient);
+                UserDao.UpdateAllTicket(dbClient);
+                UserWebsocketDao.UpdateReset(dbClient);
+                RoomDao.UpdateResetUsersNow(dbClient);
+                EmulatorStatusDao.UpdateReset(dbClient);
             }
         }
 

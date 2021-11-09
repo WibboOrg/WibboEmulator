@@ -1,3 +1,4 @@
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using System;
@@ -13,8 +14,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Avatar
             this.WriteInteger(1);
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT `slot_id`,`look`,`gender` FROM `user_wardrobe` WHERE `user_id` = '" + Session.GetHabbo().Id + "' LIMIT 10");
-                DataTable WardrobeData = dbClient.GetTable();
+                DataTable WardrobeData = UserWardrobeDao.GetAll(dbClient, Session.GetHabbo().Id);
 
                 if (WardrobeData == null)
                 {

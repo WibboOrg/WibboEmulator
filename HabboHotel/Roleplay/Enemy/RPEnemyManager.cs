@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -44,11 +45,10 @@ namespace Butterfly.HabboHotel.Roleplay.Enemy
             this._enemyPet.Clear();
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM roleplay_enemy");
-                DataTable table1 = dbClient.GetTable();
-                if (table1 != null)
+                DataTable table = RoleplayEnemyDao.GetAll(dbClient);
+                if (table != null)
                 {
-                    foreach (DataRow dataRow in table1.Rows)
+                    foreach (DataRow dataRow in table.Rows)
                     {
                         if ((this._enemyBot.ContainsKey(Convert.ToInt32(dataRow["id"])) && (string)dataRow["type"] == "bot") || (this._enemyPet.ContainsKey(Convert.ToInt32(dataRow["id"])) && (string)dataRow["type"] == "pet"))
                         {
@@ -79,9 +79,9 @@ namespace Butterfly.HabboHotel.Roleplay.Enemy
                 return this.GetEnemyBot(BotId);
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("INSERT INTO `roleplay_enemy` (`id`, `type`) VALUES ('" + BotId + "', 'bot');");
+                RoleplayEnemyDao.Insert(dbClient, BotId, "bot");
             }
 
             RPEnemy EnemyConfig = new RPEnemy(BotId, 100, 1, 4, 30, 0, 0, 5461, 0, 0, 0, true, 12, false);
@@ -96,9 +96,9 @@ namespace Butterfly.HabboHotel.Roleplay.Enemy
                 return this.GetEnemyPet(PetId);
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("INSERT INTO `roleplay_enemy` (`id`, `type`, `weapon_far_id`) VALUES ('" + PetId + "', 'pet', '0');");
+                RoleplayEnemyDao.Insert(dbClient, PetId, "pet");
             }
 
             RPEnemy EnemyConfig = new RPEnemy(PetId, 100, 0, 0, 0, 0, 0, 5461, 0, 0, 0, true, 12, false);
@@ -113,9 +113,9 @@ namespace Butterfly.HabboHotel.Roleplay.Enemy
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE FROM roleplay_enemy WHERE id = '" + BotId + "'");
+                RoleplayEnemyDao.Delete(dbClient, BotId);
             }
 
             this._enemyBot.Remove(BotId);
@@ -128,9 +128,9 @@ namespace Butterfly.HabboHotel.Roleplay.Enemy
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE FROM roleplay_enemy WHERE id = '" + PetId + "'");
+                RoleplayEnemyDao.Delete(dbClient, PetId);
             }
 
             this._enemyPet.Remove(PetId);

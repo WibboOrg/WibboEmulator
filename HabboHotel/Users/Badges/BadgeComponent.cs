@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 
 using System.Collections;
@@ -101,11 +102,9 @@ namespace Butterfly.HabboHotel.Users.Badges
 
             if (InDatabase)
             {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("INSERT INTO user_badges (user_id,badge_id,badge_slot) VALUES (" + this._userId + ",@badge," + Slot + ")");
-                    queryreactor.AddParameter("badge", Badge);
-                    queryreactor.RunQuery();
+                    UserBadgeDao.Insert(dbClient, this._userId, Slot, Badge);
                 }
             }
             this._badges.Add(Badge, new Badge(Badge, Slot));
@@ -126,12 +125,9 @@ namespace Butterfly.HabboHotel.Users.Badges
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                queryreactor.SetQuery("DELETE FROM user_badges WHERE badge_id = @badge AND user_id = " + this._userId + " LIMIT 1");
-                queryreactor.AddParameter("badge", Badge);
-                queryreactor.RunQuery();
-            }
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                UserBadgeDao.Delete(dbClient, this._userId, Badge);
+                
             this._badges.Remove(this.GetBadge(Badge).Code);
         }
 

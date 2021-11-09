@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Communication.Packets.Outgoing.Users;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Groups;
@@ -31,10 +31,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.GetHabbo().FavouriteGroupId = Group.Id;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("UPDATE `user_stats` SET `group_id` = @groupId WHERE `id` = @userId LIMIT 1");
-                dbClient.AddParameter("groupId", Session.GetHabbo().FavouriteGroupId);
-                dbClient.AddParameter("userId", Session.GetHabbo().Id);
-                dbClient.RunQuery();
+                UserStatsDao.UpdateGroupId(dbClient, Session.GetHabbo().FavouriteGroupId, Session.GetHabbo().Id);
             }
 
             if (Session.GetHabbo().InRoom && Session.GetHabbo().CurrentRoom != null)

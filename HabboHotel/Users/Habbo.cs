@@ -5,18 +5,17 @@ using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Achievements;
-using Butterfly.HabboHotel.Rooms.Chat.Logs;
+using Butterfly.HabboHotel.ChatMessageStorage;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Roleplay;
 using Butterfly.HabboHotel.Roleplay.Player;
 using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.Rooms.Chat.Commands;
 using Butterfly.HabboHotel.Users.Badges;
 using Butterfly.HabboHotel.Users.Inventory;
 using Butterfly.HabboHotel.Users.Messenger;
-using Butterfly.HabboHotel.Users.Permissions;
 using Butterfly.HabboHotel.WebClients;
 using System;
 using System.Collections.Generic;
@@ -61,6 +60,7 @@ namespace Butterfly.HabboHotel.Users
         public string MachineId;
         public Language Langue;
         public bool IsWebSocket;
+        public Dictionary<double, RoomData> Visits;
 
         public List<RoomData> RoomRightsList;
         public List<RoomData> FavoriteRooms;
@@ -72,7 +72,7 @@ namespace Butterfly.HabboHotel.Users
         private HabboMessenger Messenger;
         private BadgeComponent BadgeComponent;
         private InventoryComponent InventoryComponent;
-        private ChatlogManager chatMessageManager;
+        private ChatMessageManager chatMessageManager;
         private GameClient mClient;
         public bool SpectatorMode;
         public bool Disconnected;
@@ -117,15 +117,19 @@ namespace Butterfly.HabboHotel.Users
         public bool SessionGiftBlocked;
 
         public int RolePlayId;
-        public bool IgnoreAll;
-
-        private PermissionComponent _permissions;
-        private IChatCommand _iChatCommand;
+        public double IgnoreAllExpireTime;
+        public bool IgnoreAll
+        {
+            get
+            {
+                return this.IgnoreAllExpireTime > ButterflyEnvironment.GetUnixTimestamp();
+            }
+        }
 
         public DateTime LastGiftPurchaseTime;
 
         public bool InRoom => this.CurrentRoomId >= 1;
-         
+
         public Room CurrentRoom
         {
             get
@@ -139,13 +143,6 @@ namespace Butterfly.HabboHotel.Users
                     return ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.CurrentRoomId);
                 }
             }
-        }
-
-        private bool InitPermissions()
-        {
-            _permissions = new PermissionComponent();
-
-            return _permissions.Init(this);
         }
 
         public bool SendWebPacket(IServerPacket Message)
@@ -177,7 +174,7 @@ namespace Butterfly.HabboHotel.Users
             int WPoint, int ActivityPoints, int HomeRoom, int Respect, int DailyRespectPoints,
             int DailyPetRespectPoints, bool HasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
             int LastOnline, int FavoriteGroup, int accountCreated, bool accepttrading, string ip, bool HideInroom,
-            bool HideOnline, int MazoHighScore, int Mazo, string clientVolume, bool nuxenable, string MachineId, bool ChangeName, Language Langue, bool IgnoreAll)
+            bool HideOnline, int MazoHighScore, int Mazo, string clientVolume, bool nuxenable, string MachineId, bool ChangeName, Language Langue, int ignoreAllExpire)
         {
             this.Id = Id;
             this.Username = Username;
@@ -207,8 +204,7 @@ namespace Butterfly.HabboHotel.Users
             this.ClientVolume = new List<int>(3);
             this.CanChangeName = ChangeName;
             this.Langue = Langue;
-            this.IgnoreAll = IgnoreAll;
-            this.IChatCommand = IChatCommand;
+            this.IgnoreAllExpireTime = ignoreAllExpire;
 
             if (clientVolume.Contains(','))
             {
@@ -256,6 +252,7 @@ namespace Butterfly.HabboHotel.Users
 
             this.Nuxenable = nuxenable;
             this.NewUser = nuxenable;
+            this.Visits = new Dictionary<double, RoomData>();
         }
 
         public void Init(GameClient client, UserData.UserData data)
@@ -265,7 +262,7 @@ namespace Butterfly.HabboHotel.Users
             this.InventoryComponent = new InventoryComponent(this.Id, client);
             this.InventoryComponent.SetActiveState(client);
             this.quests = data.quests;
-            this.chatMessageManager = new ChatlogManager();
+            this.chatMessageManager = new ChatMessageManager();
             this.chatMessageManager.LoadUserChatlogs(this.Id);
             this.Messenger = new HabboMessenger(this.Id)
             {
@@ -277,15 +274,7 @@ namespace Butterfly.HabboHotel.Users
             this.UpdateRooms();
         }
 
-        public PermissionComponent GetPermissions()
-        {
-            return _permissions;
-        }
-        public IChatCommand IChatCommand
-        {
-            get { return _iChatCommand; }
-            set { _iChatCommand = value; }
-        }
+
         public void UpdateRooms()
         {
             try
@@ -293,11 +282,9 @@ namespace Butterfly.HabboHotel.Users
                 this.UsersRooms.Clear();
 
                 DataTable table;
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("SELECT * FROM rooms WHERE owner = @name ORDER BY id ASC");
-                    queryreactor.AddParameter("name", this.Username);
-                    table = queryreactor.GetTable();
+                    table = RoomDao.GetAllByOwner(dbClient, this.Username);
                 }
 
                 foreach (DataRow dRow in table.Rows)
@@ -378,9 +365,9 @@ namespace Butterfly.HabboHotel.Users
                 }
             }
 
-            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "SeasonRunOff", "WibboParty", "MovieRunOff" };
+            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "SeasonRunOff", "WibboParty", "MovieRunOff", "officialrooms", "Seonsaengnim"};
 
-            if (!this.GetClient().GetHabbo().HasFuse("fuse_mod"))
+            if (this.GetClient().GetHabbo().Rank < 8)
             {
                 if (!(this.GetClient().GetHabbo().HasFuse("fuse_enter_any_room") && !OwnerEnterNotAllowed.Any(x => x == room.RoomData.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetHabbo().IsTeleporting && this.GetClient().GetHabbo().TeleportingRoomID == room.Id))
                 {
@@ -398,7 +385,6 @@ namespace Butterfly.HabboHotel.Users
                             this.GetClient().GetHabbo().LoadingRoomId = Id;
                             this.GetClient().GetHabbo().AllowDoorBell = false;
                         }
-
                         return;
                     }
                     else if (room.RoomData.State == 2 && Password.ToLower() != room.RoomData.Password.ToLower())
@@ -528,10 +514,10 @@ namespace Butterfly.HabboHotel.Users
                 this.HabboinfoSaved = true;
                 TimeSpan TimeOnline = DateTime.Now - this.OnlineTime;
                 int TimeOnlineSec = (int)TimeOnline.TotalSeconds;
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("UPDATE users SET online = '0', last_online = '" + ButterflyEnvironment.GetUnixTimestamp() + "', activity_points = " + this.Duckets + ", credits = " + this.Credits + " WHERE id = " + this.Id + " ;");
-                    queryreactor.RunQuery("UPDATE user_stats SET group_id = " + this.FavouriteGroupId + ",  online_time = online_time + " + TimeOnlineSec + ", quest_id = '" + this.CurrentQuestId + "', Respect = '" + this.Respect + "', daily_respect_points = '" + this.DailyRespectPoints + "', daily_pet_respect_points = '" + this.DailyPetRespectPoints + "' WHERE id = " + this.Id + " ;");
+                    UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits);
+                    UserStatsDao.UpdateAll(dbClient, this.Id, this.FavouriteGroupId, TimeOnlineSec, this.CurrentQuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
                 }
             }
 
@@ -568,7 +554,7 @@ namespace Butterfly.HabboHotel.Users
             }
             if (this.OnDuty)
             {
-                ButterflyEnvironment.GetGame().GetGuideManager().RemoveGuide(this.Id);
+                ButterflyEnvironment.GetGame().GetHelpManager().RemoveGuide(this.Id);
             }
 
             if (this.Messenger != null)
@@ -649,7 +635,7 @@ namespace Butterfly.HabboHotel.Users
             return this.InventoryComponent;
         }
 
-        public ChatlogManager GetChatMessageManager()
+        public ChatMessageManager GetChatMessageManager()
         {
             return this.chatMessageManager;
         }

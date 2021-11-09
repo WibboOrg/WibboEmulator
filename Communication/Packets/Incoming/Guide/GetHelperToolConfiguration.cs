@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Guides;
+using Butterfly.HabboHotel.Help;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            GuideManager guideManager = ButterflyEnvironment.GetGame().GetGuideManager();
+            HelpManager guideManager = ButterflyEnvironment.GetGame().GetHelpManager();
             bool onDuty = Packet.PopBoolean();
             Packet.PopBoolean();
             Packet.PopBoolean();

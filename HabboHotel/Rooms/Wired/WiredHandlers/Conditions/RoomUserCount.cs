@@ -64,30 +64,22 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
             WiredUtillity.SaveTriggerItem(dbClient, this.Item.Id, string.Empty, SaveRoomCount, false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.Item.Id);
-            DataRow row = dbClient.GetRow();
-            if (row == null)
+            string triggerData = row["trigger_data"].ToString();
+            if (!triggerData.Contains(":"))
             {
                 return;
             }
 
-            string data = row[0].ToString();
-            if (!data.Contains(":"))
-            {
-                return;
-            }
+            string CountMin = triggerData.Split(':')[0];
+            string CountMax = triggerData.Split(':')[1];
 
-            string CountMin = data.Split(':')[0];
-            string CountMax = data.Split(':')[1];
+            if(int.TryParse(CountMax, out int numberMax))
+                this.RoomCountMax = numberMax;
 
-            int.TryParse(CountMax, out int numberMax);
-            this.RoomCountMax = numberMax;
-
-            int.TryParse(CountMin, out int numberMin);
-            this.RoomCountMin = numberMin;
+            if(int.TryParse(CountMin, out int numberMin))
+                this.RoomCountMin = numberMin;
         }
 
         public void OnTrigger(GameClient Session, int SpriteId)
@@ -106,11 +98,6 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
 
             Message.WriteInteger(16);
             Session.SendPacket(Message);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.Item.Id + "'");
         }
 
         public void Dispose()

@@ -1,5 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Users;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -56,13 +57,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 if (Session.GetHabbo().GetBadgeComponent().HasBadge(userItem.ExtraData))
                 {
-                    Session.SendNotification("Vous poss�der d�j� ce badge !");
+                    Session.SendNotification("Vous posséder déjà ce badge !");
                     return;
                 }
 
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("DELETE FROM items WHERE id = " + ItemId);
+                    ItemDao.Delete(dbClient, ItemId);
                 }
 
                 Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
@@ -70,7 +71,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.GetHabbo().GetBadgeComponent().GiveBadge(userItem.ExtraData, true);
                 Session.SendPacket(new ReceiveBadgeComposer(userItem.ExtraData));
 
-                Session.SendNotification("Vous avez re�u le badge: " + userItem.ExtraData + " !");
+                Session.SendNotification("Vous avez reçu le badge: " + userItem.ExtraData + " !");
                 return;
             }
 
@@ -104,9 +105,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Item roomItem = new Item(userItem.Id, Room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, X, Y, 0.0, Rotation, "", Room);
                 if (Room.GetRoomItemHandler().SetFloorItem(Session, roomItem, X, Y, Rotation, true, false, true))
                 {
-                    using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        queryreactor.RunQuery("UPDATE items SET room_id = " + Room.Id + ", user_id = " + Room.RoomData.OwnerId + " WHERE id = " + ItemId);
+                        ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, Room.Id, Room.RoomData.OwnerId);
                     }
 
                     Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
@@ -166,9 +167,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     Item roomItem = new Item(userItem.Id, Room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, WallPos, Room);
                     if (Room.GetRoomItemHandler().SetWallItem(Session, roomItem))
                     {
-                        using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            queryreactor.RunQuery("UPDATE items SET room_id = " + Room.Id + ", user_id = " + Room.RoomData.OwnerId + " WHERE id = " + ItemId);
+                            ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, Room.Id, Room.RoomData.OwnerId);
                         }
 
                         Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);

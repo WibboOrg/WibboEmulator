@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using System;
 using System.Diagnostics;
 
@@ -15,8 +16,7 @@ namespace Butterfly.Core
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT userpeak FROM server_status");
-                UserPeak = dbClient.GetInteger();
+                UserPeak = EmulatorStatusDao.GetUserpeak(dbClient);
             }
 
             ColdTitle = string.Empty;
@@ -53,7 +53,8 @@ namespace Butterfly.Core
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        dbClient.RunQuery("UPDATE server_status SET users_online = " + UsersOnline + ", rooms_loaded = " + RoomsLoaded + ", userpeak = " + UserPeak + ", stamp = UNIX_TIMESTAMP();INSERT INTO system_stats (online, time, room) VALUES (" + UsersOnline + ", UNIX_TIMESTAMP(), " + RoomsLoaded + ");");
+                        EmulatorStatsDao.Insert(dbClient, UsersOnline, RoomsLoaded);
+                        EmulatorStatusDao.UpdateScore(dbClient, UsersOnline, RoomsLoaded, UserPeak);
                     }
                 }
                 catch (Exception e) { Logging.LogThreadException(e.ToString(), "Server status update task"); }

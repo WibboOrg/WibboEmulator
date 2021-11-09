@@ -6,6 +6,7 @@ using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Users;
 
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Catalog;
 using Butterfly.HabboHotel.Catalog.Utilities;
@@ -56,7 +57,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
             }
 
-            if (Amount < 1 || Amount > 100 || !Item.HaveOffer)
+            if (Amount < 1 || Amount > 100 || !ItemUtility.CanSelectAmount(Item))
             {
                 Amount = 1;
             }
@@ -112,37 +113,32 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 #region Pet handling
 
                 case InteractionType.PET:
-                    try
+                    string[] Bits = ExtraData.Split('\n');
+                    string PetName = Bits[0];
+                    string Race = Bits[1];
+                    string Color = Bits[2];
+
+                    if (!int.TryParse(Race, out int result))
                     {
-                        string[] Bits = ExtraData.Split('\n');
-                        string PetName = Bits[0];
-                        string Race = Bits[1];
-                        string Color = Bits[2];
-
-                        int.Parse(Race); // to trigger any possible errors
-
-                        if (!PetUtility.CheckPetName(PetName))
-                        {
-                            return;
-                        }
-
-                        if (Race.Length > 2)
-                        {
-                            return;
-                        }
-
-                        if (Color.Length != 6)
-                        {
-                            return;
-                        }
-
-                        ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_PetLover", 1);
-                    }
-                    catch (Exception e)
-                    {
-                        Logging.LogException((e).ToString());
                         return;
                     }
+
+                    if (!PetUtility.CheckPetName(PetName))
+                    {
+                        return;
+                    }
+
+                    if (Race.Length > 2)
+                    {
+                        return;
+                    }
+
+                    if (Color.Length != 6)
+                    {
+                        return;
+                    }
+
+                    ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_PetLover", 1);
 
                     break;
 
@@ -264,10 +260,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Interlocked.Increment(ref Item.LimitedEditionSells);
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("UPDATE `catalog_items` SET `limited_sells` = @limitSells WHERE `id` = @itemId LIMIT 1");
-                    dbClient.AddParameter("limitSells", Item.LimitedEditionSells);
-                    dbClient.AddParameter("itemId", Item.Id);
-                    dbClient.RunQuery();
+                    CatalogItemDao.UpdateLimited(dbClient, Item.Id, Item.LimitedEditionSells);
 
                     LimitedEditionSells = Item.LimitedEditionSells;
                     LimitedEditionStack = Item.LimitedEditionStack;
@@ -291,9 +284,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.GetHabbo().WibboPoints -= TotalDiamondCost;
                 Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().WibboPoints, 0, 105));
 
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("UPDATE users SET vip_points = vip_points - " + TotalDiamondCost + " WHERE id = " + Session.GetHabbo().Id);
+                    UserDao.UpdateRemovePoints(dbClient, Session.GetHabbo().Id, TotalDiamondCost);
                 }
             }
 

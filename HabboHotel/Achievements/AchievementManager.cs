@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Data;
+using Butterfly.Database.Daos;
 
 namespace Butterfly.HabboHotel.Achievements
 {
@@ -28,8 +29,8 @@ namespace Butterfly.HabboHotel.Achievements
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT id, category, group_name, level, reward_pixels, reward_points, progress_needed FROM achievements");
-                foreach (DataRow dataRow in dbClient.GetTable().Rows)
+                DataTable table = EmulatorAchievementDao.GetAll(dbClient);
+                foreach (DataRow dataRow in table.Rows)
                 {
                     int Id = Convert.ToInt32(dataRow["id"]);
                     string Category = (string)dataRow["category"];
@@ -127,10 +128,8 @@ namespace Butterfly.HabboHotel.Achievements
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("REPLACE INTO user_achievement VALUES (" + Session.GetHabbo().Id + ", @group, " + NewLevel + ", " + NewProgress + ")");
-                    dbClient.AddParameter("group", AchievementGroup);
-                    dbClient.RunQuery();
-                    dbClient.RunQuery("UPDATE user_stats SET achievement_score = achievement_score + '" + TargetLevelData.RewardPoints + "' WHERE id = '" + Session.GetHabbo().Id + "';");
+                    UserAchievementDao.Replace(dbClient, Session.GetHabbo().Id, NewLevel, NewProgress, AchievementGroup);
+                    UserStatsDao.UpdateAchievementScore(dbClient, Session.GetHabbo().Id, TargetLevelData.RewardPoints);
                 }
 
 
@@ -165,9 +164,7 @@ namespace Butterfly.HabboHotel.Achievements
                 UserData.Progress = NewProgress;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("REPLACE INTO user_achievement VALUES (" + Session.GetHabbo().Id + ", @group, " + NewLevel + ", " + NewProgress + ")");
-                    dbClient.AddParameter("group", AchievementGroup);
-                    dbClient.RunQuery();
+                    UserAchievementDao.Replace(dbClient, Session.GetHabbo().Id, NewLevel, NewProgress, AchievementGroup);
                 }
 
                 Session.SendPacket(new AchievementProgressedComposer(AchievementData, TargetLevel, TargetLevelData,

@@ -2,6 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Rooms.Chat.Logs;
 using Butterfly.HabboHotel.GameClients;
@@ -138,13 +139,11 @@ namespace Butterfly.HabboHotel.Support
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                DataTable ModerationTopics = null;
-                dbClient.SetQuery("SELECT * FROM moderation_topics");
-                ModerationTopics = dbClient.GetTable();
+                DataTable moderationTopics = ModerationTopicDao.GetAll(dbClient);
 
-                if (ModerationTopics != null)
+                if (moderationTopics != null)
                 {
-                    foreach (DataRow Row in ModerationTopics.Rows)
+                    foreach (DataRow Row in moderationTopics.Rows)
                     {
                         if (!this._moderationCFHTopics.ContainsKey(Convert.ToInt32(Row["id"])))
                         {
@@ -154,8 +153,7 @@ namespace Butterfly.HabboHotel.Support
                 }
 
                 DataTable ModerationTopicsActions = null;
-                dbClient.SetQuery("SELECT * FROM moderation_topic_actions");
-                ModerationTopicsActions = dbClient.GetTable();
+                ModerationTopicsActions = ModerationTopicActionDao.GetAll(dbClient);
 
                 if (ModerationTopicsActions != null)
                 {
@@ -181,8 +179,7 @@ namespace Butterfly.HabboHotel.Support
             this._roomMessagePresets.Clear();
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT type,message FROM moderation_presets WHERE enabled = '1'");
-                DataTable table = dbClient.GetTable();
+                DataTable table = ModerationPresetDao.GetAll(dbClient);
                 foreach (DataRow dataRow in table.Rows)
                 {
                     string str = (string)dataRow["message"];
@@ -207,8 +204,7 @@ namespace Butterfly.HabboHotel.Support
             this._ticketResolution2.Clear();
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM moderation_resolution");
-                DataTable table = dbClient.GetTable();
+                DataTable table = ModerationResolutionDao.GetAll(dbClient);
                 foreach (DataRow dataRow in table.Rows)
                 {
                     TicketResolution str = new TicketResolution((string)dataRow["title"], (string)dataRow["subtitle"], Convert.ToInt32(dataRow["ban_hours"]), Convert.ToInt32(dataRow["enable_mute"]), Convert.ToInt32(dataRow["mute_hours"]), Convert.ToInt32(dataRow["reminder"]), (string)dataRow["message"]);
@@ -231,8 +227,7 @@ namespace Butterfly.HabboHotel.Support
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.SetQuery("SELECT * FROM moderation_tickets WHERE status = 'open'");
-                DataTable table = dbClient.GetTable();
+                DataTable table = ModerationTicketDao.GetAll(dbClient);
                 if (table == null)
                 {
                     return;
@@ -257,13 +252,12 @@ namespace Butterfly.HabboHotel.Support
             int Id = 0;
             string roomname = (roomData == null) ? roomData.Name : "Aucun appart";
             int roomid = (roomData == null) ? roomData.Id : 0;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("INSERT INTO moderation_tickets (score,type,status,sender_id,reported_id,moderator_id,message,room_id,room_name,timestamp) VALUES (1,'" + Category + "','open','" + Session.GetHabbo().Id + "','" + ReportedUser + "','0',@message,'" + roomData.Id + "',@name,'" + ButterflyEnvironment.GetUnixTimestamp() + "')");
-                queryreactor.AddParameter("message", Message);
-                queryreactor.AddParameter("name", roomname);
-                Id = Convert.ToInt32(queryreactor.InsertQuery());
+                Id = ModerationTicketDao.Insert(dbClient, Message, roomname, Category, Session.GetHabbo().Id, ReportedUser, roomData.Id);
             }
+
             SupportTicket Ticket = new SupportTicket(Id, 1, Category, Session.GetHabbo().Id, ReportedUser, Message, roomid, roomname, ButterflyEnvironment.GetUnixTimestamp());
             this._tickets.Add(Ticket);
             SendTicketToModerators(Ticket);
@@ -408,18 +402,11 @@ namespace Butterfly.HabboHotel.Support
             ButterflyEnvironment.GetGame().GetClientManager().SendMessageStaff(Ticket.Serialize());
         }
 
-        public void LogStaffEntry(int user_id, string modName, int roomid, string target, string type, string description)
+        public void LogStaffEntry(int userId, string modName, int roomId, string target, string type, string description)
         {
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("INSERT INTO cmdlogs (user_id, user_name, roomid, command, extra_data, timestamp) VALUES (@userid,@username,@roomid,@type,@desc, UNIX_TIMESTAMP())");
-                queryreactor.AddParameter("userid", user_id);
-                queryreactor.AddParameter("username", modName);
-                queryreactor.AddParameter("roomid", roomid);
-                queryreactor.AddParameter("target", target);
-                queryreactor.AddParameter("type", type);
-                queryreactor.AddParameter("desc", description + " " + target);
-                queryreactor.RunQuery();
+                LogCommandDao.Insert(dbClient, userId, modName, roomId, target, type, description + " " + target);
             }
         }
 
@@ -435,22 +422,24 @@ namespace Butterfly.HabboHotel.Support
             {
                 room.RoomData.State = 1;
                 room.RoomData.Name = "Cet appart ne respect par les conditions d'utilisation";
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("UPDATE rooms SET state = 'locked' WHERE id = " + room.Id);
+                    RoomDao.UpdateState(dbClient, room.Id);
                 }
             }
+            
             if (InappropriateRoom)
             {
                 room.RoomData.Name = ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.room.roomclosed", ModSession.Langue);
                 room.RoomData.Description = ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.room.roomclosed", ModSession.Langue);
                 room.ClearTags();
                 room.RoomData.Tags.Clear();
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.RunQuery("UPDATE rooms SET caption = 'Cet appart ne respect par les conditions dutilisation', description = 'Cet appart ne respect par les conditions dutilisation', tags = '' WHERE id = " + room.Id);
+                    RoomDao.UpdateCaptionDescTags(dbClient, room.Id);
                 }
             }
+
             if (KickUsers)
             {
                 room.onRoomKick();
@@ -462,20 +451,13 @@ namespace Butterfly.HabboHotel.Support
         public static ServerPacket SerializeRoomTool(RoomData Data)
         {
             Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Data.Id);
-            int i = 0;
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+
+            int userId = 0;
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                try
-                {
-                    queryreactor.SetQuery("SELECT id FROM users WHERE username = @owner");
-                    queryreactor.AddParameter("owner", Data.OwnerName);
-                    i = Convert.ToInt32(queryreactor.GetRow()[0]);
-                }
-                catch (Exception ex)
-                {
-                    Logging.HandleException(ex, "ModerationTool.SerializeRoomTool");
-                }
+                userId = UserDao.GetIdByName(dbClient, Data.OwnerName);
             }
+            
             ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.MODTOOL_ROOM_INFO);
             serverMessage.WriteInteger(Data.Id);
             serverMessage.WriteInteger(Data.UsersNow);
@@ -488,7 +470,7 @@ namespace Butterfly.HabboHotel.Support
                 serverMessage.WriteBoolean(false);
             }
 
-            serverMessage.WriteInteger(i);
+            serverMessage.WriteInteger(userId);
             serverMessage.WriteString(Data.OwnerName);
             serverMessage.WriteBoolean(room != null);
             if (room != null)
@@ -588,23 +570,22 @@ namespace Butterfly.HabboHotel.Support
         public static ServerPacket SerializeUserInfo(int UserId)
         {
             GameClient User = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
-            DataRow row1 = null;
+            DataRow row = null;
             if (User == null)
             {
-                using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    queryreactor.SetQuery("SELECT id, username FROM users WHERE id = " + UserId);
-                    row1 = queryreactor.GetRow();
+                    row = UserDao.GetOneIdAndName(dbClient, UserId);
                 }
-                if (row1 == null)
+                if (row == null)
                 {
                     return null;
                 }
             }
 
             ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.MODERATION_USER_INFO);
-            serverMessage.WriteInteger((row1 == null) ? User.GetHabbo().Id : Convert.ToInt32(row1["id"]));
-            serverMessage.WriteString((row1 == null) ? User.GetHabbo().Username : (string)row1["username"]);
+            serverMessage.WriteInteger((row == null) ? User.GetHabbo().Id : Convert.ToInt32(row["id"]));
+            serverMessage.WriteString((row == null) ? User.GetHabbo().Username : (string)row["username"]);
             serverMessage.WriteString("Unknown");
 
             serverMessage.WriteInteger(0);
@@ -627,15 +608,6 @@ namespace Butterfly.HabboHotel.Support
             serverMessage.WriteString(""); // ???
             return serverMessage;
         }
-
-        /*public static ServerMessage SerializeRoomVisits(int UserId)
-        {
-            ServerMessage serverMessage = new ServerMessage(537);
-            serverMessage.WriteInteger(UserId);
-            serverMessage.WriteString(ButterflyEnvironment.GetGame().GetClientManager().GetNameById(UserId));
-            serverMessage.WriteInteger(0);
-            return serverMessage;
-        }*/
 
         public static ServerPacket SerializeUserChatlog(int UserId, int RoomId)
         {

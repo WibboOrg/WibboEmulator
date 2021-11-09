@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Navigator;
-
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
@@ -35,17 +35,14 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
             {
                 Room.GetRoomItemHandler().SaveFurniture(dbClient);
 
-                dbClient.SetQuery("INSERT INTO `rooms` (`caption`, `owner`, `description`, `model_name`, `wallpaper`, `floor`, `landscape`, `allow_hidewall`, `wallthick`, `floorthick`, `allow_rightsoverride`, `allow_hidewireds`)" +
-                "SELECT 'Appart " + OldRoomId + " copie', '" + Session.GetHabbo().Username + "', `description`, `model_name`, `wallpaper`, `floor`, `landscape`, `allow_hidewall`, `wallthick`, `floorthick`, `allow_rightsoverride`, `allow_hidewireds` FROM rooms WHERE id = '" + OldRoomId + "'; ");
-                RoomId = Convert.ToInt32(dbClient.InsertQuery());
+                RoomId = RoomDao.InsertDuplicate(dbClient, OldRoomId, Session.GetHabbo().Username);
 
-                dbClient.RunQuery("INSERT INTO `room_models_customs` (`room_id`, `door_x`, `door_y`, `door_z`, `door_dir`, `heightmap`, `wall_height`) " +
-                    "SELECT '" + RoomId + "', `door_x`, `door_y`, `door_z`, `door_dir`, `heightmap`, `wall_height` FROM room_models_customs WHERE room_id = '" + OldRoomId + "'");
+                RoomModelCustomDao.InsertDuplicate(dbClient, RoomId, OldRoomId);
 
-                dbClient.RunQuery("SELECT item_id FROM catalog_items WHERE page_id IN (SELECT id FROM catalog_pages WHERE min_rank <= '" + Session.GetHabbo().Rank + "') AND cost_pixels = '0' AND cost_diamonds = '0' AND limited_sells = '0' AND limited_stack = '0' AND offer_active = '1' GROUP BY item_id");
                 List<int> furniIdAllow = new List<int>();
 
-                foreach (DataRow dataRow in dbClient.GetTable().Rows)
+                DataTable catalogItemTable = CatalogItemDao.GetItemIdByRank(dbClient, Session.GetHabbo().Rank);
+                foreach (DataRow dataRow in catalogItemTable.Rows)
                 {
                     int.TryParse(dataRow["item_id"].ToString(), out int itemId);
                     if (!furniIdAllow.Contains(itemId))
@@ -58,8 +55,8 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                 List<int> wiredId = new List<int>();
                 List<int> teleportId = new List<int>();
 
-                dbClient.SetQuery("SELECT id, base_item FROM items WHERE room_id = '" + OldRoomId + "'");
-                foreach (DataRow dataRow in dbClient.GetTable().Rows)
+                DataTable itemTable = ItemDao.GetAllIdAndBaseItem(dbClient, OldRoomId);
+                foreach (DataRow dataRow in itemTable.Rows)
                 {
                     int OldItemId = Convert.ToInt32(dataRow[0]);
                     int baseID = Convert.ToInt32(dataRow[1]);
@@ -75,9 +72,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         continue;
                     }
 
-                    dbClient.SetQuery("INSERT INTO `items` (`user_id`, `room_id`, `base_item`, `extra_data`, `x`, `y`, `z`, `rot`, `wall_pos`)" +
-                        " SELECT '" + Session.GetHabbo().Id + "', '" + RoomId + "', base_item, extra_data, x, y, z, rot, wall_pos FROM items WHERE id = '" + OldItemId + "'");
-                    int ItemId = Convert.ToInt32(dbClient.InsertQuery());
+                    int ItemId = ItemDao.InsertDuplicate(dbClient, Session.GetHabbo().Id, RoomId, OldItemId);
 
                     newItemsId.Add(OldItemId, ItemId);
 
@@ -88,23 +83,12 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 
                     if (Data.InteractionType == InteractionType.MOODLIGHT)
                     {
-                        dbClient.RunQuery("INSERT INTO `room_items_moodlight` (`item_id`, `enabled`, `current_preset`, `preset_one`, `preset_two`, `preset_three`)" +
-                        "SELECT '" + ItemId + "', `enabled`, `current_preset`, `preset_one`, `preset_two`, `preset_three` FROM room_items_moodlight WHERE item_id = '" + OldItemId + "'");
+                        ItemMoodlightDao.InsertDuplicate(dbClient, ItemId, OldItemId);
                     }
 
                     if (WiredUtillity.TypeIsWired(Data.InteractionType))
                     {
-                        /*if(Data.InteractionType == InteractionType.superwired)
-                        {
-                            //trigger_data check
-                            dbClient.RunQuery("INSERT INTO `wired_items` (`trigger_id`, `trigger_data_2`, `trigger_data`, `all_user_triggerable`, `triggers_item`) " +
-                            "SELECT '" + ItemId + "', trigger_data_2, '', all_user_triggerable, triggers_item FROM wired_items WHERE trigger_id = '" + OldItemId + "'");
-
-                        } else
-                        {*/
-                        dbClient.RunQuery("INSERT INTO `wired_items` (`trigger_id`, `trigger_data_2`, `trigger_data`, `all_user_triggerable`, `triggers_item`) " +
-                        "SELECT '" + ItemId + "', trigger_data_2, trigger_data, all_user_triggerable, triggers_item FROM wired_items WHERE trigger_id = '" + OldItemId + "'");
-                        //}
+                        ItemWiredDao.InsertDuplicate(dbClient, ItemId, OldItemId);
 
                         wiredId.Add(ItemId);
                     }
@@ -117,8 +101,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         continue;
                     }
 
-                    dbClient.SetQuery("SELECT tele_two_id FROM tele_links WHERE tele_one_id = '" + oldId + "'");
-                    DataRow rowTele = dbClient.GetRow();
+                    DataRow rowTele = ItemTeleportDao.GetOne(dbClient, oldId);
                     if (rowTele == null)
                     {
                         continue;
@@ -129,13 +112,12 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         continue;
                     }
 
-                    dbClient.RunQuery("INSERT INTO `tele_links` (`tele_one_id`, `tele_two_id`) VALUES ('" + newId + "', '" + newIdTwo + "');");
+                    ItemTeleportDao.Insert(dbClient, newId, newIdTwo);
                 }
 
                 foreach (int id in wiredId)
                 {
-                    dbClient.SetQuery("SELECT triggers_item FROM wired_items WHERE trigger_id = '" + id + "' AND triggers_item != ''");
-                    DataRow wiredRow = dbClient.GetRow();
+                    DataRow wiredRow = ItemWiredDao.GetOne(dbClient, id);
 
                     if (wiredRow == null)
                     {
@@ -185,16 +167,12 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
                         triggerItems = triggerItems.Remove(triggerItems.Length - 1);
                     }
 
-                    dbClient.SetQuery("UPDATE wired_items SET triggers_item=@triggeritems WHERE trigger_id = '" + id + "' LIMIT 1");
-                    dbClient.AddParameter("triggeritems", triggerItems);
-                    dbClient.RunQuery();
+                    ItemWiredDao.UpdateTriggerItem(dbClient, triggerItems, id);
                 }
 
-                dbClient.RunQuery("INSERT INTO `bots` (`user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`) " +
-                    "SELECT '" + Session.GetHabbo().Id + "', `name`, `motto`, `gender`, `look`, '" + RoomId + "', `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat` FROM bots WHERE room_id = '" + OldRoomId + "'");
-
-                dbClient.RunQuery("INSERT INTO `pets` (`user_id`, `room_id`, `name`, `race`, `color`, `type`, `experience`, `energy`, `nutrition`, `respect`, `createstamp`, `x`, `y`, `z`, `have_saddle`, `hairdye`, `pethair`, `anyone_ride`) " +
-                    "SELECT '" + Session.GetHabbo().Id + "', '" + RoomId + "', `name`, `race`, `color`, `type`, `experience`, `energy`, `nutrition`, `respect`, '" + ButterflyEnvironment.GetUnixTimestamp() + "', `x`, `y`, `z`, `have_saddle`, `hairdye`, `pethair`, `anyone_ride` FROM pets WHERE room_id = '" + OldRoomId + "'");
+                BotDao.DupliqueAllBotInRoomId(dbClient, Session.GetHabbo().Id , RoomId, OldRoomId);
+                
+                PetDao.InsertDuplicate(dbClient, Session.GetHabbo().Id, RoomId, OldRoomId);
             }
 
             RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);

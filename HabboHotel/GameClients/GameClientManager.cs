@@ -2,6 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 
 using Butterfly.Core;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Users.Messenger;
 using ConnectionManager;
@@ -25,7 +26,6 @@ namespace Butterfly.HabboHotel.GameClients
         public int OnlineUsersBr;
 
         private readonly List<int> _userStaff;
-
 
         public int Count => this._userIDRegister.Count;
 
@@ -113,10 +113,9 @@ namespace Butterfly.HabboHotel.GameClients
             }
 
             string username = "";
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.SetQuery("SELECT username FROM users WHERE id = '" + Id + "';");
-                username = queryreactor.GetString();
+                username = UserDao.GetNameById(dbClient, Id);
             }
 
             return username;
@@ -272,9 +271,9 @@ namespace Butterfly.HabboHotel.GameClients
             {
                 if (stringBuilder.Length > 0)
                 {
-                    using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        queryreactor.RunQuery((stringBuilder).ToString());
+                        dbClient.RunQuery((stringBuilder).ToString());
                     }
                 }
             }
@@ -339,19 +338,14 @@ namespace Butterfly.HabboHotel.GameClients
                 return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 if (str == "user")
                 {
-                    queryreactor.RunQuery("UPDATE users SET is_banned = '1' WHERE id = '" + Client.GetHabbo().Id + "'");
+                    UserDao.UpdateIsBanned(dbClient, Client.GetHabbo().Id);
                 }
 
-                queryreactor.SetQuery("INSERT INTO bans (bantype,value,reason,expire,added_by,added_date) VALUES (@rawvar, @var, @reason, '" + Expire + "', @mod, UNIX_TIMESTAMP())");
-                queryreactor.AddParameter("rawvar", str);
-                queryreactor.AddParameter("var", Variable);
-                queryreactor.AddParameter("reason", Reason);
-                queryreactor.AddParameter("mod", Moderator);
-                queryreactor.RunQuery();
+                BanDao.InsertBan(dbClient, Expire, str, Variable, Reason, Moderator);
             }
 
             if (MachineBan)

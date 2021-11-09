@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Navigator;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Rooms;
@@ -35,9 +36,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     return;
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("UPDATE rooms SET score = '" + room.RoomData.Score + "' WHERE id = '" + room.Id + "';");
+                RoomDao.UpdateScore(dbClient, room.Id, room.RoomData.Score);
             }
 
             Session.GetHabbo().RatedRooms.Add(room.Id);

@@ -34,42 +34,28 @@ namespace Butterfly.HabboHotel.Rooms.Wired.WiredHandlers.Conditions
             WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.timeout.ToString(), false, null);
         }
 
-        public void LoadFromDatabase(IQueryAdapter dbClient, Room insideRoom)
+        public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            dbClient.SetQuery("SELECT trigger_data FROM wired_items WHERE trigger_id = @id ");
-            dbClient.AddParameter("id", this.item.Id);
-            DataRow row = dbClient.GetRow();
-            if (row != null)
-            {
-                this.timeout = Convert.ToInt32(row[0].ToString());
-            }
-            else
-            {
-                this.timeout = 20;
-            }
+            if(int.TryParse(row["trigger_data"].ToString(), out int timeout))
+                this.timeout = timeout;
         }
 
         public void OnTrigger(GameClient Session, int SpriteId)
         {
-            ServerPacket Message20 = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
-            Message20.WriteBoolean(false);
-            Message20.WriteInteger(5);
-            Message20.WriteInteger(0);
-            Message20.WriteInteger(SpriteId);
-            Message20.WriteInteger(this.item.Id);
-            Message20.WriteString("");
-            Message20.WriteInteger(1);
-            Message20.WriteInteger(this.timeout);
-            Message20.WriteInteger(1);
-            Message20.WriteInteger(3);
-            Message20.WriteInteger(0);
-            Message20.WriteInteger(0);
-            Session.SendPacket(Message20);
-        }
-
-        public void DeleteFromDatabase(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("DELETE FROM wired_items WHERE trigger_id = '" + this.item.Id + "'");
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
+            Message.WriteBoolean(false);
+            Message.WriteInteger(5);
+            Message.WriteInteger(0);
+            Message.WriteInteger(SpriteId);
+            Message.WriteInteger(this.item.Id);
+            Message.WriteString("");
+            Message.WriteInteger(1);
+            Message.WriteInteger(this.timeout);
+            Message.WriteInteger(1);
+            Message.WriteInteger(3);
+            Message.WriteInteger(0);
+            Message.WriteInteger(0);
+            Session.SendPacket(Message);
         }
 
         public void Dispose()

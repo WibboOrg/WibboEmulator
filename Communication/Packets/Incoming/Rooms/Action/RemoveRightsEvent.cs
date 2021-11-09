@@ -78,9 +78,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
             }
 
-            using (IQueryAdapter queryreactor = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                queryreactor.RunQuery("DELETE FROM room_rights WHERE " + (DeleteParams).ToString());
+                dbClient.RunQuery("DELETE FROM room_rights WHERE " + (DeleteParams).ToString());
             }
         }
     }

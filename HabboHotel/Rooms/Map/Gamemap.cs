@@ -659,6 +659,7 @@ namespace Butterfly.HabboHotel.Rooms
                     this.room.GetGameManager().AddFurnitureToTeam(Item, Team.red);
                     break;
             }
+
             if (Item.GetBaseItem().Type != 's')
             {
                 return true;
