@@ -48,7 +48,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.GetHabbo().LastPhotoId = PhotoId;
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                UserPhotoDao.InsertPhoto(dbClient, Session.GetHabbo().Id, PhotoId, Time);
+                UserPhotoDao.Insert(dbClient, Session.GetHabbo().Id, PhotoId, Time);
         }
     }
 }

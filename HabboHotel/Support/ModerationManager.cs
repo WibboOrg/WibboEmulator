@@ -153,8 +153,7 @@ namespace Butterfly.HabboHotel.Support
                 }
 
                 DataTable ModerationTopicsActions = null;
-                dbClient.SetQuery("SELECT * FROM moderation_topic_actions");
-                ModerationTopicsActions = dbClient.GetTable();
+                ModerationTopicsActions = ModerationTopicActionDao.GetAll(dbClient);
 
                 if (ModerationTopicsActions != null)
                 {

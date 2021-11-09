@@ -17,7 +17,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataRow GetOne(IQueryAdapter dbClient, int itemId)
         {
-            dbClient.SetQuery("SELECT base_id,extra_data FROM user_presents WHERE item_id = @presentId LIMIT 1");
+            dbClient.SetQuery("SELECT base_id, extra_data FROM user_presents WHERE item_id = @presentId LIMIT 1");
             dbClient.AddParameter("presentId", itemId);
             return dbClient.GetRow();
         }

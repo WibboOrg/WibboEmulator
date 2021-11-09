@@ -650,6 +650,7 @@
     <Compile Include="Database\Daos\ModerationPresetDao.cs" />
     <Compile Include="Database\Daos\ModerationResolutionDao.cs" />
     <Compile Include="Database\Daos\ModerationTicketDao.cs" />
+    <Compile Include="Database\Daos\ModerationTopicActionDao.cs" />
     <Compile Include="Database\Daos\ModerationTopicDao.cs" />
     <Compile Include="Database\Daos\NavigatorCategoryDao.cs" />
     <Compile Include="Database\Daos\NavigatorPublicDao.cs" />
@@ -669,7 +670,6 @@
     <Compile Include="Database\Daos\UserFavoriteDao.cs" />
     <Compile Include="Database\Daos\UserPhotoDao.cs" />
     <Compile Include="Database\Daos\UserPresentDao.cs" />
-    <Compile Include="Database\Daos\UserPresentsDao.cs" />
     <Compile Include="Database\Daos\UserQuestDao.cs" />
     <Compile Include="Database\Daos\UserRoleplayDao.cs" />
     <Compile Include="Database\Daos\UserRoleplayItemDao.cs" />

@@ -9,7 +9,7 @@ namespace Butterfly.Database.Daos
     {
         internal static DataRow GetOneByOfferId(IQueryAdapter dbClient, int offerId)
         {
-            dbClient.SetQuery("SELECT state,timestamp,total_price,extra_data,item_id,furni_id,user_id,limited_number,limited_stack FROM catalog_marketplace_offers WHERE offer_id = @OfferId LIMIT 1");
+            dbClient.SetQuery("SELECT state, timestamp, total_price, extra_data, item_id, furni_id, user_id, limited_number, limited_stack FROM catalog_marketplace_offers WHERE offer_id = @OfferId LIMIT 1");
             dbClient.AddParameter("OfferId", offerId);
             return dbClient.GetRow();
         }
@@ -42,13 +42,14 @@ namespace Butterfly.Database.Daos
                     str = "ORDER BY asking_price ASC";
                     break;
             }
-            
-            dbClient.SetQuery("SELECT offer_id,item_type,sprite_id,total_price,limited_number,limited_stack FROM catalog_marketplace_offers " + builder.ToString() + " " + str + " LIMIT 500");
-            dbClient.AddParameter("search_query", searchQuery.Replace("%", "\\%").Replace("_", "\\_") + "%");
+
             if (searchQuery.Length >= 1)
             {
                 builder.Append(" AND public_name LIKE @search_query");
             }
+
+            dbClient.SetQuery("SELECT offer_id, item_type, sprite_id, total_price, limited_number, limited_stack FROM catalog_marketplace_offers " + builder.ToString() + " " + str + " LIMIT 500");
+            dbClient.AddParameter("search_query", searchQuery.Replace("%", "\\%").Replace("_", "\\_") + "%");
             return dbClient.GetTable();
         }
 

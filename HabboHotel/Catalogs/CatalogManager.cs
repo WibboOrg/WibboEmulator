@@ -139,7 +139,7 @@ namespace Butterfly.HabboHotel.Catalog
                     }
                 }
 
-                dbClient.SetQuery("SELECT id,name,figure,motto,gender,ai_type FROM catalog_bot_presets");
+                dbClient.SetQuery("SELECT id, name, figure, motto, gender, ai_type FROM catalog_bot_presets");
                 DataTable bots = dbClient.GetTable();
 
                 if (bots != null)

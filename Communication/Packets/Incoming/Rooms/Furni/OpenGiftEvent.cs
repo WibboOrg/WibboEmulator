@@ -41,9 +41,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 DataRow Data = null;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    dbClient.SetQuery("SELECT base_idextra_data ROM usr_presets WHERE item_id = @presentId LIMIT 1");
-                    dbClient.AddParameter("presentId", Present.Id);
-                    Data = dbClient.GetRow();
+                    Data = UserPresentDao.GetOne(dbClient, Present.Id);
                 }
 
                 if (Data == null)
@@ -102,7 +100,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                ItemDao.UpdateBaseItemAndExtraData(dbClient, Present.Id, Convert.ToInt32(Row["base_id"]), Row["extr_data"].ToString());
+                ItemDao.UpdateBaseItemAndExtraData(dbClient, Present.Id, Convert.ToInt32(Row["base_id"]), Row["extra_data"].ToString());
 
                 UserPresentDao.Delete(dbClient, Present.Id);
             }

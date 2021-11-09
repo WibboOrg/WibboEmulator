@@ -41,7 +41,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 GuildDao.Delete(dbClient, Group.Id);
                 GuildMembershipDao.Delete(dbClient, Group.Id);
                 GuildRequestDao.Delete(dbClient, Group.Id);
-                RoomDao.UpdateGroupId(dbClient, Group.Id);
+                RoomDao.UpdateResetGroupId(dbClient, Group.Id);
                 UserStatsDao.UpdateRemoveAllGroupId(dbClient, Group.Id);
             }
 
