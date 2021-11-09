@@ -5,20 +5,19 @@ using Butterfly.Database.Interfaces;
 using Butterfly.HabboHotel.Achievements;
 using Butterfly.HabboHotel.Animations;
 using Butterfly.HabboHotel.Catalog;
+using Butterfly.HabboHotel.Effects;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Groups;
 using Butterfly.HabboHotel.Help;
 using Butterfly.HabboHotel.Items;
 using Butterfly.HabboHotel.LandingView;
 using Butterfly.HabboHotel.Navigators;
-using Butterfly.HabboHotel.Permissions;
 using Butterfly.HabboHotel.Quests;
 using Butterfly.HabboHotel.Roleplay;
 using Butterfly.HabboHotel.Roles;
 using Butterfly.HabboHotel.Rooms;
 using Butterfly.HabboHotel.Rooms.Chat;
 using Butterfly.HabboHotel.Support;
-using Butterfly.HabboHotel.Users.Effect;
 using Butterfly.HabboHotel.WebClients;
 using System;
 using System.Diagnostics;
@@ -46,7 +45,6 @@ namespace Butterfly.HabboHotel
         private readonly EffectManager _effectManager;
         private readonly RoleplayManager _roleplayManager;
         private readonly AnimationManager _animationManager;
-        private readonly PermissionManager _permissionManager;
 
         private Thread gameLoop;
         public static bool gameLoopEnabled = true;
@@ -100,19 +98,14 @@ namespace Butterfly.HabboHotel
             this._animationManager = new AnimationManager();
             this._animationManager.Init();
 
-            this._permissionManager = new PermissionManager();
-            this._permissionManager.Init();
-
             DatabaseCleanup();
             LowPriorityWorker.Init();
 
             this.moduleWatch = new Stopwatch();
         }
 
-        public PermissionManager GetPermissionManager()
-        {
-            return _permissionManager;
-        }
+        #region Return values
+
         public AnimationManager GetAnimationManager()
         {
             return this._animationManager;
@@ -203,6 +196,7 @@ namespace Butterfly.HabboHotel
         {
             return this._landingViewManager;
         }
+        #endregion
 
         public void StartGameLoop()
         {

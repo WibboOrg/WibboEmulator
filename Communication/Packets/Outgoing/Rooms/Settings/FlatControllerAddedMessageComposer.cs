@@ -2,12 +2,9 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Settings
 {
     internal class FlatControllerAddedMessageComposer : ServerPacket
     {
-        public FlatControllerAddedMessageComposer(int RoomId, int UserId, string Username)
+        public FlatControllerAddedMessageComposer()
             : base(ServerPacketHeader.ROOM_RIGHTS_LIST_ADD)
         {
-            WriteInteger(RoomId);
-            WriteInteger(UserId);
-            WriteString(Username);
 
         }
     }

@@ -1,20 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.HabboHotel.GameClients;using Butterfly.HabboHotel.Users;
 
-namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Mute : IChatCommand    {        public string PermissionRequired
-        {
-            get { return ""; }
-        }
-
-        public string Parameters
-        {
-            get { return ""; }
-        }
-
-        public string Description
-        {
-            get { return ""; }
-        }        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)        {            if (Params.Length != 2)
+namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class Mute : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
             {
                 return;
             }

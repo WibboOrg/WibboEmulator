@@ -2,11 +2,10 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Stickys
 {
     internal class StickyNoteMessageComposer : ServerPacket
     {
-        public StickyNoteMessageComposer(string ItemId, string Extradata)
+        public StickyNoteMessageComposer()
             : base(ServerPacketHeader.FURNITURE_ITEMDATA)
         {
-            WriteString(ItemId);
-            WriteString(Extradata);
+
         }
     }
 }

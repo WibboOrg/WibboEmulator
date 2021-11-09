@@ -6,7 +6,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 
 using Butterfly.Core;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.Rooms.Chat.Logs;
+using Butterfly.HabboHotel.ChatMessageStorage;
 using Butterfly.HabboHotel.GameClients;
 using Butterfly.HabboHotel.Items;
 using Butterfly.HabboHotel.Pets;
@@ -67,7 +67,7 @@ namespace Butterfly.HabboHotel.Rooms
         private WiredHandler wiredHandler;
         public MoodlightData MoodlightData;
         public List<Trade> ActiveTrades;
-        private readonly ChatlogManager chatMessageManager;
+        private readonly ChatMessageManager chatMessageManager;
         public RoomData RoomData;
         public bool Disposed;
         public bool RoomMutePets;
@@ -88,7 +88,6 @@ namespace Butterfly.HabboHotel.Rooms
         public int UserCount => this.roomUserManager.GetRoomUserCount();
 
         public int Id => this.RoomData.Id;
-        public string Name => this.RoomData.Name;
 
         public event TriggerUserDelegate TriggerUser;
         public event RoomUserSaysDelegate OnUserSays;
@@ -126,7 +125,7 @@ namespace Butterfly.HabboHotel.Rooms
             this.roomUserManager = new RoomUserManager(this);
             this.wiredHandler = new WiredHandler(this);
             this.projectileManager = new ProjectileManager(this);
-            this.chatMessageManager = new ChatlogManager();
+            this.chatMessageManager = new ChatMessageManager();
             this.chatMessageManager.LoadRoomChatlogs(this.Id);
             this.LoadRights();
             this.GetRoomItemHandler().LoadFurniture();
@@ -272,7 +271,7 @@ namespace Butterfly.HabboHotel.Rooms
             return this.wiredHandler != null;
         }
 
-        public ChatlogManager GetChatMessageManager()
+        public ChatMessageManager GetChatMessageManager()
         {
             return this.chatMessageManager;
         }

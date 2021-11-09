@@ -7,21 +7,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 {
     internal class CloseDice : IChatCommand
     {
-        public string PermissionRequired
-        {
-            get { return ""; }
-        }
-
-        public string Parameters
-        {
-            get { return ""; }
-        }
-
-        public string Description
-        {
-            get { return ""; }
-        }
-        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             List<Item> userBooth = Room.GetRoomItemHandler().GetFloor.Where(x => x != null && Gamemap.TilesTouching(
                 x.GetX, x.GetY, UserRoom.X, UserRoom.Y) && x.Data.InteractionType == Items.InteractionType.DICE).ToList();

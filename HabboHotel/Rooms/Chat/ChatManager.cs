@@ -49,7 +49,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat
             this._filter = new WordFilterManager();
             this._filter.Init();
 
-            this._commands = new CommandManager(":");
+            this._commands = new CommandManager();
             this._commands.Init();
 
             this._petCommands = new PetCommandManager();

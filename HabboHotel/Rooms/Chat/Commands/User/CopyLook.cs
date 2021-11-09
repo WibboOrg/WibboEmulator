@@ -2,20 +2,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 
 using Butterfly.HabboHotel.GameClients;
 
-namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class CopyLook : IChatCommand    {        public string PermissionRequired
-        {
-            get { return ""; }
-        }
-
-        public string Parameters
-        {
-            get { return ""; }
-        }
-
-        public string Description
-        {
-            get { return ""; }
-        }        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)        {
+namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd{    internal class CopyLook : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {
             //if (UserRoom.team != Team.none || UserRoom.InGame)
             //return;
 

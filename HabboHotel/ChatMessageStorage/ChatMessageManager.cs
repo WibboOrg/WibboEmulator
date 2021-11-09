@@ -1,22 +1,21 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.Rooms.Chat.Logs;
 using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Butterfly.HabboHotel.Rooms.Chat.Logs
+namespace Butterfly.HabboHotel.ChatMessageStorage
 {
-    public class ChatlogManager
+    public class ChatMessageManager
     {
-        private readonly List<ChatlogEntry> listOfMessages;
+        private readonly List<ChatMessage> listOfMessages;
 
         public int messageCount => this.listOfMessages.Count;
 
-        public ChatlogManager()
+        public ChatMessageManager()
         {
-            this.listOfMessages = new List<ChatlogEntry>();
+            this.listOfMessages = new List<ChatMessage>();
         }
 
         public void LoadUserChatlogs(int UserId)
@@ -56,7 +55,7 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Logs
 
         public void AddMessage(int UserId, string Username, int RoomId, string MessageText)
         {
-            ChatlogEntry message = new ChatlogEntry(UserId, Username, RoomId, MessageText, DateTime.Now);
+            ChatMessage message = new ChatMessage(UserId, Username, RoomId, MessageText, DateTime.Now);
 
             lock (this.listOfMessages)
             {
@@ -70,13 +69,13 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Logs
             }
         }
 
-        public List<ChatlogEntry> GetSortedMessages(int roomid)
+        public List<ChatMessage> GetSortedMessages(int roomid)
         {
-            List<ChatlogEntry> list = new List<ChatlogEntry>();
+            List<ChatMessage> list = new List<ChatMessage>();
 
-            foreach (ChatlogEntry chatMessage in this.listOfMessages)
+            foreach (ChatMessage chatMessage in this.listOfMessages)
             {
-                if (roomid == chatMessage._roomID || roomid == 0)
+                if (roomid == chatMessage.roomID || roomid == 0)
                 {
                     list.Add(chatMessage);
                 }
@@ -89,10 +88,10 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Logs
 
         public void Serialize(ref ServerPacket message)
         {
-            List<ChatlogEntry> ListReverse = new List<ChatlogEntry>();
+            List<ChatMessage> ListReverse = new List<ChatMessage>();
             ListReverse.AddRange(this.listOfMessages);
             ListReverse.Reverse();
-            foreach (ChatlogEntry chatMessage in ListReverse)
+            foreach (ChatMessage chatMessage in ListReverse)
             {
                 if (chatMessage != null)
                 {

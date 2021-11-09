@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Navigator
             this.WriteInteger(30);
             this.WriteInteger(favouriteIDs.Count);
 
-            foreach (RoomData Room in favouriteIDs.ToArray())
+            foreach (RoomData Room in favouriteIDs)
             {
                 this.WriteInteger(Room.Id);
             }

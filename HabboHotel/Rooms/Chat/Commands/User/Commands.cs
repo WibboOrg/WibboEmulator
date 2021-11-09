@@ -4,23 +4,9 @@ namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
 {
     internal class Commands : IChatCommand
     {
-        public string PermissionRequired
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            get { return ""; }
-        }
-
-        public string Parameters
-        {
-            get { return ""; }
-        }
-
-        public string Description
-        {
-            get { return ""; }
-        }
-        public void Execute(GameClients.GameClient Session, Room Room, string[] Params)
-        {
-            //Session.SendHugeNotif(ButterflyEnvironment.GetGame().GetChatManager().GetCommands().GetCommandList(Session));
+            Session.SendHugeNotif(ButterflyEnvironment.GetGame().GetChatManager().GetCommands().GetCommandList(Session));
         }
     }
 }
