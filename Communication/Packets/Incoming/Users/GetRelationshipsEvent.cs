@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Users;
-using Butterfly.HabboHotel.Users.Messenger;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Users;
+using Butterfly.Game.Users.Messenger;
 using System;
 using System.Collections.Generic;
 using System.Linq;

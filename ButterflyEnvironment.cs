@@ -1,6 +1,5 @@
 ﻿using Buttefly.Communication.Encryption;
 using Buttefly.Communication.Encryption.Keys;
-using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Communication.WebSocket;
 using Butterfly.Core;
@@ -8,10 +7,10 @@ using Butterfly.Core.FigureData;
 using Butterfly.Database;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Users;
-using Butterfly.HabboHotel.Users.UserData;
+using Butterfly.Game;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Users;
+using Butterfly.Game.Users.UserData;
 using Butterfly.Net;
 using ConnectionManager;
 using System;
@@ -29,7 +28,7 @@ namespace Butterfly
         private static ConfigurationData _configuration;
         private static ConnectionHandeling _connectionManager;
         private static WebSocketManager _webSocketManager;
-        private static Game _game;
+        private static Game.Game _game;
         private static DatabaseManager _datebasemanager;
         private static RCONSocket _rcon;
         private static FigureDataManager _figureManager;
@@ -111,7 +110,7 @@ namespace Butterfly
                 _languageManager = new LanguageManager();
                 _languageManager.Init();
 
-                _game = new Game();
+                _game = new Game.Game();
                 _game.StartGameLoop();
 
                 _figureManager = new FigureDataManager();
@@ -347,7 +346,7 @@ namespace Butterfly
             return _rcon;
         }
 
-        public static Game GetGame()
+        public static Game.Game GetGame()
         {
             return _game;
         }

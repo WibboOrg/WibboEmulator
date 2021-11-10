@@ -1,4 +1,4 @@
-using Butterfly.HabboHotel.Items;
+using Butterfly.Game.Items;
 
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.Furni
 {

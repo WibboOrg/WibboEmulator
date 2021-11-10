@@ -1,9 +1,9 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Groups;
-using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.Users;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Groups;
+using Butterfly.Game.Rooms;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

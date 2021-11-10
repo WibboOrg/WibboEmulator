@@ -1,6 +1,6 @@
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Items;
-using Butterfly.HabboHotel.Rooms;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Items;
+using Butterfly.Game.Rooms;
 using System;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

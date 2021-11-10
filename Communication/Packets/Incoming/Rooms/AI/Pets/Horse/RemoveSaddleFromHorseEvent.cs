@@ -4,10 +4,10 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.Catalog.Utilities;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Items;
-using Butterfly.HabboHotel.Rooms;
+using Butterfly.Game.Catalog.Utilities;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Items;
+using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

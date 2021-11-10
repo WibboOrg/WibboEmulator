@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Incoming;
 using Butterfly.Communication.WebSocket;
-using Butterfly.HabboHotel.WebClients;
+using Butterfly.Game.WebClients;
 using Butterfly.Utilities;
 using SharedPacketLib;
 using System;

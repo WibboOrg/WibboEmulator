@@ -1,12 +1,46 @@
-using System;
-using System.Data;
-using Butterfly.Database;
 using Butterfly.Database.Interfaces;
+using Butterfly.Game.Pets;
+using Butterfly.Game.Rooms;
+using Butterfly.Game.Rooms.AI;
+using Butterfly.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace Butterfly.Database.Daos
 {
     class PetDao
     {
+        internal static void SavePet(IQueryAdapter dbClient, List<RoomUser> petList)
+        {
+            QueryChunk queryChunk = new QueryChunk();
+
+            foreach (RoomUser petData in petList)
+            {
+                Pet pet = petData.PetData;
+                if (pet.DBState == DatabaseUpdateState.NeedsUpdate)
+                {
+                    queryChunk.AddParameter(pet.PetId + "name", pet.Name);
+                    queryChunk.AddParameter(pet.PetId + "race", pet.Race);
+                    queryChunk.AddParameter(pet.PetId + "color", pet.Color);
+                    queryChunk.AddQuery("UPDATE pets SET room_id = " + pet.RoomId + ", name = @" + pet.PetId + "name, race = @" + pet.PetId + "race, color = @" + pet.PetId + "color, type = " + pet.Type + ", experience = " + pet.Expirience + ", energy = " + pet.Energy + ", nutrition = " + pet.Nutrition + ", respect = " + pet.Respect + ", createstamp = '" + pet.CreationStamp + "', x = " + petData.X + ", Y = " + petData.Y + ", Z = " + petData.Z + " WHERE id = " + pet.PetId);
+                }
+                else
+                {
+                    if (petData.BotData.AiType == AIType.RolePlayPet)
+                    {
+                        continue;
+                    }
+
+                    queryChunk.AddQuery("UPDATE pets SET x = " + petData.X + ", Y = " + petData.Y + ", Z = " + petData.Z + " WHERE id = " + pet.PetId);
+                }
+
+                pet.DBState = DatabaseUpdateState.Updated;
+            }
+            queryChunk.Execute(dbClient);
+            queryChunk.Dispose();
+        }
+
         internal static void UpdateHaveSaddle(IQueryAdapter dbClient, int petId, int statut)
         {
             dbClient.RunQuery("UPDATE pets SET have_saddle = '" + statut + "' WHERE id = '" + petId + "' LIMIT 1");

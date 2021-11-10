@@ -2,7 +2,7 @@ using Buttefly.Communication.Encryption;
 using Buttefly.Communication.Encryption.Crypto.Prng;
 using Buttefly.Utilities;
 using Butterfly.Communication.Packets.Outgoing.Handshake;
-using Butterfly.HabboHotel.GameClients;
+using Butterfly.Game.GameClients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

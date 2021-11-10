@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.HabboHotel.GameClients;
+using Butterfly.Game.GameClients;
 
 namespace Butterfly.Communication.RCON.Commands.User
 {

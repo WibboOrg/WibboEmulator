@@ -1,4 +1,4 @@
-using Butterfly.HabboHotel.Groups;
+using Butterfly.Game.Groups;
 
 namespace Butterfly.Communication.Packets.Outgoing.Groups
 {

@@ -1,4 +1,4 @@
-using Butterfly.HabboHotel.Rooms;
+using Butterfly.Game.Rooms;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

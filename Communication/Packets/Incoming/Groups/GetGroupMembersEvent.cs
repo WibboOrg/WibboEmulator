@@ -1,9 +1,9 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Groups;
-using Butterfly.HabboHotel.Users;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Groups;
+using Butterfly.Game.Users;
 using System;
 using System.Collections.Generic;
 using System.Data;

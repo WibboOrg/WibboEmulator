@@ -1,9 +1,9 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Quests;
-using Butterfly.HabboHotel.Roleplay.Player;
-using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.Rooms.Chat.Styles;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Quests;
+using Butterfly.Game.Roleplay.Player;
+using Butterfly.Game.Rooms;
+using Butterfly.Game.Rooms.Chat.Styles;
 using Butterfly.Utilities;
 using System;
 

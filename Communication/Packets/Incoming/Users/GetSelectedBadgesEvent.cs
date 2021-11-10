@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.Users.Badges;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Rooms;
+using Butterfly.Game.Users.Badges;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

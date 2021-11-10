@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.GameClients;
+using Butterfly.Game.GameClients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserDao.UpdateVolume(dbClient, Session.GetHabbo().Id, Volume1, + Volume2, + Volume3);
+                UserDao.UpdateVolume(dbClient, Session.GetHabbo().Id, Volume1, +Volume2, +Volume3);
             }
 
             Session.GetHabbo().ClientVolume.Clear();

@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.WebSocket;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.WebClients;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.WebClients;
 
 namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {

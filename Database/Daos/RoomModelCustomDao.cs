@@ -1,6 +1,5 @@
-using System.Data;
-using Butterfly.Database;
 using Butterfly.Database.Interfaces;
+using System.Data;
 
 namespace Butterfly.Database.Daos
 {
@@ -24,7 +23,7 @@ namespace Butterfly.Database.Daos
             dbClient.RunQuery("INSERT INTO room_models_customs (room_id, door_x, door_y, door_z, door_dir, heightmap, wall_height) " +
                 "SELECT '" + roomId + "', door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = '" + oldRoomId + "'");
         }
-        
+
         internal static DataRow GetOne(IQueryAdapter dbClient, int roomId)
         {
             dbClient.SetQuery("SELECT door_x, door_y, door_z, door_dir, heightmap, wall_height FROM room_models_customs WHERE room_id = '" + roomId + "'");

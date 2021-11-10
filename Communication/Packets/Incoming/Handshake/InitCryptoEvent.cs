@@ -1,6 +1,6 @@
 using Buttefly.Communication.Encryption;
 using Butterfly.Communication.Packets.Outgoing.Handshake;
-using Butterfly.HabboHotel.GameClients;
+using Butterfly.Game.GameClients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

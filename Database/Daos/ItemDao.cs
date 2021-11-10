@@ -1,11 +1,41 @@
-﻿using System;
+﻿using Butterfly.Database.Interfaces;
+using Butterfly.Game.Items;
+using Butterfly.Utilities;
+using System;
+using System.Collections.Concurrent;
 using System.Data;
-using Butterfly.Database.Interfaces;
 
 namespace Butterfly.Database.Daos
 {
     class ItemDao
     {
+        internal static void SaveUpdateItems(IQueryAdapter dbClient, ConcurrentDictionary<int, Item> updateItems)
+        {
+            QueryChunk standardQueries = new QueryChunk();
+
+            foreach (Item roomItem in updateItems.Values)
+            {
+                if (!string.IsNullOrEmpty(roomItem.ExtraData))
+                {
+                    standardQueries.AddQuery("UPDATE items SET extra_data = @data" + roomItem.Id + " WHERE id = '" + roomItem.Id + "'");
+                    standardQueries.AddParameter("data" + roomItem.Id, roomItem.ExtraData);
+                }
+
+                if (roomItem.IsWallItem)
+                {
+                    standardQueries.AddQuery("UPDATE items SET wall_pos = @wallpost" + roomItem.Id + " WHERE id = " + roomItem.Id);
+                    standardQueries.AddParameter("wallpost" + roomItem.Id, roomItem.WallCoord);
+                }
+                else
+                {
+                    standardQueries.AddQuery("UPDATE items SET x=" + roomItem.GetX + ", y=" + roomItem.GetY + ", z=" + roomItem.GetZ + ", rot=" + roomItem.Rotation + " WHERE id=" + roomItem.Id + "");
+                }
+            }
+
+            standardQueries.Execute(dbClient);
+            standardQueries.Dispose();
+        }
+
         internal static int Insert(IQueryAdapter dbClient, int baseItem, int userId, string extraData)
         {
             dbClient.SetQuery("INSERT INTO items (base_item,user_id,extra_data) VALUES (@baseId, @habboId, @extra_data)");
@@ -48,7 +78,7 @@ namespace Butterfly.Database.Daos
         {
             dbClient.RunQuery("DELETE items, items_limited FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) LEFT JOIN user_presents ON (user_presents.item_id = items.id) LEFT JOIN room_items_moodlight ON (room_items_moodlight.item_id = items.id) LEFT JOIN tele_links ON (tele_one_id = items.id) LEFT JOIN wired_items ON (trigger_id = items.id) WHERE room_id = '" + roomId + "'");
         }
-        
+
         internal static void DeleteAll(IQueryAdapter dbClient, int userId)
         {
             dbClient.RunQuery("DELETE items, items_limited, user_presents, room_items_moodlight, tele_links, wired_items FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) LEFT JOIN user_presents ON (user_presents.item_id = items.id) LEFT JOIN room_items_moodlight ON (room_items_moodlight.item_id = items.id) LEFT JOIN tele_links ON (tele_one_id = items.id) LEFT JOIN wired_items ON (trigger_id = items.id) WHERE room_id = '0' AND user_id = '" + userId + "'");
@@ -58,7 +88,7 @@ namespace Butterfly.Database.Daos
         {
             dbClient.RunQuery("DELETE items, items_limited, user_presents, room_items_moodlight, tele_links, wired_items FROM items LEFT JOIN items_limited ON (items_limited.item_id = items.id) LEFT JOIN user_presents ON (user_presents.item_id = items.id) LEFT JOIN room_items_moodlight ON (room_items_moodlight.item_id = items.id) LEFT JOIN tele_links ON (tele_one_id = items.id) LEFT JOIN wired_items ON (trigger_id = items.id) WHERE room_id = '0' AND user_id = '" + userId + "' AND base_item NOT IN (SELECT id FROM furniture WHERE is_rare = '1')");
         }
-        
+
         internal static void UpdateExtradata(IQueryAdapter dbClient, int itemId, string extraData)
         {
             dbClient.SetQuery("UPDATE items SET extra_data = @extraData WHERE id = @ID LIMIT 1");

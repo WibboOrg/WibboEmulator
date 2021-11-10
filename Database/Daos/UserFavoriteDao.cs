@@ -1,6 +1,5 @@
-using System.Data;
-using Butterfly.Database;
 using Butterfly.Database.Interfaces;
+using System.Data;
 
 namespace Butterfly.Database.Daos
 {
@@ -10,7 +9,7 @@ namespace Butterfly.Database.Daos
         {
             dbClient.RunQuery("INSERT INTO user_favorites (user_id,room_id) VALUES ('" + userId + "','" + roomId + "')");
         }
-        
+
         internal static void Delete(IQueryAdapter dbClient, int userId, int roomId)
         {
             dbClient.RunQuery("DELETE FROM user_favorites WHERE user_id = '" + userId + "' AND room_id = '" + roomId + "'");

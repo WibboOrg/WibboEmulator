@@ -2,10 +2,10 @@
 using Butterfly.Communication.Packets.Outgoing.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Rooms;
-using System;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Rooms;
 using Butterfly.Utilities;
+using System;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

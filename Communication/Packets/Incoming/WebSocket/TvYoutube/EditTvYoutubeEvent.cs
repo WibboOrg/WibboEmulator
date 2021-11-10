@@ -1,7 +1,7 @@
-﻿using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Items;
-using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.WebClients;
+﻿using Butterfly.Game.GameClients;
+using Butterfly.Game.Items;
+using Butterfly.Game.Rooms;
+using Butterfly.Game.WebClients;
 using System;
 
 namespace Butterfly.Communication.Packets.Incoming.WebSocket

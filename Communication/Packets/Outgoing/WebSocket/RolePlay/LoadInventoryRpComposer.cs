@@ -1,5 +1,5 @@
-﻿using Butterfly.HabboHotel.Roleplay;
-using Butterfly.HabboHotel.Roleplay.Player;
+﻿using Butterfly.Game.Roleplay;
+using Butterfly.Game.Roleplay.Player;
 using System.Collections.Concurrent;
 
 namespace Butterfly.Communication.Packets.Outgoing.WebSocket

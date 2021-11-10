@@ -1,8 +1,7 @@
-using System.Collections.Generic;
-
+using Butterfly.Game.Rooms;
+using Butterfly.Game.Users;
 using Butterfly.Utilities;
-using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.Users;
+using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {

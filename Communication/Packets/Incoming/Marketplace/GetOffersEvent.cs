@@ -1,17 +1,16 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.MarketPlace;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.Catalog.Marketplace;
+using Butterfly.Game.Catalog.Marketplace;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace Butterfly.Communication.Packets.Incoming.Marketplace
 {
     internal class GetOffersEvent : IPacketEvent
     {
-        public void Parse(HabboHotel.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(Game.GameClients.GameClient Session, ClientPacket Packet)
         {
             int MinCost = Packet.PopInt();
             int MaxCost = Packet.PopInt();

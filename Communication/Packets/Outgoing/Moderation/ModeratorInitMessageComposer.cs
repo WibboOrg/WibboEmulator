@@ -1,7 +1,7 @@
+using Butterfly.Game.Moderation;
+using Butterfly.Utilities;
 using System;
 using System.Collections.Generic;
-using Butterfly.HabboHotel.Moderation;
-using Butterfly.Utilities;
 
 namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
@@ -14,16 +14,16 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
             foreach (ModerationTicket Ticket in Tickets)
             {
                 WriteInteger(Ticket.Id);
-                WriteInteger(Ticket.GetStatus(Id)); 
-                WriteInteger(Ticket.Type); 
-                WriteInteger(Ticket.Category); 
+                WriteInteger(Ticket.GetStatus(Id));
+                WriteInteger(Ticket.Type);
+                WriteInteger(Ticket.Category);
                 WriteInteger(Convert.ToInt32((DateTime.Now - UnixTimestamp.FromUnixTimestamp(Ticket.Timestamp)).TotalMilliseconds));
                 WriteInteger(Ticket.Priority);
-                WriteInteger(Ticket.Sender == null ? 0 : Ticket.Sender.Id); 
+                WriteInteger(Ticket.Sender == null ? 0 : Ticket.Sender.Id);
                 WriteInteger(1);
                 WriteString(Ticket.Sender == null ? string.Empty : Ticket.Sender.Username);
-                WriteInteger(Ticket.Reported == null ? 0 : Ticket.Reported.Id); 
-                WriteString(Ticket.Reported == null ? string.Empty : Ticket.Reported.Username); 
+                WriteInteger(Ticket.Reported == null ? 0 : Ticket.Reported.Id);
+                WriteString(Ticket.Reported == null ? string.Empty : Ticket.Reported.Username);
                 WriteInteger(Ticket.Moderator == null ? 0 : Ticket.Moderator.Id);
                 WriteString(Ticket.Moderator == null ? string.Empty : Ticket.Moderator.Username);
                 WriteString(Ticket.Issue);
@@ -41,14 +41,14 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
             {
                 //Loop a string.
             }
-            
-            WriteBoolean(true);
-            WriteBoolean(true); 
-            WriteBoolean(true); 
+
             WriteBoolean(true);
             WriteBoolean(true);
             WriteBoolean(true);
-            WriteBoolean(true); 
+            WriteBoolean(true);
+            WriteBoolean(true);
+            WriteBoolean(true);
+            WriteBoolean(true);
 
             WriteInteger(RoomPresets.Count);
             foreach (string pre in RoomPresets)

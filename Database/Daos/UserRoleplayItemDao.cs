@@ -1,7 +1,6 @@
+using Butterfly.Database.Interfaces;
 using System;
 using System.Data;
-using Butterfly.Database;
-using Butterfly.Database.Interfaces;
 
 namespace Butterfly.Database.Daos
 {
@@ -30,7 +29,7 @@ namespace Butterfly.Database.Daos
         {
             dbClient.RunQuery("UPDATE user_rpitems SET count = count + '" + count + "' WHERE id = '" + itemId + "' LIMIT 1");
         }
-        
+
         internal static void UpdateRemoveCount(IQueryAdapter dbClient, int itemId, int count)
         {
             dbClient.RunQuery("UPDATE user_rpitems SET count = count - '" + count + "' WHERE id = '" + itemId + "' LIMIT 1");

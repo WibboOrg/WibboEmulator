@@ -1,5 +1,5 @@
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Support;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Support;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

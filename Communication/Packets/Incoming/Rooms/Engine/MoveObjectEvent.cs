@@ -1,5 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.HabboHotel.GameClients;using Butterfly.HabboHotel.Items;using Butterfly.HabboHotel.Quests;using Butterfly.HabboHotel.Rooms;namespace Butterfly.Communication.Packets.Incoming.Structure{    internal class MoveObjectEvent : IPacketEvent    {        public void Parse(GameClient Session, ClientPacket Packet)        {            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);            if (room == null || !room.CheckRights(Session))
+using Butterfly.Game.GameClients;using Butterfly.Game.Items;using Butterfly.Game.Quests;using Butterfly.Game.Rooms;namespace Butterfly.Communication.Packets.Incoming.Structure{    internal class MoveObjectEvent : IPacketEvent    {        public void Parse(GameClient Session, ClientPacket Packet)        {            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);            if (room == null || !room.CheckRights(Session))
             {
                 return;
             }

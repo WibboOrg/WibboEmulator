@@ -1,5 +1,5 @@
-using Butterfly.HabboHotel.GameClients;
 using Butterfly.Communication.Packets.Outgoing.Moderation;
+using Butterfly.Game.GameClients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             GameClient clientTarget = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
 
-            if(clientTarget == null)
+            if (clientTarget == null)
             {
                 return;
             }

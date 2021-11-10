@@ -1,9 +1,9 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Quests;
-using Butterfly.HabboHotel.Users.Badges;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Quests;
+using Butterfly.Game.Users.Badges;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

@@ -2,9 +2,9 @@ using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Groups;
-using Butterfly.HabboHotel.Items;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Groups;
+using Butterfly.Game.Items;
 using System.Linq;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

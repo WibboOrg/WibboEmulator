@@ -4,13 +4,12 @@ using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.MarketPlace;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.Catalog.Marketplace;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Items;
+using Butterfly.Game.Catalog.Marketplace;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Items;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace Butterfly.Communication.Packets.Incoming.Marketplace
 {

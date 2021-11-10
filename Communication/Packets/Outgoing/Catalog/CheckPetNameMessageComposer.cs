@@ -1,4 +1,4 @@
-using Butterfly.HabboHotel.Catalog.Utilities;
+using Butterfly.Game.Catalog.Utilities;
 
 namespace Butterfly.Communication.Packets.Outgoing.Catalog
 {

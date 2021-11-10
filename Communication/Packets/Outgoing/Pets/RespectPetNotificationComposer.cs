@@ -1,6 +1,6 @@
-using Butterfly.HabboHotel.Pets;
-using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.Users;
+using Butterfly.Game.Pets;
+using Butterfly.Game.Rooms;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Outgoing.Pets
 {

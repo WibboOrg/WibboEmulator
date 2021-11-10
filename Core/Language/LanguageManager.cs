@@ -36,7 +36,7 @@ namespace Butterfly.Core
             DataTable table;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 table = EmulatorTextDao.GetAll(dbClient);
-                
+
             if (table == null)
             {
                 return;

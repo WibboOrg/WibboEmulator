@@ -1,4 +1,4 @@
-using Butterfly.HabboHotel.Pets;
+using Butterfly.Game.Pets;
 using System.Collections.Generic;
 using System.Linq;
 

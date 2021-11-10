@@ -2,9 +2,9 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.Rooms.AI;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Rooms;
+using Butterfly.Game.Rooms.AI;
 using System;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -184,7 +184,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         }
 
                         Bot.BotData.Name = DataString;
-                        
+
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                             BotDao.UpdateName(dbClient, Bot.BotData.Id, DataString);
 

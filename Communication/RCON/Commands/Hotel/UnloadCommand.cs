@@ -1,4 +1,4 @@
-﻿using Butterfly.HabboHotel.Rooms;
+﻿using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.RCON.Commands.Hotel
 {

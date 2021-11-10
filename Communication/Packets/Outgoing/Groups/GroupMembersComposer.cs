@@ -1,5 +1,5 @@
-using Butterfly.HabboHotel.Groups;
-using Butterfly.HabboHotel.Users;
+using Butterfly.Game.Groups;
+using Butterfly.Game.Users;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Groups

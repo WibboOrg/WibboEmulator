@@ -1,5 +1,5 @@
-﻿using Butterfly.HabboHotel.Catalog.Utilities;
-using Butterfly.HabboHotel.Items;
+﻿using Butterfly.Game.Catalog.Utilities;
+using Butterfly.Game.Items;
 
 namespace Butterfly.Communication.Packets.Outgoing.Inventory.Furni
 {

@@ -1,4 +1,4 @@
-using Butterfly.HabboHotel.Users;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Outgoing.Handshake
 {

@@ -1,7 +1,7 @@
-using Butterfly.HabboHotel.Groups;
-using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.Rooms.AI;
-using Butterfly.HabboHotel.Users;
+using Butterfly.Game.Groups;
+using Butterfly.Game.Rooms;
+using Butterfly.Game.Rooms.AI;
+using Butterfly.Game.Users;
 using System.Collections.Generic;
 using System.Linq;
 

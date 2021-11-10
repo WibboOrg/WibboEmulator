@@ -1,8 +1,6 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.GameClients;
-using System;
-using System.Data;
+using Butterfly.Game.GameClients;
 
 namespace Butterfly.Communication.RCON.Commands.User
 {
@@ -36,7 +34,7 @@ namespace Butterfly.Communication.RCON.Commands.User
             {
                 credits = UserDao.GetCredits(dbClient, Client.GetHabbo().Id);
             }
-            
+
             Client.GetHabbo().Credits = credits;
             Client.GetHabbo().UpdateCreditsBalance();
 

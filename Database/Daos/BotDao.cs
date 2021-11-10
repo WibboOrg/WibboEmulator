@@ -1,15 +1,40 @@
-using System;
-using System.Data;
-using Butterfly.Database;
 using Butterfly.Database.Interfaces;
+using Butterfly.Game.Rooms;
+using Butterfly.Game.Rooms.AI;
+using Butterfly.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Data;
 
 namespace Butterfly.Database.Daos
 {
     class BotDao
     {
+        internal static void SaveBots(IQueryAdapter dbClient, List<RoomUser> botList)
+        {
+            QueryChunk queryChunk = new QueryChunk();
+
+            foreach (RoomUser bot in botList)
+            {
+                RoomBot BotData = bot.BotData;
+                if (BotData.AiType == AIType.RolePlayBot)
+                {
+                    continue;
+                }
+
+                if (bot.X != BotData.X || bot.Y != BotData.Y || bot.Z != BotData.Z || bot.RotBody != BotData.Rot)
+                {
+                    queryChunk.AddQuery("UPDATE `bots` SET `x` = '" + bot.X + "', `y` = '" + bot.Y + "', `z` = '" + bot.Z + "', `rotation` = '" + bot.RotBody + "' WHERE `id` = " + bot.BotData.Id);
+                }
+            }
+
+            queryChunk.Execute(dbClient);
+            queryChunk.Dispose();
+        }
+
         internal static void UpdateRoomId(IQueryAdapter dbClient, int botId)
         {
-            dbClient.SetQuery("UPDATE bots SET room_id = '0' WHERE id = @id LIMIT 1");
+            dbClient.SetQuery("UPDATE `bots` SET `room_id` = '0' WHERE `id` = @id LIMIT 1");
             dbClient.AddParameter("id", botId);
             dbClient.RunQuery();
         }
@@ -62,7 +87,7 @@ namespace Butterfly.Database.Daos
         internal static int InsertAndGetId(IQueryAdapter dbClient, int ownerId, string name, string motto, string figure, string gender)
         {
             dbClient.SetQuery("INSERT INTO bots (user_id,name,motto,look,gender) VALUES ('" + ownerId + "', '" + name + "', '" + motto + "', '" + figure + "', '" + gender + "')");
-            
+
             return Convert.ToInt32(dbClient.InsertQuery());
         }
 
@@ -83,7 +108,7 @@ namespace Butterfly.Database.Daos
         {
             dbClient.RunQuery("UPDATE bots SET enable = '" + enableId + "' WHERE id = '" + botId + "'");
         }
-        
+
         internal static void UpdateHanditem(IQueryAdapter dbClient, int botId, int handItem)
         {
             dbClient.RunQuery("UPDATE bots SET handitem = '" + handItem + "' WHERE id = '" + botId + "'");

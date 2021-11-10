@@ -2,9 +2,8 @@ using Butterfly.Communication.Packets.Outgoing.Catalog;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.Catalog.Vouchers;
-using Butterfly.HabboHotel.GameClients;
-using System.Data;
+using Butterfly.Game.Catalog.Vouchers;
+using Butterfly.Game.GameClients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

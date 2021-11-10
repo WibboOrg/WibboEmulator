@@ -2,8 +2,8 @@
 using Butterfly.Communication.Packets.Incoming.Marketplace;
 using Butterfly.Communication.Packets.Incoming.Structure;
 using Butterfly.Communication.Packets.Incoming.WebSocket;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.WebClients;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.WebClients;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

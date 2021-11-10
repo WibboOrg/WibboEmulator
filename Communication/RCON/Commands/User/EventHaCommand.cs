@@ -1,4 +1,4 @@
-﻿using Butterfly.HabboHotel.GameClients;
+﻿using Butterfly.Game.GameClients;
 using System.Text.RegularExpressions;
 
 namespace Butterfly.Communication.RCON.Commands.User

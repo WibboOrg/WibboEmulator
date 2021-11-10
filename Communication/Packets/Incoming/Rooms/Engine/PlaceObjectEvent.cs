@@ -2,11 +2,11 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Items;
-using Butterfly.HabboHotel.Quests;
-using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.Rooms.Wired;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Items;
+using Butterfly.Game.Quests;
+using Butterfly.Game.Rooms;
+using Butterfly.Game.Rooms.Wired;
 using System;
 using System.Linq;
 

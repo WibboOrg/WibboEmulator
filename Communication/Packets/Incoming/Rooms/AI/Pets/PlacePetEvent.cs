@@ -1,10 +1,10 @@
 using Butterfly.Communication.Packets.Outgoing.Inventory.Pets;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Pets;
-using Butterfly.HabboHotel.Rooms;
-using Butterfly.HabboHotel.Rooms.AI;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Pets;
+using Butterfly.Game.Rooms;
+using Butterfly.Game.Rooms.AI;
 using System;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

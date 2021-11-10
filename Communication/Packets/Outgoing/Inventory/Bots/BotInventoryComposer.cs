@@ -1,4 +1,4 @@
-using Butterfly.HabboHotel.Users.Inventory.Bots;
+using Butterfly.Game.Users.Inventory.Bots;
 using System.Collections.Generic;
 using System.Linq;
 

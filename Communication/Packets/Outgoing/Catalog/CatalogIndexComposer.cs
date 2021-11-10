@@ -1,6 +1,6 @@
 using Butterfly.Core;
-using Butterfly.HabboHotel.Catalog;
-using Butterfly.HabboHotel.GameClients;
+using Butterfly.Game.Catalog;
+using Butterfly.Game.GameClients;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Catalog

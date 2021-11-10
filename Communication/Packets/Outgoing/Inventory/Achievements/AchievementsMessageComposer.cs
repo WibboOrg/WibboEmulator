@@ -1,5 +1,5 @@
-using Butterfly.HabboHotel.Achievements;
-using Butterfly.HabboHotel.GameClients;
+using Butterfly.Game.Achievements;
+using Butterfly.Game.GameClients;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Inventory.Achievements

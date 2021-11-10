@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Navigator.New;
 
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Navigators;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Navigators;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

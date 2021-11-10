@@ -1,7 +1,6 @@
+using Butterfly.Database.Interfaces;
 using System.Data;
 using System.Text;
-using Butterfly.Database;
-using Butterfly.Database.Interfaces;
 
 namespace Butterfly.Database.Daos
 {

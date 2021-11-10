@@ -1,4 +1,4 @@
-﻿using Butterfly.HabboHotel.Roleplay;
+﻿using Butterfly.Game.Roleplay;
 
 namespace Butterfly.Communication.Packets.Outgoing.WebSocket
 {

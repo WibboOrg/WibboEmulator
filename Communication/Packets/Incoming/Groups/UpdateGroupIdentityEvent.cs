@@ -1,8 +1,8 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Groups;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Groups;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

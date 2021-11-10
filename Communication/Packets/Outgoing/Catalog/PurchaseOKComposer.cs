@@ -1,5 +1,5 @@
-using Butterfly.HabboHotel.Catalog;
-using Butterfly.HabboHotel.Items;
+using Butterfly.Game.Catalog;
+using Butterfly.Game.Items;
 
 namespace Butterfly.Communication.Packets.Outgoing.Catalog
 {
