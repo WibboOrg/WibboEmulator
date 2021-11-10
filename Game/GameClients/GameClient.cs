@@ -98,7 +98,7 @@ namespace Butterfly.Game.GameClients
                         ButterflyEnvironment.GetGame().GetClientManager().OnlineNitroUsers++;
                     }
 
-                    if (this._habbo.MachineId != this.MachineId)
+                    if (this._habbo.MachineId != this.MachineId && this.MachineId != null)
                     {
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {

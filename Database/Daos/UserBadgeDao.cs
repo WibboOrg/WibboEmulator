@@ -33,7 +33,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataTable GetAll(IQueryAdapter dbClient, int userId)
         {
-            dbClient.SetQuery("SELECT * FROM user_badges WHERE user_id = '" + userId + "';");
+            dbClient.SetQuery("SELECT * FROM user_badges WHERE user_id = '" + userId + "'");
             return dbClient.GetTable();
         }
     }

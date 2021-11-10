@@ -167,7 +167,7 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateAddGamePoints(IQueryAdapter dbClient, int userId)
         {
-            dbClient.RunQuery("UPDATE users SET game_points = game_points + 1, game_points_month = game_points_month + 1 WHERE id = '" + userId + "';");
+            dbClient.RunQuery("UPDATE users SET game_points = game_points + 1, game_points_month = game_points_month + 1 WHERE id = '" + userId + "'");
         }
 
         internal static void UpdateMazoScore(IQueryAdapter dbClient, int userId, int score)

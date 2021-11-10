@@ -7,12 +7,12 @@ namespace Butterfly.Database.Daos
         internal static void Replace(IQueryAdapter dbClient, int spriteId, int totalPrice)
         {
             int Id = 0;
-            dbClient.SetQuery("SELECT id FROM catalog_marketplace_data WHERE sprite = " + spriteId + " LIMIT 1;");
+            dbClient.SetQuery("SELECT id FROM catalog_marketplace_data WHERE sprite = " + spriteId + " LIMIT 1");
             Id = dbClient.GetInteger();
 
             if (Id > 0)
             {
-                dbClient.RunQuery("UPDATE catalog_marketplace_data SET sold = sold + 1, avgprice = (avgprice + " + totalPrice + ") WHERE id = " + Id + " LIMIT 1;");
+                dbClient.RunQuery("UPDATE catalog_marketplace_data SET sold = sold + 1, avgprice = (avgprice + " + totalPrice + ") WHERE id = " + Id + " LIMIT 1");
             }
             else
             {

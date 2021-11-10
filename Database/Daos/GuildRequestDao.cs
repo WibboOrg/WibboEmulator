@@ -19,7 +19,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataTable GetAllBySearch(IQueryAdapter dbClient, int groupeId, string searchVal)
         {
-            dbClient.SetQuery("SELECT users.id FROM group_requests INNER JOIN users ON group_requests.user_id = users.id WHERE group_requests.group_id = @gid AND users.username LIKE @username LIMIT 14;");
+            dbClient.SetQuery("SELECT users.id FROM group_requests INNER JOIN users ON group_requests.user_id = users.id WHERE group_requests.group_id = @gid AND users.username LIKE @username LIMIT 14");
             dbClient.AddParameter("gid", groupeId);
             dbClient.AddParameter("username", searchVal.Replace("%", "\\%").Replace("_", "\\_") + "%");
 

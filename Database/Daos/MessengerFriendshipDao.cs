@@ -6,7 +6,7 @@ namespace Butterfly.Database.Daos
     {
         internal static int GetCount(IQueryAdapter dbClient, int userId)
         {
-            dbClient.SetQuery("SELECT COUNT(0) FROM messenger_friendships WHERE (user_one_id = @userid);");
+            dbClient.SetQuery("SELECT COUNT(0) FROM messenger_friendships WHERE (user_one_id = @userid)");
             dbClient.AddParameter("userid", userId);
             return dbClient.GetInteger();
         }

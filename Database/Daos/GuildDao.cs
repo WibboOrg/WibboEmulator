@@ -25,7 +25,7 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateNameAndDesc(IQueryAdapter dbClient, int groupId, string name, string desc)
         {
-            dbClient.SetQuery("UPDATE groups SET name= @name, desc = @desc WHERE id = @groupId LIMIT 1");
+            dbClient.SetQuery("UPDATE `groups` SET `name` = @name, `desc` = @desc WHERE `id` = @groupId LIMIT 1");
             dbClient.AddParameter("name", name);
             dbClient.AddParameter("desc", desc);
             dbClient.AddParameter("groupId", groupId);
@@ -55,7 +55,7 @@ namespace Butterfly.Database.Daos
 
         internal static int Insert(IQueryAdapter dbClient, string name, string description, int creatorId, string badge, int roomId, int colour1, int colour2)
         {
-            dbClient.SetQuery("INSERT INTO groups (name, desc, badge, owner_id, created, room_id, state, colour1, colour2, admindeco) VALUES (@name, @desc, @badge, @owner, UNIX_TIMESTAMP(), @room, '0', @colour1, @colour2, '1')");
+            dbClient.SetQuery("INSERT INTO `groups` (`name`, `desc`, `badge`, `owner_id`, `created`, `room_id`, `state`, `colour1`, `colour2`, `admindeco`) VALUES (@name, @desc, @badge, @owner, UNIX_TIMESTAMP(), @room, '0', @colour1, @colour2, '1')");
             dbClient.AddParameter("name", name);
             dbClient.AddParameter("desc", description);
             dbClient.AddParameter("owner", creatorId);

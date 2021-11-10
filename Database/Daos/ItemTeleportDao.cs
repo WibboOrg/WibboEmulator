@@ -13,7 +13,7 @@ namespace Butterfly.Database.Daos
 
         internal static void Insert(IQueryAdapter dbClient, int newId, int newIdTwo)
         {
-            dbClient.RunQuery("INSERT INTO tele_links (tele_one_id, tele_two_id) VALUES ('" + newId + "', '" + newIdTwo + "');");
+            dbClient.RunQuery("INSERT INTO tele_links (tele_one_id, tele_two_id) VALUES ('" + newId + "', '" + newIdTwo + "')");
         }
     }
 }
