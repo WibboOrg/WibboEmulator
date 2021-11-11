@@ -6,12 +6,14 @@ using Butterfly.Game.Rooms.Chat.Commands.Cmd;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace Butterfly.Game.Rooms.Chat.Commands
 {
     public class CommandManager
     {
+
         private readonly Dictionary<string, ChatCommand> _commandRegisterInvokeable;
         private readonly Dictionary<string, string> _listCommande;
 
@@ -19,15 +21,26 @@ namespace Butterfly.Game.Rooms.Chat.Commands
 
         public CommandManager()
         {
-            this._commands = new Dictionary<int, IChatCommand>();
-            this._commandRegisterInvokeable = new Dictionary<string, ChatCommand>();
-            this._listCommande = new Dictionary<string, string>();
+            _commands = new Dictionary<int, IChatCommand>();
+            
+            _commandRegisterInvokeable = new Dictionary<string, ChatCommand>();
+            _listCommande = new Dictionary<string, string>();
         }
 
         public void Init()
         {
+
             this.InitInvokeableRegister();
             this.RegisterCommand();
+            _commands.Clear();
+
+
+            RegisterPlayer();
+            RegisterPremium();
+            RegisterModeration();
+            RegisterAdministrator();
+            RegisterGod();
+
         }
 
         public bool Parse(GameClient Session, RoomUser User, Room Room, string Message)
@@ -186,10 +199,9 @@ namespace Butterfly.Game.Rooms.Chat.Commands
             return (stringBuilder).ToString();
         }
 
-        public void RegisterCommand()
+        public void RegisterPlayer()
         {
-            this._commands.Clear();
-
+            this.Register(41, new Cmd.Commands());
             this.Register(1, new Pickall());
             this.Register(2, new SetSpeed());
             this.Register(3, new Unload());
@@ -197,39 +209,15 @@ namespace Butterfly.Game.Rooms.Chat.Commands
             this.Register(5, new SetMax());
             this.Register(6, new Override());
             this.Register(7, new Teleport());
-            this.Register(8, new StaffAlert());
-            this.Register(10, new RoomAlert());
             this.Register(11, new Coords());
-            this.Register(12, new Coins());
             this.Register(14, new HandItem());
-            this.Register(15, new HotelAlert());
             this.Register(16, new Freeze());
             this.Register(18, new Enable());
-            this.Register(19, new RoomMute());
-            this.Register(23, new RoomBadge());
-            this.Register(24, new MassBadge());
-            this.Register(26, new UserInfo());
-            this.Register(28, new Shutdown());
-            this.Register(30, new GiveBadge());
-            this.Register(31, new Invisible());
-            this.Register(32, new Ban());
-            this.Register(33, new Disconnect());
-            this.Register(34, new SuperBan());
-            this.Register(36, new RoomKick());
-            this.Register(37, new Mute());
-            this.Register(38, new UnMute());
-            this.Register(39, new Alert());
-            this.Register(40, new Kick());
-            this.Register(41, new Cmd.Commands());
             this.Register(42, new About());
-            this.Register(43, new Info());
             this.Register(52, new ForceRot());
-            this.Register(53, new SetEffect());
             this.Register(54, new EmptyItems());
             this.Register(60, new Warp());
-            this.Register(61, new DeleteMission());
             this.Register(62, new Follow());
-            this.Register(63, new Come());
             this.Register(64, new MoonWalk());
             this.Register(65, new Push());
             this.Register(66, new Pull());
@@ -241,48 +229,22 @@ namespace Butterfly.Game.Rooms.Chat.Commands
             this.Register(86, new KickAll());
             this.Register(87, new Troc());
             this.Register(88, new Textamigo());
-            this.Register(89, new BanIP());
             this.Register(90, new GiveItem());
             this.Register(91, new RoomMutePet());
             this.Register(92, new Facewalk());
-            this.Register(94, new AddFilter());
             this.Register(95, new NoFace());
             this.Register(96, new EmptyPets());
             this.Register(97, new Construit());
             this.Register(98, new ConstruitStop());
             this.Register(100, new Spull());
-            this.Register(101, new TeleportStaff());
             this.Register(102, new Trigger());
             this.Register(105, new RoomFreeze());
-            this.Register(106, new RemoveBadge());
-            this.Register(107, new RoomEnable());
-            this.Register(108, new VipProtect());
-            this.Register(109, new MachineBan());
-            this.Register(111, new UnloadRoom());
-            this.Register(112, new WarpStaff());
-            this.Register(115, new EventAlert());
-            this.Register(116, new Control());
-            this.Register(117, new Say());
-            this.Register(118, new SetCopyLook());
-            this.Register(119, new SetTransf());
-            this.Register(120, new SetTransfStop());
-            this.Register(121, new SetEnable());
-            this.Register(122, new Givelot());
-            this.Register(123, new extrabox());
-            this.Register(124, new SayBot());
             this.Register(126, new SetZ());
             this.Register(127, new SetZStop());
-            this.Register(128, new Murmur());
             this.Register(130, new EmptyBots());
-            this.Register(132, new Vip());
             this.Register(133, new FollowMe());
             this.Register(134, new DisableOblique());
-            this.Register(135, new AddPhoto());
-            this.Register(137, new AddPhoto());
             this.Register(138, new InfoSuperWired());
-            this.Register(140, new TransfBot());
-            this.Register(141, new SetTransfBot());
-            this.Register(143, new ShowGuide());
             this.Register(144, new Cmd.Janken());
             this.Register(145, new RandomLook());
             this.Register(146, new Mazo());
@@ -292,35 +254,21 @@ namespace Butterfly.Game.Rooms.Chat.Commands
             this.Register(151, new Use());
             this.Register(152, new UseStop());
             this.Register(153, new Youtube());
-            this.Register(154, new RoomSell());
-            this.Register(155, new RoomBuy());
-            this.Register(156, new RoomRemoveSell());
-            this.Register(157, new DupliRoom());
-            this.Register(158, new Tir());
-            this.Register(159, new SuperBot());
             this.Register(160, new OldFoot());
             this.Register(161, new Pyramide());
+            this.Register(158, new Tir());
             this.Register(162, new Cac());
             this.Register(163, new Pan());
             this.Register(165, new Prison());
-            this.Register(166, new Refresh());
             this.Register(167, new GameAlert());
             this.Register(168, new MaxFloor());
             this.Register(169, new AutoFloor());
-            this.Register(170, new Emblem());
             this.Register(171, new GiveMoney());
             this.Register(172, new ConfigBot());
             this.Register(173, new SpeedWalk());
-            this.Register(174, new ChutAll());
-            this.Register(175, new Flagme());
-            this.Register(176, new IgnoreAll());
-            this.Register(177, new PushNotif());
             this.Register(178, new Big());
             this.Register(179, new Little());
-            this.Register(180, new LoadRoomItems());
-            this.Register(181, new RegenLTD());
             this.Register(182, new ForceOpenGift());
-            this.Register(183, new AllFriends());
             this.Register(184, new GameTime());
             this.Register(185, new StartQuestion());
             this.Register(186, new StopQuestion());
@@ -328,14 +276,102 @@ namespace Butterfly.Game.Rooms.Chat.Commands
             this.Register(188, new StopSoundRoom());
             this.Register(189, new YoutubeRoom());
             this.Register(190, new CloseDice());
+
+        }
+        
+        public void RegisterPremium()
+        {
+            this.Register(26, new UserInfo());
+            this.Register(43, new Info());
+            this.Register(108, new VipProtect());
+            this.Register(132, new Vip());
+            this.Register(140, new TransfBot());
+        }
+
+        public void RegisterModeration()
+        {
+            this.Register(8, new StaffAlert());
+            this.Register(10, new RoomAlert());
+            this.Register(31, new Invisible());
+            this.Register(32, new Ban());
+            this.Register(33, new Disconnect());
+            this.Register(34, new SuperBan());
+            this.Register(36, new RoomKick());
+            this.Register(37, new Mute());
+            this.Register(38, new UnMute());
+            this.Register(39, new Alert());
+            this.Register(40, new Kick());
+            this.Register(61, new DeleteMission());
+            this.Register(63, new Come());
+            this.Register(89, new BanIP());
+            this.Register(106, new RemoveBadge());
+            this.Register(101, new TeleportStaff());
+            this.Register(107, new RoomEnable());
+            this.Register(112, new WarpStaff());
+            this.Register(115, new EventAlert());
+            this.Register(170, new Emblem());
+            this.Register(198, new StaffsOnline());
+
+        }
+
+        public void RegisterAdministrator()
+        {
+            this.Register(12, new Coins());
+            this.Register(15, new HotelAlert());
+            this.Register(19, new RoomMute());
+            this.Register(23, new RoomBadge());
+            this.Register(24, new MassBadge());
+            this.Register(30, new GiveBadge());
+            this.Register(53, new SetEffect());
+            this.Register(94, new AddFilter());
+            this.Register(109, new MachineBan());
+            this.Register(111, new UnloadRoom());
+            this.Register(116, new Control());
+            this.Register(117, new Say());
+            this.Register(118, new SetCopyLook());
+            this.Register(119, new SetTransf());
+            this.Register(120, new SetTransfStop());
+            this.Register(121, new SetEnable());
+            this.Register(122, new Givelot());
+            this.Register(123, new extrabox());
+            this.Register(124, new SayBot());
+            this.Register(128, new Murmur());
+            this.Register(135, new AddPhoto());
+            this.Register(137, new AddPhoto());
+            this.Register(141, new SetTransfBot());
+            this.Register(143, new ShowGuide());
+            this.Register(154, new RoomSell());
+            this.Register(155, new RoomBuy());
+            this.Register(156, new RoomRemoveSell());
+            this.Register(157, new DupliRoom());
+            this.Register(174, new ChutAll());
+            this.Register(175, new Flagme());
+            this.Register(176, new IgnoreAll());
+            this.Register(177, new PushNotif());
             this.Register(191, new OpenWeb());
             this.Register(192, new RoomEffect());
             this.Register(193, new KickBan());
+            this.Register(159, new SuperBot());
+
+
+        }
+
+        public void RegisterGod()
+        {
+            this.Register(28, new Shutdown());
+            this.Register(166, new Refresh());
+            this.Register(180, new LoadRoomItems());
+            this.Register(181, new RegenLTD());
+            this.Register(183, new AllFriends());
             this.Register(194, new StartGameJD());
             this.Register(195, new RegenMaps());
             this.Register(196, new AllAroundMe());
             this.Register(197, new AllEyesOnMe());
-            this.Register(198, new StaffsOnline());
+
+        }
+        public void RegisterCommand()
+        {
+            this._commands.Clear();
         }
     }
 }

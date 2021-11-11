@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Support
+﻿namespace Butterfly.Game.Moderation
 {
     public enum TicketStatus
     {

@@ -327,7 +327,7 @@
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserChatlogMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserInfoMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorUserRoomVisitsComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Moderation\ModResponseMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorSupportTicketResponseComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Navigator\CanCreateRoomComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Navigator\DoorbellComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Navigator\FavouritesComposer.cs" />
@@ -699,7 +699,11 @@
     <Compile Include="Game\Items\ItemExtrabox.cs" />
     <Compile Include="Game\Items\ItemFactory.cs" />
     <Compile Include="Game\Items\ItemTemp.cs" />
+    <Compile Include="Game\Moderation\BanTypeUtility.cs" />
+    <Compile Include="Game\Moderation\ModerationBan.cs" />
+    <Compile Include="Game\Moderation\ModerationBanType.cs" />
     <Compile Include="Game\Moderation\ModerationTicket.cs" />
+    <Compile Include="Game\Moderation\SupportTicket.cs" />
     <Compile Include="Game\Roleplay\Enemy\RPEnemy.cs" />
     <Compile Include="Game\Roleplay\Enemy\RPEnemyManager.cs" />
     <Compile Include="Game\Roleplay\Item\RPItemCategory.cs" />
@@ -915,7 +919,7 @@
     <Compile Include="Game\Rooms\Chat\Styles\ChatStyleManager.cs" />
     <Compile Include="Game\Rooms\RoomAppender.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Triggers\SuperTrigger.cs" />
-    <Compile Include="Game\Support\ModerationPresetActions.cs" />
+    <Compile Include="Game\Moderation\ModerationPresetActions.cs" />
     <Compile Include="Game\WebClients\WebClientManager.cs" />
     <Compile Include="Utilities\Astar\Algorithm\AStar.cs" />
     <Compile Include="Utilities\Astar\Algorithm\AStarHeuristicType.cs" />
@@ -997,7 +1001,7 @@
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Effects\KickUser.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Effects\SuperWired.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Triggers\Repeaterlong.cs" />
-    <Compile Include="Game\Support\TicketResolution.cs" />
+    <Compile Include="Game\Moderation\TicketResolution.cs" />
     <Compile Include="Game\Users\Messenger\Relationship.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Utilities\HabboEncoding.cs" />
@@ -1133,11 +1137,10 @@
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Triggers\UserSays.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Triggers\WalksOffFurni.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Triggers\WalksOnFurni.cs" />
-    <Compile Include="Game\Support\HelpCategory.cs" />
-    <Compile Include="Game\Support\HelpTopic.cs" />
-    <Compile Include="Game\Support\ModerationManager.cs" />
-    <Compile Include="Game\Support\TicketStatus.cs" />
-    <Compile Include="Game\Support\SupportTicket.cs" />
+    <Compile Include="Game\Moderation\HelpCategory.cs" />
+    <Compile Include="Game\Moderation\HelpTopic.cs" />
+    <Compile Include="Game\Moderation\ModerationManager.cs" />
+    <Compile Include="Game\Moderation\TicketStatus.cs" />
     <Compile Include="Game\Users\Habbo.cs" />
     <Compile Include="Game\Users\Badges\Badge.cs" />
     <Compile Include="Game\Users\Badges\BadgeComponent.cs" />

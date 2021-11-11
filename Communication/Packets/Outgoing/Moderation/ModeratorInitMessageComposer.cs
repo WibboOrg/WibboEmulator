@@ -7,11 +7,11 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorInitMessageComposer : ServerPacket
     {
-        public ModeratorInitMessageComposer(ICollection<string> UserPresets, ICollection<string> RoomPresets, ICollection<ModerationTicket> Tickets)
+        public ModeratorInitMessageComposer(ICollection<string> UserPresets, ICollection<string> RoomPresets, ICollection<SupportTicket> Tickets)
             : base(ServerPacketHeader.MODERATION_TOOL)
         {
             WriteInteger(Tickets.Count);
-            foreach (ModerationTicket Ticket in Tickets)
+            foreach (SupportTicket Ticket in Tickets)
             {
                 WriteInteger(Ticket.Id);
                 WriteInteger(Ticket.GetStatus(Id));

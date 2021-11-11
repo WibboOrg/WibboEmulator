@@ -22,7 +22,7 @@
         public const int SellablePetBreedsMessageComposer = 3331;
         public const int CheckPetNameMessageComposer = 1503;
         public const int AchievementUnlockedMessageComposer = 806;
-        public const int ModToolIssueResponseAlertComposer = 3796;
+        public const int ModeratorSupportTicketResponseComposer = 3796;
         public const int PetTrainingPanelMessageComposer = 1164;
         public const int OpenHelpToolMessageComposer = 1121;
         public const int CanCreateRoomMessageComposer = 378;

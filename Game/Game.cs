@@ -16,7 +16,7 @@ using Butterfly.Game.Roleplay;
 using Butterfly.Game.Roles;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Chat;
-using Butterfly.Game.Support;
+using Butterfly.Game.Moderation;
 using Butterfly.Game.Users.Effect;
 using Butterfly.Game.WebClients;
 using System;

@@ -1,5 +1,5 @@
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Support;
+using Butterfly.Game.Moderation;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

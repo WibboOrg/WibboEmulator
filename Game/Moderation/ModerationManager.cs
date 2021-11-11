@@ -5,17 +5,18 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.GameClients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Chat.Logs;
+using Butterfly.Game.Moderation;
 using Butterfly.Game.Users;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-namespace Butterfly.Game.Support
+namespace Butterfly.Game.Moderation
 {
     public class ModerationManager
     {
-        private readonly List<SupportTicket> _tickets;
+        private readonly List<ModerationTicket> _tickets;
         private readonly List<string> _userMessagePresets;
         private readonly List<string> _roomMessagePresets;
 
@@ -28,7 +29,7 @@ namespace Butterfly.Game.Support
 
         public ModerationManager()
         {
-            this._tickets = new List<SupportTicket>();
+            this._tickets = new List<ModerationTicket>();
             this._userMessagePresets = new List<string>();
             this._roomMessagePresets = new List<string>();
             this._ticketResolution1 = new List<TicketResolution>();
@@ -49,7 +50,7 @@ namespace Butterfly.Game.Support
         {
             ServerPacket Response = new ServerPacket(ServerPacketHeader.MODERATION_TOOL);
             Response.WriteInteger(this._tickets.Count);
-            foreach (SupportTicket ticket in this._tickets)
+            foreach (ModerationTicket ticket in this._tickets)
             {
                 ticket.Serialize(Response);
             }
@@ -233,13 +234,13 @@ namespace Butterfly.Game.Support
 
                 foreach (DataRow dataRow in table.Rows)
                 {
-                    SupportTicket supportTicket = new SupportTicket(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["score"]), Convert.ToInt32(dataRow["type"]), Convert.ToInt32(dataRow["sender_id"]), Convert.ToInt32(dataRow["reported_id"]), (string)dataRow["message"], Convert.ToInt32(dataRow["room_id"]), (string)dataRow["room_name"], (double)dataRow["timestamp"]);
+                    ModerationTicket ModerationTicket = new ModerationTicket(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["score"]), Convert.ToInt32(dataRow["type"]), Convert.ToInt32(dataRow["sender_id"]), Convert.ToInt32(dataRow["reported_id"]), (string)dataRow["message"], Convert.ToInt32(dataRow["room_id"]), (string)dataRow["room_name"], (double)dataRow["timestamp"]);
                     if (dataRow["status"].ToString().ToLower() == "picked")
                     {
-                        supportTicket.Pick(Convert.ToInt32(dataRow["moderator_id"]), false);
+                        ModerationTicket.Pick(Convert.ToInt32(dataRow["moderator_id"]), false);
                     }
 
-                    this._tickets.Add(supportTicket);
+                    this._tickets.Add(ModerationTicket);
                 }
             }
         }
@@ -256,7 +257,7 @@ namespace Butterfly.Game.Support
                 Id = ModerationTicketDao.Insert(dbClient, Message, roomname, Category, Session.GetHabbo().Id, ReportedUser, roomData.Id);
             }
 
-            SupportTicket Ticket = new SupportTicket(Id, 1, Category, Session.GetHabbo().Id, ReportedUser, Message, roomid, roomname, ButterflyEnvironment.GetUnixTimestamp());
+            ModerationTicket Ticket = new ModerationTicket(Id, 1, Category, Session.GetHabbo().Id, ReportedUser, Message, roomid, roomname, ButterflyEnvironment.GetUnixTimestamp());
             this._tickets.Add(Ticket);
             SendTicketToModerators(Ticket);
         }
@@ -297,13 +298,13 @@ namespace Butterfly.Game.Support
             room.GetRoomUserManager().RemoveUserFromRoom(roomUserByHabbo.GetClient(), true, true);
         }
 
-        public SupportTicket GetTicket(int TicketId)
+        public ModerationTicket GetTicket(int TicketId)
         {
-            foreach (SupportTicket supportTicket in this._tickets)
+            foreach (ModerationTicket ModerationTicket in this._tickets)
             {
-                if (supportTicket.TicketId == TicketId)
+                if (ModerationTicket.TicketId == TicketId)
                 {
-                    return supportTicket;
+                    return ModerationTicket;
                 }
             }
             return null;
@@ -311,7 +312,7 @@ namespace Butterfly.Game.Support
 
         public void PickTicket(GameClient Session, int TicketId)
         {
-            SupportTicket ticket = this.GetTicket(TicketId);
+            ModerationTicket ticket = this.GetTicket(TicketId);
             if (ticket == null || ticket.Status != TicketStatus.OPEN)
             {
                 return;
@@ -323,7 +324,7 @@ namespace Butterfly.Game.Support
 
         public void ReleaseTicket(GameClient Session, int TicketId)
         {
-            SupportTicket ticket = this.GetTicket(TicketId);
+            ModerationTicket ticket = this.GetTicket(TicketId);
             if (ticket == null || ticket.Status != TicketStatus.PICKED || ticket.ModeratorId != Session.GetHabbo().Id)
             {
                 return;
@@ -335,7 +336,7 @@ namespace Butterfly.Game.Support
 
         public void CloseTicket(GameClient Session, int TicketId, int Result)
         {
-            SupportTicket ticket = this.GetTicket(TicketId);
+            ModerationTicket ticket = this.GetTicket(TicketId);
             if (ticket == null || ticket.Status != TicketStatus.PICKED || ticket.ModeratorId != Session.GetHabbo().Id)
             {
                 return;
@@ -362,7 +363,7 @@ namespace Butterfly.Game.Support
             }
             if (clientByUserId != null)
             {
-                ServerPacket Message = new ServerPacket(ServerPacketHeader.ModToolIssueResponseAlertComposer);
+                ServerPacket Message = new ServerPacket(ServerPacketHeader.ModeratorSupportTicketResponseComposer);
                 Message.WriteString(MessageAlert);
                 clientByUserId.SendPacket(Message);
             }
@@ -372,9 +373,9 @@ namespace Butterfly.Game.Support
 
         public bool UsersHasPendingTicket(int Id)
         {
-            foreach (SupportTicket supportTicket in this._tickets)
+            foreach (ModerationTicket ModerationTicket in this._tickets)
             {
-                if (supportTicket.SenderId == Id && supportTicket.Status == TicketStatus.OPEN)
+                if (ModerationTicket.SenderId == Id && ModerationTicket.Status == TicketStatus.OPEN)
                 {
                     return true;
                 }
@@ -384,7 +385,7 @@ namespace Butterfly.Game.Support
 
         public void DeletePendingTicketForUser(int Id)
         {
-            foreach (SupportTicket Ticket in this._tickets)
+            foreach (ModerationTicket Ticket in this._tickets)
             {
                 if (Ticket.SenderId == Id)
                 {
@@ -395,7 +396,7 @@ namespace Butterfly.Game.Support
             }
         }
 
-        public static void SendTicketToModerators(SupportTicket Ticket)
+        public static void SendTicketToModerators(ModerationTicket Ticket)
         {
             ButterflyEnvironment.GetGame().GetClientManager().SendMessageStaff(Ticket.Serialize());
         }
@@ -644,7 +645,7 @@ namespace Butterfly.Game.Support
             }
         }
 
-        public static ServerPacket SerializeTicketChatlog(SupportTicket Ticket, RoomData RoomData, double Timestamp)
+        public static ServerPacket SerializeTicketChatlog(ModerationTicket Ticket, RoomData RoomData, double Timestamp)
         {
             Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomData.Id);
             ServerPacket message = new ServerPacket(ServerPacketHeader.ModeratorTicketChatlogMessageComposer);
