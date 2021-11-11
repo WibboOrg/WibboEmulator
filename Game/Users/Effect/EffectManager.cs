@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Butterfly.Game.Effects
+namespace Butterfly.Game.Users.Effect
 {
     public class EffectManager
     {

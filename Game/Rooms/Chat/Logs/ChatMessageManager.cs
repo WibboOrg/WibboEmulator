@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Butterfly.Game.ChatMessageStorage
+namespace Butterfly.Game.Rooms.Chat.Logs
 {
     public class ChatMessageManager
     {

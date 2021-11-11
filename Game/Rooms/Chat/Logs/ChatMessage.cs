@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using System;
 
-namespace Butterfly.Game.ChatMessageStorage
+namespace Butterfly.Game.Rooms.Chat.Logs
 {
     public class ChatMessage
     {

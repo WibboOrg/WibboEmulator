@@ -8,7 +8,7 @@ using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Achievements;
-using Butterfly.Game.ChatMessageStorage;
+using Butterfly.Game.Rooms.Chat.Logs;
 using Butterfly.Game.GameClients;
 using Butterfly.Game.Roleplay;
 using Butterfly.Game.Roleplay.Player;

@@ -791,7 +791,7 @@
     <Compile Include="Core\FigureData\Types\SetType.cs" />
     <Compile Include="Core\FigureData\Types\SetTypeUtility.cs" />
     <Compile Include="Game\Catalogs\CatalogPromotion.cs" />
-    <Compile Include="Game\Effects\EffectManager.cs" />
+    <Compile Include="Game\Users\Effect\EffectManager.cs" />
     <Compile Include="Game\Groups\GroupBadgeParts.cs" />
     <Compile Include="Game\Groups\GroupColours.cs" />
     <Compile Include="Game\LandingView\SmallPromo.cs" />
@@ -1059,8 +1059,8 @@
     <Compile Include="Game\Catalogs\CatalogManager.cs" />
     <Compile Include="Game\Catalogs\CatalogItem.cs" />
     <Compile Include="Game\Catalogs\CatalogPage.cs" />
-    <Compile Include="Game\ChatMessageStorage\ChatMessage.cs" />
-    <Compile Include="Game\ChatMessageStorage\ChatMessageManager.cs" />
+    <Compile Include="Game\Rooms\Chat\Logs\ChatMessage.cs" />
+    <Compile Include="Game\Rooms\Chat\Logs\ChatMessageManager.cs" />
     <Compile Include="Game\GameClients\GameClient.cs" />
     <Compile Include="Game\GameClients\GameClientManager.cs" />
     <Compile Include="Core\LowPriorityWorker.cs" />
