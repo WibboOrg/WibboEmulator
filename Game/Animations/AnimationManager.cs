@@ -168,7 +168,7 @@ namespace Butterfly.Game.Animations
             if (this._timer >= this.GetMinutes(START_TIME - NOTIF_TIME) && !this._notif)
             {
                 this._notif = true;
-                ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifTopComposer("Notre prochaine animation va débuter dans 2 minutes - Jack & Daisy"), Core.Language.FRANCAIS);
+                ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifTopComposer("La prochaine animation de Jack & Daisy débutera dans 2 minutes"), Core.Language.FRANCAIS);
             }
 
             if (this._timer >= this.GetMinutes(START_TIME))
@@ -202,16 +202,24 @@ namespace Butterfly.Game.Animations
             room.RoomData.State = 0;
             room.CloseFullRoom = true;
 
-            string AlertMessage = "[i]Beep beep, c'est l'heure d'une animation ![/i]" +
-            "[br][br]" +
-            "Rejoins-nous chez [b]WibboGame[/b] pour un jeu qui s'intitule [b]" + room.RoomData.Name + "[/b]" +
-            "[br][br]" +
-            "Rends-toi dans l'appartement et tente de remporter un lot composé de [i]une ou plusieurs RareBox(s) et BadgeBox(s) ainsi qu'un point au TOP Gamer ![/i]" +
-            "[br][br]" +
-            "- Jack et Daisy";
-
             ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, "WibboGame", room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", AlertMessage));
-            ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer("gameauto", "Message d'animation", AlertMessage, "Je veux y jouer !", room.Id, ""));
+            
+            ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer(
+                "gameauto", 
+                "Message d'animation",
+                "[center] [size=large]🤖[b]Animation Jack & Daisy[/b] 🤖[/size][/center]" +
+                "[br][br]" +
+                "[center][i]Beep beep, c'est l'heure d'une animation automatisée ![/i][/center]" +
+                "[br][br]" +
+                "➤ Rejoins-nous chez [b]WibboGame[/b] pour un jeu qui s'intitule [b]" + room.RoomData.Name + "[/b]" +
+                "[br][br]" +
+                "➤ Rends-toi dans l'appartement et tente de remporter un lot composé de [i]une ou plusieurs RareBox(s) et BadgeBox(s) ainsi qu'un point au TOP Gamer ! [/i] 🎁" +
+                "[br][br]" +
+                "- Jack et Daisy", 
+                "Je veux y jouer !",
+                room.Id,
+                ""
+            ));
         }
 
         public void OnCycle(Stopwatch moduleWatch)

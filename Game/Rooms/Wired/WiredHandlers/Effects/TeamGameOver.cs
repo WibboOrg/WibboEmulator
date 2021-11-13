@@ -27,7 +27,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             this.team = (Team)TeamId;
             this.room = room;
         }
-
+        
         public void Handle(RoomUser user, Item TriggerItem)
         {
             TeamManager managerForBanzai = this.room.GetTeamManager();

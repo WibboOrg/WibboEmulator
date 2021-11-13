@@ -143,6 +143,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                         return;
                     }
                     break;
+                
                 case "achievement":
                 case "givelot":
                 case "winmovierun":
@@ -1533,10 +1534,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                                 {
 
                                     Phrases.Add("Merci de patienter, le jeu va bientôt commencer !");
-                                    Phrases.Add("Le jeu ne devrait pas tarder à commencer !");
-                                    Phrases.Add("Le jeu va commencer dans quelques minutes !");
-                                    Phrases.Add("Le jeu va commencer dans quelques instants");
-                                    Phrases.Add("Patience, le jeu va débuter sous peu !");
+                                    Phrases.Add("Le jeu va commencer dans quelques instants !");
+                                    Phrases.Add("Patience, le jeu débutera sous peu !");
+                                    Phrases.Add("Silence dans la salle, le jeu va débuter !");
                                     break;
                                 }
                             case "win":
@@ -1549,9 +1549,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                                     }
                                     else
                                     {
-                                        Phrases.Add("Félicitations à #username# qui remporte la partie !");
+                                        Phrases.Add("Félicitation à #username# qui remporte la partie !");
                                         Phrases.Add("Félicitons #username# qui remporte la partie !");
                                         Phrases.Add("La chance était du côté de #username# aujourd'hui");
+                                        Phrases.Add("#username# est divin!");
+                                        Phrases.Add("#username# est légendaire !");
                                     }
                                     break;
                                 }
@@ -1559,8 +1561,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                                 {
                                     if (Bot.BotData.Name == "Jack")
                                     {
-                                        Phrases.Add("Oulà ! #username# viens de se faire botter l'arrière train' !");
-                                        Phrases.Add("Et #username# qui rejoint l'équipe des loosers");
+                                        Phrases.Add("Oulà ! #username# vient de se faire botter l'arrière train' !");
+                                        Phrases.Add("#username# rejoint l'équipe des loosers");
                                         Phrases.Add("Une défaite en bonne et due forme de #username# !");
                                     }
                                     else
@@ -1583,8 +1585,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                                 }
                             case "endgame":
                                 {
-                                    Phrases.Add("L'animation est terminé, bravo à tout les gagnant(e)s !");
-                                    Phrases.Add("L'animation est enfin terminé ! reviens nous voir à la prochaine animation !");
+                                    Phrases.Add("L'animation est terminée, bravo aux gagnants !");
+                                    Phrases.Add("L'animation est enfin terminée ! Reviens nous voir à la prochaine animation !");
                                     break;
                                 }
                             case "fungame":
@@ -1593,12 +1595,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                                     {
                                         Phrases.Add("Mhhhh, le niveau n'est pas très haut...");
                                         Phrases.Add("On sait déjà tous qui sera le grand vaiqueur...");
-                                        Phrases.Add("Qui ne tente rien n'a rien");
+                                        Phrases.Add("Qui ne tente rien, n'a rien");
                                     }
                                     else
                                     {
-                                        Phrases.Add("La victoire approche tenez le coup !");
-                                        Phrases.Add("C'est pour ça qu'il faut toujours avoir un trèfle à 4 feuilles");
+                                        Phrases.Add("La victoire approche, tenez le coup !");
+                                        Phrases.Add("C'est pour ça qu'il faut toujours avoir un trèfle à 4 feuilles sur soi");
                                         Phrases.Add("En essayant continuellement, on finit par réussir, plus ça rate, plus on a des chances que ça marque ;)");
                                     }
                                     break;
