@@ -613,7 +613,8 @@
     <Compile Include="Communication\WebSocket\EncodeDecode.cs" />
     <Compile Include="Core\IDGenerator.cs" />
     <Compile Include="Database\Daos\BanDao.cs" />
-    <Compile Include="Database\Daos\BotDao.cs" />
+    <Compile Include="Database\Daos\BotPetDao.cs" />
+    <Compile Include="Database\Daos\BotUserDao.cs" />
     <Compile Include="Database\Daos\CatalogBotPresetDao.cs" />
     <Compile Include="Database\Daos\CatalogItemDao.cs" />
     <Compile Include="Database\Daos\CatalogMarketplaceDataDao.cs" />
@@ -658,7 +659,6 @@
     <Compile Include="Database\Daos\ModerationTopicDao.cs" />
     <Compile Include="Database\Daos\NavigatorCategoryDao.cs" />
     <Compile Include="Database\Daos\NavigatorPublicDao.cs" />
-    <Compile Include="Database\Daos\PetDao.cs" />
     <Compile Include="Database\Daos\RoleplayDao.cs" />
     <Compile Include="Database\Daos\RoleplayEnemyDao.cs" />
     <Compile Include="Database\Daos\RoleplayItemDao.cs" />

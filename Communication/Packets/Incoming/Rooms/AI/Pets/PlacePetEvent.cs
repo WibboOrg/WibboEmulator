@@ -73,7 +73,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                PetDao.UpdateRoomId(dbClient, Pet.PetId, Pet.RoomId);
+                BotPetDao.UpdateRoomId(dbClient, Pet.PetId, Pet.RoomId);
             }
 
             if (!Session.GetHabbo().GetInventoryComponent().TryRemovePet(Pet.PetId, out Pet ToRemove))

@@ -36,8 +36,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 RoomRightDao.Delete(dbClient, RoomId);
                 ItemDao.DeleteAllByRoomId(dbClient, RoomId);
                 UserDao.UpdateHomeRoom(dbClient, Session.GetHabbo().Id, 0);
-                BotDao.UpdateRoomBot(dbClient, RoomId);
-                PetDao.UpdateRoomIdByRoomId(dbClient, RoomId);
+                BotUserDao.UpdateRoomBot(dbClient, RoomId);
+                BotPetDao.UpdateRoomIdByRoomId(dbClient, RoomId);
             }
 
             RoomData removedRoom = (from p in Session.GetHabbo().UsersRooms where p.Id == RoomId select p).SingleOrDefault();

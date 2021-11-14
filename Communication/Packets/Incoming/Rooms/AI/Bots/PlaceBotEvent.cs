@@ -45,7 +45,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                BotDao.UpdatePosition(dbClient, Bot.Id, Room.Id, X, Y);
+                BotUserDao.UpdatePosition(dbClient, Bot.Id, Room.Id, X, Y);
             }
 
             RoomUser roomUser = Room.GetRoomUserManager().DeployBot(new RoomBot(Bot.Id, Bot.OwnerId, Room.Id, AIType.Generic, Bot.WalkingEnabled, Bot.Name, Bot.Motto, Bot.Gender, Bot.Figure, X, Y, 0, 2, Bot.ChatEnabled, Bot.ChatText, Bot.ChatSeconds, Bot.IsDancing, Bot.Enable, Bot.Handitem, Bot.Status), null);

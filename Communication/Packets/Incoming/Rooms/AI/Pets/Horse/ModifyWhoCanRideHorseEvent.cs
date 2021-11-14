@@ -63,7 +63,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                PetDao.UpdateAnyoneRide(dbClient, PetId, Pet.PetData.AnyoneCanRide);
+                BotPetDao.UpdateAnyoneRide(dbClient, PetId, Pet.PetData.AnyoneCanRide);
             }
 
             Room.SendPacket(new PetInformationComposer(Pet.PetData, Pet.RidingHorse));

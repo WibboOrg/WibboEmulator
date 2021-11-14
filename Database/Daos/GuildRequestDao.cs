@@ -7,19 +7,19 @@ namespace Butterfly.Database.Daos
     {
         internal static void Delete(IQueryAdapter dbClient, int groupId)
         {
-            dbClient.RunQuery("DELETE FROM group_requests WHERE group_id = '" + groupId + "'");
+            dbClient.RunQuery("DELETE FROM `guild_request` WHERE group_id = '" + groupId + "'");
         }
 
         internal static DataTable GetAll(IQueryAdapter dbClient, int groupId)
         {
-            dbClient.SetQuery("SELECT user_id FROM group_requests WHERE group_id = @id");
+            dbClient.SetQuery("SELECT user_id FROM `guild_request` WHERE group_id = @id");
             dbClient.AddParameter("id", groupId);
             return dbClient.GetTable();
         }
 
         internal static DataTable GetAllBySearch(IQueryAdapter dbClient, int groupeId, string searchVal)
         {
-            dbClient.SetQuery("SELECT users.id FROM group_requests INNER JOIN users ON group_requests.user_id = users.id WHERE group_requests.group_id = @gid AND users.username LIKE @username LIMIT 14");
+            dbClient.SetQuery("SELECT `user`.id FROM `guild_request` INNER JOIN `user` ON `guild_request`.user_id = `user`.id WHERE `guild_request`.group_id = @gid AND `user`.username LIKE @username LIMIT 14");
             dbClient.AddParameter("gid", groupeId);
             dbClient.AddParameter("username", searchVal.Replace("%", "\\%").Replace("_", "\\_") + "%");
 
@@ -28,7 +28,7 @@ namespace Butterfly.Database.Daos
 
         internal static void Insert(IQueryAdapter dbClient, int groupId, int userId)
         {
-            dbClient.SetQuery("INSERT INTO group_requests (user_id, group_id) VALUES (@uid, @gid)");
+            dbClient.SetQuery("INSERT INTO `guild_request` (user_id, group_id) VALUES (@uid, @gid)");
             dbClient.AddParameter("gid", groupId);
             dbClient.AddParameter("uid", userId);
             dbClient.RunQuery();
@@ -36,7 +36,7 @@ namespace Butterfly.Database.Daos
 
         internal static void Delete(IQueryAdapter dbClient, int groupId, int userId)
         {
-            dbClient.SetQuery("DELETE FROM group_requests WHERE user_id=@uid AND group_id=@gid LIMIT 1");
+            dbClient.SetQuery("DELETE FROM `guild_request` WHERE user_id=@uid AND group_id=@gid LIMIT 1");
             dbClient.AddParameter("gid", groupId);
             dbClient.AddParameter("uid", userId);
             dbClient.RunQuery();

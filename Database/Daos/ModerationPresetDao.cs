@@ -7,7 +7,7 @@ namespace Butterfly.Database.Daos
     {
         internal static DataTable GetAll(IQueryAdapter dbClient)
         {
-            dbClient.SetQuery("SELECT type,message FROM moderation_presets WHERE enabled = '1'");
+            dbClient.SetQuery("SELECT type, message FROM moderation_presets WHERE enabled = '1'");
             return dbClient.GetTable();
         }
     }

@@ -7,7 +7,7 @@ namespace Butterfly.Database.Daos
     {
         internal static DataTable GetAll(IQueryAdapter dbClient)
         {
-            dbClient.SetQuery("SELECT * from `hotelview_promos` WHERE `enabled` = '1' ORDER BY `index` ASC");
+            dbClient.SetQuery("SELECT `index`, `header`, `body`, `button`, `in_game_promo`, `special_action`, `image`, `enabled` from `emulator_hotelview_promo` WHERE `enabled` = '1' ORDER BY `index` ASC");
             return dbClient.GetTable();
         }
     }

@@ -94,7 +94,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                PetDao.UpdateRoomId(dbClient, pet.PetId, 0);
+                BotPetDao.UpdateRoomId(dbClient, pet.PetId, 0);
             }
 
             if (pet.OwnerId != Session.GetHabbo().Id)

@@ -46,7 +46,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 PetUser.PetData.Saddle = 9;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    PetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 1);
+                    BotPetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 1);
                     ItemDao.Delete(dbClient, Item.Id);
                 }
 
@@ -58,7 +58,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 PetUser.PetData.Saddle = 10;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    PetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 2);
+                    BotPetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 2);
                     ItemDao.Delete(dbClient, Item.Id);
                 }
 
@@ -75,7 +75,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 PetUser.PetData.PetHair = Parse;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    PetDao.UpdatePethair(dbClient, PetUser.PetData.PetId, PetUser.PetData.PetHair);
+                    BotPetDao.UpdatePethair(dbClient, PetUser.PetData.PetId, PetUser.PetData.PetHair);
                     ItemDao.Delete(dbClient, Item.Id);
                 }
 
@@ -92,7 +92,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    PetDao.UpdateHairdye(dbClient, PetUser.PetData.PetId, PetUser.PetData.HairDye);
+                    BotPetDao.UpdateHairdye(dbClient, PetUser.PetData.PetId, PetUser.PetData.HairDye);
                     ItemDao.Delete(dbClient, Item.Id);
                 }
 
@@ -125,7 +125,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    PetDao.UpdateRace(dbClient, PetUser.PetData.PetId, PetUser.PetData.Race);
+                    BotPetDao.UpdateRace(dbClient, PetUser.PetData.PetId, PetUser.PetData.Race);
                     ItemDao.Delete(dbClient, Item.Id);
                 }
 

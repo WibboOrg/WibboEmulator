@@ -27,25 +27,25 @@ namespace ConsoleWriter
 
         public static void LogException(string logText)
         {
-            WriteToFile("Logs/exceptions.txt", logText + "\r\n\r\n");
+            WriteToFile("logs/exceptions.txt", logText + "\r\n\r\n");
             WriteLine("Exception has been saved");
         }
 
         public static void LogDDOS(string logText)
         {
-            WriteToFile("Logs/ddos.txt", logText + "\r\n\r\n");
+            WriteToFile("logs/ddos.txt", logText + "\r\n\r\n");
             WriteLine("Exception has been saved");
         }
 
         public static void LogCriticalException(string logText)
         {
-            WriteToFile("Logs/criticalexceptions.txt", logText + "\r\n\r\n");
+            WriteToFile("logs/criticalexceptions.txt", logText + "\r\n\r\n");
             WriteLine("CRITICAL ERROR LOGGED");
         }
 
         public static void LogCacheError(string logText)
         {
-            WriteToFile("Logs/cacheerror.txt", logText + "\r\n\r\n");
+            WriteToFile("logs/cacheerror.txt", logText + "\r\n\r\n");
             WriteLine("Critical error saved");
         }
 
@@ -56,25 +56,25 @@ namespace ConsoleWriter
 
         public static void LogDDOSS(string logText)
         {
-            WriteToFile("Logs/ddos.txt", logText + "\r\n\r\n");
+            WriteToFile("logs/ddos.txt", logText + "\r\n\r\n");
             WriteLine(logText);
         }
 
         public static void LogThreadException(string Exception, string Threadname)
         {
-            WriteToFile("Logs/threaderror.txt", "Error in thread " + Threadname + ": \r\n" + Exception + "\r\n\r\n");
+            WriteToFile("logs/threaderror.txt", "Error in thread " + Threadname + ": \r\n" + Exception + "\r\n\r\n");
             WriteLine("Error in " + Threadname + " caught");
         }
 
         public static void LogQueryError(Exception Exception, string query)
         {
-            WriteToFile("Logs/MySQLerrors.txt", "Error in query: \r\n" + (object)query + "\r\n" + Exception.ToString() + "\r\n\r\n");
+            WriteToFile("logs/MySQLerrors.txt", "Error in query: \r\n" + (object)query + "\r\n" + Exception.ToString() + "\r\n\r\n");
             WriteLine("Error in query caught");
         }
 
         public static void LogPacketException(string Packet, string Exception)
         {
-            WriteToFile("Logs/packeterror.txt", "Error in packet " + Packet + ": \r\n" + Exception + "\r\n\r\n");
+            WriteToFile("logs/packeterror.txt", "Error in packet " + Packet + ": \r\n" + Exception + "\r\n\r\n");
             WriteLine("User disconnection logged: " + Exception);
         }
 
@@ -103,13 +103,7 @@ namespace ConsoleWriter
                 stringBuilder.AppendLine("Data:");
                 foreach (DictionaryEntry dictionaryEntry in pException.Data)
                 {
-                    stringBuilder.AppendLine(string.Concat(new object[4]
-                    {
-                       "  Key: ",
-                      dictionaryEntry.Key,
-                       "Value: ",
-                      dictionaryEntry.Value
-                              }));
+                    stringBuilder.AppendLine("  Key: " + dictionaryEntry.Key + "Value: " + dictionaryEntry.Value);
                 }
             }
             if (pException.Message != null)
@@ -140,7 +134,7 @@ namespace ConsoleWriter
 
         public static void LogShutdown(StringBuilder builder)
         {
-            WriteToFile("Logs/shutdownlog.txt", builder.ToString());
+            WriteToFile("logs/shutdownlog.txt", builder.ToString());
         }
 
         private static void WriteToFile(string path, string content)

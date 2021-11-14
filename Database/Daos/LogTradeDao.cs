@@ -6,7 +6,7 @@ namespace Butterfly.Database.Daos
     {
         internal static void Insert(IQueryAdapter dbClient, int oneId, int twoId, string logsOneString, string logsTwoString, int roomId)
         {
-            dbClient.SetQuery("INSERT INTO logs_trade (user_one_id, user_two_id, user_one_items, user_two_items, room_id, time) VALUES (@userone, @usertwo, @itemsone, @itemstwo, @roomid, UNIX_TIMESTAMP())");
+            dbClient.SetQuery("INSERT INTO `log_trade` (user_one_id, user_two_id, user_one_items, user_two_items, room_id, time) VALUES (@userone, @usertwo, @itemsone, @itemstwo, @roomid, UNIX_TIMESTAMP())");
             dbClient.AddParameter("userone", oneId);
             dbClient.AddParameter("usertwo", twoId);
             dbClient.AddParameter("itemsone", logsOneString);

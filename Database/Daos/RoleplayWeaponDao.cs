@@ -7,7 +7,7 @@ namespace Butterfly.Database.Daos
     {
         internal static DataTable GetAll(IQueryAdapter dbClient)
         {
-            dbClient.SetQuery("SELECT * FROM roleplay_weapon");
+            dbClient.SetQuery("SELECT * FROM `roleplay_weapon`");
             return dbClient.GetTable();
         }
     }

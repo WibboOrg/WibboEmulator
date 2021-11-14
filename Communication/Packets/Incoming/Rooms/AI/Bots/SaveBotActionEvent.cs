@@ -69,7 +69,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            BotDao.UpdateLookGender(dbClient, Bot.BotData.Id, Session.GetHabbo().Gender, Session.GetHabbo().Look);
+                            BotUserDao.UpdateLookGender(dbClient, Bot.BotData.Id, Session.GetHabbo().Gender, Session.GetHabbo().Look);
                         }
                         break;
                     }
@@ -121,7 +121,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            BotDao.UpdateChat(dbClient, BotId, RoomBot.AutomaticChat, RoomBot.SpeakingInterval, RoomBot.MixSentences, RoomBot.ChatText);
+                            BotUserDao.UpdateChat(dbClient, BotId, RoomBot.AutomaticChat, RoomBot.SpeakingInterval, RoomBot.MixSentences, RoomBot.ChatText);
                         }
 
                         break;
@@ -134,7 +134,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         Bot.BotData.WalkingEnabled = !Bot.BotData.WalkingEnabled;
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            BotDao.UpdateWalkEnabled(dbClient, Bot.BotData.Id, Bot.BotData.WalkingEnabled);
+                            BotUserDao.UpdateWalkEnabled(dbClient, Bot.BotData.Id, Bot.BotData.WalkingEnabled);
                         }
                         break;
                     }
@@ -159,7 +159,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            BotDao.UpdateIsDancing(dbClient, Bot.BotData.Id, Bot.BotData.IsDancing);
+                            BotUserDao.UpdateIsDancing(dbClient, Bot.BotData.Id, Bot.BotData.IsDancing);
                         }
 
                         break;
@@ -186,7 +186,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         Bot.BotData.Name = DataString;
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                            BotDao.UpdateName(dbClient, Bot.BotData.Id, DataString);
+                            BotUserDao.UpdateName(dbClient, Bot.BotData.Id, DataString);
 
                         Room.SendPacket(new UserNameChangeMessageComposer(Bot.BotData.Name, Bot.VirtualId));
                         break;

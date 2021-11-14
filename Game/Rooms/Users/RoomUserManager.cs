@@ -892,7 +892,7 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            BotDao.SaveBots(dbClient, botList);
+            BotUserDao.SaveBots(dbClient, botList);
         }
 
         public void AppendPetsUpdateString(IQueryAdapter dbClient)
@@ -903,7 +903,7 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            PetDao.SavePet(dbClient, Petlist);
+            BotPetDao.SavePet(dbClient, Petlist);
         }
 
         public List<RoomUser> GetBots()

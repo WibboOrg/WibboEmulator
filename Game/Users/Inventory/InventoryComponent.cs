@@ -78,7 +78,7 @@ namespace Butterfly.Game.Users.Inventory
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                PetDao.Delete(dbClient, this.UserId);
+                BotPetDao.Delete(dbClient, this.UserId);
             }
 
             this._petsItems.Clear();
@@ -87,7 +87,7 @@ namespace Butterfly.Game.Users.Inventory
         public void ClearBots()
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                BotDao.Delete(dbClient, this.UserId);
+                BotUserDao.Delete(dbClient, this.UserId);
 
             this._botItems.Clear();
         }
@@ -215,7 +215,7 @@ namespace Butterfly.Game.Users.Inventory
             DataTable table2;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                table2 = PetDao.GetAllByUserId(dbClient, this.UserId);
+                table2 = BotPetDao.GetAllByUserId(dbClient, this.UserId);
             }
             if (table2 != null)
             {
@@ -229,7 +229,7 @@ namespace Butterfly.Game.Users.Inventory
             this._botItems.Clear();
             DataTable dBots;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                dBots = BotDao.GetAllByUserId(dbClient, this.UserId);
+                dBots = BotUserDao.GetAllByUserId(dbClient, this.UserId);
 
             if (dBots == null)
             {

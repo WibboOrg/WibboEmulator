@@ -18,9 +18,9 @@ namespace Butterfly.Game.Catalog.Utilities
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                int Id = BotDao.InsertAndGetId(dbClient, OwnerId, CataBot.Name, CataBot.Motto, CataBot.Figure, CataBot.Gender);
+                int Id = BotUserDao.InsertAndGetId(dbClient, OwnerId, CataBot.Name, CataBot.Motto, CataBot.Figure, CataBot.Gender);
 
-                DataRow BotData = BotDao.GetOne(dbClient, OwnerId, Id);
+                DataRow BotData = BotUserDao.GetOne(dbClient, OwnerId, Id);
 
                 return new Bot(Convert.ToInt32(BotData["id"]), Convert.ToInt32(BotData["user_id"]), Convert.ToString(BotData["name"]), Convert.ToString(BotData["motto"]), Convert.ToString(BotData["look"]), Convert.ToString(BotData["gender"]), false, true, "", 0, false, 0, 0, 0);
             }

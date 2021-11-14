@@ -156,9 +156,9 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                     ItemWiredDao.UpdateTriggerItem(dbClient, triggerItems, id);
                 }
 
-                BotDao.DupliqueAllBotInRoomId(dbClient, Session.GetHabbo().Id, RoomId, OldRoomId);
+                BotUserDao.DupliqueAllBotInRoomId(dbClient, Session.GetHabbo().Id, RoomId, OldRoomId);
 
-                PetDao.InsertDuplicate(dbClient, Session.GetHabbo().Id, RoomId, OldRoomId);
+                BotPetDao.InsertDuplicate(dbClient, Session.GetHabbo().Id, RoomId, OldRoomId);
             }
 
             RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);

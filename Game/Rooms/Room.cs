@@ -380,7 +380,7 @@ namespace Butterfly.Game.Rooms
             DataTable table;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                table = BotDao.GetOneByRoomId(dbClient, this.Id);
+                table = BotUserDao.GetOneByRoomId(dbClient, this.Id);
                 if (table == null)
                 {
                     return;
@@ -402,7 +402,7 @@ namespace Butterfly.Game.Rooms
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                DataTable table = PetDao.GetAllByRoomId(dbClient, this.Id);
+                DataTable table = BotPetDao.GetAllByRoomId(dbClient, this.Id);
                 if (table == null)
                 {
                     return;

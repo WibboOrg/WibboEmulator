@@ -43,7 +43,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                PetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 0);
+                BotPetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 0);
             }
 
             //Give the saddle back to the user.
