@@ -87,7 +87,7 @@ namespace Butterfly
 
             try
             {
-                _configuration = new ConfigurationData(PatchDir + "configuration/configuration.ini", false);
+                _configuration = new ConfigurationData(PatchDir + "configuration/settings.ini", false);
                 _datebasemanager = new DatabaseManager(uint.Parse(GetConfig().data["db.pool.maxsize"]), uint.Parse(GetConfig().data["db.pool.minsize"]), GetConfig().data["db.hostname"], uint.Parse(GetConfig().data["db.port"]), GetConfig().data["db.username"], GetConfig().data["db.password"], GetConfig().data["db.name"]);
 
 
