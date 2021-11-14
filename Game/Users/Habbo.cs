@@ -165,8 +165,7 @@ namespace Butterfly.Game.Users
                 int TimeOnlineSec = (int)TimeOnline.TotalSeconds;
                 this.HabboinfoSaved = true;
 
-                return "UPDATE `user` SET `user`.online = '0', `user`.last_online = '" + ButterflyEnvironment.GetUnixTimestamp() + "', activity_points = '" + this.Duckets + "', credits = '" + this.Credits + "' WHERE id = '" + this.Id + "'; " +
-                    "UPDATE user_stats SET group_id = " + this.FavouriteGroupId + ", online_time = online_time + " + TimeOnlineSec + ", quest_id = '" + this.CurrentQuestId + "', Respect = '" + this.Respect + "', daily_respect_points = '" + this.DailyRespectPoints + "', daily_pet_respect_points = '" + this.DailyPetRespectPoints + "' WHERE id = '" + this.Id + "'";
+                return UserDao.BuildUpdateQuery(this.Id, this.Duckets, this.Credits) + UserStatsDao.BuildUpdateQuery(this.Id, this.FavouriteGroupId, TimeOnlineSec, this.CurrentQuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
             }
         }
 

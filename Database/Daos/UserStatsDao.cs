@@ -5,6 +5,11 @@ namespace Butterfly.Database.Daos
 {
     class UserStatsDao
     {
+        internal static string BuildUpdateQuery(int userId, int favouriteGroupId, int timeOnlineSec, int currentQuestId, int respect, int dailyRespectPoints, int dailyPetRespectPoints)
+        {
+            return  "UPDATE `user_stats` SET group_id = " + favouriteGroupId + ", online_time = online_time + " + timeOnlineSec + ", quest_id = '" + currentQuestId + "', Respect = '" + respect + "', daily_respect_points = '" + dailyRespectPoints + "', daily_pet_respect_points = '" + dailyPetRespectPoints + "' WHERE id = '" + userId + "';";
+        }
+
         internal static void UpdateRemoveAllGroupId(IQueryAdapter dbClient, int groupId)
         {
             dbClient.RunQuery("UPDATE `user_stats` SET group_id = '0' WHERE group_id = '" + groupId + "' LIMIT 1");

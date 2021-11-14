@@ -5,6 +5,11 @@ namespace Butterfly.Database.Daos
 {
     class UserDao
     {
+        internal static string BuildUpdateQuery(int userId, int duckets, int credits)
+        {
+            return "UPDATE `user` SET `user`.online = '0', `user`.last_online = '" + ButterflyEnvironment.GetUnixTimestamp() + "', activity_points = '" + duckets + "', credits = '" + credits + "' WHERE id = '" + userId + "';";
+        }
+
         internal static int GetIdByName(IQueryAdapter dbClient, string name)
         {
             dbClient.SetQuery("SELECT id FROM `user` WHERE username = @username LIMIT 1");
