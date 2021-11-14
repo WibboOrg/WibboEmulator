@@ -39,7 +39,7 @@ namespace Butterfly.Core.FigureData
             }
 
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(ButterflyEnvironment.PatchDir + "figuredata.xml");
+            xDoc.Load(ButterflyEnvironment.PatchDir + "/configuration/figuredata.xml");
 
             XmlNodeList Colors = xDoc.GetElementsByTagName("colors");
             foreach (XmlNode Node in Colors)

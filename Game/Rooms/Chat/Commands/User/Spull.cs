@@ -25,7 +25,14 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Spull : IC
                 return;
             }
 
-            if (TargetUser.GetClient().GetHabbo().PremiumProtect && !Session.GetHabbo().HasFuse("fuse_mod"))            {                roomuser.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));                return;            }            roomuser.OnChat("*Tire " + Params[1] + "*", 0, false);            if (roomuser.RotBody % 2 != 0)
+            if (TargetUser.GetClient().GetHabbo().PremiumProtect && !Session.GetHabbo().HasFuse("fuse_mod"))            {                roomuser.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));                return;            }            RoomUser TUS = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            if (TUS == null)
+                return;
+
+            if (TUS.SetX - 1 == Room.GetGameMap().Model.DoorX)
+            {
+                return;
+            }            roomuser.OnChat("*Tire " + Params[1] + "*", 0, false);            if (roomuser.RotBody % 2 != 0)
             {
                 roomuser.RotBody--;
             }

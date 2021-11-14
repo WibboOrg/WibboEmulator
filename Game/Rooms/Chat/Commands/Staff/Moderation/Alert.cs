@@ -8,4 +8,4 @@ using Butterfly.Game.GameClients;namespace Butterfly.Game.Rooms.Chat.Commands.
                     return;
                 }
 
-                clientByUsername.SendNotification(message);            }        }    }}
+                clientByUsername.SendNotification(message);            }            UserRoom.SendWhisperChat("L'alerte a été envoyée à " + clientByUsername.GetHabbo().Username);        }    }}

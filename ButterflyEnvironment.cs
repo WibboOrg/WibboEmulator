@@ -17,6 +17,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -75,10 +76,10 @@ namespace Butterfly
             Console.WriteLine("");
 
 
-            Console.WriteLine("Butterfly Emulator Edition Wibbo");
-            Console.WriteLine("https://www.wibbo.org/");
-            Console.WriteLine("Credits : Butterfly and Plus Emulator.");
-            Console.WriteLine("- Jason Dhose, developor of Wibbo Hotel");
+            Console.WriteLine("     Butterfly Emulator Edition Wibbo");
+            Console.WriteLine("     https://www.wibbo.org/");
+            Console.WriteLine("     Credits : Butterfly and Plus Emulator.");
+            Console.WriteLine("     - Jason Dhose");
             Console.WriteLine("");
             Console.WriteLine("");
 
@@ -86,7 +87,7 @@ namespace Butterfly
 
             try
             {
-                _configuration = new ConfigurationData(PatchDir + "Settings/configuration.ini", false);
+                _configuration = new ConfigurationData(PatchDir + "configuration/configuration.ini", false);
                 _datebasemanager = new DatabaseManager(uint.Parse(GetConfig().data["db.pool.maxsize"]), uint.Parse(GetConfig().data["db.pool.minsize"]), GetConfig().data["db.hostname"], uint.Parse(GetConfig().data["db.port"]), GetConfig().data["db.username"], GetConfig().data["db.password"], GetConfig().data["db.name"]);
 
 
@@ -436,7 +437,9 @@ namespace Butterfly
 
             Console.Title = "BUTTERFLY : EXTINCTION";
 
-            GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
+            GetGame().GetClientManager().SendMessage(
+                new BroadcastMessageAlertComposer(
+                    "<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
             GetGame().Destroy();
             Thread.Sleep(3000);
             GetConnectionManager().Destroy();
@@ -445,7 +448,7 @@ namespace Butterfly
             GetGame().GetClientManager().CloseAll();
             GetGame().GetRoomManager().RemoveAllRooms();
 
-            Console.WriteLine("Butterfly Emulateur s'est parfaitement éteind...");
+            Console.WriteLine("Butterfly Emulateur s'est parfaitement éteint...");
 
             Thread.Sleep(1000);
             Environment.Exit(0);

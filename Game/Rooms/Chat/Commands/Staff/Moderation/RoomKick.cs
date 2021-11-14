@@ -33,7 +33,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
             }
 
 
-            room.SetTimeout(2500, () =>
+            room.SetTimeout(3000, () =>
             {
                 foreach (RoomUser User in currentRoom.GetRoomUserManager().GetUserList().ToList())
                 {

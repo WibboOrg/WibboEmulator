@@ -10,48 +10,44 @@ namespace Butterfly.Core
 
         public ConfigurationData(string filePath, bool maynotexist = false)
         {
-            this.data = new Dictionary<string, string>();
+            data = new Dictionary<string, string>();
 
             if (!File.Exists(filePath))
             {
                 if (!maynotexist)
-                {
                     throw new ArgumentException("Unable to locate configuration file at '" + filePath + "'.");
-                }
+                return;
             }
-            else
+
+            try
             {
-                try
+                using (var stream = new StreamReader(filePath))
                 {
-                    using (StreamReader streamReader = new StreamReader(filePath))
+                    string line;
+
+                    while ((line = stream.ReadLine()) != null)
                     {
-                        string line;
-
-                        while ((line = streamReader.ReadLine()) != null)
+                        if (line.Length < 1 || line.StartsWith("#"))
                         {
-                            if (line.Length < 1 || line.StartsWith("#"))
-                            {
-                                continue;
-                            }
+                            continue;
+                        }
 
-                            int delimiterIndex = line.IndexOf('=');
-                            if (delimiterIndex == -1)
-                            {
-                                continue;
-                            }
+                        int delimiterIndex = line.IndexOf('=');
 
+                        if (delimiterIndex != -1)
+                        {
                             string key = line.Substring(0, delimiterIndex);
                             string val = line.Substring(delimiterIndex + 1);
 
-                            this.data.Add(key, val);
+                            data.Add(key, val);
                         }
-                        streamReader.Close();
                     }
                 }
-                catch (Exception ex)
-                {
-                    throw new ArgumentException("Could not process configuration file: " + ex.Message);
-                }
+            }
+
+            catch (Exception e)
+            {
+                throw new ArgumentException("Could not process configuration file: " + e.Message);
             }
         }
     }

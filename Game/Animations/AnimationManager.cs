@@ -203,9 +203,9 @@ namespace Butterfly.Game.Animations
             room.CloseFullRoom = true;
 
             string alertMessage = "[center] [size=large]🤖[b]Animation Jack & Daisy[/b] 🤖[/size][/center]" +
-                "[br][br]" +
+                "[br]" +
                 "[center][i]Beep beep, c'est l'heure d'une animation automatisée ![/i][/center]" +
-                "[br][br]" +
+                "[br]" +
                 "➤ Rejoins-nous chez [b]WibboGame[/b] pour un jeu qui s'intitule [b]" + room.RoomData.Name + "[/b]" +
                 "[br][br]" +
                 "➤ Rends-toi dans l'appartement et tente de remporter un lot composé de [i]une ou plusieurs RareBox(s) et BadgeBox(s) ainsi qu'un point au TOP Gamer ! [/i] 🎁" +
