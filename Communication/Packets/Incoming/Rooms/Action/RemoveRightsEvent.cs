@@ -1,9 +1,11 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.GameClients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Users;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -24,22 +26,18 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            StringBuilder DeleteParams = new StringBuilder();
+            List<int> userIds = new List<int>();
             int Amount = Packet.PopInt();
             for (int index = 0; index < Amount; ++index)
             {
-                if (index > 0)
-                {
-                    DeleteParams.Append(" OR ");
-                }
-
                 int UserId = Packet.PopInt();
                 if (room.UsersWithRights.Contains(UserId))
                 {
                     room.UsersWithRights.Remove(UserId);
                 }
 
-                DeleteParams.Append("room_id = '" + room.Id + "' AND user_id = '" + UserId + "'");
+                if(!userIds.Contains(UserId))
+                    userIds.Add(UserId);
 
                 RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(UserId);
                 if (roomUserByHabbo != null && !roomUserByHabbo.IsBot)
@@ -80,7 +78,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dbClient.RunQuery("DELETE FROM room_rights WHERE " + (DeleteParams).ToString());
+                RoomRightDao.DeleteList(dbClient, room.Id, userIds);
             }
         }
     }

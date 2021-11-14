@@ -1,5 +1,8 @@
 using Butterfly.Database.Interfaces;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Text;
 
 namespace Butterfly.Database.Daos
 {
@@ -33,6 +36,25 @@ namespace Butterfly.Database.Daos
         {
             dbClient.SetQuery("SELECT room_id FROM `room_right` WHERE user_id = '" + userId + "'");
             return dbClient.GetTable();
+        }
+
+        internal static void DeleteList(IQueryAdapter dbClient, int roomId, List<int> userIds)
+        {
+            StringBuilder deleteParams = new StringBuilder();
+
+            int index = 0;
+            foreach(int userId in userIds)
+            {
+                if (index > 0)
+                {
+                    deleteParams.Append(" OR ");
+                }
+
+                deleteParams.Append("room_id = '" + roomId + "' AND user_id = '" + userId + "'");
+                index++;
+            }
+
+            dbClient.RunQuery("DELETE FROM `room_right` WHERE " + (deleteParams).ToString());
         }
     }
 }
