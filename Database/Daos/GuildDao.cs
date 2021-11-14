@@ -16,7 +16,7 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateColors(IQueryAdapter dbClient, int colour1, int colour2, int groupId)
         {
-            dbClient.SetQuery("UPDATE groups SET colour1 = @colour1, colour2 = @colour2 WHERE id = @groupId LIMIT 1");
+            dbClient.SetQuery("UPDATE `groups` SET `colour1` = @colour1, `colour2` = @colour2 WHERE `id` = @groupId LIMIT 1");
             dbClient.AddParameter("colour1", colour1);
             dbClient.AddParameter("colour2", colour2);
             dbClient.AddParameter("groupId", groupId);
@@ -34,7 +34,7 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateStateAndDeco(IQueryAdapter dbClient, int groupId, int groupState, int furniOptions)
         {
-            dbClient.SetQuery("UPDATE groups SET state = @GroupState, admindeco = @AdminDeco WHERE id = @groupId LIMIT 1");
+            dbClient.SetQuery("UPDATE `groups` SET `state` = @GroupState, `admindeco` = @AdminDeco WHERE `id` = @groupId LIMIT 1");
             dbClient.AddParameter("GroupState", groupState);
             dbClient.AddParameter("AdminDeco", furniOptions);
             dbClient.AddParameter("groupId", groupId);
@@ -43,12 +43,12 @@ namespace Butterfly.Database.Daos
 
         internal static void Delete(IQueryAdapter dbClient, int groupId)
         {
-            dbClient.RunQuery("DELETE FROM groups WHERE id = '" + groupId + "'");
+            dbClient.RunQuery("DELETE FROM `groups` WHERE `id` = '" + groupId + "'");
         }
 
         internal static DataRow GetOne(IQueryAdapter dbClient, int groupId)
         {
-            dbClient.SetQuery("SELECT * FROM groups WHERE id = @id LIMIT 1");
+            dbClient.SetQuery("SELECT * FROM `groups` WHERE `id` = @id LIMIT 1");
             dbClient.AddParameter("id", groupId);
             return dbClient.GetRow();
         }

@@ -26,7 +26,7 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateDecoration(IQueryAdapter dbClient, int roomId, string decorationKey, string extraData)
         {
-            dbClient.SetQuery("UPDATE rooms SET '" + decorationKey + "' = @extradata WHERE id = '" + roomId + "' LIMIT 1");
+            dbClient.SetQuery("UPDATE rooms SET `" + decorationKey + "` = @extradata WHERE id = '" + roomId + "' LIMIT 1");
             dbClient.AddParameter("extradata", extraData);
             dbClient.RunQuery();
         }

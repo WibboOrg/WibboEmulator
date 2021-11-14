@@ -6,9 +6,8 @@ namespace Butterfly.Database.Daos
     {
         internal static void Replace(IQueryAdapter dbClient, int spriteId, int totalPrice)
         {
-            int Id = 0;
             dbClient.SetQuery("SELECT id FROM catalog_marketplace_data WHERE sprite = " + spriteId + " LIMIT 1");
-            Id = dbClient.GetInteger();
+            int Id = dbClient.GetInteger();
 
             if (Id > 0)
             {
