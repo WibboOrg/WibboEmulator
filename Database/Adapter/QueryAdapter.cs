@@ -18,9 +18,14 @@ namespace Butterfly.Database.Adapter
             this.client = Client;
         }
 
-        public void AddParameter(string parameterName, object val)
+        public void AddParameter(string parameterName, string val)
         {
             this.command.Parameters.AddWithValue(parameterName, val);
+        }
+
+        public void AddParameter(string parameterName, int val)
+        {
+            this.command.Parameters.AddWithValue(parameterName, val.ToString());
         }
 
         public bool FindsResult()
@@ -140,11 +145,6 @@ namespace Butterfly.Database.Adapter
         {
             this.command.Parameters.Clear();
             this.command.CommandText = query;
-        }
-
-        public void addParameter(string name, byte[] data)
-        {
-            this.command.Parameters.Add(new MySqlParameter(name, MySqlDbType.Blob, data.Length));
         }
 
         public long InsertQuery()

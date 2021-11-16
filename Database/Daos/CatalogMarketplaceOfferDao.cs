@@ -22,7 +22,7 @@ namespace Butterfly.Database.Daos
         {
             StringBuilder builder = new StringBuilder();
             string str = "";
-            builder.Append("WHERE state = '1' AND timestamp >= " + ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp().ToString());
+            builder.Append("WHERE state = '1' AND timestamp >= " + ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp());
             if (minCost >= 0)
             {
                 builder.Append(" AND total_price > " + minCost);
@@ -47,7 +47,7 @@ namespace Butterfly.Database.Daos
                 builder.Append(" AND public_name LIKE @search_query");
             }
 
-            dbClient.SetQuery("SELECT offer_id, item_type, sprite_id, total_price, limited_number, limited_stack FROM `catalog_marketplace_offer` " + builder.ToString() + " " + str + " LIMIT 500");
+            dbClient.SetQuery("SELECT offer_id, item_type, sprite_id, total_price, limited_number, limited_stack FROM `catalog_marketplace_offer` " + builder + " " + str + " LIMIT 500");
             dbClient.AddParameter("search_query", searchQuery.Replace("%", "\\%").Replace("_", "\\_") + "%");
             return dbClient.GetTable();
         }

@@ -11,7 +11,7 @@ namespace Butterfly.Database.Daos
             dbClient.AddParameter("id", roomId);
             dbClient.AddParameter("doorX", doorX);
             dbClient.AddParameter("doorY", doorY);
-            dbClient.AddParameter("doorZ", doorZ);
+            dbClient.AddParameter("doorZ", doorZ.ToString());
             dbClient.AddParameter("doorDir", doorDirection);
             dbClient.AddParameter("heightmap", map);
             dbClient.AddParameter("murheight", wallHeight);

@@ -34,9 +34,9 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateStateAndDeco(IQueryAdapter dbClient, int groupId, int groupState, int furniOptions)
         {
-            dbClient.SetQuery("UPDATE `guild` SET `state`= @groupState, `admindeco`= @adminDeco WHERE `id`= @groupId LIMIT 1");
-            dbClient.AddParameter("groupState", groupState.ToString());
-            dbClient.AddParameter("adminDeco", furniOptions.ToString());
+            dbClient.SetQuery("UPDATE `guild` SET `state` = @groupState, `admindeco` = @adminDeco WHERE `id` = @groupId LIMIT 1");
+            dbClient.AddParameter("groupState", groupState);
+            dbClient.AddParameter("adminDeco", furniOptions);
             dbClient.AddParameter("groupId", groupId);
             dbClient.RunQuery();
         }

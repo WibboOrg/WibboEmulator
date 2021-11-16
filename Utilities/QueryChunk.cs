@@ -6,14 +6,14 @@ namespace Butterfly.Utilities
 {
     public class QueryChunk
     {
-        private Dictionary<string, object> parameters;
+        private Dictionary<string, string> parameters;
         private StringBuilder queries;
         private int queryCount;
         private readonly EndingType endingType;
 
         public QueryChunk()
         {
-            this.parameters = new Dictionary<string, object>();
+            this.parameters = new Dictionary<string, string>();
             this.queries = new StringBuilder();
             this.queryCount = 0;
             this.endingType = EndingType.Sequential;
@@ -21,7 +21,7 @@ namespace Butterfly.Utilities
 
         public QueryChunk(string startQuery)
         {
-            this.parameters = new Dictionary<string, object>();
+            this.parameters = new Dictionary<string, string>();
             this.queries = new StringBuilder(startQuery);
             this.endingType = EndingType.Continuous;
             this.queryCount = 0;
@@ -42,7 +42,7 @@ namespace Butterfly.Utilities
             }
         }
 
-        public void AddParameter(string parameterName, object value)
+        public void AddParameter(string parameterName, string value)
         {
             this.parameters.Add(parameterName, value);
         }
@@ -56,7 +56,7 @@ namespace Butterfly.Utilities
 
             this.queries = this.queries.Remove(this.queries.Length - 1, 1);
             dbClient.SetQuery((this.queries).ToString());
-            foreach (KeyValuePair<string, object> keyValuePair in this.parameters)
+            foreach (KeyValuePair<string, string> keyValuePair in this.parameters)
             {
                 dbClient.AddParameter(keyValuePair.Key, keyValuePair.Value);
             }

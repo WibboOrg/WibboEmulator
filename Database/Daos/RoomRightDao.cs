@@ -54,7 +54,7 @@ namespace Butterfly.Database.Daos
                 index++;
             }
 
-            dbClient.RunQuery("DELETE FROM `room_right` WHERE " + (deleteParams).ToString());
+            dbClient.RunQuery("DELETE FROM `room_right` WHERE " + (deleteParams));
         }
     }
 }
