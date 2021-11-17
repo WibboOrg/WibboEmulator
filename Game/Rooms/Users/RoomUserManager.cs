@@ -532,7 +532,7 @@ namespace Butterfly.Game.Rooms
 
             if (!User.IsBot)
             {
-                if (Session.GetHabbo().GetBadgeComponent().HasBadge("ADM")) // STAFF
+                if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("ADM")) // STAFF
                 {
                     User.CurrentEffect = 540;
                 }

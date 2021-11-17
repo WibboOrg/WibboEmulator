@@ -44,8 +44,8 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 DataTable itemTable = ItemDao.GetAllIdAndBaseItem(dbClient, OldRoomId);
                 foreach (DataRow dataRow in itemTable.Rows)
                 {
-                    int OldItemId = Convert.ToInt32(dataRow[0]);
-                    int baseID = Convert.ToInt32(dataRow[1]);
+                    int OldItemId = Convert.ToInt32(dataRow["id"]);
+                    int baseID = Convert.ToInt32(dataRow["base_item"]);
 
                     if (!furniIdAllow.Contains(baseID))
                     {
@@ -114,6 +114,9 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 
                     string OldItem = (string)wiredRow["triggers_item"];
 
+                    if (OldItem.Length <= 0) 
+                        continue;
+
                     if (OldItem.Contains(":"))
                     {
                         foreach (string oldItem in OldItem.Split(';'))
@@ -137,9 +140,14 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                     }
                     else
                     {
-                        foreach (string oldId in OldItem.Split(';'))
+                        foreach (string itemData in OldItem.Split(';'))
                         {
-                            if (!newItemsId.TryGetValue(Convert.ToInt32(oldId), out int newId))
+                            if (!int.TryParse(itemData, out int oldId))
+                            {
+                                continue;
+                            }
+
+                            if (!newItemsId.TryGetValue(oldId, out int newId))
                             {
                                 continue;
                             }
