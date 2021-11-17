@@ -441,7 +441,7 @@ namespace Butterfly
                 new BroadcastMessageAlertComposer(
                     "<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
             GetGame().Destroy();
-            Thread.Sleep(3000);
+            Thread.Sleep(20000);
             GetConnectionManager().Destroy();
             GetGame().GetPacketManager().UnregisterAll();
             GetGame().GetPacketManager().WaitForAllToComplete();

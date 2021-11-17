@@ -11,7 +11,7 @@ using Butterfly.Game.GameClients;namespace Butterfly.Game.Rooms.Chat.Commands.
                     Raison = CommandManager.MergeParams(Params, 2);
                 }
 
-                ButterflyEnvironment.GetGame().GetClientManager().BanUser(clientByUsername, Session.GetHabbo().Username, 788922000, Raison, true, false);                Session.Antipub(Raison, "<CMD>");
+                ButterflyEnvironment.GetGame().GetClientManager().BanUser(clientByUsername, Session.GetHabbo().Username, 788922000, Raison, true, false);                UserRoom.SendWhisperChat("Tu as banIP " + clientByUsername.GetHabbo().Username + " pour" + Raison + "!");                Session.Antipub(Raison, "<CMD>");
 
                 if (clientByUsername.GetHabbo().Rank > 5 && Session.GetHabbo().Rank < 12)
                 {

@@ -7,21 +7,15 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
     {
         public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Room == null)
+
+            string Message = CommandManager.MergeParams(Params, 1);
+            foreach (RoomUser RoomUser in Room.GetRoomUserManager().GetRoomUsers())
             {
-                return;
+                if (RoomUser == null || RoomUser.GetClient() == null || Session.GetHabbo().Id == RoomUser.UserId)
+                    continue;
+
+                RoomUser.GetClient().SendNotification(Message);
             }
-
-            string s = CommandManager.MergeParams(Params, 1);
-            if (Session.Antipub(s, "<CMD>", Room.Id))
-            {
-                return;
-            }
-
-            ServerPacket message = new ServerPacket(ServerPacketHeader.GENERIC_ALERT);
-            message.WriteString(s);
-            Room.SendPacket(message);
-
         }
     }
 }

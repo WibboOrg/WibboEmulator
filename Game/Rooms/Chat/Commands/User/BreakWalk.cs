@@ -1,7 +1,7 @@
-using Butterfly.HabboHotel.GameClients;
-using Butterfly.HabboHotel.Rooms.Games;
+using Butterfly.Game.GameClients;
+using Butterfly.Game.Rooms.Games;
 
-namespace Butterfly.HabboHotel.Rooms.Chat.Commands.Cmd
+namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class BreakWalk : IChatCommand
     {
