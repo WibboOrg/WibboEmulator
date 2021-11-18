@@ -22,7 +22,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 
             foreach (RoomUser User in currentRoom.GetRoomUserManager().GetUserList().ToList())
             {
-                if (User != null && !User.IsBot && !User.GetClient().GetHabbo().HasFuse("fuse_mod") || User.GetClient().GetHabbo().Id != Session.GetHabbo().Id)
+                if (User != null && !User.IsBot && !User.GetClient().GetHabbo().HasFuse("fuse_no_kick"))
                 {
                     User.AllowMoveTo = false;
                     User.IsWalking = true;
@@ -37,7 +37,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
             {
                 foreach (RoomUser User in currentRoom.GetRoomUserManager().GetUserList().ToList())
                 {
-                    if (User != null || !User.IsBot || !User.GetClient().GetHabbo().HasFuse("fuse_mod") || User.GetClient().GetHabbo().Id != Session.GetHabbo().Id)
+                    if (User != null && !User.IsBot && !User.GetClient().GetHabbo().HasFuse("fuse_no_kick"))
                     {
                         if (MessageAlert.Length > 0)
                         {

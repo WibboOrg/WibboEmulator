@@ -47,7 +47,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                     {
                         User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("wired.kick.exception", User.GetClient().Langue));
                     }
-
+                    
                     return;
                 }
 

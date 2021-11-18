@@ -1509,6 +1509,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
                         break;
                     }
+                
                 case "jackanddaisy":
                     {
                         RoomUser Bot = null;
@@ -1532,6 +1533,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                         {
                             case "wait":
                                 {
+
 
                                     Phrases.Add("Merci de patienter, le jeu va bientôt commencer !");
                                     Phrases.Add("Le jeu va commencer dans quelques instants !");
