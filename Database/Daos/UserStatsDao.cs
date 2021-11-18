@@ -7,24 +7,24 @@ namespace Butterfly.Database.Daos
     {
         internal static string BuildUpdateQuery(int userId, int favouriteGroupId, int timeOnlineSec, int currentQuestId, int respect, int dailyRespectPoints, int dailyPetRespectPoints)
         {
-            return  "UPDATE `user_stats` SET group_id = " + favouriteGroupId + ", online_time = online_time + " + timeOnlineSec + ", quest_id = '" + currentQuestId + "', Respect = '" + respect + "', daily_respect_points = '" + dailyRespectPoints + "', daily_pet_respect_points = '" + dailyPetRespectPoints + "' WHERE id = '" + userId + "';";
+            return "UPDATE `user_stats` SET `group_id` = " + favouriteGroupId + ", `online_time` = `online_time` + " + timeOnlineSec + ", `quest_id` = '" + currentQuestId + "', `respect` = '" + respect + "', `daily_respect_points` = '" + dailyRespectPoints + "', `daily_pet_respect_points` = '" + dailyPetRespectPoints + "' WHERE `id` = '" + userId + "';";
         }
 
         internal static void UpdateRemoveAllGroupId(IQueryAdapter dbClient, int groupId)
         {
-            dbClient.RunQuery("UPDATE `user_stats` SET group_id = '0' WHERE group_id = '" + groupId + "' LIMIT 1");
+            dbClient.RunQuery("UPDATE `user_stats` SET `group_id` = '0' WHERE `group_id` = '" + groupId + "' LIMIT 1");
         }
 
         internal static void UpdateRemoveGroupId(IQueryAdapter dbClient, int userId)
         {
-            dbClient.SetQuery("UPDATE `user_stats` SET group_id = '0' WHERE id = @userId LIMIT 1");
+            dbClient.SetQuery("UPDATE `user_stats` SET `group_id` = '0' WHERE `id` = @userId LIMIT 1");
             dbClient.AddParameter("userId", userId);
             dbClient.RunQuery();
         }
 
         internal static void UpdateGroupId(IQueryAdapter dbClient, int groupId, int userId)
         {
-            dbClient.SetQuery("UPDATE `user_stats` SET group_id = @groupId WHERE id = @userId LIMIT 1");
+            dbClient.SetQuery("UPDATE `user_stats` SET `group_id` = @groupId WHERE `id` = @userId LIMIT 1");
             dbClient.AddParameter("groupId", groupId);
             dbClient.AddParameter("userId", userId);
             dbClient.RunQuery();
@@ -32,22 +32,22 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateAchievementScore(IQueryAdapter dbClient, int userId, int score)
         {
-            dbClient.RunQuery("UPDATE `user_stats` SET achievement_score = achievement_score + '" + score + "' WHERE id = '" + userId + "'");
+            dbClient.RunQuery("UPDATE `user_stats` SET `achievement_score` = `achievement_score` + '" + score + "' WHERE `id` = '" + userId + "'");
         }
 
         internal static void UpdateAll(IQueryAdapter dbClient, int userId, int groupId, int onlineTime, int questId, int respect, int dailyRespectPoints, int dailyPetRespectPoints)
         {
-            dbClient.RunQuery("UPDATE `user_stats` SET group_id = '" + groupId + "',  online_time = online_time + '" + onlineTime + "', quest_id = '" + questId + "', Respect = '" + respect + "', daily_respect_points = '" + dailyRespectPoints + "', daily_pet_respect_points = '" + dailyPetRespectPoints + "' WHERE id = '" + userId + "'");
+            dbClient.RunQuery("UPDATE `user_stats` SET `group_id` = '" + groupId + "',  `online_time` = `online_time` + '" + onlineTime + "', `quest_id` = '" + questId + "', `respect` = '" + respect + "', `daily_respect_points` = '" + dailyRespectPoints + "', `daily_pet_respect_points` = '" + dailyPetRespectPoints + "' WHERE `id` = '" + userId + "'");
         }
 
         internal static void UpdateRespectPoint(IQueryAdapter dbClient, int userId, int count)
         {
-            dbClient.RunQuery("UPDATE `user_stats` SET daily_respect_points = '" + count + "', daily_pet_respect_points = '" + count + "' WHERE id = '" + userId + "' LIMIT 1");
+            dbClient.RunQuery("UPDATE `user_stats` SET `daily_respect_points` = '" + count + "', `daily_pet_respect_points` = '" + count + "' WHERE `id` = '" + userId + "' LIMIT 1");
         }
 
         internal static void Insert(IQueryAdapter dbClient, int userId)
         {
-            dbClient.RunQuery("INSERT INTO `user_stats` (id) VALUES ('" + userId + "')");
+            dbClient.RunQuery("INSERT INTO `user_stats` (`id`) VALUES ('" + userId + "')");
         }
 
         internal static DataRow GetOne(IQueryAdapter dbClient, int userId)
