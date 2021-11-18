@@ -7,7 +7,6 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
     {
         public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-
             string Message = CommandManager.MergeParams(Params, 1);
             foreach (RoomUser RoomUser in Room.GetRoomUserManager().GetRoomUsers())
             {
