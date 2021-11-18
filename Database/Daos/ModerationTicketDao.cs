@@ -8,7 +8,7 @@ namespace Butterfly.Database.Daos
     {
         internal static DataTable GetAll(IQueryAdapter dbClient)
         {
-            dbClient.SetQuery("SELECT * FROM `moderation_ticket` WHERE status = 'open'");
+            dbClient.SetQuery("SELECT `id`, `score`, `type`, `status`, `sender_id`, `reported_id`, `moderator_id`, `message`, `room_id`, `room_name`, `timestamp` FROM `moderation_ticket` WHERE status = 'open'");
             return dbClient.GetTable();
         }
 

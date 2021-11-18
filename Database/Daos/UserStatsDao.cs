@@ -52,7 +52,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataRow GetOne(IQueryAdapter dbClient, int userId)
         {
-            dbClient.SetQuery("SELECT * FROM `user_stats` WHERE id = @id");
+            dbClient.SetQuery("SELECT `id`, `online_time`, `respect`, `respect_given`, `gifts_given`, `gifts_received`, `daily_respect_points`, `daily_pet_respect_points`, `achievement_score`, `quest_id`, `quest_progress`, `lev_builder`, `lev_social`, `lev_identity`, `lev_explore`, `group_id` FROM `user_stats` WHERE id = @id");
             dbClient.AddParameter("id", userId);
             return dbClient.GetRow();
         }

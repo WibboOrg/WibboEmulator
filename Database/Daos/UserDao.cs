@@ -62,7 +62,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataRow GetOneByTicket(IQueryAdapter dbClient, string sessionTicket)
         {
-            dbClient.SetQuery("SELECT * FROM `user` WHERE auth_ticket = @sso LIMIT 1");
+            dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `last_offline`, `jetons`, `mois_vip`, `volume`, `vip_points`, `accept_trading`, `mail_valide`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned` FROM `user` WHERE auth_ticket = @sso LIMIT 1");
             dbClient.AddParameter("sso", sessionTicket);
             return dbClient.GetRow();
         }
@@ -81,7 +81,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataRow GetOne(IQueryAdapter dbClient, int userId)
         {
-            dbClient.SetQuery("SELECT * FROM `user` WHERE id = @id LIMIT 1");
+            dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `last_offline`, `jetons`, `mois_vip`, `volume`, `vip_points`, `accept_trading`, `mail_valide`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned` FROM `user` WHERE id = @id LIMIT 1");
             dbClient.AddParameter("id", userId);
             return dbClient.GetRow();
         }

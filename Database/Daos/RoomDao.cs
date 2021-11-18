@@ -83,14 +83,14 @@ namespace Butterfly.Database.Daos
 
         internal static DataTable GetAllSearchByUsername(IQueryAdapter dbClient, string searchData)
         {
-            dbClient.SetQuery("SELECT * FROM `room` WHERE owner = @username and state != 'invisible' ORDER BY users_now DESC");
+            dbClient.SetQuery("SELECT `id`, `caption`, `owner`, `description`, `category`, `state`, `users_max`, `model_name`, `score`, `tags`, `password`, `wallpaper`, `floor`, `landscape`, `allow_pets`, `allow_pets_eat`, `allow_walkthrough`, `allow_hidewall`, `wallthick`, `floorthick`, `moderation_mute_fuse`, `allow_rightsoverride`, `moderation_kick_fuse`, `moderation_ban_fuse`, `group_id`, `chat_type`, `chat_balloon`, `chat_speed`, `chat_max_distance`, `chat_flood_protection`, `troc_status`, `users_now`, `allow_hidewireds`, `price` FROM `room` WHERE owner = @username and state != 'invisible' ORDER BY users_now DESC");
             dbClient.AddParameter("username", searchData);
             return dbClient.GetTable();
         }
 
         internal static DataTable GetAllSearch(IQueryAdapter dbClient, string searchData)
         {
-            dbClient.SetQuery("SELECT * FROM `room` WHERE caption LIKE @query OR owner LIKE @query ORDER BY users_now DESC LIMIT 50");
+            dbClient.SetQuery("SELECT `id`, `caption`, `owner`, `description`, `category`, `state`, `users_max`, `model_name`, `score`, `tags`, `password`, `wallpaper`, `floor`, `landscape`, `allow_pets`, `allow_pets_eat`, `allow_walkthrough`, `allow_hidewall`, `wallthick`, `floorthick`, `moderation_mute_fuse`, `allow_rightsoverride`, `moderation_kick_fuse`, `moderation_ban_fuse`, `group_id`, `chat_type`, `chat_balloon`, `chat_speed`, `chat_max_distance`, `chat_flood_protection`, `troc_status`, `users_now`, `allow_hidewireds`, `price` FROM `room` WHERE caption LIKE @query OR owner LIKE @query ORDER BY users_now DESC LIMIT 50");
             dbClient.AddParameter("query", searchData.Replace("%", "\\%").Replace("_", "\\_") + "%");
             return dbClient.GetTable();
         }
@@ -134,7 +134,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataRow GetOne(IQueryAdapter dbClient, int roomId)
         {
-            dbClient.SetQuery("SELECT * FROM `room` WHERE id = '" + roomId + "'");
+            dbClient.SetQuery("SELECT `id`, `caption`, `owner`, `description`, `category`, `state`, `users_max`, `model_name`, `score`, `tags`, `password`, `wallpaper`, `floor`, `landscape`, `allow_pets`, `allow_pets_eat`, `allow_walkthrough`, `allow_hidewall`, `wallthick`, `floorthick`, `moderation_mute_fuse`, `allow_rightsoverride`, `moderation_kick_fuse`, `moderation_ban_fuse`, `group_id`, `chat_type`, `chat_balloon`, `chat_speed`, `chat_max_distance`, `chat_flood_protection`, `troc_status`, `users_now`, `allow_hidewireds`, `price` FROM `room` WHERE id = '" + roomId + "'");
             return dbClient.GetRow();
         }
 
@@ -167,7 +167,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataTable GetAllByOwner(IQueryAdapter dbClient, string username)
         {
-            dbClient.SetQuery("SELECT * FROM `room` WHERE owner = @name ORDER BY id ASC");
+            dbClient.SetQuery("SELECT `id`, `caption`, `owner`, `description`, `category`, `state`, `users_max`, `model_name`, `score`, `tags`, `password`, `wallpaper`, `floor`, `landscape`, `allow_pets`, `allow_pets_eat`, `allow_walkthrough`, `allow_hidewall`, `wallthick`, `floorthick`, `moderation_mute_fuse`, `allow_rightsoverride`, `moderation_kick_fuse`, `moderation_ban_fuse`, `group_id`, `chat_type`, `chat_balloon`, `chat_speed`, `chat_max_distance`, `chat_flood_protection`, `troc_status`, `users_now`, `allow_hidewireds`, `price` FROM `room` WHERE owner = @name ORDER BY id ASC");
             dbClient.AddParameter("name", username);
             return dbClient.GetTable();
         }

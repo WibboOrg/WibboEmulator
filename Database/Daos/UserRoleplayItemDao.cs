@@ -13,7 +13,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataTable GetAll(IQueryAdapter dbClient, int userId, int roleplayId)
         {
-            dbClient.SetQuery("SELECT * FROM `user_roleplay_item` WHERE user_id = '" + userId + "' AND rp_id = '" + roleplayId + "'");
+            dbClient.SetQuery("SELECT `id`, `user_id`, `rp_id`, `item_id`, `count` FROM `user_roleplay_item` WHERE user_id = '" + userId + "' AND rp_id = '" + roleplayId + "'");
             dbClient.AddParameter("userid", userId);
             return dbClient.GetTable();
         }

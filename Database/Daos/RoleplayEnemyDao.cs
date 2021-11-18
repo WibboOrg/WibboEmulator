@@ -7,7 +7,7 @@ namespace Butterfly.Database.Daos
     {
         internal static DataTable GetAll(IQueryAdapter dbClient)
         {
-            dbClient.SetQuery("SELECT * FROM `roleplay_enemy`");
+            dbClient.SetQuery("SELECT `id`, `type`, `health`, `weapon_far_id`, `weapon_cac_id`, `dead_timer`, `loot_item_id`, `money_drop`, `drop_script_id`, `team_id`, `aggro_distance`, `zone_distance`, `reset_position`, `lost_aggro_distance`, `zombie_mode` FROM `roleplay_enemy`");
             return dbClient.GetTable();
         }
 

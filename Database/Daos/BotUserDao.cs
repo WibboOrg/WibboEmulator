@@ -136,7 +136,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataTable GetOneByRoomId(IQueryAdapter dbClient, int roomId)
         {
-            dbClient.SetQuery("SELECT * FROM `bot_user` WHERE room_id = '" + roomId + "'");
+            dbClient.SetQuery("SELECT `id`, `user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`, `status`, `enable`, `handitem` FROM `bot_user` WHERE room_id = '" + roomId + "'");
 
             return dbClient.GetTable();
         }
@@ -148,7 +148,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId)
         {
-            dbClient.SetQuery("SELECT * FROM `bot_user` WHERE user_id = '" + userId + "' AND room_id = '0'");
+            dbClient.SetQuery("SELECT `id`, `user_id`, `name`, `motto`, `gender`, `look`, `room_id`, `walk_enabled`, `x`, `y`, `z`, `rotation`, `chat_enabled`, `chat_text`, `chat_seconds`, `is_dancing`, `is_mixchat`, `status`, `enable`, `handitem` FROM `bot_user` WHERE user_id = '" + userId + "' AND room_id = '0'");
 
             return dbClient.GetTable();
         }

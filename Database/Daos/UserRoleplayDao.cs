@@ -17,7 +17,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataRow GetOne(IQueryAdapter dbClient, int userId, int roleplayId)
         {
-            dbClient.SetQuery("SELECT * FROM `user_roleplay` WHERE user_id = '" + userId + "' AND roleplay_id = '" + roleplayId + "'");
+            dbClient.SetQuery("SELECT `user_id`, `roleplay_id`, `health`, `energy`, `money`, `munition`, `exp`, `weapon_far`, `weapon_cac`, `hygiene`, `money_1`, `money_2`, `money_3`, `money_4` FROM `user_roleplay` WHERE user_id = '" + userId + "' AND roleplay_id = '" + roleplayId + "'");
             return dbClient.GetRow();
         }
 
