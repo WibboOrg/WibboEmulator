@@ -726,6 +726,7 @@
     <Compile Include="Game\Rooms\Chat\Commands\Staff\Administration\StartGameJD.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\Staff\Moderation\Murmur.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\Staff\Moderation\StaffsOnline.cs" />
+    <Compile Include="Game\Rooms\Chat\Commands\User\Kick.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\User\Premium\GameTime.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\Staff\Administration\AllFriends.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\Staff\Administration\OpenWeb.cs" />
@@ -851,7 +852,7 @@
     <Compile Include="Game\Rooms\Chat\Commands\Staff\Moderation\Invisible.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\Staff\Moderation\BanIP.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\User\Janken.cs" />
-    <Compile Include="Game\Rooms\Chat\Commands\Staff\Moderation\Kick.cs" />
+    <Compile Include="Game\Rooms\Chat\Commands\Staff\Moderation\KickStaff.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\Staff\Moderation\KickBan.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\Staff\Moderation\KickAll.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\User\Lay.cs" />

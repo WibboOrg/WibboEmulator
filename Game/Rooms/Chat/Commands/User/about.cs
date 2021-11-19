@@ -14,9 +14,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 "   <b>Credits</b>:\n" +
                 "   Meth0d, Matinmine, Carlos, Super0ca,\n" +
                 "   Mike, Sledmore, Joopie, Tweeny, \n" +
-                "   JasonDhose, Leenster, Moogly, Niels, AKllX, rbi0s\n\n" +
-                "   <b>Information sur le serveur</b>:\n" +
-                "   Uptime: " + Uptime.Days + " jour(s), " + Uptime.Hours + " heure(s) et " + Uptime.Minutes + " minutes.\n\n"));
+                "   JasonDhose, Leenster, Moogly, Niels, AKllX, rbi0s\n\n"));
         }
     }
 }

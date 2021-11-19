@@ -3,15 +3,6 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Disconnect
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
-            else if (clientByUsername.GetHabbo().Rank >= Session.GetHabbo().Rank)            {                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));            }            else            {
+            else if (clientByUsername.GetHabbo().Rank >= Session.GetHabbo().Rank)            {                //Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));                Session.Disconnect();            }            else            {
                 clientByUsername.Disconnect();
-
-
-
-
-
-
-
-
-                /*WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(clientByUsername.GetHabbo().Id);                if (ClientWeb == null) return;                ClientWeb.Dispose();*/
             }        }    }}

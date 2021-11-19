@@ -276,6 +276,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands
             this.Register(188, new StopSoundRoom());
             this.Register(189, new YoutubeRoom());
             this.Register(190, new CloseDice());
+            this.Register(199, new Kick());
 
         }
         
@@ -300,7 +301,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands
             this.Register(37, new Mute());
             this.Register(38, new UnMute());
             this.Register(39, new Alert());
-            this.Register(40, new Kick());
+            this.Register(40, new KickStaff());
             this.Register(61, new DeleteMission());
             this.Register(63, new Come());
             this.Register(89, new BanIP());
