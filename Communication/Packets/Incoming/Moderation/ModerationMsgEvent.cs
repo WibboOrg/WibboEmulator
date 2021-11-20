@@ -14,11 +14,28 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int userId = Packet.PopInt();
             string message = Packet.PopString();
 
-            GameClient client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
-            if (client == null)
+            GameClient clientTarget = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            if (clientTarget == null)
                 return;
 
-            client.SendNotification(message);
+            if (clientTarget.GetHabbo().Id == Session.GetHabbo().Id)
+            {
+                return;
+            }
+
+            if (clientTarget.GetHabbo().Rank >= Session.GetHabbo().Rank)
+            {
+                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.caution.missingrank", Session.Langue));
+            }
+
+            if (Session.Antipub(message, "<MT>"))
+            {
+                return;
+            }
+
+            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetHabbo().Id, Session.GetHabbo().Username, 0, string.Empty, "ModTool", string.Format("Modtool alert ( {1} ): {0}", message, clientTarget.GetHabbo().Username));
+
+            clientTarget.SendNotification(message);
         }
     }
 }

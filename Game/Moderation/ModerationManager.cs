@@ -523,30 +523,6 @@ namespace Butterfly.Game.Moderation
             }
         }
 
-        public static void AlertUser(GameClient ModSession, int UserId, string Message, bool Caution)
-        {
-            GameClient clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
-            if (clientByUserId == null || clientByUserId.GetHabbo().Id == ModSession.GetHabbo().Id)
-            {
-                return;
-            }
-
-            if (Caution && clientByUserId.GetHabbo().Rank >= ModSession.GetHabbo().Rank)
-            {
-                ModSession.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.caution.missingrank", ModSession.Langue));
-                Caution = false;
-            }
-
-            if (ModSession.Antipub(Message, "<MT>"))
-            {
-                return;
-            }
-
-            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(ModSession.GetHabbo().Id, ModSession.GetHabbo().Username, 0, string.Empty, "ModTool", string.Format("Modtool alert ( {1} ): {0}", Message, clientByUserId.GetHabbo().Username));
-
-            clientByUserId.SendNotification(Message);
-        }
-
         public static void BanUser(GameClient ModSession, int UserId, int Length, string Message)
         {
             GameClient clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);

@@ -30,7 +30,7 @@ namespace Butterfly.Game.Rooms
     public delegate void TriggerUserDelegate(RoomUser user, string ActionType);
     public delegate void BotCollisionDelegate(RoomUser user, string BotName);
 
-    public class Room : RoomData
+    public class Room
     {
         public bool RoomMuted;
         public bool isCycling;
