@@ -429,8 +429,8 @@ namespace Butterfly.Game.Moderation
 
             if (InappropriateRoom)
             {
-                room.RoomData.Name = ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.room.roomclosed", ModSession.Langue);
-                room.RoomData.Description = ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.room.roomclosed", ModSession.Langue);
+                room.RoomData.Name = "Inapproprié pour l'hôtel";
+                room.RoomData.Description = "Malheureusement, cet appartement ne peut pas figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
                 room.ClearTags();
                 room.RoomData.Tags.Clear();
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())

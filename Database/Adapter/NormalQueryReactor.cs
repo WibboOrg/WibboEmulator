@@ -8,13 +8,13 @@ namespace Butterfly.Database.Adapter
         public NormaldbClient(IDatabaseClient Client)
             : base(Client)
         {
-            this.command = Client.createNewCommand();
+            command = Client.createNewCommand();
         }
 
         public void Dispose()
         {
-            this.command.Dispose();
-            this.client.reportDone();
+            command.Dispose();
+            client.reportDone();
             GC.SuppressFinalize(this);
         }
     }

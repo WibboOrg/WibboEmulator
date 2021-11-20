@@ -50,6 +50,8 @@ namespace Butterfly.Game.Rooms
         public int SellPrice;
         public int TagCount => this.Tags.Count;
 
+        public RoomAccess Access { get; set; }
+
         public RoomModel Model
         {
             get

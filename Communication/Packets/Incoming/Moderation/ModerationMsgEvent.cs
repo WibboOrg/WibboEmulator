@@ -1,5 +1,4 @@
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Moderation;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -12,7 +11,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ModerationManager.AlertUser(Session, Packet.PopInt(), Packet.PopString(), true);
+            int userId = Packet.PopInt();
+            string message = Packet.PopString();
+
+            GameClient client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            if (client == null)
+                return;
+
+            client.SendNotification(message);
         }
     }
 }

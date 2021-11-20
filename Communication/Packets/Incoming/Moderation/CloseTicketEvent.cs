@@ -6,13 +6,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(GameClient Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().HasFuse("fuse_mod"))
+            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().HasFuse("fuse_mod"))
             {
                 return;
             }
 
             int Result = Packet.PopInt();
             Packet.PopInt();
+            int TicketId = Packet.PopInt();
 
             ButterflyEnvironment.GetGame().GetModerationManager().CloseTicket(Session, Packet.PopInt(), Result);
         }

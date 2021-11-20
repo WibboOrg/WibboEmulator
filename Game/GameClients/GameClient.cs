@@ -1,5 +1,6 @@
 ﻿using Buttefly.Communication.Encryption.Crypto.Prng;
 using Butterfly.Communication.Packets.Incoming;
+using Butterfly.Communication.Packets.Incoming.Structure;
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.BuildersClub;
 using Butterfly.Communication.Packets.Outgoing.Handshake;
@@ -14,6 +15,7 @@ using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
+using Butterfly.Game.Rooms;
 using Butterfly.Game.Users;
 using Butterfly.Game.Users.UserData;
 using Butterfly.Net;
@@ -302,7 +304,6 @@ namespace Butterfly.Game.GameClients
             MessageNotif.WriteString(Message);
             this.SendPacket(MessageNotif);
         }
-
 
         public void Dispose()
         {

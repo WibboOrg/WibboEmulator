@@ -778,6 +778,7 @@
     <Compile Include="Game\Rooms\Chat\Commands\User\RoomBuy.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\User\RoomRemoveSell.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\User\RoomSell.cs" />
+    <Compile Include="Game\Rooms\RoomAccess.cs" />
     <Compile Include="Game\Rooms\Utils\TransformUtility.cs" />
     <Compile Include="Game\Rooms\Wired\WiredCycle.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Effects\CollisionTeam.cs" />
