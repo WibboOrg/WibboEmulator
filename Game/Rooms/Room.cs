@@ -1266,5 +1266,26 @@ namespace Butterfly.Game.Rooms
             if (!this.cancellationTokenSources.Contains(cancellationTokenSource))
                 this.cancellationTokenSources.Add(cancellationTokenSource);
         }
+
+        public void SetTimeout(Func<Task> callBack)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationToken cancellationToken = cancellationTokenSource.Token;
+
+            Task.Run(async () =>
+            {
+                if (this.cancellationTokenSources.Contains(cancellationTokenSource))
+                    this.cancellationTokenSources.Remove(cancellationTokenSource);
+
+                if (this.Disposed) return;
+
+                await callBack();
+
+            }, cancellationToken);
+
+
+            if (!this.cancellationTokenSources.Contains(cancellationTokenSource))
+                this.cancellationTokenSources.Add(cancellationTokenSource);
+        }
     }
 }

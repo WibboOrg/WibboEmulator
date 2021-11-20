@@ -1,5 +1,7 @@
 using Butterfly.Game.GameClients;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
@@ -20,56 +22,38 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            foreach (RoomUser User in currentRoom.GetRoomUserManager().GetUserList().ToList())
+            room.SetTimeout(async () =>
             {
-                if (User != null && !User.IsBot && !User.GetClient().GetHabbo().HasFuse("fuse_mod") && User.GetClient().GetHabbo().Id != Session.GetHabbo().Id)
+                List<RoomUser> userKick = new List<RoomUser>();
+                foreach (RoomUser user in currentRoom.GetRoomUserManager().GetUserList().ToList())
                 {
-                    User.AllowMoveTo = false;
-                    User.IsWalking = true;
-                    User.AllowOverride = true;
-                    User.GoalX = Room.GetGameMap().Model.DoorX;
-                    User.GoalY = Room.GetGameMap().Model.DoorY;
-                }
-            }
-
-
-            room.SetTimeout(3000, () =>
-            {
-                foreach (RoomUser User in currentRoom.GetRoomUserManager().GetUserList().ToList())
-                {
-                    if (User != null && !User.IsBot && !User.GetClient().GetHabbo().HasFuse("fuse_mod") && User.GetClient().GetHabbo().Id != Session.GetHabbo().Id)
+                    if (user != null && !user.IsBot && !user.GetClient().GetHabbo().HasFuse("fuse_mod") && user.GetClient().GetHabbo().Id != Session.GetHabbo().Id)
                     {
-                        if (MessageAlert.Length > 0)
-                        {
-                            User.GetClient().SendNotification(MessageAlert);
-                        }
-
-                        currentRoom.GetRoomUserManager().RemoveUserFromRoom(User.GetClient(), true, false);
+                        userKick.Add(user);
                     }
+                }
+                
+                foreach (RoomUser user in userKick)
+                {
+                    user.AllowMoveTo = false;
+                    user.IsWalking = true;
+                    user.AllowOverride = true;
+                    user.GoalX = Room.GetGameMap().Model.DoorX;
+                    user.GoalY = Room.GetGameMap().Model.DoorY;
+                }
+
+                await Task.Delay(3000);
+                
+                foreach (RoomUser user in userKick)
+                {
+                    if (MessageAlert.Length > 0)
+                    {
+                        user.GetClient().SendNotification(MessageAlert);
+                    }
+
+                    currentRoom.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, false);
                 }
             });
         }
     }
 }
-
-/*foreach (RoomUser User in currentRoom.GetRoomUserManager().GetUserList().ToList())
-{
-    if (User != null && !User.IsBot && !User.GetClient().GetHabbo().HasFuse("fuse_mod") && User.GetClient().GetHabbo().Id != Session.GetHabbo().Id)
-    {
-        Task.Run(async delegate
-        {
-            User.AllowMoveTo = false;
-            User.IsWalking = true;
-            User.AllowOverride = true;
-            User.GoalX = Room.GetGameMap().Model.DoorX;
-            User.GoalY = Room.GetGameMap().Model.DoorY;
-            await Task.Delay(2500);
-
-            if (MessageAlert.Length > 0)
-            {
-                User.GetClient().SendNotification(MessageAlert);
-            }
-            currentRoom.GetRoomUserManager().RemoveUserFromRoom(User.GetClient(), true, false);
-        });
-    }
-}*/
