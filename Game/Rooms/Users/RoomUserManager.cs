@@ -568,10 +568,14 @@ namespace Butterfly.Game.Rooms
                 {
                     User.CurrentEffect = 581;
                 }
-                //else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("BALTIOFFI")) // IDK ?
-                //User.CurrentEffect = 578;
-                //else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WFMEM")) // WIBBO FAMILLY
-                //User.CurrentEffect = 579;
+                /*else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("BALTIOFFI")) // IDK ?
+                {
+                    User.CurrentEffect = 578;
+                }
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WFMEM")) // WIBBO FAMILLY
+                {
+                    User.CurrentEffect = 579;
+                }*/
 
                 if (User.CurrentEffect > 0)
                 {
