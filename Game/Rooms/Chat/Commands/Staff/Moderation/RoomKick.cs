@@ -51,3 +51,25 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
         }
     }
 }
+
+/*foreach (RoomUser User in currentRoom.GetRoomUserManager().GetUserList().ToList())
+{
+    if (User != null && !User.IsBot && !User.GetClient().GetHabbo().HasFuse("fuse_mod") && User.GetClient().GetHabbo().Id != Session.GetHabbo().Id)
+    {
+        Task.Run(async delegate
+        {
+            User.AllowMoveTo = false;
+            User.IsWalking = true;
+            User.AllowOverride = true;
+            User.GoalX = Room.GetGameMap().Model.DoorX;
+            User.GoalY = Room.GetGameMap().Model.DoorY;
+            await Task.Delay(2500);
+
+            if (MessageAlert.Length > 0)
+            {
+                User.GetClient().SendNotification(MessageAlert);
+            }
+            currentRoom.GetRoomUserManager().RemoveUserFromRoom(User.GetClient(), true, false);
+        });
+    }
+}*/

@@ -368,6 +368,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands
             this.Register(195, new RegenMaps());
             this.Register(196, new AllAroundMe());
             this.Register(197, new AllEyesOnMe());
+            this.Register(200, new SummonAll());
 
         }
         public void RegisterCommand()
