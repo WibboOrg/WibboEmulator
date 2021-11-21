@@ -1087,10 +1087,10 @@
     <Compile Include="Game\Rooms\AI\RoomBot.cs" />
     <Compile Include="Game\Rooms\AI\AIType.cs" />
     <Compile Include="Game\Rooms\Games\Teams\TeamScoreChangedDelegate.cs" />
-    <Compile Include="Game\Rooms\Users\UserSaysArgs.cs" />
+    <Compile Include="Game\Rooms\User\UserSaysArgs.cs" />
     <Compile Include="Game\Items\ItemTriggeredArgs.cs" />
     <Compile Include="Game\Rooms\Games\Teams\TeamScoreChangedArgs.cs" />
-    <Compile Include="Game\Rooms\Users\UserWalksOnArgs.cs" />
+    <Compile Include="Game\Rooms\User\UserWalksOnArgs.cs" />
     <Compile Include="Game\Rooms\Games\GameItemHandler.cs" />
     <Compile Include="Game\Rooms\Map\DynamicRoomModel.cs" />
     <Compile Include="Game\Rooms\Map\Gamemap.cs" />
@@ -1100,11 +1100,11 @@
     <Compile Include="Game\Rooms\RoomManager.cs" />
     <Compile Include="Game\Rooms\Map\SquareState.cs" />
     <Compile Include="Game\Rooms\Map\RoomModel.cs" />
-    <Compile Include="Game\Rooms\Users\RoomUser.cs" />
-    <Compile Include="Game\Rooms\Users\ByteToItemEffectEnum.cs" />
+    <Compile Include="Game\Rooms\User\RoomUser.cs" />
+    <Compile Include="Game\Rooms\User\ByteToItemEffectEnum.cs" />
     <Compile Include="Game\Rooms\Trade\Trade.cs" />
     <Compile Include="Game\Rooms\Trade\TradeUser.cs" />
-    <Compile Include="Game\Rooms\Users\RoomUserManager.cs" />
+    <Compile Include="Game\Rooms\User\RoomUserManager.cs" />
     <Compile Include="Game\Rooms\Games\Freeze\Freeze.cs" />
     <Compile Include="Game\Rooms\Games\Banzai\BattleBanzai.cs" />
     <Compile Include="Game\Rooms\Games\GameManager.cs" />

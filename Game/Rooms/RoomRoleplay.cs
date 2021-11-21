@@ -10,12 +10,12 @@ namespace Butterfly.Game.Rooms
 {
     public class RoomRoleplay
     {
-        public bool Pvp;
-        public int Hour;
-        public int Minute;
-        public int Intensity;
-        public bool CycleHourEffect;
-        public bool TimeSpeed;
+        public bool Pvp { get; set; }
+        public int Hour { get; set; }
+        public int Minute { get; set; }
+        public int Intensity { get; set; }
+        public bool CycleHourEffect { get; set; }
+        public bool TimeSpeed { get; set; }
 
         public RoomRoleplay()
         {
