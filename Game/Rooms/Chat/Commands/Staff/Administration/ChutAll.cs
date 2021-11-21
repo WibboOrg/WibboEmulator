@@ -1,4 +1,6 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
+﻿using Butterfly.Communication.Packets.Incoming.Structure;
+using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Game.GameClients;
 using System.Linq;
 
@@ -21,8 +23,8 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 {
                     continue;
                 }
+                User.GetClient().SendPacket(new WhisperMessageComposer(UserRoom.VirtualId, Message, 0, 34));
 
-                User.GetClient().SendPacket(new WhisperEvent(UserRoom.VirtualId, Message, 0, 0, 0, -1));
 
                 /*ServerPacket MessagePack = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
                 MessagePack.WriteInteger(UserRoom.VirtualId);

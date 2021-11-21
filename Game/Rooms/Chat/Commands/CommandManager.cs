@@ -30,8 +30,8 @@ namespace Butterfly.Game.Rooms.Chat.Commands
         public void Init()
         {
 
-            this.InitInvokeableRegister();
-            this.RegisterCommand();
+            InitInvokeableRegister();
+            RegisterCommand();
             _commands.Clear();
 
 

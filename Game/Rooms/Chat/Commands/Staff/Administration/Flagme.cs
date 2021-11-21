@@ -22,7 +22,6 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 
             clientByUsername.GetHabbo().CanChangeName = true;
             clientByUsername.SendPacket(new UserObjectComposer(clientByUsername.GetHabbo()));
-            clientByUsername.SendWhisperChat("Tu peux maintenant changer ton pseudonyme");
         }
     }
 }

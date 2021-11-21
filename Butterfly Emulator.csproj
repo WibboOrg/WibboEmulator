@@ -779,6 +779,7 @@
     <Compile Include="Game\Rooms\Chat\Commands\User\RoomRemoveSell.cs" />
     <Compile Include="Game\Rooms\Chat\Commands\User\RoomSell.cs" />
     <Compile Include="Game\Rooms\RoomAccess.cs" />
+    <Compile Include="Game\Rooms\RoomAccessUtility.cs" />
     <Compile Include="Game\Rooms\Utils\TransformUtility.cs" />
     <Compile Include="Game\Rooms\Wired\WiredCycle.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Effects\CollisionTeam.cs" />
@@ -1195,6 +1196,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Communication\Interfaces\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

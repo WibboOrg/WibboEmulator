@@ -26,7 +26,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
             }
 
             Session.GetHabbo().ControlUserId = roomUserByHabbo.GetClient().GetHabbo().Id;
-            UserRoom.SendWhisperChat("Tu contrôles " + roomUserByHabbo.GetClient().GetHabbo().Username() + " !");
+            UserRoom.SendWhisperChat("Tu contrôles " + roomUserByHabbo.GetClient().GetHabbo().Username + " !");
 
         }
     }

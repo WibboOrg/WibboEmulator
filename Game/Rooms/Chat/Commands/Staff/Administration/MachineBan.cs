@@ -34,7 +34,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 }
 
                 ButterflyEnvironment.GetGame().GetClientManager().BanUser(clientByUsername, Session.GetHabbo().Username, 788922000, Raison, true, true);
-                UserRoom.SendWhisperChat("Tu viens de bannir " + clientByUsername.GetHabbo().Username() + " pour la raison : " + Raison +" !");
+                UserRoom.SendWhisperChat("Tu viens de bannir " + clientByUsername.GetHabbo().Username + " pour la raison : " + Raison +" !");
                 Session.Antipub(Raison, "<CMD>");
                 return;
             }

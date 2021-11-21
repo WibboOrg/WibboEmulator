@@ -25,6 +25,7 @@ namespace Butterfly.Game.Rooms
         public double Z;
         public int GoalX;
         public int GoalY;
+        public int LastBubble = 0;
 
         public bool SetStep;
         public int SetX;

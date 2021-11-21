@@ -42,10 +42,10 @@
         public const int QuestAbortedMessageComposer = 3027;
         public const int QuestCompletedMessageComposer = 949;
 
-        public const int ACHIEVEMENT_PROGRESSED = 2107;
-        public const int MARKETPLACE_ITEMS_SEARCHED = 680;
-        public const int MARKETPLACE_CANCEL_SALE = 3264;
-        public const int MARKETPLACE_ITEM_POSTED = 1359;
+        public const int ACHIEVEMENT_PROGRESSED = 2107; // AchievementProgressedComposer
+        public const int MARKETPLACE_ITEMS_SEARCHED = 680; // MarketPlaceOffersComposer
+        public const int MARKETPLACE_CANCEL_SALE = 3264; // MarketplaceCancelOfferResultComposer
+        public const int MARKETPLACE_ITEM_POSTED = 1359; // MarketplaceMakeOfferResultComposer
         public const int MARKETPLACE_SELL_ITEM = 54;
         public const int MARKETPLACE_ITEM_STATS = 725;
         public const int MARKETPLACE_OWN_ITEMS = 3884;

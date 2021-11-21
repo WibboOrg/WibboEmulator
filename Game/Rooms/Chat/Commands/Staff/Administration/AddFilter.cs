@@ -12,7 +12,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
             }
 
             ButterflyEnvironment.GetGame().GetChatManager().GetFilter().AddFilterPub(Params[1].ToLower());
-            UserRoom.SendWhisperChat("Le mot" + Params.ToString[1] + " vient d'être ajouté au filtre");
+            UserRoom.SendWhisperChat("Le mot" + Params[1] + " vient d'être ajouté au filtre");
         }
     }
 }

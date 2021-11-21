@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Game.GameClients;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
@@ -12,15 +13,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
             {
                 return;
             }
-
-            /*ServerPacket alert = new ServerPacket(ServerPacketHeader.GENERIC_ALERT);
-            alert.WriteString(ButterflyEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", Session.Langue) + "\r\n" + Message + "\r\n- " + Session.GetHabbo().Username);
-            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(alert);*/
-
-            string Message = CommandManager.MergeParams(Params, 1);
-            ButterflyEnvironment.GetGame().GetClientManager().SendPacket(new BroadcastMessageAlertComposer(Message + "\r\n" + "- " + Session.GetHabbo().Username));
-                            
-
+            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer(Message + "\r\n" + "- " + Session.GetHabbo().Username));
         }
     }
 }

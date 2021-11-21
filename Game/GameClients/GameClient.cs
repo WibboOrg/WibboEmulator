@@ -10,6 +10,7 @@ using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Notifications;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Communication.Packets.Outgoing.Sound;
 using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Core;
@@ -294,15 +295,12 @@ namespace Butterfly.Game.GameClients
 
         public void SendNotification(string Message)
         {
-            this.SendPacket(new BroadcastMessageAlertComposer(Message));
+            SendPacket(new BroadcastMessageAlertComposer(Message));
         }
 
         public void SendHugeNotif(string Message)
         {
-            ServerPacket MessageNotif = new ServerPacket(ServerPacketHeader.GENERIC_ALERT_MESSAGES);
-            MessageNotif.WriteInteger(1);
-            MessageNotif.WriteString(Message);
-            this.SendPacket(MessageNotif);
+            SendPacket(new MOTDNotificationMessageComposer(Message));
         }
 
         public void Dispose()
