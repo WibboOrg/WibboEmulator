@@ -15,7 +15,7 @@ namespace Butterfly.Game.User.Inventory
     public class InventoryComponent
     {
         private readonly ConcurrentDictionary<int, Item> _UserItems;
-        private readonly ConcurrentDictionary<int, Pets.Pet> _petsItems;
+        private readonly ConcurrentDictionary<int, Pet> _petsItems;
         private readonly ConcurrentDictionary<int, Bot> _botItems;
 
         private GameClient _client;
@@ -29,7 +29,7 @@ namespace Butterfly.Game.User.Inventory
             this.UserId = UserId;
 
             this._UserItems = new ConcurrentDictionary<int, Item>();
-            this._petsItems = new ConcurrentDictionary<int, Pets.Pet>();
+            this._petsItems = new ConcurrentDictionary<int, Pet>();
             this._botItems = new ConcurrentDictionary<int, Bot>();
         }
 
@@ -105,12 +105,12 @@ namespace Butterfly.Game.User.Inventory
             this._botItems.Clear();
         }
 
-        public ICollection<Pets.Pet> GetPets()
+        public ICollection<Pet> GetPets()
         {
             return this._petsItems.Values;
         }
 
-        public bool TryAddPet(Pets.Pet Pet)
+        public bool TryAddPet(Pet Pet)
         {
             Pet.RoomId = 0;
             Pet.PlacedInRoom = false;
@@ -118,7 +118,7 @@ namespace Butterfly.Game.User.Inventory
             return this._petsItems.TryAdd(Pet.PetId, Pet);
         }
 
-        public bool TryRemovePet(int PetId, out Pets.Pet PetItem)
+        public bool TryRemovePet(int PetId, out Pet PetItem)
         {
             if (this._petsItems.ContainsKey(PetId))
             {
@@ -131,7 +131,7 @@ namespace Butterfly.Game.User.Inventory
             }
         }
 
-        public bool TryGetPet(int PetId, out Pets.Pet Pet)
+        public bool TryGetPet(int PetId, out Pet Pet)
         {
             if (this._petsItems.ContainsKey(PetId))
             {
@@ -221,7 +221,7 @@ namespace Butterfly.Game.User.Inventory
             {
                 foreach (DataRow Row in table2.Rows)
                 {
-                    Pets.Pet pet = new Pets.Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)(Row["anyone_ride"]) == "1");
+                    Pet pet = new Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)(Row["anyone_ride"]) == "1");
                     this._petsItems.TryAdd(pet.PetId, pet);
                 }
             }

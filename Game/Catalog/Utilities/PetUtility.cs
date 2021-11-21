@@ -21,9 +21,9 @@ namespace Butterfly.Game.Catalog.Utilities
             return true;
         }
 
-        public static Game.Pets.Pet CreatePet(int UserId, string Name, int Type, string Race, string Color)
+        public static Pet CreatePet(int UserId, string Name, int Type, string Race, string Color)
         {
-            Game.Pets.Pet pet = new Game.Pets.Pet(404, UserId, 0, Name, Type, Race, Color, 0, 100, 100, 0, ButterflyEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 1, -1, false)
+            Pet pet = new Pet(404, UserId, 0, Name, Type, Race, Color, 0, 100, 100, 0, ButterflyEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 1, -1, false)
             {
                 DBState = DatabaseUpdateState.NeedsUpdate
             };

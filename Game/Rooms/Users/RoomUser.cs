@@ -44,7 +44,7 @@ namespace Butterfly.Game.Rooms
 
         private GameClient Client;
         public RoomBot BotData;
-        public Pets.Pet PetData;
+        public Pet PetData;
         public BotAI BotAI;
         public Room Room;
 
