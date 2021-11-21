@@ -21,6 +21,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 
                 U.SetRot(Rotation.Calculate(U.X, U.Y, ThisUser.X, ThisUser.Y), false);
             }
+            UserRoom.SendWhisperChat("Tout les joueurs te regardent");
         }
     }
 }

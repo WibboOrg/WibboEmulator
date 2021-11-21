@@ -13,11 +13,13 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            //ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer("staff", "Message des Staffs", Message, "Compris !", 0, ""), Session.Langue);
-
-            ServerPacket alert = new ServerPacket(ServerPacketHeader.GENERIC_ALERT);
+            /*ServerPacket alert = new ServerPacket(ServerPacketHeader.GENERIC_ALERT);
             alert.WriteString(ButterflyEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", Session.Langue) + "\r\n" + Message + "\r\n- " + Session.GetHabbo().Username);
-            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(alert);
+            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(alert);*/
+
+            string Message = CommandManager.MergeParams(Params, 1);
+            ButterflyEnvironment.GetGame().GetClientManager().SendPacket(new BroadcastMessageAlertComposer(Message + "\r\n" + "- " + Session.GetHabbo().Username));
+                            
 
         }
     }

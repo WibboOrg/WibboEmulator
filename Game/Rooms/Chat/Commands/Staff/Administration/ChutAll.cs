@@ -22,7 +22,9 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                     continue;
                 }
 
-                ServerPacket MessagePack = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
+                User.GetClient().SendPacket(new WhisperEvent(UserRoom.VirtualId, Message, 0, 0, 0, -1));
+
+                /*ServerPacket MessagePack = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
                 MessagePack.WriteInteger(UserRoom.VirtualId);
                 MessagePack.WriteString(Message);
                 MessagePack.WriteInteger(0);
@@ -30,7 +32,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 MessagePack.WriteInteger(0);
                 MessagePack.WriteInteger(-1);
 
-                User.GetClient().SendPacket(MessagePack);
+                User.GetClient().SendPacket(MessagePack);*/
             }
         }
     }

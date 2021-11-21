@@ -7,6 +7,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
         public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             Room.GetGameMap().GenerateMaps();
+            UserRoom.SendWhisperChat("Rafraichissement de la map d'appartement");
         }
     }
 }

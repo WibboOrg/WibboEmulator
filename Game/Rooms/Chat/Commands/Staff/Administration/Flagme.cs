@@ -13,7 +13,8 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            GameClient clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            GameClient clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
                 return;
@@ -21,6 +22,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 
             clientByUsername.GetHabbo().CanChangeName = true;
             clientByUsername.SendPacket(new UserObjectComposer(clientByUsername.GetHabbo()));
+            clientByUsername.SendWhisperChat("Tu peux maintenant changer ton pseudonyme");
         }
     }
 }

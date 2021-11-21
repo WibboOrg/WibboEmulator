@@ -23,9 +23,11 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 number = 0;
             }
 
-            ServerPacket RoomEffectComposer = new ServerPacket(4001);
+            Room.SendPacket(new RoomEFfectComposer(number));
+
+            /*ServerPacket RoomEffectComposer = new ServerPacket(4001);
             RoomEffectComposer.WriteInteger(number);
-            Room.SendPacket(RoomEffectComposer);
+            Room.SendPacket(RoomEffectComposer);*/
         }
     }
 }

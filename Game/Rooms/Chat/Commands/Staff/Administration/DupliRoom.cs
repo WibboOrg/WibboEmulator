@@ -176,7 +176,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
             }
 
             Session.GetHabbo().UsersRooms.Add(roomData);
-
+            Session.SendNotification("Copie de l'appartement " + OldRoomId + " en cours de chargement...");
             Session.SendPacket(new FlatCreatedComposer(roomData.Id, "Appart " + OldRoomId + " copie"));
         }
     }
