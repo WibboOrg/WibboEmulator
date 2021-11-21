@@ -1,14 +1,14 @@
-using Butterfly.Game.GameClients;using Butterfly.Game.User;
+using Butterfly.Game.Clients;using Butterfly.Game.User;
 using Butterfly.Game.WebClients;
 using System.Text;
 
-namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class UserInfo : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
+namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class UserInfo : IChatCommand    {        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
             {
                 return;
             }
 
             string username = Params[1];            if (string.IsNullOrEmpty(username))            {                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.userparammissing", Session.Langue));                return;            }
-            GameClient clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
+            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
             if (clientByUsername == null || clientByUsername.GetHabbo() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));

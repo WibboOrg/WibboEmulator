@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms;
 
@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class CreditFurniRedeemEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             if (!Session.GetHabbo().InRoom)
             {

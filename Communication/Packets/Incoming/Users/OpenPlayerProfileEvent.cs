@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.User;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class OpenPlayerProfileEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int userId = Packet.PopInt();
             bool IsMe = Packet.PopBoolean();

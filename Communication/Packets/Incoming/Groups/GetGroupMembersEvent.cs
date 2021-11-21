@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.User;
 using System;
@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GetGroupMembersEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session == null || Session.GetHabbo() == null)
             {

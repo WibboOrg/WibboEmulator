@@ -3,13 +3,13 @@ using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Catalog.Vouchers;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class RedeemVoucherEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             string VoucherCode = Packet.PopString().Replace("\r", "");
 

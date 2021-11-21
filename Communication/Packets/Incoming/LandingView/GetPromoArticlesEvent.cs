@@ -1,12 +1,12 @@
 using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.LandingView;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GetPromoArticlesEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             LandingViewManager currentView = ButterflyEnvironment.GetGame().GetHotelView();            if (Session == null || Session.GetHabbo() == null)
             {

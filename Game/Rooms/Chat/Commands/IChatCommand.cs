@@ -1,4 +1,4 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Rooms.Chat.Commands
 {
@@ -6,6 +6,6 @@ namespace Butterfly.Game.Rooms.Chat.Commands
     {
         //public string Commands { get; set; }
 
-        void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params);
+        void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params);
     }
 }

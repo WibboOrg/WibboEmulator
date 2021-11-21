@@ -10,7 +10,7 @@ using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Quests;
@@ -407,7 +407,7 @@ namespace Butterfly.Game.Rooms
             return Enumerable.FirstOrDefault<RoomUser>(this._room.GetGameMap().GetRoomUsers(new Point(x, y)).Where(u => u.IsBot == false));
         }
 
-        public bool AddAvatarToRoom(GameClient Session)
+        public bool AddAvatarToRoom(Client Session)
         {
             if (this._room == null)
             {
@@ -640,7 +640,7 @@ namespace Butterfly.Game.Rooms
             return true;
         }
 
-        public void RemoveUserFromRoom(GameClient Session, bool NotifyClient, bool NotifyKick)
+        public void RemoveUserFromRoom(Client Session, bool NotifyClient, bool NotifyKick)
         {
             try
             {
@@ -1490,7 +1490,7 @@ namespace Butterfly.Game.Rooms
 
             foreach (RoomUser user in ToRemove)
             {
-                GameClient clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(user.HabboId);
+                Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(user.HabboId);
                 if (clientByUserId != null)
                 {
                     this.RemoveUserFromRoom(clientByUserId, true, false);

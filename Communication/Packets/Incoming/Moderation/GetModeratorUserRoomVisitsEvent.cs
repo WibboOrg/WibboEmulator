@@ -1,11 +1,11 @@
 using Butterfly.Communication.Packets.Outgoing.Moderation;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GetModeratorUserRoomVisitsEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             if (!Session.GetHabbo().HasFuse("fuse_mod"))
             {
@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int userId = Packet.PopInt();
 
-            GameClient clientTarget = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            Client clientTarget = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
 
             if (clientTarget == null)
             {

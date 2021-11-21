@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Furni;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using System;
 using System.Drawing;
@@ -8,19 +8,19 @@ namespace Butterfly.Game.Items.Interactors
 {
     public class InteractorLoveLock : FurniInteractor
     {
-        public override void OnPlace(GameClient Session, Item Item)
+        public override void OnPlace(Client Session, Item Item)
         {
             Item.InteractingUser = 0;
             Item.InteractingUser2 = 0;
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        public override void OnRemove(Client Session, Item Item)
         {
             Item.InteractingUser = 0;
             Item.InteractingUser2 = 0;
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights)
         {
             RoomUser User = null;
 

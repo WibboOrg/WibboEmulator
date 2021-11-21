@@ -1,11 +1,11 @@
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Outgoing.Navigator
 {
     internal class GetGuestRoomResultComposer : ServerPacket
     {
-        public GetGuestRoomResultComposer(GameClient Session, RoomData Data, bool isLoading, bool checkEntry)
+        public GetGuestRoomResultComposer(Client Session, RoomData Data, bool isLoading, bool checkEntry)
             : base(ServerPacketHeader.ROOM_INFO)
         {
             this.WriteBoolean(isLoading);

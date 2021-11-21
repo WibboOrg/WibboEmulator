@@ -1,14 +1,14 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Camera;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class CameraPurchaseEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             string PhotoId = Packet.PopString();
 

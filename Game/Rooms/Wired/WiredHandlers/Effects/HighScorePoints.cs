@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
 using System.Collections.Generic;
@@ -112,7 +112,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             }
         }
 
-        public void OnTrigger(GameClient Session, int SpriteId)
+        public void OnTrigger(Client Session, int SpriteId)
         {
             int.TryParse(this.item.ExtraData, out int NumMode);
 

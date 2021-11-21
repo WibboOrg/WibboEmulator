@@ -2,7 +2,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SaveFloorPlanModelEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             string Map = Packet.PopString().ToLower().TrimEnd('\r');
             int DoorX = Packet.PopInt();

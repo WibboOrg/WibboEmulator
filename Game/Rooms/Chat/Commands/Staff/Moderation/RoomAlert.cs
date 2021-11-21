@@ -1,11 +1,11 @@
 using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class RoomAlert : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             string Message = CommandManager.MergeParams(Params, 1);
             foreach (RoomUser RoomUser in Room.GetRoomUserManager().GetRoomUsers())

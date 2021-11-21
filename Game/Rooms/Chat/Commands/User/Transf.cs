@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms.Games;
 using System;
 
@@ -8,7 +8,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class Transf : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (UserRoom.Team != Team.none || UserRoom.InGame)
             {

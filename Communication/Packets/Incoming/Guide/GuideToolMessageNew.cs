@@ -1,15 +1,15 @@
 using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GuideToolMessageNew : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             string message = Packet.PopString();
 
-            GameClient requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetHabbo().GuideOtherUserId);
+            Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetHabbo().GuideOtherUserId);
             if (requester == null)
             {
                 return;

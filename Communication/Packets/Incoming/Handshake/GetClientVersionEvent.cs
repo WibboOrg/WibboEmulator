@@ -1,12 +1,12 @@
 ﻿using Buttefly.Communication.Encryption;
 using Butterfly.Communication.Packets.Outgoing.Handshake;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GetClientVersionEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             string Release = Packet.PopString();
             string Type = Packet.PopString();

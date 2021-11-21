@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using System.Drawing;
 
@@ -7,15 +7,15 @@ namespace Butterfly.Game.Items.Interactors
 {
     public class InteractorPuzzleBox : FurniInteractor
     {
-        public override void OnPlace(GameClient Session, Item Item)
+        public override void OnPlace(Client Session, Item Item)
         {
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        public override void OnRemove(Client Session, Item Item)
         {
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights)
         {
             if (Session == null)
             {

@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Quests;
 using Butterfly.Game.Rooms;
 using Butterfly.Utility;
@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class ChangeMottoEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             string newMotto = StringCharFilter.Escape(Packet.PopString());
             if (newMotto == Session.GetHabbo().Motto)

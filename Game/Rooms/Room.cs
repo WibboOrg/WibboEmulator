@@ -6,7 +6,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Roleplay;
@@ -454,7 +454,7 @@ namespace Butterfly.Game.Rooms
             }
         }
 
-        public int GetRightsLevel(GameClient Session)
+        public int GetRightsLevel(Client Session)
         {
             if (Session == null || Session.GetHabbo() == null)
             {
@@ -484,7 +484,7 @@ namespace Butterfly.Game.Rooms
             return 0;
         }
 
-        public bool CheckRights(GameClient Session, bool RequireOwnership = false)
+        public bool CheckRights(Client Session, bool RequireOwnership = false)
         {
             if (Session == null || Session.GetHabbo() == null)
             {
@@ -529,7 +529,7 @@ namespace Butterfly.Game.Rooms
             return false;
         }
 
-        public void SendObjects(GameClient Session)
+        public void SendObjects(Client Session)
         {
             Session.SendPacket(this.GetGameMap().Model.SerializeRelativeHeightmap());
             Session.SendPacket(this.GetGameMap().Model.GetHeightmap());

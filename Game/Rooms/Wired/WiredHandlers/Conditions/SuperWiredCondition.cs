@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms.Games;
@@ -1279,7 +1279,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             }
         }
 
-        public void OnTrigger(GameClient Session, int SpriteId)
+        public void OnTrigger(Client Session, int SpriteId)
         {
             ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
             Message.WriteBoolean(false);

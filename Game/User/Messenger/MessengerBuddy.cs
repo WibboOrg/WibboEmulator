@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.User.Messenger
 {
@@ -27,7 +27,7 @@ namespace Butterfly.Game.User.Messenger
 
         public void UpdateUser()
         {
-            GameClient client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userId);
+            Client client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userId);
             if (client != null && client.GetHabbo() != null && client.GetHabbo().GetMessenger() != null && !client.GetHabbo().GetMessenger().AppearOffline)
             {
                 this._isOnline = true;

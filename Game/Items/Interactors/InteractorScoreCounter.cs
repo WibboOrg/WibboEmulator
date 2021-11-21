@@ -1,11 +1,11 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms.Games;
 
 namespace Butterfly.Game.Items.Interactors
 {
     public class InteractorScoreCounter : FurniInteractor
     {
-        public override void OnPlace(GameClient Session, Item Item)
+        public override void OnPlace(Client Session, Item Item)
         {
             if (Item.Team == Team.none)
             {
@@ -16,11 +16,11 @@ namespace Butterfly.Game.Items.Interactors
             Item.UpdateState(false, true);
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        public override void OnRemove(Client Session, Item Item)
         {
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights)
         {
             if (!UserHasRights)
             {

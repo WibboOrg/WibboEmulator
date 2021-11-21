@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System.Drawing;
 
 namespace Butterfly.Game.Rooms.AI.Types
@@ -32,7 +32,7 @@ namespace Butterfly.Game.Rooms.AI.Types
         {
         }
 
-        public override void OnUserLeaveRoom(GameClient Client)
+        public override void OnUserLeaveRoom(Client Client)
         {
         }
 

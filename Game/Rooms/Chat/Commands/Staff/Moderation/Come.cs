@@ -1,19 +1,19 @@
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class Come : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (Params.Length != 2)
             {
                 return;
             }
 
-            GameClient clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
             if (clientByUsername == null || clientByUsername.GetHabbo() == null)
             {
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));

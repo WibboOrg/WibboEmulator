@@ -1,5 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.User;
 using Butterfly.Game.User.Messenger;
 using System;
@@ -10,11 +10,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GetRelationshipsEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int Id = Packet.PopInt();
 
-            GameClient Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Id);
+            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Id);
 
             if (Client == null || Client.GetHabbo() == null)
             {

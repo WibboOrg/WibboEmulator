@@ -2,7 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +10,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class RoomBuy : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (Session == null || Session.GetHabbo() == null)
             {
@@ -30,7 +30,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
             Session.GetHabbo().WibboPoints -= Room.RoomData.SellPrice;
             Session.SendPacket(new ActivityPointsComposer(Session.GetHabbo().WibboPoints));
 
-            GameClient ClientOwner = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Room.RoomData.OwnerId);
+            Client ClientOwner = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Room.RoomData.OwnerId);
             if (ClientOwner != null && ClientOwner.GetHabbo() != null)
             {
                 ClientOwner.GetHabbo().WibboPoints += Room.RoomData.SellPrice;

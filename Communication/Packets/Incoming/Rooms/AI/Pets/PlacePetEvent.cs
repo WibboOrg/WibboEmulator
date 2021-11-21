@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Inventory.Pets;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.AI;
@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class PlacePetEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room Room))
             {

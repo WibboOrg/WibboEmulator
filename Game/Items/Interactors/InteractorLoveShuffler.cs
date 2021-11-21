@@ -1,20 +1,20 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Items.Interactors
 {
     public class InteractorLoveShuffler : FurniInteractor
     {
-        public override void OnPlace(GameClient Session, Item Item)
+        public override void OnPlace(Client Session, Item Item)
         {
             Item.ExtraData = "-1";
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        public override void OnRemove(Client Session, Item Item)
         {
             Item.ExtraData = "-1";
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights)
         {
             if (!UserHasRights || !(Item.ExtraData != "0"))
             {

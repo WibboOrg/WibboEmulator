@@ -1,19 +1,19 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 using System.Collections.Generic;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class StaffsOnline : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             string Output = "Les staffs en ligne\n";
 
-            List<GameClient> Staffs = ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers();
+            List<Client> Staffs = ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers();
 
             if (Staffs.Count > 0)
             {
-                foreach (GameClient Client in Staffs)
+                foreach (Client Client in Staffs)
                 {
                     if (Client != null && Client.GetHabbo() != null)
                         Output += Client.GetHabbo().Username + "\n";

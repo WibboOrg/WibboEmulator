@@ -1,5 +1,5 @@
 ﻿using Butterfly.Core;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Rooms.Chat
 {
@@ -22,7 +22,7 @@ namespace Butterfly.Game.Rooms.Chat
             this.descriptionBr = DescriptionBr;
         }
 
-        public bool UserGotAuthorization(GameClient session)
+        public bool UserGotAuthorization(Client session)
         {
             if (this.minrank == 0)
             {
@@ -64,7 +64,7 @@ namespace Butterfly.Game.Rooms.Chat
             return false;
         }
 
-        public int UserGotAuthorization2(GameClient session, Language RoomLangue)
+        public int UserGotAuthorization2(Client session, Language RoomLangue)
         {
             if (this.minrank == 0)
             {

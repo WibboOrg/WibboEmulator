@@ -1,4 +1,4 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +6,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class AllAroundMe : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
             if (User == null)

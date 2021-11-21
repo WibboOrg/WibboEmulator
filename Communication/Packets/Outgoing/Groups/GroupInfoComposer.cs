@@ -1,4 +1,4 @@
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using System;
 
@@ -6,7 +6,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Groups
 {
     internal class GroupInfoComposer : ServerPacket
     {
-        public GroupInfoComposer(Guild Group, GameClient Session, bool NewWindow = false)
+        public GroupInfoComposer(Guild Group, Client Session, bool NewWindow = false)
             : base(ServerPacketHeader.GROUP_INFO)
         {
             DateTime Origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Group.CreateTime);

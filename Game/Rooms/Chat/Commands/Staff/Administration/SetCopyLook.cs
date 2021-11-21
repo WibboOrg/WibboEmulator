@@ -1,5 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Game.GameClients;namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class SetCopyLook : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
+using Butterfly.Game.Clients;namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class SetCopyLook : IChatCommand    {        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
             {
                 return;
             }
@@ -9,7 +9,7 @@ using Butterfly.Game.GameClients;namespace Butterfly.Game.Rooms.Chat.Commands.
                 return;
             }
 
-            Room currentRoom = roomUserByHabbo.Room;            GameClient clientByUsername = roomUserByHabbo.GetClient();            if (currentRoom == null)
+            Room currentRoom = roomUserByHabbo.Room;            Client clientByUsername = roomUserByHabbo.GetClient();            if (currentRoom == null)
             {
                 return;
             }

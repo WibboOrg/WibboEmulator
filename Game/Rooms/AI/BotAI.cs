@@ -1,4 +1,4 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Rooms.AI
 {
@@ -51,7 +51,7 @@ namespace Butterfly.Game.Rooms.AI
 
         public abstract void OnUserEnterRoom(RoomUser User);
 
-        public abstract void OnUserLeaveRoom(GameClient Client);
+        public abstract void OnUserLeaveRoom(Client Client);
 
         public abstract void OnUserSay(RoomUser User, string Message);
 

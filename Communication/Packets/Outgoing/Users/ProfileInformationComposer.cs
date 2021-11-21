@@ -1,4 +1,4 @@
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.User;
 using System;
@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
 {
     internal class ProfileInformationComposer : ServerPacket
     {
-        public ProfileInformationComposer(Habbo habbo, GameClient session, List<Guild> groups, int friendCount)
+        public ProfileInformationComposer(Habbo habbo, Client session, List<Guild> groups, int friendCount)
             : base(ServerPacketHeader.USER_PROFILE)
         {
             DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(habbo.AccountCreated);

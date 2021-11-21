@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.WebSocket;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.WebClients;
 
 namespace Butterfly.Communication.Packets.Incoming.WebSocket
@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
                 return;
             }
 
-            GameClient Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
+            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
             if (Client == null || Client.GetHabbo() == null)
             {
                 return;

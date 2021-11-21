@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 using Butterfly.Communication.Packets.Outgoing.WebSocket;
 
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -15,7 +15,7 @@ namespace Butterfly.Game.Rooms.Chat.Mentions
         public string StylePrefix = "[tag]";
         public string StyleSuffix = "[/tag]";
 
-        public string Parse(GameClient Session, string Message)
+        public string Parse(Client Session, string Message)
         {
             string StyledMessage = Message;
 
@@ -61,9 +61,9 @@ namespace Butterfly.Game.Rooms.Chat.Mentions
             return StyledMessage;
         }
 
-        public bool SendNotif(GameClient Session, string TargetUsername, string Message)
+        public bool SendNotif(Client Session, string TargetUsername, string Message)
         {
-            GameClient TargetClient = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(TargetUsername);
+            Client TargetClient = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(TargetUsername);
 
             if (TargetClient == null)
             {
@@ -128,7 +128,7 @@ namespace Butterfly.Game.Rooms.Chat.Mentions
         }*/
 
 
-        public bool EveryoneFriend(GameClient Session, string Message)
+        public bool EveryoneFriend(Client Session, string Message)
         {
             if (Session.GetHabbo().Rank < 2)
             {
@@ -145,14 +145,14 @@ namespace Butterfly.Game.Rooms.Chat.Mentions
 
             Session.GetHabbo().everyoneTimer = DateTime.Now;
 
-            List<GameClient> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetHabbo().GetMessenger().GetFriends().Keys);
+            List<Client> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetHabbo().GetMessenger().GetFriends().Keys);
 
             if (onlineUsers == null)
             {
                 return false;
             }
 
-            foreach (GameClient TargetClient in onlineUsers)
+            foreach (Client TargetClient in onlineUsers)
             {
                 if (TargetClient != null && TargetClient.GetHabbo() != null && TargetClient.GetHabbo().GetMessenger() != null)
                 {

@@ -1,8 +1,8 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
-namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class CopyLook : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {
+namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class CopyLook : IChatCommand    {        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)        {
             //if (UserRoom.team != Team.none || UserRoom.InGame)
             //return;
 
@@ -14,7 +14,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class CopyLook :
             if (Params.Length != 2)
             {
                 return;
-            }            string Username = Params[1];            GameClient clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Username);            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            }            string Username = Params[1];            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Username);            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
             {
                 RoomUser Bot = Room.GetRoomUserManager().GetBotByName(Username);
                 if (Bot == null || Bot.BotData == null)

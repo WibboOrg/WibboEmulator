@@ -2,7 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.Quests;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Quests.Composer;
 using System;
 using System.Collections.Generic;
@@ -73,7 +73,7 @@ namespace Butterfly.Game.Quests
             return num;
         }
 
-        public void ProgressUserQuest(GameClient Session, QuestType QuestType, int EventData = 0)
+        public void ProgressUserQuest(Client Session, QuestType QuestType, int EventData = 0)
         {
             if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().CurrentQuestId <= 0)
             {
@@ -141,12 +141,12 @@ namespace Butterfly.Game.Quests
             return null;
         }
 
-        public void GetList(GameClient Session, ClientPacket Message)
+        public void GetList(Client Session, ClientPacket Message)
         {
             Session.SendPacket(QuestListComposer.Compose(Session, Enumerable.ToList<Quest>(this.quests.Values), Message != null));
         }
 
-        public void ActivateQuest(GameClient Session, ClientPacket Message)
+        public void ActivateQuest(Client Session, ClientPacket Message)
         {
             Quest quest = this.GetQuest(Message.PopInt());
             if (quest == null)
@@ -164,7 +164,7 @@ namespace Butterfly.Game.Quests
             Session.SendPacket(QuestStartedComposer.Compose(Session, quest));
         }
 
-        public void GetCurrentQuest(GameClient Session)
+        public void GetCurrentQuest(Client Session)
         {
             if (!Session.GetHabbo().InRoom)
             {
@@ -188,7 +188,7 @@ namespace Butterfly.Game.Quests
             Session.SendPacket(QuestStartedComposer.Compose(Session, nextQuestInSeries));
         }
 
-        public void CancelQuest(GameClient Session)
+        public void CancelQuest(Client Session)
         {
             Quest quest = this.GetQuest(Session.GetHabbo().CurrentQuestId);
             if (quest == null)

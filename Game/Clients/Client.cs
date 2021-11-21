@@ -24,9 +24,9 @@ using ConnectionManager;
 using System;
 using System.Text;
 
-namespace Butterfly.Game.GameClients
+namespace Butterfly.Game.Clients
 {
-    public class GameClient
+    public class Client
     {
         private ConnectionInformation _connection;
         private GamePacketParser _packetParser;
@@ -40,7 +40,7 @@ namespace Butterfly.Game.GameClients
 
         public int ConnectionID;
 
-        public GameClient(int ClientId, ConnectionInformation pConnection)
+        public Client(int ClientId, ConnectionInformation pConnection)
         {
             this.ConnectionID = ClientId;
             this.Langue = Language.FRANCAIS;
@@ -241,7 +241,7 @@ namespace Butterfly.Game.GameClients
                         LogChatPubDao.Insert(dbClient, this.GetHabbo().Id, "A vérifié: " + type + Message, this.GetHabbo().Username);
                     }
 
-                    foreach (GameClient Client in ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers())
+                    foreach (Client Client in ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers())
                     {
                         if (Client == null || Client.GetHabbo() == null)
                         {
@@ -280,7 +280,7 @@ namespace Butterfly.Game.GameClients
                 ButterflyEnvironment.GetGame().GetClientManager().BanUser(this, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.GetHabbo().Username, true, false);
             }
 
-            foreach (GameClient Client in ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers())
+            foreach (Client Client in ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers())
             {
                 if (Client == null || Client.GetHabbo() == null)
                 {

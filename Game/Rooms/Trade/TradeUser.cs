@@ -1,4 +1,4 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using System.Collections.Generic;
 
@@ -33,7 +33,7 @@ namespace Butterfly.Game.Rooms
             }
         }
 
-        public GameClient GetClient()
+        public Client GetClient()
         {
             return ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
         }

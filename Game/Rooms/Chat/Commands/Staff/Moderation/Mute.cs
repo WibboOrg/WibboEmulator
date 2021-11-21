@@ -1,12 +1,12 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.Game.GameClients;using Butterfly.Game.User;
+using Butterfly.Game.Clients;using Butterfly.Game.User;
 
-namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Mute : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
+namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Mute : IChatCommand    {        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
             {
                 return;
             }
 
-            GameClient clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }

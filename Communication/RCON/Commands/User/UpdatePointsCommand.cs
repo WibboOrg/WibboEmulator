@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.RCON.Commands.User
 {
@@ -22,7 +22,7 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            GameClient Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
             if (Client == null)
             {
                 return false;

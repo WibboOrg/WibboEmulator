@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Navigator;
 
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.RCON.Commands.User
@@ -24,7 +24,7 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            GameClient Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
             if (Client == null)
             {
                 return false;
@@ -41,7 +41,7 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            GameClient Client2 = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid2);
+            Client Client2 = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid2);
             if (Client2 == null)
             {
                 return false;

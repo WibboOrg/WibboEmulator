@@ -8,7 +8,7 @@ using Butterfly.Database;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.User;
 using Butterfly.Game.User.UserData;
 using Butterfly.Net;
@@ -241,7 +241,7 @@ namespace Butterfly
         {
             string Name = "Unknown User";
 
-            GameClient Client = GetGame().GetClientManager().GetClientByUserID(UserId);
+            Client Client = GetGame().GetClientManager().GetClientByUserID(UserId);
             if (Client != null && Client.GetHabbo() != null)
             {
                 return Client.GetHabbo().Username;
@@ -281,7 +281,7 @@ namespace Butterfly
         {
             try
             {
-                GameClient Client = GetGame().GetClientManager().GetClientByUserID(UserId);
+                Client Client = GetGame().GetClientManager().GetClientByUserID(UserId);
                 if (Client != null)
                 {
                     Habbo User = Client.GetHabbo();

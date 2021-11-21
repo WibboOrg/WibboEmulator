@@ -1,5 +1,5 @@
 ﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces
@@ -12,6 +12,6 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces
 
         void LoadFromDatabase(DataRow row, Room insideRoom);
 
-        void OnTrigger(GameClient Session, int SpriteId);
+        void OnTrigger(Client Session, int SpriteId);
     }
 }

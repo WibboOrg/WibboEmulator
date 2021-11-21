@@ -1,13 +1,13 @@
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.User.Messenger;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SetRelationshipEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session.GetHabbo() == null || Session.GetHabbo().GetMessenger() == null)
             {

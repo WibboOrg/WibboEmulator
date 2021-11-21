@@ -12,11 +12,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Butterfly.Game.GameClients
+namespace Butterfly.Game.Clients
 {
-    public class GameClientManager
+    public class ClientManager
     {
-        public ConcurrentDictionary<int, GameClient> _clients;
+        public ConcurrentDictionary<int, Client> _clients;
         public ConcurrentDictionary<string, int> _usernameRegister;
         public ConcurrentDictionary<int, int> _userIDRegister;
 
@@ -29,21 +29,21 @@ namespace Butterfly.Game.GameClients
 
         public int Count => this._userIDRegister.Count;
 
-        public GameClientManager()
+        public ClientManager()
         {
-            this._clients = new ConcurrentDictionary<int, GameClient>();
+            this._clients = new ConcurrentDictionary<int, Client>();
             this._usernameRegister = new ConcurrentDictionary<string, int>();
             this._userIDRegister = new ConcurrentDictionary<int, int>();
             this._userStaff = new List<int>();
         }
 
-        public List<GameClient> GetStaffUsers()
+        public List<Client> GetStaffUsers()
         {
-            List<GameClient> Users = new List<GameClient>();
+            List<Client> Users = new List<Client>();
 
             foreach (int UserId in this._userStaff)
             {
-                GameClient Client = this.GetClientByUserID(UserId);
+                Client Client = this.GetClientByUserID(UserId);
                 if (Client == null || Client.GetHabbo() == null)
                 {
                     continue;
@@ -55,11 +55,11 @@ namespace Butterfly.Game.GameClients
             return Users;
         }
 
-        public GameClient GetClientByUserID(int userID)
+        public Client GetClientByUserID(int userID)
         {
             if (this._userIDRegister.ContainsKey(userID))
             {
-                if (!this.TryGetClient(this._userIDRegister[userID], out GameClient Client))
+                if (!this.TryGetClient(this._userIDRegister[userID], out Client Client))
                 {
                     return null;
                 }
@@ -72,11 +72,11 @@ namespace Butterfly.Game.GameClients
             }
         }
 
-        public GameClient GetClientByUsername(string username)
+        public Client GetClientByUsername(string username)
         {
             if (this._usernameRegister.ContainsKey(username.ToLower()))
             {
-                if (!this.TryGetClient(this._usernameRegister[username.ToLower()], out GameClient Client))
+                if (!this.TryGetClient(this._usernameRegister[username.ToLower()], out Client Client))
                 {
                     return null;
                 }
@@ -98,14 +98,14 @@ namespace Butterfly.Game.GameClients
             return true;
         }
 
-        public bool TryGetClient(int ClientId, out GameClient Client)
+        public bool TryGetClient(int ClientId, out Client Client)
         {
             return this._clients.TryGetValue(ClientId, out Client);
         }
 
         public string GetNameById(int Id)
         {
-            GameClient clientByUserId = this.GetClientByUserID(Id);
+            Client clientByUserId = this.GetClientByUserID(Id);
 
             if (clientByUserId != null)
             {
@@ -121,12 +121,12 @@ namespace Butterfly.Game.GameClients
             return username;
         }
 
-        public List<GameClient> GetClientsById(Dictionary<int, MessengerBuddy>.KeyCollection users)
+        public List<Client> GetClientsById(Dictionary<int, MessengerBuddy>.KeyCollection users)
         {
-            List<GameClient> ClientOnline = new List<GameClient>();
+            List<Client> ClientOnline = new List<Client>();
             foreach (int userID in users)
             {
-                GameClient client = this.GetClientByUserID(userID);
+                Client client = this.GetClientByUserID(userID);
                 if (client != null)
                 {
                     ClientOnline.Add(client);
@@ -140,7 +140,7 @@ namespace Butterfly.Game.GameClients
         {
             foreach (int UserId in this._userStaff)
             {
-                GameClient Client = this.GetClientByUserID(UserId);
+                Client Client = this.GetClientByUserID(UserId);
                 if (Client == null || Client.GetHabbo() == null)
                 {
                     continue;
@@ -152,7 +152,7 @@ namespace Butterfly.Game.GameClients
 
         public void SendMessage(IServerPacket Packet)
         {
-            foreach (GameClient Client in this._clients.Values.ToList())
+            foreach (Client Client in this._clients.Values.ToList())
             {
                 if (Client == null || Client.GetHabbo() == null)
                 {
@@ -165,7 +165,7 @@ namespace Butterfly.Game.GameClients
 
         public void CreateAndStartClient(int clientID, ConnectionInformation connection)
         {
-            GameClient Client = new GameClient(clientID, connection);
+            Client Client = new Client(clientID, connection);
             if (this._clients.TryAdd(Client.ConnectionID, Client))
             {
                 Client.StartConnection();
@@ -178,7 +178,7 @@ namespace Butterfly.Game.GameClients
 
         public void DisposeConnection(int clientID)
         {
-            if (!this.TryGetClient(clientID, out GameClient Client))
+            if (!this.TryGetClient(clientID, out Client Client))
             {
                 return;
             }
@@ -193,7 +193,7 @@ namespace Butterfly.Game.GameClients
 
         public void LogClonesOut(int UserID)
         {
-            GameClient clientByUserId = this.GetClientByUserID(UserID);
+            Client clientByUserId = this.GetClientByUserID(UserID);
             if (clientByUserId == null)
             {
                 return;
@@ -202,7 +202,7 @@ namespace Butterfly.Game.GameClients
             clientByUserId.Disconnect();
         }
 
-        public void RegisterClient(GameClient client, int userID, string username)
+        public void RegisterClient(Client client, int userID, string username)
         {
             if (this._usernameRegister.ContainsKey(username.ToLower()))
             {
@@ -249,7 +249,7 @@ namespace Butterfly.Game.GameClients
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            foreach (GameClient client in this.GetClients.ToList())
+            foreach (Client client in this.GetClients.ToList())
             {
                 if (client == null)
                 {
@@ -285,7 +285,7 @@ namespace Butterfly.Game.GameClients
             Console.WriteLine("Closing server connections...");
             try
             {
-                foreach (GameClient client in this.GetClients.ToList())
+                foreach (Client client in this.GetClients.ToList())
                 {
 
                     if (client == null || client.GetConnection() == null)
@@ -310,7 +310,7 @@ namespace Butterfly.Game.GameClients
             Console.WriteLine("Connections closed!");
         }
 
-        public void BanUser(GameClient Client, string Moderator, double LengthSeconds, string Reason, bool IpBan, bool MachineBan)
+        public void BanUser(Client Client, string Moderator, double LengthSeconds, string Reason, bool IpBan, bool MachineBan)
         {
             if (string.IsNullOrEmpty(Reason))
             {
@@ -367,6 +367,6 @@ namespace Butterfly.Game.GameClients
             this.SendMessage(new RoomNotificationComposer(Title, Notice, Picture, LinkTitle, Link));
         }
 
-        public ICollection<GameClient> GetClients => this._clients.Values;
+        public ICollection<Client> GetClients => this._clients.Values;
     }
 }

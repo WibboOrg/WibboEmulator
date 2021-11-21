@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.User.Messenger;
@@ -14,7 +14,7 @@ namespace Butterfly.Game.Navigator
 {
     internal static class NavigatorHandler
     {
-        public static void Search(ServerPacket Message, SearchResultList SearchResult, string SearchData, GameClient Session, int FetchLimit)
+        public static void Search(ServerPacket Message, SearchResultList SearchResult, string SearchData, Client Session, int FetchLimit)
         {
             //Switching by categorys.
             switch (SearchResult.CategoryType)

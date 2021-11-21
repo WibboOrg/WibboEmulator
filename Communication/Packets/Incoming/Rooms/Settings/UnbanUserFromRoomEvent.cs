@@ -1,12 +1,12 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Settings;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class UnbanUserFromRoomEvent : IPacketEvent
     {
-        public void Parse(GameClient session, ClientPacket packet)
+        public void Parse(Client session, ClientPacket packet)
         {
             if (!session.GetHabbo().InRoom)
             {

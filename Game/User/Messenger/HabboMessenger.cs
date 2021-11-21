@@ -2,7 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.Messenger;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -53,9 +53,9 @@ namespace Butterfly.Game.User.Messenger
 
         public void Destroy()
         {
-            List<GameClient> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(this.friends.Keys);
+            List<Client> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(this.friends.Keys);
 
-            foreach (GameClient gameClient in onlineUsers)
+            foreach (Client gameClient in onlineUsers)
             {
                 if (gameClient != null && gameClient.GetHabbo() != null && gameClient.GetHabbo().GetMessenger() != null && gameClient.GetHabbo().GetMessenger().FriendshipExists(this.UserId))
                 {
@@ -80,14 +80,14 @@ namespace Butterfly.Game.User.Messenger
                 return;
             }
 
-            List<GameClient> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(this.friends.Keys);
+            List<Client> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(this.friends.Keys);
 
             if (onlineUsers == null)
             {
                 return;
             }
 
-            foreach (GameClient client in onlineUsers)
+            foreach (Client client in onlineUsers)
             {
                 if (client != null && client.GetHabbo() != null && client.GetHabbo().GetMessenger() != null)
                 {
@@ -114,7 +114,7 @@ namespace Butterfly.Game.User.Messenger
                 return;
             }
 
-            GameClient client1 = this.GetClient();
+            Client client1 = this.GetClient();
             if (client1 == null)
             {
                 return;
@@ -152,7 +152,7 @@ namespace Butterfly.Game.User.Messenger
             }
 
             this.OnNewFriendship(friendID);
-            GameClient clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
+            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
             if (clientByUserId == null || clientByUserId.GetHabbo().GetMessenger() == null)
             {
                 return;
@@ -174,7 +174,7 @@ namespace Butterfly.Game.User.Messenger
             }
 
             this.OnDestroyFriendship(friendID);
-            GameClient clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
+            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
             if (clientByUserId == null || clientByUserId.GetHabbo().GetMessenger() == null)
             {
                 return;
@@ -185,7 +185,7 @@ namespace Butterfly.Game.User.Messenger
 
         public void OnNewFriendship(int friendID)
         {
-            GameClient clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
+            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
             MessengerBuddy friend;
             if (clientByUserId == null || clientByUserId.GetHabbo() == null)
             {
@@ -249,7 +249,7 @@ namespace Butterfly.Game.User.Messenger
 
         public bool RequestBuddy(string UserQuery)
         {
-            GameClient clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(UserQuery);
+            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(UserQuery);
             int sender;
             bool flag;
             if (clientByUsername == null)
@@ -298,7 +298,7 @@ namespace Butterfly.Game.User.Messenger
                     MessengerRequestDao.Replace(dbClient, this.UserId, sender);
                 }
 
-                GameClient clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(sender);
+                Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(sender);
                 if (clientByUserId == null || clientByUserId.GetHabbo() == null)
                 {
                     return false;
@@ -338,7 +338,7 @@ namespace Butterfly.Game.User.Messenger
                 return;
             }
 
-            GameClient Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(ToId);
+            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(ToId);
             if (Client == null || Client.GetHabbo() == null || Client.GetHabbo().GetMessenger() == null)
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -439,7 +439,7 @@ namespace Butterfly.Game.User.Messenger
 
                 if (GetMessages != null)
                 {
-                    GameClient Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
+                    Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
                     if (Client == null)
                     {
                         return;
@@ -455,7 +455,7 @@ namespace Butterfly.Game.User.Messenger
             }
         }
 
-        private GameClient GetClient()
+        private Client GetClient()
         {
             return ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
         }

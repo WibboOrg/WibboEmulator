@@ -1,7 +1,7 @@
 ﻿using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -183,7 +183,7 @@ namespace Butterfly.Game.Rooms
             }
         }
 
-        public RoomData CreateRoom(GameClient Session, string Name, string Desc, string Model, int Category, int MaxVisitors, int TradeSettings)
+        public RoomData CreateRoom(Client Session, string Name, string Desc, string Model, int Category, int MaxVisitors, int TradeSettings)
         {
             if (!this._roomModels.ContainsKey(Model))
             {

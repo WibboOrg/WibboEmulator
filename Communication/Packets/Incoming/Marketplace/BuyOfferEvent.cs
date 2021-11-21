@@ -5,7 +5,7 @@ using Butterfly.Communication.Packets.Outgoing.MarketPlace;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Catalog.Marketplace;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 {
     internal class BuyOfferEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int OfferId = Packet.PopInt();
 
@@ -115,7 +115,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             this.ReloadOffers(Session);
         }
 
-        private void ReloadOffers(GameClient Session)
+        private void ReloadOffers(Client Session)
         {
             int MinCost = -1;
             int MaxCost = -1;

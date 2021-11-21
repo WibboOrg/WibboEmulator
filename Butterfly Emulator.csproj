@@ -1069,8 +1069,8 @@
     <Compile Include="Game\Catalog\CatalogPage.cs" />
     <Compile Include="Game\Rooms\Chat\Logs\ChatMessage.cs" />
     <Compile Include="Game\Rooms\Chat\Logs\ChatMessageManager.cs" />
-    <Compile Include="Game\GameClients\GameClient.cs" />
-    <Compile Include="Game\GameClients\GameClientManager.cs" />
+    <Compile Include="Game\Clients\Client.cs" />
+    <Compile Include="Game\Clients\ClientManager.cs" />
     <Compile Include="Core\LowPriorityWorker.cs" />
     <Compile Include="Game\Navigator\NavigatorManager.cs" />
     <Compile Include="Game\Rooms\Pathfinding\ThreeDCoord.cs" />

@@ -1,13 +1,13 @@
 using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class GiveBadge : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            GameClient clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
             if (clientByUsername != null)
             {
                 /*if (Session.Langue != clientByUsername.Langue)

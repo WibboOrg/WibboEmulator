@@ -1,10 +1,10 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class ForceOpenGift : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             Session.GetHabbo().forceOpenGift = !Session.GetHabbo().forceOpenGift;
 

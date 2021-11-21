@@ -1,8 +1,8 @@
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using System.Linq;
 
-namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Pyramide : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {
+namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Pyramide : IChatCommand    {        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)        {
             foreach (Item Item in Room.GetRoomItemHandler().GetFloor.ToList())
             {
                 if (Item == null || Item.GetBaseItem() == null)

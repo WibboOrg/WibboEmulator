@@ -1,12 +1,12 @@
 using Butterfly.Communication.Packets.Outgoing.Moderation;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class About : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             TimeSpan Uptime = DateTime.Now - ButterflyEnvironment.ServerStarted;
 

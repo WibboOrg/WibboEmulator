@@ -1,12 +1,12 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System.Collections.Generic;
 
 namespace Butterfly.Game.Quests.Composer
 {
     public class QuestListComposer
     {
-        public static ServerPacket Compose(GameClient Session, List<Quest> Quests, bool Send)
+        public static ServerPacket Compose(Client Session, List<Quest> Quests, bool Send)
         {
             Dictionary<string, int> dictionary1 = new Dictionary<string, int>();
             Dictionary<string, Quest> dictionary2 = new Dictionary<string, Quest>();
@@ -62,7 +62,7 @@ namespace Butterfly.Game.Quests.Composer
             return Message;
         }
 
-        public static void SerializeQuest(ServerPacket Message, GameClient Session, Quest Quest, string Category)
+        public static void SerializeQuest(ServerPacket Message, Client Session, Quest Quest, string Category)
         {
             int questsInCategory = ButterflyEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(Category);
             int i = Quest == null ? questsInCategory : Quest.Number - 1;

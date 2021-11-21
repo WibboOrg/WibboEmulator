@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Incoming;
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.Wired.WiredHandlers;
@@ -255,7 +255,7 @@ namespace Butterfly.Game.Rooms.Wired
             }
         }
 
-        public static void HandleSave(GameClient Session, int itemID, Room room, ClientPacket clientMessage)
+        public static void HandleSave(Client Session, int itemID, Room room, ClientPacket clientMessage)
         {
             Item roomItem = room.GetRoomItemHandler().GetItem(itemID);
             if (roomItem == null)

@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System;
 using System.Data;
 
@@ -9,7 +9,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 {
     internal class RedeemOfferCreditsEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int CreditsOwed = 0;
 

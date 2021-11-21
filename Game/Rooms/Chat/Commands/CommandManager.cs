@@ -1,7 +1,7 @@
 ﻿using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms.Chat.Commands.Cmd;
 using System;
 using System.Collections.Generic;
@@ -43,7 +43,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands
 
         }
 
-        public bool Parse(GameClient Session, RoomUser User, Room Room, string Message)
+        public bool Parse(Client Session, RoomUser User, Room Room, string Message)
         {
             if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().CurrentRoom == null)
             {
@@ -138,7 +138,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands
             }
         }
 
-        public string GetCommandList(GameClient client)
+        public string GetCommandList(Client client)
         {
             string rank = client.GetHabbo().Rank + client.GetHabbo().Langue.ToString();
             if (this._listCommande.ContainsKey(rank))

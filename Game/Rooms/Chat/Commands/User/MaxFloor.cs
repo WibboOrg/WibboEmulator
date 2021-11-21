@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class MaxFloor : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             string Map = "";
             string Line = "";

@@ -1,12 +1,12 @@
 using Butterfly.Communication.Packets.Outgoing.Inventory.Pets;
 
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class EmptyPets : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             Session.GetHabbo().GetInventoryComponent().ClearPets();
             Session.SendPacket(new PetInventoryComposer(Session.GetHabbo().GetInventoryComponent().GetPets()));

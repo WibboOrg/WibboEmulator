@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Furni;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms;
 using System;
@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class OpenGiftEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
             {
@@ -92,7 +92,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
         }
 
-        private void FinishOpenGift(GameClient Session, ItemData BaseItem, Item Present, Room Room, DataRow Row)
+        private void FinishOpenGift(Client Session, ItemData BaseItem, Item Present, Room Room, DataRow Row)
         {
             bool ItemIsInRoom = true;
 

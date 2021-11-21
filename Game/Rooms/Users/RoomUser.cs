@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Roleplay;
 using Butterfly.Game.Roleplay.Player;
@@ -42,7 +42,7 @@ namespace Butterfly.Game.Rooms
 
         public bool AllowMoveToRoller;
 
-        private GameClient Client;
+        private Client Client;
         public RoomBot BotData;
         public Pet PetData;
         public BotAI BotAI;
@@ -496,7 +496,7 @@ namespace Butterfly.Game.Rooms
             }
         }
 
-        public GameClient GetClient()
+        public Client GetClient()
         {
             if (this.IsBot)
             {

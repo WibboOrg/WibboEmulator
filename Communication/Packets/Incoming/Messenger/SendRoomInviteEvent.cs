@@ -1,5 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Utility;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SendRoomInviteEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().FloodTime;
             if (timeSpan.Seconds > 4)
@@ -64,7 +64,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 if (Session.GetHabbo().GetMessenger().FriendshipExists(UserId))
                 {
-                    GameClient clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+                    Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
                     if (clientByUserId == null)
                     {
                         break;

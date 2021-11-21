@@ -1,12 +1,12 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Utility;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SubmitNewTicketEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             if (ButterflyEnvironment.GetGame().GetModerationManager().UsersHasPendingTicket(Session.GetHabbo().Id))
             {

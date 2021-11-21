@@ -2,7 +2,7 @@
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Catalog.Marketplace;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 {
     internal class GetOffersEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int MinCost = Packet.PopInt();
             int MaxCost = Packet.PopInt();

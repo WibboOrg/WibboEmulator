@@ -5,7 +5,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Achievement;
 using Butterfly.Game.Animation;
 using Butterfly.Game.Catalog;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Help;
 using Butterfly.Game.Items;
@@ -27,7 +27,7 @@ namespace Butterfly.Game
 {
     public class GameCore
     {
-        private readonly GameClientManager _clientManager;
+        private readonly ClientManager _clientManager;
         private readonly WebClientManager _clientWebManager;
         private readonly RoleManager _roleManager;
         private readonly CatalogManager _catalogManager;
@@ -55,7 +55,7 @@ namespace Butterfly.Game
 
         public GameCore()
         {
-            this._clientManager = new GameClientManager();
+            this._clientManager = new ClientManager();
             this._clientWebManager = new WebClientManager();
 
             this._roleManager = new RoleManager();
@@ -143,7 +143,7 @@ namespace Butterfly.Game
             return this._roleplayManager;
         }
 
-        public GameClientManager GetClientManager()
+        public ClientManager GetClientManager()
         {
             return this._clientManager;
         }

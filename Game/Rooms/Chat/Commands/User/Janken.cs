@@ -1,7 +1,7 @@
-using Butterfly.Game.GameClients;using Butterfly.Game.Rooms.Games;
+using Butterfly.Game.Clients;using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Janken;
 
-namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Janken : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
+namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Janken : IChatCommand    {        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
             {
                 return;
             }

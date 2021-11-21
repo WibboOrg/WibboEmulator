@@ -1,12 +1,12 @@
 using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System.Linq;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class MassBadge : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             string Badge = Params[1];
 
@@ -15,7 +15,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            foreach (GameClient Client in ButterflyEnvironment.GetGame().GetClientManager().GetClients.ToList())
+            foreach (Client Client in ButterflyEnvironment.GetGame().GetClientManager().GetClients.ToList())
             {
                 if (Client.GetHabbo() != null)
                 {

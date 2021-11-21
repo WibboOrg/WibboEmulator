@@ -1,12 +1,12 @@
 using Butterfly.Communication.Packets.Outgoing.Catalog;
 using Butterfly.Game.Catalog;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GetCatalogOfferEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int id = Packet.PopInt();
             CatalogItem Item = ButterflyEnvironment.GetGame().GetCatalog().FindItem(id, Session.GetHabbo().Rank);

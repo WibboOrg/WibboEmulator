@@ -1,5 +1,5 @@
-using Butterfly.Game.GameClients;
-namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class SetZ : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
+using Butterfly.Game.Clients;
+namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class SetZ : IChatCommand    {        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
             {
                 return;
             }

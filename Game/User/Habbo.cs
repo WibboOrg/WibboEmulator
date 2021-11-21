@@ -9,7 +9,7 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Achievement;
 using Butterfly.Game.Rooms.Chat.Logs;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Roleplay;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms;
@@ -73,7 +73,7 @@ namespace Butterfly.Game.User
         private BadgeComponent BadgeComponent;
         private InventoryComponent InventoryComponent;
         private ChatMessageManager chatMessageManager;
-        private GameClient mClient;
+        private Client mClient;
         public bool SpectatorMode;
         public bool Disconnected;
         public bool HasFriendRequestsDisabled;
@@ -254,7 +254,7 @@ namespace Butterfly.Game.User
             this.Visits = new Dictionary<double, RoomData>();
         }
 
-        public void Init(GameClient client, UserData.UserData data)
+        public void Init(Client client, UserData.UserData data)
         {
             this.mClient = client;
             this.BadgeComponent = new BadgeComponent(this.Id, data.badges);
@@ -418,7 +418,7 @@ namespace Butterfly.Game.User
 
         public bool EnterRoom(Rooms.Room Room)
         {
-            GameClient Session = this.GetClient();
+            Client Session = this.GetClient();
             if (Session == null)
             {
                 return false;
@@ -541,7 +541,7 @@ namespace Butterfly.Game.User
 
             if (this.GuideOtherUserId != 0)
             {
-                GameClient requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.GuideOtherUserId);
+                Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.GuideOtherUserId);
                 if (requester != null)
                 {
                     ServerPacket message = new ServerPacket(ServerPacketHeader.OnGuideSessionEnded);
@@ -594,7 +594,7 @@ namespace Butterfly.Game.User
 
         public void UpdateCreditsBalance()
         {
-            GameClient client = this.GetClient();
+            Client client = this.GetClient();
             if (client == null)
             {
                 return;
@@ -605,7 +605,7 @@ namespace Butterfly.Game.User
 
         public void UpdateActivityPointsBalance()
         {
-            GameClient client = this.GetClient();
+            Client client = this.GetClient();
             if (client == null)
             {
                 return;
@@ -614,7 +614,7 @@ namespace Butterfly.Game.User
             client.SendPacket(new HabboActivityPointNotificationComposer(this.Duckets, 1));
         }
 
-        private GameClient GetClient()
+        private Client GetClient()
         {
             return ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.Id);
         }

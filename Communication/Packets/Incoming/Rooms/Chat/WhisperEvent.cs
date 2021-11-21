@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.Game.GameClients;using Butterfly.Game.Rooms;using Butterfly.Game.Rooms.Chat.Styles;using Butterfly.Utility;using System;using System.Collections.Generic;namespace Butterfly.Communication.Packets.Incoming.Structure{    internal class WhisperEvent : IPacketEvent    {        public void Parse(GameClient Session, ClientPacket Packet)        {            if (Session == null || Session.GetHabbo() == null)
+using Butterfly.Game.Clients;using Butterfly.Game.Rooms;using Butterfly.Game.Rooms.Chat.Styles;using Butterfly.Utility;using System;using System.Collections.Generic;namespace Butterfly.Communication.Packets.Incoming.Structure{    internal class WhisperEvent : IPacketEvent    {        public void Parse(Client Session, ClientPacket Packet)        {            if (Session == null || Session.GetHabbo() == null)
             {
                 return;
             }

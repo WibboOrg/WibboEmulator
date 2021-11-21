@@ -1,4 +1,4 @@
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
@@ -25,7 +25,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
             this.WriteInteger(0);
         }
 
-        public UserChangeComposer(GameClient Client)
+        public UserChangeComposer(Client Client)
             : base(ServerPacketHeader.UNIT_INFO)
         {
             this.WriteInteger(-1);

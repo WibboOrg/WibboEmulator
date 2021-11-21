@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
 using System.Data;
@@ -68,7 +68,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             this.Look = SplitData[1].ToString();
         }
 
-        public void OnTrigger(GameClient Session, int SpriteId)
+        public void OnTrigger(Client Session, int SpriteId)
         {
             ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
             Message.WriteBoolean(false);

@@ -1,13 +1,13 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Notifications;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.User;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class RoomNuxAlert : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             Habbo habbo = Session.GetHabbo();
 

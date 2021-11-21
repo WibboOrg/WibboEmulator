@@ -1,22 +1,22 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Items.Interactors
 {
     public class InteractorManiqui : FurniInteractor
     {
-        public override void OnPlace(GameClient Session, Item Item)
+        public override void OnPlace(Client Session, Item Item)
         {
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        public override void OnRemove(Client Session, Item Item)
         {
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights)
         {
             if (Session == null || Session.GetHabbo() == null || Item == null)
             {

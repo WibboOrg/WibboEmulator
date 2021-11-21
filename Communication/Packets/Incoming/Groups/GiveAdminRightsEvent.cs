@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.User;
@@ -9,7 +9,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GiveAdminRightsEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int GroupId = Packet.PopInt();
             int UserId = Packet.PopInt();

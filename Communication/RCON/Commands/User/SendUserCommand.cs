@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Navigator;
 
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.RCON.Commands.User
@@ -24,7 +24,7 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            GameClient Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
             if (Client == null || Client.GetHabbo() == null)
             {
                 return false;

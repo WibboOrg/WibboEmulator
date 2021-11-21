@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Game.GameClients;using Butterfly.Game.Rooms.Games;
+using Butterfly.Game.Clients;using Butterfly.Game.Rooms.Games;
 
-namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class TransfBot : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (UserRoom.Team != Team.none || UserRoom.InGame)
+namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class TransfBot : IChatCommand    {        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (UserRoom.Team != Team.none || UserRoom.InGame)
             {
                 return;
             }

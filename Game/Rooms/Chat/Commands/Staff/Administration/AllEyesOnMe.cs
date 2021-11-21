@@ -1,4 +1,4 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms.Pathfinding;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class AllEyesOnMe : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             RoomUser ThisUser = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
             if (ThisUser == null)

@@ -1,4 +1,4 @@
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,7 +7,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class RoomKick : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             Room currentRoom = Session.GetHabbo().CurrentRoom;
             Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);

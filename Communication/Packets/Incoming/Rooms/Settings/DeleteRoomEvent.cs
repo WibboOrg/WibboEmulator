@@ -1,6 +1,6 @@
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using System.Linq;
 
@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class DeleteRoomEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int RoomId = Packet.PopInt();
             if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().UsersRooms == null)

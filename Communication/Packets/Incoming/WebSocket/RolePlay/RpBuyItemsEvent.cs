@@ -1,4 +1,4 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Roleplay;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms;
@@ -23,7 +23,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
                 Count = 1;
             }
 
-            GameClient Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
+            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
             if (Client == null || Client.GetHabbo() == null)
             {
                 return;

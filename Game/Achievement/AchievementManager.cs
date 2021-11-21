@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using System;
 using System.Collections.Generic;
@@ -54,12 +54,12 @@ namespace Butterfly.Game.Achievement
             }
         }
 
-        public void GetList(GameClient Session)
+        public void GetList(Client Session)
         {
             Session.SendPacket(new AchievementsMessageComposer(Session, this._achievements.Values.ToList()));
         }
 
-        public bool ProgressAchievement(GameClient Session, string AchievementGroup, int ProgressAmount)
+        public bool ProgressAchievement(Client Session, string AchievementGroup, int ProgressAmount)
         {
             if (!this._achievements.ContainsKey(AchievementGroup))
             {

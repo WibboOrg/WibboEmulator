@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Incoming;
 using Butterfly.Communication.WebSocket;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Utility;
 using SharedPacketLib;
 using System;
@@ -14,13 +14,13 @@ namespace Butterfly.Net
     {
         public event HandlePacket OnNewPacket;
 
-        private readonly GameClient _currentClient;
+        private readonly Client _currentClient;
         private bool _halfDataRecieved = false;
         private byte[] _halfData = null;
         private bool _isWebSocket = false;
         private bool _policySended = false;
 
-        public GamePacketParser(GameClient me)
+        public GamePacketParser(Client me)
         {
             this.OnNewPacket = null;
             this._currentClient = me;

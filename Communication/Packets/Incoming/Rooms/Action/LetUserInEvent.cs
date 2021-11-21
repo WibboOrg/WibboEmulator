@@ -1,13 +1,13 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class LetUserInEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session.GetHabbo() == null)
             {
@@ -23,7 +23,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             string username = Packet.PopString();
             bool allowUserToEnter = Packet.PopBoolean();
 
-            GameClient clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
+            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
             if (clientByUsername == null || clientByUsername.GetHabbo() == null)
             {
                 return;

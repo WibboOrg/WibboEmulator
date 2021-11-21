@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Pets;
 using Butterfly.Game.User.Inventory.Bots;
@@ -18,12 +18,12 @@ namespace Butterfly.Game.User.Inventory
         private readonly ConcurrentDictionary<int, Pet> _petsItems;
         private readonly ConcurrentDictionary<int, Bot> _botItems;
 
-        private GameClient _client;
+        private Client _client;
 
         public bool inventoryDefined;
         public int UserId;
 
-        public InventoryComponent(int UserId, GameClient Client)
+        public InventoryComponent(int UserId, Client Client)
         {
             this._client = Client;
             this.UserId = UserId;
@@ -92,7 +92,7 @@ namespace Butterfly.Game.User.Inventory
             this._botItems.Clear();
         }
 
-        public void SetActiveState(GameClient client)
+        public void SetActiveState(Client client)
         {
             this._client = client;
         }
@@ -300,7 +300,7 @@ namespace Butterfly.Game.User.Inventory
 
         public IEnumerable<Item> GetWallAndFloor => this._UserItems.Values;
 
-        private GameClient GetClient()
+        private Client GetClient()
         {
             return ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
         }

@@ -1,5 +1,5 @@
 ﻿using Butterfly.Core;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Rooms.Pathfinding;
 using System;
@@ -44,7 +44,7 @@ namespace Butterfly.Game.Rooms.AI.Types
         {
         }
 
-        public override void OnUserLeaveRoom(GameClient Client)
+        public override void OnUserLeaveRoom(Client Client)
         {
         }
 

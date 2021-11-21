@@ -2,7 +2,7 @@ using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Items;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class UpdateGroupColoursEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int GroupId = Packet.PopInt();
             int Colour1 = Packet.PopInt();

@@ -1,4 +1,4 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Map.Movement;
 using System.Drawing;
@@ -7,15 +7,15 @@ namespace Butterfly.Game.Items.Interactors
 {
     public class InteractorFootball : FurniInteractor
     {
-        public override void OnPlace(GameClient Session, Item Item)
+        public override void OnPlace(Client Session, Item Item)
         {
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        public override void OnRemove(Client Session, Item Item)
         {
         }
 
-        public override void OnTrigger(GameClient Session, Item Ball, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Ball, int Request, bool UserHasRights)
         {
             if (Session == null)
             {

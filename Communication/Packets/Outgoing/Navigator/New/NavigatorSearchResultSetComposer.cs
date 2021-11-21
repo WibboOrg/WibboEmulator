@@ -1,4 +1,4 @@
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Navigator;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Navigator.New
 {
     internal class NavigatorSearchResultSetComposer : ServerPacket
     {
-        public NavigatorSearchResultSetComposer(string Category, string Data, ICollection<SearchResultList> SearchResultLists, GameClient Session, int GoBack = 1, int FetchLimit = 12)
+        public NavigatorSearchResultSetComposer(string Category, string Data, ICollection<SearchResultList> SearchResultLists, Client Session, int GoBack = 1, int FetchLimit = 12)
             : base(ServerPacketHeader.NAVIGATOR_SEARCH)
         {
             this.WriteString(Category);//Search code.

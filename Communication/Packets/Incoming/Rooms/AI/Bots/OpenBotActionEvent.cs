@@ -1,5 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.AI.Bots;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using System.Linq;
 
@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class OpenBotActionEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             if (!Session.GetHabbo().InRoom)
             {

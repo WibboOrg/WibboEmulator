@@ -2,7 +2,7 @@
 using Butterfly.Communication.Packets.Incoming.Marketplace;
 using Butterfly.Communication.Packets.Incoming.Structure;
 using Butterfly.Communication.Packets.Incoming.WebSocket;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.WebClients;
 using System;
 using System.Collections.Concurrent;
@@ -62,7 +62,7 @@ namespace Butterfly.Communication.Packets
             Console.WriteLine("Logged " + this._incomingPackets.Count + " packet handler(s)!");
         }
 
-        public void TryExecutePacket(GameClient Session, ClientPacket Packet)
+        public void TryExecutePacket(Client Session, ClientPacket Packet)
         {
 
             if (!this._incomingPackets.TryGetValue(Packet.Id, out IPacketEvent pak))

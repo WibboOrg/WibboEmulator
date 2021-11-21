@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Game.GameClients;using Butterfly.Game.Rooms.Games;
+using Butterfly.Game.Clients;using Butterfly.Game.Rooms.Games;
 
-namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Little : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {
+namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Little : IChatCommand    {        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)        {
             if (Params.Length != 2)
             {
                 return;

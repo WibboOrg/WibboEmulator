@@ -1,10 +1,10 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Game.GameClients;namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class SetTransf : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            string username = Params[1];            RoomUser roomUserByHabbo = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);            if (roomUserByHabbo == null)
+using Butterfly.Game.Clients;namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class SetTransf : IChatCommand    {        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)        {            string username = Params[1];            RoomUser roomUserByHabbo = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);            if (roomUserByHabbo == null)
             {
                 return;
             }
 
-            GameClient clientByUsername = roomUserByHabbo.GetClient();            if (clientByUsername == null)
+            Client clientByUsername = roomUserByHabbo.GetClient();            if (clientByUsername == null)
             {
                 return;
             }

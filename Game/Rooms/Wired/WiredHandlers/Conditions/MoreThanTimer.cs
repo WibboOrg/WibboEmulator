@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
 using System;
@@ -40,7 +40,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 this.timeout = timeout;
         }
 
-        public void OnTrigger(GameClient Session, int SpriteId)
+        public void OnTrigger(Client Session, int SpriteId)
         {
             ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
             Message.WriteBoolean(false);

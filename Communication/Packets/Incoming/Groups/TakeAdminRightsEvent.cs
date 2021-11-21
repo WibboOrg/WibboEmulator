@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
-using Butterfly.Game.GameClients;using Butterfly.Game.Guilds;using Butterfly.Game.Rooms;
-using Butterfly.Game.User;namespace Butterfly.Communication.Packets.Incoming.Structure{    internal class TakeAdminRightsEvent : IPacketEvent    {        public void Parse(GameClient Session, ClientPacket Packet)        {            int GroupId = Packet.PopInt();
+using Butterfly.Game.Clients;using Butterfly.Game.Guilds;using Butterfly.Game.Rooms;
+using Butterfly.Game.User;namespace Butterfly.Communication.Packets.Incoming.Structure{    internal class TakeAdminRightsEvent : IPacketEvent    {        public void Parse(Client Session, ClientPacket Packet)        {            int GroupId = Packet.PopInt();
             int UserId = Packet.PopInt();
 
             if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Guild Group))

@@ -1,4 +1,4 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.WebClients;
@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
             int ItemId = Packet.PopInt();
             string Url = Packet.PopString();
 
-            GameClient Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
+            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
             if (Client == null || Client.GetHabbo() == null)
             {
                 return;

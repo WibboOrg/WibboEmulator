@@ -1,6 +1,6 @@
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System;
 using System.Data;
 
@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Avatar
 {
     internal class WardrobeComposer : ServerPacket
     {
-        public WardrobeComposer(GameClient Session)
+        public WardrobeComposer(Client Session)
             : base(ServerPacketHeader.USER_OUTFITS)
         {
             this.WriteInteger(1);

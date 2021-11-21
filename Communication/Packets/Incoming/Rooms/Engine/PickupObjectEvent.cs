@@ -1,4 +1,4 @@
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Quests;
 using Butterfly.Game.Rooms;
@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class PickupObjectEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             Packet.PopInt();
             int ItemId = Packet.PopInt();

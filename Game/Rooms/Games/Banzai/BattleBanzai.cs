@@ -2,7 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.GameCenter;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Enclosure;
 using System;
@@ -229,7 +229,7 @@ namespace Butterfly.Game.Rooms.Games
             }
         }
 
-        public void MovePuck(Item item, GameClient mover, int newX, int newY, Team team)
+        public void MovePuck(Item item, Client mover, int newX, int newY, Team team)
         {
             if (item == null || mover == null || !this.room.GetGameMap().CanStackItem(newX, newY))
             {

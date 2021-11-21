@@ -10,7 +10,7 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Catalog;
 using Butterfly.Game.Catalog.Utilities;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Items;
 using Butterfly.Game.Pets;
@@ -24,7 +24,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class PurchaseFromCatalogEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int PageId = Packet.PopInt();
             int ItemId = Packet.PopInt();

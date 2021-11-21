@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Navigator.New;
 
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Navigator;
 using System.Collections.Generic;
 
@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class NavigatorSearchEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             string Category = Packet.PopString();
             string Search = Packet.PopString();

@@ -1,10 +1,10 @@
 ﻿using Butterfly.Communication.Packets.Incoming;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets
 {
     public interface IPacketEvent
     {
-        void Parse(GameClient session, ClientPacket packet);
+        void Parse(Client session, ClientPacket packet);
     }
 }

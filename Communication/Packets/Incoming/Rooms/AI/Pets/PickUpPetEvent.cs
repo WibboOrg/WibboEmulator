@@ -2,7 +2,7 @@ using Butterfly.Communication.Packets.Outgoing.Inventory.Pets;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Rooms;
 using System.Drawing;
@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class PickUpPetEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             if (!Session.GetHabbo().InRoom)
             {
@@ -99,7 +99,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (pet.OwnerId != Session.GetHabbo().Id)
             {
-                GameClient Target = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(pet.OwnerId);
+                Client Target = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(pet.OwnerId);
                 if (Target != null)
                 {
                     Target.GetHabbo().GetInventoryComponent().TryAddPet(Pet.PetData);

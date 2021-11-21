@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SaveRoomSettingsEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int RoomId = Packet.PopInt();
 

@@ -4,7 +4,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.Pathfinding;
@@ -61,7 +61,7 @@ namespace Butterfly.Game.Rooms
             this._roomItemUpdateQueue.Enqueue(item);
         }
 
-        public List<Item> RemoveAllFurniture(GameClient Session)
+        public List<Item> RemoveAllFurniture(Client Session)
         {
             List<ServerPacket> ListMessage = new List<ServerPacket>();
             List<Item> Items = new List<Item>();
@@ -267,7 +267,7 @@ namespace Butterfly.Game.Rooms
 
         public IEnumerable<Item> GetWallAndFloor => this._floorItems.Values.Concat(this._wallItems.Values);
 
-        public void RemoveFurniture(GameClient Session, int pId)
+        public void RemoveFurniture(Client Session, int pId)
         {
             Item roomItem = this.GetItem(pId);
             if (roomItem == null)
@@ -557,7 +557,7 @@ namespace Butterfly.Game.Rooms
             return Item;
         }
 
-        public bool SetFloorItem(GameClient Session, Item Item, int newX, int newY, int newRot, bool newItem, bool OnRoller, bool sendMessage)
+        public bool SetFloorItem(Client Session, Item Item, int newX, int newY, int newRot, bool newItem, bool OnRoller, bool sendMessage)
         {
             bool NeedsReAdd = false;
             if (!newItem)
@@ -769,7 +769,7 @@ namespace Butterfly.Game.Rooms
             return true;
         }
 
-        public bool SetWallItem(GameClient Session, Item Item)
+        public bool SetWallItem(Client Session, Item Item)
         {
             if (!Item.IsWallItem || this._wallItems.ContainsKey(Item.Id))
             {

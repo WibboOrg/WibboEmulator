@@ -1,5 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using System.Collections.Generic;
 
@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GetGroupCreationWindowEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session == null || Session.GetHabbo() == null)
             {

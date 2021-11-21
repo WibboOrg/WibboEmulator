@@ -5,7 +5,7 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Catalog;
 using Butterfly.Game.Catalog.Utilities;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Items;
 using Butterfly.Game.User;
@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int PageId = Packet.PopInt();
             int ItemId = Packet.PopInt();
@@ -258,7 +258,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Item GiveItem = ItemFactory.CreateSingleItem(PresentData, Habbo, ED, NewItemId);
             if (GiveItem != null)
             {
-                GameClient Receiver = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Habbo.Id);
+                Client Receiver = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Habbo.Id);
                 if (Receiver != null)
                 {
                     Receiver.GetHabbo().GetInventoryComponent().TryAddItem(GiveItem);

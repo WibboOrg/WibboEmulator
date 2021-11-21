@@ -1,12 +1,12 @@
 using Butterfly.Game.Achievement;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Inventory.Achievements
 {
     internal class AchievementsMessageComposer : ServerPacket
     {
-        public AchievementsMessageComposer(GameClient Session, List<AchievementData> Achievements)
+        public AchievementsMessageComposer(Client Session, List<AchievementData> Achievements)
             : base(ServerPacketHeader.ACHIEVEMENT_LIST)
         {
             this.WriteInteger(Achievements.Count);

@@ -8,7 +8,7 @@ using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Roleplay;
 using Butterfly.Game.Roleplay.Enemy;
@@ -2425,7 +2425,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                 this.Delay = delay;
         }
 
-        public void OnTrigger(GameClient Session, int SpriteId)
+        public void OnTrigger(Client Session, int SpriteId)
         {
             ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
             Message.WriteBoolean(false);

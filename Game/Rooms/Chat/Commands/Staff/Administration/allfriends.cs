@@ -1,12 +1,12 @@
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class AllFriends : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            foreach (GameClient User in ButterflyEnvironment.GetGame().GetClientManager().GetClients)
+            foreach (Client User in ButterflyEnvironment.GetGame().GetClientManager().GetClients)
             {
                 if (User == null)
                 {

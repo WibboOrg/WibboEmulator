@@ -1,13 +1,13 @@
 using Butterfly.Core;
 using Butterfly.Game.Catalog;
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Catalog
 {
     internal class CatalogIndexComposer : ServerPacket
     {
-        public CatalogIndexComposer(GameClient Session, ICollection<CatalogPage> Pages, int Sub = 0)
+        public CatalogIndexComposer(Client Session, ICollection<CatalogPage> Pages, int Sub = 0)
              : base(ServerPacketHeader.CATALOG_PAGES)
         {
             this.WriteRootIndex(Session, Pages);
@@ -77,7 +77,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
             this.WriteString("NORMAL");
         }
 
-        public void WriteRootIndex(GameClient session, ICollection<CatalogPage> pages)
+        public void WriteRootIndex(Client session, ICollection<CatalogPage> pages)
         {
             this.WriteBoolean(true);
             this.WriteInteger(0);
@@ -117,7 +117,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
             this.WriteInteger(treeSize);
         }
 
-        public int CalcTreeSize(GameClient Session, ICollection<CatalogPage> Pages, int ParentId)
+        public int CalcTreeSize(Client Session, ICollection<CatalogPage> Pages, int ParentId)
         {
             int i = 0;
             foreach (CatalogPage Page in Pages)

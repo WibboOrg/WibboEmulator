@@ -1,11 +1,11 @@
-﻿using Butterfly.Game.GameClients;
+﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms.Map.Movement;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {
     internal class Tir : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (!UserRoom.AllowShoot || UserRoom.Freeze)
             {

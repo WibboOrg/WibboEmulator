@@ -1,13 +1,13 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
 
-using Butterfly.Game.GameClients;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class DeclineGroupMembershipEvent : IPacketEvent
     {
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int GroupId = Packet.PopInt();
             int UserId = Packet.PopInt();
