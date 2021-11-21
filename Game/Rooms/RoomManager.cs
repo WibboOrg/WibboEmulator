@@ -218,7 +218,7 @@ namespace Butterfly.Game.Rooms
             }
         }
 
-        public void LoadModels()
+        public void Init()
         {
             this._roomModels.Clear();
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())

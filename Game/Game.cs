@@ -74,7 +74,7 @@ namespace Butterfly.Game
             this._roleplayManager.Init();
 
             this._roomManager = new RoomManager();
-            this._roomManager.LoadModels();
+            this._roomManager.Init();
 
             this._groupManager = new GroupManager();
             this._groupManager.Init();
@@ -274,7 +274,6 @@ namespace Butterfly.Game
         public void Destroy()
         {
             DatabaseCleanup();
-            this.GetClientManager();
             Console.WriteLine("Destroyed Habbo Hotel.");
         }
     }

@@ -24,31 +24,30 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 case "random":
                     {
                         ButterflyEnvironment.RegenRandom();
-                        break;
-
                         UserRoom.SendWhisperChat("Random mis à jour");
+                        break;
                     }
                 case "view":
                 case "vue":
                     {
                         ButterflyEnvironment.GetGame().GetHotelView().InitHotelViewPromo();
-                        break;
                         UserRoom.SendWhisperChat("Vue et promotion mises à jour");
+                        break;
                     }
                 case "text":
                 case "texte":
                 case "locale":
                     {
                         ButterflyEnvironment.GetLanguageManager().InitLocalValues();
-                        break;
                         UserRoom.SendWhisperChat("Local mis à jour");
+                        break;
                     }
 
                 case "wibbogame":
                     {
                         ButterflyEnvironment.GetGame().GetAnimationManager().Init();
-                        break;
                         UserRoom.SendWhisperChat("Wibbo Game mis à jour");
+                        break;
                     }
                 case "autogame":
                     {
@@ -67,52 +66,52 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 case "rpitems":
                     {
                         ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().Init();
-                        break;
                         UserRoom.SendWhisperChat("RP Items mis à jour");
+                        break;
                     }
                 case "rpweapon":
                     {
                         ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().Init();
-                        break;
                         UserRoom.SendWhisperChat("RP Weapon mis à jour");
+                        break;
                     }
                 case "rpenemy":
                     {
                         ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().Init();
-                        break;
                         UserRoom.SendWhisperChat("RP Enemy mis à jour");
+                        break;
                     }
                 case "cmd":
                 case "commands":
                     {
                         ButterflyEnvironment.GetGame().GetChatManager().GetCommands().Init();
-                        break;
                         UserRoom.SendWhisperChat("Commands mis à jour");
+                        break;
                     }
                 case "role":
                     {
                         ButterflyEnvironment.GetGame().GetRoleManager().Init();
-                        break;
                         UserRoom.SendWhisperChat("Rôle mis à jour");
+                        break;
                     }
                 case "effet":
                     {
                         ButterflyEnvironment.GetGame().GetEffectManager().Init();
-                        break;
                         UserRoom.SendWhisperChat("Effet mis à jour");
+                        break;
                     }
                 case "rp":
                 case "roleplay":
                     {
                         ButterflyEnvironment.GetGame().GetRoleplayManager().Init();
-                        break;
                         UserRoom.SendWhisperChat("Role play mis à jour");
+                        break;
                     }
                 case "modo":
                     {
                         ButterflyEnvironment.GetGame().GetModerationManager().Init();
-                        break;
                         UserRoom.SendWhisperChat("Moderation mis à jour");
+                        break;
                     }
                 case "catalogue":
                 case "cata":
@@ -120,42 +119,42 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                         ButterflyEnvironment.GetGame().GetItemManager().Init();
                         ButterflyEnvironment.GetGame().GetCatalog().Init(ButterflyEnvironment.GetGame().GetItemManager());
                         ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new CatalogUpdatedComposer());
-                        break;
                         UserRoom.SendWhisperChat("Catalogue mis à jour");
+                        break;
                     }
                 case "navigateur":
                 case "navi":
                     {
                         ButterflyEnvironment.GetGame().GetNavigator().Init();
-                        break;
                         UserRoom.SendWhisperChat("Navigateur mis à jour");
+                        break;
                     }
                 case "filter":
                 case "filtre":
                     {
                         ButterflyEnvironment.GetGame().GetChatManager().GetFilter().Init();
-                        break;
                         UserRoom.SendWhisperChat("Filtre mis à jour");
+                        break;
                     }
                 case "items":
                 case "furni":
                     {
                         ButterflyEnvironment.GetGame().GetItemManager().Init();
-                        break;
                         UserRoom.SendWhisperChat("Items mis à jour");
+                        break;
                     }
                 case "model":
                     {
-                    ButterflyEnvironment.GetGame().GetRoomManager().LoadModels();
-                    break;
-                    UserRoom.SendWhisperChat("Model mis à jour");
+                        ButterflyEnvironment.GetGame().GetRoomManager().Init();
+                        UserRoom.SendWhisperChat("Model mis à jour");
+                        break;
                     }
                 case "mutant":
                 case "figure":
                     {
                         ButterflyEnvironment.GetFigureManager().Init();
-                        break;
                         UserRoom.SendWhisperChat("Mutant/Figure mises à jour");
+                        break;
                     }
                 default:
                     {
