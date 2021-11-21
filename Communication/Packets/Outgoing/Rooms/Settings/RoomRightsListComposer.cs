@@ -1,5 +1,5 @@
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Users;
+using Butterfly.Game.User;
 using System.Linq;
 
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.Settings

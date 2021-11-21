@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.Navigators;
+using Butterfly.Game.Navigator;
 
 namespace Butterfly.Game.Rooms
 {

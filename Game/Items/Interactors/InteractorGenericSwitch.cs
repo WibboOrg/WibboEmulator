@@ -138,7 +138,7 @@ namespace Butterfly.Game.Items.Interactors
                     return;
                 }
 
-                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+                Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
                 if (room == null)
                 {
                     return;

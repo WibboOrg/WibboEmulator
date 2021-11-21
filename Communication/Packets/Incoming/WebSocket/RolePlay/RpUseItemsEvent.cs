@@ -108,7 +108,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
                     }
                 case "showtime":
                     {
-                        User.SendWhisperChat("Il est " + Room.RpHour + " heures et " + Room.RpMinute + " minutes");
+                        User.SendWhisperChat("Il est " + Room.Roleplay.Hour + " heures et " + Room.Roleplay.Minute + " minutes");
                         break;
                     }
                 case "money":

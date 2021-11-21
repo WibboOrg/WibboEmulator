@@ -2,8 +2,8 @@ using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Users;
+using Butterfly.Game.Guilds;
+using Butterfly.Game.User;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -21,7 +21,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            List<Group> Groups = ButterflyEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.MyGroups);
+            List<Guild> Groups = ButterflyEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.MyGroups);
 
             int friendCount = 0;
 

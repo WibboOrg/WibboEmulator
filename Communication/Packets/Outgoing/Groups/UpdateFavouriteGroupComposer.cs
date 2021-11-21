@@ -1,10 +1,10 @@
-using Butterfly.Game.Groups;
+using Butterfly.Game.Guilds;
 
 namespace Butterfly.Communication.Packets.Outgoing.Groups
 {
     internal class UpdateFavouriteGroupComposer : ServerPacket
     {
-        public UpdateFavouriteGroupComposer(Group Group, int VirtualId)
+        public UpdateFavouriteGroupComposer(Guild Group, int VirtualId)
             : base(ServerPacketHeader.UpdateFavouriteGroupMessageComposer)
         {
             this.WriteInteger(VirtualId);//Sends 0 on .COM

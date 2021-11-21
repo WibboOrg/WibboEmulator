@@ -1,6 +1,6 @@
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Users;
+using Butterfly.Game.Guilds;
+using Butterfly.Game.User;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
 {
     internal class ProfileInformationComposer : ServerPacket
     {
-        public ProfileInformationComposer(Habbo habbo, GameClient session, List<Group> groups, int friendCount)
+        public ProfileInformationComposer(Habbo habbo, GameClient session, List<Guild> groups, int friendCount)
             : base(ServerPacketHeader.USER_PROFILE)
         {
             DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(habbo.AccountCreated);
@@ -25,7 +25,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
             this.WriteBoolean((ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(habbo.Id)) != null);
 
             this.WriteInteger(groups.Count);
-            foreach (Group group in groups)
+            foreach (Guild group in groups)
             {
                 this.WriteInteger(group.Id);
                 this.WriteString(group.Name);

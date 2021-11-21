@@ -7,7 +7,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
     {
         public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(UserRoom.HabboId);
+            WebClients.WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(UserRoom.HabboId);
             if (ClientWeb == null)
             {
                 return;

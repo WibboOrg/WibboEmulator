@@ -4,7 +4,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.Users.Messenger;
+using Butterfly.Game.User.Messenger;
 using ConnectionManager;
 using System;
 using System.Collections.Concurrent;

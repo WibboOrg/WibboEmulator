@@ -1,4 +1,4 @@
-using Butterfly.Game.Users;
+using Butterfly.Game.User;
 
 namespace Butterfly.Communication.Packets.Outgoing.Handshake
 {

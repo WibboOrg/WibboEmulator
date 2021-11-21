@@ -9,8 +9,8 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Users;
-using Butterfly.Game.Users.UserData;
+using Butterfly.Game.User;
+using Butterfly.Game.User.UserData;
 using Butterfly.Net;
 using ConnectionManager;
 using System;
@@ -29,7 +29,7 @@ namespace Butterfly
         private static ConfigurationData _configuration;
         private static ConnectionHandeling _connectionManager;
         private static WebSocketManager _webSocketManager;
-        private static Game.Game _game;
+        private static GameCore _game;
         private static DatabaseManager _datebasemanager;
         private static RCONSocket _rcon;
         private static FigureDataManager _figureManager;
@@ -111,7 +111,7 @@ namespace Butterfly
                 _languageManager = new LanguageManager();
                 _languageManager.Init();
 
-                _game = new Game.Game();
+                _game = new GameCore();
                 _game.StartGameLoop();
 
                 _figureManager = new FigureDataManager();
@@ -347,7 +347,7 @@ namespace Butterfly
             return _rcon;
         }
 
-        public static Game.Game GetGame()
+        public static GameCore GetGame()
         {
             return _game;
         }
@@ -371,7 +371,6 @@ namespace Butterfly
             Thread.Sleep(20000);
             GetConnectionManager().Destroy();
             GetGame().GetPacketManager().UnregisterAll();
-            GetGame().GetPacketManager().WaitForAllToComplete();
             GetGame().GetClientManager().CloseAll();
             GetGame().GetRoomManager().RemoveAllRooms();
 

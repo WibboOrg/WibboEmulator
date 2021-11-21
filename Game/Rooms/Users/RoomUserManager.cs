@@ -125,7 +125,7 @@ namespace Butterfly.Game.Rooms
             return true;
         }
 
-        public RoomUser DeployBot(RoomBot Bot, Pet PetData)
+        public RoomUser DeployBot(RoomBot Bot, Pets.Pet PetData)
         {
             int key = this._primaryPrivateUserID++;
             RoomUser roomUser = new RoomUser(0, this._room.Id, key, this._room);

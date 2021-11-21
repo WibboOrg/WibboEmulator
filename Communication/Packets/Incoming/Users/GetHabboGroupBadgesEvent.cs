@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Groups;
+using Butterfly.Game.Guilds;
 using Butterfly.Game.Rooms;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +35,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     continue;
                 }
 
-                if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(User.GetClient().GetHabbo().FavouriteGroupId, out Group Group))
+                if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(User.GetClient().GetHabbo().FavouriteGroupId, out Guild Group))
                 {
                     continue;
                 }
@@ -48,7 +48,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (Session.GetHabbo().FavouriteGroupId > 0)
             {
-                if (ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Session.GetHabbo().FavouriteGroupId, out Group Group))
+                if (ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Session.GetHabbo().FavouriteGroupId, out Guild Group))
                 {
                     if (!Badges.ContainsKey(Group.Id))
                     {

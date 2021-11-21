@@ -26,7 +26,7 @@ namespace Butterfly.Core
                         break;
 
                     case "forceshutdown":
-                        ButterflyEnvironment.GetGame().gameLoopEnded = true;
+                        ButterflyEnvironment.GetGame().GameLoopEnded = true;
                         break;
 
                     case "clear":

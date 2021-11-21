@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Catalog;
 using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Groups;
+using Butterfly.Game.Guilds;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -14,12 +14,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Packet.PopInt(), out Group Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Packet.PopInt(), out Guild Group))
             {
                 return;
             }
 
-            if (Group.IsMember(Session.GetHabbo().Id) || Group.IsAdmin(Session.GetHabbo().Id) || (Group.HasRequest(Session.GetHabbo().Id) && Group.GroupType == GroupType.LOCKED) || Group.GroupType == GroupType.PRIVATE)
+            if (Group.IsMember(Session.GetHabbo().Id) || Group.IsAdmin(Session.GetHabbo().Id) || (Group.HasRequest(Session.GetHabbo().Id) && Group.GroupType == GuildType.LOCKED) || Group.GroupType == GuildType.PRIVATE)
             {
                 return;
             }
@@ -32,7 +32,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Group.AddMember(Session.GetHabbo().Id);
 
-            if (Group.GroupType == GroupType.LOCKED)
+            if (Group.GroupType == GuildType.LOCKED)
             {
                 /*List<GameClient> GroupAdmins = (from Client in ButterflyEnvironment.GetGame().GetClientManager().GetClients.ToList() where Client != null && Client.GetHabbo() != null && Group.IsAdmin(Client.GetHabbo().Id) select Client).ToList();
                 foreach (GameClient Client in GroupAdmins)

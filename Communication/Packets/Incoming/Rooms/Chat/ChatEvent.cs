@@ -5,7 +5,7 @@ using Butterfly.Game.Quests;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Chat.Styles;
-using Butterfly.Utilities;
+using Butterfly.Utility;
 using System;
 using System.Text.RegularExpressions;
 

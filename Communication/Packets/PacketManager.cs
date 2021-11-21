@@ -16,13 +16,16 @@ namespace Butterfly.Communication.Packets
     {
         private readonly Dictionary<int, IPacketEvent> _incomingPackets;
         private readonly Dictionary<int, IPacketWebEvent> _incomingWebPackets;
-        private readonly ConcurrentDictionary<int, Task> _runningTasks;
 
         public PacketManager()
         {
             this._incomingPackets = new Dictionary<int, IPacketEvent>();
             this._incomingWebPackets = new Dictionary<int, IPacketWebEvent>();
-            this._runningTasks = new ConcurrentDictionary<int, Task>();
+        }
+
+        public void Init()
+        {
+            this.UnregisterAll();
 
             this.RegisterHandshake();
             this.RegisterLandingView();
@@ -130,14 +133,7 @@ namespace Butterfly.Communication.Packets
         public void UnregisterAll()
         {
             _incomingPackets.Clear();
-        }
-
-        public void WaitForAllToComplete()
-        {
-            foreach (Task t in _runningTasks.Values.ToList())
-            {
-                t.Wait();
-            }
+            _incomingWebPackets.Clear();
         }
         private void RegisterForum()
         {

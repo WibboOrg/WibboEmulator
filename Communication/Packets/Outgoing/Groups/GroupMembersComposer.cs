@@ -1,12 +1,12 @@
-using Butterfly.Game.Groups;
-using Butterfly.Game.Users;
+using Butterfly.Game.Guilds;
+using Butterfly.Game.User;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Groups
 {
     internal class GroupMembersComposer : ServerPacket
     {
-        public GroupMembersComposer(Group Group, ICollection<Habbo> Members, int MembersCount, int Page, bool Admin, int ReqType, string SearchVal)
+        public GroupMembersComposer(Guild Group, ICollection<Habbo> Members, int MembersCount, int Page, bool Admin, int ReqType, string SearchVal)
             : base(ServerPacketHeader.GROUP_MEMBERS)
         {
             this.WriteInteger(Group.Id);

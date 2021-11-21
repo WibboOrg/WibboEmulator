@@ -2,6 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.MarketPlace;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
+using Butterfly.Game.GameClients;
 using Butterfly.Game.Items;
 using System;
 using System.Data;
@@ -10,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 {
     internal class CancelOfferEvent : IPacketEvent
     {
-        public void Parse(Game.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             if (Session == null || Session.GetHabbo() == null)
             {

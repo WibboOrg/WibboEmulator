@@ -1,5 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.Game.GameClients;using Butterfly.Game.Users;
+using Butterfly.Game.GameClients;using Butterfly.Game.User;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Mute : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
             {

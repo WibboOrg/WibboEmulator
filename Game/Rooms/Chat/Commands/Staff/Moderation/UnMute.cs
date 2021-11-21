@@ -1,4 +1,4 @@
-using Butterfly.Game.GameClients;using Butterfly.Game.Users;
+using Butterfly.Game.GameClients;using Butterfly.Game.User;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class UnMute : IChatCommand    {        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)        {            GameClient clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);            if (clientByUsername == null || clientByUsername.GetHabbo() == null)            {                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));            }            else            {                Habbo habboByUsername = clientByUsername.GetHabbo();
 

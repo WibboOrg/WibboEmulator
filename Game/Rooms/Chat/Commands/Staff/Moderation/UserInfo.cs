@@ -1,4 +1,4 @@
-using Butterfly.Game.GameClients;using Butterfly.Game.Users;
+using Butterfly.Game.GameClients;using Butterfly.Game.User;
 using Butterfly.Game.WebClients;
 using System.Text;
 
@@ -44,7 +44,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class UserInfo :
                 stringBuilder.Append("Langue: " + clientByUsername.Langue.ToString() + "\r");
                 stringBuilder.Append("Client: " + ((clientByUsername.GetConnection().IsWebSocket) ? "Nitro" : "Flash") + "\r");
 
-                WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(Habbo.Id);
+                WebClients.WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(Habbo.Id);
                 if (ClientWeb != null)
                 {
                     stringBuilder.Append("WebSocket: En ligne" + "\r");

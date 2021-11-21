@@ -1,4 +1,4 @@
-using Butterfly.Game.Navigators;
+using Butterfly.Game.Navigator;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Navigator

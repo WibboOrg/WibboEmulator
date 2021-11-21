@@ -219,7 +219,7 @@ namespace Butterfly.Game.Roleplay.Player
 
         public void SendWebPacket(IServerPacket Message)
         {
-            WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(this._id);
+            WebClients.WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(this._id);
             if (ClientWeb != null)
             {
                 ClientWeb.SendPacket(Message);
@@ -386,7 +386,7 @@ namespace Butterfly.Game.Roleplay.Player
             }
         }
 
-        public void Hit(RoomUser User, int Dmg, Room Room, bool Ralentie = false, bool Murmur = false, bool Aggro = true)
+        public void Hit(RoomUser User, int Dmg, Rooms.Room Room, bool Ralentie = false, bool Murmur = false, bool Aggro = true)
         {
             if (this.Dead || this.SendPrison)
             {

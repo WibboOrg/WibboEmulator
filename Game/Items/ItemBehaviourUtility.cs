@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Users;
+using Butterfly.Game.Guilds;
+using Butterfly.Game.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +39,7 @@ namespace Butterfly.Game.Items
 
                 case InteractionType.GUILD_ITEM:
                 case InteractionType.GUILD_GATE:
-                    Group Group = null;
+                    Guild Group = null;
                     if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Item.GroupId, out Group))
                     {
                         Message.WriteInteger(0);

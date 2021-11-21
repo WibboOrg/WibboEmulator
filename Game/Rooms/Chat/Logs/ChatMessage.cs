@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.Users;
+using Butterfly.Game.User;
 using System;
 
 namespace Butterfly.Game.Rooms.Chat.Logs

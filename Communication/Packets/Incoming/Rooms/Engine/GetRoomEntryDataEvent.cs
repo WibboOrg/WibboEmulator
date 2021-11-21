@@ -4,7 +4,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.GameClients;
 using Butterfly.Game.Rooms;
-using Butterfly.Utilities;
+using Butterfly.Utility;
 using System;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

@@ -1,10 +1,10 @@
-﻿using Butterfly.Game.Groups;
+﻿using Butterfly.Game.Guilds;
 
 namespace Butterfly.Communication.Packets.Outgoing.Groups
 {
     internal class GroupFurniSettingsComposer : ServerPacket
     {
-        public GroupFurniSettingsComposer(Group Group, int ItemId, int UserId)
+        public GroupFurniSettingsComposer(Guild Group, int ItemId, int UserId)
             : base(ServerPacketHeader.GroupFurniSettingsMessageComposer)
         {
             this.WriteInteger(ItemId);//Item Id

@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Users;
+using Butterfly.Game.User;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

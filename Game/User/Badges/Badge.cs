@@ -1,0 +1,14 @@
+﻿namespace Butterfly.Game.User.Badges
+{
+    public class Badge
+    {
+        public string Code;
+        public int Slot;
+
+        public Badge(string Code, int Slot)
+        {
+            this.Code = Code;
+            this.Slot = Slot;
+        }
+    }
+}

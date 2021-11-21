@@ -2,7 +2,7 @@ using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Groups;
+using Butterfly.Game.Guilds;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int GroupId = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Guild Group))
             {
                 return;
             }

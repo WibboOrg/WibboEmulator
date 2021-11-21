@@ -24,7 +24,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public static int GetTeleRoomId(int TeleId, Room pRoom)
+        public static int GetTeleRoomId(int TeleId, Rooms.Room pRoom)
         {
             if (pRoom == null)
             {
@@ -55,7 +55,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public static bool IsTeleLinked(int TeleId, Room pRoom)
+        public static bool IsTeleLinked(int TeleId, Rooms.Room pRoom)
         {
             int linkedTele = GetLinkedTele(TeleId);
             if (linkedTele == 0)

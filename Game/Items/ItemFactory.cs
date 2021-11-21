@@ -1,6 +1,6 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.Users;
+using Butterfly.Game.User;
 using System;
 using System.Collections.Generic;
 

@@ -35,19 +35,13 @@ namespace Butterfly.Game.Rooms
         public bool RoomMuted;
         public bool isCycling;
         public int IsLagging;
-        public bool mCycleEnded;
+        public bool CycleEnded;
         public int IdleTime;
-
-        public bool IsRoleplay;
-        public bool Pvp;
-        public int RpHour;
-        public int RpMinute;
-        public int RpIntensity;
-        public bool RpCycleHourEffect;
-        public bool RpTimeSpeed;
 
         private TeamManager _teamManager;
 
+        public bool IsRoleplay { get { return this.Roleplay != null; } }
+        public RoomRoleplay Roleplay;
         public List<int> UsersWithRights;
         public bool EveryoneGotRights;
         private readonly Dictionary<int, double> _bans;
@@ -99,11 +93,7 @@ namespace Butterfly.Game.Rooms
             RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Data.OwnerId);
             if (RPManager != null)
             {
-                this.IsRoleplay = true;
-                this.Pvp = true;
-                this.RpCycleHourEffect = true;
-                this.RpTimeSpeed = false;
-                this.RpHour = -1;
+                this.Roleplay = new RoomRoleplay();
             }
 
             this.SaveTimer = 0;
@@ -111,7 +101,7 @@ namespace Butterfly.Game.Rooms
             this._bans = new Dictionary<int, double>();
             this._mutes = new Dictionary<int, double>();
             this.ActiveTrades = new List<Trade>();
-            this.mCycleEnded = false;
+            this.CycleEnded = false;
             this.HeightMapLoaded = false;
             this.RoomData = Data;
             this.EveryoneGotRights = Data.AllowRightsOverride;
@@ -410,7 +400,7 @@ namespace Butterfly.Game.Rooms
 
                 foreach (DataRow Row in table.Rows)
                 {
-                    Pet PetData = new Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)(Row["anyone_ride"]) == "1");
+                    Pets.Pet PetData = new Pets.Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)(Row["anyone_ride"]) == "1");
                     List<string> list = new List<string>();
                     this.roomUserManager.DeployBot(new RoomBot(PetData.PetId, PetData.OwnerId, this.Id, AIType.Pet, true, PetData.Name, "", "", PetData.Look, PetData.X, PetData.Y, PetData.Z, 0, false, "", 0, false, 0, 0, 0), PetData);
                 }
@@ -626,7 +616,7 @@ namespace Butterfly.Game.Rooms
                         this.IdleTime = 0;
                     }
 
-                    if (!this.mCycleEnded)
+                    if (!this.CycleEnded)
                     {
                         if (this.IdleTime >= 60)
                         {
@@ -691,92 +681,15 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            DateTime Now = DateTime.Now;
-
-            int RpHourNow = (int)Math.Floor((double)(((Now.Minute * 60) + Now.Second) / 150)); //150sec = 2m30s = 1heure dans le rp
-
-            int RpMinuteNow = (int)Math.Floor((((Now.Minute * 60) + Now.Second) - (RpHourNow * 150)) / 2.5);
-
-            if (RpHourNow >= 16)
-            {
-                RpHourNow = (RpHourNow + 8) - 24;
-            }
-            else
-            {
-                RpHourNow = RpHourNow + 8;
-            }
-
-            if (this.RpTimeSpeed)
-            {
-                RpHourNow = (int)Math.Floor((double)(Now.Second / 2.5));
-            }
-
-            if (this.RpMinute != RpMinuteNow)
-            {
-                this.RpMinute = RpMinuteNow;
-            }
-
-            if (this.RpHour == RpHourNow)
+            if (this.RoomData.OwnerName == "WibboParty")
             {
                 return;
             }
 
-            this.RpHour = RpHourNow;
-
-            if (!this.RpCycleHourEffect)
+            if (!this.Roleplay.Cycle())
             {
                 return;
             }
-
-            int Intensity = 255;
-
-            if (this.RpHour >= 8 && this.RpHour < 20) //Journée
-            {
-                Intensity = 255;
-            }
-            else if (this.RpHour >= 20 && this.RpHour < 21)  //Crépuscule
-            {
-                Intensity = 200;
-            }
-            else if (this.RpHour >= 21 && this.RpHour < 22)  //Crépuscule
-            {
-                Intensity = 150;
-            }
-            else if (this.RpHour >= 22 && this.RpHour < 23)  //Crépuscule
-            {
-                Intensity = 100;
-            }
-            else if (this.RpHour >= 23 && this.RpHour < 24)  //Crépuscule
-            {
-                Intensity = 75;
-            }
-            else if (this.RpHour >= 0 && this.RpHour < 4)  //Nuit
-            {
-                Intensity = 50;
-            }
-            else if (this.RpHour >= 4 && this.RpHour < 5)  //Aube
-            {
-                Intensity = 75;
-            }
-            else if (this.RpHour >= 5 && this.RpHour < 6)  //Aube
-            {
-                Intensity = 100;
-            }
-            else if (this.RpHour >= 6 && this.RpHour < 7)  //Aube
-            {
-                Intensity = 150;
-            }
-            else if (this.RpHour >= 7 && this.RpHour < 8)  //Aube
-            {
-                Intensity = 200;
-            }
-
-            if (this.RpIntensity == Intensity || this.RoomData.OwnerName == "WibboParty")
-            {
-                return;
-            }
-
-            this.RpIntensity = Intensity;
 
             this.UpdateRpMoodLight();
             this.UpdateRpToner();
@@ -792,27 +705,27 @@ namespace Butterfly.Game.Rooms
             }
 
             int UseNum = 0;
-            if (this.RpIntensity == 50)
+            if (this.Roleplay.Intensity == 50)
             {
                 UseNum = 0;
             }
-            else if (this.RpIntensity == 75)
+            else if (this.Roleplay.Intensity == 75)
             {
                 UseNum = 1;
             }
-            else if (this.RpIntensity == 100)
+            else if (this.Roleplay.Intensity == 100)
             {
                 UseNum = 2;
             }
-            else if (this.RpIntensity == 150)
+            else if (this.Roleplay.Intensity == 150)
             {
                 UseNum = 3;
             }
-            else if (this.RpIntensity == 200)
+            else if (this.Roleplay.Intensity == 200)
             {
                 UseNum = 4;
             }
-            else if (this.RpIntensity == 255)
+            else if (this.Roleplay.Intensity == 255)
             {
                 UseNum = 5;
             }
@@ -839,7 +752,7 @@ namespace Butterfly.Game.Rooms
 
             this.MoodlightData.Enabled = true;
             this.MoodlightData.CurrentPreset = 1;
-            this.MoodlightData.UpdatePreset(1, "#000000", this.RpIntensity, false);
+            this.MoodlightData.UpdatePreset(1, "#000000", this.Roleplay.Intensity, false);
             roomItem.ExtraData = this.MoodlightData.GenerateExtraData();
             roomItem.UpdateState();
         }
@@ -854,7 +767,7 @@ namespace Butterfly.Game.Rooms
 
             int Teinte = 135;
             int Saturation = 180;
-            int Luminosite = (int)Math.Floor((double)this.RpIntensity / 2);
+            int Luminosite = (int)Math.Floor((double)this.Roleplay.Intensity / 2);
             roomItem.ExtraData = "on," + Teinte + "," + Saturation + "," + Luminosite;
             roomItem.UpdateState(true, true);
         }
@@ -1083,7 +996,7 @@ namespace Butterfly.Game.Rooms
             }
 
             this.Disposed = true;
-            this.mCycleEnded = true;
+            this.CycleEnded = true;
 
             foreach (CancellationTokenSource tokenSource in this.cancellationTokenSources)
             {

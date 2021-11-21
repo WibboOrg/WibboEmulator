@@ -1,7 +1,7 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Groups;
+using Butterfly.Game.Guilds;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(GameClient Session, ClientPacket Packet)
         {
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Packet.PopInt(), out Group Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Packet.PopInt(), out Guild Group))
             {
                 return;
             }

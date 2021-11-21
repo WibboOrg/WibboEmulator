@@ -1,5 +1,5 @@
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Navigators;
+using Butterfly.Game.Navigator;
 using System.Collections.Generic;
 using System.Linq;
 

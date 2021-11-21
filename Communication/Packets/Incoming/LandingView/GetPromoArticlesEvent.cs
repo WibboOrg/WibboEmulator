@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!(currentView.HotelViewPromosIndexers.Count > 0))
+            if (!(currentView.Count() > 0))
             {
                 return;
             }

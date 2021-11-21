@@ -1,8 +1,10 @@
-﻿namespace Butterfly.Communication.Packets.Incoming.Structure
+﻿using Butterfly.Game.GameClients;
+
+namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SetFriendBarStateEvent : IPacketEvent
     {
-        public void Parse(Game.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             if (Session == null || Session.GetHabbo() == null)
             {

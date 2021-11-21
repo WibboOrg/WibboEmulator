@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Game.GameClients;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Users.Badges;
+using Butterfly.Game.User.Badges;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

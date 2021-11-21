@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Groups;
+using Butterfly.Game.Guilds;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -52,7 +52,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Badge += BadgePartUtility.WorkBadgeParts(i == 0, packet.PopInt().ToString(), packet.PopInt().ToString(), packet.PopInt().ToString());
             }
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryCreateGroup(session.GetHabbo(), Name, Description, RoomId, Badge, Colour1, Colour2, out Group Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryCreateGroup(session.GetHabbo(), Name, Description, RoomId, Badge, Colour1, Colour2, out Guild Group))
             {
                 return;
             }

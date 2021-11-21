@@ -6,7 +6,7 @@ using Butterfly.Game.GameClients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Chat.Logs;
 using Butterfly.Game.Moderation;
-using Butterfly.Game.Users;
+using Butterfly.Game.User;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -282,7 +282,7 @@ namespace Butterfly.Game.Moderation
             Response.WriteString(UserReport.Username);
             Session.SendPacket(Response);
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
             if (room == null || (room.RoomData.BanFuse != 1 || !room.CheckRights(Session)) && !room.CheckRights(Session, true))
             {
                 return;
@@ -411,7 +411,7 @@ namespace Butterfly.Game.Moderation
 
         public static void PerformRoomAction(GameClient ModSession, int RoomId, bool KickUsers, bool LockRoom, bool InappropriateRoom)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
+            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
             if (room == null)
             {
                 return;
@@ -449,7 +449,7 @@ namespace Butterfly.Game.Moderation
 
         public static ServerPacket SerializeRoomTool(RoomData Data)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Data.Id);
+            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Data.Id);
 
             int userId = 0;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -499,7 +499,7 @@ namespace Butterfly.Game.Moderation
             }
             else
             {
-                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(clientByUserId.GetHabbo().CurrentRoomId);
+                Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(clientByUserId.GetHabbo().CurrentRoomId);
                 if (room == null)
                 {
                     return;
@@ -623,7 +623,7 @@ namespace Butterfly.Game.Moderation
 
         public static ServerPacket SerializeTicketChatlog(ModerationTicket Ticket, RoomData RoomData, double Timestamp)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomData.Id);
+            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomData.Id);
             ServerPacket message = new ServerPacket(ServerPacketHeader.ModeratorTicketChatlogMessageComposer);
             message.WriteInteger(Ticket.TicketId);
             message.WriteInteger(Ticket.SenderId);
@@ -650,7 +650,7 @@ namespace Butterfly.Game.Moderation
 
         public static ServerPacket SerializeRoomChatlog(int roomID)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(roomID);
+            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(roomID);
 
             ServerPacket Message = new ServerPacket(ServerPacketHeader.MODTOOL_ROOM_CHATLOG);
             Message.WriteByte(1);

@@ -3,7 +3,7 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.GameClients;
 using Butterfly.Game.Quests;
-using Butterfly.Game.Users.Badges;
+using Butterfly.Game.User.Badges;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

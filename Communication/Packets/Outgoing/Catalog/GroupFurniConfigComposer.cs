@@ -1,15 +1,15 @@
-using Butterfly.Game.Groups;
+using Butterfly.Game.Guilds;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Catalog
 {
     internal class GroupFurniConfigComposer : ServerPacket
     {
-        public GroupFurniConfigComposer(ICollection<Group> groups)
+        public GroupFurniConfigComposer(ICollection<Guild> groups)
             : base(ServerPacketHeader.GROUP_LIST)
         {
             this.WriteInteger(groups.Count);
-            foreach (Group group in groups)
+            foreach (Guild group in groups)
             {
                 this.WriteInteger(group.Id);
                 this.WriteString(group.Name);

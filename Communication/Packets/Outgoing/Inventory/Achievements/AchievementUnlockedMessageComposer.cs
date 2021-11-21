@@ -1,10 +1,10 @@
-using Butterfly.Game.Achievements;
+using Butterfly.Game.Achievement;
 
 namespace Butterfly.Communication.Packets.Outgoing.Inventory.Achievements
 {
     internal class AchievementUnlockedMessageComposer : ServerPacket
     {
-        public AchievementUnlockedMessageComposer(Achievement Achievement, int Level, int PointReward, int PixelReward)
+        public AchievementUnlockedMessageComposer(AchievementData Achievement, int Level, int PointReward, int PixelReward)
             : base(ServerPacketHeader.AchievementUnlockedMessageComposer)
         {
             this.WriteInteger(Achievement.Id);

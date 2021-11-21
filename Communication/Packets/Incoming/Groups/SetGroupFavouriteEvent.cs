@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Groups;
+using Butterfly.Game.Guilds;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -23,7 +23,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Guild Group))
             {
                 return;
             }

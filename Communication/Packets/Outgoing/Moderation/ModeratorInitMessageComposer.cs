@@ -1,5 +1,5 @@
 using Butterfly.Game.Moderation;
-using Butterfly.Utilities;
+using Butterfly.Utility;
 using System;
 using System.Collections.Generic;
 

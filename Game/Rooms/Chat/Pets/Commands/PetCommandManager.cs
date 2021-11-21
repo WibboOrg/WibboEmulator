@@ -13,8 +13,6 @@ namespace Butterfly.Game.Rooms.Chat.Pets.Commands
         public PetCommandManager()
         {
             this._petCommands = new Dictionary<string, PetCommand>();
-
-            this.Init();
         }
 
         public void Init()

@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Groups;
+using Butterfly.Game.Guilds;
 using Butterfly.Game.Rooms;
 using System.Linq;
 
@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int GroupId = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Guild Group))
             {
                 return;
             }
@@ -32,17 +32,17 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 default:
                 case 0:
-                    Group.GroupType = GroupType.OPEN;
+                    Group.GroupType = GuildType.OPEN;
                     break;
                 case 1:
-                    Group.GroupType = GroupType.LOCKED;
+                    Group.GroupType = GuildType.LOCKED;
                     break;
                 case 2:
-                    Group.GroupType = GroupType.PRIVATE;
+                    Group.GroupType = GuildType.PRIVATE;
                     break;
             }
 
-            if (Group.GroupType != GroupType.LOCKED)
+            if (Group.GroupType != GuildType.LOCKED)
             {
                 if (Group.GetRequests.Count > 0)
                 {
@@ -57,7 +57,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                GuildDao.UpdateStateAndDeco(dbClient, Group.Id, (Group.GroupType == GroupType.OPEN ? 0 : Group.GroupType == GroupType.LOCKED ? 1 : 2), FurniOptions);
+                GuildDao.UpdateStateAndDeco(dbClient, Group.Id, (Group.GroupType == GuildType.OPEN ? 0 : Group.GroupType == GuildType.LOCKED ? 1 : 2), FurniOptions);
             }
 
             Group.AdminOnlyDeco = FurniOptions;

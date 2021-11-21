@@ -11,10 +11,10 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Catalog;
 using Butterfly.Game.Catalog.Utilities;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Groups;
+using Butterfly.Game.Guilds;
 using Butterfly.Game.Items;
 using Butterfly.Game.Pets;
-using Butterfly.Game.Users.Inventory.Bots;
+using Butterfly.Game.User.Inventory.Bots;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,7 +101,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         return;
                     }
 
-                    Group Group = null;
+                    Guild Group = null;
                     if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group))
                     {
                         return;

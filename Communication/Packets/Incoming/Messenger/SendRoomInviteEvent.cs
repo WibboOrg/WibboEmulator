@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Game.GameClients;
-using Butterfly.Utilities;
+using Butterfly.Utility;
 using System;
 using System.Collections.Generic;
 

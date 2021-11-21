@@ -28,7 +28,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
             string[] strArray = Session.GetHabbo().Look.Split(new char[1] { '.' });
             string str1 = "";
             foreach (string str2 in strArray)

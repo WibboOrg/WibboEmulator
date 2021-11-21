@@ -2,7 +2,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.AI;
-using Butterfly.Utilities;
+using Butterfly.Utility;
 using System;
 using System.Collections.Generic;
 using System.Data;

@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Incoming;
 using Butterfly.Communication.WebSocket;
 using Butterfly.Game.GameClients;
-using Butterfly.Utilities;
+using Butterfly.Utility;
 using SharedPacketLib;
 using System;
 using System.IO;

@@ -1,6 +1,6 @@
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Chat.Logs;
-using Butterfly.Utilities;
+using Butterfly.Utility;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Moderation

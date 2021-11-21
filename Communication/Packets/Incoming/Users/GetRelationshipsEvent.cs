@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Users;
-using Butterfly.Game.Users.Messenger;
+using Butterfly.Game.User;
+using Butterfly.Game.User.Messenger;
 using System;
 using System.Collections.Generic;
 using System.Linq;

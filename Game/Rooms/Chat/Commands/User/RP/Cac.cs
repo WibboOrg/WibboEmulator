@@ -13,7 +13,12 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            if (!Room.IsRoleplay || !Room.Pvp)
+            if (!Room.IsRoleplay)
+            {
+                return;
+            }
+
+            if(!Room.Roleplay.Pvp)
             {
                 return;
             }

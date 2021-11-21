@@ -33,7 +33,7 @@ namespace Butterfly.Game.Items
         public int UpdateCounter;
         public int InteractingUser;
         public int InteractingUser2;
-        private Room mRoom;
+        private Rooms.Room mRoom;
         public bool PendingReset;
         public int Fx;
 
@@ -302,7 +302,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public Item(int mId, int RoomId, int mBaseItem, string ExtraData, int limitedNumber, int limitedStack, int X, int Y, double Z, int Rot, string wallCoord, Room pRoom)
+        public Item(int mId, int RoomId, int mBaseItem, string ExtraData, int limitedNumber, int limitedStack, int X, int Y, double Z, int Rot, string wallCoord, Rooms.Room pRoom)
         {
             if (ButterflyEnvironment.GetGame().GetItemManager().GetItem(mBaseItem, out ItemData Data))
             {
@@ -1197,7 +1197,7 @@ namespace Butterfly.Game.Items
             return this.Data;
         }
 
-        public Room GetRoom()
+        public Rooms.Room GetRoom()
         {
             if (this.mRoom == null)
             {

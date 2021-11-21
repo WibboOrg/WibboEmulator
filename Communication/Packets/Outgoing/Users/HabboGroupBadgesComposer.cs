@@ -1,4 +1,4 @@
-using Butterfly.Game.Groups;
+using Butterfly.Game.Guilds;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Users
@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
             }
         }
 
-        public HabboGroupBadgesComposer(Group Group)
+        public HabboGroupBadgesComposer(Guild Group)
             : base(ServerPacketHeader.GROUP_BADGES)
         {
             this.WriteInteger(1);//count

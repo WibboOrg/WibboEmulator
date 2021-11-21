@@ -55,7 +55,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             switch (effet)
             {
                 case "rpsendtimeuser":
-                case "rptimespeed":
+                case "TimeSpeed":
                 case "cyclehoureffect":
                 case "setenemy":
                 case "enemyaggrostop":
@@ -277,7 +277,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             {
                 case "rpsendtimeuser":
                     {
-                        User.SendWhisperChat("Il est " + Room.RpHour + " heures et " + Room.RpMinute + " minutes");
+                        User.SendWhisperChat("Il est " + Room.Roleplay.Hour + " heures et " + Room.Roleplay.Minute + " minutes");
                         break;
                     }
                 case "setenemy":
@@ -863,11 +863,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                     {
                         if (Value == "true")
                         {
-                            Room.Pvp = true;
+                            Room.Roleplay.Pvp = true;
                         }
                         else
                         {
-                            Room.Pvp = false;
+                            Room.Roleplay.Pvp = false;
                         }
 
                         break;
@@ -1473,7 +1473,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                         }
                         break;
                     }
-                case "rptimespeed":
+                case "TimeSpeed":
                     {
                         if (!Room.IsRoleplay)
                         {
@@ -1482,11 +1482,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
                         if (Value == "true")
                         {
-                            Room.RpTimeSpeed = true;
+                            Room.Roleplay.TimeSpeed = true;
                         }
                         else
                         {
-                            Room.RpTimeSpeed = false;
+                            Room.Roleplay.TimeSpeed = false;
                         }
 
                         break;
@@ -1500,11 +1500,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
                         if (Value == "true")
                         {
-                            Room.RpCycleHourEffect = true;
+                            Room.Roleplay.CycleHourEffect = true;
                         }
                         else
                         {
-                            Room.RpCycleHourEffect = false;
+                            Room.Roleplay.CycleHourEffect = false;
                         }
 
                         break;

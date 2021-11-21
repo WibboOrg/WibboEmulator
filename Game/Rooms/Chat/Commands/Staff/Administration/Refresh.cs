@@ -30,7 +30,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 case "view":
                 case "vue":
                     {
-                        ButterflyEnvironment.GetGame().GetHotelView().InitHotelViewPromo();
+                        ButterflyEnvironment.GetGame().GetHotelView().Init();
                         UserRoom.SendWhisperChat("Vue et promotion mises à jour");
                         break;
                     }

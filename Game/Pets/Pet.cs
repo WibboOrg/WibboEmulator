@@ -53,7 +53,7 @@ namespace Butterfly.Game.Pets
         public bool AnyoneCanRide;
         public Dictionary<short, bool> PetCommands;
 
-        public Room Room
+        public Rooms.Room Room
         {
             get
             {

@@ -2,8 +2,8 @@ using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Users;
+using Butterfly.Game.Guilds;
+using Butterfly.Game.User;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -25,7 +25,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             string SearchVal = Packet.PopString();
             int RequestType = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Guild Group))
             {
                 return;
             }

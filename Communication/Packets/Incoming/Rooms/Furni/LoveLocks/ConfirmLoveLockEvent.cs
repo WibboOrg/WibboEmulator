@@ -1,6 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Furni;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
+using Butterfly.Game.GameClients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms;
 using System;
@@ -9,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class ConfirmLoveLockEvent : IPacketEvent
     {
-        public void Parse(Game.GameClients.GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             int Id = Packet.PopInt();
             bool isConfirmed = Packet.PopBoolean();

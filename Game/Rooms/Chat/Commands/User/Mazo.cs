@@ -1,7 +1,7 @@
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.GameClients;
-using Butterfly.Game.Users;
+using Butterfly.Game.User;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {

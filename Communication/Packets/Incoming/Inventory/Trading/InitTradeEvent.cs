@@ -29,14 +29,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
 
                 RolePlayer Rp = RoomUser.Roleplayer;
-                if (Rp == null || Rp.TradeId > 0 || Rp.Dead || Rp.SendPrison || (Rp.PvpEnable && room.Pvp) || Rp.AggroTimer > 0)
+                if (Rp == null || Rp.TradeId > 0 || Rp.Dead || Rp.SendPrison || (Rp.PvpEnable && room.Roleplay.Pvp) || Rp.AggroTimer > 0)
                 {
                     RoomUser.SendWhisperChat("Vous devez �tre en zone safe pour pouvoir troquer");
                     return;
                 }
 
                 RolePlayer RpTarget = RoomUserTarget.Roleplayer;
-                if (RpTarget == null || RpTarget.TradeId > 0 || RpTarget.Dead || RpTarget.SendPrison || (RpTarget.PvpEnable && room.Pvp) || RpTarget.AggroTimer > 0)
+                if (RpTarget == null || RpTarget.TradeId > 0 || RpTarget.Dead || RpTarget.SendPrison || (RpTarget.PvpEnable && room.Roleplay.Pvp) || RpTarget.AggroTimer > 0)
                 {
                     RoomUser.SendWhisperChat("Ce joueur ne peut pas troc");
                     return;

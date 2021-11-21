@@ -8,7 +8,12 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
     {
         public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (!Room.IsRoleplay || !Room.Pvp || UserRoom.Freeze)
+            if (!Room.IsRoleplay || UserRoom.Freeze)
+            {
+                return;
+            }
+
+            if(!Room.Roleplay.Pvp)
             {
                 return;
             }

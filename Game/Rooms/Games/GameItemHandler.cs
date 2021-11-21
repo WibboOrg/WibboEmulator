@@ -1,4 +1,4 @@
-﻿using Butterfly.Game.Groups;
+﻿using Butterfly.Game.Guilds;
 using Butterfly.Game.Items;
 using System;
 using System.Collections.Generic;
@@ -222,7 +222,7 @@ namespace Butterfly.Game.Rooms
 
             Item item = Enumerable.FirstOrDefault<Item>(this._groupGate[Coordinate]);
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out Group Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out Guild Group))
             {
                 return true;
             }
@@ -277,7 +277,7 @@ namespace Butterfly.Game.Rooms
             }
 
             int countID = ButterflyEnvironment.GetRandomNumber(0, count - 1);
-            Item BanzaiItem2 = banzaiTeleports2.ElementAt(countID);
+            Item BanzaiItem2 = Enumerable.ElementAt<Item>(banzaiTeleports2, (int)countID);
 
             if (BanzaiItem2 == null)
             {

@@ -15,7 +15,7 @@ namespace Butterfly.Game.Items
 {
     internal static class ItemExtrabox
     {
-        public static void OpenExtrabox(GameClient Session, Item Present, Room Room)
+        public static void OpenExtrabox(GameClient Session, Item Present, Rooms.Room Room)
         {
             int PageId;
 
@@ -97,7 +97,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public static void OpenDeluxeBox(GameClient Session, Item Present, Room Room)
+        public static void OpenDeluxeBox(GameClient Session, Item Present, Rooms.Room Room)
         {
             int PageId;
 
@@ -171,7 +171,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public static void OpenBadgeBox(GameClient Session, Item Present, Room Room)
+        public static void OpenBadgeBox(GameClient Session, Item Present, Rooms.Room Room)
         {
             int PageId = 0;
             string BadgeCode = "";
@@ -261,7 +261,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public static void OpenLegendBox(GameClient Session, Item Present, Room Room)
+        public static void OpenLegendBox(GameClient Session, Item Present, Rooms.Room Room)
         {
             int PageId = 0;
             string BadgeCode = "";

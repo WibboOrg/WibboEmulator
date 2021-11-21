@@ -71,7 +71,7 @@ namespace Butterfly.Game.Rooms
 
                 roomItem.Destroy();
                 ListMessage.Add(new ObjectRemoveMessageComposer(roomItem.Id, Session.GetHabbo().Id));
-                Items.Add(roomItem);
+                Items.Add((Item)roomItem);
             }
             foreach (Item roomItem in this._wallItems.Values.ToList())
             {
@@ -82,7 +82,7 @@ namespace Butterfly.Game.Rooms
                 Message.WriteString(roomItem.Id + string.Empty);
                 Message.WriteInteger(this._room.RoomData.OwnerId);
                 ListMessage.Add(Message);
-                Items.Add(roomItem);
+                Items.Add((Item)roomItem);
             }
             this._room.SendMessage(ListMessage);
 

@@ -45,19 +45,19 @@ namespace Butterfly.Game.Rooms.Chat
         public ChatManager()
         {
             this._emotions = new ChatEmotionsManager();
-
-            this._filter = new WordFilterManager();
-            this._filter.Init();
-
-            this._commands = new CommandManager();
-            this._commands.Init();
-
-            this._petCommands = new PetCommandManager();
-
-            this._chatStyles = new ChatStyleManager();
-            this._chatStyles.Init();
-
             this._mention = new MentionManager();
+            this._commands = new CommandManager();
+            this._petCommands = new PetCommandManager();
+            this._chatStyles = new ChatStyleManager();
+            this._filter = new WordFilterManager();
+        }
+
+        public void Init()
+        {
+            this._petCommands.Init();
+            this._commands.Init();
+            this._chatStyles.Init();
+            this._filter.Init();
         }
 
         public ChatEmotionsManager GetEmotions()

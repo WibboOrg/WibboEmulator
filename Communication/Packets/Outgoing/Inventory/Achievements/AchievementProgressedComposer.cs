@@ -1,10 +1,10 @@
-using Butterfly.Game.Achievements;
+using Butterfly.Game.Achievement;
 
 namespace Butterfly.Communication.Packets.Outgoing.Inventory.Achievements
 {
     internal class AchievementProgressedComposer : ServerPacket
     {
-        public AchievementProgressedComposer(Achievement Achievement, int TargetLevel, AchievementLevel TargetLevelData, int TotalLevels, UserAchievement UserData)
+        public AchievementProgressedComposer(AchievementData Achievement, int TargetLevel, AchievementLevel TargetLevelData, int TotalLevels, UserAchievement UserData)
             : base(ServerPacketHeader.ACHIEVEMENT_PROGRESSED)
         {
             this.WriteInteger(Achievement.Id);

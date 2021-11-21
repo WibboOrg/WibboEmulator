@@ -249,7 +249,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        if (Room.RpMinute >= ValueInt)
+                        if (Room.Roleplay.Minute >= ValueInt)
                         {
                             Result = true;
                         }
@@ -263,7 +263,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        if (Room.RpMinute < ValueInt)
+                        if (Room.Roleplay.Minute < ValueInt)
                         {
                             Result = true;
                         }
@@ -277,7 +277,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        if (Room.RpMinute == ValueInt)
+                        if (Room.Roleplay.Minute == ValueInt)
                         {
                             Result = true;
                         }
@@ -291,7 +291,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        if (Room.RpHour >= ValueInt)
+                        if (Room.Roleplay.Hour >= ValueInt)
                         {
                             Result = true;
                         }
@@ -305,7 +305,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        if (Room.RpHour < ValueInt)
+                        if (Room.Roleplay.Hour < ValueInt)
                         {
                             Result = true;
                         }
@@ -319,7 +319,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        if (Room.RpHour == ValueInt)
+                        if (Room.Roleplay.Hour == ValueInt)
                         {
                             Result = true;
                         }
