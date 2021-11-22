@@ -15,12 +15,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         private string NameBot;
         private string Look;
 
-        public BotClothes(string namebot, string look, WiredHandler handler, int itemID)
+        public BotClothes(string stringParam, WiredHandler handler, int itemID)
         {
             this.itemID = itemID;
             this.handler = handler;
-            this.NameBot = namebot;
-            this.Look = look;
+
+            string[] nameAndLook = stringParam.Split('\t');
+            this.NameBot = (nameAndLook.Length == 2) ? nameAndLook[0] : "";
+            this.Look = (nameAndLook.Length == 2) ? nameAndLook[1] : "";
         }
 
         public void Handle(RoomUser user, Item TriggerItem)

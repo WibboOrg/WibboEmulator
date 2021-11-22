@@ -22,7 +22,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         private MovementDirection startDirection;
         private WhenMovementBlock whenMoveIsBlocked;
 
-        public MoveToDir(List<Item> items, Room room, WiredHandler handler, int itemID, MovementDirection StartDirection, WhenMovementBlock WhenMoveIsBlocked)
+        public MoveToDir(List<Item> items, Room room, WiredHandler handler, int itemID, int StartDirection, int WhenMoveIsBlocked)
         {
             this.items = items;
             this.room = room;
@@ -30,9 +30,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             this.itemID = itemID;
             this.isDisposed = false;
 
-            this.startDirection = StartDirection;
+            this.startDirection = (MovementDirection)StartDirection;
             this.movetodirMovement = this.startDirection;
-            this.whenMoveIsBlocked = WhenMoveIsBlocked;
+            this.whenMoveIsBlocked = (WhenMovementBlock)WhenMoveIsBlocked;
         }
 
         public void Handle(RoomUser user, Item TriggerItem)

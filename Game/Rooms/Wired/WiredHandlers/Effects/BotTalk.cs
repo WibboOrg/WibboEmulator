@@ -11,28 +11,30 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
     {
         private readonly WiredHandler handler;
         private readonly int itemID;
-        private string NomBot;
+        private string name;
         private string message;
-        private bool IsCrier;
+        private bool IsShout;
 
-        public BotTalk(string nombot, string message, bool iscrier, WiredHandler handler, int itemID)
+        public BotTalk(string stringParam, bool isShout, WiredHandler handler, int itemID)
         {
             this.itemID = itemID;
             this.handler = handler;
-            this.message = message;
-            this.NomBot = nombot;
-            this.IsCrier = iscrier;
+
+            string[] messageAndName = stringParam.Split('\t');
+            this.message = (messageAndName.Length == 2) ? messageAndName[0] : "";
+            this.name = (messageAndName.Length == 2) ? messageAndName[1] : "";
+            this.IsShout = isShout;
         }
 
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            if (this.NomBot == "" || this.message == "")
+            if (this.name == "" || this.message == "")
             {
                 return;
             }
 
             Room room = this.handler.GetRoom();
-            RoomUser Bot = room.GetRoomUserManager().GetBotOrPetByName(this.NomBot);
+            RoomUser Bot = room.GetRoomUserManager().GetBotOrPetByName(this.name);
             if (Bot == null)
             {
                 return;
@@ -57,7 +59,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                 }
             }
 
-            Bot.OnChat(TextMessage, (Bot.IsPet) ? 0 : 2, this.IsCrier);
+            Bot.OnChat(TextMessage, (Bot.IsPet) ? 0 : 2, this.IsShout);
 
         }
 
@@ -68,12 +70,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.NomBot + '\t' + this.message, this.IsCrier, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.name + '\t' + this.message, this.IsShout, null);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            this.IsCrier = (row["all_user_triggerable"].ToString() == "1");
+            this.IsShout = (row["all_user_triggerable"].ToString() == "1");
 
             string Data = row["trigger_data"].ToString();
 
@@ -84,7 +86,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
             string[] SplitData = Data.Split('\t');
 
-            this.NomBot = SplitData[0].ToString();
+            this.name = SplitData[0].ToString();
             this.message = SplitData[1].ToString();
         }
 
@@ -96,9 +98,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             Message.WriteInteger(0);
             Message.WriteInteger(SpriteId);
             Message.WriteInteger(this.itemID);
-            Message.WriteString(this.NomBot + '\t' + this.message);
+            Message.WriteString(this.name + '\t' + this.message);
             Message.WriteInteger(1);
-            Message.WriteInteger(this.IsCrier ? 1 : 0);
+            Message.WriteInteger(this.IsShout ? 1 : 0);
             Message.WriteInteger(0);
             Message.WriteInteger(23); //7
             Message.WriteInteger(0);

@@ -1,6 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
@@ -8,22 +6,20 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 {
-    public class ActorInTeam : IWiredCondition, IWired
+    public class ActorInTeam : WiredBase, IWiredCondition, IWired
     {
-        private Team team;
         private bool isDisposed;
-        private readonly int ItemId;
 
-        public ActorInTeam(int itemid, int TeamId)
+        public ActorInTeam(int itemid, int teamId)
         {
-            if (TeamId < 1 || TeamId > 4)
+            if (teamId < 1 || teamId > 4)
             {
-                TeamId = 1;
+                teamId = 1;
             }
 
-            this.ItemId = itemid;
+            this.Id = itemid;
 
-            this.team = (Team)TeamId;
+            this.IntParams.Add(teamId);
             this.isDisposed = false;
         }
 
@@ -34,7 +30,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 return false;
             }
 
-            if (user.Team != this.team)
+            if(this.IntParams.Count == 0)
+            {
+                return false;
+            }
+
+            if (user.Team != (Team)this.IntParams[0])
             {
                 return false;
             }
@@ -44,33 +45,26 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.ItemId, string.Empty, ((int)this.team).ToString(), false, null);
+            if (this.IntParams.Count == 0)
+            {
+                return;
+            }
+
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.IntParams[0].ToString(), false, null);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            if (int.TryParse(row["trigger_data"].ToString(), out int Number))
+            if (int.TryParse(row["trigger_data"].ToString(), out int teamId))
             {
-                this.team = (Team)Number;
+                this.IntParams.Add(teamId);
             }
         }
 
-        public void OnTrigger(Client Session, int SpriteId)
+        /*public void OnTrigger(Client Session, int SpriteId)
         {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(5);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.ItemId);
-            Message.WriteString("");
-            Message.WriteInteger(1);
-            Message.WriteInteger((int)this.team);
-            Message.WriteInteger(0);
-
-            Message.WriteInteger(6);
-            Session.SendPacket(Message);
-        }
+            Session.SendPacket(new WiredFurniConditionMessageComposer(false, 0, null, SpriteId, this.Id, "", new List<int> { (int)this.team }, 0, (int)WiredConditionType.ACTOR_IS_IN_TEAM));
+        }*/
 
         public void Dispose()
         {

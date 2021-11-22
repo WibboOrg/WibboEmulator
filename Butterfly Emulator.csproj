@@ -212,6 +212,8 @@
     <Compile Include="Communication\Packets\Incoming\Marketplace\MakeOfferEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Action\WhiperGroupEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Engine\AnswerPollEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Wired\UpdateActionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Wired\UpdateConditionEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\HandShake\DisconnectWebEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\RolePlay\RpBotChooseEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\Troc\RpTrocAccepteEvent.cs" />
@@ -466,7 +468,7 @@
     <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Stickys\GetStickyNoteEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Stickys\UpdateStickyNoteEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Furni\UpdateMagicTileEvent.cs" />
-    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Wired\SaveWiredConfigEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Wired\UpdateTriggerEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Nux\RoomNuxAlert.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Settings\DeleteRoomEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Settings\GetRoomBannedUsersEvent.cs" />
@@ -558,7 +560,10 @@
     <Compile Include="Communication\Packets\Outgoing\Rooms\Settings\RoomSettingsDataComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Settings\RoomSettingsSavedMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Settings\UnbanUserFromRoomComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Rooms\Wireds\SaveWired.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Wireds\SaveWiredMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Wireds\WiredFurniTriggerMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Wireds\WiredFurniActionMessageComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Wireds\WiredFurniConditionMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Sound\SoundSettingsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\GetRelationshipsMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\HabboGroupBadgesComposer.cs" />
@@ -787,6 +792,8 @@
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Effects\CollisionTeam.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Effects\UserMove.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Triggers\BotReadchedAvatar.cs" />
+    <Compile Include="Game\Rooms\Wired\WiredHandlers\WiredBase.cs" />
+    <Compile Include="Game\Rooms\Wired\WiredType.cs" />
     <Compile Include="Game\User\Inventory\Bots\Bot.cs" />
     <Compile Include="Game\WebClients\WebClient.cs" />
     <Compile Include="Communication\PacketParser\WebPacketParser.cs" />
@@ -1113,13 +1120,12 @@
     <Compile Include="Game\Rooms\Games\Teams\TeamManager.cs" />
     <Compile Include="Game\Rooms\RoomIvokedItems\RoomAlert.cs" />
     <Compile Include="Game\Rooms\Wired\RotationState.cs" />
-    <Compile Include="Game\Rooms\Wired\WiredLoader.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandler.cs" />
-    <Compile Include="Game\Rooms\Wired\WiredSaver.cs" />
+    <Compile Include="Game\Rooms\Wired\WiredRegister.cs" />
     <Compile Include="Game\Rooms\Wired\WiredUtillity.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Triggers\Repeater.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Triggers\SateChanged.cs" />
-    <Compile Include="Game\Rooms\Wired\WiredHandlers\Interfaces\IWiredTrigger.cs" />
+    <Compile Include="Game\Rooms\Wired\WiredHandlers\Interfaces\IWired.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Interfaces\IWiredCondition.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Interfaces\IWiredEffect.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Interfaces\IWiredCycleable.cs" />

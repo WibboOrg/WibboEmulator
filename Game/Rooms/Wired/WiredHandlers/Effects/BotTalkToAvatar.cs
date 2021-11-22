@@ -15,28 +15,29 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
     {
         private readonly WiredHandler handler;
         private readonly int itemID;
-        private string NomBot;
+        private string name;
         private string message;
-        private bool IsMurmur;
+        private bool IsWhisper;
 
-        public BotTalkToAvatar(string nombot, string message, bool iscrier, WiredHandler handler, int itemID)
+        public BotTalkToAvatar(string stringParam, bool isWhisper, WiredHandler handler, int itemID)
         {
             this.itemID = itemID;
             this.handler = handler;
-            this.message = message;
-            this.NomBot = nombot;
-            this.IsMurmur = iscrier;
+            string[] messageAndName = stringParam.Split('\t');
+            this.message = (messageAndName.Length == 2) ? messageAndName[0] : "";
+            this.name = (messageAndName.Length == 2) ? messageAndName[1] : "";
+            this.IsWhisper = isWhisper;
         }
 
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            if (this.NomBot == "" || this.message == "" || user == null || user.GetClient() == null)
+            if (this.name == "" || this.message == "" || user == null || user.GetClient() == null)
             {
                 return;
             }
 
             Room room = this.handler.GetRoom();
-            RoomUser Bot = room.GetRoomUserManager().GetBotOrPetByName(this.NomBot);
+            RoomUser Bot = room.GetRoomUserManager().GetBotOrPetByName(this.name);
             if (Bot == null || Bot.BotData == null)
             {
                 return;
@@ -54,12 +55,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                 TextMessage = TextMessage.Replace("#money#", user.Roleplayer.Money.ToString());
             }
 
-            if (this.IsMurmur && TextMessage.Contains(" : ") && (room.IsRoleplay || room.RoomData.OwnerName == "LieuPublic"))
+            if (this.IsWhisper && TextMessage.Contains(" : ") && (room.IsRoleplay || room.RoomData.OwnerName == "LieuPublic"))
             {
                 this.SendBotChoose(TextMessage, user, Bot.BotData);
             }
 
-            if (this.IsMurmur)
+            if (this.IsWhisper)
             {
                 ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
                 Message.WriteInteger(Bot.VirtualId);
@@ -112,12 +113,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.NomBot + '\t' + this.message, this.IsMurmur, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.name + '\t' + this.message, this.IsWhisper, null);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            this.IsMurmur = (row["all_user_triggerable"].ToString() == "1");
+            this.IsWhisper = (row["all_user_triggerable"].ToString() == "1");
 
             string Data = row["trigger_data"].ToString();
 
@@ -128,7 +129,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
             string[] SplitData = Data.Split('\t');
 
-            this.NomBot = SplitData[0].ToString();
+            this.name = SplitData[0].ToString();
             this.message = SplitData[1].ToString();
         }
 
@@ -140,9 +141,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             Message.WriteInteger(0);
             Message.WriteInteger(SpriteId);
             Message.WriteInteger(this.itemID);
-            Message.WriteString(this.NomBot + '\t' + this.message);
+            Message.WriteString(this.name + '\t' + this.message);
             Message.WriteInteger(1);
-            Message.WriteInteger(this.IsMurmur ? 1 : 0);
+            Message.WriteInteger(this.IsWhisper ? 1 : 0);
             Message.WriteInteger(0);
             Message.WriteInteger(27); //7
             Message.WriteInteger(0);

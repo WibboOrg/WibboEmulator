@@ -69,21 +69,21 @@
         FREEZETILE,
         JUKEBOX,
         PUZZLEBOX,
-        TRIGGERTIMER,
-        TRIGGERROOMENTER,
-        TRIGGERGAMEEND,
-        TRIGGERGAMESTART,
-        TRIGGERREPEATER,
-        TRIGGERREPEATERLONG,
-        TRIGGERONUSERSAY,
-        TRIGGERCOMMAND,
+        TRIGGER_ONCE,
+        TRIGGER_AVATAR_ENTERS_ROOM,
+        TRIGGER_GAME_ENDS,
+        TRIGGER_GAME_STARTS,
+        TRIGGER_PERIODICALLY,
+        TRIGGER_PERIODICALLY_LONG,
+        TRIGGER_AVATAR_SAYS_SOMETHING,
+        TRIGGER_COMMAND,
         WIRED_TRIGGER_SELF,
-        TRIGGERCOLLISIONUSER,
-        TRIGGERSCOREACHIEVED,
-        TRIGGERSTATECHANGED,
-        TRIGGERWALKONFURNI,
-        TRIGGERWALKOFFFURNI,
-        TRIGGERCOLLISION,
+        TRIGGER_COLLISION_USER,
+        TRIGGER_SCORE_ACHIEVED,
+        TRIGGER_STATE_CHANGED,
+        TRIGGER_WALK_ON_FURNI,
+        TRIGGER_WALK_OFF_FURNI,
+        TRIGGER_COLLISION,
         ACTIONGIVESCORE,
         ACTIONPOSRESET,
         ACTIONMOVEROTATE,
@@ -100,7 +100,7 @@
         COLLISIONTEAM,
         ACTIONGIVEREWARD,
         ACTIONMOVETODIR,
-        CONDITIONFURNISHAVEUSERS,
+        CONDITION_FURNIS_HAVE_USERS,
         WF_CND_STUFF_IS,
         WF_CND_NOT_STUFF_IS,
         CONDITIONSTATEPOS,
@@ -137,7 +137,7 @@
         TVYOUTUBE,
         PILEMAGIC,
         SUPERWIRED,
-        SUPERWIREDCONDITION,
+        CONDITION_SUPER_WIRED,
         JMPHORSE,
         GUILD_ITEM,
         GUILD_GATE,
@@ -334,42 +334,42 @@
                     return InteractionType.JUKEBOX;
                 case "triggertimer":
                 case "wf_trg_attime":
-                    return InteractionType.TRIGGERTIMER;
+                    return InteractionType.TRIGGER_ONCE;
                 case "wf_trg_collision":
-                    return InteractionType.TRIGGERCOLLISION;
+                    return InteractionType.TRIGGER_COLLISION;
                 case "triggerroomenter":
                 case "wf_trg_enterroom":
-                    return InteractionType.TRIGGERROOMENTER;
+                    return InteractionType.TRIGGER_AVATAR_ENTERS_ROOM;
                 case "triggergameend":
                 case "wf_trg_gameend":
-                    return InteractionType.TRIGGERGAMEEND;
+                    return InteractionType.TRIGGER_GAME_ENDS;
                 case "triggergamestart":
                 case "wf_trg_gamestart":
-                    return InteractionType.TRIGGERGAMESTART;
+                    return InteractionType.TRIGGER_GAME_STARTS;
                 case "triggerrepeater":
                 case "wf_trg_timer":
-                    return InteractionType.TRIGGERREPEATER;
+                    return InteractionType.TRIGGER_PERIODICALLY;
                 case "wf_trg_period_long":
-                    return InteractionType.TRIGGERREPEATERLONG;
+                    return InteractionType.TRIGGER_PERIODICALLY_LONG;
                 case "triggeronusersay":
                 case "wf_trg_onsay":
-                    return InteractionType.TRIGGERONUSERSAY;
+                    return InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING;
                 case "wf_trg_cmd":
-                    return InteractionType.TRIGGERCOMMAND;
+                    return InteractionType.TRIGGER_COMMAND;
                 case "wf_trg_cls_user":
-                    return InteractionType.TRIGGERCOLLISIONUSER;
+                    return InteractionType.TRIGGER_COLLISION_USER;
                 case "triggerscoreachieved":
                 case "wf_trg_atscore":
-                    return InteractionType.TRIGGERSCOREACHIEVED;
+                    return InteractionType.TRIGGER_SCORE_ACHIEVED;
                 case "triggerstatechanged":
                 case "wf_trg_furnistate":
-                    return InteractionType.TRIGGERSTATECHANGED;
+                    return InteractionType.TRIGGER_STATE_CHANGED;
                 case "triggerwalkonfurni":
                 case "wf_trg_onfurni":
-                    return InteractionType.TRIGGERWALKONFURNI;
+                    return InteractionType.TRIGGER_WALK_ON_FURNI;
                 case "triggerwalkofffurni":
                 case "wf_trg_offfurni":
-                    return InteractionType.TRIGGERWALKOFFFURNI;
+                    return InteractionType.TRIGGER_WALK_OFF_FURNI;
                 case "actiongivescore":
                 case "wf_act_givepoints":
                     return InteractionType.ACTIONGIVESCORE;
@@ -389,7 +389,7 @@
                 case "superwired":
                     return InteractionType.SUPERWIRED;
                 case "superwiredcondition":
-                    return InteractionType.SUPERWIREDCONDITION;
+                    return InteractionType.CONDITION_SUPER_WIRED;
                 case "actionteleportto":
                 case "wf_act_moveuser":
                     return InteractionType.ACTIONTELEPORTTO;
@@ -416,7 +416,7 @@
                     return InteractionType.ACTIONMOVETODIR;
                 case "conditionfurnishaveusers":
                 case "wf_cnd_furnis_hv_avtrs":
-                    return InteractionType.CONDITIONFURNISHAVEUSERS;
+                    return InteractionType.CONDITION_FURNIS_HAVE_USERS;
                 case "wf_cnd_furnis_hv_prsn":
                 case "wf_cnd_not_hv_avtrs":
                     return InteractionType.CONDITIONFURNISHAVENOUSERS;

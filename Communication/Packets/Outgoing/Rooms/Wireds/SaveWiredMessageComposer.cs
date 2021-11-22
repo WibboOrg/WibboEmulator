@@ -1,8 +1,8 @@
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.Wireds
 {
-    internal class SaveWired : ServerPacket
+    internal class SaveWiredMessageComposer : ServerPacket
     {
-        public SaveWired()
+        public SaveWiredMessageComposer()
             : base(ServerPacketHeader.WIRED_SAVE)
         {
 

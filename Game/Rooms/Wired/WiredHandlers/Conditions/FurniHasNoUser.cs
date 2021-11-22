@@ -82,8 +82,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             Message.WriteInteger(0);
             Message.WriteInteger(0);
             Message.WriteInteger(0);
-            Message.WriteBoolean(false);
-            Message.WriteBoolean(true);
+            Message.WriteInteger((int)WiredConditionType.FURNI_NOT_HAVE_HABBO);
             Session.SendPacket(Message);
         }
 

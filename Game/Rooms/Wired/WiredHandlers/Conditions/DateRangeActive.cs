@@ -69,7 +69,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             Message.WriteInteger(this.EndDate); //intParams
             Message.WriteInteger(0); //stuffTypeSelectionCode
 
-            Message.WriteInteger(24); //type
+            Message.WriteInteger((int)WiredConditionType.DATE_RANGE_ACTIVE); //type
             Session.SendPacket(Message);
         }
 

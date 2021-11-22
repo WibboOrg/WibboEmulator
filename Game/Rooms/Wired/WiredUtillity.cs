@@ -11,21 +11,21 @@ namespace Butterfly.Game.Rooms.Wired
         {
             switch (type)
             {
-                case InteractionType.TRIGGERCOLLISION:
-                case InteractionType.TRIGGERTIMER:
-                case InteractionType.TRIGGERROOMENTER:
-                case InteractionType.TRIGGERGAMEEND:
-                case InteractionType.TRIGGERGAMESTART:
-                case InteractionType.TRIGGERREPEATER:
-                case InteractionType.TRIGGERREPEATERLONG:
-                case InteractionType.TRIGGERONUSERSAY:
-                case InteractionType.TRIGGERCOMMAND:
+                case InteractionType.TRIGGER_COLLISION:
+                case InteractionType.TRIGGER_ONCE:
+                case InteractionType.TRIGGER_AVATAR_ENTERS_ROOM:
+                case InteractionType.TRIGGER_GAME_ENDS:
+                case InteractionType.TRIGGER_GAME_STARTS:
+                case InteractionType.TRIGGER_PERIODICALLY:
+                case InteractionType.TRIGGER_PERIODICALLY_LONG:
+                case InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING:
+                case InteractionType.TRIGGER_COMMAND:
                 case InteractionType.WIRED_TRIGGER_SELF:
-                case InteractionType.TRIGGERCOLLISIONUSER:
-                case InteractionType.TRIGGERSCOREACHIEVED:
-                case InteractionType.TRIGGERSTATECHANGED:
-                case InteractionType.TRIGGERWALKONFURNI:
-                case InteractionType.TRIGGERWALKOFFFURNI:
+                case InteractionType.TRIGGER_COLLISION_USER:
+                case InteractionType.TRIGGER_SCORE_ACHIEVED:
+                case InteractionType.TRIGGER_STATE_CHANGED:
+                case InteractionType.TRIGGER_WALK_ON_FURNI:
+                case InteractionType.TRIGGER_WALK_OFF_FURNI:
                 case InteractionType.WF_TRG_BOT_REACHED_AVTR:
                 case InteractionType.WF_TRG_BOT_REACHED_STF:
                     return true;
@@ -78,7 +78,7 @@ namespace Butterfly.Game.Rooms.Wired
         {
             switch (type)
             {
-                case InteractionType.CONDITIONFURNISHAVEUSERS:
+                case InteractionType.CONDITION_FURNIS_HAVE_USERS:
                 case InteractionType.CONDITIONFURNISHAVENOUSERS:
                 case InteractionType.CONDITIONSTATEPOS:
                 case InteractionType.WF_CND_STUFF_IS:
@@ -93,7 +93,7 @@ namespace Butterfly.Game.Rooms.Wired
                 case InteractionType.CONDITIONHASFURNIONFURNINEGATIVE:
                 case InteractionType.CONDITIONACTORINGROUP:
                 case InteractionType.CONDITIONNOTINGROUP:
-                case InteractionType.SUPERWIREDCONDITION:
+                case InteractionType.CONDITION_SUPER_WIRED:
                 case InteractionType.WF_CND_HAS_HANDITEM:
                 case InteractionType.WF_CND_ACTOR_IN_TEAM:
                 case InteractionType.WF_CND_NOT_IN_TEAM:

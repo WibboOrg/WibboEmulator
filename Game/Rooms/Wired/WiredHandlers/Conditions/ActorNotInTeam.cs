@@ -66,7 +66,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             Message.WriteInteger((int)this.team);
             Message.WriteInteger(0);
 
-            Message.WriteInteger(6);
+            Message.WriteInteger((int)WiredConditionType.NOT_ACTOR_IN_TEAM);
             Session.SendPacket(Message);
         }
 

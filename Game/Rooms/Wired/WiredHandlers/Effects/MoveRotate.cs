@@ -22,10 +22,10 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         public int Delay { get; set; }
         private bool isDisposed;
 
-        public MoveRotate(MovementState movement, RotationState rotation, List<Item> items, int delay, Room room, WiredHandler handler, int itemID)
+        public MoveRotate(int movement, int rotation, List<Item> items, int delay, Room room, WiredHandler handler, int itemID)
         {
-            this.movement = movement;
-            this.rotation = rotation;
+            this.movement = (MovementState)movement;
+            this.rotation = (RotationState)rotation;
             this.items = items;
             this.Delay = delay;
             this.room = room;

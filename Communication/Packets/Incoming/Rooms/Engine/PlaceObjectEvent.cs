@@ -114,7 +114,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     if (WiredUtillity.TypeIsWired(userItem.GetBaseItem().InteractionType))
                     {
-                        WiredSaver.HandleDefaultSave(userItem.Id, Room, roomItem);
+                        WiredRegister.HandleDefaultSave(Room, roomItem);
                     }
 
                     if (Session.GetHabbo().forceUse > -1)

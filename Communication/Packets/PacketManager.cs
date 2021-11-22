@@ -371,9 +371,9 @@ namespace Butterfly.Communication.Packets
         private void RegisterFurni()
         {
             this._incomingPackets.Add(ClientPacketHeader.ITEM_STACK_HELPER, new UpdateMagicTileEvent());
-            this._incomingPackets.Add(ClientPacketHeader.WIRED_TRIGGER_SAVE, new SaveWiredConfigEvent());
-            this._incomingPackets.Add(ClientPacketHeader.WIRED_ACTION_SAVE, new SaveWiredConfigEvent());
-            this._incomingPackets.Add(ClientPacketHeader.WIRED_CONDITION_SAVE, new SaveWiredConfigEvent());
+            this._incomingPackets.Add(ClientPacketHeader.WIRED_TRIGGER_SAVE, new UpdateTriggerEvent());
+            this._incomingPackets.Add(ClientPacketHeader.WIRED_ACTION_SAVE, new UpdateActionEvent());
+            this._incomingPackets.Add(ClientPacketHeader.WIRED_CONDITION_SAVE, new UpdateConditionEvent());
             this._incomingPackets.Add(ClientPacketHeader.ITEM_SAVE_BACKGROUND, new SaveBrandingItemEvent());
             this._incomingPackets.Add(ClientPacketHeader.ROOM_TONER_APPLY, new SetTonerEvent());
             this._incomingPackets.Add(ClientPacketHeader.ITEM_DICE_CLOSE, new DiceOffEvent());
