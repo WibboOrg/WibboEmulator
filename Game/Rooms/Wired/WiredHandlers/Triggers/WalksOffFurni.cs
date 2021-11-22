@@ -16,7 +16,6 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
         private List<Item> items;
         private readonly UserAndItemDelegate delegateFunction;
         public int DelayCycle { get => this.Delay; set => this.Delay = value; }
-        private bool disposed;
 
         public WalksOffFurni(Item item, WiredHandler handler, List<Item> targetItems, List<int> stuffIds, int requiredCycles)
         {
@@ -35,8 +34,6 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
             {
                 roomItem.OnUserWalksOffFurni += this.delegateFunction;
             }
-
-            this.disposed = false;
         }
 
         public bool OnCycle(RoomUser user, Item item)
@@ -63,7 +60,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 
         public override void Dispose()
         {
-            this.disposed = true;
+            this.isDisposed = true;
             if (this.items != null)
             {
                 foreach (Item roomItem in this.items)
@@ -106,7 +103,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 
         public void OnTrigger(Client Session, int SpriteId)
         {
-            this.SendWiredPacket(Session);
+            this.OnTrigger(Session);
         }
     }
 }

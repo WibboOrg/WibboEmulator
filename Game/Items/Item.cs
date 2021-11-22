@@ -220,7 +220,7 @@ namespace Butterfly.Game.Items
                     case InteractionType.TRIGGER_PERIODICALLY_LONG:
                     case InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING:
                     case InteractionType.TRIGGER_COMMAND:
-                    case InteractionType.WIRED_TRIGGER_SELF:
+                    case InteractionType.TRIGGER_SELF:
                     case InteractionType.TRIGGER_COLLISION_USER:
                     case InteractionType.TRIGGER_SCORE_ACHIEVED:
                     case InteractionType.TRIGGER_STATE_CHANGED:
@@ -262,8 +262,8 @@ namespace Butterfly.Game.Items
                     case InteractionType.CONDITION_TRIGGER_ON_FURNI_NEGATIVE:
                     case InteractionType.CONDITION_ACTOR_IN_GROUP:
                     case InteractionType.CONDITION_NOT_IN_GROUP:
-                    case InteractionType.WF_TRG_BOT_REACHED_STF:
-                    case InteractionType.WF_TRG_BOT_REACHED_AVTR:
+                    case InteractionType.TRIGGER_BOT_REACHED_STF:
+                    case InteractionType.TRIGGER_BOT_REACHED_AVTR:
                     case InteractionType.ACTION_BOT_CLOTHES:
                     case InteractionType.ACTION_BOT_TELEPORT:
                     case InteractionType.ACTION_BOT_FOLLOW_AVATAR:
@@ -272,7 +272,7 @@ namespace Butterfly.Game.Items
                     case InteractionType.ACTION_USER_MOVE:
                     case InteractionType.ACTION_BOT_TALK_TO_AVATAR:
                     case InteractionType.ACTION_BOT_TALK:
-                    case InteractionType.WF_CND_HAS_HANDITEM:
+                    case InteractionType.CONDITION_HAS_HANDITEM:
                     case InteractionType.ACTION_JOIN_TEAM:
                     case InteractionType.ACTION_LEAVE_TEAM:
                     case InteractionType.ACTION_GIVE_SCORE_TM:

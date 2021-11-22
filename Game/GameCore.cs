@@ -268,6 +268,7 @@ namespace Butterfly.Game
 
         public static void DatabaseCleanup()
         {
+            return;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserDao.UpdateAllOnline(dbClient);

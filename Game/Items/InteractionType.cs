@@ -77,7 +77,7 @@
         TRIGGER_PERIODICALLY_LONG,
         TRIGGER_AVATAR_SAYS_SOMETHING,
         TRIGGER_COMMAND,
-        WIRED_TRIGGER_SELF,
+        TRIGGER_SELF,
         TRIGGER_COLLISION_USER,
         TRIGGER_SCORE_ACHIEVED,
         TRIGGER_STATE_CHANGED,
@@ -147,8 +147,8 @@
         HIGHSCORE,
         HIGHSCOREPOINTS,
         VENDINGENABLEMACHINE,
-        WF_TRG_BOT_REACHED_STF,
-        WF_TRG_BOT_REACHED_AVTR,
+        TRIGGER_BOT_REACHED_STF,
+        TRIGGER_BOT_REACHED_AVTR,
         ACTION_BOT_CLOTHES,
         ACTION_BOT_TELEPORT,
         ACTION_BOT_FOLLOW_AVATAR,
@@ -156,7 +156,7 @@
         ACTION_BOT_MOVE,
         ACTION_BOT_TALK_TO_AVATAR,
         ACTION_BOT_TALK,
-        WF_CND_HAS_HANDITEM,
+        CONDITION_HAS_HANDITEM,
         ACTION_JOIN_TEAM,
         ACTION_LEAVE_TEAM,
         ACTION_GIVE_SCORE_TM,
@@ -529,13 +529,13 @@
                 case "hightscorepoints":
                     return InteractionType.HIGHSCOREPOINTS;
                 case "wf_trg_bot_reached_stf":
-                    return InteractionType.WF_TRG_BOT_REACHED_STF;
+                    return InteractionType.TRIGGER_BOT_REACHED_STF;
                 case "wf_trg_bot_reached_avtr":
-                    return InteractionType.WF_TRG_BOT_REACHED_AVTR;
+                    return InteractionType.TRIGGER_BOT_REACHED_AVTR;
                 case "wf_act_bot_clothes":
                     return InteractionType.ACTION_BOT_CLOTHES;
                 case "wf_trg_trigger_self":
-                    return InteractionType.WIRED_TRIGGER_SELF;
+                    return InteractionType.TRIGGER_SELF;
                 case "wf_act_bot_teleport":
                     return InteractionType.ACTION_BOT_TELEPORT;
                 case "wf_act_bot_follow_avatar":
@@ -551,7 +551,7 @@
                 case "wf_act_bot_talk":
                     return InteractionType.ACTION_BOT_TALK;
                 case "wf_cnd_has_handitem":
-                    return InteractionType.WF_CND_HAS_HANDITEM;
+                    return InteractionType.CONDITION_HAS_HANDITEM;
                 case "wf_act_join_team":
                     return InteractionType.ACTION_JOIN_TEAM;
                 case "wf_act_leave_team":

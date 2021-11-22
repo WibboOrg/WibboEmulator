@@ -20,14 +20,14 @@ namespace Butterfly.Game.Rooms.Wired
                 case InteractionType.TRIGGER_PERIODICALLY_LONG:
                 case InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING:
                 case InteractionType.TRIGGER_COMMAND:
-                case InteractionType.WIRED_TRIGGER_SELF:
+                case InteractionType.TRIGGER_SELF:
                 case InteractionType.TRIGGER_COLLISION_USER:
                 case InteractionType.TRIGGER_SCORE_ACHIEVED:
                 case InteractionType.TRIGGER_STATE_CHANGED:
                 case InteractionType.TRIGGER_WALK_ON_FURNI:
                 case InteractionType.TRIGGER_WALK_OFF_FURNI:
-                case InteractionType.WF_TRG_BOT_REACHED_AVTR:
-                case InteractionType.WF_TRG_BOT_REACHED_STF:
+                case InteractionType.TRIGGER_BOT_REACHED_AVTR:
+                case InteractionType.TRIGGER_BOT_REACHED_STF:
                     return true;
                 default:
                     return false;
@@ -94,7 +94,7 @@ namespace Butterfly.Game.Rooms.Wired
                 case InteractionType.CONDITION_ACTOR_IN_GROUP:
                 case InteractionType.CONDITION_NOT_IN_GROUP:
                 case InteractionType.CONDITION_SUPER_WIRED:
-                case InteractionType.WF_CND_HAS_HANDITEM:
+                case InteractionType.CONDITION_HAS_HANDITEM:
                 case InteractionType.CONDITION_ACTOR_IN_TEAM:
                 case InteractionType.CONDITION_NOT_IN_TEAM:
                 case InteractionType.CONDITION_NOT_USER_COUNT:

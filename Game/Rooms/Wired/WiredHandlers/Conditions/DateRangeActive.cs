@@ -56,7 +56,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 
         public void OnTrigger(Client Session, int spriteId)
         {
-            this.SendWiredPacket(Session);
+            this.OnTrigger(Session);
         }
     }
 }

@@ -109,7 +109,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 
         public void OnTrigger(Client Session, int SpriteId)
         {
-            this.SendWiredPacket(Session);
+            this.OnTrigger(Session);
         }
     }
 }
