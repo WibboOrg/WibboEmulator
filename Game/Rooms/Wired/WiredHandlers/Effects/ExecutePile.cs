@@ -14,12 +14,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         private WiredHandler handler;
         private readonly Item item;
         private List<Item> items;
-        public int Delay { get; set; }
+        public int DelayCycle { get; set; }
         private bool disposed;
 
         public ExecutePile(List<Item> items, int mDeley, WiredHandler handler, Item item)
         {
-            this.Delay = mDeley;
+            this.DelayCycle = mDeley;
             this.disposed = false;
 
             this.items = items;
@@ -51,9 +51,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            if (this.Delay > 0)
+            if (this.DelayCycle > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.Delay));
+                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
             }
             else
             {
@@ -75,13 +75,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, this.Delay.ToString(), string.Empty, false, this.items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, this.DelayCycle.ToString(), string.Empty, false, this.items);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
             if (int.TryParse(row["trigger_data_2"].ToString(), out int delay))
-                this.Delay = delay;
+                this.DelayCycle = delay;
 
             string triggerItem = row["triggers_item"].ToString();
 
@@ -116,7 +116,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
             Message.WriteInteger(0);
             Message.WriteInteger(0);
-            Message.WriteInteger(this.Delay);
+            Message.WriteInteger(this.DelayCycle);
 
             Message.WriteInteger(0);
             Session.SendPacket(Message);

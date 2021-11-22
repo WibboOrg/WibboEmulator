@@ -13,41 +13,30 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
         private Item item;
         private WiredHandler handler;
         private int scoreLevel;
-        //private bool used;
         private readonly TeamScoreChangedDelegate scoreChangedDelegate;
-        //private RoomEventDelegate gameEndDeletgate;
 
         public ScoreAchieved(Item item, WiredHandler handler, int scoreLevel, GameManager gameManager)
         {
             this.item = item;
             this.handler = handler;
             this.scoreLevel = scoreLevel;
-            //this.used = false;
             this.scoreChangedDelegate = new TeamScoreChangedDelegate(this.gameManager_OnScoreChanged);
-            //this.gameEndDeletgate = new RoomEventDelegate(this.gameManager_OnGameEnd);
             gameManager.OnScoreChanged += this.scoreChangedDelegate;
-            //gameManager.OnGameEnd += this.gameEndDeletgate;
         }
-
-        //private void gameManager_OnGameEnd(object sender, EventArgs e)
-        //{
-        //this.used = false;
-        //}
 
         private void gameManager_OnScoreChanged(object sender, TeamScoreChangedArgs e)
         {
-            if (e.Points <= (this.scoreLevel - 1))// || this.used)
+            if (e.Points <= (this.scoreLevel - 1))
             {
                 return;
             }
-            //this.used = true;
+
             this.handler.ExecutePile(this.item.Coordinate, e.user, null);
         }
 
         public void Dispose()
         {
             this.handler.GetRoom().GetGameManager().OnScoreChanged -= this.scoreChangedDelegate;
-            //this.handler.GetRoom().GetGameManager().OnGameEnd -= this.gameEndDeletgate;
             this.item = null;
             this.handler = null;
         }

@@ -1281,7 +1281,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 
         public void OnTrigger(Client Session, int SpriteId)
         {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
             Message.WriteBoolean(false);
             Message.WriteInteger(0); //Max count item
             Message.WriteInteger(0); //Item Count
@@ -1291,10 +1291,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             Message.WriteInteger(0); //Loop
 
             Message.WriteInteger(0);
-            Message.WriteInteger(7);
-            Message.WriteInteger(0);
-
-            Message.WriteInteger(0);
+            Message.WriteInteger((int)WiredConditionType.ACTOR_IS_WEARING_BADGE);
 
             Session.SendPacket(Message);
         }

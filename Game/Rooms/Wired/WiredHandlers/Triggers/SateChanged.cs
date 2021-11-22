@@ -9,42 +9,46 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers
 {
-    public class SateChanged : IWired, IWiredCycleable
+    public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
     {
         private WiredHandler handler;
         private List<Item> items;
         private readonly Item item;
         private readonly OnItemTrigger delegateFunction;
-        public int Delay { get; set; }
-        private bool disposed;
 
-        public SateChanged(WiredHandler handler, Item item, List<Item> items, int delay)
+        public int DelayCycle { get => this.Delay; set => this.Delay = value; }
+
+        public SateChanged(WiredHandler handler, Item item, List<Item> items, List<int> stuffIds, int delay)
         {
+            this.Id = item.Id;
+            this.Type = (int)WiredTriggerType.TOGGLE_FURNI;
+            this.StuffTypeSelectionEnabled = true;
+            this.StuffTypeId = item.GetBaseItem().SpriteId;
+            this.StuffIds = stuffIds;
+
             this.handler = handler;
             this.items = items;
             this.item = item;
             this.Delay = delay;
-            this.delegateFunction = new OnItemTrigger(this.itemTriggered);
+            this.delegateFunction = new OnItemTrigger(this.Triggered);
 
             foreach (Item roomItem in items)
             {
                 roomItem.ItemTriggerEventHandler += this.delegateFunction;
             }
-
-            this.disposed = false;
         }
 
         public bool OnCycle(RoomUser user, Item item)
         {
             if (user != null)
             {
-                this.onTrigger(user, item);
+                this.OnTriggered(user, item);
             }
 
             return false;
         }
 
-        private void itemTriggered(object sender, ItemTriggeredArgs e)
+        private void Triggered(object sender, ItemTriggeredArgs e)
         {
             if (this.Delay > 0)
             {
@@ -52,18 +56,18 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
             }
             else
             {
-                this.onTrigger(e.TriggeringUser, e.item);
+                this.OnTriggered(e.TriggeringUser, e.item);
             }
         }
 
-        private void onTrigger(RoomUser user, Item item)
+        private void OnTriggered(RoomUser user, Item item)
         {
             this.handler.ExecutePile(this.item.Coordinate, user, item);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            this.disposed = true;
+            this.isDisposed = true;
             this.handler = null;
             if (this.items != null)
             {
@@ -105,8 +109,10 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
 
         public void OnTrigger(Client Session, int SpriteId)
         {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
+            this.SendWiredPacket(Session);
+            return;
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
+            Message.WriteBoolean(true);
             Message.WriteInteger(10);
             Message.WriteInteger(this.items.Count);
             foreach (Item roomItem in this.items)
@@ -118,17 +124,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
             Message.WriteInteger(this.item.Id);
             Message.WriteString("");
             Message.WriteInteger(0);
-            Message.WriteInteger(8);
-            Message.WriteInteger(0);
-            Message.WriteInteger(this.Delay);
-            Message.WriteInteger(0);
+            Message.WriteInteger((int)WiredTriggerType.TOGGLE_FURNI);
             Message.WriteInteger(0);
             Session.SendPacket(Message);
-        }
-
-        public bool Disposed()
-        {
-            return this.disposed;
         }
     }
 }

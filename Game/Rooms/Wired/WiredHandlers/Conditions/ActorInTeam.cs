@@ -12,17 +12,10 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
     {
         public ActorInTeam(Item item, List<int> intParams) : base()
         {
-            int teamId = (intParams.Count > 0) ? intParams[0] : 1;
-            if (teamId < 1 || teamId > 4)
-            {
-                teamId = 1;
-            }
-
             this.Id = item.Id;
             this.Type = (int)WiredConditionType.ACTOR_IS_IN_TEAM;
             this.StuffTypeId = item.GetBaseItem().SpriteId;
-
-            this.IntParams.Add(teamId);
+            this.IntParams = intParams;
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
@@ -32,12 +25,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 return false;
             }
 
-            if(this.IntParams.Count == 0)
+            int teamId = (this.IntParams.Count > 0) ? this.IntParams[0] : 1;
+            if (teamId < 1 || teamId > 4)
             {
-                return false;
+                teamId = 1;
             }
 
-            if (user.Team != (Team)this.IntParams[0])
+            if (user.Team != (Team)teamId)
             {
                 return false;
             }
@@ -47,12 +41,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            if (this.IntParams.Count == 0)
+            int teamId = (this.IntParams.Count > 0) ? this.IntParams[0] : 1;
+            if (teamId < 1 || teamId > 4)
             {
-                return;
+                teamId = 1;
             }
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.IntParams[0].ToString(), false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, teamId.ToString(), false, null);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)

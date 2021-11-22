@@ -7,14 +7,14 @@ namespace Butterfly.Game.Rooms.Wired
     {
         public RoomUser User;
         public Item Item;
-        public IWiredCycleable IWiredCycleable;
+        public IWiredCycleable WiredCycleable;
         public int Cycle;
 
-        public WiredCycle(IWiredCycleable pIWiredCycleable, RoomUser pUser, Item pItem, int pDelay)
+        public WiredCycle(IWiredCycleable wiredCycleable, RoomUser user, Item item, int delay)
         {
-            this.IWiredCycleable = pIWiredCycleable;
-            this.User = pUser;
-            this.Item = pItem;
+            this.WiredCycleable = wiredCycleable;
+            this.User = user;
+            this.Item = item;
             this.Cycle = 0;
         }
 
@@ -22,7 +22,7 @@ namespace Butterfly.Game.Rooms.Wired
         {
             this.Cycle++;
 
-            if (this.Cycle <= this.IWiredCycleable.Delay)
+            if (this.Cycle <= this.WiredCycleable.DelayCycle)
             {
                 return true;
             }
@@ -34,7 +34,7 @@ namespace Butterfly.Game.Rooms.Wired
                 this.User = null;
             }
 
-            return this.IWiredCycleable.OnCycle(this.User, this.Item);
+            return this.WiredCycleable.OnCycle(this.User, this.Item);
         }
     }
 }

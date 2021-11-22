@@ -8,28 +8,31 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 {
-    public class WalksOnFurni : IWired, IWiredCycleable
+    public class WalksOnFurni : WiredTriggerBase, IWired, IWiredCycleable
     {
         private Item item;
         private WiredHandler handler;
         private List<Item> items;
         private readonly UserAndItemDelegate delegateFunction;
-        public int Delay { get; set; }
-        private bool disposed;
+        public int DelayCycle { get => this.Delay; set => this.Delay = value; }
 
-        public WalksOnFurni(Item item, WiredHandler handler, List<Item> targetItems, int requiredCycles)
+        public WalksOnFurni(Item item, WiredHandler handler, List<Item> targetItems, List<int> stuffIds, int requiredCycles)
         {
+            this.Id = item.Id;
+            this.Type = (int)WiredTriggerType.AVATAR_WALKS_ON_FURNI;
+            this.StuffTypeSelectionEnabled = true;
+            this.StuffTypeId = item.GetBaseItem().SpriteId;
+            this.StuffIds = stuffIds;
+
             this.item = item;
             this.handler = handler;
             this.items = targetItems;
             this.delegateFunction = new UserAndItemDelegate(this.targetItem_OnUserWalksOnFurni);
-            this.Delay = requiredCycles;
+            this.DelayCycle = requiredCycles;
             foreach (Item roomItem in targetItems)
             {
                 roomItem.OnUserWalksOnFurni += this.delegateFunction;
             }
-
-            this.disposed = false;
         }
 
         public bool OnCycle(RoomUser User, Item Item)
@@ -44,9 +47,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 
         private void targetItem_OnUserWalksOnFurni(RoomUser user, Item item)
         {
-            if (this.Delay > 0)
+            if (this.DelayCycle > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, user, item, this.Delay));
+                this.handler.RequestCycle(new WiredCycle(this, user, item, this.DelayCycle));
             }
             else
             {
@@ -54,9 +57,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            this.disposed = true;
+            this.isDisposed = true;
             if (this.items != null)
             {
                 foreach (Item roomItem in this.items)
@@ -73,13 +76,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.Delay.ToString(), false, this.items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.DelayCycle.ToString(), false, this.items);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
             if (int.TryParse(row["trigger_data"].ToString(), out int delay))
-                this.Delay = delay;
+                this.DelayCycle = delay;
 
             string triggerItem = row["triggers_item"].ToString();
 
@@ -106,30 +109,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 
         public void OnTrigger(Client Session, int SpriteId)
         {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(10);
-            Message.WriteInteger(this.items.Count);
-            foreach (Item roomItem in this.items)
-            {
-                Message.WriteInteger(roomItem.Id);
-            }
-
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.item.Id);
-            Message.WriteString("");
-            Message.WriteInteger(0);
-            Message.WriteInteger(8);
-            Message.WriteInteger(0);
-            Message.WriteInteger(this.Delay);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
-        }
-
-        public bool Disposed()
-        {
-            return this.disposed;
+            this.SendWiredPacket(Session);
         }
     }
 }

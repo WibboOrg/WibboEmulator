@@ -14,7 +14,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         private readonly WiredHandler handler;
         private readonly int itemID;
         private List<Item> items;
-        public int Delay { get; set; }
+        public int DelayCycle { get; set; }
         private bool disposed;
 
         public UserMove(List<Item> items, int pDelay, WiredHandler handler, int itemID)
@@ -22,7 +22,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             this.itemID = itemID;
             this.handler = handler;
             this.items = items;
-            this.Delay = pDelay;
+            this.DelayCycle = pDelay;
             this.disposed = false;
         }
 
@@ -55,9 +55,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public void Handle(RoomUser User, Item TriggerItem)
         {
-            if (this.Delay > 0)
+            if (this.DelayCycle > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, User, TriggerItem, this.Delay));
+                this.handler.RequestCycle(new WiredCycle(this, User, TriggerItem, this.DelayCycle));
             }
             else
             {
@@ -78,13 +78,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.Delay.ToString(), false, this.items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.DelayCycle.ToString(), false, this.items);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
             if (int.TryParse(row["trigger_data"].ToString(), out int delay))
-                this.Delay = delay;
+                this.DelayCycle = delay;
 
             string triggerItem = row["triggers_item"].ToString();
 
@@ -120,7 +120,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             Message.WriteInteger(0);
             Message.WriteInteger(0);
             Message.WriteInteger(12);
-            Message.WriteInteger(this.Delay);
+            Message.WriteInteger(this.DelayCycle);
             Message.WriteInteger(0);
             Message.WriteInteger(0);
             Session.SendPacket(Message);

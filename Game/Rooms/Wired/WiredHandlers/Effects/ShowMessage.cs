@@ -12,7 +12,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         private readonly WiredHandler handler;
         private readonly int itemID;
         private string message;
-        public int Delay { get; set; }
+        public int DelayCycle { get; set; }
         private bool disposed;
 
         public ShowMessage(string message, WiredHandler handler, int itemID, int mdelay)
@@ -21,7 +21,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             this.handler = handler;
             this.message = message;
 
-            this.Delay = mdelay;
+            this.DelayCycle = mdelay;
             this.disposed = false;
         }
 
@@ -68,9 +68,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                 return;
             }
 
-            if (this.Delay > 0)
+            if (this.DelayCycle > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.Delay));
+                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
             }
             else
             {
@@ -86,7 +86,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, this.Delay.ToString(), this.message, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, this.DelayCycle.ToString(), this.message, false, null);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
@@ -94,7 +94,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             this.message = row["trigger_data"].ToString();
 
             if (int.TryParse(row["trigger_data_2"].ToString(), out int delay))
-                this.Delay = delay;
+                this.DelayCycle = delay;
         }
 
         public void OnTrigger(Client Session, int SpriteId)
@@ -109,7 +109,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             Message.WriteInteger(0);
             Message.WriteInteger(0);
             Message.WriteInteger(7); //7
-            Message.WriteInteger(this.Delay);
+            Message.WriteInteger(this.DelayCycle);
             Message.WriteInteger(0);
             Message.WriteInteger(0);
             Session.SendPacket(Message);

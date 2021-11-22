@@ -17,7 +17,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         private WiredHandler handler;
         private readonly int itemID;
         private ConcurrentDictionary<int, ItemsPosReset> items;
-        public int Delay { get; set; }
+        public int DelayCycle { get; set; }
         private bool disposed;
 
         private int EtatActuel;
@@ -26,7 +26,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public PositionReset(List<Item> items, int delay, RoomItemHandling roomItemHandler, WiredHandler handler, int itemID, int etatActuel, int directionActuel, int positionActuel)
         {
-            this.Delay = delay;
+            this.DelayCycle = delay;
             this.roomItemHandler = roomItemHandler;
             this.itemID = itemID;
             this.handler = handler;
@@ -60,9 +60,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            if (this.Delay > 0)
+            if (this.DelayCycle > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.Delay));
+                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
             }
             else
             {
@@ -154,7 +154,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
             if (int.TryParse(row["trigger_data"].ToString(), out int delay))
-                this.Delay = delay;
+                this.DelayCycle = delay;
 
             string triggerItem = row["triggers_item"].ToString();
 
@@ -215,7 +215,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
             Message.WriteInteger(1);
             Message.WriteInteger(3);
-            Message.WriteInteger(this.Delay);
+            Message.WriteInteger(this.DelayCycle);
             Message.WriteInteger(0);
             Session.SendPacket(Message);
         }

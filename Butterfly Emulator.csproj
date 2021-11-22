@@ -540,9 +540,6 @@
     <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\Moodlight\MoodlightConfigMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\OpenGiftComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\Stickys\StickyNoteMessageComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\Wired\WiredConditionConfigMessageComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\Wired\WiredEffectConfigMessageComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Rooms\Furni\Wired\WiredTriggerConfigMessageComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Notifications\RoomNotificationComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Permissions\YouAreControllerComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Permissions\YouAreNotControllerComposer.cs" />

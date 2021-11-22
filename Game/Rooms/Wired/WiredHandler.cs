@@ -145,7 +145,7 @@ namespace Butterfly.Game.Rooms.Wired
                             continue;
                         }
 
-                        if (handler.IWiredCycleable.Disposed())
+                        if (handler.WiredCycleable.Disposed())
                         {
                             continue;
                         }

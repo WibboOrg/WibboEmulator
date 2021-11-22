@@ -19,7 +19,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         private MovementState movement;
         private RotationState rotation;
         private List<Item> items;
-        public int Delay { get; set; }
+        public int DelayCycle { get; set; }
         private bool isDisposed;
 
         public MoveRotate(int movement, int rotation, List<Item> items, int delay, Room room, WiredHandler handler, int itemID)
@@ -27,7 +27,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             this.movement = (MovementState)movement;
             this.rotation = (RotationState)rotation;
             this.items = items;
-            this.Delay = delay;
+            this.DelayCycle = delay;
             this.room = room;
             this.handler = handler;
             this.itemID = itemID;
@@ -36,9 +36,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            if (this.Delay > 0)
+            if (this.DelayCycle > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.Delay));
+                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
             }
             else
             {
@@ -110,12 +110,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
             string rotationandmove = (int)this.rotation + ";" + (int)this.movement;
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, rotationandmove, this.Delay.ToString(), false, this.items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, rotationandmove, this.DelayCycle.ToString(), false, this.items);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
-            this.Delay = Convert.ToInt32(row["trigger_data"]);
+            this.DelayCycle = Convert.ToInt32(row["trigger_data"]);
 
             string triggerData2 = row["trigger_data_2"].ToString();
             string triggerItem = row["triggers_item"].ToString();
@@ -164,7 +164,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             Message.WriteInteger((int)this.rotation);
             Message.WriteInteger(0);
             Message.WriteInteger(4);
-            Message.WriteInteger(this.Delay);
+            Message.WriteInteger(this.DelayCycle);
             Message.WriteInteger(0);
             Message.WriteInteger(0);
             Session.SendPacket(Message);

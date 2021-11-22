@@ -13,7 +13,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
     {
         private Item item;
         private WiredHandler handler;
-        public int Delay { get; set; }
+        public int DelayCycle { get; set; }
         private readonly RoomEventDelegate delegateFunction;
         private bool disposed;
 
@@ -21,7 +21,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
         {
             this.item = item;
             this.handler = handler;
-            this.Delay = cycleCount;
+            this.DelayCycle = cycleCount;
             this.delegateFunction = new RoomEventDelegate(this.ResetTimer);
             this.handler.TrgTimer += this.delegateFunction;
             this.disposed = false;
@@ -29,7 +29,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 
         public void ResetTimer(object sender, EventArgs e)
         {
-            this.handler.RequestCycle(new WiredCycle(this, null, null, this.Delay));
+            this.handler.RequestCycle(new WiredCycle(this, null, null, this.DelayCycle));
         }
 
         public bool OnCycle(RoomUser user, Item item)
@@ -48,13 +48,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.Delay.ToString(), false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.DelayCycle.ToString(), false, null);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
             if (int.TryParse(row["trigger_data"].ToString(), out int delay))
-                this.Delay = delay;
+                this.DelayCycle = delay;
         }
 
         public void OnTrigger(Client Session, int SpriteId)
@@ -67,7 +67,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
             Message.WriteInteger(this.item.Id);
             Message.WriteString("");
             Message.WriteInteger(1);
-            Message.WriteInteger(this.Delay);
+            Message.WriteInteger(this.DelayCycle);
             Message.WriteInteger(1);
             Message.WriteInteger(3);
             Message.WriteInteger(0);

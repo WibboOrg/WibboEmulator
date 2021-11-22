@@ -15,7 +15,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         private Gamemap gamemap;
         private WiredHandler handler;
         private readonly List<Item> items;
-        public int Delay { get; set; }
+        public int DelayCycle { get; set; }
         private bool disposed;
 
         public ToggleItemState(Gamemap gamemap, WiredHandler handler, List<Item> items, int delay, Item Item)
@@ -24,7 +24,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             this.gamemap = gamemap;
             this.handler = handler;
             this.items = items;
-            this.Delay = delay;
+            this.DelayCycle = delay;
             this.disposed = false;
         }
 
@@ -37,9 +37,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            if (this.Delay > 0)
+            if (this.DelayCycle > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.Delay));
+                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
             }
             else
             {
@@ -82,13 +82,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.Delay.ToString(), false, this.items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.DelayCycle.ToString(), false, this.items);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
         {
             if (int.TryParse(row["trigger_data"].ToString(), out int delay))
-                this.Delay = delay;
+                this.DelayCycle = delay;
 
             string triggerItem = row["triggers_item"].ToString();
 
@@ -118,11 +118,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
             Message.WriteInteger(SpriteId);
             Message.WriteInteger(this.item.Id);
-            Message.WriteString(this.Delay.ToString());
+            Message.WriteString(this.DelayCycle.ToString());
             Message.WriteInteger(0);
             Message.WriteInteger(8);
             Message.WriteInteger(0);
-            Message.WriteInteger(this.Delay); //Seconde
+            Message.WriteInteger(this.DelayCycle); //Seconde
             Message.WriteInteger(0);
             Message.WriteInteger(0);
             Session.SendPacket(Message);

@@ -25,7 +25,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         private readonly WiredHandler handler;
         private readonly int itemID;
         private string message;
-        public int Delay { get; set; }
+        public int DelayCycle { get; set; }
         private bool disposed;
 
         public SuperWired(string message, int mdelay, bool GodPermission, bool StaffPermission, WiredHandler handler, int itemID)
@@ -34,7 +34,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             this.handler = handler;
             this.message = "";
 
-            this.Delay = mdelay;
+            this.DelayCycle = mdelay;
             this.disposed = false;
 
             this.setEffet(message, GodPermission, StaffPermission);
@@ -219,9 +219,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                 return;
             }
 
-            if (this.Delay > 0)
+            if (this.DelayCycle > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.Delay));
+                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
             }
             else
             {
@@ -2414,7 +2414,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, this.Delay.ToString(), this.message, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, this.DelayCycle.ToString(), this.message, false, null);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
@@ -2422,7 +2422,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             this.message = row["trigger_data"].ToString();
 
             if (int.TryParse(row["trigger_data_2"].ToString(), out int delay))
-                this.Delay = delay;
+                this.DelayCycle = delay;
         }
 
         public void OnTrigger(Client Session, int SpriteId)
@@ -2438,7 +2438,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
 
             Message.WriteInteger(0);
             Message.WriteInteger(7);
-            Message.WriteInteger(this.Delay);
+            Message.WriteInteger(this.DelayCycle);
 
             Message.WriteInteger(0);
             Session.SendPacket(Message);

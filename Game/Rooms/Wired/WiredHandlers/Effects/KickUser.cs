@@ -12,7 +12,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
         private WiredHandler handler;
         private readonly int itemID;
         private string message;
-        public int Delay { get; set; }
+        public int DelayCycle { get; set; }
         private bool disposed;
         private readonly Room mRoom;
 
@@ -22,7 +22,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
             this.handler = handler;
             this.message = message;
             this.mRoom = room;
-            this.Delay = 2;
+            this.DelayCycle = 2;
         }
 
         public bool OnCycle(RoomUser user, Item item)
@@ -58,7 +58,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Effects
                     User.SendWhisperChat(this.message);
                 }
 
-                this.handler.RequestCycle(new WiredCycle(this, User, null, this.Delay));
+                this.handler.RequestCycle(new WiredCycle(this, User, null, this.DelayCycle));
             }
         }
 

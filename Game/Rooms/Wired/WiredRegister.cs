@@ -64,13 +64,13 @@ namespace Butterfly.Game.Rooms.Wired
                     handler = new ScoreAchieved(item, room.GetWiredHandler(), 0, room.GetGameManager());
                     break;
                 case InteractionType.TRIGGER_STATE_CHANGED:
-                    handler = new SateChanged(room.GetWiredHandler(), item, new List<Item>(), 0);
+                    handler = new SateChanged(room.GetWiredHandler(), item, new List<Item>(), new List<int>(), 0);
                     break;
                 case InteractionType.TRIGGER_WALK_ON_FURNI:
-                    handler = new WalksOnFurni(item, room.GetWiredHandler(), new List<Item>(), 0);
+                    handler = new WalksOnFurni(item, room.GetWiredHandler(), new List<Item>(), new List<int>(), 0);
                     break;
                 case InteractionType.TRIGGER_WALK_OFF_FURNI:
-                    handler = new WalksOffFurni(item, room.GetWiredHandler(), new List<Item>(), 0);
+                    handler = new WalksOffFurni(item, room.GetWiredHandler(), new List<Item>(), new List<int>(), 0);
                     break;
                 #endregion
                 #region Action
@@ -240,12 +240,6 @@ namespace Butterfly.Game.Rooms.Wired
                 return;
             }
 
-            if (item.WiredHandler != null)
-            {
-                item.WiredHandler.Dispose();
-                item.WiredHandler = null;
-            }
-
             IWired handler = null;
 
             switch (item.GetBaseItem().InteractionType)
@@ -327,12 +321,6 @@ namespace Butterfly.Game.Rooms.Wired
             if (item == null)
             {
                 return;
-            }
-
-            if (item.WiredHandler != null)
-            {
-                item.WiredHandler.Dispose();
-                item.WiredHandler = null;
             }
 
             IWired handler = null;
@@ -452,12 +440,6 @@ namespace Butterfly.Game.Rooms.Wired
                 return;
             }
 
-            if (item.WiredHandler != null)
-            {
-                item.WiredHandler.Dispose();
-                item.WiredHandler = null;
-            }
-
             IWired handler = null;
             switch (item.GetBaseItem().InteractionType)
             {
@@ -502,13 +484,13 @@ namespace Butterfly.Game.Rooms.Wired
                     handler = new ScoreAchieved(item, room.GetWiredHandler(), (intParams.Count > 0) ? intParams[0] : 0, room.GetGameManager());
                     break;
                 case InteractionType.TRIGGER_STATE_CHANGED:
-                    handler = new SateChanged(room.GetWiredHandler(), item, GetItems(stuffIds, room), (intParams.Count > 0) ? intParams[0] : 0);
+                    handler = new SateChanged(room.GetWiredHandler(), item, GetItems(stuffIds, room), stuffIds, (intParams.Count > 0) ? intParams[0] : 0);
                     break;
                 case InteractionType.TRIGGER_WALK_ON_FURNI:
-                    handler = new WalksOnFurni(item, room.GetWiredHandler(), GetItems(stuffIds, room), (intParams.Count > 0) ? intParams[0] : 0);
+                    handler = new WalksOnFurni(item, room.GetWiredHandler(), GetItems(stuffIds, room), stuffIds, (intParams.Count > 0) ? intParams[0] : 0);
                     break;
                 case InteractionType.TRIGGER_WALK_OFF_FURNI:
-                    handler = new WalksOffFurni(item, room.GetWiredHandler(), GetItems(stuffIds, room), (intParams.Count > 0) ? intParams[0] : 0);
+                    handler = new WalksOffFurni(item, room.GetWiredHandler(), GetItems(stuffIds, room), stuffIds, (intParams.Count > 0) ? intParams[0] : 0);
                     break;
                 #endregion
             }
@@ -570,10 +552,10 @@ namespace Butterfly.Game.Rooms.Wired
             session.SendPacket(new SaveWiredMessageComposer());
         }
 
-        private static List<Item> GetItems(List<int> intParams, Room room)
+        private static List<Item> GetItems(List<int> stuffIds, Room room)
         {
             List<Item> listItem = new List<Item>();
-            foreach(int itemId in intParams)
+            foreach(int itemId in stuffIds)
             {
                 Item item = room.GetRoomItemHandler().GetItem(itemId);
                 if (item != null && item.GetBaseItem().Type == 's')
@@ -587,6 +569,12 @@ namespace Butterfly.Game.Rooms.Wired
 
         private static void HandleSave(IWired handler, Room room, Item item)
         {
+            if (item.WiredHandler != null)
+            {
+                item.WiredHandler.Dispose();
+                item.WiredHandler = null;
+            }
+
             item.WiredHandler = handler;
             room.GetWiredHandler().RemoveFurniture(item);
             room.GetWiredHandler().AddFurniture(item);
