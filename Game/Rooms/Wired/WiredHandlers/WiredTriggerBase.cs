@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers
 {
-    public class WiredBase
+    public class WiredTriggerBase
     {
         internal bool StuffTypeSelectionEnabled;
         internal int FurniLimit;
@@ -15,11 +15,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
         internal List<int> IntParams;
         internal int StuffTypeSelectionCode;
         internal int Type;
+        internal List<int> Conflicting;
 
-        internal WiredBase()
+        internal WiredTriggerBase()
         {
             this.StuffTypeSelectionEnabled = false;
-            this.FurniLimit = -1;
+            this.FurniLimit = 0;
             this.StuffIds = new List<int>();
             this.StuffTypeId = 0;
             this.Id = 0;
@@ -27,11 +28,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
             this.IntParams = new List<int>();
             this.StuffTypeSelectionCode = 0;
             this.Type = 0;
+            this.Conflicting = new List<int>();
         }
-        public void OnTrigger(Client Session, int SpriteId)
+        public void SendWiredPacket(Client Session)
         {
-            Session.SendPacket(new WiredFurniConditionMessageComposer(this.StuffTypeSelectionEnabled, this.FurniLimit, this.StuffIds, this.StuffTypeId, this.Id,
-                this.StringParam, this.IntParams, this.StuffTypeSelectionCode, this.Type));
+            Session.SendPacket(new WiredFurniTriggerMessageComposer(this.StuffTypeSelectionEnabled, this.FurniLimit, this.StuffIds, this.StuffTypeId, this.Id,
+                this.StringParam, this.IntParams, this.StuffTypeSelectionCode, this.Type, this.Conflicting));
         }
     }
 }

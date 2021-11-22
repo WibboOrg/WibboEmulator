@@ -1,4 +1,5 @@
 ﻿using Butterfly.Database.Interfaces;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
@@ -6,21 +7,20 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 {
-    public class ActorInTeam : WiredBase, IWiredCondition, IWired
+    public class ActorInTeam : WiredConditionBase, IWiredCondition, IWired
     {
-        private bool isDisposed;
-
-        public ActorInTeam(int itemid, int teamId)
+        public ActorInTeam(Item item, int teamId) : base()
         {
             if (teamId < 1 || teamId > 4)
             {
                 teamId = 1;
             }
 
-            this.Id = itemid;
+            this.Id = item.Id;
+            this.Type = (int)WiredConditionType.ACTOR_IS_IN_TEAM;
+            this.StuffTypeId = item.GetBaseItem().SpriteId;
 
             this.IntParams.Add(teamId);
-            this.isDisposed = false;
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
@@ -61,19 +61,10 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             }
         }
 
-        /*public void OnTrigger(Client Session, int SpriteId)
+        public void OnTrigger(Client Session, int spriteId)
         {
-            Session.SendPacket(new WiredFurniConditionMessageComposer(false, 0, null, SpriteId, this.Id, "", new List<int> { (int)this.team }, 0, (int)WiredConditionType.ACTOR_IS_IN_TEAM));
-        }*/
-
-        public void Dispose()
-        {
-            this.isDisposed = true;
-        }
-
-        public bool Disposed()
-        {
-            return this.isDisposed;
+            this.SendWiredPacket(Session);
+            //Session.SendPacket(new WiredFurniConditionMessageComposer(false, 0, null, SpriteId, this.Id, "", new List<int> { (int)this.team }, 0, (int)WiredConditionType.ACTOR_IS_IN_TEAM));
         }
     }
 }

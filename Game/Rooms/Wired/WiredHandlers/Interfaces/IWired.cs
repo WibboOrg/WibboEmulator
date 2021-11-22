@@ -12,6 +12,6 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces
 
         void LoadFromDatabase(DataRow row, Room insideRoom);
 
-        void OnTrigger(Client Session, int SpriteId);
+        void OnTrigger(Client Session, int spriteId);
     }
 }

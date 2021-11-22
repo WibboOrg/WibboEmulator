@@ -4,31 +4,28 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 {
-    public class DateRangeActive : IWiredCondition, IWired
+    public class DateRangeActive : WiredConditionBase, IWiredCondition, IWired
     {
-        private int StartDate;
-        private int EndDate;
-        private bool isDisposed;
-        private readonly int ItemId;
-
-        public DateRangeActive(int itemId, int startData, int endDate)
+        public DateRangeActive(Item item, List<int> intParams) : base()
         {
-            this.ItemId = itemId;
-
-            this.StartDate = startData;
-            this.EndDate = endDate;
-            this.isDisposed = false;
+            this.Id = item.Id;
+            this.Type = (int)WiredConditionType.DATE_RANGE_ACTIVE;
+            this.IntParams = intParams;
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
         {
             int unixNow = ButterflyEnvironment.GetUnixTimestamp();
 
-            if (this.StartDate > unixNow || this.EndDate < unixNow)
+            int startDate = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+            int endDate = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+
+            if (startDate > unixNow || endDate < unixNow)
             {
                 return false;
             }
@@ -38,7 +35,10 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.ItemId, string.Empty, this.StartDate + ":" + this.EndDate, false, null);
+            int startDate = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+            int endDate = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, startDate + ":" + endDate, false, null);
         }
 
         public void LoadFromDatabase(DataRow row, Room insideRoom)
@@ -48,15 +48,17 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 return;
 
             if (int.TryParse(triggerData.Split(':')[0], out int startDate))
-                this.StartDate = startDate;
+                this.IntParams.Add(startDate);
 
             if (int.TryParse(triggerData.Split(':')[1], out int endDate))
-                this.EndDate = endDate;
+                this.IntParams.Add(endDate);
         }
 
-        public void OnTrigger(Client Session, int SpriteId)
+        public void OnTrigger(Client Session, int spriteId)
         {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
+            this.SendWiredPacket(Session);
+
+            /*ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
             Message.WriteBoolean(false); //stuffTypeSelectionEnabled
             Message.WriteInteger(0); //furniLimit
             Message.WriteInteger(0); //count
@@ -70,17 +72,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             Message.WriteInteger(0); //stuffTypeSelectionCode
 
             Message.WriteInteger((int)WiredConditionType.DATE_RANGE_ACTIVE); //type
-            Session.SendPacket(Message);
-        }
-
-        public void Dispose()
-        {
-            this.isDisposed = true;
-        }
-
-        public bool Disposed()
-        {
-            return this.isDisposed;
+            Session.SendPacket(Message);*/
         }
     }
 }
