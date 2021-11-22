@@ -180,7 +180,8 @@
         BADGE,
         TRAMPOLINE,
         TREADMILL,
-        CROSSTRAINER
+        CROSSTRAINER,
+        CONDITION_DATE_RNG_ACTIVE
     }
 
     public class InteractionTypes
@@ -440,6 +441,8 @@
                     return InteractionType.CONDITIONHASFURNIONFURNI;
                 case "wf_cnd_not_furni_on":
                     return InteractionType.CONDITIONHASFURNIONFURNINEGATIVE;
+                case "wf_cnd_date_rng_active":
+                    return InteractionType.CONDITION_DATE_RNG_ACTIVE;
                 case "ringplate":
                     return InteractionType.RINGPLATE;
                 case "colortile":

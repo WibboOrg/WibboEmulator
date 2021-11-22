@@ -783,6 +783,7 @@
     <Compile Include="Game\Rooms\RoomRoleplay.cs" />
     <Compile Include="Game\Rooms\Utils\TransformUtility.cs" />
     <Compile Include="Game\Rooms\Wired\WiredCycle.cs" />
+    <Compile Include="Game\Rooms\Wired\WiredHandlers\Conditions\DateRangeActive.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Effects\CollisionTeam.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Effects\UserMove.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Triggers\BotReadchedAvatar.cs" />

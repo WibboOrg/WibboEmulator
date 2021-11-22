@@ -183,6 +183,9 @@ namespace Butterfly.Game.Rooms.Wired
                 case InteractionType.CONDITIONSTATEPOSNEGATIVE:
                     handler = new FurniStatePosMatchNegative(item, new List<Item>(), 0, 0, 0);
                     break;
+                case InteractionType.CONDITION_DATE_RNG_ACTIVE:
+                    handler = new DateRangeActive(item.Id, 0, 0);
+                    break;
                 case InteractionType.CONDITIONTIMELESSTHAN:
                     handler = new LessThanTimer(0, room, item);
                     break;

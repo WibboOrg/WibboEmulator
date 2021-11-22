@@ -84,6 +84,7 @@ namespace Butterfly.Game.Rooms.Wired
                 case InteractionType.WF_CND_STUFF_IS:
                 case InteractionType.WF_CND_NOT_STUFF_IS:
                 case InteractionType.CONDITIONSTATEPOSNEGATIVE:
+                case InteractionType.CONDITION_DATE_RNG_ACTIVE:
                 case InteractionType.CONDITIONTIMELESSTHAN:
                 case InteractionType.CONDITIONTIMEMORETHAN:
                 case InteractionType.CONDITIONTRIGGERONFURNI:

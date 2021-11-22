@@ -210,6 +210,9 @@ namespace Butterfly.Game.Rooms.Wired
                 case InteractionType.CONDITIONSTATEPOSNEGATIVE:
                     HandleTriggerSave(new FurniStatePosMatchNegative(roomItem, new List<Item>(), 0, 0, 0), room.GetWiredHandler(), room, roomItem);
                     break;
+                case InteractionType.CONDITION_DATE_RNG_ACTIVE:
+                    HandleTriggerSave(new DateRangeActive(roomItem.Id, 0, 0), room.GetWiredHandler(), room, roomItem);
+                    break;
                 case InteractionType.CONDITIONTIMELESSTHAN:
                     HandleTriggerSave(new LessThanTimer(0, room, roomItem), room.GetWiredHandler(), room, roomItem);
                     break;
@@ -625,6 +628,13 @@ namespace Butterfly.Game.Rooms.Wired
                     clientMessage.PopString();
 
                     HandleTriggerSave(new FurniNotStuffIs(roomItem, GetItems(clientMessage, room, itemID)), room.GetWiredHandler(), room, roomItem);
+                    break;
+                case InteractionType.CONDITION_DATE_RNG_ACTIVE:
+                    clientMessage.PopInt(); //count ?
+                    int startDate = clientMessage.PopInt();
+                    int endDate = clientMessage.PopInt();
+
+                    HandleTriggerSave(new DateRangeActive(roomItem.Id, startDate, endDate), room.GetWiredHandler(), room, roomItem);
                     break;
                 case InteractionType.CONDITIONSTATEPOSNEGATIVE:
                     clientMessage.PopInt();

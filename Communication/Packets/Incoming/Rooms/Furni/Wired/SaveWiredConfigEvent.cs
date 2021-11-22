@@ -19,7 +19,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            WiredSaver.HandleSave(Session, Packet.PopInt(), Session.GetHabbo().CurrentRoom, Packet);
+            int itemId = Packet.PopInt();
+
+            WiredSaver.HandleSave(Session, itemId, Session.GetHabbo().CurrentRoom, Packet);
         }
     }
 }

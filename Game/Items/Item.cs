@@ -254,6 +254,7 @@ namespace Butterfly.Game.Items
                     case InteractionType.CONDITIONSTATEPOS:
                     case InteractionType.WF_CND_STUFF_IS:
                     case InteractionType.WF_CND_NOT_STUFF_IS:
+                    case InteractionType.CONDITION_DATE_RNG_ACTIVE:
                     case InteractionType.CONDITIONSTATEPOSNEGATIVE:
                     case InteractionType.CONDITIONTIMELESSTHAN:
                     case InteractionType.CONDITIONTIMEMORETHAN:
