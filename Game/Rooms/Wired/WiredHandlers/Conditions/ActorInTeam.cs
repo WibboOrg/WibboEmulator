@@ -3,14 +3,16 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 {
     public class ActorInTeam : WiredConditionBase, IWiredCondition, IWired
     {
-        public ActorInTeam(Item item, int teamId) : base()
+        public ActorInTeam(Item item, List<int> intParams) : base()
         {
+            int teamId = (intParams.Count > 0) ? intParams[0] : 1;
             if (teamId < 1 || teamId > 4)
             {
                 teamId = 1;
@@ -64,7 +66,6 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
         public void OnTrigger(Client Session, int spriteId)
         {
             this.SendWiredPacket(Session);
-            //Session.SendPacket(new WiredFurniConditionMessageComposer(false, 0, null, SpriteId, this.Id, "", new List<int> { (int)this.team }, 0, (int)WiredConditionType.ACTOR_IS_IN_TEAM));
         }
     }
 }

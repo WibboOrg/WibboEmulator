@@ -793,6 +793,7 @@
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Effects\UserMove.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\Triggers\BotReadchedAvatar.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\WiredActionBase.cs" />
+    <Compile Include="Game\Rooms\Wired\WiredHandlers\WiredBase.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\WiredTriggerBase.cs" />
     <Compile Include="Game\Rooms\Wired\WiredHandlers\WiredConditionBase.cs" />
     <Compile Include="Game\Rooms\Wired\WiredType.cs" />

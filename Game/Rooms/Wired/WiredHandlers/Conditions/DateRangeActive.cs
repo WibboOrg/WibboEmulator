@@ -57,22 +57,6 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
         public void OnTrigger(Client Session, int spriteId)
         {
             this.SendWiredPacket(Session);
-
-            /*ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
-            Message.WriteBoolean(false); //stuffTypeSelectionEnabled
-            Message.WriteInteger(0); //furniLimit
-            Message.WriteInteger(0); //count
-            //Message.WriteInteger(0); //stuffIds
-            Message.WriteInteger(SpriteId); //stuffTypeId
-            Message.WriteInteger(this.ItemId); //id
-            Message.WriteString(""); //stringParam
-            Message.WriteInteger(2); //count
-            Message.WriteInteger(this.StartDate); //intParams
-            Message.WriteInteger(this.EndDate); //intParams
-            Message.WriteInteger(0); //stuffTypeSelectionCode
-
-            Message.WriteInteger((int)WiredConditionType.DATE_RANGE_ACTIVE); //type
-            Session.SendPacket(Message);*/
         }
     }
 }

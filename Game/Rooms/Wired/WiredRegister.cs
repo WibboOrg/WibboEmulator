@@ -215,7 +215,7 @@ namespace Butterfly.Game.Rooms.Wired
                     handler = new HasUserNotInGroup(item);
                     break;
                 case InteractionType.WF_CND_ACTOR_IN_TEAM:
-                    handler = new ActorInTeam(item, 1);
+                    handler = new ActorInTeam(item, new List<int>());
                     break;
                 case InteractionType.WF_CND_NOT_IN_TEAM:
                     handler = new ActorNotInTeam(item.Id, 1);
@@ -307,7 +307,7 @@ namespace Butterfly.Game.Rooms.Wired
                     handler = new HasUserNotInGroup(item);
                     break;
                 case InteractionType.WF_CND_ACTOR_IN_TEAM:
-                    handler = new ActorInTeam(item, (intParams.Count > 0) ? intParams[0] : 0);
+                    handler = new ActorInTeam(item, intParams);
                     break;
                 case InteractionType.WF_CND_NOT_IN_TEAM:
                     handler = new ActorNotInTeam(item.Id, (intParams.Count > 0) ? intParams[0] : 0);
