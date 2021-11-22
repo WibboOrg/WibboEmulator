@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
@@ -27,7 +26,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
             this.item = item;
             this.handler = handler;
             this.items = targetItems;
-            this.delegateFunction = new UserAndItemDelegate(this.targetItem_OnUserWalksOnFurni);
+            this.delegateFunction = new UserAndItemDelegate(this.OnUserWalksOnFurni);
             this.DelayCycle = requiredCycles;
             foreach (Item roomItem in targetItems)
             {
@@ -45,7 +44,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
             return false;
         }
 
-        private void targetItem_OnUserWalksOnFurni(RoomUser user, Item item)
+        private void OnUserWalksOnFurni(RoomUser user, Item item)
         {
             if (this.DelayCycle > 0)
             {
@@ -69,6 +68,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 
                 this.items.Clear();
             }
+
             this.items = null;
             this.item = null;
             this.handler = null;
@@ -101,7 +101,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
                 Item roomItem = insideRoom.GetRoomItemHandler().GetItem(itemId);
                 if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.item.Id)
                 {
-                    roomItem.OnUserWalksOnFurni += new UserAndItemDelegate(this.targetItem_OnUserWalksOnFurni);
+                    roomItem.OnUserWalksOnFurni += new UserAndItemDelegate(this.OnUserWalksOnFurni);
                     this.items.Add(roomItem);
                 }
             }

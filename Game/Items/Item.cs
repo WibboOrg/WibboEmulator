@@ -227,59 +227,59 @@ namespace Butterfly.Game.Items
                     case InteractionType.TRIGGER_WALK_ON_FURNI:
                     case InteractionType.TRIGGER_WALK_OFF_FURNI:
                     case InteractionType.TRIGGER_COLLISION:
-                    case InteractionType.ACTIONGIVESCORE:
-                    case InteractionType.ACTIONPOSRESET:
-                    case InteractionType.ACTIONMOVEROTATE:
-                    case InteractionType.ACTIONRESETTIMER:
+                    case InteractionType.ACTION_GIVE_SCORE:
+                    case InteractionType.ACTION_POS_RESET:
+                    case InteractionType.ACTION_MOVE_ROTATE:
+                    case InteractionType.ACTION_RESET_TIMER:
                     case InteractionType.ACTIONSHOWMESSAGE:
                     case InteractionType.HIGHSCORE:
                     case InteractionType.HIGHSCOREPOINTS:
-                    case InteractionType.ACTIONGIVEREWARD:
-                    case InteractionType.SUPERWIRED:
+                    case InteractionType.ACTION_GIVE_REWARD:
+                    case InteractionType.ACTION_SUPER_WIRED:
                     case InteractionType.CONDITION_SUPER_WIRED:
-                    case InteractionType.ACTIONTELEPORTTO:
-                    case InteractionType.WF_ACT_ENDGAME_TEAM:
-                    case InteractionType.WF_ACT_CALL_STACKS:
-                    case InteractionType.ACTIONTOGGLESTATE:
-                    case InteractionType.ACTIONKICKUSER:
-                    case InteractionType.ACTIONFLEE:
-                    case InteractionType.ACTIONCHASE:
-                    case InteractionType.COLLISIONCASE:
-                    case InteractionType.COLLISIONTEAM:
-                    case InteractionType.ACTIONMOVETODIR:
+                    case InteractionType.ACTION_TELEPORT_TO:
+                    case InteractionType.ACTION_ENDGAME_TEAM:
+                    case InteractionType.ACTION_CALL_STACKS:
+                    case InteractionType.ACTION_TOGGLE_STATE:
+                    case InteractionType.ACTION_KICK_USER:
+                    case InteractionType.ACTION_FLEE:
+                    case InteractionType.ACTION_CHASE:
+                    case InteractionType.ACTION_COLLISION_CASE:
+                    case InteractionType.ACTION_COLLISION_TEAM:
+                    case InteractionType.ACTION_MOVE_TO_DIR:
                     case InteractionType.CONDITION_FURNIS_HAVE_USERS:
-                    case InteractionType.CONDITIONFURNISHAVENOUSERS:
-                    case InteractionType.CONDITIONHASFURNIONFURNI:
-                    case InteractionType.CONDITIONHASFURNIONFURNINEGATIVE:
-                    case InteractionType.CONDITIONSTATEPOS:
-                    case InteractionType.WF_CND_STUFF_IS:
-                    case InteractionType.WF_CND_NOT_STUFF_IS:
+                    case InteractionType.CONDITION_FURNIS_HAVE_NO_USERS:
+                    case InteractionType.CONDITION_HAS_FURNI_ON_FURNI:
+                    case InteractionType.CONDITION_HAS_FURNI_ON_FURNI_NEGATIVE:
+                    case InteractionType.CONDITION_STATE_POS:
+                    case InteractionType.CONDITION_STUFF_IS:
+                    case InteractionType.CONDITION_NOT_STUFF_IS:
                     case InteractionType.CONDITION_DATE_RNG_ACTIVE:
-                    case InteractionType.CONDITIONSTATEPOSNEGATIVE:
-                    case InteractionType.CONDITIONTIMELESSTHAN:
-                    case InteractionType.CONDITIONTIMEMORETHAN:
-                    case InteractionType.CONDITIONTRIGGERONFURNI:
-                    case InteractionType.CONDITIONTRIGGERONFURNINEGATIVE:
-                    case InteractionType.CONDITIONACTORINGROUP:
-                    case InteractionType.CONDITIONNOTINGROUP:
+                    case InteractionType.CONDITION_STATE_POS_NEGATIVE:
+                    case InteractionType.CONDITION_TIME_LESS_THAN:
+                    case InteractionType.CONDITION_TIME_MORE_THAN:
+                    case InteractionType.CONDITION_TRIGGER_ON_FURNI:
+                    case InteractionType.CONDITION_TRIGGER_ON_FURNI_NEGATIVE:
+                    case InteractionType.CONDITION_ACTOR_IN_GROUP:
+                    case InteractionType.CONDITION_NOT_IN_GROUP:
                     case InteractionType.WF_TRG_BOT_REACHED_STF:
                     case InteractionType.WF_TRG_BOT_REACHED_AVTR:
-                    case InteractionType.WF_ACT_BOT_CLOTHES:
-                    case InteractionType.WF_ACT_BOT_TELEPORT:
-                    case InteractionType.WF_ACT_BOT_FOLLOW_AVATAR:
-                    case InteractionType.WF_ACT_BOT_GIVE_HANDITEM:
-                    case InteractionType.WF_ACT_BOT_MOVE:
-                    case InteractionType.WF_ACT_USER_MOVE:
-                    case InteractionType.WF_ACT_BOT_TALK_TO_AVATAR:
-                    case InteractionType.WF_ACT_BOT_TALK:
+                    case InteractionType.ACTION_BOT_CLOTHES:
+                    case InteractionType.ACTION_BOT_TELEPORT:
+                    case InteractionType.ACTION_BOT_FOLLOW_AVATAR:
+                    case InteractionType.ACTION_BOT_GIVE_HANDITEM:
+                    case InteractionType.ACTION_BOT_MOVE:
+                    case InteractionType.ACTION_USER_MOVE:
+                    case InteractionType.ACTION_BOT_TALK_TO_AVATAR:
+                    case InteractionType.ACTION_BOT_TALK:
                     case InteractionType.WF_CND_HAS_HANDITEM:
-                    case InteractionType.WF_ACT_JOIN_TEAM:
-                    case InteractionType.WF_ACT_LEAVE_TEAM:
-                    case InteractionType.WF_ACT_GIVE_SCORE_TM:
-                    case InteractionType.WF_CND_ACTOR_IN_TEAM:
-                    case InteractionType.WF_CND_NOT_IN_TEAM:
-                    case InteractionType.WF_CND_NOT_USER_COUNT:
-                    case InteractionType.WF_CND_USER_COUNT_IN:
+                    case InteractionType.ACTION_JOIN_TEAM:
+                    case InteractionType.ACTION_LEAVE_TEAM:
+                    case InteractionType.ACTION_GIVE_SCORE_TM:
+                    case InteractionType.CONDITION_ACTOR_IN_TEAM:
+                    case InteractionType.CONDITION_NOT_IN_TEAM:
+                    case InteractionType.CONDITION_NOT_USER_COUNT:
+                    case InteractionType.CONDITION_USER_COUNT_IN:
                         return new WiredInteractor();
                     case InteractionType.MANNEQUIN:
                         return new InteractorManiqui();

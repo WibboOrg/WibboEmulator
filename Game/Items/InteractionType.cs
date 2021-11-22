@@ -84,36 +84,36 @@
         TRIGGER_WALK_ON_FURNI,
         TRIGGER_WALK_OFF_FURNI,
         TRIGGER_COLLISION,
-        ACTIONGIVESCORE,
-        ACTIONPOSRESET,
-        ACTIONMOVEROTATE,
-        ACTIONRESETTIMER,
+        ACTION_GIVE_SCORE,
+        ACTION_POS_RESET,
+        ACTION_MOVE_ROTATE,
+        ACTION_RESET_TIMER,
         ACTIONSHOWMESSAGE,
-        ACTIONTELEPORTTO,
-        WF_ACT_ENDGAME_TEAM,
-        WF_ACT_CALL_STACKS,
-        ACTIONTOGGLESTATE,
-        ACTIONKICKUSER,
-        ACTIONFLEE,
-        ACTIONCHASE,
-        COLLISIONCASE,
-        COLLISIONTEAM,
-        ACTIONGIVEREWARD,
-        ACTIONMOVETODIR,
+        ACTION_TELEPORT_TO,
+        ACTION_ENDGAME_TEAM,
+        ACTION_CALL_STACKS,
+        ACTION_TOGGLE_STATE,
+        ACTION_KICK_USER,
+        ACTION_FLEE,
+        ACTION_CHASE,
+        ACTION_COLLISION_CASE,
+        ACTION_COLLISION_TEAM,
+        ACTION_GIVE_REWARD,
+        ACTION_MOVE_TO_DIR,
         CONDITION_FURNIS_HAVE_USERS,
-        WF_CND_STUFF_IS,
-        WF_CND_NOT_STUFF_IS,
-        CONDITIONSTATEPOS,
-        CONDITIONSTATEPOSNEGATIVE,
-        CONDITIONTIMELESSTHAN,
-        CONDITIONTIMEMORETHAN,
-        CONDITIONTRIGGERONFURNI,
-        CONDITIONTRIGGERONFURNINEGATIVE,
-        CONDITIONHASFURNIONFURNI,
-        CONDITIONHASFURNIONFURNINEGATIVE,
-        CONDITIONFURNISHAVENOUSERS,
-        CONDITIONACTORINGROUP,
-        CONDITIONNOTINGROUP,
+        CONDITION_STUFF_IS,
+        CONDITION_NOT_STUFF_IS,
+        CONDITION_STATE_POS,
+        CONDITION_STATE_POS_NEGATIVE,
+        CONDITION_TIME_LESS_THAN,
+        CONDITION_TIME_MORE_THAN,
+        CONDITION_TRIGGER_ON_FURNI,
+        CONDITION_TRIGGER_ON_FURNI_NEGATIVE,
+        CONDITION_HAS_FURNI_ON_FURNI,
+        CONDITION_HAS_FURNI_ON_FURNI_NEGATIVE,
+        CONDITION_FURNIS_HAVE_NO_USERS,
+        CONDITION_ACTOR_IN_GROUP,
+        CONDITION_NOT_IN_GROUP,
         RINGPLATE,
         COLORTILE,
         COLORWHEEL,
@@ -136,7 +136,7 @@
         BADGE_TROC,
         TVYOUTUBE,
         PILEMAGIC,
-        SUPERWIRED,
+        ACTION_SUPER_WIRED,
         CONDITION_SUPER_WIRED,
         JMPHORSE,
         GUILD_ITEM,
@@ -149,22 +149,22 @@
         VENDINGENABLEMACHINE,
         WF_TRG_BOT_REACHED_STF,
         WF_TRG_BOT_REACHED_AVTR,
-        WF_ACT_BOT_CLOTHES,
-        WF_ACT_BOT_TELEPORT,
-        WF_ACT_BOT_FOLLOW_AVATAR,
-        WF_ACT_BOT_GIVE_HANDITEM,
-        WF_ACT_BOT_MOVE,
-        WF_ACT_BOT_TALK_TO_AVATAR,
-        WF_ACT_BOT_TALK,
+        ACTION_BOT_CLOTHES,
+        ACTION_BOT_TELEPORT,
+        ACTION_BOT_FOLLOW_AVATAR,
+        ACTION_BOT_GIVE_HANDITEM,
+        ACTION_BOT_MOVE,
+        ACTION_BOT_TALK_TO_AVATAR,
+        ACTION_BOT_TALK,
         WF_CND_HAS_HANDITEM,
-        WF_ACT_JOIN_TEAM,
-        WF_ACT_LEAVE_TEAM,
-        WF_ACT_GIVE_SCORE_TM,
-        WF_CND_ACTOR_IN_TEAM,
-        WF_CND_NOT_IN_TEAM,
-        WF_CND_NOT_USER_COUNT,
-        WF_CND_USER_COUNT_IN,
-        WF_ACT_USER_MOVE,
+        ACTION_JOIN_TEAM,
+        ACTION_LEAVE_TEAM,
+        ACTION_GIVE_SCORE_TM,
+        CONDITION_ACTOR_IN_TEAM,
+        CONDITION_NOT_IN_TEAM,
+        CONDITION_NOT_USER_COUNT,
+        CONDITION_USER_COUNT_IN,
+        ACTION_USER_MOVE,
         CRACKABLE,
         LOVELOCK,
         EXTRABOX,
@@ -372,75 +372,75 @@
                     return InteractionType.TRIGGER_WALK_OFF_FURNI;
                 case "actiongivescore":
                 case "wf_act_givepoints":
-                    return InteractionType.ACTIONGIVESCORE;
+                    return InteractionType.ACTION_GIVE_SCORE;
                 case "actionposreset":
                 case "wf_act_matchfurni":
-                    return InteractionType.ACTIONPOSRESET;
+                    return InteractionType.ACTION_POS_RESET;
                 case "actionmoverotate":
                 case "wf_act_moverotate":
-                    return InteractionType.ACTIONMOVEROTATE;
+                    return InteractionType.ACTION_MOVE_ROTATE;
                 case "actionresettimer":
-                    return InteractionType.ACTIONRESETTIMER;
+                    return InteractionType.ACTION_RESET_TIMER;
                 case "actionshowmessage":
                 case "wf_act_saymsg":
                     return InteractionType.ACTIONSHOWMESSAGE;
                 case "wf_act_give_reward":
-                    return InteractionType.ACTIONGIVEREWARD;
+                    return InteractionType.ACTION_GIVE_REWARD;
                 case "superwired":
-                    return InteractionType.SUPERWIRED;
+                    return InteractionType.ACTION_SUPER_WIRED;
                 case "superwiredcondition":
                     return InteractionType.CONDITION_SUPER_WIRED;
                 case "actionteleportto":
                 case "wf_act_moveuser":
-                    return InteractionType.ACTIONTELEPORTTO;
+                    return InteractionType.ACTION_TELEPORT_TO;
                 case "wf_act_endgame_team":
-                    return InteractionType.WF_ACT_ENDGAME_TEAM;
+                    return InteractionType.ACTION_ENDGAME_TEAM;
                 case "wf_act_call_stacks":
-                    return InteractionType.WF_ACT_CALL_STACKS;
+                    return InteractionType.ACTION_CALL_STACKS;
                 case "actiontogglestate":
                 case "wf_act_togglefurni":
-                    return InteractionType.ACTIONTOGGLESTATE;
+                    return InteractionType.ACTION_TOGGLE_STATE;
                 case "wf_act_kick_user":
                 case "wf_act_kickuser":
                 case "wf_act_kick":
-                    return InteractionType.ACTIONKICKUSER;
+                    return InteractionType.ACTION_KICK_USER;
                 case "wf_act_flee":
-                    return InteractionType.ACTIONFLEE;
+                    return InteractionType.ACTION_FLEE;
                 case "wf_act_chase":
-                    return InteractionType.ACTIONCHASE;
+                    return InteractionType.ACTION_CHASE;
                 case "wf_act_collisioncase":
-                    return InteractionType.COLLISIONCASE;
+                    return InteractionType.ACTION_COLLISION_CASE;
                 case "wf_act_collisionteam":
-                    return InteractionType.COLLISIONTEAM;
+                    return InteractionType.ACTION_COLLISION_TEAM;
                 case "wf_act_move_to_dir":
-                    return InteractionType.ACTIONMOVETODIR;
+                    return InteractionType.ACTION_MOVE_TO_DIR;
                 case "conditionfurnishaveusers":
                 case "wf_cnd_furnis_hv_avtrs":
                     return InteractionType.CONDITION_FURNIS_HAVE_USERS;
                 case "wf_cnd_furnis_hv_prsn":
                 case "wf_cnd_not_hv_avtrs":
-                    return InteractionType.CONDITIONFURNISHAVENOUSERS;
+                    return InteractionType.CONDITION_FURNIS_HAVE_NO_USERS;
                 case "conditionstatepos":
-                    return InteractionType.CONDITIONSTATEPOS;
+                    return InteractionType.CONDITION_STATE_POS;
                 case "wf_cnd_stuff_is":
-                    return InteractionType.WF_CND_STUFF_IS;
+                    return InteractionType.CONDITION_STUFF_IS;
                 case "wf_cnd_not_stuff_is":
-                    return InteractionType.WF_CND_NOT_STUFF_IS;
+                    return InteractionType.CONDITION_NOT_STUFF_IS;
                 case "wf_cnd_not_match_snap":
-                    return InteractionType.CONDITIONSTATEPOSNEGATIVE;
+                    return InteractionType.CONDITION_STATE_POS_NEGATIVE;
                 case "conditiontimelessthan":
-                    return InteractionType.CONDITIONTIMELESSTHAN;
+                    return InteractionType.CONDITION_TIME_LESS_THAN;
                 case "conditiontimemorethan":
-                    return InteractionType.CONDITIONTIMEMORETHAN;
+                    return InteractionType.CONDITION_TIME_MORE_THAN;
                 case "conditiontriggeronfurni":
                 case "wf_cnd_trggrer_on_frn":
-                    return InteractionType.CONDITIONTRIGGERONFURNI;
+                    return InteractionType.CONDITION_TRIGGER_ON_FURNI;
                 case "wf_cnd_not_trggrer_on":
-                    return InteractionType.CONDITIONTRIGGERONFURNINEGATIVE;
+                    return InteractionType.CONDITION_TRIGGER_ON_FURNI_NEGATIVE;
                 case "wf_cnd_has_furni_on":
-                    return InteractionType.CONDITIONHASFURNIONFURNI;
+                    return InteractionType.CONDITION_HAS_FURNI_ON_FURNI;
                 case "wf_cnd_not_furni_on":
-                    return InteractionType.CONDITIONHASFURNIONFURNINEGATIVE;
+                    return InteractionType.CONDITION_HAS_FURNI_ON_FURNI_NEGATIVE;
                 case "wf_cnd_date_rng_active":
                     return InteractionType.CONDITION_DATE_RNG_ACTIVE;
                 case "ringplate":
@@ -513,9 +513,9 @@
                 case "landscape":
                     return InteractionType.LANDSCAPE;
                 case "wf_cnd_actor_in_group":
-                    return InteractionType.CONDITIONACTORINGROUP;
+                    return InteractionType.CONDITION_ACTOR_IN_GROUP;
                 case "wf_cnd_not_in_group":
-                    return InteractionType.CONDITIONNOTINGROUP;
+                    return InteractionType.CONDITION_NOT_IN_GROUP;
                 case "pressurepad":
                 case "arrowplate":
                 case "pressure_pad":
@@ -533,39 +533,39 @@
                 case "wf_trg_bot_reached_avtr":
                     return InteractionType.WF_TRG_BOT_REACHED_AVTR;
                 case "wf_act_bot_clothes":
-                    return InteractionType.WF_ACT_BOT_CLOTHES;
+                    return InteractionType.ACTION_BOT_CLOTHES;
                 case "wf_trg_trigger_self":
                     return InteractionType.WIRED_TRIGGER_SELF;
                 case "wf_act_bot_teleport":
-                    return InteractionType.WF_ACT_BOT_TELEPORT;
+                    return InteractionType.ACTION_BOT_TELEPORT;
                 case "wf_act_bot_follow_avatar":
-                    return InteractionType.WF_ACT_BOT_FOLLOW_AVATAR;
+                    return InteractionType.ACTION_BOT_FOLLOW_AVATAR;
                 case "wf_act_bot_give_handitem":
-                    return InteractionType.WF_ACT_BOT_GIVE_HANDITEM;
+                    return InteractionType.ACTION_BOT_GIVE_HANDITEM;
                 case "wf_act_bot_move":
-                    return InteractionType.WF_ACT_BOT_MOVE;
+                    return InteractionType.ACTION_BOT_MOVE;
                 case "wf_act_user_move":
-                    return InteractionType.WF_ACT_USER_MOVE;
+                    return InteractionType.ACTION_USER_MOVE;
                 case "wf_act_bot_talk_to_avatar":
-                    return InteractionType.WF_ACT_BOT_TALK_TO_AVATAR;
+                    return InteractionType.ACTION_BOT_TALK_TO_AVATAR;
                 case "wf_act_bot_talk":
-                    return InteractionType.WF_ACT_BOT_TALK;
+                    return InteractionType.ACTION_BOT_TALK;
                 case "wf_cnd_has_handitem":
                     return InteractionType.WF_CND_HAS_HANDITEM;
                 case "wf_act_join_team":
-                    return InteractionType.WF_ACT_JOIN_TEAM;
+                    return InteractionType.ACTION_JOIN_TEAM;
                 case "wf_act_leave_team":
-                    return InteractionType.WF_ACT_LEAVE_TEAM;
+                    return InteractionType.ACTION_LEAVE_TEAM;
                 case "wf_act_give_score_tm":
-                    return InteractionType.WF_ACT_GIVE_SCORE_TM;
+                    return InteractionType.ACTION_GIVE_SCORE_TM;
                 case "wf_cnd_actor_in_team":
-                    return InteractionType.WF_CND_ACTOR_IN_TEAM;
+                    return InteractionType.CONDITION_ACTOR_IN_TEAM;
                 case "wf_cnd_not_in_team":
-                    return InteractionType.WF_CND_NOT_IN_TEAM;
+                    return InteractionType.CONDITION_NOT_IN_TEAM;
                 case "wf_cnd_not_user_count":
-                    return InteractionType.WF_CND_NOT_USER_COUNT;
+                    return InteractionType.CONDITION_NOT_USER_COUNT;
                 case "wf_cnd_user_count_in":
-                    return InteractionType.WF_CND_USER_COUNT_IN;
+                    return InteractionType.CONDITION_USER_COUNT_IN;
                 case "crackable":
                     return InteractionType.CRACKABLE;
                 case "lovelock":
