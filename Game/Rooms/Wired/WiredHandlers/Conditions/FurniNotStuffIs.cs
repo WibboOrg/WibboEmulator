@@ -9,18 +9,10 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 {
-    public class FurniNotStuffIs : IWiredCondition, IWired
+    public class FurniNotStuffIs : WiredConditionBase, IWiredCondition, IWired
     {
-        private readonly int itemID;
-        private List<Item> items;
-        private bool isDisposed;
-
-        public FurniNotStuffIs(Item item, List<Item> items)
+        public FurniNotStuffIs(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_FURNI_IS_OF_TYPE)
         {
-            this.itemID = item.Id;
-            this.isDisposed = false;
-
-            this.items = items;
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
@@ -30,7 +22,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 return false;
             }
 
-            foreach (Item roomItem in this.items)
+            foreach (Item roomItem in this.Items)
             {
                 if (roomItem.BaseItem == TriggerItem.BaseItem && roomItem.ExtraData == TriggerItem.ExtraData)
                 {
@@ -42,63 +34,26 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, string.Empty, false, this.items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            string triggerItem = row["triggers_item"].ToString();
+            string triggerItems = row["triggers_item"].ToString();
 
-            if (triggerItem == "")
+            if (triggerItems == "")
             {
                 return;
             }
 
-            foreach (string ItemId in triggerItem.Split(';'))
+            foreach (string itemId in triggerItems.Split(';'))
             {
-                Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(ItemId));
-                if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.itemID)
-                {
-                    this.items.Add(roomItem);
-                }
+                if (!int.TryParse(itemId, out int id))
+                    continue;
+
+                if(!this.StuffIds.Contains(id))
+                    this.StuffIds.Add(id);
             }
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(10);
-            Message.WriteInteger(this.items.Count);
-            foreach (Item roomItem in this.items)
-            {
-                Message.WriteInteger(roomItem.Id);
-            }
-
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteBoolean(false);
-            Message.WriteBoolean(true);
-            Session.SendPacket(Message);
-        }
-
-        public void Dispose()
-        {
-            this.isDisposed = true;
-            if (this.items != null)
-            {
-                this.items.Clear();
-            }
-
-            this.items = null;
-        }
-
-        public bool Disposed()
-        {
-            return this.isDisposed;
         }
     }
 }

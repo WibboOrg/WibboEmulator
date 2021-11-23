@@ -199,7 +199,7 @@ namespace Butterfly.Game.Rooms
                     {
                         if (WiredUtillity.TypeIsWired(Item.GetBaseItem().InteractionType))
                         {
-                            WiredRegister.LoadWiredItem(Item, this._room, dbClient);
+                            WiredRegister.HandleRegister(Item, this._room, dbClient);
                         }
                     }
                 }

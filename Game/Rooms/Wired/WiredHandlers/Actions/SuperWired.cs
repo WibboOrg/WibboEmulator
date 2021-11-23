@@ -8,7 +8,6 @@ using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Roleplay;
 using Butterfly.Game.Roleplay.Enemy;
@@ -20,36 +19,32 @@ using System.Linq;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class SuperWired : IWired, IWiredEffect, IWiredCycleable
+    public class SuperWired : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
     {
-        private readonly WiredHandler handler;
-        private readonly int itemID;
-        private string message;
-        public int DelayCycle { get; set; }
-        private bool disposed;
-
-        public SuperWired(string message, int mdelay, bool GodPermission, bool StaffPermission, WiredHandler handler, int itemID)
+        public SuperWired(Item item, Room room) : base(item, room, (int)WiredActionType.CHAT)
         {
-            this.itemID = itemID;
-            this.handler = handler;
-            this.message = "";
-
-            this.DelayCycle = mdelay;
-            this.disposed = false;
-
-            this.setEffet(message, GodPermission, StaffPermission);
         }
 
-        private void setEffet(string message, bool GodPermission, bool StaffPermission)
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems();
+
+            if(inDatabase)
+                return;
+
+            this.checkPermission();
+        }
+
+        private void checkPermission()
         {
             string effet;
-            if (message.Contains(":"))
+            if (this.StringParam.Contains(":"))
             {
-                effet = message.Split(new char[] { ':' })[0].ToLower();
+                effet = this.StringParam.Split(':')[0].ToLower();
             }
             else
             {
-                effet = message;
+                effet = this.StringParam;
             }
 
             switch (effet)
@@ -107,9 +102,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 case "stopsounduser":
                 case "stopsoundroom":
                 case "forcesound":
-                    if (this.handler.GetRoom().IsRoleplay)
+                    if (this.RoomInstance.GetWiredHandler().GetRoom().IsRoleplay)
                     {
-                        this.message = message;
                         return;
                     }
                     break;
@@ -137,9 +131,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 case "roomalert":
                 case "forcesound":
                 case "coins":
-                    if (StaffPermission)
+                    if (this.IsStaff)
                     {
-                        this.message = message;
                         return;
                     }
                     break;
@@ -147,9 +140,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 case "achievement":
                 case "givelot":
                 case "winmovierun":
-                    if (GodPermission)
+                    if (this.IsGod)
                     {
-                        this.message = message;
                         return;
                     }
                     break;
@@ -194,11 +186,10 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 case "pushpull":
                 case "stand":
                 case "usermute":
-                    this.message = message;
                     return;
             }
 
-            this.message = "";
+            this.StringParam = "";
         }
 
         public bool OnCycle(RoomUser user, Item item)
@@ -207,21 +198,16 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             return false;
         }
 
-        public bool Disposed()
-        {
-            return this.disposed;
-        }
-
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            if (string.IsNullOrEmpty(this.message) || this.message == ":")
+            if (string.IsNullOrEmpty(this.StringParam) || this.StringParam == ":")
             {
                 return;
             }
 
             if (this.DelayCycle > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
+                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
             }
             else
             {
@@ -231,7 +217,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         private void HandleEffect(RoomUser User, Item TriggerItem)
         {
-            if (string.IsNullOrEmpty(this.message) || this.message == ":")
+            if (string.IsNullOrEmpty(this.StringParam) || this.StringParam == ":")
             {
                 return;
             }
@@ -239,19 +225,19 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             string Cmd = "";
             string Value = "";
 
-            if (this.message.Contains(":"))
+            if (this.StringParam.Contains(":"))
             {
-                Cmd = this.message.Split(new char[] { ':' })[0].ToLower();
-                Value = this.message.Split(new char[] { ':' })[1];
+                Cmd = this.StringParam.Split(':')[0].ToLower();
+                Value = this.StringParam.Split(':')[1];
             }
             else
             {
-                Cmd = this.message;
+                Cmd = this.StringParam;
             }
 
-            this.RpCommand(Cmd, Value, this.handler.GetRoom(), User, TriggerItem);
+            this.RpCommand(Cmd, Value, this.RoomInstance.GetWiredHandler().GetRoom(), User, TriggerItem);
             this.UserCommand(Cmd, Value, User, TriggerItem);
-            this.RoomCommand(Cmd, Value, this.handler.GetRoom(), TriggerItem, User);
+            this.RoomCommand(Cmd, Value, this.RoomInstance.GetWiredHandler().GetRoom(), TriggerItem, User);
             this.BotCommand(Cmd, Value, User, TriggerItem);
         }
 
@@ -2406,42 +2392,17 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             }
         }
 
-        public void Dispose()
-        {
-            this.message = null;
-            this.disposed = true;
-        }
-
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, this.DelayCycle.ToString(), this.message, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, this.DelayCycle.ToString(), this.StringParam, false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            this.message = row["trigger_data"].ToString();
+            this.StringParam = row["trigger_data"].ToString();
 
             if (int.TryParse(row["trigger_data_2"].ToString(), out int delay))
-                this.DelayCycle = delay;
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString(this.message);
-            Message.WriteInteger(0);
-
-            Message.WriteInteger(0);
-            Message.WriteInteger(7);
-            Message.WriteInteger(this.DelayCycle);
-
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
+                this.Delay = delay;
         }
     }
 }

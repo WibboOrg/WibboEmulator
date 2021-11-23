@@ -9,13 +9,10 @@ using System.Linq;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class HighScore : IWired, IWiredEffect
+    public class HighScore : WiredActionBase, IWired, IWiredEffect
     {
-        private readonly Item item;
-
-        public HighScore(Item item)
+        public HighScore(Item item, Room room) : base(item, room, -1)
         {
-            this.item = item;
         }
 
         public void Handle(RoomUser user, Item TriggerItem)
@@ -25,7 +22,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 return;
             }
 
-            Dictionary<string, int> Scores = this.item.Scores;
+            Dictionary<string, int> Scores = this.ItemInstance.Scores;
 
             List<string> ListUsernameScore = new List<string>() { user.GetUsername() };
 
@@ -38,18 +35,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 Scores.Add(ListUsernameScore[0], 1);
             }
 
-            Room room = this.item.GetRoom();
-            if (room == null)
-            {
-                return;
-            }
-
-            room.SendPacket(new ObjectUpdateComposer(this.item, room.RoomData.OwnerId));
-
+            this.RoomInstance.SendPacket(new ObjectUpdateComposer(this.ItemInstance, this.RoomInstance.RoomData.OwnerId));
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            this.IsDisposed = true;
+
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 this.SaveToDatabase(dbClient);
@@ -61,7 +53,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             string triggerdata = "";
 
             int i = 0;
-            foreach (KeyValuePair<string, int> score in this.item.Scores.OrderByDescending(x => x.Value).Take(20))
+            foreach (KeyValuePair<string, int> score in this.ItemInstance.Scores.OrderByDescending(x => x.Value).Take(20))
             {
                 if (i != 0)
                 {
@@ -73,10 +65,10 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 i++;
             }
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, triggerdata, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, triggerdata, false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
             string triggerData = row["trigger_data"].ToString();
 
@@ -102,16 +94,16 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 }
 
-                if (!this.item.Scores.ContainsKey(username))
+                if (!this.ItemInstance.Scores.ContainsKey(username))
                 {
-                    this.item.Scores.Add(username, ScoreNum);
+                    this.ItemInstance.Scores.Add(username, ScoreNum);
                 }
             }
         }
 
-        public void OnTrigger(Client Session, int SpriteId)
+        public override void OnTrigger(Client Session)
         {
-            int.TryParse(this.item.ExtraData, out int NumMode);
+            int.TryParse(this.ItemInstance.ExtraData, out int NumMode);
 
             if (NumMode != 1)
             {
@@ -122,8 +114,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 NumMode = 0;
             }
 
-            this.item.ExtraData = NumMode.ToString();
-            this.item.UpdateState(false, true);
+            this.ItemInstance.ExtraData = NumMode.ToString();
+            this.ItemInstance.UpdateState(false, true);
         }
     }
 }

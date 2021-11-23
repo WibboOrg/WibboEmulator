@@ -1,38 +1,21 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class MoveToDir : IWiredEffect, IWired
+    public class MoveToDir : WiredActionBase, IWiredEffect, IWired
     {
-        private Room room;
-        private WiredHandler handler;
-        private readonly int itemID;
-        private List<Item> items;
-        private bool isDisposed;
-        private MovementDirection movetodirMovement;
-        private MovementDirection startDirection;
-        private WhenMovementBlock whenMoveIsBlocked;
+        private MovementDirection MoveToDirMovement;
 
-        public MoveToDir(List<Item> items, Room room, WiredHandler handler, int itemID, int StartDirection, int WhenMoveIsBlocked)
+        public MoveToDir(Item item, Room room) : base(item, room, (int)WiredActionType.MOVE_TO_DIRECTION)
         {
-            this.items = items;
-            this.room = room;
-            this.handler = handler;
-            this.itemID = itemID;
-            this.isDisposed = false;
-
-            this.startDirection = (MovementDirection)StartDirection;
-            this.movetodirMovement = this.startDirection;
-            this.whenMoveIsBlocked = (WhenMovementBlock)WhenMoveIsBlocked;
+            this.MoveToDirMovement = MovementDirection.none;
         }
 
         public void Handle(RoomUser user, Item TriggerItem)
@@ -40,49 +23,46 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             this.HandleItems();
         }
 
-        public void Dispose()
-        {
-            this.isDisposed = true;
-            this.room = null;
-            this.handler = null;
-            if (this.items != null)
-            {
-                this.items.Clear();
-            }
-
-            this.items = null;
-        }
-
         private void HandleItems()
         {
-            foreach (Item roomItem in this.items.ToArray())
+            foreach (Item roomItem in this.Items.ToArray())
             {
                 this.HandleMovement(roomItem);
             }
         }
+        
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems();
+
+            MovementDirection startDirection = (MovementDirection)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+
+            this.MoveToDirMovement = startDirection;
+        }
 
         private void HandleMovement(Item item)
         {
-            if (this.room.GetRoomItemHandler().GetItem(item.Id) == null)
+            if (this.RoomInstance.GetRoomItemHandler().GetItem(item.Id) == null)
             {
                 return;
             }
 
-            Point newPoint = MovementManagement.HandleMovementDir(item.GetX, item.GetY, this.movetodirMovement);
+            Point newPoint = MovementManagement.HandleMovementDir(item.GetX, item.GetY, this.MoveToDirMovement);
 
-            RoomUser roomUser = this.room.GetRoomUserManager().GetUserForSquare(newPoint.X, newPoint.Y);
-            if (roomUser != null) // colisión
+            RoomUser roomUser = this.RoomInstance.GetRoomUserManager().GetUserForSquare(newPoint.X, newPoint.Y);
+            if (roomUser != null)
             {
-                this.handler.TriggerCollision(roomUser, item);
+                this.RoomInstance.GetWiredHandler().TriggerCollision(roomUser, item);
                 return;
             }
 
-            //Point newPoint = base.HandleMovement(item.Coordinate, this.startDirection);
+            MovementDirection startDirection = (MovementDirection)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+            WhenMovementBlock whenMoveIsBlocked = (WhenMovementBlock)((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
 
             int OldX = item.GetX;
             int OldY = item.GetY;
             double OldZ = item.GetZ;
-            if (this.room.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
+            if (this.RoomInstance.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
             {
                 ServerPacket Message = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
                 Message.WriteInteger(OldX);
@@ -94,11 +74,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 Message.WriteString(OldZ.ToString().Replace(',', '.'));
                 Message.WriteString(item.GetZ.ToString().Replace(',', '.'));
                 Message.WriteInteger(0);
-                this.room.SendPacket(Message);
+                this.RoomInstance.SendPacket(Message);
                 return;
             }
 
-            switch (this.whenMoveIsBlocked)
+            switch (whenMoveIsBlocked)
             {
                 #region None
                 case WhenMovementBlock.none:
@@ -110,348 +90,348 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 #region Right45
                 case WhenMovementBlock.right45:
                     {
-                        if (this.movetodirMovement == MovementDirection.right)
+                        if (this.MoveToDirMovement == MovementDirection.right)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.left)
+                        else if (this.MoveToDirMovement == MovementDirection.left)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.up)
+                        else if (this.MoveToDirMovement == MovementDirection.up)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.down)
+                        else if (this.MoveToDirMovement == MovementDirection.down)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.upleft)
+                        else if (this.MoveToDirMovement == MovementDirection.upleft)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.upright)
+                        else if (this.MoveToDirMovement == MovementDirection.upright)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
                             return;
                         }
-                        else if (this.movetodirMovement == MovementDirection.downright)
+                        else if (this.MoveToDirMovement == MovementDirection.downright)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.downleft)
+                        else if (this.MoveToDirMovement == MovementDirection.downleft)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
                         }
@@ -462,188 +442,188 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 #region Right90
                 case WhenMovementBlock.right90:
                     {
-                        if (this.movetodirMovement == MovementDirection.right)
+                        if (this.MoveToDirMovement == MovementDirection.right)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.left)
+                        else if (this.MoveToDirMovement == MovementDirection.left)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.up)
+                        else if (this.MoveToDirMovement == MovementDirection.up)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.down)
+                        else if (this.MoveToDirMovement == MovementDirection.down)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.upleft)
+                        else if (this.MoveToDirMovement == MovementDirection.upleft)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.upright)
+                        else if (this.MoveToDirMovement == MovementDirection.upright)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
                             return;
                         }
-                        else if (this.movetodirMovement == MovementDirection.downright)
+                        else if (this.MoveToDirMovement == MovementDirection.downright)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.downleft)
+                        else if (this.MoveToDirMovement == MovementDirection.downleft)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
                         }
@@ -654,347 +634,347 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 #region Left45
                 case WhenMovementBlock.left45:
                     {
-                        if (this.movetodirMovement == MovementDirection.right)
+                        if (this.MoveToDirMovement == MovementDirection.right)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.left)
+                        else if (this.MoveToDirMovement == MovementDirection.left)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.up)
+                        else if (this.MoveToDirMovement == MovementDirection.up)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.down)
+                        else if (this.MoveToDirMovement == MovementDirection.down)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.upleft)
+                        else if (this.MoveToDirMovement == MovementDirection.upleft)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.upright)
+                        else if (this.MoveToDirMovement == MovementDirection.upright)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.downright)
+                        else if (this.MoveToDirMovement == MovementDirection.downright)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.downleft)
+                        else if (this.MoveToDirMovement == MovementDirection.downleft)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
                         }
@@ -1005,187 +985,187 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 #region Left90
                 case WhenMovementBlock.left90:
                     {
-                        if (this.movetodirMovement == MovementDirection.right)
+                        if (this.MoveToDirMovement == MovementDirection.right)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.left)
+                        else if (this.MoveToDirMovement == MovementDirection.left)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.up)
+                        else if (this.MoveToDirMovement == MovementDirection.up)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.down)
+                        else if (this.MoveToDirMovement == MovementDirection.down)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY)) // derecha
                             {
-                                this.movetodirMovement = MovementDirection.right;
+                                this.MoveToDirMovement = MovementDirection.right;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY - 1)) // arriba
                             {
-                                this.movetodirMovement = MovementDirection.up;
+                                this.MoveToDirMovement = MovementDirection.up;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY)) // izq
                             {
-                                this.movetodirMovement = MovementDirection.left;
+                                this.MoveToDirMovement = MovementDirection.left;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX, item.GetY + 1)) // abajo
                             {
-                                this.movetodirMovement = MovementDirection.down;
+                                this.MoveToDirMovement = MovementDirection.down;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.upleft)
+                        else if (this.MoveToDirMovement == MovementDirection.upleft)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.upright)
+                        else if (this.MoveToDirMovement == MovementDirection.upright)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.downright)
+                        else if (this.MoveToDirMovement == MovementDirection.downright)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
                         }
-                        else if (this.movetodirMovement == MovementDirection.downleft)
+                        else if (this.MoveToDirMovement == MovementDirection.downleft)
                         {
-                            if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
+                            if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY + 1)) // abajo derecha
                             {
-                                this.movetodirMovement = MovementDirection.downright;
+                                this.MoveToDirMovement = MovementDirection.downright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX + 1, item.GetY - 1)) // arriba derecha
                             {
-                                this.movetodirMovement = MovementDirection.upright;
+                                this.MoveToDirMovement = MovementDirection.upright;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY - 1)) // arriba izq
                             {
-                                this.movetodirMovement = MovementDirection.upleft;
+                                this.MoveToDirMovement = MovementDirection.upleft;
                                 break;
                             }
-                            else if (this.room.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
+                            else if (this.RoomInstance.GetGameMap().CanStackItem(item.GetX - 1, item.GetY + 1)) // abajo izq
                             {
-                                this.movetodirMovement = MovementDirection.downleft;
+                                this.MoveToDirMovement = MovementDirection.downleft;
                                 break;
                             }
                         }
@@ -1196,37 +1176,37 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 #region Turn Back
                 case WhenMovementBlock.turnback:
                     {
-                        if (this.movetodirMovement == MovementDirection.right)
+                        if (this.MoveToDirMovement == MovementDirection.right)
                         {
-                            this.movetodirMovement = MovementDirection.left;
+                            this.MoveToDirMovement = MovementDirection.left;
                         }
-                        else if (this.movetodirMovement == MovementDirection.left)
+                        else if (this.MoveToDirMovement == MovementDirection.left)
                         {
-                            this.movetodirMovement = MovementDirection.right;
+                            this.MoveToDirMovement = MovementDirection.right;
                         }
-                        else if (this.movetodirMovement == MovementDirection.up)
+                        else if (this.MoveToDirMovement == MovementDirection.up)
                         {
-                            this.movetodirMovement = MovementDirection.down;
+                            this.MoveToDirMovement = MovementDirection.down;
                         }
-                        else if (this.movetodirMovement == MovementDirection.down)
+                        else if (this.MoveToDirMovement == MovementDirection.down)
                         {
-                            this.movetodirMovement = MovementDirection.up;
+                            this.MoveToDirMovement = MovementDirection.up;
                         }
-                        else if (this.movetodirMovement == MovementDirection.upright)
+                        else if (this.MoveToDirMovement == MovementDirection.upright)
                         {
-                            this.movetodirMovement = MovementDirection.downleft;
+                            this.MoveToDirMovement = MovementDirection.downleft;
                         }
-                        else if (this.movetodirMovement == MovementDirection.downleft)
+                        else if (this.MoveToDirMovement == MovementDirection.downleft)
                         {
-                            this.movetodirMovement = MovementDirection.upright;
+                            this.MoveToDirMovement = MovementDirection.upright;
                         }
-                        else if (this.movetodirMovement == MovementDirection.upleft)
+                        else if (this.MoveToDirMovement == MovementDirection.upleft)
                         {
-                            this.movetodirMovement = MovementDirection.downright;
+                            this.MoveToDirMovement = MovementDirection.downright;
                         }
-                        else if (this.movetodirMovement == MovementDirection.downright)
+                        else if (this.MoveToDirMovement == MovementDirection.downright)
                         {
-                            this.movetodirMovement = MovementDirection.upleft;
+                            this.MoveToDirMovement = MovementDirection.upleft;
                         }
                         break;
                     }
@@ -1234,13 +1214,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 #region Random
                 case WhenMovementBlock.turnrandom:
                     {
-                        this.movetodirMovement = (MovementDirection)new Random().Next(1, 7);
+                        this.MoveToDirMovement = (MovementDirection)new Random().Next(1, 7);
                         break;
                     }
                     #endregion
             }
 
-            newPoint = MovementManagement.HandleMovementDir(item.GetX, item.GetY, this.movetodirMovement);
+            newPoint = MovementManagement.HandleMovementDir(item.GetX, item.GetY, this.MoveToDirMovement);
 
             if (newPoint != item.Coordinate)
             {
@@ -1248,7 +1228,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 OldY = item.GetY;
                 OldZ = item.GetZ;
 
-                if (this.room.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
+                if (this.RoomInstance.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
                 {
                     ServerPacket Message = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
                     Message.WriteInteger(OldX);
@@ -1260,7 +1240,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     Message.WriteString(OldZ.ToString().Replace(',', '.'));
                     Message.WriteString(item.GetZ.ToString().Replace(',', '.'));
                     Message.WriteInteger(0);
-                    this.room.SendPacket(Message);
+                    this.RoomInstance.SendPacket(Message);
                 }
             }
             return;
@@ -1268,65 +1248,35 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, Convert.ToInt32(this.startDirection).ToString(), Convert.ToInt32(this.whenMoveIsBlocked).ToString(), false, this.items);
+            MovementDirection startDirection = (MovementDirection)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+            WhenMovementBlock whenMoveIsBlocked = (WhenMovementBlock)((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
+
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, Convert.ToInt32(startDirection).ToString(), Convert.ToInt32(whenMoveIsBlocked).ToString(), false, this.Items);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            string triggerItem = row["triggers_item"].ToString();
+            string triggerItems = row["triggers_item"].ToString();
 
             if (int.TryParse(row["trigger_data_2"].ToString(), out int startDirection))
-                this.startDirection = (MovementDirection)startDirection;
-
-            this.movetodirMovement = this.startDirection;
+                this.IntParams.Add(startDirection);
 
             if (int.TryParse(row["trigger_data"].ToString(), out int whenMoveIsBlocked))
-                this.whenMoveIsBlocked = (WhenMovementBlock)whenMoveIsBlocked;
+                this.IntParams.Add(whenMoveIsBlocked);
 
-            if (triggerItem == "")
+            if (triggerItems == "")
             {
                 return;
             }
 
-            foreach (string itemid in triggerItem.Split(';'))
+            foreach (string itemId in triggerItems.Split(';'))
             {
-                Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(itemid));
-                if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.itemID)
-                {
-                    this.items.Add(roomItem);
-                }
+                if (!int.TryParse(itemId, out int id))
+                    continue;
+
+                if(!this.StuffIds.Contains(id))
+                    this.StuffIds.Add(id);
             }
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(10);
-            Message.WriteInteger(this.items.Count);
-            foreach (Item roomItem in this.items)
-            {
-                Message.WriteInteger(roomItem.Id);
-            }
-
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString("");
-            Message.WriteInteger(2);
-
-            Message.WriteInteger((this.startDirection == MovementDirection.none) ? 0 : Convert.ToInt32(this.startDirection)); //Stardirection
-            Message.WriteInteger(Convert.ToInt32(this.whenMoveIsBlocked)); //WhenmoveIsblocked
-
-            Message.WriteInteger(0);
-            Message.WriteInteger(13);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
-        }
-
-        public bool Disposed()
-        {
-            return this.isDisposed;
         }
     }
 }

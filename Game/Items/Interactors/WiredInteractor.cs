@@ -21,7 +21,7 @@ namespace Butterfly.Game.Items.Interactors
 
             if (Item.WiredHandler != null)
             {
-                Item.WiredHandler.OnTrigger(Session, Item.GetBaseItem().SpriteId);
+                Item.WiredHandler.OnTrigger(Session);
             }
         }
     }

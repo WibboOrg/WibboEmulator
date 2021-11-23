@@ -8,18 +8,16 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 {
-    public class UserCollision : IWired
+    public class UserCollision : WiredTriggerBase, IWired
     {
         private Item item;
         private WiredHandler handler;
         private readonly RoomEventDelegate delegateFunction;
 
-        public UserCollision(Item item, WiredHandler handler, Room room)
+        public UserCollision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION)
         {
-            this.item = item;
-            this.handler = handler;
             this.delegateFunction = new RoomEventDelegate(this.userCollisionDelegate);
-            room.OnUserCls += this.delegateFunction;
+            this.RoomInstance.GetWiredHandler().GetRoom().OnUserCls += this.delegateFunction;
         }
 
         private void userCollisionDelegate(object sender, EventArgs e)
@@ -30,40 +28,22 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
                 return;
             }
 
-            this.handler.ExecutePile(this.item.Coordinate, user, null);
+            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, null);
         }
-        public void Dispose()
+        public override void Dispose()
         {
-            this.handler.GetRoom().OnUserCls -= this.delegateFunction;
-            this.item = null;
-            this.handler = null;
+            this.RoomInstance.GetWiredHandler().GetRoom().OnUserCls -= this.delegateFunction;
+
+            base.Dispose();
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, string.Empty, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.item.Id);
-            Message.WriteString("");
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(8);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
         }
     }
 }

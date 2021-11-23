@@ -1,17 +1,18 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Wireds;
 using Butterfly.Game.Clients;
+using Butterfly.Game.Items;
 using System.Collections.Generic;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers
 {
     public class WiredTriggerBase : WiredBase
     {
-        internal WiredTriggerBase() : base()
+        internal WiredTriggerBase(Item item, Room room, int type) : base(item, room, type)
         {
             
         }
 
-        internal override void OnTrigger(Client Session)
+        public override void OnTrigger(Client Session)
         {
             Session.SendPacket(new WiredFurniTriggerMessageComposer(this.StuffTypeSelectionEnabled, this.FurniLimit, this.StuffIds, this.StuffTypeId, this.Id,
                 this.StringParam, this.IntParams, this.StuffTypeSelectionCode, this.Type, this.Conflicting));

@@ -7,79 +7,47 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 {
-    public class BotReadchedAvatar : IWired
+    public class BotReadchedAvatar : WiredTriggerBase, IWired
     {
-        private Item item;
-        private WiredHandler handler;
         private readonly BotCollisionDelegate delegateFunction;
-        private bool disposed;
 
-        private string NameBot;
-
-        public BotReadchedAvatar(Item ThisWired, WiredHandler handler, string pNameBot)
+        public BotReadchedAvatar(Item item, Room room) : base(item, room, (int)WiredTriggerType.BOT_REACHED_AVATAR)
         {
-            this.item = ThisWired;
-            this.handler = handler;
-            this.NameBot = pNameBot;
             this.delegateFunction = new BotCollisionDelegate(this.Collision);
-            this.handler.TrgBotCollision += this.delegateFunction;
+            this.RoomInstance.GetWiredHandler().TrgBotCollision += this.delegateFunction;
         }
 
-        private void Collision(RoomUser user, string pBotName)
+        private void Collision(RoomUser user, string botName)
         {
             if (user == null || user.IsBot)
             {
                 return;
             }
 
-            if (!string.IsNullOrEmpty(this.NameBot) && this.NameBot != pBotName)
+            if (!string.IsNullOrEmpty(this.StringParam) && this.StringParam != botName)
             {
                 return;
             }
 
-            this.handler.ExecutePile(this.item.Coordinate, user, null);
+            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, null);
         }
 
-        public bool Disposed()
-        {
-            return this.disposed;
-        }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            this.NameBot = null;
-            this.disposed = true;
-            this.handler.TrgBotCollision -= this.delegateFunction;
-            this.handler = null;
-            this.item = null;
+            base.Dispose();
+
+            this.RoomInstance.GetWiredHandler().TrgBotCollision -= this.delegateFunction;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.NameBot, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            this.NameBot = row["trigger_data"].ToString();
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.item.Id);
-            Message.WriteString(this.NameBot);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(14);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
+            this.StringParam = row["trigger_data"].ToString();
         }
     }
 }

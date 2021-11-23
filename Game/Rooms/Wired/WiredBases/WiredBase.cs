@@ -8,6 +8,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
     {
         internal bool StuffTypeSelectionEnabled;
         internal int FurniLimit;
+
         internal List<int> StuffIds;
         internal int StuffTypeId;
         internal int Id;
@@ -18,44 +19,99 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
         internal List<int> Conflicting;
         internal int Delay;
 
-        internal bool isDisposed;
+        internal Item ItemInstance;
+        internal Room RoomInstance;
+        internal List<Item> Items;
 
-        internal WiredBase()
+        internal bool IsStaff;
+        internal bool IsGod;
+        internal bool IsDisposed;
+
+        internal WiredBase(Item item, Room room, int type)
         {
+            this.Items = new List<Item>();
+            this.ItemInstance = item;
+            this.RoomInstance = room;
+            this.Type = type;
+
+            this.Id = item.Id;
+            this.StuffTypeId = item.GetBaseItem().SpriteId;
+
             this.StuffTypeSelectionEnabled = false;
             this.FurniLimit = 10;
             this.StuffIds = new List<int>();
-            this.StuffTypeId = 0;
-            this.Id = 0;
             this.StringParam = "";
             this.IntParams = new List<int>();
             this.StuffTypeSelectionCode = 0;
-            this.Type = 0;
             this.Conflicting = new List<int>();
             this.Delay = 0;
+
+            this.IsStaff = false;
+            this.IsGod = false;
+            this.IsDisposed = false;
         }
-        
-        internal virtual void OnTrigger(Client Session)
+
+        public void Init(List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod)
+        {
+            this.IntParams = intParams;
+            this.StringParam = stringParam;
+            this.StuffIds = stuffIds;
+            this.StuffTypeSelectionCode = selectionCode;
+            this.Delay = delay;
+            this.IsStaff = isStaff;
+            this.IsGod = isGod;
+        }
+
+        public virtual void OnTrigger(Client Session)
         {
             
         }
 
         public virtual void Dispose()
         {
-            this.isDisposed = true;
+            this.IsDisposed = true;
+
+            if (this.Items != null)
+            {
+                this.Items.Clear();
+                this.Items = null;
+            }
+
+            if(this.StuffIds != null)
+            {
+                this.StuffIds.Clear();
+                this.StuffIds = null;
+            }
+
+            if (this.IntParams != null)
+            {
+                this.IntParams.Clear();
+                this.IntParams = null;
+            }
+
+            if (this.Conflicting != null)
+            {
+                this.Conflicting.Clear();
+                this.Conflicting = null;
+            }
         }
 
         public bool Disposed()
         {
-            return this.isDisposed;
+            return this.IsDisposed;
         }
 
-        internal List<Item> GetItems(List<int> stuffIds, Room room)
+        public virtual void LoadItems(bool inDatabase = false)
+        {
+            this.Items = this.GetItems();
+        }
+
+        internal List<Item> GetItems()
         {
             List<Item> listItem = new List<Item>();
-            foreach (int itemId in stuffIds)
+            foreach (int itemId in this.StuffIds)
             {
-                Item item = room.GetRoomItemHandler().GetItem(itemId);
+                Item item = this.RoomInstance.GetRoomItemHandler().GetItem(itemId);
                 if (item != null && item.GetBaseItem().Type == 's')
                 {
                     listItem.Add(item);

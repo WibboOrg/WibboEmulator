@@ -325,4 +325,11 @@ namespace Butterfly.Game.Rooms.Map.Movement
             rotation = 6;
         }
     }
+    public enum RotationState
+    {
+        NONE,
+        CLOCWISE,
+        COUNTERCLOCKWISE,
+        RANDOM,
+    }
 }

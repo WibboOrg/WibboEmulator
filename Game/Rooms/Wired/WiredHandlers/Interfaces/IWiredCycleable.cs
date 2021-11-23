@@ -7,6 +7,6 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces
 
         bool Disposed();
 
-        int DelayCycle { get; set; }
+        int DelayCycle { get; }
     }
 }

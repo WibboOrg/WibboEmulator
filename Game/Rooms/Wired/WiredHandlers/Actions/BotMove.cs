@@ -1,110 +1,65 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class BotMove : IWired, IWiredEffect
+    public class BotMove : WiredActionBase, IWired, IWiredEffect
     {
-        private readonly WiredHandler handler;
-        private readonly int itemID;
-        private string NameBot;
-        private List<Item> items;
-
-        public BotMove(string NameBot, List<Item> items, WiredHandler handler, int itemID)
+        public BotMove(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_MOVE)
         {
-            this.itemID = itemID;
-            this.handler = handler;
-            this.NameBot = NameBot;
-            this.items = items;
+            this.FurniLimit = 1;
         }
 
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            if (this.NameBot == "" || this.items.Count == 0)
+            if (this.StringParam == "" || this.Items.Count == 0)
             {
                 return;
             }
 
-            Room room = this.handler.GetRoom();
-            RoomUser Bot = room.GetRoomUserManager().GetBotOrPetByName(this.NameBot);
-            if (Bot == null)
+            RoomUser bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(this.StringParam);
+            if (bot == null)
             {
                 return;
             }
 
-            Item roomItem = this.items[0];
-            if (roomItem == null)
+            Item item = this.Items[0];
+            if (item == null)
             {
                 return;
             }
 
-            if (roomItem.Coordinate != Bot.Coordinate)
+            if (item.Coordinate != bot.Coordinate)
             {
-                Bot.MoveTo(roomItem.GetX, roomItem.GetY, true);
+                bot.MoveTo(item.GetX, item.GetY, true);
             }
-        }
-
-        public void Dispose()
-        {
-            this.NameBot = null;
-            if (this.items != null)
-            {
-                this.items.Clear();
-            }
-
-            this.items = null;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.NameBot, false, this.items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, false, this.Items);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            this.NameBot = row["trigger_data"].ToString();
+            this.StringParam = row["trigger_data"].ToString();
 
-            string itemslist = row["triggers_item"].ToString();
+            string triggerItems = row["triggers_item"].ToString();
 
-            if (itemslist == "")
+            if (triggerItems == "")
                 return;
 
-            foreach (string item in itemslist.Split(';'))
+            foreach (string itemId in triggerItems.Split(';'))
             {
-                Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(item));
-                if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.itemID)
-                {
-                    this.items.Add(roomItem);
-                }
-            }
-        }
+                if (!int.TryParse(itemId, out int id))
+                    continue;
 
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(1);
-            Message.WriteInteger(this.items.Count);
-            foreach (Item roomItem in this.items)
-            {
-                Message.WriteInteger(roomItem.Id);
+                if(!this.StuffIds.Contains(id))
+                    this.StuffIds.Add(id);
             }
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString(this.NameBot);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(21); //7
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
         }
     }
 }

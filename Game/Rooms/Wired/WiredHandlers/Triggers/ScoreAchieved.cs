@@ -8,66 +8,44 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 {
-    public class ScoreAchieved : IWired
+    public class ScoreAchieved : WiredTriggerBase, IWired
     {
-        private Item item;
-        private WiredHandler handler;
-        private int scoreLevel;
         private readonly TeamScoreChangedDelegate scoreChangedDelegate;
 
-        public ScoreAchieved(Item item, WiredHandler handler, int scoreLevel, GameManager gameManager)
+        public ScoreAchieved(Item item, Room room) : base(item, room, (int)WiredTriggerType.SCORE_ACHIEVED)
         {
-            this.item = item;
-            this.handler = handler;
-            this.scoreLevel = scoreLevel;
             this.scoreChangedDelegate = new TeamScoreChangedDelegate(this.gameManager_OnScoreChanged);
-            gameManager.OnScoreChanged += this.scoreChangedDelegate;
+            this.RoomInstance.GetGameManager().OnScoreChanged += this.scoreChangedDelegate;
         }
 
         private void gameManager_OnScoreChanged(object sender, TeamScoreChangedArgs e)
         {
-            if (e.Points <= (this.scoreLevel - 1))
+            int scoreLevel = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+            if (e.Points <= scoreLevel - 1)
             {
                 return;
             }
 
-            this.handler.ExecutePile(this.item.Coordinate, e.user, null);
+            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, e.user, null);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            this.handler.GetRoom().GetGameManager().OnScoreChanged -= this.scoreChangedDelegate;
-            this.item = null;
-            this.handler = null;
+            this.RoomInstance.GetWiredHandler().GetRoom().GetGameManager().OnScoreChanged -= this.scoreChangedDelegate;
+
+            base.Dispose();
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.scoreLevel.ToString(), false, null);
+            int scoreLevel = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, scoreLevel.ToString(), false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
             if (int.TryParse(row["trigger_data"].ToString(), out int score))
-                this.scoreLevel = score;
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(5);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.item.Id);
-            Message.WriteString("");
-            Message.WriteInteger(1);
-            Message.WriteInteger(this.scoreLevel);
-            Message.WriteInteger(0);
-            Message.WriteInteger(10);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
+                this.IntParams.Add(score);
         }
     }
 }

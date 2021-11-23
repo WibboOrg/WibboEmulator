@@ -7,86 +7,55 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class BotFollowAvatar : IWired, IWiredEffect
+    public class BotFollowAvatar : WiredActionBase, IWired, IWiredEffect
     {
-        private readonly WiredHandler handler;
-        private readonly int itemID;
-        private string NameBot;
-        private bool IsFollow;
-
-        public BotFollowAvatar(string namebot, bool isfollow, WiredHandler handler, int itemID)
+        public BotFollowAvatar(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_FOLLOW_AVATAR)
         {
-            this.itemID = itemID;
-            this.handler = handler;
-            this.NameBot = namebot;
-            this.IsFollow = isfollow;
         }
 
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            if (string.IsNullOrEmpty(this.NameBot))
+            if (string.IsNullOrWhiteSpace(this.StringParam))
             {
                 return;
             }
 
-            Room room = this.handler.GetRoom();
-            RoomUser Bot = room.GetRoomUserManager().GetBotOrPetByName(this.NameBot);
-            if (Bot == null)
+            RoomUser bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(this.StringParam);
+            if (bot == null)
             {
                 return;
             }
 
             if (user != null && !user.IsBot && user.GetClient() != null)
             {
-                if (this.IsFollow)
+                bool isFollow = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1);
+                if (isFollow)
                 {
-                    if (Bot.BotData.FollowUser != user.VirtualId)
+                    if (bot.BotData.FollowUser != user.VirtualId)
                     {
-                        Bot.BotData.FollowUser = user.VirtualId;
+                        bot.BotData.FollowUser = user.VirtualId;
                     }
                 }
                 else
                 {
-                    Bot.BotData.FollowUser = 0;
+                    bot.BotData.FollowUser = 0;
                 }
             }
         }
 
-        public void Dispose()
-        {
-            this.NameBot = null;
-        }
-
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.NameBot, this.IsFollow, null);
+            bool isFollow = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1);
+
+            WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, isFollow, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            this.IsFollow = (row["all_user_triggerable"].ToString() == "1");
+            if (int.TryParse(row["all_user_triggerable"].ToString(), out int isFollow))
+                this.IntParams.Add(isFollow);
 
-            this.NameBot = row["trigger_data"].ToString();
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString(this.NameBot);
-            Message.WriteInteger(1);
-            Message.WriteInteger(this.IsFollow ? 1 : 0);
-
-            Message.WriteInteger(0);
-            Message.WriteInteger(25); //7
-            Message.WriteInteger(0);
-
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
+            this.StringParam = row["trigger_data"].ToString();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
 using System;
@@ -11,99 +9,88 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 {
     public class WalksOffFurni : WiredTriggerBase, IWired, IWiredCycleable
     {
-        private Item item;
-        private WiredHandler handler;
-        private List<Item> items;
         private readonly UserAndItemDelegate delegateFunction;
-        public int DelayCycle { get => this.Delay; set => this.Delay = value; }
+        public int DelayCycle { get => this.Delay; }
 
-        public WalksOffFurni(Item item, WiredHandler handler, List<Item> targetItems, List<int> stuffIds, int requiredCycles)
+        public WalksOffFurni(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_WALKS_OFF_FURNI)
         {
-            this.Id = item.Id;
-            this.Type = (int)WiredTriggerType.AVATAR_WALKS_OFF_FURNI;
             this.StuffTypeSelectionEnabled = true;
-            this.StuffTypeId = item.GetBaseItem().SpriteId;
-            this.StuffIds = stuffIds;
 
-            this.item = item;
-            this.handler = handler;
-            this.items = targetItems;
-            this.delegateFunction = new UserAndItemDelegate(this.targetItem_OnUserWalksOffFurni);
-            this.Delay = requiredCycles;
-            foreach (Item roomItem in targetItems)
-            {
-                roomItem.OnUserWalksOffFurni += this.delegateFunction;
-            }
+            this.delegateFunction = new UserAndItemDelegate(this.OnUserWalksOffFurni);
+            
         }
 
         public bool OnCycle(RoomUser user, Item item)
         {
             if (user != null)
             {
-                this.handler.ExecutePile(this.item.Coordinate, user, item);
+                this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, item);
             }
 
             return false;
         }
 
-        private void targetItem_OnUserWalksOffFurni(RoomUser user, Item item)
+        private void OnUserWalksOffFurni(RoomUser user, Item item)
         {
             if (this.DelayCycle > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, user, item, this.DelayCycle));
+                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, item, this.DelayCycle));
             }
             else
             {
-                this.handler.ExecutePile(this.item.Coordinate, user, item);
+                this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, item);
+            }
+        }
+
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems();
+
+            if (this.Items != null)
+            {
+                foreach (Item roomItem in this.Items)
+                {
+                    roomItem.OnUserWalksOffFurni += this.delegateFunction;
+                }
             }
         }
 
         public override void Dispose()
         {
-            this.isDisposed = true;
-            if (this.items != null)
+            if (this.Items != null)
             {
-                foreach (Item roomItem in this.items)
+                foreach (Item roomItem in this.Items)
                 {
                     roomItem.OnUserWalksOffFurni -= this.delegateFunction;
                 }
-
-                this.items.Clear();
             }
-            this.items = null;
-            this.item = null;
-            this.handler = null;
+
+            base.Dispose();
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.DelayCycle.ToString(), false, this.items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.DelayCycle.ToString(), false, this.Items);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
             if (int.TryParse(row["trigger_data"].ToString(), out int delay))
-                this.DelayCycle = delay;
+                this.Delay = delay;
 
-            string itemslist = row["triggers_item"].ToString();
+            string triggerItems = row["triggers_item"].ToString();
 
-            if (itemslist == "")
+            if (triggerItems == "")
                 return;
 
-            foreach (string item in itemslist.Split(';'))
+            foreach (string itemId in triggerItems.Split(';'))
             {
-                Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(item));
-                if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.item.Id)
-                {
-                    roomItem.OnUserWalksOffFurni += this.delegateFunction;
-                    this.items.Add(roomItem);
-                }
-            }
-        }
+                if (!int.TryParse(itemId, out int id))
+                    continue;
 
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            this.OnTrigger(Session);
+                if(!this.StuffIds.Contains(id))
+                    this.StuffIds.Add(id);
+            }
         }
     }
 }

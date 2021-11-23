@@ -7,39 +7,27 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class ShowMessage : IWired, IWiredEffect, IWiredCycleable
+    public class ShowMessage : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
     {
-        private readonly WiredHandler handler;
-        private readonly int itemID;
-        private string message;
-        public int DelayCycle { get; set; }
-        private bool disposed;
-
-        public ShowMessage(string message, WiredHandler handler, int itemID, int mdelay)
+        public ShowMessage(Item item, Room room) : base(item, room, (int)WiredActionType.CHAT)
         {
-            this.itemID = itemID;
-            this.handler = handler;
-            this.message = message;
-
-            this.DelayCycle = mdelay;
-            this.disposed = false;
         }
 
         private void HandleEffect(RoomUser user, Item TriggerItem)
         {
-            if (this.message == "")
+            if (this.StringParam == "")
             {
                 return;
             }
 
             if (user != null && !user.IsBot && user.GetClient() != null)
             {
-                string TextMessage = this.message;
+                string TextMessage = this.StringParam;
                 TextMessage = TextMessage.Replace("#username#", user.GetUsername());
                 TextMessage = TextMessage.Replace("#point#", user.WiredPoints.ToString());
-                TextMessage = TextMessage.Replace("#roomname#", this.handler.GetRoom().RoomData.Name.ToString());
-                TextMessage = TextMessage.Replace("#vote_yes#", this.handler.GetRoom().VotedYesCount.ToString());
-                TextMessage = TextMessage.Replace("#vote_no#", this.handler.GetRoom().VotedNoCount.ToString());
+                TextMessage = TextMessage.Replace("#roomname#", this.RoomInstance.GetWiredHandler().GetRoom().RoomData.Name.ToString());
+                TextMessage = TextMessage.Replace("#vote_yes#", this.RoomInstance.GetWiredHandler().GetRoom().VotedYesCount.ToString());
+                TextMessage = TextMessage.Replace("#vote_no#", this.RoomInstance.GetWiredHandler().GetRoom().VotedNoCount.ToString());
 
                 if (user.Roleplayer != null)
                 {
@@ -63,14 +51,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 return;
             }
 
-            if (this.message == "")
+            if (this.StringParam == "")
             {
                 return;
             }
 
             if (this.DelayCycle > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
+                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
             }
             else
             {
@@ -78,46 +66,17 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             }
         }
 
-        public void Dispose()
-        {
-            this.disposed = true;
-            this.message = null;
-        }
-
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, this.DelayCycle.ToString(), this.message, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, this.DelayCycle.ToString(), this.StringParam, false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            this.message = row["trigger_data"].ToString();
+            this.StringParam = row["trigger_data"].ToString();
 
             if (int.TryParse(row["trigger_data_2"].ToString(), out int delay))
-                this.DelayCycle = delay;
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString(this.message);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(7); //7
-            Message.WriteInteger(this.DelayCycle);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
-        }
-
-        public bool Disposed()
-        {
-            return this.disposed;
+                this.Delay = delay;
         }
     }
 }

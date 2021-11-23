@@ -157,4 +157,33 @@ namespace Butterfly.Game.Rooms.Wired
             ItemWiredDao.Insert(dbClient, triggerId, triggerData, triggerData2, allUsertriggerable, triggersitem);
         }
     }
+
+    public class ItemsPosReset
+    {
+        public int Id;
+
+        public int X;
+        public int Y;
+        public double Z;
+        public int Rot;
+        public string ExtraData;
+
+        public ItemsPosReset(int id, int x, int y, double z, int rot, string extraData)
+        {
+            this.Id = id;
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+            this.Rot = rot;
+
+            if (int.TryParse(extraData, out int result) || (!extraData.Contains(";") && !extraData.Contains(":")))
+            {
+                this.ExtraData = extraData;
+            }
+            else
+            {
+                this.ExtraData = "Null";
+            }
+        }
+    }
 }

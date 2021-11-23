@@ -11,44 +11,15 @@ using System.Drawing;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class Escape : IWiredEffect, IWired
+    public class Escape : WiredActionBase, IWiredEffect, IWired
     {
-        private Room room;
-        private WiredHandler handler;
-        private readonly int itemID;
-        private List<Item> items;
-        private bool isDisposed;
-
-        public Escape(List<Item> items, Room room, WiredHandler handler, int itemID)
+        public Escape(Item item, Room room) : base(item, room, (int)WiredActionType.FLEE)
         {
-            this.items = items;
-            this.room = room;
-            this.handler = handler;
-            this.itemID = itemID;
-            this.isDisposed = false;
         }
 
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            this.HandleItems();
-        }
-
-        public void Dispose()
-        {
-            this.isDisposed = true;
-            this.room = null;
-            this.handler = null;
-            if (this.items != null)
-            {
-                this.items.Clear();
-            }
-
-            this.items = null;
-        }
-
-        private void HandleItems()
-        {
-            foreach (Item roomItem in this.items.ToArray())
+            foreach (Item roomItem in this.Items.ToArray())
             {
                 this.HandleMovement(roomItem);
             }
@@ -56,19 +27,19 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         private void HandleMovement(Item item)
         {
-            if (this.room.GetRoomItemHandler().GetItem(item.Id) == null)
+            if (this.RoomInstance.GetRoomItemHandler().GetItem(item.Id) == null)
             {
                 return;
             }
 
-            RoomUser roomUser = this.room.GetGameMap().SquareHasUserNear(item.GetX, item.GetY);
+            RoomUser roomUser = this.RoomInstance.GetGameMap().SquareHasUserNear(item.GetX, item.GetY);
             if (roomUser != null)
             {
-                this.handler.TriggerCollision(roomUser, item);
+                this.RoomInstance.GetWiredHandler().TriggerCollision(roomUser, item);
                 return;
             }
 
-            item.movement = this.room.GetGameMap().GetEscapeMovement(item.GetX, item.GetY, item.movement);
+            item.movement = this.RoomInstance.GetGameMap().GetEscapeMovement(item.GetX, item.GetY, item.movement);
             if (item.movement == MovementState.none)
             {
                 return;
@@ -81,7 +52,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 int OldX = item.GetX;
                 int OldY = item.GetY;
                 double OldZ = item.GetZ;
-                if (this.room.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
+                if (this.RoomInstance.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
                 {
                     ServerPacket Message = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
                     Message.WriteInteger(OldX);
@@ -93,10 +64,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     Message.WriteString(OldZ.ToString().Replace(',', '.'));
                     Message.WriteString(item.GetZ.ToString().Replace(',', '.'));
                     Message.WriteInteger(0);
-
-                    //ServerMessage Message = new ServerMessage(Outgoing.UpdateItemOnRoom);
-                    //item.Serialize(Message, room.OwnerId);
-                    this.room.SendPacket(Message);
+                    this.RoomInstance.SendPacket(Message);
                 }
             }
             return;
@@ -104,10 +72,10 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, string.Empty, false, this.items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
             string triggerItem = row["triggers_item"].ToString();
 
@@ -116,39 +84,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
             foreach (string itemid in triggerItem.Split(';'))
             {
-                Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(itemid));
-                if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.itemID)
+                Item roomItem = this.RoomInstance.GetRoomItemHandler().GetItem(Convert.ToInt32(itemid));
+                if (roomItem != null && !this.Items.Contains(roomItem) && roomItem.Id != this.Id)
                 {
-                    this.items.Add(roomItem);
+                    this.Items.Add(roomItem);
                 }
             }
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(10);
-            Message.WriteInteger(this.items.Count);
-            foreach (Item roomItem in this.items)
-            {
-                Message.WriteInteger(roomItem.Id);
-            }
-
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString("");
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(12);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
-        }
-
-        public bool Disposed()
-        {
-            return this.isDisposed;
         }
     }
 }

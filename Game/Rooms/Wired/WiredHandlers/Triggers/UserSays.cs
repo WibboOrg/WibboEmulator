@@ -1,26 +1,16 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
 using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 {
-    public class UserSays : IWired
+    public class UserSays : WiredTriggerBase, IWired
     {
-        private Item item;
-        private WiredHandler handler;
-        private bool isOwnerOnly;
-        private string triggerMessage;
         private readonly RoomUserSaysDelegate delegateFunction;
 
-        public UserSays(Item item, WiredHandler handler, bool isOwnerOnly, string triggerMessage, Room room)
+        public UserSays(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_SAYS_SOMETHING)
         {
-            this.item = item;
-            this.handler = handler;
-            this.isOwnerOnly = isOwnerOnly;
-            this.triggerMessage = triggerMessage;
             this.delegateFunction = new RoomUserSaysDelegate(this.OnUserSays);
             room.OnUserSays += this.delegateFunction;
         }
@@ -30,58 +20,45 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
             RoomUser user = e.User;
             string message = e.Message;
 
-            if (user != null && (!this.isOwnerOnly && this.canBeTriggered(message) && !string.IsNullOrEmpty(message)) || (this.isOwnerOnly && user.IsOwner() && this.canBeTriggered(message) && !string.IsNullOrEmpty(message)))
+            bool isOwnerOnly = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+
+            if (user != null && (!isOwnerOnly && this.canBeTriggered(message) && !string.IsNullOrEmpty(message)) || (isOwnerOnly && user.IsOwner() && this.canBeTriggered(message) && !string.IsNullOrEmpty(message)))
             {
-                this.handler.ExecutePile(this.item.Coordinate, user, null);
+                this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, null);
                 messageHandled = true;
             }
         }
 
         private bool canBeTriggered(string message)
         {
-            if (string.IsNullOrEmpty(this.triggerMessage))
+            if (string.IsNullOrEmpty(this.StringParam))
             {
                 return false;
             }
 
-            return message.ToLower() == this.triggerMessage.ToLower();
+            return message.ToLower() == this.StringParam.ToLower();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            this.handler.GetRoom().OnUserSays -= this.delegateFunction;
-            this.item = null;
-            this.handler = null;
-            this.triggerMessage = null;
+            base.Dispose();
+
+            this.RoomInstance.GetWiredHandler().GetRoom().OnUserSays -= this.delegateFunction;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.triggerMessage, this.isOwnerOnly, null);
+            bool isOwnerOnly = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, isOwnerOnly, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            this.triggerMessage = row["trigger_data"].ToString();
-            this.isOwnerOnly = row["all_user_triggerable"].ToString() == "1";
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.item.Id);
-            Message.WriteString(this.triggerMessage);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
+            this.StringParam = row["trigger_data"].ToString();
+            
+            if (int.TryParse(row["all_user_triggerable"].ToString(), out int isOwnerOnly))
+	            this.IntParams.Add(isOwnerOnly);
         }
     }
 }

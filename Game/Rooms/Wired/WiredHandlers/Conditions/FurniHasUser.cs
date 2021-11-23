@@ -1,38 +1,24 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 {
-    public class FurniHasUser : IWiredCondition, IWired
+    public class FurniHasUser : WiredConditionBase, IWiredCondition, IWired
     {
-        private Item item;
-        private List<Item> items;
-        private bool isDisposed;
-
-        public FurniHasUser(Item item, List<Item> items)
+        public FurniHasUser(Item item, Room room) : base(item, room, (int)WiredConditionType.FURNIS_HAVE_AVATARS)
         {
-            this.item = item;
-            this.items = items;
-            this.isDisposed = false;
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
         {
-            Room Room = this.item.GetRoom();
-            Gamemap map = Room.GetGameMap();
-
-            foreach (Item item2 in this.items)
+            foreach (Item item in this.Items)
             {
-                foreach (Point coord in item2.GetCoords)
+                foreach (Point coord in item.GetCoords)
                 {
-                    if (map.GetRoomUsers(coord).Count == 0)
+                    if (this.RoomInstance.GetGameMap().GetRoomUsers(coord).Count == 0)
                     {
                         return false;
                     }
@@ -44,64 +30,26 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, string.Empty, false, this.items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            string triggerItem = row["triggers_item"].ToString();
+            string triggerItems = row["triggers_item"].ToString();
 
-            if (triggerItem == "")
+            if (triggerItems == "")
             {
                 return;
             }
 
-            foreach (string item in triggerItem.Split(';'))
+            foreach (string itemId in triggerItems.Split(';'))
             {
-                Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(item));
-                if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.item.Id)
-                {
-                    this.items.Add(roomItem);
-                }
+                if (!int.TryParse(itemId, out int id))
+                    continue;
+
+                if(!this.StuffIds.Contains(id))
+                    this.StuffIds.Add(id);
             }
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(10);
-            Message.WriteInteger(this.items.Count);
-            foreach (Item roomItem in this.items)
-            {
-                Message.WriteInteger(roomItem.Id);
-            }
-
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.item.Id);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteBoolean(false);
-            Message.WriteBoolean(true);
-            Session.SendPacket(Message);
-        }
-
-        public void Dispose()
-        {
-            this.isDisposed = true;
-            this.item = null;
-            if (this.items != null)
-            {
-                this.items.Clear();
-            }
-
-            this.items = null;
-        }
-
-        public bool Disposed()
-        {
-            return this.isDisposed;
         }
     }
 }

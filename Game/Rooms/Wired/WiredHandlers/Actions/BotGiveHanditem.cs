@@ -7,63 +7,29 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class BotGiveHanditem : IWired, IWiredEffect
+    public class BotGiveHanditem : WiredActionBase, IWired, IWiredEffect
     {
-        private readonly WiredHandler handler;
-        private readonly int itemID;
-        private string message;
-
-        public BotGiveHanditem(string message, WiredHandler handler, int itemID)
+        public BotGiveHanditem(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_GIVE_HAND_ITEM)
         {
-            this.itemID = itemID;
-            this.handler = handler;
-            this.message = message;
         }
 
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            if (this.message == "")
-            {
-                return;
-            }
-
-            if (user != null && !user.IsBot && user.GetClient() != null)
-            {
-                user.SendWhisperChat(this.message);
-            }
-        }
-
-        public void Dispose()
-        {
-            this.message = null;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.message, false, null);
+            int handItemId = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, handItemId.ToString(), this.StringParam, false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            this.message = row["trigger_data"].ToString();
-        }
+            this.StringParam = row["trigger_data"].ToString();
 
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString(this.message);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(24); //7
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
+            if (int.TryParse(row["trigger_data2"].ToString(), out int handItemId))
+                this.IntParams.Add(handItemId);
         }
     }
 }

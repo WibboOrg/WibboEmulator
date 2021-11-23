@@ -18,210 +18,208 @@ namespace Butterfly.Game.Rooms.Wired
     {
         private static IWired GetWiredHandler(Item item, Room room)
         {
-            return GetWiredHandler(item, room, new List<int>(), "", new List<int>(), 0, 0, false, false);
-        }
-
-        private static IWired GetWiredHandler(Item item, Room room, List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod)
-        {
-            int itemId = item.Id;
-
             IWired handler = null;
             switch (item.GetBaseItem().InteractionType)
             {
                 #region Trigger
                 case InteractionType.TRIGGER_ONCE:
-                    handler = new Timer(item, room.GetWiredHandler(), (intParams.Count > 0) ? intParams[0] : 0, room.GetGameManager());
+                    handler = new Timer(item, room);
                     break;
                 case InteractionType.TRIGGER_AVATAR_ENTERS_ROOM:
-                    handler = new EntersRoom(item, room.GetWiredHandler(), room.GetRoomUserManager(), !string.IsNullOrEmpty(stringParam), stringParam);
+                    handler = new EntersRoom(item, room);
                     break;
                 case InteractionType.TRIGGER_COLLISION:
-                    handler = new Collision(item, room.GetWiredHandler(), room.GetRoomUserManager());
+                    handler = new Collision(item, room);
                     break;
                 case InteractionType.TRIGGER_GAME_ENDS:
-                    handler = new GameEnds(item, room.GetWiredHandler(), room.GetGameManager());
+                    handler = new GameEnds(item, room);
                     break;
                 case InteractionType.TRIGGER_GAME_STARTS:
-                    handler = new GameStarts(item, room.GetWiredHandler(), room.GetGameManager());
+                    handler = new GameStarts(item, room);
                     break;
                 case InteractionType.TRIGGER_PERIODICALLY:
-                    handler = new Repeater(room.GetWiredHandler(), item, (intParams.Count > 0) ? intParams[0] : 0);
+                    handler = new Repeater(item, room);
                     break;
                 case InteractionType.TRIGGER_PERIODICALLY_LONG:
-                    handler = new Repeaterlong(room.GetWiredHandler(), item, (intParams.Count > 0) ? intParams[0] : 0);
+                    handler = new Repeaterlong(item, room);
                     break;
                 case InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING:
-                    handler = new UserSays(item, room.GetWiredHandler(), ((intParams.Count > 0) ? intParams[0] : 0) == 1, stringParam, room);
+                    handler = new UserSays(item, room);
                     break;
                 case InteractionType.TRIGGER_COMMAND:
-                    handler = new UserCommand(item, room.GetWiredHandler(), room);
+                    handler = new UserCommand(item, room);
                     break;
                 case InteractionType.TRIGGER_SELF:
-                    handler = new UserTriggerSelf(item, room.GetWiredHandler(), room);
+                    handler = new UserTriggerSelf(item, room);
                     break;
                 case InteractionType.TRIGGER_BOT_REACHED_AVTR:
-                    handler = new BotReadchedAvatar(item, room.GetWiredHandler(), stringParam);
+                    handler = new BotReadchedAvatar(item, room);
                     break;
                 case InteractionType.TRIGGER_COLLISION_USER:
-                    handler = new UserCollision(item, room.GetWiredHandler(), room);
+                    handler = new UserCollision(item, room);
                     break;
                 case InteractionType.TRIGGER_SCORE_ACHIEVED:
-                    handler = new ScoreAchieved(item, room.GetWiredHandler(), (intParams.Count > 0) ? intParams[0] : 0, room.GetGameManager());
+                    handler = new ScoreAchieved(item, room);
                     break;
                 case InteractionType.TRIGGER_STATE_CHANGED:
-                    handler = new SateChanged(room.GetWiredHandler(), item, GetItems(stuffIds, room), stuffIds, (intParams.Count > 0) ? intParams[0] : 0);
+                    handler = new SateChanged(item, room);
                     break;
                 case InteractionType.TRIGGER_WALK_ON_FURNI:
-                    handler = new WalksOnFurni(item, room.GetWiredHandler(), GetItems(stuffIds, room), stuffIds, (intParams.Count > 0) ? intParams[0] : 0);
+                    handler = new WalksOnFurni(item, room);
                     break;
                 case InteractionType.TRIGGER_WALK_OFF_FURNI:
-                    handler = new WalksOffFurni(item, room.GetWiredHandler(), GetItems(stuffIds, room), stuffIds, (intParams.Count > 0) ? intParams[0] : 0);
+                    handler = new WalksOffFurni(item, room);
                     break;
                 #endregion
                 #region Action
                 case InteractionType.ACTION_GIVE_SCORE:
-                    handler = new GiveScore((intParams.Count > 1) ? intParams[1] : 0, (intParams.Count > 0) ? intParams[0] : 0, room.GetGameManager(), itemId);
+                    handler = new GiveScore(item, room);
                     break;
                 case InteractionType.ACTION_GIVE_SCORE_TM:
-                    handler = new GiveScoreTeam((intParams.Count > 2) ? intParams[2] : 0, (intParams.Count > 1) ? intParams[1] : 0, (intParams.Count > 0) ? intParams[0] : 0, room.GetGameManager(), itemId);
+                    handler = new GiveScoreTeam(item, room);
                     break;
                 case InteractionType.ACTION_POS_RESET:
-                    handler = new PositionReset(GetItems(stuffIds, room), delay, room.GetRoomItemHandler(), room.GetWiredHandler(), itemId, (intParams.Count > 0) ? intParams[0] : 0, (intParams.Count > 1) ? intParams[1] : 0, (intParams.Count > 2) ? intParams[2] : 0);
+                    handler = new PositionReset(item, room);
                     break;
                 case InteractionType.ACTION_MOVE_ROTATE:
-                    handler = new MoveRotate((intParams.Count > 0) ? intParams[0] : 0, (intParams.Count > 1) ? intParams[1] : 0, GetItems(stuffIds, room), delay, room, room.GetWiredHandler(), itemId);
+                    handler = new MoveRotate(item, room);
                     break;
                 case InteractionType.ACTION_RESET_TIMER:
-                    handler = new TimerReset(room, room.GetWiredHandler(), delay, itemId);
+                    handler = new TimerReset(item, room);
                     break;
                 case InteractionType.ACTIONSHOWMESSAGE:
-                    handler = new ShowMessage(stringParam, room.GetWiredHandler(), itemId, delay);
+                    handler = new ShowMessage(item, room);
                     break;
                 case InteractionType.ACTION_SUPER_WIRED:
-                    handler = new SuperWired(stringParam, delay, isGod, isStaff, room.GetWiredHandler(), itemId);
+                    handler = new SuperWired(item, room);
                     break;
                 case InteractionType.ACTION_KICK_USER:
-                    handler = new KickUser(stringParam, room.GetWiredHandler(), itemId, room);
+                    handler = new KickUser(item, room);
                     break;
                 case InteractionType.ACTION_TELEPORT_TO:
-                    handler = new TeleportToItem(room.GetGameMap(), room.GetWiredHandler(), GetItems(stuffIds, room), delay, itemId);
+                    handler = new TeleportToItem(item, room);
                     break;
                 case InteractionType.ACTION_ENDGAME_TEAM:
-                    handler = new TeamGameOver((intParams.Count > 0) ? intParams[0] : 0, item.Id, room);
+                    handler = new TeamGameOver(item, room);
                     break;
                 case InteractionType.ACTION_TOGGLE_STATE:
-                    handler = new ToggleItemState(room.GetGameMap(), room.GetWiredHandler(), GetItems(stuffIds, room), delay, item);
+                    handler = new ToggleItemState(item, room);
                     break;
                 case InteractionType.ACTION_CALL_STACKS:
-                    handler = new ExecutePile(GetItems(stuffIds, room), delay, room.GetWiredHandler(), item);
+                    handler = new ExecutePile(item, room);
                     break;
                 case InteractionType.ACTION_FLEE:
-                    handler = new Escape(GetItems(stuffIds, room), room, room.GetWiredHandler(), item.Id);
+                    handler = new Escape(item, room);
                     break;
                 case InteractionType.ACTION_CHASE:
-                    handler = new Chase(GetItems(stuffIds, room), room, room.GetWiredHandler(), item.Id);
+                    handler = new Chase(item, room);
                     break;
                 case InteractionType.ACTION_COLLISION_TEAM:
-                    handler = new CollisionTeam((intParams.Count > 0) ? intParams[0] : 0, room, room.GetWiredHandler(), item.Id);
+                    handler = new CollisionTeam(item, room);
                     break;
                 case InteractionType.ACTION_COLLISION_CASE:
-                    handler = new CollisionCase(GetItems(stuffIds, room), room, room.GetWiredHandler(), item.Id);
+                    handler = new CollisionCase(item, room);
                     break;
                 case InteractionType.ACTION_MOVE_TO_DIR:
-                    handler = new MoveToDir(GetItems(stuffIds, room), room, room.GetWiredHandler(), item.Id, (intParams.Count > 0) ? intParams[0] : 0, (intParams.Count > 1) ? intParams[1] : 0);
+                    handler = new MoveToDir(item, room);
                     break;
                 case InteractionType.ACTION_BOT_CLOTHES:
-                    handler = new BotClothes(stringParam, room.GetWiredHandler(), item.Id);
+                    handler = new BotClothes(item, room);
                     break;
                 case InteractionType.ACTION_BOT_TELEPORT:
-                    handler = new BotTeleport(stringParam, GetItems(stuffIds, room), room.GetGameMap(), room.GetWiredHandler(), item.Id);
+                    handler = new BotTeleport(item, room);
                     break;
                 case InteractionType.ACTION_BOT_FOLLOW_AVATAR:
-                    handler = new BotFollowAvatar(stringParam, (((intParams.Count > 0) ? intParams[0] : 0) == 1), room.GetWiredHandler(), item.Id);
+                    handler = new BotFollowAvatar(item, room);
                     break;
                 case InteractionType.ACTION_BOT_GIVE_HANDITEM:
-                    handler = new BotGiveHanditem("", room.GetWiredHandler(), item.Id); //TODO: fix this
+                    handler = new BotGiveHanditem(item, room);
                     break;
                 case InteractionType.ACTION_BOT_MOVE:
-                    handler = new BotMove(stringParam, GetItems(stuffIds, room), room.GetWiredHandler(), item.Id);
+                    handler = new BotMove(item, room);
                     break;
                 case InteractionType.ACTION_USER_MOVE:
-                    handler = new UserMove(GetItems(stuffIds, room), delay, room.GetWiredHandler(), item.Id);
+                    handler = new UserMove(item, room);
                     break;
                 case InteractionType.ACTION_BOT_TALK_TO_AVATAR:
-                    handler = new BotTalkToAvatar(stringParam, (((intParams.Count > 0) ? intParams[0] : 0) == 1), room.GetWiredHandler(), item.Id);
+                    handler = new BotTalkToAvatar(item, room);
                     break;
                 case InteractionType.ACTION_BOT_TALK:
-                    handler = new BotTalk(stringParam, (((intParams.Count > 0) ? intParams[0] : 0) == 1), room.GetWiredHandler(), item.Id);
+                    handler = new BotTalk(item, room);
                     break;
                 case InteractionType.ACTION_LEAVE_TEAM:
-                    handler = new TeamLeave(item.Id);
+                    handler = new TeamLeave(item, room);
                     break;
                 case InteractionType.ACTION_JOIN_TEAM:
-                    handler = new TeamJoin((intParams.Count > 0) ? intParams[0] : 0, item.Id);
+                    handler = new TeamJoin(item, room);
+                    break;
+                case InteractionType.HIGHSCORE:
+                    handler = new HighScore(item, room);
+                    break;
+                case InteractionType.HIGHSCOREPOINTS:
+                    handler = new HighScorePoints(item, room);
                     break;
                 #endregion
                 #region Condition
                 case InteractionType.CONDITION_SUPER_WIRED:
-                    handler = new SuperWiredCondition(item, stringParam, isStaff);
+                    handler = new SuperWiredCondition(item, room);
                     break;
                 case InteractionType.CONDITION_FURNIS_HAVE_USERS:
-                    handler = new FurniHasUser(item, GetItems(stuffIds, room));
+                    handler = new FurniHasUser(item, room);
                     break;
                 case InteractionType.CONDITION_FURNIS_HAVE_NO_USERS:
-                    handler = new FurniHasNoUser(item, GetItems(stuffIds, room));
+                    handler = new FurniHasNoUser(item, room);
                     break;
                 case InteractionType.CONDITION_STATE_POS:
-                    handler = new FurniStatePosMatch(item, GetItems(stuffIds, room), (intParams.Count > 0) ? intParams[0] : 0, (intParams.Count > 1) ? intParams[1] : 0, (intParams.Count > 2) ? intParams[2] : 0);
+                    handler = new FurniStatePosMatch(item, room);
                     break;
                 case InteractionType.CONDITION_STUFF_IS:
-                    handler = new FurniStuffIs(item, GetItems(stuffIds, room));
+                    handler = new FurniStuffIs(item, room);
                     break;
                 case InteractionType.CONDITION_NOT_STUFF_IS:
-                    handler = new FurniNotStuffIs(item, GetItems(stuffIds, room));
+                    handler = new FurniNotStuffIs(item, room);
                     break;
                 case InteractionType.CONDITION_DATE_RNG_ACTIVE:
-                    handler = new DateRangeActive(item, intParams);
+                    handler = new DateRangeActive(item, room);
                     break;
                 case InteractionType.CONDITION_STATE_POS_NEGATIVE:
-                    List<Item> items17 = GetItems(stuffIds, room);
-                    handler = new FurniStatePosMatchNegative(item, items17, (intParams.Count > 0) ? intParams[0] : 0, (intParams.Count > 1) ? intParams[1] : 0, (intParams.Count > 2) ? intParams[2] : 0);
+                    handler = new FurniStatePosMatchNegative(item, room);
                     break;
                 case InteractionType.CONDITION_TIME_LESS_THAN:
-                    handler = new LessThanTimer((intParams.Count > 0) ? intParams[0] : 0, room, item);
+                    handler = new LessThanTimer(item, room);
                     break;
                 case InteractionType.CONDITION_TIME_MORE_THAN:
-                    handler = new MoreThanTimer((intParams.Count > 0) ? intParams[0] : 0, room, item);
+                    handler = new MoreThanTimer(item, room);
                     break;
                 case InteractionType.CONDITION_TRIGGER_ON_FURNI:
-                    handler = new TriggerUserIsOnFurni(item, GetItems(stuffIds, room));
+                    handler = new TriggerUserIsOnFurni(item, room);
                     break;
                 case InteractionType.CONDITION_TRIGGER_ON_FURNI_NEGATIVE:
-                    handler = new TriggerUserIsOnFurniNegative(item, GetItems(stuffIds, room));
+                    handler = new TriggerUserIsOnFurniNegative(item, room);
                     break;
                 case InteractionType.CONDITION_HAS_FURNI_ON_FURNI:
-                    handler = new HasFurniOnFurni(item, GetItems(stuffIds, room));
+                    handler = new HasFurniOnFurni(item, room);
                     break;
                 case InteractionType.CONDITION_HAS_FURNI_ON_FURNI_NEGATIVE:
-                    handler = new HasFurniOnFurniNegative(item, GetItems(stuffIds, room));
+                    handler = new HasFurniOnFurniNegative(item, room);
                     break;
                 case InteractionType.CONDITION_ACTOR_IN_GROUP:
-                    handler = new HasUserInGroup(item);
+                    handler = new HasUserInGroup(item, room);
                     break;
                 case InteractionType.CONDITION_NOT_USER_COUNT:
-                    handler = new RoomUserNotCount(item, (intParams.Count > 0) ? intParams[0] : 0, (intParams.Count > 1) ? intParams[1] : 0);
+                    handler = new RoomUserNotCount(item, room);
                     break;
                 case InteractionType.CONDITION_USER_COUNT_IN:
-                    handler = new RoomUserCount(item, (intParams.Count > 0) ? intParams[0] : 0, (intParams.Count > 1) ? intParams[1] : 0);
+                    handler = new RoomUserCount(item, room);
                     break;
                 case InteractionType.CONDITION_NOT_IN_GROUP:
-                    handler = new HasUserNotInGroup(item);
+                    handler = new HasUserNotInGroup(item, room);
                     break;
                 case InteractionType.CONDITION_ACTOR_IN_TEAM:
-                    handler = new ActorInTeam(item, intParams);
+                    handler = new ActorInTeam(item, room);
                     break;
                 case InteractionType.CONDITION_NOT_IN_TEAM:
-                    handler = new ActorNotInTeam(item.Id, (intParams.Count > 0) ? intParams[0] : 0);
+                    handler = new ActorNotInTeam(item, room);
                     break;
                     #endregion
             }
@@ -229,9 +227,27 @@ namespace Butterfly.Game.Rooms.Wired
             return handler;
         }
 
-        internal static void HandleSave(Item item, Room room, List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod)
+        internal static void HandleRegister(Item item, Room room, List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod)
         {
-            IWired handler = GetWiredHandler(item, room, intParams, stringParam, stuffIds, selectionCode, delay, isStaff, isGod);
+            IWired handler = GetWiredHandler(item, room);
+
+            if (handler != null)
+            {
+                handler.Init(intParams, stringParam, stuffIds, selectionCode, delay, isStaff, isGod);
+                handler.LoadItems();
+
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                {
+                    handler.SaveToDatabase(dbClient);
+                }
+
+                HandleSave(handler, room, item);
+            }
+        }
+
+        public static void HandleRegister(Room room, Item item)
+        {
+            IWired handler = GetWiredHandler(item, room);
 
             if (handler != null)
             {
@@ -239,7 +255,7 @@ namespace Butterfly.Game.Rooms.Wired
             }
         }
 
-        public static void LoadWiredItem(Item item, Room room, IQueryAdapter dbClient)
+        public static void HandleRegister(Item item, Room room, IQueryAdapter dbClient)
         {
             IWired handler = GetWiredHandler(item, room);
 
@@ -247,62 +263,12 @@ namespace Butterfly.Game.Rooms.Wired
             {
                 DataRow row = ItemWiredDao.GetOne(dbClient, item.Id);
                 if (row != null)
-                    handler.LoadFromDatabase(row, room);
+                    handler.LoadFromDatabase(row);
 
-                HandleItemLoad(handler, item);
-            }
-        }
+                handler.LoadItems(true);
 
-        private static void HandleItemLoad(IWired handler, Item item)
-        {
-            if (item.WiredHandler != null)
-            {
-                item.WiredHandler.Dispose();
-            }
-
-            item.WiredHandler = handler;
-        }
-
-        public static void HandleDefaultSave(Room room, Item item)
-        {
-            IWired handler = GetWiredHandler(item, room);
-
-            if (handler != null)
-            {
                 HandleSave(handler, room, item);
             }
-        }
-
-        public static void HandleSave(Client session, int itemId, Room room, ClientPacket clientMessage)
-        {
-            Item item = room.GetRoomItemHandler().GetItem(itemId);
-            if (item == null)
-            {
-                return;
-            }
-
-            if (item.WiredHandler != null)
-            {
-                item.WiredHandler.Dispose();
-                item.WiredHandler = null;
-            }
-
-            session.SendPacket(new SaveWiredMessageComposer());
-        }
-
-        private static List<Item> GetItems(List<int> stuffIds, Room room)
-        {
-            List<Item> listItem = new List<Item>();
-            foreach(int itemId in stuffIds)
-            {
-                Item item = room.GetRoomItemHandler().GetItem(itemId);
-                if (item != null && item.GetBaseItem().Type == 's')
-                {
-                    listItem.Add(item);
-                }
-            }
-
-            return listItem;
         }
 
         private static void HandleSave(IWired handler, Room room, Item item)
@@ -316,11 +282,6 @@ namespace Butterfly.Game.Rooms.Wired
             item.WiredHandler = handler;
             room.GetWiredHandler().RemoveFurniture(item);
             room.GetWiredHandler().AddFurniture(item);
-
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                handler.SaveToDatabase(dbClient);
-            }
         }
     }
 }

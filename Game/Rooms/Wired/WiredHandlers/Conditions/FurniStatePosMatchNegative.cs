@@ -10,52 +10,34 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 {
-    public class FurniStatePosMatchNegative : IWiredCondition, IWired
+    public class FurniStatePosMatchNegative : WiredConditionBase, IWiredCondition, IWired
     {
-        private readonly int itemID;
-        private Dictionary<int, ItemsPosReset> items;
-        private bool isDisposed;
+        private Dictionary<int, ItemsPosReset> ItemsData;
 
-        private int EtatActuel;
-        private int DirectionActuel;
-        private int PositionActuel;
-
-        public FurniStatePosMatchNegative(Item item, List<Item> items, int etatActuel, int directionActuel, int positionActuel)
+        public FurniStatePosMatchNegative(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_STATES_MATCH)
         {
-            this.itemID = item.Id;
-            this.isDisposed = false;
-
-            this.EtatActuel = etatActuel;
-            this.DirectionActuel = directionActuel;
-            this.PositionActuel = positionActuel;
-
-            this.items = new Dictionary<int, ItemsPosReset>();
-
-            foreach (Item roomItem in items)
-            {
-                if (!this.items.ContainsKey(roomItem.Id))
-                {
-                    this.items.Add(roomItem.Id, new ItemsPosReset(roomItem, roomItem.GetX, roomItem.GetY, roomItem.GetZ, roomItem.Rotation, roomItem.ExtraData));
-                }
-                else
-                {
-                    this.items.Remove(roomItem.Id);
-                    this.items.Add(roomItem.Id, new ItemsPosReset(roomItem, roomItem.GetX, roomItem.GetY, roomItem.GetZ, roomItem.Rotation, roomItem.ExtraData));
-                }
-            }
+            this.ItemsData = new Dictionary<int, ItemsPosReset>();
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
         {
-            foreach (ItemsPosReset roomItem in this.items.Values)
+            bool state = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+            bool direction = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0) == 1;
+            bool position = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0) == 1;
+
+            foreach (Item roomItem in this.Items)
             {
-                if (this.EtatActuel == 1)
+                if(!this.ItemsData.TryGetValue(roomItem.Id, out ItemsPosReset itemPosReset))
+                    continue;
+
+                if (state)
                 {
-                    if (roomItem.extradata != "Null")
+                    if (itemPosReset.ExtraData != "Null")
                     {
-                        if (!(roomItem.item.ExtraData == "" && roomItem.extradata == "0") && !(roomItem.item.ExtraData == "0" && roomItem.extradata == ""))
+                        if (!(roomItem.ExtraData == "" && itemPosReset.ExtraData == "0") && !(roomItem.ExtraData == "0" && itemPosReset.ExtraData == ""))
                         {
-                            if (roomItem.item.ExtraData == roomItem.extradata)
+
+                            if (roomItem.ExtraData == itemPosReset.ExtraData)
                             {
                                 return false;
                             }
@@ -63,126 +45,110 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 }
 
-                if (this.DirectionActuel == 1)
+                if (direction)
                 {
-                    if (roomItem.rot == roomItem.item.Rotation)
+                    if (itemPosReset.Rot == roomItem.Rotation)
                     {
                         return false;
                     }
                 }
 
-                if (this.PositionActuel == 1)
+                if (position)
                 {
-                    if (roomItem.x == roomItem.item.GetX && roomItem.y == roomItem.item.GetY)
+                    if (itemPosReset.X == roomItem.GetX && itemPosReset.Y == roomItem.GetY)
                     {
                         return false;
                     }
                 }
             }
+
             return true;
+        }
+
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems();
+
+            if(inDatabase)
+                return;
+
+            foreach (Item roomItem in this.Items)
+            {
+                if (!this.ItemsData.ContainsKey(roomItem.Id))
+                {
+                    this.ItemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.GetX, roomItem.GetY, roomItem.GetZ, roomItem.Rotation, roomItem.ExtraData));
+                }
+                else
+                {
+                    this.ItemsData.Remove(roomItem.Id);
+                    this.ItemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.GetX, roomItem.GetY, roomItem.GetZ, roomItem.Rotation, roomItem.ExtraData));
+                }
+            }
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            string triggersitem = "";
+            string triggerItems = "";
 
-            int i = 0;
-            foreach (ItemsPosReset roomItem in this.items.Values)
+            foreach (ItemsPosReset roomItem in this.ItemsData.Values)
             {
-                if (i != 0)
-                {
-                    triggersitem += ";";
-                }
-
-                triggersitem += roomItem.item.Id + ":" + roomItem.x + ":" + roomItem.y + ":" + roomItem.z + ":" + roomItem.rot + ":" + roomItem.extradata;
-
-                i++;
+                triggerItems += roomItem.Id + ":" + roomItem.X + ":" + roomItem.Y + ":" + roomItem.Z + ":" + roomItem.Rot + ":" + roomItem.ExtraData + ";";
             }
 
-            string triggerData2 = this.EtatActuel + ";" + this.DirectionActuel + ";" + this.PositionActuel;
+            triggerItems = triggerItems.TrimEnd(';');
 
-            ItemWiredDao.Delete(dbClient, this.itemID);
-            ItemWiredDao.Insert(dbClient, this.itemID, "", triggerData2, false, triggersitem);
+            bool state = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+            bool direction = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0) == 1;
+            bool position = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0) == 1;
+
+            string triggerData2 = state + ";" + direction + ";" + position;
+
+            ItemWiredDao.Delete(dbClient, this.ItemInstance.Id);
+            ItemWiredDao.Insert(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            string triggerItem = row["triggers_item"].ToString();
+            if (int.TryParse(row["trigger_data"].ToString(), out int delay))
+                this.Delay = delay;
 
-            string triggerDataTwo = row["trigger_data_2"].ToString();
+            string triggerData2 = row["trigger_data_2"].ToString();
 
-            if (triggerDataTwo.Length == 5)
+            if (triggerData2.Length == 5)
             {
-                string[] dataSplit = triggerDataTwo.Split(';');
+                string[] dataSplit = triggerData2.Split(';');
 
                 if (int.TryParse(dataSplit[0], out int state))
-                    this.EtatActuel = state;
-                if (int.TryParse(dataSplit[1], out int direct))
-                    this.DirectionActuel = direct;
+                    this.IntParams.Add(state);
+                if (int.TryParse(dataSplit[1], out int direction))
+                    this.IntParams.Add(direction);
                 if (int.TryParse(dataSplit[2], out int position))
-                    this.PositionActuel = position;
+                    this.IntParams.Add(position);
             }
 
-            if (triggerItem == "")
+            string triggerItems = row["triggers_item"].ToString();
+
+            if (triggerItems == "")
             {
                 return;
             }
 
-            foreach (string item in triggerItem.Split(';'))
+            foreach (string item in triggerItems.Split(';'))
             {
-                string[] Item2 = item.Split(':');
-                if (Item2.Length != 6)
+                string[] itemData = item.Split(':');
+                if (itemData.Length != 6)
                 {
                     continue;
                 }
 
-                Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(Item2[0]));
-                if (roomItem != null && !this.items.ContainsKey(roomItem.Id) && roomItem.Id != this.itemID)
-                {
-                    this.items.Add(roomItem.Id, new ItemsPosReset(roomItem, Convert.ToInt32(Item2[1]), Convert.ToInt32(Item2[2]), Convert.ToDouble(Item2[3]), Convert.ToInt32(Item2[4]), Item2[5]));
-                }
+                if (!int.TryParse(itemData[0], out int id))
+                    continue;
+
+                if(!this.StuffIds.Contains(id))
+                    this.StuffIds.Add(id);
+
+                this.ItemsData.Add(Convert.ToInt32(itemData[0]), new ItemsPosReset(Convert.ToInt32(itemData[0]), Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]), Convert.ToDouble(itemData[3]), Convert.ToInt32(itemData[4]), itemData[5]));
             }
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(10);
-            Message.WriteInteger(this.items.Count);
-            foreach (int roomItemid in this.items.Keys)
-            {
-                Message.WriteInteger(roomItemid);
-            }
-
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString("");
-            Message.WriteInteger(3);
-
-            Message.WriteInteger(this.EtatActuel); //Etat actuel du mobi
-            Message.WriteInteger(this.DirectionActuel); //Direction  actuelle
-            Message.WriteInteger(this.PositionActuel); //position actuelle dans l'appart
-
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
-        }
-
-        public void Dispose()
-        {
-            this.isDisposed = true;
-            if (this.items != null)
-            {
-                this.items.Clear();
-            }
-
-            this.items = null;
-        }
-
-        public bool Disposed()
-        {
-            return this.isDisposed;
         }
     }
 }

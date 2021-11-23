@@ -7,15 +7,10 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 {
-    public class HasUserNotInGroup : IWiredCondition, IWired
+    public class HasUserNotInGroup : WiredConditionBase, IWiredCondition, IWired
     {
-        private Item item;
-        private bool isDisposed;
-
-        public HasUserNotInGroup(Item item)
+        public HasUserNotInGroup(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_ACTOR_IN_GROUP)
         {
-            this.item = item;
-            this.isDisposed = false;
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
@@ -25,12 +20,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 return false;
             }
 
-            if (this.item.GetRoom().RoomData.Group == null)
+            if (this.RoomInstance.RoomData.Group == null)
             {
                 return false;
             }
 
-            if (user.GetClient().GetHabbo().MyGroups.Contains(this.item.GetRoom().RoomData.Group.Id))
+            if (user.GetClient().GetHabbo().MyGroups.Contains(this.RoomInstance.RoomData.Group.Id))
             {
                 return false;
             }
@@ -40,42 +35,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, string.Empty, false, null);
+            
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
 
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(5);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.item.Id);
-            Message.WriteString("");
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(10);
-
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
-        }
-
-        public void Dispose()
-        {
-            this.isDisposed = true;
-            this.item = null;
-        }
-
-        public bool Disposed()
-        {
-            return this.isDisposed;
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms.Games;
@@ -10,24 +8,31 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 {
-    public class SuperWiredCondition : IWiredCondition, IWired
+    public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
     {
-        private Item item;
-        private string Effet;
-        private string Value;
-
-        public SuperWiredCondition(Item item, string message, bool StaffPermission)
+        public SuperWiredCondition(Item item, Room room) : base(item, room, (int)WiredConditionType.ACTOR_IS_WEARING_BADGE)
         {
-            this.item = item;
+        }
 
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if(inDatabase) return;
+
+            this.CheckPermission();
+        }
+
+        private void CheckPermission()
+        {
             string effet = "";
-            if (message.Contains(":"))
+            if (this.StringParam.Contains(":"))
             {
-                effet = message.Split(new char[] { ':' })[0].ToLower();
+                effet = this.StringParam.Split(':')[0].ToLower();
             }
             else
             {
-                effet = message.ToLower();
+                effet = this.StringParam.ToLower();
             }
 
             switch (effet)
@@ -73,36 +78,18 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "rpminute":
                 case "winusermoney":
                 case "notwinusermoney":
-                    if (this.item.GetRoom().IsRoleplay)
+                    if (this.RoomInstance.IsRoleplay)
                     {
-                        this.Effet = effet;
-                        if (message.Contains(":"))
-                        {
-                            this.Value = message.Split(new char[] { ':' })[1];
-                        }
-                    }
-                    else
-                    {
-                        this.Effet = "";
-                        this.Value = "";
+                        return;
                     }
                     break;
 
                 case "rankplus":
                 case "rankmoin":
                 case "rank":
-                    if (StaffPermission)
+                    if (this.IsStaff)
                     {
-                        this.Effet = effet;
-                        if (message.Contains(":"))
-                        {
-                            this.Value = message.Split(new char[] { ':' })[1];
-                        }
-                    }
-                    else
-                    {
-                        this.Effet = "";
-                        this.Value = "";
+                        return;
                     }
                     break;
                 case "favogroupid":
@@ -177,54 +164,59 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "itemdistancemoins":
                 case "winuserpoint":
                 case "notwinuserpoint":
-                    this.Effet = effet;
-                    if (message.Contains(":"))
-                    {
-                        this.Value = message.Split(new char[] { ':' })[1];
-                    }
-
-                    break;
-                default:
-                    this.Effet = "";
-                    this.Value = "";
-                    break;
+                    return;
             }
+
+            this.StringParam = "";
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
         {
-            if (this.Effet == "")
+            if (this.StringParam == "")
             {
                 return false;
+            }
+
+            string Effect = "";
+            string Value = "";
+
+            if (this.StringParam.Contains(":"))
+            {
+                Effect = this.StringParam.Split(':')[0].ToLower();
+                Value = this.StringParam.Split(':')[1];
+            }
+            else
+            {
+                Effect = this.StringParam;
             }
 
             bool Bool = false;
             if (user != null)
             {
-                Bool = this.UserCommand(user, this.item.GetRoom());
+                Bool = this.UserCommand(user, this.RoomInstance, Effect, Value);
             }
 
             if (Bool == false)
             {
-                Bool = this.RoomCommand(this.item.GetRoom());
+                Bool = this.RoomCommand(this.RoomInstance, Effect, Value);
             }
 
             if (Bool == false)
             {
-                Bool = this.RpUserCommand(user);
+                Bool = this.RpUserCommand(user, Effect, Value);
             }
 
             if (Bool == false)
             {
-                Bool = this.RpGlobalCommand(this.item.GetRoom());
+                Bool = this.RpGlobalCommand(this.RoomInstance, Effect, Value);
             }
 
             if (Bool == false && TriggerItem != null)
             {
-                Bool = this.ItemCommand(TriggerItem, user);
+                Bool = this.ItemCommand(TriggerItem, user, Effect, Value);
             }
 
-            if (this.Effet.Contains("not"))
+            if (Effect.Contains("not"))
             {
                 Bool = !Bool;
             }
@@ -232,7 +224,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             return Bool;
         }
 
-        private bool RpGlobalCommand(Room Room)
+        private bool RpGlobalCommand(Room Room, string Effect, string Value)
         {
             if (Room == null || !Room.IsRoleplay)
             {
@@ -240,11 +232,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             }
 
             bool Result = false;
-            switch (this.Effet)
+            switch (Effect)
             {
                 case "rpminuteplus":
                     {
-                        if (!int.TryParse(this.Value, out int ValueInt))
+                        if (!int.TryParse(Value, out int ValueInt))
                         {
                             break;
                         }
@@ -258,7 +250,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "rpminutemoins":
                     {
-                        if (!int.TryParse(this.Value, out int ValueInt))
+                        if (!int.TryParse(Value, out int ValueInt))
                         {
                             break;
                         }
@@ -272,7 +264,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "rpminute":
                     {
-                        if (!int.TryParse(this.Value, out int ValueInt))
+                        if (!int.TryParse(Value, out int ValueInt))
                         {
                             break;
                         }
@@ -286,7 +278,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "rphourplus":
                     {
-                        if (!int.TryParse(this.Value, out int ValueInt))
+                        if (!int.TryParse(Value, out int ValueInt))
                         {
                             break;
                         }
@@ -300,7 +292,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "rphourmoins":
                     {
-                        if (!int.TryParse(this.Value, out int ValueInt))
+                        if (!int.TryParse(Value, out int ValueInt))
                         {
                             break;
                         }
@@ -314,7 +306,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "rphour":
                     {
-                        if (!int.TryParse(this.Value, out int ValueInt))
+                        if (!int.TryParse(Value, out int ValueInt))
                         {
                             break;
                         }
@@ -328,7 +320,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "enemy":
                     {
-                        string[] Params = this.Value.Split(';');
+                        string[] Params = Value.Split(';');
                         if (Params.Length != 3)
                         {
                             break;
@@ -378,9 +370,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             return Result;
         }
 
-        private bool RpUserCommand(RoomUser User)
+        private bool RpUserCommand(RoomUser User, string Effect, string Value)
         {
-            Room Room = this.item.GetRoom();
+            Room Room = this.RoomInstance;
             if (Room == null || !Room.IsRoleplay)
             {
                 return false;
@@ -398,12 +390,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             }
 
             bool Result = false;
-            switch (this.Effet)
+            switch (Effect)
             {
                 case "inventoryitem":
                 case "inventorynotitem":
                     {
-                        if (!int.TryParse(this.Value, out int ValueInt))
+                        if (!int.TryParse(Value, out int ValueInt))
                         {
                             break;
                         }
@@ -417,7 +409,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "energyplus":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
 
                         if (Rp.Energy >= ValueInt)
                         {
@@ -428,7 +420,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "energymoins":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
 
                         if (Rp.Energy < ValueInt)
                         {
@@ -439,7 +431,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "hygieneplus":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
 
                         if (Rp.Hygiene >= ValueInt)
                         {
@@ -450,7 +442,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "hygienemoins":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
 
                         if (Rp.Hygiene < ValueInt)
                         {
@@ -461,7 +453,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "munition":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
 
                         if (Rp.Munition == ValueInt)
                         {
@@ -472,7 +464,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "munitionplus":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
 
                         if (Rp.Munition >= ValueInt)
                         {
@@ -483,7 +475,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "munitionmoins":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
 
                         if (Rp.Munition < ValueInt)
                         {
@@ -494,7 +486,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "moneyplus":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Money >= ValueInt)
                         {
                             Result = true;
@@ -504,7 +496,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "moneymoins":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Money < ValueInt)
                         {
                             Result = true;
@@ -514,7 +506,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "money1plus":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Money1 >= ValueInt)
                         {
                             Result = true;
@@ -524,7 +516,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "money1moins":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Money1 < ValueInt)
                         {
                             Result = true;
@@ -534,7 +526,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "money2plus":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Money2 >= ValueInt)
                         {
                             Result = true;
@@ -544,7 +536,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "money2moins":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Money2 < ValueInt)
                         {
                             Result = true;
@@ -554,7 +546,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "money3plus":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Money3 >= ValueInt)
                         {
                             Result = true;
@@ -564,7 +556,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "money3moins":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Money3 < ValueInt)
                         {
                             Result = true;
@@ -574,7 +566,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "money4plus":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Money >= ValueInt)
                         {
                             Result = true;
@@ -584,7 +576,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "money4moins":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Money4 < ValueInt)
                         {
                             Result = true;
@@ -594,7 +586,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "levelplus":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Level >= ValueInt)
                         {
                             Result = true;
@@ -604,7 +596,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "levelmoins":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Level < ValueInt)
                         {
                             Result = true;
@@ -614,7 +606,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "healthplus":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Health >= ValueInt)
                         {
                             Result = true;
@@ -624,7 +616,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "healthmoins":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Health < ValueInt)
                         {
                             Result = true;
@@ -634,7 +626,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "health":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
                         if (Rp.Health == ValueInt)
                         {
                             Result = true;
@@ -655,7 +647,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "weaponfarid":
                 case "notweaponfarid":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
 
                         if (Rp.WeaponGun.Id == ValueInt)
                         {
@@ -667,7 +659,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "weaponcacid":
                 case "notweaponcacid":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
 
                         if (Rp.WeaponCac.Id == ValueInt)
                         {
@@ -713,17 +705,17 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             return Result;
         }
 
-        private bool ItemCommand(Item item, RoomUser User)
+        private bool ItemCommand(Item item, RoomUser User, string Effect, string Value)
         {
             bool Bool = false;
-            switch (this.Effet)
+            switch (Effect)
             {
                 case "itemmode":
                 case "itemnotmode":
                     {
                         if (int.TryParse(item.ExtraData, out int Num))
                         {
-                            if (item.ExtraData == this.Value)
+                            if (item.ExtraData == Value)
                             {
                                 Bool = true;
                             }
@@ -733,7 +725,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "itemrot":
                 case "itemnotrot":
                     {
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
 
                         if (item.Rotation == ValueInt)
                         {
@@ -749,7 +741,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
 
                         if (Math.Abs(User.X - item.GetX) >= ValueInt && Math.Abs(User.Y - item.GetY) >= ValueInt)
                         {
@@ -765,7 +757,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        int.TryParse(this.Value, out int ValueInt);
+                        int.TryParse(Value, out int ValueInt);
 
                         if (Math.Abs(User.X - item.GetX) <= ValueInt && Math.Abs(User.Y - item.GetY) <= ValueInt)
                         {
@@ -779,7 +771,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             return Bool;
         }
 
-        private bool RoomCommand(Room room)
+        private bool RoomCommand(Room room, string Effect, string Value)
         {
             if (room == null)
             {
@@ -787,7 +779,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             }
 
             bool Bool = false;
-            switch (this.Effet)
+            switch (Effect)
             {
                 case "roomopen":
                 case "roomnotopen":
@@ -814,7 +806,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     {
                         TeamManager TeamManager = room.GetTeamManager();
 
-                        int.TryParse(this.Value, out int Count);
+                        int.TryParse(Value, out int Count);
                         if (TeamManager.GetAllPlayer().Count == Count)
                         {
                             Bool = true;
@@ -827,7 +819,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     {
                         TeamManager TeamManager = room.GetTeamManager();
 
-                        int.TryParse(this.Value, out int Count);
+                        int.TryParse(Value, out int Count);
                         if (TeamManager.RedTeam.Count == Count)
                         {
                             Bool = true;
@@ -840,7 +832,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     {
                         TeamManager TeamManager = room.GetTeamManager();
 
-                        int.TryParse(this.Value, out int Count);
+                        int.TryParse(Value, out int Count);
                         if (TeamManager.YellowTeam.Count == Count)
                         {
                             Bool = true;
@@ -853,7 +845,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     {
                         TeamManager TeamManager = room.GetTeamManager();
 
-                        int.TryParse(this.Value, out int Count);
+                        int.TryParse(Value, out int Count);
                         if (TeamManager.BlueTeam.Count == Count)
                         {
                             Bool = true;
@@ -866,7 +858,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     {
                         TeamManager TeamManager = room.GetTeamManager();
 
-                        int.TryParse(this.Value, out int Count);
+                        int.TryParse(Value, out int Count);
                         if (TeamManager.GreenTeam.Count == Count)
                         {
                             Bool = true;
@@ -878,10 +870,10 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             return Bool;
         }
 
-        private bool UserCommand(RoomUser user, Room Room)
+        private bool UserCommand(RoomUser user, Room Room, string Effect, string Value)
         {
             bool Result = false;
-            switch (this.Effet)
+            switch (Effect)
             {
                 case "winuserpoint":
                 case "notwinuserpoint":
@@ -914,7 +906,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "missioncontais":
                 case "notmissioncontais":
                     {
-                        if (!user.IsBot && user.GetClient().GetHabbo().Motto.Contains(this.Value))
+                        if (!user.IsBot && user.GetClient().GetHabbo().Motto.Contains(Value))
                         {
                             Result = true;
                         }
@@ -924,7 +916,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "mission":
                 case "notmission":
                     {
-                        if (!user.IsBot && user.GetClient().GetHabbo().Motto == this.Value)
+                        if (!user.IsBot && user.GetClient().GetHabbo().Motto == Value)
                         {
                             Result = true;
                         }
@@ -934,7 +926,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "favogroupid":
                 case "notfavogroupid":
                     {
-                        int.TryParse(this.Value, out int GroupId);
+                        int.TryParse(Value, out int GroupId);
 
                         if (!user.IsBot && user.GetClient().GetHabbo().FavouriteGroupId == GroupId)
                         {
@@ -966,7 +958,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "namebot":
                 case "notnamebot":
                     {
-                        if (user.IsBot && user.BotData.Name == this.Value)
+                        if (user.IsBot && user.BotData.Name == Value)
                         {
                             Result = true;
                         }
@@ -1001,7 +993,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        Room room = this.item.GetRoom();
+                        Room room = this.RoomInstance;
                         if (room == null)
                         {
                             break;
@@ -1037,7 +1029,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "usertimer":
                     {
-                        int.TryParse(this.Value, out int Points);
+                        int.TryParse(Value, out int Points);
 
                         if (user.UserTimer == Points)
                         {
@@ -1048,7 +1040,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "usertimerplus":
                     {
-                        int.TryParse(this.Value, out int Points);
+                        int.TryParse(Value, out int Points);
 
                         if (user.UserTimer > Points)
                         {
@@ -1059,7 +1051,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "usertimermoins":
                     {
-                        int.TryParse(this.Value, out int point);
+                        int.TryParse(Value, out int point);
 
                         if (user.UserTimer < point)
                         {
@@ -1070,7 +1062,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "point":
                     {
-                        int.TryParse(this.Value, out int point);
+                        int.TryParse(Value, out int point);
 
                         if (user.WiredPoints == point)
                         {
@@ -1081,7 +1073,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "pointplus":
                     {
-                        int.TryParse(this.Value, out int Points);
+                        int.TryParse(Value, out int Points);
 
                         if (user.WiredPoints > Points)
                         {
@@ -1092,7 +1084,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                     }
                 case "pointmoins":
                     {
-                        int.TryParse(this.Value, out int Points);
+                        int.TryParse(Value, out int Points);
 
                         if (user.WiredPoints < Points)
                         {
@@ -1104,7 +1096,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "ingroup":
                 case "innotgroup":
                     {
-                        int.TryParse(this.Value, out int GroupId);
+                        int.TryParse(Value, out int GroupId);
 
                         if (GroupId == 0)
                         {
@@ -1151,7 +1143,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "rot":
                 case "notrot":
                     {
-                        if (user.RotBody.ToString() == this.Value)
+                        if (user.RotBody.ToString() == Value)
                         {
                             Result = true;
                         }
@@ -1171,7 +1163,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "username":
                 case "notusername":
                     {
-                        if (user.GetUsername() == this.Value)
+                        if (user.GetUsername() == Value)
                         {
                             Result = true;
                         }
@@ -1181,7 +1173,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "handitem":
                 case "nothanditem":
                     {
-                        if (user.CarryItemID.ToString() == this.Value)
+                        if (user.CarryItemID.ToString() == Value)
                         {
                             Result = true;
                         }
@@ -1196,7 +1188,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        if (user.GetClient().GetHabbo().GetBadgeComponent().HasBadge(this.Value))
+                        if (user.GetClient().GetHabbo().GetBadgeComponent().HasBadge(Value))
                         {
                             Result = true;
                         }
@@ -1206,7 +1198,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                 case "enable":
                 case "notenable":
                     {
-                        if (user.CurrentEffect.ToString() == this.Value)
+                        if (user.CurrentEffect.ToString() == Value)
                         {
                             Result = true;
                         }
@@ -1220,7 +1212,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        if (user.GetClient().GetHabbo().Rank.ToString() == this.Value)
+                        if (user.GetClient().GetHabbo().Rank.ToString() == Value)
                         {
                             Result = true;
                         }
@@ -1234,7 +1226,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        if (user.GetClient().GetHabbo().Rank > Convert.ToInt32(this.Value))
+                        if (user.GetClient().GetHabbo().Rank > Convert.ToInt32(Value))
                         {
                             Result = true;
                         }
@@ -1248,7 +1240,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
                             break;
                         }
 
-                        if (user.GetClient().GetHabbo().Rank < Convert.ToInt32(this.Value))
+                        if (user.GetClient().GetHabbo().Rank < Convert.ToInt32(Value))
                         {
                             Result = true;
                         }
@@ -1261,46 +1253,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.Effet + ":" + this.Value, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            string message = row["trigger_data"].ToString();
-
-            if (message.Contains(":"))
-            {
-                this.Effet = message.Split(new char[] { ':' })[0].ToLower();
-                this.Value = message.Split(new char[] { ':' })[1];
-            }
-            else
-            {
-                this.Effet = message.ToLower();
-            }
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_CONDITION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0); //Max count item
-            Message.WriteInteger(0); //Item Count
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.item.Id);
-            Message.WriteString(this.Effet + ":" + this.Value);
-            Message.WriteInteger(0); //Loop
-
-            Message.WriteInteger(0);
-            Message.WriteInteger((int)WiredConditionType.ACTOR_IS_WEARING_BADGE);
-
-            Session.SendPacket(Message);
-        }
-
-        public void Dispose()
-        {
-            this.item = null;
-            this.Value = "";
-            this.Effet = "";
+            this.StringParam = row["trigger_data"].ToString();
         }
     }
 }

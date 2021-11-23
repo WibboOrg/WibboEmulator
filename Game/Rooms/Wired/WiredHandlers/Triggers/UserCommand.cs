@@ -8,16 +8,12 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 {
-    public class UserCommand : IWired
+    public class UserCommand : WiredTriggerBase, IWired
     {
-        private Item item;
-        private WiredHandler handler;
         private readonly RoomEventDelegate delegateFunction;
 
-        public UserCommand(Item item, WiredHandler handler, Room room)
+        public UserCommand(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION)
         {
-            this.item = item;
-            this.handler = handler;
             this.delegateFunction = new RoomEventDelegate(this.roomUserManager_OnUserSays);
             room.OnTrigger += this.delegateFunction;
         }
@@ -30,42 +26,23 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
                 return;
             }
 
-            this.handler.ExecutePile(this.item.Coordinate, user, null);
+            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, null);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            this.handler.GetRoom().OnTrigger -= this.delegateFunction;
-            this.item = null;
-            this.handler = null;
+            base.Dispose();
+
+            this.RoomInstance.GetWiredHandler().GetRoom().OnTrigger -= this.delegateFunction;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, string.Empty, false, null);
-        }
-
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
-        {
 
         }
 
-        public void OnTrigger(Client Session, int SpriteId)
+        public void LoadFromDatabase(DataRow row)
         {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.item.Id);
-            Message.WriteString("");
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(8);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
         }
     }
 }

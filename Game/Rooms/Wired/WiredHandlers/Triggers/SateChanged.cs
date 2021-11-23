@@ -11,31 +11,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
 {
     public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
     {
-        private WiredHandler handler;
-        private List<Item> items;
-        private readonly Item item;
+        public int DelayCycle { get => this.Delay; }
         private readonly OnItemTrigger delegateFunction;
 
-        public int DelayCycle { get => this.Delay; set => this.Delay = value; }
-
-        public SateChanged(WiredHandler handler, Item item, List<Item> items, List<int> stuffIds, int delay)
+        public SateChanged(Item item, Room room) : base(item, room, (int)WiredTriggerType.TOGGLE_FURNI)
         {
-            this.Id = item.Id;
-            this.Type = (int)WiredTriggerType.TOGGLE_FURNI;
             this.StuffTypeSelectionEnabled = true;
-            this.StuffTypeId = item.GetBaseItem().SpriteId;
-            this.StuffIds = stuffIds;
 
-            this.handler = handler;
-            this.items = items;
-            this.item = item;
-            this.Delay = delay;
             this.delegateFunction = new OnItemTrigger(this.Triggered);
-
-            foreach (Item roomItem in items)
-            {
-                roomItem.ItemTriggerEventHandler += this.delegateFunction;
-            }
         }
 
         public bool OnCycle(RoomUser user, Item item)
@@ -52,7 +35,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
         {
             if (this.Delay > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, e.TriggeringUser, e.item, this.Delay));
+                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, e.TriggeringUser, e.item, this.Delay));
             }
             else
             {
@@ -62,71 +45,58 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
 
         private void OnTriggered(RoomUser user, Item item)
         {
-            this.handler.ExecutePile(this.item.Coordinate, user, item);
+            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, item);
+        }
+
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems();
+
+            if (this.Items != null)
+            {
+                foreach (Item roomItem in this.Items)
+                {
+                    roomItem.ItemTriggerEventHandler += this.delegateFunction;
+                }
+            }
         }
 
         public override void Dispose()
         {
-            this.isDisposed = true;
-            this.handler = null;
-            if (this.items != null)
+            if (this.Items != null)
             {
-                foreach (Item roomItem in this.items)
+                foreach (Item roomItem in this.Items)
                 {
                     roomItem.ItemTriggerEventHandler -= this.delegateFunction;
                 }
-
-                this.items.Clear();
             }
-            this.items = null;
+
+            base.Dispose();
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.Delay.ToString(), false, this.items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.DelayCycle.ToString(), false, this.Items);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
             if (int.TryParse(row["trigger_data"].ToString(), out int delay))
                 this.Delay = delay;
 
-            string triggerItem = row["triggers_item"].ToString();
+            string triggerItems = row["triggers_item"].ToString();
 
-            if (triggerItem == "")
+            if (triggerItems == "")
                 return;
 
-            foreach (string item in triggerItem.Split(';'))
+            foreach (string itemId in triggerItems.Split(';'))
             {
-                Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(item));
-                if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.item.Id)
-                {
-                    roomItem.ItemTriggerEventHandler += this.delegateFunction;
-                    this.items.Add(roomItem);
-                }
-            }
-        }
+                if (!int.TryParse(itemId, out int id))
+                    continue;
 
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            this.OnTrigger(Session);
-            return;
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message.WriteBoolean(true);
-            Message.WriteInteger(10);
-            Message.WriteInteger(this.items.Count);
-            foreach (Item roomItem in this.items)
-            {
-                Message.WriteInteger(roomItem.Id);
+                if(!this.StuffIds.Contains(id))
+                    this.StuffIds.Add(id);
             }
-
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.item.Id);
-            Message.WriteString("");
-            Message.WriteInteger(0);
-            Message.WriteInteger((int)WiredTriggerType.TOGGLE_FURNI);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
         }
     }
 }

@@ -9,75 +9,44 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 {
-    public class Timer : IWired, IWiredCycleable
+    public class Timer : WiredTriggerBase, IWired, IWiredCycleable
     {
-        private Item item;
-        private WiredHandler handler;
-        public int DelayCycle { get; set; }
+        public int DelayCycle { get => (this.IntParams.Count > 0) ? this.IntParams[0] : 0; }
         private readonly RoomEventDelegate delegateFunction;
-        private bool disposed;
 
-        public Timer(Item item, WiredHandler handler, int cycleCount, GameManager gameManager)
+        public Timer(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_ONCE)
         {
-            this.item = item;
-            this.handler = handler;
-            this.DelayCycle = cycleCount;
             this.delegateFunction = new RoomEventDelegate(this.ResetTimer);
-            this.handler.TrgTimer += this.delegateFunction;
-            this.disposed = false;
+            this.RoomInstance.GetWiredHandler().TrgTimer += this.delegateFunction;
         }
 
         public void ResetTimer(object sender, EventArgs e)
         {
-            this.handler.RequestCycle(new WiredCycle(this, null, null, this.DelayCycle));
+            this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, null, null, this.DelayCycle));
         }
 
         public bool OnCycle(RoomUser user, Item item)
         {
-            this.handler.ExecutePile(this.item.Coordinate, null, null);
+            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, null, null);
             return false;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            this.disposed = true;
-            this.item = null;
-            this.handler.TrgTimer -= this.delegateFunction;
-            this.handler = null;
+            this.RoomInstance.GetWiredHandler().TrgTimer -= this.delegateFunction;
+            
+            base.Dispose();
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, this.DelayCycle.ToString(), false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
             if (int.TryParse(row["trigger_data"].ToString(), out int delay))
-                this.DelayCycle = delay;
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(5);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.item.Id);
-            Message.WriteString("");
-            Message.WriteInteger(1);
-            Message.WriteInteger(this.DelayCycle);
-            Message.WriteInteger(1);
-            Message.WriteInteger(3);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
-        }
-
-        public bool Disposed()
-        {
-            return this.disposed;
+                this.IntParams.Add(delay);
         }
     }
 }

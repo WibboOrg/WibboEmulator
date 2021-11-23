@@ -7,31 +7,19 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class KickUser : IWired, IWiredCycleable, IWiredEffect
-    {
-        private WiredHandler handler;
-        private readonly int itemID;
-        private string message;
-        public int DelayCycle { get; set; }
-        private bool disposed;
-        private readonly Room mRoom;
-
-        public KickUser(string message, WiredHandler handler, int itemID, Room room)
+    public class KickUser : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
+    {   
+        public KickUser(Item item, Room room) : base(item, room, (int)WiredActionType.KICK_FROM_ROOM)
         {
-            this.itemID = itemID;
-            this.handler = handler;
-            this.message = message;
-            this.mRoom = room;
-            this.DelayCycle = 2;
         }
 
         public bool OnCycle(RoomUser user, Item item)
         {
             if (user != null && user.GetClient() != null)
             {
-                if (user.RoomId == this.mRoom.RoomData.Id)
+                if (user.RoomId == this.RoomInstance.RoomData.Id)
                 {
-                    this.mRoom.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, true);
+                    this.RoomInstance.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, true);
                 }
             }
             return false;
@@ -41,7 +29,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
             if (User != null && User.GetClient() != null && User.GetClient().GetHabbo() != null)
             {
-                if (User.GetClient().GetHabbo().HasFuse("fuse_mod") || this.mRoom.RoomData.OwnerId == User.UserId)
+                if (User.GetClient().GetHabbo().HasFuse("fuse_mod") || this.RoomInstance.RoomData.OwnerId == User.UserId)
                 {
                     if (User.GetClient() != null)
                     {
@@ -53,52 +41,23 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
                 User.ApplyEffect(4);
                 User.Freeze = true;
-                if (!string.IsNullOrEmpty(this.message))
+                if (!string.IsNullOrEmpty(this.StringParam))
                 {
-                    User.SendWhisperChat(this.message);
+                    User.SendWhisperChat(this.StringParam);
                 }
 
-                this.handler.RequestCycle(new WiredCycle(this, User, null, this.DelayCycle));
+                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, User, null, this.DelayCycle));
             }
-        }
-
-        public void Dispose()
-        {
-            this.disposed = true;
-            this.handler = null;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.message, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            this.message = row["trigger_data"].ToString();
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString(this.message);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(7); //7
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
-        }
-
-        public bool Disposed()
-        {
-            return this.disposed;
+            this.StringParam = row["trigger_data"].ToString();
         }
     }
 }

@@ -9,24 +9,17 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class GiveScore : IWiredEffect, IWired
+    public class GiveScore : WiredActionBase, IWiredEffect, IWired
     {
-        private int maxCountPerGame;
         private int currentGameCount;
-        private int scoreToGive;
-        private GameManager gameManager;
         private RoomEventDelegate delegateFunction;
-        private readonly int itemID;
 
-        public GiveScore(int maxCountPerGame, int scoreToGive, GameManager gameManager, int itemID)
+        public GiveScore(Item item, Room room) : base(item, room, (int)WiredActionType.GIVE_SCORE)
         {
-            this.maxCountPerGame = maxCountPerGame;
+
             this.currentGameCount = 0;
-            this.scoreToGive = scoreToGive;
             this.delegateFunction = new RoomEventDelegate(this.gameManager_OnGameStart);
-            this.gameManager = gameManager;
-            this.itemID = itemID;
-            gameManager.OnGameStart += this.delegateFunction;
+            this.RoomInstance.GetGameManager().OnGameStart += this.delegateFunction;
         }
 
         private void gameManager_OnGameStart(object sender, EventArgs e)
@@ -36,54 +29,39 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            if (user == null || user.Team == Team.none || this.maxCountPerGame <= this.currentGameCount)
+            int scoreToGive = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+            int maxCountPerGame = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+
+            if (user == null || user.Team == Team.none || maxCountPerGame <= this.currentGameCount)
             {
                 return;
             }
 
             this.currentGameCount++;
-            this.gameManager.AddPointToTeam(user.Team, this.scoreToGive, user);
+            this.RoomInstance.GetGameManager().AddPointToTeam(user.Team, scoreToGive, user);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            this.gameManager.OnGameStart -= this.delegateFunction;
-            this.gameManager = null;
+            this.RoomInstance.GetGameManager().OnGameStart -= this.delegateFunction;
             this.delegateFunction = null;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, this.scoreToGive.ToString(), this.maxCountPerGame.ToString(), false, null);
+            int scoreToGive = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+            int maxCountPerGame = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+
+            WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, scoreToGive.ToString(), maxCountPerGame.ToString(), false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
             if (int.TryParse(row["trigger_data"].ToString(), out int maxCount))
-                this.maxCountPerGame = maxCount;
+                this.IntParams.Add(maxCount);
 
             if (int.TryParse(row["trigger_data_2"].ToString(), out int score))
-                this.scoreToGive = score;
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(5);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString("");
-            Message.WriteInteger(2);
-            Message.WriteInteger(this.scoreToGive);
-            Message.WriteInteger(this.maxCountPerGame);
-            Message.WriteInteger(0);
-            Message.WriteInteger(6);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
+                this.IntParams.Add(score);
         }
     }
 }

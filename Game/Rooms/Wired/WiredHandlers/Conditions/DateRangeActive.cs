@@ -11,11 +11,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 {
     public class DateRangeActive : WiredConditionBase, IWiredCondition, IWired
     {
-        public DateRangeActive(Item item, List<int> intParams) : base()
+        public DateRangeActive(Item item, Room room) : base(item, room, (int)WiredConditionType.DATE_RANGE_ACTIVE)
         {
-            this.Id = item.Id;
-            this.Type = (int)WiredConditionType.DATE_RANGE_ACTIVE;
-            this.IntParams = intParams;
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
@@ -41,7 +38,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, startDate + ":" + endDate, false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
             string triggerData = row["trigger_data"].ToString();
             if (!triggerData.Contains(":"))
@@ -52,11 +49,6 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 
             if (int.TryParse(triggerData.Split(':')[1], out int endDate))
                 this.IntParams.Add(endDate);
-        }
-
-        public void OnTrigger(Client Session, int spriteId)
-        {
-            this.OnTrigger(Session);
         }
     }
 }

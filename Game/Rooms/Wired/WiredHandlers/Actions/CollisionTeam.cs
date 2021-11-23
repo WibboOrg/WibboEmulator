@@ -9,26 +9,10 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class CollisionTeam : IWiredEffect, IWired
+    public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
     {
-        private Room room;
-        private WiredHandler handler;
-        private readonly int itemID;
-        private Team team;
-        private bool isDisposed;
-
-        public CollisionTeam(int TeamId, Room room, WiredHandler handler, int itemID)
+        public CollisionTeam(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM)
         {
-            if (TeamId < 1 || TeamId > 4)
-            {
-                TeamId = 1;
-            }
-
-            this.team = (Team)TeamId;
-            this.room = room;
-            this.handler = handler;
-            this.itemID = itemID;
-            this.isDisposed = false;
         }
 
         public void Handle(RoomUser user, Item TriggerItem)
@@ -36,32 +20,27 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             this.HandleItems();
         }
 
-        public void Dispose()
-        {
-            this.isDisposed = true;
-            this.room = null;
-            this.handler = null;
-        }
-
         private void HandleItems()
         {
-            TeamManager managerForBanzai = this.room.GetTeamManager();
+            TeamManager managerForBanzai = this.RoomInstance.GetTeamManager();
 
             List<RoomUser> ListTeam = new List<RoomUser>();
 
-            if (this.team == Team.blue)
+            Team team = (Team)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+
+            if (team == Team.blue)
             {
                 ListTeam.AddRange(managerForBanzai.BlueTeam);
             }
-            else if (this.team == Team.green)
+            else if (team == Team.green)
             {
                 ListTeam.AddRange(managerForBanzai.GreenTeam);
             }
-            else if (this.team == Team.red)
+            else if (team == Team.red)
             {
                 ListTeam.AddRange(managerForBanzai.RedTeam);
             }
-            else if (this.team == Team.yellow)
+            else if (team == Team.yellow)
             {
                 ListTeam.AddRange(managerForBanzai.YellowTeam);
             }
@@ -82,43 +61,21 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     continue;
                 }
 
-                this.handler.TriggerCollision(teamUser, null);
+                this.RoomInstance.GetWiredHandler().TriggerCollision(teamUser, null);
             }
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, ((int)this.team).ToString(), false, null);
+            int team = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, team.ToString(), false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            if (int.TryParse(row["trigger_data"].ToString(), out int number))
-                this.team = (Team)number;
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString("");
-            Message.WriteInteger(1);
-            Message.WriteInteger((int)this.team);
-            Message.WriteInteger(0);
-            Message.WriteInteger(9);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-
-            Session.SendPacket(Message);
-        }
-
-        public bool Disposed()
-        {
-            return this.isDisposed;
+            if (int.TryParse(row["trigger_data"].ToString(), out int team))
+                this.IntParams.Add(team);
         }
     }
 }

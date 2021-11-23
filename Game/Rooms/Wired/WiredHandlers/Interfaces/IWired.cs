@@ -1,5 +1,7 @@
 ﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
+using Butterfly.Game.Items;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces
@@ -10,8 +12,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces
 
         void SaveToDatabase(IQueryAdapter dbClient);
 
-        void LoadFromDatabase(DataRow row, Room insideRoom);
+        void LoadFromDatabase(DataRow row);
 
-        void OnTrigger(Client Session, int spriteId);
+        void OnTrigger(Client Session);
+
+        void Init(List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod);
+
+        void LoadItems(bool inDatabase = false);
     }
 }

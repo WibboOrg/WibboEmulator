@@ -7,68 +7,30 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers
 {
-    public class Repeaterlong : IWired, IWiredCycleable
+    public class Repeaterlong : WiredTriggerBase, IWired, IWiredCycleable
     {
-        public int DelayCycle { get; set; }
-        private WiredHandler handler;
-        private Item item;
-        private bool disposed;
+        public int DelayCycle { get => (this.IntParams.Count > 0) ? this.IntParams[0] : 0; }
 
-        public Repeaterlong(WiredHandler handler, Item item, int cyclesRequired)
+        public Repeaterlong(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_PERIODICALLY_LONG)
         {
-            this.handler = handler;
-            this.DelayCycle = cyclesRequired * 10;
-            this.item = item;
-            this.handler.RequestCycle(new WiredCycle(this, null, null, this.DelayCycle));
-            this.disposed = false;
+            this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, null, null, this.DelayCycle * 10));
         }
 
         public bool OnCycle(RoomUser user, Item item)
         {
-            this.handler.ExecutePile(this.item.Coordinate, null, null);
+            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, null, null);
             return true;
-        }
-
-        public void Dispose()
-        {
-            this.disposed = true;
-            this.handler = null;
-            this.item = null;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.item.Id, string.Empty, (this.DelayCycle / 10).ToString(), false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, (this.DelayCycle).ToString(), false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
             if (int.TryParse(row["trigger_data"].ToString(), out int delay))
-                this.DelayCycle = delay * 10;
+                this.IntParams.Add(delay);
         }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_TRIGGER);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(5);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.item.Id);
-            Message.WriteString("");
-            Message.WriteInteger(1);
-            Message.WriteInteger(this.DelayCycle / 10);
-            Message.WriteInteger(0);
-            Message.WriteInteger(12);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
-        }
-
-        public bool Disposed()
-        {
-            return this.disposed;
-        }
-
     }
 }

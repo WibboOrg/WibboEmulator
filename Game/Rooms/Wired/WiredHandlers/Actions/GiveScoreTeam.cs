@@ -9,31 +9,16 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class GiveScoreTeam : IWiredEffect, IWired
+    public class GiveScoreTeam : WiredActionBase, IWiredEffect, IWired
     {
-        private int maxCountPerGame;
-        private int currentGameCount;
-        private int scoreToGive;
-        private GameManager gameManager;
         private RoomEventDelegate delegateFunction;
-        private readonly int itemID;
-        private Team team;
+        private int currentGameCount;
 
-        public GiveScoreTeam(int TeamId, int maxCountPerGame, int scoreToGive, GameManager gameManager, int itemID)
+        public GiveScoreTeam(Item item, Room room) : base(item, room, (int)WiredActionType.GIVE_SCORE_TO_PREDEFINED_TEAM)
         {
-            if (TeamId < 1 || TeamId > 4)
-            {
-                TeamId = 1;
-            }
-
-            this.maxCountPerGame = maxCountPerGame;
             this.currentGameCount = 0;
-            this.scoreToGive = scoreToGive;
             this.delegateFunction = new RoomEventDelegate(this.gameManager_OnGameStart);
-            this.gameManager = gameManager;
-            this.itemID = itemID;
-            gameManager.OnGameStart += this.delegateFunction;
-            this.team = (Team)TeamId;
+            this.RoomInstance.GetGameManager().OnGameStart += this.delegateFunction;
         }
 
         private void gameManager_OnGameStart(object sender, EventArgs e)
@@ -43,69 +28,53 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void Handle(RoomUser user, Item TriggerItem)
         {
-            if (this.maxCountPerGame <= this.currentGameCount)
+            int scoreToGive = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+            int maxCountPerGame = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
+            Team team = (Team)((this.IntParams.Count > 2) ? this.IntParams[2] : 0);
+
+            if (maxCountPerGame <= this.currentGameCount)
             {
                 return;
             }
 
             this.currentGameCount++;
-            this.gameManager.AddPointToTeam(this.team, this.scoreToGive, user);
+            this.RoomInstance.GetGameManager().AddPointToTeam(team, scoreToGive, user);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            this.gameManager.OnGameStart -= this.delegateFunction;
-            this.gameManager = null;
+            this.RoomInstance.GetGameManager().OnGameStart -= this.delegateFunction;
             this.delegateFunction = null;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, ((int)this.team).ToString(), this.maxCountPerGame.ToString() + ":" + this.scoreToGive.ToString(), false, null);
+            int scoreToGive = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+            int maxCountPerGame = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
+            int team = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0);
+
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, team.ToString(), maxCountPerGame.ToString() + ":" + scoreToGive.ToString(), false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            string data = row["trigger_data"].ToString();
-            string data2 = row["trigger_data_2"].ToString();
+            string triggerData = row["trigger_data"].ToString();
+            string triggerData2 = row["trigger_data_2"].ToString();
 
-            if (data.Contains(":"))
-            {
-                string[] dataSplit = data.Split(':');
+            if (!triggerData.Contains(":"))
+                return;
+
+            string[] dataSplit = triggerData.Split(':');
+
+            if (int.TryParse(dataSplit[1], out int score))
+                this.IntParams.Add(score);
 
                 if (int.TryParse(dataSplit[0], out int maxCount))
-                    this.maxCountPerGame = maxCount;
+                this.IntParams.Add(maxCount);
 
-                if (int.TryParse(dataSplit[1], out int score))
-                    this.scoreToGive = score;
-            }
+            if (int.TryParse(triggerData2, out int team))
+                this.IntParams.Add(team);
 
-            if (int.TryParse(data2, out int number))
-            {
-                this.team = (Team)number;
-            }
-
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString("");
-            Message.WriteInteger(3);
-            Message.WriteInteger(this.scoreToGive);
-            Message.WriteInteger(this.maxCountPerGame);
-            Message.WriteInteger((int)this.team);
-
-            Message.WriteInteger(0);
-            Message.WriteInteger(14);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
         }
     }
 }

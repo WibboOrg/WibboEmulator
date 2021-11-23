@@ -1,39 +1,24 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class UserMove : IWired, IWiredEffect, IWiredCycleable
+    public class UserMove : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
     {
-        private readonly WiredHandler handler;
-        private readonly int itemID;
-        private List<Item> items;
-        public int DelayCycle { get; set; }
-        private bool disposed;
-
-        public UserMove(List<Item> items, int pDelay, WiredHandler handler, int itemID)
+        public UserMove(Item item, Room room) : base(item, room, (int)WiredActionType.TOGGLE_FURNI_STATE)
         {
-            this.itemID = itemID;
-            this.handler = handler;
-            this.items = items;
-            this.DelayCycle = pDelay;
-            this.disposed = false;
         }
 
         private void Execute(RoomUser User)
         {
-            if (this.items.Count == 0)
+            if (this.Items.Count == 0)
             {
                 return;
             }
 
-            Item roomItem = this.items[0];
+            Item roomItem = this.Items[0];
             if (roomItem == null)
             {
                 return;
@@ -57,7 +42,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
             if (this.DelayCycle > 0)
             {
-                this.handler.RequestCycle(new WiredCycle(this, User, TriggerItem, this.DelayCycle));
+                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, User, TriggerItem, this.DelayCycle));
             }
             else
             {
@@ -65,70 +50,31 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             }
         }
 
-        public void Dispose()
-        {
-            this.disposed = true;
-            if (this.items != null)
-            {
-                this.items.Clear();
-            }
-
-            this.items = null;
-        }
-
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.DelayCycle.ToString(), false, this.items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, this.Items);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
             if (int.TryParse(row["trigger_data"].ToString(), out int delay))
-                this.DelayCycle = delay;
+                this.Delay = delay;
 
-            string triggerItem = row["triggers_item"].ToString();
+            string triggerItems = row["triggers_item"].ToString();
 
-            if (triggerItem == "")
+            if (triggerItems == "")
             {
                 return;
             }
 
-            foreach (string item in triggerItem.Split(';'))
+            foreach (string itemId in triggerItems.Split(';'))
             {
-                Item roomItem = insideRoom.GetRoomItemHandler().GetItem(Convert.ToInt32(item));
-                if (roomItem != null && !this.items.Contains(roomItem) && roomItem.Id != this.itemID)
-                {
-                    this.items.Add(roomItem);
-                }
+                if (!int.TryParse(itemId, out int id))
+                    continue;
+
+                if(!this.StuffIds.Contains(id))
+                    this.StuffIds.Add(id);
             }
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(1);
-            Message.WriteInteger(this.items.Count);
-            foreach (Item roomItem in this.items)
-            {
-                Message.WriteInteger(roomItem.Id);
-            }
-
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString("");
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(12);
-            Message.WriteInteger(this.DelayCycle);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
-        }
-
-        public bool Disposed()
-        {
-            return this.disposed;
         }
     }
 }

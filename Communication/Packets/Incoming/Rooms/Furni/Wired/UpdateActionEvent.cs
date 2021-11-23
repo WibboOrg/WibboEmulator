@@ -53,7 +53,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             bool isStaff = session.GetHabbo().HasFuse("fuse_superwired_staff");
             bool isGod = session.GetHabbo().HasFuse("fuse_superwired_god");
 
-            WiredRegister.HandleSave(item, room, intParams, stringParam, stuffIds, selectionCode, delay, isStaff, isGod);
+            WiredRegister.HandleRegister(item, room, intParams, stringParam, stuffIds, selectionCode, delay, isStaff, isGod);
 
             session.SendPacket(new SaveWiredMessageComposer());
         }

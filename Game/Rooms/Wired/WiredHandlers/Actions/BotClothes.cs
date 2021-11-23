@@ -1,91 +1,59 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
+﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
 using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class BotClothes : IWired, IWiredEffect
+    public class BotClothes : WiredActionBase, IWired, IWiredEffect
     {
-        private readonly WiredHandler handler;
-        private readonly int itemID;
-        private string NameBot;
-        private string Look;
-
-        public BotClothes(string stringParam, WiredHandler handler, int itemID)
+        public BotClothes(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_CHANGE_FIGURE)
         {
-            this.itemID = itemID;
-            this.handler = handler;
-
-            string[] nameAndLook = stringParam.Split('\t');
-            this.NameBot = (nameAndLook.Length == 2) ? nameAndLook[0] : "";
-            this.Look = (nameAndLook.Length == 2) ? nameAndLook[1] : "";
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
+        public void Handle(RoomUser user, Item item)
         {
-            if (this.NameBot == "" || this.Look == "")
+            if (string.IsNullOrWhiteSpace(this.StringParam) || !this.StringParam.Contains("\t"))
             {
                 return;
             }
 
-            Room room = this.handler.GetRoom();
-            RoomUser Bot = room.GetRoomUserManager().GetBotOrPetByName(this.NameBot);
+            string[] nameAndLook = this.StringParam.Split('\t');
+            string nameBot = (nameAndLook.Length == 2) ? nameAndLook[0] : "";
+            string look = (nameAndLook.Length == 2) ? nameAndLook[1] : "";
+
+            if (nameBot == "" || look == "")
+            {
+                return;
+            }
+
+            RoomUser Bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(nameBot);
             if (Bot == null)
             {
                 return;
             }
 
-            Bot.BotData.Look = this.Look;
+            Bot.BotData.Look = look;
 
-            room.SendPacket(new UserChangeComposer(Bot));
-        }
-
-        public void Dispose()
-        {
-            this.NameBot = null;
-            this.Look = null;
+            this.RoomInstance.SendPacket(new UserChangeComposer(Bot));
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.itemID, string.Empty, this.NameBot + '\t' + this.Look, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);
         }
 
-        public void LoadFromDatabase(DataRow row, Room insideRoom)
+        public void LoadFromDatabase(DataRow row)
         {
-            string Data = row["trigger_data"].ToString();
+            string triggerData = row["trigger_data"].ToString();
 
-            if (string.IsNullOrWhiteSpace(Data) || !Data.Contains("\t"))
+            if (string.IsNullOrWhiteSpace(triggerData) || !triggerData.Contains("\t"))
             {
                 return;
             }
 
-            string[] SplitData = Data.Split('\t');
-
-            this.NameBot = SplitData[0].ToString();
-            this.Look = SplitData[1].ToString();
-        }
-
-        public void OnTrigger(Client Session, int SpriteId)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.WIRED_ACTION);
-            Message.WriteBoolean(false);
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(SpriteId);
-            Message.WriteInteger(this.itemID);
-            Message.WriteString(this.NameBot + '\t' + this.Look);
-            Message.WriteInteger(0);
-
-            Message.WriteInteger(0);
-            Message.WriteInteger(26); //7
-            Message.WriteInteger(0);
-            Message.WriteInteger(0);
-            Session.SendPacket(Message);
+            this.StringParam = triggerData;
         }
     }
 }
