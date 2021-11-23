@@ -7,44 +7,27 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
     public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
     {
-
         public ExecutePile(Item item, Room room) : base(item, room, (int)WiredActionType.TOGGLE_FURNI_STATE)
         {
             
         }
 
-        public bool OnCycle(RoomUser user, Item item)
-        {
-            this.HandleEffect(user, item);
-            return false;
-        }
-
-        private void HandleEffect(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             foreach (Item roomItem in this.Items)
             {
                 if (roomItem.Coordinate != this.ItemInstance.Coordinate)
                 {
-                    this.RoomInstance.GetWiredHandler().ExecutePile(roomItem.Coordinate, user, TriggerItem);
+                    this.RoomInstance.GetWiredHandler().ExecutePile(roomItem.Coordinate, user, item);
                 }
             }
-        }
 
-        public void Handle(RoomUser user, Item item)
-        {
-            if (this.DelayCycle > 0)
-            {
-                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, item, this.DelayCycle));
-            }
-            else
-            {
-                this.HandleEffect(user, item);
-            }
+            return false;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, this.DelayCycle.ToString(), string.Empty, false, this.Items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, this.DelayCycle.ToString(), string.Empty, false, this.Items, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)

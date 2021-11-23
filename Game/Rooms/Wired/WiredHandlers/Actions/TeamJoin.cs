@@ -13,7 +13,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             if (user != null && !user.IsBot && user.GetClient() != null && user.Room != null)
             {
@@ -35,17 +35,22 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
                 user.GetClient().SendPacket(new IsPlayingComposer(true));
             }
+
+            return false;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
             int team = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, team.ToString(), false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, team.ToString(), false, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
         {
+            if (int.TryParse(row["delay"].ToString(), out int delay))
+	            this.Delay = delay;
+                
             if (int.TryParse(row["trigger_data"].ToString(), out int number))
                 this.IntParams.Add(number);
         }

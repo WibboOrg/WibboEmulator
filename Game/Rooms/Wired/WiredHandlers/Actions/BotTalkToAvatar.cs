@@ -16,10 +16,10 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             if (this.StringParam.Contains("\t"))
-                return;
+                return false;
 
             string[] splitData = this.StringParam.Split('\t');
 
@@ -28,39 +28,39 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(message) || user == null || user.GetClient() == null)
             {
-                return;
+                return false;
             }
 
-            RoomUser Bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(name);
-            if (Bot == null || Bot.BotData == null)
+            RoomUser bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(name);
+            if (bot == null || bot.BotData == null)
             {
-                return;
+                return false;
             }
 
             bool isWhisper = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0)) == 1;
 
-            string TextMessage = message;
-            TextMessage = TextMessage.Replace("#username#", user.GetUsername());
-            TextMessage = TextMessage.Replace("#point#", user.WiredPoints.ToString());
-            TextMessage = TextMessage.Replace("#roomname#", this.RoomInstance.RoomData.Name.ToString());
-            TextMessage = TextMessage.Replace("#vote_yes#", this.RoomInstance.VotedYesCount.ToString());
-            TextMessage = TextMessage.Replace("#vote_no#", this.RoomInstance.VotedNoCount.ToString());
+            string textMessage = message;
+            textMessage = textMessage.Replace("#username#", user.GetUsername());
+            textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());
+            textMessage = textMessage.Replace("#roomname#", this.RoomInstance.RoomData.Name.ToString());
+            textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.VotedYesCount.ToString());
+            textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.VotedNoCount.ToString());
 
             if (user.Roleplayer != null)
             {
-                TextMessage = TextMessage.Replace("#money#", user.Roleplayer.Money.ToString());
+                textMessage = textMessage.Replace("#money#", user.Roleplayer.Money.ToString());
             }
 
-            if (isWhisper && TextMessage.Contains(" : ") && (this.RoomInstance.IsRoleplay || this.RoomInstance.RoomData.OwnerName == "LieuPublic"))
+            if (isWhisper && textMessage.Contains(" : ") && (this.RoomInstance.IsRoleplay || this.RoomInstance.RoomData.OwnerName == "LieuPublic"))
             {
-                this.SendBotChoose(TextMessage, user, Bot.BotData);
+                this.SendBotChoose(textMessage, user, bot.BotData);
             }
 
             if (isWhisper)
             {
                 ServerPacket MessagePacket = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
-                MessagePacket.WriteInteger(Bot.VirtualId);
-                MessagePacket.WriteString(TextMessage);
+                MessagePacket.WriteInteger(bot.VirtualId);
+                MessagePacket.WriteString(textMessage);
                 MessagePacket.WriteInteger(0);
                 MessagePacket.WriteInteger(2);
                 MessagePacket.WriteInteger(0);
@@ -70,14 +70,16 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             else
             {
                 ServerPacket MessagePacket = new ServerPacket(ServerPacketHeader.UNIT_CHAT);
-                MessagePacket.WriteInteger(Bot.VirtualId);
-                MessagePacket.WriteString(TextMessage);
+                MessagePacket.WriteInteger(bot.VirtualId);
+                MessagePacket.WriteString(textMessage);
                 MessagePacket.WriteInteger(ButterflyEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(message));
                 MessagePacket.WriteInteger(2);
                 MessagePacket.WriteInteger(0);
                 MessagePacket.WriteInteger(-1);
                 user.GetClient().SendPacket(MessagePacket);
             }
+
+            return false;
         }
 
         private void SendBotChoose(string TextMessage, RoomUser user, RoomBot BotData)
@@ -106,11 +108,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
             bool isWhisper = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0)) == 1;
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, isWhisper, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, isWhisper, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
         {
+            if (int.TryParse(row["delay"].ToString(), out int delay))
+	            this.Delay = delay;
+                
             if (int.TryParse(row["all_user_triggerable"].ToString(), out int isWhisper))
                 this.IntParams.Add(isWhisper);
 

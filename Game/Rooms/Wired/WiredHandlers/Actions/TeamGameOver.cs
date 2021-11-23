@@ -14,7 +14,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
         }
         
-        public void Handle(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             TeamManager managerForBanzai = this.RoomInstance.GetTeamManager();
 
@@ -40,7 +40,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             }
             else
             {
-                return;
+                return false;
             }
 
             Item ExitTeleport = this.RoomInstance.GetGameItemHandler().GetExitTeleport();
@@ -64,17 +64,22 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     this.RoomInstance.GetGameMap().TeleportToItem(teamuser, ExitTeleport);
                 }
             }
+
+            return false;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
             int team = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, team.ToString(), false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, team.ToString(), false, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
         {
+            if (int.TryParse(row["delay"].ToString(), out int delay))
+	            this.Delay = delay;
+                
             if (int.TryParse(row["trigger_data"].ToString(), out int number))
                 this.IntParams.Add(number);
         }

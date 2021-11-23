@@ -19,7 +19,7 @@ using System.Linq;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class SuperWired : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
+    public class SuperWired : WiredActionBase, IWired, IWiredEffect
     {
         public SuperWired(Item item, Room room) : base(item, room, (int)WiredActionType.CHAT)
         {
@@ -192,34 +192,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             this.StringParam = "";
         }
 
-        public bool OnCycle(RoomUser user, Item item)
-        {
-            this.HandleEffect(user, item);
-            return false;
-        }
-
-        public void Handle(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             if (string.IsNullOrEmpty(this.StringParam) || this.StringParam == ":")
             {
-                return;
-            }
-
-            if (this.DelayCycle > 0)
-            {
-                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
-            }
-            else
-            {
-                this.HandleEffect(user, TriggerItem);
-            }
-        }
-
-        private void HandleEffect(RoomUser User, Item TriggerItem)
-        {
-            if (string.IsNullOrEmpty(this.StringParam) || this.StringParam == ":")
-            {
-                return;
+                return false;
             }
 
             string Cmd = "";
@@ -235,11 +212,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 Cmd = this.StringParam;
             }
 
-            this.RpCommand(Cmd, Value, this.RoomInstance.GetWiredHandler().GetRoom(), User, TriggerItem);
-            this.UserCommand(Cmd, Value, User, TriggerItem);
-            this.RoomCommand(Cmd, Value, this.RoomInstance.GetWiredHandler().GetRoom(), TriggerItem, User);
-            this.BotCommand(Cmd, Value, User, TriggerItem);
+            this.RpCommand(Cmd, Value, this.RoomInstance.GetWiredHandler().GetRoom(), user, item);
+            this.UserCommand(Cmd, Value, user, item);
+            this.RoomCommand(Cmd, Value, this.RoomInstance.GetWiredHandler().GetRoom(), item, user);
+            this.BotCommand(Cmd, Value, user, item);
+
+            return false;
         }
+
 
         private void RpCommand(string Cmd, string Value, Room Room, RoomUser User, Item TriggerItem)
         {
@@ -2394,7 +2374,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, this.DelayCycle.ToString(), this.StringParam, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, this.DelayCycle.ToString(), this.StringParam, false, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)

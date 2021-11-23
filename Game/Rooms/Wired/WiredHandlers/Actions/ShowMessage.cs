@@ -5,68 +5,42 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class ShowMessage : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
+    public class ShowMessage : WiredActionBase, IWired, IWiredEffect
     {
         public ShowMessage(Item item, Room room) : base(item, room, (int)WiredActionType.CHAT)
         {
         }
 
-        private void HandleEffect(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             if (this.StringParam == "")
             {
-                return;
+                return false;
             }
 
             if (user != null && !user.IsBot && user.GetClient() != null)
             {
-                string TextMessage = this.StringParam;
-                TextMessage = TextMessage.Replace("#username#", user.GetUsername());
-                TextMessage = TextMessage.Replace("#point#", user.WiredPoints.ToString());
-                TextMessage = TextMessage.Replace("#roomname#", this.RoomInstance.GetWiredHandler().GetRoom().RoomData.Name.ToString());
-                TextMessage = TextMessage.Replace("#vote_yes#", this.RoomInstance.GetWiredHandler().GetRoom().VotedYesCount.ToString());
-                TextMessage = TextMessage.Replace("#vote_no#", this.RoomInstance.GetWiredHandler().GetRoom().VotedNoCount.ToString());
+                string textMessage = this.StringParam;
+                textMessage = textMessage.Replace("#username#", user.GetUsername());
+                textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());
+                textMessage = textMessage.Replace("#roomname#", this.RoomInstance.GetWiredHandler().GetRoom().RoomData.Name.ToString());
+                textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.GetWiredHandler().GetRoom().VotedYesCount.ToString());
+                textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.GetWiredHandler().GetRoom().VotedNoCount.ToString());
 
                 if (user.Roleplayer != null)
                 {
-                    TextMessage = TextMessage.Replace("#money#", user.Roleplayer.Money.ToString());
+                    textMessage = textMessage.Replace("#money#", user.Roleplayer.Money.ToString());
                 }
 
-                user.SendWhisperChat(TextMessage);
+                user.SendWhisperChat(textMessage);
             }
-        }
 
-        public bool OnCycle(RoomUser user, Item item)
-        {
-            this.HandleEffect(user, item);
             return false;
-        }
-
-        public void Handle(RoomUser user, Item TriggerItem)
-        {
-            if (user == null || user.IsBot || user.GetClient() == null)
-            {
-                return;
-            }
-
-            if (this.StringParam == "")
-            {
-                return;
-            }
-
-            if (this.DelayCycle > 0)
-            {
-                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
-            }
-            else
-            {
-                this.HandleEffect(user, TriggerItem);
-            }
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, this.DelayCycle.ToString(), this.StringParam, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, this.DelayCycle.ToString(), this.StringParam, false, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)

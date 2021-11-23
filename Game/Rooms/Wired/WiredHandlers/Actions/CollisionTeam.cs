@@ -13,9 +13,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             this.HandleItems();
+
+            return false;
         }
 
         private void HandleItems()
@@ -67,11 +69,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
             int team = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, team.ToString(), false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, team.ToString(), false, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
         {
+            if (int.TryParse(row["delay"].ToString(), out int delay))
+	            this.Delay = delay;
+                
             if (int.TryParse(row["trigger_data"].ToString(), out int team))
                 this.IntParams.Add(team);
         }

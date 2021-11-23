@@ -15,11 +15,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             if (user == null || user.IsBot || user.GetClient() == null)
             {
-                return;
+                return false;
             }
 
             Dictionary<string, int> Scores = this.ItemInstance.Scores;
@@ -39,11 +39,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             }
 
             this.RoomInstance.SendPacket(new ObjectUpdateComposer(this.ItemInstance, this.RoomInstance.RoomData.OwnerId));
+
+            return false;
         }
 
         public override void Dispose()
         {
-            this.IsDisposed = true;
+            base.Dispose();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -68,11 +70,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 i++;
             }
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, triggerdata, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, triggerdata, false, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
         {
+            if (int.TryParse(row["delay"].ToString(), out int delay))
+	            this.Delay = delay;
+                
             string triggerData = row["trigger_data"].ToString();
 
             if (triggerData == "")

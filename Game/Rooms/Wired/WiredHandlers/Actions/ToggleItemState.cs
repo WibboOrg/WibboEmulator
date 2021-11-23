@@ -5,31 +5,13 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class ToggleItemState : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
+    public class ToggleItemState : WiredActionBase, IWired, IWiredEffect
     {
         public ToggleItemState(Item item, Room room) : base(item, room, (int)WiredActionType.TOGGLE_FURNI_STATE)
         {
         }
 
-        public bool OnCycle(RoomUser user, Item item)
-        {
-            this.ToggleItems(user);
-            return false;
-        }
-
-        public void Handle(RoomUser user, Item TriggerItem)
-        {
-            if (this.DelayCycle > 0)
-            {
-                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
-            }
-            else
-            {
-                this.ToggleItems(user);
-            }
-        }
-
-        private void ToggleItems(RoomUser user)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             foreach (Item roomItem in this.Items)
             {
@@ -46,11 +28,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
                 }
             }
+
+            return false;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, this.Items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, this.Items, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)

@@ -11,17 +11,17 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             if (string.IsNullOrWhiteSpace(this.StringParam))
             {
-                return;
+                return false;
             }
 
             RoomUser bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(this.StringParam);
             if (bot == null)
             {
-                return;
+                return false;
             }
 
             if (user != null && !user.IsBot && user.GetClient() != null)
@@ -39,13 +39,15 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     bot.BotData.FollowUser = 0;
                 }
             }
+
+            return false;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
             bool isFollow = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1);
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, isFollow, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, isFollow, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)

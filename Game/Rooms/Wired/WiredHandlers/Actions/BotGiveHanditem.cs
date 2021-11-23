@@ -11,19 +11,23 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
+            return false;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
             int handItemId = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, handItemId.ToString(), this.StringParam, false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, handItemId.ToString(), this.StringParam, false, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
         {
+            if (int.TryParse(row["delay"].ToString(), out int delay))
+	            this.Delay = delay;
+                
             this.StringParam = row["trigger_data"].ToString();
 
             if (int.TryParse(row["trigger_data2"].ToString(), out int handItemId))

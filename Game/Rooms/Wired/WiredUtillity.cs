@@ -133,7 +133,7 @@ namespace Butterfly.Game.Rooms.Wired
             }
         }
 
-        public static void SaveTriggerItem(IQueryAdapter dbClient, int triggerId, string triggerData2, string triggerData, bool allUsertriggerable, List<Item> itemslist)
+        public static void SaveTriggerItem(IQueryAdapter dbClient, int triggerId, string triggerData2, string triggerData, bool allUsertriggerable, List<Item> itemslist, int delay = 0)
         {
             string triggersitem = "";
 
@@ -154,7 +154,7 @@ namespace Butterfly.Game.Rooms.Wired
             }
 
             ItemWiredDao.Delete(dbClient, triggerId);
-            ItemWiredDao.Insert(dbClient, triggerId, triggerData, triggerData2, allUsertriggerable, triggersitem);
+            ItemWiredDao.Insert(dbClient, triggerId, triggerData, triggerData2, allUsertriggerable, triggersitem, delay);
         }
     }
 

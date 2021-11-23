@@ -12,48 +12,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
         }
 
-        public bool OnCycle(RoomUser user, Item item)
-        {
-            this.TeleportUser(user);
-
-            return false;
-        }
-
-        private void DoAnimation(RoomUser user)
-        {
-            user.ApplyEffect(4, true);
-            user.Freeze = true;
-        }
-        private void ResetAnimation(RoomUser user)
-        {
-            user.ApplyEffect(user.CurrentEffect, true);
-            if (user.FreezeEndCounter <= 0)
-            {
-                user.Freeze = false;
-            }
-        }
-
-        public void Handle(RoomUser user, Item TriggerItem)
-        {
-            if (this.Items.Count == 0)
-            {
-                return;
-            }
-
-            if (user == null)
-            {
-                return;
-            }
-
-            this.DoAnimation(user);
-            this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, null, this.DelayCycle));
-        }
-
-        private void TeleportUser(RoomUser user)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             if (user == null)
             {
-                return;
+                return false;
             }
 
             if (this.Items.Count > 1)
@@ -61,7 +24,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 Item roomItem = this.Items[ButterflyEnvironment.GetRandomNumber(0, this.Items.Count - 1)];
                 if (roomItem == null)
                 {
-                    return;
+                    return false;
                 }
 
                 if (roomItem.Coordinate != user.Coordinate)
@@ -74,12 +37,31 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 this.RoomInstance.GetGameMap().TeleportToItem(user, Enumerable.First<Item>(this.Items));
             }
 
-            this.ResetAnimation(user);
+            user.ApplyEffect(user.CurrentEffect, true);
+            if (user.FreezeEndCounter <= 0)
+            {
+                user.Freeze = false;
+            }
+
+            return false;
+        }
+
+        public override void Handle(RoomUser user, Item item)
+        {
+            if (this.Items.Count == 0 || user == null)
+            {
+                return;
+            }
+
+            user.ApplyEffect(4, true);
+            user.Freeze = true;
+
+            base.Handle(user, item);
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, this.Items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, this.Items, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)

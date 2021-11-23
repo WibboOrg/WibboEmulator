@@ -11,48 +11,32 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
         }
 
-        private void Execute(RoomUser User)
+        public override bool OnCycle(RoomUser user, Item item)
         {
-            if (this.Items.Count == 0)
+            if (this.Items.Count == 0 || user == null)
             {
-                return;
+                return false;
             }
 
             Item roomItem = this.Items[0];
             if (roomItem == null)
             {
-                return;
+                return false;
             }
 
-            if (roomItem.Coordinate != User.Coordinate)
+            if (roomItem.Coordinate != user.Coordinate)
             {
-                User.IsWalking = true;
-                User.GoalX = roomItem.GetX;
-                User.GoalY = roomItem.GetY;
+                user.IsWalking = true;
+                user.GoalX = roomItem.GetX;
+                user.GoalY = roomItem.GetY;
             }
-        }
 
-        public bool OnCycle(RoomUser User, Item Item)
-        {
-            this.Execute(User);
             return false;
-        }
-
-        public void Handle(RoomUser User, Item TriggerItem)
-        {
-            if (this.DelayCycle > 0)
-            {
-                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, User, TriggerItem, this.DelayCycle));
-            }
-            else
-            {
-                this.Execute(User);
-            }
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, this.Items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, this.Items, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)

@@ -268,7 +268,7 @@ namespace Butterfly.Game
 
         public static void DatabaseCleanup()
         {
-            return;
+            #if !DEBUG
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserDao.UpdateAllOnline(dbClient);
@@ -277,6 +277,7 @@ namespace Butterfly.Game
                 RoomDao.UpdateResetUsersNow(dbClient);
                 EmulatorStatusDao.UpdateReset(dbClient);
             }
+            #endif
         }
 
         public void Destroy()

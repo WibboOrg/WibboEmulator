@@ -13,14 +13,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             if (user != null && !user.IsBot && user.GetClient() != null && user.Team != Team.none && user.Room != null)
             {
                 TeamManager managerForBanzai = user.Room.GetTeamManager();
                 if (managerForBanzai == null)
                 {
-                    return;
+                    return false;
                 }
 
                 managerForBanzai.OnUserLeave(user);
@@ -30,15 +30,19 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
                 user.GetClient().SendPacket(new IsPlayingComposer(false));
             }
+
+            return true;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
         {
+            if (int.TryParse(row["delay"].ToString(), out int delay))
+	            this.Delay = delay;
         }
     }
 }

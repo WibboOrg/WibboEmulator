@@ -8,7 +8,7 @@ using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class PositionReset : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
+    public class PositionReset : WiredActionBase, IWired, IWiredEffect
     {
         private Dictionary<int, ItemsPosReset> ItemsData;
 
@@ -38,22 +38,10 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             }
         }
 
-        public bool OnCycle(RoomUser user, Item item)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             this.HandleItems();
             return false;
-        }
-
-        public void Handle(RoomUser user, Item TriggerItem)
-        {
-            if (this.DelayCycle > 0)
-            {
-                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, TriggerItem, this.Delay));
-            }
-            else
-            {
-                this.HandleItems();
-            }
         }
 
         private void HandleItems()
@@ -119,7 +107,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             string triggerData2 = state + ";" + direction + ";" + position;
 
             ItemWiredDao.Delete(dbClient, this.ItemInstance.Id);
-            ItemWiredDao.Insert(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems);
+            ItemWiredDao.Insert(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)

@@ -18,17 +18,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             this.MoveToDirMovement = MovementDirection.none;
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
-        {
-            this.HandleItems();
-        }
-
-        private void HandleItems()
+        public override bool OnCycle(RoomUser user, Item item)
         {
             foreach (Item roomItem in this.Items.ToArray())
             {
                 this.HandleMovement(roomItem);
             }
+
+            return false;
         }
         
         public override void LoadItems(bool inDatabase = false)
@@ -1251,11 +1248,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             MovementDirection startDirection = (MovementDirection)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
             WhenMovementBlock whenMoveIsBlocked = (WhenMovementBlock)((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, Convert.ToInt32(startDirection).ToString(), Convert.ToInt32(whenMoveIsBlocked).ToString(), false, this.Items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, Convert.ToInt32(startDirection).ToString(), Convert.ToInt32(whenMoveIsBlocked).ToString(), false, this.Items, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
         {
+            if (int.TryParse(row["delay"].ToString(), out int delay))
+	            this.Delay = delay;
+                
             string triggerItems = row["triggers_item"].ToString();
 
             if (int.TryParse(row["trigger_data_2"].ToString(), out int startDirection))

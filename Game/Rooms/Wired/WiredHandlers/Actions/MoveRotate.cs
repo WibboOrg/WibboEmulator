@@ -9,43 +9,27 @@ using System.Drawing;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 {
-    public class MoveRotate : WiredActionBase, IWiredEffect, IWired, IWiredCycleable
+    public class MoveRotate : WiredActionBase, IWiredEffect, IWired
     {
         public MoveRotate(Item item, Room room) : base(item, room, (int)WiredActionType.MOVE_FURNI)
         {
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
-        {
-            if (this.DelayCycle > 0)
-            {
-                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
-            }
-            else
-            {
-                this.HandleItems();
-            }
-        }
-
-        public bool OnCycle(RoomUser user, Item item)
-        {
-            this.HandleItems();
-            return false;
-        }
-
-        private void HandleItems()
+        public override bool OnCycle(RoomUser user, Item item)
         {
             foreach (Item roomItem in this.Items)
             {
                 this.HandleMovement(roomItem);
             }
+
+            return false;
         }
 
-        private bool HandleMovement(Item item)
+        private void HandleMovement(Item item)
         {
             if (this.RoomInstance.GetRoomItemHandler().GetItem(item.Id) == null)
             {
-                return false;
+                return;
             }
             
             int movement = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
@@ -74,7 +58,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     this.RoomInstance.SendPacket(Message);
                 }
             }
-            return false;
+
+            return;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
@@ -83,13 +68,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             int rotation = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
 
             string rotAndMove = (int)rotation + ";" + (int)movement;
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, rotAndMove, this.DelayCycle.ToString(), false, this.Items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, rotAndMove, this.DelayCycle.ToString(), false, this.Items, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
         {
-            this.Delay = Convert.ToInt32(row["trigger_data"]);
-
+            if (int.TryParse(row["trigger_data"].ToString(), out int delay))
+                this.Delay = delay;
 
             string triggerData2 = row["trigger_data_2"].ToString();
             if (triggerData2.Contains(";"))

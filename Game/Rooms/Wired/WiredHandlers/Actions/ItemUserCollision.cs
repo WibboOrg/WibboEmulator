@@ -12,17 +12,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
-        {
-            this.HandleItems();
-        }
-
-        private void HandleItems()
+        public override bool OnCycle(RoomUser user, Item item)
         {
             foreach (Item roomItem in this.Items.ToArray())
             {
                 this.HandleMovement(roomItem);
             }
+
+            return false;
         }
 
         private void HandleMovement(Item item)
@@ -45,11 +42,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
         {
+            if (int.TryParse(row["delay"].ToString(), out int delay))
+	            this.Delay = delay;
+                
             string triggerItems = row["triggers_item"].ToString();
 
             if (triggerItems == "")

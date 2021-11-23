@@ -24,7 +24,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             this.currentGameCount = 0;
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             int scoreToGive = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
             int maxCountPerGame = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
@@ -32,15 +32,19 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
             if (maxCountPerGame <= this.currentGameCount)
             {
-                return;
+                return false;
             }
 
             this.currentGameCount++;
             this.RoomInstance.GetGameManager().AddPointToTeam(team, scoreToGive, user);
+
+            return false;
         }
 
         public override void Dispose()
         {
+            base.Dispose();
+
             this.RoomInstance.GetGameManager().OnGameStart -= this.delegateFunction;
             this.delegateFunction = null;
         }
@@ -51,11 +55,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             int maxCountPerGame = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
             int team = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0);
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, team.ToString(), maxCountPerGame.ToString() + ":" + scoreToGive.ToString(), false, null);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, team.ToString(), maxCountPerGame.ToString() + ":" + scoreToGive.ToString(), false, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
         {
+            if (int.TryParse(row["delay"].ToString(), out int delay))
+	            this.Delay = delay;
+                
             string triggerData = row["trigger_data"].ToString();
             string triggerData2 = row["trigger_data_2"].ToString();
 

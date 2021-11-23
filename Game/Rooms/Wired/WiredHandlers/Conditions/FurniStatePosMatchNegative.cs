@@ -102,7 +102,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             string triggerData2 = state + ";" + direction + ";" + position;
 
             ItemWiredDao.Delete(dbClient, this.ItemInstance.Id);
-            ItemWiredDao.Insert(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems);
+            ItemWiredDao.Insert(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)

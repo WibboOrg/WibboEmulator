@@ -11,38 +11,43 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
         {
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
+        public override bool OnCycle(RoomUser user, Item item)
         {
             if (string.IsNullOrWhiteSpace(this.StringParam) || this.Items.Count == 0)
             {
-                return;
+                return false;
             }
 
             RoomUser Bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(this.StringParam);
             if (Bot == null)
             {
-                return;
+                return false;
             }
 
             Item roomItem = this.Items[ButterflyEnvironment.GetRandomNumber(0, this.Items.Count - 1)];
             if (roomItem == null)
             {
-                return;
+                return false;
             }
 
             if (roomItem.Coordinate != Bot.Coordinate)
             {
                 this.RoomInstance.GetGameMap().TeleportToItem(Bot, roomItem);
             }
+
+            return false;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, this.Items);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, this.Items, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
         {
+            if (int.TryParse(row["delay"].ToString(), out int delay))
+	            this.Delay = delay;
+                
             this.StringParam = row["trigger_data"].ToString();
 
             string triggerItems = row["triggers_item"].ToString();
