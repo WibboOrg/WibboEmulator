@@ -1,7 +1,6 @@
 ﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
-using System;
 using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions

@@ -1,4 +1,3 @@
-using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd

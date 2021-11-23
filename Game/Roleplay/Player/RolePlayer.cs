@@ -5,7 +5,6 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Roleplay.Weapon;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.WebClients;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

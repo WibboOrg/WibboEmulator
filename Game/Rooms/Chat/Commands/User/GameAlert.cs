@@ -1,5 +1,4 @@
 ﻿using Butterfly.Game.Clients;
-using Butterfly.Game.WebClients;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 {

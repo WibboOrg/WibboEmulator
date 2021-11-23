@@ -1,5 +1,4 @@
 ﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;

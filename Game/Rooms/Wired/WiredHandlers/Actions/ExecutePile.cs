@@ -30,15 +30,15 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             }
         }
 
-        public void Handle(RoomUser user, Item TriggerItem)
+        public void Handle(RoomUser user, Item item)
         {
             if (this.DelayCycle > 0)
             {
-                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, TriggerItem, this.DelayCycle));
+                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, item, this.DelayCycle));
             }
             else
             {
-                this.HandleEffect(user, TriggerItem);
+                this.HandleEffect(user, item);
             }
         }
 

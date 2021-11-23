@@ -1,6 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
 using System.Data;
@@ -22,6 +20,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     this.RoomInstance.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, true);
                 }
             }
+            
             return false;
         }
 
@@ -31,16 +30,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             {
                 if (User.GetClient().GetHabbo().HasFuse("fuse_mod") || this.RoomInstance.RoomData.OwnerId == User.UserId)
                 {
-                    if (User.GetClient() != null)
-                    {
-                        User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("wired.kick.exception", User.GetClient().Langue));
-                    }
+                    User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("wired.kick.exception", User.GetClient().Langue));
                     
                     return;
                 }
 
                 User.ApplyEffect(4);
                 User.Freeze = true;
+
                 if (!string.IsNullOrEmpty(this.StringParam))
                 {
                     User.SendWhisperChat(this.StringParam);

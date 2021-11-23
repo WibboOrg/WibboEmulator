@@ -2,7 +2,6 @@
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Pathfinding;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
-using System;
 using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions

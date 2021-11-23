@@ -1,10 +1,6 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
@@ -33,9 +29,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             }
         }
 
-        private bool ToggleItems(RoomUser user)
+        private void ToggleItems(RoomUser user)
         {
-            bool flag = false;
             foreach (Item roomItem in this.Items)
             {
                 if (roomItem != null)
@@ -49,10 +44,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                         roomItem.Interactor.OnTrigger(null, roomItem, 0, true);
                     }
 
-                    flag = true;
                 }
             }
-            return flag;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)

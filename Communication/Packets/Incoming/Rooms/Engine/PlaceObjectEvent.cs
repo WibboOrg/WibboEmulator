@@ -161,10 +161,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     CorrectedData[i - 1] = Data[i];
                 }
 
-                string WallPos = string.Empty;
-                if (TrySetWallItem(CorrectedData, out WallPos))
+                if (TrySetWallItem(CorrectedData, out string wallPos))
                 {
-                    Item roomItem = new Item(userItem.Id, Room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, WallPos, Room);
+                    Item roomItem = new Item(userItem.Id, Room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallPos, Room);
                     if (Room.GetRoomItemHandler().SetWallItem(Session, roomItem))
                     {
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())

@@ -1,11 +1,9 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 

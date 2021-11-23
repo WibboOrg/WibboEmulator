@@ -109,7 +109,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Present.ResetBaseItem();
             Present.ExtraData = (!string.IsNullOrEmpty(Convert.ToString(Row["extra_data"])) ? Convert.ToString(Row["extra_data"]) : "");
 
-
             if (Present.Data.Type == 's')
             {
                 if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.GetX, Present.GetY, Present.Rotation, true, false, true))

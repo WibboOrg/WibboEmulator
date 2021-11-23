@@ -1,16 +1,15 @@
 ﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 {
     public class WalksOffFurni : WiredTriggerBase, IWired, IWiredCycleable
     {
-        private readonly UserAndItemDelegate delegateFunction;
         public int DelayCycle { get => this.Delay; }
+
+        private readonly UserAndItemDelegate delegateFunction;
 
         public WalksOffFurni(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_WALKS_OFF_FURNI)
         {

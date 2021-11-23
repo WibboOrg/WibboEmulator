@@ -6,7 +6,6 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.User;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

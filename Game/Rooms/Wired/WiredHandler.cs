@@ -94,8 +94,7 @@ namespace Butterfly.Game.Rooms.Wired
                 this._actionStacks[coordinate].Remove(item);
                 if (this._actionStacks[coordinate].Count == 0)
                 {
-                    List<Item> NewList = new List<Item>();
-                    this._actionStacks.TryRemove(coordinate, out NewList);
+                    this._actionStacks.TryRemove(coordinate, out List<Item> NewList);
                 }
             }
             else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))

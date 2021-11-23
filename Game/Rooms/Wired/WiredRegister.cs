@@ -1,7 +1,4 @@
-﻿using Butterfly.Communication.Packets.Incoming;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Wireds;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Wired.WiredHandlers;
 using Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions;
@@ -280,8 +277,6 @@ namespace Butterfly.Game.Rooms.Wired
             }
 
             item.WiredHandler = handler;
-            room.GetWiredHandler().RemoveFurniture(item);
-            room.GetWiredHandler().AddFurniture(item);
         }
     }
 }

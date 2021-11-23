@@ -608,21 +608,21 @@ namespace Butterfly.Game.Rooms
             return flag;
         }
 
-        public bool AddItemToMap(Item Item)
+        public bool AddItemToMap(Item item)
         {
-            if (this.room.GotWired() && WiredUtillity.TypeIsWired(Item.GetBaseItem().InteractionType))
+            if (this.room.GotWired() && WiredUtillity.TypeIsWired(item.GetBaseItem().InteractionType))
             {
-                this.room.GetWiredHandler().AddFurniture(Item);
+                this.room.GetWiredHandler().AddFurniture(item);
             }
 
-            this.AddSpecialItems(Item);
+            this.AddSpecialItems(item);
 
-            switch (Item.GetBaseItem().InteractionType)
+            switch (item.GetBaseItem().InteractionType)
             {
                 case InteractionType.ROLLER:
-                    if (!this.room.GetRoomItemHandler().GetRollers().Contains(Item))
+                    if (!this.room.GetRoomItemHandler().GetRollers().Contains(item))
                     {
-                        this.room.GetRoomItemHandler().TryAddRoller(Item.Id, Item);
+                        this.room.GetRoomItemHandler().TryAddRoller(item.Id, item);
                     }
 
                     break;
@@ -632,7 +632,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEGREEN:
                 case InteractionType.FREEZEGREENCOUNTER:
                 case InteractionType.FREEZEGREENGATE:
-                    this.room.GetGameManager().AddFurnitureToTeam(Item, Team.green);
+                    this.room.GetGameManager().AddFurnitureToTeam(item, Team.green);
                     break;
                 case InteractionType.FOOTBALLGOALYELLOW:
                 case InteractionType.FOOTBALLCOUNTERYELLOW:
@@ -640,7 +640,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEYELLOW:
                 case InteractionType.FREEZEYELLOWCOUNTER:
                 case InteractionType.FREEZEYELLOWGATE:
-                    this.room.GetGameManager().AddFurnitureToTeam(Item, Team.yellow);
+                    this.room.GetGameManager().AddFurnitureToTeam(item, Team.yellow);
                     break;
                 case InteractionType.footballgoalblue:
                 case InteractionType.FOOTBALLCOUNTERBLUE:
@@ -648,7 +648,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEBLUE:
                 case InteractionType.FREEZEBLUECOUNTER:
                 case InteractionType.FREEZEBLUEGATE:
-                    this.room.GetGameManager().AddFurnitureToTeam(Item, Team.blue);
+                    this.room.GetGameManager().AddFurnitureToTeam(item, Team.blue);
                     break;
                 case InteractionType.FOOTBALLGOALRED:
                 case InteractionType.FOOTBALLCOUNTERRED:
@@ -656,28 +656,28 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATERED:
                 case InteractionType.FREEZEREDCOUNTER:
                 case InteractionType.FREEZEREDGATE:
-                    this.room.GetGameManager().AddFurnitureToTeam(Item, Team.red);
+                    this.room.GetGameManager().AddFurnitureToTeam(item, Team.red);
                     break;
             }
 
-            if (Item.GetBaseItem().Type != 's')
+            if (item.GetBaseItem().Type != 's')
             {
                 return true;
             }
 
-            foreach (Point point in Item.GetCoords)
+            foreach (Point point in item.GetCoords)
             {
-                this.AddCoordinatedItem(Item, new Point(point.X, point.Y));
+                this.AddCoordinatedItem(item, new Point(point.X, point.Y));
             }
 
-            if (Item.GetBaseItem().InteractionType == InteractionType.FOOTBALL)
+            if (item.GetBaseItem().InteractionType == InteractionType.FOOTBALL)
             {
                 return true;
             }
 
-            foreach (Point Coord in Item.GetCoords)
+            foreach (Point Coord in item.GetCoords)
             {
-                if (!this.ConstructMapForItem(Item, Coord))
+                if (!this.ConstructMapForItem(item, Coord))
                 {
                     return false;
                 }

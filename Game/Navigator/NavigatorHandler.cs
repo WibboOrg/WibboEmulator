@@ -4,7 +4,6 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.User.Messenger;
 using System;
 using System.Collections.Generic;
 using System.Data;

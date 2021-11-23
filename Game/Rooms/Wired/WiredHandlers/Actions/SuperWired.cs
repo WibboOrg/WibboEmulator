@@ -32,10 +32,10 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             if(inDatabase)
                 return;
 
-            this.checkPermission();
+            this.CheckPermission();
         }
 
-        private void checkPermission()
+        private void CheckPermission()
         {
             string effet;
             if (this.StringParam.Contains(":"))

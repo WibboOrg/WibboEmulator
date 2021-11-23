@@ -5,7 +5,6 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Chat.Logs;
-using Butterfly.Game.Moderation;
 using Butterfly.Game.User;
 using System;
 using System.Collections.Generic;

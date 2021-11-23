@@ -16,7 +16,6 @@ using Butterfly.Game.Rooms;
 using Butterfly.Game.User.Badges;
 using Butterfly.Game.User.Inventory;
 using Butterfly.Game.User.Messenger;
-using Butterfly.Game.WebClients;
 using System;
 using System.Collections.Generic;
 using System.Data;

@@ -1,4 +1,3 @@
-using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Moderation;
 using Butterfly.Game.Rooms;

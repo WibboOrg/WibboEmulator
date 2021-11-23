@@ -1,5 +1,4 @@
 using Butterfly.Game.Clients;using Butterfly.Game.User;
-using Butterfly.Game.WebClients;
 using System.Text;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class UserInfo : IChatCommand    {        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)

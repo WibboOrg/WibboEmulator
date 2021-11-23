@@ -1,5 +1,4 @@
-﻿using Butterfly.Game.Rooms.Wired;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace Butterfly.Game.Rooms.Map.Movement
 {

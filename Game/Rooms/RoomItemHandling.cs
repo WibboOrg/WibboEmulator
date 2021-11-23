@@ -78,10 +78,7 @@ namespace Butterfly.Game.Rooms
                 roomItem.Interactor.OnRemove(Session, roomItem);
                 roomItem.Destroy();
 
-                ServerPacket Message = new ServerPacket(ServerPacketHeader.ITEM_WALL_REMOVE);
-                Message.WriteString(roomItem.Id + string.Empty);
-                Message.WriteInteger(this._room.RoomData.OwnerId);
-                ListMessage.Add(Message);
+                ListMessage.Add(new ItemRemoveMessageComposer(roomItem.Id, this._room.RoomData.OwnerId));
                 Items.Add((Item)roomItem);
             }
             this._room.SendMessage(ListMessage);
@@ -279,16 +276,6 @@ namespace Butterfly.Game.Rooms
 
             this.RemoveRoomItem(roomItem);
 
-            if (roomItem.WiredHandler != null)
-            {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                    ItemWiredDao.Delete(dbClient, roomItem.Id);
-
-                roomItem.WiredHandler.Dispose();
-                this._room.GetWiredHandler().RemoveFurniture(roomItem);
-                roomItem.WiredHandler = null;
-            }
-
             roomItem.Destroy();
         }
 
@@ -304,42 +291,47 @@ namespace Butterfly.Game.Rooms
             this._itemsTemp.TryRemove(pId, out Item);
         }
 
-        private void RemoveRoomItem(Item Item)
+        private void RemoveRoomItem(Item item)
         {
-            if (Item.IsWallItem)
+            if (item.IsWallItem)
             {
-                ServerPacket Message = new ServerPacket(ServerPacketHeader.ITEM_WALL_REMOVE);
-                Message.WriteString(Item.Id.ToString());
-                Message.WriteInteger(this._room.RoomData.OwnerId);
-                this._room.SendPacket(Message);
+                this._room.SendPacket(new ItemRemoveMessageComposer(item.Id, this._room.RoomData.OwnerId));
             }
-            else if (Item.IsFloorItem)
+            else if (item.IsFloorItem)
             {
-                this._room.SendPacket(new ObjectRemoveMessageComposer(Item.Id, this._room.RoomData.OwnerId));
+                this._room.SendPacket(new ObjectRemoveMessageComposer(item.Id, this._room.RoomData.OwnerId));
             }
 
-
-            if (Item.IsWallItem)
+            if (item.IsWallItem)
             {
-                this._wallItems.TryRemove(Item.Id, out Item);
+                this._wallItems.TryRemove(item.Id, out item);
             }
             else
             {
-                this._floorItems.TryRemove(Item.Id, out Item);
-                this._room.GetGameMap().RemoveFromMap(Item);
+                this._floorItems.TryRemove(item.Id, out item);
             }
 
-            if (this._updateItems.ContainsKey(Item.Id))
+            if (this._updateItems.ContainsKey(item.Id))
             {
-                this._updateItems.TryRemove(Item.Id, out Item);
+                this._updateItems.TryRemove(item.Id, out item);
             }
 
-            if (this._rollers.ContainsKey(Item.Id))
+            if (this._rollers.ContainsKey(item.Id))
             {
-                this._rollers.TryRemove(Item.Id, out Item);
+                this._rollers.TryRemove(item.Id, out item);
             }
 
-            foreach (ThreeDCoord threeDcoord in Item.GetAffectedTiles.Values)
+            if (item.WiredHandler != null)
+            {
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    ItemWiredDao.Delete(dbClient, item.Id);
+
+                item.WiredHandler.Dispose();
+                this._room.GetWiredHandler().RemoveFurniture(item);
+                item.WiredHandler = null;
+            }
+
+            foreach (ThreeDCoord threeDcoord in item.GetAffectedTiles.Values)
             {
                 List<RoomUser> userForSquare = this._room.GetGameMap().GetRoomUsers(new Point(threeDcoord.X, threeDcoord.Y));
                 if (userForSquare == null)
@@ -592,9 +584,7 @@ namespace Butterfly.Game.Rooms
                     ItemsAffected.AddRange(Temp);
                 }
             }
-            //ItemsComplete.AddRange(ItemsOnTile);
             ItemsComplete.AddRange(ItemsAffected);
-
 
             bool ConstruitMode = false;
             bool ConstruitZMode = false;
@@ -608,12 +598,12 @@ namespace Butterfly.Game.Rooms
 
             if (Session != null && Session.GetHabbo() != null && Session.GetHabbo().CurrentRoom != null)
             {
-                RoomUser User_room = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-                if (User_room != null)
+                RoomUser roomUser = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+                if (roomUser != null)
                 {
-                    ConstruitMode = User_room.ConstruitEnable;
-                    ConstruitZMode = User_room.ConstruitZMode;
-                    ConstruitHeigth = User_room.ConstruitHeigth;
+                    ConstruitMode = roomUser.ConstruitEnable;
+                    ConstruitZMode = roomUser.ConstruitZMode;
+                    ConstruitHeigth = roomUser.ConstruitHeigth;
                 }
             }
 
@@ -624,7 +614,7 @@ namespace Butterfly.Game.Rooms
 
             if (ConstruitZMode)
             {
-                pZ = pZ + ConstruitHeigth;
+                pZ += ConstruitHeigth;
             }
             else
             {
@@ -725,7 +715,6 @@ namespace Butterfly.Game.Rooms
             }
 
             this._room.GetGameMap().AddToMap(Item);
-
 
             foreach (ThreeDCoord threeDcoord in Item.GetAffectedTiles.Values)
             {
