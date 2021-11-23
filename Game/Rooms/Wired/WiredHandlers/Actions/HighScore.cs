@@ -52,22 +52,16 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            string triggerdata = "";
+            string triggerItems = "";
 
-            int i = 0;
             foreach (KeyValuePair<string, int> score in this.ItemInstance.Scores.OrderByDescending(x => x.Value).Take(20))
             {
-                if (i != 0)
-                {
-                    triggerdata += ";";
-                }
-
-                triggerdata += score.Key + ":" + score.Value;
-
-                i++;
+                triggerItems += score.Key + ":" + score.Value + ";";
             }
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, triggerdata, false, null, this.Delay);
+            triggerItems = triggerItems.TrimEnd(';');
+
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, triggerItems, false, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
@@ -82,26 +76,29 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 return;
             }
 
-            foreach (string score in triggerData.Split(';'))
+            foreach (string data in triggerData.Split(';'))
             {
-                string[] score2 = score.Split(':');
-                int.TryParse(score2[score2.Count() - 1], out int ScoreNum);
+                string[] userData = data.Split(':');
+
+                int.TryParse(userData[userData.Count() - 1], out int score);
+
                 string username = "";
-                for (int i = 0; i < score2.Count() - 1; i++)
+
+                for (int i = 0; i < userData.Count() - 1; i++)
                 {
                     if (i == 0)
                     {
-                        username = score2[i];
+                        username = userData[i];
                     }
                     else
                     {
-                        username += ':' + score2[i];
+                        username += ':' + userData[i];
                     }
                 }
 
                 if (!this.ItemInstance.Scores.ContainsKey(username))
                 {
-                    this.ItemInstance.Scores.Add(username, ScoreNum);
+                    this.ItemInstance.Scores.Add(username, score);
                 }
             }
         }

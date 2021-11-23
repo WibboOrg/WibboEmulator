@@ -95,9 +95,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
 
             triggerItems = triggerItems.TrimEnd(';');
 
-            bool state = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
-            bool direction = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0) == 1;
-            bool position = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0) == 1;
+            int state = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+            int direction = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
+            int position = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0);
 
             string triggerData2 = state + ";" + direction + ";" + position;
 
