@@ -57,8 +57,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
         {
             this.StringParam = row["trigger_data"].ToString();
             
-            if (int.TryParse(row["all_user_triggerable"].ToString(), out int isOwnerOnly))
-	            this.IntParams.Add(isOwnerOnly);
+            if (bool.TryParse(row["all_user_triggerable"].ToString(), out bool isOwnerOnly))
+	            this.IntParams.Add(isOwnerOnly ? 1 : 0);
         }
     }
 }

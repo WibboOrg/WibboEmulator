@@ -86,7 +86,7 @@ namespace Butterfly.Database.Daos
 
         internal static int InsertAndGetId(IQueryAdapter dbClient, int ownerId, string name, string motto, string figure, string gender)
         {
-            dbClient.SetQuery("INSERT INTO `bot_user` (user_id,name,motto,look,gender) VALUES ('" + ownerId + "', '" + name + "', '" + motto + "', '" + figure + "', '" + gender + "')");
+            dbClient.SetQuery("INSERT INTO `bot_user` (user_id,name,motto,look,gender,chat_text) VALUES ('" + ownerId + "', '" + name + "', '" + motto + "', '" + figure + "', '" + gender + "', '')");
 
             return Convert.ToInt32(dbClient.InsertQuery());
         }

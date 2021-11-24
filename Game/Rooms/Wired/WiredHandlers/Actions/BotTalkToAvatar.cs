@@ -37,7 +37,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 return false;
             }
 
-            bool isWhisper = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0)) == 0;
+            bool isWhisper = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0)) == 1;
 
             string textMessage = message;
             textMessage = textMessage.Replace("#username#", user.GetUsername());
@@ -106,7 +106,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            bool isWhisper = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0)) == 0;
+            bool isWhisper = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0)) == 1;
 
             WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, isWhisper, null, this.Delay);
         }
@@ -116,8 +116,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             if (int.TryParse(row["delay"].ToString(), out int delay))
 	            this.Delay = delay;
                 
-            if (int.TryParse(row["all_user_triggerable"].ToString(), out int isWhisper))
-                this.IntParams.Add(isWhisper);
+            if (bool.TryParse(row["all_user_triggerable"].ToString(), out bool isWhisper))
+                this.IntParams.Add(isWhisper ? 1 : 0);
 
             string Data = row["trigger_data"].ToString();
 

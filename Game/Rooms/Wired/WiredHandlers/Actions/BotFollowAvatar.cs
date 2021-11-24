@@ -55,8 +55,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             if (int.TryParse(row["delay"].ToString(), out int delay))
 	            this.Delay = delay;
 
-            if (int.TryParse(row["all_user_triggerable"].ToString(), out int isFollow))
-                this.IntParams.Add(isFollow);
+            if (bool.TryParse(row["all_user_triggerable"].ToString(), out bool isFollow))
+                this.IntParams.Add(isFollow ? 1 : 0);
 
             this.StringParam = row["trigger_data"].ToString();
         }
