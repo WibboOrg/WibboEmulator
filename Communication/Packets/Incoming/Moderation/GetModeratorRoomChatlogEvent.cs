@@ -1,5 +1,6 @@
 using Butterfly.Game.Clients;
 using Butterfly.Game.Moderation;
+using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -12,15 +13,16 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Packet.PopInt();
+            Packet.PopInt(); //useless
             int roomID = Packet.PopInt();
 
-            if (ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(roomID) == null)
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(roomID);
+            if (room == null)
             {
                 return;
             }
 
-            Session.SendPacket(ModerationManager.SerializeRoomChatlog(roomID));
+            Session.SendPacket(ModerationManager.SerializeRoomChatlog(room));
         }
     }
 }

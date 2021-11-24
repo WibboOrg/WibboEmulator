@@ -1,8 +1,8 @@
 namespace Butterfly.Communication.Packets.Outgoing.Help
 {
-    internal class OnGuideSessionMsg : ServerPacket
+    internal class OnGuideSessionMsgComposer : ServerPacket
     {
-        public OnGuideSessionMsg()
+        public OnGuideSessionMsgComposer()
             : base(ServerPacketHeader.OnGuideSessionMsg)
         {
 

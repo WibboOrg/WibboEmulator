@@ -1,8 +1,8 @@
 namespace Butterfly.Communication.Packets.Outgoing.Help
 {
-    internal class OnGuideSessionEnded : ServerPacket
+    internal class OnGuideSessionEndedComposer : ServerPacket
     {
-        public OnGuideSessionEnded()
+        public OnGuideSessionEndedComposer()
             : base(ServerPacketHeader.OnGuideSessionEnded)
         {
 

@@ -1,8 +1,8 @@
 namespace Butterfly.Communication.Packets.Outgoing.Help
 {
-    internal class OpenHelpToolMessageComposer : ServerPacket
+    internal class OpenHelpToolComposer : ServerPacket
     {
-        public OpenHelpToolMessageComposer()
+        public OpenHelpToolComposer()
             : base(ServerPacketHeader.OpenHelpToolMessageComposer)
         {
 

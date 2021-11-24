@@ -647,10 +647,8 @@ namespace Butterfly.Game.Moderation
             }
         }
 
-        public static ServerPacket SerializeRoomChatlog(int roomID)
+        public static ServerPacket SerializeRoomChatlog(Room room)
         {
-            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(roomID);
-
             ServerPacket Message = new ServerPacket(ServerPacketHeader.MODTOOL_ROOM_CHATLOG);
             Message.WriteByte(1);
 
@@ -664,18 +662,10 @@ namespace Butterfly.Game.Moderation
             Message.WriteByte(1);
             Message.WriteInteger(room.RoomData.Id);
 
-            if (room == null)
-            {
-                Message.WriteShort(0);
-                return Message;
-            }
-            else
-            {
-                ChatMessageManager chatMessageManager = room.GetChatMessageManager();
-                Message.WriteShort(chatMessageManager.messageCount);
-                chatMessageManager.Serialize(ref Message);
-                return Message;
-            }
+            ChatMessageManager chatMessageManager = room.GetChatMessageManager();
+            Message.WriteShort(chatMessageManager.messageCount);
+            chatMessageManager.Serialize(ref Message);
+            return Message;
         }
     }
 }

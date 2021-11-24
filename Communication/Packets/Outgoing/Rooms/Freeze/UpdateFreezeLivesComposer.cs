@@ -1,8 +1,8 @@
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.Freeze
 {
-    internal class UpdateFreezeLives : ServerPacket
+    internal class UpdateFreezeLivesComposer : ServerPacket
     {
-        public UpdateFreezeLives()
+        public UpdateFreezeLivesComposer()
             : base(ServerPacketHeader.UNIT_NUMBER)
         {
 

@@ -1,8 +1,8 @@
 ﻿namespace Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Furni
 {
-    internal class LoveLockDialogueCloseMessageComposer : ServerPacket
+    internal class LoveLockDialogueCloseComposer : ServerPacket
     {
-        public LoveLockDialogueCloseMessageComposer(int ItemId)
+        public LoveLockDialogueCloseComposer(int ItemId)
             : base(ServerPacketHeader.LOVELOCK_FURNI_FINISHED)
         {
             this.WriteInteger(ItemId);

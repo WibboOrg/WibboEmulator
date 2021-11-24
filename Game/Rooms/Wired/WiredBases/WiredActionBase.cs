@@ -32,7 +32,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
 
         public override void OnTrigger(Client Session)
         {
-            Session.SendPacket(new WiredFurniActionMessageComposer(this.StuffTypeSelectionEnabled, this.FurniLimit, this.StuffIds, this.StuffTypeId, this.Id,
+            Session.SendPacket(new WiredFurniActionComposer(this.StuffTypeSelectionEnabled, this.FurniLimit, this.StuffIds, this.StuffTypeId, this.Id,
                 this.StringParam, this.IntParams, this.StuffTypeSelectionCode, this.Type, this.Delay, this.Conflicting));
         }
     }

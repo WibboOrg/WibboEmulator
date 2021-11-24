@@ -15,8 +15,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int RoomId = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(RoomId, out Room room))
-
             Session.SendPacket(ModerationManager.SerializeRoomTool(ButterflyEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(RoomId)));
         }
     }
