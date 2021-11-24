@@ -54,7 +54,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
         public void Init(List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod)
         {
             this.IntParams = intParams;
-            this.StringParam = stringParam;
+            this.StringParam = (stringParam.Length <= 255) ? stringParam : stringParam.Substring(0, 255);
             this.StuffIds = stuffIds;
             this.StuffTypeSelectionCode = selectionCode;
             this.Delay = delay;
@@ -116,6 +116,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
                 {
                     listItem.Add(item);
                 }
+
+                if (listItem.Count >= this.FurniLimit)
+                    break;
             }
 
             return listItem;

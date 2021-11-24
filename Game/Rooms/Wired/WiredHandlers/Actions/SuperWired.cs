@@ -199,62 +199,62 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 return false;
             }
 
-            string Cmd = "";
-            string Value = "";
+            string command = "";
+            string value = "";
 
             if (this.StringParam.Contains(":"))
             {
-                Cmd = this.StringParam.Split(':')[0].ToLower();
-                Value = this.StringParam.Split(':')[1];
+                command = this.StringParam.Split(':')[0].ToLower();
+                value = this.StringParam.Split(':')[1];
             }
             else
             {
-                Cmd = this.StringParam;
+                command = this.StringParam;
             }
 
-            this.RpCommand(Cmd, Value, this.RoomInstance.GetWiredHandler().GetRoom(), user, item);
-            this.UserCommand(Cmd, Value, user, item);
-            this.RoomCommand(Cmd, Value, this.RoomInstance.GetWiredHandler().GetRoom(), item, user);
-            this.BotCommand(Cmd, Value, user, item);
+            this.RpCommand(command, value, user, item);
+            this.UserCommand(command, value, user, item);
+            this.RoomCommand(command, value, user, item);
+            this.BotCommand(command, value, user, item);
 
             return false;
         }
 
 
-        private void RpCommand(string Cmd, string Value, Room Room, RoomUser User, Item TriggerItem)
+        private void RpCommand(string command, string value, RoomUser user, Item item)
         {
-            if (Room == null || !Room.IsRoleplay)
+            if (!this.RoomInstance.IsRoleplay)
             {
                 return;
             }
 
-            if (User == null || User.GetClient() == null)
+            if (user == null || user.GetClient() == null)
             {
                 return;
             }
 
-            RolePlayer Rp = User.Roleplayer;
+            RolePlayer Rp = user.Roleplayer;
             if (Rp == null)
             {
                 return;
             }
 
-            switch (Cmd)
+            switch (command)
             {
                 case "rpsendtimeuser":
                     {
-                        User.SendWhisperChat("Il est " + Room.Roleplay.Hour + " heures et " + Room.Roleplay.Minute + " minutes");
+                        user.SendWhisperChat("Il est " + this.RoomInstance.Roleplay.Hour + " heures et " + this.RoomInstance.Roleplay.Minute + " minutes");
                         break;
                     }
                 case "setenemy":
                     {
-                        string[] Params = Value.Split(';');
+                        string[] Params = value.Split(';');
                         if (Params.Length != 3)
                         {
                             break;
                         }
 
-                        RoomUser BotOrPet = Room.GetRoomUserManager().GetBotOrPetByName(Params[0]);
+                        RoomUser BotOrPet = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(Params[0]);
                         if (BotOrPet == null || BotOrPet.BotData == null || BotOrPet.BotData.RoleBot == null)
                         {
                             break;
@@ -577,7 +577,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "removeenemy":
                     {
-                        RoomUser BotOrPet = Room.GetRoomUserManager().GetBotOrPetByName(Value);
+                        RoomUser BotOrPet = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(value);
                         if (BotOrPet == null || BotOrPet.BotData == null || BotOrPet.BotData.RoleBot == null)
                         {
                             break;
@@ -601,7 +601,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "addenemy":
                     {
-                        RoomUser BotOrPet = Room.GetRoomUserManager().GetBotOrPetByName(Value);
+                        RoomUser BotOrPet = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(value);
                         if (BotOrPet == null || BotOrPet.BotData == null || BotOrPet.BotData.RoleBot != null)
                         {
                             break;
@@ -631,7 +631,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "enemyaggrostop":
                     {
-                        RoomUser BotOrPet = Room.GetRoomUserManager().GetBotOrPetByName(Value);
+                        RoomUser BotOrPet = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(value);
                         if (BotOrPet == null || BotOrPet.BotData == null || BotOrPet.BotData.RoleBot == null)
                         {
                             break;
@@ -643,34 +643,34 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "enemyaggrostart":
                     {
-                        RoomUser BotOrPet = Room.GetRoomUserManager().GetBotOrPetByName(Value);
+                        RoomUser BotOrPet = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(value);
                         if (BotOrPet == null || BotOrPet.BotData == null || BotOrPet.BotData.RoleBot == null)
                         {
                             break;
                         }
 
-                        BotOrPet.BotData.RoleBot.AggroVirtuelId = User.VirtualId;
+                        BotOrPet.BotData.RoleBot.AggroVirtuelId = user.VirtualId;
                         BotOrPet.BotData.RoleBot.AggroTimer = 0;
 
                         break;
                     }
                 case "sendroomid":
                     {
-                        if (int.TryParse(Value, out int RoomId))
+                        if (int.TryParse(value, out int RoomId))
                         {
                             Room room = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
-                            if (room != null && room.RoomData.OwnerId == Room.RoomData.OwnerId)
+                            if (room != null && room.RoomData.OwnerId == room.RoomData.OwnerId)
                             {
-                                User.GetClient().GetHabbo().IsTeleporting = true;
-                                User.GetClient().GetHabbo().TeleportingRoomID = RoomId;
-                                User.GetClient().GetHabbo().PrepareRoom(RoomId, "");
+                                user.GetClient().GetHabbo().IsTeleporting = true;
+                                user.GetClient().GetHabbo().TeleportingRoomID = RoomId;
+                                user.GetClient().GetHabbo().PrepareRoom(RoomId, "");
                             }
                         }
                         break;
                     }
                 case "inventoryadd":
                     {
-                        int.TryParse(Value, out int ItemId);
+                        int.TryParse(value, out int ItemId);
 
                         RPItem RpItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
                         if (RpItem == null)
@@ -683,7 +683,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "inventoryremove":
                     {
-                        int.TryParse(Value, out int ItemId);
+                        int.TryParse(value, out int ItemId);
 
                         RPItem RpItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
                         if (RpItem == null)
@@ -703,7 +703,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "userpvp":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
                             Rp.PvpEnable = true;
                         }
@@ -717,17 +717,17 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 case "allowitemsbuy":
                     {
                         List<RPItem> ItemsList = new List<RPItem>();
-                        User.AllowBuyItems.Clear();
+                        user.AllowBuyItems.Clear();
 
-                        if (string.IsNullOrEmpty(Value))
+                        if (string.IsNullOrEmpty(value))
                         {
                             Rp.SendItemsList(ItemsList);
                             break;
                         }
 
-                        if (Value.Contains(","))
+                        if (value.Contains(","))
                         {
-                            foreach (string pId in Value.Split(','))
+                            foreach (string pId in value.Split(','))
                             {
                                 if (!int.TryParse(pId, out int Id))
                                 {
@@ -741,12 +741,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                                 }
 
                                 ItemsList.Add(RpItem);
-                                User.AllowBuyItems.Add(Id);
+                                user.AllowBuyItems.Add(Id);
                             }
                         }
                         else
                         {
-                            if (!int.TryParse(Value, out int Id))
+                            if (!int.TryParse(value, out int Id))
                             {
                                 break;
                             }
@@ -758,7 +758,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                             }
 
                             ItemsList.Add(RpItem);
-                            User.AllowBuyItems.Add(Id);
+                            user.AllowBuyItems.Add(Id);
                         }
 
                         Rp.SendItemsList(ItemsList);
@@ -767,7 +767,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "removeenergy":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
 
                         Rp.RemoveEnergy(Nb);
 
@@ -776,7 +776,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "addenergy":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
 
                         Rp.AddEnergy(Nb);
 
@@ -785,7 +785,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "removehygiene":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
 
                         Rp.RemoveHygiene(Nb);
 
@@ -794,7 +794,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "addhygiene":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
 
                         Rp.AddHygiene(Nb);
 
@@ -803,7 +803,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "weaponfarid":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb < 0 || Nb > 2)
                         {
                             Nb = 0;
@@ -815,7 +815,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "weaponcacid":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
 
                         if (Nb < 0 || Nb > 3)
                         {
@@ -827,20 +827,20 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "pvp":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
-                            Room.Roleplay.Pvp = true;
+                            this.RoomInstance.Roleplay.Pvp = true;
                         }
                         else
                         {
-                            Room.Roleplay.Pvp = false;
+                            this.RoomInstance.Roleplay.Pvp = false;
                         }
 
                         break;
                     }
                 case "munition":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb > 99)
                         {
                             Nb = 99;
@@ -858,7 +858,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "addmunition":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
 
                         Rp.AddMunition(Nb);
                         Rp.SendUpdate();
@@ -866,7 +866,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "removemunition":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
 
                         Rp.RemoveMunition(Nb);
                         Rp.SendUpdate();
@@ -874,7 +874,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "rpexp":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -885,7 +885,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "rpremoveexp":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -896,7 +896,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "removemoney":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -915,7 +915,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "addmoney":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -927,7 +927,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "removemoney1":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -946,7 +946,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "addmoney1":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -958,7 +958,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "removemoney2":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -977,7 +977,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "addmoney2":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -989,7 +989,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "removemoney3":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -1008,7 +1008,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "addmoney3":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -1020,7 +1020,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "removemoney4":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -1039,7 +1039,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "addmoney4":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -1051,7 +1051,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "health":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -1071,7 +1071,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "healthplus":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
@@ -1084,65 +1084,65 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "hit":
                     {
-                        int.TryParse(Value, out int Nb);
+                        int.TryParse(value, out int Nb);
                         if (Nb <= 0)
                         {
                             break;
                         }
 
-                        Rp.Hit(User, Nb, Room, false, true);
+                        Rp.Hit(user, Nb, this.RoomInstance, false, true);
                         Rp.SendUpdate();
                         break;
                     }
                 case "rpsay":
                     {
-                        User.OnChat(Value, 0, false);
+                        user.OnChat(value, 0, false);
                         break;
                     }
                 case "rpsayme":
                     {
-                        User.OnChatMe(Value, 0, false);
+                        user.OnChatMe(value, 0, false);
                         break;
                     }
                 case "droprpitem":
                     {
-                        int.TryParse(Value, out int ValueNumber);
+                        int.TryParse(value, out int ValueNumber);
                         if (ValueNumber <= 0)
                         {
                             break;
                         }
 
-                        Room.GetRoomItemHandler().AddTempItem(User.VirtualId, ValueNumber, User.SetX, User.SetY, User.Z, "1", 0, InteractionTypeTemp.RPITEM);
+                        this.RoomInstance.GetRoomItemHandler().AddTempItem(user.VirtualId, ValueNumber, user.SetX, user.SetY, user.Z, "1", 0, InteractionTypeTemp.RPITEM);
                         break;
                     }
             }
         }
 
-        private void BotCommand(string Cmd, string Value, RoomUser User, Item TriggerItem)
+        private void BotCommand(string command, string value, RoomUser user, Item item)
         {
-            if (User == null || !User.IsBot)
+            if (user == null || !user.IsBot)
             {
                 return;
             }
 
-            switch (Cmd)
+            switch (command)
             {
                 case "dance":
                     {
-                        if (int.TryParse(Value, out int danceid))
+                        if (int.TryParse(value, out int danceid))
                         {
                             if (danceid < 0 || danceid > 4)
                             {
                                 danceid = 0;
                             }
 
-                            if (danceid > 0 && User.CarryItemID > 0)
+                            if (danceid > 0 && user.CarryItemID > 0)
                             {
-                                User.CarryItem(0);
+                                user.CarryItem(0);
                             }
 
-                            User.DanceId = danceid;
-                            User.Room.SendPacket(new DanceComposer(User, danceid));
+                            user.DanceId = danceid;
+                            user.Room.SendPacket(new DanceComposer(user, danceid));
                         }
 
                         break;
@@ -1150,61 +1150,61 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
                 case "handitem":
                     {
-                        if (int.TryParse(Value, out int carryid))
+                        if (int.TryParse(value, out int carryid))
                         {
-                            User.CarryItem(carryid, true);
+                            user.CarryItem(carryid, true);
                         }
 
                         break;
                     }
                 case "sit":
                     {
-                        if (User.RotBody % 2 == 0)
+                        if (user.RotBody % 2 == 0)
                         {
-                            User.SetStatus("sit", "0.5");
+                            user.SetStatus("sit", "0.5");
 
-                            User.IsSit = true;
-                            User.UpdateNeeded = true;
+                            user.IsSit = true;
+                            user.UpdateNeeded = true;
                         }
                         break;
                     }
 
                 case "lay":
                     {
-                        if (User.RotBody % 2 == 0)
+                        if (user.RotBody % 2 == 0)
                         {
-                            User.SetStatus("lay", "0.7");
+                            user.SetStatus("lay", "0.7");
 
-                            User.IsLay = true;
-                            User.UpdateNeeded = true;
+                            user.IsLay = true;
+                            user.UpdateNeeded = true;
                         }
                         break;
                     }
 
                 case "stand":
                     {
-                        if (User.Statusses.ContainsKey("lay"))
+                        if (user.Statusses.ContainsKey("lay"))
                         {
-                            User.RemoveStatus("lay");
+                            user.RemoveStatus("lay");
                         }
 
-                        if (User.Statusses.ContainsKey("sit"))
+                        if (user.Statusses.ContainsKey("sit"))
                         {
-                            User.RemoveStatus("sit");
+                            user.RemoveStatus("sit");
                         }
 
-                        if (User.Statusses.ContainsKey("sign"))
+                        if (user.Statusses.ContainsKey("sign"))
                         {
-                            User.RemoveStatus("sign");
+                            user.RemoveStatus("sign");
                         }
 
-                        User.UpdateNeeded = true;
+                        user.UpdateNeeded = true;
                         break;
                     }
 
                 case "enable":
                     {
-                        if (!int.TryParse(Value, out int NumEnable))
+                        if (!int.TryParse(value, out int NumEnable))
                         {
                             return;
                         }
@@ -1214,19 +1214,19 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                             return;
                         }
 
-                        User.ApplyEffect(NumEnable);
+                        user.ApplyEffect(NumEnable);
                         break;
                     }
 
                 case "breakwalk":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
-                            User.BreakWalkEnable = true;
+                            user.BreakWalkEnable = true;
                         }
                         else
                         {
-                            User.BreakWalkEnable = false;
+                            user.BreakWalkEnable = false;
                         }
 
                         break;
@@ -1234,82 +1234,77 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
                 case "freeze":
                     {
-                        int.TryParse(Value, out int Seconde);
+                        int.TryParse(value, out int Seconde);
                         Seconde = Seconde * 2;
-                        User.Freeze = true;
-                        User.FreezeEndCounter = Seconde;
+                        user.Freeze = true;
+                        user.FreezeEndCounter = Seconde;
                         break;
                     }
                 case "unfreeze":
                     {
-                        User.Freeze = false;
-                        User.FreezeEndCounter = 0;
+                        user.Freeze = false;
+                        user.FreezeEndCounter = 0;
                         break;
                     }
             }
         }
 
-        private void RoomCommand(string Cmd, string Value, Room Room, Item TriggerItem, RoomUser User)
+        private void RoomCommand(string command, string value, RoomUser user, Item item)
         {
-            if (Room == null)
-            {
-                return;
-            }
-
-            switch (Cmd)
+            switch (command)
             {
                 case "roomfreeze":
                     {
-                        Room.FreezeRoom = (Value == "true") ? true : false;
+                        this.RoomInstance.FreezeRoom = (value == "true") ? true : false;
                         break;
                     }
                 case "roomkick":
                     {
-                        foreach (RoomUser RUser in Room.GetRoomUserManager().GetUserList().ToList())
+                        foreach (RoomUser RUser in this.RoomInstance.GetRoomUserManager().GetUserList().ToList())
                         {
-                            if (RUser != null && !RUser.IsBot && !RUser.GetClient().GetHabbo().HasFuse("fuse_no_kick"))
+                            if (RUser != null && !RUser.IsBot && !RUser.GetClient().GetHabbo().HasFuse("fuse_no_kick") && this.RoomInstance.RoomData.OwnerId != RUser.UserId)
                             {
-                                Room.GetRoomUserManager().RemoveUserFromRoom(RUser.GetClient(), true, false);
+                                this.RoomInstance.GetRoomUserManager().RemoveUserFromRoom(RUser.GetClient(), true, false);
                             }
                         }
                         break;
                     }
                 case "roomalert":
                     {
-                        if (Value.Length <= 0)
+                        if (value.Length <= 0)
                         {
                             break;
                         }
 
-                        foreach (RoomUser RUser in Room.GetRoomUserManager().GetUserList().ToList())
+                        foreach (RoomUser RUser in this.RoomInstance.GetRoomUserManager().GetUserList().ToList())
                         {
                             if (RUser != null && !RUser.IsBot && !RUser.GetClient().GetHabbo().HasFuse("fuse_no_kick"))
                             {
-                                RUser.GetClient().SendNotification(Value);
+                                RUser.GetClient().SendNotification(value);
                             }
                         }
                         break;
                     }
                 case "stopsoundroom":
                     {
-                        Room.SendPacketWeb(new StopSoundComposer(Value));
+                        this.RoomInstance.SendPacketWeb(new StopSoundComposer(value));
                         break;
                     }
                 case "playsoundroom":
                     {
-                        Room.SendPacketWeb(new PlaySoundComposer(Value, 1)); //Type = Trax
+                        this.RoomInstance.SendPacketWeb(new PlaySoundComposer(value, 1)); //Type = Trax
                         break;
                     }
                 case "playmusicroom":
                     {
-                        Room.SendPacketWeb(new PlaySoundComposer(Value, 2, true)); //Type = Trax
+                        this.RoomInstance.SendPacketWeb(new PlaySoundComposer(value, 2, true)); //Type = Trax
                         break;
                     }
                 case "configbot":
                     {
-                        string[] Params = Value.Split(';');
+                        string[] Params = value.Split(';');
 
-                        RoomUser Bot = Room.GetRoomUserManager().GetBotByName(Params[0]);
+                        RoomUser Bot = this.RoomInstance.GetRoomUserManager().GetBotByName(Params[0]);
                         if (Bot == null)
                         {
                             return;
@@ -1441,36 +1436,36 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "TimeSpeed":
                     {
-                        if (!Room.IsRoleplay)
+                        if (!this.RoomInstance.IsRoleplay)
                         {
                             break;
                         }
 
-                        if (Value == "true")
+                        if (value == "true")
                         {
-                            Room.Roleplay.TimeSpeed = true;
+                            this.RoomInstance.Roleplay.TimeSpeed = true;
                         }
                         else
                         {
-                            Room.Roleplay.TimeSpeed = false;
+                            this.RoomInstance.Roleplay.TimeSpeed = false;
                         }
 
                         break;
                     }
                 case "cyclehoureffect":
                     {
-                        if (!Room.IsRoleplay)
+                        if (!this.RoomInstance.IsRoleplay)
                         {
                             break;
                         }
 
-                        if (Value == "true")
+                        if (value == "true")
                         {
-                            Room.Roleplay.CycleHourEffect = true;
+                            this.RoomInstance.Roleplay.CycleHourEffect = true;
                         }
                         else
                         {
-                            Room.Roleplay.CycleHourEffect = false;
+                            this.RoomInstance.Roleplay.CycleHourEffect = false;
                         }
 
                         break;
@@ -1481,11 +1476,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                         RoomUser Bot = null;
                         if (ButterflyEnvironment.GetRandomNumber(0, 1) == 1)
                         {
-                            Bot = Room.GetRoomUserManager().GetBotOrPetByName("Jack");
+                            Bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName("Jack");
                         }
                         else
                         {
-                            Bot = Room.GetRoomUserManager().GetBotOrPetByName("Daisy");
+                            Bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName("Daisy");
                         }
 
                         if (Bot == null)
@@ -1495,7 +1490,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
                         List<string> Phrases = new List<string>();
 
-                        switch (Value)
+                        switch (value)
                         {
                             case "wait":
                                 {
@@ -1576,9 +1571,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                         }
 
                         string TextMessage = Phrases[ButterflyEnvironment.GetRandomNumber(0, Phrases.Count - 1)];
-                        if (User != null)
+                        if (user != null)
                         {
-                            TextMessage = TextMessage.Replace("#username#", User.GetUsername());
+                            TextMessage = TextMessage.Replace("#username#", user.GetUsername());
                         }
 
                         Bot.OnChat(TextMessage, 2, true);
@@ -1587,72 +1582,72 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     }
                 case "roomingamechat":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
-                            Room.RoomIngameChat = true;
+                            this.RoomInstance.RoomIngameChat = true;
                         }
                         else
                         {
-                            Room.RoomIngameChat = false;
+                            this.RoomInstance.RoomIngameChat = false;
                         }
 
                         break;
                     }
                 case "roomstate":
                     {
-                        if (Value == "close")
+                        if (value == "close")
                         {
-                            Room.RoomData.State = 1;
+                            this.RoomInstance.RoomData.State = 1;
                         }
                         else
                         {
-                            Room.RoomData.State = 0;
+                            this.RoomInstance.RoomData.State = 0;
                         }
 
                         break;
                     }
                 case "roommute":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
-                            Room.RoomMuted = true;
+                            this.RoomInstance.RoomMuted = true;
                         }
                         else
                         {
-                            Room.RoomMuted = false;
+                            this.RoomInstance.RoomMuted = false;
                         }
 
                         break;
                     }
                 case "setspeed":
                     {
-                        int.TryParse(Value, out int Vitesse);
+                        int.TryParse(value, out int Vitesse);
 
-                        Room.GetRoomItemHandler().SetSpeed(Vitesse);
+                        this.RoomInstance.GetRoomItemHandler().SetSpeed(Vitesse);
                         break;
                     }
                 case "roomdiagonal":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
-                            Room.GetGameMap().DiagonalEnabled = true;
+                            this.RoomInstance.GetGameMap().DiagonalEnabled = true;
                         }
                         else
                         {
-                            Room.GetGameMap().DiagonalEnabled = false;
+                            this.RoomInstance.GetGameMap().DiagonalEnabled = false;
                         }
 
                         break;
                     }
                 case "roomoblique":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
-                            Room.GetGameMap().ObliqueDisable = true;
+                            this.RoomInstance.GetGameMap().ObliqueDisable = true;
                         }
                         else
                         {
-                            Room.GetGameMap().ObliqueDisable = false;
+                            this.RoomInstance.GetGameMap().ObliqueDisable = false;
                         }
 
                         break;
@@ -1660,54 +1655,54 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
                 case "setitemmode":
                     {
-                        if (TriggerItem == null)
+                        if (item == null)
                         {
                             break;
                         }
 
-                        int.TryParse(Value, out int Count);
+                        int.TryParse(value, out int Count);
 
-                        if (Count > TriggerItem.GetBaseItem().Modes - 1)
+                        if (Count > item.GetBaseItem().Modes - 1)
                         {
                             break;
                         }
 
-                        if (!int.TryParse(TriggerItem.ExtraData, out int result))
+                        if (!int.TryParse(item.ExtraData, out int result))
                         {
                             break;
                         }
 
-                        TriggerItem.ExtraData = Count.ToString();
-                        TriggerItem.UpdateState();
-                        Room.GetGameMap().updateMapForItem(TriggerItem);
+                        item.ExtraData = Count.ToString();
+                        item.UpdateState();
+                        this.RoomInstance.GetGameMap().updateMapForItem(item);
 
                         break;
                     }
 
                 case "useitem":
                     {
-                        if (TriggerItem == null)
+                        if (item == null)
                         {
                             break;
                         }
 
-                        if (TriggerItem.GetBaseItem().Modes == 0)
+                        if (item.GetBaseItem().Modes == 0)
                         {
                             break;
                         }
 
-                        int.TryParse(Value, out int Count);
+                        int.TryParse(value, out int Count);
 
-                        if (!int.TryParse(TriggerItem.ExtraData, out int ItemCount))
+                        if (!int.TryParse(item.ExtraData, out int ItemCount))
                         {
                             break;
                         }
 
-                        int newCount = (ItemCount + Count < TriggerItem.GetBaseItem().Modes) ? ItemCount + Count : 0;
+                        int newCount = (ItemCount + Count < item.GetBaseItem().Modes) ? ItemCount + Count : 0;
 
-                        TriggerItem.ExtraData = newCount.ToString();
-                        TriggerItem.UpdateState();
-                        Room.GetGameMap().updateMapForItem(TriggerItem);
+                        item.ExtraData = newCount.ToString();
+                        item.UpdateState();
+                        this.RoomInstance.GetGameMap().updateMapForItem(item);
 
                         break;
                     }
@@ -1715,13 +1710,13 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
                 case "pushpull":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
-                            Room.PushPullAllowed = true;
+                            this.RoomInstance.PushPullAllowed = true;
                         }
                         else
                         {
-                            Room.PushPullAllowed = false;
+                            this.RoomInstance.PushPullAllowed = false;
                         }
 
                         break;
