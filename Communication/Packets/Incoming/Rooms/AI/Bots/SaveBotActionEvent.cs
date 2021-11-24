@@ -188,7 +188,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                             BotUserDao.UpdateName(dbClient, Bot.BotData.Id, DataString);
 
-                        Room.SendPacket(new UserNameChangeMessageComposer(Bot.BotData.Name, Bot.VirtualId));
+                        Room.SendPacket(new UserNameChangeComposer(Bot.BotData.Name, Bot.VirtualId));
                         break;
                     }
                     #endregion

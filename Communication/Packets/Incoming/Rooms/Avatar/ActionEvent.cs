@@ -27,7 +27,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int i = Packet.PopInt();
             roomUserByHabbo.DanceId = 0;
 
-            room.SendPacket(new ActionMessageComposer(roomUserByHabbo.VirtualId, i));
+            room.SendPacket(new ActionComposer(roomUserByHabbo.VirtualId, i));
 
             if (i == 5)
             {

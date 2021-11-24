@@ -156,7 +156,7 @@ namespace Butterfly.Communication.Packets
 
         private void RegisterNux()
         {
-            this._incomingPackets.Add(ClientPacketHeader.UserNuxEvent, new RoomNuxAlert());
+            this._incomingPackets.Add(ClientPacketHeader.UserNuxEvent, new RoomNuxAlertEvent());
         }
 
         private void RegisterCatalog()
@@ -397,7 +397,7 @@ namespace Butterfly.Communication.Packets
         private void RegisterUsers()
         {
             this._incomingPackets.Add(ClientPacketHeader.USER_SUBSCRIPTION, new ScrGetUserInfoMessageEvent());
-            this._incomingPackets.Add(ClientPacketHeader.USER_SETTINGS_OLD_CHAT, new SetChatPreference());
+            this._incomingPackets.Add(ClientPacketHeader.USER_SETTINGS_OLD_CHAT, new SetChatPreferenceEvent());
 
             this._incomingPackets.Add(ClientPacketHeader.USER_RESPECT, new RespectUserEvent());
             this._incomingPackets.Add(ClientPacketHeader.USER_FIGURE, new UpdateFigureDataEvent());
@@ -469,15 +469,15 @@ namespace Butterfly.Communication.Packets
 
         private void RegisterGuide()
         {
-            this._incomingPackets.Add(ClientPacketHeader.RequestGuideToolEvent, new GetHelperToolConfiguration());
-            this._incomingPackets.Add(ClientPacketHeader.OnGuideSessionDetached, new OnGuideSessionDetached());
-            this._incomingPackets.Add(ClientPacketHeader.OnGuide, new OnGuide());
-            this._incomingPackets.Add(ClientPacketHeader.GuideRecommendHelperEvent, new RecomendHelpers());
-            this._incomingPackets.Add(ClientPacketHeader.GuideToolMessageNew, new GuideToolMessageNew());
-            this._incomingPackets.Add(ClientPacketHeader.GuideInviteUserEvent, new GuideInviteToRoom());
-            this._incomingPackets.Add(ClientPacketHeader.GuideVisitUserEvent, new VisitRoomGuides());
-            this._incomingPackets.Add(ClientPacketHeader.GuideEndSession, new GuideEndSession());
-            this._incomingPackets.Add(ClientPacketHeader.CancellInviteGuide, new CancellInviteGuide());
+            this._incomingPackets.Add(ClientPacketHeader.RequestGuideToolEvent, new GetHelperToolConfigurationEvent());
+            this._incomingPackets.Add(ClientPacketHeader.OnGuideSessionDetached, new OnGuideSessionDetachedEvent());
+            this._incomingPackets.Add(ClientPacketHeader.OnGuide, new OnGuideEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GuideRecommendHelperEvent, new RecomendHelpersEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GuideToolMessageNew, new GuideToolMessageNewEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GuideInviteUserEvent, new GuideInviteToRoomEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GuideVisitUserEvent, new VisitRoomGuidesEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GuideEndSession, new GuideEndSessionEvent());
+            this._incomingPackets.Add(ClientPacketHeader.CancellInviteGuide, new CancellInviteGuideEvent());
         }
     }
 }

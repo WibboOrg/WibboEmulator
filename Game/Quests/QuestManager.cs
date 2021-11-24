@@ -113,7 +113,7 @@ namespace Butterfly.Game.Quests
             }
 
             Session.GetHabbo().quests[Session.GetHabbo().CurrentQuestId] = progress;
-            Session.SendPacket(QuestStartedComposer.Compose(Session, quest));
+            Session.SendPacket(Composer.QuestStartedComposer.Compose(Session, quest));
 
             if (!flag)
             {
@@ -122,7 +122,7 @@ namespace Butterfly.Game.Quests
 
             Session.GetHabbo().CurrentQuestId = 0;
             Session.GetHabbo().LastCompleted = quest.Id;
-            Session.SendPacket(QuestCompletedComposer.Compose(Session, quest));
+            Session.SendPacket(Composer.QuestCompletedComposer.Compose(Session, quest));
             Session.GetHabbo().Duckets += quest.Reward;
             Session.GetHabbo().UpdateActivityPointsBalance();
             this.GetList(Session, null);
@@ -143,7 +143,7 @@ namespace Butterfly.Game.Quests
 
         public void GetList(Client Session, ClientPacket Message)
         {
-            Session.SendPacket(QuestListComposer.Compose(Session, Enumerable.ToList<Quest>(this.quests.Values), Message != null));
+            Session.SendPacket(Composer.QuestListComposer.Compose(Session, Enumerable.ToList<Quest>(this.quests.Values), Message != null));
         }
 
         public void ActivateQuest(Client Session, ClientPacket Message)
@@ -161,7 +161,7 @@ namespace Butterfly.Game.Quests
 
             Session.GetHabbo().CurrentQuestId = quest.Id;
             this.GetList(Session, null);
-            Session.SendPacket(QuestStartedComposer.Compose(Session, quest));
+            Session.SendPacket(Composer.QuestStartedComposer.Compose(Session, quest));
         }
 
         public void GetCurrentQuest(Client Session)
@@ -185,7 +185,7 @@ namespace Butterfly.Game.Quests
 
             Session.GetHabbo().CurrentQuestId = nextQuestInSeries.Id;
             this.GetList(Session, null);
-            Session.SendPacket(QuestStartedComposer.Compose(Session, nextQuestInSeries));
+            Session.SendPacket(Composer.QuestStartedComposer.Compose(Session, nextQuestInSeries));
         }
 
         public void CancelQuest(Client Session)
@@ -202,7 +202,7 @@ namespace Butterfly.Game.Quests
                 UserQuestDao.Delete(dbClient, Session.GetHabbo().Id, quest.Id);
             }
 
-            Session.SendPacket(new QuestAbortedMessageComposer());
+            Session.SendPacket(new QuestAbortedComposer());
             this.GetList(Session, null);
         }
     }

@@ -80,14 +80,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 ButterflyEnvironment.GetGame().GetRoomManager().RoomDataRemove(roomData.Id);
             }
 
-            Room.SendPacket(new UserNameChangeMessageComposer(NewUsername, User.VirtualId));
+            Room.SendPacket(new UserNameChangeComposer(NewUsername, User.VirtualId));
 
             if (Session.GetHabbo().Id != Room.RoomData.OwnerId)
             {
                 return;
             }
 
-            Room.SendPacket(new RoomInfoUpdatedMessageComposer(Room.Id));
+            Room.SendPacket(new RoomInfoUpdatedComposer(Room.Id));
         }
 
         private int NameAvailable(string Username)

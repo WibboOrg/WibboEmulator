@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             string PetName = Packet.PopString();
 
-            Session.SendPacket(new CheckPetNameMessageComposer(PetName));
+            Session.SendPacket(new CheckPetNameComposer(PetName));
         }
     }
 }

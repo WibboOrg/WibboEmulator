@@ -56,7 +56,7 @@ namespace Butterfly.Game.Achievement
 
         public void GetList(Client Session)
         {
-            Session.SendPacket(new AchievementsMessageComposer(Session, this._achievements.Values.ToList()));
+            Session.SendPacket(new AchievementsComposer(Session, this._achievements.Values.ToList()));
         }
 
         public bool ProgressAchievement(Client Session, string AchievementGroup, int ProgressAmount)
@@ -120,7 +120,7 @@ namespace Butterfly.Game.Achievement
                 Session.GetHabbo().Duckets += TargetLevelData.RewardPixels;
                 Session.GetHabbo().UpdateActivityPointsBalance();
 
-                Session.SendPacket(new AchievementUnlockedMessageComposer(AchievementData, TargetLevel, TargetLevelData.RewardPoints, TargetLevelData.RewardPixels));
+                Session.SendPacket(new AchievementUnlockedComposer(AchievementData, TargetLevel, TargetLevelData.RewardPoints, TargetLevelData.RewardPixels));
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {

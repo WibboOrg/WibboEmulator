@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Session.SendPacket(new GiftWrappingConfigurationMessageComposer());
+            Session.SendPacket(new GiftWrappingConfigurationComposer());
         }
     }
 }

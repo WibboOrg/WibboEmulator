@@ -349,7 +349,7 @@ namespace Butterfly.Game.User.Messenger
                 return;
             }
 
-            Client.SendPacket(new NewConsoleMessageComposer(this.UserId, Message));
+            Client.SendPacket(new NewConsoleComposer(this.UserId, Message));
         }
 
         public ServerPacket SerializeCategories()
@@ -447,7 +447,7 @@ namespace Butterfly.Game.User.Messenger
 
                     foreach (DataRow Row in GetMessages.Rows)
                     {
-                        Client.SendPacket(new NewConsoleMessageComposer(Convert.ToInt32(Row["from_id"]), Convert.ToString(Row["message"]), (ButterflyEnvironment.GetUnixTimestamp() - Convert.ToInt32(Row["timestamp"]))));
+                        Client.SendPacket(new NewConsoleComposer(Convert.ToInt32(Row["from_id"]), Convert.ToString(Row["message"]), (ButterflyEnvironment.GetUnixTimestamp() - Convert.ToInt32(Row["timestamp"]))));
                     }
 
                     MessengerOfflineMessageDao.Delete(dbClient, this.UserId);

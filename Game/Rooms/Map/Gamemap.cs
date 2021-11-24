@@ -191,11 +191,6 @@ namespace Butterfly.Game.Rooms
             return new Point(rx, ry);
         }
 
-        public void AddToMap(Item item)
-        {
-            this.AddItemToMap(item);
-        }
-
         private void SetDefaultValue(int x, int y)
         {
             if (!this.ValidTile(x, y))

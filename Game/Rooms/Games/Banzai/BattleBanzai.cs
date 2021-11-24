@@ -203,7 +203,7 @@ namespace Butterfly.Game.Rooms.Games
         {
             if (roomUser.Team == winningTeam && winningTeam != Team.none)
             {
-                this.room.SendPacket(new ActionMessageComposer(roomUser.VirtualId, 1));
+                this.room.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
             }
             else if (roomUser.Team != Team.none)
             {

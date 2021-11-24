@@ -70,7 +70,7 @@ namespace Butterfly.Game.Rooms
                 roomItem.Interactor.OnRemove(Session, roomItem);
 
                 roomItem.Destroy();
-                ListMessage.Add(new ObjectRemoveMessageComposer(roomItem.Id, Session.GetHabbo().Id));
+                ListMessage.Add(new ObjectRemoveComposer(roomItem.Id, Session.GetHabbo().Id));
                 Items.Add((Item)roomItem);
             }
             foreach (Item roomItem in this._wallItems.Values.ToList())
@@ -78,7 +78,7 @@ namespace Butterfly.Game.Rooms
                 roomItem.Interactor.OnRemove(Session, roomItem);
                 roomItem.Destroy();
 
-                ListMessage.Add(new ItemRemoveMessageComposer(roomItem.Id, this._room.RoomData.OwnerId));
+                ListMessage.Add(new ItemRemoveComposer(roomItem.Id, this._room.RoomData.OwnerId));
                 Items.Add((Item)roomItem);
             }
             this._room.SendMessage(ListMessage);
@@ -281,25 +281,25 @@ namespace Butterfly.Game.Rooms
 
         public void RemoveTempItem(int pId)
         {
-            ItemTemp Item = this.GetTempItem(pId);
-            if (Item == null)
+            ItemTemp item = this.GetTempItem(pId);
+            if (item == null)
             {
                 return;
             }
 
-            this._room.SendPacket(new ObjectRemoveMessageComposer(Item.Id, 0));
-            this._itemsTemp.TryRemove(pId, out Item);
+            this._room.SendPacket(new ObjectRemoveComposer(item.Id, 0));
+            this._itemsTemp.TryRemove(pId, out item);
         }
 
         private void RemoveRoomItem(Item item)
         {
             if (item.IsWallItem)
             {
-                this._room.SendPacket(new ItemRemoveMessageComposer(item.Id, this._room.RoomData.OwnerId));
+                this._room.SendPacket(new ItemRemoveComposer(item.Id, this._room.RoomData.OwnerId));
             }
             else if (item.IsFloorItem)
             {
-                this._room.SendPacket(new ObjectRemoveMessageComposer(item.Id, this._room.RoomData.OwnerId));
+                this._room.SendPacket(new ObjectRemoveComposer(item.Id, this._room.RoomData.OwnerId));
             }
 
             if (item.IsWallItem)
@@ -309,6 +309,7 @@ namespace Butterfly.Game.Rooms
             else
             {
                 this._floorItems.TryRemove(item.Id, out item);
+                this._room.GetGameMap().RemoveFromMap(item);
             }
 
             if (this._updateItems.ContainsKey(item.Id))
@@ -565,7 +566,7 @@ namespace Butterfly.Game.Rooms
                     if (NeedsReAdd)
                     {
                         this.UpdateItem(Item);
-                        this._room.GetGameMap().AddToMap(Item);
+                        this._room.GetGameMap().AddItemToMap(Item);
                     }
                     return false;
                 }
@@ -649,7 +650,7 @@ namespace Butterfly.Game.Rooms
                         if (NeedsReAdd)
                         {
                             this.UpdateItem(Item);
-                            this._room.GetGameMap().AddToMap(Item);
+                            this._room.GetGameMap().AddItemToMap(Item);
                         }
                         return false;
                     }
@@ -714,7 +715,7 @@ namespace Butterfly.Game.Rooms
                 }
             }
 
-            this._room.GetGameMap().AddToMap(Item);
+            this._room.GetGameMap().AddItemToMap(Item);
 
             foreach (ThreeDCoord threeDcoord in Item.GetAffectedTiles.Values)
             {

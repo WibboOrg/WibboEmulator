@@ -83,8 +83,8 @@ namespace Butterfly.Game.Items.Interactors
                     Item.InteractingUser = UserOne.GetClient().GetHabbo().Id;
                     Item.InteractingUser2 = UserTwo.GetClient().GetHabbo().Id;
 
-                    UserOne.GetClient().SendPacket(new LoveLockDialogueMessageComposer(Item.Id));
-                    UserTwo.GetClient().SendPacket(new LoveLockDialogueMessageComposer(Item.Id));
+                    UserOne.GetClient().SendPacket(new LoveLockDialogueComposer(Item.Id));
+                    UserTwo.GetClient().SendPacket(new LoveLockDialogueComposer(Item.Id));
                 }
             }
             else

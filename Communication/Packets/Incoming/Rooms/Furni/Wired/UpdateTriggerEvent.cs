@@ -53,7 +53,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             WiredRegister.HandleRegister(item, room, intParams, stringParam, stuffIds, selectionCode, 0, isStaff, isGod);
 
-            session.SendPacket(new SaveWiredMessageComposer());
+            session.SendPacket(new SaveWiredComposer());
         }
     }
 }

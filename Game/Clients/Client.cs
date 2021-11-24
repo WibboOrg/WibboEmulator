@@ -297,7 +297,7 @@ namespace Butterfly.Game.Clients
 
         public void SendHugeNotif(string Message)
         {
-            SendPacket(new MOTDNotificationMessageComposer(Message));
+            SendPacket(new MOTDNotificationComposer(Message));
         }
 
         public void Dispose()

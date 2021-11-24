@@ -40,7 +40,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             RoomUser roomUserByHabbo2 = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
 
-            room.SendPacket(new ActionMessageComposer(roomUserByHabbo2.VirtualId, 7));
+            room.SendPacket(new ActionComposer(roomUserByHabbo2.VirtualId, 7));
         }
     }
 }

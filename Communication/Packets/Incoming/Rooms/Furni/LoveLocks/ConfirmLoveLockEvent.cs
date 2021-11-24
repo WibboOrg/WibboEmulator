@@ -89,12 +89,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 if (UserOneId == Session.GetHabbo().Id)
                 {
-                    Session.SendPacket(new LoveLockDialogueSetLockedMessageComposer(Id));
+                    Session.SendPacket(new LoveLockDialogueSetLockedComposer(Id));
                     UserOne.LLPartner = UserTwoId;
                 }
                 else if (UserTwoId == Session.GetHabbo().Id)
                 {
-                    Session.SendPacket(new LoveLockDialogueSetLockedMessageComposer(Id));
+                    Session.SendPacket(new LoveLockDialogueSetLockedComposer(Id));
                     UserTwo.LLPartner = UserOneId;
                 }
 
@@ -114,8 +114,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     Item.UpdateState(true, true);
 
-                    UserOne.GetClient().SendPacket(new LoveLockDialogueCloseMessageComposer(Id));
-                    UserTwo.GetClient().SendPacket(new LoveLockDialogueCloseMessageComposer(Id));
+                    UserOne.GetClient().SendPacket(new LoveLockDialogueCloseComposer(Id));
+                    UserTwo.GetClient().SendPacket(new LoveLockDialogueCloseComposer(Id));
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {

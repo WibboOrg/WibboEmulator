@@ -21,7 +21,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 {
                     continue;
                 }
-                User.GetClient().SendPacket(new WhisperMessageComposer(UserRoom.VirtualId, Message, 0, 34));
+                User.GetClient().SendPacket(new WhisperComposer(UserRoom.VirtualId, Message, 0, 34));
 
 
                 /*ServerPacket MessagePack = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
