@@ -52,6 +52,9 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void LoadFromDatabase(DataRow row)
         {
+            if (int.TryParse(row["delay"].ToString(), out int delay))
+	            this.Delay = delay;
+
             if (int.TryParse(row["all_user_triggerable"].ToString(), out int isFollow))
                 this.IntParams.Add(isFollow);
 

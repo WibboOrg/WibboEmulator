@@ -73,7 +73,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void LoadFromDatabase(DataRow row)
         {
-            if (int.TryParse(row["trigger_data"].ToString(), out int delay))
+            int delay = 0;
+            if (int.TryParse(row["delay"].ToString(), out delay))
+	            this.Delay = delay;
+
+            if (int.TryParse(row["trigger_data"].ToString(), out delay))
                 this.Delay = delay;
 
             string triggerData2 = row["trigger_data_2"].ToString();

@@ -2379,10 +2379,15 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void LoadFromDatabase(DataRow row)
         {
+            int delay = 0;
+            if (int.TryParse(row["delay"].ToString(), out delay))
+	            this.Delay = delay;
+
+            if (int.TryParse(row["trigger_data_2"].ToString(), out delay))
+                this.Delay = delay;
+
             this.StringParam = row["trigger_data"].ToString();
 
-            if (int.TryParse(row["trigger_data_2"].ToString(), out int delay))
-                this.Delay = delay;
         }
     }
 }

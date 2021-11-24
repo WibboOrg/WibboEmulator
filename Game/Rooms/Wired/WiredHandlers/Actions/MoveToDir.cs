@@ -20,7 +20,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public override bool OnCycle(RoomUser user, Item item)
         {
-            foreach (Item roomItem in this.Items.ToArray())
+            foreach (Item roomItem in this.Items)
             {
                 this.HandleMovement(roomItem);
             }

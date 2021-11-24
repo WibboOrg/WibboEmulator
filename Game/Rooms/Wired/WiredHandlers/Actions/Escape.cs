@@ -17,7 +17,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public override bool OnCycle(RoomUser user, Item item)
         {
-            foreach (Item roomItem in this.Items.ToArray())
+            foreach (Item roomItem in this.Items)
             {
                 this.HandleMovement(roomItem);
             }
@@ -80,18 +80,18 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             if (int.TryParse(row["delay"].ToString(), out int delay))
 	            this.Delay = delay;
                 
-            string triggerItem = row["triggers_item"].ToString();
+            string triggerItems = row["triggers_item"].ToString();
 
-            if (triggerItem == "")
+            if (triggerItems == "")
                 return;
 
-            foreach (string itemid in triggerItem.Split(';'))
+            foreach (string itemId in triggerItems.Split(';'))
             {
-                Item roomItem = this.RoomInstance.GetRoomItemHandler().GetItem(Convert.ToInt32(itemid));
-                if (roomItem != null && !this.Items.Contains(roomItem) && roomItem.Id != this.Id)
-                {
-                    this.Items.Add(roomItem);
-                }
+                if (!int.TryParse(itemId, out int id))
+                    continue;
+
+                if (!this.StuffIds.Contains(id))
+                    this.StuffIds.Add(id);
             }
         }
     }
