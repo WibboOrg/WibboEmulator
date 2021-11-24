@@ -26,11 +26,11 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public override void Handle(RoomUser user, Item item)
         {
-            if(this.beforeCycle(user, item))
+            if(this.BeforeCycle(user, item))
                 base.Handle(user, item);
         }
 
-        public bool beforeCycle(RoomUser user, Item item)
+        public bool BeforeCycle(RoomUser user, Item item)
         {
             if (user != null && user.GetClient() != null && user.GetClient().GetHabbo() != null)
             {

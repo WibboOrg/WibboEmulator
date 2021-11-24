@@ -8,8 +8,6 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Triggers
 {
     public class UserCollision : WiredTriggerBase, IWired
     {
-        private Item item;
-        private WiredHandler handler;
         private readonly RoomEventDelegate delegateFunction;
 
         public UserCollision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION)

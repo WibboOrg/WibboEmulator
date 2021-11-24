@@ -68,7 +68,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
             int rotation = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
 
             string rotAndMove = (int)rotation + ";" + (int)movement;
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, rotAndMove, this.DelayCycle.ToString(), false, this.Items, this.Delay);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, rotAndMove, string.Empty, false, this.Items, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)

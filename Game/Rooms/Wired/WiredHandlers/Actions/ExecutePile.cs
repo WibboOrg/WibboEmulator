@@ -27,7 +27,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, this.DelayCycle.ToString(), string.Empty, false, this.Items, this.Delay);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)

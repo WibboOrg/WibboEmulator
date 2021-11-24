@@ -658,8 +658,8 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                     {
                         if (int.TryParse(value, out int RoomId))
                         {
-                            Room room = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
-                            if (room != null && room.RoomData.OwnerId == room.RoomData.OwnerId)
+                            Room roomTarget = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
+                            if (roomTarget != null && roomTarget.RoomData.OwnerId == this.RoomInstance.RoomData.OwnerId)
                             {
                                 user.GetClient().GetHabbo().IsTeleporting = true;
                                 user.GetClient().GetHabbo().TeleportingRoomID = RoomId;
@@ -2369,7 +2369,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, this.DelayCycle.ToString(), this.StringParam, false, null, this.Delay);
+            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null, this.Delay);
         }
 
         public void LoadFromDatabase(DataRow row)
