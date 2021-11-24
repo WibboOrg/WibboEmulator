@@ -18,7 +18,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public override bool OnCycle(RoomUser user, Item item)
         {
-            if (this.StringParam.Contains("\t"))
+            if (!this.StringParam.Contains("\t"))
                 return false;
 
             string[] splitData = this.StringParam.Split('\t');
@@ -37,7 +37,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
                 return false;
             }
 
-            bool isWhisper = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0)) == 1;
+            bool isWhisper = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0)) == 0;
 
             string textMessage = message;
             textMessage = textMessage.Replace("#username#", user.GetUsername());
@@ -106,7 +106,7 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Actions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            bool isWhisper = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0)) == 1;
+            bool isWhisper = (((this.IntParams.Count > 0) ? this.IntParams[0] : 0)) == 0;
 
             WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, isWhisper, null, this.Delay);
         }

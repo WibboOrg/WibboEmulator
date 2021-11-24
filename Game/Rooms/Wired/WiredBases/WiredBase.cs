@@ -104,6 +104,12 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers
         public virtual void LoadItems(bool inDatabase = false)
         {
             this.Items = this.GetItems();
+
+            this.StuffIds.Clear();
+            foreach (Item item in this.Items)
+            {
+                this.StuffIds.Add(item.Id);
+            }
         }
 
         internal List<Item> GetItems()

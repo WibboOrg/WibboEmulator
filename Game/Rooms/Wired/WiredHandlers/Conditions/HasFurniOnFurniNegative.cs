@@ -39,6 +39,14 @@ namespace Butterfly.Game.Rooms.Wired.WiredHandlers.Conditions
             return requireAll;
         }
 
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if(this.IntParams.Count == 0)
+                this.IntParams.Add(1);
+        }
+
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
             int requireAll = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
