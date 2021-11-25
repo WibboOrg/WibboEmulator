@@ -17,7 +17,6 @@ namespace Butterfly.Game.Items.Wired.Triggers
             this.StuffTypeSelectionEnabled = true;
 
             this.delegateFunction = new UserAndItemDelegate(this.OnUserWalksOffFurni);
-            
         }
 
         public bool OnCycle(RoomUser user, Item item)
