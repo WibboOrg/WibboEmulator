@@ -20,6 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Butterfly.Game.User.Data;
 
 namespace Butterfly.Game.User
 {
@@ -66,9 +67,9 @@ namespace Butterfly.Game.User
         public List<RoomData> UsersRooms;
 
         public List<int> MutedUsers;
-        public Dictionary<string, UserAchievement> Achievements;
         public List<int> RatedRooms;
-        private HabboMessenger Messenger;
+        public Dictionary<string, UserAchievement> Achievements;
+        private MessengerComponent Messenger;
         private BadgeComponent BadgeComponent;
         private InventoryComponent InventoryComponent;
         private ChatMessageManager chatMessageManager;
@@ -84,7 +85,7 @@ namespace Butterfly.Game.User
         public DateTime spamFloodTime;
         public DateTime everyoneTimer;
 
-        public Dictionary<int, int> quests;
+        public Dictionary<int, int> Quests;
         public int CurrentQuestId;
         public int LastCompleted;
         public int LastQuestId;
@@ -129,7 +130,7 @@ namespace Butterfly.Game.User
 
         public bool InRoom => this.CurrentRoomId >= 1;
 
-        public Rooms.Room CurrentRoom
+        public Room CurrentRoom
         {
             get
             {
@@ -253,20 +254,17 @@ namespace Butterfly.Game.User
             this.Visits = new Dictionary<double, RoomData>();
         }
 
-        public void Init(Client client, UserData.UserData data)
+        public void Init(Client client, UserData data)
         {
             this.mClient = client;
-            this.BadgeComponent = new BadgeComponent(this.Id, data.badges);
+            this.BadgeComponent = new BadgeComponent(this.Id, data.Badges);
             this.InventoryComponent = new InventoryComponent(this.Id, client);
             this.InventoryComponent.SetActiveState(client);
-            this.quests = data.quests;
+            this.Quests = data.Quests;
             this.chatMessageManager = new ChatMessageManager();
             this.chatMessageManager.LoadUserChatlogs(this.Id);
-            this.Messenger = new HabboMessenger(this.Id)
-            {
-                AppearOffline = this.HideOnline
-            };
-            this.Messenger.Init(data.friends, data.requests, data.Relationships);
+            this.Messenger = new MessengerComponent(this.Id);
+            this.Messenger.Init(data.Friends, data.Requests, data.Relationships, this.HideOnline);
             this.MyGroups = data.MyGroups;
 
             this.UpdateRooms();
@@ -306,7 +304,7 @@ namespace Butterfly.Game.User
 
             if (this.GetClient().GetHabbo().InRoom)
             {
-                Rooms.Room OldRoom = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.GetClient().GetHabbo().CurrentRoomId);
+                Room OldRoom = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.GetClient().GetHabbo().CurrentRoomId);
 
                 if (OldRoom != null)
                 {
@@ -314,7 +312,7 @@ namespace Butterfly.Game.User
                 }
             }
 
-            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(Id);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(Id);
             if (room == null)
             {
                 this.GetClient().SendPacket(new CloseConnectionComposer());
@@ -415,7 +413,7 @@ namespace Butterfly.Game.User
 
         }
 
-        public bool EnterRoom(Rooms.Room Room)
+        public bool EnterRoom(Room Room)
         {
             Client Session = this.GetClient();
             if (Session == null)
@@ -447,10 +445,10 @@ namespace Butterfly.Game.User
             return true;
         }
 
-        public void LoadData(UserData.UserData data)
+        public void LoadData(UserData data)
         {
-            this.LoadAchievements(data.achievements);
-            this.LoadFavorites(data.favouritedRooms);
+            this.LoadAchievements(data.Achievements);
+            this.LoadFavorites(data.FavouritedRooms);
             this.LoadRoomRights(data.RoomRightsList);
         }
 
@@ -618,7 +616,7 @@ namespace Butterfly.Game.User
             return ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.Id);
         }
 
-        public HabboMessenger GetMessenger()
+        public MessengerComponent GetMessenger()
         {
             return this.Messenger;
         }
@@ -640,7 +638,7 @@ namespace Butterfly.Game.User
 
         public int GetQuestProgress(int p)
         {
-            this.quests.TryGetValue(p, out int num);
+            this.Quests.TryGetValue(p, out int num);
             return num;
         }
 

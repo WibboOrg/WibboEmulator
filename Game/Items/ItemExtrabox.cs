@@ -15,7 +15,7 @@ namespace Butterfly.Game.Items
 {
     internal static class ItemExtrabox
     {
-        public static void OpenExtrabox(Client Session, Item Present, Rooms.Room Room)
+        public static void OpenExtrabox(Client Session, Item Present, Room Room)
         {
             int PageId;
 
@@ -69,7 +69,7 @@ namespace Butterfly.Game.Items
 
             if (Present.Data.Type == 's')
             {
-                if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.GetX, Present.GetY, Present.Rotation, true, false, true))
+                if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
@@ -97,7 +97,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public static void OpenDeluxeBox(Client Session, Item Present, Rooms.Room Room)
+        public static void OpenDeluxeBox(Client Session, Item Present, Room Room)
         {
             int PageId;
 
@@ -143,7 +143,7 @@ namespace Butterfly.Game.Items
 
             if (Present.Data.Type == 's')
             {
-                if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.GetX, Present.GetY, Present.Rotation, true, false, true))
+                if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
@@ -171,13 +171,11 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public static void OpenBadgeBox(Client Session, Item Present, Rooms.Room Room)
+        public static void OpenBadgeBox(Client Session, Item Present, Room Room)
         {
-            int PageId = 0;
-            string BadgeCode = "";
 
             //Présentoir et badge
-            PageId = 987987;
+            int PageId = 987987;
 
             List<int> PageBadgeList = new List<int>(new int[] { 8948, 18171, 18172, 18173, 18174, 18175, 18176, 18177, 18178, 18179, 18180, 18181, 18182, 18183 });
             int PageBadgeId = PageBadgeList[ButterflyEnvironment.GetRandomNumber(0, PageBadgeList.Count - 1)];
@@ -187,7 +185,7 @@ namespace Butterfly.Game.Items
                 return;
             }
 
-            BadgeCode = PageBadge.Items.ElementAt(ButterflyEnvironment.GetRandomNumber(0, PageBadge.Items.Count - 1)).Value.Badge;
+            string BadgeCode = PageBadge.Items.ElementAt(ButterflyEnvironment.GetRandomNumber(0, PageBadge.Items.Count - 1)).Value.Badge;
 
 
             ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
@@ -221,7 +219,7 @@ namespace Butterfly.Game.Items
 
             if (Present.Data.Type == 's')
             {
-                if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.GetX, Present.GetY, Present.Rotation, true, false, true))
+                if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
@@ -261,7 +259,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public static void OpenLegendBox(Client Session, Item Present, Rooms.Room Room)
+        public static void OpenLegendBox(Client Session, Item Present, Room Room)
         {
             int PageId = 0;
             string BadgeCode = "";
@@ -391,7 +389,7 @@ namespace Butterfly.Game.Items
 
             if (Present.Data.Type == 's')
             {
-                if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.GetX, Present.GetY, Present.Rotation, true, false, true))
+                if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {

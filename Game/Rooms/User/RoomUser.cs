@@ -14,23 +14,23 @@ namespace Butterfly.Game.Rooms
 {
     public class RoomUser : IEquatable<RoomUser>
     {
-        public int UserId;
-        public int HabboId;
-        public int VirtualId;
-        public int RoomId;
-        public int IdleTime;
+        public int UserId { get; set; }
+        public int HabboId { get; set; }
+        public int VirtualId { get; set; }
+        public int RoomId { get; set; }
+        public int IdleTime { get; set; }
 
-        public int X;
-        public int Y;
-        public double Z;
-        public int GoalX;
-        public int GoalY;
+        public int X { get; set; }
+        public int Y { get; set; }
+        public double Z { get; set; }
+        public int GoalX { get; set; }
+        public int GoalY { get; set; }
         public int LastBubble = 0;
 
-        public bool SetStep;
-        public int SetX;
-        public int SetY;
-        public double SetZ;
+        public bool SetStep { get; set; }
+        public int SetX { get; set; }
+        public int SetY { get; set; }
+        public double SetZ { get; set; }
 
         public int CarryItemID;
         public int CarryTimer;
@@ -43,6 +43,7 @@ namespace Butterfly.Game.Rooms
         public bool AllowMoveToRoller;
 
         private Client Client;
+
         public RoomBot BotData;
         public Pet PetData;
         public BotAI BotAI;
@@ -51,7 +52,7 @@ namespace Butterfly.Game.Rooms
         public ItemEffectType CurrentItemEffect;
         public bool Freezed;
         public int FreezeCounter;
-        public Team Team;
+        public TeamType Team;
         public FreezePowerUp BanzaiPowerUp;
         public int FreezeLives;
         public bool ShieldActive;
@@ -119,7 +120,6 @@ namespace Butterfly.Game.Rooms
 
         public List<string> WhiperGroupUsers;
         public bool muted;
-
 
         public Point Coordinate => new Point(this.X, this.Y);
 
@@ -306,7 +306,7 @@ namespace Butterfly.Game.Rooms
             Message.WriteInteger(Color);
             Message.WriteInteger(0);
             Message.WriteInteger(-1);
-            this.GetRoom().SendPacketOnChat(Message, this, true, (this.Team == Team.none && !this.IsBot));
+            this.GetRoom().SendPacketOnChat(Message, this, true, (this.Team == TeamType.none && !this.IsBot));
         }
 
         public void MoveTo(Point c, bool Override = false)

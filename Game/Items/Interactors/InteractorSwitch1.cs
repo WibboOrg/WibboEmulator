@@ -58,7 +58,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            if (!Gamemap.TilesTouching(Item.GetX, Item.GetY, roomUser.X, roomUser.Y))
+            if (!Gamemap.TilesTouching(Item.X, Item.Y, roomUser.X, roomUser.Y))
             {
                 return;
             }

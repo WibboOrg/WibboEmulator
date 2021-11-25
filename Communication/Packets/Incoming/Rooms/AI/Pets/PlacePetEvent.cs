@@ -66,10 +66,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Pet.RoomId = Room.Id;
 
             Room.GetRoomUserManager().DeployBot(new RoomBot(Pet.PetId, Pet.OwnerId, Pet.RoomId, AIType.Pet, true, Pet.Name, "", "", Pet.Look, X, Y, 0, 0, false, "", 0, false, 0, 0, 0), Pet);
-            if (Pet.DBState != DatabaseUpdateState.NeedsInsert)
-            {
-                Pet.DBState = DatabaseUpdateState.NeedsUpdate;
-            }
+            
+            Pet.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {

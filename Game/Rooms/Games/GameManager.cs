@@ -7,12 +7,13 @@ namespace Butterfly.Game.Rooms.Games
 {
     public class GameManager
     {
-        public int[] TeamPoints;
-        private Dictionary<int, Item> redTeamItems;
-        private Dictionary<int, Item> blueTeamItems;
-        private Dictionary<int, Item> greenTeamItems;
-        private Dictionary<int, Item> yellowTeamItems;
-        private Room room;
+        public int[] TeamPoints { get; set; }
+
+        private Dictionary<int, Item> _redTeamItems;
+        private Dictionary<int, Item> _blueTeamItems;
+        private Dictionary<int, Item> _greenTeamItems;
+        private Dictionary<int, Item> _yellowTeamItems;
+        private Room _roomInstance;
 
         public int[] Points
         {
@@ -29,31 +30,32 @@ namespace Butterfly.Game.Rooms.Games
         public GameManager(Room room)
         {
             this.TeamPoints = new int[5];
-            this.redTeamItems = new Dictionary<int, Item>();
-            this.blueTeamItems = new Dictionary<int, Item>();
-            this.greenTeamItems = new Dictionary<int, Item>();
-            this.yellowTeamItems = new Dictionary<int, Item>();
-            this.room = room;
+
+            this._redTeamItems = new Dictionary<int, Item>();
+            this._blueTeamItems = new Dictionary<int, Item>();
+            this._greenTeamItems = new Dictionary<int, Item>();
+            this._yellowTeamItems = new Dictionary<int, Item>();
+            this._roomInstance = room;
         }
 
-        public Dictionary<int, Item> GetItems(Team team)
+        public Dictionary<int, Item> GetItems(TeamType team)
         {
             switch (team)
             {
-                case Team.red:
-                    return this.redTeamItems;
-                case Team.green:
-                    return this.greenTeamItems;
-                case Team.blue:
-                    return this.blueTeamItems;
-                case Team.yellow:
-                    return this.yellowTeamItems;
+                case TeamType.red:
+                    return this._redTeamItems;
+                case TeamType.green:
+                    return this._greenTeamItems;
+                case TeamType.blue:
+                    return this._blueTeamItems;
+                case TeamType.yellow:
+                    return this._yellowTeamItems;
                 default:
                     return new Dictionary<int, Item>();
             }
         }
 
-        public Team getWinningTeam()
+        public TeamType GetWinningTeam()
         {
             int NbTeam = 0;
             int MaxPoints = 0;
@@ -70,15 +72,15 @@ namespace Butterfly.Game.Rooms.Games
                     NbTeam = i;
                 }
             }
-            return (Team)NbTeam;
+            return (TeamType)NbTeam;
         }
 
-        public void AddPointToTeam(Team team, RoomUser user)
+        public void AddPointToTeam(TeamType team, RoomUser user)
         {
             this.AddPointToTeam(team, 1, user);
         }
 
-        public void AddPointToTeam(Team team, int points, RoomUser user)
+        public void AddPointToTeam(TeamType team, int points, RoomUser user)
         {
             int points1 = this.TeamPoints[(int)team] += points;
             if (points1 < 0)
@@ -110,29 +112,29 @@ namespace Butterfly.Game.Rooms.Games
 
         public void Reset()
         {
-            this.AddPointToTeam(Team.blue, this.GetScoreForTeam(Team.blue) * -1, null);
-            this.AddPointToTeam(Team.green, this.GetScoreForTeam(Team.green) * -1, null);
-            this.AddPointToTeam(Team.red, this.GetScoreForTeam(Team.red) * -1, null);
-            this.AddPointToTeam(Team.yellow, this.GetScoreForTeam(Team.yellow) * -1, null);
+            this.AddPointToTeam(TeamType.blue, this.GetScoreForTeam(TeamType.blue) * -1, null);
+            this.AddPointToTeam(TeamType.green, this.GetScoreForTeam(TeamType.green) * -1, null);
+            this.AddPointToTeam(TeamType.red, this.GetScoreForTeam(TeamType.red) * -1, null);
+            this.AddPointToTeam(TeamType.yellow, this.GetScoreForTeam(TeamType.yellow) * -1, null);
         }
 
-        private int GetScoreForTeam(Team team)
+        private int GetScoreForTeam(TeamType team)
         {
             return this.TeamPoints[(int)team];
         }
 
-        private Dictionary<int, Item> GetFurniItems(Team team)
+        private Dictionary<int, Item> GetFurniItems(TeamType team)
         {
             switch (team)
             {
-                case Team.red:
-                    return this.redTeamItems;
-                case Team.green:
-                    return this.greenTeamItems;
-                case Team.blue:
-                    return this.blueTeamItems;
-                case Team.yellow:
-                    return this.yellowTeamItems;
+                case TeamType.red:
+                    return this._redTeamItems;
+                case TeamType.green:
+                    return this._greenTeamItems;
+                case TeamType.blue:
+                    return this._blueTeamItems;
+                case TeamType.yellow:
+                    return this._yellowTeamItems;
                 default:
                     return new Dictionary<int, Item>();
             }
@@ -169,78 +171,78 @@ namespace Butterfly.Game.Rooms.Games
 
         }
 
-        public void AddFurnitureToTeam(Item item, Team team)
+        public void AddFurnitureToTeam(Item item, TeamType team)
         {
             switch (team)
             {
-                case Team.red:
-                    if (!this.redTeamItems.ContainsKey(item.Id))
+                case TeamType.red:
+                    if (!this._redTeamItems.ContainsKey(item.Id))
                     {
-                        this.redTeamItems.Add(item.Id, item);
+                        this._redTeamItems.Add(item.Id, item);
                     }
 
                     break;
-                case Team.green:
-                    if (!this.greenTeamItems.ContainsKey(item.Id))
+                case TeamType.green:
+                    if (!this._greenTeamItems.ContainsKey(item.Id))
                     {
-                        this.greenTeamItems.Add(item.Id, item);
+                        this._greenTeamItems.Add(item.Id, item);
                     }
 
                     break;
-                case Team.blue:
-                    if (!this.blueTeamItems.ContainsKey(item.Id))
+                case TeamType.blue:
+                    if (!this._blueTeamItems.ContainsKey(item.Id))
                     {
-                        this.blueTeamItems.Add(item.Id, item);
+                        this._blueTeamItems.Add(item.Id, item);
                     }
 
                     break;
-                case Team.yellow:
-                    if (!this.yellowTeamItems.ContainsKey(item.Id))
+                case TeamType.yellow:
+                    if (!this._yellowTeamItems.ContainsKey(item.Id))
                     {
-                        this.yellowTeamItems.Add(item.Id, item);
+                        this._yellowTeamItems.Add(item.Id, item);
                     }
 
                     break;
             }
         }
 
-        public void RemoveFurnitureFromTeam(Item item, Team team)
+        public void RemoveFurnitureFromTeam(Item item, TeamType team)
         {
             switch (team)
             {
-                case Team.red:
-                    this.redTeamItems.Remove(item.Id);
+                case TeamType.red:
+                    this._redTeamItems.Remove(item.Id);
                     break;
-                case Team.green:
-                    this.greenTeamItems.Remove(item.Id);
+                case TeamType.green:
+                    this._greenTeamItems.Remove(item.Id);
                     break;
-                case Team.blue:
-                    this.blueTeamItems.Remove(item.Id);
+                case TeamType.blue:
+                    this._blueTeamItems.Remove(item.Id);
                     break;
-                case Team.yellow:
-                    this.yellowTeamItems.Remove(item.Id);
+                case TeamType.yellow:
+                    this._yellowTeamItems.Remove(item.Id);
                     break;
             }
         }
 
         public void UnlockGates()
         {
-            foreach (Item roomItem in this.redTeamItems.Values)
+            foreach (Item roomItem in this._redTeamItems.Values)
             {
                 this.UnlockGate(roomItem);
             }
 
-            foreach (Item roomItem in this.greenTeamItems.Values)
+            foreach (Item roomItem in this._greenTeamItems.Values)
             {
                 this.UnlockGate(roomItem);
             }
 
-            foreach (Item roomItem in this.blueTeamItems.Values)
+            foreach (Item roomItem in this._blueTeamItems.Values)
             {
                 this.UnlockGate(roomItem);
             }
 
-            foreach (Item roomItem in this.yellowTeamItems.Values)
+            foreach (Item roomItem in this._yellowTeamItems.Values)
             {
                 this.UnlockGate(roomItem);
             }
@@ -265,22 +267,22 @@ namespace Butterfly.Game.Rooms.Games
 
         public void UpdateGatesTeamCounts()
         {
-            foreach (Item roomItem in this.redTeamItems.Values)
+            foreach (Item roomItem in this._redTeamItems.Values)
             {
                 this.UpdateGateTeamCount(roomItem);
             }
 
-            foreach (Item roomItem in this.greenTeamItems.Values)
+            foreach (Item roomItem in this._greenTeamItems.Values)
             {
                 this.UpdateGateTeamCount(roomItem);
             }
 
-            foreach (Item roomItem in this.blueTeamItems.Values)
+            foreach (Item roomItem in this._blueTeamItems.Values)
             {
                 this.UpdateGateTeamCount(roomItem);
             }
 
-            foreach (Item roomItem in this.yellowTeamItems.Values)
+            foreach (Item roomItem in this._yellowTeamItems.Values)
             {
                 this.UpdateGateTeamCount(roomItem);
             }
@@ -292,22 +294,22 @@ namespace Butterfly.Game.Rooms.Games
             {
                 case InteractionType.BANZAIGATEBLUE:
                 case InteractionType.FREEZEBLUEGATE:
-                    item.ExtraData = this.room.GetTeamManager().BlueTeam.Count.ToString();
+                    item.ExtraData = this._roomInstance.GetTeamManager().BlueTeam.Count.ToString();
                     item.UpdateState();
                     break;
                 case InteractionType.BANZAIGATERED:
                 case InteractionType.FREEZEREDGATE:
-                    item.ExtraData = this.room.GetTeamManager().RedTeam.Count.ToString();
+                    item.ExtraData = this._roomInstance.GetTeamManager().RedTeam.Count.ToString();
                     item.UpdateState();
                     break;
                 case InteractionType.BANZAIGATEGREEN:
                 case InteractionType.FREEZEGREENGATE:
-                    item.ExtraData = this.room.GetTeamManager().GreenTeam.Count.ToString();
+                    item.ExtraData = this._roomInstance.GetTeamManager().GreenTeam.Count.ToString();
                     item.UpdateState();
                     break;
                 case InteractionType.BANZAIGATEYELLOW:
                 case InteractionType.FREEZEYELLOWGATE:
-                    item.ExtraData = this.room.GetTeamManager().YellowTeam.Count.ToString();
+                    item.ExtraData = this._roomInstance.GetTeamManager().YellowTeam.Count.ToString();
                     item.UpdateState();
                     break;
             }
@@ -332,22 +334,22 @@ namespace Butterfly.Game.Rooms.Games
 
         public void LockGates()
         {
-            foreach (Item roomItem in this.redTeamItems.Values)
+            foreach (Item roomItem in this._redTeamItems.Values)
             {
                 this.LockGate(roomItem);
             }
 
-            foreach (Item roomItem in this.greenTeamItems.Values)
+            foreach (Item roomItem in this._greenTeamItems.Values)
             {
                 this.LockGate(roomItem);
             }
 
-            foreach (Item roomItem in this.blueTeamItems.Values)
+            foreach (Item roomItem in this._blueTeamItems.Values)
             {
                 this.LockGate(roomItem);
             }
 
-            foreach (Item roomItem in this.yellowTeamItems.Values)
+            foreach (Item roomItem in this._yellowTeamItems.Values)
             {
                 this.LockGate(roomItem);
             }
@@ -355,10 +357,8 @@ namespace Butterfly.Game.Rooms.Games
 
         public void StopGame()
         {
-            this.room.GetBanzai().BanzaiEnd();
-            this.room.GetFreeze().StopGame();
-
-            //this.room.GetGameManager().UnlockGates();
+            this._roomInstance.GetBanzai().BanzaiEnd();
+            this._roomInstance.GetFreeze().StopGame();
 
             if (this.OnGameEnd != null)
             {
@@ -368,40 +368,38 @@ namespace Butterfly.Game.Rooms.Games
 
         public void StartGame()
         {
-            this.room.GetBanzai().BanzaiStart();
-            this.room.GetFreeze().StartGame();
-
-            //this.room.GetGameManager().LockGates();
+            this._roomInstance.GetBanzai().BanzaiStart();
+            this._roomInstance.GetFreeze().StartGame();
 
             if (this.OnGameStart != null)
             {
                 this.OnGameStart(null, null);
             }
 
-            this.room.lastTimerReset = DateTime.Now;
+            this._roomInstance.lastTimerReset = DateTime.Now;
         }
 
         public Room GetRoom()
         {
-            return this.room;
+            return this._roomInstance;
         }
 
         public void Destroy()
         {
             Array.Clear(this.TeamPoints, 0, this.TeamPoints.Length);
-            this.redTeamItems.Clear();
-            this.blueTeamItems.Clear();
-            this.greenTeamItems.Clear();
-            this.yellowTeamItems.Clear();
+            this._redTeamItems.Clear();
+            this._blueTeamItems.Clear();
+            this._greenTeamItems.Clear();
+            this._yellowTeamItems.Clear();
             this.TeamPoints = null;
             this.OnScoreChanged = null;
             this.OnGameStart = null;
             this.OnGameEnd = null;
-            this.redTeamItems = null;
-            this.blueTeamItems = null;
-            this.greenTeamItems = null;
-            this.yellowTeamItems = null;
-            this.room = null;
+            this._redTeamItems = null;
+            this._blueTeamItems = null;
+            this._greenTeamItems = null;
+            this._yellowTeamItems = null;
+            this._roomInstance = null;
         }
     }
 }

@@ -121,9 +121,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     {
                         ItemDao.UpdateExtradata(dbClient, Item.Id, Item.ExtraData);
                     }
-
-                    UserOne = null;
-                    UserTwo = null;
                 }
             }
         }

@@ -90,7 +90,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 case InteractionType.GUILD_ITEM:
                 case InteractionType.GUILD_GATE:
-                    int GroupId = 0;
+                    int GroupId;
                     if (!int.TryParse(ExtraData, out GroupId))
                     {
                         return;
@@ -101,7 +101,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         return;
                     }
 
-                    Guild Group = null;
+                    Guild Group;
                     if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group))
                     {
                         return;
@@ -290,12 +290,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
             }
 
-            Item NewItem = null;
             switch (Item.Data.Type.ToString().ToLower())
             {
                 default:
                     List<Item> GeneratedGenericItems = new List<Item>();
 
+
+                    Item NewItem;
                     switch (Item.Data.InteractionType)
                     {
                         default:

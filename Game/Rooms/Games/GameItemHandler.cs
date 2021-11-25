@@ -13,12 +13,12 @@ namespace Butterfly.Game.Rooms
         private Dictionary<int, Item> _banzaiPyramids;
         private readonly Dictionary<Point, List<Item>> _groupGate;
         private readonly Dictionary<int, Item> _banzaiBlobs;
-        private Room _room;
+        private Room _roomInstance;
         private Item _exitTeleport;
 
         public GameItemHandler(Room room)
         {
-            this._room = room;
+            this._roomInstance = room;
             this._banzaiPyramids = new Dictionary<int, Item>();
             this._banzaiTeleports = new Dictionary<int, Item>();
             this._groupGate = new Dictionary<Point, List<Item>>();
@@ -55,13 +55,13 @@ namespace Butterfly.Game.Rooms
                     {
                         roomItem.ExtraData = "1";
                         roomItem.UpdateState();
-                        this._room.GetGameMap().updateMapForItem(roomItem);
+                        this._roomInstance.GetGameMap().UpdateMapForItem(roomItem);
                     }
-                    else if (this._room.GetGameMap().CanStackItem(roomItem.GetX, roomItem.GetY))
+                    else if (this._roomInstance.GetGameMap().CanStackItem(roomItem.X, roomItem.Y))
                     {
                         roomItem.ExtraData = "0";
                         roomItem.UpdateState();
-                        this._room.GetGameMap().updateMapForItem(roomItem);
+                        this._roomInstance.GetGameMap().UpdateMapForItem(roomItem);
                     }
                 }
             }
@@ -128,7 +128,7 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            this._room.GetGameManager().AddPointToTeam(User.Team, User);
+            this._roomInstance.GetGameManager().AddPointToTeam(User.Team, User);
             Item.ExtraData = "1";
             Item.UpdateState();
         }
@@ -140,7 +140,7 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            this._room.GetGameManager().AddPointToTeam(User.Team, 5, User);
+            this._roomInstance.GetGameManager().AddPointToTeam(User.Team, 5, User);
             Item.ExtraData = "1";
             Item.UpdateState();
         }
@@ -313,7 +313,7 @@ namespace Butterfly.Game.Rooms
 
             this._banzaiPyramids = null;
             this._banzaiTeleports = null;
-            this._room = null;
+            this._roomInstance = null;
         }
     }
 }

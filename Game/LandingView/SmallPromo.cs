@@ -4,13 +4,13 @@ namespace Butterfly.Game.LandingView
 {
     public class SmallPromo
     {
-        public int Index;
-        public string Header;
-        public string Body;
-        public string Button;
-        public int inGamePromo;
-        public string SpecialAction;
-        public string Image;
+        public int Index { get; private set; }
+        public string Header { get; private set; }
+        public string Body { get; private set; }
+        public string Button { get; private set; }
+        public int inGamePromo { get; private set; }
+        public string SpecialAction { get; private set; }
+        public string Image { get; private set; }
 
         public SmallPromo(int index, string header, string body, string button, int inGame, string specialAction, string image)
         {
@@ -22,19 +22,5 @@ namespace Butterfly.Game.LandingView
             this.SpecialAction = specialAction;
             this.Image = image;
         }
-
-        public ServerPacket Serialize(ServerPacket Composer)
-        {
-            Composer.WriteInteger(this.Index);
-            Composer.WriteString(this.Header);
-            Composer.WriteString(this.Body);
-            Composer.WriteString(this.Button);
-            Composer.WriteInteger(this.inGamePromo);
-            Composer.WriteString(this.SpecialAction);
-            Composer.WriteString(this.Image);
-
-            return Composer;
-        }
-
     }
 }

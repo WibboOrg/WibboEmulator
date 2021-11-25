@@ -2,41 +2,17 @@
 {
     public class TopLevelItem
     {
-        private int _id;
-        private string _searchCode;
-        private string _filter;
-        private string _localization;
+        public int Id { get; private set; }
+        public string SearchCode { get; private set; }
+        public string Filter { get; private set; }
+        public string Localization { get; private set; }
 
-        public TopLevelItem(int Id, string SearchCode, string Filter, string Localization)
+        public TopLevelItem(int id, string searchCode, string filter, string localization)
         {
-            this._id = Id;
-            this._searchCode = SearchCode;
-            this._filter = Filter;
-            this._localization = Localization;
-        }
-
-        public int Id
-        {
-            get => this._id;
-            set => this._id = value;
-        }
-
-        public string SearchCode
-        {
-            get => this._searchCode;
-            set => this._searchCode = value;
-        }
-
-        public string Filter
-        {
-            get => this._filter;
-            set => this._filter = value;
-        }
-
-        public string Localization
-        {
-            get => this._localization;
-            set => this._localization = value;
+            this.Id = id;
+            this.SearchCode = searchCode;
+            this.Filter = filter;
+            this.Localization = localization;
         }
     }
 }

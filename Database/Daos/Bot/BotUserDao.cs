@@ -17,7 +17,7 @@ namespace Butterfly.Database.Daos
             foreach (RoomUser bot in botList)
             {
                 RoomBot BotData = bot.BotData;
-                if (BotData.AiType == AIType.RolePlayBot)
+                if (BotData.AiType == AIType.RoleplayBot)
                 {
                     continue;
                 }

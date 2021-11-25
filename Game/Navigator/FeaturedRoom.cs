@@ -4,10 +4,10 @@ namespace Butterfly.Game.Navigator
 {
     public class FeaturedRoom
     {
-        public int RoomId;
-        public string Image;
-        public Language Langue;
-        public bool Game;
+        public int RoomId { get; private set; }
+        public string Image { get; private set; }
+        public Language Langue { get; private set; }
+        public bool Game { get; private set; }
 
         public FeaturedRoom(int RoomId, string Image, Language Langue, bool Game)
         {

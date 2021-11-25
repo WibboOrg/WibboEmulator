@@ -1,6 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Wireds;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
+using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Wired;
 using System.Collections.Generic;

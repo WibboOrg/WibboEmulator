@@ -9,10 +9,10 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
         {
             this.WriteInteger(item.Id);
             this.WriteInteger(item.GetBaseItem().SpriteId);
-            this.WriteInteger(item.GetX);
-            this.WriteInteger(item.GetY);
+            this.WriteInteger(item.X);
+            this.WriteInteger(item.Y);
             this.WriteInteger(item.Rotation);
-            this.WriteString(string.Format("{0:0.00}", item.GetZ));
+            this.WriteString(string.Format("{0:0.00}", item.Z));
             this.WriteString(string.Empty);
 
             if (item.Limited > 0)

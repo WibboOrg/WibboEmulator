@@ -66,10 +66,10 @@ namespace Butterfly.Game.Roleplay
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                DataTable table1 = RoleplayDao.GetAll(dbClient);
-                if (table1 != null)
+                DataTable table = RoleplayDao.GetAll(dbClient);
+                if (table != null)
                 {
-                    foreach (DataRow dataRow in table1.Rows)
+                    foreach (DataRow dataRow in table.Rows)
                     {
                         if (!this._rolePlay.ContainsKey(Convert.ToInt32(dataRow["owner_id"])))
                         {

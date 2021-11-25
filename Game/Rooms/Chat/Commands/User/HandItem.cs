@@ -12,12 +12,12 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            if (UserRoom.Team != Team.none || UserRoom.InGame)
+            if (UserRoom.Team != TeamType.none || UserRoom.InGame)
             {
                 return;
             }
 
-            int handitemid = -1;
+            int handitemid;
             int.TryParse(Params[1], out handitemid);
             if (handitemid < 0)
             {

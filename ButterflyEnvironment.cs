@@ -10,7 +10,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game;
 using Butterfly.Game.Clients;
 using Butterfly.Game.User;
-using Butterfly.Game.User.UserData;
+using Butterfly.Game.User.Data;
 using Butterfly.Net;
 using ConnectionManager;
 using System;
@@ -307,7 +307,7 @@ namespace Butterfly
                             UserData data = UserDataFactory.GetUserData(UserId);
                             if (data != null)
                             {
-                                Habbo Generated = data.user;
+                                Habbo Generated = data.User;
                                 if (Generated != null)
                                 {
                                     _usersCached.TryAdd(UserId, Generated);
@@ -356,6 +356,11 @@ namespace Butterfly
             return _datebasemanager;
         }
 
+        public static WebSocketManager GetWebSocketManager()
+        {
+            return _webSocketManager;
+        }
+
         public static void PreformShutDown()
         {
             Console.Clear();
@@ -363,9 +368,7 @@ namespace Butterfly
 
             Console.Title = "BUTTERFLY : EXTINCTION";
 
-            GetGame().GetClientManager().SendMessage(
-                new BroadcastMessageAlertComposer(
-                    "<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
+            GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
             GetGame().Destroy();
             Thread.Sleep(20000);
             GetConnectionManager().Destroy();
@@ -381,13 +384,7 @@ namespace Butterfly
 
         public static string TimeSpanToString(TimeSpan span)
         {
-            return string.Concat(new object[4]
-      {
-         span.Seconds,
-         " s, ",
-         span.Milliseconds,
-         " ms"
-      });
+            return span.Seconds + " s, " + span.Milliseconds + " ms";
         }
 
         public static void AppendTimeStampWithComment(ref StringBuilder builder, DateTime time, string text)

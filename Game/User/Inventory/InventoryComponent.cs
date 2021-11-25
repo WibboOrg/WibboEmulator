@@ -20,8 +20,8 @@ namespace Butterfly.Game.User.Inventory
 
         private Client _client;
 
-        public bool inventoryDefined;
         public int UserId;
+        public bool InventoryDefined;
 
         public InventoryComponent(int UserId, Client Client)
         {
@@ -52,22 +52,22 @@ namespace Butterfly.Game.User.Inventory
                 }
 
                 this._UserItems.Clear();
-                DataTable table1;
+
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    table1 = ItemDao.GetAllByUserId(dbClient, this.UserId);
-                }
+                    DataTable table = ItemDao.GetAllByUserId(dbClient, this.UserId);
 
-                foreach (DataRow dataRow in table1.Rows)
-                {
-                    int Id = Convert.ToInt32(dataRow["id"]);
-                    int BaseItem = Convert.ToInt32(dataRow["base_item"]);
-                    string ExtraData = DBNull.Value.Equals(dataRow["extra_data"]) ? string.Empty : (string)dataRow["extra_data"];
-                    int Limited = DBNull.Value.Equals(dataRow["limited_number"]) ? 0 : Convert.ToInt32(dataRow["limited_number"]);
-                    int LimitedTo = DBNull.Value.Equals(dataRow["limited_stack"]) ? 0 : Convert.ToInt32(dataRow["limited_stack"]);
+                    foreach (DataRow dataRow in table.Rows)
+                    {
+                        int Id = Convert.ToInt32(dataRow["id"]);
+                        int BaseItem = Convert.ToInt32(dataRow["base_item"]);
+                        string ExtraData = DBNull.Value.Equals(dataRow["extra_data"]) ? string.Empty : (string)dataRow["extra_data"];
+                        int Limited = DBNull.Value.Equals(dataRow["limited_number"]) ? 0 : Convert.ToInt32(dataRow["limited_number"]);
+                        int LimitedTo = DBNull.Value.Equals(dataRow["limited_stack"]) ? 0 : Convert.ToInt32(dataRow["limited_stack"]);
 
-                    Item userItem = new Item(Id, 0, BaseItem, ExtraData, Limited, LimitedTo, 0, 0, 0.0, 0, "", null);
-                    this._UserItems.TryAdd(Id, userItem);
+                        Item userItem = new Item(Id, 0, BaseItem, ExtraData, Limited, LimitedTo, 0, 0, 0.0, 0, "", null);
+                        this._UserItems.TryAdd(Id, userItem);
+                    }
                 }
             }
 
@@ -240,12 +240,6 @@ namespace Butterfly.Game.User.Inventory
             {
                 this._botItems.TryAdd(Convert.ToInt32(Row["id"]), new Bot(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), (string)Row["name"], (string)Row["motto"], (string)Row["look"], (string)Row["gender"], (string)Row["walk_enabled"] == "1", (string)Row["chat_enabled"] == "1", (string)Row["chat_text"], Convert.ToInt32(Row["chat_seconds"]), (string)Row["is_dancing"] == "1", Convert.ToInt32(Row["enable"]), Convert.ToInt32(Row["handitem"]), Convert.ToInt32((string)Row["status"])));
             }
-        }
-
-
-        public int getFloorInventoryAmount()
-        {
-            return this._UserItems.Count;
         }
 
         public Item GetItem(int Id)

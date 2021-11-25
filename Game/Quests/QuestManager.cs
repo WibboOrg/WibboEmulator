@@ -13,62 +13,64 @@ namespace Butterfly.Game.Quests
 {
     public class QuestManager
     {
-        private Dictionary<int, Quest> quests;
-        private Dictionary<string, int> questCount;
+        private Dictionary<int, Quest> _quests;
+        private Dictionary<string, int> _questCount;
 
         public void Init()
         {
-            this.quests = new Dictionary<int, Quest>();
-            this.questCount = new Dictionary<string, int>();
+            this._quests = new Dictionary<int, Quest>();
+            this._questCount = new Dictionary<string, int>();
+
             this.ReloadQuests();
         }
 
         public void ReloadQuests()
         {
-            this.quests.Clear();
+            this._quests.Clear();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 DataTable table = EmulatorQuestDao.GetAll(dbClient);
                 foreach (DataRow dataRow in table.Rows)
                 {
-                    int num1 = Convert.ToInt32(dataRow["id"]);
-                    string str = (string)dataRow["category"];
-                    int Number = Convert.ToInt32(dataRow["series_number"]);
-                    int num2 = Convert.ToInt32(dataRow["goal_type"]);
-                    int GoalData = Convert.ToInt32(dataRow["goal_data"]);
-                    string Name = (string)dataRow["name"];
-                    int Reward = Convert.ToInt32(dataRow["reward"]);
-                    string DataBit = (string)dataRow["data_bit"];
-                    Quest quest = new Quest(num1, str, Number, (QuestType)num2, GoalData, Name, Reward, DataBit);
-                    this.quests.Add(num1, quest);
-                    this.AddToCounter(str);
+                    int id = Convert.ToInt32(dataRow["id"]);
+                    string category = (string)dataRow["category"];
+                    int seriesNumber = Convert.ToInt32(dataRow["series_number"]);
+                    int goalType = Convert.ToInt32(dataRow["goal_type"]);
+                    int goalData = Convert.ToInt32(dataRow["goal_data"]);
+                    string name = (string)dataRow["name"];
+                    int reward = Convert.ToInt32(dataRow["reward"]);
+                    string dataBit = (string)dataRow["data_bit"];
+
+                    this._quests.Add(id, new Quest(id, category, seriesNumber, (QuestType)goalType, goalData, name, reward, dataBit));
+
+                    this.AddToCounter(category);
                 }
             }
         }
 
         private void AddToCounter(string category)
         {
-            if (this.questCount.TryGetValue(category, out int num))
+            if (this._questCount.TryGetValue(category, out int num))
             {
-                this.questCount[category] = num + 1;
+                this._questCount[category] = num + 1;
             }
             else
             {
-                this.questCount.Add(category, 1);
+                this._questCount.Add(category, 1);
             }
         }
 
         public Quest GetQuest(int Id)
         {
-            this.quests.TryGetValue(Id, out Quest quest);
+            this._quests.TryGetValue(Id, out Quest quest);
 
             return quest;
         }
 
         public int GetAmountOfQuestsInCategory(string Category)
         {
-            this.questCount.TryGetValue(Category, out int num);
+            this._questCount.TryGetValue(Category, out int num);
 
             return num;
         }
@@ -112,7 +114,7 @@ namespace Butterfly.Game.Quests
                 UserQuestDao.Update(dbClient, Session.GetHabbo().Id, quest.Id, progress);
             }
 
-            Session.GetHabbo().quests[Session.GetHabbo().CurrentQuestId] = progress;
+            Session.GetHabbo().Quests[Session.GetHabbo().CurrentQuestId] = progress;
             Session.SendPacket(Composer.QuestStartedComposer.Compose(Session, quest));
 
             if (!flag)
@@ -130,7 +132,7 @@ namespace Butterfly.Game.Quests
 
         public Quest GetNextQuestInSeries(string Category, int Number)
         {
-            foreach (Quest quest in this.quests.Values)
+            foreach (Quest quest in this._quests.Values)
             {
                 if (quest.Category == Category && quest.Number == Number)
                 {
@@ -143,7 +145,7 @@ namespace Butterfly.Game.Quests
 
         public void GetList(Client Session, ClientPacket Message)
         {
-            Session.SendPacket(Composer.QuestListComposer.Compose(Session, Enumerable.ToList<Quest>(this.quests.Values), Message != null));
+            Session.SendPacket(Composer.QuestListComposer.Compose(Session, Enumerable.ToList<Quest>(this._quests.Values), Message != null));
         }
 
         public void ActivateQuest(Client Session, ClientPacket Message)

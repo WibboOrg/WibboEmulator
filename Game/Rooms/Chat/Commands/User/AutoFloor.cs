@@ -14,11 +14,9 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             string Map = "";
-            string Line = "";
-
             for (int y = 0; y < Room.GetGameMap().Model.MapSizeY; y++)
             {
-                Line = "";
+                string Line = "";
                 for (int x = 0; x < Room.GetGameMap().Model.MapSizeX; x++)
                 {
                     if (x >= Room.GetGameMap().Model.MapSizeX || y >= Room.GetGameMap().Model.MapSizeY)

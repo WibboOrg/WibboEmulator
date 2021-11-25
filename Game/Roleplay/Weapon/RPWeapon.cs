@@ -2,23 +2,23 @@
 {
     public class RPWeapon
     {
-        public int Id;
-        public int DmgMin;
-        public int DmgMax;
-        public RPWeaponInteraction Interaction;
-        public int Enable;
-        public int FreezeTime;
-        public int Distance;
+        public int Id { get; set; }
+        public int DmgMin { get; set; }
+        public int DmgMax { get; set; }
+        public RPWeaponInteraction Interaction { get; set; }
+        public int Enable { get; set; }
+        public int FreezeTime { get; set; }
+        public int Distance { get; set; }
 
-        public RPWeapon(int pId, int pDmgMin, int pDmgMax, RPWeaponInteraction pInteraction, int pEnable, int pFreezeTime, int pDistance)
+        public RPWeapon(int id, int dmgMin, int dmgMax, RPWeaponInteraction interaction, int enable, int freezeTime, int distance)
         {
-            this.Id = pId;
-            this.DmgMin = pDmgMin;
-            this.DmgMax = pDmgMax;
-            this.Interaction = pInteraction;
-            this.Enable = pEnable;
-            this.FreezeTime = pFreezeTime;
-            this.Distance = pDistance;
+            this.Id = id;
+            this.DmgMin = dmgMin;
+            this.DmgMax = dmgMax;
+            this.Interaction = interaction;
+            this.Enable = enable;
+            this.FreezeTime = freezeTime;
+            this.Distance = distance;
         }
     }
 }

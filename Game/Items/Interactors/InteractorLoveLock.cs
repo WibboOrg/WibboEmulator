@@ -39,7 +39,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            if (Gamemap.TilesTouching(Item.GetX, Item.GetY, User.X, User.Y))
+            if (Gamemap.TilesTouching(Item.X, Item.Y, User.X, User.Y))
             {
                 if (Item.ExtraData == null || Item.ExtraData.Length <= 1 || !Item.ExtraData.Contains(Convert.ToChar(5).ToString()))
                 {
@@ -50,14 +50,14 @@ namespace Butterfly.Game.Items.Interactors
                     {
                         case 0:
                         case 2:
-                            pointOne = new Point(Item.GetX, Item.GetY + 1);
-                            pointTwo = new Point(Item.GetX, Item.GetY - 1);
+                            pointOne = new Point(Item.X, Item.Y + 1);
+                            pointTwo = new Point(Item.X, Item.Y - 1);
                             break;
 
                         case 4:
                         case 6:
-                            pointOne = new Point(Item.GetX - 1, Item.GetY);
-                            pointTwo = new Point(Item.GetX + 1, Item.GetY);
+                            pointOne = new Point(Item.X - 1, Item.Y);
+                            pointTwo = new Point(Item.X + 1, Item.Y);
                             break;
 
                         default:

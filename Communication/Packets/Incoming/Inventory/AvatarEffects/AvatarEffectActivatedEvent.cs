@@ -41,7 +41,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (User.Team != Team.none || User.InGame)
+            if (User.Team != TeamType.none || User.InGame)
             {
                 return;
             }

@@ -3,7 +3,7 @@
     public enum ModerationBanType
     {
         IP, 
-        Machine, 
-        User
+        MACHINE, 
+        USER
     }
 }

@@ -11,19 +11,19 @@ namespace Butterfly.Game.Rooms
 {
     public class Trade
     {
-        private readonly TradeUser[] Users;
-        private int TradeStage;
-        private readonly int RoomId;
-        private readonly int oneId;
-        private readonly int twoId;
+        private readonly TradeUser[] _users;
+        private int _tradeStage;
+        private readonly int _roomId;
+        private readonly int _oneId;
+        private readonly int _twoId;
 
         public bool AllUsersAccepted
         {
             get
             {
-                for (int index = 0; index < this.Users.Length; ++index)
+                for (int index = 0; index < this._users.Length; ++index)
                 {
-                    if (this.Users[index] != null && !this.Users[index].HasAccepted)
+                    if (this._users[index] != null && !this._users[index].HasAccepted)
                     {
                         return false;
                     }
@@ -34,13 +34,13 @@ namespace Butterfly.Game.Rooms
 
         public Trade(int UserOneId, int UserTwoId, int RoomId)
         {
-            this.oneId = UserOneId;
-            this.twoId = UserTwoId;
-            this.Users = new TradeUser[2];
-            this.Users[0] = new TradeUser(UserOneId, RoomId);
-            this.Users[1] = new TradeUser(UserTwoId, RoomId);
-            this.TradeStage = 1;
-            this.RoomId = RoomId;
+            this._oneId = UserOneId;
+            this._twoId = UserTwoId;
+            this._users = new TradeUser[2];
+            this._users[0] = new TradeUser(UserOneId, RoomId);
+            this._users[1] = new TradeUser(UserTwoId, RoomId);
+            this._tradeStage = 1;
+            this._roomId = RoomId;
 
             ServerPacket Message = new ServerPacket(ServerPacketHeader.TRADE);
             Message.WriteInteger(UserOneId);
@@ -49,7 +49,7 @@ namespace Butterfly.Game.Rooms
             Message.WriteInteger(1);
             this.SendMessageToUsers(Message);
 
-            foreach (TradeUser tradeUser in this.Users)
+            foreach (TradeUser tradeUser in this._users)
             {
                 if (!tradeUser.GetRoomUser().Statusses.ContainsKey("/trd"))
                 {
@@ -61,9 +61,9 @@ namespace Butterfly.Game.Rooms
 
         public bool ContainsUser(int Id)
         {
-            for (int index = 0; index < this.Users.Length; ++index)
+            for (int index = 0; index < this._users.Length; ++index)
             {
-                if (this.Users[index] != null && this.Users[index].UserId == Id)
+                if (this._users[index] != null && this._users[index].UserId == Id)
                 {
                     return true;
                 }
@@ -73,11 +73,11 @@ namespace Butterfly.Game.Rooms
 
         public TradeUser GetTradeUser(int Id)
         {
-            for (int index = 0; index < this.Users.Length; ++index)
+            for (int index = 0; index < this._users.Length; ++index)
             {
-                if (this.Users[index] != null && this.Users[index].UserId == Id)
+                if (this._users[index] != null && this._users[index].UserId == Id)
                 {
-                    return this.Users[index];
+                    return this._users[index];
                 }
             }
             return null;
@@ -86,7 +86,7 @@ namespace Butterfly.Game.Rooms
         public void OfferItem(int UserId, Item Item, bool UpdateWindows = true)
         {
             TradeUser tradeUser = this.GetTradeUser(UserId);
-            if (tradeUser == null || Item == null || (!Item.GetBaseItem().AllowTrade || tradeUser.HasAccepted) || this.TradeStage != 1)
+            if (tradeUser == null || Item == null || (!Item.GetBaseItem().AllowTrade || tradeUser.HasAccepted) || this._tradeStage != 1)
             {
                 return;
             }
@@ -106,7 +106,7 @@ namespace Butterfly.Game.Rooms
         public void TakeBackItem(int UserId, Item Item)
         {
             TradeUser tradeUser = this.GetTradeUser(UserId);
-            if (tradeUser == null || Item == null || (tradeUser.HasAccepted || this.TradeStage != 1))
+            if (tradeUser == null || Item == null || (tradeUser.HasAccepted || this._tradeStage != 1))
             {
                 return;
             }
@@ -119,7 +119,7 @@ namespace Butterfly.Game.Rooms
         public void Accept(int UserId)
         {
             TradeUser tradeUser = this.GetTradeUser(UserId);
-            if (tradeUser == null || this.TradeStage != 1)
+            if (tradeUser == null || this._tradeStage != 1)
             {
                 return;
             }
@@ -135,14 +135,14 @@ namespace Butterfly.Game.Rooms
             }
 
             this.SendMessageToUsers(new ServerPacket(ServerPacketHeader.TRADE_CONFIRM));
-            this.TradeStage++;
+            this._tradeStage++;
             this.ClearAccepted();
         }
 
         public void Unaccept(int UserId)
         {
             TradeUser tradeUser = this.GetTradeUser(UserId);
-            if (tradeUser == null || this.TradeStage != 1 || this.AllUsersAccepted)
+            if (tradeUser == null || this._tradeStage != 1 || this.AllUsersAccepted)
             {
                 return;
             }
@@ -157,7 +157,7 @@ namespace Butterfly.Game.Rooms
         public void CompleteTrade(int UserId)
         {
             TradeUser tradeUser = this.GetTradeUser(UserId);
-            if (tradeUser == null || this.TradeStage != 2)
+            if (tradeUser == null || this._tradeStage != 2)
             {
                 return;
             }
@@ -174,7 +174,7 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            this.TradeStage = 999;
+            this._tradeStage = 999;
             this.EndTrade();
         }
 
@@ -197,7 +197,7 @@ namespace Butterfly.Game.Rooms
 
         public void ClearAccepted()
         {
-            foreach (TradeUser tradeUser in this.Users)
+            foreach (TradeUser tradeUser in this._users)
             {
                 tradeUser.HasAccepted = false;
             }
@@ -206,9 +206,9 @@ namespace Butterfly.Game.Rooms
         public void UpdateTradeWindow()
         {
             ServerPacket Message = new ServerPacket(ServerPacketHeader.TRADE_UPDATE);
-            for (int index = 0; index < this.Users.Length; ++index)
+            for (int index = 0; index < this._users.Length; ++index)
             {
-                TradeUser tradeUser = this.Users[index];
+                TradeUser tradeUser = this._users[index];
                 if (tradeUser != null)
                 {
                     Message.WriteInteger(tradeUser.UserId);
@@ -275,39 +275,39 @@ namespace Butterfly.Game.Rooms
 
         public bool DeliverItems()
         {
-            List<Item> list1 = this.GetTradeUser(this.oneId).OfferedItems;
-            List<Item> list2 = this.GetTradeUser(this.twoId).OfferedItems;
+            List<Item> list1 = this.GetTradeUser(this._oneId).OfferedItems;
+            List<Item> list2 = this.GetTradeUser(this._twoId).OfferedItems;
 
             foreach (Item userItem in list1)
             {
-                if (this.GetTradeUser(this.oneId).GetClient().GetHabbo().GetInventoryComponent().GetItem(userItem.Id) == null)
+                if (this.GetTradeUser(this._oneId).GetClient().GetHabbo().GetInventoryComponent().GetItem(userItem.Id) == null)
                 {
-                    this.GetTradeUser(this.oneId).GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", this.GetTradeUser(this.oneId).GetClient().Langue));
-                    this.GetTradeUser(this.twoId).GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", this.GetTradeUser(this.twoId).GetClient().Langue));
+                    this.GetTradeUser(this._oneId).GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", this.GetTradeUser(this._oneId).GetClient().Langue));
+                    this.GetTradeUser(this._twoId).GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", this.GetTradeUser(this._twoId).GetClient().Langue));
                     return false;
                 }
             }
 
             foreach (Item userItem in list2)
             {
-                if (this.GetTradeUser(this.twoId).GetClient().GetHabbo().GetInventoryComponent().GetItem(userItem.Id) == null)
+                if (this.GetTradeUser(this._twoId).GetClient().GetHabbo().GetInventoryComponent().GetItem(userItem.Id) == null)
                 {
-                    this.GetTradeUser(this.oneId).GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", this.GetTradeUser(this.oneId).GetClient().Langue));
-                    this.GetTradeUser(this.twoId).GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", this.GetTradeUser(this.twoId).GetClient().Langue));
+                    this.GetTradeUser(this._oneId).GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", this.GetTradeUser(this._oneId).GetClient().Langue));
+                    this.GetTradeUser(this._twoId).GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", this.GetTradeUser(this._twoId).GetClient().Langue));
                     return false;
                 }
             }
 
             foreach (Item userItem in list1)
             {
-                this.GetTradeUser(this.oneId).GetClient().GetHabbo().GetInventoryComponent().RemoveItem(userItem.Id);
-                this.GetTradeUser(this.twoId).GetClient().GetHabbo().GetInventoryComponent().AddItem(userItem);
+                this.GetTradeUser(this._oneId).GetClient().GetHabbo().GetInventoryComponent().RemoveItem(userItem.Id);
+                this.GetTradeUser(this._twoId).GetClient().GetHabbo().GetInventoryComponent().AddItem(userItem);
             }
 
             foreach (Item userItem in list2)
             {
-                this.GetTradeUser(this.twoId).GetClient().GetHabbo().GetInventoryComponent().RemoveItem(userItem.Id);
-                this.GetTradeUser(this.oneId).GetClient().GetHabbo().GetInventoryComponent().AddItem(userItem);
+                this.GetTradeUser(this._twoId).GetClient().GetHabbo().GetInventoryComponent().RemoveItem(userItem.Id);
+                this.GetTradeUser(this._oneId).GetClient().GetHabbo().GetInventoryComponent().AddItem(userItem);
             }
 
             ServerPacket Message1 = new ServerPacket(ServerPacketHeader.UNSEEN_ITEMS);
@@ -327,7 +327,7 @@ namespace Butterfly.Game.Rooms
                 Message1.WriteInteger(userItem.Id);
             }
 
-            this.GetTradeUser(this.twoId).GetClient().SendPacket(Message1);
+            this.GetTradeUser(this._twoId).GetClient().SendPacket(Message1);
 
             ServerPacket Message2 = new ServerPacket(ServerPacketHeader.UNSEEN_ITEMS);
             Message2.WriteInteger(1);
@@ -346,10 +346,10 @@ namespace Butterfly.Game.Rooms
                 Message2.WriteInteger(userItem.Id);
             }
 
-            this.GetTradeUser(this.oneId).GetClient().SendPacket(Message2);
+            this.GetTradeUser(this._oneId).GetClient().SendPacket(Message2);
 
-            this.GetTradeUser(this.oneId).GetClient().SendPacket(new FurniListUpdateComposer());
-            this.GetTradeUser(this.twoId).GetClient().SendPacket(new FurniListUpdateComposer());
+            this.GetTradeUser(this._oneId).GetClient().SendPacket(new FurniListUpdateComposer());
+            this.GetTradeUser(this._twoId).GetClient().SendPacket(new FurniListUpdateComposer());
 
             return true;
         }
@@ -359,7 +359,7 @@ namespace Butterfly.Game.Rooms
             Dictionary<string, int> ItemsOneCounter = new Dictionary<string, int>();
             Dictionary<string, int> ItemsTwoCounter = new Dictionary<string, int>();
 
-            foreach (Item userItem in this.GetTradeUser(this.oneId).OfferedItems)
+            foreach (Item userItem in this.GetTradeUser(this._oneId).OfferedItems)
             {
                 if (!ItemsOneCounter.ContainsKey(userItem.GetBaseItem().ItemName))
                 {
@@ -371,7 +371,7 @@ namespace Butterfly.Game.Rooms
                 }
             }
 
-            foreach (Item userItem in this.GetTradeUser(this.twoId).OfferedItems)
+            foreach (Item userItem in this.GetTradeUser(this._twoId).OfferedItems)
             {
                 if (!ItemsTwoCounter.ContainsKey(userItem.GetBaseItem().ItemName))
                 {
@@ -401,15 +401,15 @@ namespace Butterfly.Game.Rooms
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                LogTradeDao.Insert(dbClient, this.oneId, this.twoId, LogsOneString, LogsTwoString, this.RoomId);
+                LogTradeDao.Insert(dbClient, this._oneId, this._twoId, LogsOneString, LogsTwoString, this._roomId);
             }
         }
 
         public void CloseTradeClean()
         {
-            for (int index = 0; index < this.Users.Length; ++index)
+            for (int index = 0; index < this._users.Length; ++index)
             {
-                TradeUser tradeUser = this.Users[index];
+                TradeUser tradeUser = this._users[index];
                 if (tradeUser != null && tradeUser.GetRoomUser() != null)
                 {
                     tradeUser.GetRoomUser().RemoveStatus("/trd");
@@ -422,9 +422,9 @@ namespace Butterfly.Game.Rooms
 
         public void CloseTrade(int UserId)
         {
-            for (int index = 0; index < this.Users.Length; ++index)
+            for (int index = 0; index < this._users.Length; ++index)
             {
-                TradeUser tradeUser = this.Users[index];
+                TradeUser tradeUser = this._users[index];
                 if (tradeUser != null && tradeUser.GetRoomUser() != null)
                 {
                     tradeUser.GetRoomUser().RemoveStatus("/trd");
@@ -439,14 +439,14 @@ namespace Butterfly.Game.Rooms
 
         public void SendMessageToUsers(ServerPacket Message)
         {
-            if (this.Users == null)
+            if (this._users == null)
             {
                 return;
             }
 
-            for (int index = 0; index < this.Users.Length; ++index)
+            for (int index = 0; index < this._users.Length; ++index)
             {
-                TradeUser tradeUser = this.Users[index];
+                TradeUser tradeUser = this._users[index];
                 if (tradeUser != null && tradeUser != null && tradeUser.GetClient() != null)
                 {
                     tradeUser.GetClient().SendPacket(Message);
@@ -456,7 +456,7 @@ namespace Butterfly.Game.Rooms
 
         private Room GetRoom()
         {
-            return ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.RoomId);
+            return ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this._roomId);
         }
     }
 }

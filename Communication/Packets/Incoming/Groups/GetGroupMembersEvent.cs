@@ -38,7 +38,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 case 0:
                     MemberCount = Group.GetAllMembers.Count();
-                    List<int> MemberIds = null;
+                    List<int> MemberIds;
                     if (!string.IsNullOrEmpty(SearchVal))
                     {
                         MemberIds = this.GetSearchMembres(Group.Id, SearchVal);
@@ -64,7 +64,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     break;
                 case 1:
                     MemberCount = Group.GetAdministrators.Count();
-                    List<int> AdminIds = null;
+                    List<int> AdminIds;
                     if (!string.IsNullOrEmpty(SearchVal))
                     {
                         AdminIds = this.GetSearchAdmins(Group.Id, SearchVal);
@@ -90,7 +90,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     break;
                 case 2:
                     MemberCount = Group.GetRequests.Count();
-                    List<int> RequestIds = null;
+                    List<int> RequestIds;
                     if (!string.IsNullOrEmpty(SearchVal))
                     {
                         RequestIds = this.GetSearchRequests(Group.Id, SearchVal);

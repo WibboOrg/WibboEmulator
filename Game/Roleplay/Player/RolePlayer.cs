@@ -196,7 +196,7 @@ namespace Butterfly.Game.Roleplay.Player
 
             if (Item.Count > Count)
             {
-                Item.Count = Item.Count - Count;
+                Item.Count -= Count;
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
@@ -385,7 +385,7 @@ namespace Butterfly.Game.Roleplay.Player
             }
         }
 
-        public void Hit(RoomUser User, int Dmg, Rooms.Room Room, bool Ralentie = false, bool Murmur = false, bool Aggro = true)
+        public void Hit(RoomUser User, int Dmg, Room Room, bool Ralentie = false, bool Murmur = false, bool Aggro = true)
         {
             if (this.Dead || this.SendPrison)
             {

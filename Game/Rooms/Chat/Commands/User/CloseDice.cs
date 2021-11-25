@@ -10,7 +10,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             List<Item> userBooth = Room.GetRoomItemHandler().GetFloor.Where(x => x != null && Gamemap.TilesTouching(
-                x.GetX, x.GetY, UserRoom.X, UserRoom.Y) && x.Data.InteractionType == InteractionType.DICE).ToList();
+                x.X, x.Y, UserRoom.X, UserRoom.Y) && x.Data.InteractionType == InteractionType.DICE).ToList();
 
             if (userBooth == null)
             {

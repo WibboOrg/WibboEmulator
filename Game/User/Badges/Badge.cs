@@ -2,8 +2,8 @@
 {
     public class Badge
     {
-        public string Code;
-        public int Slot;
+        public string Code { get; set; }
+        public int Slot { get; set; }
 
         public Badge(string Code, int Slot)
         {

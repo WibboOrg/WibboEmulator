@@ -1,5 +1,5 @@
 ﻿using Butterfly.Game.Items;
-using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
+using Butterfly.Game.Items.Wired.Interfaces;
 
 namespace Butterfly.Game.Rooms.Wired
 {

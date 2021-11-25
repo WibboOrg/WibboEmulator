@@ -15,7 +15,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Enable : I
                 return;
             }
 
-            if (UserRoom.Team != Team.none || UserRoom.InGame)
+            if (UserRoom.Team != TeamType.none || UserRoom.InGame)
             {
                 return;
             }

@@ -6,7 +6,9 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
+using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Rooms.Map.Movement;
+using Butterfly.Game.Rooms.Moodlight;
 using Butterfly.Game.Rooms.Pathfinding;
 using Butterfly.Game.Rooms.Wired;
 using System;
@@ -361,8 +363,8 @@ namespace Butterfly.Game.Rooms
                 foreach (Item Roller in this._rollers.Values.ToList())
                 {
                     Point NextSquare = Roller.SquareInFront;
-                    List<Item> ItemsOnRoller = this._room.GetGameMap().GetRoomItemForSquare(Roller.GetX, Roller.GetY, Roller.GetZ);
-                    RoomUser userForSquare = this._room.GetRoomUserManager().GetUserForSquare(Roller.GetX, Roller.GetY);
+                    List<Item> ItemsOnRoller = this._room.GetGameMap().GetRoomItemForSquare(Roller.X, Roller.Y, Roller.Z);
+                    RoomUser userForSquare = this._room.GetRoomUserManager().GetUserForSquare(Roller.X, Roller.Y);
 
                     if (ItemsOnRoller.Count > 0 || userForSquare != null)
                     {
@@ -404,8 +406,8 @@ namespace Butterfly.Game.Rooms
 
                         foreach (Item pItem in ItemsOnRoller)
                         {
-                            double RollerHeight = pItem.GetZ - Roller.TotalHeight;
-                            if (!this._rollerItemsMoved.Contains(pItem.Id) && this._room.GetGameMap().CanStackItem(NextSquare.X, NextSquare.Y) && (NextRollerClear && Roller.GetZ < pItem.GetZ))
+                            double RollerHeight = pItem.Z - Roller.TotalHeight;
+                            if (!this._rollerItemsMoved.Contains(pItem.Id) && this._room.GetGameMap().CanStackItem(NextSquare.X, NextSquare.Y) && (NextRollerClear && Roller.Z < pItem.Z))
                             {
                                 this._rollerMessages.Add(this.UpdateItemOnRoller(pItem, NextSquare, nextZ + RollerHeight));
                                 this._rollerItemsMoved.Add(pItem.Id);
@@ -433,14 +435,14 @@ namespace Butterfly.Game.Rooms
         public void PositionReset(Item pItem, int x, int y, double z)
         {
             ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
-            serverMessage.WriteInteger(pItem.GetX);
-            serverMessage.WriteInteger(pItem.GetY);
+            serverMessage.WriteInteger(pItem.X);
+            serverMessage.WriteInteger(pItem.Y);
             serverMessage.WriteInteger(x);
             serverMessage.WriteInteger(y);
 
             serverMessage.WriteInteger(1); //Count user or item on roller
             serverMessage.WriteInteger(pItem.Id);
-            serverMessage.WriteString(pItem.GetZ.ToString());
+            serverMessage.WriteString(pItem.Z.ToString());
             serverMessage.WriteString(z.ToString());
 
             serverMessage.WriteInteger(0);
@@ -459,13 +461,13 @@ namespace Butterfly.Game.Rooms
         private ServerPacket UpdateItemOnRoller(Item pItem, Point NextCoord, double nextZ)
         {
             ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
-            serverMessage.WriteInteger(pItem.GetX);
-            serverMessage.WriteInteger(pItem.GetY);
+            serverMessage.WriteInteger(pItem.X);
+            serverMessage.WriteInteger(pItem.Y);
             serverMessage.WriteInteger(NextCoord.X);
             serverMessage.WriteInteger(NextCoord.Y);
             serverMessage.WriteInteger(1);
             serverMessage.WriteInteger(pItem.Id);
-            serverMessage.WriteString(pItem.GetZ.ToString());
+            serverMessage.WriteString(pItem.Z.ToString());
             serverMessage.WriteString(nextZ.ToString());
             serverMessage.WriteInteger(0);
             this.SetFloorItem(pItem, NextCoord.X, NextCoord.Y, nextZ);
@@ -526,8 +528,8 @@ namespace Butterfly.Game.Rooms
                     this._updateItems.Clear();
                 }
 
-                this._room.GetRoomUserManager().AppendPetsUpdateString(dbClient);
-                this._room.GetRoomUserManager().SavePositionBots(dbClient);
+                this._room.GetRoomUserManager().SavePets(dbClient);
+                this._room.GetRoomUserManager().SaveBots(dbClient);
             }
             catch (Exception ex)
             {
@@ -608,9 +610,9 @@ namespace Butterfly.Game.Rooms
                 }
             }
 
-            if (Item.Rotation != newRot && Item.GetX == newX && Item.GetY == newY && !ConstruitZMode)
+            if (Item.Rotation != newRot && Item.X == newX && Item.Y == newY && !ConstruitZMode)
             {
-                pZ = Item.GetZ;
+                pZ = Item.Z;
             }
 
             if (ConstruitZMode)
@@ -623,7 +625,7 @@ namespace Butterfly.Game.Rooms
                 {
                     if (roomItem.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
                     {
-                        pZ = roomItem.GetZ;
+                        pZ = roomItem.Z;
                         PileMagic = true;
                         break;
                     }
@@ -631,7 +633,7 @@ namespace Butterfly.Game.Rooms
                     {
                         if (ConstruitMode)
                         {
-                            pZ = roomItem.GetZ + ConstruitHeigth;
+                            pZ = roomItem.Z + ConstruitHeigth;
                         }
                         else
                         {

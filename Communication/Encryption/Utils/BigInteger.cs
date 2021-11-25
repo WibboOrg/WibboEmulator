@@ -338,11 +338,11 @@ namespace Buttefly.Utilities
                         posVal = -posVal;
                     }
 
-                    result = result + (multiplier * posVal);
+                    result += (multiplier * posVal);
 
                     if ((i - 1) >= limit)
                     {
-                        multiplier = multiplier * radix;
+                        multiplier *= radix;
                     }
                 }
             }
@@ -1239,7 +1239,7 @@ namespace Buttefly.Utilities
             }
 
             shiftLeft(remainder, shift);
-            bi2 = bi2 << shift;
+            bi2 <<= shift;
 
             /*
             Console.WriteLine("bi1 Len = {0}, bi2 Len = {1}", bi1.dataLength, bi2.dataLength);
@@ -1866,7 +1866,7 @@ namespace Buttefly.Utilities
             constant.data[i] = 0x00000001;
             constant.dataLength = i + 1;
 
-            constant = constant / n;
+            constant /= n;
             int totalBits = exp.bitCount();
             int count = 0;
 
@@ -2641,7 +2641,7 @@ namespace Buttefly.Utilities
             constant.data[nLen] = 0x00000001;
             constant.dataLength = nLen + 1;
 
-            constant = constant / thisVal;
+            constant /= thisVal;
 
             BigInteger[] lucas = LucasSequenceHelper(1, Q, t, thisVal, constant, 0);
             bool isPrime = false;
@@ -2904,9 +2904,7 @@ namespace Buttefly.Utilities
 
         public long LongValue()
         {
-            long val = 0;
-
-            val = this.data[0];
+            long val = this.data[0];
             try
             {       // exception if maxLength = 1
                 val |= (long)this.data[1] << 32;
@@ -3244,7 +3242,7 @@ namespace Buttefly.Utilities
             }
             else
             {
-                numBits = (numBits >> 1);
+                numBits >>= 1;
             }
 
             uint bytePos = numBits >> 5;
@@ -3336,7 +3334,7 @@ namespace Buttefly.Utilities
             constant.data[nLen] = 0x00000001;
             constant.dataLength = nLen + 1;
 
-            constant = constant / n;
+            constant /= n;
 
             // calculate values of s and t
             int s = 0;

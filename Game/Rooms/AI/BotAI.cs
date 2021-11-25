@@ -4,9 +4,7 @@ namespace Butterfly.Game.Rooms.AI
 {
     public abstract class BotAI
     {
-        public int BaseId;
-        private int RoomUserId;
-        private int RoomId;
+        public int Id { get; set; }
         private RoomUser roomUser;
         private Room room;
 
@@ -14,11 +12,9 @@ namespace Butterfly.Game.Rooms.AI
         {
         }
 
-        public void Init(int pBaseId, int pRoomUserId, int pRoomId, RoomUser user, Room room)
+        public void Init(int pBaseId, RoomUser user, Room room)
         {
-            this.BaseId = pBaseId;
-            this.RoomUserId = pRoomUserId;
-            this.RoomId = pRoomId;
+            this.Id = pBaseId;
             this.roomUser = user;
             this.room = room;
         }

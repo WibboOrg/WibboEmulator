@@ -41,14 +41,14 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            if (!Gamemap.TilesTouching(roomUserByHabbo.X, roomUserByHabbo.Y, Item.GetX, Item.GetY))
+            if (!Gamemap.TilesTouching(roomUserByHabbo.X, roomUserByHabbo.Y, Item.X, Item.Y))
             {
                 roomUserByHabbo.MoveTo(Item.SquareInFront);
             }
             else
             {
                 Item.InteractingUser = Session.GetHabbo().Id;
-                roomUserByHabbo.SetRot(Rotation.Calculate(roomUserByHabbo.X, roomUserByHabbo.Y, Item.GetX, Item.GetY), false);
+                roomUserByHabbo.SetRot(Rotation.Calculate(roomUserByHabbo.X, roomUserByHabbo.Y, Item.X, Item.Y), false);
                 Item.ReqUpdate(2);
                 Item.ExtraData = "1";
                 Item.UpdateState(false, true);

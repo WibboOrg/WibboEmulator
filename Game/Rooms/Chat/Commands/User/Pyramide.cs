@@ -17,5 +17,5 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Pyramide :
 
                 Item.ExtraData = (Item.ExtraData == "0") ? "1" : "0";
                 Item.UpdateState();
-                Item.GetRoom().GetGameMap().updateMapForItem(Item);
+                Item.GetRoom().GetGameMap().UpdateMapForItem(Item);
             }            UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.pyramide", Session.Langue));        }    }}

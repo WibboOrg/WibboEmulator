@@ -24,11 +24,11 @@ namespace Astar.Algorithm
 
         private int BinarySearch(T value)
         {
-            int low = 0, high = this.InnerList.Count - 1, midpoint = 0;
+            int low = 0, high = this.InnerList.Count - 1;
 
             while (low <= high)
             {
-                midpoint = (low + high) / 2;
+                int midpoint = (low + high) / 2;
 
                 // check to see if value is equal to item in array
                 if (this.mComparer.Compare(value, this.InnerList[midpoint]) == 0)

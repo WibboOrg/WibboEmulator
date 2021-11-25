@@ -1,12 +1,12 @@
 using Butterfly.Game.Clients;using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Rooms.Janken;
+using Butterfly.Game.Rooms.Jankens;
 
 namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Janken : IChatCommand    {        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)        {            if (Params.Length != 2)
             {
                 return;
             }
 
-            if (UserRoom.Team != Team.none || UserRoom.InGame)
+            if (UserRoom.Team != TeamType.none || UserRoom.InGame)
             {
                 return;
             }
@@ -31,4 +31,4 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd{    internal class Janken : I
                 return;
             }
 
-            JankenManager Jankan = room.GetJanken();            Jankan.Duel(UserRoom, roomuser);        }    }}
+            JankenManager Jankan = room.GetJanken();            Jankan.Start(UserRoom, roomuser);        }    }}

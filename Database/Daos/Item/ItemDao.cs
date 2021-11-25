@@ -28,7 +28,7 @@ namespace Butterfly.Database.Daos
                 }
                 else
                 {
-                    standardQueries.AddQuery("UPDATE `item` SET x=" + roomItem.GetX + ", y=" + roomItem.GetY + ", z=" + roomItem.GetZ + ", rot=" + roomItem.Rotation + " WHERE id=" + roomItem.Id + "");
+                    standardQueries.AddQuery("UPDATE `item` SET x=" + roomItem.X + ", y=" + roomItem.Y + ", z=" + roomItem.Z + ", rot=" + roomItem.Rotation + " WHERE id=" + roomItem.Id + "");
                 }
             }
 

@@ -2,13 +2,13 @@
 {
     public class HelpCategory
     {
-        public int CategoryId;
-        public string Caption;
+        public int CategoryId { get; private set; }
+        public string Caption { get; private set; }
 
-        public HelpCategory(int Id, string Caption)
+        public HelpCategory(int id, string caption)
         {
-            this.CategoryId = Id;
-            this.Caption = Caption;
+            this.CategoryId = id;
+            this.Caption = caption;
         }
     }
 }

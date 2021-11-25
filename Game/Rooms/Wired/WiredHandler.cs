@@ -1,5 +1,6 @@
 ﻿using Butterfly.Game.Items;
-using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
+using Butterfly.Game.Items.Wired;
+using Butterfly.Game.Items.Wired.Interfaces;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
@@ -249,7 +250,7 @@ namespace Butterfly.Game.Rooms.Wired
                 }
             }
 
-            List<Item> ActionStack = this._actionStacks[coordinate].OrderBy(p => p.GetZ).ToList();
+            List<Item> ActionStack = this._actionStacks[coordinate].OrderBy(p => p.Z).ToList();
 
             if (this._specialRandom.Contains(coordinate))
             {

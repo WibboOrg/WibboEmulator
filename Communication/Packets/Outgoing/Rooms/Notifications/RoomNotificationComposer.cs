@@ -46,7 +46,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Notifications
             int CountMessage = 2;
             if (!string.IsNullOrEmpty(HotelName))
             {
-                CountMessage = CountMessage + 2;
+                CountMessage += 2;
             }
 
             this.WriteString(Image);

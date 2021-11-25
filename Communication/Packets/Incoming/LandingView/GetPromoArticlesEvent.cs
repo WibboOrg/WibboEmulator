@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.LandingView;
 using Butterfly.Game.Clients;
 using Butterfly.Game.LandingView;
 
@@ -17,8 +18,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 return;
             }
-
-            ServerPacket Message = currentView.SmallPromoComposer(new ServerPacket(ServerPacketHeader.DESKTOP_NEWS));            Session.SendPacket(Message);
+            Session.SendPacket(new PromoArticlesComposer(currentView.HotelViewPromosIndexers));
         }
     }
 }

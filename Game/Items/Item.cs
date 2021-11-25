@@ -5,7 +5,7 @@ using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.Pathfinding;
-using Butterfly.Game.Rooms.Wired.WiredHandlers.Interfaces;
+using Butterfly.Game.Items.Wired.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -24,7 +24,7 @@ namespace Butterfly.Game.Items
         public int GroupId;
         public int Limited;
         public int LimitedStack;
-        public Team Team;
+        public TeamType Team;
         public int InteractionCountHelper;
         public int Value;
         public FreezePowerUp FreezePowerUp;
@@ -33,7 +33,7 @@ namespace Butterfly.Game.Items
         public int UpdateCounter;
         public int InteractingUser;
         public int InteractingUser2;
-        private Rooms.Room mRoom;
+        private Room mRoom;
         public bool PendingReset;
         public int Fx;
 
@@ -50,15 +50,15 @@ namespace Butterfly.Game.Items
 
         public Dictionary<int, ThreeDCoord> GetAffectedTiles { get; private set; }
 
-        public int GetX { get; private set; }
+        public int X { get; private set; }
 
-        public int GetY { get; private set; }
+        public int Y { get; private set; }
 
-        public double GetZ { get; private set; }
+        public double Z { get; private set; }
 
         public bool IsRoller { get; private set; }
 
-        public Point Coordinate => new Point(this.GetX, this.GetY);
+        public Point Coordinate => new Point(this.X, this.Y);
 
         public List<Point> GetCoords
         {
@@ -77,7 +77,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public double TotalHeight => this.GetZ + this.Height;
+        public double TotalHeight => this.Z + this.Height;
 
         public double Height
         {
@@ -109,7 +109,7 @@ namespace Butterfly.Game.Items
         {
             get
             {
-                Point point = new Point(this.GetX, this.GetY);
+                Point point = new Point(this.X, this.Y);
                 if (this.Rotation == 0)
                 {
                     --point.Y;
@@ -135,7 +135,7 @@ namespace Butterfly.Game.Items
         {
             get
             {
-                Point point = new Point(this.GetX, this.GetY);
+                Point point = new Point(this.X, this.Y);
                 if (this.Rotation == 0)
                 {
                     ++point.Y;
@@ -303,7 +303,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public Item(int mId, int RoomId, int mBaseItem, string ExtraData, int limitedNumber, int limitedStack, int X, int Y, double Z, int Rot, string wallCoord, Rooms.Room pRoom)
+        public Item(int mId, int RoomId, int mBaseItem, string ExtraData, int limitedNumber, int limitedStack, int X, int Y, double Z, int Rot, string wallCoord, Room pRoom)
         {
             if (ButterflyEnvironment.GetGame().GetItemManager().GetItem(mBaseItem, out ItemData Data))
             {
@@ -311,11 +311,11 @@ namespace Butterfly.Game.Items
                 this.RoomId = RoomId;
                 this.BaseItem = mBaseItem;
                 this.ExtraData = ExtraData;
-                this.GetX = X;
-                this.GetY = Y;
+                this.X = X;
+                this.Y = Y;
                 if (!double.IsInfinity(Z))
                 {
-                    this.GetZ = Z;
+                    this.Z = Z;
                 }
 
                 this.Rotation = Rot;
@@ -349,28 +349,28 @@ namespace Butterfly.Game.Items
                     case InteractionType.BANZAISCOREGREEN:
                     case InteractionType.FREEZEGREENCOUNTER:
                     case InteractionType.FREEZEGREENGATE:
-                        this.Team = Team.green;
+                        this.Team = TeamType.green;
                         break;
                     case InteractionType.FOOTBALLCOUNTERYELLOW:
                     case InteractionType.BANZAIGATEYELLOW:
                     case InteractionType.BANZAISCOREYELLOW:
                     case InteractionType.FREEZEYELLOWCOUNTER:
                     case InteractionType.FREEZEYELLOWGATE:
-                        this.Team = Team.yellow;
+                        this.Team = TeamType.yellow;
                         break;
                     case InteractionType.FOOTBALLCOUNTERBLUE:
                     case InteractionType.BANZAIGATEBLUE:
                     case InteractionType.BANZAISCOREBLUE:
                     case InteractionType.FREEZEBLUECOUNTER:
                     case InteractionType.FREEZEBLUEGATE:
-                        this.Team = Team.blue;
+                        this.Team = TeamType.blue;
                         break;
                     case InteractionType.FOOTBALLCOUNTERRED:
                     case InteractionType.BANZAIGATERED:
                     case InteractionType.BANZAISCORERED:
                     case InteractionType.FREEZEREDCOUNTER:
                     case InteractionType.FREEZEREDGATE:
-                        this.Team = Team.red;
+                        this.Team = TeamType.red;
                         break;
                     case InteractionType.BANZAITELE:
                         this.ExtraData = "";
@@ -389,17 +389,17 @@ namespace Butterfly.Game.Items
                 this.IsWallItem = this.GetBaseItem().Type.ToString().ToLower() == "i";
                 this.IsFloorItem = this.GetBaseItem().Type.ToString().ToLower() == "s";
 
-                this.GetAffectedTiles = Gamemap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.GetX, this.GetY, Rot);
+                this.GetAffectedTiles = Gamemap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.X, this.Y, Rot);
             }
         }
 
         public void SetState(int pX, int pY, double pZ, Dictionary<int, ThreeDCoord> Tiles)
         {
-            this.GetX = pX;
-            this.GetY = pY;
+            this.X = pX;
+            this.Y = pY;
             if (!double.IsInfinity(pZ))
             {
-                this.GetZ = pZ;
+                this.Z = pZ;
             }
 
             this.GetAffectedTiles = Tiles;
@@ -444,46 +444,46 @@ namespace Butterfly.Game.Items
             {
                 case MovementDirection.up:
                     {
-                        Y = Y - i;
+                        Y -= i;
                         break;
                     }
                 case MovementDirection.upright:
                     {
-                        X = X + i;
-                        Y = Y - i;
+                        X += i;
+                        Y -= i;
                         break;
                     }
                 case MovementDirection.right:
                     {
-                        X = X + i;
+                        X += i;
                         break;
                     }
                 case MovementDirection.downright:
                     {
-                        X = X + i;
-                        Y = Y + i;
+                        X += i;
+                        Y += i;
                         break;
                     }
                 case MovementDirection.down:
                     {
-                        Y = Y + i;
+                        Y += i;
                         break;
                     }
                 case MovementDirection.downleft:
                     {
-                        X = X - i;
-                        Y = Y + i;
+                        X -= i;
+                        Y += i;
                         break;
                     }
                 case MovementDirection.left:
                     {
-                        X = X - i;
+                        X -= i;
                         break;
                     }
                 case MovementDirection.upleft:
                     {
-                        X = X - i;
-                        Y = Y - i;
+                        X -= i;
+                        Y -= i;
                         break;
                     }
             }
@@ -657,15 +657,16 @@ namespace Butterfly.Game.Items
                         break;
                     }
 
-                    int Length = 1;
-                    int OldX = this.GetX;
-                    int OldY = this.GetY;
+                    int OldX = this.X;
+                    int OldY = this.Y;
 
-                    int NewX = this.GetX;
-                    int NewY = this.GetY;
+                    int NewX = this.X;
+                    int NewY = this.Y;
 
                     Point NewPoint = this.GetMoveCoord(OldX, OldY, 1);
 
+
+                    int Length;
                     if (this.InteractionCountHelper > 3)
                     {
                         Length = 3;
@@ -741,7 +742,7 @@ namespace Butterfly.Game.Items
                                     {
                                         this.InteractionCountHelper = 6;
                                         this.InteractingUser = User.VirtualId;
-                                        this.MovementDir = MovementManagement.GetMovementByDirection(User.RotBody);
+                                        this.MovementDir = MovementUtility.GetMovementByDirection(User.RotBody);
                                         BreakMe = true;
                                         break;
                                     }
@@ -768,7 +769,7 @@ namespace Butterfly.Game.Items
                         break;
                     }
 
-                    int NumChrono = 0;
+                    int NumChrono;
                     if (!int.TryParse(this.ExtraData, out NumChrono))
                     {
                         break;
@@ -936,7 +937,7 @@ namespace Butterfly.Game.Items
                         break;
                     }
 
-                    if (roomUser3.Coordinate == this.SquareBehind || !Gamemap.TilesTouching(this.GetX, this.GetY, roomUser3.X, roomUser3.Y))
+                    if (roomUser3.Coordinate == this.SquareBehind || !Gamemap.TilesTouching(this.X, this.Y, roomUser3.X, roomUser3.Y))
                     {
                         roomUser3.UnlockWalking();
                         this.ExtraData = "0";
@@ -1144,28 +1145,28 @@ namespace Butterfly.Game.Items
                 case InteractionType.BANZAISCOREGREEN:
                 case InteractionType.FREEZEGREENCOUNTER:
                 case InteractionType.FREEZEGREENGATE:
-                    this.Team = Team.green;
+                    this.Team = TeamType.green;
                     break;
                 case InteractionType.FOOTBALLCOUNTERYELLOW:
                 case InteractionType.BANZAIGATEYELLOW:
                 case InteractionType.BANZAISCOREYELLOW:
                 case InteractionType.FREEZEYELLOWCOUNTER:
                 case InteractionType.FREEZEYELLOWGATE:
-                    this.Team = Team.yellow;
+                    this.Team = TeamType.yellow;
                     break;
                 case InteractionType.FOOTBALLCOUNTERBLUE:
                 case InteractionType.BANZAIGATEBLUE:
                 case InteractionType.BANZAISCOREBLUE:
                 case InteractionType.FREEZEBLUECOUNTER:
                 case InteractionType.FREEZEBLUEGATE:
-                    this.Team = Team.blue;
+                    this.Team = TeamType.blue;
                     break;
                 case InteractionType.FOOTBALLCOUNTERRED:
                 case InteractionType.BANZAIGATERED:
                 case InteractionType.BANZAISCORERED:
                 case InteractionType.FREEZEREDCOUNTER:
                 case InteractionType.FREEZEREDGATE:
-                    this.Team = Team.red;
+                    this.Team = TeamType.red;
                     break;
                 case InteractionType.BANZAITELE:
                     this.ExtraData = "";
@@ -1182,7 +1183,7 @@ namespace Butterfly.Game.Items
                     break;
             }
 
-            this.GetAffectedTiles = Gamemap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.GetX, this.GetY, this.Rotation);
+            this.GetAffectedTiles = Gamemap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.X, this.Y, this.Rotation);
         }
 
         public ItemData GetBaseItem()
@@ -1198,7 +1199,7 @@ namespace Butterfly.Game.Items
             return this.Data;
         }
 
-        public Rooms.Room GetRoom()
+        public Room GetRoom()
         {
             if (this.mRoom == null)
             {

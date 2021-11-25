@@ -32,24 +32,24 @@ namespace Butterfly.Game.Items.Interactors
             bool TropLoin = true;
             bool Deloin = false;
 
-            int differenceX = User.SetX - Ball.GetX;
-            int differenceY = User.SetY - Ball.GetY;
+            int differenceX = User.SetX - Ball.X;
+            int differenceY = User.SetY - Ball.Y;
 
             if (differenceX <= 1 && differenceX >= -1 && differenceY <= 1 && differenceY >= -1)
             {
                 TropLoin = false;
             }
 
-            int differenceX2 = User.X - Ball.GetX;
-            int differenceY2 = User.Y - Ball.GetY;
+            int differenceX2 = User.X - Ball.X;
+            int differenceY2 = User.Y - Ball.Y;
 
             if (differenceX2 <= 1 && differenceX2 >= -1 && differenceY2 <= 1 && differenceY2 >= -1)
             {
                 TropLoin = false;
             }
 
-            int differenceX3 = User.GoalX - Ball.GetX;
-            int differenceY3 = User.GoalY - Ball.GetY;
+            int differenceX3 = User.GoalX - Ball.X;
+            int differenceY3 = User.GoalY - Ball.Y;
 
             if (differenceX3 > 1 || differenceX3 < -1 || differenceY3 > 1 || differenceY3 < -1)
             {
@@ -90,8 +90,8 @@ namespace Butterfly.Game.Items.Interactors
             }
 
 
-            int GoalX = Ball.GetX;
-            int GoalY = Ball.GetY;
+            int GoalX = Ball.X;
+            int GoalY = Ball.Y;
 
             Point NewPoint = Ball.GetMoveCoord(GoalX, GoalY, 1);
 

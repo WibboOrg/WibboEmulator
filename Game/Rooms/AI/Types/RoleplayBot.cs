@@ -4,13 +4,8 @@ namespace Butterfly.Game.Rooms.AI.Types
 {
     public class RoleplayBot : BotAI
     {
-        private readonly int SpeechTimer;
-        private readonly int ActionTimer;
-
         public RoleplayBot(int VirtualId)
         {
-            this.SpeechTimer = ButterflyEnvironment.GetRandomNumber(10, 40);
-            this.ActionTimer = ButterflyEnvironment.GetRandomNumber(10, 30);
         }
 
         public override void OnSelfEnterRoom()

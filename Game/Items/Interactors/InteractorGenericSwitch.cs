@@ -102,8 +102,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            int NumMode = 0;
-
+            int NumMode;
             if (Item.GetBaseItem().InteractionType == InteractionType.GUILD_ITEM || Item.GetBaseItem().InteractionType == InteractionType.GUILD_GATE)
             {
                 int.TryParse(Item.ExtraData.Split(';')[0], out NumMode);
@@ -138,7 +137,7 @@ namespace Butterfly.Game.Items.Interactors
                     return;
                 }
 
-                Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
                 if (room == null)
                 {
                     return;

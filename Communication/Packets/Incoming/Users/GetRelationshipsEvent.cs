@@ -35,9 +35,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Dictionary<int, Relationship> Loves = habbo.GetMessenger().relation.Where(x => x.Value.Type == 1).ToDictionary(item => item.Key, item => item.Value);
-            Dictionary<int, Relationship> Likes = habbo.GetMessenger().relation.Where(x => x.Value.Type == 2).ToDictionary(item => item.Key, item => item.Value);
-            Dictionary<int, Relationship> Hates = habbo.GetMessenger().relation.Where(x => x.Value.Type == 3).ToDictionary(item => item.Key, item => item.Value);
+            Dictionary<int, Relationship> Loves = habbo.GetMessenger().Relation.Where(x => x.Value.Type == 1).ToDictionary(item => item.Key, item => item.Value);
+            Dictionary<int, Relationship> Likes = habbo.GetMessenger().Relation.Where(x => x.Value.Type == 2).ToDictionary(item => item.Key, item => item.Value);
+            Dictionary<int, Relationship> Hates = habbo.GetMessenger().Relation.Where(x => x.Value.Type == 3).ToDictionary(item => item.Key, item => item.Value);
             int Nbrela = 0;
             if (Loves.Count > 0)
             {

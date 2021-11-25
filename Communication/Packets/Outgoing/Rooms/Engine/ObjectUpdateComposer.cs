@@ -1,5 +1,5 @@
 using Butterfly.Game.Items;
-using Butterfly.Game.Rooms.Wired;
+using Butterfly.Game.Items.Wired;
 
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
 {
@@ -10,10 +10,10 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
         {
             this.WriteInteger(Item.Id);
             this.WriteInteger((HideWired && WiredUtillity.TypeIsWired(Item.GetBaseItem().InteractionType) && (Item.GetBaseItem().InteractionType != InteractionType.HIGHSCORE && Item.GetBaseItem().InteractionType != InteractionType.HIGHSCOREPOINTS)) ? 31294061 : Item.GetBaseItem().SpriteId);
-            this.WriteInteger(Item.GetX);
-            this.WriteInteger(Item.GetY);
+            this.WriteInteger(Item.X);
+            this.WriteInteger(Item.Y);
             this.WriteInteger(Item.Rotation);
-            this.WriteString(string.Format("{0:0.00}", Item.GetZ));
+            this.WriteString(string.Format("{0:0.00}", Item.Z));
             this.WriteString(string.Empty);
 
             if (Item.Limited > 0)

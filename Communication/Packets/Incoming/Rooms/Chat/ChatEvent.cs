@@ -70,7 +70,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (Room.GetJanken().PlayerStarted(User))
             {
-                if (!Room.GetJanken().PickChoix(User, Message))
+                if (!Room.GetJanken().PickChoice(User, Message))
                 {
                     User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.choice", Session.Langue));
                 }

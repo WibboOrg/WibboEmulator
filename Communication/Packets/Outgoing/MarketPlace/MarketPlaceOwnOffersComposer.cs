@@ -10,13 +10,11 @@ namespace Butterfly.Communication.Packets.Outgoing.MarketPlace
         public MarketPlaceOwnOffersComposer(int UserId)
            : base(ServerPacketHeader.MARKETPLACE_OWN_ITEMS)
         {
-            int i = 0;
-            DataTable table = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                table = CatalogMarketplaceOfferDao.GetOneByUserId(dbClient, UserId);
+                DataTable table = CatalogMarketplaceOfferDao.GetOneByUserId(dbClient, UserId);
 
-                i = CatalogMarketplaceOfferDao.GetSunPrice(dbClient, UserId);
+                int i = CatalogMarketplaceOfferDao.GetSunPrice(dbClient, UserId);
 
                 this.WriteInteger(i);
                 if (table != null)

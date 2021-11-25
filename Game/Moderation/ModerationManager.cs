@@ -281,7 +281,7 @@ namespace Butterfly.Game.Moderation
             Response.WriteString(UserReport.Username);
             Session.SendPacket(Response);
 
-            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
             if (room == null || (room.RoomData.BanFuse != 1 || !room.CheckRights(Session)) && !room.CheckRights(Session, true))
             {
                 return;
@@ -312,7 +312,7 @@ namespace Butterfly.Game.Moderation
         public void PickTicket(Client Session, int TicketId)
         {
             ModerationTicket ticket = this.GetTicket(TicketId);
-            if (ticket == null || ticket.Status != TicketStatus.OPEN)
+            if (ticket == null || ticket.Status != TicketStatusType.OPEN)
             {
                 return;
             }
@@ -324,7 +324,7 @@ namespace Butterfly.Game.Moderation
         public void ReleaseTicket(Client Session, int TicketId)
         {
             ModerationTicket ticket = this.GetTicket(TicketId);
-            if (ticket == null || ticket.Status != TicketStatus.PICKED || ticket.ModeratorId != Session.GetHabbo().Id)
+            if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != Session.GetHabbo().Id)
             {
                 return;
             }
@@ -336,27 +336,27 @@ namespace Butterfly.Game.Moderation
         public void CloseTicket(Client Session, int TicketId, int Result)
         {
             ModerationTicket ticket = this.GetTicket(TicketId);
-            if (ticket == null || ticket.Status != TicketStatus.PICKED || ticket.ModeratorId != Session.GetHabbo().Id)
+            if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != Session.GetHabbo().Id)
             {
                 return;
             }
 
             Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(ticket.SenderId);
 
-            TicketStatus NewStatus;
-            string MessageAlert = "";
+            TicketStatusType NewStatus;
+            string MessageAlert;
             switch (Result)
             {
                 case 1:
-                    NewStatus = TicketStatus.INVALID;
+                    NewStatus = TicketStatusType.INVALID;
                     MessageAlert = "Es-tu certain d'avoir bien utilisé cet outil ? Nous voulons donner le meilleur des services mais nous devons aussi aider d'autres personnes dans l'urgence...";
                     break;
                 case 2:
-                    NewStatus = TicketStatus.ABUSIVE;
+                    NewStatus = TicketStatusType.ABUSIVE;
                     MessageAlert = "Merci de ne pas utiliser l'outil d'appel à l'aide pour rien. Tu risques l'exclusion.";
                     break;
                 default:
-                    NewStatus = TicketStatus.RESOLVED;
+                    NewStatus = TicketStatusType.RESOLVED;
                     MessageAlert = "Merci, ton souci est résolu ou en cours de résolution. N'hésite pas à Ignorer la personne  ou à la supprimer de ta console s'il s'agit d'insultes.";
                     break;
             }
@@ -374,7 +374,7 @@ namespace Butterfly.Game.Moderation
         {
             foreach (ModerationTicket ModerationTicket in this._tickets)
             {
-                if (ModerationTicket.SenderId == Id && ModerationTicket.Status == TicketStatus.OPEN)
+                if (ModerationTicket.SenderId == Id && ModerationTicket.Status == TicketStatusType.OPEN)
                 {
                     return true;
                 }
@@ -410,7 +410,7 @@ namespace Butterfly.Game.Moderation
 
         public static void PerformRoomAction(Client ModSession, int RoomId, bool KickUsers, bool LockRoom, bool InappropriateRoom)
         {
-            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
             if (room == null)
             {
                 return;
@@ -448,7 +448,7 @@ namespace Butterfly.Game.Moderation
 
         public static ServerPacket SerializeRoomTool(RoomData Data)
         {
-            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Data.Id);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Data.Id);
 
             int userId = 0;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -498,7 +498,7 @@ namespace Butterfly.Game.Moderation
             }
             else
             {
-                Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(clientByUserId.GetHabbo().CurrentRoomId);
+                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(clientByUserId.GetHabbo().CurrentRoomId);
                 if (room == null)
                 {
                     return;
@@ -622,7 +622,7 @@ namespace Butterfly.Game.Moderation
 
         public static ServerPacket SerializeTicketChatlog(ModerationTicket Ticket, RoomData RoomData, double Timestamp)
         {
-            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomData.Id);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomData.Id);
             ServerPacket message = new ServerPacket(ServerPacketHeader.ModeratorTicketChatlogMessageComposer);
             message.WriteInteger(Ticket.TicketId);
             message.WriteInteger(Ticket.SenderId);

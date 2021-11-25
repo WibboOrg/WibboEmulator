@@ -12,7 +12,6 @@
 
         public ModerationBan(ModerationBanType type, string value, string reason, double expire)
         {
-
             Type = type;
             Value = value;
             Reason = reason;

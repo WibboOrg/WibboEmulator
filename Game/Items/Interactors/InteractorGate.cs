@@ -24,10 +24,10 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            int newMode = 0;
-
             int.TryParse(Item.ExtraData, out int currentMode);
 
+
+            int newMode;
             if (currentMode == 0)
             {
                 newMode = 1;
@@ -39,7 +39,7 @@ namespace Butterfly.Game.Items.Interactors
 
             Item.ExtraData = newMode.ToString();
             Item.UpdateState();
-            Item.GetRoom().GetGameMap().updateMapForItem(Item);
+            Item.GetRoom().GetGameMap().UpdateMapForItem(Item);
         }
     }
 }

@@ -87,10 +87,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             pet.RoomId = 0;
             pet.PlacedInRoom = false;
 
-            if (pet.DBState != DatabaseUpdateState.NeedsInsert)
-            {
-                pet.DBState = DatabaseUpdateState.NeedsUpdate;
-            }
+            pet.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {

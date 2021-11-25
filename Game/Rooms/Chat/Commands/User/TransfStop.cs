@@ -9,7 +9,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (UserRoom.Team != Team.none || UserRoom.InGame)
+            if (UserRoom.Team != TeamType.none || UserRoom.InGame)
             {
                 return;
             }

@@ -2,23 +2,23 @@
 {
     public class TicketResolution
     {
-        public string Title;
-        public string SubTitle;
-        public int BanHours;
-        public int Enablemute;
-        public int MuteHours;
-        public int Reminder;
-        public string Message;
+        public string Title { get; private set; }
+        public string SubTitle { get; private set; }
+        public int BanHours { get; private set; }
+        public int Enablemute { get; private set; }
+        public int MuteHours { get; private set; }
+        public int Reminder { get; private set; }
+        public string Message { get; private set; }
 
-        public TicketResolution(string Title, string SubTitle, int BanHours, int enablemute, int MuteHours, int Reminder, string Message)
+        public TicketResolution(string title, string subTitle, int banHours, int enablemute, int muteHours, int reminder, string message)
         {
-            this.Title = Title;
-            this.SubTitle = SubTitle;
-            this.BanHours = BanHours;
+            this.Title = title;
+            this.SubTitle = subTitle;
+            this.BanHours = banHours;
             this.Enablemute = enablemute;
-            this.MuteHours = MuteHours;
-            this.Reminder = Reminder;
-            this.Message = Message;
+            this.MuteHours = muteHours;
+            this.Reminder = reminder;
+            this.Message = message;
         }
     }
 }

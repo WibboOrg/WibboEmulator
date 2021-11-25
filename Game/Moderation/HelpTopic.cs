@@ -2,17 +2,17 @@
 {
     public class HelpTopic
     {
-        public int TopicId;
-        public string Caption;
-        public string Body;
-        public int CategoryId;
+        public int TopicId { get; private set; }
+        public string Caption { get; private set; }
+        public string Body { get; private set; }
+        public int CategoryId { get; private set; }
 
-        public HelpTopic(int Id, string Caption, string Body, int CategoryId)
+        public HelpTopic(int id, string caption, string body, int categoryId)
         {
-            this.TopicId = Id;
-            this.Caption = Caption;
-            this.Body = Body;
-            this.CategoryId = CategoryId;
+            this.TopicId = id;
+            this.Caption = caption;
+            this.Body = body;
+            this.CategoryId = categoryId;
         }
     }
 }

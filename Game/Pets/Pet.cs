@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Game.Rooms;
 using System;
 using System.Collections.Generic;
 
@@ -52,7 +53,7 @@ namespace Butterfly.Game.Pets
         public bool AnyoneCanRide;
         public Dictionary<short, bool> PetCommands;
 
-        public Rooms.Room Room
+        public Room Room
         {
             get
             {
@@ -129,7 +130,7 @@ namespace Butterfly.Game.Pets
             this.Y = Y;
             this.Z = Z;
             this.PlacedInRoom = false;
-            this.DBState = DatabaseUpdateState.Updated;
+            this.DBState = DatabaseUpdateState.UPDATED;
             this.Saddle = (havesaddle == 1) ? 9 : (havesaddle == 2) ? 10 : 0;
             this.HairDye = hairdye;
             this.PetHair = PetHair;
@@ -217,11 +218,9 @@ namespace Butterfly.Game.Pets
 
         public void OnRespect()
         {
-            ++this.Respect;
-            if (this.DBState != DatabaseUpdateState.NeedsInsert)
-            {
-                this.DBState = DatabaseUpdateState.NeedsUpdate;
-            }
+            this.Respect++;
+
+            this.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 
             if (this.Expirience > 51900)
             {
@@ -233,16 +232,13 @@ namespace Butterfly.Game.Pets
 
         public void AddExpirience(int Amount)
         {
-            this.Expirience = this.Expirience + Amount;
+            this.Expirience += Amount;
             if (this.Expirience >= 51900)
             {
                 return;
             }
 
-            if (this.DBState != DatabaseUpdateState.NeedsInsert)
-            {
-                this.DBState = DatabaseUpdateState.NeedsUpdate;
-            }
+            this.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 
             if (this.Room == null)
             {
@@ -286,7 +282,6 @@ namespace Butterfly.Game.Pets
                 if (this.Energy < 0)
                 {
                     this.Energy = 1;
-                    randomUsage = 1;
                 }
             }
             else
@@ -294,10 +289,7 @@ namespace Butterfly.Game.Pets
                 this.Energy = (this.Energy + randomUsage) % 100;
             }
 
-            if (this.DBState != DatabaseUpdateState.NeedsInsert)
-            {
-                this.DBState = DatabaseUpdateState.NeedsUpdate;
-            }
+            this.DBState = DatabaseUpdateState.NEEDS_UPDATE;
         }
     }
 }

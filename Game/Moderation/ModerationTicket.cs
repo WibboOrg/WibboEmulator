@@ -9,7 +9,7 @@ namespace Butterfly.Game.Moderation
         public int Id;
         public int Score;
         public int Type;
-        public TicketStatus Status;
+        public TicketStatusType Status;
         public int SenderId;
         public int ReportedId;
         public int ModeratorId;
@@ -25,17 +25,17 @@ namespace Butterfly.Game.Moderation
         {
             get
             {
-                if (this.Status == TicketStatus.OPEN)
+                if (this.Status == TicketStatusType.OPEN)
                 {
                     return 1;
                 }
 
-                if (this.Status == TicketStatus.PICKED || this.Status == TicketStatus.ABUSIVE || (this.Status == TicketStatus.INVALID || this.Status == TicketStatus.RESOLVED))
+                if (this.Status == TicketStatusType.PICKED || this.Status == TicketStatusType.ABUSIVE || (this.Status == TicketStatusType.INVALID || this.Status == TicketStatusType.RESOLVED))
                 {
                     return 2;
                 }
 
-                return this.Status == TicketStatus.DELETED ? 3 : 0;
+                return this.Status == TicketStatusType.DELETED ? 3 : 0;
             }
         }
 
@@ -46,7 +46,7 @@ namespace Butterfly.Game.Moderation
             this.Id = Id;
             this.Score = Score;
             this.Type = Type;
-            this.Status = TicketStatus.OPEN;
+            this.Status = TicketStatusType.OPEN;
             this.SenderId = SenderId;
             this.ReportedId = ReportedId;
             this.ModeratorId = 0;
@@ -83,7 +83,7 @@ namespace Butterfly.Game.Moderation
             message.WriteString(this.SenderName); // sender name
             message.WriteInteger(this.ReportedId);
             message.WriteString(this.ReportedName);
-            message.WriteInteger((this.Status == TicketStatus.PICKED) ? this.ModeratorId : 0); // mod id
+            message.WriteInteger((this.Status == TicketStatusType.PICKED) ? this.ModeratorId : 0); // mod id
             message.WriteString(this.ModName); // mod name
             message.WriteString(this.Message); // issue message
             message.WriteInteger(0);
@@ -94,7 +94,7 @@ namespace Butterfly.Game.Moderation
 
         public void Pick(int moderatorId, bool UpdateInDb)
         {
-            this.Status = TicketStatus.PICKED;
+            this.Status = TicketStatusType.PICKED;
             this.ModeratorId = moderatorId;
             this.Timestamp = ButterflyEnvironment.GetUnixTimestamp();
 
@@ -109,7 +109,7 @@ namespace Butterfly.Game.Moderation
             }
         }
 
-        public void Close(TicketStatus NewStatus, bool UpdateInDb)
+        public void Close(TicketStatusType NewStatus, bool UpdateInDb)
         {
             this.Status = NewStatus;
             if (!UpdateInDb)
@@ -120,10 +120,10 @@ namespace Butterfly.Game.Moderation
             string str;
             switch (NewStatus)
             {
-                case TicketStatus.ABUSIVE:
+                case TicketStatusType.ABUSIVE:
                     str = "abusive";
                     break;
-                case TicketStatus.INVALID:
+                case TicketStatusType.INVALID:
                     str = "invalid";
                     break;
                 default:
@@ -139,7 +139,7 @@ namespace Butterfly.Game.Moderation
 
         public void Release(bool UpdateInDb)
         {
-            this.Status = TicketStatus.OPEN;
+            this.Status = TicketStatusType.OPEN;
 
             if (!UpdateInDb)
             {
@@ -154,7 +154,7 @@ namespace Butterfly.Game.Moderation
 
         public void Delete(bool UpdateInDb)
         {
-            this.Status = TicketStatus.DELETED;
+            this.Status = TicketStatusType.DELETED;
 
             if (!UpdateInDb)
             {
@@ -197,10 +197,10 @@ namespace Butterfly.Game.Moderation
                 serverMessage.WriteString(this.ReportedName);
             }
 
-            serverMessage.WriteInteger(this.Status == TicketStatus.PICKED ? this.ModeratorId : 0);
+            serverMessage.WriteInteger(this.Status == TicketStatusType.PICKED ? this.ModeratorId : 0);
             if (ButterflyEnvironment.GetHabboById(this.ModeratorId) != null)
             {
-                serverMessage.WriteString(this.Status == TicketStatus.PICKED ? (this.ModName.Equals("") ? ButterflyEnvironment.GetHabboById(this.ModeratorId).Username : this.ModName) : "");
+                serverMessage.WriteString(this.Status == TicketStatusType.PICKED ? (this.ModName.Equals("") ? ButterflyEnvironment.GetHabboById(this.ModeratorId).Username : this.ModName) : "");
             }
             else
             {

@@ -10,11 +10,11 @@ namespace Butterfly.Communication.WebSocket
             byte[] response;
             byte[] bytesRaw = message;
             byte[] frame = new byte[10];
-
-            int indexStartRawData = -1;
             long length = bytesRaw.Length;
 
             frame[0] = 130;
+
+            int indexStartRawData;
             if (length <= 125)
             {
                 frame[1] = (byte)length;

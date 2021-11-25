@@ -10,11 +10,11 @@ namespace Butterfly.HabboHotel.Moderation
             {
                 default:
                 case "user":
-                    return ModerationBanType.User;
+                    return ModerationBanType.USER;
                 case "ip":
                     return ModerationBanType.IP;
                 case "machine":
-                    return ModerationBanType.Machine;
+                    return ModerationBanType.MACHINE;
             }
         }
 
@@ -23,11 +23,11 @@ namespace Butterfly.HabboHotel.Moderation
             switch (type)
             {
                 default:
-                case ModerationBanType.User:
+                case ModerationBanType.USER:
                     return "user";
                 case ModerationBanType.IP:
                     return "ip";
-                case ModerationBanType.Machine:
+                case ModerationBanType.MACHINE:
                     return "machine";
             }
         }

@@ -3,6 +3,7 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
+using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Rooms.Wired;
 using System;
 using System.Collections.Generic;

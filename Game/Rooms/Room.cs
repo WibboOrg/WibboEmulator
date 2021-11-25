@@ -13,7 +13,8 @@ using Butterfly.Game.Roleplay;
 using Butterfly.Game.Rooms.AI;
 using Butterfly.Game.Rooms.Chat.Logs;
 using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Rooms.Janken;
+using Butterfly.Game.Rooms.Jankens;
+using Butterfly.Game.Rooms.Moodlight;
 using Butterfly.Game.Rooms.Projectile;
 using Butterfly.Game.Rooms.Wired;
 using System;
@@ -38,30 +39,34 @@ namespace Butterfly.Game.Rooms
         public bool CycleEnded;
         public int IdleTime;
 
-        private TeamManager _teamManager;
-
         public bool IsRoleplay { get { return this.Roleplay != null; } }
         public RoomRoleplay Roleplay;
         public List<int> UsersWithRights;
         public bool EveryoneGotRights;
-        private readonly Dictionary<int, double> _bans;
-        private readonly Dictionary<int, double> _mutes;
         public bool HeightMapLoaded;
         public DateTime lastTimerReset;
-        public GameManager game;
-        private readonly Gamemap gamemap;
-        private readonly RoomItemHandling roomItemHandling;
-        private readonly RoomUserManager roomUserManager;
-        private Soccer soccer;
-        private BattleBanzai banzai;
-        private Freeze freeze;
-        private JankenManager jankan;
-        private GameItemHandler gameItemHandler;
-        private WiredHandler wiredHandler;
         public MoodlightData MoodlightData;
         public List<Trade> ActiveTrades;
-        private readonly ChatMessageManager chatMessageManager;
-        public RoomData RoomData;
+        public RoomData RoomData { get; set; }
+
+        private TeamManager _teamManager;
+        private GameManager _gameManager;
+        private readonly Gamemap _gameMap;
+        private readonly RoomItemHandling _roomItemHandling;
+        private readonly RoomUserManager _roomUserManager;
+        private Soccer _soccer;
+        private BattleBanzai _banzai;
+        private Freeze _freeze;
+        private JankenManager _jankan;
+        private GameItemHandler _gameItemHandler;
+        private WiredHandler _wiredHandler;
+        private ProjectileManager _projectileManager;
+        private readonly ChatMessageManager _chatMessageManager;
+
+        private readonly Dictionary<int, double> _bans;
+        private readonly Dictionary<int, double> _mutes;
+
+        
         public bool Disposed;
         public bool RoomMutePets;
         public bool FreezeRoom;
@@ -70,19 +75,20 @@ namespace Butterfly.Game.Rooms
         public bool OldFoot;
         public bool RoomIngameChat;
 
-        private ProjectileManager projectileManager;
-        private int SaveTimer;
+       
+        private int _saveFurnitureTimer;
 
         //Question
-        public int VotedYesCount;
-        public int VotedNoCount;
-        private List<CancellationTokenSource> cancellationTokenSources;
+        public int VotedYesCount { get; set; }
+        public int VotedNoCount { get; set; }
 
-        public int UserCount => this.roomUserManager.GetRoomUserCount();
+        private List<CancellationTokenSource> _cancellationTokenSources;
+
+        public int UserCount => this._roomUserManager.GetRoomUserCount();
 
         public int Id => this.RoomData.Id;
 
-        public event TriggerUserDelegate TriggerUser;
+        public event TriggerUserDelegate OnTriggerUser;
         public event RoomUserSaysDelegate OnUserSays;
         public event RoomEventDelegate OnTrigger;
         public event RoomEventDelegate OnTriggerSelf;
@@ -96,7 +102,7 @@ namespace Butterfly.Game.Rooms
                 this.Roleplay = new RoomRoleplay();
             }
 
-            this.SaveTimer = 0;
+            this._saveFurnitureTimer = 0;
             this.Disposed = false;
             this._bans = new Dictionary<int, double>();
             this._mutes = new Dictionary<int, double>();
@@ -109,14 +115,16 @@ namespace Butterfly.Game.Rooms
             this.RoomMuted = false;
             this.PushPullAllowed = true;
             this.RoomIngameChat = false;
-            this.gamemap = new Gamemap(this);
-            this.roomItemHandling = new RoomItemHandling(this);
-            this.roomUserManager = new RoomUserManager(this);
-            this.wiredHandler = new WiredHandler(this);
-            this.projectileManager = new ProjectileManager(this);
-            this.chatMessageManager = new ChatMessageManager();
-            this.chatMessageManager.LoadRoomChatlogs(this.Id);
-            this.LoadRights();
+
+            this._gameMap = new Gamemap(this);
+            this._roomItemHandling = new RoomItemHandling(this);
+            this._roomUserManager = new RoomUserManager(this);
+            this._wiredHandler = new WiredHandler(this);
+            this._projectileManager = new ProjectileManager(this);
+            this._chatMessageManager = new ChatMessageManager();
+
+            this._chatMessageManager.LoadRoomChatlogs(this.Id);
+
             this.GetRoomItemHandler().LoadFurniture();
             if (this.RoomData.OwnerName == "WibboGame")
             {
@@ -124,35 +132,36 @@ namespace Butterfly.Game.Rooms
             }
 
             this.GetGameMap().GenerateMaps(true);
+            this.LoadRights();
             this.LoadBots();
             this.InitPets();
             this.lastTimerReset = DateTime.Now;
-            this.cancellationTokenSources = new List<CancellationTokenSource>();
+            this._cancellationTokenSources = new List<CancellationTokenSource>();
         }
 
         public Gamemap GetGameMap()
         {
-            return this.gamemap;
+            return this._gameMap;
         }
 
         public RoomItemHandling GetRoomItemHandler()
         {
-            return this.roomItemHandling;
+            return this._roomItemHandling;
         }
 
         public RoomUserManager GetRoomUserManager()
         {
-            return this.roomUserManager;
+            return this._roomUserManager;
         }
 
         public Soccer GetSoccer()
         {
-            if (this.soccer == null)
+            if (this._soccer == null)
             {
-                this.soccer = new Soccer(this);
+                this._soccer = new Soccer(this);
             }
 
-            return this.soccer;
+            return this._soccer;
         }
 
         public TeamManager GetTeamManager()
@@ -167,102 +176,92 @@ namespace Butterfly.Game.Rooms
 
         public BattleBanzai GetBanzai()
         {
-            if (this.banzai == null)
+            if (this._banzai == null)
             {
-                this.banzai = new BattleBanzai(this);
+                this._banzai = new BattleBanzai(this);
             }
 
-            return this.banzai;
+            return this._banzai;
         }
 
         public Freeze GetFreeze()
         {
-            if (this.freeze == null)
+            if (this._freeze == null)
             {
-                this.freeze = new Freeze(this);
+                this._freeze = new Freeze(this);
             }
 
-            return this.freeze;
+            return this._freeze;
         }
 
         public JankenManager GetJanken()
         {
-            if (this.jankan == null)
+            if (this._jankan == null)
             {
-                this.jankan = new JankenManager(this);
+                this._jankan = new JankenManager(this);
             }
 
-            return this.jankan;
+            return this._jankan;
         }
 
         public GameManager GetGameManager()
         {
-            if (this.game == null)
+            if (this._gameManager == null)
             {
-                this.game = new GameManager(this);
+                this._gameManager = new GameManager(this);
             }
 
-            return this.game;
+            return this._gameManager;
         }
 
         public GameItemHandler GetGameItemHandler()
         {
-            if (this.gameItemHandler == null)
+            if (this._gameItemHandler == null)
             {
-                this.gameItemHandler = new GameItemHandler(this);
+                this._gameItemHandler = new GameItemHandler(this);
             }
 
-            return this.gameItemHandler;
+            return this._gameItemHandler;
         }
 
         public WiredHandler GetWiredHandler()
         {
-            if (this.wiredHandler == null)
-            {
-                this.wiredHandler = new WiredHandler(this);
-            }
-
-            return this.wiredHandler;
+            return this._wiredHandler;
         }
 
         public ProjectileManager GetProjectileManager()
         {
-            if (this.projectileManager == null)
-            {
-                this.projectileManager = new ProjectileManager(this);
-            }
-
-            return this.projectileManager;
+            return this._projectileManager;
         }
 
         public bool GotSoccer()
         {
-            return this.soccer != null;
+            return this._soccer != null;
         }
 
         public bool GotBanzai()
         {
-            return this.banzai != null;
+            return this._banzai != null;
         }
 
         public bool GotFreeze()
         {
-            return this.freeze != null;
+            return this._freeze != null;
         }
 
         public bool GotJanken()
         {
-            return this.jankan != null;
+            return this._jankan != null;
         }
 
         public bool GotWired()
         {
-            return this.wiredHandler != null;
+            return this._wiredHandler != null;
         }
 
         public ChatMessageManager GetChatMessageManager()
         {
-            return this.chatMessageManager;
+            return this._chatMessageManager;
         }
 
         public bool AllowsShous(RoomUser user, string message)
@@ -329,7 +328,7 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            if (UserGoal.Team == User.Team && User.Team != Team.none)
+            if (UserGoal.Team == User.Team && User.Team != TeamType.none)
             {
                 return;
             }
@@ -378,7 +377,7 @@ namespace Butterfly.Game.Rooms
 
                 foreach (DataRow Row in table.Rows)
                 {
-                    RoomBot roomBot = new RoomBot(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (this.IsRoleplay) ? AIType.RolePlayBot : AIType.Generic, (string)Row["walk_enabled"] == "1", (string)Row["name"], (string)Row["motto"], (string)Row["gender"], (string)Row["look"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), Convert.ToInt32(Row["z"]), Convert.ToInt32(Row["rotation"]), (string)Row["chat_enabled"] == "1", (string)Row["chat_text"], Convert.ToInt32(Row["chat_seconds"]), (string)Row["is_dancing"] == "1", Convert.ToInt32(Row["enable"]), Convert.ToInt32(Row["handitem"]), Convert.ToInt32((string)Row["status"]));
+                    RoomBot roomBot = new RoomBot(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (this.IsRoleplay) ? AIType.RoleplayBot : AIType.Generic, (string)Row["walk_enabled"] == "1", (string)Row["name"], (string)Row["motto"], (string)Row["gender"], (string)Row["look"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), Convert.ToInt32(Row["z"]), Convert.ToInt32(Row["rotation"]), (string)Row["chat_enabled"] == "1", (string)Row["chat_text"], Convert.ToInt32(Row["chat_seconds"]), (string)Row["is_dancing"] == "1", Convert.ToInt32(Row["enable"]), Convert.ToInt32(Row["handitem"]), Convert.ToInt32((string)Row["status"]));
                     RoomUser roomUser = this.GetRoomUserManager().DeployBot(roomBot, null);
                     if (roomBot.IsDancing)
                     {
@@ -402,7 +401,7 @@ namespace Butterfly.Game.Rooms
                 {
                     Pet PetData = new Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)(Row["anyone_ride"]) == "1");
                     List<string> list = new List<string>();
-                    this.roomUserManager.DeployBot(new RoomBot(PetData.PetId, PetData.OwnerId, this.Id, AIType.Pet, true, PetData.Name, "", "", PetData.Look, PetData.X, PetData.Y, PetData.Z, 0, false, "", 0, false, 0, 0, 0), PetData);
+                    this._roomUserManager.DeployBot(new RoomBot(PetData.PetId, PetData.OwnerId, this.Id, AIType.Pet, true, PetData.Name, "", "", PetData.Look, PetData.X, PetData.Y, PetData.Z, 0, false, "", 0, false, 0, 0, 0), PetData);
                 }
             }
         }
@@ -410,7 +409,7 @@ namespace Butterfly.Game.Rooms
         public void onRoomKick()
         {
             List<RoomUser> list = new List<RoomUser>();
-            foreach (RoomUser roomUser in this.roomUserManager.GetUserList().ToList())
+            foreach (RoomUser roomUser in this._roomUserManager.GetUserList().ToList())
             {
                 if (!roomUser.IsBot && !roomUser.GetClient().GetHabbo().HasFuse("fuse_no_kick"))
                 {
@@ -421,7 +420,7 @@ namespace Butterfly.Game.Rooms
 
         public void OnUserSay(RoomUser User, string Message, bool Shout)
         {
-            foreach (RoomUser roomUser in this.roomUserManager.GetPets().ToList())
+            foreach (RoomUser roomUser in this._roomUserManager.GetPets().ToList())
             {
                 if (Shout)
                 {
@@ -534,7 +533,7 @@ namespace Butterfly.Game.Rooms
             Session.SendPacket(this.GetGameMap().Model.SerializeRelativeHeightmap());
             Session.SendPacket(this.GetGameMap().Model.GetHeightmap());
 
-            foreach (RoomUser RoomUser in this.roomUserManager.GetUserList().ToList())
+            foreach (RoomUser RoomUser in this._roomUserManager.GetUserList().ToList())
             {
                 if (RoomUser == null)
                 {
@@ -579,7 +578,7 @@ namespace Butterfly.Game.Rooms
                 }
             }
 
-            Session.SendPacket(new UserUpdateComposer(this.roomUserManager.GetUserList().ToList()));
+            Session.SendPacket(new UserUpdateComposer(this._roomUserManager.GetUserList().ToList()));
             Session.SendPacket(new ObjectsComposer(this.GetRoomItemHandler().GetFloor.ToArray(), this));
             Session.SendPacket(new ObjectsComposer(this.GetRoomItemHandler().GetTempItems.ToArray(), this));
             Session.SendPacket(new ItemsComposer(this.GetRoomItemHandler().GetWall.ToArray(), this));
@@ -645,13 +644,13 @@ namespace Butterfly.Game.Rooms
                         this.GetJanken().OnCycle();
                     }
 
-                    if (this.SaveTimer < ((2 * 60) * 2))
+                    if (this._saveFurnitureTimer < ((2 * 60) * 2))
                     {
-                        this.SaveTimer++;
+                        this._saveFurnitureTimer++;
                     }
                     else
                     {
-                        this.SaveTimer = 0;
+                        this._saveFurnitureTimer = 0;
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             this.GetRoomItemHandler().SaveFurniture(dbClient);
@@ -787,12 +786,12 @@ namespace Butterfly.Game.Rooms
                     return;
                 }
 
-                if (this == null || this.roomUserManager == null)
+                if (this == null || this._roomUserManager == null)
                 {
                     return;
                 }
 
-                List<RoomUser> Users = this.roomUserManager.GetUserList().ToList();
+                List<RoomUser> Users = this._roomUserManager.GetUserList().ToList();
                 if (Users == null)
                 {
                     return;
@@ -825,7 +824,7 @@ namespace Butterfly.Game.Rooms
                         continue;
                     }
 
-                    if (this.RoomIngameChat && (UserNotIngameOnly && User.Team != Team.none))
+                    if (this.RoomIngameChat && (UserNotIngameOnly && User.Team != TeamType.none))
                     {
                         continue;
                     }
@@ -853,12 +852,12 @@ namespace Butterfly.Game.Rooms
                     return;
                 }
 
-                if (this == null || this.roomUserManager == null)
+                if (this == null || this._roomUserManager == null)
                 {
                     return;
                 }
 
-                List<RoomUser> Users = this.roomUserManager.GetUserList().ToList();
+                List<RoomUser> Users = this._roomUserManager.GetUserList().ToList();
                 if (Users == null)
                 {
                     return;
@@ -893,12 +892,12 @@ namespace Butterfly.Game.Rooms
                     return;
                 }
 
-                if (this == null || this.roomUserManager == null)
+                if (this == null || this._roomUserManager == null)
                 {
                     return;
                 }
 
-                List<RoomUser> Users = this.roomUserManager.GetUserList().ToList();
+                List<RoomUser> Users = this._roomUserManager.GetUserList().ToList();
                 if (Users == null)
                 {
                     return;
@@ -966,7 +965,7 @@ namespace Butterfly.Game.Rooms
 
         public void BroadcastPacket(byte[] Packet)
         {
-            foreach (RoomUser User in this.roomUserManager.GetUserList().ToList())
+            foreach (RoomUser User in this._roomUserManager.GetUserList().ToList())
             {
                 if (User == null || User.IsBot)
                 {
@@ -998,11 +997,11 @@ namespace Butterfly.Game.Rooms
             this.Disposed = true;
             this.CycleEnded = true;
 
-            foreach (CancellationTokenSource tokenSource in this.cancellationTokenSources)
+            foreach (CancellationTokenSource tokenSource in this._cancellationTokenSources)
             {
                 tokenSource.Cancel();
             }
-            this.cancellationTokenSources.Clear();
+            this._cancellationTokenSources.Clear();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -1024,7 +1023,7 @@ namespace Butterfly.Game.Rooms
             this.GetRoomUserManager().UpdateUserCount(0);
             this.GetRoomUserManager().Destroy();
 
-            this.gamemap.Destroy();
+            this._gameMap.Destroy();
         }
 
         public Dictionary<int, double> getBans()
@@ -1166,8 +1165,8 @@ namespace Butterfly.Game.Rooms
 
             Task.Delay(delay).ContinueWith((t) =>
             {
-                if (this.cancellationTokenSources.Contains(cancellationTokenSource))
-                    this.cancellationTokenSources.Remove(cancellationTokenSource);
+                if (this._cancellationTokenSources.Contains(cancellationTokenSource))
+                    this._cancellationTokenSources.Remove(cancellationTokenSource);
 
                 if (this.Disposed) return;
 
@@ -1176,8 +1175,8 @@ namespace Butterfly.Game.Rooms
             }, cancellationToken);
 
 
-            if (!this.cancellationTokenSources.Contains(cancellationTokenSource))
-                this.cancellationTokenSources.Add(cancellationTokenSource);
+            if (!this._cancellationTokenSources.Contains(cancellationTokenSource))
+                this._cancellationTokenSources.Add(cancellationTokenSource);
         }
 
         public void SetTimeout(Func<Task> callBack)
@@ -1187,8 +1186,8 @@ namespace Butterfly.Game.Rooms
 
             Task.Run(async () =>
             {
-                if (this.cancellationTokenSources.Contains(cancellationTokenSource))
-                    this.cancellationTokenSources.Remove(cancellationTokenSource);
+                if (this._cancellationTokenSources.Contains(cancellationTokenSource))
+                    this._cancellationTokenSources.Remove(cancellationTokenSource);
 
                 if (this.Disposed) return;
 
@@ -1197,8 +1196,8 @@ namespace Butterfly.Game.Rooms
             }, cancellationToken);
 
 
-            if (!this.cancellationTokenSources.Contains(cancellationTokenSource))
-                this.cancellationTokenSources.Add(cancellationTokenSource);
+            if (!this._cancellationTokenSources.Contains(cancellationTokenSource))
+                this._cancellationTokenSources.Add(cancellationTokenSource);
         }
     }
 }

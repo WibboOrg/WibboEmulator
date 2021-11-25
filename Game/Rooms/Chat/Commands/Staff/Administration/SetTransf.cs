@@ -24,6 +24,6 @@ using Butterfly.Game.Clients;namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            int raceid = 0;            if (Params.Length == 4)            {                string x = Params[3];                if (int.TryParse(x, out int value))                {                    raceid = 0;
+            int raceid = 0;            if (Params.Length == 4)            {                string x = Params[3];                if (int.TryParse(x, out int value))                {
                     int.TryParse(Params[2], out raceid);                    if (raceid < 1 || raceid > 50)                    {                        raceid = 0;                    }                }            }            else            {                raceid = 0;            }            if (!roomUserByHabbo.SetPetTransformation(Params[2], raceid))            {                Session.SendHugeNotif(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", Session.Langue));                return;            }            roomUserByHabbo.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.transf.helpstop", Session.Langue));            roomUserByHabbo.transformation = true;            RoomClient.SendPacket(new UserRemoveComposer(roomUserByHabbo.VirtualId));
             RoomClient.SendPacket(new UsersComposer(roomUserByHabbo));        }    }}

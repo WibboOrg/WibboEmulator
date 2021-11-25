@@ -6,23 +6,24 @@ namespace Butterfly.Game.Rooms
 {
     public class TradeUser
     {
-        public int UserId;
-        private readonly int RoomId;
-        public List<Item> OfferedItems;
-
+        public int UserId { get; set; }
+        public List<Item> OfferedItems { get; set; }
         public bool HasAccepted { get; set; }
+
+        private readonly int _roomId;
 
         public TradeUser(int UserId, int RoomId)
         {
+            this._roomId = RoomId;
+
             this.UserId = UserId;
-            this.RoomId = RoomId;
             this.HasAccepted = false;
             this.OfferedItems = new List<Item>();
         }
 
         public RoomUser GetRoomUser()
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.RoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this._roomId);
             if (room == null)
             {
                 return null;

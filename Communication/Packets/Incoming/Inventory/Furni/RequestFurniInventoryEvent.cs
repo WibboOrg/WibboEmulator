@@ -20,10 +20,10 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Session.GetHabbo().GetInventoryComponent().inventoryDefined)
+            if (!Session.GetHabbo().GetInventoryComponent().InventoryDefined)
             {
                 Session.GetHabbo().GetInventoryComponent().LoadInventory();
-                Session.GetHabbo().GetInventoryComponent().inventoryDefined = true;
+                Session.GetHabbo().GetInventoryComponent().InventoryDefined = true;
             }
 
             IEnumerable<Item> Items = Session.GetHabbo().GetInventoryComponent().GetWallAndFloor;

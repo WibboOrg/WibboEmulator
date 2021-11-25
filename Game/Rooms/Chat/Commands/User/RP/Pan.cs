@@ -41,7 +41,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
                 return;
             }
 
-            MovementDirection movement = MovementManagement.GetMovementByDirection(UserRoom.RotBody);
+            MovementDirection movement = MovementUtility.GetMovementByDirection(UserRoom.RotBody);
 
             int WeaponEanble = Rp.WeaponGun.Enable;
 

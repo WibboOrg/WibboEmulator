@@ -77,17 +77,17 @@ namespace Butterfly.Game.Items
             return Items;
         }
 
-        public static List<Item> CreateTeleporterItems(ItemData Data, Habbo Habbo)
+        public static List<Item> CreateTeleporterItems(ItemData data, Habbo habbo)
         {
             List<Item> Items = new List<Item>();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                int Item1Id = ItemDao.Insert(dbClient, Data.Id, Habbo.Id, "");
-                int Item2Id = ItemDao.Insert(dbClient, Data.Id, Habbo.Id, Item1Id.ToString());
+                int Item1Id = ItemDao.Insert(dbClient, data.Id, habbo.Id, "");
+                int Item2Id = ItemDao.Insert(dbClient, data.Id, habbo.Id, Item1Id.ToString());
 
-                Item Item1 = new Item(Item1Id, 0, Data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
-                Item Item2 = new Item(Item2Id, 0, Data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
+                Item Item1 = new Item(Item1Id, 0, data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
+                Item Item2 = new Item(Item2Id, 0, data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
 
                 ItemTeleportDao.Insert(dbClient, Item1Id, Item2Id);
                 ItemTeleportDao.Insert(dbClient, Item2Id, Item1Id);

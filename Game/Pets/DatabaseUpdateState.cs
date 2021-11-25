@@ -2,8 +2,7 @@
 {
     public enum DatabaseUpdateState
     {
-        Updated,
-        NeedsUpdate,
-        NeedsInsert,
+        UPDATED,
+        NEEDS_UPDATE,
     }
 }

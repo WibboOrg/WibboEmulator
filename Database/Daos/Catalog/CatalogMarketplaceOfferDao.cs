@@ -21,7 +21,6 @@ namespace Butterfly.Database.Daos
         internal static DataTable GetAll(IQueryAdapter dbClient, string searchQuery, int minCost, int maxCost, int filterMode)
         {
             StringBuilder builder = new StringBuilder();
-            string str = "";
             builder.Append("WHERE state = '1' AND timestamp >= " + ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp());
             if (minCost >= 0)
             {
@@ -31,6 +30,7 @@ namespace Butterfly.Database.Daos
             {
                 builder.Append(" AND total_price < " + maxCost);
             }
+            string str;
             switch (filterMode)
             {
                 case 1:

@@ -2,17 +2,11 @@
 {
     public struct SquareInformation
     {
-        private readonly int _x;
-        private readonly int _y;
         private readonly SquarePoint[] _pos;
-        private readonly SquarePoint _target;
         private readonly SquarePoint _point;
 
         public SquareInformation(int pX, int pY, SquarePoint pTarget, ModelInfo pMap, bool pUserOverride, bool CalculateDiagonal, bool pAllowWalkthrough, bool DisableOblique)
         {
-            this._x = pX;
-            this._y = pY;
-            this._target = pTarget;
             this._point = new SquarePoint(pX, pY, pTarget.X, pTarget.Y, pMap.GetState(pX, pY), pUserOverride, pAllowWalkthrough, pMap.GetStateUser(pX, pY));
             this._pos = new SquarePoint[8];
 

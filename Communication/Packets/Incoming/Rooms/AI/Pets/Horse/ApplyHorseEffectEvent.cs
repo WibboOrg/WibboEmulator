@@ -70,7 +70,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 int Parse = 100;
                 string HairType = Item.GetBaseItem().ItemName.Split('_')[2];
 
-                Parse = Parse + int.Parse(HairType);
+                Parse += int.Parse(HairType);
 
                 PetUser.PetData.PetHair = Parse;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -87,7 +87,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 int HairDye = 48;
                 string HairType = Item.GetBaseItem().ItemName.Split('_')[2];
 
-                HairDye = HairDye + int.Parse(HairType);
+                HairDye += int.Parse(HairType);
                 PetUser.PetData.HairDye = HairDye;
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())

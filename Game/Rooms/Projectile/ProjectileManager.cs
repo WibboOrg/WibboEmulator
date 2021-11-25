@@ -47,7 +47,7 @@ namespace Butterfly.Game.Rooms.Projectile
 
                 if (Item.InteractionType == InteractionTypeTemp.GRENADE)
                 {
-                    newPoint = MovementManagement.GetMoveCoord(Item.X, Item.Y, 1, Item.Movement);
+                    newPoint = MovementUtility.GetMoveCoord(Item.X, Item.Y, 1, Item.Movement);
                     newX = newPoint.X;
                     newY = newPoint.Y;
 
@@ -73,7 +73,7 @@ namespace Butterfly.Game.Rooms.Projectile
                 {
                     for (int i = 1; i <= 3; i++)
                     {
-                        newPoint = MovementManagement.GetMoveCoord(Item.X, Item.Y, i, Item.Movement);
+                        newPoint = MovementUtility.GetMoveCoord(Item.X, Item.Y, i, Item.Movement);
 
                         UsersTouch = this._room.GetGameMap().GetRoomUsers(newPoint);
 
@@ -116,8 +116,8 @@ namespace Butterfly.Game.Rooms.Projectile
                 Message.WriteInteger(newY);
                 Message.WriteInteger(1);
                 Message.WriteInteger(Item.Id);
-                Message.WriteString(Item.Z.ToString().Replace(',', '.'));
-                Message.WriteString(newZ.ToString().Replace(',', '.'));
+                Message.WriteString(Item.Z.ToString());
+                Message.WriteString(newZ.ToString());
                 Message.WriteInteger(0);
                 this._messages.Add(Message);
 

@@ -6,10 +6,10 @@ namespace Butterfly.Game.Rooms
     public class TeamScoreChangedArgs : EventArgs
     {
         public readonly int Points;
-        public readonly Team Team;
+        public readonly TeamType Team;
         public readonly RoomUser user;
 
-        public TeamScoreChangedArgs(int points, Team team, RoomUser user)
+        public TeamScoreChangedArgs(int points, TeamType team, RoomUser user)
         {
             this.Points = points;
             this.Team = team;

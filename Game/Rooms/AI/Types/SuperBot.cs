@@ -9,13 +9,11 @@ namespace Butterfly.Game.Rooms.AI.Types
     public class SuperBot : BotAI
     {
         private readonly int _virtualId;
-        private readonly int _speechTimer;
         private int _actionTimer;
 
         public SuperBot(int VirtualId)
         {
             this._virtualId = VirtualId;
-            this._speechTimer = ButterflyEnvironment.GetRandomNumber(30, 120);
             this._actionTimer = ButterflyEnvironment.GetRandomNumber(0, 60);
         }
 

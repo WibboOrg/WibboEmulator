@@ -6,7 +6,7 @@
         Generic,
         CopyBot,
         SuperBot,
-        RolePlayBot,
-        RolePlayPet,
+        RoleplayBot,
+        RoleplayPet,
     }
 }

@@ -18,7 +18,7 @@ namespace Butterfly.Database.Daos
             foreach (RoomUser petData in petList)
             {
                 Pet pet = petData.PetData;
-                if (pet.DBState == DatabaseUpdateState.NeedsUpdate)
+                if (pet.DBState == DatabaseUpdateState.NEEDS_UPDATE)
                 {
                     queryChunk.AddParameter(pet.PetId + "name", pet.Name);
                     queryChunk.AddParameter(pet.PetId + "race", pet.Race);
@@ -27,7 +27,7 @@ namespace Butterfly.Database.Daos
                 }
                 else
                 {
-                    if (petData.BotData.AiType == AIType.RolePlayPet)
+                    if (petData.BotData.AiType == AIType.RoleplayPet)
                     {
                         continue;
                     }
@@ -35,7 +35,7 @@ namespace Butterfly.Database.Daos
                     queryChunk.AddQuery("UPDATE `bot_pet` SET x = " + petData.X + ", Y = " + petData.Y + ", Z = " + petData.Z + " WHERE id = " + pet.PetId);
                 }
 
-                pet.DBState = DatabaseUpdateState.Updated;
+                pet.DBState = DatabaseUpdateState.UPDATED;
             }
             queryChunk.Execute(dbClient);
             queryChunk.Dispose();

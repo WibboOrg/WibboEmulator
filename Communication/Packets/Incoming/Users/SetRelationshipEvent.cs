@@ -29,20 +29,20 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (Type == 0)
             {
-                if (Session.GetHabbo().GetMessenger().relation.ContainsKey(User))
+                if (Session.GetHabbo().GetMessenger().Relation.ContainsKey(User))
                 {
-                    Session.GetHabbo().GetMessenger().relation.Remove(User);
+                    Session.GetHabbo().GetMessenger().Relation.Remove(User);
                 }
             }
             else
             {
-                if (Session.GetHabbo().GetMessenger().relation.ContainsKey(User))
+                if (Session.GetHabbo().GetMessenger().Relation.ContainsKey(User))
                 {
-                    Session.GetHabbo().GetMessenger().relation[User].Type = Type;
+                    Session.GetHabbo().GetMessenger().Relation[User].Type = Type;
                 }
                 else
                 {
-                    Session.GetHabbo().GetMessenger().relation.Add(User, new Relationship(User, Type));
+                    Session.GetHabbo().GetMessenger().Relation.Add(User, new Relationship(User, Type));
                 }
             }
 

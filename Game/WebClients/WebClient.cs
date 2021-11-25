@@ -22,9 +22,9 @@ namespace Butterfly.Game.WebClients
 
         private Language _langue;
 
-        public int UserId;
+        public int UserId { get; set; }
 
-        public int ConnectionID;
+        public int ConnectionID { get; set; }
 
         public bool ShowGameAlert { get => this._showGameAlert; set => this._showGameAlert = value; }
         public Language Langue { get => this._langue; set => this._langue = value; }
@@ -32,15 +32,16 @@ namespace Butterfly.Game.WebClients
         public WebClient(int id, ConnectionInformation connection)
         {
             this.ConnectionID = id;
+
             this._isStaff = false;
             this._showGameAlert = true;
             this._connection = connection;
             this._packetParser = new WebPacketParser(this);
         }
 
-        public void TryAuthenticate(string AuthTicket)
+        public void TryAuthenticate(string authTicket)
         {
-            if (string.IsNullOrEmpty(AuthTicket))
+            if (string.IsNullOrEmpty(authTicket))
             {
                 return;
             }
@@ -56,7 +57,7 @@ namespace Butterfly.Game.WebClients
                     return;
                 }
 
-                DataRow dUserInfo = UserWebsocketDao.GetOne(dbClient, AuthTicket);
+                DataRow dUserInfo = UserWebsocketDao.GetOne(dbClient, authTicket);
                 if (dUserInfo == null)
                 {
                     return;
@@ -75,7 +76,6 @@ namespace Butterfly.Game.WebClients
 
             this.SendPacket(new AuthOkComposer());
             this.SendPacket(new UserIsStaffComposer(this._isStaff));
-            //this.SendPacket(new NotifTopInitComposer(ButterflyEnvironment.GetGame().GetNotifTopManager().GetAllMessages()));
         }
 
         public void Disconnect()

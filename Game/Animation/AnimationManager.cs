@@ -1,6 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
+using Butterfly.Game.Rooms;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -80,7 +81,7 @@ namespace Butterfly.Game.Animation
                 return false;
             }
 
-            if (this._timer >= this.GetMinutes(START_TIME - NOTIF_TIME))
+            if (this._timer >= this.ToSeconds(START_TIME - NOTIF_TIME))
             {
                 return false;
             }
@@ -92,7 +93,7 @@ namespace Butterfly.Game.Animation
 
         public string GetTime()
         {
-            TimeSpan time = TimeSpan.FromSeconds(this.GetMinutes(START_TIME) - this._timer);
+            TimeSpan time = TimeSpan.FromSeconds(this.ToSeconds(START_TIME) - this._timer);
 
             return time.Minutes + " minutes et " + time.Seconds + " secondes";
         }
@@ -150,27 +151,27 @@ namespace Butterfly.Game.Animation
 
             if (this._started)
             {
-                if (this._timer >= this.GetMinutes(CLOSE_TIME))
+                if (this._timer >= this.ToSeconds(CLOSE_TIME))
                 {
-                    Rooms.Room Rooom = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(this._roomIdGame);
+                    Room room = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(this._roomIdGame);
 
                     this._started = false;
 
-                    if (Rooom != null)
+                    if (room != null)
                     {
-                        Rooom.RoomData.State = 1;
+                        room.RoomData.State = 1;
                     }
                 }
                 return;
             }
 
-            if (this._timer >= this.GetMinutes(START_TIME - NOTIF_TIME) && !this._notif)
+            if (this._timer >= this.ToSeconds(START_TIME - NOTIF_TIME) && !this._notif)
             {
                 this._notif = true;
                 ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifTopComposer("La prochaine animation de Jack & Daisy débutera dans 2 minutes"), Core.Language.FRANCAIS);
             }
 
-            if (this._timer >= this.GetMinutes(START_TIME))
+            if (this._timer >= this.ToSeconds(START_TIME))
             {
                 this.StartGame();
             }
@@ -187,7 +188,7 @@ namespace Butterfly.Game.Animation
             int RoomId = this._roomId[this._RoomIdIndex]; //ButterflyEnvironment.GetRandomNumber(0, this._roomId.Count - 1)
             this._RoomIdIndex++;
 
-            Rooms.Room room = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
             if (room == null)
             {
                 return;
@@ -229,7 +230,7 @@ namespace Butterfly.Game.Animation
             this.HandleFunctionReset(moduleWatch, "AnimationCycle");
         }
 
-        private int GetMinutes(int minutes)
+        private int ToSeconds(int minutes)
         {
             return (minutes * 60);
         }

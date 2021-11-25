@@ -9,8 +9,8 @@ namespace Butterfly.Game.Items
 {
     public class ItemDataManager
     {
-        public Dictionary<int, ItemData> _items;
-        public Dictionary<int, ItemData> _gifts;
+        private Dictionary<int, ItemData> _items;
+        private Dictionary<int, ItemData> _gifts;
 
         public ItemDataManager()
         {

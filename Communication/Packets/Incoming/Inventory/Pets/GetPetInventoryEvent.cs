@@ -17,10 +17,10 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Session.GetHabbo().GetInventoryComponent().inventoryDefined)
+            if (!Session.GetHabbo().GetInventoryComponent().InventoryDefined)
             {
                 Session.GetHabbo().GetInventoryComponent().LoadInventory();
-                Session.GetHabbo().GetInventoryComponent().inventoryDefined = true;
+                Session.GetHabbo().GetInventoryComponent().InventoryDefined = true;
             }
 
             Session.SendPacket(new PetInventoryComposer(Session.GetHabbo().GetInventoryComponent().GetPets()));

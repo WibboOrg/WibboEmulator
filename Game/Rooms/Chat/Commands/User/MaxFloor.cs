@@ -13,8 +13,6 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             string Map = "";
-            string Line = "";
-
             int TailleFloor = 50;
             if (Session.GetHabbo().Rank > 1)
             {
@@ -23,7 +21,7 @@ namespace Butterfly.Game.Rooms.Chat.Commands.Cmd
 
             for (int y = 0; y < ((Room.GetGameMap().Model.MapSizeY) > TailleFloor ? Room.GetGameMap().Model.MapSizeY : TailleFloor); y++)
             {
-                Line = "";
+                string Line = "";
                 for (int x = 0; x < ((Room.GetGameMap().Model.MapSizeX) > TailleFloor ? Room.GetGameMap().Model.MapSizeX : TailleFloor); x++)
                 {
                     if (x >= Room.GetGameMap().Model.MapSizeX || y >= Room.GetGameMap().Model.MapSizeY)

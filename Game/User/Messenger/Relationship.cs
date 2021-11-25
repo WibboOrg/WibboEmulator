@@ -2,8 +2,8 @@
 {
     public class Relationship
     {
-        public int UserId;
-        public int Type;
+        public int UserId { get; private set; }
+        public int Type { get; set; }
 
         public Relationship(int User, int Type)
         {

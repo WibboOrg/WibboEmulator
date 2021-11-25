@@ -12,16 +12,14 @@ namespace Butterfly.Game.Rooms.Games
 {
     public class Freeze
     {
-        private Room room;
-        private readonly Dictionary<int, Item> freezeBlocks;
-        private Random rnd;
+        private Room _roomInstance;
+        private readonly Dictionary<int, Item> _freezeBlocks;
         private bool gameStarted;
 
         public Freeze(Room room)
         {
-            this.room = room;
-            this.freezeBlocks = new Dictionary<int, Item>();
-            this.rnd = new Random();
+            this._roomInstance = room;
+            this._freezeBlocks = new Dictionary<int, Item>();
             this.gameStarted = false;
         }
 
@@ -48,21 +46,21 @@ namespace Butterfly.Game.Rooms.Games
 
             this.gameStarted = false;
 
-            Team winningTeam = this.room.GetGameManager().getWinningTeam();
+            TeamType winningTeam = this._roomInstance.GetGameManager().GetWinningTeam();
 
-            foreach (RoomUser user in this.room.GetTeamManager().GetAllPlayer())
+            foreach (RoomUser user in this._roomInstance.GetTeamManager().GetAllPlayer())
             {
                 this.EndGame(user, winningTeam);
             }
         }
 
-        private void EndGame(RoomUser roomUser, Team winningTeam)
+        private void EndGame(RoomUser roomUser, TeamType winningTeam)
         {
-            if (roomUser.Team == winningTeam && winningTeam != Team.none)
+            if (roomUser.Team == winningTeam && winningTeam != TeamType.none)
             {
-                this.room.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
+                this._roomInstance.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
             }
-            else if (roomUser.Team != Team.none)
+            else if (roomUser.Team != TeamType.none)
             {
                 Item FirstTile = this.GetFirstTile(roomUser.X, roomUser.Y);
 
@@ -71,18 +69,18 @@ namespace Butterfly.Game.Rooms.Games
                     return;
                 }
                 roomUser.ApplyEffect(0);
-                TeamManager managerForFreeze = this.room.GetTeamManager();
+                TeamManager managerForFreeze = this._roomInstance.GetTeamManager();
                 managerForFreeze.OnUserLeave(roomUser);
 
                 roomUser.GetClient().SendPacket(new IsPlayingComposer(false));
 
-                this.room.GetGameManager().UpdateGatesTeamCounts();
+                this._roomInstance.GetGameManager().UpdateGatesTeamCounts();
 
-                roomUser.Team = Team.none;
+                roomUser.Team = TeamType.none;
 
-                if (this.room.GetGameItemHandler().GetExitTeleport() != null)
+                if (this._roomInstance.GetGameItemHandler().GetExitTeleport() != null)
                 {
-                    this.room.GetGameMap().TeleportToItem(roomUser, this.room.GetGameItemHandler().GetExitTeleport());
+                    this._roomInstance.GetGameMap().TeleportToItem(roomUser, this._roomInstance.GetGameItemHandler().GetExitTeleport());
                 }
 
                 roomUser.Freezed = false;
@@ -123,20 +121,20 @@ namespace Butterfly.Game.Rooms.Games
 
         public void ResetGame()
         {
-            foreach (Item roomItem in (IEnumerable)this.freezeBlocks.Values)
+            foreach (Item roomItem in (IEnumerable)this._freezeBlocks.Values)
             {
                 if (!string.IsNullOrEmpty(roomItem.ExtraData))
                 {
                     roomItem.ExtraData = "";
                     roomItem.UpdateState(false, true);
-                    this.room.GetGameMap().updateMapForItem(roomItem);
+                    this._roomInstance.GetGameMap().UpdateMapForItem(roomItem);
                 }
             }
         }
 
         public void OnWalkFreezeBlock(Item roomitem, RoomUser user)
         {
-            if (!this.gameStarted || user.Team == Team.none)
+            if (!this.gameStarted || user.Team == TeamType.none)
             {
                 return;
             }
@@ -149,7 +147,7 @@ namespace Butterfly.Game.Rooms.Games
 
         private void CountTeamPoints()
         {
-            foreach (RoomUser user in this.room.GetTeamManager().GetAllPlayer())
+            foreach (RoomUser user in this._roomInstance.GetTeamManager().GetAllPlayer())
             {
                 this.CountTeamPoint(user);
             }
@@ -166,7 +164,7 @@ namespace Butterfly.Game.Rooms.Games
 
             if (FirstTile == null)
             {
-                this.EndGame(roomUser, Team.none);
+                this.EndGame(roomUser, TeamType.none);
                 return;
             }
 
@@ -175,7 +173,7 @@ namespace Butterfly.Game.Rooms.Games
             roomUser.ShieldActive = false;
             roomUser.ShieldCounter = 11;
 
-            this.room.GetGameManager().AddPointToTeam(roomUser.Team, 40, null);
+            this._roomInstance.GetGameManager().AddPointToTeam(roomUser.Team, 40, null);
 
             ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_NUMBER);
             Message.WriteInteger(roomUser.VirtualId);
@@ -185,23 +183,23 @@ namespace Butterfly.Game.Rooms.Games
 
         private static void RemoveUserFromTeam(RoomUser user)
         {
-            user.Team = Team.none;
+            user.Team = TeamType.none;
             user.ApplyEffect(0);
         }
 
         public void throwBall(Item Item, RoomUser roomUserByHabbo)
         {
-            if (Math.Abs((roomUserByHabbo.X - Item.GetX)) >= 2 || Math.Abs((roomUserByHabbo.Y - Item.GetY)) >= 2)
+            if (Math.Abs((roomUserByHabbo.X - Item.X)) >= 2 || Math.Abs((roomUserByHabbo.Y - Item.Y)) >= 2)
             {
                 return;
             }
 
-            if (roomUserByHabbo.Team == Team.none || !this.gameStarted)
+            if (roomUserByHabbo.Team == TeamType.none || !this.gameStarted)
             {
                 return;
             }
 
-            Item Tile = this.GetFirstTile(Item.GetX, Item.GetY);
+            Item Tile = this.GetFirstTile(Item.X, Item.Y);
 
             if (Tile == null)
             {
@@ -230,7 +228,7 @@ namespace Butterfly.Game.Rooms.Games
 
         private Item GetFirstTile(int x, int y)
         {
-            foreach (Item roomItem in this.room.GetGameMap().GetCoordinatedItems(new Point(x, y)))
+            foreach (Item roomItem in this._roomInstance.GetGameMap().GetCoordinatedItems(new Point(x, y)))
             {
                 if (roomItem.GetBaseItem().InteractionType == InteractionType.FREEZETILE)
                 {
@@ -242,7 +240,7 @@ namespace Butterfly.Game.Rooms.Games
 
         public void onFreezeTiles(Item item, FreezePowerUp powerUp, int userID)
         {
-            if (this.room.GetRoomUserManager().GetRoomUserByHabboId(userID) == null)
+            if (this._roomInstance.GetRoomUserManager().GetRoomUserByHabboId(userID) == null)
             {
                 return;
             }
@@ -251,17 +249,17 @@ namespace Butterfly.Game.Rooms.Games
             switch (powerUp)
             {
                 case FreezePowerUp.BlueArrow:
-                    items = this.GetVerticalItems(item.GetX, item.GetY, 5);
+                    items = this.GetVerticalItems(item.X, item.Y, 5);
                     break;
                 case FreezePowerUp.GreenArrow:
-                    items = this.GetDiagonalItems(item.GetX, item.GetY, 5);
+                    items = this.GetDiagonalItems(item.X, item.Y, 5);
                     break;
                 case FreezePowerUp.OrangeSnowball:
-                    items = this.GetVerticalItems(item.GetX, item.GetY, 5);
-                    items.AddRange(this.GetDiagonalItems(item.GetX, item.GetY, 5));
+                    items = this.GetVerticalItems(item.X, item.Y, 5);
+                    items.AddRange(this.GetDiagonalItems(item.X, item.Y, 5));
                     break;
                 default:
-                    items = this.GetVerticalItems(item.GetX, item.GetY, 3);
+                    items = this.GetVerticalItems(item.X, item.Y, 3);
                     break;
             }
             this.HandleBanzaiFreezeItems(items);
@@ -301,7 +299,7 @@ namespace Butterfly.Game.Rooms.Games
                 return;
             }
 
-            switch (this.rnd.Next(1, 14))
+            switch (ButterflyEnvironment.GetRandomNumber(1, 14))
             {
                 case 2:
                     item.ExtraData = "2000";
@@ -332,7 +330,7 @@ namespace Butterfly.Game.Rooms.Games
                     item.FreezePowerUp = FreezePowerUp.None;
                     break;
             }
-            this.room.GetGameMap().updateMapForItem(item);
+            this._roomInstance.GetGameMap().UpdateMapForItem(item);
             item.UpdateState(false, true);
         }
 
@@ -352,7 +350,7 @@ namespace Butterfly.Game.Rooms.Games
                     if (user.FreezeLives < 3)
                     {
                         ++user.FreezeLives;
-                        this.room.GetGameManager().AddPointToTeam(user.Team, 10, user);
+                        this._roomInstance.GetGameManager().AddPointToTeam(user.Team, 10, user);
                     }
                     ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_NUMBER);
                     Message.WriteInteger(user.VirtualId);
@@ -370,22 +368,22 @@ namespace Butterfly.Game.Rooms.Games
 
         public void AddFreezeBlock(Item item)
         {
-            if (this.freezeBlocks.ContainsKey(item.Id))
+            if (this._freezeBlocks.ContainsKey(item.Id))
             {
-                this.freezeBlocks.Remove(item.Id);
+                this._freezeBlocks.Remove(item.Id);
             }
 
-            this.freezeBlocks.Add(item.Id, item);
+            this._freezeBlocks.Add(item.Id, item);
         }
 
         public void RemoveFreezeBlock(int itemID)
         {
-            this.freezeBlocks.Remove(itemID);
+            this._freezeBlocks.Remove(itemID);
         }
 
         private void HandleUserFreeze(Point point)
         {
-            RoomUser user = this.room.GetRoomUserManager().GetUserForSquare(point.X, point.Y);
+            RoomUser user = this._roomInstance.GetRoomUserManager().GetUserForSquare(point.X, point.Y);
             if (user == null || user.IsWalking && user.SetX != point.X && user.SetY != point.Y)
             {
                 return;
@@ -396,7 +394,7 @@ namespace Butterfly.Game.Rooms.Games
 
         private void FreezeUser(RoomUser user)
         {
-            if (user.IsBot || user.ShieldActive || user.Team == Team.none || !this.gameStarted)
+            if (user.IsBot || user.ShieldActive || user.Team == TeamType.none || !this.gameStarted)
             {
                 return;
             }
@@ -420,19 +418,19 @@ namespace Butterfly.Game.Rooms.Games
 
                     user.ApplyEffect(0);
 
-                    this.room.GetGameManager().AddPointToTeam(user.Team, -20, user);
+                    this._roomInstance.GetGameManager().AddPointToTeam(user.Team, -20, user);
 
-                    TeamManager managerForFreeze = this.room.GetTeamManager();
+                    TeamManager managerForFreeze = this._roomInstance.GetTeamManager();
                     managerForFreeze.OnUserLeave(user);
 
                     user.GetClient().SendPacket(new IsPlayingComposer(false));
 
-                    this.room.GetGameManager().UpdateGatesTeamCounts();
-                    user.Team = Team.none;
+                    this._roomInstance.GetGameManager().UpdateGatesTeamCounts();
+                    user.Team = TeamType.none;
 
-                    if (this.room.GetGameItemHandler().GetExitTeleport() != null)
+                    if (this._roomInstance.GetGameItemHandler().GetExitTeleport() != null)
                     {
-                        this.room.GetGameMap().TeleportToItem(user, this.room.GetGameItemHandler().GetExitTeleport());
+                        this._roomInstance.GetGameMap().TeleportToItem(user, this._roomInstance.GetGameItemHandler().GetExitTeleport());
                     }
 
                     user.Freezed = false;
@@ -464,7 +462,7 @@ namespace Butterfly.Game.Rooms.Games
                 }
                 else
                 {
-                    this.room.GetGameManager().AddPointToTeam(user.Team, -10, user);
+                    this._roomInstance.GetGameManager().AddPointToTeam(user.Team, -10, user);
                     user.ApplyEffect(12);
 
                     ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_NUMBER);
@@ -633,7 +631,7 @@ namespace Butterfly.Game.Rooms.Games
 
         private List<Item> GetItemsForSquare(Point point)
         {
-            return this.room.GetGameMap().GetCoordinatedItems(point);
+            return this._roomInstance.GetGameMap().GetCoordinatedItems(point);
         }
 
         private static bool SquareGotFreezeTile(List<Item> items)
@@ -662,9 +660,8 @@ namespace Butterfly.Game.Rooms.Games
 
         public void Destroy()
         {
-            this.freezeBlocks.Clear();
-            this.room = null;
-            this.rnd = null;
+            this._freezeBlocks.Clear();
+            this._roomInstance = null;
         }
     }
 }

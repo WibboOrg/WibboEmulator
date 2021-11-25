@@ -8,64 +8,64 @@ namespace Butterfly.Game.Rooms.Games
 {
     public class Soccer
     {
-        private Room room;
+        private Room _roomInstance;
 
         public Soccer(Room room)
         {
-            this.room = room;
+            this._roomInstance = room;
         }
 
         public void HandleFootballGameItems(Point ballItemCoord)
         {
-            foreach (Item roomItem in this.room.GetGameManager().GetItems(Team.red).Values)
+            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.red).Values)
             {
                 foreach (ThreeDCoord threeDcoord in roomItem.GetAffectedTiles.Values)
                 {
                     if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                     {
-                        this.AddPointToScoreCounters(Team.red);
+                        this.AddPointToScoreCounters(TeamType.red);
                         return;
                     }
                 }
             }
-            foreach (Item roomItem in this.room.GetGameManager().GetItems(Team.green).Values)
+            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.green).Values)
             {
                 foreach (ThreeDCoord threeDcoord in roomItem.GetAffectedTiles.Values)
                 {
                     if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                     {
-                        this.AddPointToScoreCounters(Team.green);
+                        this.AddPointToScoreCounters(TeamType.green);
                         return;
                     }
                 }
             }
-            foreach (Item roomItem in this.room.GetGameManager().GetItems(Team.blue).Values)
+            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.blue).Values)
             {
                 foreach (ThreeDCoord threeDcoord in roomItem.GetAffectedTiles.Values)
                 {
                     if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                     {
-                        this.AddPointToScoreCounters(Team.blue);
+                        this.AddPointToScoreCounters(TeamType.blue);
                         return;
                     }
                 }
             }
-            foreach (Item roomItem in this.room.GetGameManager().GetItems(Team.yellow).Values)
+            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.yellow).Values)
             {
                 foreach (ThreeDCoord threeDcoord in roomItem.GetAffectedTiles.Values)
                 {
                     if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                     {
-                        this.AddPointToScoreCounters(Team.yellow);
+                        this.AddPointToScoreCounters(TeamType.yellow);
                         return;
                     }
                 }
             }
         }
 
-        private void AddPointToScoreCounters(Team team)
+        private void AddPointToScoreCounters(TeamType team)
         {
-            foreach (Item roomItem in this.room.GetGameManager().GetItems(team).Values)
+            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(team).Values)
             {
                 switch (roomItem.GetBaseItem().InteractionType)
                 {
@@ -94,14 +94,14 @@ namespace Butterfly.Game.Rooms.Games
                 return;
             }
 
-            if ((!User.AllowBall && Shoot) && !this.room.OldFoot)
+            if ((!User.AllowBall && Shoot) && !this._roomInstance.OldFoot)
             {
                 User.AllowBall = true;
                 User.MoveWithBall = false;
                 return;
             }
 
-            List<Item> roomItemForSquare = this.room.GetGameMap().GetCoordinatedItems(new Point(User.SetX, User.SetY));
+            List<Item> roomItemForSquare = this._roomInstance.GetGameMap().GetCoordinatedItems(new Point(User.SetX, User.SetY));
 
             bool MoveBall = false;
 
@@ -148,8 +148,8 @@ namespace Butterfly.Game.Rooms.Games
                 }
                 else
                 {
-                    int GoalX = Ball.GetX;
-                    int GoalY = Ball.GetY;
+                    int GoalX = Ball.X;
+                    int GoalY = Ball.Y;
 
                     Point NewPoint = Ball.GetMoveCoord(GoalX, GoalY, 1);
 
@@ -196,15 +196,15 @@ namespace Butterfly.Game.Rooms.Games
 
             item.UpdateState(false, true);
 
-            double Z = this.room.GetGameMap().SqAbsoluteHeight(newX, newY);
-            this.room.GetRoomItemHandler().PositionReset(item, newX, newY, Z);
+            double Z = this._roomInstance.GetGameMap().SqAbsoluteHeight(newX, newY);
+            this._roomInstance.GetRoomItemHandler().PositionReset(item, newX, newY, Z);
 
             this.HandleFootballGameItems(new Point(newX, newY));
         }
 
         public void Destroy()
         {
-            this.room = null;
+            this._roomInstance = null;
         }
     }
 }

@@ -91,7 +91,7 @@ namespace Butterfly.Game.Roleplay.Enemy
             }
         }
 
-        public void OnCycle(RoomUser Bot, Rooms.Room Room)
+        public void OnCycle(RoomUser Bot, Room Room)
         {
             if (this.SlowTimer > 0 || this.Config.ZombieMode)
             {
@@ -153,7 +153,7 @@ namespace Butterfly.Game.Roleplay.Enemy
             }
         }
 
-        public void Hit(RoomUser Bot, int Dmg, Rooms.Room Room, int pAggroVId, int pTeamId)
+        public void Hit(RoomUser Bot, int Dmg, Room Room, int pAggroVId, int pTeamId)
         {
             if (this.Dead)
             {
@@ -235,9 +235,9 @@ namespace Butterfly.Game.Roleplay.Enemy
             }
         }
 
-        private void Pan(RoomUser Bot, Rooms.Room Room)
+        private void Pan(RoomUser Bot, Room Room)
         {
-            MovementDirection movement = MovementManagement.GetMovementByDirection(Bot.RotBody);
+            MovementDirection movement = MovementUtility.GetMovementByDirection(Bot.RotBody);
 
             int WeaponEanble = this.WeaponGun.Enable;
 
@@ -264,7 +264,7 @@ namespace Butterfly.Game.Roleplay.Enemy
             }
         }
 
-        private void Cac(RoomUser Bot, Rooms.Room Room, RoomUser User)
+        private void Cac(RoomUser Bot, Room Room, RoomUser User)
         {
             int Dmg = ButterflyEnvironment.GetRandomNumber(this.WeaponCac.DmgMin, this.WeaponCac.DmgMax);
 
@@ -302,7 +302,7 @@ namespace Butterfly.Game.Roleplay.Enemy
             this.AggroTimer = 0;
         }
 
-        private void AggroCycle(RoomUser Bot, Rooms.Room Room)
+        private void AggroCycle(RoomUser Bot, Room Room)
         {
             RoomUser User = Room.GetRoomUserManager().GetRoomUserByVirtualId(this.AggroVirtuelId);
             if (User == null || this.Dead)
@@ -406,7 +406,7 @@ namespace Butterfly.Game.Roleplay.Enemy
             }
         }
 
-        private bool BotPathFind(RoomUser Bot, Rooms.Room Room, RoomUser User)
+        private bool BotPathFind(RoomUser Bot, Room Room, RoomUser User)
         {
             int BotX = (Bot.SetStep) ? Bot.SetX : Bot.X;
             int BotY = (Bot.SetStep) ? Bot.SetY : Bot.Y;
@@ -531,7 +531,7 @@ namespace Butterfly.Game.Roleplay.Enemy
             return true;
         }
 
-        private bool CheckCollisionDir(RoomUser Bot, Rooms.Room Room, int Rot, int DistanceX, int DistanceY)
+        private bool CheckCollisionDir(RoomUser Bot, Room Room, int Rot, int DistanceX, int DistanceY)
         {
             int BotX = (Bot.SetStep) ? Bot.SetX : Bot.X;
             int BotY = (Bot.SetStep) ? Bot.SetY : Bot.Y;
@@ -627,7 +627,7 @@ namespace Butterfly.Game.Roleplay.Enemy
             return false;
         }
 
-        private void CheckResetBot(RoomUser Bot, Rooms.Room Room)
+        private void CheckResetBot(RoomUser Bot, Room Room)
         {
             if ((this.Config.ResetPosition && (this.IsAllowZone(Bot) || !Bot.IsWalking) && this.Health == this.Config.Health) || (!this.Config.ResetPosition && this.Health == this.Config.Health))
             {
@@ -740,7 +740,7 @@ namespace Butterfly.Game.Roleplay.Enemy
             }
         }
 
-        private void AggroSearch(RoomUser Bot, Rooms.Room Room)
+        private void AggroSearch(RoomUser Bot, Room Room)
         {
             List<RoomUser> Users = Room.GetGameMap().GetNearUsers(new Point(Bot.X, Bot.Y), this.Config.AggroDistance);
             if (Users == null)

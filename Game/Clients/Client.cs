@@ -15,7 +15,7 @@ using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.User;
-using Butterfly.Game.User.UserData;
+using Butterfly.Game.User.Data;
 using Butterfly.Net;
 using ConnectionManager;
 using System;
@@ -73,12 +73,12 @@ namespace Butterfly.Game.Clients
                 }
                 else
                 {
-                    ButterflyEnvironment.GetGame().GetClientManager().LogClonesOut(userData.userID);
-                    this._habbo = userData.user;
+                    ButterflyEnvironment.GetGame().GetClientManager().LogClonesOut(userData.Id);
+                    this._habbo = userData.User;
                     this.Langue = this._habbo.Langue;
                     this.IsWebSocket = this._connection.IsWebSocket;
 
-                    ButterflyEnvironment.GetGame().GetClientManager().RegisterClient(this, userData.userID, this._habbo.Username);
+                    ButterflyEnvironment.GetGame().GetClientManager().RegisterClient(this, userData.Id, this._habbo.Username);
 
                     if (this.Langue == Language.FRANCAIS)
                     {

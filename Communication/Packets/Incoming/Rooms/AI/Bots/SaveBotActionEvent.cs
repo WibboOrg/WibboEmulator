@@ -104,10 +104,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         RoomBot.MixSentences = Convert.ToBoolean(MixChat);
 
                         string Text = "";
-                        string Phrase = "";
                         for (int i = 0; i <= SpeechData.Length - 1; i++)
                         {
-                            Phrase = SpeechData[i];
+                            string Phrase = SpeechData[i];
                             if (Phrase.Length > 150)
                             {
                                 Phrase.Substring(0, 150);

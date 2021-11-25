@@ -422,7 +422,6 @@ namespace Astar.Algorithm
             while ((item = item.parent) != null)
             {
                 result.AddFirst(item);
-                current_node = item;
             }
         }
 

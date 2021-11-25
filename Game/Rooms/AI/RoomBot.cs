@@ -33,7 +33,7 @@ namespace Butterfly.Game.Rooms.AI
         public AIType AiType;
         public RoleBot RoleBot;
 
-        public bool IsPet => this.AiType == AIType.Pet || this.AiType == AIType.RolePlayPet;
+        public bool IsPet => this.AiType == AIType.Pet || this.AiType == AIType.RoleplayPet;
 
         public string OwnerName => ButterflyEnvironment.GetGame().GetClientManager().GetNameById(this.OwnerId);
 
@@ -101,16 +101,20 @@ namespace Butterfly.Game.Rooms.AI
         {
             switch (this.AiType)
             {
-                case AIType.RolePlayBot:
-                case AIType.RolePlayPet:
+                case AIType.RoleplayBot:
+                case AIType.RoleplayPet:
                     return new RoleplayBot(VirtualId);
                 case AIType.SuperBot:
                     return new SuperBot(VirtualId);
                 case AIType.Pet:
                     return new PetBot(VirtualId);
-                default:
-                    return new GenericBot(VirtualId);
+                case AIType.Generic:
+                    break;
+                case AIType.CopyBot:
+                    break;
             }
+
+            return new GenericBot(VirtualId);
         }
     }
 }

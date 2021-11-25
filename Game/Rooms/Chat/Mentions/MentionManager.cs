@@ -145,7 +145,7 @@ namespace Butterfly.Game.Rooms.Chat.Mentions
 
             Session.GetHabbo().everyoneTimer = DateTime.Now;
 
-            List<Client> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetHabbo().GetMessenger().GetFriends().Keys);
+            List<Client> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetHabbo().GetMessenger().Friends.Keys);
 
             if (onlineUsers == null)
             {

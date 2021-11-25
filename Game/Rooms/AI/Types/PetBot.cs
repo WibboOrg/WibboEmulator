@@ -51,10 +51,7 @@ namespace Butterfly.Game.Rooms.AI.Types
         public override void OnUserSay(RoomUser User, string Message)
         {
             RoomUser roomUser = this.GetRoomUser();
-            if (roomUser.PetData.DBState != DatabaseUpdateState.NeedsInsert)
-            {
-                roomUser.PetData.DBState = DatabaseUpdateState.NeedsUpdate;
-            }
+            roomUser.PetData.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 
             if (roomUser.PetData.OwnerId != User.GetClient().GetHabbo().Id)
             {

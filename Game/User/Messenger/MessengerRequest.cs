@@ -12,11 +12,11 @@ namespace Butterfly.Game.User.Messenger
 
         public int From => this._fromUser;
 
-        public MessengerRequest(int ToUser, int FromUser, string pUsername)
+        public MessengerRequest(int toUser, int fromUser, string username)
         {
-            this._toUser = ToUser;
-            this._fromUser = FromUser;
-            this._username = pUsername;
+            this._toUser = toUser;
+            this._fromUser = fromUser;
+            this._username = username;
         }
 
         public void Serialize(ServerPacket Request)

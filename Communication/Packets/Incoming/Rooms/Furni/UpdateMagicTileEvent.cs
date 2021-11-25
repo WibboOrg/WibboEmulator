@@ -30,7 +30,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         double TotalZ = (double)(HeightToSet / 100.00);
 
-                        item.SetState(item.GetX, item.GetY, TotalZ, item.GetAffectedTiles);
+                        item.SetState(item.X, item.Y, TotalZ, item.GetAffectedTiles);
 
                         room.SendPacket(new ObjectUpdateComposer(item, room.RoomData.OwnerId));
                     }

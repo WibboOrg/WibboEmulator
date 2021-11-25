@@ -91,7 +91,7 @@ namespace Butterfly.Game.Rooms
             roomUser.BotData = Bot;
             roomUser.BotAI = Bot.GenerateBotAI(roomUser.VirtualId);
 
-            roomUser.BotAI.Init(Bot.Id, roomUser.VirtualId, this._room.Id, roomUser, this._room);
+            roomUser.BotAI.Init(Bot.Id, roomUser, this._room);
 
             roomUser.SetStatus("flatctrl 4", "");
             this.UpdateUserStatus(roomUser, false);
@@ -154,11 +154,11 @@ namespace Butterfly.Game.Rooms
                     roomUser.BotData.RoleBot = new RoleBot(Enemy);
                     if (Bot.IsPet)
                     {
-                        roomUser.BotData.AiType = AIType.RolePlayPet;
+                        roomUser.BotData.AiType = AIType.RoleplayPet;
                     }
                     else
                     {
-                        roomUser.BotData.AiType = AIType.RolePlayBot;
+                        roomUser.BotData.AiType = AIType.RoleplayBot;
                     }
                 }
             }
@@ -167,13 +167,13 @@ namespace Butterfly.Game.Rooms
 
             if (roomUser.IsPet)
             {
-                roomUser.BotAI.Init(Bot.Id, roomUser.VirtualId, this._room.Id, roomUser, this._room);
+                roomUser.BotAI.Init(Bot.Id, roomUser, this._room);
                 roomUser.PetData = PetData;
                 roomUser.PetData.VirtualId = roomUser.VirtualId;
             }
             else
             {
-                roomUser.BotAI.Init(Bot.Id, roomUser.VirtualId, this._room.Id, roomUser, this._room);
+                roomUser.BotAI.Init(Bot.Id, roomUser, this._room);
             }
             this.BotCounter++;
             roomUser.SetStatus("flatctrl 4", "");
@@ -288,7 +288,7 @@ namespace Butterfly.Game.Rooms
                 byte pByte = this._room.GetGameMap().EffectMap[x, y];
                 if (pByte > 0)
                 {
-                    ItemEffectType itemEffectType = ByteToItemEffectEnum.Parse(pByte);
+                    ItemEffectType itemEffectType = ByteToItemEffectType.Parse(pByte);
                     if (itemEffectType == User.CurrentItemEffect)
                     {
                         return;
@@ -674,7 +674,7 @@ namespace Butterfly.Game.Rooms
                     this._usersRank.Remove(User.UserId);
                 }
 
-                if (User.Team != Team.none)
+                if (User.Team != TeamType.none)
                 {
                     this._room.GetTeamManager().OnUserLeave(User);
                     this._room.GetGameManager().UpdateGatesTeamCounts();
@@ -888,7 +888,7 @@ namespace Butterfly.Game.Rooms
             }
         }
 
-        public void SavePositionBots(IQueryAdapter dbClient)
+        public void SaveBots(IQueryAdapter dbClient)
         {
             List<RoomUser> botList = this.GetBots();
             if (botList.Count <= 0)
@@ -899,7 +899,7 @@ namespace Butterfly.Game.Rooms
             BotUserDao.SaveBots(dbClient, botList);
         }
 
-        public void AppendPetsUpdateString(IQueryAdapter dbClient)
+        public void SavePets(IQueryAdapter dbClient)
         {
             List<RoomUser> Petlist = this.GetPets();
             if (Petlist.Count <= 0)
@@ -1024,7 +1024,7 @@ namespace Butterfly.Game.Rooms
                 User.UpdateNeeded = true;
             }
 
-            List<Item> roomItemForSquare = this._room.GetGameMap().GetCoordinatedItems(new Point(User.X, User.Y)).OrderBy(p => p.GetZ).ToList();
+            List<Item> roomItemForSquare = this._room.GetGameMap().GetCoordinatedItems(new Point(User.X, User.Y)).OrderBy(p => p.Z).ToList();
 
             double newZ = !User.RidingHorse || User.IsPet ? this._room.GetGameMap().SqAbsoluteHeight(User.X, User.Y, roomItemForSquare) : this._room.GetGameMap().SqAbsoluteHeight(User.X, User.Y, roomItemForSquare) + 1.0;
             if (newZ != User.Z)
@@ -1052,7 +1052,7 @@ namespace Butterfly.Game.Rooms
                         User.SetStatus("sit", roomItem.Height.ToString());
                         User.IsSit = true;
                     }
-                    User.Z = roomItem.GetZ;
+                    User.Z = roomItem.Z;
                     User.RotHead = roomItem.Rotation;
                     User.RotBody = roomItem.Rotation;
                     User.UpdateNeeded = true;
@@ -1066,7 +1066,7 @@ namespace Butterfly.Game.Rooms
                             User.SetStatus("lay", roomItem.Height.ToString() + " null");
                             User.IsLay = true;
                         }
-                        User.Z = roomItem.GetZ;
+                        User.Z = roomItem.Z;
                         User.RotHead = roomItem.Rotation;
                         User.RotBody = roomItem.Rotation;
                         User.UpdateNeeded = true;
@@ -1107,7 +1107,7 @@ namespace Butterfly.Game.Rooms
                             TeamManager managerForBanzai = this._room.GetTeamManager();
                             if (User.Team != roomItem.Team)
                             {
-                                if (User.Team != Team.none)
+                                if (User.Team != TeamType.none)
                                 {
                                     managerForBanzai.OnUserLeave(User);
                                 }
@@ -1140,19 +1140,19 @@ namespace Butterfly.Game.Rooms
                                     User.GetClient().SendPacket(new IsPlayingComposer(false));
                                 }
 
-                                User.Team = Team.none;
+                                User.Team = TeamType.none;
                                 continue;
                             }
                         }
                         break;
                     case InteractionType.BANZAIBLO:
-                        if (cyclegameitems && User.Team != Team.none && !User.IsBot)
+                        if (cyclegameitems && User.Team != TeamType.none && !User.IsBot)
                         {
                             this._room.GetGameItemHandler().OnWalkableBanzaiBlo(User, roomItem);
                         }
                         break;
                     case InteractionType.BANZAIBLOB:
-                        if (cyclegameitems && User.Team != Team.none && !User.IsBot)
+                        if (cyclegameitems && User.Team != TeamType.none && !User.IsBot)
                         {
                             this._room.GetGameItemHandler().OnWalkableBanzaiBlob(User, roomItem);
                         }
@@ -1174,7 +1174,7 @@ namespace Butterfly.Game.Rooms
                             TeamManager managerForFreeze = this._room.GetTeamManager();
                             if (User.Team != roomItem.Team)
                             {
-                                if (User.Team != Team.none)
+                                if (User.Team != TeamType.none)
                                 {
                                     managerForFreeze.OnUserLeave(User);
                                 }
@@ -1206,7 +1206,7 @@ namespace Butterfly.Game.Rooms
                                     User.GetClient().SendPacket(new IsPlayingComposer(false));
                                 }
 
-                                User.Team = Team.none;
+                                User.Team = TeamType.none;
                             }
                         }
                         break;
@@ -1508,10 +1508,10 @@ namespace Butterfly.Game.Rooms
         private void CalculatePath(RoomUser User)
         {
             Gamemap gameMap = this._room.GetGameMap();
-            SquarePoint nextStep = DreamPathfinder.GetNextStep(User.X, User.Y, User.GoalX, User.GoalY, gameMap.GameMap, gameMap.ItemHeightMap, gameMap.mUserOnMap, gameMap.mSquareTaking, gameMap.Model.MapSizeX, gameMap.Model.MapSizeY, User.AllowOverride, gameMap.DiagonalEnabled, this._room.RoomData.AllowWalkthrough, gameMap.ObliqueDisable);
+            SquarePoint nextStep = DreamPathfinder.GetNextStep(User.X, User.Y, User.GoalX, User.GoalY, gameMap.GameMap, gameMap.ItemHeightMap, gameMap.UserOnMap, gameMap.SquareTaking, gameMap.Model.MapSizeX, gameMap.Model.MapSizeY, User.AllowOverride, gameMap.DiagonalEnabled, this._room.RoomData.AllowWalkthrough, gameMap.ObliqueDisable);
             if (User.WalkSpeed)
             {
-                nextStep = DreamPathfinder.GetNextStep(nextStep.X, nextStep.Y, User.GoalX, User.GoalY, gameMap.GameMap, gameMap.ItemHeightMap, gameMap.mUserOnMap, gameMap.mSquareTaking, gameMap.Model.MapSizeX, gameMap.Model.MapSizeY, User.AllowOverride, gameMap.DiagonalEnabled, this._room.RoomData.AllowWalkthrough, gameMap.ObliqueDisable);
+                nextStep = DreamPathfinder.GetNextStep(nextStep.X, nextStep.Y, User.GoalX, User.GoalY, gameMap.GameMap, gameMap.ItemHeightMap, gameMap.UserOnMap, gameMap.SquareTaking, gameMap.Model.MapSizeX, gameMap.Model.MapSizeY, User.AllowOverride, gameMap.DiagonalEnabled, this._room.RoomData.AllowWalkthrough, gameMap.ObliqueDisable);
             }
 
             if (User.BreakWalkEnable && User.StopWalking)

@@ -1,5 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Game.Items;
+using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.Pathfinding;
@@ -14,11 +15,10 @@ namespace Butterfly.Game.Rooms
 {
     public class Gamemap
     {
-        private readonly Room room;
-        private readonly ConcurrentDictionary<Point, List<RoomUser>> userMap;
-        public bool DiagonalEnabled;
-        public bool ObliqueDisable;
-        public ServerPacket SerializedFloormap;
+        private readonly Room _roomInstance;
+        private readonly ConcurrentDictionary<Point, List<RoomUser>> _userMap;
+        public bool DiagonalEnabled { get; set; }
+        public bool ObliqueDisable { get; set; }
 
         public DynamicRoomModel Model;
 
@@ -28,16 +28,17 @@ namespace Butterfly.Game.Rooms
 
         public double[,] ItemHeightMap { get; private set; }
 
-        public byte[,] mUserOnMap { get; private set; }
+        public byte[,] UserOnMap { get; private set; }
 
-        public byte[,] mSquareTaking { get; private set; }
+        public byte[,] SquareTaking { get; private set; }
         public ConcurrentDictionary<Point, List<Item>> CoordinatedItems { get; private set; }
 
         public Gamemap(Room room)
         {
-            this.room = room;
+            this._roomInstance = room;
             this.ObliqueDisable = true;
             this.DiagonalEnabled = true;
+
             RoomModel mStaticModel = ButterflyEnvironment.GetGame().GetRoomManager().GetModel(room.RoomData.ModelName, room.Id);
             if (mStaticModel == null)
             {
@@ -47,28 +48,28 @@ namespace Butterfly.Game.Rooms
             this.Model = new DynamicRoomModel(mStaticModel);
 
             this.CoordinatedItems = new ConcurrentDictionary<Point, List<Item>>();
-            this.userMap = new ConcurrentDictionary<Point, List<RoomUser>>();
+            this._userMap = new ConcurrentDictionary<Point, List<RoomUser>>();
 
             this.GameMap = new byte[this.Model.MapSizeX, this.Model.MapSizeY];
-            this.mUserOnMap = new byte[this.Model.MapSizeX, this.Model.MapSizeY];
-            this.mSquareTaking = new byte[this.Model.MapSizeX, this.Model.MapSizeY];
+            this.UserOnMap = new byte[this.Model.MapSizeX, this.Model.MapSizeY];
+            this.SquareTaking = new byte[this.Model.MapSizeX, this.Model.MapSizeY];
             this.ItemHeightMap = new double[this.Model.MapSizeX, this.Model.MapSizeY];
             this.EffectMap = new byte[this.Model.MapSizeX, this.Model.MapSizeY];
         }
 
         public void AddUserToMap(RoomUser user, Point coord)
         {
-            if (this.userMap.ContainsKey(coord))
+            if (this._userMap.ContainsKey(coord))
             {
-                this.userMap[coord].Add(user);
+                this._userMap[coord].Add(user);
             }
             else
             {
-                this.userMap.TryAdd(coord, new List<RoomUser>() { user });
+                this._userMap.TryAdd(coord, new List<RoomUser>() { user });
             }
             if (this.ValidTile(coord.X, coord.Y))
             {
-                this.mUserOnMap[coord.X, coord.Y] = 1;
+                this.UserOnMap[coord.X, coord.Y] = 1;
             }
         }
 
@@ -76,7 +77,7 @@ namespace Butterfly.Game.Rooms
         {
             if (user.Room != null)
             {
-                user.Room.SendPacket(user.Room.GetRoomItemHandler().TeleportUser(user, item.Coordinate, 0, item.GetZ)); //user.mRoom.GetGameMap().SqAbsoluteHeight(item.GetX, item.GetY)
+                user.Room.SendPacket(user.Room.GetRoomItemHandler().TeleportUser(user, item.Coordinate, 0, item.Z)); //user.mRoom.GetGameMap().SqAbsoluteHeight(item.GetX, item.GetY)
             }
 
             item.GetRoom().GetRoomUserManager().UpdateUserStatus(user, false);
@@ -96,30 +97,30 @@ namespace Butterfly.Game.Rooms
 
         public void RemoveUserFromMap(RoomUser user, Point coord)
         {
-            if (!this.userMap.ContainsKey(coord))
+            if (!this._userMap.ContainsKey(coord))
             {
                 if (this.ValidTile(coord.X, coord.Y))
                 {
-                    this.mUserOnMap[coord.X, coord.Y] = 0;
+                    this.UserOnMap[coord.X, coord.Y] = 0;
                 }
 
                 return;
             }
-            if (this.userMap[coord].Contains(user))
+            if (this._userMap[coord].Contains(user))
             {
-                this.userMap[coord].Remove(user);
+                this._userMap[coord].Remove(user);
             }
 
-            if (this.userMap[coord].Count > 0)
+            if (this._userMap[coord].Count > 0)
             {
                 return;
             }
 
-            this.userMap.TryRemove(coord, out List<RoomUser> UserList);
+            this._userMap.TryRemove(coord, out List<RoomUser> UserList);
 
             if (this.ValidTile(coord.X, coord.Y))
             {
-                this.mUserOnMap[coord.X, coord.Y] = 0;
+                this.UserOnMap[coord.X, coord.Y] = 0;
             }
         }
 
@@ -127,7 +128,7 @@ namespace Butterfly.Game.Rooms
         {
             if (this.ValidTile(X, Y))
             {
-                this.mSquareTaking[X, Y] = 1;
+                this.SquareTaking[X, Y] = 1;
             }
         }
 
@@ -135,7 +136,7 @@ namespace Butterfly.Game.Rooms
         {
             if (this.ValidTile(X, Y))
             {
-                this.mSquareTaking[X, Y] = 0;
+                this.SquareTaking[X, Y] = 0;
             }
         }
 
@@ -146,14 +147,14 @@ namespace Butterfly.Game.Rooms
                 return true;
             }
 
-            return this.room.RoomData.AllowWalkthrough || this.mSquareTaking[X, Y] == 0;
+            return this._roomInstance.RoomData.AllowWalkthrough || this.SquareTaking[X, Y] == 0;
         }
 
         public List<RoomUser> GetRoomUsers(Point coord)
         {
-            if (this.userMap.ContainsKey(coord))
+            if (this._userMap.ContainsKey(coord))
             {
-                return this.userMap[coord];
+                return this._userMap[coord];
             }
             else
             {
@@ -165,7 +166,7 @@ namespace Butterfly.Game.Rooms
         {
             List<RoomUser> UsersNear = new List<RoomUser>();
 
-            foreach (KeyValuePair<Point, List<RoomUser>> Users in this.userMap)
+            foreach (KeyValuePair<Point, List<RoomUser>> Users in this._userMap)
             {
                 if (Math.Abs(Users.Key.X - coord.X) > MaxDistance || Math.Abs(Users.Key.Y - coord.Y) > MaxDistance)
                 {
@@ -202,18 +203,13 @@ namespace Butterfly.Game.Rooms
             this.EffectMap[x, y] = 0;
             this.ItemHeightMap[x, y] = 0.0;
 
-            //if (x == this.Model.DoorX && y == this.Model.DoorY)
-            //{
-            //this.GameMap[x, y] = 3;
-            //}
-            //else 
             if (this.Model.SqState[x, y] == SquareState.OPEN)
             {
                 this.GameMap[x, y] = 1;
             }
         }
 
-        public void updateMapForItem(Item item)
+        public void UpdateMapForItem(Item item)
         {
             foreach (Point Coord in item.GetCoords)
             {
@@ -230,7 +226,7 @@ namespace Butterfly.Game.Rooms
             int MaxY = 0;
             if (checkLines)
             {
-                Item[] items = this.room.GetRoomItemHandler().GetFloor.ToArray();
+                Item[] items = this._roomInstance.GetRoomItemHandler().GetFloor.ToArray();
                 foreach (Item item in items.ToList())
                 {
                     if (item == null)
@@ -253,7 +249,6 @@ namespace Butterfly.Game.Rooms
                 }
 
                 Array.Clear(items, 0, items.Length);
-                items = null;
             }
 
             if (MaxY > (this.Model.MapSizeY - 1) || MaxX > (this.Model.MapSizeX - 1))
@@ -273,8 +268,8 @@ namespace Butterfly.Game.Rooms
 
             this.CoordinatedItems.Clear();
             this.GameMap = new byte[this.Model.MapSizeX, this.Model.MapSizeY];
-            this.mUserOnMap = new byte[this.Model.MapSizeX, this.Model.MapSizeY];
-            this.mSquareTaking = new byte[this.Model.MapSizeX, this.Model.MapSizeY];
+            this.UserOnMap = new byte[this.Model.MapSizeX, this.Model.MapSizeY];
+            this.SquareTaking = new byte[this.Model.MapSizeX, this.Model.MapSizeY];
             this.ItemHeightMap = new double[this.Model.MapSizeX, this.Model.MapSizeY];
             this.EffectMap = new byte[this.Model.MapSizeX, this.Model.MapSizeY];
 
@@ -285,9 +280,6 @@ namespace Butterfly.Game.Rooms
                     this.GameMap[chr, line] = 0;
                     this.EffectMap[chr, line] = 0;
 
-                    //if (chr == this.Model.DoorX && line == this.Model.DoorY)
-                    //this.GameMap[chr, line] = 3;
-                    //else 
                     if (this.Model.SqState[chr, line] == SquareState.OPEN)
                     {
                         this.GameMap[chr, line] = 1;
@@ -295,7 +287,7 @@ namespace Butterfly.Game.Rooms
                 }
             }
 
-            foreach (Item Item in this.room.GetRoomItemHandler().GetFloor.ToArray())
+            foreach (Item Item in this._roomInstance.GetRoomItemHandler().GetFloor.ToArray())
             {
                 if (!this.AddItemToMap(Item))
                 {
@@ -303,11 +295,11 @@ namespace Butterfly.Game.Rooms
                 }
             }
 
-            foreach (RoomUser user in this.room.GetRoomUserManager().GetUserList().ToList())
+            foreach (RoomUser user in this._roomInstance.GetRoomUserManager().GetUserList().ToList())
             {
                 if (this.ValidTile(user.X, user.Y))
                 {
-                    this.mUserOnMap[user.X, user.Y] = 1;
+                    this.UserOnMap[user.X, user.Y] = 1;
                 }
             }
         }
@@ -324,11 +316,11 @@ namespace Butterfly.Game.Rooms
                 {
                     if (Item.GetBaseItem().IsSeat || Item.GetBaseItem().InteractionType == InteractionType.BED)
                     {
-                        this.ItemHeightMap[Coord.X, Coord.Y] = Item.GetZ - this.Model.SqFloorHeight[Item.GetX, Item.GetY];
+                        this.ItemHeightMap[Coord.X, Coord.Y] = Item.Z - this.Model.SqFloorHeight[Item.X, Item.Y];
                     }
                     else
                     {
-                        this.ItemHeightMap[Coord.X, Coord.Y] = Item.TotalHeight - this.Model.SqFloorHeight[Item.GetX, Item.GetY];
+                        this.ItemHeightMap[Coord.X, Coord.Y] = Item.TotalHeight - this.Model.SqFloorHeight[Item.X, Item.Y];
                     }
 
                     switch (Item.GetBaseItem().InteractionType)
@@ -459,30 +451,30 @@ namespace Butterfly.Game.Rooms
             switch (item.GetBaseItem().InteractionType)
             {
                 case InteractionType.GUILD_GATE:
-                    this.room.GetGameItemHandler().AddGroupGate(item);
+                    this._roomInstance.GetGameItemHandler().AddGroupGate(item);
                     break;
                 case InteractionType.BANZAIFLOOR:
-                    this.room.GetBanzai().AddTile(item, item.Id);
+                    this._roomInstance.GetBanzai().AddTile(item, item.Id);
                     break;
                 case InteractionType.BANZAITELE:
-                    this.room.GetGameItemHandler().AddTeleport(item, item.Id);
+                    this._roomInstance.GetGameItemHandler().AddTeleport(item, item.Id);
                     item.ExtraData = "";
                     break;
                 //case InteractionType.banzaipuck:
                 //this.room.GetBanzai().AddPuck(item);
                 //break;
                 case InteractionType.BANZAIPYRAMID:
-                    this.room.GetGameItemHandler().AddPyramid(item, item.Id);
+                    this._roomInstance.GetGameItemHandler().AddPyramid(item, item.Id);
                     break;
                 case InteractionType.BANZAIBLO:
                 case InteractionType.BANZAIBLOB:
-                    this.room.GetGameItemHandler().AddBlob(item, item.Id);
+                    this._roomInstance.GetGameItemHandler().AddBlob(item, item.Id);
                     break;
                 case InteractionType.FREEZEEXIT:
-                    this.room.GetGameItemHandler().AddExitTeleport(item);
+                    this._roomInstance.GetGameItemHandler().AddExitTeleport(item);
                     break;
                 case InteractionType.FREEZETILEBLOCK:
-                    this.room.GetFreeze().AddFreezeBlock(item);
+                    this._roomInstance.GetFreeze().AddFreezeBlock(item);
                     break;
             }
         }
@@ -492,26 +484,26 @@ namespace Butterfly.Game.Rooms
             switch (item.GetBaseItem().InteractionType)
             {
                 case InteractionType.GUILD_GATE:
-                    this.room.GetGameItemHandler().RemoveGroupGate(item);
+                    this._roomInstance.GetGameItemHandler().RemoveGroupGate(item);
                     break;
                 case InteractionType.BANZAIFLOOR:
-                    this.room.GetBanzai().RemoveTile(item.Id);
+                    this._roomInstance.GetBanzai().RemoveTile(item.Id);
                     break;
                 case InteractionType.BANZAITELE:
-                    this.room.GetGameItemHandler().RemoveTeleport(item.Id);
+                    this._roomInstance.GetGameItemHandler().RemoveTeleport(item.Id);
                     break;
                 //case InteractionType.banzaipuck:
                 //this.room.GetBanzai().RemovePuck(item.Id);
                 //break;
                 case InteractionType.BANZAIPYRAMID:
-                    this.room.GetGameItemHandler().RemovePyramid(item.Id);
+                    this._roomInstance.GetGameItemHandler().RemovePyramid(item.Id);
                     break;
                 case InteractionType.BANZAIBLO:
                 case InteractionType.BANZAIBLOB:
-                    this.room.GetGameItemHandler().RemoveBlob(item.Id);
+                    this._roomInstance.GetGameItemHandler().RemoveBlob(item.Id);
                     break;
                 case InteractionType.FREEZETILEBLOCK:
-                    this.room.GetFreeze().RemoveFreezeBlock(item.Id);
+                    this._roomInstance.GetFreeze().RemoveFreezeBlock(item.Id);
                     break;
                 case InteractionType.FOOTBALLGOALGREEN:
                 case InteractionType.FOOTBALLCOUNTERGREEN:
@@ -519,7 +511,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEGREEN:
                 case InteractionType.FREEZEGREENCOUNTER:
                 case InteractionType.FREEZEGREENGATE:
-                    this.room.GetGameManager().RemoveFurnitureFromTeam(item, Team.green);
+                    this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.green);
                     break;
                 case InteractionType.FOOTBALLGOALYELLOW:
                 case InteractionType.FOOTBALLCOUNTERYELLOW:
@@ -527,7 +519,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEYELLOW:
                 case InteractionType.FREEZEYELLOWCOUNTER:
                 case InteractionType.FREEZEYELLOWGATE:
-                    this.room.GetGameManager().RemoveFurnitureFromTeam(item, Team.yellow);
+                    this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.yellow);
                     break;
                 case InteractionType.footballgoalblue:
                 case InteractionType.FOOTBALLCOUNTERBLUE:
@@ -535,7 +527,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEBLUE:
                 case InteractionType.FREEZEBLUECOUNTER:
                 case InteractionType.FREEZEBLUEGATE:
-                    this.room.GetGameManager().RemoveFurnitureFromTeam(item, Team.blue);
+                    this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.blue);
                     break;
                 case InteractionType.FOOTBALLGOALRED:
                 case InteractionType.FOOTBALLCOUNTERRED:
@@ -543,19 +535,19 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATERED:
                 case InteractionType.FREEZEREDCOUNTER:
                 case InteractionType.FREEZEREDGATE:
-                    this.room.GetGameManager().RemoveFurnitureFromTeam(item, Team.red);
+                    this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.red);
                     break;
                 case InteractionType.FREEZEEXIT:
-                    this.room.GetGameItemHandler().RemoveExitTeleport(item);
+                    this._roomInstance.GetGameItemHandler().RemoveExitTeleport(item);
                     break;
             }
         }
 
         public bool RemoveFromMap(Item item)
         {
-            if (this.room.GotWired() && WiredUtillity.TypeIsWired(item.GetBaseItem().InteractionType))
+            if (this._roomInstance.GotWired() && WiredUtillity.TypeIsWired(item.GetBaseItem().InteractionType))
             {
-                this.room.GetWiredHandler().RemoveFurniture(item);
+                this._roomInstance.GetWiredHandler().RemoveFurniture(item);
             }
 
             this.RemoveSpecialItem(item);
@@ -598,16 +590,14 @@ namespace Butterfly.Game.Rooms
                 }
             }
             NoDoublons.Clear();
-            NoDoublons = null;
-
             return flag;
         }
 
         public bool AddItemToMap(Item item)
         {
-            if (this.room.GotWired() && WiredUtillity.TypeIsWired(item.GetBaseItem().InteractionType))
+            if (this._roomInstance.GotWired() && WiredUtillity.TypeIsWired(item.GetBaseItem().InteractionType))
             {
-                this.room.GetWiredHandler().AddFurniture(item);
+                this._roomInstance.GetWiredHandler().AddFurniture(item);
             }
 
             this.AddSpecialItems(item);
@@ -615,9 +605,9 @@ namespace Butterfly.Game.Rooms
             switch (item.GetBaseItem().InteractionType)
             {
                 case InteractionType.ROLLER:
-                    if (!this.room.GetRoomItemHandler().GetRollers().Contains(item))
+                    if (!this._roomInstance.GetRoomItemHandler().GetRollers().Contains(item))
                     {
-                        this.room.GetRoomItemHandler().TryAddRoller(item.Id, item);
+                        this._roomInstance.GetRoomItemHandler().TryAddRoller(item.Id, item);
                     }
 
                     break;
@@ -627,7 +617,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEGREEN:
                 case InteractionType.FREEZEGREENCOUNTER:
                 case InteractionType.FREEZEGREENGATE:
-                    this.room.GetGameManager().AddFurnitureToTeam(item, Team.green);
+                    this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.green);
                     break;
                 case InteractionType.FOOTBALLGOALYELLOW:
                 case InteractionType.FOOTBALLCOUNTERYELLOW:
@@ -635,7 +625,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEYELLOW:
                 case InteractionType.FREEZEYELLOWCOUNTER:
                 case InteractionType.FREEZEYELLOWGATE:
-                    this.room.GetGameManager().AddFurnitureToTeam(item, Team.yellow);
+                    this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.yellow);
                     break;
                 case InteractionType.footballgoalblue:
                 case InteractionType.FOOTBALLCOUNTERBLUE:
@@ -643,7 +633,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEBLUE:
                 case InteractionType.FREEZEBLUECOUNTER:
                 case InteractionType.FREEZEBLUEGATE:
-                    this.room.GetGameManager().AddFurnitureToTeam(item, Team.blue);
+                    this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.blue);
                     break;
                 case InteractionType.FOOTBALLGOALRED:
                 case InteractionType.FOOTBALLCOUNTERRED:
@@ -651,7 +641,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATERED:
                 case InteractionType.FREEZEREDCOUNTER:
                 case InteractionType.FREEZEREDGATE:
-                    this.room.GetGameManager().AddFurnitureToTeam(item, Team.red);
+                    this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.red);
                     break;
             }
 
@@ -688,7 +678,7 @@ namespace Butterfly.Game.Rooms
             }
             else
             {
-                return (this.mUserOnMap[X, Y] == 0 || NoUser) && (this.GameMap[X, Y] == 1 || this.GameMap[X, Y] == 2);
+                return (this.UserOnMap[X, Y] == 0 || NoUser) && (this.GameMap[X, Y] == 1 || this.GameMap[X, Y] == 2);
             }
         }
 
@@ -700,7 +690,7 @@ namespace Butterfly.Game.Rooms
             }
             else
             {
-                return (this.room.RoomData.AllowWalkthrough || Override || this.mUserOnMap[X, Y] == 0) && CanWalkState(this.GameMap[X, Y], Override);
+                return (this._roomInstance.RoomData.AllowWalkthrough || Override || this.UserOnMap[X, Y] == 0) && CanWalkState(this.GameMap[X, Y], Override);
             };
         }
 
@@ -868,7 +858,7 @@ namespace Butterfly.Game.Rooms
             {
                 foreach (Item roomItem in this.CoordinatedItems[point])
                 {
-                    if (roomItem.GetZ > minZ && roomItem.GetX == pX && roomItem.GetY == pY)
+                    if (roomItem.Z > minZ && roomItem.X == pX && roomItem.Y == pY)
                     {
                         list.Add(roomItem);
                     }
@@ -1147,60 +1137,59 @@ namespace Butterfly.Game.Rooms
         {
             if (this.SquareHasUsers(X - 1, Y))
             {
-                return this.room.GetRoomUserManager().GetUserForSquare(X - 1, Y);
+                return this._roomInstance.GetRoomUserManager().GetUserForSquare(X - 1, Y);
             }
             else if (this.SquareHasUsers(X + 1, Y))
             {
-                return this.room.GetRoomUserManager().GetUserForSquare(X + 1, Y);
+                return this._roomInstance.GetRoomUserManager().GetUserForSquare(X + 1, Y);
             }
             else if (this.SquareHasUsers(X, Y - 1))
             {
-                return this.room.GetRoomUserManager().GetUserForSquare(X, Y - 1);
+                return this._roomInstance.GetRoomUserManager().GetUserForSquare(X, Y - 1);
             }
             else if (this.SquareHasUsers(X, Y + 1))
             {
-                return this.room.GetRoomUserManager().GetUserForSquare(X, Y + 1);
+                return this._roomInstance.GetRoomUserManager().GetUserForSquare(X, Y + 1);
             }
 
             return null;
         }
 
-
         public RoomUser LookHasUserNearNotBot(int X, int Y, int Distance = 0)
         {
             Distance++;
-            if (this.room.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y) != null)
+            if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y) != null)
             {
-                return this.room.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y);
+                return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y);
             }
-            else if (this.room.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y) != null)
+            else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y) != null)
             {
-                return this.room.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y);
+                return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y);
             }
-            else if (this.room.GetRoomUserManager().GetUserForSquareNotBot(X, Y - Distance) != null)
+            else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X, Y - Distance) != null)
             {
-                return this.room.GetRoomUserManager().GetUserForSquareNotBot(X, Y - Distance);
+                return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X, Y - Distance);
             }
-            else if (this.room.GetRoomUserManager().GetUserForSquareNotBot(X, Y + Distance) != null)
+            else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X, Y + Distance) != null)
             {
-                return this.room.GetRoomUserManager().GetUserForSquareNotBot(X, Y + Distance);
+                return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X, Y + Distance);
             }
             //diago
-            else if (this.room.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y + Distance) != null)
+            else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y + Distance) != null)
             {
-                return this.room.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y + Distance);
+                return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y + Distance);
             }
-            else if (this.room.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y - Distance) != null)
+            else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y - Distance) != null)
             {
-                return this.room.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y + Distance);
+                return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y + Distance);
             }
-            else if (this.room.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y + Distance) != null)
+            else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y + Distance) != null)
             {
-                return this.room.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y + Distance);
+                return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y + Distance);
             }
-            else if (this.room.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y - Distance) != null)
+            else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y - Distance) != null)
             {
-                return this.room.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y + Distance);
+                return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y + Distance);
             }
 
             return null;
@@ -1213,7 +1202,7 @@ namespace Butterfly.Game.Rooms
                 return false;
             }
 
-            if (this.mUserOnMap[X, Y] == 0)
+            if (this.UserOnMap[X, Y] == 0)
             {
                 return false;
             }
@@ -1233,14 +1222,14 @@ namespace Butterfly.Game.Rooms
 
         public void Destroy()
         {
-            this.userMap.Clear();
+            this._userMap.Clear();
             this.Model.Destroy();
             this.CoordinatedItems.Clear();
             Array.Clear(this.GameMap, 0, this.GameMap.Length);
             Array.Clear(this.EffectMap, 0, this.EffectMap.Length);
             Array.Clear(this.ItemHeightMap, 0, this.ItemHeightMap.Length);
-            Array.Clear(this.mUserOnMap, 0, this.mUserOnMap.Length);
-            Array.Clear(this.mSquareTaking, 0, this.mSquareTaking.Length);
+            Array.Clear(this.UserOnMap, 0, this.UserOnMap.Length);
+            Array.Clear(this.SquareTaking, 0, this.SquareTaking.Length);
         }
     }
 }

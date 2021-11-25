@@ -72,9 +72,9 @@ namespace Butterfly.Game.Items.Interactors
                     return;
                 }
 
-                int OldX = Item.GetX;
-                int OldY = Item.GetY;
-                double OldZ = Item.GetZ;
+                int OldX = Item.X;
+                int OldY = Item.Y;
+                double OldZ = Item.Z;
                 double Newz = Item.GetRoom().GetGameMap().SqAbsoluteHeight(newX, newY);
                 if (Item.GetRoom().GetRoomItemHandler().SetFloorItem(roomUserByHabbo.GetClient(), Item, newX, newY, Item.Rotation, false, false, false))
                 {

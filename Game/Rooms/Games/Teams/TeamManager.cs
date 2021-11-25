@@ -4,10 +4,10 @@ namespace Butterfly.Game.Rooms.Games
 {
     public class TeamManager
     {
-        public List<RoomUser> BlueTeam;
-        public List<RoomUser> RedTeam;
-        public List<RoomUser> YellowTeam;
-        public List<RoomUser> GreenTeam;
+        public List<RoomUser> BlueTeam { get; set; }
+        public List<RoomUser> RedTeam { get; set; }
+        public List<RoomUser> YellowTeam { get; set; }
+        public List<RoomUser> GreenTeam { get; set; }
 
         public TeamManager()
         {
@@ -29,24 +29,24 @@ namespace Butterfly.Game.Rooms.Games
             return Players;
         }
 
-        public bool CanEnterOnTeam(Team t)
+        public bool CanEnterOnTeam(TeamType t)
         {
-            if (t.Equals(Team.blue))
+            if (t.Equals(TeamType.blue))
             {
                 return this.BlueTeam.Count < 5;
             }
 
-            if (t.Equals(Team.red))
+            if (t.Equals(TeamType.red))
             {
                 return this.RedTeam.Count < 5;
             }
 
-            if (t.Equals(Team.yellow))
+            if (t.Equals(TeamType.yellow))
             {
                 return this.YellowTeam.Count < 5;
             }
 
-            if (t.Equals(Team.green))
+            if (t.Equals(TeamType.green))
             {
                 return this.GreenTeam.Count < 5;
             }
@@ -56,19 +56,19 @@ namespace Butterfly.Game.Rooms.Games
 
         public void AddUser(RoomUser user)
         {
-            if (user.Team.Equals(Team.blue))
+            if (user.Team.Equals(TeamType.blue))
             {
                 this.BlueTeam.Add(user);
             }
-            else if (user.Team.Equals(Team.red))
+            else if (user.Team.Equals(TeamType.red))
             {
                 this.RedTeam.Add(user);
             }
-            else if (user.Team.Equals(Team.yellow))
+            else if (user.Team.Equals(TeamType.yellow))
             {
                 this.YellowTeam.Add(user);
             }
-            else if (user.Team.Equals(Team.green))
+            else if (user.Team.Equals(TeamType.green))
             {
                 this.GreenTeam.Add(user);
             }
@@ -76,19 +76,19 @@ namespace Butterfly.Game.Rooms.Games
 
         public void OnUserLeave(RoomUser user)
         {
-            if (user.Team.Equals(Team.blue))
+            if (user.Team.Equals(TeamType.blue))
             {
                 this.BlueTeam.Remove(user);
             }
-            else if (user.Team.Equals(Team.red))
+            else if (user.Team.Equals(TeamType.red))
             {
                 this.RedTeam.Remove(user);
             }
-            else if (user.Team.Equals(Team.yellow))
+            else if (user.Team.Equals(TeamType.yellow))
             {
                 this.YellowTeam.Remove(user);
             }
-            else if (user.Team.Equals(Team.green))
+            else if (user.Team.Equals(TeamType.green))
             {
                 this.GreenTeam.Remove(user);
             }

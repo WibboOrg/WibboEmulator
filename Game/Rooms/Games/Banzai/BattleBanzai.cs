@@ -14,36 +14,36 @@ namespace Butterfly.Game.Rooms.Games
 {
     public class BattleBanzai
     {
-        private Room room;
-        public Dictionary<int, Item> banzaiTiles;
-        private bool banzaiStarted;
-        private byte[,] floorMap;
-        private GameField field;
-        private int TilesUsed;
+        public Dictionary<int, Item> BanzaiTiles { get; set; }
 
-        public bool isBanzaiActive => this.banzaiStarted;
+        private Room _roomInstance;
+        private bool _banzaiStarted;
+        private byte[,] _floorMap;
+        private GameField _field;
+        private int _tilesUsed;
 
         public BattleBanzai(Room room)
         {
-            this.room = room;
-            this.banzaiTiles = new Dictionary<int, Item>();
-            this.banzaiStarted = false;
-            this.TilesUsed = 0;
+            this.BanzaiTiles = new Dictionary<int, Item>();
+
+            this._roomInstance = room;
+            this._banzaiStarted = false;
+            this._tilesUsed = 0;
         }
 
         public void AddTile(Item item, int itemID)
         {
-            if (this.banzaiTiles.ContainsKey(itemID))
+            if (this.BanzaiTiles.ContainsKey(itemID))
             {
                 return;
             }
 
-            this.banzaiTiles.Add(itemID, item);
+            this.BanzaiTiles.Add(itemID, item);
         }
 
         public void RemoveTile(int itemID)
         {
-            this.banzaiTiles.Remove(itemID);
+            this.BanzaiTiles.Remove(itemID);
         }
 
         public void OnUserWalk(RoomUser User)
@@ -53,7 +53,7 @@ namespace Butterfly.Game.Rooms.Games
                 return;
             }
 
-            List<Item> roomItemForSquare = this.room.GetGameMap().GetCoordinatedItems(new Point(User.SetX, User.SetY));
+            List<Item> roomItemForSquare = this._roomInstance.GetGameMap().GetCoordinatedItems(new Point(User.SetX, User.SetY));
 
             foreach (Item Ball in roomItemForSquare)
             {
@@ -63,80 +63,80 @@ namespace Butterfly.Game.Rooms.Games
                 }
 
                 int Lenght = 1;
-                int GoalX = Ball.GetX;
-                int GoalY = Ball.GetY;
+                int GoalX = Ball.X;
+                int GoalY = Ball.Y;
 
                 switch (User.RotBody)
                 {
                     case 0:
-                        GoalX = Ball.GetX;
-                        GoalY = Ball.GetY - Lenght;
+                        GoalX = Ball.X;
+                        GoalY = Ball.Y - Lenght;
                         break;
                     case 1:
-                        GoalX = Ball.GetX + Lenght;
-                        GoalY = Ball.GetY - Lenght;
+                        GoalX = Ball.X + Lenght;
+                        GoalY = Ball.Y - Lenght;
                         break;
                     case 2:
-                        GoalX = Ball.GetX + Lenght;
-                        GoalY = Ball.GetY;
+                        GoalX = Ball.X + Lenght;
+                        GoalY = Ball.Y;
                         break;
                     case 3:
-                        GoalX = Ball.GetX + Lenght;
-                        GoalY = Ball.GetY + Lenght;
+                        GoalX = Ball.X + Lenght;
+                        GoalY = Ball.Y + Lenght;
                         break;
                     case 4:
-                        GoalX = Ball.GetX;
-                        GoalY = Ball.GetY + Lenght;
+                        GoalX = Ball.X;
+                        GoalY = Ball.Y + Lenght;
                         break;
                     case 5:
-                        GoalX = Ball.GetX - Lenght;
-                        GoalY = Ball.GetY + Lenght;
+                        GoalX = Ball.X - Lenght;
+                        GoalY = Ball.Y + Lenght;
                         break;
                     case 6:
-                        GoalX = Ball.GetX - Lenght;
-                        GoalY = Ball.GetY;
+                        GoalX = Ball.X - Lenght;
+                        GoalY = Ball.Y;
                         break;
                     case 7:
-                        GoalX = Ball.GetX - Lenght;
-                        GoalY = Ball.GetY - Lenght;
+                        GoalX = Ball.X - Lenght;
+                        GoalY = Ball.Y - Lenght;
                         break;
                 }
 
-                if (!this.room.GetGameMap().CanStackItem(GoalX, GoalY))
+                if (!this._roomInstance.GetGameMap().CanStackItem(GoalX, GoalY))
                 {
                     switch (User.RotBody)
                     {
                         case 0:
-                            GoalX = Ball.GetX;
-                            GoalY = Ball.GetY + Lenght;
+                            GoalX = Ball.X;
+                            GoalY = Ball.Y + Lenght;
                             break;
                         case 1:
-                            GoalX = Ball.GetX - Lenght;
-                            GoalY = Ball.GetY + Lenght;
+                            GoalX = Ball.X - Lenght;
+                            GoalY = Ball.Y + Lenght;
                             break;
                         case 2:
-                            GoalX = Ball.GetX - Lenght;
-                            GoalY = Ball.GetY;
+                            GoalX = Ball.X - Lenght;
+                            GoalY = Ball.Y;
                             break;
                         case 3:
-                            GoalX = Ball.GetX - Lenght;
-                            GoalY = Ball.GetY - Lenght;
+                            GoalX = Ball.X - Lenght;
+                            GoalY = Ball.Y - Lenght;
                             break;
                         case 4:
-                            GoalX = Ball.GetX;
-                            GoalY = Ball.GetY - Lenght;
+                            GoalX = Ball.X;
+                            GoalY = Ball.Y - Lenght;
                             break;
                         case 5:
-                            GoalX = Ball.GetX + Lenght;
-                            GoalY = Ball.GetY - Lenght;
+                            GoalX = Ball.X + Lenght;
+                            GoalY = Ball.Y - Lenght;
                             break;
                         case 6:
-                            GoalX = Ball.GetX + Lenght;
-                            GoalY = Ball.GetY;
+                            GoalX = Ball.X + Lenght;
+                            GoalY = Ball.Y;
                             break;
                         case 7:
-                            GoalX = Ball.GetX + Lenght;
-                            GoalY = Ball.GetY + Lenght;
+                            GoalX = Ball.X + Lenght;
+                            GoalY = Ball.Y + Lenght;
                             break;
                     }
                 }
@@ -147,65 +147,65 @@ namespace Butterfly.Game.Rooms.Games
 
         public void BanzaiStart()
         {
-            if (this.banzaiStarted)
+            if (this._banzaiStarted)
             {
                 return;
             }
 
-            this.banzaiStarted = true;
+            this._banzaiStarted = true;
 
-            this.room.GetGameItemHandler().ResetAllBlob();
-            this.room.GetGameManager().Reset();
-            this.floorMap = new byte[this.room.GetGameMap().Model.MapSizeY, this.room.GetGameMap().Model.MapSizeX];
-            this.field = new GameField(this.floorMap, true);
+            this._roomInstance.GetGameItemHandler().ResetAllBlob();
+            this._roomInstance.GetGameManager().Reset();
+            this._floorMap = new byte[this._roomInstance.GetGameMap().Model.MapSizeY, this._roomInstance.GetGameMap().Model.MapSizeX];
+            this._field = new GameField(this._floorMap, true);
 
             for (int index = 1; index < 5; ++index)
             {
-                this.room.GetGameManager().Points[index] = 0;
+                this._roomInstance.GetGameManager().Points[index] = 0;
             }
 
-            foreach (Item roomItem in (IEnumerable)this.banzaiTiles.Values)
+            foreach (Item roomItem in (IEnumerable)this.BanzaiTiles.Values)
             {
                 roomItem.ExtraData = "1";
                 roomItem.Value = 0;
-                roomItem.Team = Team.none;
+                roomItem.Team = TeamType.none;
                 roomItem.UpdateState();
             }
 
-            this.TilesUsed = 0;
+            this._tilesUsed = 0;
         }
 
         public void BanzaiEnd()
         {
-            if (!this.banzaiStarted)
+            if (!this._banzaiStarted)
             {
                 return;
             }
 
-            this.banzaiStarted = false;
+            this._banzaiStarted = false;
 
-            this.field.destroy();
+            this._field.destroy();
 
-            if (this.banzaiTiles.Count == 0)
+            if (this.BanzaiTiles.Count == 0)
             {
                 return;
             }
 
-            Team winningTeam = this.room.GetGameManager().getWinningTeam();
+            TeamType winningTeam = this._roomInstance.GetGameManager().GetWinningTeam();
 
-            foreach (RoomUser user in this.room.GetTeamManager().GetAllPlayer())
+            foreach (RoomUser user in this._roomInstance.GetTeamManager().GetAllPlayer())
             {
                 this.EndGame(user, winningTeam);
             }
         }
 
-        private void EndGame(RoomUser roomUser, Team winningTeam)
+        private void EndGame(RoomUser roomUser, TeamType winningTeam)
         {
-            if (roomUser.Team == winningTeam && winningTeam != Team.none)
+            if (roomUser.Team == winningTeam && winningTeam != TeamType.none)
             {
-                this.room.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
+                this._roomInstance.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
             }
-            else if (roomUser.Team != Team.none)
+            else if (roomUser.Team != TeamType.none)
             {
                 Item FirstTile = this.GetFirstTile(roomUser.X, roomUser.Y);
 
@@ -214,24 +214,24 @@ namespace Butterfly.Game.Rooms.Games
                     return;
                 }
 
-                if (this.room.GetGameItemHandler().GetExitTeleport() != null)
+                if (this._roomInstance.GetGameItemHandler().GetExitTeleport() != null)
                 {
-                    this.room.GetGameMap().TeleportToItem(roomUser, this.room.GetGameItemHandler().GetExitTeleport());
+                    this._roomInstance.GetGameMap().TeleportToItem(roomUser, this._roomInstance.GetGameItemHandler().GetExitTeleport());
                 }
 
                 TeamManager managerForBanzai = roomUser.GetClient().GetHabbo().CurrentRoom.GetTeamManager();
                 managerForBanzai.OnUserLeave(roomUser);
-                this.room.GetGameManager().UpdateGatesTeamCounts();
+                this._roomInstance.GetGameManager().UpdateGatesTeamCounts();
                 roomUser.ApplyEffect(0);
-                roomUser.Team = Team.none;
+                roomUser.Team = TeamType.none;
 
                 roomUser.GetClient().SendPacket(new IsPlayingComposer(false));
             }
         }
 
-        public void MovePuck(Item item, Client mover, int newX, int newY, Team team)
+        public void MovePuck(Item item, Client mover, int newX, int newY, TeamType team)
         {
-            if (item == null || mover == null || !this.room.GetGameMap().CanStackItem(newX, newY))
+            if (item == null || mover == null || !this._roomInstance.GetGameMap().CanStackItem(newX, newY))
             {
                 return;
             }
@@ -240,8 +240,8 @@ namespace Butterfly.Game.Rooms.Games
             item.UpdateState();
 
 
-            double newZ = (double)this.room.GetGameMap().SqAbsoluteHeight(newX, newY);
-            if (this.room.GetRoomItemHandler().SetFloorItem(item, newX, newY, newZ))
+            double newZ = (double)this._roomInstance.GetGameMap().SqAbsoluteHeight(newX, newY);
+            if (this._roomInstance.GetRoomItemHandler().SetFloorItem(item, newX, newY, newZ))
             {
                 ServerPacket Message = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
                 Message.WriteInteger(item.Coordinate.X);
@@ -250,21 +250,21 @@ namespace Butterfly.Game.Rooms.Games
                 Message.WriteInteger(newY);
                 Message.WriteInteger(1);
                 Message.WriteInteger(item.Id);
-                Message.WriteString(item.GetZ.ToString().Replace(',', '.'));
-                Message.WriteString(newZ.ToString().Replace(',', '.'));
+                Message.WriteString(item.Z.ToString());
+                Message.WriteString(newZ.ToString());
                 Message.WriteInteger(0);
-                this.room.SendPacket(Message);
+                this._roomInstance.SendPacket(Message);
             }
 
-            if (!this.banzaiStarted)
+            if (!this._banzaiStarted)
             {
                 return;
             }
 
-            this.HandleBanzaiTiles(new Point(newX, newY), team, this.room.GetRoomUserManager().GetRoomUserByHabboId(mover.GetHabbo().Id));
+            this.HandleBanzaiTiles(new Point(newX, newY), team, this._roomInstance.GetRoomUserManager().GetRoomUserByHabboId(mover.GetHabbo().Id));
         }
 
-        private void SetTile(Item item, Team team, RoomUser user)
+        private void SetTile(Item item, TeamType team, RoomUser user)
         {
             if (item.Team == team)
             {
@@ -273,23 +273,23 @@ namespace Butterfly.Game.Rooms.Games
                     ++item.Value;
                     if (item.Value == 3)
                     {
-                        this.room.GetGameManager().AddPointToTeam(item.Team, user);
-                        this.field.updateLocation(item.GetX, item.GetY, (byte)team);
-                        foreach (PointField pointField in this.field.doUpdate(false))
+                        this._roomInstance.GetGameManager().AddPointToTeam(item.Team, user);
+                        this._field.updateLocation(item.X, item.Y, (byte)team);
+                        foreach (PointField pointField in this._field.doUpdate(false))
                         {
-                            Team team1 = (Team)pointField.forValue;
+                            TeamType team1 = (TeamType)pointField.forValue;
                             foreach (Point point in pointField.getPoints())
                             {
-                                if (this.floorMap[point.Y, point.X] == (byte)team1)
+                                if (this._floorMap[point.Y, point.X] == (byte)team1)
                                 {
                                     continue;
                                 }
 
-                                this.HandleMaxBanzaiTiles(new Point(point.X, point.Y), team1, user, (Team)this.floorMap[point.Y, point.X]);
-                                this.floorMap[point.Y, point.X] = pointField.forValue;
+                                this.HandleMaxBanzaiTiles(new Point(point.X, point.Y), team1, user, (TeamType)this._floorMap[point.Y, point.X]);
+                                this._floorMap[point.Y, point.X] = pointField.forValue;
                             }
                         }
-                        this.TilesUsed++;
+                        this._tilesUsed++;
                     }
                 }
             }
@@ -304,7 +304,7 @@ namespace Butterfly.Game.Rooms.Games
 
         private Item GetFirstTile(int x, int y)
         {
-            foreach (Item roomItem in this.room.GetGameMap().GetCoordinatedItems(new Point(x, y)))
+            foreach (Item roomItem in this._roomInstance.GetGameMap().GetCoordinatedItems(new Point(x, y)))
             {
                 if (roomItem.GetBaseItem().InteractionType == InteractionType.BANZAIFLOOR)
                 {
@@ -314,9 +314,9 @@ namespace Butterfly.Game.Rooms.Games
             return null;
         }
 
-        public void HandleBanzaiTiles(Point coord, Team team, RoomUser user)
+        public void HandleBanzaiTiles(Point coord, TeamType team, RoomUser user)
         {
-            if (!this.banzaiStarted || team == Team.none || this.banzaiTiles.Count == 0)
+            if (!this._banzaiStarted || team == TeamType.none || this.BanzaiTiles.Count == 0)
             {
                 return;
             }
@@ -335,7 +335,7 @@ namespace Butterfly.Game.Rooms.Games
             this.SetTile(roomItem, team, user);
             roomItem.UpdateState(false, true);
 
-            if (this.TilesUsed != this.banzaiTiles.Count)
+            if (this._tilesUsed != this.BanzaiTiles.Count)
             {
                 return;
             }
@@ -343,9 +343,9 @@ namespace Butterfly.Game.Rooms.Games
             this.BanzaiEnd();
         }
 
-        private void HandleMaxBanzaiTiles(Point coord, Team team, RoomUser user, Team oldteam)
+        private void HandleMaxBanzaiTiles(Point coord, TeamType team, RoomUser user, TeamType oldteam)
         {
-            if (team == Team.none)
+            if (team == TeamType.none)
             {
                 return;
             }
@@ -358,16 +358,16 @@ namespace Butterfly.Game.Rooms.Games
 
             if (roomItem.Value != 3)
             {
-                this.TilesUsed++;
+                this._tilesUsed++;
             }
 
             SetMaxForTile(roomItem, team);
-            this.room.GetGameManager().AddPointToTeam(team, user);
-            this.room.GetGameManager().AddPointToTeam(oldteam, -1, user);
+            this._roomInstance.GetGameManager().AddPointToTeam(team, user);
+            this._roomInstance.GetGameManager().AddPointToTeam(oldteam, -1, user);
             roomItem.UpdateState(false, true);
         }
 
-        private static void SetMaxForTile(Item item, Team team)
+        private static void SetMaxForTile(Item item, TeamType team)
         {
             if (item.Value < 3)
             {
@@ -381,13 +381,13 @@ namespace Butterfly.Game.Rooms.Games
 
         public void Destroy()
         {
-            this.banzaiTiles.Clear();
-            Array.Clear(this.floorMap, 0, this.floorMap.Length);
-            this.field.destroy();
-            this.room = null;
-            this.banzaiTiles = null;
-            this.floorMap = null;
-            this.field = null;
+            this.BanzaiTiles.Clear();
+            Array.Clear(this._floorMap, 0, this._floorMap.Length);
+            this._field.destroy();
+            this._roomInstance = null;
+            this.BanzaiTiles = null;
+            this._floorMap = null;
+            this._field = null;
         }
     }
 }

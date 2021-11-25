@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            string DecorationKey = string.Empty;
+            string DecorationKey;
             switch (userItem.GetBaseItem().InteractionType)
             {
                 case InteractionType.FLOOR:

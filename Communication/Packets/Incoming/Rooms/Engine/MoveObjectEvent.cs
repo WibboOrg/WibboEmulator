@@ -13,7 +13,7 @@ using Butterfly.Game.Clients;using Butterfly.Game.Items;using Butterfly.Game.Q
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", Session.Langue));
                 return;
-            }            int newX = Packet.PopInt();            int newY = Packet.PopInt();            int newRot = Packet.PopInt();            Packet.PopInt();            if (newX != roomItem.GetX || newY != roomItem.GetY)
+            }            int newX = Packet.PopInt();            int newY = Packet.PopInt();            int newRot = Packet.PopInt();            Packet.PopInt();            if (newX != roomItem.X || newY != roomItem.Y)
             {
                 ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_MOVE, 0);
             }
@@ -23,7 +23,7 @@ using Butterfly.Game.Clients;using Butterfly.Game.Items;using Butterfly.Game.Q
                 ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_ROTATE, 0);
             }
 
-            if (roomItem.GetZ >= 0.1)
+            if (roomItem.Z >= 0.1)
             {
                 ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_STACK, 0);
             }
