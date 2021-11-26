@@ -47,9 +47,7 @@ namespace Butterfly.Game
         private readonly AnimationManager _animationManager;
 
         private Thread _gameLoop;
-        public static bool GameLoopEnabled = true;
         public bool GameLoopActive;
-        public bool GameLoopEnded;
 
         private readonly Stopwatch _moduleWatch;
 
@@ -222,37 +220,34 @@ namespace Butterfly.Game
             {
                 try
                 {
-                    if (GameLoopEnabled)
+                    this._moduleWatch.Restart();
+
+                    LowPriorityWorker.Process();
+
+                    if (this._moduleWatch.ElapsedMilliseconds > 500)
                     {
-                        this._moduleWatch.Restart();
-
-                        LowPriorityWorker.Process();
-
-                        if (this._moduleWatch.ElapsedMilliseconds > 500)
-                        {
-                            Console.WriteLine("High latency in LowPriorityWorker.Process ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
-                        }
-
-                        this._moduleWatch.Restart();
-
-                        this._roomManager.OnCycle(this._moduleWatch);
-
-                        if (this._moduleWatch.ElapsedMilliseconds > 500)
-                        {
-                            Console.WriteLine("High latency in RoomManager ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
-                        }
-
-                        this._moduleWatch.Restart();
-
-                        this._animationManager.OnCycle(this._moduleWatch);
-
-                        if (this._moduleWatch.ElapsedMilliseconds > 500)
-                        {
-                            Console.WriteLine("High latency in AnimationManager ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
-                        }
-
-                        this._moduleWatch.Restart();
+                        Console.WriteLine("High latency in LowPriorityWorker.Process ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
                     }
+
+                    this._moduleWatch.Restart();
+
+                    this._roomManager.OnCycle(this._moduleWatch);
+
+                    if (this._moduleWatch.ElapsedMilliseconds > 500)
+                    {
+                        Console.WriteLine("High latency in RoomManager ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
+                    }
+
+                    this._moduleWatch.Restart();
+
+                    this._animationManager.OnCycle(this._moduleWatch);
+
+                    if (this._moduleWatch.ElapsedMilliseconds > 500)
+                    {
+                        Console.WriteLine("High latency in AnimationManager ({0} ms)", this._moduleWatch.ElapsedMilliseconds);
+                    }
+
+                    this._moduleWatch.Restart();
                 }
                 catch (OperationCanceledException e)
                 {
@@ -263,12 +258,11 @@ namespace Butterfly.Game
             }
 
             Console.WriteLine("MainGameLoop end");
-            this.GameLoopEnded = true;
         }
 
         public static void DatabaseCleanup()
         {
-            //#if !DEBUG
+            #if !DEBUG
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserDao.UpdateAllOnline(dbClient);
@@ -277,7 +271,7 @@ namespace Butterfly.Game
                 RoomDao.UpdateResetUsersNow(dbClient);
                 EmulatorStatusDao.UpdateReset(dbClient);
             }
-            //#endif
+            #endif
         }
 
         public void Destroy()

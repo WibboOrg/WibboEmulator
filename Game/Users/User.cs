@@ -1,5 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Handshake;
+using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
@@ -7,30 +8,26 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.Achievements;
 using Butterfly.Game.Chat.Logs;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Roleplay;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms;
+using Butterfly.Game.Users.Achievements;
 using Butterfly.Game.Users.Badges;
+using Butterfly.Game.Users.Data;
 using Butterfly.Game.Users.Inventory;
 using Butterfly.Game.Users.Messenger;
+using Butterfly.Game.Users.Wardrobes;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Butterfly.Game.Users.Data;
-using Butterfly.Communication.Packets.Outgoing.Help;
 
 namespace Butterfly.Game.Users
 {
     public class User
     {
-        public bool forceOpenGift;
-        public int forceUse = -1;
-        public int forceRot = -1;
-        public int ChatColor = -1;
         public int Id;
         public string Username;
         public int Rank;
@@ -55,42 +52,49 @@ namespace Butterfly.Game.Users
         public bool IsTeleporting;
         public int TeleportingRoomID;
         public int TeleporterId;
-        public int FloodCount;
-        public DateTime FloodTime;
         public List<int> ClientVolume;
         public string MachineId;
         public Language Langue;
         public bool IsWebSocket;
-        public Dictionary<double, RoomData> Visits;
+
+        public bool ForceOpenGift;
+        public int ForceUse = -1;
+        public int ForceRot = -1;
 
         public List<RoomData> RoomRightsList;
         public List<RoomData> FavoriteRooms;
         public List<RoomData> UsersRooms;
-
         public List<int> MutedUsers;
         public List<int> RatedRooms;
-        public Dictionary<string, UserAchievement> Achievements;
-        private MessengerComponent Messenger;
-        private BadgeComponent BadgeComponent;
-        private InventoryComponent InventoryComponent;
-        private ChatMessageManager ChatMessageManager;
-        private Client Client;
+        public List<int> MyGroups;
+        public Dictionary<int, int> Quests;
+        public Dictionary<double, RoomData> Visits;
+
+        private MessengerComponent _messengerComponent;
+        private BadgeComponent _badgeComponent;
+        private AchievementComponent _achievementComponent;
+        private InventoryComponent _inventoryComponent;
+        private WardrobeComponent _wardrobeComponent;
+        private ChatMessageManager _chatMessageManager;
+
+        public Client ClientInstance { get; private set; }
         public bool SpectatorMode;
         public bool Disconnected;
         public bool HasFriendRequestsDisabled;
         public int FavouriteGroupId;
-        public List<int> MyGroups;
 
-        public bool spamEnable;
-        public int spamProtectionTime;
-        public DateTime spamFloodTime;
-        public DateTime everyoneTimer;
+        public int FloodCount;
+        public DateTime FloodTime;
+        public bool SpamEnable;
+        public int SpamProtectionTime;
+        public DateTime SpamFloodTime;
+        public DateTime EveryoneTimer;
+        public DateTime LastGiftPurchaseTime;
 
-        public Dictionary<int, int> Quests;
         public int CurrentQuestId;
         public int LastCompleted;
         public int LastQuestId;
-        private bool HabboinfoSaved;
+        public bool HabboinfoSaved;
         public bool AcceptTrading;
         public bool HideInRoom;
         public int PubDectectCount = 0;
@@ -127,9 +131,7 @@ namespace Butterfly.Game.Users
             }
         }
 
-        public DateTime LastGiftPurchaseTime;
-
-        public bool InRoom => this.CurrentRoomId >= 1;
+        public bool InRoom => this.CurrentRoomId > 0;
 
         public Room CurrentRoom
         {
@@ -158,18 +160,6 @@ namespace Butterfly.Game.Users
             return false;
         }
 
-        public string GetQueryString
-        {
-            get
-            {
-                TimeSpan TimeOnline = DateTime.Now - this.OnlineTime;
-                int TimeOnlineSec = (int)TimeOnline.TotalSeconds;
-                this.HabboinfoSaved = true;
-
-                return UserDao.BuildUpdateQuery(this.Id, this.Duckets, this.Credits) + UserStatsDao.BuildUpdateQuery(this.Id, this.FavouriteGroupId, TimeOnlineSec, this.CurrentQuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
-            }
-        }
-
         public User(int Id, string Username, int Rank, string Motto, string Look, string Gender, int Credits,
             int WPoint, int ActivityPoints, int HomeRoom, int Respect, int DailyRespectPoints,
             int DailyPetRespectPoints, bool HasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
@@ -191,15 +181,15 @@ namespace Butterfly.Game.Users
             this.LoadingRoomId = 0;
             this.HomeRoom = HomeRoom;
             this.FavoriteRooms = new List<RoomData>();
+            this.RoomRightsList = new List<RoomData>();
+            this.UsersRooms = new List<RoomData>();
             this.MutedUsers = new List<int>();
-            this.Achievements = new Dictionary<string, UserAchievement>();
             this.RatedRooms = new List<int>();
             this.Respect = Respect;
             this.DailyRespectPoints = DailyRespectPoints;
             this.DailyPetRespectPoints = DailyPetRespectPoints;
             this.IsTeleporting = false;
             this.TeleporterId = 0;
-            this.UsersRooms = new List<RoomData>();
             this.HasFriendRequestsDisabled = HasFriendRequestsDisabled;
             this.ClientVolume = new List<int>(3);
             this.CanChangeName = ChangeName;
@@ -257,35 +247,71 @@ namespace Butterfly.Game.Users
 
         public void Init(Client client, UserData data)
         {
-            this.Client = client;
+            this.ClientInstance = client;
 
-            this.BadgeComponent = new BadgeComponent(this.Id, data.Badges);
-            this.InventoryComponent = new InventoryComponent(this.Id, client);
-            this.Messenger = new MessengerComponent(this.Id);
-            this.Messenger.Init(data.Friends, data.Requests, data.Relationships, this.HideOnline);
-
-            this.Quests = data.Quests;
-            this.MyGroups = data.MyGroups;
-
-            this.ChatMessageManager = new ChatMessageManager();
-            this.ChatMessageManager.LoadUserChatlogs(this.Id);
-
-            this.UpdateRooms();
-        }
-
-
-        public void UpdateRooms()
-        {
-            this.UsersRooms.Clear();
+            this._badgeComponent = new BadgeComponent(this);
+            this._achievementComponent = new AchievementComponent(this);
+            this._inventoryComponent = new InventoryComponent(this);
+            this._wardrobeComponent = new WardrobeComponent(this);
+            this._messengerComponent = new MessengerComponent(this);
+            this._chatMessageManager = new ChatMessageManager();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                DataTable table = RoomDao.GetAllByOwner(dbClient, this.Username);
+                this._badgeComponent.Init(dbClient);
+                this._wardrobeComponent.Init(dbClient);
+                this._achievementComponent.Init(dbClient);
+                this._messengerComponent.Init(dbClient, this.HideOnline);
+                this._chatMessageManager.LoadUserChatlogs(dbClient, this.Id);
 
-                foreach (DataRow dRow in table.Rows)
+                this.UpdateRooms(dbClient);
+
+                DataTable dGroupMemberships = GuildMembershipDao.GetOneByUserId(dbClient, this.Id);
+                foreach (DataRow dRow in dGroupMemberships.Rows)
                 {
-                    this.UsersRooms.Add(ButterflyEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(dRow["id"]), dRow));
+                    this.MyGroups.Add(Convert.ToInt32(dRow["group_id"]));
                 }
+
+                DataTable dQuests = UserQuestDao.GetAll(dbClient, this.Id);
+                foreach (DataRow dataRow in dQuests.Rows)
+                {
+                    int questId = Convert.ToInt32(dataRow["quest_id"]);
+                    int progress = Convert.ToInt32(dataRow["progress"]);
+                    this.Quests.Add(questId, progress);
+                }
+
+                DataTable dFavorites = UserFavoriteDao.GetAll(dbClient, this.Id);
+                foreach (DataRow dataRow in dFavorites.Rows)
+                {
+                    int roomId = Convert.ToInt32(dataRow["room_id"]);
+
+                    RoomData roomdata = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+                    if(roomdata != null)
+                        this.FavoriteRooms.Add(roomdata);
+                }
+
+                DataTable dRoomRights = RoomRightDao.GetAllByUserId(dbClient, this.Id);
+                foreach (DataRow dataRow in dRoomRights.Rows)
+                {
+                    int roomId = Convert.ToInt32(dataRow["room_id"]);
+
+                    RoomData roomdata = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+                    if(roomdata != null)
+                        this.RoomRightsList.Add(roomdata);
+                }
+            }
+        }
+
+
+        public void UpdateRooms(IQueryAdapter dbClient)
+        {
+            this.UsersRooms.Clear();
+
+            DataTable table = RoomDao.GetAllByOwner(dbClient, this.Username);
+
+            foreach (DataRow dRow in table.Rows)
+            {
+                this.UsersRooms.Add(ButterflyEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(dRow["id"]), dRow));
             }
         }
 
@@ -439,13 +465,6 @@ namespace Butterfly.Game.Users
             return true;
         }
 
-        public void LoadData(UserData data)
-        {
-            this.LoadAchievements(data.Achievements);
-            this.LoadFavorites(data.FavouritedRooms);
-            this.LoadRoomRights(data.RoomRightsList);
-        }
-
         public bool HasFuse(string Fuse)
         {
             if (ButterflyEnvironment.GetGame().GetRoleManager().RankHasRight(this.Rank, Fuse))
@@ -454,31 +473,6 @@ namespace Butterfly.Game.Users
             }
 
             return false;
-        }
-
-        public void LoadRoomRights(List<int> roomID)
-        {
-            this.RoomRightsList = new List<RoomData>();
-            foreach (int num in roomID)
-            {
-                RoomData roomdata = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(num);
-                this.RoomRightsList.Add(roomdata);
-            }
-        }
-
-        public void LoadFavorites(List<int> roomID)
-        {
-            this.FavoriteRooms = new List<RoomData>();
-            foreach (int num in roomID)
-            {
-                RoomData roomdata = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(num);
-                this.FavoriteRooms.Add(roomdata);
-            }
-        }
-
-        public void LoadAchievements(Dictionary<string, UserAchievement> achievements)
-        {
-            this.Achievements = achievements;
         }
 
         public void OnDisconnect()
@@ -513,7 +507,7 @@ namespace Butterfly.Game.Users
 
             if (this.InRoom && this.CurrentRoom != null)
             {
-                this.CurrentRoom.GetRoomUserManager().RemoveUserFromRoom(this.Client, false, false);
+                this.CurrentRoom.GetRoomUserManager().RemoveUserFromRoom(this.ClientInstance, false, false);
             }
 
             if (this.RolePlayId > 0)
@@ -545,22 +539,34 @@ namespace Butterfly.Game.Users
                 ButterflyEnvironment.GetGame().GetHelpManager().RemoveGuide(this.Id);
             }
 
-            if (this.Messenger != null)
+            if (this._messengerComponent != null)
             {
-                this.Messenger.AppearOffline = true;
-                this.Messenger.Destroy();
+                this._messengerComponent.AppearOffline = true;
+                this._messengerComponent.Destroy();
             }
 
-            if (this.InventoryComponent != null)
+            if (this._inventoryComponent != null)
             {
-                this.InventoryComponent.Destroy();
-                this.InventoryComponent = null;
+                this._inventoryComponent.Dispose();
+                this._inventoryComponent = null;
             }
 
-            if (this.BadgeComponent != null)
+            if (this._badgeComponent != null)
             {
-                this.BadgeComponent.Destroy();
-                this.BadgeComponent = null;
+                this._badgeComponent.Dispose();
+                this._badgeComponent = null;
+            }
+
+            if (this._wardrobeComponent != null)
+            {
+                this._wardrobeComponent.Dispose();
+                this._wardrobeComponent = null;
+            }
+
+            if (this._achievementComponent != null)
+            {
+                this._achievementComponent.Dispose();
+                this._achievementComponent = null;
             }
 
             if (this.UsersRooms != null)
@@ -578,7 +584,7 @@ namespace Butterfly.Game.Users
                 this.FavoriteRooms.Clear();
             }
 
-            this.Client = null;
+            this.ClientInstance = null;
         }
 
         public void UpdateCreditsBalance()
@@ -610,34 +616,38 @@ namespace Butterfly.Game.Users
 
         public MessengerComponent GetMessenger()
         {
-            return this.Messenger;
+            return this._messengerComponent;
+        }
+
+        public WardrobeComponent GetWardrobeComponent()
+        {
+            return this._wardrobeComponent;
+        }
+
+        public AchievementComponent GetAchievementComponent()
+        {
+            return this._achievementComponent;
         }
 
         public BadgeComponent GetBadgeComponent()
         {
-            return this.BadgeComponent;
+            return this._badgeComponent;
         }
 
         public InventoryComponent GetInventoryComponent()
         {
-            return this.InventoryComponent;
+            return this._inventoryComponent;
         }
 
         public ChatMessageManager GetChatMessageManager()
         {
-            return this.ChatMessageManager;
+            return this._chatMessageManager;
         }
 
         public int GetQuestProgress(int p)
         {
             this.Quests.TryGetValue(p, out int num);
             return num;
-        }
-
-        public UserAchievement GetAchievementData(string p)
-        {
-            this.Achievements.TryGetValue(p, out UserAchievement userAchievement);
-            return userAchievement;
         }
     }
 }

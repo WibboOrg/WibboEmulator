@@ -7,7 +7,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Session.GetHabbo().forceUse = -1;
+            Session.GetHabbo().ForceUse = -1;
         }
     }
 }

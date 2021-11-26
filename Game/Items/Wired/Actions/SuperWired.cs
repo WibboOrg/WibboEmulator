@@ -18,6 +18,7 @@ using System.Data;
 using System.Linq;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.AI;
+using Butterfly.Communication.Packets.Outgoing.Inventory.Badges;
 
 namespace Butterfly.Game.Items.Wired.Actions
 {
@@ -2252,7 +2253,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                 case "removebadge":
                     {
                         User.GetClient().GetHabbo().GetBadgeComponent().RemoveBadge(Value);
-                        User.GetClient().SendPacket(User.GetClient().GetHabbo().GetBadgeComponent().Serialize());
+                        User.GetClient().SendPacket(new BadgesComposer(User.GetClient().GetHabbo().GetBadgeComponent().BadgeList));
                         break;
                     }
 

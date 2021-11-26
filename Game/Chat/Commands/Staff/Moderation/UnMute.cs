@@ -17,8 +17,8 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             {
                 User habboByUsername = clientByUsername.GetHabbo();
 
-                habboByUsername.spamProtectionTime = 10;
-                habboByUsername.spamEnable = true;
+                habboByUsername.SpamProtectionTime = 10;
+                habboByUsername.SpamEnable = true;
             }
 
         }

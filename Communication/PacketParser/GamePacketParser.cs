@@ -1,5 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Incoming;
 using Butterfly.Communication.WebSocket;
+using Butterfly.Core;
 using Butterfly.Game.Clients;
 using Butterfly.Utility;
 using ConsoleWriter;
@@ -70,7 +71,7 @@ namespace Butterfly.Net
                     }
                     catch (Exception e)
                     {
-                        Writer.LogException($"Length: {Data.Length} Message: {e.Message}");
+                        Logging.LogException($"Length: {Data.Length} Message: {e.Message}");
                         return;
                     }
                 }
@@ -138,7 +139,7 @@ namespace Butterfly.Net
             }
             catch (Exception e)
             {
-                ConsoleWriter.Writer.LogException("Packet Erro : " + e.Message);
+                Logging.LogException("Packet Error : " + e.Message);
             }
         }
 

@@ -260,7 +260,12 @@ namespace Butterfly.Game.Clients
                 {
                     try
                     {
-                        stringBuilder.Append(client.GetHabbo().GetQueryString);
+                        TimeSpan TimeOnline = DateTime.Now - client.GetHabbo().OnlineTime;
+                        int TimeOnlineSec = (int)TimeOnline.TotalSeconds;
+
+                        stringBuilder.Append(UserDao.BuildUpdateQuery(client.GetHabbo().Id, client.GetHabbo().Duckets, client.GetHabbo().Credits));
+                        stringBuilder.Append(UserStatsDao.BuildUpdateQuery(client.GetHabbo().Id, client.GetHabbo().FavouriteGroupId, TimeOnlineSec, client.GetHabbo().CurrentQuestId, client.GetHabbo().Respect, client.GetHabbo().DailyRespectPoints, client.GetHabbo().DailyPetRespectPoints));
+
                     }
                     catch
                     {

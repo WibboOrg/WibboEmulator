@@ -641,7 +641,7 @@ namespace Butterfly.Game.Moderation
             else
             {
                 ChatMessageManager chatMessageManager = room.GetChatMessageManager();
-                message.WriteInteger(chatMessageManager.messageCount);
+                message.WriteInteger(chatMessageManager.MessageCount);
                 chatMessageManager.Serialize(ref message);
                 return message;
             }
@@ -663,7 +663,7 @@ namespace Butterfly.Game.Moderation
             Message.WriteInteger(room.RoomData.Id);
 
             ChatMessageManager chatMessageManager = room.GetChatMessageManager();
-            Message.WriteShort(chatMessageManager.messageCount);
+            Message.WriteShort(chatMessageManager.MessageCount);
             chatMessageManager.Serialize(ref Message);
             return Message;
         }

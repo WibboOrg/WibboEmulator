@@ -1,3 +1,4 @@
+using Butterfly.Communication.Packets.Outgoing.Inventory.Badges;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -11,7 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Session.SendPacket(Session.GetHabbo().GetBadgeComponent().Serialize());
+            Session.SendPacket(new BadgesComposer(Session.GetHabbo().GetBadgeComponent().BadgeList));
         }
     }
 }

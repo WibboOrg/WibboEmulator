@@ -1,6 +1,6 @@
 ﻿namespace Butterfly.Game.Users.Wardrobes
 {
-    internal class Wardrobe
+    public class Wardrobe
     {
         public int SlotId { get; set; }
         public string Look { get; set; }

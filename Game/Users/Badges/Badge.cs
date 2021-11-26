@@ -2,7 +2,7 @@
 {
     public class Badge
     {
-        public string Code { get; set; }
+        public string Code { get; private set; }
         public int Slot { get; set; }
 
         public Badge(string Code, int Slot)

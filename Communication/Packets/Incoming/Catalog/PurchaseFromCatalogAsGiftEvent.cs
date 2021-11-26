@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Catalog;
+using Butterfly.Communication.Packets.Outgoing.Inventory.Badges;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Database.Daos;
@@ -221,7 +222,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                                 Session.GetHabbo().GetBadgeComponent().RemoveBadge(Data);
                             }
 
-                            Session.SendPacket(Session.GetHabbo().GetBadgeComponent().Serialize());
+                            Session.SendPacket(new BadgesComposer(Session.GetHabbo().GetBadgeComponent().BadgeList));
 
                             ItemExtraData = Data;
                             break;

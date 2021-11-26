@@ -734,7 +734,7 @@ namespace Butterfly.Game.Rooms
                 Session.GetHabbo().CurrentRoomId = 0;
                 Session.GetHabbo().LoadingRoomId = 0;
 
-                Session.GetHabbo().forceUse = -1;
+                Session.GetHabbo().ForceUse = -1;
 
                 this._usersByUserID.TryRemove(User.UserId, out User);
                 this._usersByUsername.TryRemove(Session.GetHabbo().Username.ToLower(), out User);

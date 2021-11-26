@@ -114,9 +114,9 @@ namespace Butterfly.Game.Items.Interactors
 
             int num2 = (NumMode > 0) ? (NumMode < this.Modes) ? NumMode + 1 : 0 : 1;
 
-            if (Session != null && Session.GetHabbo() != null && Session.GetHabbo().forceUse > -1)
+            if (Session != null && Session.GetHabbo() != null && Session.GetHabbo().ForceUse > -1)
             {
-                num2 = (Session.GetHabbo().forceUse <= this.Modes) ? Session.GetHabbo().forceUse : 0;
+                num2 = (Session.GetHabbo().ForceUse <= this.Modes) ? Session.GetHabbo().ForceUse : 0;
             }
 
             if (Item.GetBaseItem().InteractionType == InteractionType.GUILD_ITEM || Item.GetBaseItem().InteractionType == InteractionType.GUILD_GATE)

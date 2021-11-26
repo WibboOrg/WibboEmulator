@@ -56,6 +56,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 UserDao.UpdateName(dbClient, Session.GetHabbo().Id, NewUsername);
 
                 LogFlagmeDao.Insert(dbClient, Session.GetHabbo().Id, Session.GetHabbo().Username, NewUsername);
+
+                Session.GetHabbo().UpdateRooms(dbClient);
             }
 
             ButterflyEnvironment.GetGame().GetClientManager().UpdateClientUsername(Session.ConnectionID, Session.GetHabbo().Username, NewUsername);
@@ -66,7 +68,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.SendPacket(new UpdateUsernameComposer(NewUsername));
             Session.SendPacket(new UserObjectComposer(Session.GetHabbo()));
 
-            Session.GetHabbo().UpdateRooms();
+            
             foreach (RoomData roomData in Session.GetHabbo().UsersRooms)
             {
                 roomData.OwnerName = NewUsername;

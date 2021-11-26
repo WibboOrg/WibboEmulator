@@ -17,11 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Session.GetHabbo().GetInventoryComponent().InventoryDefined)
-            {
-                Session.GetHabbo().GetInventoryComponent().LoadInventory();
-                Session.GetHabbo().GetInventoryComponent().InventoryDefined = true;
-            }
+            Session.GetHabbo().GetInventoryComponent().LoadInventory();
 
             Session.SendPacket(new PetInventoryComposer(Session.GetHabbo().GetInventoryComponent().GetPets()));
         }

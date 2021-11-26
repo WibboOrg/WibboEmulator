@@ -1,3 +1,4 @@
+using Butterfly.Communication.Packets.Outgoing.Inventory.Badges;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
@@ -11,7 +12,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             if (clientByUsername != null && clientByUsername.GetHabbo() != null)
             {
                 clientByUsername.GetHabbo().GetBadgeComponent().RemoveBadge(Params[2]);
-                clientByUsername.SendPacket(clientByUsername.GetHabbo().GetBadgeComponent().Serialize());
+                clientByUsername.SendPacket(new BadgesComposer(clientByUsername.GetHabbo().GetBadgeComponent().BadgeList));
             }
             else
             {

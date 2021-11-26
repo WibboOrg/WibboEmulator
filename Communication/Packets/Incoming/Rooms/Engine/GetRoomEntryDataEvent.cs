@@ -75,12 +75,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.SendPacket(new NuxAlertComposer("helpBubble/add/BOTTOM_BAR_NAVIGATOR/nux.bot.info.navigator.1"));
             }
 
-            if (Session.GetHabbo().spamEnable)
+            if (Session.GetHabbo().SpamEnable)
             {
-                TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().spamFloodTime;
-                if (timeSpan.TotalSeconds < Session.GetHabbo().spamProtectionTime)
+                TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().SpamFloodTime;
+                if (timeSpan.TotalSeconds < Session.GetHabbo().SpamProtectionTime)
                 {
-                    Session.SendPacket(new FloodControlComposer(Session.GetHabbo().spamProtectionTime - timeSpan.Seconds));
+                    Session.SendPacket(new FloodControlComposer(Session.GetHabbo().SpamProtectionTime - timeSpan.Seconds));
                 }
             }
 

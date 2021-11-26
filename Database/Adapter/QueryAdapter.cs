@@ -1,5 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
-using ConsoleWriter;
+﻿using Butterfly.Core;
+using Butterfly.Database.Interfaces;
 using MySql.Data.MySqlClient;
 using System;
 using System.Data;
@@ -40,7 +40,7 @@ namespace Butterfly.Database.Adapter
             }
             catch (Exception exception)
             {
-                Writer.LogQueryError(exception, this.command.CommandText);
+                Logging.LogQueryError(exception, this.command.CommandText);
             }
 
             return hasRows;
@@ -59,7 +59,7 @@ namespace Butterfly.Database.Adapter
             }
             catch (Exception exception)
             {
-                Writer.LogQueryError(exception, this.command.CommandText);
+                Logging.LogQueryError(exception, this.command.CommandText);
             }
 
             return result;
@@ -82,7 +82,7 @@ namespace Butterfly.Database.Adapter
             }
             catch (Exception exception)
             {
-                Writer.LogQueryError(exception, this.command.CommandText);
+                Logging.LogQueryError(exception, this.command.CommandText);
             }
 
             return row;
@@ -101,7 +101,7 @@ namespace Butterfly.Database.Adapter
             }
             catch (Exception exception)
             {
-                Writer.LogQueryError(exception, this.command.CommandText);
+                Logging.LogQueryError(exception, this.command.CommandText);
             }
 
             return str;
@@ -124,7 +124,7 @@ namespace Butterfly.Database.Adapter
             }
             catch (Exception exception)
             {
-                Writer.LogQueryError(exception, this.command.CommandText);
+                Logging.LogQueryError(exception, this.command.CommandText);
             }
 
             return dataTable;
@@ -162,7 +162,7 @@ namespace Butterfly.Database.Adapter
             }
             catch (Exception exception)
             {
-                Writer.LogQueryError(exception, this.command.CommandText);
+                Logging.LogQueryError(exception, this.command.CommandText);
             }
             return lastInsertedId;
         }
@@ -180,7 +180,7 @@ namespace Butterfly.Database.Adapter
             }
             catch (Exception exception)
             {
-                Writer.LogQueryError(exception, this.command.CommandText);
+                Logging.LogQueryError(exception, this.command.CommandText);
             }
         }
     }

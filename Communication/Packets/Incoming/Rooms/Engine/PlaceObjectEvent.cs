@@ -97,9 +97,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     return;
                 }
 
-                if (session.GetHabbo().forceRot > -1)
+                if (session.GetHabbo().ForceRot > -1)
                 {
-                    rotation = session.GetHabbo().forceRot;
+                    rotation = session.GetHabbo().ForceRot;
                 }
 
                 Item item = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, X, Y, 0.0, rotation, "", room);
@@ -117,12 +117,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         WiredRegister.HandleRegister(room, item);
                     }
 
-                    if (session.GetHabbo().forceUse > -1)
+                    if (session.GetHabbo().ForceUse > -1)
                     {
                         item.Interactor.OnTrigger(session, item, 0, true);
                     }
 
-                    if (session.GetHabbo().forceOpenGift)
+                    if (session.GetHabbo().ForceOpenGift)
                     {
                         if (item.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
                         {

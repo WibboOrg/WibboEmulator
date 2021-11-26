@@ -12,21 +12,18 @@ using System.Data;
 
 namespace Butterfly.Game.Users.Inventory
 {
-    public class InventoryComponent
+    public class InventoryComponent : IDisposable
     {
         private readonly ConcurrentDictionary<int, Item> _userItems;
         private readonly ConcurrentDictionary<int, Pet> _petsItems;
         private readonly ConcurrentDictionary<int, Bot> _botItems;
 
-        private Client _client;
+        private readonly User _userInstance;
+        private bool _inventoryDefined;
 
-        public int UserId { get; private set; }
-        public bool InventoryDefined { get; set; }
-
-        public InventoryComponent(int UserId, Client Client)
+        public InventoryComponent(User user)
         {
-            this._client = Client;
-            this.UserId = UserId;
+            this._userInstance = user;
 
             this._userItems = new ConcurrentDictionary<int, Item>();
             this._petsItems = new ConcurrentDictionary<int, Pet>();
@@ -39,7 +36,7 @@ namespace Butterfly.Game.Users.Inventory
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    ItemDao.DeleteAll(dbClient, this.UserId);
+                    ItemDao.DeleteAll(dbClient, this._userInstance.Id);
                 }
 
                 this._userItems.Clear();
@@ -48,14 +45,14 @@ namespace Butterfly.Game.Users.Inventory
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    ItemDao.DeleteAllWithoutRare(dbClient, this.UserId);
+                    ItemDao.DeleteAllWithoutRare(dbClient, this._userInstance.Id);
                 }
 
                 this._userItems.Clear();
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    DataTable table = ItemDao.GetAllByUserId(dbClient, this.UserId);
+                    DataTable table = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id);
 
                     foreach (DataRow dataRow in table.Rows)
                     {
@@ -78,7 +75,7 @@ namespace Butterfly.Game.Users.Inventory
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                BotPetDao.Delete(dbClient, this.UserId);
+                BotPetDao.Delete(dbClient, this._userInstance.Id);
             }
 
             this._petsItems.Clear();
@@ -87,14 +84,13 @@ namespace Butterfly.Game.Users.Inventory
         public void ClearBots()
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                BotUserDao.Delete(dbClient, this.UserId);
+                BotUserDao.Delete(dbClient, this._userInstance.Id);
 
             this._botItems.Clear();
         }
 
-        public void Destroy()
+        public void Dispose()
         {
-            this._client = null;
             this._userItems.Clear();
             this._petsItems.Clear();
             this._botItems.Clear();
@@ -177,23 +173,25 @@ namespace Butterfly.Game.Users.Inventory
 
         public bool TryAddItem(Item item)
         {
-            if (this._client != null)
-            {
-                this._client.SendPacket(new FurniListAddComposer(item));
-            }
+            this._userInstance.ClientInstance.SendPacket(new FurniListAddComposer(item));
 
             return this._userItems.TryAdd(item.Id, item);
         }
 
         public void LoadInventory()
         {
+            if (this._inventoryDefined)
+                return;
+
+            this._inventoryDefined = true;
+
             this._userItems.Clear();
             this._botItems.Clear();
             this._petsItems.Clear();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                DataTable dItems = ItemDao.GetAllByUserId(dbClient, this.UserId);
+                DataTable dItems = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id);
 
                 foreach (DataRow dataRow in dItems.Rows)
                 {
@@ -207,7 +205,7 @@ namespace Butterfly.Game.Users.Inventory
                     this._userItems.TryAdd(Id, userItem);
                 }
 
-                DataTable dPets = BotPetDao.GetAllByUserId(dbClient, this.UserId);
+                DataTable dPets = BotPetDao.GetAllByUserId(dbClient, this._userInstance.Id);
                 if (dPets != null)
                 {
                     foreach (DataRow Row in dPets.Rows)
@@ -217,7 +215,7 @@ namespace Butterfly.Game.Users.Inventory
                     }
                 }
 
-                DataTable dBots = BotUserDao.GetAllByUserId(dbClient, this.UserId);
+                DataTable dBots = BotUserDao.GetAllByUserId(dbClient, this._userInstance.Id);
                 if (dBots != null)
                 {
                     foreach (DataRow Row in dBots.Rows)
@@ -245,7 +243,7 @@ namespace Butterfly.Game.Users.Inventory
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                ItemDao.UpdateRoomIdAndUserId(dbClient, Id, 0, this.UserId);
+                ItemDao.UpdateRoomIdAndUserId(dbClient, Id, 0, this._userInstance.Id);
             }
 
             Item userItem = new Item(Id, 0, BaseItem, ExtraData, Limited, LimitedStack, 0, 0, 0.0, 0, "", null);
@@ -256,10 +254,7 @@ namespace Butterfly.Game.Users.Inventory
 
             this._userItems.TryAdd(userItem.Id, userItem);
 
-            if (this._client != null)
-            {
-                this._client.SendPacket(new FurniListAddComposer(userItem));
-            }
+            this._userInstance.ClientInstance.SendPacket(new FurniListAddComposer(userItem));
 
             return userItem;
         }
@@ -283,7 +278,7 @@ namespace Butterfly.Game.Users.Inventory
 
         private Client GetClient()
         {
-            return ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
+            return ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
         }
 
         public void AddItemArray(List<Item> RoomItemList)
@@ -298,7 +293,7 @@ namespace Butterfly.Game.Users.Inventory
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                ItemDao.UpdateRoomIdAndUserId(dbClient, item.Id, 0, this.UserId);
+                ItemDao.UpdateRoomIdAndUserId(dbClient, item.Id, 0, this._userInstance.Id);
             }
 
             Item userItem = new Item(item.Id, 0, item.BaseItem, item.ExtraData, item.Limited, item.LimitedStack, 0, 0, 0.0, 0, "", null);
@@ -309,10 +304,7 @@ namespace Butterfly.Game.Users.Inventory
 
             this._userItems.TryAdd(userItem.Id, userItem);
 
-            if (this._client != null)
-            {
-                this._client.SendPacket(new FurniListAddComposer(userItem));
-            }
+            this._userInstance.ClientInstance.SendPacket(new FurniListAddComposer(userItem));
         }
     }
 }

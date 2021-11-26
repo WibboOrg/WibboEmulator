@@ -80,29 +80,29 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().spamFloodTime;
-            if (timeSpan.TotalSeconds > Session.GetHabbo().spamProtectionTime && Session.GetHabbo().spamEnable)
+            TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().SpamFloodTime;
+            if (timeSpan.TotalSeconds > Session.GetHabbo().SpamProtectionTime && Session.GetHabbo().SpamEnable)
             {
                 User.FloodCount = 0;
-                Session.GetHabbo().spamEnable = false;
+                Session.GetHabbo().SpamEnable = false;
             }
             else if (timeSpan.TotalSeconds > 4.0)
             {
                 User.FloodCount = 0;
             }
 
-            if (timeSpan.TotalSeconds < Session.GetHabbo().spamProtectionTime && Session.GetHabbo().spamEnable)
+            if (timeSpan.TotalSeconds < Session.GetHabbo().SpamProtectionTime && Session.GetHabbo().SpamEnable)
             {
-                int i = Session.GetHabbo().spamProtectionTime - timeSpan.Seconds;
+                int i = Session.GetHabbo().SpamProtectionTime - timeSpan.Seconds;
                 User.GetClient().SendPacket(new FloodControlComposer(i));
                 return;
             }
             else if (timeSpan.TotalSeconds < 4.0 && User.FloodCount > 5 && !Session.GetHabbo().HasFuse("fuse_mod"))
             {
-                Session.GetHabbo().spamProtectionTime = (Room.IsRoleplay || Session.GetHabbo().HasFuse("fuse_low_flood")) ? 5 : 30;
-                Session.GetHabbo().spamEnable = true;
+                Session.GetHabbo().SpamProtectionTime = (Room.IsRoleplay || Session.GetHabbo().HasFuse("fuse_low_flood")) ? 5 : 30;
+                Session.GetHabbo().SpamEnable = true;
 
-                User.GetClient().SendPacket(new FloodControlComposer(Session.GetHabbo().spamProtectionTime - timeSpan.Seconds));
+                User.GetClient().SendPacket(new FloodControlComposer(Session.GetHabbo().SpamProtectionTime - timeSpan.Seconds));
 
                 return;
             }
@@ -111,9 +111,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 User.LastMessageCount = 0;
                 User.LastMessage = "";
 
-                Session.GetHabbo().spamProtectionTime = (Room.IsRoleplay || Session.GetHabbo().HasFuse("fuse_low_flood")) ? 5 : 30;
-                Session.GetHabbo().spamEnable = true;
-                User.GetClient().SendPacket(new FloodControlComposer(Session.GetHabbo().spamProtectionTime - timeSpan.Seconds));
+                Session.GetHabbo().SpamProtectionTime = (Room.IsRoleplay || Session.GetHabbo().HasFuse("fuse_low_flood")) ? 5 : 30;
+                Session.GetHabbo().SpamEnable = true;
+                User.GetClient().SendPacket(new FloodControlComposer(Session.GetHabbo().SpamProtectionTime - timeSpan.Seconds));
                 return;
             }
             else
@@ -125,7 +125,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 User.LastMessage = Message;
 
-                Session.GetHabbo().spamFloodTime = DateTime.Now;
+                Session.GetHabbo().SpamFloodTime = DateTime.Now;
                 User.FloodCount++;
 
                 if (Message.StartsWith("@red@"))

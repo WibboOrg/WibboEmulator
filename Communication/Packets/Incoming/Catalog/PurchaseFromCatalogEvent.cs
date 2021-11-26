@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Catalog;
+using Butterfly.Communication.Packets.Outgoing.Inventory.Badges;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Bots;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Pets;
@@ -207,7 +208,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                             Session.GetHabbo().GetBadgeComponent().RemoveBadge(ExtraData);
                         }
 
-                        Session.SendPacket(Session.GetHabbo().GetBadgeComponent().Serialize());
+                        Session.SendPacket(new BadgesComposer(Session.GetHabbo().GetBadgeComponent().BadgeList));
 
                         break;
                     }

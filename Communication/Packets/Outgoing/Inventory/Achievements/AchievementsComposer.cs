@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Inventory.Achievements
             this.WriteInteger(Achievements.Count);
             foreach (AchievementData achievement in Achievements)
             {
-                UserAchievement achievementData = Session.GetHabbo().GetAchievementData(achievement.GroupName);
+                UserAchievement achievementData = Session.GetHabbo().GetAchievementComponent().GetAchievementData(achievement.GroupName);
                 int TargetLevel = achievementData != null ? achievementData.Level + 1 : 1;
                 int count = achievement.Levels.Count;
                 if (TargetLevel > count)

@@ -2,29 +2,36 @@
 using Butterfly.Communication.Packets.Outgoing.Inventory.Badges;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Butterfly.Game.Users.Badges
 {
-    public class BadgeComponent
+    public class BadgeComponent : IDisposable
     {
+        private readonly User _userInstance;
         private readonly Dictionary<string, Badge> _badges;
-        private readonly int _userId;
 
-        public BadgeComponent(int userId, List<Badge> data)
+        public BadgeComponent(User user)
         {
+            this._userInstance = user;
             this._badges = new Dictionary<string, Badge>();
-            foreach (Badge badge in data)
-            {
-                if (!this._badges.ContainsKey(badge.Code))
-                {
-                    this._badges.Add(badge.Code, badge);
-                }
-            }
+        }
 
-            this._userId = userId;
+        public void Init(IQueryAdapter dbClient)
+        {
+            DataTable table = UserBadgeDao.GetAll(dbClient, this._userInstance.Id);
+
+            foreach (DataRow dataRow in table.Rows)
+            {
+                string Code = (string)dataRow["badge_id"];
+                int Slot = Convert.ToInt32(dataRow["badge_slot"]);
+
+                if (!this._badges.ContainsKey(Code))
+                    this._badges.Add(Code, new Badge(Code, Slot));
+            }
         }
 
         public int Count => this._badges.Count;
@@ -49,11 +56,6 @@ namespace Butterfly.Game.Users.Badges
         }
 
         public Dictionary<string, Badge> BadgeList => this._badges;
-
-        public void Destroy()
-        {
-            this._badges.Clear();
-        }
 
         public bool HasBadgeSlot(string Badge)
         {
@@ -105,7 +107,7 @@ namespace Butterfly.Game.Users.Badges
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserBadgeDao.Insert(dbClient, this._userId, Slot, Badge);
+                    UserBadgeDao.Insert(dbClient, this._userInstance.Id, Slot, Badge);
                 }
             }
             this._badges.Add(Badge, new Badge(Badge, Slot));
@@ -127,14 +129,15 @@ namespace Butterfly.Game.Users.Badges
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                UserBadgeDao.Delete(dbClient, this._userId, Badge);
+                UserBadgeDao.Delete(dbClient, this._userInstance.Id, Badge);
 
             this._badges.Remove(this.GetBadge(Badge).Code);
         }
 
-        public ServerPacket Serialize()
+        public void Dispose()
         {
-            return new BadgesComposer(this._badges);
+            this._badges.Clear();
+            GC.SuppressFinalize(this);
         }
     }
 }

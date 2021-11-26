@@ -793,6 +793,7 @@
     <Compile Include="Game\Items\Wired\Bases\WiredTriggerBase.cs" />
     <Compile Include="Game\Items\Wired\Bases\WiredConditionBase.cs" />
     <Compile Include="Game\Items\Wired\WiredType.cs" />
+    <Compile Include="Game\Users\Achievements\AchievementComponent.cs" />
     <Compile Include="Game\Users\Inventory\Bots\Bot.cs" />
     <Compile Include="Game\Users\Wardrobes\Wardrobe.cs" />
     <Compile Include="Game\Users\Wardrobes\WardrobeComponent.cs" />
@@ -1025,7 +1026,7 @@
     <Compile Include="Game\Achievements\AchievementData.cs" />
     <Compile Include="Game\Achievements\AchievementLevel.cs" />
     <Compile Include="Game\Achievements\AchievementManager.cs" />
-    <Compile Include="Game\Achievements\UserAchievement.cs" />
+    <Compile Include="Game\Users\Achievements\UserAchievement.cs" />
     <Compile Include="Game\Guilds\Guild.cs" />
     <Compile Include="Game\Guilds\GuildManager.cs" />
     <Compile Include="Game\Items\InteractionType.cs" />

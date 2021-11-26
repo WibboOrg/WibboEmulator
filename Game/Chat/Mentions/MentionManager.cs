@@ -136,14 +136,14 @@ namespace Butterfly.Game.Chat.Mentions
                 return false;
             }
 
-            TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().everyoneTimer;
+            TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().EveryoneTimer;
             if (timeSpan.TotalSeconds < 120)
             {
                 Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Veuille attendre 2 minute avant de pouvoir réutiliser @everyone"));
                 return false;
             }
 
-            Session.GetHabbo().everyoneTimer = DateTime.Now;
+            Session.GetHabbo().EveryoneTimer = DateTime.Now;
 
             List<Client> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetHabbo().GetMessenger().Friends.Keys);
 

@@ -11,27 +11,24 @@ namespace Butterfly.Game.Chat.Logs
     {
         private readonly List<ChatMessage> listOfMessages;
 
-        public int messageCount => this.listOfMessages.Count;
+        public int MessageCount => this.listOfMessages.Count;
 
         public ChatMessageManager()
         {
             this.listOfMessages = new List<ChatMessage>();
         }
 
-        public void LoadUserChatlogs(int UserId)
+        public void LoadUserChatlogs(IQueryAdapter dbClient, int UserId)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable table = LogChatDao.GetAllByUserId(dbClient, UserId);
+            if (table == null)
             {
-                DataTable table = LogChatDao.GetAllByUserId(dbClient, UserId);
-                if (table == null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                foreach (DataRow Row in table.Rows)
-                {
-                    this.AddMessage(Convert.ToInt32(Row["user_id"]), Row["user_name"].ToString(), Convert.ToInt32(Row["room_id"]), Row["type"].ToString() + Row["message"].ToString());
-                }
+            foreach (DataRow Row in table.Rows)
+            {
+                this.AddMessage(Convert.ToInt32(Row["user_id"]), Row["user_name"].ToString(), Convert.ToInt32(Row["room_id"]), Row["type"].ToString() + Row["message"].ToString());
             }
         }
 

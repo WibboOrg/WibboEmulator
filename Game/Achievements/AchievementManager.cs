@@ -68,12 +68,12 @@ namespace Butterfly.Game.Achievements
 
             AchievementData AchievementData = this._achievements[AchievementGroup];
 
-            UserAchievement UserData = Session.GetHabbo().GetAchievementData(AchievementGroup);
+            UserAchievement UserData = Session.GetHabbo().GetAchievementComponent().GetAchievementData(AchievementGroup);
 
             if (UserData == null)
             {
                 UserData = new UserAchievement(AchievementGroup, 0, 0);
-                Session.GetHabbo().Achievements.Add(AchievementGroup, UserData);
+                Session.GetHabbo().GetAchievementComponent().AddAchievement(UserData);
             }
 
             int TotalLevels = AchievementData.Levels.Count;
@@ -150,7 +150,7 @@ namespace Butterfly.Game.Achievements
 
 
                 AchievementLevel NewLevelData = AchievementData.Levels[NewTarget];
-                Session.SendPacket(new AchievementProgressedComposer(AchievementData, NewTarget, NewLevelData, TotalLevels, Session.GetHabbo().GetAchievementData(AchievementGroup)));
+                Session.SendPacket(new AchievementProgressedComposer(AchievementData, NewTarget, NewLevelData, TotalLevels, Session.GetHabbo().GetAchievementComponent().GetAchievementData(AchievementGroup)));
 
                 return true;
             }
@@ -164,7 +164,7 @@ namespace Butterfly.Game.Achievements
                 }
 
                 Session.SendPacket(new AchievementProgressedComposer(AchievementData, TargetLevel, TargetLevelData,
-                TotalLevels, Session.GetHabbo().GetAchievementData(AchievementGroup)));
+                TotalLevels, Session.GetHabbo().GetAchievementComponent().GetAchievementData(AchievementGroup)));
             }
 
             return false;
