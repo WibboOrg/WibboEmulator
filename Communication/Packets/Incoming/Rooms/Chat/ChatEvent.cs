@@ -62,7 +62,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             User.Unidle();
 
-            if (Session.GetHabbo().Rank < 5U && Room.RoomMuted && !User.IsOwner() && !Session.GetHabbo().CurrentRoom.CheckRights(Session))
+            if (Session.GetHabbo().Rank < 5 && Room.RoomMuted && !User.IsOwner() && !Session.GetHabbo().CurrentRoom.CheckRights(Session))
             {
                 User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("room.muted", Session.Langue));
                 return;

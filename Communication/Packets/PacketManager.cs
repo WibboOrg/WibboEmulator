@@ -61,7 +61,6 @@ namespace Butterfly.Communication.Packets
 
         public void TryExecutePacket(Client Session, ClientPacket Packet)
         {
-
             if (!this._incomingPackets.TryGetValue(Packet.Id, out IPacketEvent pak))
             {
                 if (ButterflyEnvironment.StaticEvents)

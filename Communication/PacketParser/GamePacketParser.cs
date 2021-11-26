@@ -35,6 +35,9 @@ namespace Butterfly.Net
                     return;
                 }
 
+                if (Data.Length < 4)
+                    return;
+
                 if (!this._policySended && (Data[0] == 71 && Data[1] == 69))
                 {
                     this.PolicyRequest(Data);

@@ -15,28 +15,28 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class PlaceObjectEvent : IPacketEvent
     {
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(Client session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
             {
                 return;
             }
 
-            Room Room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
-            if (Room == null || !Room.CheckRights(Session))
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(session.GetHabbo().CurrentRoomId);
+            if (room == null || !room.CheckRights(session))
             {
-                Session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_not_owner}"));
+                session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_not_owner}"));
                 return;
             }
 
-            if (Room.RoomData.SellPrice > 0)
+            if (room.RoomData.SellPrice > 0)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", Session.Langue));
+                session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
                 return;
             }
 
             string RawData = Packet.PopString();
-            string[] Data = RawData.Split(new char[1] { ' ' });
+            string[] Data = RawData.Split(' ');
 
             if (!int.TryParse(Data[0], out int ItemId))
             {
@@ -48,7 +48,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Item userItem = Session.GetHabbo().GetInventoryComponent().GetItem(ItemId);
+            Item userItem = session.GetHabbo().GetInventoryComponent().GetItem(ItemId);
             if (userItem == null)
             {
                 return;
@@ -56,9 +56,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (userItem.GetBaseItem().InteractionType == InteractionType.BADGE_TROC)
             {
-                if (Session.GetHabbo().GetBadgeComponent().HasBadge(userItem.ExtraData))
+                if (session.GetHabbo().GetBadgeComponent().HasBadge(userItem.ExtraData))
                 {
-                    Session.SendNotification("Vous posséder déjà ce badge !");
+                    session.SendNotification("Vous posséder déjà ce badge !");
                     return;
                 }
 
@@ -67,12 +67,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     ItemDao.Delete(dbClient, ItemId);
                 }
 
-                Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
+                session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
 
-                Session.GetHabbo().GetBadgeComponent().GiveBadge(userItem.ExtraData, true);
-                Session.SendPacket(new ReceiveBadgeComposer(userItem.ExtraData));
+                session.GetHabbo().GetBadgeComponent().GiveBadge(userItem.ExtraData, true);
+                session.SendPacket(new ReceiveBadgeComposer(userItem.ExtraData));
 
-                Session.SendNotification("Vous avez reçu le badge: " + userItem.ExtraData + " !");
+                session.SendNotification("Vous avez reçu le badge: " + userItem.ExtraData + " !");
                 return;
             }
 
@@ -93,61 +93,61 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     return;
                 }
 
-                if (!int.TryParse(Data[3], out int Rotation))
+                if (!int.TryParse(Data[3], out int rotation))
                 {
                     return;
                 }
 
-                if (Session.GetHabbo().forceRot > -1)
+                if (session.GetHabbo().forceRot > -1)
                 {
-                    Rotation = Session.GetHabbo().forceRot;
+                    rotation = session.GetHabbo().forceRot;
                 }
 
-                Item roomItem = new Item(userItem.Id, Room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, X, Y, 0.0, Rotation, "", Room);
-                if (Room.GetRoomItemHandler().SetFloorItem(Session, roomItem, X, Y, Rotation, true, false, true))
+                Item item = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, X, Y, 0.0, rotation, "", room);
+                if (room.GetRoomItemHandler().SetFloorItem(session, item, X, Y, rotation, true, false, true))
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, Room.Id, Room.RoomData.OwnerId);
+                        ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, room.Id, room.RoomData.OwnerId);
                     }
 
-                    Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
+                    session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
 
                     if (WiredUtillity.TypeIsWired(userItem.GetBaseItem().InteractionType))
                     {
-                        WiredRegister.HandleRegister(Room, roomItem);
+                        WiredRegister.HandleRegister(room, item);
                     }
 
-                    if (Session.GetHabbo().forceUse > -1)
+                    if (session.GetHabbo().forceUse > -1)
                     {
-                        roomItem.Interactor.OnTrigger(Session, roomItem, 0, true);
+                        item.Interactor.OnTrigger(session, item, 0, true);
                     }
 
-                    if (Session.GetHabbo().forceOpenGift)
+                    if (session.GetHabbo().forceOpenGift)
                     {
-                        if (roomItem.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
+                        if (item.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
                         {
-                            ItemExtrabox.OpenExtrabox(Session, roomItem, Room);
+                            ItemExtrabox.OpenExtrabox(session, item, room);
                         }
-                        else if (roomItem.GetBaseItem().InteractionType == InteractionType.DELUXEBOX)
+                        else if (item.GetBaseItem().InteractionType == InteractionType.DELUXEBOX)
                         {
-                            ItemExtrabox.OpenDeluxeBox(Session, roomItem, Room);
+                            ItemExtrabox.OpenDeluxeBox(session, item, room);
                         }
-                        else if (roomItem.GetBaseItem().InteractionType == InteractionType.LEGENDBOX)
+                        else if (item.GetBaseItem().InteractionType == InteractionType.LEGENDBOX)
                         {
-                            ItemExtrabox.OpenLegendBox(Session, roomItem, Room);
+                            ItemExtrabox.OpenLegendBox(session, item, room);
                         }
-                        else if (roomItem.GetBaseItem().InteractionType == InteractionType.BADGEBOX)
+                        else if (item.GetBaseItem().InteractionType == InteractionType.BADGEBOX)
                         {
-                            ItemExtrabox.OpenBadgeBox(Session, roomItem, Room);
+                            ItemExtrabox.OpenBadgeBox(session, item, room);
                         }
                     }
 
-                    ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_PLACE, 0);
+                    ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_PLACE, 0);
                 }
                 else
                 {
-                    Session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
+                    session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
                     return;
                 }
             }
@@ -164,20 +164,20 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 if (TrySetWallItem(CorrectedData, out string wallPos))
                 {
-                    Item roomItem = new Item(userItem.Id, Room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallPos, Room);
-                    if (Room.GetRoomItemHandler().SetWallItem(Session, roomItem))
+                    Item roomItem = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallPos, room);
+                    if (room.GetRoomItemHandler().SetWallItem(session, roomItem))
                     {
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, Room.Id, Room.RoomData.OwnerId);
+                            ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, room.Id, room.RoomData.OwnerId);
                         }
 
-                        Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
+                        session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
                     }
                 }
                 else
                 {
-                    Session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
+                    session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_item}"));
                     return;
                 }
             }

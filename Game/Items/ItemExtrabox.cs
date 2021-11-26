@@ -259,161 +259,159 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public static void OpenLegendBox(Client Session, Item Present, Room Room)
+        public static void OpenLegendBox(Client session, Item present, Room room)
         {
-            int PageId = 0;
-            string BadgeCode = "";
-            string LotType = "";
-            int ForceItem = 0;
+            int pageId = 0;
+            string badgeCode = "";
+            string lotType = "";
+            int forceItem = 0;
 
             if (ButterflyEnvironment.GetRandomNumber(1, 100) == 100) //Legendaire
             {
-                PageId = 14514;
-                LotType = "Légendaire";
+                pageId = 14514;
+                lotType = "Légendaire";
             }
             else if (ButterflyEnvironment.GetRandomNumber(1, 75) == 75) //Royal
             {
-                PageId = 584545;
-                LotType = "Royal";
-                ForceItem = 37951979;
+                pageId = 584545;
+                lotType = "Royal";
+                forceItem = 37951979;
             }
             else if (ButterflyEnvironment.GetRandomNumber(1, 30) == 30) //Royal
             {
-                PageId = 584545;
-                LotType = "Royal";
-                ForceItem = 70223722;
+                pageId = 584545;
+                lotType = "Royal";
+                forceItem = 70223722;
             }
             else if (ButterflyEnvironment.GetRandomNumber(1, 15) == 15) //Epique
             {
-                PageId = 84641;
-                LotType = "épique";
+                pageId = 84641;
+                lotType = "épique";
             }
             else if (ButterflyEnvironment.GetRandomNumber(1, 5) == 5) //Royal
             {
-                PageId = 584545;
-                LotType = "Royal";
-                ForceItem = 52394359;
+                pageId = 584545;
+                lotType = "Royal";
+                forceItem = 52394359;
             }
             else
             {
-                PageId = 98747;
-                LotType = "commun";
+                pageId = 98747;
+                lotType = "commun";
             }
 
+            int pageBadgeId = 841878;
 
-            int PageBadgeId = 841878;
-
-            if (!ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(PageBadgeId, out CatalogPage PageBadge))
+            if (!ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(pageBadgeId, out CatalogPage pageBadge))
             {
+                session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
                 return;
             }
 
-            foreach (KeyValuePair<int, CatalogItem> Item in PageBadge.Items.OrderBy(a => Guid.NewGuid()).ToList())
+            foreach (KeyValuePair<int, CatalogItem> Item in pageBadge.Items.OrderBy(a => Guid.NewGuid()).ToList())
             {
-                if (Session.GetHabbo().GetBadgeComponent().HasBadge(Item.Value.Badge))
+                if (session.GetHabbo().GetBadgeComponent().HasBadge(Item.Value.Badge))
                 {
                     continue;
                 }
 
-                BadgeCode = Item.Value.Badge;
+                badgeCode = Item.Value.Badge;
                 break;
-
             }
 
-            ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
-            if (Page == null)
+            
+            if (!ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out CatalogPage page))
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
+                session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
                 return;
             }
 
-            ItemData LotData = null;
+            ItemData lotData = null;
 
-            if (ForceItem == 0)
+            if (forceItem == 0)
             {
-                LotData = Page.Items.ElementAt(ButterflyEnvironment.GetRandomNumber(0, Page.Items.Count - 1)).Value.Data;
+                lotData = page.Items.ElementAt(ButterflyEnvironment.GetRandomNumber(0, page.Items.Count - 1)).Value.Data;
             }
             else
             {
-                LotData = Page.GetItem(ForceItem).Data;
+                lotData = page.GetItem(forceItem).Data;
             }
 
-            if (LotData == null)
+            if (lotData == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
+                session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
                 return;
             }
 
-            int Credits = ButterflyEnvironment.GetRandomNumber(100, 10000) * 1000;
-            Session.GetHabbo().Credits += Credits;
-            Session.GetHabbo().UpdateCreditsBalance();
+            int credits = ButterflyEnvironment.GetRandomNumber(100, 10000) * 1000;
+            session.GetHabbo().Credits += credits;
+            session.GetHabbo().UpdateCreditsBalance();
 
-            int WinWin = ButterflyEnvironment.GetRandomNumber(100, 1000);
-            Session.GetHabbo().AchievementPoints += WinWin;
-
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                UserStatsDao.UpdateAchievementScore(dbClient, Session.GetHabbo().Id, WinWin);
-            }
-
-            Session.SendPacket(new AchievementScoreComposer(Session.GetHabbo().AchievementPoints));
-            RoomUser roomUserByHabbo = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-            if (roomUserByHabbo != null)
-            {
-                Session.SendPacket(new UserChangeComposer(roomUserByHabbo, true));
-                Room.SendPacket(new UserChangeComposer(roomUserByHabbo, false));
-            }
-
-            if (!string.IsNullOrEmpty(BadgeCode))
-            {
-                Session.GetHabbo().GetBadgeComponent().GiveBadge(BadgeCode, true);
-                Session.SendPacket(new ReceiveBadgeComposer(BadgeCode));
-            }
-
-            if (roomUserByHabbo != null)
-            {
-                roomUserByHabbo.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("item.legendboxlot", Session.Langue), Credits, WinWin, BadgeCode, LotType));
-            }
-
-            Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
+            int winwin = ButterflyEnvironment.GetRandomNumber(100, 1000);
+            session.GetHabbo().AchievementPoints += winwin;
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                ItemDao.UpdateBaseItem(dbClient, Present.Id, LotData.Id);
+                UserStatsDao.UpdateAchievementScore(dbClient, session.GetHabbo().Id, winwin);
             }
-            string FurniType = Present.GetBaseItem().Type.ToString().ToLower();
-            Present.BaseItem = LotData.Id;
-            Present.ResetBaseItem();
 
-            bool ItemIsInRoom = true;
+            session.SendPacket(new AchievementScoreComposer(session.GetHabbo().AchievementPoints));
 
-            if (Present.Data.Type == 's')
+            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(session.GetHabbo().Id);
+            if (roomUserByHabbo != null)
             {
-                if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
+                session.SendPacket(new UserChangeComposer(roomUserByHabbo, true));
+                room.SendPacket(new UserChangeComposer(roomUserByHabbo, false));
+
+                roomUserByHabbo.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("item.legendboxlot", session.Langue), credits, winwin, badgeCode, lotType));
+            }
+
+            if (!string.IsNullOrEmpty(badgeCode))
+            {
+                session.GetHabbo().GetBadgeComponent().GiveBadge(badgeCode, true);
+                session.SendPacket(new ReceiveBadgeComposer(badgeCode));
+            }
+
+            room.GetRoomItemHandler().RemoveFurniture(session, present.Id);
+
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            {
+                ItemDao.UpdateBaseItem(dbClient, present.Id, lotData.Id);
+            }
+
+            string furniType = present.GetBaseItem().Type.ToString().ToLower();
+            present.BaseItem = lotData.Id;
+            present.ResetBaseItem();
+
+            bool itemIsInRoom = true;
+
+            if (present.Data.Type == 's')
+            {
+                if (!room.GetRoomItemHandler().SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        ItemDao.UpdateResetRoomId(dbClient, Present.Id);
+                        ItemDao.UpdateResetRoomId(dbClient, present.Id);
                     }
 
-                    ItemIsInRoom = false;
+                    itemIsInRoom = false;
                 }
             }
             else
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    ItemDao.UpdateResetRoomId(dbClient, Present.Id);
+                    ItemDao.UpdateResetRoomId(dbClient, present.Id);
                 }
 
-                ItemIsInRoom = false;
+                itemIsInRoom = false;
             }
 
-            Session.SendPacket(new OpenGiftComposer(Present.Data, Present.ExtraData, Present, ItemIsInRoom));
+            session.SendPacket(new OpenGiftComposer(present.Data, present.ExtraData, present, itemIsInRoom));
 
-            if (!ItemIsInRoom)
+            if (!itemIsInRoom)
             {
-                Session.GetHabbo().GetInventoryComponent().TryAddItem(Present);
+                session.GetHabbo().GetInventoryComponent().TryAddItem(present);
             }
         }
     }
