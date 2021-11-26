@@ -4,7 +4,7 @@ using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Chat.Commands.Cmd
 {
-    internal class Facewalk : IChatCommand
+    internal class FaceWalk : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {

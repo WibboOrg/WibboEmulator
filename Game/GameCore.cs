@@ -11,7 +11,7 @@ using Butterfly.Game.LandingView;
 using Butterfly.Game.Navigator;
 using Butterfly.Game.Quests;
 using Butterfly.Game.Roleplay;
-using Butterfly.Game.Role;
+using Butterfly.Game.Permissions;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Chat;
 using Butterfly.Game.Moderation;
@@ -29,7 +29,7 @@ namespace Butterfly.Game
     {
         private readonly ClientManager _clientManager;
         private readonly WebClientManager _clientWebManager;
-        private readonly RoleManager _roleManager;
+        private readonly PermissionManager _permissionManager;
         private readonly CatalogManager _catalogManager;
         private readonly NavigatorManager _navigatorManager;
         private readonly ItemDataManager _itemDataManager;
@@ -56,8 +56,8 @@ namespace Butterfly.Game
             this._clientManager = new ClientManager();
             this._clientWebManager = new WebClientManager();
 
-            this._roleManager = new RoleManager();
-            this._roleManager.Init();
+            this._permissionManager = new PermissionManager();
+            this._permissionManager.Init();
 
             this._itemDataManager = new ItemDataManager();
             this._itemDataManager.Init();
@@ -151,9 +151,9 @@ namespace Butterfly.Game
             return this._clientWebManager;
         }
 
-        public RoleManager GetRoleManager()
+        public PermissionManager GetPermissionManager()
         {
-            return this._roleManager;
+            return this._permissionManager;
         }
 
         public CatalogManager GetCatalog()

@@ -5,11 +5,11 @@ namespace Butterfly.Communication.Packets.Outgoing.LandingView
 {
     internal class PromoArticlesComposer : ServerPacket
     {
-        public PromoArticlesComposer(List<SmallPromo> hotelViewPromosIndexers)
+        public PromoArticlesComposer(List<Promotion> hotelViewPromosIndexers)
             : base(ServerPacketHeader.DESKTOP_NEWS)
         {
             this.WriteInteger(hotelViewPromosIndexers.Count);
-            foreach (SmallPromo promo in hotelViewPromosIndexers)
+            foreach (Promotion promo in hotelViewPromosIndexers)
             {
                 this.WriteInteger(promo.Index);
                 this.WriteString(promo.Header);

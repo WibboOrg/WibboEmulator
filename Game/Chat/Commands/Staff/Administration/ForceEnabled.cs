@@ -3,18 +3,18 @@ using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Chat.Commands.Cmd
 {
-    internal class Control : IChatCommand
+    internal class ForceEnabled : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Params.Length != 2)
+            if (Params.Length != 3)
             {
                 return;
             }
 
-            string username = Params[1];
+            string Username = Params[1];
 
-            RoomUser roomUserByHabbo = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
+            RoomUser roomUserByHabbo = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByName(Username);
             if (roomUserByHabbo == null || roomUserByHabbo.GetClient() == null)
             {
                 return;
@@ -26,8 +26,17 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Session.GetHabbo().ControlUserId = roomUserByHabbo.GetClient().GetHabbo().Id;
+            if (!int.TryParse(Params[2], out int NumEnable))
+            {
+                return;
+            }
 
+            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, Session.GetHabbo().HasFuse("fuse_sysadmin")))
+            {
+                return;
+            }
+
+            roomUserByHabbo.ApplyEffect(NumEnable);
         }
     }
 }

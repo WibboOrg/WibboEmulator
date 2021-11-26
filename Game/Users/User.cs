@@ -196,6 +196,7 @@ namespace Butterfly.Game.Users
             this.Langue = Langue;
             this.IgnoreAllExpireTime = ignoreAllExpire;
 
+
             if (clientVolume.Contains(','))
             {
                 foreach (string Str in clientVolume.Split(','))
@@ -364,7 +365,7 @@ namespace Butterfly.Game.Users
                 }
             }
 
-            if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.GetClient().GetHabbo().HasFuse("fuse_enter_full_rooms") && !ButterflyEnvironment.GetGame().GetRoleManager().RankHasRight(this.GetClient().GetHabbo().Rank, "fuse_enter_full_rooms"))
+            if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.GetClient().GetHabbo().HasFuse("fuse_enter_full_rooms") && !ButterflyEnvironment.GetGame().GetPermissionManager().RankHasRight(this.GetClient().GetHabbo().Rank, "fuse_enter_full_rooms"))
             {
                 if (room.CloseFullRoom)
                 {
@@ -467,7 +468,7 @@ namespace Butterfly.Game.Users
 
         public bool HasFuse(string Fuse)
         {
-            if (ButterflyEnvironment.GetGame().GetRoleManager().RankHasRight(this.Rank, Fuse))
+            if (ButterflyEnvironment.GetGame().GetPermissionManager().RankHasRight(this.Rank, Fuse))
             {
                 return true;
             }
@@ -609,11 +610,11 @@ namespace Butterfly.Game.Users
             client.SendPacket(new HabboActivityPointNotificationComposer(this.Duckets, 1));
         }
 
-        private Client GetClient()
+        public Client GetClient()
         {
             return ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.Id);
         }
-
+        
         public MessengerComponent GetMessenger()
         {
             return this._messengerComponent;

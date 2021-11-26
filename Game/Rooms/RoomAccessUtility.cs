@@ -15,7 +15,7 @@ namespace Plus.HabboHotel.Rooms
                 case RoomAccess.Doorbell:
                     return 1;
 
-                case RoomAccess.PassWord:
+                case RoomAccess.Password:
                     return 2;
 
                 case RoomAccess.Invisible:
@@ -35,7 +35,7 @@ namespace Plus.HabboHotel.Rooms
                     return RoomAccess.Doorbell;
 
                 case "password":
-                    return RoomAccess.PassWord;
+                    return RoomAccess.Password;
 
                 case "invisible":
                     return RoomAccess.Invisible;
@@ -54,7 +54,7 @@ namespace Plus.HabboHotel.Rooms
                     return RoomAccess.Doorbell;
 
                 case 2:
-                    return RoomAccess.PassWord;
+                    return RoomAccess.Password;
 
                 case 3:
                     return RoomAccess.Invisible;

@@ -8,13 +8,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using Butterfly.Game.Rooms;
+using Butterfly.Game.Permissions;
 
 namespace Butterfly.Game.Chat.Commands
 {
     public class CommandManager
     {
 
-        private readonly Dictionary<string, ChatCommand> _commandRegisterInvokeable;
+        private readonly Dictionary<string, AuthorizationCommands> _commandRegisterInvokeable;
         private readonly Dictionary<string, string> _listCommande;
 
         private readonly Dictionary<int, IChatCommand> _commands;
@@ -23,7 +24,7 @@ namespace Butterfly.Game.Chat.Commands
         {
             _commands = new Dictionary<int, IChatCommand>();
             
-            _commandRegisterInvokeable = new Dictionary<string, ChatCommand>();
+            _commandRegisterInvokeable = new Dictionary<string, AuthorizationCommands>();
             _listCommande = new Dictionary<string, string>();
         }
 
@@ -63,7 +64,7 @@ namespace Butterfly.Game.Chat.Commands
                 return false;
             }
 
-            if (!this._commandRegisterInvokeable.TryGetValue(Split[0].ToLower(), out ChatCommand CmdInfo))
+            if (!this._commandRegisterInvokeable.TryGetValue(Split[0].ToLower(), out AuthorizationCommands CmdInfo))
             {
                 return false;
             }
@@ -133,7 +134,7 @@ namespace Butterfly.Game.Chat.Commands
                         continue;
                     }
 
-                    this._commandRegisterInvokeable.Add(command, new ChatCommand(key, strArray[0], pRank, pDescriptionFr, pDescriptionEn, pDescriptionBr));
+                    this._commandRegisterInvokeable.Add(command, new AuthorizationCommands(key, strArray[0], pRank, pDescriptionFr, pDescriptionEn, pDescriptionBr));
                 }
             }
         }
@@ -149,7 +150,7 @@ namespace Butterfly.Game.Chat.Commands
             List<string> NotDoublons = new List<string>();
             StringBuilder stringBuilder = new StringBuilder();
 
-            foreach (ChatCommand chatCommand in this._commandRegisterInvokeable.Values)
+            foreach (AuthorizationCommands chatCommand in this._commandRegisterInvokeable.Values)
             {
                 if (chatCommand.UserGotAuthorization(client) && !NotDoublons.Contains(chatCommand.input))
                 {
@@ -221,42 +222,42 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(64, new MoonWalk());
             this.Register(65, new Push());
             this.Register(66, new Pull());
-            this.Register(67, new CopyLook());
+            this.Register(67, new Mimic());
             this.Register(69, new Sit());
             this.Register(70, new Lay());
             this.Register(84, new Transf());
             this.Register(85, new TransfStop());
             this.Register(86, new KickAll());
-            this.Register(87, new Troc());
-            this.Register(88, new Textamigo());
+            this.Register(87, new DisableExchange());
+            this.Register(88, new DisableFriendRequests());
             this.Register(90, new GiveItem());
             this.Register(91, new RoomMutePet());
-            this.Register(92, new Facewalk());
-            this.Register(95, new NoFace());
+            this.Register(92, new FaceWalk());
+            this.Register(95, new FaceLess());
             this.Register(96, new EmptyPets());
             this.Register(97, new Construit());
             this.Register(98, new ConstruitStop());
-            this.Register(100, new Spull());
+            this.Register(100, new SuperPull());
             this.Register(102, new Trigger());
             this.Register(105, new RoomFreeze());
             this.Register(126, new SetZ());
             this.Register(127, new SetZStop());
             this.Register(130, new EmptyBots());
-            this.Register(133, new FollowMe());
+            this.Register(133, new DisableFollow());
             this.Register(134, new DisableOblique());
             this.Register(138, new InfoSuperWired());
-            this.Register(144, new Cmd.Janken());
+            this.Register(144, new Cmd.RockPaperScissors());
             this.Register(145, new RandomLook());
             this.Register(146, new Mazo());
             this.Register(148, new LoadVideo());
             this.Register(149, new HideWireds());
-            this.Register(150, new WarpAll());
+            this.Register(150, new AllWarp());
             this.Register(151, new Use());
             this.Register(152, new UseStop());
             this.Register(153, new Youtube());
             this.Register(160, new OldFoot());
-            this.Register(161, new Pyramide());
-            this.Register(158, new Tir());
+            this.Register(161, new HidePyramide());
+            this.Register(158, new GunFire());
             this.Register(162, new Cac());
             this.Register(163, new Pan());
             this.Register(165, new Prison());
@@ -265,18 +266,19 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(169, new AutoFloor());
             this.Register(171, new GiveMoney());
             this.Register(172, new ConfigBot());
-            this.Register(173, new SpeedWalk());
-            this.Register(178, new Big());
-            this.Register(179, new Little());
+            this.Register(173, new FastWalk());
+            this.Register(178, new TransfBig());
+            this.Register(179, new TransfLittle());
             this.Register(182, new ForceOpenGift());
             this.Register(184, new GameTime());
             this.Register(185, new StartQuestion());
             this.Register(186, new StopQuestion());
             this.Register(187, new PlaySoundRoom());
             this.Register(188, new StopSoundRoom());
-            this.Register(189, new YoutubeRoom());
+            this.Register(189, new RoomYouTube());
             this.Register(190, new CloseDice());
             this.Register(199, new Kick());
+            this.Register(201, new Dance());
 
         }
         
@@ -303,64 +305,64 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(39, new Alert());
             this.Register(40, new KickStaff());
             this.Register(61, new DeleteMission());
-            this.Register(63, new Come());
+            this.Register(63, new Summon());
             this.Register(89, new BanIP());
             this.Register(106, new RemoveBadge());
             this.Register(101, new TeleportStaff());
             this.Register(107, new RoomEnable());
             this.Register(112, new WarpStaff());
             this.Register(115, new EventAlert());
-            this.Register(170, new Emblem());
+            this.Register(170, new Insignia());
             this.Register(198, new StaffsOnline());
 
         }
 
         public void RegisterAdministrator()
         {
-            this.Register(12, new Coins());
+            this.Register(12, new GiveCoins());
             this.Register(15, new HotelAlert());
             this.Register(19, new RoomMute());
             this.Register(23, new RoomBadge());
             this.Register(24, new MassBadge());
             this.Register(30, new GiveBadge());
-            this.Register(53, new SetEffect());
+            this.Register(53, new ForceEnable());
             this.Register(94, new AddFilter());
             this.Register(109, new MachineBan());
             this.Register(111, new UnloadRoom());
             this.Register(116, new Control());
-            this.Register(117, new Say());
-            this.Register(118, new SetCopyLook());
-            this.Register(119, new SetTransf());
-            this.Register(120, new SetTransfStop());
-            this.Register(121, new SetEnable());
+            this.Register(117, new MakeSay());
+            this.Register(118, new ForceMimic());
+            this.Register(119, new ForceTransf());
+            this.Register(120, new ForceTransfStop());
+            this.Register(121, new ForceEnabled());
             this.Register(122, new Givelot());
             this.Register(123, new extrabox());
-            this.Register(124, new SayBot());
-            this.Register(128, new Murmur());
+            this.Register(124, new MakeSayBot());
+            this.Register(128, new DisableWhisper());
             this.Register(135, new AddPhoto());
             this.Register(137, new AddPhoto());
-            this.Register(141, new SetTransfBot());
+            this.Register(141, new ForceTransfBot());
             this.Register(143, new ShowGuide());
             this.Register(154, new RoomSell());
             this.Register(155, new RoomBuy());
             this.Register(156, new RoomRemoveSell());
-            this.Register(157, new DupliRoom());
-            this.Register(174, new ChutAll());
-            this.Register(175, new Flagme());
-            this.Register(176, new IgnoreAll());
-            this.Register(177, new PushNotif());
+            this.Register(157, new DuplicateRoom());
+            this.Register(174, new AllWhisper());
+            this.Register(175, new ForceFlagUser());
+            this.Register(176, new AllIgnore());
+            this.Register(177, new NotifTop());
             this.Register(191, new OpenWeb());
             this.Register(192, new RoomEffect());
             this.Register(193, new KickBan());
             this.Register(159, new SuperBot());
-
+            this.Register(202, new ForceSit());
 
         }
 
         public void RegisterGod()
         {
-            this.Register(28, new Shutdown());
-            this.Register(166, new Refresh());
+            this.Register(28, new ShutDown());
+            this.Register(166, new Update());
             this.Register(180, new LoadRoomItems());
             this.Register(181, new RegenLTD());
             this.Register(183, new AllFriends());
@@ -369,6 +371,7 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(196, new AllAroundMe());
             this.Register(197, new AllEyesOnMe());
             this.Register(200, new SummonAll());
+            this.Register(203, new RoomDance());
 
         }
         public void RegisterCommand()

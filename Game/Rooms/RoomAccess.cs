@@ -4,7 +4,7 @@
     {
         Open,
         Doorbell, 
-        PassWord, 
+        Password, 
         Invisible
     }
 }

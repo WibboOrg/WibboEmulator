@@ -1,9 +1,10 @@
+using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Chat.Commands.Cmd
 {
-    internal class Control : IChatCommand
+    internal class ForceTransfBot : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
@@ -26,7 +27,17 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Session.GetHabbo().ControlUserId = roomUserByHabbo.GetClient().GetHabbo().Id;
+            if (!roomUserByHabbo.transformation && !roomUserByHabbo.IsSpectator)
+            {
+                Room RoomClient = Session.GetHabbo().CurrentRoom;
+                if (RoomClient != null)
+                {
+                    roomUserByHabbo.transfbot = !roomUserByHabbo.transfbot;
+
+                    RoomClient.SendPacket(new UserRemoveComposer(roomUserByHabbo.VirtualId));
+                    RoomClient.SendPacket(new UsersComposer(roomUserByHabbo));
+                }
+            }
 
         }
     }
