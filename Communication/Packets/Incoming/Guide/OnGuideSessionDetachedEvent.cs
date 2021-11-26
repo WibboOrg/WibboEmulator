@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -13,17 +14,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (!state)
             {
-                ServerPacket finsession = new ServerPacket(ServerPacketHeader.OnGuideSessionDetached);
-                Session.SendPacket(finsession);
+                Session.SendPacket(new OnGuideSessionDetachedComposer());
 
                 if (requester == null)
                 {
                     return;
                 }
 
-                ServerPacket MessageNoGuide = new ServerPacket(ServerPacketHeader.OnGuideSessionError);
-                MessageNoGuide.WriteInteger(1);
-                requester.SendPacket(MessageNoGuide);
+                requester.SendPacket(new OnGuideSessionErrorComposer(1));
                 return;
             }
 
@@ -32,16 +30,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ServerPacket message = new ServerPacket(ServerPacketHeader.OnGuideSessionStarted);
-            message.WriteInteger(requester.GetHabbo().Id);
-            message.WriteString(requester.GetHabbo().Username);
-            message.WriteString(requester.GetHabbo().Look);
-            message.WriteInteger(Session.GetHabbo().Id);
-            message.WriteString(Session.GetHabbo().Username);
-            message.WriteString(Session.GetHabbo().Look);
-
-            requester.SendPacket(message);
-            Session.SendPacket(message);
+            requester.SendPacket(new OnGuideSessionStartedComposer(Session.GetHabbo(), requester.GetHabbo()));
+            Session.SendPacket(new OnGuideSessionStartedComposer(Session.GetHabbo(), requester.GetHabbo()));
         }
     }
 }

@@ -57,7 +57,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     Session.SendPacket(new RefreshFavouriteGroupComposer(Session.GetHabbo().Id));
                 }
             }
-
         }
     }
 }

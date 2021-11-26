@@ -2,10 +2,10 @@ namespace Butterfly.Communication.Packets.Outgoing.Help
 {
     internal class OnGuideSessionRequesterRoomComposer : ServerPacket
     {
-        public OnGuideSessionRequesterRoomComposer()
+        public OnGuideSessionRequesterRoomComposer(int roomId)
             : base(ServerPacketHeader.OnGuideSessionRequesterRoom)
         {
-
+            WriteInteger(roomId);
         }
     }
 }

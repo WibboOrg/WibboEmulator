@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -20,12 +21,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ServerPacket messageC = new ServerPacket(ServerPacketHeader.OnGuideSessionMsg);
-            messageC.WriteString(message);
-            messageC.WriteInteger(Session.GetHabbo().Id);
-
-            requester.SendPacket(messageC);
-            Session.SendPacket(messageC);
+            requester.SendPacket(new OnGuideSessionMsgComposer(message, Session.GetHabbo().Id);
+            Session.SendPacket(new OnGuideSessionMsgComposer(message, Session.GetHabbo().Id);
         }
     }
 }

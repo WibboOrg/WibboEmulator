@@ -51,7 +51,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, Voucher.Value));
             }
 
-            // Session.SendPacket(new VoucherRedeemOkComposer());
+            //Session.SendPacket(new VoucherRedeemOkComposer());
         }
     }
 }

@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -7,9 +8,10 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.OpenHelpToolMessageComposer);
-            serverMessage.WriteInteger(0);
-            Session.SendPacket(serverMessage);
+            if (Session.GetHabbo() == null || Session.GetHabbo().HasFuse("fuse_helptool"))
+                return;
+
+            Session.SendPacket(new OpenHelpToolComposer(0));
         }
     }
 }

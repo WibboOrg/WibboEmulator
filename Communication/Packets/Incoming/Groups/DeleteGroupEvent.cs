@@ -48,7 +48,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
 
             Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.succes", Session.Langue));
-            return;
         }
     }
 }

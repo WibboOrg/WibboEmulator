@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
@@ -15,21 +16,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             Room room = Session.GetHabbo().CurrentRoom;
-            ServerPacket message = new ServerPacket(ServerPacketHeader.OnGuideSessionInvitedToGuideRoom);
 
             if (room == null)
             {
-                message.WriteInteger(0);
-                message.WriteString("");
+                requester.SendPacket(new OnGuideSessionInvitedToGuideRoomComposer(0, ""));
+                Session.SendPacket(new OnGuideSessionInvitedToGuideRoomComposer(0, ""));
             }
             else
             {
-                message.WriteInteger(room.Id);
-                message.WriteString(room.RoomData.Name);
+                requester.SendPacket(new OnGuideSessionInvitedToGuideRoomComposer(room.Id, room.RoomData.Name));
+                Session.SendPacket(new OnGuideSessionInvitedToGuideRoomComposer(room.Id, room.RoomData.Name));
             }
 
-            requester.SendPacket(message);
-            Session.SendPacket(message);
+            
         }
     }
 }

@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Help;
 
@@ -30,12 +31,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.GetHabbo().OnDuty = false;
             }
 
-            ServerPacket HelpTool = new ServerPacket(ServerPacketHeader.HelperToolMessageComposer);
-            HelpTool.WriteBoolean(Session.GetHabbo().OnDuty);
-            HelpTool.WriteInteger(guideManager.GuidesCount);
-            HelpTool.WriteInteger(0);
-            HelpTool.WriteInteger(0);
-            Session.SendPacket(HelpTool);
+            Session.SendPacket(new HelperToolComposer(Session.GetHabbo().OnDuty, guideManager.GuidesCount));
         }
     }
 }

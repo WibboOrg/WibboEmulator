@@ -10,11 +10,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            string PhotoId = Packet.PopString();
+            string photoId = Packet.PopString();
 
-            if (string.IsNullOrEmpty(PhotoId) || !ButterflyEnvironment.IsValidAlphaNumeric(PhotoId) || PhotoId.Length != 32)
+            if (string.IsNullOrEmpty(photoId) || !ButterflyEnvironment.IsValidAlphaNumeric(photoId) || photoId.Length != 32)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", Session.Langue) + " ( " + PhotoId + " ) ");
+                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", Session.Langue) + " ( " + photoId + " ) ");
                 return;
             }
 
@@ -29,7 +29,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             int Time = ButterflyEnvironment.GetUnixTimestamp();
-            string ExtraData = "{\"w\":\"" + "/photos/" + PhotoId + ".png" + "\", \"n\":\"" + Session.GetHabbo().Username + "\", \"s\":\"" + Session.GetHabbo().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
+            string ExtraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + Session.GetHabbo().Username + "\", \"s\":\"" + Session.GetHabbo().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
 
 
             Item ItemSmall = ItemFactory.CreateSingleItemNullable(ItemDataSmall, Session.GetHabbo(), ExtraData);
@@ -40,15 +40,15 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Session.SendPacket(new CameraPurchaseSuccesfullComposer());
 
-            if (Session.GetHabbo().LastPhotoId == PhotoId)
+            if (Session.GetHabbo().LastPhotoId == photoId)
             {
                 return;
             }
 
-            Session.GetHabbo().LastPhotoId = PhotoId;
+            Session.GetHabbo().LastPhotoId = photoId;
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                UserPhotoDao.Insert(dbClient, Session.GetHabbo().Id, PhotoId, Time);
+                UserPhotoDao.Insert(dbClient, Session.GetHabbo().Id, photoId, Time);
         }
     }
 }

@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Butterfly.Game.User.Data;
+using Butterfly.Communication.Packets.Outgoing.Help;
 
 namespace Butterfly.Game.User
 {
@@ -541,9 +542,7 @@ namespace Butterfly.Game.User
                 Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.GuideOtherUserId);
                 if (requester != null)
                 {
-                    ServerPacket message = new ServerPacket(ServerPacketHeader.OnGuideSessionEnded);
-                    message.WriteInteger(1);
-                    requester.SendPacket(message);
+                    requester.SendPacket(new OnGuideSessionEndedComposer(1));
 
                     requester.GetHabbo().GuideOtherUserId = 0;
                 }

@@ -1,4 +1,4 @@
-using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Session.SendPacket(new ServerPacket(ServerPacketHeader.OnGuideSessionDetached));
+            Session.SendPacket(new OnGuideSessionDetachedComposer());
         }
     }
 }

@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Help;
 
@@ -14,9 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             HelpManager guideManager = ButterflyEnvironment.GetGame().GetHelpManager();
             if (guideManager.GuidesCount <= 0)
             {
-                ServerPacket Response = new ServerPacket(ServerPacketHeader.OnGuideSessionError);
-                Response.WriteInteger(2);
-                Session.SendPacket(Response);
+                Session.SendPacket(new OnGuideSessionErrorComposer(2));
                 return;
             }
 
@@ -28,27 +27,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int guideId = guideManager.GetRandomGuide();
             if (guideId == 0)
             {
-                ServerPacket Response = new ServerPacket(ServerPacketHeader.OnGuideSessionError);
-                Response.WriteInteger(2);
-                Session.SendPacket(Response);
+                Session.SendPacket(new OnGuideSessionErrorComposer(2));
                 return;
             }
 
             Client guide = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(guideId);
 
-            ServerPacket onGuideSessionAttached = new ServerPacket(ServerPacketHeader.OnGuideSessionAttached);
-            onGuideSessionAttached.WriteBoolean(false);
-            onGuideSessionAttached.WriteInteger(userId);
-            onGuideSessionAttached.WriteString(message);
-            onGuideSessionAttached.WriteInteger(30); //Temps moyen
-            Session.SendPacket(onGuideSessionAttached);
-
-            ServerPacket onGuideSessionAttached2 = new ServerPacket(ServerPacketHeader.OnGuideSessionAttached);
-            onGuideSessionAttached2.WriteBoolean(true);
-            onGuideSessionAttached2.WriteInteger(userId);
-            onGuideSessionAttached2.WriteString(message);
-            onGuideSessionAttached2.WriteInteger(15);
-            guide.SendPacket(onGuideSessionAttached2);
+            Session.SendPacket(new OnGuideSessionAttachedComposer(false, userId, message, 30));
+            guide.SendPacket(new OnGuideSessionAttachedComposer(true, userId, message, 15));
 
             guide.GetHabbo().GuideOtherUserId = Session.GetHabbo().Id;
             Session.GetHabbo().GuideOtherUserId = guide.GetHabbo().Id;

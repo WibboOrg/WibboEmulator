@@ -9,12 +9,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetHabbo().GuideOtherUserId);
 
-            ServerPacket message = new ServerPacket(ServerPacketHeader.OnGuideSessionDetached);
-            Session.SendPacket(message);
+            Session.SendPacket(new OnGuideSessionDetachedComposer());
 
             if (requester != null)
             {
-                requester.SendPacket(message);
+                requester.SendPacket(new OnGuideSessionDetachedComposer());
             }
         }
     }

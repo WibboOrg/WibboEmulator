@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -13,11 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            int roomid = requester.GetHabbo().CurrentRoomId;
-
-            ServerPacket message = new ServerPacket(ServerPacketHeader.OnGuideSessionRequesterRoom);
-            message.WriteInteger(roomid);
-            Session.SendPacket(message);
+            Session.SendPacket(new OnGuideSessionRequesterRoomComposer(requester.GetHabbo().CurrentRoomId));
         }
     }
 }
