@@ -69,7 +69,7 @@ namespace Butterfly.Game.Chat.Commands
                 return false;
             }
 
-            if (!this._commands.TryGetValue(CmdInfo.commandID, out IChatCommand Cmd))
+            if (!this._commands.TryGetValue(CmdInfo.CommandID, out IChatCommand Cmd))
             {
                 return false;
             }
@@ -152,22 +152,22 @@ namespace Butterfly.Game.Chat.Commands
 
             foreach (AuthorizationCommands chatCommand in this._commandRegisterInvokeable.Values)
             {
-                if (chatCommand.UserGotAuthorization(client) && !NotDoublons.Contains(chatCommand.input))
+                if (chatCommand.UserGotAuthorization(client) && !NotDoublons.Contains(chatCommand.Input))
                 {
                     if (client.Langue == Language.ANGLAIS)
                     {
-                        stringBuilder.Append(":" + chatCommand.input + " - " + chatCommand.descriptionEn + "\r\r");
+                        stringBuilder.Append(":" + chatCommand.Input + " - " + chatCommand.DescriptionEn + "\r\r");
                     }
                     else if (client.Langue == Language.PORTUGAIS)
                     {
-                        stringBuilder.Append(":" + chatCommand.input + " - " + chatCommand.descriptionBr + "\r\r");
+                        stringBuilder.Append(":" + chatCommand.Input + " - " + chatCommand.DescriptionBr + "\r\r");
                     }
                     else
                     {
-                        stringBuilder.Append(":" + chatCommand.input + " - " + chatCommand.descriptionFr + "\r\r");
+                        stringBuilder.Append(":" + chatCommand.Input + " - " + chatCommand.DescriptionFr + "\r\r");
                     }
 
-                    NotDoublons.Add(chatCommand.input);
+                    NotDoublons.Add(chatCommand.Input);
                 }
             }
             NotDoublons.Clear();

@@ -5,47 +5,47 @@ namespace Butterfly.Game.Permissions
 {
     public struct AuthorizationCommands
     {
-        public readonly int commandID;
-        public readonly string input;
-        public readonly int minrank;
-        public readonly string descriptionFr;
-        public readonly string descriptionEn;
-        public readonly string descriptionBr;
+        public readonly int CommandID;
+        public readonly string Input;
+        public readonly int MinRank;
+        public readonly string DescriptionFr;
+        public readonly string DescriptionEn;
+        public readonly string DescriptionBr;
 
-        public AuthorizationCommands(int CommandID, string Input, int Rank, string DescriptionFr, string DescriptionEn, string DescriptionBr)
+        public AuthorizationCommands(int commandID, string input, int rank, string descriptionFr, string descriptionEn, string descriptionBr)
         {
-            this.commandID = CommandID;
-            this.input = Input;
-            this.minrank = Rank;
-            this.descriptionFr = DescriptionFr;
-            this.descriptionEn = DescriptionEn;
-            this.descriptionBr = DescriptionBr;
+            this.CommandID = commandID;
+            this.Input = input;
+            this.MinRank = rank;
+            this.DescriptionFr = descriptionFr;
+            this.DescriptionEn = descriptionEn;
+            this.DescriptionBr = descriptionBr;
         }
 
         public bool UserGotAuthorization(Client session)
         {
-            if (this.minrank == 0)
+            if (this.MinRank == 0)
             {
                 return true;
             }
 
-            if (this.minrank > 0)
+            if (this.MinRank > 0)
             {
-                if (this.minrank <= (long)session.GetHabbo().Rank)
+                if (this.MinRank <= (long)session.GetHabbo().Rank)
                 {
                     return true;
                 }
             }
-            else if (this.minrank < 0)
+            else if (this.MinRank < 0)
             {
-                if (this.minrank == -1)
+                if (this.MinRank == -1)
                 {
                     if (session.GetHabbo().CurrentRoom.CheckRights(session))
                     {
                         return true;
                     }
                 }
-                else if (this.minrank == -2 && session.GetHabbo().CurrentRoom.CheckRights(session, true))
+                else if (this.MinRank == -2 && session.GetHabbo().CurrentRoom.CheckRights(session, true))
                 {
                     return true;
                 }
@@ -56,7 +56,7 @@ namespace Butterfly.Game.Permissions
 
         public bool UserGotAuthorizationStaffLog()
         {
-            if (this.minrank > 4)
+            if (this.MinRank > 4)
             {
                 return true;
             }
@@ -66,30 +66,30 @@ namespace Butterfly.Game.Permissions
 
         public int UserGotAuthorization2(Client session, Language RoomLangue)
         {
-            if (this.minrank == 0)
+            if (this.MinRank == 0)
             {
                 return 0;
             }
 
-            if (this.minrank > 2 && session.GetHabbo().Rank < 13 && RoomLangue != session.Langue)
+            if (this.MinRank > 2 && session.GetHabbo().Rank < 13 && RoomLangue != session.Langue)
             {
                 return 5;
             }
 
-            if (this.minrank > 0)
+            if (this.MinRank > 0)
             {
-                if (this.minrank <= session.GetHabbo().Rank)
+                if (this.MinRank <= session.GetHabbo().Rank)
                 {
                     return 0;
                 }
-                else if (this.minrank == 2)
+                else if (this.MinRank == 2)
                 {
                     return 2;
                 }
             }
-            else if (this.minrank < 0)
+            else if (this.MinRank < 0)
             {
-                if (this.minrank == -1)
+                if (this.MinRank == -1)
                 {
                     if (session.GetHabbo().CurrentRoom.CheckRights(session))
                     {
@@ -100,7 +100,7 @@ namespace Butterfly.Game.Permissions
                         return 3;
                     }
                 }
-                else if (this.minrank == -2 && session.GetHabbo().CurrentRoom.CheckRights(session, true))
+                else if (this.MinRank == -2 && session.GetHabbo().CurrentRoom.CheckRights(session, true))
                 {
                     return 0;
                 }
