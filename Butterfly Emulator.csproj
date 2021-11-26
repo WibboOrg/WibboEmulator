@@ -814,7 +814,7 @@
     <Compile Include="Core\FigureData\Types\SetType.cs" />
     <Compile Include="Core\FigureData\Types\SetTypeUtility.cs" />
     <Compile Include="Game\Catalog\CatalogPromotion.cs" />
-    <Compile Include="Game\Users\Effects\EffectManager.cs" />
+    <Compile Include="Game\Effects\EffectManager.cs" />
     <Compile Include="Game\Guilds\GuildBadgePart.cs" />
     <Compile Include="Game\Guilds\GuildColour.cs" />
     <Compile Include="Game\LandingView\Promotion.cs" />
