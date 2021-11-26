@@ -5,18 +5,18 @@ namespace Butterfly.Game.Items
 {
     public class ItemTemp : IEquatable<ItemTemp>
     {
-        public int Id;
-        public int VirtualUserId;
-        public int SpriteId;
-        public int X;
-        public int Y;
-        public double Z;
-        public MovementDirection Movement;
-        public string ExtraData;
-        public int Value;
-        public int TeamId;
-        public int Distance;
-        public InteractionTypeTemp InteractionType;
+        public int Id { get; set; }
+        public int VirtualUserId { get; set; }
+        public int SpriteId { get; set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public double Z { get; set; }
+        public MovementDirection Movement { get; set; }
+        public string ExtraData { get; set; }
+        public int Value { get; set; }
+        public int TeamId { get; set; }
+        public int Distance { get; set; }
+        public InteractionTypeTemp InteractionType { get; set; }
 
         public ItemTemp(int id, int userId, int spriteId, int x, int y, double z, string extraData, MovementDirection movement, int value, InteractionTypeTemp pInteraction, int pDistance = 0, int pTeamId = 0)
         {

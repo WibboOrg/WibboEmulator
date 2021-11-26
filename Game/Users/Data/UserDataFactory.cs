@@ -1,7 +1,7 @@
 ﻿using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.Achievement;
+using Butterfly.Game.Achievements;
 using Butterfly.Game.Users.Badges;
 using Butterfly.Game.Users.Messenger;
 using System;

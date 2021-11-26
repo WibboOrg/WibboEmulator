@@ -3,6 +3,7 @@ using Butterfly.Game.Rooms;
 using Butterfly.Game.Items.Wired.Interfaces;
 using System.Data;
 using Butterfly.Game.Rooms.Wired;
+using Butterfly.Utility.Events;
 
 namespace Butterfly.Game.Items.Wired
 {

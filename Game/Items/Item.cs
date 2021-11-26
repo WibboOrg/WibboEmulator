@@ -9,6 +9,7 @@ using Butterfly.Game.Items.Wired.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Butterfly.Utility.Events;
 
 namespace Butterfly.Game.Items
 {
@@ -33,7 +34,7 @@ namespace Butterfly.Game.Items
         public int UpdateCounter;
         public int InteractingUser;
         public int InteractingUser2;
-        private Room mRoom;
+        private Room RoomInstance;
         public bool PendingReset;
         public int Fx;
 
@@ -303,7 +304,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public Item(int mId, int RoomId, int mBaseItem, string ExtraData, int limitedNumber, int limitedStack, int X, int Y, double Z, int Rot, string wallCoord, Room pRoom)
+        public Item(int mId, int RoomId, int mBaseItem, string ExtraData, int limitedNumber, int limitedStack, int X, int Y, double Z, int Rot, string wallCoord, Room room)
         {
             if (ButterflyEnvironment.GetGame().GetItemManager().GetItem(mBaseItem, out ItemData Data))
             {
@@ -333,7 +334,7 @@ namespace Butterfly.Game.Items
 
                 this.Fx = this.Data.EffectId;
 
-                this.mRoom = pRoom;
+                this.RoomInstance = room;
                 if (this.GetBaseItem() == null)
                 {
                     Logging.LogException("Unknown baseID: " + mBaseItem);
@@ -417,7 +418,7 @@ namespace Butterfly.Game.Items
 
         public void Destroy()
         {
-            this.mRoom = null;
+            this.RoomInstance = null;
             this.GetAffectedTiles.Clear();
 
             if (this.WiredHandler != null)
@@ -991,11 +992,11 @@ namespace Butterfly.Game.Items
                             if (roomUserByHabbo2.Coordinate == this.Coordinate)
                             {
                                 roomUserByHabbo2.AllowOverride = false;
-                                if (ItemTeleporterFinder.IsTeleLinked(this.Id, this.mRoom))
+                                if (ItemTeleporterFinder.IsTeleLinked(this.Id, this.RoomInstance))
                                 {
                                     showTeleEffect = true;
                                     int linkedTele = ItemTeleporterFinder.GetLinkedTele(this.Id);
-                                    int teleRoomId = ItemTeleporterFinder.GetTeleRoomId(linkedTele, this.mRoom);
+                                    int teleRoomId = ItemTeleporterFinder.GetTeleRoomId(linkedTele, this.RoomInstance);
                                     if (teleRoomId == this.RoomId)
                                     {
                                         Item roomItem = this.GetRoom().GetRoomItemHandler().GetItem(linkedTele);
@@ -1201,12 +1202,12 @@ namespace Butterfly.Game.Items
 
         public Room GetRoom()
         {
-            if (this.mRoom == null)
+            if (this.RoomInstance == null)
             {
-                this.mRoom = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.RoomId);
+                this.RoomInstance = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.RoomId);
             }
 
-            return this.mRoom;
+            return this.RoomInstance;
         }
 
         public void UserWalksOnFurni(RoomUser user, Item item)

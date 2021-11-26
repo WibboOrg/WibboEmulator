@@ -37,10 +37,10 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                         stringBuilder.Append("- " + guide.GetHabbo().Username + " (Disponible)\r");
                     }
                 }
+
                 stringBuilder.Append("\r");
                 Session.SendHugeNotif(stringBuilder.ToString());
             }
-
         }
     }
 }

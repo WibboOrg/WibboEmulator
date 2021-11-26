@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Butterfly.Game.Achievement
+namespace Butterfly.Game.Achievements
 {
     public class AchievementData
     {

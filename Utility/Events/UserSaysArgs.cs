@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Butterfly.Game.Rooms;
+using System;
 
-namespace Butterfly.Game.Rooms
+namespace Butterfly.Utility.Events
 {
     public class UserSaysArgs : EventArgs
     {

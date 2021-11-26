@@ -1,7 +1,8 @@
-﻿using Butterfly.Game.Rooms;
+﻿using Butterfly.Game.Items;
+using Butterfly.Game.Rooms;
 using System;
 
-namespace Butterfly.Game.Items
+namespace Butterfly.Utility.Events
 {
     public class ItemTriggeredArgs : EventArgs
     {

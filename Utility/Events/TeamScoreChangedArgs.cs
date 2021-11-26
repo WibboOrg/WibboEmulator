@@ -1,7 +1,8 @@
-﻿using Butterfly.Game.Rooms.Games;
+﻿using Butterfly.Game.Rooms;
+using Butterfly.Game.Rooms.Games;
 using System;
 
-namespace Butterfly.Game.Rooms
+namespace Butterfly.Utility.Events
 {
     public class TeamScoreChangedArgs : EventArgs
     {

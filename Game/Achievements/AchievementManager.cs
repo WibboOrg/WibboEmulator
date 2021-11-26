@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-namespace Butterfly.Game.Achievement
+namespace Butterfly.Game.Achievements
 {
     public class AchievementManager
     {
