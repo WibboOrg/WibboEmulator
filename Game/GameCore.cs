@@ -1,7 +1,5 @@
 ﻿using Butterfly.Communication.Packets;
 using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
 using Butterfly.Game.Achievement;
 using Butterfly.Game.Animation;
 using Butterfly.Game.Catalog;

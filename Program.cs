@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.WebSocket;
-using Butterfly.Core;
+﻿using Butterfly.Core;
 using System;
 using System.Security.Permissions;
 

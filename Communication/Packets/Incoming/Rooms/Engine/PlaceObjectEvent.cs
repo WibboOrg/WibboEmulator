@@ -7,7 +7,6 @@ using Butterfly.Game.Items;
 using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Quests;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Wired;
 using System;
 using System.Linq;
 

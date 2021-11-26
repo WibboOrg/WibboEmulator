@@ -1,10 +1,8 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.Items;
+﻿using Butterfly.Game.Items;
 using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.Pathfinding;
-using Butterfly.Game.Rooms.Wired;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

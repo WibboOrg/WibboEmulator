@@ -5,7 +5,6 @@ using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Items.Wired.Interfaces;
 using System.Data;
 using System.Drawing;
-using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Items.Wired.Actions
 {

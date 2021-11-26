@@ -1,6 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-
-namespace Butterfly.Game.LandingView
+﻿namespace Butterfly.Game.LandingView
 {
     public class SmallPromo
     {

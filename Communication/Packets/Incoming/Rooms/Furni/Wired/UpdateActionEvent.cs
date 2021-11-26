@@ -3,7 +3,6 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Wired;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
