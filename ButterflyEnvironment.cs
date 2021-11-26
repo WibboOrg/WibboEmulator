@@ -9,8 +9,8 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game;
 using Butterfly.Game.Clients;
-using Butterfly.Game.User;
-using Butterfly.Game.User.Data;
+using Butterfly.Game.Users;
+using Butterfly.Game.Users.Data;
 using Butterfly.Net;
 using ConnectionManager;
 using System;
@@ -29,13 +29,13 @@ namespace Butterfly
         private static ConnectionHandeling _connectionManager;
         private static WebSocketManager _webSocketManager;
         private static GameCore _game;
-        private static DatabaseManager _datebasemanager;
+        private static DatabaseManager _datebaseManager;
         private static RCONSocket _rcon;
         private static FigureDataManager _figureManager;
         private static LanguageManager _languageManager;
 
         private static Random _random = new Random();
-        private static readonly ConcurrentDictionary<int, Habbo> _usersCached = new ConcurrentDictionary<int, Habbo>();
+        private static readonly ConcurrentDictionary<int, User> _usersCached = new ConcurrentDictionary<int, User>();
 
         public static DateTime ServerStarted;
         public static bool StaticEvents;
@@ -87,11 +87,11 @@ namespace Butterfly
             try
             {
                 _configuration = new ConfigurationData(PatchDir + "configuration/settings.ini", false);
-                _datebasemanager = new DatabaseManager(uint.Parse(GetConfig().data["db.pool.maxsize"]), uint.Parse(GetConfig().data["db.pool.minsize"]), GetConfig().data["db.hostname"], uint.Parse(GetConfig().data["db.port"]), GetConfig().data["db.username"], GetConfig().data["db.password"], GetConfig().data["db.name"]);
+                _datebaseManager = new DatabaseManager(uint.Parse(GetConfig().data["db.pool.maxsize"]), uint.Parse(GetConfig().data["db.pool.minsize"]), GetConfig().data["db.hostname"], uint.Parse(GetConfig().data["db.port"]), GetConfig().data["db.username"], GetConfig().data["db.password"], GetConfig().data["db.name"]);
 
 
                 int TryCount = 0;
-                while (!_datebasemanager.IsConnected())
+                while (!_datebaseManager.IsConnected())
                 {
                     TryCount++;
                     Thread.Sleep(5000);
@@ -105,7 +105,7 @@ namespace Butterfly
                     }
                 }
 
-                HabboEncryptionV2.Initialize(new RSAKeys());
+                EncryptionV2.Initialize(new RSAKeys());
 
                 _languageManager = new LanguageManager();
                 _languageManager.Init();
@@ -262,7 +262,7 @@ namespace Butterfly
             return Name;
         }
 
-        public static Habbo GetHabboByUsername(string UserName)
+        public static User GetHabboByUsername(string UserName)
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -276,14 +276,14 @@ namespace Butterfly
             }
         }
 
-        public static Habbo GetHabboById(int UserId)
+        public static User GetHabboById(int UserId)
         {
             try
             {
                 Client Client = GetGame().GetClientManager().GetClientByUserID(UserId);
                 if (Client != null)
                 {
-                    Habbo User = Client.GetHabbo();
+                    User User = Client.GetHabbo();
                     if (User != null && User.Id > 0)
                     {
                         if (_usersCached.ContainsKey(UserId))
@@ -307,7 +307,7 @@ namespace Butterfly
                             UserData data = UserDataFactory.GetUserData(UserId);
                             if (data != null)
                             {
-                                Habbo Generated = data.User;
+                                User Generated = data.User;
                                 if (Generated != null)
                                 {
                                     _usersCached.TryAdd(UserId, Generated);
@@ -353,7 +353,7 @@ namespace Butterfly
 
         public static DatabaseManager GetDatabaseManager()
         {
-            return _datebasemanager;
+            return _datebaseManager;
         }
 
         public static WebSocketManager GetWebSocketManager()

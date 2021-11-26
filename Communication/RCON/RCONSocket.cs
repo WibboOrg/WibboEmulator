@@ -8,27 +8,27 @@ namespace Butterfly.Net
 {
     public class RCONSocket
     {
-        public Socket msSocket;
-        public int musPort;
+        private readonly Socket _socket;
+        private readonly int _musPort;
 
-        public List<string> allowedIps;
+        private readonly List<string> _allowedIps;
         private readonly CommandManager _commands;
 
         public RCONSocket(int _musPort, string[] _allowedIps)
         {
-            this.musPort = _musPort;
-            this.allowedIps = new List<string>();
+            this._musPort = _musPort;
+            this._allowedIps = new List<string>();
             foreach (string str in _allowedIps)
             {
-                this.allowedIps.Add(str);
+                this._allowedIps.Add(str);
             }
 
             try
             {
-                this.msSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                this.msSocket.Bind(new IPEndPoint(IPAddress.Any, this.musPort));
-                this.msSocket.Listen(0);
-                this.msSocket.BeginAccept(new AsyncCallback(this.onNewConnection), this.msSocket);
+                this._socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                this._socket.Bind(new IPEndPoint(IPAddress.Any, this._musPort));
+                this._socket.Listen(0);
+                this._socket.BeginAccept(new AsyncCallback(this.OnNewConnection), this._socket);
             }
             catch (Exception ex)
             {
@@ -38,13 +38,13 @@ namespace Butterfly.Net
             this._commands = new CommandManager();
         }
 
-        public void onNewConnection(IAsyncResult iAr)
+        public void OnNewConnection(IAsyncResult iAr)
         {
             try
             {
                 Socket _socket = ((Socket)iAr.AsyncState).EndAccept(iAr);
                 string str = _socket.RemoteEndPoint.ToString().Split(new char[1] { ':' })[0];
-                if (this.allowedIps.Contains(str) || str == "127.0.0.1")
+                if (this._allowedIps.Contains(str) || str == "127.0.0.1")
                 {
                     new RCONConnection(_socket);
                 }
@@ -57,7 +57,7 @@ namespace Butterfly.Net
             catch
             {
             }
-            this.msSocket.BeginAccept(new AsyncCallback(this.onNewConnection), this.msSocket);
+            this._socket.BeginAccept(new AsyncCallback(this.OnNewConnection), this._socket);
         }
 
         public CommandManager GetCommands()

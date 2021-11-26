@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Notifications;
 using Butterfly.Game.Clients;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -9,7 +9,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Habbo habbo = Session.GetHabbo();
+            User habbo = Session.GetHabbo();
 
             habbo.PassedNuxCount++;
 

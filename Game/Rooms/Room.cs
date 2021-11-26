@@ -11,7 +11,7 @@ using Butterfly.Game.Items;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Roleplay;
 using Butterfly.Game.Rooms.AI;
-using Butterfly.Game.Rooms.Chat.Logs;
+using Butterfly.Game.Chat.Logs;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Jankens;
 using Butterfly.Game.Rooms.Moodlight;
@@ -59,8 +59,8 @@ namespace Butterfly.Game.Rooms
         private Freeze _freeze;
         private JankenManager _jankan;
         private GameItemHandler _gameItemHandler;
-        private WiredHandler _wiredHandler;
-        private ProjectileManager _projectileManager;
+        private readonly WiredHandler _wiredHandler;
+        private readonly ProjectileManager _projectileManager;
         private readonly ChatMessageManager _chatMessageManager;
 
         private readonly Dictionary<int, double> _bans;
@@ -82,7 +82,7 @@ namespace Butterfly.Game.Rooms
         public int VotedYesCount { get; set; }
         public int VotedNoCount { get; set; }
 
-        private List<CancellationTokenSource> _cancellationTokenSources;
+        private readonly List<CancellationTokenSource> _cancellationTokenSources;
 
         public int UserCount => this._roomUserManager.GetRoomUserCount();
 

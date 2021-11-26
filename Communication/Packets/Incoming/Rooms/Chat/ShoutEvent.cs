@@ -3,7 +3,7 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Quests;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Chat.Styles;
+using Butterfly.Game.Chat.Styles;
 using Butterfly.Utility;
 using System;
 

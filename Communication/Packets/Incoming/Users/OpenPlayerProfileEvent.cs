@@ -3,7 +3,7 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int userId = Packet.PopInt();
             bool IsMe = Packet.PopBoolean();
 
-            Habbo targetData = ButterflyEnvironment.GetHabboById(userId);
+            User targetData = ButterflyEnvironment.GetHabboById(userId);
             if (targetData == null)
             {
                 return;

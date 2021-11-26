@@ -7,6 +7,8 @@ namespace ConnectionManager
 {
     public class ConnectionInformation : IDisposable
     {
+        private static readonly int BUFFER_SIZE = 8192 * 10;
+
         private readonly Socket _dataSocket;
         private readonly string _ip;
         private readonly int _connectionID;
@@ -22,13 +24,13 @@ namespace ConnectionManager
         public ConnectionInformation(Socket dataStream, int connectionID, IDataParser parser, string ip)
         {
             this.Parser = parser;
-            this._buffer = new byte[GameSocketManagerStatics.BUFFER_SIZE];
+            this._buffer = new byte[BUFFER_SIZE];
 
             this._dataSocket = dataStream;
             this._dataSocket.SendTimeout = 1000 * 30;
             this._dataSocket.ReceiveTimeout = 1000 * 30;
-            this._dataSocket.SendBufferSize = GameSocketManagerStatics.BUFFER_SIZE;
-            this._dataSocket.ReceiveBufferSize = GameSocketManagerStatics.BUFFER_SIZE;
+            this._dataSocket.SendBufferSize = BUFFER_SIZE;
+            this._dataSocket.ReceiveBufferSize = BUFFER_SIZE;
             this._dataSocket.DontFragment = false;
 
             this._sendCallback = new AsyncCallback(this.SentData);

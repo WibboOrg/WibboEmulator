@@ -10,7 +10,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 {
     public class PositionReset : WiredActionBase, IWired, IWiredEffect
     {
-        private Dictionary<int, ItemsPosReset> ItemsData;
+        private readonly Dictionary<int, ItemsPosReset> ItemsData;
 
         public PositionReset(Item item, Room room) : base(item, room, (int)WiredActionType.SET_FURNI_STATE)
         {

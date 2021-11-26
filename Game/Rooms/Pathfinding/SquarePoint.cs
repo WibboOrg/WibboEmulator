@@ -19,7 +19,7 @@
             this._squareDataUser = SquareDataUser;
             this._override = pOverride;
             this._lastStep = pX == pTargetX && pY == pTargetY;
-            this._distance = DreamPathfinder.GetDistance(pX, pY, pTargetX, pTargetY);
+            this._distance = GetDistance(pX, pY, pTargetX, pTargetY);
             this._allowWalkthrough = pAllowWalkthrough;
         }
 
@@ -27,7 +27,7 @@
 
         public int Y => this._y;
 
-        public double GetDistance => this._distance;
+        public double Distance => this._distance;
 
         public bool CanWalk
         {
@@ -45,5 +45,12 @@
         }
 
         public bool AllowWalkthrough => this._allowWalkthrough || this._squareDataUser == 0;
+
+        public static double GetDistance(int x1, int y1, int x2, int y2)
+        {
+            int dx = (x1 - x2);
+            int dy = (y1 - y2);
+            return (dx * dx) + (dy * dy);
+        }
     }
 }

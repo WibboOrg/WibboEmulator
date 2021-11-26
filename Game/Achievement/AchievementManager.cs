@@ -14,7 +14,7 @@ namespace Butterfly.Game.Achievement
 {
     public class AchievementManager
     {
-        private Dictionary<string, AchievementData> _achievements;
+        private readonly Dictionary<string, AchievementData> _achievements;
 
         public AchievementManager()
         {

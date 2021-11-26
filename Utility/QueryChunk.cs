@@ -16,14 +16,14 @@ namespace Butterfly.Utility
             this.parameters = new Dictionary<string, string>();
             this.queries = new StringBuilder();
             this.queryCount = 0;
-            this.endingType = EndingType.Sequential;
+            this.endingType = EndingType.SEQUENTIAL;
         }
 
         public QueryChunk(string startQuery)
         {
             this.parameters = new Dictionary<string, string>();
             this.queries = new StringBuilder(startQuery);
-            this.endingType = EndingType.Continuous;
+            this.endingType = EndingType.CONTINUOUS;
             this.queryCount = 0;
         }
 
@@ -33,10 +33,10 @@ namespace Butterfly.Utility
             this.queries.Append(query);
             switch (this.endingType)
             {
-                case EndingType.Sequential:
+                case EndingType.SEQUENTIAL:
                     this.queries.Append(";");
                     break;
-                case EndingType.Continuous:
+                case EndingType.CONTINUOUS:
                     this.queries.Append(",");
                     break;
             }

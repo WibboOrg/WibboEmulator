@@ -1,6 +1,6 @@
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Chat.Logs;
-using Butterfly.Game.User;
+using Butterfly.Game.Chat.Logs;
+using Butterfly.Game.Users;
 using Butterfly.Utility;
 using System.Collections.Generic;
 
@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorUserChatlogComposer : ServerPacket
     {
-        public ModeratorUserChatlogComposer(Habbo habbo, List<KeyValuePair<RoomData, List<ChatMessage>>> chatlogs)
+        public ModeratorUserChatlogComposer(User habbo, List<KeyValuePair<RoomData, List<ChatMessage>>> chatlogs)
             : base(ServerPacketHeader.MODTOOL_USER_CHATLOG)
         {
             WriteInteger(habbo.Id);

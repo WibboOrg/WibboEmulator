@@ -1,5 +1,5 @@
 using Butterfly.Game.Rooms;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.Settings
 {
@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Settings
             this.WriteInteger(instance.getBans().Count);//Count
             foreach (int Id in instance.getBans().Keys)
             {
-                Habbo Data = ButterflyEnvironment.GetHabboById(Id);
+                User Data = ButterflyEnvironment.GetHabboById(Id);
 
                 if (Data == null)
                 {

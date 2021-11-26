@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Game.Clients;
-using Butterfly.Game.User;
-using Butterfly.Game.User.Messenger;
+using Butterfly.Game.Users;
+using Butterfly.Game.Users.Messenger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Habbo habbo = Client.GetHabbo();
+            User habbo = Client.GetHabbo();
             if (habbo == null || habbo.GetMessenger() == null)
             {
                 ServerPacket ResponseOff = new ServerPacket(ServerPacketHeader.MESSENGER_RELATIONSHIPS);
@@ -66,7 +66,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 Random randlove = new Random();
                 int useridlove = Loves.ElementAt(randlove.Next(0, Loves.Count)).Value.UserId;//Loves[randlove.Next(Loves.Count)].UserId;
-                Habbo HHablove = ButterflyEnvironment.GetHabboById(Convert.ToInt32(useridlove));
+                User HHablove = ButterflyEnvironment.GetHabboById(Convert.ToInt32(useridlove));
                 Response.WriteInteger(useridlove); // UserId
                 Response.WriteString((HHablove == null) ? "" : HHablove.Username);
                 Response.WriteString((HHablove == null) ? "" : HHablove.Look); // look
@@ -79,7 +79,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 Random randLikes = new Random();
                 int useridLikes = Likes.ElementAt(randLikes.Next(0, Likes.Count)).Value.UserId;//Likes[randLikes.Next(Likes.Count)].UserId;
-                Habbo HHabLikes = ButterflyEnvironment.GetHabboById(Convert.ToInt32(useridLikes));
+                User HHabLikes = ButterflyEnvironment.GetHabboById(Convert.ToInt32(useridLikes));
                 Response.WriteInteger(useridLikes); // UserId
                 Response.WriteString((HHabLikes == null) ? "" : HHabLikes.Username);
                 Response.WriteString((HHabLikes == null) ? "" : HHabLikes.Look); // look
@@ -92,7 +92,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 Random randHates = new Random();
                 int useridHates = Hates.ElementAt(randHates.Next(0, Hates.Count)).Value.UserId;//Hates[randHates.Next(Hates.Count)].UserId;
-                Habbo HHabHates = ButterflyEnvironment.GetHabboById(Convert.ToInt32(useridHates));
+                User HHabHates = ButterflyEnvironment.GetHabboById(Convert.ToInt32(useridHates));
                 Response.WriteInteger(useridHates); // UserId
                 Response.WriteString((HHabHates == null) ? "" : HHabHates.Username);
                 Response.WriteString((HHabHates == null) ? "" : HHabHates.Look); // look

@@ -14,8 +14,8 @@ using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.User;
-using Butterfly.Game.User.Data;
+using Butterfly.Game.Users;
+using Butterfly.Game.Users.Data;
 using Butterfly.Net;
 using ConnectionManager;
 using System;
@@ -27,7 +27,7 @@ namespace Butterfly.Game.Clients
     {
         private ConnectionInformation _connection;
         private GamePacketParser _packetParser;
-        private Habbo _habbo;
+        private User _habbo;
 
         public string MachineId;
         public Language Langue;
@@ -190,7 +190,7 @@ namespace Butterfly.Game.Clients
             return this._connection;
         }
 
-        public Habbo GetHabbo()
+        public User GetHabbo()
         {
             return this._habbo;
         }

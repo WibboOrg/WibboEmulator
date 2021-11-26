@@ -83,7 +83,7 @@ namespace Butterfly.Game.Rooms.Jankens
 
                 party.Timer++;
 
-                if (party.Timer >= 60 || (party.ChoiceOne != JankenType.None && party.ChoiceTwo != JankenType.None))
+                if (party.Timer >= 60 || (party.ChoiceOne != JankenType.NONE && party.ChoiceTwo != JankenType.NONE))
                 {
                     if (this.EndGame(party))
                     {
@@ -131,12 +131,12 @@ namespace Butterfly.Game.Rooms.Jankens
                 return false;
             }
 
-            if (party.UserOne == User.UserId && party.ChoiceOne != JankenType.None)
+            if (party.UserOne == User.UserId && party.ChoiceOne != JankenType.NONE)
             {
                 return false;
             }
 
-            if (party.UserTwo == User.UserId && party.ChoiceTwo != JankenType.None)
+            if (party.UserTwo == User.UserId && party.ChoiceTwo != JankenType.NONE)
             {
                 return false;
             }
@@ -151,15 +151,15 @@ namespace Butterfly.Game.Rooms.Jankens
             JankenType choice;
             if (Message.ToLower().StartsWith("p"))
             {
-                choice = JankenType.Pierre;
+                choice = JankenType.ROCK;
             }
             else if (Message.ToLower().StartsWith("f"))
             {
-                choice = JankenType.Feuille;
+                choice = JankenType.PAPER;
             }
             else if (Message.ToLower().StartsWith("c"))
             {
-                choice = JankenType.Ciseaux;
+                choice = JankenType.SCISSORS;
             }
             else
             {
@@ -203,19 +203,19 @@ namespace Butterfly.Game.Rooms.Jankens
                 return true;
             }
 
-            if (party.ChoiceOne == JankenType.None && party.ChoiceTwo == JankenType.None)
+            if (party.ChoiceOne == JankenType.NONE && party.ChoiceTwo == JankenType.NONE)
             {
                 roomuserTwo.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.annule", roomuserTwo.GetClient().Langue));
                 roomuserOne.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.annule", roomuserOne.GetClient().Langue));
                 return true;
             }
 
-            if (party.ChoiceOne == JankenType.None)
+            if (party.ChoiceOne == JankenType.NONE)
             {
                 roomuserTwo.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserTwo.GetClient().Langue));
                 return true;
             }
-            else if (party.ChoiceTwo == JankenType.None)
+            else if (party.ChoiceTwo == JankenType.NONE)
             {
                 roomuserOne.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserOne.GetClient().Langue));
                 return true;
@@ -223,8 +223,8 @@ namespace Butterfly.Game.Rooms.Jankens
 
             if (party.ChoiceOne == party.ChoiceTwo) //match null
             {
-                party.ChoiceOne = JankenType.None;
-                party.ChoiceTwo = JankenType.None;
+                party.ChoiceOne = JankenType.NONE;
+                party.ChoiceTwo = JankenType.NONE;
 
                 party.Timer = 0;
 
@@ -237,9 +237,9 @@ namespace Butterfly.Game.Rooms.Jankens
             }
 
             //ChoixOne qui gagne
-            if ((party.ChoiceOne == JankenType.Ciseaux && party.ChoiceTwo == JankenType.Feuille) ||
-                (party.ChoiceOne == JankenType.Feuille && party.ChoiceTwo == JankenType.Pierre) ||
-                (party.ChoiceOne == JankenType.Pierre && party.ChoiceTwo == JankenType.Ciseaux))
+            if ((party.ChoiceOne == JankenType.SCISSORS && party.ChoiceTwo == JankenType.PAPER) ||
+                (party.ChoiceOne == JankenType.PAPER && party.ChoiceTwo == JankenType.ROCK) ||
+                (party.ChoiceOne == JankenType.ROCK && party.ChoiceTwo == JankenType.SCISSORS))
             {
                 roomuserOne.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.win", roomuserOne.GetClient().Langue), this.GetStringChoix(party.ChoiceOne, roomuserOne.GetClient().Langue), this.GetStringChoix(party.ChoiceTwo, roomuserOne.GetClient().Langue), roomuserTwo.GetUsername()));
                 roomuserTwo.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.loose", roomuserTwo.GetClient().Langue), this.GetStringChoix(party.ChoiceOne, roomuserTwo.GetClient().Langue), this.GetStringChoix(party.ChoiceTwo, roomuserTwo.GetClient().Langue), roomuserOne.GetUsername()));
@@ -250,9 +250,9 @@ namespace Butterfly.Game.Rooms.Jankens
             }
 
             //ChoixTwo qui gagne
-            if ((party.ChoiceOne == JankenType.Ciseaux && party.ChoiceTwo == JankenType.Pierre) ||
-                (party.ChoiceOne == JankenType.Feuille && party.ChoiceTwo == JankenType.Ciseaux) ||
-                (party.ChoiceOne == JankenType.Pierre && party.ChoiceTwo == JankenType.Feuille))
+            if ((party.ChoiceOne == JankenType.SCISSORS && party.ChoiceTwo == JankenType.ROCK) ||
+                (party.ChoiceOne == JankenType.PAPER && party.ChoiceTwo == JankenType.SCISSORS) ||
+                (party.ChoiceOne == JankenType.ROCK && party.ChoiceTwo == JankenType.PAPER))
             {
                 roomuserTwo.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.win", roomuserTwo.GetClient().Langue), this.GetStringChoix(party.ChoiceTwo, roomuserTwo.GetClient().Langue), this.GetStringChoix(party.ChoiceOne, roomuserTwo.GetClient().Langue), roomuserOne.GetUsername()));
                 roomuserOne.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.loose", roomuserOne.GetClient().Langue), this.GetStringChoix(party.ChoiceTwo, roomuserOne.GetClient().Langue), this.GetStringChoix(party.ChoiceOne, roomuserOne.GetClient().Langue), roomuserTwo.GetUsername()));
@@ -269,11 +269,11 @@ namespace Butterfly.Game.Rooms.Jankens
         {
             switch (Choix)
             {
-                case JankenType.Ciseaux:
+                case JankenType.SCISSORS:
                     return ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.ciseaux", langue);
-                case JankenType.Feuille:
+                case JankenType.PAPER:
                     return ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.feuille", langue);
-                case JankenType.Pierre:
+                case JankenType.ROCK:
                     return ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.pierre", langue);
                 default:
                     return "";
@@ -282,15 +282,15 @@ namespace Butterfly.Game.Rooms.Jankens
 
         private void EnableEffet(RoomUser user, JankenType Janken)
         {
-            if (Janken == JankenType.Ciseaux)
+            if (Janken == JankenType.SCISSORS)
             {
                 user.ApplyEffect(563, true);
             }
-            else if (Janken == JankenType.Pierre)
+            else if (Janken == JankenType.ROCK)
             {
                 user.ApplyEffect(565, true);
             }
-            else if (Janken == JankenType.Feuille)
+            else if (Janken == JankenType.PAPER)
             {
                 user.ApplyEffect(564, true);
             }

@@ -3,7 +3,7 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -31,7 +31,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             int StartIndex = (Page - 1) * 14 + 14;
-            List<Habbo> Members = new List<Habbo>();
+            List<User> Members = new List<User>();
             int MemberCount = 0;
 
             switch (RequestType)
@@ -50,7 +50,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     foreach (int Id in MemberIds.ToList())
                     {
-                        Habbo GroupMember = ButterflyEnvironment.GetHabboById(Id);
+                        User GroupMember = ButterflyEnvironment.GetHabboById(Id);
                         if (GroupMember == null)
                         {
                             continue;
@@ -76,7 +76,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     foreach (int User in AdminIds.ToList())
                     {
-                        Habbo GroupMember = ButterflyEnvironment.GetHabboById(User);
+                        User GroupMember = ButterflyEnvironment.GetHabboById(User);
                         if (GroupMember == null)
                         {
                             continue;
@@ -102,7 +102,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     foreach (int Id in RequestIds.ToList())
                     {
-                        Habbo GroupMember = ButterflyEnvironment.GetHabboById(Id);
+                        User GroupMember = ButterflyEnvironment.GetHabboById(Id);
                         if (GroupMember == null)
                         {
                             continue;

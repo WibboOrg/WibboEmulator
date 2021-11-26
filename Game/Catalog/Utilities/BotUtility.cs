@@ -1,7 +1,7 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
-using Butterfly.Game.User.Inventory.Bots;
+using Butterfly.Game.Users.Inventory.Bots;
 using System;
 using System.Data;
 

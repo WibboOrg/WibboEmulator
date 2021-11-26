@@ -1,10 +1,10 @@
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Outgoing.Handshake
 {
     internal class UserObjectComposer : ServerPacket
     {
-        public UserObjectComposer(Habbo Habbo)
+        public UserObjectComposer(User Habbo)
             : base(ServerPacketHeader.USER_INFO)
         {
             this.WriteInteger(Habbo.Id);

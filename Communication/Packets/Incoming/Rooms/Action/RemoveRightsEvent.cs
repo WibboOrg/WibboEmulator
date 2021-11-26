@@ -4,7 +4,7 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -67,7 +67,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     Response.WriteInteger(room.UsersWithRights.Count);
                     foreach (int UserId2 in room.UsersWithRights)
                     {
-                        Habbo habboForId = ButterflyEnvironment.GetHabboById(UserId2);
+                        User habboForId = ButterflyEnvironment.GetHabboById(UserId2);
                         Response.WriteInteger(UserId2);
                         Response.WriteString((habboForId == null) ? "Undefined (error)" : habboForId.Username);
                     }

@@ -12,7 +12,7 @@ namespace Butterfly.Net
 {
     public class WebPacketParser : IDataParser, IDisposable, ICloneable
     {
-        public event WebPacketParser.HandlePacket OnNewPacket;
+        public event HandlePacket OnNewPacket;
         private readonly WebClient _currentClient;
 
         public WebPacketParser(WebClient client)

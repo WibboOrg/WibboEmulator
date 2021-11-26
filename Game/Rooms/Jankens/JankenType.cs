@@ -2,9 +2,9 @@
 {
     public enum JankenType
     {
-        None,
-        Pierre,
-        Feuille,
-        Ciseaux,
+        NONE,
+        ROCK,
+        PAPER,
+        SCISSORS,
     }
 }

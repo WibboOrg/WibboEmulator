@@ -1,4 +1,4 @@
-using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
@@ -20,9 +20,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.ROOM_FORWARD);
-            Response.WriteInteger(clientByUserId.GetHabbo().CurrentRoomId);
-            Session.SendPacket(Response);
+            Session.SendPacket(new RoomForwardComposer(clientByUserId.GetHabbo().CurrentRoomId));
         }
     }
 }

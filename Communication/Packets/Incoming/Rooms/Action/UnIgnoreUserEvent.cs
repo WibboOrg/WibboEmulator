@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Game.Clients;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -20,7 +20,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             string str = Packet.PopString();
 
-            Habbo habbo = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(str).GetHabbo();
+            User habbo = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(str).GetHabbo();
             if (habbo == null || !Session.GetHabbo().MutedUsers.Contains(habbo.Id))
             {
                 return;

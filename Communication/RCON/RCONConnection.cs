@@ -7,17 +7,17 @@ namespace Butterfly.Net
 {
     public class RCONConnection
     {
-        private byte[] buffer = new byte[1024];
-        private Socket socket;
+        private byte[] _buffer = new byte[1024];
+        private Socket _socket;
 
         private readonly Encoding Encoding = Encoding.GetEncoding("Windows-1252");
 
         public RCONConnection(Socket _socket)
         {
-            this.socket = _socket;
+            this._socket = _socket;
             try
             {
-                this.socket.BeginReceive(this.buffer, 0, this.buffer.Length, SocketFlags.None, new AsyncCallback(this.OnCallBack), this.socket);
+                this._socket.BeginReceive(this._buffer, 0, this._buffer.Length, SocketFlags.None, new AsyncCallback(this.OnCallBack), this._socket);
             }
             catch
             {
@@ -29,13 +29,13 @@ namespace Butterfly.Net
         {
             try
             {
-                if (!int.TryParse(this.socket.EndReceive(iAr).ToString(), out int bytes))
+                if (!int.TryParse(this._socket.EndReceive(iAr).ToString(), out int bytes))
                 {
                     this.Dispose();
                     return;
                 }
 
-                string data = this.Encoding.GetString(this.buffer, 0, bytes);
+                string data = this.Encoding.GetString(this._buffer, 0, bytes);
 
                 if (!ButterflyEnvironment.GetRCONSocket().GetCommands().Parse(data))
                 {
@@ -54,15 +54,15 @@ namespace Butterfly.Net
         {
             try
             {
-                this.socket.Shutdown(SocketShutdown.Both);
-                this.socket.Close();
-                this.socket.Dispose();
+                this._socket.Shutdown(SocketShutdown.Both);
+                this._socket.Close();
+                this._socket.Dispose();
             }
             catch
             {
             }
-            this.socket = null;
-            this.buffer = null;
+            this._socket = null;
+            this._buffer = null;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Butterfly.Game.Rooms
         public bool DiagonalEnabled { get; set; }
         public bool ObliqueDisable { get; set; }
 
-        public DynamicRoomModel Model;
+        public RoomModelDynamic Model;
 
         public byte[,] EffectMap { get; private set; }
 
@@ -43,7 +43,7 @@ namespace Butterfly.Game.Rooms
                 throw new Exception("No modeldata found for roomID " + room.Id);
             }
 
-            this.Model = new DynamicRoomModel(mStaticModel);
+            this.Model = new RoomModelDynamic(mStaticModel);
 
             this.CoordinatedItems = new ConcurrentDictionary<Point, List<Item>>();
             this._userMap = new ConcurrentDictionary<Point, List<RoomUser>>();
@@ -201,7 +201,7 @@ namespace Butterfly.Game.Rooms
             this.EffectMap[x, y] = 0;
             this.ItemHeightMap[x, y] = 0.0;
 
-            if (this.Model.SqState[x, y] == SquareState.OPEN)
+            if (this.Model.SqState[x, y] == SquareStateType.OPEN)
             {
                 this.GameMap[x, y] = 1;
             }
@@ -278,7 +278,7 @@ namespace Butterfly.Game.Rooms
                     this.GameMap[chr, line] = 0;
                     this.EffectMap[chr, line] = 0;
 
-                    if (this.Model.SqState[chr, line] == SquareState.OPEN)
+                    if (this.Model.SqState[chr, line] == SquareStateType.OPEN)
                     {
                         this.GameMap[chr, line] = 1;
                     }

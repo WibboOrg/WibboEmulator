@@ -2,8 +2,8 @@
 {
     public enum EndingType
     {
-        None,
-        Sequential,
-        Continuous,
+        NONE,
+        SEQUENTIAL,
+        CONTINUOUS,
     }
 }

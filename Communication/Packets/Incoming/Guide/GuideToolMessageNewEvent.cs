@@ -21,8 +21,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            requester.SendPacket(new OnGuideSessionMsgComposer(message, Session.GetHabbo().Id);
-            Session.SendPacket(new OnGuideSessionMsgComposer(message, Session.GetHabbo().Id);
+            requester.SendPacket(new OnGuideSessionMsgComposer(message, Session.GetHabbo().Id));
+            Session.SendPacket(new OnGuideSessionMsgComposer(message, Session.GetHabbo().Id));
         }
     }
 }

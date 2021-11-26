@@ -1,5 +1,5 @@
 using Butterfly.Game.Rooms;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 using Butterfly.Utility;
 using System.Collections.Generic;
 
@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorUserRoomVisitsComposer : ServerPacket
     {
-        public ModeratorUserRoomVisitsComposer(Habbo Data, Dictionary<double, RoomData> Visits)
+        public ModeratorUserRoomVisitsComposer(User Data, Dictionary<double, RoomData> Visits)
             : base(ServerPacketHeader.MODTOOL_VISITED_ROOMS_USER)
         {
             WriteInteger(Data.Id);

@@ -2,10 +2,10 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Session
 {
     internal class RoomForwardComposer : ServerPacket
     {
-        public RoomForwardComposer(int RoomId)
+        public RoomForwardComposer(int roomId)
             : base(ServerPacketHeader.ROOM_FORWARD)
         {
-            this.WriteInteger(RoomId);
+            this.WriteInteger(roomId);
         }
     }
 }

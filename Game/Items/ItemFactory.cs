@@ -1,6 +1,6 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +8,7 @@ namespace Butterfly.Game.Items
 {
     public class ItemFactory
     {
-        public static Item CreateSingleItemNullable(ItemData Data, Habbo Habbo, string ExtraData, int LimitedNumber = 0, int LimitedStack = 0)
+        public static Item CreateSingleItemNullable(ItemData Data, User Habbo, string ExtraData, int LimitedNumber = 0, int LimitedStack = 0)
         {
             if (Data == null)
             {
@@ -30,7 +30,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public static Item CreateSingleItem(ItemData Data, Habbo Habbo, string ExtraData, int ItemId, int LimitedNumber = 0, int LimitedStack = 0)
+        public static Item CreateSingleItem(ItemData Data, User Habbo, string ExtraData, int ItemId, int LimitedNumber = 0, int LimitedStack = 0)
         {
             if (Data == null)
             {
@@ -57,7 +57,7 @@ namespace Butterfly.Game.Items
             return Item;
         }
 
-        public static List<Item> CreateMultipleItems(ItemData Data, Habbo Habbo, string ExtraData, int Amount)
+        public static List<Item> CreateMultipleItems(ItemData Data, User Habbo, string ExtraData, int Amount)
         {
             if (Data == null) throw new InvalidOperationException("Data cannot be null.");
 
@@ -77,7 +77,7 @@ namespace Butterfly.Game.Items
             return Items;
         }
 
-        public static List<Item> CreateTeleporterItems(ItemData data, Habbo habbo)
+        public static List<Item> CreateTeleporterItems(ItemData data, User habbo)
         {
             List<Item> Items = new List<Item>();
 

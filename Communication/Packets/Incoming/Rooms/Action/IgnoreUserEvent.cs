@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Game.Clients;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Habbo habbo = gameclient.GetHabbo();
+            User habbo = gameclient.GetHabbo();
             if (habbo == null || Session.GetHabbo().MutedUsers.Contains(habbo.Id))
             {
                 return;

@@ -7,14 +7,14 @@ namespace ConnectionManager
 {
     public class ConnectionHandeling
     {
-        public GameSocketManager Manager;
+        private readonly GameSocketManager _manager;
 
         public ConnectionHandeling(int port, int maxConnections, int connectionsPerIP)
         {
-            this.Manager = new GameSocketManager();
-            this.Manager.Init(port, maxConnections, new InitialPacketParser());
+            this._manager = new GameSocketManager();
+            this._manager.Init(port, maxConnections, new InitialPacketParser());
 
-            this.Manager.connectionEvent += new GameSocketManager.ConnectionEvent(this.ConnectionEvent);
+            this._manager.connectionEvent += new GameSocketManager.ConnectionEvent(this.ConnectionEvent);
         }
 
         private void ConnectionEvent(ConnectionInformation connection)
@@ -48,7 +48,7 @@ namespace ConnectionManager
 
         public void Destroy()
         {
-            this.Manager.Destroy();
+            this._manager.Destroy();
         }
     }
 }

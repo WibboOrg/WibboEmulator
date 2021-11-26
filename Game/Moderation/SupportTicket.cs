@@ -1,5 +1,5 @@
 ﻿using Butterfly.Game.Rooms;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 using System.Collections.Generic;
 
 namespace Butterfly.Game.Moderation
@@ -12,15 +12,15 @@ namespace Butterfly.Game.Moderation
         public double Timestamp { get; set; }
         public int Priority { get; set; }
         public bool Answered { get; set; }
-        public Habbo Sender { get; set; }
-        public Habbo Reported { get; set; }
-        public Habbo Moderator { get; set; }
+        public User Sender { get; set; }
+        public User Reported { get; set; }
+        public User Moderator { get; set; }
         public string Issue { get; set; }
         public RoomData Room { get; set; }
 
         public List<string> ReportedChats;
 
-        public SupportTicket(int id, int type, int category, double timestamp, int priority, Habbo sender, Habbo reported, string issue, RoomData room, List<string> reportedChats)
+        public SupportTicket(int id, int type, int category, double timestamp, int priority, User sender, User reported, string issue, RoomData room, List<string> reportedChats)
         {
             Id = id;
             Type = type;

@@ -12,11 +12,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             string CipherPublickey = Packet.PopString();
 
-            BigInteger SharedKey = HabboEncryptionV2.CalculateDiffieHellmanSharedKey(CipherPublickey);
+            BigInteger SharedKey = EncryptionV2.CalculateDiffieHellmanSharedKey(CipherPublickey);
             if (SharedKey != 0)
             {
                 Session.RC4Client = new ARC4(SharedKey.getBytes());
-                Session.SendPacket(new SecretKeyComposer(HabboEncryptionV2.GetRsaDiffieHellmanPublicKey()));
+                Session.SendPacket(new SecretKeyComposer(EncryptionV2.GetRsaDiffieHellmanPublicKey()));
             }
         }
     }

@@ -5,7 +5,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -134,16 +134,16 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         Group.DeleteMember(UserId);
                     }
 
-                    Habbo Habbo = ButterflyEnvironment.GetHabboById(UserId);
+                    User Habbo = ButterflyEnvironment.GetHabboById(UserId);
                     Habbo.MyGroups.Remove(Group.Id);
 
                     int StartIndex = (1 - 1) * 14 + 14;
 
-                    List<Habbo> Members = new List<Habbo>();
+                    List<User> Members = new List<User>();
                     List<int> MemberIds = Group.GetMembers.Skip(StartIndex).Take(14).ToList();
                     foreach (int Id in MemberIds.ToList())
                     {
-                        Habbo GroupMember = ButterflyEnvironment.GetHabboById(Id);
+                        User GroupMember = ButterflyEnvironment.GetHabboById(Id);
                         if (GroupMember == null)
                         {
                             continue;

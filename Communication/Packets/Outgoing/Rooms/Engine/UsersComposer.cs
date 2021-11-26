@@ -1,7 +1,7 @@
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.AI;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -100,7 +100,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                 }
                 else
                 {
-                    Habbo Habbo = User.GetClient().GetHabbo();
+                    User Habbo = User.GetClient().GetHabbo();
 
                     Guild Group = null;
                     if (Habbo != null)

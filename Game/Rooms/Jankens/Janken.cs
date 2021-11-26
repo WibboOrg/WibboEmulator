@@ -16,8 +16,8 @@
             this.UserOne = userid;
             this.UserTwo = dueluserid;
 
-            this.ChoiceOne = JankenType.None;
-            this.ChoiceTwo = JankenType.None;
+            this.ChoiceOne = JankenType.NONE;
+            this.ChoiceTwo = JankenType.NONE;
 
             this.Started = false;
             this.Timer = 0;

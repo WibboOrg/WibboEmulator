@@ -1,6 +1,6 @@
 using Butterfly.Game.Pets;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Outgoing.Pets
 {
@@ -22,7 +22,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Pets
             this.WriteInteger(1);
         }
 
-        public RespectPetNotificationComposer(Habbo Habbo, RoomUser User)
+        public RespectPetNotificationComposer(User Habbo, RoomUser User)
             : base(ServerPacketHeader.RespectPetNotificationMessageComposer)
         {
             //TODO: Structure

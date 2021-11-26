@@ -1,10 +1,10 @@
-﻿using Butterfly.Game.User;
+﻿using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Outgoing.Groups
 {
     internal class GroupMembershipRequestedComposer : ServerPacket
     {
-        public GroupMembershipRequestedComposer(int GroupId, Habbo Habbo, int Type)
+        public GroupMembershipRequestedComposer(int GroupId, User Habbo, int Type)
             : base(ServerPacketHeader.GroupMembershipRequestedMessageComposer)
         {
             this.WriteInteger(GroupId);//GroupId

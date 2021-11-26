@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Butterfly;
+using System;
 using System.Collections;
 using System.IO;
 using System.Text;
@@ -141,7 +142,7 @@ namespace ConsoleWriter
         {
             try
             {
-                FileStream fileStream = new FileStream(Butterfly.ButterflyEnvironment.PatchDir + path, FileMode.Append, FileAccess.Write);
+                FileStream fileStream = new FileStream(ButterflyEnvironment.PatchDir + path, FileMode.Append, FileAccess.Write);
                 byte[] bytes = Encoding.ASCII.GetBytes(Environment.NewLine + content);
                 fileStream.Write(bytes, 0, bytes.Length);
                 fileStream.Dispose();

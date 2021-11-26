@@ -4,7 +4,7 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -36,7 +36,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
             else
             {
-                Habbo Userright = ButterflyEnvironment.GetHabboById(UserId);
+                User Userright = ButterflyEnvironment.GetHabboById(UserId);
                 if (Userright == null)
                 {
                     return;

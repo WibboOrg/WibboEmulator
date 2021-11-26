@@ -10,7 +10,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
 {
     public class FurniStatePosMatchNegative : WiredConditionBase, IWiredCondition, IWired
     {
-        private Dictionary<int, ItemsPosReset> ItemsData;
+        private readonly Dictionary<int, ItemsPosReset> ItemsData;
 
         public FurniStatePosMatchNegative(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_STATES_MATCH)
         {

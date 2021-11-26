@@ -4,7 +4,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.AI;
-using Butterfly.Game.User.Inventory.Bots;
+using Butterfly.Game.Users.Inventory.Bots;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

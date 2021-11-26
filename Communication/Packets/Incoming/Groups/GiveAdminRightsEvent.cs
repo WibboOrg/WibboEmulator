@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -24,7 +24,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Habbo Habbo = ButterflyEnvironment.GetHabboById(UserId);
+            User Habbo = ButterflyEnvironment.GetHabboById(UserId);
             if (Habbo == null)
             {
                 return;

@@ -2,6 +2,7 @@
 using Butterfly.Communication.WebSocket;
 using Butterfly.Game.Clients;
 using Butterfly.Utility;
+using ConsoleWriter;
 using SharedPacketLib;
 using System;
 using System.IO;
@@ -69,7 +70,7 @@ namespace Butterfly.Net
                     }
                     catch (Exception e)
                     {
-                        ConsoleWriter.Writer.LogException($"Length: {Data.Length} Message: {e.Message}");
+                        Writer.LogException($"Length: {Data.Length} Message: {e.Message}");
                         return;
                     }
                 }

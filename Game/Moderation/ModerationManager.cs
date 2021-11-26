@@ -4,8 +4,8 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Chat.Logs;
-using Butterfly.Game.User;
+using Butterfly.Game.Chat.Logs;
+using Butterfly.Game.Users;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -268,7 +268,7 @@ namespace Butterfly.Game.Moderation
                 return;
             }
 
-            Habbo UserReport = ButterflyEnvironment.GetHabboById(ReportedUser);
+            User UserReport = ButterflyEnvironment.GetHabboById(ReportedUser);
             if (UserReport == null)
             {
                 return;

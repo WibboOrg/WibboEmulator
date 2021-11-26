@@ -14,7 +14,7 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Items;
 using Butterfly.Game.Pets;
-using Butterfly.Game.User.Inventory.Bots;
+using Butterfly.Game.Users.Inventory.Bots;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -23,8 +23,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            string Prime = HabboEncryptionV2.GetRsaDiffieHellmanPrimeKey();
-            string Generator = HabboEncryptionV2.GetRsaDiffieHellmanGeneratorKey();
+            string Prime = EncryptionV2.GetRsaDiffieHellmanPrimeKey();
+            string Generator = EncryptionV2.GetRsaDiffieHellmanGeneratorKey();
 
             Session.SendPacket(new InitCryptoComposer(Prime, Generator));
         }

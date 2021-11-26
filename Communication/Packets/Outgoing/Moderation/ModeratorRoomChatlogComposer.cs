@@ -1,5 +1,5 @@
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Chat.Logs;
+using Butterfly.Game.Chat.Logs;
 using Butterfly.Utility;
 using System.Collections.Generic;
 

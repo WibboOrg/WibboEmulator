@@ -1,4 +1,4 @@
-using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -7,11 +7,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            int RoomId = 447654;
-
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.ROOM_FORWARD);
-            Response.WriteInteger(RoomId);
-            Session.SendPacket(Response);
+            Session.SendPacket(new RoomForwardComposer(447654));
         }
     }
 }

@@ -13,13 +13,15 @@ using Butterfly.Game.Quests;
 using Butterfly.Game.Roleplay;
 using Butterfly.Game.Role;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Chat;
+using Butterfly.Game.Chat;
 using Butterfly.Game.Moderation;
-using Butterfly.Game.User.Effect;
+using Butterfly.Game.Users.Effect;
 using Butterfly.Game.WebClients;
 using System;
 using System.Diagnostics;
 using System.Threading;
+using Butterfly.Database.Interfaces;
+using Butterfly.Database.Daos;
 
 namespace Butterfly.Game
 {
@@ -266,7 +268,7 @@ namespace Butterfly.Game
 
         public static void DatabaseCleanup()
         {
-            #if !DEBUG
+            //#if !DEBUG
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserDao.UpdateAllOnline(dbClient);
@@ -275,7 +277,7 @@ namespace Butterfly.Game
                 RoomDao.UpdateResetUsersNow(dbClient);
                 EmulatorStatusDao.UpdateReset(dbClient);
             }
-            #endif
+            //#endif
         }
 
         public void Destroy()

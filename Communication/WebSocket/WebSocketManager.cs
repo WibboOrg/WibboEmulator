@@ -7,14 +7,14 @@ namespace Butterfly.Communication.WebSocket
 {
     public class WebSocketManager
     {
-        public GameSocketManager manager;
+        private readonly GameSocketManager _manager;
 
         public WebSocketManager(int port, int maxConnections)
         {
-            this.manager = new GameSocketManager();
-            this.manager.Init(port, maxConnections, new InitialPacketParser());
+            this._manager = new GameSocketManager();
+            this._manager.Init(port, maxConnections, new InitialPacketParser());
 
-            this.manager.connectionEvent += new GameSocketManager.ConnectionEvent(this.ConnectionEvent);
+            this._manager.connectionEvent += new GameSocketManager.ConnectionEvent(this.ConnectionEvent);
         }
 
         private void ConnectionEvent(ConnectionInformation connection)
@@ -45,7 +45,7 @@ namespace Butterfly.Communication.WebSocket
 
         public void Destroy()
         {
-            this.manager.Destroy();
+            this._manager.Destroy();
         }
     }
 }

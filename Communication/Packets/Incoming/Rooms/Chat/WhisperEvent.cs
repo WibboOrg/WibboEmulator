@@ -1,16 +1,33 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.Game.Clients;using Butterfly.Game.Rooms;using Butterfly.Game.Rooms.Chat.Styles;using Butterfly.Utility;using System;using System.Collections.Generic;namespace Butterfly.Communication.Packets.Incoming.Structure{    internal class WhisperEvent : IPacketEvent    {        public void Parse(Client Session, ClientPacket Packet)        {            if (Session == null || Session.GetHabbo() == null)
+
+using Butterfly.Game.Clients;
+using Butterfly.Game.Rooms;
+using Butterfly.Game.Chat.Styles;
+using Butterfly.Utility;
+using System;
+using System.Collections.Generic;
+
+namespace Butterfly.Communication.Packets.Incoming.Structure
+{
+    internal class WhisperEvent : IPacketEvent
+    {
+        public void Parse(Client Session, ClientPacket Packet)
+        {
+            if (Session == null || Session.GetHabbo() == null)
             {
                 return;
             }
 
-            Room Room = Session.GetHabbo().CurrentRoom;            if (Room == null)
+            Room Room = Session.GetHabbo().CurrentRoom;
+            if (Room == null)
             {
                 return;
             }
 
-            if (Room.UserIsMuted(Session.GetHabbo().Id))            {                if (!Room.HasMuteExpired(Session.GetHabbo().Id))
+            if (Room.UserIsMuted(Session.GetHabbo().Id))
+            {
+                if (!Room.HasMuteExpired(Session.GetHabbo().Id))
                 {
                     return;
                 }
@@ -18,17 +35,23 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
                 {
                     Room.RemoveMute(Session.GetHabbo().Id);
                 }
-            }            string Params = StringCharFilter.Escape(Packet.PopString());            if (string.IsNullOrEmpty(Params) || Params.Length > 100 || !Params.Contains(" "))
+            }
+
+            string Params = StringCharFilter.Escape(Packet.PopString());
+            if (string.IsNullOrEmpty(Params) || Params.Length > 100 || !Params.Contains(" "))
             {
                 return;
             }
 
-            string ToUser = Params.Split(new char[1] { ' ' })[0];            if (ToUser.Length + 1 > Params.Length)
+            string ToUser = Params.Split(new char[1] { ' ' })[0];
+
+            if (ToUser.Length + 1 > Params.Length)
             {
                 return;
             }
 
-            string Message = Params.Substring(ToUser.Length + 1);            int Color = Packet.PopInt();
+            string Message = Params.Substring(ToUser.Length + 1);
+            int Color = Packet.PopInt();
 
             if (!ButterflyEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Color, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !Session.GetHabbo().HasFuse(Style.RequiredRight)))
             {
@@ -100,7 +123,12 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
                     User.LastMessageCount++;
                 }
 
-                User.LastMessage = Message;                Session.GetHabbo().spamFloodTime = DateTime.Now;                User.FloodCount++;                if (Message.StartsWith("@red@"))
+                User.LastMessage = Message;
+
+                Session.GetHabbo().spamFloodTime = DateTime.Now;
+                User.FloodCount++;
+
+                if (Message.StartsWith("@red@"))
                 {
                     User.ChatTextColor = "@red@";
                 }
@@ -255,4 +283,9 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
                 }
 
                 Session.GetHabbo().GetChatMessageManager().AddMessage(User.UserId, User.GetUsername(), User.RoomId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message);
-                Room.GetChatMessageManager().AddMessage(User.UserId, User.GetUsername(), User.RoomId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message);            }        }    }}
+                Room.GetChatMessageManager().AddMessage(User.UserId, User.GetUsername(), User.RoomId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message);
+            }
+
+        }
+    }
+}

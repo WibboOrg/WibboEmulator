@@ -8,7 +8,6 @@
         public int Index;
         public int ColorIndex;
 
-
         public Part(int id, SetType setType, bool colorable, int index, int colorIndex)
         {
             this.Id = id;

@@ -1,10 +1,10 @@
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Outgoing.Handshake
 {
     internal class UserPerksComposer : ServerPacket
     {
-        public UserPerksComposer(Habbo Habbo)
+        public UserPerksComposer(User Habbo)
             : base(ServerPacketHeader.USER_PERKS)
         {
             this.WriteInteger(17); // Count

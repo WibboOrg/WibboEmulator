@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Session.SendPacket(new InitCryptoComposer(HabboEncryptionV2.GetRsaDiffieHellmanPrimeKey(), HabboEncryptionV2.GetRsaDiffieHellmanGeneratorKey()));
+            Session.SendPacket(new InitCryptoComposer(EncryptionV2.GetRsaDiffieHellmanPrimeKey(), EncryptionV2.GetRsaDiffieHellmanGeneratorKey()));
         }
     }
 }

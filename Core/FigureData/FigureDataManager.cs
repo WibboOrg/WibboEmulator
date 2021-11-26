@@ -8,10 +8,9 @@ namespace Butterfly.Core.FigureData
 {
     public class FigureDataManager
     {
-
         private readonly List<string> _requirements;
-        private readonly Dictionary<int, Palette> _palettes; //pallet id, Pallet
-        private readonly Dictionary<string, FigureSet> _setTypes; //type (hr, ch, etc), Set
+        private readonly Dictionary<int, Palette> _palettes;
+        private readonly Dictionary<string, FigureSet> _setTypes;
 
         public FigureDataManager()
         {

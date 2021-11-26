@@ -8,7 +8,7 @@ using Butterfly.Game.Catalog.Utilities;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Items;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 using Butterfly.Utility;
 using System;
 using System.Linq;
@@ -63,7 +63,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Habbo Habbo = ButterflyEnvironment.GetHabboByUsername(GiftUser);
+            User Habbo = ButterflyEnvironment.GetHabboByUsername(GiftUser);
             if (Habbo == null)
             {
                 //Session.SendPacket(new GiftWrappingErrorComposer());

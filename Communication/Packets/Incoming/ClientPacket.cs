@@ -8,7 +8,6 @@ namespace Butterfly.Communication.Packets.Incoming
         private byte[] Body;
         private int Pointer;
         private readonly Encoding Encoding = Encoding.UTF8;
-        //private readonly Encoding Encoding = Encoding.GetEncoding("Windows-1252");
 
         public ClientPacket(int messageID, byte[] body)
         {

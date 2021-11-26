@@ -1,6 +1,6 @@
 using Butterfly.Game.Pets;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets
 {
@@ -48,7 +48,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets
             this.WriteBoolean(false);
         }
 
-        public PetInformationComposer(Habbo Habbo)
+        public PetInformationComposer(User Habbo)
             : base(ServerPacketHeader.PET_INFO)
         {
             this.WriteInteger(Habbo.Id);

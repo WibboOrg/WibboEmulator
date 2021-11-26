@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
@@ -20,10 +21,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_TYPING);
-            Message.WriteInteger(roomUserByHabbo.VirtualId);
-            Message.WriteInteger(0);
-            room.SendPacket(Message);
+            room.SendPacket(new UserTypingComposer(roomUserByHabbo.VirtualId, 0));
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Game.User;
+using Butterfly.Game.Users;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -97,7 +97,7 @@ namespace Butterfly.Game.Guilds
             return true;
         }
 
-        public bool TryCreateGroup(Habbo Player, string Name, string Description, int RoomId, string Badge, int Colour1, int Colour2, out Guild Group)
+        public bool TryCreateGroup(User Player, string Name, string Description, int RoomId, string Badge, int Colour1, int Colour2, out Guild Group)
         {
             Group = new Guild(0, Name, Description, Badge, RoomId, Player.Id, ButterflyEnvironment.GetUnixTimestamp(), 0, Colour1, Colour2, 0, false);
             if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Badge))
