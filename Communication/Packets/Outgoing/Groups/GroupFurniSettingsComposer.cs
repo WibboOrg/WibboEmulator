@@ -5,7 +5,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Groups
     internal class GroupFurniSettingsComposer : ServerPacket
     {
         public GroupFurniSettingsComposer(Guild Group, int ItemId, int UserId)
-            : base(ServerPacketHeader.GroupFurniSettingsMessageComposer)
+            : base(ServerPacketHeader.FURNITURE_GROUP_CONTEXT_MENU_INFO)
         {
             this.WriteInteger(ItemId);//Item Id
             this.WriteInteger(Group.Id);//Group Id?

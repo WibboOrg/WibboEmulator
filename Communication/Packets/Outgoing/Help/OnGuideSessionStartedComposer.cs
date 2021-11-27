@@ -5,7 +5,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Help
     internal class OnGuideSessionStartedComposer : ServerPacket
     {
         public OnGuideSessionStartedComposer(User session, User requester)
-            : base(ServerPacketHeader.OnGuideSessionStarted)
+            : base(ServerPacketHeader.GUIDE_SESSION_STARTED)
         {
             WriteInteger(requester.Id);
             WriteString(requester.Username);

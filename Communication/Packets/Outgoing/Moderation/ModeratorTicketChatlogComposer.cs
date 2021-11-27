@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
     internal class ModeratorTicketChatlogComposer : ServerPacket
     {
         public ModeratorTicketChatlogComposer(SupportTicket ticket, RoomData roomData, double timestamp)
-            : base(ServerPacketHeader.ModeratorTicketChatlogMessageComposer)
+            : base(ServerPacketHeader.CFH_CHATLOG)
         {
             WriteInteger(ticket.Id);
             WriteInteger(ticket.Sender != null ? ticket.Sender.Id : 0);

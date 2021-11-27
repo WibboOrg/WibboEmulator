@@ -166,9 +166,9 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.CATALOG_PURCHASE, new PurchaseFromCatalogEvent());
             this._incomingPackets.Add(ClientPacketHeader.CATALOG_PURCHASE_GIFT, new PurchaseFromCatalogAsGiftEvent());
             this._incomingPackets.Add(ClientPacketHeader.GIFT_CONFIG, new GetGiftWrappingConfigurationEvent());
-            this._incomingPackets.Add(ClientPacketHeader.CheckPetNameMessageEvent, new CheckPetNameEvent());
+            this._incomingPackets.Add(ClientPacketHeader.APPROVE_NAME, new CheckPetNameEvent());
             this._incomingPackets.Add(ClientPacketHeader.CATALOG_REDEEM_VOUCHER, new RedeemVoucherEvent());
-            this._incomingPackets.Add(ClientPacketHeader.GetSellablePetBreedsMessageEvent, new GetSellablePetBreedsEvent());
+            this._incomingPackets.Add(ClientPacketHeader.CATALOG_REQUESET_PET_BREEDS, new GetSellablePetBreedsEvent());
             this._incomingPackets.Add(ClientPacketHeader.GROUP_MEMBERSHIPS, new GetGroupFurniConfigEvent());
             this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_CONFIG, new GetMarketplaceConfigurationEvent());
 
@@ -178,13 +178,13 @@ namespace Butterfly.Communication.Packets
 
         private void RegisterMarketplace()
         {
-            this._incomingPackets.Add(ClientPacketHeader.GetOffersMessageEvent, new GetOffersEvent());
+            this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_REQUEST_OFFERS, new GetOffersEvent());
             this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_REQUEST_OWN_ITEMS, new GetOwnOffersEvent());
             this._incomingPackets.Add(ClientPacketHeader.REQUEST_SELL_ITEM, new GetMarketplaceCanMakeOfferEvent());
             this._incomingPackets.Add(ClientPacketHeader.REQUEST_MARKETPLACE_ITEM_STATS, new GetMarketplaceItemStatsEvent());
             this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_SELL_ITEM, new MakeOfferEvent());
             this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_TAKE_BACK_ITEM, new CancelOfferEvent());
-            this._incomingPackets.Add(ClientPacketHeader.BuyOfferMessageEvent, new BuyOfferEvent());
+            this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_BUY_OFFER, new BuyOfferEvent());
             this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_REDEEM_CREDITS, new RedeemOfferCreditsEvent());
         }
 
@@ -209,7 +209,7 @@ namespace Butterfly.Communication.Packets
         private void RegisterRoomConnection()
         {
             this._incomingPackets.Add(ClientPacketHeader.ROOM_ENTER, new OpenFlatConnectionEvent());
-            this._incomingPackets.Add(ClientPacketHeader.GoToFlatMessageEvent, new GoToFlatEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GO_TO_FLAT, new GoToFlatEvent());
         }
 
         private void RegisterRoomSettings()
@@ -263,7 +263,7 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.FURNITURE_PLACE, new PlaceObjectEvent());
             this._incomingPackets.Add(ClientPacketHeader.FURNITURE_MULTISTATE, new UseFurnitureEvent());
             this._incomingPackets.Add(ClientPacketHeader.FURNITURE_WALL_MULTISTATE, new UseFurnitureEvent());
-            this._incomingPackets.Add(ClientPacketHeader.AnswerPollMessageEvent, new AnswerPollEvent());
+            this._incomingPackets.Add(ClientPacketHeader.POLL_ANSWER, new AnswerPollEvent());
         }
 
         private void RegisterRoomChat()
@@ -323,7 +323,7 @@ namespace Butterfly.Communication.Packets
         {
             this._incomingPackets.Add(ClientPacketHeader.GROUP_REQUEST, new JoinGroupEvent());
             this._incomingPackets.Add(ClientPacketHeader.RemoveGroupFavouriteMessageEvent, new RemoveGroupFavouriteEvent());
-            this._incomingPackets.Add(ClientPacketHeader.SetGroupFavouriteMessageEvent, new SetGroupFavouriteEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GROUP_FAVORITE, new SetGroupFavouriteEvent());
             this._incomingPackets.Add(ClientPacketHeader.GROUP_INFO, new GetGroupInfoEvent());
             this._incomingPackets.Add(ClientPacketHeader.GROUP_MEMBERS, new GetGroupMembersEvent());
             this._incomingPackets.Add(ClientPacketHeader.GROUP_CREATE_OPTIONS, new GetGroupCreationWindowEvent());
@@ -349,19 +349,19 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.PET_PICKUP, new PickUpPetEvent());
             this._incomingPackets.Add(ClientPacketHeader.PET_PLACE, new PlacePetEvent());
             this._incomingPackets.Add(ClientPacketHeader.PET_RIDE, new RideHorseEvent());
-            this._incomingPackets.Add(ClientPacketHeader.ApplyHorseEffectMessageEvent, new ApplyHorseEffectEvent());
-            this._incomingPackets.Add(ClientPacketHeader.RemoveSaddleFromHorseMessageEvent, new RemoveSaddleFromHorseEvent());
-            this._incomingPackets.Add(ClientPacketHeader.ModifyWhoCanRideHorseMessageEvent, new ModifyWhoCanRideHorseEvent());
+            this._incomingPackets.Add(ClientPacketHeader.USE_PET_PRODUCT, new ApplyHorseEffectEvent());
+            this._incomingPackets.Add(ClientPacketHeader.REMOVE_PET_SADDLE, new RemoveSaddleFromHorseEvent());
+            this._incomingPackets.Add(ClientPacketHeader.TOGGLE_PET_RIDING, new ModifyWhoCanRideHorseEvent());
             this._incomingPackets.Add(ClientPacketHeader.GetPetTrainingPanelMessageEvent, new GetPetTrainingPanelEvent());
             this._incomingPackets.Add(ClientPacketHeader.PET_MOVE, new MoveMonsterPlanteEvent());
         }
 
         private void RegisterQuests()
         {
-            this._incomingPackets.Add(ClientPacketHeader.GetQuestListMessageEvent, new GetQuestListEvent());
-            this._incomingPackets.Add(ClientPacketHeader.StartQuestMessageEvent, new StartQuestEvent());
-            this._incomingPackets.Add(ClientPacketHeader.CancelQuestMessageEvent, new CancelQuestEvent());
-            this._incomingPackets.Add(ClientPacketHeader.GetCurrentQuestMessageEvent, new GetCurrentQuestEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GET_QUESTS, new GetQuestListEvent());
+            this._incomingPackets.Add(ClientPacketHeader.ACCEPT_QUEST, new StartQuestEvent());
+            this._incomingPackets.Add(ClientPacketHeader.REJECT_QUEST, new CancelQuestEvent());
+            this._incomingPackets.Add(ClientPacketHeader.OPEN_QUEST_TRACKER, new GetCurrentQuestEvent());
         }
 
         private void RegisterFurni()
@@ -388,7 +388,7 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.ITEM_COLOR_WHEEL_CLICK, new UseFurnitureEvent());
             this._incomingPackets.Add(ClientPacketHeader.FootballGateSaveLookEvent, new ChangeFootGate());
             this._incomingPackets.Add(ClientPacketHeader.FURNITURE_OPEN_GIFT, new OpenGiftEvent());
-            this._incomingPackets.Add(ClientPacketHeader.GetGroupFurniSettingsMessageEvent, new GetGroupFurniSettingsEvent());
+            this._incomingPackets.Add(ClientPacketHeader.FURNITURE_GROUP_INFO, new GetGroupFurniSettingsEvent());
 
             this._incomingPackets.Add(ClientPacketHeader.LOVELOCK_START_CONFIRM, new ConfirmLoveLockEvent());
         }
@@ -404,9 +404,9 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.USER_BADGES_CURRENT, new GetSelectedBadgesEvent());
             this._incomingPackets.Add(ClientPacketHeader.MESSENGER_RELATIONSHIPS, new GetRelationshipsEvent());
             this._incomingPackets.Add(ClientPacketHeader.MESSENGER_RELATIONSHIPS_UPDATE, new SetRelationshipEvent());
-            this._incomingPackets.Add(ClientPacketHeader.CheckValidNameMessageEvent, new CheckValidNameEvent());
-            this._incomingPackets.Add(ClientPacketHeader.ChangeNameMessageEvent, new ChangeNameEvent());
-            this._incomingPackets.Add(ClientPacketHeader.GetHabboGroupBadgesMessageEvent, new GetHabboGroupBadgesEvent());
+            this._incomingPackets.Add(ClientPacketHeader.CHECK_USERNAME, new CheckValidNameEvent());
+            this._incomingPackets.Add(ClientPacketHeader.CHANGE_USERNAME, new ChangeNameEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GROUP_BADGES, new GetHabboGroupBadgesEvent());
         }
 
         private void RegisterSound()
@@ -445,7 +445,7 @@ namespace Butterfly.Communication.Packets
 
         private void RegisterModeration()
         {
-            this._incomingPackets.Add(ClientPacketHeader.OpenHelpToolMessageEvent, new OpenHelpToolEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GET_PENDING_CALLS_FOR_HELP, new OpenHelpToolEvent());
             this._incomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_ROOM_INFO, new GetModeratorRoomInfoEvent());
             this._incomingPackets.Add(ClientPacketHeader.MOD_TOOL_USER_INFO, new GetModeratorUserInfoEvent());
             this._incomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_USER_ROOMS, new GetModeratorUserRoomVisitsEvent());
@@ -455,9 +455,9 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_ROOM_CHATLOG, new GetModeratorRoomChatlogEvent());
             this._incomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_USER_CHATLOG, new GetModeratorUserChatlogEvent());
 
-            this._incomingPackets.Add(ClientPacketHeader.PickTicketMessageEvent, new PickTicketEvent());
-            this._incomingPackets.Add(ClientPacketHeader.ReleaseTicketMessageEvent, new ReleaseTicketEvent());
-            this._incomingPackets.Add(ClientPacketHeader.CloseTicketMesageEvent, new CloseTicketEvent());
+            this._incomingPackets.Add(ClientPacketHeader.PICK_ISSUES, new PickTicketEvent());
+            this._incomingPackets.Add(ClientPacketHeader.RELEASE_ISSUES, new ReleaseTicketEvent());
+            this._incomingPackets.Add(ClientPacketHeader.CLOSE_ISSUES, new CloseTicketEvent());
 
             this._incomingPackets.Add(ClientPacketHeader.MODTOOL_SANCTION_MUTE, new ModerationMuteEvent());
             this._incomingPackets.Add(ClientPacketHeader.MODTOOL_SANCTION_KICK, new ModerationMuteEvent());
@@ -468,15 +468,15 @@ namespace Butterfly.Communication.Packets
 
         private void RegisterGuide()
         {
-            this._incomingPackets.Add(ClientPacketHeader.RequestGuideToolEvent, new GetHelperToolConfigurationEvent());
-            this._incomingPackets.Add(ClientPacketHeader.OnGuideSessionDetached, new OnGuideSessionDetachedEvent());
-            this._incomingPackets.Add(ClientPacketHeader.OnGuide, new OnGuideEvent());
-            this._incomingPackets.Add(ClientPacketHeader.GuideRecommendHelperEvent, new RecomendHelpersEvent());
-            this._incomingPackets.Add(ClientPacketHeader.GuideToolMessageNew, new GuideToolMessageNewEvent());
-            this._incomingPackets.Add(ClientPacketHeader.GuideInviteUserEvent, new GuideInviteToRoomEvent());
-            this._incomingPackets.Add(ClientPacketHeader.GuideVisitUserEvent, new VisitRoomGuidesEvent());
-            this._incomingPackets.Add(ClientPacketHeader.GuideEndSession, new GuideEndSessionEvent());
-            this._incomingPackets.Add(ClientPacketHeader.CancellInviteGuide, new CancellInviteGuideEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_ON_DUTY_UPDATE, new GetHelperToolConfigurationEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_GUIDE_DECIDES, new OnGuideSessionDetachedEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_CREATE, new OnGuideEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_FEEDBACK, new RecomendHelpersEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_MESSAGE, new GuideToolMessageNewEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_INVITE_REQUESTER, new GuideInviteToRoomEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_GET_REQUESTER_ROOM, new VisitRoomGuidesEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_RESOLVED, new GuideEndSessionEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GUIDE_SESSION_REQUESTER_CANCELS, new CancellInviteGuideEvent());
         }
     }
 }

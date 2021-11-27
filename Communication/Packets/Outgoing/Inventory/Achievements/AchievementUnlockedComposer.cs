@@ -5,7 +5,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Inventory.Achievements
     internal class AchievementUnlockedComposer : ServerPacket
     {
         public AchievementUnlockedComposer(AchievementData Achievement, int Level, int PointReward, int PixelReward)
-            : base(ServerPacketHeader.AchievementUnlockedMessageComposer)
+            : base(ServerPacketHeader.ACHIEVEMENT_NOTIFICATION)
         {
             this.WriteInteger(Achievement.Id);
             this.WriteInteger(Level);

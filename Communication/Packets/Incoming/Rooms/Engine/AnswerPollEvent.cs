@@ -42,7 +42,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 room.VotedYesCount++;
             }
 
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.RoomUserQuestionAnsweredComposer);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.QUESTION_ANSWERED);
             Message.WriteInteger(Session.GetHabbo().Id);
             Message.WriteString(Value);
             Message.WriteInteger(2);

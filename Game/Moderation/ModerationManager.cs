@@ -362,7 +362,7 @@ namespace Butterfly.Game.Moderation
             }
             if (clientByUserId != null)
             {
-                ServerPacket Message = new ServerPacket(ServerPacketHeader.ModeratorSupportTicketResponseComposer);
+                ServerPacket Message = new ServerPacket(ServerPacketHeader.CFH_REPLY);
                 Message.WriteString(MessageAlert);
                 clientByUserId.SendPacket(Message);
             }
@@ -623,7 +623,7 @@ namespace Butterfly.Game.Moderation
         public static ServerPacket SerializeTicketChatlog(ModerationTicket Ticket, RoomData RoomData, double Timestamp)
         {
             Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomData.Id);
-            ServerPacket message = new ServerPacket(ServerPacketHeader.ModeratorTicketChatlogMessageComposer);
+            ServerPacket message = new ServerPacket(ServerPacketHeader.CFH_CHATLOG);
             message.WriteInteger(Ticket.TicketId);
             message.WriteInteger(Ticket.SenderId);
             message.WriteInteger(Ticket.ReportedId);

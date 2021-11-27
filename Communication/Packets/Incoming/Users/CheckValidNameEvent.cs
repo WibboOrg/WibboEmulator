@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             string Name = Packet.PopString();
 
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.NameChangeUpdateMessageComposer);
+            ServerPacket Response = new ServerPacket(ServerPacketHeader.CHECK_USER_NAME);
             switch (this.NameAvailable(Name))
             {
                 case -2:

@@ -8,7 +8,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.SimplePollAnswersComposer);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.QUESTION_FINISHED);
             Message.WriteInteger(1);//PollId
             Message.WriteInteger(2);//Count
             Message.WriteString("0");//Négatif

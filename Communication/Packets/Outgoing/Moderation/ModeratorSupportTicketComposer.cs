@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
     internal class ModeratorSupportTicketComposer : ServerPacket
     {
         public ModeratorSupportTicketComposer(int Id, SupportTicket Ticket)
-            : base(ServerPacketHeader.ModeratorSupportTicketMessageComposer)
+            : base(ServerPacketHeader.ISSUE_INFO)
         {
             WriteInteger(Ticket.Id); // Id
             WriteInteger(Ticket.GetStatus(Id)); // Tab ID

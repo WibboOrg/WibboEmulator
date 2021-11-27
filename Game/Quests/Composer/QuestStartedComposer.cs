@@ -7,7 +7,7 @@ namespace Butterfly.Game.Quests.Composer
     {
         public static ServerPacket Compose(Client Session, Quest Quest)
         {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.QuestStartedMessageComposer);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.QUEST);
             QuestListComposer.SerializeQuest(Message, Session, Quest, Quest.Category);
             return Message;
         }

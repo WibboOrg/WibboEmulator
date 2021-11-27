@@ -245,7 +245,7 @@ namespace Butterfly.Game.Pets
                 return;
             }
 
-            ServerPacket Message1 = new ServerPacket(ServerPacketHeader.AddExperiencePointsMessageComposer);
+            ServerPacket Message1 = new ServerPacket(ServerPacketHeader.PET_EXPERIENCE);
             Message1.WriteInteger(this.PetId);
             Message1.WriteInteger(this.VirtualId);
             Message1.WriteInteger(Amount);
@@ -256,7 +256,7 @@ namespace Butterfly.Game.Pets
                 return;
             }
 
-            ServerPacket LevelNotify = new ServerPacket(ServerPacketHeader.PetLevelUpComposer);
+            ServerPacket LevelNotify = new ServerPacket(ServerPacketHeader.PET_LEVEL_NOTIFICATION);
             LevelNotify.WriteInteger(this.PetId);
             LevelNotify.WriteString(this.Name);
             LevelNotify.WriteInteger(this.Level);

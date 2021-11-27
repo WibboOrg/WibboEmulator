@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
     internal class SellablePetBreedsComposer : ServerPacket
     {
         public SellablePetBreedsComposer(string PetType, int PetId, ICollection<PetRace> Races)
-             : base(ServerPacketHeader.SellablePetBreedsMessageComposer)
+             : base(ServerPacketHeader.CATALOG_RECEIVE_PET_BREEDS)
         {
             this.WriteString(PetType);
 

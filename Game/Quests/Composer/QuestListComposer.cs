@@ -40,7 +40,7 @@ namespace Butterfly.Game.Quests.Composer
                 }
             }
 
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.QuestListMessageComposer);
+            ServerPacket Message = new ServerPacket(ServerPacketHeader.QUESTS);
             Message.WriteInteger(dictionary2.Count);
             foreach (KeyValuePair<string, Quest> keyValuePair in dictionary2)
             {

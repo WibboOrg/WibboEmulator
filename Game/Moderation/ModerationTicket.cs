@@ -169,7 +169,7 @@ namespace Butterfly.Game.Moderation
 
         public ServerPacket Serialize()
         {
-            ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.ModeratorSupportTicketMessageComposer);
+            ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.ISSUE_INFO);
             serverMessage.WriteInteger(this.Id);
             serverMessage.WriteInteger(this.TabId);
             serverMessage.WriteInteger(3);

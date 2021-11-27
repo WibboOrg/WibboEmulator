@@ -16,7 +16,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            ServerPacket MessageTwo = new ServerPacket(ServerPacketHeader.QuestionInfoComposer);
+            ServerPacket MessageTwo = new ServerPacket(ServerPacketHeader.QUESTION);
             MessageTwo.WriteString("MATCHING_POLL"); //Type
             MessageTwo.WriteInteger(1);//pollId
             MessageTwo.WriteInteger(1);//questionId
