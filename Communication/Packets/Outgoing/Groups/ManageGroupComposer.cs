@@ -4,7 +4,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Groups
 {
     internal class ManageGroupComposer : ServerPacket
     {
-        public ManageGroupComposer(Guild Group, string[] BadgeParts)
+        public ManageGroupComposer(Group Group, string[] BadgeParts)
             : base(ServerPacketHeader.GROUP_SETTINGS)
         {
             this.WriteInteger(0);
@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Groups
             this.WriteInteger(1);
             this.WriteInteger(Group.Colour1);
             this.WriteInteger(Group.Colour2);
-            this.WriteInteger(Group.GroupType == GuildType.OPEN ? 0 : Group.GroupType == GuildType.LOCKED ? 1 : 2);
+            this.WriteInteger(Group.GroupType == GroupType.OPEN ? 0 : Group.GroupType == GroupType.LOCKED ? 1 : 2);
             this.WriteInteger(Group.AdminOnlyDeco);
             this.WriteBoolean(false);
             this.WriteString("");

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Butterfly.Game.Guilds
 {
-    public class Guild
+    public class Group
     {
         public int Id;
         public string Name;
@@ -20,13 +20,13 @@ namespace Butterfly.Game.Guilds
         public int Colour1;
         public int Colour2;
         public bool ForumEnabled;
-        public GuildType GroupType;
+        public GroupType GroupType;
         public bool HasForum;
         private readonly List<int> _members;
         private readonly List<int> _requests;
         private readonly List<int> _administrators;
 
-        public Guild(int Id, string Name, string Description, string Badge, int RoomId, int Owner, int Time, int Type, int Colour1, int Colour2, int AdminOnlyDeco, bool HasForum)
+        public Group(int Id, string Name, string Description, string Badge, int RoomId, int Owner, int Time, int Type, int Colour1, int Colour2, int AdminOnlyDeco, bool HasForum)
         {
             this.Id = Id;
             this.Name = Name;
@@ -42,13 +42,13 @@ namespace Butterfly.Game.Guilds
             switch (Type)
             {
                 case 0:
-                    this.GroupType = GuildType.OPEN;
+                    this.GroupType = GroupType.OPEN;
                     break;
                 case 1:
-                    this.GroupType = GuildType.LOCKED;
+                    this.GroupType = GroupType.LOCKED;
                     break;
                 case 2:
-                    this.GroupType = GuildType.PRIVATE;
+                    this.GroupType = GroupType.PRIVATE;
                     break;
             }
 
@@ -199,7 +199,7 @@ namespace Butterfly.Game.Guilds
                     this._administrators.Remove(userId);
                     this._members.Add(userId);
                 }
-                else if (this.GroupType == GuildType.LOCKED)
+                else if (this.GroupType == GroupType.LOCKED)
                 {
                     GuildRequestDao.Insert(dbClient, this.Id, userId);
                     if (!this._requests.Contains(userId))

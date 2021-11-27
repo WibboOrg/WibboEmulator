@@ -6,5 +6,7 @@
         DUCKET,
         BADGE,
         WINWIN,
+        WIBBOPOINTS,
+        JETONS,
     }
 }

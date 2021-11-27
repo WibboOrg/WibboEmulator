@@ -1,6 +1,6 @@
 ﻿namespace Butterfly.Game.Rooms.AI
 {
-    public enum AIType
+    public enum BotAIType
     {
         Pet,
         Generic,

@@ -12,14 +12,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            RoomUser roomUserByHabbo = UserRoom.Room.GetRoomUserManager().GetRoomUserByName(Params[1]);
-            if (roomUserByHabbo == null)
+            RoomUser TargetUser = UserRoom.Room.GetRoomUserManager().GetRoomUserByName(Params[1]);
+            if (TargetUser == null)
             {
                 return;
             }
 
-            roomUserByHabbo.Freeze = !roomUserByHabbo.Freeze;
-            roomUserByHabbo.FreezeEndCounter = 0;
+            TargetUser.Freeze = !TargetUser.Freeze;
+            TargetUser.FreezeEndCounter = 0;
 
 
         }

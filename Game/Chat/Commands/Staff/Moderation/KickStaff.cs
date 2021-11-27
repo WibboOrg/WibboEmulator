@@ -8,22 +8,22 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             Room currentRoom = Session.GetHabbo().CurrentRoom;
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (TargetUser == null || TargetUser.GetHabbo() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
-            else if (Session.GetHabbo().Rank <= clientByUsername.GetHabbo().Rank)
+            else if (Session.GetHabbo().Rank <= TargetUser.GetHabbo().Rank)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
             }
-            else if (clientByUsername.GetHabbo().CurrentRoomId < 1U)
+            else if (TargetUser.GetHabbo().CurrentRoomId < 1U)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("kick.error", Session.Langue));
             }
             else
             {
-                Room.GetRoomUserManager().RemoveUserFromRoom(clientByUsername, true, false);
+                Room.GetRoomUserManager().RemoveUserFromRoom(TargetUser, true, false);
 
                 if (Params.Length > 2)
                 {
@@ -33,11 +33,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                         return;
                     }
 
-                    clientByUsername.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("kick.withmessage", clientByUsername.Langue) + message);
+                    TargetUser.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("kick.withmessage", TargetUser.Langue) + message);
                 }
                 else
                 {
-                    clientByUsername.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("kick.nomessage", clientByUsername.Langue));
+                    TargetUser.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("kick.nomessage", TargetUser.Langue));
                 }
             }
 

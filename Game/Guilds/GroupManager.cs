@@ -8,25 +8,25 @@ using System.Data;
 
 namespace Butterfly.Game.Guilds
 {
-    public class GuildManager
+    public class GroupManager
     {
-        private readonly ConcurrentDictionary<int, Guild> _groups;
+        private readonly ConcurrentDictionary<int, Group> _groups;
 
-        private readonly List<GuildBadgePart> _bases;
-        private readonly List<GuildBadgePart> _symbols;
-        private readonly List<GuildColour> _baseColours;
-        private readonly Dictionary<int, GuildColour> _symbolColours;
-        private readonly Dictionary<int, GuildColour> _backgroundColours;
+        private readonly List<GroupBadgePart> _bases;
+        private readonly List<GroupBadgePart> _symbols;
+        private readonly List<GroupColour> _baseColours;
+        private readonly Dictionary<int, GroupColour> _symbolColours;
+        private readonly Dictionary<int, GroupColour> _backgroundColours;
 
-        public GuildManager()
+        public GroupManager()
         {
-            this._groups = new ConcurrentDictionary<int, Guild>();
+            this._groups = new ConcurrentDictionary<int, Group>();
 
-            this._bases = new List<GuildBadgePart>();
-            this._symbols = new List<GuildBadgePart>();
-            this._baseColours = new List<GuildColour>();
-            this._symbolColours = new Dictionary<int, GuildColour>();
-            this._backgroundColours = new Dictionary<int, GuildColour>();
+            this._bases = new List<GroupBadgePart>();
+            this._symbols = new List<GroupBadgePart>();
+            this._baseColours = new List<GroupColour>();
+            this._symbolColours = new Dictionary<int, GroupColour>();
+            this._backgroundColours = new Dictionary<int, GroupColour>();
         }
 
         public void Init()
@@ -46,30 +46,30 @@ namespace Butterfly.Game.Guilds
                     switch (dRow["type"].ToString())
                     {
                         case "base":
-                            this._bases.Add(new GuildBadgePart(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
+                            this._bases.Add(new GroupBadgePart(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
                             break;
 
                         case "symbol":
-                            this._symbols.Add(new GuildBadgePart(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
+                            this._symbols.Add(new GroupBadgePart(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
                             break;
 
                         case "color":
-                            this._baseColours.Add(new GuildColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                            this._baseColours.Add(new GroupColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
                             break;
 
                         case "color2":
-                            this._symbolColours.Add(Convert.ToInt32(dRow["id"]), new GuildColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                            this._symbolColours.Add(Convert.ToInt32(dRow["id"]), new GroupColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
                             break;
 
                         case "color3":
-                            this._backgroundColours.Add(Convert.ToInt32(dRow["id"]), new GuildColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                            this._backgroundColours.Add(Convert.ToInt32(dRow["id"]), new GroupColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
                             break;
                     }
                 }
             }
         }
 
-        public bool TryGetGroup(int id, out Guild Group)
+        public bool TryGetGroup(int id, out Group Group)
         {
             Group = null;
 
@@ -87,7 +87,7 @@ namespace Butterfly.Game.Guilds
                     return false;
                 }
 
-                Group = new Guild(
+                Group = new Group(
                         Convert.ToInt32(Row["id"]), Convert.ToString(Row["name"]), Convert.ToString(Row["desc"]), Convert.ToString(Row["badge"]), Convert.ToInt32(Row["room_id"]), Convert.ToInt32(Row["owner_id"]),
                         Convert.ToInt32(Row["created"]), Convert.ToInt32(Row["state"]), Convert.ToInt32(Row["colour1"]), Convert.ToInt32(Row["colour2"]), Convert.ToInt32(Row["admindeco"]), Convert.ToInt32(Row["has_forum"]) == 1);
 
@@ -97,9 +97,9 @@ namespace Butterfly.Game.Guilds
             return true;
         }
 
-        public bool TryCreateGroup(User Player, string Name, string Description, int RoomId, string Badge, int Colour1, int Colour2, out Guild Group)
+        public bool TryCreateGroup(User Player, string Name, string Description, int RoomId, string Badge, int Colour1, int Colour2, out Group Group)
         {
-            Group = new Guild(0, Name, Description, Badge, RoomId, Player.Id, ButterflyEnvironment.GetUnixTimestamp(), 0, Colour1, Colour2, 0, false);
+            Group = new Group(0, Name, Description, Badge, RoomId, Player.Id, ButterflyEnvironment.GetUnixTimestamp(), 0, Colour1, Colour2, 0, false);
             if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Badge))
             {
                 return false;
@@ -149,7 +149,7 @@ namespace Butterfly.Game.Guilds
 
         public void DeleteGroup(int id)
         {
-            Guild Group = null;
+            Group Group = null;
             if (this._groups.ContainsKey(id))
             {
                 this._groups.TryRemove(id, out Group);
@@ -161,13 +161,13 @@ namespace Butterfly.Game.Guilds
             }
         }
 
-        public List<Guild> GetGroupsForUser(List<int> GroupIds)
+        public List<Group> GetGroupsForUser(List<int> GroupIds)
         {
-            List<Guild> Groups = new List<Guild>();
+            List<Group> Groups = new List<Group>();
 
             foreach (int Id in GroupIds)
             {
-                if (this.TryGetGroup(Id, out Guild Group))
+                if (this.TryGetGroup(Id, out Group Group))
                 {
                     Groups.Add(Group);
                 }
@@ -176,14 +176,14 @@ namespace Butterfly.Game.Guilds
         }
 
 
-        public ICollection<GuildBadgePart> BadgeBases => this._bases;
+        public ICollection<GroupBadgePart> BadgeBases => this._bases;
 
-        public ICollection<GuildBadgePart> BadgeSymbols => this._symbols;
+        public ICollection<GroupBadgePart> BadgeSymbols => this._symbols;
 
-        public ICollection<GuildColour> BadgeBaseColours => this._baseColours;
+        public ICollection<GroupColour> BadgeBaseColours => this._baseColours;
 
-        public ICollection<GuildColour> BadgeSymbolColours => this._symbolColours.Values;
+        public ICollection<GroupColour> BadgeSymbolColours => this._symbolColours.Values;
 
-        public ICollection<GuildColour> BadgeBackColours => this._backgroundColours.Values;
+        public ICollection<GroupColour> BadgeBackColours => this._backgroundColours.Values;
     }
 }

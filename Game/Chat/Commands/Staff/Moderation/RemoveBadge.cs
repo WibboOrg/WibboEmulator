@@ -8,11 +8,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (clientByUsername != null && clientByUsername.GetHabbo() != null)
+            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (TargetUser != null && TargetUser.GetHabbo() != null)
             {
-                clientByUsername.GetHabbo().GetBadgeComponent().RemoveBadge(Params[2]);
-                clientByUsername.SendPacket(new BadgesComposer(clientByUsername.GetHabbo().GetBadgeComponent().BadgeList));
+                TargetUser.GetHabbo().GetBadgeComponent().RemoveBadge(Params[2]);
+                TargetUser.SendPacket(new BadgesComposer(TargetUser.GetHabbo().GetBadgeComponent().BadgeList));
             }
             else
             {

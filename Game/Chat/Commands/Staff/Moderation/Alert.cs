@@ -12,8 +12,8 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (clientByUsername == null)
+            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (TargetUser == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
@@ -25,10 +25,8 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     return;
                 }
 
-                clientByUsername.SendNotification(message);
+                TargetUser.SendNotification(message);
             }
-
-            UserRoom.SendWhisperChat("L'alerte a �t� envoy�e � " + clientByUsername.GetHabbo().Username);
         }
     }
 }

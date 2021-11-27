@@ -590,14 +590,14 @@ namespace Butterfly.Game.Items.Wired.Actions
                         {
                             ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().RemoveEnemyBot(BotOrPet.BotData.Id);
                             BotOrPet.BotData.RoleBot = null;
-                            BotOrPet.BotData.AiType = AIType.Generic;
+                            BotOrPet.BotData.AiType = BotAIType.Generic;
                             BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                         }
                         else
                         {
                             ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().RemoveEnemyPet(BotOrPet.BotData.Id);
                             BotOrPet.BotData.RoleBot = null;
-                            BotOrPet.BotData.AiType = AIType.Pet;
+                            BotOrPet.BotData.AiType = BotAIType.Pet;
                             BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                         }
                         break;
@@ -616,7 +616,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             if (RPEnemyConfig != null)
                             {
                                 BotOrPet.BotData.RoleBot = new RoleBot(RPEnemyConfig);
-                                BotOrPet.BotData.AiType = AIType.RoleplayBot;
+                                BotOrPet.BotData.AiType = BotAIType.RoleplayBot;
                                 BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                             }
                         }
@@ -626,7 +626,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             if (RPEnemyConfig != null)
                             {
                                 BotOrPet.BotData.RoleBot = new RoleBot(RPEnemyConfig);
-                                BotOrPet.BotData.AiType = AIType.RoleplayPet;
+                                BotOrPet.BotData.AiType = BotAIType.RoleplayPet;
                                 BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                             }
                         }

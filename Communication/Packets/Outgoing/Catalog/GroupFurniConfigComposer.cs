@@ -5,11 +5,11 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
 {
     internal class GroupFurniConfigComposer : ServerPacket
     {
-        public GroupFurniConfigComposer(ICollection<Guild> groups)
+        public GroupFurniConfigComposer(ICollection<Group> groups)
             : base(ServerPacketHeader.GROUP_LIST)
         {
             this.WriteInteger(groups.Count);
-            foreach (Guild group in groups)
+            foreach (Group group in groups)
             {
                 this.WriteInteger(group.Id);
                 this.WriteString(group.Name);

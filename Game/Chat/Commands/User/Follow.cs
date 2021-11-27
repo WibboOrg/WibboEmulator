@@ -13,18 +13,18 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (TargetUser == null || TargetUser.GetHabbo() == null)
             {
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));
             }
-            else if ((clientByUsername.GetHabbo().HideInRoom) && !Session.GetHabbo().HasFuse("fuse_mod"))
+            else if ((TargetUser.GetHabbo().HideInRoom) && !Session.GetHabbo().HasFuse("fuse_mod"))
             {
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.follow.notallowed", Session.Langue));
             }
             else
             {
-                Room currentRoom = clientByUsername.GetHabbo().CurrentRoom;
+                Room currentRoom = TargetUser.GetHabbo().CurrentRoom;
                 if (currentRoom != null)
                 {
                     Session.SendPacket(new GetGuestRoomResultComposer(Session, currentRoom.RoomData, false, true));

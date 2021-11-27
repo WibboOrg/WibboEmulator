@@ -4,7 +4,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Groups
 {
     internal class UpdateFavouriteGroupComposer : ServerPacket
     {
-        public UpdateFavouriteGroupComposer(Guild Group, int VirtualId)
+        public UpdateFavouriteGroupComposer(Group Group, int VirtualId)
             : base(ServerPacketHeader.UpdateFavouriteGroupMessageComposer)
         {
             this.WriteInteger(VirtualId);//Sends 0 on .COM

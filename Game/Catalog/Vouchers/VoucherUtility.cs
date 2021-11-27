@@ -15,6 +15,10 @@
                     return VoucherType.BADGE;
                 case "winwin":
                     return VoucherType.WINWIN;
+                case "wibbopoints":
+                    return VoucherType.WIBBOPOINTS;
+                case "jetons":
+                    return VoucherType.JETONS;
             }
         }
 
@@ -31,6 +35,10 @@
                     return "badge";
                 case VoucherType.WINWIN:
                     return "winwin";
+                case VoucherType.WIBBOPOINTS:
+                    return "wibbopoints";
+                case VoucherType.JETONS:
+                    return "jetons";
             }
         }
     }

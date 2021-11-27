@@ -15,13 +15,13 @@ using Butterfly.Game.Permissions;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Chat;
 using Butterfly.Game.Moderation;
-using Butterfly.Game.Users.Effect;
 using Butterfly.Game.WebClients;
 using System;
 using System.Diagnostics;
 using System.Threading;
 using Butterfly.Database.Interfaces;
 using Butterfly.Database.Daos;
+using Butterfly.Game.Effects;
 
 namespace Butterfly.Game
 {
@@ -37,7 +37,7 @@ namespace Butterfly.Game
         private readonly AchievementManager _achievementManager;
         private readonly ModerationManager _moderationManager;
         private readonly QuestManager _questManager;
-        private readonly GuildManager _groupManager;
+        private readonly GroupManager _groupManager;
         private readonly LandingViewManager _landingViewManager;
         private readonly HelpManager _helpManager;
         private readonly PacketManager _packetManager;
@@ -74,7 +74,7 @@ namespace Butterfly.Game
             this._roomManager = new RoomManager();
             this._roomManager.Init();
 
-            this._groupManager = new GuildManager();
+            this._groupManager = new GroupManager();
             this._groupManager.Init();
 
             this._moderationManager = new ModerationManager();
@@ -191,7 +191,7 @@ namespace Butterfly.Game
             return this._questManager;
         }
 
-        public GuildManager GetGroupManager()
+        public GroupManager GetGroupManager()
         {
             return this._groupManager;
         }

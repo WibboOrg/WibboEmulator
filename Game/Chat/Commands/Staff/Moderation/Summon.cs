@@ -13,23 +13,23 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (TargetUser == null || TargetUser.GetHabbo() == null)
             {
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));
                 return;
             }
-            else if (clientByUsername.GetHabbo().CurrentRoom != null && clientByUsername.GetHabbo().CurrentRoom.Id == Session.GetHabbo().CurrentRoom.Id)
+            else if (TargetUser.GetHabbo().CurrentRoom != null && TargetUser.GetHabbo().CurrentRoom.Id == Session.GetHabbo().CurrentRoom.Id)
             {
                 return;
             }
 
             Room currentRoom = Session.GetHabbo().CurrentRoom;
-            clientByUsername.GetHabbo().IsTeleporting = true;
-            clientByUsername.GetHabbo().TeleportingRoomID = currentRoom.RoomData.Id;
-            clientByUsername.GetHabbo().TeleporterId = 0;
+            TargetUser.GetHabbo().IsTeleporting = true;
+            TargetUser.GetHabbo().TeleportingRoomID = currentRoom.RoomData.Id;
+            TargetUser.GetHabbo().TeleporterId = 0;
 
-            clientByUsername.SendPacket(new GetGuestRoomResultComposer(clientByUsername, currentRoom.RoomData, false, true));
+            TargetUser.SendPacket(new GetGuestRoomResultComposer(TargetUser, currentRoom.RoomData, false, true));
         }
 
     }

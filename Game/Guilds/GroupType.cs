@@ -1,6 +1,6 @@
 ﻿namespace Butterfly.Game.Guilds
 {
-    public enum GuildType
+    public enum GroupType
     {
         OPEN,
         LOCKED,

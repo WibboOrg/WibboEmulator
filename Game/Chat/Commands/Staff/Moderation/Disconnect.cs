@@ -7,19 +7,19 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (TargetUser == null || TargetUser.GetHabbo() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
-            else if (clientByUsername.GetHabbo().Rank >= Session.GetHabbo().Rank)
+            else if (TargetUser.GetHabbo().Rank >= Session.GetHabbo().Rank)
             {
                 //Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
                 Session.Disconnect();
             }
             else
             {
-                clientByUsername.Disconnect();
+                TargetUser.Disconnect();
             }
 
         }

@@ -14,22 +14,22 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (TargetUser == null || TargetUser.GetHabbo() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
-            else if (clientByUsername.GetHabbo().Rank >= Session.GetHabbo().Rank)
+            else if (TargetUser.GetHabbo().Rank >= Session.GetHabbo().Rank)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
             }
             else
             {
-                User habbo = clientByUsername.GetHabbo();
+                User habbo = TargetUser.GetHabbo();
 
                 habbo.SpamProtectionTime = 300;
                 habbo.SpamEnable = true;
-                clientByUsername.SendPacket(new FloodControlComposer(habbo.SpamProtectionTime));
+                TargetUser.SendPacket(new FloodControlComposer(habbo.SpamProtectionTime));
             }
         }
     }

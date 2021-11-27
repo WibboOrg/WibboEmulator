@@ -30,14 +30,14 @@ namespace Butterfly.Game.Rooms.AI
         public int Status;
 
         public bool IsDancing;
-        public AIType AiType;
+        public BotAIType AiType;
         public RoleBot RoleBot;
 
-        public bool IsPet => this.AiType == AIType.Pet || this.AiType == AIType.RoleplayPet;
+        public bool IsPet => this.AiType == BotAIType.Pet || this.AiType == BotAIType.RoleplayPet;
 
         public string OwnerName => ButterflyEnvironment.GetGame().GetClientManager().GetNameById(this.OwnerId);
 
-        public RoomBot(int BotId, int OwnerId, int RoomId, AIType AiType, bool WalkingEnabled, string Name, string Motto, string Gender, string Look, int X, int Y, double Z, int Rot, bool ChatEnabled, string ChatText, int ChatSeconds, bool IsDancing, int pEffectEnable, int pHanditemId, int pStatus)
+        public RoomBot(int BotId, int OwnerId, int RoomId, BotAIType AiType, bool WalkingEnabled, string Name, string Motto, string Gender, string Look, int X, int Y, double Z, int Rot, bool ChatEnabled, string ChatText, int ChatSeconds, bool IsDancing, int pEffectEnable, int pHanditemId, int pStatus)
         {
             this.Id = BotId;
             this.OwnerId = OwnerId;
@@ -101,16 +101,16 @@ namespace Butterfly.Game.Rooms.AI
         {
             switch (this.AiType)
             {
-                case AIType.RoleplayBot:
-                case AIType.RoleplayPet:
+                case BotAIType.RoleplayBot:
+                case BotAIType.RoleplayPet:
                     return new RoleplayBot(VirtualId);
-                case AIType.SuperBot:
+                case BotAIType.SuperBot:
                     return new SuperBot(VirtualId);
-                case AIType.Pet:
+                case BotAIType.Pet:
                     return new PetBot(VirtualId);
-                case AIType.Generic:
+                case BotAIType.Generic:
                     break;
-                case AIType.CopyBot:
+                case BotAIType.CopyBot:
                     break;
             }
 

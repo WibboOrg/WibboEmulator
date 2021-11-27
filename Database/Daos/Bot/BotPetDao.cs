@@ -27,7 +27,7 @@ namespace Butterfly.Database.Daos
                 }
                 else
                 {
-                    if (petData.BotData.AiType == AIType.RoleplayPet)
+                    if (petData.BotData.AiType == BotAIType.RoleplayPet)
                     {
                         continue;
                     }

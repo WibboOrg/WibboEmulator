@@ -1,6 +1,7 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
+using Butterfly.Game.Rooms.AI;
 using Butterfly.Game.Users.Inventory.Bots;
 using System;
 using System.Data;
@@ -23,6 +24,25 @@ namespace Butterfly.Game.Catalog.Utilities
                 DataRow BotData = BotUserDao.GetOne(dbClient, OwnerId, Id);
 
                 return new Bot(Convert.ToInt32(BotData["id"]), Convert.ToInt32(BotData["user_id"]), Convert.ToString(BotData["name"]), Convert.ToString(BotData["motto"]), Convert.ToString(BotData["look"]), Convert.ToString(BotData["gender"]), false, true, "", 0, false, 0, 0, 0);
+            }
+        }
+
+        public static BotAIType GetAIFromString(string type)
+        {
+            switch (type)
+            {
+                case "pet":
+                    return BotAIType.Pet;
+                case "generic":
+                    return BotAIType.Generic;
+                case "copybot":
+                    return BotAIType.CopyBot;
+                case "roleplaybot":
+                    return BotAIType.RoleplayBot;
+                case "roleplaypet":
+                    return BotAIType.RoleplayPet;
+                default:
+                    return BotAIType.Generic;
             }
         }
     }

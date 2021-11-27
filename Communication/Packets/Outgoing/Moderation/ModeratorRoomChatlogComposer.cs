@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorRoomChatlogComposer : ServerPacket
     {
-        public ModeratorRoomChatlogComposer(Room room, ICollection<ChatMessage> chats)
+        public ModeratorRoomChatlogComposer(Room room, ICollection<ChatlogEntry> chats)
             : base(ServerPacketHeader.MODTOOL_ROOM_CHATLOG)
         {
             WriteByte(1);
@@ -20,7 +20,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
             WriteInteger(room.Id);
 
             WriteShort(chats.Count);
-            foreach (ChatMessage Entry in chats)
+            foreach (ChatlogEntry Entry in chats)
             {
                 string Username = "Inconnu";
                 if (Entry.PlayerNullable() != null)

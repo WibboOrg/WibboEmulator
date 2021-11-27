@@ -33,7 +33,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                 this.WriteInteger(User.BotAI.Id);
                 this.WriteString(User.BotData.Name);
                 this.WriteString(User.BotData.Motto);
-                if (User.BotData.AiType == AIType.Pet || User.BotData.AiType == AIType.RoleplayPet)
+                if (User.BotData.AiType == BotAIType.Pet || User.BotData.AiType == BotAIType.RoleplayPet)
                 {
                     this.WriteString(User.BotData.Look.ToLower() + ((User.PetData.Saddle > 0) ? " 3 2 " + User.PetData.PetHair + " " + User.PetData.HairDye + " 3 " + User.PetData.PetHair + " " + User.PetData.HairDye + " 4 " + User.PetData.Saddle + " 0" : " 2 2 " + User.PetData.PetHair + " " + User.PetData.HairDye + " 3 " + User.PetData.PetHair + " " + User.PetData.HairDye + ""));
                 }
@@ -47,8 +47,8 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                 this.WriteInteger(User.Y);
                 this.WriteString(User.Z.ToString());
                 this.WriteInteger(2);
-                this.WriteInteger(User.BotData.AiType == AIType.Pet || User.BotData.AiType == AIType.RoleplayPet ? 2 : 4);
-                if (User.BotData.AiType == AIType.Pet || User.BotData.AiType == AIType.RoleplayPet)
+                this.WriteInteger(User.BotData.AiType == BotAIType.Pet || User.BotData.AiType == BotAIType.RoleplayPet ? 2 : 4);
+                if (User.BotData.AiType == BotAIType.Pet || User.BotData.AiType == BotAIType.RoleplayPet)
                 {
                     this.WriteInteger(User.PetData.Type);
                     this.WriteInteger(User.PetData.OwnerId);
@@ -102,7 +102,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                 {
                     User Habbo = User.GetClient().GetHabbo();
 
-                    Guild Group = null;
+                    Group Group = null;
                     if (Habbo != null)
                     {
                         if (Habbo.FavouriteGroupId > 0)

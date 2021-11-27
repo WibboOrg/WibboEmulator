@@ -49,7 +49,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 stringBuilder.Append("Utilisateurs: " + Habbo.CurrentRoom.UserCount + "/" + Habbo.CurrentRoom.RoomData.UsersMax + "\r");
             }
 
-            if (Session.GetHabbo().HasFuse("fuse_sysadmin"))
+            if (Session.GetHabbo().HasFuse("fuse_infouser"))
             {
                 stringBuilder.Append("\r - Autre information - \r");
                 stringBuilder.Append("MachineId: " + clientByUsername.MachineId + "\r");

@@ -23,8 +23,8 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             string Username = Params[1];
 
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Username);
-            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Username);
+            if (TargetUser == null || TargetUser.GetHabbo() == null)
             {
                 RoomUser Bot = Room.GetRoomUserManager().GetBotByName(Username);
                 if (Bot == null || Bot.BotData == null)
@@ -38,14 +38,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             else
             {
 
-                if (clientByUsername.GetHabbo().PremiumProtect && !Session.GetHabbo().HasFuse("fuse_mod"))
+                if (TargetUser.GetHabbo().PremiumProtect && !Session.GetHabbo().HasFuse("fuse_mod"))
                 {
                     UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
                     return;
                 }
 
-                Session.GetHabbo().Gender = clientByUsername.GetHabbo().Gender;
-                Session.GetHabbo().Look = clientByUsername.GetHabbo().Look;
+                Session.GetHabbo().Gender = TargetUser.GetHabbo().Gender;
+                Session.GetHabbo().Look = TargetUser.GetHabbo().Look;
             }
 
             if (UserRoom.transformation || UserRoom.IsSpectator)

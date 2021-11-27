@@ -75,7 +75,7 @@ namespace Butterfly.Game.Users
         private AchievementComponent _achievementComponent;
         private InventoryComponent _inventoryComponent;
         private WardrobeComponent _wardrobeComponent;
-        private ChatMessageManager _chatMessageManager;
+        private ChatlogManager _chatMessageManager;
 
         public Client ClientInstance { get; private set; }
         public bool SpectatorMode;
@@ -220,6 +220,7 @@ namespace Butterfly.Game.Users
 
             this.LastOnline = LastOnline;
             this.MyGroups = new List<int>();
+            this.Quests = new Dictionary<int, int>();
             this.FavouriteGroupId = FavoriteGroup;
 
             this.AccountCreated = accountCreated;
@@ -246,7 +247,7 @@ namespace Butterfly.Game.Users
             this.Visits = new Dictionary<double, RoomData>();
         }
 
-        public void Init(Client client, UserData data)
+        public void Init(Client client)
         {
             this.ClientInstance = client;
 
@@ -255,7 +256,7 @@ namespace Butterfly.Game.Users
             this._inventoryComponent = new InventoryComponent(this);
             this._wardrobeComponent = new WardrobeComponent(this);
             this._messengerComponent = new MessengerComponent(this);
-            this._chatMessageManager = new ChatMessageManager();
+            this._chatMessageManager = new ChatlogManager();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -640,7 +641,7 @@ namespace Butterfly.Game.Users
             return this._inventoryComponent;
         }
 
-        public ChatMessageManager GetChatMessageManager()
+        public ChatlogManager GetChatMessageManager()
         {
             return this._chatMessageManager;
         }

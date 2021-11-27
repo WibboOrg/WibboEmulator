@@ -264,7 +264,7 @@ namespace Butterfly.Game.Navigator
 
                     foreach (int GroupId in Session.GetHabbo().MyGroups.ToList())
                     {
-                        if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Guild Group))
+                        if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
                         {
                             continue;
                         }

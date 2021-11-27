@@ -4,7 +4,7 @@ using Butterfly.Game.Clients;using Butterfly.Game.Guilds;using Butterfly.Game.
 using Butterfly.Game.Users;namespace Butterfly.Communication.Packets.Incoming.Structure{    internal class TakeAdminRightsEvent : IPacketEvent    {        public void Parse(Client Session, ClientPacket Packet)        {            int GroupId = Packet.PopInt();
             int UserId = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Guild Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
             {
                 return;
             }

@@ -7,15 +7,15 @@ using System.Data;
 
 namespace Butterfly.Game.Chat.Logs
 {
-    public class ChatMessageManager
+    public class ChatlogManager
     {
-        private readonly List<ChatMessage> listOfMessages;
+        private readonly List<ChatlogEntry> listOfMessages;
 
         public int MessageCount => this.listOfMessages.Count;
 
-        public ChatMessageManager()
+        public ChatlogManager()
         {
-            this.listOfMessages = new List<ChatMessage>();
+            this.listOfMessages = new List<ChatlogEntry>();
         }
 
         public void LoadUserChatlogs(IQueryAdapter dbClient, int UserId)
@@ -52,7 +52,7 @@ namespace Butterfly.Game.Chat.Logs
 
         public void AddMessage(int UserId, string Username, int RoomId, string MessageText)
         {
-            ChatMessage message = new ChatMessage(UserId, Username, RoomId, MessageText, DateTime.Now);
+            ChatlogEntry message = new ChatlogEntry(UserId, Username, RoomId, MessageText, DateTime.Now);
 
             lock (this.listOfMessages)
             {
@@ -66,11 +66,11 @@ namespace Butterfly.Game.Chat.Logs
             }
         }
 
-        public List<ChatMessage> GetSortedMessages(int roomid)
+        public List<ChatlogEntry> GetSortedMessages(int roomid)
         {
-            List<ChatMessage> list = new List<ChatMessage>();
+            List<ChatlogEntry> list = new List<ChatlogEntry>();
 
-            foreach (ChatMessage chatMessage in this.listOfMessages)
+            foreach (ChatlogEntry chatMessage in this.listOfMessages)
             {
                 if (roomid == chatMessage.roomID || roomid == 0)
                 {
@@ -85,10 +85,10 @@ namespace Butterfly.Game.Chat.Logs
 
         public void Serialize(ref ServerPacket message)
         {
-            List<ChatMessage> ListReverse = new List<ChatMessage>();
+            List<ChatlogEntry> ListReverse = new List<ChatlogEntry>();
             ListReverse.AddRange(this.listOfMessages);
             ListReverse.Reverse();
-            foreach (ChatMessage chatMessage in ListReverse)
+            foreach (ChatlogEntry chatMessage in ListReverse)
             {
                 if (chatMessage != null)
                 {

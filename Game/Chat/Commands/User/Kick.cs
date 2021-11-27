@@ -8,24 +8,24 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
 
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
 
-            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            if (TargetUser == null || TargetUser.GetHabbo() == null)
             {
                 return;
             }
 
-            if (Session.GetHabbo().Rank <= clientByUsername.GetHabbo().Rank)
+            if (Session.GetHabbo().Rank <= TargetUser.GetHabbo().Rank)
             {
                 return;
             }
 
-            if (clientByUsername.GetHabbo().CurrentRoomId < 1U)
+            if (TargetUser.GetHabbo().CurrentRoomId < 1U)
             {
                 return;
             }
 
-            Room.GetRoomUserManager().RemoveUserFromRoom(clientByUsername, true, true);
+            Room.GetRoomUserManager().RemoveUserFromRoom(TargetUser, true, true);
         }
     }
 }

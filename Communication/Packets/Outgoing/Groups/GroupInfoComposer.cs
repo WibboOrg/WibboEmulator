@@ -6,14 +6,14 @@ namespace Butterfly.Communication.Packets.Outgoing.Groups
 {
     internal class GroupInfoComposer : ServerPacket
     {
-        public GroupInfoComposer(Guild Group, Client Session, bool NewWindow = false)
+        public GroupInfoComposer(Group Group, Client Session, bool NewWindow = false)
             : base(ServerPacketHeader.GROUP_INFO)
         {
             DateTime Origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Group.CreateTime);
 
             this.WriteInteger(Group.Id);
             this.WriteBoolean(true);
-            this.WriteInteger(Group.GroupType == GuildType.OPEN ? 0 : Group.GroupType == GuildType.LOCKED ? 1 : 2);
+            this.WriteInteger(Group.GroupType == GroupType.OPEN ? 0 : Group.GroupType == GroupType.LOCKED ? 1 : 2);
             this.WriteString(Group.Name);
             this.WriteString(Group.Description);
             this.WriteString(Group.Badge);

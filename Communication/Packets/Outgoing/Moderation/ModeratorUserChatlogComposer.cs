@@ -8,14 +8,14 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorUserChatlogComposer : ServerPacket
     {
-        public ModeratorUserChatlogComposer(User habbo, List<KeyValuePair<RoomData, List<ChatMessage>>> chatlogs)
+        public ModeratorUserChatlogComposer(User habbo, List<KeyValuePair<RoomData, List<ChatlogEntry>>> chatlogs)
             : base(ServerPacketHeader.MODTOOL_USER_CHATLOG)
         {
             WriteInteger(habbo.Id);
             WriteString(habbo.Username);
 
             WriteInteger(chatlogs.Count); // Room Visits Count
-            foreach (KeyValuePair<RoomData, List<ChatMessage>> Chatlog in chatlogs)
+            foreach (KeyValuePair<RoomData, List<ChatlogEntry>> Chatlog in chatlogs)
             {
                 WriteByte(1);
                 WriteShort(2);//Count
@@ -27,7 +27,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
                 WriteInteger(Chatlog.Key.Id);
 
                 WriteShort(Chatlog.Value.Count); // Chatlogs Count
-                foreach (ChatMessage Entry in Chatlog.Value)
+                foreach (ChatlogEntry Entry in Chatlog.Value)
                 {
                     string Username = "NOT FOUND";
                     if (Entry.PlayerNullable() != null)

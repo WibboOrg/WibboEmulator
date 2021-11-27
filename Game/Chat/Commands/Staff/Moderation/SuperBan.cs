@@ -12,14 +12,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (TargetUser == null || TargetUser.GetHabbo() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
                 return;
             }
 
-            if (clientByUsername.GetHabbo().Rank >= Session.GetHabbo().Rank)
+            if (TargetUser.GetHabbo().Rank >= Session.GetHabbo().Rank)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
                 ButterflyEnvironment.GetGame().GetClientManager().BanUser(Session, "Robot", 788922000, "Votre compte � �t� banni par s�curit�", false, false);
@@ -39,8 +39,8 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 else
                 {
                     string Raison = CommandManager.MergeParams(Params, 3);
-                    ButterflyEnvironment.GetGame().GetClientManager().BanUser(clientByUsername, Session.GetHabbo().Username, num, Raison, false, false);
-                    UserRoom.SendWhisperChat("Tu as SuperBan " + clientByUsername.GetHabbo().Username + " pour" + Raison + "!");
+                    ButterflyEnvironment.GetGame().GetClientManager().BanUser(TargetUser, Session.GetHabbo().Username, num, Raison, false, false);
+                    UserRoom.SendWhisperChat("Tu as SuperBan " + TargetUser.GetHabbo().Username + " pour" + Raison + "!");
                     Session.Antipub(Raison, "<CMD>");
                 }
             }

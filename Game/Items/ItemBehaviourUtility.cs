@@ -39,7 +39,7 @@ namespace Butterfly.Game.Items
 
                 case InteractionType.GUILD_ITEM:
                 case InteractionType.GUILD_GATE:
-                    Guild Group = null;
+                    Group Group = null;
                     if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Item.GroupId, out Group))
                     {
                         Message.WriteInteger(0);

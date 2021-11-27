@@ -21,7 +21,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            List<Guild> Groups = ButterflyEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.MyGroups);
+            List<Group> Groups = ButterflyEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.MyGroups);
 
             int friendCount = 0;
 

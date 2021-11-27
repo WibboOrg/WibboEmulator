@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int GroupId = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Guild Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
             {
                 return;
             }
@@ -32,17 +32,17 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 default:
                 case 0:
-                    Group.GroupType = GuildType.OPEN;
+                    Group.GroupType = GroupType.OPEN;
                     break;
                 case 1:
-                    Group.GroupType = GuildType.LOCKED;
+                    Group.GroupType = GroupType.LOCKED;
                     break;
                 case 2:
-                    Group.GroupType = GuildType.PRIVATE;
+                    Group.GroupType = GroupType.PRIVATE;
                     break;
             }
 
-            if (Group.GroupType != GuildType.LOCKED)
+            if (Group.GroupType != GroupType.LOCKED)
             {
                 if (Group.GetRequests.Count > 0)
                 {
@@ -57,7 +57,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                GuildDao.UpdateStateAndDeco(dbClient, Group.Id, (Group.GroupType == GuildType.OPEN ? 0 : Group.GroupType == GuildType.LOCKED ? 1 : 2), FurniOptions);
+                GuildDao.UpdateStateAndDeco(dbClient, Group.Id, (Group.GroupType == GroupType.OPEN ? 0 : Group.GroupType == GroupType.LOCKED ? 1 : 2), FurniOptions);
             }
 
             Group.AdminOnlyDeco = FurniOptions;

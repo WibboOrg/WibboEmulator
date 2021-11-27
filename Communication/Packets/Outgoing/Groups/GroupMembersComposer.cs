@@ -6,7 +6,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Groups
 {
     internal class GroupMembersComposer : ServerPacket
     {
-        public GroupMembersComposer(Guild Group, ICollection<User> Members, int MembersCount, int Page, bool Admin, int ReqType, string SearchVal)
+        public GroupMembersComposer(Group Group, ICollection<User> Members, int MembersCount, int Page, bool Admin, int ReqType, string SearchVal)
             : base(ServerPacketHeader.GROUP_MEMBERS)
         {
             this.WriteInteger(Group.Id);

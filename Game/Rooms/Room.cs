@@ -62,7 +62,7 @@ namespace Butterfly.Game.Rooms
         private GameItemHandler _gameItemHandler;
         private readonly WiredHandler _wiredHandler;
         private readonly ProjectileManager _projectileManager;
-        private readonly ChatMessageManager _chatMessageManager;
+        private readonly ChatlogManager _chatMessageManager;
 
         private readonly Dictionary<int, double> _bans;
         private readonly Dictionary<int, double> _mutes;
@@ -122,7 +122,7 @@ namespace Butterfly.Game.Rooms
             this._roomUserManager = new RoomUserManager(this);
             this._wiredHandler = new WiredHandler(this);
             this._projectileManager = new ProjectileManager(this);
-            this._chatMessageManager = new ChatMessageManager();
+            this._chatMessageManager = new ChatlogManager();
 
             this._chatMessageManager.LoadRoomChatlogs(this.Id);
 
@@ -260,7 +260,7 @@ namespace Butterfly.Game.Rooms
             return this._wiredHandler != null;
         }
 
-        public ChatMessageManager GetChatMessageManager()
+        public ChatlogManager GetChatMessageManager()
         {
             return this._chatMessageManager;
         }
@@ -378,7 +378,7 @@ namespace Butterfly.Game.Rooms
 
                 foreach (DataRow Row in table.Rows)
                 {
-                    RoomBot roomBot = new RoomBot(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (this.IsRoleplay) ? AIType.RoleplayBot : AIType.Generic, (string)Row["walk_enabled"] == "1", (string)Row["name"], (string)Row["motto"], (string)Row["gender"], (string)Row["look"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), Convert.ToInt32(Row["z"]), Convert.ToInt32(Row["rotation"]), (string)Row["chat_enabled"] == "1", (string)Row["chat_text"], Convert.ToInt32(Row["chat_seconds"]), (string)Row["is_dancing"] == "1", Convert.ToInt32(Row["enable"]), Convert.ToInt32(Row["handitem"]), Convert.ToInt32((string)Row["status"]));
+                    RoomBot roomBot = new RoomBot(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (this.IsRoleplay) ? BotAIType.RoleplayBot : BotAIType.Generic, (string)Row["walk_enabled"] == "1", (string)Row["name"], (string)Row["motto"], (string)Row["gender"], (string)Row["look"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), Convert.ToInt32(Row["z"]), Convert.ToInt32(Row["rotation"]), (string)Row["chat_enabled"] == "1", (string)Row["chat_text"], Convert.ToInt32(Row["chat_seconds"]), (string)Row["is_dancing"] == "1", Convert.ToInt32(Row["enable"]), Convert.ToInt32(Row["handitem"]), Convert.ToInt32((string)Row["status"]));
                     RoomUser roomUser = this.GetRoomUserManager().DeployBot(roomBot, null);
                     if (roomBot.IsDancing)
                     {
@@ -402,7 +402,7 @@ namespace Butterfly.Game.Rooms
                 {
                     Pet PetData = new Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)(Row["anyone_ride"]) == "1");
                     List<string> list = new List<string>();
-                    this._roomUserManager.DeployBot(new RoomBot(PetData.PetId, PetData.OwnerId, this.Id, AIType.Pet, true, PetData.Name, "", "", PetData.Look, PetData.X, PetData.Y, PetData.Z, 0, false, "", 0, false, 0, 0, 0), PetData);
+                    this._roomUserManager.DeployBot(new RoomBot(PetData.PetId, PetData.OwnerId, this.Id, BotAIType.Pet, true, PetData.Name, "", "", PetData.Look, PetData.X, PetData.Y, PetData.Z, 0, false, "", 0, false, 0, 0, 0), PetData);
                 }
             }
         }

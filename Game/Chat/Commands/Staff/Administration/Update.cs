@@ -163,7 +163,6 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                         return;
                     }
             }
-            UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.refresh", Session.Langue));
         }
     }
 }

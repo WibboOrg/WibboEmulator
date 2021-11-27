@@ -19,8 +19,8 @@ namespace Butterfly.Game.Moderation
         private readonly List<string> _userMessagePresets;
         private readonly List<string> _roomMessagePresets;
 
-        private readonly List<TicketResolution> _ticketResolution1;
-        private readonly List<TicketResolution> _ticketResolution2;
+        private readonly List<ModerationPresetActionMessages> _ticketResolution1;
+        private readonly List<ModerationPresetActionMessages> _ticketResolution2;
 
         private readonly Dictionary<int, string> _moderationCFHTopics;
 
@@ -31,8 +31,8 @@ namespace Butterfly.Game.Moderation
             this._tickets = new List<ModerationTicket>();
             this._userMessagePresets = new List<string>();
             this._roomMessagePresets = new List<string>();
-            this._ticketResolution1 = new List<TicketResolution>();
-            this._ticketResolution2 = new List<TicketResolution>();
+            this._ticketResolution1 = new List<ModerationPresetActionMessages>();
+            this._ticketResolution2 = new List<ModerationPresetActionMessages>();
             this._moderationCFHTopics = new Dictionary<int, string>();
             this._moderationCFHTopicActions = new Dictionary<int, List<ModerationPresetActions>>();
         }
@@ -205,7 +205,7 @@ namespace Butterfly.Game.Moderation
                 DataTable table = ModerationResolutionDao.GetAll(dbClient);
                 foreach (DataRow dataRow in table.Rows)
                 {
-                    TicketResolution str = new TicketResolution((string)dataRow["title"], (string)dataRow["subtitle"], Convert.ToInt32(dataRow["ban_hours"]), Convert.ToInt32(dataRow["enable_mute"]), Convert.ToInt32(dataRow["mute_hours"]), Convert.ToInt32(dataRow["reminder"]), (string)dataRow["message"]);
+                    ModerationPresetActionMessages str = new ModerationPresetActionMessages((string)dataRow["title"], (string)dataRow["subtitle"], Convert.ToInt32(dataRow["ban_hours"]), Convert.ToInt32(dataRow["enable_mute"]), Convert.ToInt32(dataRow["mute_hours"]), Convert.ToInt32(dataRow["reminder"]), (string)dataRow["message"]);
                     switch (dataRow["type"].ToString())
                     {
                         case "Sexual":
@@ -596,7 +596,7 @@ namespace Butterfly.Game.Moderation
             }
             else
             {
-                List<ChatMessage> sortedMessages = clientByUserId.GetHabbo().GetChatMessageManager().GetSortedMessages(0);
+                List<ChatlogEntry> sortedMessages = clientByUserId.GetHabbo().GetChatMessageManager().GetSortedMessages(0);
                 ServerPacket packet = new ServerPacket(ServerPacketHeader.MODTOOL_USER_CHATLOG);
                 packet.WriteInteger(UserId);
                 packet.WriteString(clientByUserId.GetHabbo().Username);
@@ -612,7 +612,7 @@ namespace Butterfly.Game.Moderation
                 packet.WriteInteger(RoomId);
 
                 packet.WriteShort(sortedMessages.Count);
-                foreach (ChatMessage chatMessage2 in sortedMessages)
+                foreach (ChatlogEntry chatMessage2 in sortedMessages)
                 {
                     chatMessage2.Serialize(ref packet);
                 }
@@ -640,7 +640,7 @@ namespace Butterfly.Game.Moderation
             }
             else
             {
-                ChatMessageManager chatMessageManager = room.GetChatMessageManager();
+                ChatlogManager chatMessageManager = room.GetChatMessageManager();
                 message.WriteInteger(chatMessageManager.MessageCount);
                 chatMessageManager.Serialize(ref message);
                 return message;
@@ -662,7 +662,7 @@ namespace Butterfly.Game.Moderation
             Message.WriteByte(1);
             Message.WriteInteger(room.RoomData.Id);
 
-            ChatMessageManager chatMessageManager = room.GetChatMessageManager();
+            ChatlogManager chatMessageManager = room.GetChatMessageManager();
             Message.WriteShort(chatMessageManager.MessageCount);
             chatMessageManager.Serialize(ref Message);
             return Message;

@@ -700,7 +700,8 @@
     <Compile Include="Game\Chat\Commands\Staff\Administration\RoomDance.cs" />
     <Compile Include="Game\Chat\Commands\User\Dance.cs" />
     <Compile Include="Game\Guilds\BadgePartUtility.cs" />
-    <Compile Include="Game\Guilds\GuildType.cs" />
+    <Compile Include="Game\Guilds\GroupMember.cs" />
+    <Compile Include="Game\Guilds\GroupType.cs" />
     <Compile Include="Game\Items\ItemExtrabox.cs" />
     <Compile Include="Game\Items\ItemFactory.cs" />
     <Compile Include="Game\Items\ItemTemp.cs" />
@@ -748,6 +749,7 @@
     <Compile Include="Game\Chat\Commands\User\StopQuestion.cs" />
     <Compile Include="Game\Chat\Mentions\MentionManager.cs" />
     <Compile Include="Game\Permissions\PermissionCommand.cs" />
+    <Compile Include="Game\Rooms\AI\Responses\BotResponse.cs" />
     <Compile Include="Game\Rooms\Games\Freeze\FreezePowerUp.cs" />
     <Compile Include="Game\Rooms\Games\Teams\TeamType.cs" />
     <Compile Include="Game\Rooms\AI\Types\RoleplayBot.cs" />
@@ -778,7 +780,7 @@
     <Compile Include="Game\Rooms\Map\Movement\MovementState.cs" />
     <Compile Include="Game\Rooms\Projectile\ProjectileManager.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\DuplicateRoom.cs" />
-    <Compile Include="Game\Chat\Commands\User\GunFire.cs" />
+    <Compile Include="Game\Chat\Commands\User\RP\GunFire.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\Youtube.cs" />
     <Compile Include="Game\Chat\Commands\User\RoomBuy.cs" />
     <Compile Include="Game\Chat\Commands\User\RoomRemoveSell.cs" />
@@ -815,8 +817,8 @@
     <Compile Include="Core\FigureData\Types\SetTypeUtility.cs" />
     <Compile Include="Game\Catalog\CatalogPromotion.cs" />
     <Compile Include="Game\Effects\EffectManager.cs" />
-    <Compile Include="Game\Guilds\GuildBadgePart.cs" />
-    <Compile Include="Game\Guilds\GuildColour.cs" />
+    <Compile Include="Game\Guilds\GroupBadgePart.cs" />
+    <Compile Include="Game\Guilds\GroupColour.cs" />
     <Compile Include="Game\LandingView\Promotion.cs" />
     <Compile Include="Game\Items\Interactors\InteractorLoveLock.cs" />
     <Compile Include="Game\Items\ItemBehaviourUtility.cs" />
@@ -1018,7 +1020,7 @@
     <Compile Include="Game\Items\Wired\Actions\KickUser.cs" />
     <Compile Include="Game\Items\Wired\Actions\SuperWired.cs" />
     <Compile Include="Game\Items\Wired\Triggers\Repeaterlong.cs" />
-    <Compile Include="Game\Moderation\TicketResolution.cs" />
+    <Compile Include="Game\Moderation\ModerationPresetActionMessages.cs" />
     <Compile Include="Game\Users\Messenger\Relationship.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Utility\HabboEncoding.cs" />
@@ -1032,8 +1034,8 @@
     <Compile Include="Game\Achievements\AchievementLevel.cs" />
     <Compile Include="Game\Achievements\AchievementManager.cs" />
     <Compile Include="Game\Users\Achievements\UserAchievement.cs" />
-    <Compile Include="Game\Guilds\Guild.cs" />
-    <Compile Include="Game\Guilds\GuildManager.cs" />
+    <Compile Include="Game\Guilds\Group.cs" />
+    <Compile Include="Game\Guilds\GroupManager.cs" />
     <Compile Include="Game\Items\InteractionType.cs" />
     <Compile Include="Game\Items\ItemData.cs" />
     <Compile Include="Game\Items\ItemDataManager.cs" />
@@ -1065,8 +1067,8 @@
     <Compile Include="Game\Items\Interactors\InteractorChangeBackgrounds.cs" />
     <Compile Include="Game\Items\Interactors\InteractorManiqui.cs" />
     <Compile Include="Game\Catalog\Pets\PetRaceManager.cs" />
-    <Compile Include="Game\Pets\Pet.cs" />
-    <Compile Include="Game\Pets\DatabaseUpdateState.cs" />
+    <Compile Include="Game\Rooms\AI\Pet.cs" />
+    <Compile Include="Game\Rooms\AI\DatabaseUpdateState.cs" />
     <Compile Include="Game\Chat\Pets\Commands\PetCommand.cs" />
     <Compile Include="Game\Chat\Pets\Commands\PetCommandManager.cs" />
     <Compile Include="Game\Quests\Quest.cs" />
@@ -1080,8 +1082,8 @@
     <Compile Include="Game\Catalog\CatalogManager.cs" />
     <Compile Include="Game\Catalog\CatalogItem.cs" />
     <Compile Include="Game\Catalog\CatalogPage.cs" />
-    <Compile Include="Game\Chat\Logs\ChatMessage.cs" />
-    <Compile Include="Game\Chat\Logs\ChatMessageManager.cs" />
+    <Compile Include="Game\Chat\Logs\ChatlogEntry.cs" />
+    <Compile Include="Game\Chat\Logs\ChatlogManager.cs" />
     <Compile Include="Game\Clients\Client.cs" />
     <Compile Include="Game\Clients\ClientManager.cs" />
     <Compile Include="Core\LowPriorityWorker.cs" />
@@ -1098,7 +1100,7 @@
     <Compile Include="Game\Rooms\AI\Types\GenericBot.cs" />
     <Compile Include="Game\Rooms\AI\Types\PetBot.cs" />
     <Compile Include="Game\Rooms\AI\RoomBot.cs" />
-    <Compile Include="Game\Rooms\AI\AIType.cs" />
+    <Compile Include="Game\Rooms\AI\BotAIType.cs" />
     <Compile Include="Game\Rooms\Games\Teams\TeamScoreChangedDelegate.cs" />
     <Compile Include="Utility\Events\UserSaysArgs.cs" />
     <Compile Include="Utility\Events\ItemTriggeredArgs.cs" />
@@ -1183,7 +1185,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="bin\Configuration\settings.ini" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
@@ -1206,6 +1207,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="bin\Configuration\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

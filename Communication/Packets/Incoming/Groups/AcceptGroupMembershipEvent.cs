@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int GroupId = Packet.PopInt();
             int UserId = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Guild Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
             {
                 return;
             }

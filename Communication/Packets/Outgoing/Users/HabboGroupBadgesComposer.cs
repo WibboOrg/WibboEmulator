@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
             }
         }
 
-        public HabboGroupBadgesComposer(Guild Group)
+        public HabboGroupBadgesComposer(Group Group)
             : base(ServerPacketHeader.GROUP_BADGES)
         {
             this.WriteInteger(1);//count

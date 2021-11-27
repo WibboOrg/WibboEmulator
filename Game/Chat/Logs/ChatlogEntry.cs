@@ -5,7 +5,7 @@ using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Chat.Logs
 {
-    public class ChatMessage
+    public class ChatlogEntry
     {
         public readonly int userID;
         public readonly string username;
@@ -16,7 +16,7 @@ namespace Butterfly.Game.Chat.Logs
         private readonly WeakReference _playerReference;
         private readonly WeakReference _roomReference;
 
-        public ChatMessage(int userID, string username, int roomID, string message, DateTime timeSpoken, User user = null, RoomData roomData = null)
+        public ChatlogEntry(int userID, string username, int roomID, string message, DateTime timeSpoken, User user = null, RoomData roomData = null)
         {
             this.userID = userID;
             this.username = username;

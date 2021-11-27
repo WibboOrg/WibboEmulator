@@ -23,17 +23,6 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     continue;
                 }
                 User.GetClient().SendPacket(new WhisperComposer(UserRoom.VirtualId, Message, 0, 0));
-
-
-                /*ServerPacket MessagePack = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
-                MessagePack.WriteInteger(UserRoom.VirtualId);
-                MessagePack.WriteString(Message);
-                MessagePack.WriteInteger(0);
-                MessagePack.WriteInteger(0); //Color
-                MessagePack.WriteInteger(0);
-                MessagePack.WriteInteger(-1);
-
-                User.GetClient().SendPacket(MessagePack);*/
             }
         }
     }

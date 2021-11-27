@@ -16,30 +16,30 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             string username = Params[1];
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
-            if (clientByUsername == null)
+            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
+            if (TargetUser == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
-            else if (Session.GetHabbo().Rank <= clientByUsername.GetHabbo().Rank)
+            else if (Session.GetHabbo().Rank <= TargetUser.GetHabbo().Rank)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.notpermitted", Session.Langue));
             }
             else
             {
-                clientByUsername.GetHabbo().Motto = ButterflyEnvironment.GetLanguageManager().TryGetValue("user.unacceptable_motto", clientByUsername.Langue);
+                TargetUser.GetHabbo().Motto = ButterflyEnvironment.GetLanguageManager().TryGetValue("user.unacceptable_motto", TargetUser.Langue);
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserDao.UpdateMotto(dbClient, clientByUsername.GetHabbo().Id, clientByUsername.GetHabbo().Motto);
+                    UserDao.UpdateMotto(dbClient, TargetUser.GetHabbo().Id, TargetUser.GetHabbo().Motto);
                 }
 
-                Room currentRoom2 = clientByUsername.GetHabbo().CurrentRoom;
+                Room currentRoom2 = TargetUser.GetHabbo().CurrentRoom;
                 if (currentRoom2 == null)
                 {
                     return;
                 }
 
-                RoomUser roomUserByHabbo = currentRoom2.GetRoomUserManager().GetRoomUserByHabboId(clientByUsername.GetHabbo().Id);
+                RoomUser roomUserByHabbo = currentRoom2.GetRoomUserManager().GetRoomUserByHabboId(TargetUser.GetHabbo().Id);
                 if (roomUserByHabbo == null)
                 {
                     return;

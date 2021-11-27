@@ -106,7 +106,7 @@ namespace Butterfly.Game.Clients
                         }
                     }
 
-                    this._user.Init(this, userData);
+                    this._user.Init(this);
 
                     this.IsNewUser();
 

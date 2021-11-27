@@ -65,7 +65,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Pet.PlacedInRoom = true;
             Pet.RoomId = Room.Id;
 
-            Room.GetRoomUserManager().DeployBot(new RoomBot(Pet.PetId, Pet.OwnerId, Pet.RoomId, AIType.Pet, true, Pet.Name, "", "", Pet.Look, X, Y, 0, 0, false, "", 0, false, 0, 0, 0), Pet);
+            Room.GetRoomUserManager().DeployBot(new RoomBot(Pet.PetId, Pet.OwnerId, Pet.RoomId, BotAIType.Pet, true, Pet.Name, "", "", Pet.Look, X, Y, 0, 0, false, "", 0, false, 0, 0, 0), Pet);
             
             Pet.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 

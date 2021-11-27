@@ -72,7 +72,7 @@ namespace Butterfly.Game.Chat.Filter
             {
                 if (Message.ToLower().Contains(Filter))
                 {
-                    Message = Regex.Replace(Message, Filter, "****", RegexOptions.IgnoreCase);
+                    Message = Regex.Replace(Message, Filter, "*****", RegexOptions.IgnoreCase);
                 }
             }
 

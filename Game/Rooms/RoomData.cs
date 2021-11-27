@@ -45,7 +45,7 @@ namespace Butterfly.Game.Rooms
         public int ChatFloodProtection;
         public int GroupId;
         public int TrocStatus;
-        public Guilds.Guild Group;
+        public Guilds.Group Group;
         public bool HideWireds;
         public int SellPrice;
         public int TagCount => this.Tags.Count;
@@ -171,7 +171,7 @@ namespace Butterfly.Game.Rooms
             this.WhoCanKick = Convert.ToInt32((string)Row["moderation_kick_fuse"]);
             this.BanFuse = Convert.ToInt32((string)Row["moderation_ban_fuse"]);
             this.GroupId = Convert.ToInt32(Row["group_id"]);
-            ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(this.GroupId, out Guild Group);
+            ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(this.GroupId, out Group Group);
             this.Group = Group;
             this.HideWireds = ButterflyEnvironment.EnumToBool(Row["allow_hidewireds"].ToString());
 

@@ -154,11 +154,11 @@ namespace Butterfly.Game.Rooms
                     roomUser.BotData.RoleBot = new RoleBot(Enemy);
                     if (Bot.IsPet)
                     {
-                        roomUser.BotData.AiType = AIType.RoleplayPet;
+                        roomUser.BotData.AiType = BotAIType.RoleplayPet;
                     }
                     else
                     {
-                        roomUser.BotData.AiType = AIType.RoleplayBot;
+                        roomUser.BotData.AiType = BotAIType.RoleplayBot;
                     }
                 }
             }

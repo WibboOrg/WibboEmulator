@@ -116,7 +116,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                             return;
                         }
 
-                        Guild groupItem;
+                        Group groupItem;
                         if (ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Groupid, out groupItem))
                         {
                             ItemExtraData = "0;" + groupItem.Id;

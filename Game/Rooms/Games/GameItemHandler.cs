@@ -222,7 +222,7 @@ namespace Butterfly.Game.Rooms
 
             Item item = Enumerable.FirstOrDefault<Item>(this._groupGate[Coordinate]);
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out Guild Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out Group Group))
             {
                 return true;
             }

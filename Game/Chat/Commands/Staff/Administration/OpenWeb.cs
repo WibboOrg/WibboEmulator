@@ -13,13 +13,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (TargetUser == null || TargetUser.GetHabbo() == null)
             {
                 return;
             }
 
-            clientByUsername.GetHabbo().SendWebPacket(new NavigateWebComposer(Params[2]));
+            TargetUser.GetHabbo().SendWebPacket(new NavigateWebComposer(Params[2]));
         }
     }
 }

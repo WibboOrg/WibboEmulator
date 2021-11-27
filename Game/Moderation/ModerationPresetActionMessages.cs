@@ -1,6 +1,6 @@
 ﻿namespace Butterfly.Game.Moderation
 {
-    public class TicketResolution
+    public class ModerationPresetActionMessages
     {
         public string Title { get; private set; }
         public string SubTitle { get; private set; }
@@ -10,7 +10,7 @@
         public int Reminder { get; private set; }
         public string Message { get; private set; }
 
-        public TicketResolution(string title, string subTitle, int banHours, int enablemute, int muteHours, int reminder, string message)
+        public ModerationPresetActionMessages(string title, string subTitle, int banHours, int enablemute, int muteHours, int reminder, string message)
         {
             this.Title = title;
             this.SubTitle = subTitle;
