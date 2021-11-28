@@ -9,8 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Butterfly.Game.Users.Achievements;
 
-namespace Butterfly.Game.Achievement
+namespace Butterfly.Game.Achievements
 {
     public class AchievementManager
     {

@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets;
 using Butterfly.Core;
-using Butterfly.Game.Achievement;
+using Butterfly.Game.Achievements;
 using Butterfly.Game.Animation;
 using Butterfly.Game.Catalog;
 using Butterfly.Game.Clients;
