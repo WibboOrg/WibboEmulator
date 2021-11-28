@@ -1,4 +1,4 @@
-using Butterfly.Game.Achievements;
+using Butterfly.Game.Achievement;
 
 namespace Butterfly.Communication.Packets.Outgoing.Inventory.Achievements
 {

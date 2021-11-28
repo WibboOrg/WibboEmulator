@@ -381,9 +381,9 @@ namespace Butterfly.Game.Users
                 }
             }
 
-            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "SeasonRunOff", "WibboParty", "MovieRunOff", "officialrooms", "Seonsaengnim" };
+            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "SeasonRunOff", "CasinoRunOff", "WibboParty", "MovieRunOff", "officialrooms", "Seonsaengnim", "Jason" };
 
-            if (this.GetClient().GetHabbo().Rank < 8)
+            if (this.GetClient().GetHabbo().Rank < 8 || this.GetClient().GetHabbo().Rank > 6)
             {
                 if (!(this.GetClient().GetHabbo().HasFuse("fuse_enter_any_room") && !OwnerEnterNotAllowed.Any(x => x == room.RoomData.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetHabbo().IsTeleporting && this.GetClient().GetHabbo().TeleportingRoomID == room.Id))
                 {

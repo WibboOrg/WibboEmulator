@@ -1030,9 +1030,9 @@
     <Compile Include="Core\Language\LanguageManager.cs" />
     <Compile Include="Core\Logging.cs" />
     <Compile Include="Game\GameCore.cs" />
-    <Compile Include="Game\Achievements\AchievementData.cs" />
-    <Compile Include="Game\Achievements\AchievementLevel.cs" />
-    <Compile Include="Game\Achievements\AchievementManager.cs" />
+    <Compile Include="Game\Achievement\AchievementData.cs" />
+    <Compile Include="Game\Achievement\AchievementLevel.cs" />
+    <Compile Include="Game\Achievement\AchievementManager.cs" />
     <Compile Include="Game\Users\Achievements\UserAchievement.cs" />
     <Compile Include="Game\Guilds\Group.cs" />
     <Compile Include="Game\Guilds\GroupManager.cs" />

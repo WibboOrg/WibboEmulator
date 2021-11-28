@@ -1,4 +1,4 @@
-﻿using Butterfly.Game.Achievements;
+﻿using Butterfly.Game.Achievement;
 using Butterfly.Game.Users.Badges;
 using Butterfly.Game.Users.Messenger;
 using System.Collections.Generic;

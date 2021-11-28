@@ -22,7 +22,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             if (TargetUser.GetHabbo().Rank >= Session.GetHabbo().Rank)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
-                ButterflyEnvironment.GetGame().GetClientManager().BanUser(Session, "Robot", 788922000, "Votre compte � �t� banni par s�curit�", false, false);
+                ButterflyEnvironment.GetGame().GetClientManager().BanUser(Session, "Robot", 788922000, "Votre compte a été banni par sécurité !", false, false);
             }
             else
             {
