@@ -14,8 +14,6 @@ namespace Butterfly.Game.Items.Wired
 
         public SateChanged(Item item, Room room) : base(item, room, (int)WiredTriggerType.TOGGLE_FURNI)
         {
-            this.StuffTypeSelectionEnabled = true;
-
             this.delegateFunction = new OnItemTrigger(this.Triggered);
         }
 

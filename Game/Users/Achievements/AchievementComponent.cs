@@ -7,7 +7,7 @@ using System.Data;
 
 namespace Butterfly.Game.Users.Achievements
 {
-    public class AchievementComponent
+    public class AchievementComponent : IDisposable
     {
         private readonly User _userInstance;
         private readonly Dictionary<string, UserAchievement> _achievements;

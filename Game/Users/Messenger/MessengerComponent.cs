@@ -9,7 +9,7 @@ using System.Data;
 
 namespace Butterfly.Game.Users.Messenger
 {
-    public class MessengerComponent
+    public class MessengerComponent : IDisposable
     {
         private readonly User _userInstance;
 
@@ -92,7 +92,7 @@ namespace Butterfly.Game.Users.Messenger
             }
         }
 
-        public void Destroy()
+        public void Dispose()
         {
             List<Client> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(this.Friends.Keys);
 

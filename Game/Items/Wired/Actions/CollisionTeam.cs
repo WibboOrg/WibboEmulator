@@ -13,6 +13,16 @@ namespace Butterfly.Game.Items.Wired.Actions
         {
         }
 
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add((int)TeamType.red);
+        }
+
         public override bool OnCycle(RoomUser user, Item item)
         {
             this.HandleItems();
@@ -24,37 +34,37 @@ namespace Butterfly.Game.Items.Wired.Actions
         {
             TeamManager managerForBanzai = this.RoomInstance.GetTeamManager();
 
-            List<RoomUser> ListTeam = new List<RoomUser>();
+            List<RoomUser> listTeam = new List<RoomUser>();
 
             TeamType team = (TeamType)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
             if (team == TeamType.blue)
             {
-                ListTeam.AddRange(managerForBanzai.BlueTeam);
+                listTeam.AddRange(managerForBanzai.BlueTeam);
             }
             else if (team == TeamType.green)
             {
-                ListTeam.AddRange(managerForBanzai.GreenTeam);
+                listTeam.AddRange(managerForBanzai.GreenTeam);
             }
             else if (team == TeamType.red)
             {
-                ListTeam.AddRange(managerForBanzai.RedTeam);
+                listTeam.AddRange(managerForBanzai.RedTeam);
             }
             else if (team == TeamType.yellow)
             {
-                ListTeam.AddRange(managerForBanzai.YellowTeam);
+                listTeam.AddRange(managerForBanzai.YellowTeam);
             }
             else
             {
                 return;
             }
 
-            if (ListTeam.Count == 0)
+            if (listTeam.Count == 0)
             {
                 return;
             }
 
-            foreach (RoomUser teamUser in ListTeam)
+            foreach (RoomUser teamUser in listTeam)
             {
                 if (teamUser == null)
                 {

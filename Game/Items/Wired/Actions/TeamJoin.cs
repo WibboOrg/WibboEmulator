@@ -13,6 +13,15 @@ namespace Butterfly.Game.Items.Wired.Actions
         {
         }
 
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add((int)TeamType.red);
+        }
         public override bool OnCycle(RoomUser user, Item item)
         {
             if (user != null && !user.IsBot && user.GetClient() != null && user.Room != null)

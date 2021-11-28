@@ -43,6 +43,9 @@ namespace Butterfly.Game.Items.Wired.Conditions
         {
             base.LoadItems(inDatabase);
 
+            if (inDatabase)
+                return;
+
             if(this.IntParams.Count == 0)
                 this.IntParams.Add(1);
         }

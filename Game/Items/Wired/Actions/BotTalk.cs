@@ -11,6 +11,15 @@ namespace Butterfly.Game.Items.Wired.Actions
         {
         }
 
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add(0);
+        }
         public override bool OnCycle(RoomUser user, Item item)
         {
             if (!this.StringParam.Contains("\t"))

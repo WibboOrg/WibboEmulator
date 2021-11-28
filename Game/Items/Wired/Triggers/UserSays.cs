@@ -16,6 +16,16 @@ namespace Butterfly.Game.Items.Wired.Triggers
             room.OnUserSays += this.delegateFunction;
         }
 
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add(0);
+        }
+
         private void OnUserSays(object sender, UserSaysArgs e, ref bool messageHandled)
         {
             RoomUser user = e.User;

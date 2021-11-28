@@ -10,6 +10,16 @@ namespace Butterfly.Game.Items.Wired
     {
         public int DelayCycle { get => (this.IntParams.Count > 0) ? this.IntParams[0] : 0; }
 
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add(0);
+        }
+
         public Repeater(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_PERIODICALLY)
         {
             this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, null, null, this.DelayCycle));

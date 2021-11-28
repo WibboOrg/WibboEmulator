@@ -24,6 +24,17 @@ namespace Butterfly.Game.Items.Wired.Actions
             return false;
         }
 
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add(0);
+            this.IntParams.Add(0);
+        }
+
         private void HandleMovement(Item item)
         {
             if (this.RoomInstance.GetRoomItemHandler().GetItem(item.Id) == null)

@@ -11,6 +11,17 @@ namespace Butterfly.Game.Items.Wired.Conditions
         {
         }
 
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add(ButterflyEnvironment.GetUnixTimestamp());
+            this.IntParams.Add(ButterflyEnvironment.GetUnixTimestamp());
+        }
+
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
         {
             int unixNow = ButterflyEnvironment.GetUnixTimestamp();

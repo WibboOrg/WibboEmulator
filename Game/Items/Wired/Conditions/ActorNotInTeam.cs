@@ -12,6 +12,16 @@ namespace Butterfly.Game.Items.Wired.Conditions
         {
         }
 
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add((int)TeamType.red);
+        }
+
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
         {
             if (user == null)

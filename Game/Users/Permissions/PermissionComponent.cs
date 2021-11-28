@@ -7,13 +7,13 @@ namespace Butterfly.Game.Users.Permissions
         private readonly List<string> _permissions;
         private readonly List<string> _commands;
 
-        public PermissionComponent()
+        public PermissionComponent(User habbo)
         {
             _permissions = new List<string>();
             _commands = new List<string>();
         }
 
-        public bool Init (GameCore habbo)
+        public bool Init()
         {
             if (_permissions.Count > 0)
                 _permissions.Clear();

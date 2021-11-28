@@ -134,13 +134,6 @@ namespace Butterfly.Game.Users.Data
             int Diamonds = Convert.ToInt32(dRow["vip_points"]);
             int ActivityPoints = Convert.ToInt32(dRow["activity_points"]);
             int HomeRoom = Convert.ToInt32(dRow["home_room"]);
-            int Respect = Convert.ToInt32(dRow2["respect"]);
-            int DailyRespectPoints = Convert.ToInt32(dRow2["daily_respect_points"]);
-            int DailyPetRespectPoints = Convert.ToInt32(dRow2["daily_pet_respect_points"]);
-            bool HasFriendRequestsDisabled = ButterflyEnvironment.EnumToBool(dRow["block_newfriends"].ToString());
-            int currentQuestID = Convert.ToInt32(dRow2["quest_id"]);
-            int achievementPoints = Convert.ToInt32(dRow2["achievement_score"]);
-            int FavoriteGroup = Convert.ToInt32(dRow2["group_id"]);
             int accountCreated = Convert.ToInt32(dRow["account_created"]);
             bool AcceptTrading = ButterflyEnvironment.EnumToBool(dRow["accept_trading"].ToString());
             string Ip = dRow["ip_last"].ToString();
@@ -152,6 +145,14 @@ namespace Butterfly.Game.Users.Data
             bool NuxEnable = ButterflyEnvironment.EnumToBool(dRow["nux_enable"].ToString());
             string MachineId = (string)dRow["machine_id"];
             Language Langue = LanguageManager.ParseLanguage((string)dRow["langue"]);
+
+            int Respect = Convert.ToInt32(dRow2["respect"]);
+            int DailyRespectPoints = Convert.ToInt32(dRow2["daily_respect_points"]);
+            int DailyPetRespectPoints = Convert.ToInt32(dRow2["daily_pet_respect_points"]);
+            bool HasFriendRequestsDisabled = ButterflyEnvironment.EnumToBool(dRow["block_newfriends"].ToString());
+            int currentQuestID = Convert.ToInt32(dRow2["quest_id"]);
+            int achievementPoints = Convert.ToInt32(dRow2["achievement_score"]);
+            int FavoriteGroup = Convert.ToInt32(dRow2["group_id"]);
 
             return new User(Id, Username, Rank, Motto, Look, Gender, Credits, Diamonds, ActivityPoints, HomeRoom, Respect, DailyRespectPoints, DailyPetRespectPoints, HasFriendRequestsDisabled, currentQuestID, achievementPoints, LastOnline, FavoriteGroup, accountCreated, AcceptTrading, Ip, HideInroom, HideOnline, MazoHighScore, Mazo, clientVolume, NuxEnable, MachineId, ChangeName, Langue, ignoreAllExpire);
         }

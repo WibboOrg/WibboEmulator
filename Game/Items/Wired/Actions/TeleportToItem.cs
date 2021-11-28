@@ -10,6 +10,7 @@ namespace Butterfly.Game.Items.Wired.Actions
     {
         public TeleportToItem(Item item, Room room) : base(item, room, (int)WiredActionType.TELEPORT)
         {
+            this.Delay = 1;
         }
 
         public override bool OnCycle(RoomUser user, Item item)
@@ -57,6 +58,16 @@ namespace Butterfly.Game.Items.Wired.Actions
             user.Freeze = true;
 
             base.Handle(user, item);
+        }
+
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.Delay = 1;
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)

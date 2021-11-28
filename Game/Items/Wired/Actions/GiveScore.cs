@@ -15,11 +15,22 @@ namespace Butterfly.Game.Items.Wired.Actions
         public GiveScore(Item item, Room room) : base(item, room, (int)WiredActionType.GIVE_SCORE)
         {
             this.currentGameCount = 0;
-            this.delegateFunction = new RoomEventDelegate(this.gameManager_OnGameStart);
+            this.delegateFunction = new RoomEventDelegate(this.OnGameStart);
             this.RoomInstance.GetGameManager().OnGameStart += this.delegateFunction;
         }
 
-        private void gameManager_OnGameStart(object sender, EventArgs e)
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add(1);
+            this.IntParams.Add(1);
+        }
+
+        private void OnGameStart(object sender, EventArgs e)
         {
             this.currentGameCount = 0;
         }

@@ -13,7 +13,17 @@ namespace Butterfly.Game.Items.Wired.Actions
         public TeamGameOver(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM)
         {
         }
-        
+
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add((int)TeamType.red);
+        }
+
         public override bool OnCycle(RoomUser user, Item item)
         {
             TeamManager managerForBanzai = this.RoomInstance.GetTeamManager();

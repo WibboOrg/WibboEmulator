@@ -12,6 +12,16 @@ namespace Butterfly.Game.Items.Wired.Conditions
         {
         }
 
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add(0);
+        }
+
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
         {
              int timeout = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);

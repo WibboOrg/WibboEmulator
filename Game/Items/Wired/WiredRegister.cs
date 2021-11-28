@@ -247,6 +247,8 @@ namespace Butterfly.Game.Items.Wired
 
             if (handler != null)
             {
+                handler.LoadItems();
+
                 HandleSave(handler, room, item);
             }
         }

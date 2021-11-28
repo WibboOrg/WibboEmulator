@@ -12,11 +12,21 @@ namespace Butterfly.Game.Items.Wired.Triggers
 
         public ScoreAchieved(Item item, Room room) : base(item, room, (int)WiredTriggerType.SCORE_ACHIEVED)
         {
-            this.scoreChangedDelegate = new TeamScoreChangedDelegate(this.gameManager_OnScoreChanged);
+            this.scoreChangedDelegate = new TeamScoreChangedDelegate(this.OnScoreChanged);
             this.RoomInstance.GetGameManager().OnScoreChanged += this.scoreChangedDelegate;
         }
 
-        private void gameManager_OnScoreChanged(object sender, TeamScoreChangedArgs e)
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add(0);
+        }
+
+        private void OnScoreChanged(object sender, TeamScoreChangedArgs e)
         {
             int scoreLevel = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
             if (e.Points <= scoreLevel - 1)

@@ -15,11 +15,23 @@ namespace Butterfly.Game.Items.Wired.Actions
         public GiveScoreTeam(Item item, Room room) : base(item, room, (int)WiredActionType.GIVE_SCORE_TO_PREDEFINED_TEAM)
         {
             this.currentGameCount = 0;
-            this.delegateFunction = new RoomEventDelegate(this.gameManager_OnGameStart);
+            this.delegateFunction = new RoomEventDelegate(this.OnGameStart);
             this.RoomInstance.GetGameManager().OnGameStart += this.delegateFunction;
         }
 
-        private void gameManager_OnGameStart(object sender, EventArgs e)
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add(1);
+            this.IntParams.Add(1);
+            this.IntParams.Add((int)TeamType.red);
+        }
+
+        private void OnGameStart(object sender, EventArgs e)
         {
             this.currentGameCount = 0;
         }
@@ -28,7 +40,7 @@ namespace Butterfly.Game.Items.Wired.Actions
         {
             int scoreToGive = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
             int maxCountPerGame = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
-            TeamType team = (TeamType)((this.IntParams.Count > 2) ? this.IntParams[2] : 0);
+            TeamType team = (TeamType)((this.IntParams.Count > 2) ? this.IntParams[2] : 1);
 
             if (maxCountPerGame <= this.currentGameCount)
             {

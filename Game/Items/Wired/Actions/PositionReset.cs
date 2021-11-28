@@ -24,6 +24,10 @@ namespace Butterfly.Game.Items.Wired.Actions
             if(inDatabase)
                 return;
 
+            this.IntParams.Add(0);
+            this.IntParams.Add(0);
+            this.IntParams.Add(0);
+
             foreach (Item roomItem in this.Items)
             {
                 if (!this.ItemsData.ContainsKey(roomItem.Id))

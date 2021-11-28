@@ -15,7 +15,6 @@ using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Users.Achievements;
 using Butterfly.Game.Users.Badges;
-using Butterfly.Game.Users.Data;
 using Butterfly.Game.Users.Inventory;
 using Butterfly.Game.Users.Messenger;
 using Butterfly.Game.Users.Wardrobes;
@@ -544,7 +543,7 @@ namespace Butterfly.Game.Users
             if (this._messengerComponent != null)
             {
                 this._messengerComponent.AppearOffline = true;
-                this._messengerComponent.Destroy();
+                this._messengerComponent.Dispose();
             }
 
             if (this._inventoryComponent != null)

@@ -18,6 +18,16 @@ namespace Butterfly.Game.Items.Wired.Triggers
             this.RoomInstance.GetWiredHandler().TrgTimer += this.delegateFunction;
         }
 
+        public override void LoadItems(bool inDatabase = false)
+        {
+            base.LoadItems(inDatabase);
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add(0);
+        }
+
         public void ResetTimer(object sender, EventArgs e)
         {
             this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, null, null, this.DelayCycle));

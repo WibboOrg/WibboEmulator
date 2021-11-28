@@ -14,8 +14,6 @@ namespace Butterfly.Game.Items.Wired.Triggers
 
         public WalksOffFurni(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_WALKS_OFF_FURNI)
         {
-            this.StuffTypeSelectionEnabled = true;
-
             this.delegateFunction = new UserAndItemDelegate(this.OnUserWalksOffFurni);
         }
 

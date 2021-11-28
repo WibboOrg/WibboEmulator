@@ -35,6 +35,12 @@ namespace Butterfly.Game.Items.Wired.Actions
             MovementDirection startDirection = (MovementDirection)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
             this.MoveToDirMovement = startDirection;
+
+            if (inDatabase)
+                return;
+
+            this.IntParams.Add(0);
+            this.IntParams.Add(0);
         }
 
         private void HandleMovement(Item item)
