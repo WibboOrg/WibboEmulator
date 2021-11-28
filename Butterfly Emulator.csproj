@@ -650,6 +650,7 @@
     <Compile Include="Database\Daos\Log\LogChatPubDao.cs" />
     <Compile Include="Database\Daos\Log\LogCommandDao.cs" />
     <Compile Include="Database\Daos\Log\LogFlagmeDao.cs" />
+    <Compile Include="Database\Daos\Log\LogStaffDao.cs" />
     <Compile Include="Database\Daos\Log\LogTradeDao.cs" />
     <Compile Include="Database\Daos\Messenger\MessengerFriendshipDao.cs" />
     <Compile Include="Database\Daos\Messenger\MessengerOfflineMessageDao.cs" />
