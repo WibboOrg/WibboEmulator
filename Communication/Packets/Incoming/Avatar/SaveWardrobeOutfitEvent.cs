@@ -12,20 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             string look = Packet.PopString();
             string gender = Packet.PopString();
 
-            if (slotId < 1 || slotId > 24)
-            {
-                return;
-            }
-
-            if (gender != "M" && gender != "F")
-            {
-                return;
-            }
-
-            look = ButterflyEnvironment.GetFigureManager().ProcessFigure(look, gender, true);
-
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                UserWardrobeDao.Insert(dbClient, Session.GetHabbo().Id, slotId, look, gender.ToUpper());
+            Session.GetHabbo().GetWardrobeComponent().AddWardobe(look, gender, slotId);
         }
     }
 }

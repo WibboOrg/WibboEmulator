@@ -16,7 +16,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (Session == null || Session.GetHabbo() == null)
+            if (Session.GetHabbo() == null)
+            {
+                return;
+            }
+
+            if (UserRoom.transformation || UserRoom.IsSpectator)
             {
                 return;
             }
@@ -24,30 +29,8 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 Session.GetHabbo().Look = UserWardrobeDao.GetOneRandomLook(dbClient);
 
-            if (UserRoom.transformation || UserRoom.IsSpectator)
-            {
-                return;
-            }
-
-            if (!Session.GetHabbo().InRoom)
-            {
-                return;
-            }
-
-            Room currentRoom = Session.GetHabbo().CurrentRoom;
-            if (currentRoom == null)
-            {
-                return;
-            }
-
-            RoomUser roomUserByHabbo = UserRoom;
-            if (roomUserByHabbo == null)
-            {
-                return;
-            }
-
-            Session.SendPacket(new UserChangeComposer(roomUserByHabbo, true));
-            currentRoom.SendPacket(new UserChangeComposer(roomUserByHabbo, false));
+            Session.SendPacket(new UserChangeComposer(RoomUser, true));
+            Room.SendPacket(new UserChangeComposer(RoomUser, false));
 
         }
     }

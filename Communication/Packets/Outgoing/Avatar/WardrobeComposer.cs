@@ -10,13 +10,13 @@ namespace Butterfly.Communication.Packets.Outgoing.Avatar
 {
     internal class WardrobeComposer : ServerPacket
     {
-        public WardrobeComposer(List<Wardrobe> wardrobes)
+        public WardrobeComposer(Dictionary<int, Wardrobe> wardrobes)
             : base(ServerPacketHeader.USER_OUTFITS)
         {
             this.WriteInteger(1);
 
             this.WriteInteger(wardrobes.Count);
-            foreach (Wardrobe wardrobe in wardrobes)
+            foreach (Wardrobe wardrobe in wardrobes.Values)
             {
                 this.WriteInteger(wardrobe.SlotId);
                 this.WriteString(wardrobe.Look);

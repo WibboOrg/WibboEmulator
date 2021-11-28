@@ -54,7 +54,6 @@ namespace Butterfly.Game.Users
         public List<int> ClientVolume;
         public string MachineId;
         public Language Langue;
-        public bool IsWebSocket;
 
         public bool ForceOpenGift;
         public int ForceUse = -1;

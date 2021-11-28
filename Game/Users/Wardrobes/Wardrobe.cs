@@ -2,9 +2,9 @@
 {
     public class Wardrobe
     {
-        public int SlotId { get; set; }
-        public string Look { get; set; }
-        public string Gender { get; set; }
+        public int SlotId { get; private set; }
+        public string Look { get; private set; }
+        public string Gender { get; private set; }
 
         public Wardrobe(int slotId, string look, string gender)
         {

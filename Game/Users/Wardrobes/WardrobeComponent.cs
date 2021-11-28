@@ -8,13 +8,14 @@ namespace Butterfly.Game.Users.Wardrobes
 {
     public class WardrobeComponent : IDisposable
     {
+        private static readonly int MAX_SLOT = 24;
         private readonly User _userInstance;
-        private readonly List<Wardrobe> _wardrobes;
+        private readonly Dictionary<int, Wardrobe> _wardrobes;
 
         public WardrobeComponent(User user)
         {
             this._userInstance = user;
-            this._wardrobes = new List<Wardrobe>();
+            this._wardrobes = new Dictionary<int, Wardrobe>();
         }
 
         public void Init(IQueryAdapter dbClient)
@@ -23,12 +24,42 @@ namespace Butterfly.Game.Users.Wardrobes
 
             foreach (DataRow Row in WardrobeData.Rows)
             {
-                Wardrobe wardrobe = new Wardrobe(Convert.ToInt32(Row["slot_id"]), Convert.ToString(Row["look"]), Row["gender"].ToString().ToUpper());
-                this._wardrobes.Add(wardrobe);
+                int slotId = Convert.ToInt32(Row["slot_id"]);
+
+                if (this._wardrobes.ContainsKey(slotId))
+                    continue;
+
+                if (slotId < 1 || slotId > MAX_SLOT)
+                    continue;
+
+                Wardrobe wardrobe = new Wardrobe(slotId, Row["look"].ToString(), Row["gender"].ToString().ToUpper());
+                this._wardrobes.Add(slotId, wardrobe);
             }
         }
 
-        public List<Wardrobe> GetWardrobes()
+        internal void AddWardobe(string look, string gender, int slotId)
+        {
+            if (slotId < 1 || slotId > MAX_SLOT)
+                return;
+
+            gender = gender.ToUpper();
+
+            if (gender != "M" && gender != "F")
+                return;
+
+            if (this._wardrobes.ContainsKey(slotId))
+                this._wardrobes.Remove(slotId);
+
+            look = ButterflyEnvironment.GetFigureManager().ProcessFigure(look, gender, true);
+
+            Wardrobe wardrobe = new Wardrobe(slotId, look, gender);
+            this._wardrobes.Add(slotId, wardrobe);
+
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                UserWardrobeDao.Insert(dbClient, this._userInstance.Id, slotId, look, gender.ToUpper());
+        }
+
+        public Dictionary<int, Wardrobe> GetWardrobes()
         {
             return this._wardrobes;
         }

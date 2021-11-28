@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Butterfly.Database.Interfaces;
+using System;
+using System.Collections.Generic;
 
 namespace Butterfly.Game.Users.Permissions
 {
-    public sealed class PermissionComponent
+    public sealed class PermissionComponent : IDisposable
     {
         private readonly List<string> _permissions;
         private readonly List<string> _commands;
@@ -13,7 +15,7 @@ namespace Butterfly.Game.Users.Permissions
             _commands = new List<string>();
         }
 
-        public bool Init()
+        public bool Init(IQueryAdapter dbClient)
         {
             if (_permissions.Count > 0)
                 _permissions.Clear();
@@ -37,6 +39,7 @@ namespace Butterfly.Game.Users.Permissions
         public void Dispose()
         {
             _permissions.Clear();
+            GC.SuppressFinalize(this);
         }
     }
 }
