@@ -29,8 +29,8 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 Session.GetHabbo().Look = UserWardrobeDao.GetOneRandomLook(dbClient);
 
-            Session.SendPacket(new UserChangeComposer(RoomUser, true));
-            Room.SendPacket(new UserChangeComposer(RoomUser, false));
+            Session.SendPacket(new UserChangeComposer(UserRoom, true));
+            Room.SendPacket(new UserChangeComposer(UserRoom, false));
 
         }
     }

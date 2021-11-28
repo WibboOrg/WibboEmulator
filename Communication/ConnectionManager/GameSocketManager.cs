@@ -30,30 +30,13 @@ namespace ConnectionManager
             this._maxIpConnectionCount = connectionsPerIP;
             this._acceptedConnections = 0;
 
-            this._bannedIp = new List<string>
-            {
-                "145.239.187.36",
-                "149.56.182.243"
-            };
+            this._bannedIp = new List<string>();
 
             this._connectionListener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            try
-            {
-                this._connectionListener.Bind(new IPEndPoint(IPAddress.Any, portID));
-                this._connectionListener.Listen(100);
-                this._connectionListener.BeginAccept(new AsyncCallback(this.NewConnectionRequest), this._connectionListener);
-                //this.connectionListener.SendBufferSize = GameSocketManagerStatics.BUFFER_SIZE;
-                //this.connectionListener.ReceiveBufferSize = GameSocketManagerStatics.BUFFER_SIZE;
-                //this.connectionListener.SendTimeout = 1000 * 30;
-                //this.connectionListener.ReceiveTimeout = 1000 * 30;
-                this._connectionListener.DontFragment = false;
-            }
-            catch (Exception ex)
-            {
-                this.Destroy();
-                Console.WriteLine(ex);
-                return;
-            }
+
+            this._connectionListener.Bind(new IPEndPoint(IPAddress.Any, portID));
+            this._connectionListener.Listen(100);
+            this._connectionListener.BeginAccept(new AsyncCallback(this.NewConnectionRequest), this._connectionListener);
 
             this._acceptConnections = true;
         }
@@ -116,7 +99,7 @@ namespace ConnectionManager
                             return;
                         }
 
-                        int now = GameSocketManager.GetUnixTimestamp();
+                        int now = GetUnixTimestamp();
 
                         if (now - lastTime < 2)
                         {
@@ -129,7 +112,7 @@ namespace ConnectionManager
                     }
                     else
                     {
-                        this._lastTimeConnection.TryAdd(Ip, GameSocketManager.GetUnixTimestamp());
+                        this._lastTimeConnection.TryAdd(Ip, GetUnixTimestamp());
                     }
                 }
 
