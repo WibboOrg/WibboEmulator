@@ -16,7 +16,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     continue;
                 }
 
-                User.SendWhisperChat((Room.RoomMuted) ? "Vous ne pouvez plus parler" : "Vous ne pouvez plus parler");
+                User.SendWhisperChat((Room.RoomMuted) ? "Vous ne pouvez plus parler" : "Vous pouvez parler");
             }
         }
     }
