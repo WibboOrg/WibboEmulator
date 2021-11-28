@@ -6,9 +6,9 @@ namespace Butterfly.Database.Daos
 {
     class RoomDao
     {
-        internal static void UpdateResetGroupId(IQueryAdapter dbClient, int groupId)
+        internal static void UpdateResetGroupId(IQueryAdapter dbClient, int id)
         {
-            dbClient.RunQuery("UPDATE `room` SET group_id = '0' WHERE group_id = '" + groupId + "' LIMIT 1");
+            dbClient.RunQuery("UPDATE `room` SET group_id = '0' WHERE id = '" + id + "' LIMIT 1");
         }
 
         internal static void UpdateGroupId(IQueryAdapter dbClient, int groupId, int roomId)

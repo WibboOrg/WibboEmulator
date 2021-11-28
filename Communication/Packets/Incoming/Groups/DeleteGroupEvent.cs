@@ -10,18 +10,20 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Packet.PopInt(), out Group Group))
+            int groupId = Packet.PopInt();
+
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out Group Group))
             {
                 return;
             }
 
-            if (Group.CreatorId != Session.GetHabbo().Id && !Session.GetHabbo().HasFuse("group_delete_override"))//Maybe a FUSE check for staff override?
+            if (Group.CreatorId != Session.GetHabbo().Id && !Session.GetHabbo().HasFuse("group_delete_override"))
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.1", Session.Langue));
                 return;
             }
 
-            if (Group.MemberCount >= 500 && !Session.GetHabbo().HasFuse("group_delete_limit_override"))
+            if (Group.MemberCount >= 100 && !Session.GetHabbo().HasFuse("group_delete_limit_override"))
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.2", Session.Langue));
                 return;
@@ -41,8 +43,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 GuildDao.Delete(dbClient, Group.Id);
                 GuildMembershipDao.Delete(dbClient, Group.Id);
                 GuildRequestDao.Delete(dbClient, Group.Id);
-                RoomDao.UpdateResetGroupId(dbClient, Group.Id);
+                RoomDao.UpdateResetGroupId(dbClient, Group.RoomId);
                 UserStatsDao.UpdateRemoveAllGroupId(dbClient, Group.Id);
+
+                if (Group.CreatorId != Session.GetHabbo().Id)
+                {
+                    LogStaffDao.Insert(dbClient, Session.GetHabbo().Username, $"Suppresion du groupe {Group.Id} crée par {Group.CreatorId}");
+                }
             }
 
             ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
