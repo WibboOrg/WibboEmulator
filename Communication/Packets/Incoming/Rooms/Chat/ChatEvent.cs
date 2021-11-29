@@ -199,7 +199,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Room.OnUserSay(User, Message, false);
 
-            if (User.IsSpectator && Session.GetHabbo().Rank < 12)
+            if (User.IsSpectator && Session.GetHabbo().Rank < 11)
             {
                 return;
             }
