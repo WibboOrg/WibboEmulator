@@ -29,5 +29,25 @@ namespace Butterfly.Game.Items.Interactors
 
             Item.GetRoom().GetFreeze().throwBall(Item, roomUserByHabbo);
         }
+
+        public override void OnTick(Item item)
+        {
+            if (item.InteractingUser <= 0)
+            {
+                return;
+            }
+
+            RoomUser roomUserByHabbo3 = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser);
+            if (roomUserByHabbo3 != null)
+            {
+                roomUserByHabbo3.CountFreezeBall = 1;
+            }
+
+            item.ExtraData = "11000";
+            item.UpdateState(false, true);
+            item.GetRoom().GetFreeze().onFreezeTiles(item, item.FreezePowerUp, item.InteractingUser);
+            item.InteractingUser = 0;
+            item.InteractionCountHelper = 0;
+        }
     }
 }

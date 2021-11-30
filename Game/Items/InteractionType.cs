@@ -17,7 +17,7 @@
         LOVESHUFFLER,
         HABBOWHEEL,
         DICE,
-        bottle,
+        BOTTLE,
         TELEPORT,
         ARROW,
         rentals,
@@ -223,7 +223,7 @@
                 case "dice":
                     return InteractionType.DICE;
                 case "bottle":
-                    return InteractionType.bottle;
+                    return InteractionType.BOTTLE;
                 case "teleport":
                     return InteractionType.TELEPORT;
                 case "teleportfloor":

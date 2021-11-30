@@ -51,5 +51,11 @@ namespace Butterfly.Game.Items.Interactors
                 roomUser.MoveTo(Item.SquareInFront);
             }
         }
+
+        public override void OnTick(Item item)
+        {
+            item.ExtraData = ButterflyEnvironment.GetRandomNumber(1, 6).ToString();
+            item.UpdateState();
+        }
     }
 }

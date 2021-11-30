@@ -54,5 +54,24 @@ namespace Butterfly.Game.Items.Interactors
                 Item.UpdateState(false, true);
             }
         }
+
+        public override void OnTick(Item item)
+        {
+            if (!(item.ExtraData == "1"))
+            {
+                return;
+            }
+
+            RoomUser roomUserByHabbo1 = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser);
+            if (roomUserByHabbo1 != null)
+            {
+                int handitemId = item.GetBaseItem().VendingIds[ButterflyEnvironment.GetRandomNumber(0, item.GetBaseItem().VendingIds.Count - 1)];
+                roomUserByHabbo1.CarryItem(handitemId);
+            }
+
+            item.InteractingUser = 0;
+            item.ExtraData = "0";
+            item.UpdateState(false, true);
+        }
     }
 }

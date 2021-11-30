@@ -55,5 +55,9 @@ namespace Butterfly.Game.Items.Interactors
             Item.ExtraData = num.ToString();
             Item.UpdateState(false, true);
         }
+
+        public override void OnTick(Item item)
+        {
+        }
     }
 }

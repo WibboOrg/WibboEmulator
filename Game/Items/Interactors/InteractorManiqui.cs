@@ -70,5 +70,9 @@ namespace Butterfly.Game.Items.Interactors
 
             room.SendPacket(new UserChangeComposer(Roomuser, false));
         }
+
+        public override void OnTick(Item item)
+        {
+        }
     }
 }

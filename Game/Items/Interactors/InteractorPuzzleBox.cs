@@ -92,5 +92,9 @@ namespace Butterfly.Game.Items.Interactors
                 }
             }
         }
+
+        public override void OnTick(Item item)
+        {
+        }
     }
 }

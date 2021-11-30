@@ -90,5 +90,36 @@ namespace Butterfly.Game.Items.Interactors
                 Item.ReqUpdate(1);
             }
         }
+
+        public override void OnTick(Item item)
+        {
+            RoomUser roomUser3 = null;
+            if (item.InteractingUser > 0)
+            {
+                roomUser3 = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser);
+            }
+
+            if (roomUser3 == null)
+            {
+                item.InteractingUser = 0;
+                return;
+            }
+
+            if (roomUser3.Coordinate == item.SquareBehind || !Gamemap.TilesTouching(item.X, item.Y, roomUser3.X, roomUser3.Y))
+            {
+                roomUser3.UnlockWalking();
+                item.ExtraData = "0";
+                item.InteractingUser = 0;
+                item.UpdateState(false, true);
+            }
+            else
+            {
+                roomUser3.CanWalk = false;
+                roomUser3.AllowOverride = true;
+                roomUser3.MoveTo(item.SquareBehind);
+
+                item.UpdateCounter = 1;
+            }
+        }
     }
 }

@@ -703,6 +703,8 @@
     <Compile Include="Game\Guilds\BadgePartUtility.cs" />
     <Compile Include="Game\Guilds\GroupMember.cs" />
     <Compile Include="Game\Guilds\GroupType.cs" />
+    <Compile Include="Game\Items\Interactors\InteractorBanzaiTele.cs" />
+    <Compile Include="Game\Items\Interactors\InteractorFreezeBlock.cs" />
     <Compile Include="Game\Items\ItemExtrabox.cs" />
     <Compile Include="Game\Items\ItemFactory.cs" />
     <Compile Include="Game\Items\ItemTemp.cs" />
@@ -1062,7 +1064,7 @@
     <Compile Include="Game\Items\Interactors\InteractorBanzaiPuck.cs" />
     <Compile Include="Game\Items\Interactors\InteractorFreezeTile.cs" />
     <Compile Include="Game\Items\Interactors\InteractorIgnore.cs" />
-    <Compile Include="Game\Items\Interactors\WiredInteractor.cs" />
+    <Compile Include="Game\Items\Interactors\InteractorWired.cs" />
     <Compile Include="Game\Items\Interactors\InteractorJukebox.cs" />
     <Compile Include="Game\Items\Interactors\InteractorPuzzleBox.cs" />
     <Compile Include="Game\Items\Interactors\InteractorChangeBackgrounds.cs" />

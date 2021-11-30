@@ -31,5 +31,9 @@ namespace Butterfly.Game.Items.Interactors
             Item.ExtraData = "0";
             Item.UpdateState();
         }
+
+        public override void OnTick(Item item)
+        {
+        }
     }
 }

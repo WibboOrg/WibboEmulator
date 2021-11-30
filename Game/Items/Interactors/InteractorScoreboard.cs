@@ -61,5 +61,36 @@ namespace Butterfly.Game.Items.Interactors
             Item.ExtraData = num.ToString();
             Item.UpdateState();
         }
+
+        public override void OnTick(Item item)
+        {
+            if (string.IsNullOrEmpty(item.ExtraData))
+            {
+                return;
+            }
+
+            int.TryParse(item.ExtraData, out int num);
+
+            if (num > 0)
+            {
+                if (item.InteractionCountHelper == 1)
+                {
+                    int score = num - 1;
+                    item.InteractionCountHelper = 0;
+                    item.ExtraData = score.ToString();
+                    item.UpdateState();
+                }
+                else
+                {
+                    item.InteractionCountHelper++;
+                }
+
+                item.UpdateCounter = 1;
+            }
+            else
+            {
+                item.UpdateCounter = 0;
+            }
+        }
     }
 }

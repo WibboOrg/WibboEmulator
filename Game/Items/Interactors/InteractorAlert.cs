@@ -25,5 +25,16 @@ namespace Butterfly.Game.Items.Interactors
             Item.UpdateState(false, true);
             Item.ReqUpdate(4);
         }
+
+        public override void OnTick(Item item)
+        {
+            if (!(item.ExtraData == "1"))
+            {
+                return;
+            }
+
+            item.ExtraData = "0";
+            item.UpdateState(false, true);
+        }
     }
 }

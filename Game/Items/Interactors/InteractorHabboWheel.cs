@@ -26,5 +26,11 @@ namespace Butterfly.Game.Items.Interactors
             Item.UpdateState();
             Item.ReqUpdate(10);
         }
+
+        public override void OnTick(Item item)
+        {
+            item.ExtraData = ButterflyEnvironment.GetRandomNumber(1, 10).ToString();
+            item.UpdateState();
+        }
     }
 }

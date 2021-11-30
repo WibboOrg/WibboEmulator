@@ -50,5 +50,9 @@ namespace Butterfly.Game.Items.Interactors
                 roomUser.LoaderVideoId = "";
             }
         }
+
+        public override void OnTick(Item item)
+        {
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Map.Movement;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Butterfly.Game.Items.Interactors
@@ -114,6 +115,123 @@ namespace Butterfly.Game.Items.Interactors
                 Ball.InteractingUser = User.VirtualId;
                 Ball.ReqUpdate(1);
             }
+        }
+
+        public override void OnTick(Item item)
+        {
+            if (item.InteractionCountHelper <= 0 || item.InteractionCountHelper > 6)
+            {
+                item.ExtraData = "0";
+                item.UpdateState(false, true);
+
+                item.InteractionCountHelper = 0;
+                return;
+            }
+
+            int OldX = item.X;
+            int OldY = item.Y;
+
+            int NewX = item.X;
+            int NewY = item.Y;
+
+            Point NewPoint = item.GetMoveCoord(OldX, OldY, 1);
+
+
+            int Length;
+            if (item.InteractionCountHelper > 3)
+            {
+                Length = 3;
+
+                item.ExtraData = "6";
+                item.UpdateState(false, true);
+            }
+            else if (item.InteractionCountHelper > 1 && item.InteractionCountHelper < 4)
+            {
+                Length = 2;
+
+                item.ExtraData = "4";
+                item.UpdateState(false, true);
+            }
+            else
+            {
+                Length = 1;
+
+                item.ExtraData = "2";
+                item.UpdateState(false, true);
+            }
+
+
+            if (Length != 1 && !item.GetRoom().GetGameMap().CanStackItem(NewPoint.X, NewPoint.Y, true))
+            {
+                item.GetNewDir(NewX, NewY);
+                item.InteractionCountHelper--;
+            }
+
+            for (int i = 1; i <= Length; i++)
+            {
+                NewPoint = item.GetMoveCoord(OldX, OldY, i);
+
+                if ((item.InteractionCountHelper <= 3 && item.GetRoom().GetGameMap().SquareHasUsers(NewPoint.X, NewPoint.Y)))
+                {
+                    item.InteractionCountHelper = 0;
+                    break;
+                }
+
+                if (item.GetRoom().GetGameMap().CanStackItem(NewPoint.X, NewPoint.Y, true))
+                {
+                    NewX = NewPoint.X;
+                    NewY = NewPoint.Y;
+                    item.GetRoom().GetSoccer().HandleFootballGameItems(new Point(NewPoint.X, NewPoint.Y));
+                }
+                else
+                {
+                    item.GetNewDir(NewX, NewY);
+                    item.InteractionCountHelper--;
+                    return;
+                }
+
+                if (!item.GetRoom().GetGameMap().SquareTakingOpen(NewPoint.X, NewPoint.Y))
+                {
+                    List<RoomUser> Users = item.GetRoom().GetGameMap().GetNearUsers(new Point(NewPoint.X, NewPoint.Y), 1);
+                    if (Users != null)
+                    {
+                        bool BreakMe = false;
+                        foreach (RoomUser User in Users)
+                        {
+                            if (User == null || item.InteractingUser == User.VirtualId)
+                            {
+                                continue;
+                            }
+
+                            if (User.SetX != NewPoint.X || User.SetY != NewPoint.Y)
+                            {
+                                continue;
+                            }
+
+                            if (User.SetStep && User.SetX == User.GoalX && User.SetY == User.GoalY)
+                            {
+                                item.InteractionCountHelper = 6;
+                                item.InteractingUser = User.VirtualId;
+                                item.MovementDir = MovementUtility.GetMovementByDirection(User.RotBody);
+                                BreakMe = true;
+                                break;
+                            }
+                        }
+
+                        if (BreakMe)
+                        {
+                            return;
+                        }
+                    }
+                }
+
+                item.InteractionCountHelper--;
+            }
+
+            double Z = item.GetRoom().GetGameMap().SqAbsoluteHeight(NewX, NewY);
+            item.GetRoom().GetRoomItemHandler().PositionReset(item, NewX, NewY, Z);
+
+            item.UpdateCounter = 1;
         }
     }
 }

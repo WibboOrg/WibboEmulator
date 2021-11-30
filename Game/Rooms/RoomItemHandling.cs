@@ -818,9 +818,9 @@ namespace Butterfly.Game.Rooms
                         }
                     }
                 }
-                foreach (Item item_0 in addItems)
+                foreach (Item item in addItems)
                 {
-                    this._roomItemUpdateQueue.Enqueue(item_0);
+                    this._roomItemUpdateQueue.Enqueue(item);
                 }
             }
         }

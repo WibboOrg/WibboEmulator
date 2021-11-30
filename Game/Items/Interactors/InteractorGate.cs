@@ -41,5 +41,9 @@ namespace Butterfly.Game.Items.Interactors
             Item.UpdateState();
             Item.GetRoom().GetGameMap().UpdateMapForItem(Item);
         }
+
+        public override void OnTick(Item item)
+        {
+        }
     }
 }

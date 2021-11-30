@@ -34,7 +34,6 @@ namespace Butterfly.Game.Items
         public int UpdateCounter;
         public int InteractingUser;
         public int InteractingUser2;
-        private Room RoomInstance;
         public bool PendingReset;
         public int Fx;
 
@@ -48,6 +47,8 @@ namespace Butterfly.Game.Items
         public event OnItemTrigger ItemTriggerEventHandler;
         public event UserAndItemDelegate OnUserWalksOffFurni;
         public event UserAndItemDelegate OnUserWalksOnFurni;
+
+        private Room _roomInstance;
 
         public Dictionary<int, ThreeDCoord> GetAffectedTiles { get; private set; }
 
@@ -185,8 +186,9 @@ namespace Butterfly.Game.Items
                         return new InteractorHabboWheel();
                     case InteractionType.DICE:
                         return new InteractorDice();
-                    case InteractionType.bottle:
+                    case InteractionType.BOTTLE:
                         return new InteractorSpinningBottle();
+                    case InteractionType.ARROW:
                     case InteractionType.TELEPORT:
                         return new InteractorTeleport();
                     case InteractionType.FOOTBALL:
@@ -209,6 +211,7 @@ namespace Butterfly.Game.Items
                     case InteractionType.BANZAIPUCK:
                         return new InteractorBanzaiPuck();
                     case InteractionType.FREEZETILEBLOCK:
+                        return new InteractorFreezeBlock();
                     case InteractionType.FREEZETILE:
                         return new InteractorFreezeTile();
                     case InteractionType.JUKEBOX:
@@ -281,7 +284,7 @@ namespace Butterfly.Game.Items
                     case InteractionType.CONDITION_NOT_IN_TEAM:
                     case InteractionType.CONDITION_NOT_USER_COUNT:
                     case InteractionType.CONDITION_USER_COUNT_IN:
-                        return new WiredInteractor();
+                        return new InteractorWired();
                     case InteractionType.MANNEQUIN:
                         return new InteractorManiqui();
                     case InteractionType.TONER:
@@ -298,6 +301,8 @@ namespace Butterfly.Game.Items
                         return new InteractorLoveLock();
                     case InteractionType.PHOTO:
                         return new InteractorIgnore();
+                    case InteractionType.BANZAITELE:
+                        return new InteractorBanzaiTele();
                     default:
                         return new InteractorGenericSwitch(this.GetBaseItem().Modes);
                 }
@@ -334,7 +339,7 @@ namespace Butterfly.Game.Items
 
                 this.Fx = this.Data.EffectId;
 
-                this.RoomInstance = room;
+                this._roomInstance = room;
                 if (this.GetBaseItem() == null)
                 {
                     Logging.LogException("Unknown baseID: " + mBaseItem);
@@ -418,7 +423,7 @@ namespace Butterfly.Game.Items
 
         public void Destroy()
         {
-            this.RoomInstance = null;
+            this._roomInstance = null;
             this.GetAffectedTiles.Clear();
 
             if (this.WiredHandler != null)
@@ -646,446 +651,7 @@ namespace Butterfly.Game.Items
 
             this.UpdateCounter = 0;
 
-            switch (this.GetBaseItem().InteractionType)
-            {
-                case InteractionType.FOOTBALL:
-                    if (this.InteractionCountHelper <= 0 || this.InteractionCountHelper > 6)
-                    {
-                        this.ExtraData = "0";
-                        this.UpdateState(false, true);
-
-                        this.InteractionCountHelper = 0;
-                        break;
-                    }
-
-                    int OldX = this.X;
-                    int OldY = this.Y;
-
-                    int NewX = this.X;
-                    int NewY = this.Y;
-
-                    Point NewPoint = this.GetMoveCoord(OldX, OldY, 1);
-
-
-                    int Length;
-                    if (this.InteractionCountHelper > 3)
-                    {
-                        Length = 3;
-
-                        this.ExtraData = "6";
-                        this.UpdateState(false, true);
-                    }
-                    else if (this.InteractionCountHelper > 1 && this.InteractionCountHelper < 4)
-                    {
-                        Length = 2;
-
-                        this.ExtraData = "4";
-                        this.UpdateState(false, true);
-                    }
-                    else
-                    {
-                        Length = 1;
-
-                        this.ExtraData = "2";
-                        this.UpdateState(false, true);
-                    }
-
-
-                    if (Length != 1 && !this.GetRoom().GetGameMap().CanStackItem(NewPoint.X, NewPoint.Y, true))
-                    {
-                        this.GetNewDir(NewX, NewY);
-                        this.InteractionCountHelper--;
-                    }
-
-                    for (int i = 1; i <= Length; i++)
-                    {
-                        NewPoint = this.GetMoveCoord(OldX, OldY, i);
-
-
-                        if ((this.InteractionCountHelper <= 3 && this.GetRoom().GetGameMap().SquareHasUsers(NewPoint.X, NewPoint.Y)))
-                        {
-                            this.InteractionCountHelper = 0;
-                            break;
-                        }
-
-                        if (this.GetRoom().GetGameMap().CanStackItem(NewPoint.X, NewPoint.Y, true))
-                        {
-                            NewX = NewPoint.X;
-                            NewY = NewPoint.Y;
-                            this.GetRoom().GetSoccer().HandleFootballGameItems(new Point(NewPoint.X, NewPoint.Y));
-                        }
-                        else
-                        {
-                            this.GetNewDir(NewX, NewY);
-                            this.InteractionCountHelper--;
-                            break;
-                        }
-
-                        if (!this.GetRoom().GetGameMap().SquareTakingOpen(NewPoint.X, NewPoint.Y))
-                        {
-                            List<RoomUser> Users = this.GetRoom().GetGameMap().GetNearUsers(new Point(NewPoint.X, NewPoint.Y), 1);
-                            if (Users != null)
-                            {
-                                bool BreakMe = false;
-                                foreach (RoomUser User in Users)
-                                {
-                                    if (User == null || this.InteractingUser == User.VirtualId)
-                                    {
-                                        continue;
-                                    }
-
-                                    if (User.SetX != NewPoint.X || User.SetY != NewPoint.Y)
-                                    {
-                                        continue;
-                                    }
-
-                                    if (User.SetStep && User.SetX == User.GoalX && User.SetY == User.GoalY)
-                                    {
-                                        this.InteractionCountHelper = 6;
-                                        this.InteractingUser = User.VirtualId;
-                                        this.MovementDir = MovementUtility.GetMovementByDirection(User.RotBody);
-                                        BreakMe = true;
-                                        break;
-                                    }
-                                }
-
-                                if (BreakMe)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-
-                        this.InteractionCountHelper--;
-                    }
-
-                    double Z = this.GetRoom().GetGameMap().SqAbsoluteHeight(NewX, NewY);
-                    this.GetRoom().GetRoomItemHandler().PositionReset(this, NewX, NewY, Z);
-
-                    this.UpdateCounter = 1;
-                    break;
-                case InteractionType.CHRONOTIMER:
-                    if (string.IsNullOrEmpty(this.ExtraData))
-                    {
-                        break;
-                    }
-
-                    int NumChrono;
-                    if (!int.TryParse(this.ExtraData, out NumChrono))
-                    {
-                        break;
-                    }
-
-                    if (!this.ChronoStarter)
-                    {
-                        break;
-                    }
-
-                    if (NumChrono > 0)
-                    {
-                        if (this.InteractionCountHelper == 1)
-                        {
-                            NumChrono--;
-                            /*if (!this.GetRoom().GetBanzai().isBanzaiActive || !this.GetRoom().GetFreeze().isGameActive)
-                            {
-                                NumChrono = 0;
-                            }*/
-                            this.InteractionCountHelper = 0;
-                            this.ExtraData = NumChrono.ToString();
-                            this.UpdateState();
-                        }
-                        else
-                        {
-                            this.InteractionCountHelper++;
-                        }
-
-                        this.UpdateCounter = 1;
-                        break;
-                    }
-                    else
-                    {
-                        this.ChronoStarter = false;
-                        this.GetRoom().GetGameManager().StopGame();
-                        break;
-                    }
-                case InteractionType.BANZAITELE:
-                    if (this.InteractingUser == 0)
-                    {
-                        this.ExtraData = string.Empty;
-                        this.UpdateState();
-                        break;
-                    }
-
-                    this.ExtraData = "1";
-                    this.UpdateState();
-
-                    this.UpdateCounter = 1;
-
-                    RoomUser roomUserByHabbo = this.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(this.InteractingUser);
-                    if (roomUserByHabbo != null)
-                    {
-                        this.GetRoom().GetGameMap().TeleportToItem(roomUserByHabbo, this);
-                        roomUserByHabbo.SetRot(ButterflyEnvironment.GetRandomNumber(0, 7), false);
-                        roomUserByHabbo.CanWalk = true;
-                    }
-                    this.InteractingUser = 0;
-
-                    break;
-                case InteractionType.FREEZETILE:
-                    if (this.InteractingUser <= 0)
-                    {
-                        break;
-                    }
-
-                    RoomUser roomUserByHabbo3 = this.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(this.InteractingUser);
-                    if (roomUserByHabbo3 != null)
-                    {
-                        roomUserByHabbo3.CountFreezeBall = 1;
-                    }
-                    this.ExtraData = "11000";
-                    this.UpdateState(false, true);
-                    this.GetRoom().GetFreeze().onFreezeTiles(this, this.FreezePowerUp, this.InteractingUser);
-                    this.InteractingUser = 0;
-                    this.InteractionCountHelper = 0;
-                    break;
-                case InteractionType.SCOREBOARD:
-                    if (string.IsNullOrEmpty(this.ExtraData))
-                    {
-                        break;
-                    }
-
-                    int num4 = 0;
-                    try
-                    {
-                        num4 = int.Parse(this.ExtraData);
-                    }
-                    catch
-                    {
-                    }
-                    if (num4 > 0)
-                    {
-                        if (this.InteractionCountHelper == 1)
-                        {
-                            int num2 = num4 - 1;
-                            this.InteractionCountHelper = 0;
-                            this.ExtraData = num2.ToString();
-                            this.UpdateState();
-                        }
-                        else
-                        {
-                            this.InteractionCountHelper++;
-                        }
-
-                        this.UpdateCounter = 1;
-                        break;
-                    }
-                    else
-                    {
-                        this.UpdateCounter = 0;
-                        break;
-                    }
-                case InteractionType.VENDINGMACHINE:
-                    if (!(this.ExtraData == "1"))
-                    {
-                        break;
-                    }
-
-                    RoomUser roomUserByHabbo1 = this.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(this.InteractingUser);
-                    if (roomUserByHabbo1 != null)
-                    {
-                        int num2 = this.GetBaseItem().VendingIds[ButterflyEnvironment.GetRandomNumber(0, this.GetBaseItem().VendingIds.Count - 1)];
-                        roomUserByHabbo1.CarryItem(num2);
-                    }
-                    this.InteractingUser = 0;
-                    this.ExtraData = "0";
-                    this.UpdateState(false, true);
-                    break;
-                case InteractionType.VENDINGENABLEMACHINE:
-                    if (!(this.ExtraData == "1"))
-                    {
-                        break;
-                    }
-
-                    RoomUser roomUserByHabboEnable = this.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(this.InteractingUser);
-                    if (roomUserByHabboEnable != null)
-                    {
-                        int num2 = this.GetBaseItem().VendingIds[ButterflyEnvironment.GetRandomNumber(0, this.GetBaseItem().VendingIds.Count - 1)];
-                        roomUserByHabboEnable.ApplyEffect(num2);
-                    }
-                    this.InteractingUser = 0;
-                    this.ExtraData = "0";
-                    this.UpdateState(false, true);
-                    break;
-                case InteractionType.ALERT:
-                    if (!(this.ExtraData == "1"))
-                    {
-                        break;
-                    }
-
-                    this.ExtraData = "0";
-                    this.UpdateState(false, true);
-                    break;
-                case InteractionType.ONEWAYGATE:
-                    RoomUser roomUser3 = null;
-                    if (this.InteractingUser > 0)
-                    {
-                        roomUser3 = this.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(this.InteractingUser);
-                    }
-
-                    if (roomUser3 == null)
-                    {
-                        this.InteractingUser = 0;
-                        break;
-                    }
-
-                    if (roomUser3.Coordinate == this.SquareBehind || !Gamemap.TilesTouching(this.X, this.Y, roomUser3.X, roomUser3.Y))
-                    {
-                        roomUser3.UnlockWalking();
-                        this.ExtraData = "0";
-                        this.InteractingUser = 0;
-                        this.UpdateState(false, true);
-                    }
-                    else
-                    {
-                        roomUser3.CanWalk = false;
-                        roomUser3.AllowOverride = true;
-                        roomUser3.MoveTo(this.SquareBehind);
-
-                        this.UpdateCounter = 1;
-                    }
-
-                    break;
-                case InteractionType.LOVESHUFFLER:
-                    if (this.ExtraData == "0")
-                    {
-                        this.ExtraData = ButterflyEnvironment.GetRandomNumber(1, 4).ToString();
-                        this.ReqUpdate(20);
-                    }
-                    else if (this.ExtraData != "-1")
-                    {
-                        this.ExtraData = "-1";
-                    }
-
-                    this.UpdateState(false, true);
-                    break;
-                case InteractionType.HABBOWHEEL:
-                    this.ExtraData = ButterflyEnvironment.GetRandomNumber(1, 10).ToString();
-                    this.UpdateState();
-                    break;
-                case InteractionType.DICE:
-                    this.ExtraData = ButterflyEnvironment.GetRandomNumber(1, 6).ToString();
-                    this.UpdateState();
-                    break;
-                case InteractionType.bottle:
-                    this.ExtraData = ButterflyEnvironment.GetRandomNumber(0, 7).ToString();
-                    this.UpdateState();
-                    break;
-                case InteractionType.TELEPORT:
-                case InteractionType.ARROW:
-                    bool keepDoorOpen = false;
-                    bool showTeleEffect = false;
-                    if (this.InteractingUser > 0)
-                    {
-                        RoomUser roomUserByHabbo2 = this.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(this.InteractingUser);
-                        if (roomUserByHabbo2 != null)
-                        {
-                            if (roomUserByHabbo2.Coordinate == this.Coordinate)
-                            {
-                                roomUserByHabbo2.AllowOverride = false;
-                                if (ItemTeleporterFinder.IsTeleLinked(this.Id, this.RoomInstance))
-                                {
-                                    showTeleEffect = true;
-                                    int linkedTele = ItemTeleporterFinder.GetLinkedTele(this.Id);
-                                    int teleRoomId = ItemTeleporterFinder.GetTeleRoomId(linkedTele, this.RoomInstance);
-                                    if (teleRoomId == this.RoomId)
-                                    {
-                                        Item roomItem = this.GetRoom().GetRoomItemHandler().GetItem(linkedTele);
-                                        if (roomItem == null)
-                                        {
-                                            roomUserByHabbo2.UnlockWalking();
-                                        }
-                                        else
-                                        {
-                                            roomUserByHabbo2.SetRot(roomItem.Rotation, false);
-                                            roomItem.GetRoom().GetGameMap().TeleportToItem(roomUserByHabbo2, roomItem);
-                                            roomItem.ExtraData = "2";
-                                            roomItem.UpdateState(false, true);
-                                            roomItem.InteractingUser2 = this.InteractingUser;
-                                            roomItem.ReqUpdate(2);
-                                        }
-                                    }
-                                    else if (!roomUserByHabbo2.IsBot && roomUserByHabbo2 != null && (roomUserByHabbo2.GetClient() != null && roomUserByHabbo2.GetClient().GetHabbo() != null))
-                                    {
-                                        roomUserByHabbo2.GetClient().GetHabbo().IsTeleporting = true;
-                                        roomUserByHabbo2.GetClient().GetHabbo().TeleportingRoomID = teleRoomId;
-                                        roomUserByHabbo2.GetClient().GetHabbo().TeleporterId = linkedTele;
-                                        roomUserByHabbo2.GetClient().GetHabbo().PrepareRoom(teleRoomId, "");
-                                    }
-                                    this.InteractingUser = 0;
-                                }
-                                else
-                                {
-                                    roomUserByHabbo2.UnlockWalking();
-                                    this.InteractingUser = 0;
-                                }
-                            }
-                            else if (roomUserByHabbo2.Coordinate == this.SquareInFront)
-                            {
-                                roomUserByHabbo2.AllowOverride = true;
-                                keepDoorOpen = true;
-
-                                roomUserByHabbo2.CanWalk = false;
-                                roomUserByHabbo2.AllowOverride = true;
-                                roomUserByHabbo2.MoveTo(this.Coordinate.X, this.Coordinate.Y, true);
-                            }
-                            else
-                            {
-                                this.InteractingUser = 0;
-                            }
-                        }
-                        else
-                        {
-                            this.InteractingUser = 0;
-                        }
-
-                        this.UpdateCounter = 1;
-                    }
-                    if (this.InteractingUser2 > 0)
-                    {
-                        RoomUser roomUserByHabbo2 = this.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(this.InteractingUser2);
-                        if (roomUserByHabbo2 != null)
-                        {
-                            keepDoorOpen = true;
-                            roomUserByHabbo2.UnlockWalking();
-                            roomUserByHabbo2.MoveTo(this.SquareInFront);
-                        }
-                        this.UpdateCounter = 1;
-                        this.InteractingUser2 = 0;
-                    }
-                    if (keepDoorOpen)
-                    {
-                        if (this.ExtraData != "1")
-                        {
-                            this.ExtraData = "1";
-                            this.UpdateState(false, true);
-                        }
-                    }
-                    else if (showTeleEffect)
-                    {
-                        if (this.ExtraData != "2")
-                        {
-                            this.ExtraData = "2";
-                            this.UpdateState(false, true);
-                        }
-                    }
-                    else if (this.ExtraData != "0")
-                    {
-                        this.ExtraData = "0";
-                        this.UpdateState(false, true);
-                    }
-
-                    break;
-            }
+            this.Interactor.OnTick(this);
         }
 
         public void ReqUpdate(int Cycles)
@@ -1191,9 +757,9 @@ namespace Butterfly.Game.Items
         {
             if (this.Data == null)
             {
-                if (ButterflyEnvironment.GetGame().GetItemManager().GetItem(this.BaseItem, out ItemData I))
+                if (ButterflyEnvironment.GetGame().GetItemManager().GetItem(this.BaseItem, out ItemData itemData))
                 {
-                    this.Data = I;
+                    this.Data = itemData;
                 }
             }
 
@@ -1202,12 +768,7 @@ namespace Butterfly.Game.Items
 
         public Room GetRoom()
         {
-            if (this.RoomInstance == null)
-            {
-                this.RoomInstance = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.RoomId);
-            }
-
-            return this.RoomInstance;
+            return this._roomInstance;
         }
 
         public void UserWalksOnFurni(RoomUser user, Item item)

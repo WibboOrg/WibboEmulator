@@ -2,7 +2,7 @@
 
 namespace Butterfly.Game.Items.Interactors
 {
-    public class WiredInteractor : FurniInteractor
+    public class InteractorWired : FurniInteractor
     {
         public override void OnPlace(Client Session, Item Item)
         {
@@ -23,6 +23,10 @@ namespace Butterfly.Game.Items.Interactors
             {
                 Item.WiredHandler.OnTrigger(Session);
             }
+        }
+
+        public override void OnTick(Item item)
+        {
         }
     }
 }

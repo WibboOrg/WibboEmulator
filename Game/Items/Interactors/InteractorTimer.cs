@@ -20,65 +20,59 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            int num = 0;
+            int time = 0;
             if (!string.IsNullOrEmpty(Item.ExtraData))
             {
-                try
-                {
-                    num = int.Parse(Item.ExtraData);
-                }
-                catch
-                {
-                }
+                 int.TryParse(Item.ExtraData, out time);
             }
+
             if (Request == 2)
             {
-                if (Item.PendingReset && num > 0)
+                if (Item.PendingReset && time > 0)
                 {
-                    //num = 0;
                     Item.ChronoStarter = false;
                     Item.PendingReset = false;
                 }
                 else
                 {
-                    if (num == 0 || num == 30 || num == 60 || num == 120 || num == 180 || num == 300 || num == 600)
+                    if (time == 0 || time == 30 || time == 60 || time == 120 || time == 180 || time == 300 || time == 600)
                     {
-                        if (num == 0)
+                        if (time == 0)
                         {
-                            num = 30;
+                            time = 30;
                         }
-                        else if (num == 30)
+                        else if (time == 30)
                         {
-                            num = 60;
+                            time = 60;
                         }
-                        else if (num == 60)
+                        else if (time == 60)
                         {
-                            num = 120;
+                            time = 120;
                         }
-                        else if (num == 120)
+                        else if (time == 120)
                         {
-                            num = 180;
+                            time = 180;
                         }
-                        else if (num == 180)
+                        else if (time == 180)
                         {
-                            num = 300;
+                            time = 300;
                         }
-                        else if (num == 300)
+                        else if (time == 300)
                         {
-                            num = 600;
+                            time = 600;
                         }
-                        else if (num == 600)
+                        else if (time == 600)
                         {
-                            num = 0;
+                            time = 0;
                         }
                     }
                     else
                     {
-                        num = 0;
+                        time = 0;
                     }
                 }
             }
-            else if ((Request == 0 || Request == 1) && num != 0 && !Item.ChronoStarter)
+            else if ((Request == 0 || Request == 1) && time != 0 && !Item.ChronoStarter)
             {
                 Item.ReqUpdate(1);
                 Item.GetRoom().GetGameManager().StartGame();
@@ -86,8 +80,52 @@ namespace Butterfly.Game.Items.Interactors
                 Item.PendingReset = true;
             }
 
-            Item.ExtraData = num.ToString();
+            Item.ExtraData = time.ToString();
             Item.UpdateState();
+        }
+
+        public override void OnTick(Item item)
+        {
+            if (string.IsNullOrEmpty(item.ExtraData))
+            {
+                return;
+            }
+
+            int time;
+            if (!int.TryParse(item.ExtraData, out time))
+            {
+                return;
+            }
+
+            if (!item.ChronoStarter)
+            {
+                return;
+            }
+
+            if (time > 0)
+            {
+                if (item.InteractionCountHelper == 1)
+                {
+                    time--;
+
+                    item.InteractionCountHelper = 0;
+                    item.ExtraData = time.ToString();
+                    item.UpdateState();
+                }
+                else
+                {
+                    item.InteractionCountHelper++;
+                }
+
+                item.UpdateCounter = 1;
+                return;
+            }
+            else
+            {
+                item.ChronoStarter = false;
+                item.GetRoom().GetGameManager().StopGame();
+                return;
+            }
         }
     }
 }

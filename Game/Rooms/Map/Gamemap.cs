@@ -458,9 +458,6 @@ namespace Butterfly.Game.Rooms
                     this._roomInstance.GetGameItemHandler().AddTeleport(item, item.Id);
                     item.ExtraData = "";
                     break;
-                //case InteractionType.banzaipuck:
-                //this.room.GetBanzai().AddPuck(item);
-                //break;
                 case InteractionType.BANZAIPYRAMID:
                     this._roomInstance.GetGameItemHandler().AddPyramid(item, item.Id);
                     break;
@@ -490,9 +487,6 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAITELE:
                     this._roomInstance.GetGameItemHandler().RemoveTeleport(item.Id);
                     break;
-                //case InteractionType.banzaipuck:
-                //this.room.GetBanzai().RemovePuck(item.Id);
-                //break;
                 case InteractionType.BANZAIPYRAMID:
                     this._roomInstance.GetGameItemHandler().RemovePyramid(item.Id);
                     break;
