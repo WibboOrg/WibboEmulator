@@ -264,7 +264,11 @@ namespace Butterfly.Game.Users
                 this._messengerComponent.Init(dbClient, this.HideOnline);
                 this._chatMessageManager.LoadUserChatlogs(dbClient, this.Id);
 
-                this.UpdateRooms(dbClient);
+                DataTable dUserRooms = RoomDao.GetAllByOwner(dbClient, this.Username);
+                foreach (DataRow dRow in dUserRooms.Rows)
+                {
+                    this.UsersRooms.Add(ButterflyEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(dRow["id"]), dRow));
+                }
 
                 DataTable dGroupMemberships = GuildMembershipDao.GetOneByUserId(dbClient, this.Id);
                 foreach (DataRow dRow in dGroupMemberships.Rows)
@@ -299,19 +303,6 @@ namespace Butterfly.Game.Users
                     if(roomdata != null)
                         this.RoomRightsList.Add(roomdata);
                 }
-            }
-        }
-
-
-        public void UpdateRooms(IQueryAdapter dbClient)
-        {
-            this.UsersRooms.Clear();
-
-            DataTable table = RoomDao.GetAllByOwner(dbClient, this.Username);
-
-            foreach (DataRow dRow in table.Rows)
-            {
-                this.UsersRooms.Add(ButterflyEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(dRow["id"]), dRow));
             }
         }
 

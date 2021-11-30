@@ -37,7 +37,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Room.GetRoomUserManager().BotCounter >= 30)
+            if (Room.GetRoomUserManager().BotPetCount >= 30)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.placebot.error", Session.Langue));
                 return;

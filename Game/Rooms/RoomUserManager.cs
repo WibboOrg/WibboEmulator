@@ -44,7 +44,7 @@ namespace Butterfly.Game.Rooms
         private readonly List<int> _usersRank;
 
         private int _primaryPrivateUserID;
-        public int BotCounter;
+        public int BotPetCount => this._pets.Count + this._bots.Count;
 
         public event RoomEventDelegate OnUserEnter;
 
@@ -58,7 +58,6 @@ namespace Butterfly.Game.Rooms
             this._usersByUserID = new ConcurrentDictionary<int, RoomUser>();
             this._usersRank = new List<int>();
             this._primaryPrivateUserID = 1;
-            this.BotCounter = 0;
         }
 
         public void UserEnter(RoomUser thisUser)
@@ -82,8 +81,6 @@ namespace Butterfly.Game.Rooms
             Bot.Id = -key;
 
             this._users.TryAdd(key, roomUser);
-
-            this.BotCounter++;
 
             roomUser.SetPos(Bot.X, Bot.Y, Bot.Z);
             roomUser.SetRot(Bot.Rot, false);
@@ -175,7 +172,7 @@ namespace Butterfly.Game.Rooms
             {
                 roomUser.BotAI.Init(Bot.Id, roomUser, this._room);
             }
-            this.BotCounter++;
+
             roomUser.SetStatus("flatctrl 4", "");
 
             if (Bot.Status == 1)
@@ -254,7 +251,7 @@ namespace Butterfly.Game.Rooms
             {
                 this._bots.TryRemove(roomUserByVirtualId.BotData.Id, out RoomUser BotRemoval);
             }
-            this.BotCounter--;
+
             roomUserByVirtualId.BotAI.OnSelfLeaveRoom(Kicked);
 
             this._room.SendPacket(new UserRemoveComposer(roomUserByVirtualId.VirtualId));

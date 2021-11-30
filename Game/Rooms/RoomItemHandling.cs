@@ -515,7 +515,7 @@ namespace Butterfly.Game.Rooms
         {
             try
             {
-                if (this._updateItems.Count <= 0 && this._room.GetRoomUserManager().BotCounter <= 0)
+                if (this._updateItems.Count <= 0 && this._room.GetRoomUserManager().BotPetCount <= 0)
                 {
                     return;
                 }
