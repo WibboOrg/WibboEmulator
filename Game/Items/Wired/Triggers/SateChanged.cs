@@ -31,7 +31,7 @@ namespace Butterfly.Game.Items.Wired
         {
             if (this.Delay > 0)
             {
-                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, e.User, e.Item, this.Delay));
+                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, e.User, e.Item));
             }
             else
             {

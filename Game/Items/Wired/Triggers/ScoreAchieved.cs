@@ -14,14 +14,6 @@ namespace Butterfly.Game.Items.Wired.Triggers
         {
             this.scoreChangedDelegate = new TeamScoreChangedDelegate(this.OnScoreChanged);
             this.RoomInstance.GetGameManager().OnScoreChanged += this.scoreChangedDelegate;
-        }
-
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
 
             this.IntParams.Add(0);
         }
@@ -52,6 +44,8 @@ namespace Butterfly.Game.Items.Wired.Triggers
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             if (int.TryParse(row["trigger_data"].ToString(), out int score))
                 this.IntParams.Add(score);
         }

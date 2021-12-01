@@ -9,15 +9,6 @@ namespace Butterfly.Game.Items.Wired.Conditions
     {
         public DateRangeActive(Item item, Room room) : base(item, room, (int)WiredConditionType.DATE_RANGE_ACTIVE)
         {
-        }
-
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
-
             this.IntParams.Add(ButterflyEnvironment.GetUnixTimestamp());
             this.IntParams.Add(ButterflyEnvironment.GetUnixTimestamp());
         }
@@ -47,6 +38,8 @@ namespace Butterfly.Game.Items.Wired.Conditions
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             string triggerData = row["trigger_data"].ToString();
             if (!triggerData.Contains(":"))
                 return;

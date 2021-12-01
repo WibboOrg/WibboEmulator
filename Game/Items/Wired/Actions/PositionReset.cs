@@ -15,6 +15,10 @@ namespace Butterfly.Game.Items.Wired.Actions
         public PositionReset(Item item, Room room) : base(item, room, (int)WiredActionType.SET_FURNI_STATE)
         {
             this.ItemsData = new Dictionary<int, ItemsPosReset>();
+
+            this.IntParams.Add(0);
+            this.IntParams.Add(0);
+            this.IntParams.Add(0);
         }
 
         public override void LoadItems(bool inDatabase = false)
@@ -24,9 +28,7 @@ namespace Butterfly.Game.Items.Wired.Actions
             if(inDatabase)
                 return;
 
-            this.IntParams.Add(0);
-            this.IntParams.Add(0);
-            this.IntParams.Add(0);
+            this.ItemsData.Clear();
 
             foreach (Item roomItem in this.Items)
             {
@@ -116,6 +118,8 @@ namespace Butterfly.Game.Items.Wired.Actions
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             int delay;
             if (int.TryParse(row["delay"].ToString(), out delay))
                 this.Delay = delay;

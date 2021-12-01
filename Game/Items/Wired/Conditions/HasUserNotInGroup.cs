@@ -33,12 +33,10 @@ namespace Butterfly.Game.Items.Wired.Conditions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-            
         }
 
         public void LoadFromDatabase(DataRow row)
         {
-
         }
     }
 }

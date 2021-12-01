@@ -14,14 +14,6 @@ namespace Butterfly.Game.Items.Wired.Triggers
         {
             this.delegateFunction = new RoomUserSaysDelegate(this.OnUserSays);
             room.OnUserSays += this.delegateFunction;
-        }
-
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
 
             this.IntParams.Add(0);
         }
@@ -33,14 +25,14 @@ namespace Butterfly.Game.Items.Wired.Triggers
 
             bool isOwnerOnly = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
 
-            if (user != null && (!isOwnerOnly && this.canBeTriggered(message) && !string.IsNullOrEmpty(message)) || (isOwnerOnly && user.IsOwner() && this.canBeTriggered(message) && !string.IsNullOrEmpty(message)))
+            if (user != null && (!isOwnerOnly && this.CanBeTriggered(message) && !string.IsNullOrEmpty(message)) || (isOwnerOnly && user.IsOwner() && this.CanBeTriggered(message) && !string.IsNullOrEmpty(message)))
             {
                 this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, null);
                 messageHandled = true;
             }
         }
 
-        private bool canBeTriggered(string message)
+        private bool CanBeTriggered(string message)
         {
             if (string.IsNullOrEmpty(this.StringParam))
             {
@@ -66,6 +58,8 @@ namespace Butterfly.Game.Items.Wired.Triggers
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             this.StringParam = row["trigger_data"].ToString();
             
             if (bool.TryParse(row["all_user_triggerable"].ToString(), out bool isOwnerOnly))

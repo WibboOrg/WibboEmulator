@@ -10,7 +10,7 @@ namespace Butterfly.Game.Rooms.Wired
         public IWiredCycleable WiredCycleable;
         public int Cycle;
 
-        public WiredCycle(IWiredCycleable wiredCycleable, RoomUser user, Item item, int delay)
+        public WiredCycle(IWiredCycleable wiredCycleable, RoomUser user, Item item)
         {
             this.WiredCycleable = wiredCycleable;
             this.User = user;

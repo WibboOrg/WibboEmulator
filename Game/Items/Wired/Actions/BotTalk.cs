@@ -9,17 +9,9 @@ namespace Butterfly.Game.Items.Wired.Actions
     {
         public BotTalk(Item item, Room room) : base(item, room, (int)WiredActionType.BOT_TALK)
         {
-        }
-
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
-
             this.IntParams.Add(0);
         }
+
         public override bool OnCycle(RoomUser user, Item item)
         {
             if (!this.StringParam.Contains("\t"))
@@ -75,6 +67,8 @@ namespace Butterfly.Game.Items.Wired.Actions
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             if (int.TryParse(row["delay"].ToString(), out int delay))
 	            this.Delay = delay;
                 

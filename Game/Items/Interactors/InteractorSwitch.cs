@@ -4,11 +4,11 @@ using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Items.Interactors
 {
-    public class InteractorSwitch1 : FurniInteractor
+    public class InteractorSwitch : FurniInteractor
     {
         private readonly int Modes;
 
-        public InteractorSwitch1(int Modes)
+        public InteractorSwitch(int Modes)
         {
             this.Modes = Modes - 1;
             if (this.Modes >= 0)
@@ -63,15 +63,9 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            int num1 = 0;
-            try
-            {
-                num1 = int.Parse(Item.ExtraData);
-            }
-            catch
-            {
-            }
-            int num2 = num1 > 0 ? (num1 < this.Modes ? num1 + 1 : 0) : 1;
+            int.TryParse(Item.ExtraData, out int state);
+
+            int num2 = state > 0 ? (state < this.Modes ? state + 1 : 0) : 1;
             Item.ExtraData = num2.ToString();
             Item.UpdateState();
         }

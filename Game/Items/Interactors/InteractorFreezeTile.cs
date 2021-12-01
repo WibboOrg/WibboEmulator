@@ -37,10 +37,10 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            RoomUser roomUserByHabbo3 = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser);
-            if (roomUserByHabbo3 != null)
+            RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser);
+            if (roomUserTarget != null)
             {
-                roomUserByHabbo3.CountFreezeBall = 1;
+                roomUserTarget.CountFreezeBall = 1;
             }
 
             item.ExtraData = "11000";

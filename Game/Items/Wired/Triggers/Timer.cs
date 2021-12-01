@@ -16,21 +16,13 @@ namespace Butterfly.Game.Items.Wired.Triggers
         {
             this.delegateFunction = new RoomEventDelegate(this.ResetTimer);
             this.RoomInstance.GetWiredHandler().TrgTimer += this.delegateFunction;
-        }
-
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
 
             this.IntParams.Add(0);
         }
 
         public void ResetTimer(object sender, EventArgs e)
         {
-            this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, null, null, this.DelayCycle));
+            this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, null, null));
         }
 
         public bool OnCycle(RoomUser user, Item item)
@@ -53,6 +45,8 @@ namespace Butterfly.Game.Items.Wired.Triggers
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             if (int.TryParse(row["trigger_data"].ToString(), out int delay))
                 this.IntParams.Add(delay);
         }

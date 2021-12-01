@@ -105,12 +105,12 @@ namespace Butterfly.Game.Items.Interactors
 
             if (item.InteractingUser > 0)
             {
-                RoomUser roomUserByHabbo2 = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser);
-                if (roomUserByHabbo2 != null)
+                RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser);
+                if (roomUserTarget != null)
                 {
-                    if (roomUserByHabbo2.Coordinate == item.Coordinate)
+                    if (roomUserTarget.Coordinate == item.Coordinate)
                     {
-                        roomUserByHabbo2.AllowOverride = false;
+                        roomUserTarget.AllowOverride = false;
                         if (ItemTeleporterFinder.IsTeleLinked(item.Id, item.GetRoom()))
                         {
                             showTeleEffect = true;
@@ -121,41 +121,41 @@ namespace Butterfly.Game.Items.Interactors
                                 Item roomItem = item.GetRoom().GetRoomItemHandler().GetItem(linkedTele);
                                 if (roomItem == null)
                                 {
-                                    roomUserByHabbo2.UnlockWalking();
+                                    roomUserTarget.UnlockWalking();
                                 }
                                 else
                                 {
-                                    roomUserByHabbo2.SetRot(roomItem.Rotation, false);
-                                    roomItem.GetRoom().GetGameMap().TeleportToItem(roomUserByHabbo2, roomItem);
+                                    roomUserTarget.SetRot(roomItem.Rotation, false);
+                                    roomItem.GetRoom().GetGameMap().TeleportToItem(roomUserTarget, roomItem);
                                     roomItem.ExtraData = "2";
                                     roomItem.UpdateState(false, true);
                                     roomItem.InteractingUser2 = item.InteractingUser;
                                     roomItem.ReqUpdate(2);
                                 }
                             }
-                            else if (!roomUserByHabbo2.IsBot && roomUserByHabbo2 != null && (roomUserByHabbo2.GetClient() != null && roomUserByHabbo2.GetClient().GetHabbo() != null))
+                            else if (!roomUserTarget.IsBot && roomUserTarget != null && (roomUserTarget.GetClient() != null && roomUserTarget.GetClient().GetHabbo() != null))
                             {
-                                roomUserByHabbo2.GetClient().GetHabbo().IsTeleporting = true;
-                                roomUserByHabbo2.GetClient().GetHabbo().TeleportingRoomID = teleRoomId;
-                                roomUserByHabbo2.GetClient().GetHabbo().TeleporterId = linkedTele;
-                                roomUserByHabbo2.GetClient().GetHabbo().PrepareRoom(teleRoomId, "");
+                                roomUserTarget.GetClient().GetHabbo().IsTeleporting = true;
+                                roomUserTarget.GetClient().GetHabbo().TeleportingRoomID = teleRoomId;
+                                roomUserTarget.GetClient().GetHabbo().TeleporterId = linkedTele;
+                                roomUserTarget.GetClient().GetHabbo().PrepareRoom(teleRoomId, "");
                             }
                             item.InteractingUser = 0;
                         }
                         else
                         {
-                            roomUserByHabbo2.UnlockWalking();
+                            roomUserTarget.UnlockWalking();
                             item.InteractingUser = 0;
                         }
                     }
-                    else if (roomUserByHabbo2.Coordinate == item.SquareInFront)
+                    else if (roomUserTarget.Coordinate == item.SquareInFront)
                     {
-                        roomUserByHabbo2.AllowOverride = true;
+                        roomUserTarget.AllowOverride = true;
                         keepDoorOpen = true;
 
-                        roomUserByHabbo2.CanWalk = false;
-                        roomUserByHabbo2.AllowOverride = true;
-                        roomUserByHabbo2.MoveTo(item.Coordinate.X, item.Coordinate.Y, true);
+                        roomUserTarget.CanWalk = false;
+                        roomUserTarget.AllowOverride = true;
+                        roomUserTarget.MoveTo(item.Coordinate.X, item.Coordinate.Y, true);
                     }
                     else
                     {
@@ -172,12 +172,12 @@ namespace Butterfly.Game.Items.Interactors
 
             if (item.InteractingUser2 > 0)
             {
-                RoomUser roomUserByHabbo2 = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser2);
-                if (roomUserByHabbo2 != null)
+                RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser2);
+                if (roomUserTarget != null)
                 {
                     keepDoorOpen = true;
-                    roomUserByHabbo2.UnlockWalking();
-                    roomUserByHabbo2.MoveTo(item.SquareInFront);
+                    roomUserTarget.UnlockWalking();
+                    roomUserTarget.MoveTo(item.SquareInFront);
                 }
                 item.UpdateCounter = 1;
                 item.InteractingUser2 = 0;

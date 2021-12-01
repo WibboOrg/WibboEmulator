@@ -11,17 +11,9 @@ namespace Butterfly.Game.Items.Wired.Actions
     {
         public TeamJoin(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM)
         {
-        }
-
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
-
             this.IntParams.Add((int)TeamType.red);
         }
+
         public override bool OnCycle(RoomUser user, Item item)
         {
             if (user != null && !user.IsBot && user.GetClient() != null && user.Room != null)
@@ -57,6 +49,8 @@ namespace Butterfly.Game.Items.Wired.Actions
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             if (int.TryParse(row["delay"].ToString(), out int delay))
 	            this.Delay = delay;
                 

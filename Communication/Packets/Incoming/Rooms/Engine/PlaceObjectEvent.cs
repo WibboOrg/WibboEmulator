@@ -126,19 +126,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     {
                         if (item.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
                         {
-                            ItemExtrabox.OpenExtrabox(session, item, room);
+                            ItemLotBox.OpenExtrabox(session, item, room);
                         }
                         else if (item.GetBaseItem().InteractionType == InteractionType.DELUXEBOX)
                         {
-                            ItemExtrabox.OpenDeluxeBox(session, item, room);
+                            ItemLotBox.OpenDeluxeBox(session, item, room);
                         }
                         else if (item.GetBaseItem().InteractionType == InteractionType.LEGENDBOX)
                         {
-                            ItemExtrabox.OpenLegendBox(session, item, room);
+                            ItemLotBox.OpenLegendBox(session, item, room);
                         }
                         else if (item.GetBaseItem().InteractionType == InteractionType.BADGEBOX)
                         {
-                            ItemExtrabox.OpenBadgeBox(session, item, room);
+                            ItemLotBox.OpenBadgeBox(session, item, room);
                         }
                     }
 

@@ -60,16 +60,6 @@ namespace Butterfly.Game.Items.Wired.Actions
             base.Handle(user, item);
         }
 
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
-
-            this.Delay = 1;
-        }
-
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
             WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);

@@ -12,6 +12,8 @@ namespace Butterfly.Game.Items.Wired.Actions
     {
         public MoveRotate(Item item, Room room) : base(item, room, (int)WiredActionType.MOVE_FURNI)
         {
+            this.IntParams.Add(0);
+            this.IntParams.Add(0);
         }
 
         public override bool OnCycle(RoomUser user, Item item)
@@ -22,17 +24,6 @@ namespace Butterfly.Game.Items.Wired.Actions
             }
 
             return false;
-        }
-
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
-
-            this.IntParams.Add(0);
-            this.IntParams.Add(0);
         }
 
         private void HandleMovement(Item item)
@@ -83,6 +74,8 @@ namespace Butterfly.Game.Items.Wired.Actions
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             int delay;
             if (int.TryParse(row["delay"].ToString(), out delay))
 	            this.Delay = delay;

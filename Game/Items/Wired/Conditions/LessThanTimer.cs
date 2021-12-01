@@ -10,15 +10,6 @@ namespace Butterfly.Game.Items.Wired.Conditions
     {
         public LessThanTimer(Item item, Room room) : base(item, room, (int)WiredConditionType.TIME_ELAPSED_LESS)
         {
-        }
-
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
-
             this.IntParams.Add(0);
         }
 
@@ -39,6 +30,8 @@ namespace Butterfly.Game.Items.Wired.Conditions
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             if (int.TryParse(row["trigger_data"].ToString(), out int timeout))
                 this.IntParams.Add(timeout);
         }

@@ -9,15 +9,6 @@ namespace Butterfly.Game.Items.Wired.Conditions
     {
         public RoomUserNotCount(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_USER_COUNT_IN)
         {
-        }
-
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
-
             this.IntParams.Add(0);
             this.IntParams.Add(0);
         }
@@ -50,6 +41,8 @@ namespace Butterfly.Game.Items.Wired.Conditions
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             string triggerData = row["trigger_data"].ToString();
             if (!triggerData.Contains(":"))
             {

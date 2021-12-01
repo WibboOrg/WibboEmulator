@@ -12,11 +12,11 @@ namespace Butterfly.Game.Items.Wired.Triggers
 
         public UserCollision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION)
         {
-            this.delegateFunction = new RoomEventDelegate(this.userCollisionDelegate);
+            this.delegateFunction = new RoomEventDelegate(this.UserCollisionDelegate);
             this.RoomInstance.GetWiredHandler().GetRoom().OnUserCls += this.delegateFunction;
         }
 
-        private void userCollisionDelegate(object sender, EventArgs e)
+        private void UserCollisionDelegate(object sender, EventArgs e)
         {
             RoomUser user = (RoomUser)sender;
             if (user == null)

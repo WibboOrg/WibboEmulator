@@ -17,14 +17,6 @@ namespace Butterfly.Game.Items.Wired.Actions
             this.currentGameCount = 0;
             this.delegateFunction = new RoomEventDelegate(this.OnGameStart);
             this.RoomInstance.GetGameManager().OnGameStart += this.delegateFunction;
-        }
-
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
 
             this.IntParams.Add(1);
             this.IntParams.Add(1);
@@ -72,6 +64,8 @@ namespace Butterfly.Game.Items.Wired.Actions
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             if (int.TryParse(row["delay"].ToString(), out int delay))
 	            this.Delay = delay;
                 

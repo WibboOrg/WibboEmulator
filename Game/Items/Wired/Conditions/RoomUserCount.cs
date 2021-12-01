@@ -9,18 +9,10 @@ namespace Butterfly.Game.Items.Wired.Conditions
     {
         public RoomUserCount(Item item, Room room) : base(item, room, (int)WiredConditionType.USER_COUNT_IN)
         {
-        }
-
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
-
             this.IntParams.Add(0);
             this.IntParams.Add(0);
         }
+
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
         {
             int minUsers = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
@@ -49,6 +41,8 @@ namespace Butterfly.Game.Items.Wired.Conditions
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             string triggerData = row["trigger_data"].ToString();
             if (!triggerData.Contains(":"))
             {

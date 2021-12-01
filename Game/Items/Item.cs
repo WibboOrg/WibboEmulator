@@ -292,7 +292,7 @@ namespace Butterfly.Game.Items
                     case InteractionType.PUZZLEBOX:
                         return new InteractorPuzzleBox();
                     case InteractionType.FLOORSWITCH1:
-                        return new InteractorSwitch1(this.GetBaseItem().Modes);
+                        return new InteractorSwitch(this.GetBaseItem().Modes);
                     case InteractionType.CRACKABLE:
                         return new InteractorCrackable(this.GetBaseItem().Modes);
                     case InteractionType.TVYOUTUBE:
@@ -672,11 +672,6 @@ namespace Butterfly.Game.Items
 
         public void UpdateState(bool inDb, bool inRoom)
         {
-            if (this.GetRoom() == null)
-            {
-                return;
-            }
-
             if (inDb)
             {
                 this.GetRoom().GetRoomItemHandler().UpdateItem(this);

@@ -705,7 +705,7 @@
     <Compile Include="Game\Guilds\GroupType.cs" />
     <Compile Include="Game\Items\Interactors\InteractorBanzaiTele.cs" />
     <Compile Include="Game\Items\Interactors\InteractorFreezeBlock.cs" />
-    <Compile Include="Game\Items\ItemExtrabox.cs" />
+    <Compile Include="Game\Items\ItemLotBox.cs" />
     <Compile Include="Game\Items\ItemFactory.cs" />
     <Compile Include="Game\Items\ItemTemp.cs" />
     <Compile Include="Game\Moderation\BanTypeUtility.cs" />
@@ -971,7 +971,7 @@
     <Compile Include="Game\Items\Interactors\InteractorBlob.cs" />
     <Compile Include="Game\Items\Interactors\InteractorCrackable.cs" />
     <Compile Include="Game\Items\Interactors\InteractorTvYoutube.cs" />
-    <Compile Include="Game\Items\Interactors\InteractorSwitch1.cs" />
+    <Compile Include="Game\Items\Interactors\InteractorSwitch.cs" />
     <Compile Include="Game\Items\Interactors\InteractorVendorEnable.cs" />
     <Compile Include="Game\Rooms\Jankens\JankenManager.cs" />
     <Compile Include="Game\Rooms\Jankens\Janken.cs" />

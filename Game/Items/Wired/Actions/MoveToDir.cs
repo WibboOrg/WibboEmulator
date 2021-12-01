@@ -16,6 +16,9 @@ namespace Butterfly.Game.Items.Wired.Actions
         public MoveToDir(Item item, Room room) : base(item, room, (int)WiredActionType.MOVE_TO_DIRECTION)
         {
             this.MoveToDirMovement = MovementDirection.none;
+
+            this.IntParams.Add(0);
+            this.IntParams.Add(0);
         }
 
         public override bool OnCycle(RoomUser user, Item item)
@@ -35,12 +38,6 @@ namespace Butterfly.Game.Items.Wired.Actions
             MovementDirection startDirection = (MovementDirection)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
             this.MoveToDirMovement = startDirection;
-
-            if (inDatabase)
-                return;
-
-            this.IntParams.Add(0);
-            this.IntParams.Add(0);
         }
 
         private void HandleMovement(Item item)
@@ -1259,6 +1256,8 @@ namespace Butterfly.Game.Items.Wired.Actions
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             if (int.TryParse(row["delay"].ToString(), out int delay))
 	            this.Delay = delay;
                 

@@ -20,8 +20,8 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            string pName = Session.GetHabbo().Username;
-            RoomUser roomUserByHabbo = Item.GetRoom().GetRoomUserManager().GetRoomUserByName(pName);
+            string name = Session.GetHabbo().Username;
+            RoomUser roomUserByHabbo = Item.GetRoom().GetRoomUserManager().GetRoomUserByName(name);
             if (roomUserByHabbo == null || roomUserByHabbo.CountFreezeBall == 0 || roomUserByHabbo.Freezed)
             {
                 return;

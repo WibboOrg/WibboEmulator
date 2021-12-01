@@ -15,6 +15,10 @@ namespace Butterfly.Game.Items.Wired.Conditions
         public FurniStatePosMatchNegative(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_STATES_MATCH)
         {
             this.ItemsData = new Dictionary<int, ItemsPosReset>();
+
+            this.IntParams.Add(0);
+            this.IntParams.Add(0);
+            this.IntParams.Add(0);
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
@@ -70,9 +74,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
             if(inDatabase)
                 return;
 
-            this.IntParams.Add(0);
-            this.IntParams.Add(0);
-            this.IntParams.Add(0);
+            this.ItemsData.Clear();
 
             foreach (Item roomItem in this.Items)
             {
@@ -111,6 +113,8 @@ namespace Butterfly.Game.Items.Wired.Conditions
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             if (int.TryParse(row["trigger_data"].ToString(), out int delay))
                 this.Delay = delay;
 

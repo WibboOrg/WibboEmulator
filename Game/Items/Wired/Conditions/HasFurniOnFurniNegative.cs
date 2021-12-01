@@ -10,6 +10,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
     {
         public HasFurniOnFurniNegative(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_HAS_STACKED_FURNIS)
         {
+            this.IntParams.Add(1);
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
@@ -39,17 +40,6 @@ namespace Butterfly.Game.Items.Wired.Conditions
             return requireAll;
         }
 
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems(inDatabase);
-
-            if (inDatabase)
-                return;
-
-            if(this.IntParams.Count == 0)
-                this.IntParams.Add(1);
-        }
-
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
             int requireAll = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
@@ -58,6 +48,8 @@ namespace Butterfly.Game.Items.Wired.Conditions
 
         public void LoadFromDatabase(DataRow row)
         {
+            this.IntParams.Clear();
+
             if (int.TryParse(row["trigger_data"].ToString(), out int requireAll))
                 this.IntParams.Add(requireAll);
 

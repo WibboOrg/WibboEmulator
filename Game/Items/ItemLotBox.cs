@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Butterfly.Game.Items
 {
-    internal static class ItemExtrabox
+    internal static class ItemLotBox
     {
         public static void OpenExtrabox(Client Session, Item Present, Room Room)
         {
