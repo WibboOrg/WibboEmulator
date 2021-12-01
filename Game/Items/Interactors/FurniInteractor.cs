@@ -8,7 +8,7 @@ namespace Butterfly.Game.Items.Interactors
 
         public abstract void OnRemove(Client Session, Item Item);
 
-        public abstract void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights);
+        public abstract void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse);
 
         public abstract void OnTick(Item item);
     }

@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 UserHasRights = true;
             }
 
-            roomItem.Interactor.OnTrigger(Session, roomItem, -1, UserHasRights);
+            roomItem.Interactor.OnTrigger(Session, roomItem, -1, UserHasRights, false);
             roomItem.OnTrigger(room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id));
         }
     }

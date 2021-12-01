@@ -15,7 +15,7 @@ namespace Butterfly.Game.Items.Interactors
             Item.ExtraData = "0";
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (!(Item.ExtraData != "-1"))
             {

@@ -25,7 +25,7 @@ namespace Butterfly.Game.Items.Interactors
         {
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (!UserHasRights || this.Modes == 0)
             {

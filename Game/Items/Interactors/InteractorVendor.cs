@@ -28,7 +28,7 @@ namespace Butterfly.Game.Items.Interactors
             Item.InteractingUser = 0;
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (!(Item.ExtraData != "1") || Item.GetBaseItem().VendingIds.Count < 1 || (Item.InteractingUser != 0 || Session == null || Session.GetHabbo() == null))
             {

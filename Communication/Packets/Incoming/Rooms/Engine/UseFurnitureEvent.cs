@@ -84,7 +84,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int Request = Packet.PopInt();
 
-            RoomItem.Interactor.OnTrigger(Session, RoomItem, Request, UserHasRights);
+            RoomItem.Interactor.OnTrigger(Session, RoomItem, Request, UserHasRights, false);
             RoomItem.OnTrigger(room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id));
         }
     }

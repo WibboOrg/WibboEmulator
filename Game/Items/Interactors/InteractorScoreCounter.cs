@@ -20,7 +20,7 @@ namespace Butterfly.Game.Items.Interactors
         {
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (!UserHasRights)
             {
@@ -30,13 +30,7 @@ namespace Butterfly.Game.Items.Interactors
             int num = 0;
             if (!string.IsNullOrEmpty(Item.ExtraData))
             {
-                try
-                {
-                    num = int.Parse(Item.ExtraData);
-                }
-                catch
-                {
-                }
+                int.TryParse(Item.ExtraData, out num);
             }
 
             if (Request == 1)

@@ -119,7 +119,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     if (session.GetHabbo().ForceUse > -1)
                     {
-                        item.Interactor.OnTrigger(session, item, 0, true);
+                        item.Interactor.OnTrigger(session, item, 0, true, false);
                     }
 
                     if (session.GetHabbo().ForceOpenGift)

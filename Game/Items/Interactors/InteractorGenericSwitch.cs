@@ -90,7 +90,7 @@ namespace Butterfly.Game.Items.Interactors
             }
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (Session != null)
             {
@@ -102,30 +102,35 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            int NumMode;
+            int state;
             if (Item.GetBaseItem().InteractionType == InteractionType.GUILD_ITEM || Item.GetBaseItem().InteractionType == InteractionType.GUILD_GATE)
             {
-                int.TryParse(Item.ExtraData.Split(';')[0], out NumMode);
+                int.TryParse(Item.ExtraData.Split(';')[0], out state);
             }
             else
             {
-                int.TryParse(Item.ExtraData, out NumMode);
+                int.TryParse(Item.ExtraData, out state);
             }
 
-            int num2 = (NumMode > 0) ? (NumMode < this.Modes) ? NumMode + 1 : 0 : 1;
+            int newState;
+
+            if (Reverse)
+                newState = (state > 0 ? state - 1 : this.Modes);
+            else
+                newState = (state < this.Modes ? state + 1 : 0);
 
             if (Session != null && Session.GetHabbo() != null && Session.GetHabbo().ForceUse > -1)
             {
-                num2 = (Session.GetHabbo().ForceUse <= this.Modes) ? Session.GetHabbo().ForceUse : 0;
+                newState = (Session.GetHabbo().ForceUse <= this.Modes) ? Session.GetHabbo().ForceUse : 0;
             }
 
             if (Item.GetBaseItem().InteractionType == InteractionType.GUILD_ITEM || Item.GetBaseItem().InteractionType == InteractionType.GUILD_GATE)
             {
-                Item.ExtraData = num2.ToString() + ";" + Item.GroupId;
+                Item.ExtraData = newState.ToString() + ";" + Item.GroupId;
             }
             else
             {
-                Item.ExtraData = num2.ToString();
+                Item.ExtraData = newState.ToString();
             }
 
             Item.UpdateState();

@@ -12,7 +12,7 @@ namespace Butterfly.Game.Items.Interactors
         {
         }
 
-        public override void OnTrigger(Client Session, Item Ball, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Ball, int Request, bool UserHasRights, bool Reverse)
         {
         }
 

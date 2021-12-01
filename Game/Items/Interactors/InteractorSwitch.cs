@@ -35,7 +35,7 @@ namespace Butterfly.Game.Items.Interactors
             }
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (Session != null)
             {
@@ -65,8 +65,11 @@ namespace Butterfly.Game.Items.Interactors
 
             int.TryParse(Item.ExtraData, out int state);
 
-            int num2 = state > 0 ? (state < this.Modes ? state + 1 : 0) : 1;
-            Item.ExtraData = num2.ToString();
+            if(Reverse)
+                Item.ExtraData = (state > 0 ? state - 1 : this.Modes).ToString();
+            else
+                Item.ExtraData = (state < this.Modes ? state + 1 : 0).ToString();
+
             Item.UpdateState();
         }
 

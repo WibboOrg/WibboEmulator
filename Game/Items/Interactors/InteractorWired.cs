@@ -12,7 +12,7 @@ namespace Butterfly.Game.Items.Interactors
         {
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights)
+        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (Session == null || Item == null || !UserHasRights)
             {
@@ -23,10 +23,16 @@ namespace Butterfly.Game.Items.Interactors
             {
                 Item.WiredHandler.OnTrigger(Session);
             }
+
+            Item.ExtraData = "1";
+            Item.UpdateState();
+            Item.ReqUpdate(4);
         }
 
         public override void OnTick(Item item)
         {
+            item.ExtraData = "0";
+            item.UpdateState();
         }
     }
 }
