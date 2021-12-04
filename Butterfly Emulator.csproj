@@ -698,6 +698,7 @@
     <Compile Include="Game\Catalog\Vouchers\VoucherType.cs" />
     <Compile Include="Game\Catalog\Vouchers\VoucherUtility.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\ForceSit.cs" />
+    <Compile Include="Game\Chat\Commands\Staff\Administration\GiveCash.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\RoomDance.cs" />
     <Compile Include="Game\Chat\Commands\User\Dance.cs" />
     <Compile Include="Game\Guilds\BadgePartUtility.cs" />
@@ -1184,10 +1185,12 @@
     <Compile Include="Utility\UnixTimestamp.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bin\Configuration\figuredata.xml" />
     <Content Include="w.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="bin\Configuration\settings.ini" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.1">
@@ -1210,7 +1213,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="bin\Configuration\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
