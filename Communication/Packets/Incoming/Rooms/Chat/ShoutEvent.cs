@@ -187,7 +187,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
             }
 
-            if (!Session.GetHabbo().HasFuse("word_filter_override"))
+            if (!Session.GetHabbo().HasFuse("fuse_word_filter_override"))
             {
                 Message = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
             }
