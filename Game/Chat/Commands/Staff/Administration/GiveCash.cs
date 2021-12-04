@@ -56,7 +56,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             int Amount;
                             if (int.TryParse(Params[3], out Amount))
                             {
-                                TargetUser.GetHabbo().Credits = TargetUser.GetHabbo().Credits += Amount;
+                                TargetUser.GetHabbo().WibboPoints = TargetUser.GetHabbo().WibboPoints += Amount;
                                 TargetUser.SendPacket(new HabboActivityPointNotificationComposer(TargetUser.GetHabbo().WibboPoints, Amount, 5));
 
                                 if (TargetUser.GetHabbo().Id != Session.GetHabbo().Id)

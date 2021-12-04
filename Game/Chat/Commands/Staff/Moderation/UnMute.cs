@@ -20,7 +20,6 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 habboByUsername.SpamProtectionTime = 10;
                 habboByUsername.SpamEnable = true;
             }
-
         }
     }
 }
