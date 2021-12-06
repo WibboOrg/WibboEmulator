@@ -356,7 +356,6 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(193, new KickBan());
             this.Register(159, new SuperBot());
             this.Register(202, new ForceSit());
-
         }
 
         public void RegisterGod()

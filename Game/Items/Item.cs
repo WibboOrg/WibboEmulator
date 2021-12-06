@@ -236,8 +236,6 @@ namespace Butterfly.Game.Items
                     case InteractionType.ACTION_MOVE_ROTATE:
                     case InteractionType.ACTION_RESET_TIMER:
                     case InteractionType.ACTIONSHOWMESSAGE:
-                    case InteractionType.HIGHSCORE:
-                    case InteractionType.HIGHSCOREPOINTS:
                     case InteractionType.ACTION_GIVE_REWARD:
                     case InteractionType.ACTION_SUPER_WIRED:
                     case InteractionType.CONDITION_SUPER_WIRED:
@@ -303,6 +301,9 @@ namespace Butterfly.Game.Items
                         return new InteractorIgnore();
                     case InteractionType.BANZAITELE:
                         return new InteractorBanzaiTele();
+                    case InteractionType.HIGHSCORE:
+                    case InteractionType.HIGHSCOREPOINTS:
+                        return new InteractorGenericSwitch(2);
                     default:
                         return new InteractorGenericSwitch(this.GetBaseItem().Modes);
                 }
