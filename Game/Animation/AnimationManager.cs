@@ -202,7 +202,7 @@ namespace Butterfly.Game.Animation
             room.RoomData.State = 0;
             room.CloseFullRoom = true;
 
-            string alertMessage = "[center] [size=large]🤖[b]Animation Jack & Daisy[/b] 🤖[/size][/center]" +
+            /*string alertMessage = "[center] [size=large]🤖[b]Animation Jack & Daisy[/b] 🤖[/size][/center]" +
                 "[br]" +
                 "[center][i]Beep beep, c'est l'heure d'une animation automatisée ![/i][/center]" +
                 "[br]" +
@@ -210,14 +210,22 @@ namespace Butterfly.Game.Animation
                 "[br][br]" +
                 "➤ Rends-toi dans l'appartement et tente de remporter un lot composé de [i]une ou plusieurs RareBox(s) et BadgeBox(s) ainsi qu'un point au TOP Gamer ! [/i] 🎁" +
                 "[br][br]" +
-                "- Jack et Daisy";
+                "- Jack et Daisy";*/
+
+            string alertMessageChristmas = "[center] [size=large]🎅[b]Joyeux Noël avec Jack & Daisy [/b] 🤶[/size][br][br]🎁 [i]Beep beep, c'est Noël avec Jack & Daisy ![/i]🎁 [/center]" +
+                "[br]" +
+                "➤ Viens fêter Noël chez [b]WibboGame[/b] pour un jeu qui s'intitule [b]" + room.RoomData.Name + "[/b]" +
+                "[br][br]" +
+                "➤ Rends-toi dans l'appartement et tente de remporter un lot composé de [i]une ou plusieurs RareBox(s) et BadgeBox(s) ainsi qu'un point au TOP Gamer ! [/i] 🎁🎄" +
+                "[br][br]" +
+                "- Jack et Daisy 🎅";
 
             ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, "WibboGame", room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
             
             ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer(
                 "gameauto", 
                 "Message d'animation",
-                alertMessage, 
+                alertMessageChristmas, 
                 "Je veux y jouer !",
                 room.Id,
                 ""
