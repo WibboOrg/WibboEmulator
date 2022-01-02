@@ -11,6 +11,12 @@
                     return NavigatorCategoryType.CATEGORY;
                 case "featured":
                     return NavigatorCategoryType.FEATURED;
+                case "featured_new":
+                    return NavigatorCategoryType.FEATURED_NEW;
+                case "featured_help_security":
+                    return NavigatorCategoryType.FEATURED_HELP_SECURITY;
+                case "featured_RUN":
+                    return NavigatorCategoryType.FEATURED_RUN;
                 case "featured_game":
                     return NavigatorCategoryType.FEATURED_GAME;
                 case "popular":

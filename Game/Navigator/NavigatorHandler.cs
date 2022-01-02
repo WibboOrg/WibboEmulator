@@ -121,6 +121,10 @@ namespace Butterfly.Game.Navigator
                     }
 
                 case NavigatorCategoryType.FEATURED:
+                case NavigatorCategoryType.FEATURED_GAME:
+                case NavigatorCategoryType.FEATURED_NEW:
+                case NavigatorCategoryType.FEATURED_HELP_SECURITY:
+                case NavigatorCategoryType.FEATURED_RUN:
                     #region Featured
                     List<RoomData> Rooms = new List<RoomData>();
                     ICollection<FeaturedRoom> Featured = ButterflyEnvironment.GetGame().GetNavigator().GetFeaturedRooms(Session.Langue);
@@ -131,7 +135,7 @@ namespace Butterfly.Game.Navigator
                             continue;
                         }
 
-                        if (FeaturedItem.Game)
+                        if (FeaturedItem.CategoryType != SearchResult.CategoryType)
                         {
                             continue;
                         }
@@ -150,42 +154,6 @@ namespace Butterfly.Game.Navigator
 
                     Message.WriteInteger(Rooms.Count);
                     foreach (RoomData Data in Rooms.ToList())
-                    {
-                        RoomAppender.WriteRoom(Message, Data);
-                    }
-                    #endregion
-                    break;
-
-                case NavigatorCategoryType.FEATURED_GAME:
-                    #region Featured
-                    List<RoomData> GameRooms = new List<RoomData>();
-                    ICollection<FeaturedRoom> FeaturedGame = ButterflyEnvironment.GetGame().GetNavigator().GetFeaturedRooms(Session.Langue);
-                    foreach (FeaturedRoom FeaturedItem in FeaturedGame.ToList())
-                    {
-                        if (FeaturedItem == null)
-                        {
-                            continue;
-                        }
-
-                        if (!FeaturedItem.Game)
-                        {
-                            continue;
-                        }
-
-                        RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(FeaturedItem.RoomId);
-                        if (Data == null)
-                        {
-                            continue;
-                        }
-
-                        if (!GameRooms.Contains(Data))
-                        {
-                            GameRooms.Add(Data);
-                        }
-                    }
-
-                    Message.WriteInteger(GameRooms.Count);
-                    foreach (RoomData Data in GameRooms.ToList())
                     {
                         RoomAppender.WriteRoom(Message, Data);
                     }

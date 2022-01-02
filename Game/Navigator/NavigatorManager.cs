@@ -70,7 +70,7 @@ namespace Butterfly.Game.Navigator
                         {
                             if (!this._featuredRooms.ContainsKey(Convert.ToInt32(Row["room_id"])))
                             {
-                                this._featuredRooms.Add(Convert.ToInt32(Row["room_id"]), new FeaturedRoom(Convert.ToInt32(Row["room_id"]), Convert.ToString(Row["image_url"]), LanguageManager.ParseLanguage(Convert.ToString(Row["langue"])), Convert.ToInt32(Row["game"]) == 1));
+                                this._featuredRooms.Add(Convert.ToInt32(Row["room_id"]), new FeaturedRoom(Convert.ToInt32(Row["room_id"]), Convert.ToString(Row["image_url"]), LanguageManager.ParseLanguage(Convert.ToString(Row["langue"])), (string)Row["category_type"]));
                             }
                         }
                     }
