@@ -12,7 +12,6 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             string UpdateVal = Params[2];
             switch (UpdateVal.ToLower())
-
             {
                 case "coins":
                 case "credits":
@@ -27,11 +26,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             int Amount;
                             if (int.TryParse(Params[3], out Amount))
                             {
-                                TargetUser.GetHabbo().Credits = TargetUser.GetHabbo().Credits += Amount;
+                                TargetUser.GetHabbo().Credits += Amount;
                                 TargetUser.SendPacket(new CreditBalanceComposer(TargetUser.GetHabbo().Credits));
 
                                 if (TargetUser.GetHabbo().Id != Session.GetHabbo().Id)
                                     TargetUser.SendNotification(Session.GetHabbo().Username + " t'a donné  " + Amount.ToString() + " crédit(s)!");
+
                                 UserRoom.SendWhisperChat("Tu as donné " + Amount + " crédit(s) à " + TargetUser.GetHabbo().Username + "!");
                                 break;
                             }
@@ -56,8 +56,8 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             int Amount;
                             if (int.TryParse(Params[3], out Amount))
                             {
-                                TargetUser.GetHabbo().WibboPoints = TargetUser.GetHabbo().WibboPoints += Amount;
-                                TargetUser.SendPacket(new HabboActivityPointNotificationComposer(TargetUser.GetHabbo().WibboPoints, Amount, 5));
+                                TargetUser.GetHabbo().WibboPoints += Amount;
+                                TargetUser.SendPacket(new HabboActivityPointNotificationComposer(TargetUser.GetHabbo().WibboPoints, 0, 105));
 
                                 if (TargetUser.GetHabbo().Id != Session.GetHabbo().Id)
                                     TargetUser.SendNotification(Session.GetHabbo().Username + " t'a donné " + Amount.ToString() + " WibboPoint(s)!");

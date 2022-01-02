@@ -17,7 +17,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 foreach (Client Client in Staffs)
                 {
                     if (Client != null && Client.GetHabbo() != null)
-                        Output += Client.GetHabbo().Username + "\n";
+                        Output += $"{Client.GetHabbo().Username} (Rank: {Client.GetHabbo().Rank})\n";
                 }
             }
             else

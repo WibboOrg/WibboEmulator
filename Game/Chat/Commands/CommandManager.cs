@@ -314,7 +314,6 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(115, new EventAlert());
             this.Register(170, new Insignia());
             this.Register(198, new StaffsOnline());
-
         }
 
         public void RegisterAdministrator()
