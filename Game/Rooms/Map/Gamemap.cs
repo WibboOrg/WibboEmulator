@@ -75,7 +75,7 @@ namespace Butterfly.Game.Rooms
         {
             if (user.Room != null)
             {
-                user.Room.SendPacket(user.Room.GetRoomItemHandler().TeleportUser(user, item.Coordinate, 0, item.Z)); //user.mRoom.GetGameMap().SqAbsoluteHeight(item.GetX, item.GetY)
+                user.Room.SendPacket(user.Room.GetRoomItemHandler().TeleportUser(user, item.Coordinate, 0, item.Z, true));
             }
 
             item.GetRoom().GetRoomUserManager().UpdateUserStatus(user, false);
@@ -814,6 +814,7 @@ namespace Butterfly.Game.Rooms
                     }
                 }
             }
+
             if (Width > 1)
             {
                 if (Rotation == 0 || Rotation == 4)

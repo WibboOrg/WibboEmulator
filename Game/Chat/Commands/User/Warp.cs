@@ -38,7 +38,6 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             room.SendPacket(room.GetRoomItemHandler().TeleportUser(roomUserByHabbo, roomUserByHabbo2.Coordinate, 0, room.GetGameMap().SqAbsoluteHeight(roomUserByHabbo2.X, roomUserByHabbo2.Y)));
             //room.GetRoomUserManager().UpdateUserStatus(roomUserByHabbo, false);
-
         }
     }
 }

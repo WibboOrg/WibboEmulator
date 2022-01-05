@@ -492,18 +492,18 @@ namespace Butterfly.Game.Rooms
             return serverMessage;
         }
 
-        public ServerPacket TeleportUser(RoomUser user, Point nextCoord, int rollerID, double nextZ)
+        public ServerPacket TeleportUser(RoomUser user, Point nextCoord, int rollerID, double nextZ, bool noAnimation = false)
         {
             ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
-            serverMessage.WriteInteger(user.X);
-            serverMessage.WriteInteger(user.Y);
+            serverMessage.WriteInteger(noAnimation ? nextCoord.X : user.X);
+            serverMessage.WriteInteger(noAnimation ? nextCoord.Y: user.Y);
             serverMessage.WriteInteger(nextCoord.X);
             serverMessage.WriteInteger(nextCoord.Y);
             serverMessage.WriteInteger(0);
             serverMessage.WriteInteger(rollerID);
             serverMessage.WriteInteger(2);
             serverMessage.WriteInteger(user.VirtualId);
-            serverMessage.WriteString(user.Z.ToString());
+            serverMessage.WriteString(noAnimation ? nextZ.ToString() : user.Z.ToString());;
             serverMessage.WriteString(nextZ.ToString());
 
             user.SetPos(nextCoord.X, nextCoord.Y, nextZ);

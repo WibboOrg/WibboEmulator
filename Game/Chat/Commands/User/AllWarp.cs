@@ -30,7 +30,6 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             room.SendMessage(MessageList);
-
         }
     }
 }

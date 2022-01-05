@@ -53,7 +53,6 @@ namespace Butterfly.Game.Items.Wired.Actions
                 this.Delay = delay;
 
             this.StringParam = row["trigger_data"].ToString();
-
         }
     }
 }
