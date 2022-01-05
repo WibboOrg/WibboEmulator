@@ -2,12 +2,13 @@
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Items.Wired.Interfaces;
 using System.Data;
+using System.Drawing;
 
 namespace Butterfly.Game.Items.Wired.Actions
 {
     public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
     {
-        public ExecutePile(Item item, Room room) : base(item, room, (int)WiredActionType.TOGGLE_FURNI_STATE)
+        public ExecutePile(Item item, Room room) : base(item, room, (int)WiredActionType.CALL_ANOTHER_STACK)
         {
             
         }
@@ -16,9 +17,12 @@ namespace Butterfly.Game.Items.Wired.Actions
         {
             foreach (Item roomItem in this.Items)
             {
-                if (roomItem.Coordinate != this.ItemInstance.Coordinate)
+                foreach (Point Coord in roomItem.GetCoords)
                 {
-                    this.RoomInstance.GetWiredHandler().ExecutePile(roomItem.Coordinate, user, item);
+                    if (Coord != this.ItemInstance.Coordinate)
+                    {
+                        this.RoomInstance.GetWiredHandler().ExecutePile(Coord, user, item);
+                    }
                 }
             }
 
