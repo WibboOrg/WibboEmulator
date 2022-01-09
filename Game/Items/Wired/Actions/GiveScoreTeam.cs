@@ -20,7 +20,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 
             this.IntParams.Add(1);
             this.IntParams.Add(1);
-            this.IntParams.Add((int)TeamType.red);
+            this.IntParams.Add((int)TeamType.RED);
         }
 
         private void OnGameStart(object sender, EventArgs e)

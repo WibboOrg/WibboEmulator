@@ -9,18 +9,18 @@ namespace Butterfly.Game.Chat.Logs
 {
     public class ChatlogManager
     {
-        private readonly List<ChatlogEntry> listOfMessages;
+        private readonly List<ChatlogEntry> _listOfMessages;
 
-        public int MessageCount => this.listOfMessages.Count;
+        public int MessageCount => this._listOfMessages.Count;
 
         public ChatlogManager()
         {
-            this.listOfMessages = new List<ChatlogEntry>();
+            this._listOfMessages = new List<ChatlogEntry>();
         }
 
-        public void LoadUserChatlogs(IQueryAdapter dbClient, int UserId)
+        public void LoadUserChatlogs(IQueryAdapter dbClient, int userId)
         {
-            DataTable table = LogChatDao.GetAllByUserId(dbClient, UserId);
+            DataTable table = LogChatDao.GetAllByUserId(dbClient, userId);
             if (table == null)
             {
                 return;
@@ -32,12 +32,12 @@ namespace Butterfly.Game.Chat.Logs
             }
         }
 
-        public void LoadRoomChatlogs(int RoomId)
+        public void LoadRoomChatlogs(int roomId)
         {
             DataTable table;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                table = LogChatDao.GetAllByRoomId(dbClient, RoomId);
+                table = LogChatDao.GetAllByRoomId(dbClient, roomId);
                 if (table == null)
                 {
                     return;
@@ -54,15 +54,15 @@ namespace Butterfly.Game.Chat.Logs
         {
             ChatlogEntry message = new ChatlogEntry(UserId, Username, RoomId, MessageText, DateTime.Now);
 
-            lock (this.listOfMessages)
+            lock (this._listOfMessages)
             {
-                this.listOfMessages.Add(message);
+                this._listOfMessages.Add(message);
             }
 
-            int CountMessage = this.listOfMessages.Count;
+            int CountMessage = this._listOfMessages.Count;
             if (CountMessage >= 100)
             {
-                this.listOfMessages.RemoveRange(0, 1);
+                this._listOfMessages.RemoveRange(0, 1);
             }
         }
 
@@ -70,7 +70,7 @@ namespace Butterfly.Game.Chat.Logs
         {
             List<ChatlogEntry> list = new List<ChatlogEntry>();
 
-            foreach (ChatlogEntry chatMessage in this.listOfMessages)
+            foreach (ChatlogEntry chatMessage in this._listOfMessages)
             {
                 if (roomid == chatMessage.roomID || roomid == 0)
                 {
@@ -86,7 +86,7 @@ namespace Butterfly.Game.Chat.Logs
         public void Serialize(ref ServerPacket message)
         {
             List<ChatlogEntry> ListReverse = new List<ChatlogEntry>();
-            ListReverse.AddRange(this.listOfMessages);
+            ListReverse.AddRange(this._listOfMessages);
             ListReverse.Reverse();
             foreach (ChatlogEntry chatMessage in ListReverse)
             {

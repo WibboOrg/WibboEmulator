@@ -1960,7 +1960,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     }
                 case "addpointteam":
                     {
-                        if (User.Team == TeamType.none)
+                        if (User.Team == TeamType.NONE)
                         {
                             break;
                         }

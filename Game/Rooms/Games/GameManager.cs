@@ -42,13 +42,13 @@ namespace Butterfly.Game.Rooms.Games
         {
             switch (team)
             {
-                case TeamType.red:
+                case TeamType.RED:
                     return this._redTeamItems;
-                case TeamType.green:
+                case TeamType.GREEN:
                     return this._greenTeamItems;
-                case TeamType.blue:
+                case TeamType.BLUE:
                     return this._blueTeamItems;
-                case TeamType.yellow:
+                case TeamType.YELLOW:
                     return this._yellowTeamItems;
                 default:
                     return new Dictionary<int, Item>();
@@ -112,10 +112,10 @@ namespace Butterfly.Game.Rooms.Games
 
         public void Reset()
         {
-            this.AddPointToTeam(TeamType.blue, this.GetScoreForTeam(TeamType.blue) * -1, null);
-            this.AddPointToTeam(TeamType.green, this.GetScoreForTeam(TeamType.green) * -1, null);
-            this.AddPointToTeam(TeamType.red, this.GetScoreForTeam(TeamType.red) * -1, null);
-            this.AddPointToTeam(TeamType.yellow, this.GetScoreForTeam(TeamType.yellow) * -1, null);
+            this.AddPointToTeam(TeamType.BLUE, this.GetScoreForTeam(TeamType.BLUE) * -1, null);
+            this.AddPointToTeam(TeamType.GREEN, this.GetScoreForTeam(TeamType.GREEN) * -1, null);
+            this.AddPointToTeam(TeamType.RED, this.GetScoreForTeam(TeamType.RED) * -1, null);
+            this.AddPointToTeam(TeamType.YELLOW, this.GetScoreForTeam(TeamType.YELLOW) * -1, null);
         }
 
         private int GetScoreForTeam(TeamType team)
@@ -127,13 +127,13 @@ namespace Butterfly.Game.Rooms.Games
         {
             switch (team)
             {
-                case TeamType.red:
+                case TeamType.RED:
                     return this._redTeamItems;
-                case TeamType.green:
+                case TeamType.GREEN:
                     return this._greenTeamItems;
-                case TeamType.blue:
+                case TeamType.BLUE:
                     return this._blueTeamItems;
-                case TeamType.yellow:
+                case TeamType.YELLOW:
                     return this._yellowTeamItems;
                 default:
                     return new Dictionary<int, Item>();
@@ -175,28 +175,28 @@ namespace Butterfly.Game.Rooms.Games
         {
             switch (team)
             {
-                case TeamType.red:
+                case TeamType.RED:
                     if (!this._redTeamItems.ContainsKey(item.Id))
                     {
                         this._redTeamItems.Add(item.Id, item);
                     }
 
                     break;
-                case TeamType.green:
+                case TeamType.GREEN:
                     if (!this._greenTeamItems.ContainsKey(item.Id))
                     {
                         this._greenTeamItems.Add(item.Id, item);
                     }
 
                     break;
-                case TeamType.blue:
+                case TeamType.BLUE:
                     if (!this._blueTeamItems.ContainsKey(item.Id))
                     {
                         this._blueTeamItems.Add(item.Id, item);
                     }
 
                     break;
-                case TeamType.yellow:
+                case TeamType.YELLOW:
                     if (!this._yellowTeamItems.ContainsKey(item.Id))
                     {
                         this._yellowTeamItems.Add(item.Id, item);
@@ -210,16 +210,16 @@ namespace Butterfly.Game.Rooms.Games
         {
             switch (team)
             {
-                case TeamType.red:
+                case TeamType.RED:
                     this._redTeamItems.Remove(item.Id);
                     break;
-                case TeamType.green:
+                case TeamType.GREEN:
                     this._greenTeamItems.Remove(item.Id);
                     break;
-                case TeamType.blue:
+                case TeamType.BLUE:
                     this._blueTeamItems.Remove(item.Id);
                     break;
-                case TeamType.yellow:
+                case TeamType.YELLOW:
                     this._yellowTeamItems.Remove(item.Id);
                     break;
             }

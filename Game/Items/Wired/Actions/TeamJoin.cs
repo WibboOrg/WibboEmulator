@@ -11,7 +11,7 @@ namespace Butterfly.Game.Items.Wired.Actions
     {
         public TeamJoin(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM)
         {
-            this.IntParams.Add((int)TeamType.red);
+            this.IntParams.Add((int)TeamType.RED);
         }
 
         public override bool OnCycle(RoomUser user, Item item)
@@ -20,7 +20,7 @@ namespace Butterfly.Game.Items.Wired.Actions
             {
                 TeamManager managerForFreeze = user.Room.GetTeamManager();
 
-                if (user.Team != TeamType.none)
+                if (user.Team != TeamType.NONE)
                 {
                     managerForFreeze.OnUserLeave(user);
                 }

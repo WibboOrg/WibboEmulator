@@ -7,7 +7,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 {
     public class UserMove : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
     {
-        public UserMove(Item item, Room room) : base(item, room, (int)WiredActionType.TOGGLE_FURNI_STATE)
+        public UserMove(Item item, Room room) : base(item, room, (int)WiredActionType.TELEPORT)
         {
         }
 

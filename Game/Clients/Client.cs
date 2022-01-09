@@ -37,11 +37,11 @@ namespace Butterfly.Game.Clients
 
         public int ConnectionID;
 
-        public Client(int ClientId, ConnectionInformation pConnection)
+        public Client(int ClientId, ConnectionInformation connection)
         {
             this.ConnectionID = ClientId;
             this.Langue = Language.FRANCAIS;
-            this._connection = pConnection;
+            this._connection = connection;
             this._packetParser = new GamePacketParser(this);
         }
 

@@ -55,7 +55,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataTable GetAllSearchUsers(IQueryAdapter dbClient, string search)
         {
-            dbClient.SetQuery("SELECT id, username, look FROM `user` WHERE username LIKE @search LIMIT 50");
+            dbClient.SetQuery("SELECT id, username, look FROM `user` WHERE username LIKE @search AND is_banned = '0' LIMIT 50");
             dbClient.AddParameter("search", (search.Replace("%", "\\%").Replace("_", "\\_") + "%"));
             return dbClient.GetTable();
         }

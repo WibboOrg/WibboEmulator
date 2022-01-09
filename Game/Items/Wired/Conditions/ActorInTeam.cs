@@ -10,7 +10,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
     {
         public ActorInTeam(Item item, Room room) : base(item, room, (int)WiredConditionType.ACTOR_IS_IN_TEAM)
         {
-            this.IntParams.Add((int)TeamType.red);
+            this.IntParams.Add((int)TeamType.RED);
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)

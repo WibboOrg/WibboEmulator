@@ -8,19 +8,19 @@ namespace Butterfly.Game.Permissions
 {
     public class PermissionManager
     {
-        private readonly Dictionary<string, int> Rights;
+        private readonly Dictionary<string, int> _rights;
 
         private readonly Dictionary<string, PermissionCommand> _commands = new Dictionary<string, PermissionCommand>();
 
         public PermissionManager()
         {
-            this.Rights = new Dictionary<string, int>();
+            this._rights = new Dictionary<string, int>();
         }
 
         public void Init()
         {
-            this.Rights.Clear();
-            _commands.Clear();
+            this._rights.Clear();
+            this._commands.Clear();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -33,18 +33,18 @@ namespace Butterfly.Game.Permissions
 
                 foreach (DataRow dataRow in table.Rows)
                 {
-                    this.Rights.Add((string)dataRow["fuse"], Convert.ToInt32(dataRow["rank"]));
+                    this._rights.Add((string)dataRow["fuse"], Convert.ToInt32(dataRow["rank"]));
                 }
             }
         }
         public bool RankHasRight(int RankId, string Fuse)
         {
-            if (!this.Rights.ContainsKey(Fuse))
+            if (!this._rights.ContainsKey(Fuse))
             {
                 return false;
             }
 
-            return RankId >= this.Rights[Fuse];
+            return RankId >= this._rights[Fuse];
         }
 
         public bool HasFuse(int Rank, string Fuse)

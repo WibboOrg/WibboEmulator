@@ -12,9 +12,9 @@ namespace Butterfly.Game.Rooms.AI
         {
         }
 
-        public void Init(int pBaseId, RoomUser user, Room room)
+        public void Init(int baseId, RoomUser user, Room room)
         {
-            this.Id = pBaseId;
+            this.Id = baseId;
             this.roomUser = user;
             this.room = room;
         }

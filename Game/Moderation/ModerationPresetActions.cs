@@ -13,7 +13,7 @@
         public int TradeLockTime { get; private set; }
         public string DefaultSanction { get; private set; }
 
-    public ModerationPresetActions(int id, int parentId, string type, string caption, string messageText, int muteText, int banTime, int ipBanTime, int tradeLockTime, string defaultSanction)
+        public ModerationPresetActions(int id, int parentId, string type, string caption, string messageText, int muteText, int banTime, int ipBanTime, int tradeLockTime, string defaultSanction)
         {
             this.Id = id;
             this.ParentId = parentId;

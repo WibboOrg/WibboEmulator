@@ -14,37 +14,37 @@ namespace Butterfly.Game.Rooms.Games
     {
         private Room _roomInstance;
         private readonly Dictionary<int, Item> _freezeBlocks;
-        private bool gameStarted;
+        private bool _gameStarted;
 
         public Freeze(Room room)
         {
             this._roomInstance = room;
             this._freezeBlocks = new Dictionary<int, Item>();
-            this.gameStarted = false;
+            this._gameStarted = false;
         }
 
-        public bool isGameActive => this.gameStarted;
+        public bool IsGameActive => this._gameStarted;
 
         public void StartGame()
         {
-            if (this.gameStarted)
+            if (this._gameStarted)
             {
                 return;
             }
 
-            this.gameStarted = true;
+            this._gameStarted = true;
             this.CountTeamPoints();
             this.ResetGame();
         }
 
         public void StopGame()
         {
-            if (!this.gameStarted)
+            if (!this._gameStarted)
             {
                 return;
             }
 
-            this.gameStarted = false;
+            this._gameStarted = false;
 
             TeamType winningTeam = this._roomInstance.GetGameManager().GetWinningTeam();
 
@@ -56,11 +56,11 @@ namespace Butterfly.Game.Rooms.Games
 
         private void EndGame(RoomUser roomUser, TeamType winningTeam)
         {
-            if (roomUser.Team == winningTeam && winningTeam != TeamType.none)
+            if (roomUser.Team == winningTeam && winningTeam != TeamType.NONE)
             {
                 this._roomInstance.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
             }
-            else if (roomUser.Team != TeamType.none)
+            else if (roomUser.Team != TeamType.NONE)
             {
                 Item FirstTile = this.GetFirstTile(roomUser.X, roomUser.Y);
 
@@ -76,7 +76,7 @@ namespace Butterfly.Game.Rooms.Games
 
                 this._roomInstance.GetGameManager().UpdateGatesTeamCounts();
 
-                roomUser.Team = TeamType.none;
+                roomUser.Team = TeamType.NONE;
 
                 if (this._roomInstance.GetGameItemHandler().GetExitTeleport() != null)
                 {
@@ -134,7 +134,7 @@ namespace Butterfly.Game.Rooms.Games
 
         public void OnWalkFreezeBlock(Item roomitem, RoomUser user)
         {
-            if (!this.gameStarted || user.Team == TeamType.none)
+            if (!this._gameStarted || user.Team == TeamType.NONE)
             {
                 return;
             }
@@ -164,7 +164,7 @@ namespace Butterfly.Game.Rooms.Games
 
             if (FirstTile == null)
             {
-                this.EndGame(roomUser, TeamType.none);
+                this.EndGame(roomUser, TeamType.NONE);
                 return;
             }
 
@@ -183,7 +183,7 @@ namespace Butterfly.Game.Rooms.Games
 
         private static void RemoveUserFromTeam(RoomUser user)
         {
-            user.Team = TeamType.none;
+            user.Team = TeamType.NONE;
             user.ApplyEffect(0);
         }
 
@@ -194,7 +194,7 @@ namespace Butterfly.Game.Rooms.Games
                 return;
             }
 
-            if (roomUserByHabbo.Team == TeamType.none || !this.gameStarted)
+            if (roomUserByHabbo.Team == TeamType.NONE || !this._gameStarted)
             {
                 return;
             }
@@ -394,7 +394,7 @@ namespace Butterfly.Game.Rooms.Games
 
         private void FreezeUser(RoomUser user)
         {
-            if (user.IsBot || user.ShieldActive || user.Team == TeamType.none || !this.gameStarted)
+            if (user.IsBot || user.ShieldActive || user.Team == TeamType.NONE || !this._gameStarted)
             {
                 return;
             }
@@ -426,7 +426,7 @@ namespace Butterfly.Game.Rooms.Games
                     user.GetClient().SendPacket(new IsPlayingComposer(false));
 
                     this._roomInstance.GetGameManager().UpdateGatesTeamCounts();
-                    user.Team = TeamType.none;
+                    user.Team = TeamType.NONE;
 
                     if (this._roomInstance.GetGameItemHandler().GetExitTeleport() != null)
                     {

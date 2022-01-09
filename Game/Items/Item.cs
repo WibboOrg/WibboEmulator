@@ -356,28 +356,28 @@ namespace Butterfly.Game.Items
                     case InteractionType.BANZAISCOREGREEN:
                     case InteractionType.FREEZEGREENCOUNTER:
                     case InteractionType.FREEZEGREENGATE:
-                        this.Team = TeamType.green;
+                        this.Team = TeamType.GREEN;
                         break;
                     case InteractionType.FOOTBALLCOUNTERYELLOW:
                     case InteractionType.BANZAIGATEYELLOW:
                     case InteractionType.BANZAISCOREYELLOW:
                     case InteractionType.FREEZEYELLOWCOUNTER:
                     case InteractionType.FREEZEYELLOWGATE:
-                        this.Team = TeamType.yellow;
+                        this.Team = TeamType.YELLOW;
                         break;
                     case InteractionType.FOOTBALLCOUNTERBLUE:
                     case InteractionType.BANZAIGATEBLUE:
                     case InteractionType.BANZAISCOREBLUE:
                     case InteractionType.FREEZEBLUECOUNTER:
                     case InteractionType.FREEZEBLUEGATE:
-                        this.Team = TeamType.blue;
+                        this.Team = TeamType.BLUE;
                         break;
                     case InteractionType.FOOTBALLCOUNTERRED:
                     case InteractionType.BANZAIGATERED:
                     case InteractionType.BANZAISCORERED:
                     case InteractionType.FREEZEREDCOUNTER:
                     case InteractionType.FREEZEREDGATE:
-                        this.Team = TeamType.red;
+                        this.Team = TeamType.RED;
                         break;
                     case InteractionType.BANZAITELE:
                         this.ExtraData = "";
@@ -708,28 +708,28 @@ namespace Butterfly.Game.Items
                 case InteractionType.BANZAISCOREGREEN:
                 case InteractionType.FREEZEGREENCOUNTER:
                 case InteractionType.FREEZEGREENGATE:
-                    this.Team = TeamType.green;
+                    this.Team = TeamType.GREEN;
                     break;
                 case InteractionType.FOOTBALLCOUNTERYELLOW:
                 case InteractionType.BANZAIGATEYELLOW:
                 case InteractionType.BANZAISCOREYELLOW:
                 case InteractionType.FREEZEYELLOWCOUNTER:
                 case InteractionType.FREEZEYELLOWGATE:
-                    this.Team = TeamType.yellow;
+                    this.Team = TeamType.YELLOW;
                     break;
                 case InteractionType.FOOTBALLCOUNTERBLUE:
                 case InteractionType.BANZAIGATEBLUE:
                 case InteractionType.BANZAISCOREBLUE:
                 case InteractionType.FREEZEBLUECOUNTER:
                 case InteractionType.FREEZEBLUEGATE:
-                    this.Team = TeamType.blue;
+                    this.Team = TeamType.BLUE;
                     break;
                 case InteractionType.FOOTBALLCOUNTERRED:
                 case InteractionType.BANZAIGATERED:
                 case InteractionType.BANZAISCORERED:
                 case InteractionType.FREEZEREDCOUNTER:
                 case InteractionType.FREEZEREDGATE:
-                    this.Team = TeamType.red;
+                    this.Team = TeamType.RED;
                     break;
                 case InteractionType.BANZAITELE:
                     this.ExtraData = "";

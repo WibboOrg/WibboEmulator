@@ -168,7 +168,7 @@ namespace Butterfly.Game.Rooms.Games
             {
                 roomItem.ExtraData = "1";
                 roomItem.Value = 0;
-                roomItem.Team = TeamType.none;
+                roomItem.Team = TeamType.NONE;
                 roomItem.UpdateState();
             }
 
@@ -201,11 +201,11 @@ namespace Butterfly.Game.Rooms.Games
 
         private void EndGame(RoomUser roomUser, TeamType winningTeam)
         {
-            if (roomUser.Team == winningTeam && winningTeam != TeamType.none)
+            if (roomUser.Team == winningTeam && winningTeam != TeamType.NONE)
             {
                 this._roomInstance.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
             }
-            else if (roomUser.Team != TeamType.none)
+            else if (roomUser.Team != TeamType.NONE)
             {
                 Item FirstTile = this.GetFirstTile(roomUser.X, roomUser.Y);
 
@@ -223,7 +223,7 @@ namespace Butterfly.Game.Rooms.Games
                 managerForBanzai.OnUserLeave(roomUser);
                 this._roomInstance.GetGameManager().UpdateGatesTeamCounts();
                 roomUser.ApplyEffect(0);
-                roomUser.Team = TeamType.none;
+                roomUser.Team = TeamType.NONE;
 
                 roomUser.GetClient().SendPacket(new IsPlayingComposer(false));
             }
@@ -316,7 +316,7 @@ namespace Butterfly.Game.Rooms.Games
 
         public void HandleBanzaiTiles(Point coord, TeamType team, RoomUser user)
         {
-            if (!this._banzaiStarted || team == TeamType.none || this.BanzaiTiles.Count == 0)
+            if (!this._banzaiStarted || team == TeamType.NONE || this.BanzaiTiles.Count == 0)
             {
                 return;
             }
@@ -345,7 +345,7 @@ namespace Butterfly.Game.Rooms.Games
 
         private void HandleMaxBanzaiTiles(Point coord, TeamType team, RoomUser user, TeamType oldteam)
         {
-            if (team == TeamType.none)
+            if (team == TeamType.NONE)
             {
                 return;
             }

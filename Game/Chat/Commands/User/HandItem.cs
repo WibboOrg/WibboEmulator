@@ -13,7 +13,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (UserRoom.Team != TeamType.none || UserRoom.InGame)
+            if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
             {
                 return;
             }

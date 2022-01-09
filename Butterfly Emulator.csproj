@@ -753,7 +753,6 @@
     <Compile Include="Game\Chat\Commands\User\StopQuestion.cs" />
     <Compile Include="Game\Chat\Mentions\MentionManager.cs" />
     <Compile Include="Game\Permissions\PermissionCommand.cs" />
-    <Compile Include="Game\Rooms\AI\Responses\BotResponse.cs" />
     <Compile Include="Game\Rooms\Games\Freeze\FreezePowerUp.cs" />
     <Compile Include="Game\Rooms\Games\Teams\TeamType.cs" />
     <Compile Include="Game\Rooms\AI\Types\RoleplayBot.cs" />

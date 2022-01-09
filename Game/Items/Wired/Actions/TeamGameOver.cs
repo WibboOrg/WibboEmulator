@@ -12,7 +12,7 @@ namespace Butterfly.Game.Items.Wired.Actions
     {
         public TeamGameOver(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM)
         {
-            this.IntParams.Add((int)TeamType.red);
+            this.IntParams.Add((int)TeamType.RED);
         }
 
         public override bool OnCycle(RoomUser user, Item item)
@@ -23,19 +23,19 @@ namespace Butterfly.Game.Items.Wired.Actions
 
             TeamType team = (TeamType)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
-            if (team == TeamType.blue)
+            if (team == TeamType.BLUE)
             {
                 ListTeam.AddRange(managerForBanzai.BlueTeam);
             }
-            else if (team == TeamType.green)
+            else if (team == TeamType.GREEN)
             {
                 ListTeam.AddRange(managerForBanzai.GreenTeam);
             }
-            else if (team == TeamType.red)
+            else if (team == TeamType.RED)
             {
                 ListTeam.AddRange(managerForBanzai.RedTeam);
             }
-            else if (team == TeamType.yellow)
+            else if (team == TeamType.YELLOW)
             {
                 ListTeam.AddRange(managerForBanzai.YellowTeam);
             }
@@ -56,7 +56,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                 managerForBanzai.OnUserLeave(teamuser);
                 this.RoomInstance.GetGameManager().UpdateGatesTeamCounts();
                 teamuser.ApplyEffect(0);
-                teamuser.Team = TeamType.none;
+                teamuser.Team = TeamType.NONE;
 
                 teamuser.GetClient().SendPacket(new IsPlayingComposer(false));
 

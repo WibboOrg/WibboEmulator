@@ -11,7 +11,7 @@ namespace Butterfly.Game.Items.Wired.Actions
     {
         public CollisionTeam(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM)
         {
-            this.IntParams.Add((int)TeamType.red);
+            this.IntParams.Add((int)TeamType.RED);
         }
 
         public override bool OnCycle(RoomUser user, Item item)
@@ -29,19 +29,19 @@ namespace Butterfly.Game.Items.Wired.Actions
 
             TeamType team = (TeamType)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
-            if (team == TeamType.blue)
+            if (team == TeamType.BLUE)
             {
                 listTeam.AddRange(managerForBanzai.BlueTeam);
             }
-            else if (team == TeamType.green)
+            else if (team == TeamType.GREEN)
             {
                 listTeam.AddRange(managerForBanzai.GreenTeam);
             }
-            else if (team == TeamType.red)
+            else if (team == TeamType.RED)
             {
                 listTeam.AddRange(managerForBanzai.RedTeam);
             }
-            else if (team == TeamType.yellow)
+            else if (team == TeamType.YELLOW)
             {
                 listTeam.AddRange(managerForBanzai.YellowTeam);
             }

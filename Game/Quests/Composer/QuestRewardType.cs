@@ -2,10 +2,10 @@
 {
     public enum QuestRewardType
     {
-        Pixels,
-        Snowflakes,
-        Love,
-        PixelsBROKEN,
-        Seashells,
+        PIXELS,
+        SNOWFLAKES,
+        LOVE,
+        PIXELS_BROKEN,
+        SEASHELLS,
     }
 }

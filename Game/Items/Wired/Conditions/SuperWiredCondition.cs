@@ -989,7 +989,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                 case "winteam":
                 case "notwinteam":
                     {
-                        if (user.Team == TeamType.none)
+                        if (user.Team == TeamType.NONE)
                         {
                             break;
                         }
@@ -1114,7 +1114,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                 case "userteam":
                 case "usernotteam":
                     {
-                        if (user.Team != TeamType.none)
+                        if (user.Team != TeamType.NONE)
                         {
                             Result = true;
                         }

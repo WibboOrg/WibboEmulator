@@ -15,7 +15,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 
         public override bool OnCycle(RoomUser user, Item item)
         {
-            if (user != null && !user.IsBot && user.GetClient() != null && user.Team != TeamType.none && user.Room != null)
+            if (user != null && !user.IsBot && user.GetClient() != null && user.Team != TeamType.NONE && user.Room != null)
             {
                 TeamManager managerForBanzai = user.Room.GetTeamManager();
                 if (managerForBanzai == null)
@@ -26,7 +26,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                 managerForBanzai.OnUserLeave(user);
                 user.Room.GetGameManager().UpdateGatesTeamCounts();
                 user.ApplyEffect(0);
-                user.Team = TeamType.none;
+                user.Team = TeamType.NONE;
 
                 user.GetClient().SendPacket(new IsPlayingComposer(false));
             }

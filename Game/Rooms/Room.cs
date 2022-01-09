@@ -329,7 +329,7 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            if (UserGoal.Team == User.Team && User.Team != TeamType.none)
+            if (UserGoal.Team == User.Team && User.Team != TeamType.NONE)
             {
                 return;
             }
@@ -825,7 +825,7 @@ namespace Butterfly.Game.Rooms
                         continue;
                     }
 
-                    if (this.RoomIngameChat && (UserNotIngameOnly && User.Team != TeamType.none))
+                    if (this.RoomIngameChat && (UserNotIngameOnly && User.Team != TeamType.NONE))
                     {
                         continue;
                     }

@@ -250,36 +250,6 @@ namespace Butterfly.Game.Rooms.AI.Types
 
         public override void OnTimerTick()
         {
-            /*if (this.SpeechTimer <= 0)
-            {
-                RoomUser roomUser = this.GetRoomUser();
-
-                if (roomUser.PetData.DBState != DatabaseUpdateState.NeedsInsert)
-                    roomUser.PetData.DBState = DatabaseUpdateState.NeedsUpdate;
-
-                /*if (roomUser != null)
-                {
-                    if (!roomUser.mRoom.RoomMutePets)
-                    {
-                        Random random = new Random();
-                        this.RemovePetStatus();
-                        string[] strArray = ButterflyEnvironment.GetGame().GetChatManager().GetPetLocale().GetValue("speech.pet" + roomUser.PetData.Type);
-                        string str = strArray[random.Next(0, strArray.Length - 1)];
-
-                        if (!string.IsNullOrEmpty(str))
-                        {
-                            if (str.Length != 3)
-                                roomUser.OnChat(str, 0, false);
-                            else
-                                roomUser.SetStatus(str, TextHandling.GetString(roomUser.Z));
-                        }
-                    }
-                }
-                this.SpeechTimer = ButterflyEnvironment.GetRandomNumber(20, 120);
-            }
-            else
-                this.SpeechTimer--;*/
-
             if (this._actionTimer <= 0)
             {
                 try

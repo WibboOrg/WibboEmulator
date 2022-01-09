@@ -6,7 +6,7 @@
         public string Header { get; private set; }
         public string Body { get; private set; }
         public string Button { get; private set; }
-        public int inGamePromo { get; private set; }
+        public int InGamePromo { get; private set; }
         public string SpecialAction { get; private set; }
         public string Image { get; private set; }
 
@@ -16,7 +16,7 @@
             this.Header = header;
             this.Body = body;
             this.Button = button;
-            this.inGamePromo = inGame;
+            this.InGamePromo = inGame;
             this.SpecialAction = specialAction;
             this.Image = image;
         }

@@ -503,7 +503,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEGREEN:
                 case InteractionType.FREEZEGREENCOUNTER:
                 case InteractionType.FREEZEGREENGATE:
-                    this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.green);
+                    this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.GREEN);
                     break;
                 case InteractionType.FOOTBALLGOALYELLOW:
                 case InteractionType.FOOTBALLCOUNTERYELLOW:
@@ -511,7 +511,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEYELLOW:
                 case InteractionType.FREEZEYELLOWCOUNTER:
                 case InteractionType.FREEZEYELLOWGATE:
-                    this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.yellow);
+                    this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.YELLOW);
                     break;
                 case InteractionType.footballgoalblue:
                 case InteractionType.FOOTBALLCOUNTERBLUE:
@@ -519,7 +519,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEBLUE:
                 case InteractionType.FREEZEBLUECOUNTER:
                 case InteractionType.FREEZEBLUEGATE:
-                    this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.blue);
+                    this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.BLUE);
                     break;
                 case InteractionType.FOOTBALLGOALRED:
                 case InteractionType.FOOTBALLCOUNTERRED:
@@ -527,7 +527,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATERED:
                 case InteractionType.FREEZEREDCOUNTER:
                 case InteractionType.FREEZEREDGATE:
-                    this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.red);
+                    this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.RED);
                     break;
                 case InteractionType.FREEZEEXIT:
                     this._roomInstance.GetGameItemHandler().RemoveExitTeleport(item);
@@ -609,7 +609,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEGREEN:
                 case InteractionType.FREEZEGREENCOUNTER:
                 case InteractionType.FREEZEGREENGATE:
-                    this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.green);
+                    this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.GREEN);
                     break;
                 case InteractionType.FOOTBALLGOALYELLOW:
                 case InteractionType.FOOTBALLCOUNTERYELLOW:
@@ -617,7 +617,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEYELLOW:
                 case InteractionType.FREEZEYELLOWCOUNTER:
                 case InteractionType.FREEZEYELLOWGATE:
-                    this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.yellow);
+                    this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.YELLOW);
                     break;
                 case InteractionType.footballgoalblue:
                 case InteractionType.FOOTBALLCOUNTERBLUE:
@@ -625,7 +625,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATEBLUE:
                 case InteractionType.FREEZEBLUECOUNTER:
                 case InteractionType.FREEZEBLUEGATE:
-                    this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.blue);
+                    this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.BLUE);
                     break;
                 case InteractionType.FOOTBALLGOALRED:
                 case InteractionType.FOOTBALLCOUNTERRED:
@@ -633,7 +633,7 @@ namespace Butterfly.Game.Rooms
                 case InteractionType.BANZAIGATERED:
                 case InteractionType.FREEZEREDCOUNTER:
                 case InteractionType.FREEZEREDGATE:
-                    this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.red);
+                    this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.RED);
                     break;
             }
 

@@ -265,132 +265,125 @@ namespace Butterfly.Game.Rooms
 
         private void UpdateUserEffect(RoomUser User, int x, int y)
         {
-            try
+            if (User == null)
             {
-                if (User == null)
+                return;
+            }
+
+            if (User.IsPet)
+            {
+                return;
+            }
+
+            if (!this._room.GetGameMap().ValidTile(x, y))
+            {
+                return;
+            }
+
+            byte pByte = this._room.GetGameMap().EffectMap[x, y];
+            if (pByte > 0)
+            {
+                ItemEffectType itemEffectType = ByteToItemEffectType.Parse(pByte);
+                if (itemEffectType == User.CurrentItemEffect)
                 {
                     return;
                 }
 
-                if (User.IsPet)
+                switch (itemEffectType)
                 {
-                    return;
-                }
+                    case ItemEffectType.NONE:
+                        User.ApplyEffect(0);
+                        User.CurrentItemEffect = itemEffectType;
+                        break;
+                    case ItemEffectType.SWIM:
+                        User.ApplyEffect(29);
+                        if (User.GetClient() != null)
+                        {
+                            ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 1948);
+                        }
 
-                if (!this._room.GetGameMap().ValidTile(x, y))
-                {
-                    return;
-                }
-
-                byte pByte = this._room.GetGameMap().EffectMap[x, y];
-                if (pByte > 0)
-                {
-                    ItemEffectType itemEffectType = ByteToItemEffectType.Parse(pByte);
-                    if (itemEffectType == User.CurrentItemEffect)
-                    {
-                        return;
-                    }
-
-                    switch (itemEffectType)
-                    {
-                        case ItemEffectType.NONE:
-                            User.ApplyEffect(0);
-                            User.CurrentItemEffect = itemEffectType;
-                            break;
-                        case ItemEffectType.SWIM:
-                            User.ApplyEffect(29);
-                            if (User.GetClient() != null)
-                            {
-                                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 1948);
-                            }
-
-                            User.CurrentItemEffect = itemEffectType;
-                            break;
-                        case ItemEffectType.SWIMLOW:
-                            User.ApplyEffect(30);
-                            User.CurrentItemEffect = itemEffectType;
-                            break;
-                        case ItemEffectType.SWIMHALLOWEEN:
-                            User.ApplyEffect(37);
-                            User.CurrentItemEffect = itemEffectType;
-                            break;
-                        case ItemEffectType.ICESKATES:
-                            if (User.GetClient() != null)
-                            {
-                                if (User.GetClient().GetHabbo().Gender == "M")
-                                {
-                                    User.ApplyEffect(38);
-                                }
-                                else
-                                {
-                                    User.ApplyEffect(39);
-                                }
-                            }
-                            else
+                        User.CurrentItemEffect = itemEffectType;
+                        break;
+                    case ItemEffectType.SWIMLOW:
+                        User.ApplyEffect(30);
+                        User.CurrentItemEffect = itemEffectType;
+                        break;
+                    case ItemEffectType.SWIMHALLOWEEN:
+                        User.ApplyEffect(37);
+                        User.CurrentItemEffect = itemEffectType;
+                        break;
+                    case ItemEffectType.ICESKATES:
+                        if (User.GetClient() != null)
+                        {
+                            if (User.GetClient().GetHabbo().Gender == "M")
                             {
                                 User.ApplyEffect(38);
                             }
-
-                            User.CurrentItemEffect = ItemEffectType.ICESKATES;
-                            if (User.GetClient() != null)
-                            {
-                                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 1413);
-                            }
-
-                            break;
-                        case ItemEffectType.NORMALSKATES:
-                            if (User.GetClient() != null)
-                            {
-                                if (User.GetClient().GetHabbo().Gender == "M")
-                                {
-                                    User.ApplyEffect(55);
-                                }
-                                else
-                                {
-                                    User.ApplyEffect(56);
-                                }
-                            }
                             else
+                            {
+                                User.ApplyEffect(39);
+                            }
+                        }
+                        else
+                        {
+                            User.ApplyEffect(38);
+                        }
+
+                        User.CurrentItemEffect = ItemEffectType.ICESKATES;
+                        if (User.GetClient() != null)
+                        {
+                            ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 1413);
+                        }
+
+                        break;
+                    case ItemEffectType.NORMALSKATES:
+                        if (User.GetClient() != null)
+                        {
+                            if (User.GetClient().GetHabbo().Gender == "M")
                             {
                                 User.ApplyEffect(55);
                             }
-
-                            User.CurrentItemEffect = itemEffectType;
-                            if (User.GetClient() != null)
+                            else
                             {
-                                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 2199);
+                                User.ApplyEffect(56);
                             }
+                        }
+                        else
+                        {
+                            User.ApplyEffect(55);
+                        }
 
-                            break;
-                        case ItemEffectType.TRAMPOLINE:
-                            User.ApplyEffect(193);
-                            User.CurrentItemEffect = itemEffectType;
-                            break;
-                        case ItemEffectType.TREADMILL:
-                            User.ApplyEffect(194);
-                            User.CurrentItemEffect = itemEffectType;
-                            break;
-                        case ItemEffectType.CROSSTRAINER:
-                            User.ApplyEffect(195);
-                            User.CurrentItemEffect = itemEffectType;
-                            break;
+                        User.CurrentItemEffect = itemEffectType;
+                        if (User.GetClient() != null)
+                        {
+                            ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 2199);
+                        }
 
-                    }
-                }
-                else
-                {
-                    if (User.CurrentItemEffect == ItemEffectType.NONE || pByte != 0)
-                    {
-                        return;
-                    }
+                        break;
+                    case ItemEffectType.TRAMPOLINE:
+                        User.ApplyEffect(193);
+                        User.CurrentItemEffect = itemEffectType;
+                        break;
+                    case ItemEffectType.TREADMILL:
+                        User.ApplyEffect(194);
+                        User.CurrentItemEffect = itemEffectType;
+                        break;
+                    case ItemEffectType.CROSSTRAINER:
+                        User.ApplyEffect(195);
+                        User.CurrentItemEffect = itemEffectType;
+                        break;
 
-                    User.ApplyEffect(0);
-                    User.CurrentItemEffect = ItemEffectType.NONE;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine("UpdateUserEffecterreur: " + ex);
+                if (User.CurrentItemEffect == ItemEffectType.NONE || pByte != 0)
+                {
+                    return;
+                }
+
+                User.ApplyEffect(0);
+                User.CurrentItemEffect = ItemEffectType.NONE;
             }
         }
 
@@ -671,7 +664,7 @@ namespace Butterfly.Game.Rooms
                     this._usersRank.Remove(User.UserId);
                 }
 
-                if (User.Team != TeamType.none)
+                if (User.Team != TeamType.NONE)
                 {
                     this._room.GetTeamManager().OnUserLeave(User);
                     this._room.GetGameManager().UpdateGatesTeamCounts();
@@ -968,18 +961,13 @@ namespace Butterfly.Game.Rooms
 
         public void UpdateUserStatusses()
         {
-            this.onUserUpdateStatus();
-        }
-
-        private void onUserUpdateStatus()
-        {
             foreach (RoomUser User in this.GetUserList().ToList())
             {
                 this.UpdateUserStatus(User, false);
             }
         }
 
-        private bool isValid(RoomUser user)
+        private bool IsValid(RoomUser user)
         {
             return user.IsBot || user.GetClient() != null && user.GetClient().GetHabbo() != null && user.GetClient().GetHabbo().CurrentRoomId == this._room.Id;
         }
@@ -1104,7 +1092,7 @@ namespace Butterfly.Game.Rooms
                             TeamManager managerForBanzai = this._room.GetTeamManager();
                             if (User.Team != roomItem.Team)
                             {
-                                if (User.Team != TeamType.none)
+                                if (User.Team != TeamType.NONE)
                                 {
                                     managerForBanzai.OnUserLeave(User);
                                 }
@@ -1137,19 +1125,19 @@ namespace Butterfly.Game.Rooms
                                     User.GetClient().SendPacket(new IsPlayingComposer(false));
                                 }
 
-                                User.Team = TeamType.none;
+                                User.Team = TeamType.NONE;
                                 continue;
                             }
                         }
                         break;
                     case InteractionType.BANZAIBLO:
-                        if (cyclegameitems && User.Team != TeamType.none && !User.IsBot)
+                        if (cyclegameitems && User.Team != TeamType.NONE && !User.IsBot)
                         {
                             this._room.GetGameItemHandler().OnWalkableBanzaiBlo(User, roomItem);
                         }
                         break;
                     case InteractionType.BANZAIBLOB:
-                        if (cyclegameitems && User.Team != TeamType.none && !User.IsBot)
+                        if (cyclegameitems && User.Team != TeamType.NONE && !User.IsBot)
                         {
                             this._room.GetGameItemHandler().OnWalkableBanzaiBlob(User, roomItem);
                         }
@@ -1157,7 +1145,7 @@ namespace Butterfly.Game.Rooms
                     case InteractionType.BANZAITELE:
                         if (cyclegameitems)
                         {
-                            this._room.GetGameItemHandler().onTeleportRoomUserEnter(User, roomItem);
+                            this._room.GetGameItemHandler().OnTeleportRoomUserEnter(User, roomItem);
                         }
 
                         break;
@@ -1171,7 +1159,7 @@ namespace Butterfly.Game.Rooms
                             TeamManager managerForFreeze = this._room.GetTeamManager();
                             if (User.Team != roomItem.Team)
                             {
-                                if (User.Team != TeamType.none)
+                                if (User.Team != TeamType.NONE)
                                 {
                                     managerForFreeze.OnUserLeave(User);
                                 }
@@ -1203,7 +1191,7 @@ namespace Butterfly.Game.Rooms
                                     User.GetClient().SendPacket(new IsPlayingComposer(false));
                                 }
 
-                                User.Team = TeamType.none;
+                                User.Team = TeamType.NONE;
                             }
                         }
                         break;
@@ -1331,7 +1319,7 @@ namespace Butterfly.Game.Rooms
 
             foreach (RoomUser User in this.GetUserList().ToList())
             {
-                if (!this.isValid(User))
+                if (!this.IsValid(User))
                 {
                     if (User.GetClient() != null && User.GetClient().GetHabbo() != null)
                     {
@@ -1615,7 +1603,7 @@ namespace Butterfly.Game.Rooms
         {
             this._room.GetGameMap().UpdateUserMovement(User.Coordinate, new Point(User.SetX, User.SetY), User);
 
-            List<Item> coordinatedItems = this._room.GetGameMap().GetCoordinatedItems(new Point(User.X, User.Y)).ToList(); //Quitter la dalle
+            List<Item> coordinatedItems = this._room.GetGameMap().GetCoordinatedItems(new Point(User.X, User.Y)).ToList();
 
             if (User.IsBot)
             {
@@ -1672,6 +1660,7 @@ namespace Butterfly.Game.Rooms
                                 }
                             }
                         }
+
                         User.OnChat("*Récupère un objet au sol*");
                         this._room.GetRoomItemHandler().RemoveTempItem(ItemTmp.Id);
                     }

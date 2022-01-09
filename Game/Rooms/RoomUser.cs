@@ -25,13 +25,13 @@ namespace Butterfly.Game.Rooms
         public double Z { get; set; }
         public int GoalX { get; set; }
         public int GoalY { get; set; }
-        public int LastBubble = 0;
 
         public bool SetStep { get; set; }
         public int SetX { get; set; }
         public int SetY { get; set; }
         public double SetZ { get; set; }
 
+        public int LastBubble = 0;
         public int CarryItemID;
         public int CarryTimer;
         public int RotHead;
@@ -199,9 +199,6 @@ namespace Butterfly.Game.Rooms
                 return false;
             }
 
-            //if (comparedUser.HabboId > 0 || this.HabboId > 0)
-            //return comparedUser.HabboId == this.HabboId;
-
             return comparedUser.VirtualId == this.VirtualId;
         }
 
@@ -306,7 +303,7 @@ namespace Butterfly.Game.Rooms
             Message.WriteInteger(Color);
             Message.WriteInteger(0);
             Message.WriteInteger(-1);
-            this.GetRoom().SendPacketOnChat(Message, this, true, (this.Team == TeamType.none && !this.IsBot));
+            this.GetRoom().SendPacketOnChat(Message, this, true, (this.Team == TeamType.NONE && !this.IsBot));
         }
 
         public void MoveTo(Point c, bool Override = false)

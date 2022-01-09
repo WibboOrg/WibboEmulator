@@ -32,7 +32,7 @@ namespace Butterfly.Game.Items.Wired.Actions
             int scoreToGive = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
             int maxCountPerGame = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
 
-            if (user == null || user.Team == TeamType.none || maxCountPerGame <= this.currentGameCount)
+            if (user == null || user.Team == TeamType.NONE || maxCountPerGame <= this.currentGameCount)
             {
                 return false;
             }

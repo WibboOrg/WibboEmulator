@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Outgoing.LandingView
                 this.WriteString(promo.Header);
                 this.WriteString(promo.Body);
                 this.WriteString(promo.Button);
-                this.WriteInteger(promo.inGamePromo);
+                this.WriteInteger(promo.InGamePromo);
                 this.WriteString(promo.SpecialAction);
                 this.WriteString(promo.Image);
             }

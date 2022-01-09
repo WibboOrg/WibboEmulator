@@ -92,13 +92,6 @@ namespace Butterfly.Game.Rooms.AI.Types
                 this.GetRoomUser().CurrentEffect = OwnerUser.CurrentEffect;
                 this.GetRoom().SendPacket(new AvatarEffectComposer(this.GetRoomUser().VirtualId, this.GetRoomUser().CurrentEffect));
             }
-            /*else if (OwnerUser.GetClient().GetHabbo().Look != this.GetRoomUser().BotData.Look)
-            {
-                this.GetRoomUser().BotData.Look = OwnerUser.GetClient().GetHabbo().Look;
-                this.GetRoomUser().BotData.Gender = OwnerUser.GetClient().GetHabbo().Gender;
-
-                this.GetRoom().SendPacket(new UserChangeComposer(this.GetRoomUser()));
-            }*/
 
             if (this.GetBotData().FollowUser > 0)
             {

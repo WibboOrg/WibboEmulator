@@ -17,46 +17,46 @@ namespace Butterfly.Game.Rooms.Games
 
         public void HandleFootballGameItems(Point ballItemCoord)
         {
-            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.red).Values)
+            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.RED).Values)
             {
                 foreach (ThreeDCoord threeDcoord in roomItem.GetAffectedTiles.Values)
                 {
                     if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                     {
-                        this.AddPointToScoreCounters(TeamType.red);
+                        this.AddPointToScoreCounters(TeamType.RED);
                         return;
                     }
                 }
             }
-            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.green).Values)
+            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.GREEN).Values)
             {
                 foreach (ThreeDCoord threeDcoord in roomItem.GetAffectedTiles.Values)
                 {
                     if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                     {
-                        this.AddPointToScoreCounters(TeamType.green);
+                        this.AddPointToScoreCounters(TeamType.GREEN);
                         return;
                     }
                 }
             }
-            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.blue).Values)
+            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.BLUE).Values)
             {
                 foreach (ThreeDCoord threeDcoord in roomItem.GetAffectedTiles.Values)
                 {
                     if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                     {
-                        this.AddPointToScoreCounters(TeamType.blue);
+                        this.AddPointToScoreCounters(TeamType.BLUE);
                         return;
                     }
                 }
             }
-            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.yellow).Values)
+            foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.YELLOW).Values)
             {
                 foreach (ThreeDCoord threeDcoord in roomItem.GetAffectedTiles.Values)
                 {
                     if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                     {
-                        this.AddPointToScoreCounters(TeamType.yellow);
+                        this.AddPointToScoreCounters(TeamType.YELLOW);
                         return;
                     }
                 }

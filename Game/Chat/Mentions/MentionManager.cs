@@ -94,40 +94,6 @@ namespace Butterfly.Game.Chat.Mentions
             return true;
         }
 
-        /*public bool EveryoneFriend(GameClient Session, string Message)
-        {
-            TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().everyoneTimer;
-            if (timeSpan.TotalSeconds < 120)
-            {
-                Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Veuille attendre 2 minute avant de pouvoir réutiliser @everyone"));
-                return false;
-            }
-
-            Session.GetHabbo().everyoneTimer = DateTime.Now;
-
-            List<GameClient> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetHabbo().GetMessenger().GetFriends().Keys);
-
-            if (onlineUsers == null)
-            {
-                return false;
-            }
-
-            foreach (GameClient TargetClient in onlineUsers)
-            {
-                if (TargetClient != null && TargetClient.GetHabbo() != null && TargetClient.GetHabbo().GetMessenger() != null)
-                {
-                    if (TargetClient.GetHabbo().GetMessenger().FriendshipExists(Session.GetHabbo().Id))
-                    {
-                        if (!TargetClient.GetHabbo().SendWebPacket(new MentionComposer(Session.GetHabbo().Id, Session.GetHabbo().Username, Session.GetHabbo().Look, Message)))
-                        {
-                            TargetClient.SendPacket(RoomNotificationComposer.SendBubble("mention", $"{Session.GetHabbo().Username} t'a tagué:\n\n{Message}", "event:navigator/goto/" + Session.GetHabbo().CurrentRoomId));
-                        }
-                    }
-                }
-            }
-        }*/
-
-
         public bool EveryoneFriend(Client Session, string Message)
         {
             if (Session.GetHabbo().Rank < 2)

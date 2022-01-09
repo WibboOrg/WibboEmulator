@@ -265,7 +265,7 @@ namespace Butterfly.Game.Rooms
             return true;
         }
 
-        public void onTeleportRoomUserEnter(RoomUser User, Item Item)
+        public void OnTeleportRoomUserEnter(RoomUser User, Item Item)
         {
             IEnumerable<Item> banzaiTeleports2 = this._banzaiTeleports.Values.Where(p => p.Id != Item.Id);
 

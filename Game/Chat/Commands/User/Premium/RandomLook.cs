@@ -11,7 +11,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (UserRoom.Team != TeamType.none || UserRoom.InGame)
+            if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
             {
                 return;
             }

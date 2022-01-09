@@ -7,7 +7,7 @@ namespace Butterfly.Game.Items.Interactors
     {
         public override void OnPlace(Client Session, Item Item)
         {
-            if (Item.Team == TeamType.none)
+            if (Item.Team == TeamType.NONE)
             {
                 return;
             }

@@ -58,17 +58,17 @@ namespace Butterfly.Game.Items
                             int cycleCount = Convert.ToInt32(Row["interaction_modes_count"]);
                             string vendingIDS = Convert.ToString(Row["vending_ids"]);
                             string heightAdjustable = Convert.ToString(Row["height_adjustable"]);
-                            int EffectId = Convert.ToInt32(Row["effect_id"]);
-                            bool IsRare = ButterflyEnvironment.EnumToBool(Row["is_rare"].ToString());
+                            int effectId = Convert.ToInt32(Row["effect_id"]);
+                            bool isRare = ButterflyEnvironment.EnumToBool(Row["is_rare"].ToString());
 
                             if (!this._gifts.ContainsKey(spriteID) && interactionType == InteractionType.GIFT)
                             {
-                                this._gifts.Add(spriteID, new ItemData(id, spriteID, itemName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowGift, allowInventoryStack, interactionType, cycleCount, vendingIDS, heightAdjustable, EffectId, IsRare));
+                                this._gifts.Add(spriteID, new ItemData(id, spriteID, itemName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowGift, allowInventoryStack, interactionType, cycleCount, vendingIDS, heightAdjustable, effectId, isRare));
                             }
 
                             if (!this._items.ContainsKey(id))
                             {
-                                this._items.Add(id, new ItemData(id, spriteID, itemName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowGift, allowInventoryStack, interactionType, cycleCount, vendingIDS, heightAdjustable, EffectId, IsRare));
+                                this._items.Add(id, new ItemData(id, spriteID, itemName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowGift, allowInventoryStack, interactionType, cycleCount, vendingIDS, heightAdjustable, effectId, isRare));
                             }
                         }
                         catch (Exception e)

@@ -154,9 +154,6 @@ namespace Butterfly.Game.Rooms.Projectile
                         {
                             BulletUser[Item.VirtualUserId]++;
 
-                            //if (BulletUser[Item.VirtualUserId] > 3)
-                            //this._room.GetRoomItemHandler().RemoveTempItem(Item.Id);
-                            //else
                             toAdd.Add(Item);
                         }
                     }
