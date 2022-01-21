@@ -230,6 +230,7 @@ namespace Butterfly.Communication.Packets
         {
             this._incomingPackets.Add(ClientPacketHeader.ROOM_MODEL_SAVE, new SaveFloorPlanModelEvent());
             this._incomingPackets.Add(ClientPacketHeader.ROOM_MODEL_DOOR, new InitializeFloorPlanSessionEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GET_OCCUPIED_TILES, new GetOccupiedTilesEvent());
         }
 
         private void RegisterAvatar()
@@ -451,7 +452,7 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_USER_ROOMS, new GetModeratorUserRoomVisitsEvent());
             this._incomingPackets.Add(ClientPacketHeader.MODTOOL_CHANGE_ROOM_SETTINGS, new ModerateRoomEvent());
             this._incomingPackets.Add(ClientPacketHeader.MODTOOL_ROOM_ALERT, new ModeratorActionEvent());
-            this._incomingPackets.Add(ClientPacketHeader.REPORT, new SubmitNewTicketEvent());
+            this._incomingPackets.Add(ClientPacketHeader.CALL_FOR_HELP, new SubmitNewTicketEvent());
             this._incomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_ROOM_CHATLOG, new GetModeratorRoomChatlogEvent());
             this._incomingPackets.Add(ClientPacketHeader.MODTOOL_REQUEST_USER_CHATLOG, new GetModeratorUserChatlogEvent());
 

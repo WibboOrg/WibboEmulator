@@ -20,17 +20,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Response.WriteInteger(room.GetGameMap().Model.DoorY); // y
             Response.WriteInteger(room.GetGameMap().Model.DoorOrientation); // dir
             Session.SendPacket(Response);
-
-            ServerPacket Response2 = new ServerPacket(ServerPacketHeader.ROOM_MODEL_BLOCKED_TILES);
-            Response2.WriteInteger(room.GetGameMap().CoordinatedItems.Count); //nombre de case
-
-            foreach (Point Coords in room.GetGameMap().CoordinatedItems.Keys)
-            {
-                Response2.WriteInteger(Coords.X); // x
-                Response2.WriteInteger(Coords.Y); // y
-            }
-
-            Session.SendPacket(Response2);
         }
     }
 }

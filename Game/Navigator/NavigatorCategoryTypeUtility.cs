@@ -19,6 +19,8 @@
                     return NavigatorCategoryType.FEATURED_RUN;
                 case "featured_game":
                     return NavigatorCategoryType.FEATURED_GAME;
+                case "featured_casino":
+                    return NavigatorCategoryType.FEATURED_CASINO;
                 case "popular":
                     return NavigatorCategoryType.POPULAR;
                 case "recommended":

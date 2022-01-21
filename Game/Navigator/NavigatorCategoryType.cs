@@ -8,6 +8,7 @@
         FEATURED_NEW,
         FEATURED_HELP_SECURITY,
         FEATURED_RUN,
+        FEATURED_CASINO,
         POPULAR,
         RECOMMENDED,
         QUERY,

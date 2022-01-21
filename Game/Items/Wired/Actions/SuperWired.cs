@@ -134,6 +134,8 @@ namespace Butterfly.Game.Items.Wired.Actions
                 case "roomalert":
                 case "forcesound":
                 case "coins":
+                case "rpsay":
+                case "rpsayme":
                     if (this.IsStaff)
                     {
                         return;

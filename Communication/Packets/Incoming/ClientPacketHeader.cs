@@ -14,6 +14,7 @@
         public const int RemoveGroupFavouriteMessageEvent = 1820;
         public const int FootballGateSaveLookEvent = 924;
 
+        public const int GET_OCCUPIED_TILES = 1687;
         public const int POLL_ANSWER = 3505;
         public const int GROUP_BADGES = 21;
         public const int GUIDE_SESSION_ON_DUTY_UPDATE = 1922;
@@ -199,7 +200,7 @@
         public const int WIRED_ACTION_SAVE = 2281;
         public const int WIRED_CONDITION_SAVE = 3203;
         public const int MOD_TOOL_USER_INFO = 3295;
-        public const int REPORT = 1691;
+        public const int CALL_FOR_HELP = 1691;
         public const int ROOM_LIKE = 3582;
         public const int ROOM_KICK = 1320;
         public const int ROOM_BAN_GIVE = 1477;

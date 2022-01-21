@@ -125,6 +125,7 @@ namespace Butterfly.Game.Navigator
                 case NavigatorCategoryType.FEATURED_NEW:
                 case NavigatorCategoryType.FEATURED_HELP_SECURITY:
                 case NavigatorCategoryType.FEATURED_RUN:
+                case NavigatorCategoryType.FEATURED_CASINO:
                     #region Featured
                     List<RoomData> Rooms = new List<RoomData>();
                     ICollection<FeaturedRoom> Featured = ButterflyEnvironment.GetGame().GetNavigator().GetFeaturedRooms(Session.Langue);

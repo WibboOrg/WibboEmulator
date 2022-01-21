@@ -17,7 +17,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int TicketType = Packet.PopInt();
             int ReporterId = Packet.PopInt();
             int RoomId = Packet.PopInt();
-            int RepporteurId = Packet.PopInt();
+            int chatEntriesCount = Packet.PopInt();
+            //chatEntries = Packet.PopString();
 
             ButterflyEnvironment.GetGame().GetModerationManager().SendNewTicket(Session, TicketType, ReporterId, Message);
             ButterflyEnvironment.GetGame().GetModerationManager().ApplySanction(Session, ReporterId);
