@@ -45,8 +45,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_BADGE, 0);
 
-            User HabboTarget = Session.GetHabbo();
-
             if (Session.GetHabbo().InRoom && ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId) != null)
                 ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId).SendPacket(new HabboUserBadgesComposer(Session.GetHabbo()));
             else
