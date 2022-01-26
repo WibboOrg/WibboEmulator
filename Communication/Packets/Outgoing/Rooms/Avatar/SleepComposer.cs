@@ -4,10 +4,10 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Avatar
 {
     internal class SleepComposer : ServerPacket
     {
-        public SleepComposer(RoomUser User, bool IsSleeping)
+        public SleepComposer(int VirtualId, bool IsSleeping)
             : base(ServerPacketHeader.UNIT_IDLE)
         {
-            this.WriteInteger(User.VirtualId);
+            this.WriteInteger(VirtualId);
             this.WriteBoolean(IsSleeping);
         }
     }

@@ -11,7 +11,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             if (!Session.GetHabbo().SendWebPacket(new NavigateWebComposer("/forum/sujet/57389")))
             {
-                Session.SendPacket(new NuxAlertComposer("habbopages/infosuperwired"));
+                Session.SendPacket(new InClientLinkComposer("habbopages/infosuperwired"));
             }
 
             return;

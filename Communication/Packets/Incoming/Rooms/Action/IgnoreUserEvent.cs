@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Action;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Users;
 
@@ -34,10 +35,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Session.GetHabbo().MutedUsers.Add(habbo.Id);
 
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.USER_IGNORED_UPDATE);
-            Response.WriteInteger(1);
-            Response.WriteString(UserName);
-            Session.SendPacket(Response);
+            Session.SendPacket(new IgnoreStatusComposer(1, UserName));
         }
     }
 }

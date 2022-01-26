@@ -194,7 +194,6 @@ namespace Butterfly.Game.Users
             this.Langue = Langue;
             this.IgnoreAllExpireTime = ignoreAllExpire;
 
-
             if (clientVolume.Contains(','))
             {
                 foreach (string Str in clientVolume.Split(','))
@@ -372,7 +371,7 @@ namespace Butterfly.Game.Users
                 }
             }
 
-            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "SeasonRunOff", "CasinoRunOff", "WibboParty", "MovieRunOff", "officialrooms", "Seonsaengnim", "Jason", "Ximbay" };
+            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "SeasonRunOff", "CasinoRunOff", "WibboParty", "MovieRunOff", "officialrooms", "Seonsaengnim", "Jason", "ElkunRUN" };
 
             //if (!this.GetClient().GetHabbo().HasFuse("fuse_mod"))
             if (this.GetClient().GetHabbo().Rank < 8)

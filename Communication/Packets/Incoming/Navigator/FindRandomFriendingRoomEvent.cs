@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (type == "predefined_noob_lobby")
             {
-                Session.SendPacket(new NuxAlertComposer("nux/lobbyoffer/hide"));
+                Session.SendPacket(new InClientLinkComposer("nux/lobbyoffer/hide"));
             }
 
             Room Instance = ButterflyEnvironment.GetGame().GetRoomManager().TryGetRandomLoadedRoom();

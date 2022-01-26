@@ -1369,7 +1369,7 @@ namespace Butterfly.Game.Rooms
                 if (!User.IsAsleep && User.IdleTime >= 600 && !User.IsBot)
                 {
                     User.IsAsleep = true;
-                    this._room.SendPacket(new SleepComposer(User, true));
+                    this._room.SendPacket(new SleepComposer(User.VirtualId, true));
                 }
 
                 if (User.CarryItemID > 0 && User.CarryTimer > 0)

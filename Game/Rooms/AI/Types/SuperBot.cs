@@ -80,7 +80,7 @@ namespace Butterfly.Game.Rooms.AI.Types
             else if (OwnerUser.IsAsleep != this.GetRoomUser().IsAsleep)
             {
                 this.GetRoomUser().IsAsleep = OwnerUser.IsAsleep;
-                this.GetRoom().SendPacket(new SleepComposer(this.GetRoomUser(), this.GetRoomUser().IsAsleep));
+                this.GetRoom().SendPacket(new SleepComposer(this.GetRoomUser().VirtualId, this.GetRoomUser().IsAsleep));
             }
             else if (OwnerUser.CarryItemID != this.GetRoomUser().CarryItemID)
             {

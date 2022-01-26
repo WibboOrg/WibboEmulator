@@ -565,7 +565,7 @@ namespace Butterfly.Game.Rooms
 
                 if (RoomUser.IsAsleep)
                 {
-                    Session.SendPacket(new SleepComposer(RoomUser, true));
+                    Session.SendPacket(new SleepComposer(RoomUser.VirtualId, true));
                 }
 
                 if (RoomUser.CarryItemID > 0 && RoomUser.CarryTimer > 0)

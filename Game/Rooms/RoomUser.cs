@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Roleplay;
@@ -244,10 +245,7 @@ namespace Butterfly.Game.Rooms
 
             this.IsAsleep = false;
 
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_IDLE);
-            Message.WriteInteger(this.VirtualId);
-            Message.WriteBoolean(false);
-            this.GetRoom().SendPacket(Message);
+            this.GetRoom().SendPacket(new SleepComposer(this.VirtualId, false));
         }
 
         public void Dispose()

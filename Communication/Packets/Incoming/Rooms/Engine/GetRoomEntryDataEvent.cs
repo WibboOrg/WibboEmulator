@@ -71,8 +71,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.SendPacket(nuxStatus);
 
                 Session.GetHabbo().PassedNuxCount++;
-                Session.SendPacket(new NuxAlertComposer("nux/lobbyoffer/hide"));
-                Session.SendPacket(new NuxAlertComposer("helpBubble/add/BOTTOM_BAR_NAVIGATOR/nux.bot.info.navigator.1"));
+                Session.SendPacket(new InClientLinkComposer("nux/lobbyoffer/hide"));
+                Session.SendPacket(new InClientLinkComposer("helpBubble/add/BOTTOM_BAR_NAVIGATOR/nux.bot.info.navigator.1"));
             }
 
             if (Session.GetHabbo().SpamEnable)

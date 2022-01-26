@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Action;
 
 namespace Butterfly.Game.Moderation
 {
@@ -276,10 +277,7 @@ namespace Butterfly.Game.Moderation
 
             Session.GetHabbo().GetMessenger().DestroyFriendship(UserReport.Id);
 
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.USER_IGNORED_UPDATE);
-            Response.WriteInteger(1);
-            Response.WriteString(UserReport.Username);
-            Session.SendPacket(Response);
+            Session.SendPacket(new IgnoreStatusComposer(1, UserReport.Username));
 
             Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
             if (room == null || (room.RoomData.BanFuse != 1 || !room.CheckRights(Session)) && !room.CheckRights(Session, true))

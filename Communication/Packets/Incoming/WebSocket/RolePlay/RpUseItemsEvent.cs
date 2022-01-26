@@ -87,12 +87,12 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
             {
                 case "openpage":
                     {
-                        User.GetClient().SendPacket(new NuxAlertComposer("habbopages/roleplay/" + RpItem.Value));
+                        User.GetClient().SendPacket(new InClientLinkComposer("habbopages/roleplay/" + RpItem.Value));
                         break;
                     }
                 case "openguide":
                     {
-                        User.GetClient().SendPacket(new NuxAlertComposer("habbopages/westworld/westworld"));
+                        User.GetClient().SendPacket(new InClientLinkComposer("habbopages/westworld/westworld"));
                         break;
                     }
                 case "hit":

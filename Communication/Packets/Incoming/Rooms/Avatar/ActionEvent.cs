@@ -32,10 +32,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             if (i == 5)
             {
                 roomUserByHabbo.IsAsleep = true;
-                ServerPacket Message2 = new ServerPacket(ServerPacketHeader.UNIT_IDLE);
-                Message2.WriteInteger(roomUserByHabbo.VirtualId);
-                Message2.WriteBoolean(roomUserByHabbo.IsAsleep);
-                room.SendPacket(Message2);
+                room.SendPacket(new SleepComposer(roomUserByHabbo.VirtualId, true));
             }
 
             ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_WAVE, 0);

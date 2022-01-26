@@ -168,7 +168,7 @@ namespace Butterfly.Game.Clients
                 nuxStatus.WriteInteger(2);
                 this.SendPacket(nuxStatus);
 
-                this.SendPacket(new NuxAlertComposer("nux/lobbyoffer/hide"));
+                this.SendPacket(new InClientLinkComposer("nux/lobbyoffer/hide"));
             }
         }
 

@@ -1904,7 +1904,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     }
                 case "openpage":
                     {
-                        User.GetClient().SendPacket(new NuxAlertComposer("habbopages/" + Value));
+                        User.GetClient().SendPacket(new InClientLinkComposer("habbopages/" + Value));
                         break;
                     }
                 case "rot":
