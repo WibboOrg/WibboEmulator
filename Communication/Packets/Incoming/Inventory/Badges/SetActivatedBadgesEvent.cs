@@ -1,8 +1,10 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Quests;
+using Butterfly.Game.Users;
 using Butterfly.Game.Users.Badges;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -43,25 +45,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_BADGE, 0);
 
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.USER_BADGES_CURRENT);
-            Message.WriteInteger(Session.GetHabbo().Id);
-            Message.WriteInteger(Session.GetHabbo().GetBadgeComponent().EquippedCount);
+            User HabboTarget = Session.GetHabbo();
 
-            int BadgeCount = 0;
-            foreach (Badge badge in Session.GetHabbo().GetBadgeComponent().BadgeList.Values)
-            {
-                if (badge.Slot > 0)
-                {
-                    BadgeCount++;
-                    if (BadgeCount > 5)
-                    {
-                        break;
-                    }
-
-                    Message.WriteInteger(badge.Slot);
-                    Message.WriteString(badge.Code);
-                }
-            }
+            ServerPacket Message = new HabboUserBadgesComposer(HabboTarget.Id, HabboTarget.GetBadgeComponent().EquippedCount, HabboTarget.GetBadgeComponent().BadgeList));
 
             if (Session.GetHabbo().InRoom && ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId) != null)
             {

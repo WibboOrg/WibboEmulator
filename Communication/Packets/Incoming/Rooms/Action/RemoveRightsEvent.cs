@@ -1,5 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Settings;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
@@ -47,10 +48,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     roomUserByHabbo.SetStatus("flatctrl 0", "");
                     roomUserByHabbo.UpdateNeeded = true;
                 }
-                ServerPacket Response2 = new ServerPacket(ServerPacketHeader.ROOM_RIGHTS_LIST_REMOVE);
-                Response2.WriteInteger(room.Id);
-                Response2.WriteInteger(UserId);
-                Session.SendPacket(Response2);
+
+                Session.SendPacket(new FlatControllerRemovedMessageComposer(room.Id, UserId));
 
                 if (room.UsersWithRights.Count <= 0)
                 {

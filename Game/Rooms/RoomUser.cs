@@ -1,5 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Roleplay;
@@ -258,50 +259,31 @@ namespace Butterfly.Game.Rooms
 
         public void SendWhisperChat(string message, bool Info = true)
         {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
-            Message.WriteInteger(this.VirtualId);
-            Message.WriteString(message);
-            Message.WriteInteger(0);
-            Message.WriteInteger((Info) ? 34 : 0);
-            Message.WriteInteger(0);
-            Message.WriteInteger(-1);
-            this.GetClient().SendPacket(Message);
+            this.GetClient().SendPacket(new WhisperComposer(this.VirtualId, message, (Info) ? 34 : 0));
         }
 
         public void OnChatMe(string MessageText, int Color = 0, bool Shout = false)
         {
-            int Header = ServerPacketHeader.UNIT_CHAT;
             if (Shout)
             {
-                Header = ServerPacketHeader.UNIT_CHAT_SHOUT;
+                this.GetClient().SendPacket(new ShoutComposer(this.VirtualId, MessageText, Color));
             }
-
-            ServerPacket Message = new ServerPacket(Header);
-            Message.WriteInteger(this.VirtualId);
-            Message.WriteString(MessageText);
-            Message.WriteInteger(ButterflyEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(MessageText));
-            Message.WriteInteger(Color);
-            Message.WriteInteger(0);
-            Message.WriteInteger(-1);
-            this.GetClient().SendPacket(Message);
+            else
+            {
+                this.GetClient().SendPacket(new ChatComposer(this.VirtualId, MessageText, Color));
+            }
         }
 
         public void OnChat(string MessageText, int Color = 0, bool Shout = false)
         {
-            int Header = ServerPacketHeader.UNIT_CHAT;
             if (Shout)
             {
-                Header = ServerPacketHeader.UNIT_CHAT_SHOUT;
+                this.GetRoom().SendPacketOnChat(new ShoutComposer(this.VirtualId, MessageText, Color), this, true, (this.Team == TeamType.NONE && !this.IsBot));
             }
-
-            ServerPacket Message = new ServerPacket(Header);
-            Message.WriteInteger(this.VirtualId);
-            Message.WriteString(MessageText);
-            Message.WriteInteger(ButterflyEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(MessageText));
-            Message.WriteInteger(Color);
-            Message.WriteInteger(0);
-            Message.WriteInteger(-1);
-            this.GetRoom().SendPacketOnChat(Message, this, true, (this.Team == TeamType.NONE && !this.IsBot));
+            else
+            {
+                this.GetRoom().SendPacketOnChat(new ChatComposer(this.VirtualId, MessageText, Color), this, true, (this.Team == TeamType.NONE && !this.IsBot));
+            }
         }
 
         public void MoveTo(Point c, bool Override = false)

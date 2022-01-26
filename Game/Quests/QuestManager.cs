@@ -123,7 +123,7 @@ namespace Butterfly.Game.Quests
 
             Session.GetHabbo().CurrentQuestId = 0;
             Session.GetHabbo().LastCompleted = quest.Id;
-            Session.SendPacket(Composer.QuestCompletedComposer.Compose(Session, quest));
+            Session.SendPacket(new QuestCompletedComposer(Session, quest));
             Session.GetHabbo().Duckets += quest.Reward;
             Session.GetHabbo().UpdateActivityPointsBalance();
             this.GetList(Session, null);

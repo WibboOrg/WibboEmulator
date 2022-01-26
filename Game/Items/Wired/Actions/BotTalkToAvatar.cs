@@ -7,6 +7,7 @@ using Butterfly.Game.Items.Wired.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 
 namespace Butterfly.Game.Items.Wired.Actions
 {
@@ -59,25 +60,11 @@ namespace Butterfly.Game.Items.Wired.Actions
 
             if (isWhisper)
             {
-                ServerPacket MessagePacket = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
-                MessagePacket.WriteInteger(bot.VirtualId);
-                MessagePacket.WriteString(textMessage);
-                MessagePacket.WriteInteger(0);
-                MessagePacket.WriteInteger(2);
-                MessagePacket.WriteInteger(0);
-                MessagePacket.WriteInteger(-1);
-                user.GetClient().SendPacket(MessagePacket);
+                user.GetClient().SendPacket(new ShoutComposer(bot.VirtualId, textMessage, 2));
             }
             else
             {
-                ServerPacket MessagePacket = new ServerPacket(ServerPacketHeader.UNIT_CHAT);
-                MessagePacket.WriteInteger(bot.VirtualId);
-                MessagePacket.WriteString(textMessage);
-                MessagePacket.WriteInteger(ButterflyEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(message));
-                MessagePacket.WriteInteger(2);
-                MessagePacket.WriteInteger(0);
-                MessagePacket.WriteInteger(-1);
-                user.GetClient().SendPacket(MessagePacket);
+                user.GetClient().SendPacket(new ChatComposer(bot.VirtualId, textMessage, 2));
             }
 
             return false;

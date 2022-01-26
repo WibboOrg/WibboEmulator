@@ -349,7 +349,7 @@
     <Compile Include="Communication\Packets\Outgoing\Navigator\UpdateFavouriteRoomComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Navigator\UserFlatCatsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Notifications\MOTDNotificationComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Notifications\NuxAlertComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Notifications\InClientLinkComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Pets\NotifyNewPetLevelComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Pets\RespectPetNotificationComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Quests\QuestAbortedComposer.cs" />

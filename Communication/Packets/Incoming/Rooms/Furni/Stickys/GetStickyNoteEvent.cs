@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Stickys;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms;
@@ -21,10 +22,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.FURNITURE_ITEMDATA);
-            Response.WriteString(roomItem.Id.ToString());
-            Response.WriteString(roomItem.ExtraData);
-            Session.SendPacket(Response);
+            Session.SendPacket(new StickyNoteComposer(roomItem.Id, roomItem.ExtraData));
         }
     }
 }

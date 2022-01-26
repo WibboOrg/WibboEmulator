@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.FloorPlan;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using System.Drawing;
@@ -15,16 +16,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.ROOM_MODEL_BLOCKED_TILES);
-            Response.WriteInteger(room.GetGameMap().CoordinatedItems.Count); //nombre de case
-
-            foreach (Point Coords in room.GetGameMap().CoordinatedItems.Keys)
-            {
-                Response.WriteInteger(Coords.X); // x
-                Response.WriteInteger(Coords.Y); // y
-            }
-
-            Session.SendPacket(Response);
+            Session.SendPacket(new FloorPlanFloorMapComposer(room.GetGameMap().CoordinatedItems));
         }
     }
 }

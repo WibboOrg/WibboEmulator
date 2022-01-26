@@ -1,5 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Settings;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
@@ -49,11 +50,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     RoomRightDao.Insert(dbClient, room.Id, UserId);
                 }
 
-                ServerPacket Response = new ServerPacket(ServerPacketHeader.ROOM_RIGHTS_LIST_ADD);
-                Response.WriteInteger(room.Id);
-                Response.WriteInteger(UserId);
-                Response.WriteString(Userright.Username);
-                Session.SendPacket(Response);
+                Session.SendPacket(new FlatControllerAddedComposer(room.Id, UserId, Userright.Username));
 
                 RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(UserId);
                 if (roomUserByHabbo == null || roomUserByHabbo.IsBot)

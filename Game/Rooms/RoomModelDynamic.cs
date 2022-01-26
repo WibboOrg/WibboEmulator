@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
-
+using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using System;
 using System.Text;
 
@@ -23,7 +23,7 @@ namespace Butterfly.Game.Rooms
         private bool RelativeSerialized;
         private ServerPacket SerializedHeightmap;
         private bool HeightmapSerialized;
-        public int MurHeight;
+        public int WallHeight;
 
         public RoomModelDynamic(RoomModel pModel)
         {
@@ -35,7 +35,7 @@ namespace Butterfly.Game.Rooms
             this.Heightmap = this.staticModel.Heightmap;
             this.MapSizeX = this.staticModel.MapSizeX;
             this.MapSizeY = this.staticModel.MapSizeY;
-            this.MurHeight = this.staticModel.MurHeight;
+            this.WallHeight = this.staticModel.WallHeight;
             this.Generate();
         }
 
@@ -86,16 +86,14 @@ namespace Butterfly.Game.Rooms
                 this.SerializedHeightmap = this.SerializeHeightmap();
                 this.HeightmapSerialized = true;
             }
+
             return this.SerializedHeightmap;
         }
 
         private ServerPacket SerializeHeightmap()
         {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.ROOM_MODEL);
-            Message.WriteBoolean(this.MurHeight > 0);
-            Message.WriteInteger((this.MurHeight > 0) ? this.MurHeight : -1);
             StringBuilder thatMessage = new StringBuilder();
-            //Needs cache!
+
             for (int y = 0; y < this.MapSizeY; y++)
             {
                 for (int x = 0; x < this.MapSizeX; x++)
@@ -116,8 +114,8 @@ namespace Butterfly.Game.Rooms
 
                 thatMessage.Append(Convert.ToChar(13));
             }
-            Message.WriteString(thatMessage.ToString());
-            return Message;
+
+            return new FloorHeightMapComposer(this.WallHeight, thatMessage.ToString());
         }
 
         private string Parse(short text)
@@ -176,46 +174,12 @@ namespace Butterfly.Game.Rooms
 
         private ServerPacket NewHeightMap()
         {
-            ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.ROOM_HEIGHT_MAP);
-            serverMessage.WriteInteger(this.MapSizeX);
-            serverMessage.WriteInteger(this.MapSizeX * this.MapSizeY);
-            for (int i = 0; i < this.MapSizeY; i++)
-            {
-                for (int j = 0; j < this.MapSizeX; j++)
-                {
-                    if (this.SqState[j, i] == SquareStateType.BLOCKED)
-                    {
-                        serverMessage.WriteShort(-1);
-                    }
-                    else
-                    {
-                        serverMessage.WriteShort(this.SqFloorHeight[j, i] << 8);
-                    }
-                }
-            }
-            return serverMessage;
+            return new HeightMapComposer(this);
         }
 
-        public ServerPacket setHeightMap(double Height)
+        public ServerPacket SetHeightMap(double Height)
         {
-            ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.ROOM_HEIGHT_MAP);
-            serverMessage.WriteInteger(this.MapSizeX);
-            serverMessage.WriteInteger(this.MapSizeX * this.MapSizeY);
-            for (int i = 0; i < this.MapSizeY; i++)
-            {
-                for (int j = 0; j < this.MapSizeX; j++)
-                {
-                    if (this.SqState[j, i] == SquareStateType.BLOCKED)
-                    {
-                        serverMessage.WriteShort(-1);
-                    }
-                    else
-                    {
-                        serverMessage.WriteShort((int)Math.Floor((this.SqFloorHeight[j, i] + Height) * 256.0));
-                    }
-                }
-            }
-            return serverMessage;
+            return new HeightMapComposer(this, Height);
         }
 
         public void SetMapsize(int x, int y)

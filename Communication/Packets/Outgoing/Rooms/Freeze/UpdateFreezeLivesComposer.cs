@@ -2,10 +2,11 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Freeze
 {
     internal class UpdateFreezeLivesComposer : ServerPacket
     {
-        public UpdateFreezeLivesComposer()
+        public UpdateFreezeLivesComposer(int VirtualId, int FreezeLives)
             : base(ServerPacketHeader.UNIT_NUMBER)
         {
-
+            this.WriteInteger(VirtualId);
+            this.WriteInteger(FreezeLives);
         }
     }
 }

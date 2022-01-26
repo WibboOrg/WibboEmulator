@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -7,9 +8,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.FURNITURE_ALIASES);
-            Response.WriteInteger(0);
-            Session.SendPacket(Response);
+            Session.SendPacket(new FurnitureAliasesComposer());
         }
     }
 }

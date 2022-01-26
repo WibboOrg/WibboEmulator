@@ -1,4 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Pets;
+using Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using Butterfly.Game.Rooms;
 using System;
 using System.Collections.Generic;
@@ -245,22 +247,14 @@ namespace Butterfly.Game.Pets
                 return;
             }
 
-            ServerPacket Message1 = new ServerPacket(ServerPacketHeader.PET_EXPERIENCE);
-            Message1.WriteInteger(this.PetId);
-            Message1.WriteInteger(this.VirtualId);
-            Message1.WriteInteger(Amount);
-            this.Room.SendPacket(Message1);
+            this.Room.SendPacket(new AddExperiencePointsComposer(this.PetId, this.VirtualId, Amount));
 
             if (this.Expirience <= this.ExpirienceGoal)
             {
                 return;
             }
 
-            ServerPacket LevelNotify = new ServerPacket(ServerPacketHeader.PET_LEVEL_NOTIFICATION);
-            LevelNotify.WriteInteger(this.PetId);
-            LevelNotify.WriteString(this.Name);
-            LevelNotify.WriteInteger(this.Level);
-            this.Room.SendPacket(LevelNotify);
+            this.Room.SendPacket(new NotifyNewPetLevelComposer(this.PetId, this.Name, this.Level));
 
             this.PetCommands.Clear();
             this.PetCommands = this.GetPetCommands();

@@ -35,7 +35,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (Result >= 0)
             {
-                Session.SendPacket(Room.GetGameMap().Model.setHeightMap((Result > 63) ? 63 : Result));
+                Session.SendPacket(Room.GetGameMap().Model.SetHeightMap((Result > 63) ? 63 : Result));
             }
         }
     }

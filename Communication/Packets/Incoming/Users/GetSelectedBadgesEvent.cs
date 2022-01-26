@@ -1,6 +1,8 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
+using Butterfly.Game.Users;
 using Butterfly.Game.Users.Badges;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -21,27 +23,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.USER_BADGES_CURRENT);
-            Response.WriteInteger(roomUserByHabbo.GetClient().GetHabbo().Id);
-            Response.WriteInteger(roomUserByHabbo.GetClient().GetHabbo().GetBadgeComponent().EquippedCount);
+            User HabboTarget = roomUserByHabbo.GetClient().GetHabbo();
 
-            int BadgeCount = 0;
-            foreach (Badge badge in roomUserByHabbo.GetClient().GetHabbo().GetBadgeComponent().BadgeList.Values)
-            {
-                if (badge.Slot > 0)
-                {
-                    BadgeCount++;
-                    if (BadgeCount > 5)
-                    {
-                        break;
-                    }
-
-                    Response.WriteInteger(badge.Slot);
-                    Response.WriteString(badge.Code);
-                }
-            }
-
-            Session.SendPacket(Response);
+            Session.SendPacket(new HabboUserBadgesComposer(HabboTarget.Id, HabboTarget.GetBadgeComponent().EquippedCount, HabboTarget.GetBadgeComponent().BadgeList));
         }
     }
 }

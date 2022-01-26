@@ -1,6 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Settings;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
@@ -153,20 +154,10 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 RoomDao.UpdateAll(dbClient, room.Id, room.RoomData.Name, room.RoomData.Description, room.RoomData.Password, (stringBuilder).ToString(), CategoryId, str5, MaxUsers, AllowPets, AllowPetsEat, AllowWalkthrough, room.RoomData.Hidewall, room.RoomData.FloorThickness, room.RoomData.WallThickness, mutefuse, kickfuse, banfuse, ChatType, ChatBalloon, ChatSpeed, ChatMaxDistance, ChatFloodProtection, TrocStatus);
             }
 
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.ROOM_SETTINGS_SAVE);
-            Response.WriteInteger(room.Id);
-            Session.SendPacket(Response);
+            Session.SendPacket(new RoomSettingsSavedComposer(room.Id));
 
             room.SendPacket(new RoomVisualizationSettingsComposer(room.RoomData.WallThickness, room.RoomData.FloorThickness, room.RoomData.Hidewall));
-
-            ServerPacket ResponseTwo = new ServerPacket(ServerPacketHeader.ROOM_SETTINGS_CHAT);
-            ResponseTwo.WriteInteger(room.RoomData.ChatType);
-            ResponseTwo.WriteInteger(room.RoomData.ChatBalloon);
-            ResponseTwo.WriteInteger(room.RoomData.ChatSpeed);
-            ResponseTwo.WriteInteger(room.RoomData.ChatMaxDistance);
-            ResponseTwo.WriteInteger(room.RoomData.ChatFloodProtection);
-            room.SendPacket(ResponseTwo);
-
+            room.SendPacket(new RoomChatOptionsComposer(room.RoomData.ChatType, room.RoomData.ChatBalloon, room.RoomData.ChatSpeed, room.RoomData.ChatMaxDistance, room.RoomData.ChatFloodProtection));
 
             Session.SendPacket(new GetGuestRoomResultComposer(Session, room.RoomData, true, false));
         }

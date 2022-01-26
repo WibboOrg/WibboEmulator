@@ -22,7 +22,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 {
                     continue;
                 }
-                User.GetClient().SendPacket(new WhisperComposer(UserRoom.VirtualId, Message, 0, 0));
+                User.GetClient().SendPacket(new WhisperComposer(UserRoom.VirtualId, Message, 0));
             }
         }
     }

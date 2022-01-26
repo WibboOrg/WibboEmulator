@@ -5,7 +5,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
         public FurnitureAliasesComposer()
             : base(ServerPacketHeader.FURNITURE_ALIASES)
         {
-
+            this.WriteInteger(0);
         }
     }
 }

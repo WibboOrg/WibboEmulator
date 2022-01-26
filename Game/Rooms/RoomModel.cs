@@ -8,7 +8,7 @@ namespace Butterfly.Game.Rooms
         public int DoorY;
         public double DoorZ;
         public int DoorOrientation;
-        public int MurHeight;
+        public int WallHeight;
         public string Heightmap;
 
         public SquareStateType[,] SqState;
@@ -30,7 +30,7 @@ namespace Butterfly.Game.Rooms
                 this.MapSizeY = tmpHeightmap.Length;
                 this.SqState = new SquareStateType[this.MapSizeX, this.MapSizeY];
                 this.SqFloorHeight = new short[this.MapSizeX, this.MapSizeY];
-                this.MurHeight = Murheight;
+                this.WallHeight = Murheight;
 
                 for (int y = 0; y < this.MapSizeY; y++)
                 {

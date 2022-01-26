@@ -1,5 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Settings;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
@@ -40,10 +41,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     }
                 }
 
-                ServerPacket Response3 = new ServerPacket(ServerPacketHeader.ROOM_RIGHTS_LIST_REMOVE);
-                Response3.WriteInteger(room.Id);
-                Response3.WriteInteger(num);
-                Session.SendPacket(Response3);
+                Session.SendPacket(new FlatControllerRemovedMessageComposer(room.Id, num));
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())

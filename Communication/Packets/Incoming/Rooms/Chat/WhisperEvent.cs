@@ -176,14 +176,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     Message = "(" + GroupUsername + ") " + Message;
 
-                    ServerPacket Message1 = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
-                    Message1.WriteInteger(User.VirtualId);
-                    Message1.WriteString(Message);
-                    Message1.WriteInteger(ButterflyEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(Message));
-                    Message1.WriteInteger(Color);
-                    Message1.WriteInteger(0);
-                    Message1.WriteInteger(-1);
-                    User.GetClient().SendPacket(Message1);
+                    User.GetClient().SendPacket(new WhisperComposer(User.VirtualId, Message, Color));
 
                     if (Session.GetHabbo().IgnoreAll)
                     {
@@ -215,31 +208,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         return;
                     }
 
-                    ServerPacket Message2 = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
-                    Message2.WriteInteger(User.VirtualId);
-                    Message2.WriteString(ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message);
-                    Message2.WriteInteger(ButterflyEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(Message));
-                    Message2.WriteInteger(Color);
-                    Message2.WriteInteger(0);
-                    Message2.WriteInteger(-1);
+                    ServerPacket MessageWhipser = new WhisperComposer(User.VirtualId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, Color);
+               
                     foreach (RoomUser roomUser in roomUserByRank)
                     {
                         if (roomUser != null && roomUser.HabboId != User.HabboId && roomUser.GetClient() != null && roomUser.GetClient().GetHabbo().ViewMurmur && !User.WhiperGroupUsers.Contains(roomUser.GetUsername()))
                         {
-                            roomUser.GetClient().SendPacket(Message2);
+                            roomUser.GetClient().SendPacket(MessageWhipser);
                         }
                     }
                 }
                 else
                 {
-                    ServerPacket Message1 = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
-                    Message1.WriteInteger(User.VirtualId);
-                    Message1.WriteString(Message);
-                    Message1.WriteInteger(ButterflyEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(Message));
-                    Message1.WriteInteger(Color);
-                    Message1.WriteInteger(0);
-                    Message1.WriteInteger(-1);
-                    User.GetClient().SendPacket(Message1);
+                    User.GetClient().SendPacket(new WhisperComposer(User.VirtualId, Message, Color));
 
                     if (Session.GetHabbo().IgnoreAll)
                     {
@@ -258,7 +239,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         return;
                     }
 
-                    UserWhiper.GetClient().SendPacket(Message1);
+                    UserWhiper.GetClient().SendPacket(new WhisperComposer(User.VirtualId, Message, Color));
 
                     List<RoomUser> roomUserByRank = Room.GetRoomUserManager().GetStaffRoomUser();
                     if (roomUserByRank.Count <= 0)
@@ -266,18 +247,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         return;
                     }
 
-                    ServerPacket Message2 = new ServerPacket(ServerPacketHeader.UNIT_CHAT_WHISPER);
-                    Message2.WriteInteger(User.VirtualId);
-                    Message2.WriteString(ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message);
-                    Message2.WriteInteger(ButterflyEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(Message));
-                    Message2.WriteInteger(Color);
-                    Message2.WriteInteger(0);
-                    Message2.WriteInteger(-1);
+                    ServerPacket MessageWhipserStaff = new WhisperComposer(User.VirtualId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, Color);
                     foreach (RoomUser roomUser in roomUserByRank)
                     {
                         if (roomUser != null && roomUser.GetClient() != null && roomUser.GetClient().GetHabbo() != null && roomUser.HabboId != User.HabboId && roomUser.GetClient() != null && roomUser.GetClient().GetHabbo().ViewMurmur && UserWhiper.UserId != roomUser.UserId)
                         {
-                            roomUser.GetClient().SendPacket(Message2);
+                            roomUser.GetClient().SendPacket(MessageWhipserStaff);
                         }
                     }
                 }

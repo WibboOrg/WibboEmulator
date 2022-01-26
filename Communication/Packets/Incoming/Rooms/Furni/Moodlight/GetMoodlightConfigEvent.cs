@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Moodlight;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Moodlight;
@@ -20,20 +21,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.ITEM_DIMMER_SETTINGS);
-            Response.WriteInteger(room.MoodlightData.Presets.Count);
-            Response.WriteInteger(room.MoodlightData.CurrentPreset);
-
-            int i = 0;
-            foreach (MoodlightPreset moodlightPreset in room.MoodlightData.Presets)
-            {
-                i++;
-                Response.WriteInteger(i);
-                Response.WriteInteger(int.Parse(ButterflyEnvironment.BoolToEnum(moodlightPreset.BackgroundOnly)) + 1);
-                Response.WriteString(moodlightPreset.ColorCode);
-                Response.WriteInteger(moodlightPreset.ColorIntensity);
-            }
-            Session.SendPacket(Response);
+            Session.SendPacket(new MoodlightConfigComposer(room.MoodlightData));
         }
     }
 }

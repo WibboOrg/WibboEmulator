@@ -1,5 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
+using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Quests;
 using Butterfly.Game.Rooms;
@@ -33,10 +34,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.GetHabbo().DailyRespectPoints--;
             roomUserByHabbo.GetClient().GetHabbo().Respect++;
 
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.USER_RESPECT);
-            Message.WriteInteger(roomUserByHabbo.GetClient().GetHabbo().Id);
-            Message.WriteInteger(roomUserByHabbo.GetClient().GetHabbo().Respect);
-            room.SendPacket(Message);
+            room.SendPacket(new RespectNotificationComposer(roomUserByHabbo.GetClient().GetHabbo().Id, roomUserByHabbo.GetClient().GetHabbo().Respect));
 
             RoomUser roomUserByHabbo2 = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
 

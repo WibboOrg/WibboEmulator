@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.GameCenter;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
-
+using Butterfly.Communication.Packets.Outgoing.Rooms.Freeze;
 using Butterfly.Game.Items;
 using System;
 using System.Collections;
@@ -175,10 +175,7 @@ namespace Butterfly.Game.Rooms.Games
 
             this._roomInstance.GetGameManager().AddPointToTeam(roomUser.Team, 40, null);
 
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_NUMBER);
-            Message.WriteInteger(roomUser.VirtualId);
-            Message.WriteInteger(roomUser.FreezeLives);
-            roomUser.GetClient().SendPacket(Message);
+            roomUser.GetClient().SendPacket(new UpdateFreezeLivesComposer(roomUser.VirtualId, roomUser.FreezeLives));
         }
 
         private static void RemoveUserFromTeam(RoomUser user)
@@ -349,13 +346,11 @@ namespace Butterfly.Game.Rooms.Games
                 case FreezePowerUp.Heart:
                     if (user.FreezeLives < 3)
                     {
-                        ++user.FreezeLives;
+                        user.FreezeLives++;
                         this._roomInstance.GetGameManager().AddPointToTeam(user.Team, 10, user);
                     }
-                    ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_NUMBER);
-                    Message.WriteInteger(user.VirtualId);
-                    Message.WriteInteger(user.FreezeLives);
-                    user.GetClient().SendPacket(Message);
+
+                    user.GetClient().SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
                     break;
                 case FreezePowerUp.Snowballs:
                     user.CountFreezeBall += 1;
@@ -411,10 +406,7 @@ namespace Butterfly.Game.Rooms.Games
                 --user.FreezeLives;
                 if (user.FreezeLives <= 0)
                 {
-                    ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_NUMBER);
-                    Message.WriteInteger(user.VirtualId);
-                    Message.WriteInteger(user.FreezeLives);
-                    user.GetClient().SendPacket(Message);
+                    user.GetClient().SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
 
                     user.ApplyEffect(0);
 
@@ -465,10 +457,7 @@ namespace Butterfly.Game.Rooms.Games
                     this._roomInstance.GetGameManager().AddPointToTeam(user.Team, -10, user);
                     user.ApplyEffect(12);
 
-                    ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_NUMBER);
-                    Message.WriteInteger(user.VirtualId);
-                    Message.WriteInteger(user.FreezeLives);
-                    user.GetClient().SendPacket(Message);
+                    user.GetClient().SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
                 }
             }
         }
