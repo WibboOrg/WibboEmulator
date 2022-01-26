@@ -69,6 +69,11 @@ namespace Butterfly.Game.Users.Badges
             }
         }
 
+        public ICollection<Badge> GetBadges()
+        {
+            return this._badges.Values;
+        }
+
         public Badge GetBadge(string Badge)
         {
             if (this._badges.ContainsKey(Badge))

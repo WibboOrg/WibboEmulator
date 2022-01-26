@@ -11,21 +11,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
-            if (room == null)
-            {
+            int UserId = Packet.PopInt();
+
+            User User = ButterflyEnvironment.GetHabboById(UserId);
+            if (User == null)
                 return;
-            }
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(Packet.PopInt());
-            if (roomUserByHabbo == null || roomUserByHabbo.IsBot || roomUserByHabbo.GetClient() == null || roomUserByHabbo.GetClient().GetHabbo() == null || roomUserByHabbo.GetClient().GetHabbo().GetBadgeComponent() == null)
-            {
-                return;
-            }
-
-            User HabboTarget = roomUserByHabbo.GetClient().GetHabbo();
-
-            Session.SendPacket(new HabboUserBadgesComposer(HabboTarget.Id, HabboTarget.GetBadgeComponent().EquippedCount, HabboTarget.GetBadgeComponent().BadgeList));
+            Session.SendPacket(new HabboUserBadgesComposer(User));
         }
     }
 }

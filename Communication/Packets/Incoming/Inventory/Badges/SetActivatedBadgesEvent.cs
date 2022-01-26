@@ -47,14 +47,10 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             User HabboTarget = Session.GetHabbo();
 
-            ServerPacket Message = new HabboUserBadgesComposer(HabboTarget.Id, HabboTarget.GetBadgeComponent().EquippedCount, HabboTarget.GetBadgeComponent().BadgeList);
-
             if (Session.GetHabbo().InRoom && ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId) != null)
-            {
-                ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId).SendPacket(Message);
-            }
-
-            Session.SendPacket(Message);
+                ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId).SendPacket(new HabboUserBadgesComposer(Session.GetHabbo()));
+            else
+                Session.SendPacket(new HabboUserBadgesComposer(Session.GetHabbo()));
         }
     }
 }
