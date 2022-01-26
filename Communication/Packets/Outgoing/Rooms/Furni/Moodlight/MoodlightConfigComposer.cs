@@ -1,3 +1,5 @@
+using Butterfly.Game.Rooms.Moodlight;
+
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Moodlight
 {
     internal class MoodlightConfigComposer : ServerPacket

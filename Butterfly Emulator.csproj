@@ -1079,7 +1079,6 @@
     <Compile Include="Game\Quests\QuestManager.cs" />
     <Compile Include="Game\Quests\QuestType.cs" />
     <Compile Include="Game\Quests\QuestTypeUtillity.cs" />
-    <Compile Include="Game\Quests\Composer\QuestCompletedComposer.cs" />
     <Compile Include="Game\Quests\Composer\QuestRewardType.cs" />
     <Compile Include="Game\Quests\Composer\QuestListComposer.cs" />
     <Compile Include="Game\Quests\Composer\QuestStartedComposer.cs" />
