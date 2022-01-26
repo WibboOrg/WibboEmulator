@@ -53,24 +53,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 if (room.UsersWithRights.Count <= 0)
                 {
-                    ServerPacket Response3 = new ServerPacket(ServerPacketHeader.ROOM_RIGHTS_LIST);
-                    Response3.WriteInteger(room.RoomData.Id);
-                    Response3.WriteInteger(0);
-                    Session.SendPacket(Response3);
+                    Session.SendPacket(new RoomRightsListComposer(room));
                 }
                 else
                 {
-
-                    ServerPacket Response = new ServerPacket(ServerPacketHeader.ROOM_RIGHTS_LIST);
-                    Response.WriteInteger(room.RoomData.Id);
-                    Response.WriteInteger(room.UsersWithRights.Count);
-                    foreach (int UserId2 in room.UsersWithRights)
-                    {
-                        User habboForId = ButterflyEnvironment.GetHabboById(UserId2);
-                        Response.WriteInteger(UserId2);
-                        Response.WriteString((habboForId == null) ? "Undefined (error)" : habboForId.Username);
-                    }
-                    Session.SendPacket(Response);
+                    room.UsersWithRights.Contains(UserId);
+                    Session.SendPacket(new RoomRightsListComposer(room));
                 }
             }
 

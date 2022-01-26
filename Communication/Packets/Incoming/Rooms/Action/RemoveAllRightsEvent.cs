@@ -51,10 +51,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             room.UsersWithRights.Clear();
 
-            ServerPacket Response2 = new ServerPacket(ServerPacketHeader.ROOM_RIGHTS_LIST);
-            Response2.WriteInteger(room.RoomData.Id);
-            Response2.WriteInteger(0);
-            Session.SendPacket(Response2);
+            Session.SendPacket(new RoomRightsListComposer(room));
         }
     }
 }
