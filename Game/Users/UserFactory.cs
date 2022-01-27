@@ -6,9 +6,9 @@ using System.Data;
 
 namespace Butterfly.Game.Users.Data
 {
-    public class UserDataFactory
+    public class UserFactory
     {
-        public static UserData GetUserData(string sessionTicket, string ip, string machineid)
+        public static User GetUserData(string sessionTicket, string ip, string machineid)
         {
             try
             {
@@ -79,9 +79,7 @@ namespace Butterfly.Game.Users.Data
                     }
                 }
 
-                User user = GenerateHabbo(dUserInfo, dUserStats, changeName, ignoreAllExpire);
-
-                return new UserData(userId, user);
+                return GenerateHabbo(dUserInfo, dUserStats, changeName, ignoreAllExpire);
             }
             catch (Exception ex)
             {
@@ -90,7 +88,7 @@ namespace Butterfly.Game.Users.Data
             }
         }
 
-        public static UserData GetUserData(int userId)
+        public static User GetUserData(int userId)
         {
             DataRow row;
             DataRow row2;
@@ -117,8 +115,7 @@ namespace Butterfly.Game.Users.Data
                 }
             }
 
-            User user = GenerateHabbo(row, row2, false, 0);
-            return new UserData(userId, user);
+            return GenerateHabbo(row, row2, false, 0);
         }
 
         public static User GenerateHabbo(DataRow dRow, DataRow dRow2, bool ChangeName, int ignoreAllExpire)
