@@ -15,8 +15,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             List<RoomData> ValidRooms = new List<RoomData>();
-            foreach (RoomData Data in Session.GetHabbo().UsersRooms)
+            foreach (int RoomId in Session.GetHabbo().UsersRooms)
             {
+                RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+                if (Data == null)
+                    continue;
+
                 if (Data.Group == null)
                 {
                     ValidRooms.Add(Data);

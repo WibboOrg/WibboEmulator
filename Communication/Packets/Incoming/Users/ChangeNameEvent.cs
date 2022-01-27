@@ -67,17 +67,15 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.SendPacket(new UpdateUsernameComposer(newUsername));
             Session.SendPacket(new UserObjectComposer(Session.GetHabbo()));
 
-            foreach (RoomData roomData in Session.GetHabbo().UsersRooms)
+            foreach (int RoomId in Session.GetHabbo().UsersRooms)
             {
-                roomData.OwnerName = newUsername;
-
-                Room roomowner = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(roomData.Id);
+                Room roomowner = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
                 if (roomowner != null)
                 {
                     roomowner.RoomData.OwnerName = newUsername;
                 }
 
-                ButterflyEnvironment.GetGame().GetRoomManager().RoomDataRemove(roomData.Id);
+                ButterflyEnvironment.GetGame().GetRoomManager().RoomDataRemove(RoomId);
             }
 
             room.SendPacket(new UserNameChangeComposer(newUsername, roomUser.VirtualId));

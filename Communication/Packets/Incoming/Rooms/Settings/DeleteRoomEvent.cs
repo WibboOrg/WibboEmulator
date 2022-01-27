@@ -40,19 +40,16 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 BotPetDao.UpdateRoomIdByRoomId(dbClient, RoomId);
             }
 
-            RoomData removedRoom = (from p in Session.GetHabbo().UsersRooms where p.Id == RoomId select p).SingleOrDefault();
-            if (removedRoom != null)
+            if (Session.GetHabbo().UsersRooms.Contains(RoomId))
             {
-                Session.GetHabbo().UsersRooms.Remove(removedRoom);
+                Session.GetHabbo().UsersRooms.Remove(RoomId);
             }
 
             if (Session.GetHabbo().FavoriteRooms != null)
             {
-                RoomData removedRoomFavo = (from p in Session.GetHabbo().FavoriteRooms where p.Id == RoomId select p).FirstOrDefault();
-
-                if (removedRoomFavo != null)
+                if (Session.GetHabbo().FavoriteRooms.Contains(RoomId))
                 {
-                    Session.GetHabbo().FavoriteRooms.Remove(removedRoomFavo);
+                    Session.GetHabbo().FavoriteRooms.Remove(RoomId);
                 }
             }
         }

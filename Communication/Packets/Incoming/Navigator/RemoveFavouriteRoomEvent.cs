@@ -23,7 +23,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Session.GetHabbo().FavoriteRooms.Remove(roomdata);
+            Session.GetHabbo().FavoriteRooms.Remove(RoomId);
 
             ServerPacket Response = new ServerPacket(ServerPacketHeader.USER_FAVORITE_ROOM);
             Response.WriteInteger(RoomId);

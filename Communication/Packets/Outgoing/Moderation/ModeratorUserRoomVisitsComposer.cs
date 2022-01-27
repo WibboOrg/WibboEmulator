@@ -7,17 +7,19 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorUserRoomVisitsComposer : ServerPacket
     {
-        public ModeratorUserRoomVisitsComposer(User Data, Dictionary<double, RoomData> Visits)
+        public ModeratorUserRoomVisitsComposer(User Data, Dictionary<double, int> Visits)
             : base(ServerPacketHeader.MODTOOL_VISITED_ROOMS_USER)
         {
             WriteInteger(Data.Id);
             WriteString(Data.Username);
             WriteInteger(Visits.Count);
 
-            foreach (KeyValuePair<double, RoomData> Visit in Visits)
+            foreach (KeyValuePair<double, int> Visit in Visits)
             {
-                WriteInteger(Visit.Value.Id);
-                WriteString(Visit.Value.Name);
+                RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(Visit.Value);
+
+                WriteInteger(roomData.Id);
+                WriteString(roomData.Name);
                 WriteInteger(UnixTimestamp.FromUnixTimestamp(Visit.Key).Hour);
                 WriteInteger(UnixTimestamp.FromUnixTimestamp(Visit.Key).Minute);
             }

@@ -161,7 +161,9 @@ namespace Butterfly.Game.Clients
                     ItemDao.InsertDuplicate(dbClient, this.GetHabbo().Id, RoomId);
                 }
 
-                this.GetHabbo().UsersRooms.Add(ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId));
+                if(!this.GetHabbo().UsersRooms.Contains(RoomId))
+                    this.GetHabbo().UsersRooms.Add(RoomId);
+
                 this.GetHabbo().HomeRoom = RoomId;
 
                 ServerPacket nuxStatus = new ServerPacket(ServerPacketHeader.NuxAlertComposer);

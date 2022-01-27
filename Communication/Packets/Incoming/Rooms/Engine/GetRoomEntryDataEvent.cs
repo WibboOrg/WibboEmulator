@@ -93,7 +93,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             double timeStampNow = UnixTimestamp.GetNow();
 
             if (!Session.GetHabbo().Visits.ContainsKey(timeStampNow))
-                Session.GetHabbo().Visits.Add(timeStampNow, Room.RoomData);
+                Session.GetHabbo().Visits.Add(timeStampNow, Room.Id);
         }
     }
 }

@@ -111,7 +111,6 @@ namespace Butterfly.Game.Rooms
 
         public Room LoadRoom(int Id)
         {
-
             if (this.TryGetRoom(Id, out Room Room))
             {
                 return Room;
@@ -211,8 +210,9 @@ namespace Butterfly.Game.Rooms
                 {
                     RoomId = RoomDao.Insert(dbClient, Name, Desc, Session.GetHabbo().Username, Model, Category, MaxVisitors, TradeSettings);
                 }
+                Session.GetHabbo().UsersRooms.Add(RoomId);
+
                 RoomData roomData = this.GenerateRoomData(RoomId);
-                Session.GetHabbo().UsersRooms.Add(roomData);
 
                 return roomData;
             }

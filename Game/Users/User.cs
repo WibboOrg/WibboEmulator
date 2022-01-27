@@ -59,14 +59,14 @@ namespace Butterfly.Game.Users
         public int ForceUse = -1;
         public int ForceRot = -1;
 
-        public List<RoomData> RoomRightsList;
-        public List<RoomData> FavoriteRooms;
-        public List<RoomData> UsersRooms;
+        public List<int> RoomRightsList;
+        public List<int> FavoriteRooms;
+        public List<int> UsersRooms;
         public List<int> MutedUsers;
         public List<int> RatedRooms;
         public List<int> MyGroups;
         public Dictionary<int, int> Quests;
-        public Dictionary<double, RoomData> Visits;
+        public Dictionary<double, int> Visits;
 
         private MessengerComponent _messengerComponent;
         private BadgeComponent _badgeComponent;
@@ -178,9 +178,9 @@ namespace Butterfly.Game.Users
             this.CurrentRoomId = 0;
             this.LoadingRoomId = 0;
             this.HomeRoom = HomeRoom;
-            this.FavoriteRooms = new List<RoomData>();
-            this.RoomRightsList = new List<RoomData>();
-            this.UsersRooms = new List<RoomData>();
+            this.FavoriteRooms = new List<int>();
+            this.RoomRightsList = new List<int>();
+            this.UsersRooms = new List<int>();
             this.MutedUsers = new List<int>();
             this.RatedRooms = new List<int>();
             this.Respect = Respect;
@@ -241,7 +241,7 @@ namespace Butterfly.Game.Users
 
             this.Nuxenable = nuxenable;
             this.NewUser = nuxenable;
-            this.Visits = new Dictionary<double, RoomData>();
+            this.Visits = new Dictionary<double, int>();
         }
 
         public void Init(Client client)
@@ -266,7 +266,7 @@ namespace Butterfly.Game.Users
                 DataTable dUserRooms = RoomDao.GetAllByOwner(dbClient, this.Username);
                 foreach (DataRow dRow in dUserRooms.Rows)
                 {
-                    this.UsersRooms.Add(ButterflyEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(dRow["id"]), dRow));
+                    this.UsersRooms.Add(Convert.ToInt32(dRow["id"]));
                 }
 
                 DataTable dGroupMemberships = GuildMembershipDao.GetOneByUserId(dbClient, this.Id);
@@ -287,20 +287,14 @@ namespace Butterfly.Game.Users
                 foreach (DataRow dataRow in dFavorites.Rows)
                 {
                     int roomId = Convert.ToInt32(dataRow["room_id"]);
-
-                    RoomData roomdata = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
-                    if(roomdata != null)
-                        this.FavoriteRooms.Add(roomdata);
+                    this.FavoriteRooms.Add(roomId);
                 }
 
                 DataTable dRoomRights = RoomRightDao.GetAllByUserId(dbClient, this.Id);
                 foreach (DataRow dataRow in dRoomRights.Rows)
                 {
                     int roomId = Convert.ToInt32(dataRow["room_id"]);
-
-                    RoomData roomdata = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
-                    if(roomdata != null)
-                        this.RoomRightsList.Add(roomdata);
+                    this.RoomRightsList.Add(roomId);
                 }
             }
         }

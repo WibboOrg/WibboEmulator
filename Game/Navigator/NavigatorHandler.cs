@@ -201,8 +201,24 @@ namespace Butterfly.Game.Navigator
 
                 case NavigatorCategoryType.MY_ROOMS:
 
-                    Message.WriteInteger(Session.GetHabbo().UsersRooms.Count);
-                    foreach (RoomData Data in Session.GetHabbo().UsersRooms.OrderBy(a => a.Name).ToList())
+                    List<RoomData> MyRooms = new List<RoomData>();
+
+                    foreach (int RoomId in Session.GetHabbo().UsersRooms)
+                    {
+                        RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+                        if (Data == null)
+                        {
+                            continue;
+                        }
+
+                        if (!MyRooms.Contains(Data))
+                        {
+                            MyRooms.Add(Data);
+                        }
+                    }
+
+                    Message.WriteInteger(MyRooms.Count);
+                    foreach (RoomData Data in MyRooms.OrderBy(a => a.Name).ToList())
                     {
                         RoomAppender.WriteRoom(Message, Data);
                     }
@@ -210,12 +226,17 @@ namespace Butterfly.Game.Navigator
 
                 case NavigatorCategoryType.MY_FAVORITES:
                     List<RoomData> Favourites = new List<RoomData>();
-                    foreach (RoomData Room in Session.GetHabbo().FavoriteRooms.ToArray())
+                    foreach (int RoomId in Session.GetHabbo().FavoriteRooms)
                     {
-
-                        if (!Favourites.Contains(Room))
+                        RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+                        if (Data == null)
                         {
-                            Favourites.Add(Room);
+                            continue;
+                        }
+
+                        if (!Favourites.Contains(Data))
+                        {
+                            Favourites.Add(Data);
                         }
                     }
 
@@ -280,16 +301,17 @@ namespace Butterfly.Game.Navigator
                 case NavigatorCategoryType.MY_RIGHTS:
                     List<RoomData> MyRights = new List<RoomData>();
 
-                    foreach (RoomData Room in Session.GetHabbo().RoomRightsList.ToArray())
+                    foreach (int RoomId in Session.GetHabbo().RoomRightsList)
                     {
-                        if (Room == null)
+                        RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+                        if (Data == null)
                         {
                             continue;
                         }
 
-                        if (!MyRights.Contains(Room))
+                        if (!MyRights.Contains(Data))
                         {
-                            MyRights.Add(Room);
+                            MyRights.Add(Data);
                         }
                     }
 

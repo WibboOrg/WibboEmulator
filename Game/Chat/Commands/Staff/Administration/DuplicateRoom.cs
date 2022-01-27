@@ -170,15 +170,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 BotPetDao.InsertDuplicate(dbClient, Session.GetHabbo().Id, RoomId, OldRoomId);
             }
 
-            RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
-            if (roomData == null)
-            {
-                return;
-            }
+            if(!Session.GetHabbo().UsersRooms.Contains(RoomId))
+                Session.GetHabbo().UsersRooms.Add(RoomId);
 
-            Session.GetHabbo().UsersRooms.Add(roomData);
             Session.SendNotification("Copie de l'appartement " + OldRoomId + " en cours de chargement...");
-            Session.SendPacket(new FlatCreatedComposer(roomData.Id, "Appart " + OldRoomId + " copie"));
+            Session.SendPacket(new FlatCreatedComposer(RoomId, "Appart " + OldRoomId + " copie"));
         }
     }
 }
