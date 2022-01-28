@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.RCON.Commands.User
@@ -36,9 +37,10 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            ServerPacket message = new ServerPacket(ServerPacketHeader.GENERIC_ALERT);
-            message.WriteString(ButterflyEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", Client.Langue) + "\r\n" + Message + "\r\n- " + Client.GetHabbo().Username);
-            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(message);
+            ButterflyEnvironment
+                .GetGame()
+                .GetClientManager()
+                .SendMessage(new BroadcastMessageAlertComposer(ButterflyEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", Client.Langue) + "\r\n" + Message + "\r\n- " + Client.GetHabbo().Username));
             return true;
         }
     }

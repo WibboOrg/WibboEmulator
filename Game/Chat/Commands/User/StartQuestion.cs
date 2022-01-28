@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Polls;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
@@ -12,24 +13,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (string.IsNullOrWhiteSpace(Question))
             {
-                UserRoom.SendWhisperChat("Votre question ne peu pas être vide");
+                UserRoom.SendWhisperChat("Votre question ne peut pas être vide");
                 return;
             }
 
-            ServerPacket MessageTwo = new ServerPacket(ServerPacketHeader.QUESTION);
-            MessageTwo.WriteString("MATCHING_POLL"); //Type
-            MessageTwo.WriteInteger(1);//pollId
-            MessageTwo.WriteInteger(1);//questionId
-            MessageTwo.WriteInteger(60);//Duration
-            MessageTwo.WriteInteger(1); //id
-            MessageTwo.WriteInteger(1);//number
-            MessageTwo.WriteInteger(3);//type (1 ou 2)
-            MessageTwo.WriteString(Question);//content
-            MessageTwo.WriteInteger(0);
-            MessageTwo.WriteInteger(0);
-            //MessageTwo.WriteString("0");
-            //MessageTwo.WriteString("1");
-            Room.SendPacket(MessageTwo);
+            Room.SendPacket(new QuestionComposer(Question));
 
             Room.VotedNoCount = 0;
             Room.VotedYesCount = 0;

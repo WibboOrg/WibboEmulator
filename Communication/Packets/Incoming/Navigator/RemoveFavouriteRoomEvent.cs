@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
@@ -15,24 +16,21 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            int RoomId = Packet.PopInt();
+            int roomId = Packet.PopInt();
 
-            RoomData roomdata = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+            RoomData roomdata = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
             if (roomdata == null)
             {
                 return;
             }
 
-            Session.GetHabbo().FavoriteRooms.Remove(RoomId);
+            Session.GetHabbo().FavoriteRooms.Remove(roomId);
 
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.USER_FAVORITE_ROOM);
-            Response.WriteInteger(RoomId);
-            Response.WriteBoolean(false);
-            Session.SendPacket(Response);
+            Session.SendPacket(new UpdateFavouriteRoomComposer(roomId, false));
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserFavoriteDao.Delete(dbClient, Session.GetHabbo().Id, RoomId);
+                UserFavoriteDao.Delete(dbClient, Session.GetHabbo().Id, roomId);
             }
         }
     }

@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Messenger;
 using Butterfly.Game.Clients;
 using Butterfly.Utility;
 using System;
@@ -56,10 +57,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.MESSENGER_ROOM_INVITE);
-            Message.WriteInteger(Session.GetHabbo().Id);
-            Message.WriteString(TextMessage);
-
             foreach (int UserId in Targets)
             {
                 if (Session.GetHabbo().GetMessenger().FriendshipExists(UserId))
@@ -72,7 +69,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     if (clientByUserId.GetHabbo().GetMessenger().FriendshipExists(Session.GetHabbo().Id))
                     {
-                        clientByUserId.SendPacket(Message);
+                        clientByUserId.SendPacket(new RoomInviteComposer(Session.GetHabbo().Id, TextMessage));
                     }
                 }
             }

@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Misc;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -7,9 +8,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.CLIENT_LATENCY);
-            Response.WriteInteger(Packet.PopInt());
-            Session.SendPacket(Response);
+            Session.SendPacket(new LatencyResponseComposer(Packet.PopInt()));
         }
     }
 }

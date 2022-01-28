@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Polls;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
@@ -42,16 +43,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 room.VotedYesCount++;
             }
 
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.QUESTION_ANSWERED);
-            Message.WriteInteger(Session.GetHabbo().Id);
-            Message.WriteString(Value);
-            Message.WriteInteger(2);
 
-            Message.WriteString("0");
-            Message.WriteInteger(room.VotedNoCount);
-            Message.WriteString("1");
-            Message.WriteInteger(room.VotedYesCount);
-            room.SendPacket(Message);
+            room.SendPacket(new QuestionAnsweredComposer(Session.GetHabbo().Id, Value, room.VotedNoCount, room.VotedYesCount));
 
             string WiredCode = (Value == "0") ? "QUESTION_NO" : "QUESTION_YES";
             if (room.AllowsShous(User, WiredCode))

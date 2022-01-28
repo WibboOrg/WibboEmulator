@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
@@ -24,10 +25,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
             else
             {
-                ServerPacket Response = new ServerPacket(ServerPacketHeader.USER_FAVORITE_ROOM);
-                Response.WriteInteger(roomId);
-                Response.WriteBoolean(true);
-                Session.SendPacket(Response);
+                Session.SendPacket(new UpdateFavouriteRoomComposer(roomId, true));
 
                 Session.GetHabbo().FavoriteRooms.Add(roomId);
 

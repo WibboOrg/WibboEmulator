@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Polls;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
@@ -8,14 +9,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.QUESTION_FINISHED);
-            Message.WriteInteger(1);//PollId
-            Message.WriteInteger(2);//Count
-            Message.WriteString("0");//Négatif
-            Message.WriteInteger(Room.VotedNoCount);//Nombre
-            Message.WriteString("1");//Positif
-            Message.WriteInteger(Room.VotedYesCount);//Nombre
-            Room.SendPacket(Message);
+            Room.SendPacket(new QuestionFinishedComposer(Room.VotedNoCount, Room.VotedYesCount));
 
             UserRoom.SendWhisperChat("Question terminée!");
         }

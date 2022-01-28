@@ -211,7 +211,7 @@
     <Compile Include="Communication\Packets\Incoming\Marketplace\GetOwnOffersEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Marketplace\MakeOfferEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Action\WhiperGroupEvent.cs" />
-    <Compile Include="Communication\Packets\Incoming\Rooms\Engine\AnswerPollEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Polls\AnswerPollEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\FloorPlan\GetOccupiedTilesEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Wired\UpdateActionEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Wired\UpdateConditionEvent.cs" />
@@ -545,6 +545,9 @@
     <Compile Include="Communication\Packets\Outgoing\Rooms\Permissions\YouAreControllerComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Permissions\YouAreNotControllerComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Permissions\YouAreOwnerComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Polls\QuestionAnsweredComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Polls\QuestionComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Polls\QuestionFinishedComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Session\CantConnectComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Session\CloseConnectionComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Session\FlatAccessibleComposer.cs" />
@@ -743,7 +746,6 @@
     <Compile Include="Game\Chat\Commands\Staff\Administration\OpenWeb.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\RegenLTD.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\PlaySoundRoom.cs" />
-    <Compile Include="Game\Chat\Commands\Staff\Administration\RoomEffect.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\StaffAlert.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\StopSoundRoom.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\RoomYouTube.cs" />

@@ -350,7 +350,6 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(176, new AllIgnore());
             this.Register(177, new NotifTop());
             this.Register(191, new OpenWeb());
-            this.Register(192, new RoomEffect());
             this.Register(193, new KickBan());
             this.Register(159, new SuperBot());
             this.Register(202, new ForceSit());
