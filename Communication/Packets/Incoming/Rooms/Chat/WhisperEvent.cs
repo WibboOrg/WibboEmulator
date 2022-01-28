@@ -199,7 +199,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                             continue;
                         }
 
-                        UserWhiper.GetClient().SendPacket(new WhisperComposer(UserWhiper.VirtualId, Message, Color));
+                        UserWhiper.GetClient().SendPacket(new WhisperComposer(User.VirtualId, Message, Color));
                     }
 
                     List<RoomUser> roomUserByRank = Room.GetRoomUserManager().GetStaffRoomUser();
