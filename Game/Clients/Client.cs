@@ -65,20 +65,20 @@ namespace Butterfly.Game.Clients
             try
             {
                 string ip = this.GetConnection().GetIp();
-                UserData userData = UserDataFactory.GetUserData(AuthTicket, ip, this.MachineId);
+                User user = UserFactory.GetUserData(AuthTicket, ip, this.MachineId);
 
-                if (userData == null)
+                if (user == null)
                 {
                     return;
                 }
                 else
                 {
-                    ButterflyEnvironment.GetGame().GetClientManager().LogClonesOut(userData.Id);
-                    this._user = userData.User;
-                    this.Langue = this._user.Langue;
+                    ButterflyEnvironment.GetGame().GetClientManager().LogClonesOut(user.Id);
+                    this._user = user;
+                    this.Langue = user.Langue;
                     this.IsWebSocket = this._connection.IsWebSocket;
 
-                    ButterflyEnvironment.GetGame().GetClientManager().RegisterClient(this, userData.Id, this._user.Username);
+                    ButterflyEnvironment.GetGame().GetClientManager().RegisterClient(this, user.Id, user.Username);
 
                     if (this.Langue == Language.FRANCAIS)
                     {

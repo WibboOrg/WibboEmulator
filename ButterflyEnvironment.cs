@@ -304,15 +304,11 @@ namespace Butterfly
                         }
                         else
                         {
-                            UserData data = UserDataFactory.GetUserData(UserId);
-                            if (data != null)
+                            User user = UserFactory.GetUserData(UserId);
+                            if (user != null)
                             {
-                                User Generated = data.User;
-                                if (Generated != null)
-                                {
-                                    _usersCached.TryAdd(UserId, Generated);
-                                    return Generated;
-                                }
+                                _usersCached.TryAdd(UserId, user);
+                                return user;
                             }
                         }
                     }

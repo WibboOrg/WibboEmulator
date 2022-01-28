@@ -1171,8 +1171,7 @@
     <Compile Include="Game\Users\Messenger\MessengerRequest.cs" />
     <Compile Include="Game\Users\Messenger\SearchResult.cs" />
     <Compile Include="Game\Users\Messenger\SearchResultFactory.cs" />
-    <Compile Include="Game\Users\Data\UserData.cs" />
-    <Compile Include="Game\Users\Data\UserDataFactory.cs" />
+    <Compile Include="Game\Users\UserFactory.cs" />
     <Compile Include="Game\Permissions\AuthorizationCommands.cs" />
     <Compile Include="Game\Chat\Commands\CommandManager.cs" />
     <Compile Include="Communication\Packets\Outgoing\ServerPacket.cs" />
