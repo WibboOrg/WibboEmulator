@@ -6,6 +6,7 @@ using Butterfly.Communication.Packets.Outgoing.Handshake;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Achievements;
 using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
+using Butterfly.Communication.Packets.Outgoing.Misc;
 using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Notifications;
@@ -166,10 +167,7 @@ namespace Butterfly.Game.Clients
 
                 this.GetHabbo().HomeRoom = RoomId;
 
-                ServerPacket nuxStatus = new ServerPacket(ServerPacketHeader.NuxAlertComposer);
-                nuxStatus.WriteInteger(2);
-                this.SendPacket(nuxStatus);
-
+                this.SendPacket(new NuxAlertComposer(2));
                 this.SendPacket(new InClientLinkComposer("nux/lobbyoffer/hide"));
             }
         }

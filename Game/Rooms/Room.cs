@@ -560,7 +560,7 @@ namespace Butterfly.Game.Rooms
 
                 if (RoomUser.IsDancing)
                 {
-                    Session.SendPacket(new DanceComposer(RoomUser, RoomUser.DanceId));
+                    Session.SendPacket(new DanceComposer(RoomUser.VirtualId, RoomUser.DanceId));
                 }
 
                 if (RoomUser.IsAsleep)

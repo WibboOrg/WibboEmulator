@@ -1134,20 +1134,20 @@ namespace Butterfly.Game.Items.Wired.Actions
             {
                 case "dance":
                     {
-                        if (int.TryParse(value, out int danceid))
+                        if (int.TryParse(value, out int danceId))
                         {
-                            if (danceid < 0 || danceid > 4)
+                            if (danceId < 0 || danceId > 4)
                             {
-                                danceid = 0;
+                                danceId = 0;
                             }
 
-                            if (danceid > 0 && user.CarryItemID > 0)
+                            if (danceId > 0 && user.CarryItemID > 0)
                             {
                                 user.CarryItem(0);
                             }
 
-                            user.DanceId = danceid;
-                            user.Room.SendPacket(new DanceComposer(user, danceid));
+                            user.DanceId = danceId;
+                            user.Room.SendPacket(new DanceComposer(user.VirtualId, danceId));
                         }
 
                         break;
@@ -2135,23 +2135,21 @@ namespace Butterfly.Game.Items.Wired.Actions
                             break;
                         }
 
-                        if (int.TryParse(Value, out int danceid))
+                        if (int.TryParse(Value, out int danceId))
                         {
-                            if (danceid < 0 || danceid > 4)
+                            if (danceId < 0 || danceId > 4)
                             {
-                                danceid = 0;
+                                danceId = 0;
                             }
 
-                            if (danceid > 0 && User.CarryItemID > 0)
+                            if (danceId > 0 && User.CarryItemID > 0)
                             {
                                 User.CarryItem(0);
                             }
 
-                            User.DanceId = danceid;
-                            ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_DANCE);
-                            Message.WriteInteger(User.VirtualId);
-                            Message.WriteInteger(danceid);
-                            User.Room.SendPacket(Message);
+                            User.DanceId = danceId;
+
+                            User.Room.SendPacket(new DanceComposer(User.VirtualId, danceId));
                         }
                         break;
                     }

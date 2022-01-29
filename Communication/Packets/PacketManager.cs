@@ -433,7 +433,7 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.ROOM_LIKE, new GiveRoomScoreEvent());
             this._incomingPackets.Add(ClientPacketHeader.USER_IGNORE, new IgnoreUserEvent());
             this._incomingPackets.Add(ClientPacketHeader.USER_UNIGNORE, new UnIgnoreUserEvent());
-            this._incomingPackets.Add(ClientPacketHeader.WhiperGroupMessageEvent, new WhiperGroupEvent());
+            this._incomingPackets.Add(ClientPacketHeader.UNIT_CHAT_WHISPER_GROUP, new WhiperGroupEvent());
         }
 
         private void RegisterBots()

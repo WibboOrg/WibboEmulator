@@ -43,7 +43,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 room.VotedYesCount++;
             }
 
-
             room.SendPacket(new QuestionAnsweredComposer(Session.GetHabbo().Id, Value, room.VotedNoCount, room.VotedYesCount));
 
             string WiredCode = (Value == "0") ? "QUESTION_NO" : "QUESTION_YES";

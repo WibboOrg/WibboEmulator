@@ -75,7 +75,7 @@ namespace Butterfly.Game.Rooms.AI.Types
             if (OwnerUser.DanceId != this.GetRoomUser().DanceId)
             {
                 this.GetRoomUser().DanceId = OwnerUser.DanceId;
-                this.GetRoom().SendPacket(new DanceComposer(this.GetRoomUser(), this.GetRoomUser().DanceId));
+                this.GetRoom().SendPacket(new DanceComposer(this.GetRoomUser().VirtualId, this.GetRoomUser().DanceId));
             }
             else if (OwnerUser.IsAsleep != this.GetRoomUser().IsAsleep)
             {

@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Misc;
 using Butterfly.Communication.Packets.Outgoing.Notifications;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Users;
@@ -38,9 +39,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.SendPacket(new InClientLinkComposer("nux/lobbyoffer/show"));
                 habbo.Nuxenable = false;
 
-                ServerPacket nuxStatus = new ServerPacket(ServerPacketHeader.NuxAlertComposer);
-                nuxStatus.WriteInteger(0);
-                Session.SendPacket(nuxStatus);
+                Session.SendPacket(new NuxAlertComposer(0));
             }
         }
     }

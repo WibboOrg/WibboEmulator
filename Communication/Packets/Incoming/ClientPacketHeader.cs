@@ -2,7 +2,6 @@
 {
     public static class ClientPacketHeader //PRODUCTION-201611291003-a-1161735
     {
-        public const int WhiperGroupMessageEvent = 1118; //Custom
         public const int CameraPurchaseMessageEvent = 2408; //Custom
 
         public const int FindRandomFriendingRoomMessageEvent = 1703;
@@ -14,6 +13,7 @@
         public const int RemoveGroupFavouriteMessageEvent = 1820;
         public const int FootballGateSaveLookEvent = 924;
 
+        public const int UNIT_CHAT_WHISPER_GROUP = 1118;
         public const int GET_OCCUPIED_TILES = 1687;
         public const int POLL_ANSWER = 3505;
         public const int GROUP_BADGES = 21;

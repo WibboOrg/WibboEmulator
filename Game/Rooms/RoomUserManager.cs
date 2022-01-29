@@ -193,10 +193,7 @@ namespace Butterfly.Game.Rooms
             if (Bot.IsDancing)
             {
                 roomUser.DanceId = 3;
-                ServerPacket Response = new ServerPacket(ServerPacketHeader.UNIT_DANCE);
-                Response.WriteInteger(roomUser.VirtualId);
-                Response.WriteInteger(3);
-                this._room.SendPacket(Response);
+                this._room.SendPacket(new DanceComposer(roomUser.VirtualId, 3));
             }
 
             if (Bot.Enable > 0)

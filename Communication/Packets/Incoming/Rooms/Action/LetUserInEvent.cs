@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
@@ -43,9 +44,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (allowUserToEnter)
             {
-                ServerPacket Response = new ServerPacket(ServerPacketHeader.ROOM_DOORBELL_CLOSE);
-                Response.WriteString("");
-                clientByUsername.SendPacket(Response);
+                clientByUsername.SendPacket(new FlatAccessibleComposer(username));
 
                 clientByUsername.GetHabbo().AllowDoorBell = true;
 
@@ -56,9 +55,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
             else
             {
-                ServerPacket Response = new ServerPacket(ServerPacketHeader.ROOM_DOORBELL_DENIED);
-                Response.WriteString("");
-                clientByUsername.SendPacket(Response);
+                clientByUsername.SendPacket(new FlatAccessDeniedComposer(username));
             }
         }
     }

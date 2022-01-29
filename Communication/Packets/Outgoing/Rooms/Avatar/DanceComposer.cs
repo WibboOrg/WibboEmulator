@@ -4,11 +4,11 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Avatar
 {
     internal class DanceComposer : ServerPacket
     {
-        public DanceComposer(RoomUser Avatar, int Dance)
+        public DanceComposer(int virtualId, int dance)
             : base(ServerPacketHeader.UNIT_DANCE)
         {
-            this.WriteInteger(Avatar.VirtualId);
-            this.WriteInteger(Dance);
+            this.WriteInteger(virtualId);
+            this.WriteInteger(dance);
         }
     }
 }

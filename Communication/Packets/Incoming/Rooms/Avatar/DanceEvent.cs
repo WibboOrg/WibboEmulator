@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Quests;
 using Butterfly.Game.Rooms;
@@ -22,22 +23,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             roomUserByHabbo.Unidle();
-            int i = Packet.PopInt();
-            if (i < 0 || i > 4 || !true && i > 1)
+            int danceId = Packet.PopInt();
+            if (danceId < 0 || danceId > 4 || !true && danceId > 1)
             {
-                i = 0;
+                danceId = 0;
             }
 
-            if (i > 0 && roomUserByHabbo.CarryItemID > 0)
+            if (danceId > 0 && roomUserByHabbo.CarryItemID > 0)
             {
                 roomUserByHabbo.CarryItem(0);
             }
 
-            roomUserByHabbo.DanceId = i;
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_DANCE);
-            Message.WriteInteger(roomUserByHabbo.VirtualId);
-            Message.WriteInteger(i);
-            room.SendPacket(Message);
+            roomUserByHabbo.DanceId = danceId;
+            room.SendPacket(new DanceComposer(roomUserByHabbo.VirtualId, danceId));
             ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_DANCE, 0);
         }
     }

@@ -132,9 +132,9 @@
         public const int ROOM_SETTINGS_SAVE = 948;
         public const int ROOM_ENTER_ERROR = 899;
         public const int DESKTOP_VIEW = 122;
-        public const int ROOM_DOORBELL_DENIED = 878;
+        public const int ROOM_DOORBELL_REJECTED = 878;
         public const int ROOM_DOORBELL_ADD = 2309;
-        public const int ROOM_DOORBELL_CLOSE = 3783;
+        public const int ROOM_DOORBELL_ACCEPTED = 3783;
         public const int ROOM_MODEL_NAME = 2031;
         public const int ROOM_FORWARD = 160;
         public const int TRADE = 2505;

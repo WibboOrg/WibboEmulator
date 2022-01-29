@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Misc;
 using Butterfly.Communication.Packets.Outgoing.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
@@ -66,9 +67,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (Session.GetHabbo().Nuxenable)
             {
-                ServerPacket nuxStatus = new ServerPacket(ServerPacketHeader.NuxAlertComposer);
-                nuxStatus.WriteInteger(2);
-                Session.SendPacket(nuxStatus);
+                Session.SendPacket(new NuxAlertComposer(2));
 
                 Session.GetHabbo().PassedNuxCount++;
                 Session.SendPacket(new InClientLinkComposer("nux/lobbyoffer/hide"));

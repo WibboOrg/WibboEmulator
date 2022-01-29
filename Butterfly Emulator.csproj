@@ -320,6 +320,7 @@
     <Compile Include="Communication\Packets\Outgoing\Messenger\NewConsoleComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Messenger\RoomInviteComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Misc\LatencyResponseComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Misc\NuxAlertComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\BroadcastMessageAlertComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\CfhTopicsInitComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Moderation\ModeratorInitComposer.cs" />

@@ -154,7 +154,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                             Bot.BotData.IsDancing = true;
                         }
 
-                        Room.SendPacket(new DanceComposer(Bot, Bot.DanceId));
+                        Room.SendPacket(new DanceComposer(Bot.VirtualId, Bot.DanceId));
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {

@@ -376,8 +376,7 @@ namespace Butterfly.Game.Users
                     {
                         if (room.UserCount == 0)
                         {
-                            ServerPacket message = new ServerPacket(ServerPacketHeader.ROOM_DOORBELL_DENIED);
-                            this.GetClient().SendPacket(message);
+                            this.GetClient().SendPacket(new FlatAccessDeniedComposer(""));
                         }
                         else
                         {

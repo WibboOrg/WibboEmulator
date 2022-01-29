@@ -27,16 +27,16 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             List<RoomUser> Users = Room.GetRoomUserManager().GetRoomUsers();
             if (Users.Count > 0)
             {
-                foreach (RoomUser U in Users.ToList())
+                foreach (RoomUser user in Users.ToList())
                 {
-                    if (U == null)
+                    if (user == null)
                         continue;
 
-                    if (U.CarryItemID > 0)
-                        U.CarryItemID = 0;
+                    if (user.CarryItemID > 0)
+                        user.CarryItemID = 0;
 
-                    U.DanceId = DanceId;
-                    Room.SendPacket(new DanceComposer(U, DanceId));
+                    user.DanceId = DanceId;
+                    Room.SendPacket(new DanceComposer(user.VirtualId, DanceId));
                 }
             }
         }
