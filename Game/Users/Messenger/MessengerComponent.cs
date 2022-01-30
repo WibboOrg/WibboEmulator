@@ -439,8 +439,8 @@ namespace Butterfly.Game.Users.Messenger
         public ServerPacket PerformSearch(string query)
         {
             List<SearchResult> searchResult = SearchResultFactory.GetSearchResult(query);
-            List<SearchResult> list1 = new List<SearchResult>();
-            List<SearchResult> list2 = new List<SearchResult>();
+            List<SearchResult> friend = new List<SearchResult>();
+            List<SearchResult> other = new List<SearchResult>();
 
             foreach (SearchResult searchResult2 in searchResult)
             {
@@ -448,29 +448,16 @@ namespace Butterfly.Game.Users.Messenger
                 {
                     if (this.FriendshipExists(searchResult2.UserId))
                     {
-                        list1.Add(searchResult2);
+                        friend.Add(searchResult2);
                     }
                     else
                     {
-                        list2.Add(searchResult2);
+                        other.Add(searchResult2);
                     }
                 }
             }
 
-            ServerPacket reply = new ServerPacket(ServerPacketHeader.MESSENGER_SEARCH);
-            reply.WriteInteger(list1.Count);
-            foreach (SearchResult searchResult2 in list1)
-            {
-                searchResult2.Searialize(reply);
-            }
-
-            reply.WriteInteger(list2.Count);
-            foreach (SearchResult searchResult2 in list2)
-            {
-                searchResult2.Searialize(reply);
-            }
-
-            return reply;
+            return new HabboSearchResultComposer(friend, other);
         }
 
         public void ProcessOfflineMessages()

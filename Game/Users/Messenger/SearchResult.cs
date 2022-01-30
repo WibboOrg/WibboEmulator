@@ -14,18 +14,5 @@ namespace Butterfly.Game.Users.Messenger
             this.Username = username;
             this.Look = look;
         }
-
-        public void Searialize(ServerPacket reply)
-        {
-            reply.WriteInteger(this.UserId);
-            reply.WriteString(this.Username);
-            reply.WriteString(""); //motto
-            reply.WriteBoolean(ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId) != null);
-            reply.WriteBoolean(false);
-            reply.WriteString(string.Empty);
-            reply.WriteInteger(0);
-            reply.WriteString(this.Look);
-            reply.WriteString(""); //realName
-        }
     }
 }

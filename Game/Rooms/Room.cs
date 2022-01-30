@@ -534,51 +534,53 @@ namespace Butterfly.Game.Rooms
             Session.SendPacket(this.GetGameMap().Model.SerializeRelativeHeightmap());
             Session.SendPacket(this.GetGameMap().Model.GetHeightmap());
 
-            foreach (RoomUser RoomUser in this._roomUserManager.GetUserList().ToList())
+            List<RoomUser> roomUsers = new List<RoomUser>();
+            foreach (RoomUser roomUser in this._roomUserManager.GetUserList().ToList())
             {
-                if (RoomUser == null)
+                if (roomUser == null)
                 {
                     continue;
                 }
 
-                if (RoomUser.IsSpectator)
+                if (roomUser.IsSpectator)
                 {
                     continue;
                 }
 
-                if (!RoomUser.IsBot && RoomUser.GetClient() == null)
+                if (!roomUser.IsBot && roomUser.GetClient() == null)
                 {
                     continue;
                 }
 
-                if (!RoomUser.IsBot && RoomUser.GetClient().GetHabbo() == null)
+                if (!roomUser.IsBot && roomUser.GetClient().GetHabbo() == null)
                 {
                     continue;
                 }
 
-                Session.SendPacket(new UsersComposer(RoomUser));
+                roomUsers.Add(roomUser);
 
-                if (RoomUser.IsDancing)
+                if (roomUser.IsDancing)
                 {
-                    Session.SendPacket(new DanceComposer(RoomUser.VirtualId, RoomUser.DanceId));
+                    Session.SendPacket(new DanceComposer(roomUser.VirtualId, roomUser.DanceId));
                 }
 
-                if (RoomUser.IsAsleep)
+                if (roomUser.IsAsleep)
                 {
-                    Session.SendPacket(new SleepComposer(RoomUser.VirtualId, true));
+                    Session.SendPacket(new SleepComposer(roomUser.VirtualId, true));
                 }
 
-                if (RoomUser.CarryItemID > 0 && RoomUser.CarryTimer > 0)
+                if (roomUser.CarryItemID > 0 && roomUser.CarryTimer > 0)
                 {
-                    Session.SendPacket(new CarryObjectComposer(RoomUser.VirtualId, RoomUser.CarryItemID));
+                    Session.SendPacket(new CarryObjectComposer(roomUser.VirtualId, roomUser.CarryItemID));
                 }
 
-                if (RoomUser.CurrentEffect > 0)
+                if (roomUser.CurrentEffect > 0)
                 {
-                    Session.SendPacket(new AvatarEffectComposer(RoomUser.VirtualId, RoomUser.CurrentEffect));
+                    Session.SendPacket(new AvatarEffectComposer(roomUser.VirtualId, roomUser.CurrentEffect));
                 }
             }
 
+            Session.SendPacket(new UsersComposer(roomUsers));
             Session.SendPacket(new UserUpdateComposer(this._roomUserManager.GetUserList().ToList()));
             Session.SendPacket(new ObjectsComposer(this.GetRoomItemHandler().GetFloor.ToArray(), this));
             Session.SendPacket(new ObjectsComposer(this.GetRoomItemHandler().GetTempItems.ToArray(), this));
