@@ -1,4 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
@@ -68,11 +69,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             Session.GetHabbo().GetInventoryComponent().RemoveItem(userItem.Id);
-
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.ROOM_PAINT);
-            Message.WriteString(DecorationKey);
-            Message.WriteString(userItem.ExtraData);
-            room.SendPacket(Message);
+            room.SendPacket(new RoomPropertyComposer(DecorationKey, userItem.ExtraData));
         }
     }
 }

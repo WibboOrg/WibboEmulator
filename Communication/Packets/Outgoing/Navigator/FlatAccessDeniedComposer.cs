@@ -5,8 +5,8 @@ namespace Butterfly.Communication.Packets.Outgoing.Navigator
         public FlatAccessDeniedComposer(string username)
             : base(ServerPacketHeader.ROOM_DOORBELL_REJECTED)
         {
-            if(username != null)
-                WriteString(username)
+            if (username != null)
+                WriteString(username);
         }
     }
 }
