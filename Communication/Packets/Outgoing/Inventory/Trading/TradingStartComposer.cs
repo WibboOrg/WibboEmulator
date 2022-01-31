@@ -2,10 +2,13 @@ namespace Butterfly.Communication.Packets.Outgoing.Inventory.Trading
 {
     internal class TradingStartComposer : ServerPacket
     {
-        public TradingStartComposer()
+        public TradingStartComposer(int UserOneId, int UserTwoId)
             : base(ServerPacketHeader.TRADE)
         {
-
+            this.WriteInteger(UserOneId);
+            this.WriteInteger(1);
+            this.WriteInteger(UserTwoId);
+            this.WriteInteger(1);
         }
     }
 }

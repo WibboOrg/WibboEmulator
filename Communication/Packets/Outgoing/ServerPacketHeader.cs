@@ -138,7 +138,7 @@
         public const int ROOM_MODEL_NAME = 2031;
         public const int ROOM_FORWARD = 160;
         public const int TRADE = 2505;
-        public const int TRADE_UPDATE = 2024;
+        public const int TRADE_LIST_ITEM = 2024;
         public const int TRADE_ACCEPTED = 2568;
         public const int TRADE_CONFIRM = 2720;
         public const int TRADE_CLOSE = 1001;
