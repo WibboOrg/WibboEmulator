@@ -2,10 +2,11 @@ namespace Butterfly.Communication.Packets.Outgoing.Inventory.Trading
 {
     internal class TradingAcceptComposer : ServerPacket
     {
-        public TradingAcceptComposer()
+        public TradingAcceptComposer(int userId, int statut)
             : base(ServerPacketHeader.TRADE_ACCEPTED)
         {
-
+            this.WriteInteger(userId);
+            this.WriteInteger(statut);
         }
     }
 }
