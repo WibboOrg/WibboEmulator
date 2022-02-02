@@ -1602,6 +1602,13 @@ namespace Butterfly.Game.Rooms
 
             List<Item> coordinatedItems = this._room.GetGameMap().GetCoordinatedItems(new Point(User.X, User.Y)).ToList();
 
+            
+            User.X = User.SetX;
+            User.Y = User.SetY;
+            User.Z = User.SetZ;
+
+            this._room.CollisionUser(User);
+
             if (User.IsBot)
             {
                 RoomUser BotCollisionUser = this._room.GetGameMap().LookHasUserNearNotBot(User.X, User.Y);
@@ -1610,12 +1617,6 @@ namespace Butterfly.Game.Rooms
                     this._room.GetWiredHandler().TriggerBotCollision(BotCollisionUser, User.BotData.Name);
                 }
             }
-
-            User.X = User.SetX;
-            User.Y = User.SetY;
-            User.Z = User.SetZ;
-
-            this._room.CollisionUser(User);
 
             if (this._room.IsRoleplay)
             {
