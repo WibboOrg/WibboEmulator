@@ -2,11 +2,10 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorSupportTicketResponseComposer : ServerPacket
     {
-        public ModeratorSupportTicketResponseComposer(int result)
+        public ModeratorSupportTicketResponseComposer(string messageAlert)
             : base(ServerPacketHeader.CFH_REPLY)
         {
-            WriteInteger(result);
-            WriteString("");
+            WriteString(messageAlert);
         }
     }
 }

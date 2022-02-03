@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Action;
+using Butterfly.Communication.Packets.Outgoing.Moderation;
 
 namespace Butterfly.Game.Moderation
 {
@@ -360,9 +361,7 @@ namespace Butterfly.Game.Moderation
             }
             if (clientByUserId != null)
             {
-                ServerPacket Message = new ServerPacket(ServerPacketHeader.CFH_REPLY);
-                Message.WriteString(MessageAlert);
-                clientByUserId.SendPacket(Message);
+                clientByUserId.SendPacket(new ModeratorSupportTicketResponseComposer(MessageAlert));
             }
             ticket.Close(NewStatus, true);
             SendTicketToModerators(ticket);
@@ -444,42 +443,15 @@ namespace Butterfly.Game.Moderation
             room.SendPacket(new GetGuestRoomResultComposer(ModSession, room.RoomData, false, false));
         }
 
-        public static ServerPacket SerializeRoomTool(RoomData Data)
+        public static ServerPacket SerializeRoomTool(RoomData data)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Data.Id);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(data.Id);
 
-            int userId = 0;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                userId = UserDao.GetIdByName(dbClient, Data.OwnerName);
-            }
+            bool ownerInRoom = false;
+            if (room != null && room.GetRoomUserManager().GetRoomUserByName(data.OwnerName) != null)
+                ownerInRoom = true;
 
-            ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.MODTOOL_ROOM_INFO);
-            serverMessage.WriteInteger(Data.Id);
-            serverMessage.WriteInteger(Data.UsersNow);
-            if (room != null)
-            {
-                serverMessage.WriteBoolean(room.GetRoomUserManager().GetRoomUserByName(Data.OwnerName) != null);
-            }
-            else
-            {
-                serverMessage.WriteBoolean(false);
-            }
-
-            serverMessage.WriteInteger(userId);
-            serverMessage.WriteString(Data.OwnerName);
-            serverMessage.WriteBoolean(room != null);
-            if (room != null)
-            {
-                serverMessage.WriteString(Data.Name);
-                serverMessage.WriteString(Data.Description);
-                serverMessage.WriteInteger(Data.TagCount);
-                foreach (string s in Data.Tags)
-                {
-                    serverMessage.WriteString(s);
-                }
-            }
-            return serverMessage;
+            return new ModeratorRoomInfoComposer(data, ownerInRoom);
         }
 
         public static void KickUser(Client ModSession, int UserId, string Message, bool Soft)

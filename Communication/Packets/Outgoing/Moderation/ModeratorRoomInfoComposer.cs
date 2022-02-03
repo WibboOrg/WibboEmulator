@@ -4,25 +4,25 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorRoomInfoComposer : ServerPacket
     {
-        public ModeratorRoomInfoComposer(RoomData Data, bool OwnerInRoom)
+        public ModeratorRoomInfoComposer(RoomData data, bool ownerInRoom)
             : base(ServerPacketHeader.MODTOOL_ROOM_INFO)
         {
-            WriteInteger(Data.Id);
-            WriteInteger(Data.UsersNow);
-            WriteBoolean(OwnerInRoom); // owner in room
-            WriteInteger(Data.OwnerId);
-            WriteString(Data.OwnerName);
-            WriteBoolean(Data != null);
-            WriteString(Data.Name);
-            WriteString(Data.Description);
+            WriteInteger(data.Id);
+            WriteInteger(data.UsersNow);
 
-            WriteInteger(Data.Tags.Count);
-            foreach (string Tag in Data.Tags)
+            WriteBoolean(ownerInRoom);
+
+            WriteInteger(data.OwnerId);
+            WriteString(data.OwnerName);
+            WriteBoolean(true);
+
+            WriteString(data.Name);
+            WriteString(data.Description);
+            WriteInteger(data.TagCount);
+            foreach (string s in data.Tags)
             {
-                WriteString(Tag);
+                WriteString(s);
             }
-
-            WriteBoolean(false);
         }
     }
 }

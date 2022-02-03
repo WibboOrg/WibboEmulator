@@ -45,7 +45,7 @@ namespace Butterfly.Game.Rooms
         public int ChatFloodProtection;
         public int GroupId;
         public int TrocStatus;
-        public Guilds.Group Group;
+        public Group Group;
         public bool HideWireds;
         public int SellPrice;
         public int TagCount => this.Tags.Count;

@@ -72,8 +72,6 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
                     return;
                 }
 
-
-                //ButterflyEnvironment.GetGame().GetClientManager().SendSuperNotif("Message des Staffs", AlertMessage, "game_promo_small", "event:navigator/goto/" + Client.GetHabbo().CurrentRoom.Id, "Je veux y accéder!", true, true);
                 ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", Message, "Je veux y jouer !", Client.GetHabbo().CurrentRoom.Id, ""), Session.Langue, true);
 
                 Client.GetHabbo().CurrentRoom.CloseFullRoom = true;
@@ -86,9 +84,6 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
                     return;
                 }
 
-                //ServerPacket message = new ServerPacket(ServerPacketHeader.BroadcastMessageAlertMessageComposer);
-                //message.WriteString(ButterflyEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", Client.Langue) + "\r\n" + Message);// + "\r\n- " + Client.GetHabbo().Username);
-                //ButterflyEnvironment.GetGame().GetClientManager().SendMessage(message);
                 ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer("staff", "Message des Staffs", Message, "Compris !", 0, ""), Session.Langue);
             }
 

@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Game.Clients;
@@ -450,11 +451,7 @@ namespace Butterfly.Game.Rooms
                 this.CurrentEffect = EffectId;
             }
 
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_EFFECT);
-            Message.WriteInteger(this.VirtualId);
-            Message.WriteInteger(EffectId);
-            Message.WriteInteger(2);
-            this.Room.SendPacket(Message);
+            this.Room.SendPacket(new AvatarEffectComposer(this.VirtualId, EffectId));
         }
 
         public bool SetPetTransformation(string NamePet, int RaceId)
