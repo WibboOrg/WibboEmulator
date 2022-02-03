@@ -49,13 +49,13 @@ namespace Butterfly.Game.Items.Wired.Actions
 
             if (newPoint != item.Coordinate)
             {
-                int OldX = item.X;
-                int OldY = item.Y;
-                double OldZ = item.Z;
+                int oldX = item.X;
+                int oldY = item.Y;
+                double oldZ = item.Z;
 
                 if (this.RoomInstance.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
                 {
-                    this.RoomInstance.SendPacket(new SlideObjectBundleComposer(OldX, OldY, newPoint.X, newPoint.Y, OldZ, item, 0));
+                    this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newPoint.X, newPoint.Y, item.Z, item.Id));
                 }
             }
             return;

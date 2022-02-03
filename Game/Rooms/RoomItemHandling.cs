@@ -431,11 +431,11 @@ namespace Butterfly.Game.Rooms
             return new List<ServerPacket>();
         }
 
-        public void PositionReset(Item pItem, int x, int y, double z)
+        public void PositionReset(Item item, int x, int y, double z)
         {
-            this._room.SendPacket(new SlideObjectBundleComposer(pItem.X, pItem.Y, x, y, z, pItem, 0));
+            this._room.SendPacket(new SlideObjectBundleComposer(item.X, item.Y, item.Z, x, y, z, item.Id));
 
-            this.SetFloorItem(pItem, x, y, z);
+            this.SetFloorItem(item, x, y, z);
         }
 
         public void RotReset(Item pItem, int newRot)
@@ -445,23 +445,27 @@ namespace Butterfly.Game.Rooms
             this._room.SendPacket(new ObjectUpdateComposer(pItem, this._room.RoomData.OwnerId));
         }
 
-        private ServerPacket UpdateItemOnRoller(Item pItem, Point NextCoord, double nextZ)
+        private ServerPacket UpdateItemOnRoller(Item item, Point NextCoord, double nextZ)
         {
-            return new SlideObjectBundleComposer(pItem.X, pItem.Y, NextCoord.X, NextCoord.Y, nextZ, pItem, 0);
+            return new SlideObjectBundleComposer(item.X, item.Y, item.Z, NextCoord.X, NextCoord.Y, nextZ, item.Id);
         }
 
         public ServerPacket UpdateUserOnRoller(RoomUser user, Point nextCoord, int rollerID, double nextZ)
         {
             user.SetPosRoller(nextCoord.X, nextCoord.Y, nextZ);
 
-            return new SlideObjectBundleComposer(user.X, user.Y, nextCoord.X, nextCoord.Y, nextZ, null, 0, user.Z, user.VirtualId);
+            return new SlideObjectBundleComposer(user.X, user.Y, user.Z, nextCoord.X, nextCoord.Y, nextZ, user.VirtualId, rollerID, false);
         }
 
         public ServerPacket TeleportUser(RoomUser user, Point nextCoord, int rollerID, double nextZ, bool noAnimation = false)
         {
             user.SetPos(nextCoord.X, nextCoord.Y, nextZ);
 
-            return new SlideObjectBundleComposer(noAnimation ? nextCoord.X : user.X, noAnimation ? nextCoord.Y : user.Y, nextCoord.X, nextCoord.Y, nextZ, null, 0, noAnimation ? nextZ : user.Z, user.VirtualId);
+            int x = noAnimation ? nextCoord.X : user.X;
+            int y = noAnimation ? nextCoord.Y : user.Y;
+            double z = noAnimation ? nextZ : user.Z;
+
+            return new SlideObjectBundleComposer(x, y, z, nextCoord.X, nextCoord.Y, nextZ, user.VirtualId, rollerID, false);
         }
 
         public void SaveFurniture(IQueryAdapter dbClient)

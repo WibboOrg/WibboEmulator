@@ -239,11 +239,11 @@ namespace Butterfly.Game.Rooms.Games
             item.ExtraData = (team).ToString();
             item.UpdateState();
 
-
+            double oldZ = item.Z;
             double newZ = (double)this._roomInstance.GetGameMap().SqAbsoluteHeight(newX, newY);
             if (this._roomInstance.GetRoomItemHandler().SetFloorItem(item, newX, newY, newZ))
             {
-                this._roomInstance.SendPacket(new SlideObjectBundleComposer(item.Coordinate.X, item.Coordinate.Y, newX, newY, newZ, item, 0));
+                this._roomInstance.SendPacket(new SlideObjectBundleComposer(item.Coordinate.X, item.Coordinate.Y, oldZ, newX, newY, newZ, item.Id));
             }
 
             if (!this._banzaiStarted)

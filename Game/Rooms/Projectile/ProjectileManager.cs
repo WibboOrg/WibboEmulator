@@ -110,7 +110,7 @@ namespace Butterfly.Game.Rooms.Projectile
                     }
                 }
 
-                this._messages.Add(new SlideObjectBundleComposer(Item.X, Item.Y, newX, newY, newZ, Item, 0));
+                this._messages.Add(new SlideObjectBundleComposer(Item.X, Item.Y, Item.Z, newX, newY, newZ, Item.Id));
 
                 Item.X = newX;
                 Item.Y = newY;

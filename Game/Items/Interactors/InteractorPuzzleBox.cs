@@ -74,13 +74,13 @@ namespace Butterfly.Game.Items.Interactors
                     return;
                 }
 
-                int OldX = Item.X;
-                int OldY = Item.Y;
-                double oZ = Item.Z;
-                double nZ = Item.GetRoom().GetGameMap().SqAbsoluteHeight(newX, newY);
+                int oldX = Item.X;
+                int oldY = Item.Y;
+                double oldZ = Item.Z;
+                double newZ = Item.GetRoom().GetGameMap().SqAbsoluteHeight(newX, newY);
                 if (Item.GetRoom().GetRoomItemHandler().SetFloorItem(roomUserByHabbo.GetClient(), Item, newX, newY, Item.Rotation, false, false, false))
                 {
-                    Item.GetRoom().SendPacket(new SlideObjectBundleComposer(OldX, OldY, newX, newY, nZ, Item, 0));
+                    Item.GetRoom().SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newX, newY, newZ, Item.Id));
                 }
             }
         }
