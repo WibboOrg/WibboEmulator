@@ -141,27 +141,29 @@ namespace Butterfly.Game.Users.Messenger
             }
         }
 
-        public void UpdateFriend(int userid, bool notification)
+        public void UpdateFriend(int userId, bool notification)
         {
-            if (!this.Friends.ContainsKey(userid))
+            if (!this.Friends.ContainsKey(userId))
             {
                 return;
             }
 
-            this.Friends[userid].UpdateUser();
+            MessengerBuddy friend = this.Friends[userId];
+
+            friend.UpdateUser();
 
             if (!notification)
             {
                 return;
             }
 
-            Client client1 = this.GetClient();
-            if (client1 == null)
+            Client client = this.GetClient();
+            if (client == null)
             {
                 return;
             }
 
-            client1.SendPacket(this.SerializeUpdate(this.Friends[userid]));
+            client.SendPacket(new FriendListUpdateComposer(friend));
         }
 
         public void HandleAllRequests()
@@ -254,7 +256,7 @@ namespace Butterfly.Game.Users.Messenger
                 this.Friends.Add(friendID, friend);
             }
 
-            this.GetClient().SendPacket(this.SerializeUpdate(friend));
+            this.GetClient().SendPacket(new FriendListUpdateComposer(friend));
         }
 
         public bool RequestExists(int requestID)
@@ -275,17 +277,12 @@ namespace Butterfly.Game.Users.Messenger
             return this.Friends.ContainsKey(friendID);
         }
 
-        public void OnDestroyFriendship(int Friend)
+        public void OnDestroyFriendship(int friendId)
         {
-            this.Friends.Remove(Friend);
-            this.Relation.Remove(Friend);
+            this.Friends.Remove(friendId);
+            this.Relation.Remove(friendId);
 
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.MESSENGER_UPDATE);
-            Response.WriteInteger(0);
-            Response.WriteInteger(1);
-            Response.WriteInteger(-1);
-            Response.WriteInteger(Friend);
-            this.GetClient().SendPacket(Response);
+            this.GetClient().SendPacket(new FriendListUpdateComposer(null, friendId));
         }
 
         public bool RequestBuddy(string UserQuery)
@@ -345,16 +342,14 @@ namespace Butterfly.Game.Users.Messenger
                     return false;
                 }
 
-                MessengerRequest messengerRequest = new MessengerRequest(sender, this._userInstance.Id, ButterflyEnvironment.GetGame().GetClientManager().GetNameById(this._userInstance.Id));
+                MessengerRequest request = new MessengerRequest(sender, this._userInstance.Id, ButterflyEnvironment.GetGame().GetClientManager().GetNameById(this._userInstance.Id));
                 clientByUserId.GetHabbo().GetMessenger().OnNewRequest(this._userInstance.Id);
 
-                ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.MESSENGER_REQUEST);
-                messengerRequest.Serialize(serverMessage);
-                clientByUserId.SendPacket(serverMessage);
+                clientByUserId.SendPacket(new NewBuddyRequestComposer(request));
 
                 if (!this.Requests.ContainsKey(sender))
                 {
-                    this.Requests.Add(sender, messengerRequest);
+                    this.Requests.Add(sender, request);
                 }
 
                 return true;
@@ -391,73 +386,6 @@ namespace Butterfly.Game.Users.Messenger
             }
 
             Client.SendPacket(new NewConsoleComposer(this._userInstance.Id, Message));
-        }
-
-        public ServerPacket SerializeCategories()
-        {
-            return new MessengerInitComposer();
-        }
-
-        public ServerPacket SerializeFriends()
-        {
-            ServerPacket reply = new ServerPacket(ServerPacketHeader.MESSENGER_FRIENDS);
-            reply.WriteInteger(1);
-            reply.WriteInteger(0);
-            reply.WriteInteger(this.Friends.Count);
-            foreach (MessengerBuddy messengerBuddy in this.Friends.Values)
-            {
-                messengerBuddy.Serialize(reply);
-            }
-
-            return reply;
-        }
-
-        public ServerPacket SerializeUpdate(MessengerBuddy friend)
-        {
-            ServerPacket reply = new ServerPacket(ServerPacketHeader.MESSENGER_UPDATE);
-            reply.WriteInteger(0);
-            reply.WriteInteger(1);
-            reply.WriteInteger(0);
-            friend.Serialize(reply);
-            reply.WriteBoolean(false);
-            return reply;
-        }
-
-        public ServerPacket SerializeRequests()
-        {
-            ServerPacket Request = new ServerPacket(ServerPacketHeader.MESSENGER_REQUESTS);
-            Request.WriteInteger(this.Requests.Count);
-            Request.WriteInteger(this.Requests.Count);
-
-            foreach (MessengerRequest messengerRequest in this.Requests.Values)
-            {
-                messengerRequest.Serialize(Request);
-            }
-            return Request;
-        }
-
-        public ServerPacket PerformSearch(string query)
-        {
-            List<SearchResult> searchResult = SearchResultFactory.GetSearchResult(query);
-            List<SearchResult> friend = new List<SearchResult>();
-            List<SearchResult> other = new List<SearchResult>();
-
-            foreach (SearchResult searchResult2 in searchResult)
-            {
-                if (searchResult2.UserId != this.GetClient().GetHabbo().Id)
-                {
-                    if (this.FriendshipExists(searchResult2.UserId))
-                    {
-                        friend.Add(searchResult2);
-                    }
-                    else
-                    {
-                        other.Add(searchResult2);
-                    }
-                }
-            }
-
-            return new HabboSearchResultComposer(friend, other);
         }
 
         public void ProcessOfflineMessages()

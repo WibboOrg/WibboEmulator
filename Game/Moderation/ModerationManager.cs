@@ -333,7 +333,7 @@ namespace Butterfly.Game.Moderation
 
         public static void SendTicketToModerators(ModerationTicket Ticket)
         {
-            ButterflyEnvironment.GetGame().GetClientManager().SendMessageStaff(Ticket.Serialize());
+            ButterflyEnvironment.GetGame().GetClientManager().SendMessageStaff(new ModeratorSupportTicketComposer(Ticket));
         }
 
         public void LogStaffEntry(int userId, string modName, int roomId, string target, string type, string description)
@@ -380,17 +380,6 @@ namespace Butterfly.Game.Moderation
             }
 
             room.SendPacket(new GetGuestRoomResultComposer(ModSession, room.RoomData, false, false));
-        }
-
-        public static ServerPacket SerializeRoomTool(RoomData data)
-        {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(data.Id);
-
-            bool ownerInRoom = false;
-            if (room != null && room.GetRoomUserManager().GetRoomUserByName(data.OwnerName) != null)
-                ownerInRoom = true;
-
-            return new ModeratorRoomInfoComposer(data, ownerInRoom);
         }
 
         public static void KickUser(Client ModSession, int UserId, string Message, bool Soft)
@@ -448,133 +437,6 @@ namespace Butterfly.Game.Moderation
                 double LengthSeconds = Length;
                 ButterflyEnvironment.GetGame().GetClientManager().BanUser(clientByUserId, ModSession.GetHabbo().Username, LengthSeconds, Message, false, false);
             }
-        }
-
-        public static ServerPacket SerializeUserInfo(int UserId)
-        {
-            Client User = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
-            DataRow row = null;
-            if (User == null)
-            {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    row = UserDao.GetOneIdAndName(dbClient, UserId);
-                }
-                if (row == null)
-                {
-                    return null;
-                }
-            }
-
-            ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.MODERATION_USER_INFO);
-            serverMessage.WriteInteger((row == null) ? User.GetHabbo().Id : Convert.ToInt32(row["id"]));
-            serverMessage.WriteString((row == null) ? User.GetHabbo().Username : (string)row["username"]);
-            serverMessage.WriteString("Unknown");
-
-            serverMessage.WriteInteger(0);
-            serverMessage.WriteInteger(0);
-
-            serverMessage.WriteBoolean(User != null);
-
-            serverMessage.WriteInteger(0);
-            serverMessage.WriteInteger(0);
-            serverMessage.WriteInteger(0);
-            serverMessage.WriteInteger(0);
-
-            serverMessage.WriteInteger(0); // trading_lock_count_txt
-
-            serverMessage.WriteString("");
-            serverMessage.WriteString("");
-            serverMessage.WriteInteger(0);
-            serverMessage.WriteInteger(0);
-            serverMessage.WriteString("Unknown");
-            serverMessage.WriteString(""); // ???
-            return serverMessage;
-        }
-
-        public static ServerPacket SerializeUserChatlog(int UserId, int RoomId)
-        {
-            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
-            if (clientByUserId == null || clientByUserId.GetHabbo() == null)
-            {
-                ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.MODTOOL_USER_CHATLOG);
-                serverMessage.WriteInteger(UserId);
-                serverMessage.WriteString("User not online");
-                serverMessage.WriteInteger(0);
-                return serverMessage;
-            }
-            else
-            {
-                List<ChatlogEntry> sortedMessages = clientByUserId.GetHabbo().GetChatMessageManager().GetSortedMessages(0);
-                ServerPacket packet = new ServerPacket(ServerPacketHeader.MODTOOL_USER_CHATLOG);
-                packet.WriteInteger(UserId);
-                packet.WriteString(clientByUserId.GetHabbo().Username);
-                packet.WriteInteger(1);
-
-                packet.WriteByte(1);
-                packet.WriteShort(2);
-                packet.WriteString("roomName");
-                packet.WriteByte(2);
-                packet.WriteString("RoomName"); // room name
-                packet.WriteString("roomId");
-                packet.WriteByte(1);
-                packet.WriteInteger(RoomId);
-
-                packet.WriteShort(sortedMessages.Count);
-                foreach (ChatlogEntry chatMessage2 in sortedMessages)
-                {
-                    chatMessage2.Serialize(ref packet);
-                }
-                return packet;
-            }
-        }
-
-        public static ServerPacket SerializeTicketChatlog(ModerationTicket Ticket, RoomData RoomData, double Timestamp)
-        {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomData.Id);
-            ServerPacket message = new ServerPacket(ServerPacketHeader.CFH_CHATLOG);
-            message.WriteInteger(Ticket.TicketId);
-            message.WriteInteger(Ticket.SenderId);
-            message.WriteInteger(Ticket.ReportedId);
-            message.WriteInteger(RoomData.Id);
-
-            message.WriteBoolean(false);
-            message.WriteInteger(RoomData.Id);
-            message.WriteString(RoomData.Name);
-
-            if (room == null)
-            {
-                message.WriteInteger(0);
-                return message;
-            }
-            else
-            {
-                ChatlogManager chatMessageManager = room.GetChatMessageManager();
-                message.WriteInteger(chatMessageManager.MessageCount);
-                chatMessageManager.Serialize(ref message);
-                return message;
-            }
-        }
-
-        public static ServerPacket SerializeRoomChatlog(Room room)
-        {
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.MODTOOL_ROOM_CHATLOG);
-            Message.WriteByte(1);
-
-            Message.WriteShort(2);
-
-            Message.WriteString("roomName");
-            Message.WriteByte(2);
-            Message.WriteString(room.RoomData.Name);
-
-            Message.WriteString("roomId");
-            Message.WriteByte(1);
-            Message.WriteInteger(room.RoomData.Id);
-
-            ChatlogManager chatMessageManager = room.GetChatMessageManager();
-            Message.WriteShort(chatMessageManager.MessageCount);
-            chatMessageManager.Serialize(ref Message);
-            return Message;
         }
     }
 }

@@ -1,36 +1,43 @@
+using Butterfly.Game.Chat.Logs;
 using Butterfly.Game.Moderation;
 using Butterfly.Game.Rooms;
-using Butterfly.Utility;
+using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorTicketChatlogComposer : ServerPacket
     {
-        public ModeratorTicketChatlogComposer(SupportTicket ticket, RoomData roomData, double timestamp)
+        public ModeratorTicketChatlogComposer(ModerationTicket ticket, RoomData roomData, List<ChatlogEntry> chatlogs)
             : base(ServerPacketHeader.CFH_CHATLOG)
         {
-            WriteInteger(ticket.Id);
-            WriteInteger(ticket.Sender != null ? ticket.Sender.Id : 0);
-            WriteInteger(ticket.Reported != null ? ticket.Reported.Id : 0);
+            WriteInteger(ticket.TicketId);
+            WriteInteger(ticket.SenderId);
+            WriteInteger(ticket.ReportedId);
             WriteInteger(roomData.Id);
 
-            WriteByte(1);
-            WriteShort(2);//Count
-            WriteString("roomName");
-            WriteByte(2);
+            WriteBoolean(false);
+            WriteInteger(roomData.Id);
             WriteString(roomData.Name);
-            WriteString("roomId");
-            WriteByte(1);
-            WriteInteger(roomData.Id);
 
-            WriteShort(ticket.ReportedChats.Count);
-            foreach (string Chat in ticket.ReportedChats)
+            WriteShort(chatlogs.Count);
+            foreach (ChatlogEntry chat in chatlogs)
             {
-                WriteString(UnixTimestamp.FromUnixTimestamp(timestamp).ToShortTimeString());
-                WriteInteger(ticket.Id);
-                WriteString(ticket.Reported != null ? ticket.Reported.Username : "No username");
-                WriteString(Chat);
-                WriteBoolean(false);
+                if (chat != null)
+                {
+                    WriteString(chat.timeSpoken.Hour + ":" + chat.timeSpoken.Minute); //this.timeSpoken.Minute
+                    WriteInteger(chat.userID); //this.timeSpoken.Minute
+                    WriteString(chat.username);
+                    WriteString(chat.message);
+                    WriteBoolean(false); // Text is bold
+                }
+                else
+                {
+                    WriteString("0"); //this.timeSpoken.Minute
+                    WriteInteger(0); //this.timeSpoken.Minute
+                    WriteString("");
+                    WriteString("");
+                    WriteBoolean(false); // Text is bold
+                }
             }
         }
     }

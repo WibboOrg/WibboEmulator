@@ -1,5 +1,8 @@
+using Butterfly.Communication.Packets.Outgoing.Messenger;
 using Butterfly.Game.Clients;
+using Butterfly.Game.Users.Messenger;
 using Butterfly.Utility;
+using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -18,7 +21,26 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Session.SendPacket(Session.GetHabbo().GetMessenger().PerformSearch(SearchPseudo));
+            List<SearchResult> searchResult = SearchResultFactory.GetSearchResult(SearchPseudo);
+            List<SearchResult> friend = new List<SearchResult>();
+            List<SearchResult> other = new List<SearchResult>();
+
+            foreach (SearchResult searchResult2 in searchResult)
+            {
+                if (searchResult2.UserId != Session.GetHabbo().Id)
+                {
+                    if (Session.GetHabbo().GetMessenger().FriendshipExists(searchResult2.UserId))
+                    {
+                        friend.Add(searchResult2);
+                    }
+                    else
+                    {
+                        other.Add(searchResult2);
+                    }
+                }
+            }
+
+            Session.SendPacket(new HabboSearchResultComposer(friend, other));
         }
     }
 }

@@ -2,6 +2,27 @@
 {
     public class QuestTypeUtillity
     {
+        public static int GetIntValue(string QuestCategory)
+        {
+            switch (QuestCategory)
+            {
+                case "room_builder":
+                    return 2;
+                case "social":
+                    return 3;
+                case "identity":
+                    return 4;
+                case "explore":
+                    return 5;
+                case "battleball":
+                    return 7;
+                case "freeze":
+                    return 8;
+                default:
+                    return 0;
+            }
+        }
+
         public static string GetString(QuestType type)
         {
             switch (type)

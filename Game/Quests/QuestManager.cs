@@ -114,7 +114,7 @@ namespace Butterfly.Game.Quests
             }
 
             Session.GetHabbo().Quests[Session.GetHabbo().CurrentQuestId] = progress;
-            Session.SendPacket(Composer.QuestStartedComposer.Compose(Session, quest));
+            Session.SendPacket(new QuestStartedComposer(Session, quest));
 
             if (!flag)
             {
@@ -126,7 +126,7 @@ namespace Butterfly.Game.Quests
             Session.SendPacket(new QuestCompletedComposer(Session, quest));
             Session.GetHabbo().Duckets += quest.Reward;
             Session.GetHabbo().UpdateActivityPointsBalance();
-            this.GetList(Session, null);
+            this.SendQuestList(Session);
         }
 
         public Quest GetNextQuestInSeries(string Category, int Number)
@@ -142,9 +142,41 @@ namespace Butterfly.Game.Quests
             return null;
         }
 
-        public void GetList(Client Session, ClientPacket Message)
+        public void SendQuestList(Client Session, bool send = true)
         {
-            Session.SendPacket(Composer.QuestListComposer.Compose(Session, Enumerable.ToList<Quest>(this._quests.Values), Message != null));
+            Dictionary<string, int> dictionary1 = new Dictionary<string, int>();
+            Dictionary<string, Quest> dictionary2 = new Dictionary<string, Quest>();
+
+            foreach (Quest quest in this._quests.Values)
+            {
+                if (!dictionary1.ContainsKey(quest.Category))
+                {
+                    dictionary1.Add(quest.Category, 1);
+                    dictionary2.Add(quest.Category, null);
+                }
+                if (quest.Number >= dictionary1[quest.Category])
+                {
+                    int questProgress = Session.GetHabbo().GetQuestProgress(quest.Id);
+                    if (Session.GetHabbo().CurrentQuestId != quest.Id && questProgress >= (long)quest.GoalData)
+                    {
+                        dictionary1[quest.Category] = quest.Number + 1;
+                    }
+                }
+            }
+
+            foreach (Quest quest in this._quests.Values)
+            {
+                foreach (KeyValuePair<string, int> keyValuePair in dictionary1)
+                {
+                    if (quest.Category == keyValuePair.Key && quest.Number == keyValuePair.Value)
+                    {
+                        dictionary2[keyValuePair.Key] = quest;
+                        break;
+                    }
+                }
+            }
+
+            Session.SendPacket(new QuestListComposer(dictionary2, Session, send));
         }
 
         public void ActivateQuest(Client Session, ClientPacket Message)
@@ -161,8 +193,8 @@ namespace Butterfly.Game.Quests
             }
 
             Session.GetHabbo().CurrentQuestId = quest.Id;
-            this.GetList(Session, null);
-            Session.SendPacket(Composer.QuestStartedComposer.Compose(Session, quest));
+            this.SendQuestList(Session);
+            Session.SendPacket(new QuestStartedComposer(Session, quest));
         }
 
         public void GetCurrentQuest(Client Session)
@@ -185,8 +217,8 @@ namespace Butterfly.Game.Quests
             }
 
             Session.GetHabbo().CurrentQuestId = nextQuestInSeries.Id;
-            this.GetList(Session, null);
-            Session.SendPacket(Composer.QuestStartedComposer.Compose(Session, nextQuestInSeries));
+            this.SendQuestList(Session);
+            Session.SendPacket(new QuestStartedComposer(Session, nextQuestInSeries));
         }
 
         public void CancelQuest(Client Session)
@@ -204,7 +236,7 @@ namespace Butterfly.Game.Quests
             }
 
             Session.SendPacket(new QuestAbortedComposer());
-            this.GetList(Session, null);
+            this.SendQuestList(Session);
         }
     }
 }

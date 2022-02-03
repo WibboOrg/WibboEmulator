@@ -1,4 +1,5 @@
-﻿using Butterfly.Game.Clients;
+﻿using Butterfly.Communication.Packets.Outgoing.Messenger;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -8,8 +9,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             Session.GetHabbo().GetMessenger().OnStatusChanged();
 
-            Session.SendPacket(Session.GetHabbo().GetMessenger().SerializeCategories());
-            Session.SendPacket(Session.GetHabbo().GetMessenger().SerializeFriends());
+            Session.SendPacket(new MessengerInitComposer());
+            Session.SendPacket(new BuddyListComposer(Session.GetHabbo().GetMessenger().Friends));
             Session.GetHabbo().GetMessenger().ProcessOfflineMessages();
         }
     }

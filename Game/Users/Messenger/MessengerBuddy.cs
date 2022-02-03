@@ -10,7 +10,7 @@ namespace Butterfly.Game.Users.Messenger
         private string _look;
         private int _relation;
         private bool _isOnline;
-        private bool _hideInroom;
+        private bool _hideInRoom;
 
         public MessengerBuddy(int UserId, string Username, string Look, int Relation)
         {
@@ -32,43 +32,21 @@ namespace Butterfly.Game.Users.Messenger
             {
                 this._isOnline = true;
                 this._look = client.GetHabbo().Look;
-                this._hideInroom = client.GetHabbo().HideInRoom;
+                this._hideInRoom = client.GetHabbo().HideInRoom;
             }
             else
             {
                 this._isOnline = false;
                 this._look = "";
-                this._hideInroom = true;
+                this._hideInRoom = true;
             }
-
         }
 
-        public void Serialize(ServerPacket reply)
-        {
-            reply.WriteInteger(this._userId);
-            reply.WriteString(this._username);
-            reply.WriteInteger(1);
-            bool isOnline = this._isOnline;
-            reply.WriteBoolean(isOnline);
-
-            if (isOnline)
-            {
-                reply.WriteBoolean(!this._hideInroom);
-            }
-            else
-            {
-                reply.WriteBoolean(false);
-            }
-
-            reply.WriteString(isOnline ? this._look : "");
-            reply.WriteInteger(0);
-            reply.WriteString(""); //Motto ?
-            reply.WriteString(string.Empty);
-            reply.WriteString(string.Empty);
-            reply.WriteBoolean(true); // Allows offline messaging
-            reply.WriteBoolean(false);
-            reply.WriteBoolean(false);
-            reply.WriteShort(this._relation);
-        }
+        public int UserId => this._userId;
+        public string Username => this._username;
+        public string Look => this. _look;
+        public int Relation => this._relation;
+        public bool IsOnline => this._isOnline;
+        public bool HideInRoom => this._hideInRoom;
     }
 }

@@ -349,15 +349,12 @@ namespace Butterfly.Game.Rooms
             this.UpdateNeeded = true;
         }
 
-        public void CarryItem(int Item, bool notTimer = false)
+        public void CarryItem(int itemId, bool notTimer = false)
         {
-            this.CarryItemID = Item;
-            this.CarryTimer = Item <= 0 || notTimer ? 0 : 240;
+            this.CarryItemID = itemId;
+            this.CarryTimer = itemId <= 0 || notTimer ? 0 : 240;
 
-            ServerPacket Message = new ServerPacket(ServerPacketHeader.UNIT_HAND_ITEM);
-            Message.WriteInteger(this.VirtualId);
-            Message.WriteInteger(Item);
-            this.GetRoom().SendPacket(Message);
+            this.GetRoom().SendPacket(new CarryObjectComposer(this.VirtualId, itemId));
         }
 
         public void SetRot(int Rotation, bool HeadOnly, bool IgnoreWalk = false)

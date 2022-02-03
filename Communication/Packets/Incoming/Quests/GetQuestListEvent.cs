@@ -6,7 +6,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            ButterflyEnvironment.GetGame().GetQuestManager().GetList(Session, Packet);
+            ButterflyEnvironment.GetGame().GetQuestManager().SendQuestList(Session, false);
         }
     }
 }

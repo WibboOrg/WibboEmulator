@@ -9,21 +9,14 @@ namespace Butterfly.Game.Users.Messenger
         private readonly string _username;
 
         public int To => this._toUser;
-
         public int From => this._fromUser;
+        public string Username => this._username;
 
         public MessengerRequest(int toUser, int fromUser, string username)
         {
             this._toUser = toUser;
             this._fromUser = fromUser;
             this._username = username;
-        }
-
-        public void Serialize(ServerPacket Request)
-        {
-            Request.WriteInteger(this._fromUser);
-            Request.WriteString(this._username);
-            Request.WriteString("");
         }
     }
 }

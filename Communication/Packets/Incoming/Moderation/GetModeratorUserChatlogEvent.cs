@@ -1,5 +1,8 @@
+using Butterfly.Communication.Packets.Outgoing.Moderation;
+using Butterfly.Game.Chat.Logs;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Moderation;
+using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -12,7 +15,20 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Session.SendPacket(ModerationManager.SerializeUserChatlog(Packet.PopInt(), Session.GetHabbo().CurrentRoomId));
+            int userId = Packet.PopInt();
+
+            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            if (clientByUserId == null || clientByUserId.GetHabbo() == null)
+            {
+                List<ChatlogEntry> sortedMessages = new List<ChatlogEntry>();
+                Session.SendPacket(new ModeratorUserChatlogComposer(userId, "User not online", Session.GetHabbo().CurrentRoomId, sortedMessages));
+            }
+            else
+            {
+                List<ChatlogEntry> sortedMessages = clientByUserId.GetHabbo().GetChatMessageManager().GetSortedMessages(0);
+
+                Session.SendPacket(new ModeratorUserChatlogComposer(userId, clientByUserId.GetHabbo().Username, Session.GetHabbo().CurrentRoomId, sortedMessages));
+            }
         }
     }
 }

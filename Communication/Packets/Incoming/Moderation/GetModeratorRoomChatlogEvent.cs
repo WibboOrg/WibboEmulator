@@ -1,6 +1,8 @@
+using Butterfly.Communication.Packets.Outgoing.Moderation;
+using Butterfly.Game.Chat.Logs;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Moderation;
 using Butterfly.Game.Rooms;
+using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -22,7 +24,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Session.SendPacket(ModerationManager.SerializeRoomChatlog(room));
+            List<ChatlogEntry> listReverse = new List<ChatlogEntry>();
+            listReverse.AddRange(room.GetChatMessageManager().ListOfMessages);
+            listReverse.Reverse();
+
+            Session.SendPacket(new ModeratorRoomChatlogComposer(room, listReverse));
         }
     }
 }

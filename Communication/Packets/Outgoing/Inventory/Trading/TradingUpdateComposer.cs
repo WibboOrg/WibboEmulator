@@ -20,7 +20,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Inventory.Trading
 
             this.WriteInteger(userTwoId);
             this.WriteInteger(userTwoItems.Count);
-            foreach (Item userItem in userOneItems)
+            foreach (Item userItem in userTwoItems)
             {
                 this.WriteItem(userItem);
             }

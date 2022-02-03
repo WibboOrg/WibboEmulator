@@ -7,32 +7,40 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorRoomChatlogComposer : ServerPacket
     {
-        public ModeratorRoomChatlogComposer(Room room, ICollection<ChatlogEntry> chats)
+        public ModeratorRoomChatlogComposer(Room room, List<ChatlogEntry> chatlogs)
             : base(ServerPacketHeader.MODTOOL_ROOM_CHATLOG)
         {
             WriteByte(1);
+
             WriteShort(2);
+
             WriteString("roomName");
             WriteByte(2);
             WriteString(room.RoomData.Name);
+
             WriteString("roomId");
             WriteByte(1);
-            WriteInteger(room.Id);
+            WriteInteger(room.RoomData.Id);
 
-            WriteShort(chats.Count);
-            foreach (ChatlogEntry Entry in chats)
+            WriteShort(chatlogs.Count);
+            foreach (ChatlogEntry chat in chatlogs)
             {
-                string Username = "Inconnu";
-                if (Entry.PlayerNullable() != null)
+                if (chat != null)
                 {
-                    Username = Entry.PlayerNullable().Username;
+                    WriteString(chat.timeSpoken.Hour + ":" + chat.timeSpoken.Minute); //this.timeSpoken.Minute
+                    WriteInteger(chat.userID); //this.timeSpoken.Minute
+                    WriteString(chat.username);
+                    WriteString(chat.message);
+                    WriteBoolean(false); // Text is bold
                 }
-
-                WriteString(UnixTimestamp.FromUnixTimestamp(Entry.TimeSpoken.Hour).ToShortTimeString()); // time?
-                WriteInteger(Entry.UserID); // User Id
-                WriteString(Username); // Username
-                WriteString(!string.IsNullOrEmpty(Entry.Message) ? Entry.Message : "** flood **"); // Message        
-                WriteBoolean(false); //TODO, AI's?
+                else
+                {
+                    WriteString("0"); //this.timeSpoken.Minute
+                    WriteInteger(0); //this.timeSpoken.Minute
+                    WriteString("");
+                    WriteString("");
+                    WriteBoolean(false); // Text is bold
+                }
             }
         }
     }

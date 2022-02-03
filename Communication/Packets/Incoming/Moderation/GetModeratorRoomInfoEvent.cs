@@ -1,5 +1,6 @@
+using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Moderation;
+using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -14,7 +15,15 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int RoomId = Packet.PopInt();
 
-            Session.SendPacket(ModerationManager.SerializeRoomTool(ButterflyEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(RoomId)));
+            RoomData data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(RoomId);
+
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(data.Id);
+
+            bool ownerInRoom = false;
+            if (room != null && room.GetRoomUserManager().GetRoomUserByName(data.OwnerName) != null)
+                ownerInRoom = true;
+
+            Session.SendPacket(new ModeratorRoomInfoComposer(data, ownerInRoom));
         }
     }
 }

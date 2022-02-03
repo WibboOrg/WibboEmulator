@@ -720,7 +720,6 @@
     <Compile Include="Game\Moderation\ModerationBan.cs" />
     <Compile Include="Game\Moderation\ModerationBanType.cs" />
     <Compile Include="Game\Moderation\ModerationTicket.cs" />
-    <Compile Include="Game\Moderation\SupportTicket.cs" />
     <Compile Include="Game\Roleplay\Enemy\RPEnemy.cs" />
     <Compile Include="Game\Roleplay\Enemy\RPEnemyManager.cs" />
     <Compile Include="Game\Roleplay\Item\RPItemCategory.cs" />
@@ -1084,9 +1083,6 @@
     <Compile Include="Game\Quests\QuestManager.cs" />
     <Compile Include="Game\Quests\QuestType.cs" />
     <Compile Include="Game\Quests\QuestTypeUtillity.cs" />
-    <Compile Include="Game\Quests\Composer\QuestRewardType.cs" />
-    <Compile Include="Game\Quests\Composer\QuestListComposer.cs" />
-    <Compile Include="Game\Quests\Composer\QuestStartedComposer.cs" />
     <Compile Include="Game\Catalog\CatalogManager.cs" />
     <Compile Include="Game\Catalog\CatalogItem.cs" />
     <Compile Include="Game\Catalog\CatalogPage.cs" />

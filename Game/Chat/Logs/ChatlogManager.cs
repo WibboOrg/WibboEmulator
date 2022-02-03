@@ -66,13 +66,13 @@ namespace Butterfly.Game.Chat.Logs
             }
         }
 
-        public List<ChatlogEntry> GetSortedMessages(int roomid)
+        public List<ChatlogEntry> GetSortedMessages(int roomId)
         {
             List<ChatlogEntry> list = new List<ChatlogEntry>();
 
             foreach (ChatlogEntry chatMessage in this._listOfMessages)
             {
-                if (roomid == chatMessage.roomID || roomid == 0)
+                if (roomId == chatMessage.roomID || roomId == 0)
                 {
                     list.Add(chatMessage);
                 }
@@ -83,26 +83,6 @@ namespace Butterfly.Game.Chat.Logs
             return list;
         }
 
-        public void Serialize(ref ServerPacket message)
-        {
-            List<ChatlogEntry> ListReverse = new List<ChatlogEntry>();
-            ListReverse.AddRange(this._listOfMessages);
-            ListReverse.Reverse();
-            foreach (ChatlogEntry chatMessage in ListReverse)
-            {
-                if (chatMessage != null)
-                {
-                    chatMessage.Serialize(ref message);
-                }
-                else
-                {
-                    message.WriteString("0"); //this.timeSpoken.Minute
-                    message.WriteInteger(0); //this.timeSpoken.Minute
-                    message.WriteString("");
-                    message.WriteString("");
-                    message.WriteBoolean(false); // Text is bold
-                }
-            }
-        }
+        public List<ChatlogEntry> ListOfMessages => this._listOfMessages;
     }
 }

@@ -1,5 +1,9 @@
+using Butterfly.Communication.Packets.Outgoing.Moderation;
+using Butterfly.Database.Daos;
+using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Moderation;
+using System.Data;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -12,10 +16,24 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            int num = Packet.PopInt();
-            if (ButterflyEnvironment.GetGame().GetClientManager().GetNameById(num) != "")
+            int userId = Packet.PopInt();
+            if (ButterflyEnvironment.GetGame().GetClientManager().GetNameById(userId) != "")
             {
-                Session.SendPacket(ModerationManager.SerializeUserInfo(num));
+                Client client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+                DataRow row = null;
+                if (client == null)
+                {
+                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    {
+                        row = UserDao.GetOneIdAndName(dbClient, userId);
+                    }
+                    if (row == null)
+                    {
+                        return;
+                    }
+                }
+
+                Session.SendPacket(new ModeratorUserInfoComposer(row, client));
             }
             else
             {

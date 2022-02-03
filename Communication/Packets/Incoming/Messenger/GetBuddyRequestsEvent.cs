@@ -1,4 +1,5 @@
-﻿using Butterfly.Game.Clients;
+﻿using Butterfly.Communication.Packets.Outgoing.Messenger;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
@@ -6,7 +7,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Session.SendPacket(Session.GetHabbo().GetMessenger().SerializeRequests());
+            Session.SendPacket(new BuddyRequestsComposer(Session.GetHabbo().GetMessenger().Requests));
         }
     }
 }
