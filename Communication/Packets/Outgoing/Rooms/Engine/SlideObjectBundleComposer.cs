@@ -32,7 +32,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                 WriteString(Convert.ToString(nextHeight));
             }
         }
-        public SlideObjectBundleComposer(int x, int y, int nextX, int nextY, double nextHeight, Item Item, int rollerId, double height = 0.0, int unitId = 0)
+        public SlideObjectBundleComposer(int x, int y, int nextX, int nextY, double nextHeight, Item item, int rollerId, double height = 0.0, int unitId = 0)
             : base(ServerPacketHeader.ROOM_ROLLING)
         {
             WriteInteger(x);
@@ -40,10 +40,13 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
             WriteInteger(nextX);
             WriteInteger(nextY);
 
-            WriteInteger(1);
-            WriteInteger(Item.Id);
-            WriteString(Item.Height.ToString());
-            WriteString(nextHeight.ToString());
+            WriteInteger(item != null ? 1 : 0);
+            if (item != null)
+            {
+                WriteInteger(item.Id);
+                WriteString(item.Z.ToString());
+                WriteString(nextHeight.ToString());
+            }
 
             WriteInteger(rollerId);
 
@@ -51,11 +54,11 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
             {
                 WriteInteger(2);
                 WriteInteger(unitId);
-                WriteString(Convert.ToString(height));
-                WriteString(Convert.ToString(nextHeight));
+                WriteString(height.ToString());
+                WriteString(nextHeight.ToString());
             }
         }
-        public SlideObjectBundleComposer(int x, int y, int nextX, int nextY, double nextHeight, ItemTemp Item, int rollerId, int unitId = 0, double height = 0.0)
+        public SlideObjectBundleComposer(int x, int y, int nextX, int nextY, double nextHeight, ItemTemp item, int rollerId, int unitId = 0, double height = 0.0)
             : base(ServerPacketHeader.ROOM_ROLLING)
         {
             WriteInteger(x);
@@ -63,10 +66,13 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
             WriteInteger(nextX);
             WriteInteger(nextY);
 
-            WriteInteger(1);
-            WriteInteger(Item.Id);
-            WriteString(Item.Z.ToString());
-            WriteString(nextHeight.ToString());
+            WriteInteger(item != null ? 1 : 0);
+            if (item != null)
+            {
+                WriteInteger(item.Id);
+                WriteString(item.Z.ToString());
+                WriteString(nextHeight.ToString());
+            }
 
             WriteInteger(rollerId);
 
@@ -74,8 +80,8 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
             {
                 WriteInteger(2);
                 WriteInteger(unitId);
-                WriteString(Convert.ToString(height));
-                WriteString(Convert.ToString(nextHeight));
+                WriteString(height.ToString());
+                WriteString(nextHeight.ToString());
             }
         }
     }
