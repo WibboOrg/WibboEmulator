@@ -1,23 +1,22 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.Users
+﻿using System;
+
+namespace Butterfly.Communication.Packets.Outgoing.Users
 {
     internal class ScrSendUserInfoComposer : ServerPacket
     {
-        public ScrSendUserInfoComposer()
+        public ScrSendUserInfoComposer(int timeLeft, int totalDaysLeft, int monthsLeft)
             : base(ServerPacketHeader.USER_SUBSCRIPTION)
         {
-            int DisplayMonths = 0;
-            int DisplayDays = 0;
-
             this.WriteString("habbo_club");
-            this.WriteInteger(DisplayDays);
-            this.WriteInteger(2);
-            this.WriteInteger(DisplayMonths);
-            this.WriteInteger(1);
+            this.WriteInteger(totalDaysLeft - (monthsLeft * 31)); // display days
+            this.WriteInteger(2); // ??
+            this.WriteInteger(monthsLeft); // display months
+            this.WriteInteger(1); // type
             this.WriteBoolean(true); // hc
             this.WriteBoolean(true); // vip
-            this.WriteInteger(0);
-            this.WriteInteger(0);
-            this.WriteInteger(495);
+            this.WriteInteger(0); // unknow
+            this.WriteInteger(timeLeft); // days i have on hc
+            this.WriteInteger(timeLeft); // days i have on vip
         }
     }
 }

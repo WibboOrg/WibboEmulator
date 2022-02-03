@@ -433,19 +433,7 @@ namespace Butterfly.Game.Rooms
 
         public void PositionReset(Item pItem, int x, int y, double z)
         {
-            ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
-            serverMessage.WriteInteger(pItem.X);
-            serverMessage.WriteInteger(pItem.Y);
-            serverMessage.WriteInteger(x);
-            serverMessage.WriteInteger(y);
-
-            serverMessage.WriteInteger(1); //Count user or item on roller
-            serverMessage.WriteInteger(pItem.Id);
-            serverMessage.WriteString(pItem.Z.ToString());
-            serverMessage.WriteString(z.ToString());
-
-            serverMessage.WriteInteger(0);
-            this._room.SendPacket(serverMessage);
+            this._room.SendPacket(new SlideObjectBundleComposer(pItem.X, pItem.Y, x, y, z, pItem, 0));
 
             this.SetFloorItem(pItem, x, y, z);
         }
@@ -459,56 +447,21 @@ namespace Butterfly.Game.Rooms
 
         private ServerPacket UpdateItemOnRoller(Item pItem, Point NextCoord, double nextZ)
         {
-            ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
-            serverMessage.WriteInteger(pItem.X);
-            serverMessage.WriteInteger(pItem.Y);
-            serverMessage.WriteInteger(NextCoord.X);
-            serverMessage.WriteInteger(NextCoord.Y);
-            serverMessage.WriteInteger(1);
-            serverMessage.WriteInteger(pItem.Id);
-            serverMessage.WriteString(pItem.Z.ToString());
-            serverMessage.WriteString(nextZ.ToString());
-            serverMessage.WriteInteger(0);
-            this.SetFloorItem(pItem, NextCoord.X, NextCoord.Y, nextZ);
-            return serverMessage;
+            return new SlideObjectBundleComposer(pItem.X, pItem.Y, NextCoord.X, NextCoord.Y, nextZ, pItem, 0);
         }
 
         public ServerPacket UpdateUserOnRoller(RoomUser user, Point nextCoord, int rollerID, double nextZ)
         {
-            ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
-            serverMessage.WriteInteger(user.X);
-            serverMessage.WriteInteger(user.Y);
-            serverMessage.WriteInteger(nextCoord.X);
-            serverMessage.WriteInteger(nextCoord.Y);
-            serverMessage.WriteInteger(0); //Count items or Users on roller
-            serverMessage.WriteInteger(rollerID);
-            serverMessage.WriteInteger(2); //Type
-            serverMessage.WriteInteger(user.VirtualId);
-            serverMessage.WriteString(user.Z.ToString());
-            serverMessage.WriteString(nextZ.ToString());
-
             user.SetPosRoller(nextCoord.X, nextCoord.Y, nextZ);
 
-            return serverMessage;
+            return new SlideObjectBundleComposer(user.X, user.Y, nextCoord.X, nextCoord.Y, nextZ, null, 0, user.Z, user.VirtualId);
         }
 
         public ServerPacket TeleportUser(RoomUser user, Point nextCoord, int rollerID, double nextZ, bool noAnimation = false)
         {
-            ServerPacket serverMessage = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
-            serverMessage.WriteInteger(noAnimation ? nextCoord.X : user.X);
-            serverMessage.WriteInteger(noAnimation ? nextCoord.Y: user.Y);
-            serverMessage.WriteInteger(nextCoord.X);
-            serverMessage.WriteInteger(nextCoord.Y);
-            serverMessage.WriteInteger(0);
-            serverMessage.WriteInteger(rollerID);
-            serverMessage.WriteInteger(2);
-            serverMessage.WriteInteger(user.VirtualId);
-            serverMessage.WriteString(noAnimation ? nextZ.ToString() : user.Z.ToString());;
-            serverMessage.WriteString(nextZ.ToString());
-
             user.SetPos(nextCoord.X, nextCoord.Y, nextZ);
 
-            return serverMessage;
+            return new SlideObjectBundleComposer(noAnimation ? nextCoord.X : user.X, noAnimation ? nextCoord.Y : user.Y, nextCoord.X, nextCoord.Y, nextZ, null, 0, noAnimation ? nextZ : user.Z, user.VirtualId);
         }
 
         public void SaveFurniture(IQueryAdapter dbClient)

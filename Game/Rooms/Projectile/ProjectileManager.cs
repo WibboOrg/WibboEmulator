@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Items;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms.Map.Movement;
@@ -109,17 +110,7 @@ namespace Butterfly.Game.Rooms.Projectile
                     }
                 }
 
-                ServerPacket Message = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
-                Message.WriteInteger(Item.X);
-                Message.WriteInteger(Item.Y);
-                Message.WriteInteger(newX);
-                Message.WriteInteger(newY);
-                Message.WriteInteger(1);
-                Message.WriteInteger(Item.Id);
-                Message.WriteString(Item.Z.ToString());
-                Message.WriteString(newZ.ToString());
-                Message.WriteInteger(0);
-                this._messages.Add(Message);
+                this._messages.Add(new SlideObjectBundleComposer(Item.X, Item.Y, newX, newY, newZ, Item, 0));
 
                 Item.X = newX;
                 Item.Y = newY;

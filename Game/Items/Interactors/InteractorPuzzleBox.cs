@@ -1,6 +1,8 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace Butterfly.Game.Items.Interactors
@@ -74,21 +76,11 @@ namespace Butterfly.Game.Items.Interactors
 
                 int OldX = Item.X;
                 int OldY = Item.Y;
-                double OldZ = Item.Z;
-                double Newz = Item.GetRoom().GetGameMap().SqAbsoluteHeight(newX, newY);
+                double oZ = Item.Z;
+                double nZ = Item.GetRoom().GetGameMap().SqAbsoluteHeight(newX, newY);
                 if (Item.GetRoom().GetRoomItemHandler().SetFloorItem(roomUserByHabbo.GetClient(), Item, newX, newY, Item.Rotation, false, false, false))
                 {
-                    ServerPacket Message = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
-                    Message.WriteInteger(OldX);
-                    Message.WriteInteger(OldY);
-                    Message.WriteInteger(newX);
-                    Message.WriteInteger(newY);
-                    Message.WriteInteger(1);
-                    Message.WriteInteger(Item.Id);
-                    Message.WriteString(OldZ.ToString());
-                    Message.WriteString(Newz.ToString());
-                    Message.WriteInteger(0);
-                    Item.GetRoom().SendPacket(Message);
+                    Item.GetRoom().SendPacket(new SlideObjectBundleComposer(OldX, OldY, newX, newY, nZ, Item, 0));
                 }
             }
         }

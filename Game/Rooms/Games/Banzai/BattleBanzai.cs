@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.GameCenter;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
-
+using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Enclosure;
@@ -243,17 +243,7 @@ namespace Butterfly.Game.Rooms.Games
             double newZ = (double)this._roomInstance.GetGameMap().SqAbsoluteHeight(newX, newY);
             if (this._roomInstance.GetRoomItemHandler().SetFloorItem(item, newX, newY, newZ))
             {
-                ServerPacket Message = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
-                Message.WriteInteger(item.Coordinate.X);
-                Message.WriteInteger(item.Coordinate.Y);
-                Message.WriteInteger(newX);
-                Message.WriteInteger(newY);
-                Message.WriteInteger(1);
-                Message.WriteInteger(item.Id);
-                Message.WriteString(item.Z.ToString());
-                Message.WriteString(newZ.ToString());
-                Message.WriteInteger(0);
-                this._roomInstance.SendPacket(Message);
+                this._roomInstance.SendPacket(new SlideObjectBundleComposer(item.Coordinate.X, item.Coordinate.Y, newX, newY, newZ, item, 0));
             }
 
             if (!this._banzaiStarted)

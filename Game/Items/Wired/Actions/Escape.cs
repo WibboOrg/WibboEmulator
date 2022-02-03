@@ -5,6 +5,7 @@ using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Items.Wired.Interfaces;
 using System.Data;
 using System.Drawing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 
 namespace Butterfly.Game.Items.Wired.Actions
 {
@@ -53,17 +54,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                 double OldZ = item.Z;
                 if (this.RoomInstance.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
                 {
-                    ServerPacket Message = new ServerPacket(ServerPacketHeader.ROOM_ROLLING);
-                    Message.WriteInteger(OldX);
-                    Message.WriteInteger(OldY);
-                    Message.WriteInteger(newPoint.X);
-                    Message.WriteInteger(newPoint.Y);
-                    Message.WriteInteger(1);
-                    Message.WriteInteger(item.Id);
-                    Message.WriteString(OldZ.ToString());
-                    Message.WriteString(item.Z.ToString());
-                    Message.WriteInteger(0);
-                    this.RoomInstance.SendPacket(Message);
+                    this.RoomInstance.SendPacket(new SlideObjectBundleComposer(OldX, OldY, newPoint.X, newPoint.Y, OldZ, item, 0));
                 }
             }
             return;

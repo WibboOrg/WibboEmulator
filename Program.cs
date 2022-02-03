@@ -24,7 +24,7 @@ namespace Butterfly
                     Console.Write("Command> ");
                     string Input = Console.ReadLine();
 
-                    if (Input.Length > 0 && Input.Contains(" "))
+                    if (Input.Length > 0)
                     {
                         string s = Input.Split(' ')[0];
 
