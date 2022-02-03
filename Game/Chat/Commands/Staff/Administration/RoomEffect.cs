@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
@@ -24,9 +25,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 number = 0;
             }
 
-            ServerPacket RoomEffectComposer = new ServerPacket(4001); //ONLY FLASH
-            RoomEffectComposer.WriteInteger(number);
-            Room.SendPacket(RoomEffectComposer);
+            Room.SendPacket(new RoomEffectComposer(number));
         }
     }
 }

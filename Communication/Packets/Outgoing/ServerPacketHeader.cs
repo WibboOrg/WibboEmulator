@@ -12,6 +12,7 @@
         public const int RefreshFavouriteGroupMessageComposer = 876;
         public const int RespectPetNotificationMessageComposer = 2788;
 
+        public const int ROOM_EFFECT = 4001;
         public const int QUESTION_ANSWERED = 2589;
         public const int QUESTION = 2665;
         public const int QUESTION_FINISHED = 1066;

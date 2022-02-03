@@ -524,6 +524,7 @@
     <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\ObjectRemoveComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\ObjectsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\ObjectUpdateComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\RoomEffectComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\RoomEntryInfoComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\RoomPropertyComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Engine\RoomVisualizationSettingsComposer.cs" />
