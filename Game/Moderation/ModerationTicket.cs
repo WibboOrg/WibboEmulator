@@ -17,9 +17,9 @@ namespace Butterfly.Game.Moderation
         public int RoomId;
         public string RoomName;
         public double Timestamp;
-        private readonly string SenderName;
-        private readonly string ReportedName;
-        private readonly string ModName;
+        public string SenderName;
+        public string ReportedName;
+        public string ModName;
 
         public int TabId
         {

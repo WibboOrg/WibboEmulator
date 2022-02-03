@@ -47,73 +47,6 @@ namespace Butterfly.Game.Moderation
             this.LoadTicketResolution();
         }
 
-        public ServerPacket SerializeTool()
-        {
-            ServerPacket Response = new ServerPacket(ServerPacketHeader.MODERATION_TOOL);
-            Response.WriteInteger(this._tickets.Count);
-            foreach (ModerationTicket ticket in this._tickets)
-            {
-                ticket.Serialize(Response);
-            }
-
-            Response.WriteInteger(this._userMessagePresets.Count);
-            foreach (string Preset in this._userMessagePresets)
-            {
-                Response.WriteString(Preset);
-            }
-
-            Response.WriteInteger(0); // Thing presets
-
-            /*
-            Response.WriteString("Sexually Explicit"); //catégorie titre
-            Response.WriteBoolean(true);
-
-            Response.WriteInteger(TicketResolution1.Count); //nombre
-            foreach (TicketResolution Resolu in TicketResolution1)
-            {
-                Response.WriteString(Resolu.Titre); //Titre onglet
-                Response.WriteString(Resolu.Soustitre); //sous titre
-                Response.WriteInteger(Resolu.Ban_hours); //ban temps si + de 10 000 = permanant
-                Response.WriteInteger(Resolu.Enablemute); //0 = disabed / 1 = enable
-                Response.WriteInteger(Resolu.Mute_hours); //mute hours
-                Response.WriteInteger(Resolu.Reminder); // reminder_text ?
-                Response.WriteString(Resolu.Message);
-                Response.WriteBoolean(true); //
-            }
-            Response.WriteString("PII"); //catégorie titre
-            Response.WriteBoolean(true);
-
-            Response.WriteInteger(TicketResolution2.Count); //nombre
-            foreach (TicketResolution Resolu in TicketResolution2)
-            {
-                Response.WriteString(Resolu.Titre); //Titre onglet
-                Response.WriteString(Resolu.Soustitre); //sous titre
-                Response.WriteInteger(Resolu.Ban_hours); //ban temps si + de 10 000 = permanant
-                Response.WriteInteger(Resolu.Enablemute); //0 = disabed / 1 = enable
-                Response.WriteInteger(Resolu.Mute_hours); //mute hours
-                Response.WriteInteger(Resolu.Reminder); // reminder_text ?
-                Response.WriteString(Resolu.Message);
-                Response.WriteBoolean(true); //
-            }*/
-
-            // Permissions
-            Response.WriteBoolean(true); // ticket_queue fuse
-            Response.WriteBoolean(true); // chatlog fuse
-            Response.WriteBoolean(true); // message / caution fuse
-            Response.WriteBoolean(true); // kick fuse
-            Response.WriteBoolean(true); // band fuse
-            Response.WriteBoolean(true); // broadcastshit fuse
-            Response.WriteBoolean(true);
-
-            // Room tool notices
-            Response.WriteInteger(this._roomMessagePresets.Count);
-            foreach (string Preset in this._roomMessagePresets)
-            {
-                Response.WriteString(Preset);
-            }
-            return Response;
-        }
-
         public Dictionary<string, List<ModerationPresetActions>> UserActionPresets
         {
             get
@@ -307,6 +240,12 @@ namespace Butterfly.Game.Moderation
             }
             return null;
         }
+
+        public List<string> UserMessagePresets() => this._userMessagePresets;
+
+        public List<ModerationTicket> Tickets() => this._tickets;
+
+        public List<string> RoomMessagePresets() => this._roomMessagePresets;
 
         public void PickTicket(Client Session, int TicketId)
         {

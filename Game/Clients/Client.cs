@@ -130,7 +130,10 @@ namespace Butterfly.Game.Clients
                     if (this._user.HasFuse("fuse_mod"))
                     {
                         ButterflyEnvironment.GetGame().GetClientManager().AddUserStaff(this._user.Id);
-                        this.SendPacket(ButterflyEnvironment.GetGame().GetModerationManager().SerializeTool());
+                        this.SendPacket(new ModeratorInitComposer(
+                            ButterflyEnvironment.GetGame().GetModerationManager().UserMessagePresets(),
+                            ButterflyEnvironment.GetGame().GetModerationManager().RoomMessagePresets(),
+                            ButterflyEnvironment.GetGame().GetModerationManager().Tickets()));
                     }
 
                     return;

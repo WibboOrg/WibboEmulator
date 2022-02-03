@@ -7,27 +7,27 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorInitComposer : ServerPacket
     {
-        public ModeratorInitComposer(ICollection<string> UserPresets, ICollection<string> RoomPresets, ICollection<SupportTicket> Tickets)
+        public ModeratorInitComposer(List<string> UserPresets, List<string> RoomPresets, List<ModerationTicket> Tickets)
             : base(ServerPacketHeader.MODERATION_TOOL)
         {
             WriteInteger(Tickets.Count);
-            foreach (SupportTicket Ticket in Tickets)
+            foreach (ModerationTicket Ticket in Tickets)
             {
-                WriteInteger(Ticket.Id);
-                WriteInteger(Ticket.GetStatus(Id));
-                WriteInteger(Ticket.Type);
-                WriteInteger(Ticket.Category);
-                WriteInteger(Convert.ToInt32((DateTime.Now - UnixTimestamp.FromUnixTimestamp(Ticket.Timestamp)).TotalMilliseconds));
-                WriteInteger(Ticket.Priority);
-                WriteInteger(Ticket.Sender == null ? 0 : Ticket.Sender.Id);
-                WriteInteger(1);
-                WriteString(Ticket.Sender == null ? string.Empty : Ticket.Sender.Username);
-                WriteInteger(Ticket.Reported == null ? 0 : Ticket.Reported.Id);
-                WriteString(Ticket.Reported == null ? string.Empty : Ticket.Reported.Username);
-                WriteInteger(Ticket.Moderator == null ? 0 : Ticket.Moderator.Id);
-                WriteString(Ticket.Moderator == null ? string.Empty : Ticket.Moderator.Username);
-                WriteString(Ticket.Issue);
-                WriteInteger(Ticket.Room == null ? 0 : Ticket.Room.Id);
+                WriteInteger(Ticket.Id); // id
+                WriteInteger(Ticket.TabId); // state
+                WriteInteger(4); // type (3 or 4 for new style)
+                WriteInteger(Ticket.Type); // priority
+                WriteInteger((int)(ButterflyEnvironment.GetUnixTimestamp() - Ticket.Timestamp) * 1000); // -->> timestamp
+                WriteInteger(Ticket.Score); // priority
+                WriteInteger(Ticket.SenderId);
+                WriteInteger(Ticket.SenderId); // sender id 8 ints
+                WriteString(Ticket.SenderName); // sender name
+                WriteInteger(Ticket.ReportedId);
+                WriteString(Ticket.ReportedName);
+                WriteInteger((Ticket.Status == TicketStatusType.PICKED) ? Ticket.ModeratorId : 0); // mod id
+                WriteString(Ticket.ModName); // mod name
+                WriteString(Ticket.Message); // issue message
+                WriteInteger(0);
                 WriteInteger(0);
             }
 
