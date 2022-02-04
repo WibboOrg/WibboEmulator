@@ -44,7 +44,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (allowUserToEnter)
             {
-                clientByUsername.SendPacket(new FlatAccessibleComposer(username));
+                clientByUsername.SendPacket(new FlatAccessibleComposer(""));
 
                 clientByUsername.GetHabbo().AllowDoorBell = true;
 
@@ -55,7 +55,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
             else
             {
-                clientByUsername.SendPacket(new FlatAccessDeniedComposer(username));
+                clientByUsername.SendPacket(new FlatAccessDeniedComposer(""));
             }
         }
     }
