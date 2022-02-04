@@ -384,6 +384,11 @@ namespace Butterfly.Game.Rooms
             }
         }
 
+        public List<RoomUser> GetUsersForSquare(int x, int y)
+        {
+            return this._room.GetGameMap().GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot == true).ToList();
+        }
+
         public RoomUser GetUserForSquare(int x, int y)
         {
             return Enumerable.FirstOrDefault<RoomUser>(this._room.GetGameMap().GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot == true));
@@ -527,15 +532,15 @@ namespace Butterfly.Game.Rooms
                 {
                     User.CurrentEffect = 580;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("GPHWIB")) //GRAPHISTE
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("GPHWIB")) // GRAPHISTE
                 {
                     User.CurrentEffect = 557;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("wibbo.helpeur")) //HELPEUR
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("wibbo.helpeur")) // HELPEUR
                 {
                     User.CurrentEffect = 544;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WIBARC")) //ARCHI
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WIBARC")) // ARCHI
                 {
                     User.CurrentEffect = 546;
                 }
@@ -547,7 +552,7 @@ namespace Butterfly.Game.Rooms
                 {
                     User.CurrentEffect = 552;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WBASSO")) //IDK ?
+                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WBASSO")) // ASSOCIER ?
                 {
                     User.CurrentEffect = 576;
                 }
@@ -555,14 +560,6 @@ namespace Butterfly.Game.Rooms
                 {
                     User.CurrentEffect = 581;
                 }
-                /*else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("BALTIOFFI")) // IDK ?
-                {
-                    User.CurrentEffect = 578;
-                }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WFMEM")) // WIBBO FAMILLY
-                {
-                    User.CurrentEffect = 579;
-                }*/
 
                 if (User.CurrentEffect > 0)
                 {
