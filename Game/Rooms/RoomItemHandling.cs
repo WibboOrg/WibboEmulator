@@ -359,67 +359,75 @@ namespace Butterfly.Game.Rooms
                 this._rollerUsersMoved.Clear();
                 this._rollerMessages.Clear();
 
-                foreach (Item Roller in this._rollers.Values.ToList())
+                foreach (Item roller in this._rollers.Values.ToList())
                 {
-                    Point NextSquare = Roller.SquareInFront;
-                    List<Item> ItemsOnRoller = this._room.GetGameMap().GetRoomItemForSquare(Roller.X, Roller.Y, Roller.Z);
-                    RoomUser userForSquare = this._room.GetRoomUserManager().GetUserForSquare(Roller.X, Roller.Y);
+                    Point nextCoord = roller.SquareInFront;
+                    List<Item> itemsOnRoller = this._room.GetGameMap().GetRoomItemForSquare(roller.X, roller.Y, roller.Z);
+                    List<RoomUser> usersForSquare = this._room.GetRoomUserManager().GetUsersForSquare(roller.X, roller.Y);
 
-                    if (ItemsOnRoller.Count > 0 || userForSquare != null)
+                    if (itemsOnRoller.Count > 0 || usersForSquare.Count > 0)
                     {
-
-                        if (ItemsOnRoller.Count > 10)
+                        if (itemsOnRoller.Count > 10)
                         {
-                            ItemsOnRoller = ItemsOnRoller.Take(10).ToList();
+                            itemsOnRoller = itemsOnRoller.Take(10).ToList();
                         }
 
-                        List<Item> ItemsOnNext = this._room.GetGameMap().GetCoordinatedItems(NextSquare);
-                        bool NextRoller = false;
+                        List<Item> itemsOnNext = this._room.GetGameMap().GetCoordinatedItems(nextCoord);
+                        bool nextRoller = false;
                         double nextZ = 0.0;
-                        bool NextRollerClear = true;
-                        foreach (Item roomItem2 in ItemsOnNext)
+                        bool nextRollerClear = true;
+
+                        foreach (Item item in itemsOnNext)
                         {
-                            if (roomItem2.IsRoller)
+                            if (item.IsRoller)
                             {
-                                NextRoller = true;
-                                if (roomItem2.TotalHeight > nextZ)
+                                nextRoller = true;
+                                if (item.TotalHeight > nextZ)
                                 {
-                                    nextZ = roomItem2.TotalHeight;
+                                    nextZ = item.TotalHeight;
                                 }
                             }
                         }
-                        if (NextRoller)
+                        if (nextRoller)
                         {
-                            foreach (Item roomItem2 in ItemsOnNext)
+                            foreach (Item roomItem2 in itemsOnNext)
                             {
                                 if (roomItem2.TotalHeight > nextZ)
                                 {
-                                    NextRollerClear = false;
+                                    nextRollerClear = false;
                                 }
                             }
                         }
                         else
                         {
-                            nextZ += this._room.GetGameMap().GetHeightForSquareFromData(NextSquare);
+                            nextZ += this._room.GetGameMap().GetHeightForSquareFromData(nextCoord);
                         }
 
-                        foreach (Item pItem in ItemsOnRoller)
+                        foreach (Item item in itemsOnRoller)
                         {
-                            double RollerHeight = pItem.Z - Roller.TotalHeight;
-                            if (!this._rollerItemsMoved.Contains(pItem.Id) && this._room.GetGameMap().CanStackItem(NextSquare.X, NextSquare.Y) && (NextRollerClear && Roller.Z < pItem.Z))
+                            double rollerHeight = item.Z - roller.TotalHeight;
+                            if (!this._rollerItemsMoved.Contains(item.Id) && this._room.GetGameMap().CanStackItem(nextCoord.X, nextCoord.Y) && (nextRollerClear && roller.Z < item.Z))
                             {
-                                this._rollerMessages.Add(this.UpdateItemOnRoller(pItem, NextSquare, nextZ + RollerHeight));
-                                this._rollerItemsMoved.Add(pItem.Id);
+                                this._rollerMessages.Add(new SlideObjectBundleComposer(item.X, item.Y, item.Z, nextCoord.X, nextCoord.Y, nextZ + rollerHeight, item.Id));
+                                this._rollerItemsMoved.Add(item.Id);
+
+                                this.SetFloorItem(item, nextCoord.X, nextCoord.Y, nextZ + rollerHeight);
                             }
                         }
 
-                        if (userForSquare != null && (!userForSquare.SetStep && (userForSquare.AllowMoveToRoller || this._rollerSpeed == 0) && (!userForSquare.IsWalking || userForSquare.Freeze)) && NextRollerClear && (this._room.GetGameMap().CanWalk(NextSquare.X, NextSquare.Y) && this._room.GetGameMap().SquareTakingOpen(NextSquare.X, NextSquare.Y) && !this._rollerUsersMoved.Contains(userForSquare.HabboId)))
+                        foreach (RoomUser userForSquare in usersForSquare)
                         {
-                            this._rollerMessages.Add(this.UpdateUserOnRoller(userForSquare, NextSquare, Roller.Id, nextZ));
-                            this._rollerUsersMoved.Add(userForSquare.HabboId);
+                            if (userForSquare != null && (!userForSquare.SetStep && (userForSquare.AllowMoveToRoller || this._rollerSpeed == 0) && (!userForSquare.IsWalking || userForSquare.Freeze)) && nextRollerClear && (this._room.GetGameMap().CanWalk(nextCoord.X, nextCoord.Y) && this._room.GetGameMap().SquareTakingOpen(nextCoord.X, nextCoord.Y) && !this._rollerUsersMoved.Contains(userForSquare.HabboId)))
+                            {
+                                this._rollerMessages.Add(new SlideObjectBundleComposer(userForSquare.X, userForSquare.Y, userForSquare.Z, nextCoord.X, nextCoord.Y, nextZ, userForSquare.VirtualId, roller.Id, false));
+                                this._rollerUsersMoved.Add(userForSquare.HabboId);
+
+                                userForSquare.SetPosRoller(nextCoord.X, nextCoord.Y, nextZ);
+                            }
                         }
                     }
                 }
+
                 this._rollerCycle = 0;
                 return this._rollerMessages;
             }
@@ -443,18 +451,6 @@ namespace Butterfly.Game.Rooms
             pItem.Rotation = newRot;
 
             this._room.SendPacket(new ObjectUpdateComposer(pItem, this._room.RoomData.OwnerId));
-        }
-
-        private ServerPacket UpdateItemOnRoller(Item item, Point NextCoord, double nextZ)
-        {
-            return new SlideObjectBundleComposer(item.X, item.Y, item.Z, NextCoord.X, NextCoord.Y, nextZ, item.Id);
-        }
-
-        public ServerPacket UpdateUserOnRoller(RoomUser user, Point nextCoord, int rollerID, double nextZ)
-        {
-            user.SetPosRoller(nextCoord.X, nextCoord.Y, nextZ);
-
-            return new SlideObjectBundleComposer(user.X, user.Y, user.Z, nextCoord.X, nextCoord.Y, nextZ, user.VirtualId, rollerID, false);
         }
 
         public ServerPacket TeleportUser(RoomUser user, Point nextCoord, int rollerID, double nextZ, bool noAnimation = false)

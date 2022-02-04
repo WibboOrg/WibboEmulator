@@ -534,7 +534,6 @@ namespace Butterfly.Game.Rooms
             Session.SendPacket(this.GetGameMap().Model.SerializeRelativeHeightmap());
             Session.SendPacket(this.GetGameMap().Model.GetHeightmap());
 
-            List<RoomUser> roomUsers = new List<RoomUser>();
             foreach (RoomUser roomUser in this._roomUserManager.GetUserList().ToList())
             {
                 if (roomUser == null)
@@ -557,7 +556,7 @@ namespace Butterfly.Game.Rooms
                     continue;
                 }
 
-                roomUsers.Add(roomUser);
+                Session.SendPacket(new UsersComposer(roomUser));
 
                 if (roomUser.IsDancing)
                 {
@@ -580,7 +579,6 @@ namespace Butterfly.Game.Rooms
                 }
             }
 
-            Session.SendPacket(new UsersComposer(roomUsers));
             Session.SendPacket(new UserUpdateComposer(this._roomUserManager.GetUserList().ToList()));
             Session.SendPacket(new ObjectsComposer(this.GetRoomItemHandler().GetFloor.ToArray(), this));
             Session.SendPacket(new ObjectsComposer(this.GetRoomItemHandler().GetTempItems.ToArray(), this));

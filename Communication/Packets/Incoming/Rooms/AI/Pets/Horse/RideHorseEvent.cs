@@ -71,8 +71,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     int NewX2 = Pet.X;
                     int NewY2 = Pet.Y;
-                    Room.SendPacket(Room.GetRoomItemHandler().UpdateUserOnRoller(User, new Point(NewX2, NewY2), 0, Room.GetGameMap().SqAbsoluteHeight(NewX2, NewY2) + 1));
-                    Room.SendPacket(Room.GetRoomItemHandler().UpdateUserOnRoller(Pet, new Point(NewX2, NewY2), 0, Room.GetGameMap().SqAbsoluteHeight(NewX2, NewY2)));
+                    Room.SendPacket(Room.GetRoomItemHandler().TeleportUser(User, new Point(NewX2, NewY2), 0, Room.GetGameMap().SqAbsoluteHeight(NewX2, NewY2) + 1));
+                    Room.SendPacket(Room.GetRoomItemHandler().TeleportUser(Pet, new Point(NewX2, NewY2), 0, Room.GetGameMap().SqAbsoluteHeight(NewX2, NewY2)));
 
                     User.MoveTo(NewX2, NewY2);
 

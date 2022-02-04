@@ -37,7 +37,6 @@ namespace Butterfly.Communication.Packets.Outgoing.Messenger
                 WriteBoolean(false);
                 WriteBoolean(false);
                 WriteShort(friend.Relation);
-                WriteBoolean(false);
             }
         }
     }

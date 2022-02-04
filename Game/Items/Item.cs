@@ -114,19 +114,39 @@ namespace Butterfly.Game.Items
                 Point point = new Point(this.X, this.Y);
                 if (this.Rotation == 0)
                 {
-                    --point.Y;
+                    point.Y--;
+                }
+                if (this.Rotation == 1)
+                {
+                    point.X++;
+                    point.Y--;
                 }
                 else if (this.Rotation == 2)
                 {
-                    ++point.X;
+                    point.X++;
+                }
+                else if (this.Rotation == 3)
+                {
+                    point.X++;
+                    point.Y++;
                 }
                 else if (this.Rotation == 4)
                 {
-                    ++point.Y;
+                    point.Y++;
+                }
+                else if (this.Rotation == 5)
+                {
+                    point.X--;
+                    point.Y++;
                 }
                 else if (this.Rotation == 6)
                 {
-                    --point.X;
+                    point.X--;
+                }
+                else if (this.Rotation == 6)
+                {
+                    point.X--;
+                    point.Y--;
                 }
 
                 return point;
@@ -140,19 +160,39 @@ namespace Butterfly.Game.Items
                 Point point = new Point(this.X, this.Y);
                 if (this.Rotation == 0)
                 {
-                    ++point.Y;
+                    point.Y++;
+                }
+                if (this.Rotation == 1)
+                {
+                    point.X--;
+                    point.Y++;
                 }
                 else if (this.Rotation == 2)
                 {
-                    --point.X;
+                    point.X--;
+                }
+                else if (this.Rotation == 3)
+                {
+                    point.X--;
+                    point.Y--;
                 }
                 else if (this.Rotation == 4)
                 {
-                    --point.Y;
+                    point.Y--;
+                }
+                else if (this.Rotation == 5)
+                {
+                    point.X++;
+                    point.Y--;
                 }
                 else if (this.Rotation == 6)
                 {
-                    ++point.X;
+                    point.X++;
+                }
+                else if (this.Rotation == 6)
+                {
+                    point.X++;
+                    point.Y++;
                 }
 
                 return point;
