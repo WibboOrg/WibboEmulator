@@ -1,4 +1,3 @@
-using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Help;

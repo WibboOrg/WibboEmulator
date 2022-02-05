@@ -1,4 +1,3 @@
-using Butterfly.Game.Rooms;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Navigator

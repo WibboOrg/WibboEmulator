@@ -1,4 +1,3 @@
-using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Quests;

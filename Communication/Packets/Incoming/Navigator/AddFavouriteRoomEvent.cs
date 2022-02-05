@@ -1,4 +1,3 @@
-using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;

@@ -2,7 +2,6 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using System.Linq;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Butterfly.Communication.Packets.Outgoing.Users
+﻿namespace Butterfly.Communication.Packets.Outgoing.Users
 {
     internal class ScrSendUserInfoComposer : ServerPacket
     {

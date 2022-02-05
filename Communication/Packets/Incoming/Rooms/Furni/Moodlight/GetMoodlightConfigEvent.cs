@@ -1,8 +1,6 @@
-using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Moodlight;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Moodlight;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

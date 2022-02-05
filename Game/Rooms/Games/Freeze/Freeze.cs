@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.GameCenter;
+﻿using Butterfly.Communication.Packets.Outgoing.GameCenter;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Freeze;
 using Butterfly.Game.Items;

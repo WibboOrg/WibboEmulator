@@ -1,8 +1,6 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Rooms.FloorPlan;
+﻿using Butterfly.Communication.Packets.Outgoing.Rooms.FloorPlan;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using System.Drawing;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

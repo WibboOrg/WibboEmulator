@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Polls
+﻿namespace Butterfly.Communication.Packets.Outgoing.Rooms.Polls
 {
     internal class QuestionFinishedComposer : ServerPacket
     {

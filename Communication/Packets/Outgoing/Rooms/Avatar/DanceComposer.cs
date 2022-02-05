@@ -1,5 +1,3 @@
-using Butterfly.Game.Rooms;
-
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.Avatar
 {
     internal class DanceComposer : ServerPacket

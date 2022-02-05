@@ -1,6 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-
-namespace Butterfly.Game.Users.Messenger
+﻿namespace Butterfly.Game.Users.Messenger
 {
     public class MessengerRequest
     {

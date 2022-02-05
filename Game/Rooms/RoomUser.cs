@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+﻿using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Game.Clients;

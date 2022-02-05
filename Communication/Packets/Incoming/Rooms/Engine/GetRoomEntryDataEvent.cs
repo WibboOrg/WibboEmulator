@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Misc;
+﻿using Butterfly.Communication.Packets.Outgoing.Misc;
 using Butterfly.Communication.Packets.Outgoing.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;

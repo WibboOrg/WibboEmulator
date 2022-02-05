@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Game.Rooms;
+﻿using Butterfly.Game.Rooms;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Chat.Commands.Cmd

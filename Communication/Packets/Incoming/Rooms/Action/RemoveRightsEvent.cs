@@ -1,11 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Settings;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Users;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

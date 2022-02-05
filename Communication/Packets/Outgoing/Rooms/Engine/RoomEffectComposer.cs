@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
+﻿namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class RoomEffectComposer : ServerPacket
     {

@@ -1,7 +1,5 @@
 using Butterfly.Game.Moderation;
 using Butterfly.Game.Users;
-using Butterfly.Utility;
-using System;
 
 namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {

@@ -1,4 +1,3 @@
-using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Settings;
 using Butterfly.Database.Daos;

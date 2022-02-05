@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Database.Interfaces;
+﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Items.Wired.Interfaces;

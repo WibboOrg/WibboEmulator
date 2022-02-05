@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class FloorHeightMapComposer : ServerPacket

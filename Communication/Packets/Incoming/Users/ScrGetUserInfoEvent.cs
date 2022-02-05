@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Users;
+﻿using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Game.Clients;
 using System;
 

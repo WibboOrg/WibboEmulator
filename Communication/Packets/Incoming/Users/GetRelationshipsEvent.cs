@@ -1,9 +1,7 @@
-using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Users;
 using Butterfly.Game.Users.Messenger;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -51,6 +49,5 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Session.SendPacket(new GetRelationshipsComposer(habbo.Id, Nbrela, Loves, Likes, Hates));
         }
-        
     }
 }

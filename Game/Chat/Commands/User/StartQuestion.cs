@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Polls;
+﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Polls;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 

@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
+﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;

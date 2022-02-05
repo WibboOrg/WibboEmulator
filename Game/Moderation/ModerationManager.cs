@@ -1,10 +1,8 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Navigator;
+﻿using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Chat.Logs;
 using Butterfly.Game.Users;
 using System;
 using System.Collections.Generic;

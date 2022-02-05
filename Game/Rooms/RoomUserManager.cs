@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.GameCenter;
+﻿using Butterfly.Communication.Packets.Outgoing.GameCenter;
 using Butterfly.Communication.Packets.Outgoing.Handshake;
 using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;

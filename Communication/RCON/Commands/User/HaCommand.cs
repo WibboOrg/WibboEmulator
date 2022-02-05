@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Moderation;
+﻿using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.RCON.Commands.User

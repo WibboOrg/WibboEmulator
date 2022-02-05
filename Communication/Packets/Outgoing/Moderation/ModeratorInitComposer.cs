@@ -1,6 +1,4 @@
 using Butterfly.Game.Moderation;
-using Butterfly.Utility;
-using System;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Moderation

@@ -2,7 +2,6 @@ using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Moderation;
 using System.Data;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

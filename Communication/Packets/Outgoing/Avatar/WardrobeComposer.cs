@@ -1,10 +1,5 @@
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
 using Butterfly.Game.Users.Wardrobes;
-using System;
 using System.Collections.Generic;
-using System.Data;
 
 namespace Butterfly.Communication.Packets.Outgoing.Avatar
 {

@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.Clients;
+﻿using Butterfly.Game.Clients;
 
 namespace Butterfly.Game.Users.Messenger
 {

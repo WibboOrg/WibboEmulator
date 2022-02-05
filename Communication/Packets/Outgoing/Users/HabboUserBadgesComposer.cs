@@ -1,6 +1,5 @@
 using Butterfly.Game.Users;
 using Butterfly.Game.Users.Badges;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Butterfly.Communication.Packets.Outgoing.Users
