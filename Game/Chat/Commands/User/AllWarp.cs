@@ -3,6 +3,7 @@ using Butterfly.Game.Clients;
 using System.Collections.Generic;
 using System.Linq;
 using Butterfly.Game.Rooms;
+using Butterfly.Utility;
 
 namespace Butterfly.Game.Chat.Commands.Cmd
 {
@@ -17,7 +18,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            List<ServerPacket> MessageList = new List<ServerPacket>();
+            ServerPacketList MessageList = new ServerPacketList();
 
             foreach (RoomUser user in room.GetRoomUserManager().GetUserList().ToList())
             {

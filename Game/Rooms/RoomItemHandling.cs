@@ -10,6 +10,7 @@ using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.Moodlight;
 using Butterfly.Game.Rooms.Pathfinding;
+using Butterfly.Utility;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace Butterfly.Game.Rooms
 
         private readonly List<int> _rollerItemsMoved;
         private readonly List<int> _rollerUsersMoved;
-        private readonly List<ServerPacket> _rollerMessages;
+        private readonly ServerPacketList _rollerMessages;
 
         private int _rollerSpeed;
         private int _rollerCycle;
@@ -54,7 +55,7 @@ namespace Butterfly.Game.Rooms
             this._rollerSpeed = 4;
             this._rollerItemsMoved = new List<int>();
             this._rollerUsersMoved = new List<int>();
-            this._rollerMessages = new List<ServerPacket>();
+            this._rollerMessages = new ServerPacketList();
         }
 
         public void QueueRoomItemUpdate(Item item)
@@ -64,25 +65,27 @@ namespace Butterfly.Game.Rooms
 
         public List<Item> RemoveAllFurniture(Client Session)
         {
-            List<ServerPacket> ListMessage = new List<ServerPacket>();
-            List<Item> Items = new List<Item>();
+            ServerPacketList listMessage = new ServerPacketList();
+            List<Item> items = new List<Item>();
+
             foreach (Item roomItem in this._floorItems.Values.ToList())
             {
                 roomItem.Interactor.OnRemove(Session, roomItem);
 
                 roomItem.Destroy();
-                ListMessage.Add(new ObjectRemoveComposer(roomItem.Id, Session.GetHabbo().Id));
-                Items.Add((Item)roomItem);
+                listMessage.Add(new ObjectRemoveComposer(roomItem.Id, Session.GetHabbo().Id));
+                items.Add((Item)roomItem);
             }
+
             foreach (Item roomItem in this._wallItems.Values.ToList())
             {
                 roomItem.Interactor.OnRemove(Session, roomItem);
                 roomItem.Destroy();
 
-                ListMessage.Add(new ItemRemoveComposer(roomItem.Id, this._room.RoomData.OwnerId));
-                Items.Add((Item)roomItem);
+                listMessage.Add(new ItemRemoveComposer(roomItem.Id, this._room.RoomData.OwnerId));
+                items.Add((Item)roomItem);
             }
-            this._room.SendMessage(ListMessage);
+            this._room.SendMessage(listMessage);
 
             this._wallItems.Clear();
             this._floorItems.Clear();
@@ -101,7 +104,7 @@ namespace Butterfly.Game.Rooms
                 this._room.GetWiredHandler().OnPickall();
             }
 
-            return Items;
+            return items;
         }
 
         public void SetSpeed(int p)
@@ -351,7 +354,7 @@ namespace Butterfly.Game.Rooms
             }
         }
 
-        private List<ServerPacket> CycleRollers()
+        private ServerPacketList CycleRollers()
         {
             if (this._rollerCycle >= this._rollerSpeed || this._rollerSpeed == 0)
             {
@@ -433,10 +436,10 @@ namespace Butterfly.Game.Rooms
             }
             else
             {
-                ++this._rollerCycle;
+                this._rollerCycle++;
             }
 
-            return new List<ServerPacket>();
+            return new ServerPacketList();
         }
 
         public void PositionReset(Item item, int x, int y, double z)
@@ -455,11 +458,12 @@ namespace Butterfly.Game.Rooms
 
         public ServerPacket TeleportUser(RoomUser user, Point nextCoord, int rollerID, double nextZ, bool noAnimation = false)
         {
-            user.SetPos(nextCoord.X, nextCoord.Y, nextZ);
 
             int x = noAnimation ? nextCoord.X : user.X;
             int y = noAnimation ? nextCoord.Y : user.Y;
             double z = noAnimation ? nextZ : user.Z;
+
+            user.SetPos(nextCoord.X, nextCoord.Y, nextZ);
 
             return new SlideObjectBundleComposer(x, y, z, nextCoord.X, nextCoord.Y, nextZ, user.VirtualId, rollerID, false);
         }

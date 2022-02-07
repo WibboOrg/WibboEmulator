@@ -18,6 +18,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Users;
 using Butterfly.Game.Users.Data;
 using Butterfly.Net;
+using Butterfly.Utility;
 using ConnectionManager;
 using System;
 using System.Text;
@@ -109,20 +110,26 @@ namespace Butterfly.Game.Clients
 
                     this._user.Init(this);
 
-                    this.IsNewUser();
+                    ServerPacketList packetList = new ServerPacketList();
 
-                    this.SendPacket(new AuthenticationOKComposer());
-                    this.SendPacket(new NavigatorSettingsComposer(this._user.HomeRoom));
-                    this.SendPacket(new FavouritesComposer(this._user.FavoriteRooms));
-                    this.SendPacket(new FigureSetIdsComposer());
-                    this.SendPacket(new UserRightsComposer(this._user.Rank < 2 ? 2 : this.GetHabbo().Rank));
-                    this.SendPacket(new AvailabilityStatusComposer());
-                    this.SendPacket(new AchievementScoreComposer(this._user.AchievementPoints));
-                    this.SendPacket(new BuildersClubMembershipComposer());
-                    this.SendPacket(new ActivityPointsComposer(this._user.WibboPoints));
-                    this.SendPacket(new CfhTopicsInitComposer(ButterflyEnvironment.GetGame().GetModerationManager().UserActionPresets));
-                    this.SendPacket(new SoundSettingsComposer(this._user.ClientVolume, false, false, false, 1));
-                    this.SendPacket(new AvatarEffectsComposer(ButterflyEnvironment.GetGame().GetEffectManager().GetEffects()));
+                    if(this.IsNewUser())
+                    {
+                        packetList.Add(new NuxAlertComposer(2));
+                        packetList.Add(new InClientLinkComposer("nux/lobbyoffer/hide"));
+                    }
+
+                    packetList.Add(new AuthenticationOKComposer());
+                    packetList.Add(new NavigatorSettingsComposer(this._user.HomeRoom));
+                    packetList.Add(new FavouritesComposer(this._user.FavoriteRooms));
+                    packetList.Add(new FigureSetIdsComposer());
+                    packetList.Add(new UserRightsComposer(this._user.Rank < 2 ? 2 : this.GetHabbo().Rank));
+                    packetList.Add(new AvailabilityStatusComposer());
+                    packetList.Add(new AchievementScoreComposer(this._user.AchievementPoints));
+                    packetList.Add(new BuildersClubMembershipComposer());
+                    packetList.Add(new ActivityPointsComposer(this._user.WibboPoints));
+                    packetList.Add(new CfhTopicsInitComposer(ButterflyEnvironment.GetGame().GetModerationManager().UserActionPresets));
+                    packetList.Add(new SoundSettingsComposer(this._user.ClientVolume, false, false, false, 1));
+                    packetList.Add(new AvatarEffectsComposer(ButterflyEnvironment.GetGame().GetEffectManager().GetEffects()));
 
                     this._user.UpdateActivityPointsBalance();
                     this._user.UpdateCreditsBalance();
@@ -130,11 +137,13 @@ namespace Butterfly.Game.Clients
                     if (this._user.HasFuse("fuse_mod"))
                     {
                         ButterflyEnvironment.GetGame().GetClientManager().AddUserStaff(this._user.Id);
-                        this.SendPacket(new ModeratorInitComposer(
+                        packetList.Add(new ModeratorInitComposer(
                             ButterflyEnvironment.GetGame().GetModerationManager().UserMessagePresets(),
                             ButterflyEnvironment.GetGame().GetModerationManager().RoomMessagePresets(),
                             ButterflyEnvironment.GetGame().GetModerationManager().Tickets()));
                     }
+
+                    this.SendPacket(packetList);
 
                     return;
                 }
@@ -145,34 +154,33 @@ namespace Butterfly.Game.Clients
             }
         }
 
-        private void IsNewUser()
+        private bool IsNewUser()
         {
-            if (this.GetHabbo().NewUser)
+            if (!this.GetHabbo().NewUser)
+                return false;
+
+            this.GetHabbo().NewUser = false;
+
+            int RoomId = 0;
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                this.GetHabbo().NewUser = false;
+                RoomId = RoomDao.InsertDuplicate(dbClient, this.GetHabbo().Username, ButterflyEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
 
-                int RoomId = 0;
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                UserDao.UpdateNuxEnable(dbClient, this.GetHabbo().Id, RoomId);
+                if (RoomId == 0)
                 {
-                    RoomId = RoomDao.InsertDuplicate(dbClient, this.GetHabbo().Username, ButterflyEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
-
-                    UserDao.UpdateNuxEnable(dbClient, this.GetHabbo().Id, RoomId);
-                    if (RoomId == 0)
-                    {
-                        return;
-                    }
-
-                    ItemDao.InsertDuplicate(dbClient, this.GetHabbo().Id, RoomId);
+                    return false;
                 }
 
-                if(!this.GetHabbo().UsersRooms.Contains(RoomId))
-                    this.GetHabbo().UsersRooms.Add(RoomId);
-
-                this.GetHabbo().HomeRoom = RoomId;
-
-                this.SendPacket(new NuxAlertComposer(2));
-                this.SendPacket(new InClientLinkComposer("nux/lobbyoffer/hide"));
+                ItemDao.InsertDuplicate(dbClient, this.GetHabbo().Id, RoomId);
             }
+
+            if (!this.GetHabbo().UsersRooms.Contains(RoomId))
+                this.GetHabbo().UsersRooms.Add(RoomId);
+
+            this.GetHabbo().HomeRoom = RoomId;
+
+            return true;
         }
 
         private void OnNewPacket(ClientPacket Message)
@@ -202,7 +210,9 @@ namespace Butterfly.Game.Clients
             if (this._connection == null)
             {
                 return;
-            } (this._connection.Parser as InitialPacketParser).SwitchParserRequest += new InitialPacketParser.NoParamDelegate(this.SwitchParserRequest);
+            }
+
+            (this._connection.Parser as InitialPacketParser).SwitchParserRequest += new InitialPacketParser.NoParamDelegate(this.SwitchParserRequest);
 
             this._connection.StartPacketProcessing();
         }
@@ -341,14 +351,25 @@ namespace Butterfly.Game.Clients
             }
         }
 
-        public void SendPacket(IServerPacket Message)
+        public void SendPacket(ServerPacketList packets)
         {
-            if (Message == null || this.GetConnection() == null)
+            if (packets == null)
+                return;
+
+            if (packets.Count == 0)
+                return;
+
+            this.GetConnection().SendData(packets.GetBytes);
+        }
+
+        public void SendPacket(IServerPacket packet)
+        {
+            if (packet == null || this.GetConnection() == null)
             {
                 return;
             }
 
-            this.GetConnection().SendData(Message.GetBytes());
+            this.GetConnection().SendData(packet.GetBytes());
         }
     }
 }

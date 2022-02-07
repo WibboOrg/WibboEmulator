@@ -2,9 +2,9 @@
 {
     internal static class TransformUtility
     {
-        public static string GetRace(string NamePet, int RaceId)
+        public static string GetRace(string namePet, int RaceId)
         {
-            switch (NamePet.ToLower())
+            switch (namePet.ToLower())
             {
                 case "bigeuthanasie":
                     {
@@ -303,7 +303,7 @@
                         return "11 " + RaceId + " FFFFFF";
 
                     }
-                case "arraigne":
+                case "spider":
                     {
                         return "8 " + RaceId + " FFFFFF";
 

@@ -2283,6 +2283,12 @@ namespace Butterfly.Game.Items.Wired.Actions
                             break;
                         }
 
+
+                        if (User.GetUsername() == User.Room.RoomData.OwnerName)
+                        {
+                            break;
+                        }
+
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             UserDao.UpdateAddRunPoints(dbClient, User.GetClient().GetHabbo().Id);
@@ -2293,6 +2299,11 @@ namespace Butterfly.Game.Items.Wired.Actions
                 case "givelot":
                     {
                         if (User.IsBot || User.GetClient() == null || User.GetClient().GetHabbo() == null || User.GetClient().GetHabbo().Rank > 4)
+                        {
+                            break;
+                        }
+
+                        if(User.GetUsername() == User.Room.RoomData.OwnerName)
                         {
                             break;
                         }

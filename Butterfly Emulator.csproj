@@ -1032,6 +1032,7 @@
     <Compile Include="Game\Users\Messenger\Relationship.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Utility\HabboEncoding.cs" />
+    <Compile Include="Utility\ServerPacketList.cs" />
     <Compile Include="Utility\StringCharFilter.cs" />
     <Compile Include="Core\ConfigurationData.cs" />
     <Compile Include="Communication\ConnectionManager\ConnectionHandeling.cs" />

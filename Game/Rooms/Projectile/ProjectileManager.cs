@@ -3,6 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Items;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms.Map.Movement;
+using Butterfly.Utility;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,14 +16,14 @@ namespace Butterfly.Game.Rooms.Projectile
         private readonly ConcurrentQueue<ItemTemp> _queueProjectile;
         private readonly Room _room;
 
-        private readonly List<ServerPacket> _messages;
+        private readonly ServerPacketList _messages;
 
         public ProjectileManager(Room room)
         {
             this._projectile = new List<ItemTemp>();
             this._queueProjectile = new ConcurrentQueue<ItemTemp>();
             this._room = room;
-            this._messages = new List<ServerPacket>();
+            this._messages = new ServerPacketList();
         }
 
         public void OnCycle()

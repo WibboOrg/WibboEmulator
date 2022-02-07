@@ -24,6 +24,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Butterfly.Utility.Events;
+using Butterfly.Utility;
 
 namespace Butterfly.Game.Rooms
 {
@@ -531,8 +532,9 @@ namespace Butterfly.Game.Rooms
 
         public void SendObjects(Client Session)
         {
-            Session.SendPacket(this.GetGameMap().Model.SerializeRelativeHeightmap());
-            Session.SendPacket(this.GetGameMap().Model.GetHeightmap());
+            ServerPacketList packetList = new ServerPacketList();
+            packetList.Add(this.GetGameMap().Model.SerializeRelativeHeightmap());
+            packetList.Add(this.GetGameMap().Model.GetHeightmap());
 
             foreach (RoomUser roomUser in this._roomUserManager.GetUserList().ToList())
             {
@@ -556,33 +558,36 @@ namespace Butterfly.Game.Rooms
                     continue;
                 }
 
-                Session.SendPacket(new UsersComposer(roomUser));
+                packetList.Add(new UsersComposer(roomUser));
 
                 if (roomUser.IsDancing)
                 {
-                    Session.SendPacket(new DanceComposer(roomUser.VirtualId, roomUser.DanceId));
+                    packetList.Add(new DanceComposer(roomUser.VirtualId, roomUser.DanceId));
                 }
 
                 if (roomUser.IsAsleep)
                 {
-                    Session.SendPacket(new SleepComposer(roomUser.VirtualId, true));
+                    packetList.Add(new SleepComposer(roomUser.VirtualId, true));
                 }
 
                 if (roomUser.CarryItemID > 0 && roomUser.CarryTimer > 0)
                 {
-                    Session.SendPacket(new CarryObjectComposer(roomUser.VirtualId, roomUser.CarryItemID));
+                    packetList.Add(new CarryObjectComposer(roomUser.VirtualId, roomUser.CarryItemID));
                 }
 
                 if (roomUser.CurrentEffect > 0)
                 {
-                    Session.SendPacket(new AvatarEffectComposer(roomUser.VirtualId, roomUser.CurrentEffect));
+                    packetList.Add(new AvatarEffectComposer(roomUser.VirtualId, roomUser.CurrentEffect));
                 }
             }
 
-            Session.SendPacket(new UserUpdateComposer(this._roomUserManager.GetUserList().ToList()));
-            Session.SendPacket(new ObjectsComposer(this.GetRoomItemHandler().GetFloor.ToArray(), this));
-            Session.SendPacket(new ObjectsComposer(this.GetRoomItemHandler().GetTempItems.ToArray(), this));
-            Session.SendPacket(new ItemsComposer(this.GetRoomItemHandler().GetWall.ToArray(), this));
+            packetList.Add(new UserUpdateComposer(this._roomUserManager.GetUserList().ToList()));
+            packetList.Add(new ObjectsComposer(this.GetRoomItemHandler().GetFloor.ToArray(), this));
+            packetList.Add(new ObjectsComposer(this.GetRoomItemHandler().GetTempItems.ToArray(), this));
+            packetList.Add(new ItemsComposer(this.GetRoomItemHandler().GetWall.ToArray(), this));
+
+            Session.SendPacket(packetList);
+            packetList.Clear();
         }
 
         public void ProcessRoom(object pCallback)
@@ -930,38 +935,14 @@ namespace Butterfly.Game.Rooms
             }
         }
 
-        public void SendMessage(List<ServerPacket> Messages)
+        public void SendMessage(ServerPacketList Messages)
         {
             if (Messages.Count == 0)
             {
                 return;
             }
 
-            try
-            {
-                byte[] TotalBytes = new byte[0];
-                int Current = 0;
-
-                foreach (ServerPacket Packet in Messages.ToList())
-                {
-                    byte[] ToAdd = Packet.GetBytes();
-                    int NewLen = TotalBytes.Length + ToAdd.Length;
-
-                    Array.Resize(ref TotalBytes, NewLen);
-
-                    for (int i = 0; i < ToAdd.Length; i++)
-                    {
-                        TotalBytes[Current] = ToAdd[i];
-                        Current++;
-                    }
-                }
-
-                this.BroadcastPacket(TotalBytes);
-            }
-            catch (Exception e)
-            {
-                Logging.HandleException(e, "Room.SendMessage List<ServerPacket>");
-            }
+            this.BroadcastPacket(Messages.GetBytes);
         }
 
         public void BroadcastPacket(byte[] Packet)
