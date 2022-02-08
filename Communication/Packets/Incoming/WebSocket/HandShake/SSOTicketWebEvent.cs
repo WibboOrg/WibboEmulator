@@ -10,7 +10,9 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
                 return;
             }
 
-            Session.TryAuthenticate(Packet.PopString());
+            string SSOTicket = Packet.PopString();
+
+            Session.TryAuthenticate(SSOTicket);
         }
     }
 }

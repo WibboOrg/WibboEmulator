@@ -68,13 +68,14 @@ namespace Butterfly.Game.WebClients
                 this._langue = LanguageManager.ParseLanguage(Convert.ToString(dUserInfo["langue"]));
                 UserWebsocketDao.UpdateTicket(dbClient, this.UserId);
 
+                this.SendPacket(new AuthOkComposer());
+
                 this.SendSettingSound(dbClient);
             }
 
             ButterflyEnvironment.GetGame().GetClientWebManager().LogClonesOut(this.UserId);
             ButterflyEnvironment.GetGame().GetClientWebManager().RegisterClient(this, this.UserId);
 
-            this.SendPacket(new AuthOkComposer());
             this.SendPacket(new UserIsStaffComposer(this._isStaff));
         }
 
