@@ -17,14 +17,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (Client == null || Client.GetHabbo() == null)
             {
-                Session.SendPacket(new GetRelationshipsComposer(Id, 0, null, null, null));
+                Session.SendPacket(new GetRelationshipsComposer(Id, 0, new Dictionary<int, Relationship>(), new Dictionary<int, Relationship>(), new Dictionary<int, Relationship>()));
                 return;
             }
 
             User habbo = Client.GetHabbo();
             if (habbo == null || habbo.GetMessenger() == null)
             {
-                Session.SendPacket(new GetRelationshipsComposer(Id, 0, null, null, null));
+                Session.SendPacket(new GetRelationshipsComposer(Id, 0, new Dictionary<int, Relationship>(), new Dictionary<int, Relationship>(), new Dictionary<int, Relationship>()));
                 return;
             }
 

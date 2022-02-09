@@ -21,12 +21,13 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
                 this.WriteInteger(Loves.Count); //Total personne love
 
                 Random randlove = new Random();
-                int useridlove = Loves.ElementAt(randlove.Next(0, Loves.Count)).Value.UserId;//Loves[randlove.Next(Loves.Count)].UserId;
+                int useridlove = Loves.ElementAt(randlove.Next(0, Loves.Count)).Value.UserId;
                 User HHablove = ButterflyEnvironment.GetHabboById(Convert.ToInt32(useridlove));
                 this.WriteInteger(useridlove); // UserId
                 this.WriteString((HHablove == null) ? "" : HHablove.Username);
                 this.WriteString((HHablove == null) ? "" : HHablove.Look); // look
             }
+
             if (Likes.Count > 0)
             {
                 //Likes
@@ -34,12 +35,13 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
                 this.WriteInteger(Likes.Count); //Total personne Like
 
                 Random randLikes = new Random();
-                int useridLikes = Likes.ElementAt(randLikes.Next(0, Likes.Count)).Value.UserId;//Likes[randLikes.Next(Likes.Count)].UserId;
+                int useridLikes = Likes.ElementAt(randLikes.Next(0, Likes.Count)).Value.UserId;
                 User HHabLikes = ButterflyEnvironment.GetHabboById(Convert.ToInt32(useridLikes));
                 this.WriteInteger(useridLikes); // UserId
                 this.WriteString((HHabLikes == null) ? "" : HHabLikes.Username);
                 this.WriteString((HHabLikes == null) ? "" : HHabLikes.Look); // look
             }
+
             if (Hates.Count > 0)
             {
                 //Hates
@@ -47,7 +49,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
                 this.WriteInteger(Hates.Count); //Total personne hates
 
                 Random randHates = new Random();
-                int useridHates = Hates.ElementAt(randHates.Next(0, Hates.Count)).Value.UserId;//Hates[randHates.Next(Hates.Count)].UserId;
+                int useridHates = Hates.ElementAt(randHates.Next(0, Hates.Count)).Value.UserId;
                 User HHabHates = ButterflyEnvironment.GetHabboById(Convert.ToInt32(useridHates));
                 this.WriteInteger(useridHates); // UserId
                 this.WriteString((HHabHates == null) ? "" : HHabHates.Username);

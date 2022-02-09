@@ -11,6 +11,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
     {
         public void Parse(Client Session, ClientPacket Packet)
         {
+            if (Session == null)
+                return;
+            if (Session.GetHabbo() == null)
+                return;
+            if (Session.GetHabbo().GetBadgeComponent() == null)
+                return;
+
             Session.GetHabbo().GetBadgeComponent().ResetSlots();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())

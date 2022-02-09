@@ -112,13 +112,7 @@ namespace Butterfly.Game.Clients
 
                     ServerPacketList packetList = new ServerPacketList();
 
-                    if(this.IsNewUser())
-                    {
-                        packetList.Add(new NuxAlertComposer(2));
-                        packetList.Add(new InClientLinkComposer("nux/lobbyoffer/hide"));
-                    }
-
-                    packetList.Add(new AuthenticationOKComposer());
+                    this.SendPacket(new AuthenticationOKComposer());
                     packetList.Add(new NavigatorSettingsComposer(this._user.HomeRoom));
                     packetList.Add(new FavouritesComposer(this._user.FavoriteRooms));
                     packetList.Add(new FigureSetIdsComposer());
@@ -133,6 +127,12 @@ namespace Butterfly.Game.Clients
 
                     this._user.UpdateActivityPointsBalance();
                     this._user.UpdateCreditsBalance();
+
+                    if (this.IsNewUser())
+                    {
+                        packetList.Add(new NuxAlertComposer(2));
+                        packetList.Add(new InClientLinkComposer("nux/lobbyoffer/hide"));
+                    }
 
                     if (this._user.HasFuse("fuse_mod"))
                     {

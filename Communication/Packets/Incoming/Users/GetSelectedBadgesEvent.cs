@@ -13,6 +13,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             User User = ButterflyEnvironment.GetHabboById(UserId);
             if (User == null)
                 return;
+            if (User.GetBadgeComponent() == null)
+                return;
 
             Session.SendPacket(new HabboUserBadgesComposer(User));
         }
