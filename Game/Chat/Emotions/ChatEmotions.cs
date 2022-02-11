@@ -2,10 +2,10 @@
 {
     internal enum ChatEmotions
     {
-        Smile,
-        Angry,
-        Sad,
-        Shocked,
-        None
+        SMILE,
+        ANGRY,
+        SAD,
+        SHOCKED,
+        NONE
     }
 }

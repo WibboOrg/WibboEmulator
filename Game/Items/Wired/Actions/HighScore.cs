@@ -54,7 +54,7 @@ namespace Butterfly.Game.Items.Wired.Actions
         {
             string triggerItems = "";
 
-            foreach (KeyValuePair<string, int> score in this.ItemInstance.Scores.OrderByDescending(x => x.Value).Take(20))
+            foreach (KeyValuePair<string, int> score in this.ItemInstance.Scores.OrderByDescending(x => x.Value))
             {
                 triggerItems += score.Key + ":" + score.Value + ";";
             }

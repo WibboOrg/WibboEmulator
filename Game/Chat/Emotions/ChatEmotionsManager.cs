@@ -7,42 +7,42 @@ namespace Butterfly.Game.Chat.Emotions
         private readonly Dictionary<string, ChatEmotions> Emotions = new Dictionary<string, ChatEmotions>()
             {
                 // Smile
-                { ":)", ChatEmotions.Smile },
-                { ";)", ChatEmotions.Smile },
-                { ":d", ChatEmotions.Smile },
-                { ";d", ChatEmotions.Smile },
-                { ":]", ChatEmotions.Smile },
-                { ";]", ChatEmotions.Smile },
-                { "=)", ChatEmotions.Smile },
-                { "=]", ChatEmotions.Smile },
-                { ":-)", ChatEmotions.Smile },
+                { ":)", ChatEmotions.SMILE },
+                { ";)", ChatEmotions.SMILE },
+                { ":d", ChatEmotions.SMILE },
+                { ";d", ChatEmotions.SMILE },
+                { ":]", ChatEmotions.SMILE },
+                { ";]", ChatEmotions.SMILE },
+                { "=)", ChatEmotions.SMILE },
+                { "=]", ChatEmotions.SMILE },
+                { ":-)", ChatEmotions.SMILE },
      
                 // Angry
-                { ">:(", ChatEmotions.Angry },
-                { ">:[", ChatEmotions.Angry },
-                { ">;[", ChatEmotions.Angry },
-                { ">;(", ChatEmotions.Angry },
-                { ">=(", ChatEmotions.Angry },
+                { ">:(", ChatEmotions.ANGRY },
+                { ">:[", ChatEmotions.ANGRY },
+                { ">;[", ChatEmotions.ANGRY },
+                { ">;(", ChatEmotions.ANGRY },
+                { ">=(", ChatEmotions.ANGRY },
      
                 // Shocked
-                { ":o", ChatEmotions.Shocked },
-                { ";o", ChatEmotions.Shocked },
-                { ">;o", ChatEmotions.Shocked },
-                { ">:o", ChatEmotions.Shocked },
-                { "=o", ChatEmotions.Shocked },
-                { ">=o", ChatEmotions.Shocked },
+                { ":o", ChatEmotions.SHOCKED },
+                { ";o", ChatEmotions.SHOCKED },
+                { ">;o", ChatEmotions.SHOCKED },
+                { ">:o", ChatEmotions.SHOCKED },
+                { "=o", ChatEmotions.SHOCKED },
+                { ">=o", ChatEmotions.SHOCKED },
      
                 // Sad
-                { ";'(", ChatEmotions.Sad },
-                { ";[", ChatEmotions.Sad },
-                { ":[", ChatEmotions.Sad },
-                { ";(", ChatEmotions.Sad },
-                { "=(", ChatEmotions.Sad },
-                { "='(", ChatEmotions.Sad },
-                { "=[", ChatEmotions.Sad },
-                { "='[", ChatEmotions.Sad },
-                { ":(", ChatEmotions.Sad },
-                { ":-(", ChatEmotions.Sad }
+                { ";'(", ChatEmotions.SAD },
+                { ";[", ChatEmotions.SAD },
+                { ":[", ChatEmotions.SAD },
+                { ";(", ChatEmotions.SAD },
+                { "=(", ChatEmotions.SAD },
+                { "='(", ChatEmotions.SAD },
+                { "=[", ChatEmotions.SAD },
+                { "='[", ChatEmotions.SAD },
+                { ":(", ChatEmotions.SAD },
+                { ":-(", ChatEmotions.SAD }
             };
 
         /// <summary>
@@ -72,19 +72,19 @@ namespace Butterfly.Game.Chat.Emotions
         {
             switch (e)
             {
-                case ChatEmotions.Smile:
+                case ChatEmotions.SMILE:
                     return 1;
 
-                case ChatEmotions.Angry:
+                case ChatEmotions.ANGRY:
                     return 2;
 
-                case ChatEmotions.Shocked:
+                case ChatEmotions.SHOCKED:
                     return 3;
 
-                case ChatEmotions.Sad:
+                case ChatEmotions.SAD:
                     return 4;
 
-                case ChatEmotions.None:
+                case ChatEmotions.NONE:
                 default:
                     return 0;
             }
