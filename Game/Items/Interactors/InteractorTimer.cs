@@ -4,6 +4,8 @@ namespace Butterfly.Game.Items.Interactors
 {
     public class InteractorTimer : FurniInteractor
     {
+        private bool _pendingReset = false;
+        private bool _chronoStarter = false;
         public override void OnPlace(Client Session, Item Item)
         {
         }
@@ -28,10 +30,10 @@ namespace Butterfly.Game.Items.Interactors
 
             if (Request == 2)
             {
-                if (Item.PendingReset && time > 0)
+                if (this._pendingReset && time > 0)
                 {
-                    Item.ChronoStarter = false;
-                    Item.PendingReset = false;
+                    this._chronoStarter = false;
+                    this._pendingReset = false;
                 }
                 else
                 {
@@ -76,8 +78,8 @@ namespace Butterfly.Game.Items.Interactors
             {
                 Item.ReqUpdate(1);
                 Item.GetRoom().GetGameManager().StartGame();
-                Item.ChronoStarter = true;
-                Item.PendingReset = true;
+                this._chronoStarter = true;
+                this._pendingReset = true;
             }
 
             Item.ExtraData = time.ToString();
@@ -97,7 +99,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            if (!item.ChronoStarter)
+            if (!this._chronoStarter)
             {
                 return;
             }
@@ -122,7 +124,7 @@ namespace Butterfly.Game.Items.Interactors
             }
             else
             {
-                item.ChronoStarter = false;
+                this._chronoStarter = false;
                 item.GetRoom().GetGameManager().StopGame();
                 return;
             }

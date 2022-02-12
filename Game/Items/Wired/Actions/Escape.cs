@@ -38,13 +38,13 @@ namespace Butterfly.Game.Items.Wired.Actions
                 return;
             }
 
-            item.movement = this.RoomInstance.GetGameMap().GetEscapeMovement(item.X, item.Y, item.movement);
-            if (item.movement == MovementState.none)
+            item.Movement = this.RoomInstance.GetGameMap().GetEscapeMovement(item.X, item.Y, item.Movement);
+            if (item.Movement == MovementState.none)
             {
                 return;
             }
 
-            Point newPoint = MovementUtility.HandleMovement(item.Coordinate, item.movement);
+            Point newPoint = MovementUtility.HandleMovement(item.Coordinate, item.Movement);
 
             if (newPoint != item.Coordinate)
             {

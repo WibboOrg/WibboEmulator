@@ -1017,9 +1017,9 @@ namespace Butterfly.Game.Rooms
                 {
                     roomItem.UserWalksOnFurni(User, roomItem);
 
-                    if (roomItem.Fx != 0 && !User.IsBot)
+                    if (roomItem.EffectId != 0 && !User.IsBot)
                     {
-                        User.ApplyEffect(roomItem.Fx);
+                        User.ApplyEffect(roomItem.EffectId);
                     }
                 }
 

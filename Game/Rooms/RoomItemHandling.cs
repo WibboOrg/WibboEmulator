@@ -493,10 +493,10 @@ namespace Butterfly.Game.Rooms
             }
         }
 
-        public ItemTemp AddTempItem(int vId, int spriteId, int x, int y, double z, string extraData, int value = 0, InteractionTypeTemp pInteraction = InteractionTypeTemp.NONE, MovementDirection movement = MovementDirection.none, int pDistance = 0, int pTeamId = 0)
+        public ItemTemp AddTempItem(int itemId, int spriteId, int x, int y, double z, string extraData, int value = 0, InteractionTypeTemp pInteraction = InteractionTypeTemp.NONE, MovementDirection movement = MovementDirection.none, int pDistance = 0, int pTeamId = 0)
         {
             int id = this._itemTempoId--;
-            ItemTemp Item = new ItemTemp(id, vId, spriteId, x, y, z, extraData, movement, value, pInteraction, pDistance, pTeamId);
+            ItemTemp Item = new ItemTemp(id, itemId, spriteId, x, y, z, extraData, movement, value, pInteraction, pDistance, pTeamId);
 
             if (!this._itemsTemp.ContainsKey(Item.Id))
             {
@@ -784,6 +784,7 @@ namespace Butterfly.Game.Rooms
 
         public void Destroy()
         {
+            this._roomItemUpdateQueue.
             this._floorItems.Clear();
             this._wallItems.Clear();
             this._itemsTemp.Clear();

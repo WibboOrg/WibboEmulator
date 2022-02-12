@@ -10,8 +10,8 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Settings
         {
             this.WriteInteger(instance.Id);
 
-            this.WriteInteger(instance.getBans().Count);//Count
-            foreach (int Id in instance.getBans().Keys)
+            this.WriteInteger(instance.GetBans().Count);//Count
+            foreach (int Id in instance.GetBans().Keys)
             {
                 User Data = ButterflyEnvironment.GetHabboById(Id);
 

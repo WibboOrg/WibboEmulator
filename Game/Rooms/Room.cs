@@ -40,6 +40,7 @@ namespace Butterfly.Game.Rooms
         public int IsLagging;
         public bool CycleEnded;
         public int IdleTime;
+        public bool Disposed;
 
         public bool IsRoleplay { get { return this.Roleplay != null; } }
         public RoomRoleplay Roleplay;
@@ -68,8 +69,6 @@ namespace Butterfly.Game.Rooms
         private readonly Dictionary<int, double> _bans;
         private readonly Dictionary<int, double> _mutes;
 
-        
-        public bool Disposed;
         public bool RoomMutePets;
         public bool FreezeRoom;
         public bool PushPullAllowed;
@@ -1008,7 +1007,7 @@ namespace Butterfly.Game.Rooms
             this._gameMap.Destroy();
         }
 
-        public Dictionary<int, double> getBans()
+        public Dictionary<int, double> GetBans()
         {
             return this._bans;
         }
@@ -1038,7 +1037,7 @@ namespace Butterfly.Game.Rooms
             return !this.UserIsBanned(pId) || this._bans[pId] - ButterflyEnvironment.GetUnixTimestamp() <= 0.0;
         }
 
-        public Dictionary<int, double> getMute()
+        public Dictionary<int, double> GetMute()
         {
             return this._mutes;
         }

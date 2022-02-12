@@ -34,11 +34,9 @@ namespace Butterfly.Game.Items
         public int UpdateCounter;
         public int InteractingUser;
         public int InteractingUser2;
-        public bool PendingReset;
-        public int Fx;
+        public int EffectId;
 
-        public bool ChronoStarter;
-        public MovementState movement;
+        public MovementState Movement;
         public MovementDirection MovementDir;
 
         public Dictionary<string, int> Scores;
@@ -378,7 +376,7 @@ namespace Butterfly.Game.Items
 
                 this.Scores = new Dictionary<string, int>();
 
-                this.Fx = this.Data.EffectId;
+                this.EffectId = this.Data.EffectId;
 
                 this._roomInstance = room;
                 if (this.GetBaseItem() == null)
@@ -826,6 +824,5 @@ namespace Butterfly.Game.Items
 
             this.OnUserWalksOffFurni(user, item);
         }
-
     }
 }

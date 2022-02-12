@@ -19,7 +19,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Instance.getBans().Count > 0)
+            if (Instance.GetBans().Count > 0)
             {
                 Session.SendPacket(new GetRoomBannedUsersComposer(Instance));
             }

@@ -90,8 +90,8 @@ namespace Butterfly.Game.Users.Data
 
         public static User GetUserData(int userId)
         {
-            DataRow row;
-            DataRow row2;
+            DataRow dUserInfo;
+            DataRow dUserStats;
 
             if (ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId) != null)
             {
@@ -100,22 +100,22 @@ namespace Butterfly.Game.Users.Data
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                row = UserDao.GetOne(dbClient, userId);
-                if (row == null)
+                dUserInfo = UserDao.GetOne(dbClient, userId);
+                if (dUserInfo == null)
                 {
                     return null;
                 }
 
-                row2 = UserStatsDao.GetOne(dbClient, userId);
+                dUserStats = UserStatsDao.GetOne(dbClient, userId);
 
-                if (row2 == null)
+                if (dUserStats == null)
                 {
                     UserStatsDao.Insert(dbClient, userId);
-                    row2 = UserStatsDao.GetOne(dbClient, userId);
+                    dUserStats = UserStatsDao.GetOne(dbClient, userId);
                 }
             }
 
-            return GenerateHabbo(row, row2, false, 0);
+            return GenerateHabbo(dUserInfo, dUserStats, false, 0);
         }
 
         public static User GenerateHabbo(DataRow dRow, DataRow dRow2, bool ChangeName, int ignoreAllExpire)

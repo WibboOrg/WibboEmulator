@@ -72,7 +72,7 @@ namespace Butterfly.Game.Rooms
         {
             if (!this.RelativeSerialized)
             {
-                this.SerializedRelativeHeightmap = this.NewHeightMap();//this.GetRelativeHeightmap();
+                this.SerializedRelativeHeightmap = new HeightMapComposer(this);
                 this.RelativeSerialized = true;
             }
 
@@ -170,11 +170,6 @@ namespace Butterfly.Game.Rooms
                     return "w";
             }
             return text.ToString();
-        }
-
-        private ServerPacket NewHeightMap()
-        {
-            return new HeightMapComposer(this);
         }
 
         public ServerPacket SetHeightMap(double Height)
