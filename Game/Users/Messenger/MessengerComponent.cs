@@ -5,6 +5,7 @@ using Butterfly.Game.Clients;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace Butterfly.Game.Users.Messenger
 {
@@ -410,6 +411,11 @@ namespace Butterfly.Game.Users.Messenger
                     MessengerOfflineMessageDao.Delete(dbClient, this._userInstance.Id);
                 }
             }
+        }
+
+        public List<Relationship> GetRelationships()
+        {
+            return Friends.Values.Select(c => new Relationship(c.UserId, c.Relation)).ToList();
         }
 
         private Client GetClient()

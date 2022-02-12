@@ -8,52 +8,45 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
 {
     internal class GetRelationshipsComposer : ServerPacket
     {
-        public GetRelationshipsComposer(int Id, int Nbrela, Dictionary<int, Relationship> Loves, Dictionary<int, Relationship> Likes, Dictionary<int, Relationship> Hates)
+        public GetRelationshipsComposer(int UserId, ICollection<Relationship> Relationships)
             : base(ServerPacketHeader.MESSENGER_RELATIONSHIPS)
         {
-            this.WriteInteger(Id);
-            this.WriteInteger(Nbrela); // Count //Habbo.Relationships.Count
+            this.WriteInteger(UserId);
+            this.WriteInteger(Relationships.Count); // Count //Habbo.Relationships.Count
+            Random rand = new Random();
+            ICollection<Relationship>relations = Relationships;
 
-            if (Loves.Count > 0)
+            Dictionary<int, Relationship> RelationRandom = new Dictionary<int, Relationship>();
+
+            foreach (Relationship UserRelation in relations)
             {
-                //Loves
-                this.WriteInteger(1); //type
-                this.WriteInteger(Loves.Count); //Total personne love
-
-                Random randlove = new Random();
-                int useridlove = Loves.ElementAt(randlove.Next(0, Loves.Count)).Value.UserId;
-                User HHablove = ButterflyEnvironment.GetHabboById(Convert.ToInt32(useridlove));
-                this.WriteInteger(useridlove); // UserId
-                this.WriteString((HHablove == null) ? "" : HHablove.Username);
-                this.WriteString((HHablove == null) ? "" : HHablove.Look); // look
+                RelationRandom.Add(UserRelation.UserId, UserRelation);
             }
 
-            if (Likes.Count > 0)
+            RelationRandom = RelationRandom.OrderBy(x => rand.Next()).ToDictionary(item => item.Key, item => item.Value);
+
+            int Loves = RelationRandom.Count(x => x.Value.Type == 1);
+            int Likes = RelationRandom.Count(x => x.Value.Type == 2);
+            int Hates = RelationRandom.Count(x => x.Value.Type == 3);
+            foreach (Relationship Rel in RelationRandom.Values)
             {
-                //Likes
-                this.WriteInteger(2); //type
-                this.WriteInteger(Likes.Count); //Total personne Like
-
-                Random randLikes = new Random();
-                int useridLikes = Likes.ElementAt(randLikes.Next(0, Likes.Count)).Value.UserId;
-                User HHabLikes = ButterflyEnvironment.GetHabboById(Convert.ToInt32(useridLikes));
-                this.WriteInteger(useridLikes); // UserId
-                this.WriteString((HHabLikes == null) ? "" : HHabLikes.Username);
-                this.WriteString((HHabLikes == null) ? "" : HHabLikes.Look); // look
-            }
-
-            if (Hates.Count > 0)
-            {
-                //Hates
-                this.WriteInteger(3); //type
-                this.WriteInteger(Hates.Count); //Total personne hates
-
-                Random randHates = new Random();
-                int useridHates = Hates.ElementAt(randHates.Next(0, Hates.Count)).Value.UserId;
-                User HHabHates = ButterflyEnvironment.GetHabboById(Convert.ToInt32(useridHates));
-                this.WriteInteger(useridHates); // UserId
-                this.WriteString((HHabHates == null) ? "" : HHabHates.Username);
-                this.WriteString((HHabHates == null) ? "" : HHabHates.Look); // look
+                User HHab = ButterflyEnvironment.GetHabboById(Rel.UserId);
+                if (HHab == null)
+                {
+                    base.WriteInteger(0);
+                    base.WriteInteger(0);
+                    base.WriteInteger(0); // Their ID
+                    base.WriteString("Placeholder");
+                    base.WriteString("hr-115-42.hd-190-1.ch-215-62.lg-285-91.sh-290-62");
+                }
+                else
+                {
+                    base.WriteInteger(Rel.Type);
+                    base.WriteInteger(Rel.Type == 1 ? Loves : Rel.Type == 2 ? Likes : Hates);
+                    base.WriteInteger(Rel.UserId); // Their ID
+                    base.WriteString(HHab.Username);
+                    base.WriteString(HHab.Look);
+                }
             }
         }
     }
