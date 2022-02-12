@@ -15,10 +15,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             if (User == null)
                 return;
 
-            ICollection<Relationship>relations = User.GetMessenger().GetRelationships();
+            if (User == null || User.GetMessenger() == null)
+            {
+                Session.SendPacket(new GetRelationshipsComposer(User.Id, new List<Relationship>()));
+                return;
+            }
 
-
-            Session.SendPacket(new GetRelationshipsComposer(User.Id, relations));
+            Session.SendPacket(new GetRelationshipsComposer(User.Id, User.GetMessenger().GetRelationships()));
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
 {
     internal class GetRelationshipsComposer : ServerPacket
     {
-        public GetRelationshipsComposer(int UserId, ICollection<Relationship> Relationships)
+        public GetRelationshipsComposer(int UserId, List<Relationship> Relationships)
             : base(ServerPacketHeader.MESSENGER_RELATIONSHIPS)
         {
             this.WriteInteger(UserId);
