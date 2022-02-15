@@ -74,7 +74,7 @@ namespace Butterfly.Game.Items.Interactors
                     }
                 }
             }
-            else if ((Request == 0 || Request == 1) && time != 0 && !Item.ChronoStarter)
+            else if ((Request == 0 || Request == 1) && time != 0 && !this._chronoStarter)
             {
                 Item.ReqUpdate(1);
                 Item.GetRoom().GetGameManager().StartGame();

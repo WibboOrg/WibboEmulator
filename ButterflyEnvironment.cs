@@ -118,7 +118,7 @@ namespace Butterfly
 
                 if (_configuration.data["Websocketenable"] == "true")
                 {
-                    _webSocketManager = new WebSocketManager(527, int.Parse(GetConfig().data["game.tcp.conlimit"]));
+                    _webSocketManager = new WebSocketManager(int.Parse(GetConfig().data["websocket.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]));
                 }
 
                 _connectionManager = new ConnectionHandeling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]));

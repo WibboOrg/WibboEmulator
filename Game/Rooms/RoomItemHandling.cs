@@ -767,6 +767,11 @@ namespace Butterfly.Game.Rooms
                 {
                     if (this._roomItemUpdateQueue.TryDequeue(out Item item))
                     {
+                        if(this._room.Disposed)
+                        {
+                            continue;
+                        }
+
                         item.ProcessUpdates();
 
                         if (item.UpdateCounter > 0)
@@ -784,7 +789,6 @@ namespace Butterfly.Game.Rooms
 
         public void Destroy()
         {
-            this._roomItemUpdateQueue.
             this._floorItems.Clear();
             this._wallItems.Clear();
             this._itemsTemp.Clear();

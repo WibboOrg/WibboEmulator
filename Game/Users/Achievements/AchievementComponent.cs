@@ -42,7 +42,7 @@ namespace Butterfly.Game.Users.Achievements
                 this._achievements.Add(userAchivement.Group, userAchivement);
         }
 
-        public new Dictionary<string, UserAchievement> GetAchievements()
+        public Dictionary<string, UserAchievement> GetAchievements()
         {
             return this._achievements;
         }
