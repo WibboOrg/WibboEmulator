@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Butterfly.Utility
+namespace Butterfly.Utilities
 {
     internal static class StringCharFilter
     {

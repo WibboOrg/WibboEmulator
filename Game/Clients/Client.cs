@@ -18,7 +18,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Users;
 using Butterfly.Game.Users.Data;
 using Butterfly.Net;
-using Butterfly.Utility;
+using Butterfly.Utilities;
 using ConnectionManager;
 using System;
 using System.Text;

@@ -2,7 +2,7 @@
 using Butterfly.Game.Rooms.Games;
 using System;
 
-namespace Butterfly.Utility.Events
+namespace Butterfly.Utilities.Events
 {
     public class TeamScoreChangedArgs : EventArgs
     {

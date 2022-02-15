@@ -1,5 +1,5 @@
 ﻿using Butterfly.Game.Items;
-using Butterfly.Utility.Events;
+using Butterfly.Utilities.Events;
 using System;
 using System.Collections.Generic;
 

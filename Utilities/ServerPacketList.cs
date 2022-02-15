@@ -1,7 +1,7 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using System;
 
-namespace Butterfly.Utility
+namespace Butterfly.Utilities
 {
     public class ServerPacketList
     {

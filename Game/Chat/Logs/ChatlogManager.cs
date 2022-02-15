@@ -1,5 +1,6 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
+using Butterfly.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -51,7 +52,7 @@ namespace Butterfly.Game.Chat.Logs
 
         public void AddMessage(int UserId, string Username, int RoomId, string MessageText)
         {
-            ChatlogEntry message = new ChatlogEntry(UserId, Username, RoomId, MessageText, DateTime.Now);
+            ChatlogEntry message = new ChatlogEntry(UserId, Username, RoomId, MessageText, UnixTimestamp.GetNow());
 
             lock (this._listOfMessages)
             {

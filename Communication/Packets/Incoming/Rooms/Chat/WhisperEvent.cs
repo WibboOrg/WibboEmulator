@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Chat.Styles;
-using Butterfly.Utility;
+using Butterfly.Utilities;
 using System;
 using System.Collections.Generic;
 

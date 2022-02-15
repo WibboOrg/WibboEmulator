@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Utility
+﻿namespace Butterfly.Utilities
 {
     public enum EndingType
     {

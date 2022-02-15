@@ -10,7 +10,7 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Items;
 using Butterfly.Game.Users;
-using Butterfly.Utility;
+using Butterfly.Utilities;
 using System;
 using System.Linq;
 

@@ -23,8 +23,8 @@ using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Butterfly.Utility.Events;
-using Butterfly.Utility;
+using Butterfly.Utilities.Events;
+using Butterfly.Utilities;
 
 namespace Butterfly.Game.Rooms
 {

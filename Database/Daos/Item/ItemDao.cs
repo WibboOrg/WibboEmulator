@@ -1,6 +1,6 @@
 ﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
-using Butterfly.Utility;
+using Butterfly.Utilities;
 using System;
 using System.Collections.Concurrent;
 using System.Data;

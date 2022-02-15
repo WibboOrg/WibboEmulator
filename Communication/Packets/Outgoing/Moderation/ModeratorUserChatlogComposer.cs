@@ -1,4 +1,5 @@
 using Butterfly.Game.Chat.Logs;
+using Butterfly.Utilities;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Moderation
@@ -24,7 +25,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
             WriteShort(chatlogs.Count);
             foreach (ChatlogEntry chat in chatlogs)
             {
-                WriteString(chat.timeSpoken.Hour + ":" + chat.timeSpoken.Minute);
+                WriteString(UnixTimestamp.FromUnixTimestamp(chat.timestamp).ToShortTimeString());
                 WriteInteger(chat.userID);
                 WriteString(chat.username);
                 WriteString(chat.message);

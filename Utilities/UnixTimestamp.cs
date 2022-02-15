@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Butterfly.Utility
+namespace Butterfly.Utilities
 {
     static class UnixTimestamp
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Butterfly.Utility
+namespace Butterfly.Utilities
 {
     public class QueryChunk
     {

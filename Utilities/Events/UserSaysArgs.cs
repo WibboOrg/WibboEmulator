@@ -1,7 +1,7 @@
 ﻿using Butterfly.Game.Rooms;
 using System;
 
-namespace Butterfly.Utility.Events
+namespace Butterfly.Utilities.Events
 {
     public class UserSaysArgs : EventArgs
     {

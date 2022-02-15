@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 using Butterfly.Game.Clients;
-using Butterfly.Utility;
+using Butterfly.Utilities;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

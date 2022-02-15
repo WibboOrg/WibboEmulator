@@ -1,6 +1,7 @@
 using Butterfly.Game.Chat.Logs;
 using Butterfly.Game.Moderation;
 using Butterfly.Game.Rooms;
+using Butterfly.Utilities;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Moderation
@@ -24,7 +25,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
             {
                 if (chat != null)
                 {
-                    WriteString(chat.timeSpoken.Hour + ":" + chat.timeSpoken.Minute); //this.timeSpoken.Minute
+                    WriteString(UnixTimestamp.FromUnixTimestamp(chat.timestamp).ToShortTimeString()); //this.timeSpoken.Minute
                     WriteInteger(chat.userID); //this.timeSpoken.Minute
                     WriteString(chat.username);
                     WriteString(chat.message);

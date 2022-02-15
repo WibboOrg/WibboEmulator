@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Items;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Utility;
+using Butterfly.Utilities;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;

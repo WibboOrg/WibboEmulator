@@ -4,7 +4,7 @@ using Butterfly.Game.Quests;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Chat.Styles;
-using Butterfly.Utility;
+using Butterfly.Utilities;
 using System;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

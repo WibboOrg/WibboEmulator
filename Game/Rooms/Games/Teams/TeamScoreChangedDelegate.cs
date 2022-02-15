@@ -1,4 +1,4 @@
-﻿using Butterfly.Utility.Events;
+﻿using Butterfly.Utilities.Events;
 
 namespace Butterfly.Game.Rooms
 {

@@ -9,7 +9,7 @@ using Butterfly.Game.Items.Wired.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using Butterfly.Utility.Events;
+using Butterfly.Utilities.Events;
 
 namespace Butterfly.Game.Items
 {

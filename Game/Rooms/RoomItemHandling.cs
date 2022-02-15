@@ -10,7 +10,7 @@ using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.Moodlight;
 using Butterfly.Game.Rooms.Pathfinding;
-using Butterfly.Utility;
+using Butterfly.Utilities;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
