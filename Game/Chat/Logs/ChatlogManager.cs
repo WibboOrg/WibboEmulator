@@ -28,7 +28,7 @@ namespace Butterfly.Game.Chat.Logs
 
             foreach (DataRow Row in table.Rows)
             {
-                this.AddMessage(Convert.ToInt32(Row["user_id"]), Row["user_name"].ToString(), Convert.ToInt32(Row["room_id"]), Row["type"].ToString() + Row["message"].ToString());
+                this.AddMessage(Convert.ToInt32(Row["user_id"]), Row["user_name"].ToString(), Convert.ToInt32(Row["room_id"]), Row["type"].ToString() + Row["message"].ToString(), (double)Row["timestamp"]);
             }
         }
 
@@ -45,14 +45,14 @@ namespace Butterfly.Game.Chat.Logs
 
                 foreach (DataRow Row in table.Rows)
                 {
-                    this.AddMessage(Convert.ToInt32(Row["user_id"]), Row["user_name"].ToString(), Convert.ToInt32(Row["room_id"]), Row["type"].ToString() + Row["message"].ToString());
+                    this.AddMessage(Convert.ToInt32(Row["user_id"]), Row["user_name"].ToString(), Convert.ToInt32(Row["room_id"]), Row["type"].ToString() + Row["message"].ToString(), (double)Row["timestamp"]);
                 }
             }
         }
 
-        public void AddMessage(int UserId, string Username, int RoomId, string MessageText)
+        public void AddMessage(int UserId, string Username, int RoomId, string MessageText, double timestamp)
         {
-            ChatlogEntry message = new ChatlogEntry(UserId, Username, RoomId, MessageText, UnixTimestamp.GetNow());
+            ChatlogEntry message = new ChatlogEntry(UserId, Username, RoomId, MessageText, timestamp);
 
             lock (this._listOfMessages)
             {

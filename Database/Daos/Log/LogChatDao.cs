@@ -7,13 +7,13 @@ namespace Butterfly.Database.Daos
     {
         internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId)
         {
-            dbClient.SetQuery("SELECT user_id, user_name, room_id, type, message FROM `log_chat` WHERE user_id = '" + userId + "' ORDER BY id DESC LIMIT 100");
+            dbClient.SetQuery("SELECT user_id, user_name, room_id, type, timestamp, message FROM `log_chat` WHERE user_id = '" + userId + "' ORDER BY id DESC LIMIT 100");
             return dbClient.GetTable();
         }
 
         internal static DataTable GetAllByRoomId(IQueryAdapter dbClient, int roomId)
         {
-            dbClient.SetQuery("SELECT user_id, user_name, room_id, type, message FROM `log_chat` WHERE room_id = '" + roomId + "' ORDER BY id DESC LIMIT 100");
+            dbClient.SetQuery("SELECT user_id, user_name, room_id, type, timestamp, message FROM `log_chat` WHERE room_id = '" + roomId + "' ORDER BY id DESC LIMIT 100");
             return dbClient.GetTable();
         }
 
