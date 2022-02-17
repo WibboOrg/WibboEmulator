@@ -6,7 +6,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {
     internal class RpBotChooseEvent : IPacketWebEvent
     {
-        public double Delay => 0;
+        public double Delay => 250;
 
         public void Parse(WebClient Session, ClientPacket Packet)
         {
@@ -31,8 +31,6 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
             }
 
             Room.AllowsShous(User, Message);
-            //if (Room.AllowsShous(User, Message))
-            //User.SendWhisperChat(Message, false);
         }
     }
 }

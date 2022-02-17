@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {
     internal class EditTvYoutubeEvent : IPacketWebEvent
     {
-        public double Delay => 0;
+        public double Delay => 500;
 
         public void Parse(WebClient Session, ClientPacket Packet)
         {

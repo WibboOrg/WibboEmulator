@@ -9,7 +9,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class MoveWallItemEvent : IPacketEvent
     {
-        public double Delay => 250;
+        public double Delay => 200;
 
         public void Parse(Client Session, ClientPacket Packet)
         {

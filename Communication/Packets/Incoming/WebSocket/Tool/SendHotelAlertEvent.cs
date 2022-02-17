@@ -6,7 +6,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {
     internal class SendHotelAlertEvent : IPacketWebEvent
     {
-        public double Delay => 0;
+        public double Delay => 1000;
 
         public void Parse(WebClient Session, ClientPacket Packet)
         {

@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {
     internal class RpTrocRemoveItemEvent : IPacketWebEvent
     {
-        public double Delay => 0;
+        public double Delay => 100;
 
         public void Parse(WebClient Session, ClientPacket Packet)
         {

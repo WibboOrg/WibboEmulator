@@ -1,6 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Clients;using Butterfly.Game.Items;using Butterfly.Game.Quests;using Butterfly.Game.Rooms;namespace Butterfly.Communication.Packets.Incoming.Structure{    internal class MoveObjectEvent : IPacketEvent    {
-        public double Delay => 250;
+        public double Delay => 200;
 
         public void Parse(Client Session, ClientPacket Packet)        {            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);            if (room == null || !room.CheckRights(Session))
             {

@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class PlaceObjectEvent : IPacketEvent
     {
-        public double Delay => 250;
+        public double Delay => 200;
         public void Parse(Client session, ClientPacket Packet)
         {
             if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)

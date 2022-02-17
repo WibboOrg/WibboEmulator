@@ -6,8 +6,10 @@ using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Net;
+using Butterfly.Utilities;
 using ConnectionManager;
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.WebClients
@@ -16,6 +18,10 @@ namespace Butterfly.Game.WebClients
     {
         private readonly ConnectionInformation _connection;
         private readonly WebPacketParser _packetParser;
+
+        private Dictionary<int, double> _packetTimeout;
+        private int _packetCount;
+        private double _packetLastTimeStamp;
 
         private bool _isStaff;
         private bool _showGameAlert;
@@ -33,10 +39,47 @@ namespace Butterfly.Game.WebClients
         {
             this.ConnectionID = id;
 
+            this._packetTimeout = new Dictionary<int, double>();
+            this._packetCount = 0;
+            this._packetLastTimeStamp = UnixTimestamp.GetNow();
+
             this._isStaff = false;
             this._showGameAlert = true;
             this._connection = connection;
             this._packetParser = new WebPacketParser(this);
+        }
+
+        public bool PacketTimeout(int packetId, double delay)
+        {
+            double timeStampNow = UnixTimestamp.GetNow();
+
+            if (this._packetLastTimeStamp + 1 > timeStampNow)
+            {
+                this._packetCount++;
+            }
+            else
+            {
+                this._packetCount = 0;
+                this._packetLastTimeStamp = timeStampNow;
+            }
+
+            if (this._packetCount >= 10)
+                return true;
+
+            if (delay <= 0)
+                return false;
+
+            if (this._packetTimeout.TryGetValue(packetId, out double timestamp))
+            {
+                if (timestamp + (delay / 1000) > timeStampNow)
+                    return true;
+
+                this._packetTimeout.Remove(packetId);
+            }
+
+            this._packetTimeout.Add(packetId, timeStampNow);
+
+            return false;
         }
 
         public void TryAuthenticate(string authTicket)

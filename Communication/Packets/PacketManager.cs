@@ -79,11 +79,14 @@ namespace Butterfly.Communication.Packets
                 Console.ResetColor();
             }
             
-            if(pak.Delay > 0 && Session.PacketTimeout(Packet.Id, pak.Delay))
+            if(Session.PacketTimeout(Packet.Id, pak.Delay))
             {
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("Spam packet: " + Packet.Id);
-                Console.ResetColor();
+                if (ButterflyEnvironment.StaticEvents)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("[" + Packet.Id + "] Spam detected");
+                    Console.ResetColor();
+                }
                 return;
             }
 
@@ -110,13 +113,16 @@ namespace Butterfly.Communication.Packets
                 Console.ResetColor();
             }
 
-            /*if (pak.Delay > 0 && Session.PacketTimeout(Packet.Id, pak.Delay))
+            if (Session.PacketTimeout(Packet.Id, pak.Delay))
             {
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("Spam packet: " + Packet.Id);
-                Console.ResetColor();
+                if (ButterflyEnvironment.StaticEvents)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine("[" + Packet.Id + "] Spam detected");
+                    Console.ResetColor();
+                }
                 return;
-            }*/
+            }
 
             pak.Parse(Session, Packet);
         }

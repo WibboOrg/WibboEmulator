@@ -31,7 +31,10 @@ namespace Butterfly.Game.Clients
         private ConnectionInformation _connection;
         private GamePacketParser _packetParser;
         private User _user;
+
         private Dictionary<int, double> _packetTimeout;
+        private int _packetCount;
+        private double _packetLastTimeStamp;
 
         public string MachineId;
         public Language Langue;
@@ -46,7 +49,11 @@ namespace Butterfly.Game.Clients
             this.ConnectionID = ClientId;
             this.Langue = Language.FRANCAIS;
             this._connection = connection;
+
             this._packetTimeout = new Dictionary<int, double>();
+            this._packetCount = 0;
+            this._packetLastTimeStamp = UnixTimestamp.GetNow();
+
             this._packetParser = new GamePacketParser(this);
         }
 
@@ -318,15 +325,33 @@ namespace Butterfly.Game.Clients
 
         public bool PacketTimeout(int packetId, double delay)
         {
+            double timeStampNow = UnixTimestamp.GetNow();
+
+            if (this._packetLastTimeStamp + 1 > timeStampNow)
+            {
+                this._packetCount++;
+            }
+            else
+            {
+                this._packetCount = 0;
+                this._packetLastTimeStamp = timeStampNow;
+            }
+
+            if (this._packetCount >= 10)
+                return true;
+
+            if (delay <= 0)
+                return false;
+
             if (this._packetTimeout.TryGetValue(packetId, out double timestamp))
             {
-                if (timestamp + (delay / 1000) > UnixTimestamp.GetNow())
+                if (timestamp + (delay / 1000) > timeStampNow)
                     return true;
 
                 this._packetTimeout.Remove(packetId);
             }
 
-            this._packetTimeout.Add(packetId, UnixTimestamp.GetNow());
+            this._packetTimeout.Add(packetId, timeStampNow);
 
             return false;
         }
