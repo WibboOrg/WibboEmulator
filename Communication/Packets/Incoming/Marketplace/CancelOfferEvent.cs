@@ -11,6 +11,8 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 {
     internal class CancelOfferEvent : IPacketEvent
     {
+        public double Delay => 1000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session == null || Session.GetHabbo() == null)

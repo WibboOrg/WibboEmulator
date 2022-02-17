@@ -5,6 +5,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class OnGuideSessionDetachedEvent : IPacketEvent
     {
+        public double Delay => 0;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             bool state = Packet.PopBoolean();

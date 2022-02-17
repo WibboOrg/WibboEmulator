@@ -4,6 +4,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class ModerationMsgEvent : IPacketEvent
     {
+        public double Delay => 0;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             if (!Session.GetHabbo().HasFuse("fuse_alert"))

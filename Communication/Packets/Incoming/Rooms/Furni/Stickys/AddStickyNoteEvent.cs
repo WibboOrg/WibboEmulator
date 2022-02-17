@@ -10,6 +10,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class AddStickyNoteEvent : IPacketEvent
     {
+        public double Delay => 250;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);

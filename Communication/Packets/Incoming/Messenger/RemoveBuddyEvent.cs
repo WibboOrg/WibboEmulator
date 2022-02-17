@@ -4,6 +4,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class RemoveBuddyEvent : IPacketEvent
     {
+        public double Delay => 0;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session.GetHabbo().GetMessenger() == null)
@@ -11,15 +13,15 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            int num = Packet.PopInt();
-            if (num > 200)
-            {
-                num = 200;
-            }
+            int count = Packet.PopInt();
 
-            for (int index = 0; index < num; index++)
+            if (count > 200) count = 200;
+
+            int friendId;
+            for (int index = 0; index < count; index++)
             {
-                Session.GetHabbo().GetMessenger().DestroyFriendship(Packet.PopInt());
+                friendId = Packet.PopInt();
+                Session.GetHabbo().GetMessenger().DestroyFriendship(friendId);
             }
         }
     }

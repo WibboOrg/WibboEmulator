@@ -11,6 +11,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class ShoutEvent : IPacketEvent
     {
+        public double Delay => 250;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)

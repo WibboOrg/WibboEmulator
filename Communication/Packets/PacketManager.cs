@@ -78,13 +78,21 @@ namespace Butterfly.Communication.Packets
                 Console.WriteLine(Packet.ToString());
                 Console.ResetColor();
             }
+            
+            if(pak.Delay > 0 && Session.PacketTimeout(Packet.Id, pak.Delay))
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("Spam packet: " + Packet.Id);
+                Console.ResetColor();
+                return;
+            }
 
             pak.Parse(Session, Packet);
         }
 
         public void TryExecuteWebPacket(WebClient Session, ClientPacket Packet)
         {
-            if (!this._incomingWebPackets.TryGetValue(Packet.Id, out IPacketWebEvent Pak))
+            if (!this._incomingWebPackets.TryGetValue(Packet.Id, out IPacketWebEvent pak))
             {
                 if (ButterflyEnvironment.StaticEvents)
                 {
@@ -102,7 +110,15 @@ namespace Butterfly.Communication.Packets
                 Console.ResetColor();
             }
 
-            Pak.Parse(Session, Packet);
+            /*if (pak.Delay > 0 && Session.PacketTimeout(Packet.Id, pak.Delay))
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("Spam packet: " + Packet.Id);
+                Console.ResetColor();
+                return;
+            }*/
+
+            pak.Parse(Session, Packet);
         }
 
         private void RegisterWebPacket()

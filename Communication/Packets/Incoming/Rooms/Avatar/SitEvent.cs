@@ -5,6 +5,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SitEvent : IPacketEvent
     {
+        public double Delay => 250;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             Room room = Session.GetHabbo().CurrentRoom;            if (room == null)

@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  emulator:
+    image: "jasondhose/wibboemulator"
+    build: .
+    ports:
+      - "444:444"
+      - "30001:30001"
+      - "527:527"

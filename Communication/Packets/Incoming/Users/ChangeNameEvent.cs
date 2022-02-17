@@ -11,6 +11,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class ChangeNameEvent : IPacketEvent
     {
+        public double Delay => 5000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session.GetHabbo() == null || Session == null)

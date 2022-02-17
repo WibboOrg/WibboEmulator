@@ -10,6 +10,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class ApplyDecorationEvent : IPacketEvent
     {
+        public double Delay => 500;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             int ItemId = Packet.PopInt();

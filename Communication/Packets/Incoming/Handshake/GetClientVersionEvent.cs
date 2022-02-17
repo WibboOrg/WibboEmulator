@@ -6,6 +6,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GetClientVersionEvent : IPacketEvent
     {
+        public double Delay => 5000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             string Release = Packet.PopString();

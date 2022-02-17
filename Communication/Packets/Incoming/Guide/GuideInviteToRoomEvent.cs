@@ -6,6 +6,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GuideInviteToRoomEvent : IPacketEvent
     {
+        public double Delay => 0;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetHabbo().GuideOtherUserId);
@@ -26,8 +28,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 requester.SendPacket(new OnGuideSessionInvitedToGuideRoomComposer(room.Id, room.RoomData.Name));
                 Session.SendPacket(new OnGuideSessionInvitedToGuideRoomComposer(room.Id, room.RoomData.Name));
             }
-
-            
         }
     }
 }

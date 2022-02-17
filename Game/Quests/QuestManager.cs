@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Incoming;
+using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Quests;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
@@ -124,7 +125,7 @@ namespace Butterfly.Game.Quests
             Session.GetHabbo().LastCompleted = quest.Id;
             Session.SendPacket(new QuestCompletedComposer(Session, quest));
             Session.GetHabbo().Duckets += quest.Reward;
-            Session.GetHabbo().UpdateActivityPointsBalance();
+            Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, 1));
             this.SendQuestList(Session);
         }
 

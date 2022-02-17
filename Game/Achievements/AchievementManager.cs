@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Butterfly.Game.Users.Achievements;
+using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 
 namespace Butterfly.Game.Achievements
 {
@@ -119,7 +120,7 @@ namespace Butterfly.Game.Achievements
                 }
 
                 Session.GetHabbo().Duckets += TargetLevelData.RewardPixels;
-                Session.GetHabbo().UpdateActivityPointsBalance();
+                Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, 1));
 
                 Session.SendPacket(new AchievementUnlockedComposer(AchievementData, TargetLevel, TargetLevelData.RewardPoints, TargetLevelData.RewardPixels));
 
@@ -135,7 +136,7 @@ namespace Butterfly.Game.Achievements
 
                 Session.GetHabbo().AchievementPoints += TargetLevelData.RewardPoints;
                 Session.GetHabbo().Duckets += TargetLevelData.RewardPixels;
-                Session.GetHabbo().UpdateActivityPointsBalance();
+                Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, 1));
                 Session.SendPacket(new AchievementScoreComposer(Session.GetHabbo().AchievementPoints));
 
 

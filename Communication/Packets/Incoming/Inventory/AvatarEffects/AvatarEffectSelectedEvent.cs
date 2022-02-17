@@ -6,6 +6,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class AvatarEffectSelectedEvent : IPacketEvent
     {
+        public double Delay => 500;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             int NumEnable = Packet.PopInt();

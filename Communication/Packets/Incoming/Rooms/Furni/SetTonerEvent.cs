@@ -6,6 +6,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SetTonerEvent : IPacketEvent
     {
+        public double Delay => 250;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             int ItemId = Packet.PopInt();

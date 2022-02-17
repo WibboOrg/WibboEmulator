@@ -1,4 +1,5 @@
-﻿using Butterfly.Database.Daos;
+﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
+using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 
@@ -36,7 +37,7 @@ namespace Butterfly.Communication.RCON.Commands.User
             }
 
             Client.GetHabbo().Credits = credits;
-            Client.GetHabbo().UpdateCreditsBalance();
+            Client.SendPacket(new CreditBalanceComposer(Client.GetHabbo().Credits));
 
             return true;
         }

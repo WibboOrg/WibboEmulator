@@ -6,6 +6,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SubmitNewTicketEvent : IPacketEvent
     {
+        public double Delay => 1000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             if (ButterflyEnvironment.GetGame().GetModerationManager().UsersHasPendingTicket(Session.GetHabbo().Id))

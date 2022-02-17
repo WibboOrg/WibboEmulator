@@ -8,6 +8,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GenerateSecretKeyEvent : IPacketEvent
     {
+        public double Delay => 5000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             string CipherPublickey = Packet.PopString();

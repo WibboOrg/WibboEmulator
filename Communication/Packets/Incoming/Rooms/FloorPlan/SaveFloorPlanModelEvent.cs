@@ -12,6 +12,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SaveFloorPlanModelEvent : IPacketEvent
     {
+        public double Delay => 1000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             string Map = Packet.PopString().ToLower().TrimEnd('\r');

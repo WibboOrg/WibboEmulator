@@ -6,6 +6,8 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {
     internal class RpBotChooseEvent : IPacketWebEvent
     {
+        public double Delay => 0;
+
         public void Parse(WebClient Session, ClientPacket Packet)
         {
             string Message = Packet.PopString();

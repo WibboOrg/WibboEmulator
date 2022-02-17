@@ -8,6 +8,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SendRoomInviteEvent : IPacketEvent
     {
+        public double Delay => 1000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().FloodTime;

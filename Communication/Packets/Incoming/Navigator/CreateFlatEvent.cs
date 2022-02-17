@@ -7,6 +7,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class CreateFlatEvent : IPacketEvent
     {
+        public double Delay => 5000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session == null || Session.GetHabbo() == null)

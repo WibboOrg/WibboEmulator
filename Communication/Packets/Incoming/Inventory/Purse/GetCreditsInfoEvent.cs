@@ -5,6 +5,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GetCreditsInfoEvent : IPacketEvent
     {
+        public double Delay => 0;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             Session.SendPacket(new CreditBalanceComposer(Session.GetHabbo().Credits));

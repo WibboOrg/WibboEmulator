@@ -5,6 +5,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class TradingModifyEvent : IPacketEvent
     {
+        public double Delay => 0;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);

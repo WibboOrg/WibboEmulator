@@ -6,6 +6,8 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {
     internal class MoveUserEvent : IPacketWebEvent
     {
+        public double Delay => 0;
+
         public void Parse(WebClient Session, ClientPacket Packet)
         {
             int mX = Packet.PopInt();

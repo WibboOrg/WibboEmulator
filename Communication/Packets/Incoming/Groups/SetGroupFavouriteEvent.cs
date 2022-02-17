@@ -10,6 +10,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SetGroupFavouriteEvent : IPacketEvent
     {
+        public double Delay => 100;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session == null)

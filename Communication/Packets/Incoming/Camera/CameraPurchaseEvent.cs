@@ -8,6 +8,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class CameraPurchaseEvent : IPacketEvent
     {
+        public double Delay => 500;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             string photoId = Packet.PopString();
@@ -30,7 +32,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int Time = ButterflyEnvironment.GetUnixTimestamp();
             string ExtraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + Session.GetHabbo().Username + "\", \"s\":\"" + Session.GetHabbo().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
-
 
             Item ItemSmall = ItemFactory.CreateSingleItemNullable(ItemDataSmall, Session.GetHabbo(), ExtraData);
             Session.GetHabbo().GetInventoryComponent().TryAddItem(ItemSmall);

@@ -2,6 +2,7 @@
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
+using Butterfly.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -403,10 +404,14 @@ namespace Butterfly.Game.Users.Messenger
                         return;
                     }
 
+                    ServerPacketList packetList = new ServerPacketList();
+
                     foreach (DataRow Row in GetMessages.Rows)
                     {
-                        Client.SendPacket(new NewConsoleComposer(Convert.ToInt32(Row["from_id"]), Convert.ToString(Row["message"]), (ButterflyEnvironment.GetUnixTimestamp() - Convert.ToInt32(Row["timestamp"]))));
+                        packetList.Add(new NewConsoleComposer(Convert.ToInt32(Row["from_id"]), Convert.ToString(Row["message"]), (ButterflyEnvironment.GetUnixTimestamp() - Convert.ToInt32(Row["timestamp"]))));
                     }
+
+                    Client.SendPacket(packetList);
 
                     MessengerOfflineMessageDao.Delete(dbClient, this._userInstance.Id);
                 }

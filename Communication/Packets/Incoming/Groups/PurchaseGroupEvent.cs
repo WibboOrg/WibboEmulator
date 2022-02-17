@@ -10,6 +10,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class PurchaseGroupEvent : IPacketEvent
     {
+        public double Delay => 1000;
+
         public void Parse(Client session, ClientPacket packet)
         {
             string Name = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());

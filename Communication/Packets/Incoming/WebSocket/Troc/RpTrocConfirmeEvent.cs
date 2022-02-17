@@ -7,6 +7,8 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {
     internal class RpTrocConfirmeEvent : IPacketWebEvent
     {
+        public double Delay => 0;
+
         public void Parse(WebClient Session, ClientPacket Packet)
         {
             Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);

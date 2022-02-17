@@ -171,7 +171,6 @@ namespace Butterfly
             _random = new Random();
         }
 
-
         public static bool EnumToBool(string Enum)
         {
             return Enum == "1";
@@ -376,16 +375,6 @@ namespace Butterfly
 
             Thread.Sleep(1000);
             Environment.Exit(0);
-        }
-
-        public static string TimeSpanToString(TimeSpan span)
-        {
-            return span.Seconds + " s, " + span.Milliseconds + " ms";
-        }
-
-        public static void AppendTimeStampWithComment(ref StringBuilder builder, DateTime time, string text)
-        {
-            builder.AppendLine(text + " =>[" + TimeSpanToString(DateTime.Now - time) + "]");
         }
     }
 }

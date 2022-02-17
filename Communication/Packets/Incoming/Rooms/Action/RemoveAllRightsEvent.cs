@@ -9,6 +9,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class RemoveAllRightsEvent : IPacketEvent
     {
+        public double Delay => 1000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session.GetHabbo() == null)

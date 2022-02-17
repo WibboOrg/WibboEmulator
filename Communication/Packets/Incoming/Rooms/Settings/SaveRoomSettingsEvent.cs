@@ -12,6 +12,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class SaveRoomSettingsEvent : IPacketEvent
     {
+        public double Delay => 500;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             int RoomId = Packet.PopInt();

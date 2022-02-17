@@ -8,6 +8,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class RequestFurniInventoryEvent : IPacketEvent
     {
+        public double Delay => 5000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             if (Session.GetHabbo() == null)

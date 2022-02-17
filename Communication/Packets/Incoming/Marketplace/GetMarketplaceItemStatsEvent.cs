@@ -7,6 +7,8 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 {
     internal class GetMarketplaceItemStatsEvent : IPacketEvent
     {
+        public double Delay => 0;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             int ItemId = Packet.PopInt();

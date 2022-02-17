@@ -21,6 +21,7 @@ using Butterfly.Net;
 using Butterfly.Utilities;
 using ConnectionManager;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Butterfly.Game.Clients
@@ -30,6 +31,7 @@ namespace Butterfly.Game.Clients
         private ConnectionInformation _connection;
         private GamePacketParser _packetParser;
         private User _user;
+        private Dictionary<int, double> _packetTimeout;
 
         public string MachineId;
         public Language Langue;
@@ -44,6 +46,7 @@ namespace Butterfly.Game.Clients
             this.ConnectionID = ClientId;
             this.Langue = Language.FRANCAIS;
             this._connection = connection;
+            this._packetTimeout = new Dictionary<int, double>();
             this._packetParser = new GamePacketParser(this);
         }
 
@@ -113,6 +116,7 @@ namespace Butterfly.Game.Clients
                     ServerPacketList packetList = new ServerPacketList();
 
                     this.SendPacket(new AuthenticationOKComposer());
+
                     packetList.Add(new NavigatorSettingsComposer(this._user.HomeRoom));
                     packetList.Add(new FavouritesComposer(this._user.FavoriteRooms));
                     packetList.Add(new FigureSetIdsComposer());
@@ -125,8 +129,8 @@ namespace Butterfly.Game.Clients
                     packetList.Add(new SoundSettingsComposer(this._user.ClientVolume, false, false, false, 1));
                     packetList.Add(new AvatarEffectsComposer(ButterflyEnvironment.GetGame().GetEffectManager().GetEffects()));
 
-                    this._user.UpdateActivityPointsBalance();
-                    this._user.UpdateCreditsBalance();
+                    packetList.Add(new HabboActivityPointNotificationComposer(this._user.Duckets, 1));
+                    packetList.Add(new CreditBalanceComposer(this._user.Credits));
 
                     if (this.IsNewUser())
                     {
@@ -310,6 +314,21 @@ namespace Butterfly.Game.Clients
         public void SendHugeNotif(string Message)
         {
             SendPacket(new MOTDNotificationComposer(Message));
+        }
+
+        public bool PacketTimeout(int packetId, double delay)
+        {
+            if (this._packetTimeout.TryGetValue(packetId, out double timestamp))
+            {
+                if (timestamp + (delay / 1000) > UnixTimestamp.GetNow())
+                    return true;
+
+                this._packetTimeout.Remove(packetId);
+            }
+
+            this._packetTimeout.Add(packetId, UnixTimestamp.GetNow());
+
+            return false;
         }
 
         public void Dispose()

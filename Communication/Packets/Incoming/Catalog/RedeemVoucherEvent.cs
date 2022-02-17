@@ -9,6 +9,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class RedeemVoucherEvent : IPacketEvent
     {
+        public double Delay => 500;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             string VoucherCode = Packet.PopString().Replace("\r", "");

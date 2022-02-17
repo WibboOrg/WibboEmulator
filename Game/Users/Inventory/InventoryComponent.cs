@@ -173,7 +173,7 @@ namespace Butterfly.Game.Users.Inventory
 
         public bool TryAddItem(Item item)
         {
-            this._userInstance.ClientInstance.SendPacket(new FurniListAddComposer(item));
+            this._userInstance.GetClient().SendPacket(new FurniListAddComposer(item));
 
             return this._userItems.TryAdd(item.Id, item);
         }
@@ -254,7 +254,7 @@ namespace Butterfly.Game.Users.Inventory
 
             this._userItems.TryAdd(userItem.Id, userItem);
 
-            this._userInstance.ClientInstance.SendPacket(new FurniListAddComposer(userItem));
+            this._userInstance.GetClient().SendPacket(new FurniListAddComposer(userItem));
 
             return userItem;
         }
@@ -304,7 +304,7 @@ namespace Butterfly.Game.Users.Inventory
 
             this._userItems.TryAdd(userItem.Id, userItem);
 
-            this._userInstance.ClientInstance.SendPacket(new FurniListAddComposer(userItem));
+            this._userInstance.GetClient().SendPacket(new FurniListAddComposer(userItem));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Achievements;
+using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Furni;
 using Butterfly.Communication.Packets.Outgoing.Users;
@@ -345,7 +346,7 @@ namespace Butterfly.Game.Items
 
             int credits = ButterflyEnvironment.GetRandomNumber(100, 10000) * 1000;
             session.GetHabbo().Credits += credits;
-            session.GetHabbo().UpdateCreditsBalance();
+            session.SendPacket(new CreditBalanceComposer(session.GetHabbo().Credits));
 
             int winwin = ButterflyEnvironment.GetRandomNumber(100, 1000);
             session.GetHabbo().AchievementPoints += winwin;

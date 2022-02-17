@@ -10,6 +10,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class ConfirmLoveLockEvent : IPacketEvent
     {
+        public double Delay => 250;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             int Id = Packet.PopInt();

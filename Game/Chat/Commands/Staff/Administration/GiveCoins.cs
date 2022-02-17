@@ -1,3 +1,4 @@
+using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
@@ -14,7 +15,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 if (int.TryParse(Params[2], out int result))
                 {
                     clientByUsername.GetHabbo().Credits = clientByUsername.GetHabbo().Credits + result;
-                    clientByUsername.GetHabbo().UpdateCreditsBalance();
+                    clientByUsername.SendPacket(new CreditBalanceComposer(clientByUsername.GetHabbo().Credits));
                     clientByUsername.SendNotification(Session.GetHabbo().Username + ButterflyEnvironment.GetLanguageManager().TryGetValue("coins.awardmessage1", Session.Langue) + result.ToString() + ButterflyEnvironment.GetLanguageManager().TryGetValue("coins.awardmessage2", Session.Langue));
                     Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("coins.updateok", Session.Langue));
                 }

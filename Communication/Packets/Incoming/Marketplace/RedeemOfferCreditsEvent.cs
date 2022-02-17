@@ -9,6 +9,8 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 {
     internal class RedeemOfferCreditsEvent : IPacketEvent
     {
+        public double Delay => 1000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             int CreditsOwed = 0;

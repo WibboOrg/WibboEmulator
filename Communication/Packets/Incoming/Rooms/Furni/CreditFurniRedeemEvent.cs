@@ -11,6 +11,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class CreditFurniRedeemEvent : IPacketEvent
     {
+        public double Delay => 250;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             if (!Session.GetHabbo().InRoom)
@@ -53,7 +55,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 if (Exchange.GetBaseItem().ItemName.StartsWith("CF_") || Exchange.GetBaseItem().ItemName.StartsWith("CFC_"))
                 {
                     Session.GetHabbo().Credits += Value;
-                    Session.GetHabbo().UpdateCreditsBalance();
+                    Session.SendPacket(new CreditBalanceComposer(Session.GetHabbo().Credits));
                 }
                 else if (Exchange.GetBaseItem().ItemName.StartsWith("PntEx_"))
                 {

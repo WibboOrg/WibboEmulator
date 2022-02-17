@@ -6,6 +6,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class InitTradeEvent : IPacketEvent
     {
+        public double Delay => 5000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
@@ -31,7 +33,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 RolePlayer Rp = RoomUser.Roleplayer;
                 if (Rp == null || Rp.TradeId > 0 || Rp.Dead || Rp.SendPrison || (Rp.PvpEnable && room.Roleplay.Pvp) || Rp.AggroTimer > 0)
                 {
-                    RoomUser.SendWhisperChat("Vous devez �tre en zone safe pour pouvoir troquer");
+                    RoomUser.SendWhisperChat("Vous devez être en zone safe pour pouvoir troquer");
                     return;
                 }
 

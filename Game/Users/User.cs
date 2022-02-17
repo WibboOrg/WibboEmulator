@@ -27,6 +27,8 @@ namespace Butterfly.Game.Users
 {
     public class User
     {
+        private Client _clientInstance;
+
         public int Id;
         public string Username;
         public int Rank;
@@ -75,7 +77,6 @@ namespace Butterfly.Game.Users
         private WardrobeComponent _wardrobeComponent;
         private ChatlogManager _chatMessageManager;
 
-        public Client ClientInstance { get; private set; }
         public bool SpectatorMode;
         public bool Disconnected;
         public bool HasFriendRequestsDisabled;
@@ -246,7 +247,7 @@ namespace Butterfly.Game.Users
 
         public void Init(Client client)
         {
-            this.ClientInstance = client;
+            this._clientInstance = client;
 
             this._badgeComponent = new BadgeComponent(this);
             this._achievementComponent = new AchievementComponent(this);
@@ -491,7 +492,7 @@ namespace Butterfly.Game.Users
 
             if (this.InRoom && this.CurrentRoom != null)
             {
-                this.CurrentRoom.GetRoomUserManager().RemoveUserFromRoom(this.ClientInstance, false, false);
+                this.CurrentRoom.GetRoomUserManager().RemoveUserFromRoom(this._clientInstance, false, false);
             }
 
             if (this.RolePlayId > 0)
@@ -568,34 +569,12 @@ namespace Butterfly.Game.Users
                 this.FavoriteRooms.Clear();
             }
 
-            this.ClientInstance = null;
-        }
-
-        public void UpdateCreditsBalance()
-        {
-            Client client = this.GetClient();
-            if (client == null)
-            {
-                return;
-            }
-
-            client.SendPacket(new CreditBalanceComposer(this.Credits));
-        }
-
-        public void UpdateActivityPointsBalance()
-        {
-            Client client = this.GetClient();
-            if (client == null)
-            {
-                return;
-            }
-
-            client.SendPacket(new HabboActivityPointNotificationComposer(this.Duckets, 1));
+            this._clientInstance = null;
         }
 
         public Client GetClient()
         {
-            return ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.Id);
+            return this._clientInstance;
         }
         
         public MessengerComponent GetMessenger()

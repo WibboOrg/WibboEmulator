@@ -9,6 +9,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GiveAdminRightsEvent : IPacketEvent
     {
+        public double Delay => 100;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             int GroupId = Packet.PopInt();

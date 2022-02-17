@@ -5,6 +5,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class UniqueIDEvent : IPacketEvent
     {
+        public double Delay => 0;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             string CookieId = Packet.PopString();

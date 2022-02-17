@@ -9,6 +9,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GetRelationshipsEvent : IPacketEvent
     {
+        public double Delay => 0;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             User User = ButterflyEnvironment.GetHabboById(Packet.PopInt());

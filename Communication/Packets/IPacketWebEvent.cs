@@ -6,5 +6,7 @@ namespace Butterfly.Communication.Packets
     public interface IPacketWebEvent
     {
         void Parse(WebClient session, ClientPacket packet);
+
+        double Delay { get; }
     }
 }

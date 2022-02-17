@@ -6,9 +6,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class FollowFriendEvent : IPacketEvent
     {
+        public double Delay => 0;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Packet.PopInt());
+            int userId = Packet.PopInt();
+            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
             if (clientByUserId == null || clientByUserId.GetHabbo() == null || !clientByUserId.GetHabbo().InRoom || (clientByUserId.GetHabbo().HideInRoom && !Session.GetHabbo().HasFuse("fuse_mod")))
             {
                 return;

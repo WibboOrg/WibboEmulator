@@ -11,6 +11,8 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 {
     internal class GetOffersEvent : IPacketEvent
     {
+        public double Delay => 0;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             int MinCost = Packet.PopInt();

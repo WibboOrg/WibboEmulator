@@ -221,7 +221,7 @@
     <Compile Include="Communication\Packets\Incoming\WebSocket\Troc\RpTrocConfirmeEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\Troc\RpTrocRemoveItemEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\Troc\RpTrocStopEvent.cs" />
-    <Compile Include="Communication\Packets\Incoming\WebSocket\WibboTool\FollowUserIdEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\WebSocket\Tool\FollowUserIdEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\User\JoinRoomIdEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\User\MoveUserEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\RolePlay\RpUseItemsEvent.cs" />
@@ -492,7 +492,7 @@
     <Compile Include="Communication\Packets\Incoming\Users\UpdateFigureDataEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\TvYoutube\EditTvYoutubeEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\HandShake\PingWebEvent.cs" />
-    <Compile Include="Communication\Packets\Incoming\WebSocket\WibboTool\SendHotelAlertEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\WebSocket\Tool\SendHotelAlertEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\HandShake\SSOTicketWebEvent.cs" />
     <Compile Include="Communication\Packets\IPacketWebEvent.cs" />
     <Compile Include="Communication\Packets\Outgoing\IServerPacket.cs" />

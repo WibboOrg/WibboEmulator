@@ -8,6 +8,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class UpdateNavigatorSettingsEvent : IPacketEvent
     {
+        public double Delay => 1000;
+
         public void Parse(Client Session, ClientPacket Packet)
         {
             int RoomId = Packet.PopInt();
