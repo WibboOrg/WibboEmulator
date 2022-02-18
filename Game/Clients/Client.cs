@@ -34,7 +34,7 @@ namespace Butterfly.Game.Clients
 
         private Dictionary<int, double> _packetTimeout;
         private int _packetCount;
-        private double _packetLastTimeStamp;
+        private double _packetLastTimestamp;
 
         public string MachineId;
         public Language Langue;
@@ -52,7 +52,7 @@ namespace Butterfly.Game.Clients
 
             this._packetTimeout = new Dictionary<int, double>();
             this._packetCount = 0;
-            this._packetLastTimeStamp = UnixTimestamp.GetNow();
+            this._packetLastTimestamp = UnixTimestamp.GetNow();
 
             this._packetParser = new GamePacketParser(this);
         }
@@ -325,16 +325,16 @@ namespace Butterfly.Game.Clients
 
         public bool PacketTimeout(int packetId, double delay)
         {
-            double timeStampNow = UnixTimestamp.GetNow();
+            double timestampNow = UnixTimestamp.GetNow();
 
-            if (this._packetLastTimeStamp + 1 > timeStampNow)
+            if (this._packetLastTimestamp > timestampNow)
             {
                 this._packetCount++;
             }
             else
             {
                 this._packetCount = 0;
-                this._packetLastTimeStamp = timeStampNow;
+                this._packetLastTimestamp = timestampNow + 1;
             }
 
             if (this._packetCount >= 10)
@@ -345,13 +345,13 @@ namespace Butterfly.Game.Clients
 
             if (this._packetTimeout.TryGetValue(packetId, out double timestamp))
             {
-                if (timestamp + (delay / 1000) > timeStampNow)
+                if (timestamp > timestampNow)
                     return true;
 
                 this._packetTimeout.Remove(packetId);
             }
 
-            this._packetTimeout.Add(packetId, timeStampNow);
+            this._packetTimeout.Add(packetId, timestampNow + (delay / 1000));
 
             return false;
         }
@@ -381,6 +381,9 @@ namespace Butterfly.Game.Clients
                 this._user.OnDisconnect();
             }
 
+            this._packetTimeout.Clear();
+
+            this._packetTimeout = null;
             this._user = null;
             this._connection = null;
             this._packetParser = null;

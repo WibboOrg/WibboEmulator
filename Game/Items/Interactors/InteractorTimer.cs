@@ -6,6 +6,7 @@ namespace Butterfly.Game.Items.Interactors
     {
         private bool _pendingReset = false;
         private bool _chronoStarter = false;
+
         public override void OnPlace(Client Session, Item Item)
         {
         }
