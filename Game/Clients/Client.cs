@@ -381,7 +381,10 @@ namespace Butterfly.Game.Clients
                 this._user.OnDisconnect();
             }
 
-            this._packetTimeout.Clear();
+            if (this._packetTimeout != null)
+            {
+                this._packetTimeout.Clear();
+            }
 
             this._packetTimeout = null;
             this._user = null;

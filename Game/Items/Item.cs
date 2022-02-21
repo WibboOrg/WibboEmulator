@@ -56,8 +56,6 @@ namespace Butterfly.Game.Items
 
         public double Z { get; private set; }
 
-        public bool IsRoller { get; private set; }
-
         public Point Coordinate => new Point(this.X, this.Y);
 
         public List<Point> GetCoords
@@ -238,9 +236,6 @@ namespace Butterfly.Game.Items
 
                 switch (this.GetBaseItem().InteractionType)
                 {
-                    case InteractionType.ROLLER:
-                        this.IsRoller = true;
-                        break;
                     case InteractionType.FOOTBALLCOUNTERGREEN:
                     case InteractionType.BANZAIGATEGREEN:
                     case InteractionType.BANZAISCOREGREEN:
@@ -592,9 +587,6 @@ namespace Butterfly.Game.Items
 
             switch (this.GetBaseItem().InteractionType)
             {
-                case InteractionType.ROLLER:
-                    this.IsRoller = true;
-                    break;
                 case InteractionType.FOOTBALLCOUNTERGREEN:
                 case InteractionType.BANZAIGATEGREEN:
                 case InteractionType.BANZAISCOREGREEN:

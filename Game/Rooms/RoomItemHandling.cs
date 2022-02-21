@@ -382,7 +382,7 @@ namespace Butterfly.Game.Rooms
 
                         foreach (Item item in itemsOnNext)
                         {
-                            if (item.IsRoller)
+                            if (item.GetBaseItem().InteractionType == InteractionType.ROLLER)
                             {
                                 nextRoller = true;
                                 if (item.TotalHeight > nextZ)
