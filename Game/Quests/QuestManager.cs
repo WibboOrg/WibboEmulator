@@ -15,36 +15,33 @@ namespace Butterfly.Game.Quests
         private Dictionary<int, Quest> _quests;
         private Dictionary<string, int> _questCount;
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this._quests = new Dictionary<int, Quest>();
             this._questCount = new Dictionary<string, int>();
 
-            this.ReloadQuests();
+            this.ReloadQuests(dbClient);
         }
 
-        public void ReloadQuests()
+        public void ReloadQuests(IQueryAdapter dbClient)
         {
             this._quests.Clear();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable table = EmulatorQuestDao.GetAll(dbClient);
+            foreach (DataRow dataRow in table.Rows)
             {
-                DataTable table = EmulatorQuestDao.GetAll(dbClient);
-                foreach (DataRow dataRow in table.Rows)
-                {
-                    int id = Convert.ToInt32(dataRow["id"]);
-                    string category = (string)dataRow["category"];
-                    int seriesNumber = Convert.ToInt32(dataRow["series_number"]);
-                    int goalType = Convert.ToInt32(dataRow["goal_type"]);
-                    int goalData = Convert.ToInt32(dataRow["goal_data"]);
-                    string name = (string)dataRow["name"];
-                    int reward = Convert.ToInt32(dataRow["reward"]);
-                    string dataBit = (string)dataRow["data_bit"];
+                int id = Convert.ToInt32(dataRow["id"]);
+                string category = (string)dataRow["category"];
+                int seriesNumber = Convert.ToInt32(dataRow["series_number"]);
+                int goalType = Convert.ToInt32(dataRow["goal_type"]);
+                int goalData = Convert.ToInt32(dataRow["goal_data"]);
+                string name = (string)dataRow["name"];
+                int reward = Convert.ToInt32(dataRow["reward"]);
+                string dataBit = (string)dataRow["data_bit"];
 
-                    this._quests.Add(id, new Quest(id, category, seriesNumber, (QuestType)goalType, goalData, name, reward, dataBit));
+                this._quests.Add(id, new Quest(id, category, seriesNumber, (QuestType)goalType, goalData, name, reward, dataBit));
 
-                    this.AddToCounter(category);
-                }
+                this.AddToCounter(category);
             }
         }
 

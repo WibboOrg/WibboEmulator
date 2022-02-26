@@ -41,30 +41,28 @@ namespace Butterfly.Game.Roleplay.Weapon
             return weapon;
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this._weaponCac.Clear();
             this._weaponGun.Clear();
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                DataTable table = RoleplayWeaponDao.GetAll(dbClient);
-                if (table != null)
-                {
-                    foreach (DataRow dataRow in table.Rows)
-                    {
-                        if (this._weaponCac.ContainsKey(Convert.ToInt32(dataRow["id"])) || this._weaponGun.ContainsKey(Convert.ToInt32(dataRow["id"])))
-                        {
-                            continue;
-                        }
 
-                        if ((string)dataRow["type"] == "cac")
-                        {
-                            this._weaponCac.Add(Convert.ToInt32(dataRow["id"]), new RPWeapon(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["domage_min"]), Convert.ToInt32(dataRow["domage_max"]), RPWeaponInteractions.GetTypeFromString((string)dataRow["interaction"]), Convert.ToInt32(dataRow["enable"]), Convert.ToInt32(dataRow["freeze_time"]), Convert.ToInt32(dataRow["distance"])));
-                        }
-                        else
-                        {
-                            this._weaponGun.Add(Convert.ToInt32(dataRow["id"]), new RPWeapon(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["domage_min"]), Convert.ToInt32(dataRow["domage_max"]), RPWeaponInteractions.GetTypeFromString((string)dataRow["interaction"]), Convert.ToInt32(dataRow["enable"]), Convert.ToInt32(dataRow["freeze_time"]), Convert.ToInt32(dataRow["distance"])));
-                        }
+            DataTable table = RoleplayWeaponDao.GetAll(dbClient);
+            if (table != null)
+            {
+                foreach (DataRow dataRow in table.Rows)
+                {
+                    if (this._weaponCac.ContainsKey(Convert.ToInt32(dataRow["id"])) || this._weaponGun.ContainsKey(Convert.ToInt32(dataRow["id"])))
+                    {
+                        continue;
+                    }
+
+                    if ((string)dataRow["type"] == "cac")
+                    {
+                        this._weaponCac.Add(Convert.ToInt32(dataRow["id"]), new RPWeapon(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["domage_min"]), Convert.ToInt32(dataRow["domage_max"]), RPWeaponInteractions.GetTypeFromString((string)dataRow["interaction"]), Convert.ToInt32(dataRow["enable"]), Convert.ToInt32(dataRow["freeze_time"]), Convert.ToInt32(dataRow["distance"])));
+                    }
+                    else
+                    {
+                        this._weaponGun.Add(Convert.ToInt32(dataRow["id"]), new RPWeapon(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["domage_min"]), Convert.ToInt32(dataRow["domage_max"]), RPWeaponInteractions.GetTypeFromString((string)dataRow["interaction"]), Convert.ToInt32(dataRow["enable"]), Convert.ToInt32(dataRow["freeze_time"]), Convert.ToInt32(dataRow["distance"])));
                     }
                 }
             }

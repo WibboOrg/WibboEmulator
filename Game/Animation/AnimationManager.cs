@@ -98,27 +98,24 @@ namespace Butterfly.Game.Animation
             return time.Minutes + " minutes et " + time.Seconds + " secondes";
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this._roomId.Clear();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable table = RoomDao.GetAllByOwnerWibboGame(dbClient);
+            if (table == null)
             {
-                DataTable table = RoomDao.GetAllByOwnerWibboGame(dbClient);
-                if (table == null)
+                return;
+            }
+
+            foreach (DataRow dataRow in table.Rows)
+            {
+                if (this._roomId.Contains(Convert.ToInt32(dataRow["id"])))
                 {
-                    return;
+                    continue;
                 }
 
-                foreach (DataRow dataRow in table.Rows)
-                {
-                    if (this._roomId.Contains(Convert.ToInt32(dataRow["id"])))
-                    {
-                        continue;
-                    }
-
-                    this._roomId.Add(Convert.ToInt32(dataRow["id"]));
-                }
+                this._roomId.Add(Convert.ToInt32(dataRow["id"]));
             }
 
             if (this._roomId.Count == 0)
@@ -213,11 +210,11 @@ namespace Butterfly.Game.Animation
                 "- Jack et Daisy";
 
             ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, "WibboGame", room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
-            
+
             ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer(
-                "gameauto", 
+                "gameauto",
                 "Message d'animation",
-                alertMessage, 
+                alertMessage,
                 "Je veux y jouer !",
                 room.Id,
                 ""

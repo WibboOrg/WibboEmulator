@@ -19,7 +19,7 @@ namespace Butterfly.Game.Chat.Filter
             this._pubWords = new List<string>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             if (this._filteredWords.Count > 0)
             {
@@ -31,26 +31,23 @@ namespace Butterfly.Game.Chat.Filter
                 this._pubWords.Clear();
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable Data = RoomSwearwordFilterDao.GetAll(dbClient);
+
+            if (Data != null)
             {
-                DataTable Data = RoomSwearwordFilterDao.GetAll(dbClient);
-
-                if (Data != null)
+                foreach (DataRow Row in Data.Rows)
                 {
-                    foreach (DataRow Row in Data.Rows)
-                    {
-                        this._filteredWords.Add(Convert.ToString(Row["word"]));
-                    }
+                    this._filteredWords.Add(Convert.ToString(Row["word"]));
                 }
+            }
 
-                DataTable Data2 = WordFilterRetroDao.GetAll(dbClient);
+            DataTable Data2 = WordFilterRetroDao.GetAll(dbClient);
 
-                if (Data2 != null)
+            if (Data2 != null)
+            {
+                foreach (DataRow Row in Data2.Rows)
                 {
-                    foreach (DataRow Row in Data2.Rows)
-                    {
-                        this._pubWords.Add(Convert.ToString(Row["word"]));
-                    }
+                    this._pubWords.Add(Convert.ToString(Row["word"]));
                 }
             }
         }

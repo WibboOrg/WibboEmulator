@@ -28,10 +28,10 @@ namespace Butterfly.Game.Chat.Commands
             _listCommande = new Dictionary<string, string>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
 
-            InitInvokeableRegister();
+            InitInvokeableRegister(dbClient);
             RegisterCommand();
             _commands.Clear();
 
@@ -104,13 +104,11 @@ namespace Butterfly.Game.Chat.Commands
             return true;
         }
 
-        private void InitInvokeableRegister()
+        private void InitInvokeableRegister(IQueryAdapter dbClient)
         {
             this._commandRegisterInvokeable.Clear();
 
-            DataTable table;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                table = EmulatorCommandDao.GetAll(dbClient);
+            DataTable table = EmulatorCommandDao.GetAll(dbClient);
 
             if (table == null)
             {

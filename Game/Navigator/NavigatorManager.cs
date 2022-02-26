@@ -28,7 +28,7 @@ namespace Butterfly.Game.Navigator
             this._featuredRooms = new Dictionary<int, FeaturedRoom>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             if (this._searchResultLists.Count > 0)
             {
@@ -40,38 +40,33 @@ namespace Butterfly.Game.Navigator
                 this._featuredRooms.Clear();
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable Table = NavigatorCategoryDao.GetAll(dbClient);
+
+            if (Table != null)
             {
-                DataTable Table = null;
-
-                Table = NavigatorCategoryDao.GetAll(dbClient);
-
-                if (Table != null)
+                foreach (DataRow Row in Table.Rows)
                 {
-                    foreach (DataRow Row in Table.Rows)
+                    if (Convert.ToInt32(Row["enabled"]) == 1)
                     {
-                        if (Convert.ToInt32(Row["enabled"]) == 1)
+                        if (!this._searchResultLists.ContainsKey(Convert.ToInt32(Row["id"])))
                         {
-                            if (!this._searchResultLists.ContainsKey(Convert.ToInt32(Row["id"])))
-                            {
-                                this._searchResultLists.Add(Convert.ToInt32(Row["id"]), new SearchResultList(Convert.ToInt32(Row["id"]), Convert.ToString(Row["category"]), Convert.ToString(Row["category_identifier"]), Convert.ToString(Row["public_name"]), true, -1, Convert.ToInt32(Row["required_rank"]), Convert.ToInt32(Row["minimized"]) == 1, NavigatorViewModeUtility.GetViewModeByString(Convert.ToString(Row["view_mode"])), Convert.ToString(Row["category_type"]), Convert.ToString(Row["search_allowance"]), Convert.ToInt32(Row["order_id"])));
-                            }
+                            this._searchResultLists.Add(Convert.ToInt32(Row["id"]), new SearchResultList(Convert.ToInt32(Row["id"]), Convert.ToString(Row["category"]), Convert.ToString(Row["category_identifier"]), Convert.ToString(Row["public_name"]), true, -1, Convert.ToInt32(Row["required_rank"]), Convert.ToInt32(Row["minimized"]) == 1, NavigatorViewModeUtility.GetViewModeByString(Convert.ToString(Row["view_mode"])), Convert.ToString(Row["category_type"]), Convert.ToString(Row["search_allowance"]), Convert.ToInt32(Row["order_id"])));
                         }
                     }
                 }
+            }
 
-                DataTable GetPublics = NavigatorPublicDao.GetAll(dbClient);
+            DataTable GetPublics = NavigatorPublicDao.GetAll(dbClient);
 
-                if (GetPublics != null)
+            if (GetPublics != null)
+            {
+                foreach (DataRow Row in GetPublics.Rows)
                 {
-                    foreach (DataRow Row in GetPublics.Rows)
+                    if (Convert.ToInt32(Row["enabled"]) == 1)
                     {
-                        if (Convert.ToInt32(Row["enabled"]) == 1)
+                        if (!this._featuredRooms.ContainsKey(Convert.ToInt32(Row["room_id"])))
                         {
-                            if (!this._featuredRooms.ContainsKey(Convert.ToInt32(Row["room_id"])))
-                            {
-                                this._featuredRooms.Add(Convert.ToInt32(Row["room_id"]), new FeaturedRoom(Convert.ToInt32(Row["room_id"]), Convert.ToString(Row["image_url"]), LanguageManager.ParseLanguage(Convert.ToString(Row["langue"])), (string)Row["category_type"]));
-                            }
+                            this._featuredRooms.Add(Convert.ToInt32(Row["room_id"]), new FeaturedRoom(Convert.ToInt32(Row["room_id"]), Convert.ToString(Row["image_url"]), LanguageManager.ParseLanguage(Convert.ToString(Row["langue"])), (string)Row["category_type"]));
                         }
                     }
                 }

@@ -10,12 +10,9 @@ namespace Butterfly.Core
         private static int UserPeak;
         private static bool isExecuted = false;
 
-        public static void Init()
+        public static void Init(IQueryAdapter dbClient)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                UserPeak = EmulatorStatusDao.GetUserpeak(dbClient);
-            }
+            UserPeak = EmulatorStatusDao.GetUserpeak(dbClient);
 
             lowPriorityProcessWatch = new Stopwatch();
             lowPriorityProcessWatch.Start();

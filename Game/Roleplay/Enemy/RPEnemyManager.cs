@@ -39,34 +39,32 @@ namespace Butterfly.Game.Roleplay.Enemy
             return enemy;
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this._enemyBot.Clear();
             this._enemyPet.Clear();
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+
+            DataTable table = RoleplayEnemyDao.GetAll(dbClient);
+            if (table != null)
             {
-                DataTable table = RoleplayEnemyDao.GetAll(dbClient);
-                if (table != null)
+                foreach (DataRow dataRow in table.Rows)
                 {
-                    foreach (DataRow dataRow in table.Rows)
+                    if ((this._enemyBot.ContainsKey(Convert.ToInt32(dataRow["id"])) && (string)dataRow["type"] == "bot") || (this._enemyPet.ContainsKey(Convert.ToInt32(dataRow["id"])) && (string)dataRow["type"] == "pet"))
                     {
-                        if ((this._enemyBot.ContainsKey(Convert.ToInt32(dataRow["id"])) && (string)dataRow["type"] == "bot") || (this._enemyPet.ContainsKey(Convert.ToInt32(dataRow["id"])) && (string)dataRow["type"] == "pet"))
-                        {
-                            continue;
-                        }
+                        continue;
+                    }
 
-                        RPEnemy Config = new RPEnemy(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["health"]), Convert.ToInt32(dataRow["weapon_far_id"]), Convert.ToInt32(dataRow["weapon_cac_id"]), Convert.ToInt32(dataRow["dead_timer"]),
-                            Convert.ToInt32(dataRow["loot_item_id"]), Convert.ToInt32(dataRow["money_drop"]), Convert.ToInt32((string)dataRow["drop_script_id"]), Convert.ToInt32(dataRow["team_id"]), Convert.ToInt32(dataRow["aggro_distance"]),
-                            Convert.ToInt32(dataRow["zone_distance"]), Convert.ToInt32((string)dataRow["reset_position"]) == 1, Convert.ToInt32(dataRow["lost_aggro_distance"]), Convert.ToInt32((string)dataRow["zombie_mode"]) == 1);
+                    RPEnemy Config = new RPEnemy(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["health"]), Convert.ToInt32(dataRow["weapon_far_id"]), Convert.ToInt32(dataRow["weapon_cac_id"]), Convert.ToInt32(dataRow["dead_timer"]),
+                        Convert.ToInt32(dataRow["loot_item_id"]), Convert.ToInt32(dataRow["money_drop"]), Convert.ToInt32((string)dataRow["drop_script_id"]), Convert.ToInt32(dataRow["team_id"]), Convert.ToInt32(dataRow["aggro_distance"]),
+                        Convert.ToInt32(dataRow["zone_distance"]), Convert.ToInt32((string)dataRow["reset_position"]) == 1, Convert.ToInt32(dataRow["lost_aggro_distance"]), Convert.ToInt32((string)dataRow["zombie_mode"]) == 1);
 
-                        if ((string)dataRow["type"] == "bot")
-                        {
-                            this._enemyBot.Add(Convert.ToInt32(dataRow["id"]), Config);
-                        }
-                        else
-                        {
-                            this._enemyPet.Add(Convert.ToInt32(dataRow["id"]), Config);
-                        }
+                    if ((string)dataRow["type"] == "bot")
+                    {
+                        this._enemyBot.Add(Convert.ToInt32(dataRow["id"]), Config);
+                    }
+                    else
+                    {
+                        this._enemyPet.Add(Convert.ToInt32(dataRow["id"]), Config);
                     }
                 }
             }

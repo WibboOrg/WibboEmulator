@@ -19,23 +19,20 @@ namespace Butterfly.Core
         private Dictionary<string, string> _valuesEn;
         private Dictionary<string, string> _valuesBr;
 
-        public void Init()
+        public LanguageManager()
         {
             this._valuesFr = new Dictionary<string, string>();
             this._valuesEn = new Dictionary<string, string>();
             this._valuesBr = new Dictionary<string, string>();
-            this.InitLocalValues();
         }
 
-        public void InitLocalValues()
+        public void Init(IQueryAdapter dbClient)
         {
             this._valuesFr.Clear();
             this._valuesEn.Clear();
             this._valuesBr.Clear();
 
-            DataTable table;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                table = EmulatorTextDao.GetAll(dbClient);
+            DataTable table = EmulatorTextDao.GetAll(dbClient);
 
             if (table == null)
             {

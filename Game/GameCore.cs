@@ -22,6 +22,7 @@ using System.Threading;
 using Butterfly.Database.Interfaces;
 using Butterfly.Database.Daos;
 using Butterfly.Game.Effects;
+using Butterfly.Game.Badges;
 
 namespace Butterfly.Game
 {
@@ -43,6 +44,7 @@ namespace Butterfly.Game
         private readonly PacketManager _packetManager;
         private readonly ChatManager _chatManager;
         private readonly EffectManager _effectManager;
+        private readonly BadgeManager _badgeManager;
         private readonly RoleplayManager _roleplayManager;
         private readonly AnimationManager _animationManager;
 
@@ -53,60 +55,66 @@ namespace Butterfly.Game
 
         public GameCore()
         {
-            this._clientManager = new ClientManager();
-            this._clientWebManager = new WebClientManager();
+            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            {
+                this._clientManager = new ClientManager();
+                this._clientWebManager = new WebClientManager();
 
-            this._permissionManager = new PermissionManager();
-            this._permissionManager.Init();
+                this._permissionManager = new PermissionManager();
+                this._permissionManager.Init(dbClient);
 
-            this._itemDataManager = new ItemDataManager();
-            this._itemDataManager.Init();
+                this._itemDataManager = new ItemDataManager();
+                this._itemDataManager.Init(dbClient);
 
-            this._catalogManager = new CatalogManager();
-            this._catalogManager.Init(this._itemDataManager);
+                this._catalogManager = new CatalogManager();
+                this._catalogManager.Init(dbClient, this._itemDataManager);
 
-            this._navigatorManager = new NavigatorManager();
-            this._navigatorManager.Init();
+                this._navigatorManager = new NavigatorManager();
+                this._navigatorManager.Init(dbClient);
 
-            this._roleplayManager = new RoleplayManager();
-            this._roleplayManager.Init();
+                this._roleplayManager = new RoleplayManager();
+                this._roleplayManager.Init(dbClient);
 
-            this._roomManager = new RoomManager();
-            this._roomManager.Init();
+                this._roomManager = new RoomManager();
+                this._roomManager.Init(dbClient);
 
-            this._groupManager = new GroupManager();
-            this._groupManager.Init();
+                this._groupManager = new GroupManager();
+                this._groupManager.Init(dbClient);
 
-            this._moderationManager = new ModerationManager();
-            this._moderationManager.Init();
+                this._moderationManager = new ModerationManager();
+                this._moderationManager.Init(dbClient);
 
-            this._questManager = new QuestManager();
-            this._questManager.Init();
+                this._questManager = new QuestManager();
+                this._questManager.Init(dbClient);
 
-            this._landingViewManager = new LandingViewManager();
-            this._landingViewManager.Init();
+                this._landingViewManager = new LandingViewManager();
+                this._landingViewManager.Init(dbClient);
 
-            this._helpManager = new HelpManager();
+                this._helpManager = new HelpManager();
 
-            this._packetManager = new PacketManager();
-            this._packetManager.Init();
+                this._packetManager = new PacketManager();
+                this._packetManager.Init(dbClient);
 
-            this._chatManager = new ChatManager();
-            this._chatManager.Init();
+                this._chatManager = new ChatManager();
+                this._chatManager.Init(dbClient);
 
-            this._effectManager = new EffectManager();
-            this._effectManager.Init();
+                this._effectManager = new EffectManager();
+                this._effectManager.Init(dbClient);
 
-            this._achievementManager = new AchievementManager();
-            this._achievementManager.Init();
+                this._badgeManager = new BadgeManager();
+                this._badgeManager.Init(dbClient);
 
-            this._animationManager = new AnimationManager();
-            this._animationManager.Init();
+                this._achievementManager = new AchievementManager();
+                this._achievementManager.Init(dbClient);
 
-            DatabaseCleanup();
-            LowPriorityWorker.Init();
+                this._animationManager = new AnimationManager();
+                this._animationManager.Init(dbClient);
 
-            this._moduleWatch = new Stopwatch();
+                DatabaseCleanup(dbClient);
+                LowPriorityWorker.Init(dbClient);
+
+                this._moduleWatch = new Stopwatch();
+            }
         }
 
         #region Return values
@@ -114,6 +122,11 @@ namespace Butterfly.Game
         public AnimationManager GetAnimationManager()
         {
             return this._animationManager;
+        }
+
+        public BadgeManager GetBadgeManager()
+        {
+            return this._badgeManager;
         }
 
         public EffectManager GetEffectManager()
@@ -260,23 +273,19 @@ namespace Butterfly.Game
             Console.WriteLine("MainGameLoop end");
         }
 
-        public static void DatabaseCleanup()
+        public static void DatabaseCleanup(IQueryAdapter dbClient)
         {
             #if !DEBUG
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                UserDao.UpdateAllOnline(dbClient);
-                UserDao.UpdateAllTicket(dbClient);
-                UserWebsocketDao.UpdateReset(dbClient);
-                RoomDao.UpdateResetUsersNow(dbClient);
-                EmulatorStatusDao.UpdateReset(dbClient);
-            }
+            UserDao.UpdateAllOnline(dbClient);
+            UserDao.UpdateAllTicket(dbClient);
+            UserWebsocketDao.UpdateReset(dbClient);
+            RoomDao.UpdateResetUsersNow(dbClient);
+            EmulatorStatusDao.UpdateReset(dbClient);
             #endif
         }
 
         public void Destroy()
         {
-            DatabaseCleanup();
             Console.WriteLine("Destroyed Habbo Hotel.");
         }
     }

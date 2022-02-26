@@ -58,27 +58,24 @@ namespace Butterfly.Game.Roleplay
             return this._roleplayEnemyManager;
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
-            this._roleplayItemManager.Init();
-            this._roleplayWeaponManager.Init();
-            this._roleplayEnemyManager.Init();
+            this._roleplayItemManager.Init(dbClient);
+            this._roleplayWeaponManager.Init(dbClient);
+            this._roleplayEnemyManager.Init(dbClient);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable table = RoleplayDao.GetAll(dbClient);
+            if (table != null)
             {
-                DataTable table = RoleplayDao.GetAll(dbClient);
-                if (table != null)
+                foreach (DataRow dataRow in table.Rows)
                 {
-                    foreach (DataRow dataRow in table.Rows)
+                    if (!this._rolePlay.ContainsKey(Convert.ToInt32(dataRow["owner_id"])))
                     {
-                        if (!this._rolePlay.ContainsKey(Convert.ToInt32(dataRow["owner_id"])))
-                        {
-                            this._rolePlay.TryAdd(Convert.ToInt32(dataRow["owner_id"]), new RolePlayerManager(Convert.ToInt32(dataRow["owner_id"]), Convert.ToInt32(dataRow["hopital_id"]), Convert.ToInt32(dataRow["prison_id"])));
-                        }
-                        else
-                        {
-                            this.GetRolePlay(Convert.ToInt32(dataRow["owner_id"])).Update(Convert.ToInt32(dataRow["hopital_id"]), Convert.ToInt32(dataRow["prison_id"]));
-                        }
+                        this._rolePlay.TryAdd(Convert.ToInt32(dataRow["owner_id"]), new RolePlayerManager(Convert.ToInt32(dataRow["owner_id"]), Convert.ToInt32(dataRow["hopital_id"]), Convert.ToInt32(dataRow["prison_id"])));
+                    }
+                    else
+                    {
+                        this.GetRolePlay(Convert.ToInt32(dataRow["owner_id"])).Update(Convert.ToInt32(dataRow["hopital_id"]), Convert.ToInt32(dataRow["prison_id"]));
                     }
                 }
             }

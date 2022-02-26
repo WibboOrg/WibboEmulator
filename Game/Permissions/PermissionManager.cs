@@ -17,24 +17,21 @@ namespace Butterfly.Game.Permissions
             this._rights = new Dictionary<string, int>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this._rights.Clear();
             this._commands.Clear();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable table = EmulatorFuserightDao.GetAll(dbClient);
+
+            if (table == null)
             {
-                DataTable table = EmulatorFuserightDao.GetAll(dbClient);
+                return;
+            }
 
-                if (table == null)
-                {
-                    return;
-                }
-
-                foreach (DataRow dataRow in table.Rows)
-                {
-                    this._rights.Add((string)dataRow["fuse"], Convert.ToInt32(dataRow["rank"]));
-                }
+            foreach (DataRow dataRow in table.Rows)
+            {
+                this._rights.Add((string)dataRow["fuse"], Convert.ToInt32(dataRow["rank"]));
             }
         }
         public bool RankHasRight(int RankId, string Fuse)

@@ -29,7 +29,7 @@ namespace Butterfly.Game.Guilds
             this._backgroundColours = new Dictionary<int, GroupColour>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this._bases.Clear();
             this._symbols.Clear();
@@ -37,34 +37,31 @@ namespace Butterfly.Game.Guilds
             this._symbolColours.Clear();
             this._backgroundColours.Clear();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable dItems = GuildItemDao.GetAll(dbClient);
+
+            foreach (DataRow dRow in dItems.Rows)
             {
-                DataTable dItems = GuildItemDao.GetAll(dbClient);
-
-                foreach (DataRow dRow in dItems.Rows)
+                switch (dRow["type"].ToString())
                 {
-                    switch (dRow["type"].ToString())
-                    {
-                        case "base":
-                            this._bases.Add(new GroupBadgePart(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
-                            break;
+                    case "base":
+                        this._bases.Add(new GroupBadgePart(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
+                        break;
 
-                        case "symbol":
-                            this._symbols.Add(new GroupBadgePart(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
-                            break;
+                    case "symbol":
+                        this._symbols.Add(new GroupBadgePart(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
+                        break;
 
-                        case "color":
-                            this._baseColours.Add(new GroupColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
-                            break;
+                    case "color":
+                        this._baseColours.Add(new GroupColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                        break;
 
-                        case "color2":
-                            this._symbolColours.Add(Convert.ToInt32(dRow["id"]), new GroupColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
-                            break;
+                    case "color2":
+                        this._symbolColours.Add(Convert.ToInt32(dRow["id"]), new GroupColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                        break;
 
-                        case "color3":
-                            this._backgroundColours.Add(Convert.ToInt32(dRow["id"]), new GroupColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
-                            break;
-                    }
+                    case "color3":
+                        this._backgroundColours.Add(Convert.ToInt32(dRow["id"]), new GroupColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                        break;
                 }
             }
         }

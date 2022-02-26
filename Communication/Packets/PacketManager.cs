@@ -2,6 +2,7 @@
 using Butterfly.Communication.Packets.Incoming.Marketplace;
 using Butterfly.Communication.Packets.Incoming.Structure;
 using Butterfly.Communication.Packets.Incoming.WebSocket;
+using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.WebClients;
 using System;
@@ -20,7 +21,7 @@ namespace Butterfly.Communication.Packets
             this._incomingWebPackets = new Dictionary<int, IPacketWebEvent>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this.UnregisterAll();
 

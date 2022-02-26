@@ -218,22 +218,19 @@ namespace Butterfly.Game.Rooms
             }
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this._roomModels.Clear();
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable table = RoomModelDao.GetAll(dbClient);
+            if (table == null)
             {
-                DataTable table = RoomModelDao.GetAll(dbClient);
-                if (table == null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                foreach (DataRow dataRow in table.Rows)
-                {
-                    string str = (string)dataRow["id"];
-                    this._roomModels.Add(str, new RoomModel(str, Convert.ToInt32(dataRow["door_x"]), Convert.ToInt32(dataRow["door_y"]), (double)dataRow["door_z"], Convert.ToInt32(dataRow["door_dir"]), (string)dataRow["heightmap"], 0));
-                }
+            foreach (DataRow dataRow in table.Rows)
+            {
+                string str = (string)dataRow["id"];
+                this._roomModels.Add(str, new RoomModel(str, Convert.ToInt32(dataRow["door_x"]), Convert.ToInt32(dataRow["door_y"]), (double)dataRow["door_z"], Convert.ToInt32(dataRow["door_dir"]), (string)dataRow["heightmap"], 0));
             }
         }
 

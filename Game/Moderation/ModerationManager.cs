@@ -37,12 +37,12 @@ namespace Butterfly.Game.Moderation
             this._moderationCFHTopicActions = new Dictionary<int, List<ModerationPresetActions>>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
-            this.LoadMessageTopics();
-            this.LoadMessagePresets();
-            this.LoadPendingTickets();
-            this.LoadTicketResolution();
+            this.LoadMessageTopics(dbClient);
+            this.LoadMessagePresets(dbClient);
+            this.LoadPendingTickets(dbClient);
+            this.LoadTicketResolution(dbClient);
         }
 
         public Dictionary<string, List<ModerationPresetActions>> UserActionPresets
@@ -66,114 +66,103 @@ namespace Butterfly.Game.Moderation
             }
         }
 
-        public void LoadMessageTopics()
+        public void LoadMessageTopics(IQueryAdapter dbClient)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                DataTable moderationTopics = ModerationTopicDao.GetAll(dbClient);
+            DataTable moderationTopics = ModerationTopicDao.GetAll(dbClient);
 
-                if (moderationTopics != null)
+            if (moderationTopics != null)
+            {
+                foreach (DataRow Row in moderationTopics.Rows)
                 {
-                    foreach (DataRow Row in moderationTopics.Rows)
+                    if (!this._moderationCFHTopics.ContainsKey(Convert.ToInt32(Row["id"])))
                     {
-                        if (!this._moderationCFHTopics.ContainsKey(Convert.ToInt32(Row["id"])))
-                        {
-                            this._moderationCFHTopics.Add(Convert.ToInt32(Row["id"]), Convert.ToString(Row["caption"]));
-                        }
+                        this._moderationCFHTopics.Add(Convert.ToInt32(Row["id"]), Convert.ToString(Row["caption"]));
                     }
                 }
+            }
 
-                DataTable ModerationTopicsActions = null;
-                ModerationTopicsActions = ModerationTopicActionDao.GetAll(dbClient);
+            DataTable ModerationTopicsActions = ModerationTopicActionDao.GetAll(dbClient);
 
-                if (ModerationTopicsActions != null)
+            if (ModerationTopicsActions != null)
+            {
+                foreach (DataRow Row in ModerationTopicsActions.Rows)
                 {
-                    foreach (DataRow Row in ModerationTopicsActions.Rows)
+                    int ParentId = Convert.ToInt32(Row["parent_id"]);
+
+                    if (!this._moderationCFHTopicActions.ContainsKey(ParentId))
                     {
-                        int ParentId = Convert.ToInt32(Row["parent_id"]);
-
-                        if (!this._moderationCFHTopicActions.ContainsKey(ParentId))
-                        {
-                            this._moderationCFHTopicActions.Add(ParentId, new List<ModerationPresetActions>());
-                        }
-
-                        this._moderationCFHTopicActions[ParentId].Add(new ModerationPresetActions(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["parent_id"]), Convert.ToString(Row["type"]), Convert.ToString(Row["caption"]), Convert.ToString(Row["message_text"]),
-                            Convert.ToInt32(Row["mute_time"]), Convert.ToInt32(Row["ban_time"]), Convert.ToInt32(Row["ip_time"]), Convert.ToInt32(Row["trade_lock_time"]), Convert.ToString(Row["default_sanction"])));
+                        this._moderationCFHTopicActions.Add(ParentId, new List<ModerationPresetActions>());
                     }
+
+                    this._moderationCFHTopicActions[ParentId].Add(new ModerationPresetActions(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["parent_id"]), Convert.ToString(Row["type"]), Convert.ToString(Row["caption"]), Convert.ToString(Row["message_text"]),
+                        Convert.ToInt32(Row["mute_time"]), Convert.ToInt32(Row["ban_time"]), Convert.ToInt32(Row["ip_time"]), Convert.ToInt32(Row["trade_lock_time"]), Convert.ToString(Row["default_sanction"])));
                 }
             }
         }
 
-        public void LoadMessagePresets()
+        public void LoadMessagePresets(IQueryAdapter dbClient)
         {
             this._userMessagePresets.Clear();
             this._roomMessagePresets.Clear();
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+
+            DataTable table = ModerationPresetDao.GetAll(dbClient);
+            foreach (DataRow dataRow in table.Rows)
             {
-                DataTable table = ModerationPresetDao.GetAll(dbClient);
-                foreach (DataRow dataRow in table.Rows)
+                string str = (string)dataRow["message"];
+                switch (dataRow["type"].ToString().ToLower())
                 {
-                    string str = (string)dataRow["message"];
-                    switch (dataRow["type"].ToString().ToLower())
-                    {
-                        case "message":
-                            this._userMessagePresets.Add(str);
-                            continue;
-                        case "roommessage":
-                            this._roomMessagePresets.Add(str);
-                            continue;
-                        default:
-                            continue;
-                    }
+                    case "message":
+                        this._userMessagePresets.Add(str);
+                        continue;
+                    case "roommessage":
+                        this._roomMessagePresets.Add(str);
+                        continue;
+                    default:
+                        continue;
                 }
             }
         }
 
-        public void LoadTicketResolution()
+        public void LoadTicketResolution(IQueryAdapter dbClient)
         {
             this._ticketResolution1.Clear();
             this._ticketResolution2.Clear();
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+
+            DataTable table = ModerationResolutionDao.GetAll(dbClient);
+            foreach (DataRow dataRow in table.Rows)
             {
-                DataTable table = ModerationResolutionDao.GetAll(dbClient);
-                foreach (DataRow dataRow in table.Rows)
+                ModerationPresetActionMessages str = new ModerationPresetActionMessages((string)dataRow["title"], (string)dataRow["subtitle"], Convert.ToInt32(dataRow["ban_hours"]), Convert.ToInt32(dataRow["enable_mute"]), Convert.ToInt32(dataRow["mute_hours"]), Convert.ToInt32(dataRow["reminder"]), (string)dataRow["message"]);
+                switch (dataRow["type"].ToString())
                 {
-                    ModerationPresetActionMessages str = new ModerationPresetActionMessages((string)dataRow["title"], (string)dataRow["subtitle"], Convert.ToInt32(dataRow["ban_hours"]), Convert.ToInt32(dataRow["enable_mute"]), Convert.ToInt32(dataRow["mute_hours"]), Convert.ToInt32(dataRow["reminder"]), (string)dataRow["message"]);
-                    switch (dataRow["type"].ToString())
-                    {
-                        case "Sexual":
-                            this._ticketResolution1.Add(str);
-                            continue;
-                        case "PII":
-                            this._ticketResolution2.Add(str);
-                            continue;
-                        default:
-                            continue;
-                    }
+                    case "Sexual":
+                        this._ticketResolution1.Add(str);
+                        continue;
+                    case "PII":
+                        this._ticketResolution2.Add(str);
+                        continue;
+                    default:
+                        continue;
                 }
             }
         }
 
-        public void LoadPendingTickets()
+        public void LoadPendingTickets(IQueryAdapter dbClient)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable table = ModerationTicketDao.GetAll(dbClient);
+            if (table == null)
             {
-                DataTable table = ModerationTicketDao.GetAll(dbClient);
-                if (table == null)
+                return;
+            }
+
+            foreach (DataRow dataRow in table.Rows)
+            {
+                ModerationTicket ModerationTicket = new ModerationTicket(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["score"]), Convert.ToInt32(dataRow["type"]), Convert.ToInt32(dataRow["sender_id"]), Convert.ToInt32(dataRow["reported_id"]), (string)dataRow["message"], Convert.ToInt32(dataRow["room_id"]), (string)dataRow["room_name"], (double)dataRow["timestamp"]);
+                if (dataRow["status"].ToString().ToLower() == "picked")
                 {
-                    return;
+                    ModerationTicket.Pick(Convert.ToInt32(dataRow["moderator_id"]), false);
                 }
 
-                foreach (DataRow dataRow in table.Rows)
-                {
-                    ModerationTicket ModerationTicket = new ModerationTicket(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["score"]), Convert.ToInt32(dataRow["type"]), Convert.ToInt32(dataRow["sender_id"]), Convert.ToInt32(dataRow["reported_id"]), (string)dataRow["message"], Convert.ToInt32(dataRow["room_id"]), (string)dataRow["room_name"], (double)dataRow["timestamp"]);
-                    if (dataRow["status"].ToString().ToLower() == "picked")
-                    {
-                        ModerationTicket.Pick(Convert.ToInt32(dataRow["moderator_id"]), false);
-                    }
-
-                    this._tickets.Add(ModerationTicket);
-                }
+                this._tickets.Add(ModerationTicket);
             }
         }
 

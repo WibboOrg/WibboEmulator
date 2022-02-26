@@ -108,7 +108,8 @@ namespace Butterfly
                 EncryptionV2.Initialize(new RSAKeys());
 
                 _languageManager = new LanguageManager();
-                _languageManager.Init();
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    _languageManager.Init(dbClient);
 
                 _game = new GameCore();
                 _game.StartGameLoop();

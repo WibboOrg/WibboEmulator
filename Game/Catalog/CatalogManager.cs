@@ -38,7 +38,7 @@ namespace Butterfly.Game.Catalog
             this._badges = new List<string>();
         }
 
-        public void Init(ItemDataManager ItemDataManager)
+        public void Init(IQueryAdapter dbClient, ItemDataManager ItemDataManager)
         {
             if (this._pages.Count > 0)
             {
@@ -75,47 +75,44 @@ namespace Butterfly.Game.Catalog
                 this._races.Clear();
             }
 
-            this._voucherManager.Init();
+            this._voucherManager.Init(dbClient);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable CatalogueItems = CatalogItemDao.GetAll(dbClient);
+
+            if (CatalogueItems != null)
             {
-                DataTable CatalogueItems = CatalogItemDao.GetAll(dbClient);
-
-                if (CatalogueItems != null)
+                foreach (DataRow Row in CatalogueItems.Rows)
                 {
-                    foreach (DataRow Row in CatalogueItems.Rows)
+                    if (Convert.ToInt32(Row["amount"]) <= 0)
                     {
-                        if (Convert.ToInt32(Row["amount"]) <= 0)
-                        {
-                            continue;
-                        }
-
-                        int ItemId = Convert.ToInt32(Row["id"]);
-                        int PageId = Convert.ToInt32(Row["page_id"]);
-                        int BaseId = Convert.ToInt32(Row["item_id"]);
-
-                        if (!ItemDataManager.GetItem(BaseId, out ItemData Data))
-                        {
-                            Console.WriteLine("Couldn't load Catalog Item " + ItemId + ", no furniture record found.");
-                            continue;
-                        }
-
-                        if (!this._badges.Contains((string)Row["badge"]))
-                        {
-                            this._badges.Add((string)Row["badge"]);
-                        }
-
-                        if (!this._items.ContainsKey(PageId))
-                        {
-                            this._items[PageId] = new Dictionary<int, CatalogItem>();
-                        }
-
-                        this._items[PageId].Add(Convert.ToInt32(Row["id"]), new CatalogItem(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["item_id"]),
-                            Data, Convert.ToString(Row["catalog_name"]), Convert.ToInt32(Row["page_id"]), Convert.ToInt32(Row["cost_credits"]), Convert.ToInt32(Row["cost_pixels"]), Convert.ToInt32(Row["cost_diamonds"]),
-                            Convert.ToInt32(Row["amount"]), Convert.ToInt32(Row["limited_sells"]), Convert.ToInt32(Row["limited_stack"]), ButterflyEnvironment.EnumToBool(Row["offer_active"].ToString()), Convert.ToString(Row["badge"])));
-
-                        this._itemsPage.Add(Convert.ToInt32(Row["id"]), PageId);
+                        continue;
                     }
+
+                    int ItemId = Convert.ToInt32(Row["id"]);
+                    int PageId = Convert.ToInt32(Row["page_id"]);
+                    int BaseId = Convert.ToInt32(Row["item_id"]);
+
+                    if (!ItemDataManager.GetItem(BaseId, out ItemData Data))
+                    {
+                        Console.WriteLine("Couldn't load Catalog Item " + ItemId + ", no furniture record found.");
+                        continue;
+                    }
+
+                    if (!this._badges.Contains((string)Row["badge"]))
+                    {
+                        this._badges.Add((string)Row["badge"]);
+                    }
+
+                    if (!this._items.ContainsKey(PageId))
+                    {
+                        this._items[PageId] = new Dictionary<int, CatalogItem>();
+                    }
+
+                    this._items[PageId].Add(Convert.ToInt32(Row["id"]), new CatalogItem(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["item_id"]),
+                        Data, Convert.ToString(Row["catalog_name"]), Convert.ToInt32(Row["page_id"]), Convert.ToInt32(Row["cost_credits"]), Convert.ToInt32(Row["cost_pixels"]), Convert.ToInt32(Row["cost_diamonds"]),
+                        Convert.ToInt32(Row["amount"]), Convert.ToInt32(Row["limited_sells"]), Convert.ToInt32(Row["limited_stack"]), ButterflyEnvironment.EnumToBool(Row["offer_active"].ToString()), Convert.ToString(Row["badge"])));
+
+                    this._itemsPage.Add(Convert.ToInt32(Row["id"]), PageId);
                 }
 
                 DataTable CatalogPages = CatalogPageDao.GetAll(dbClient);

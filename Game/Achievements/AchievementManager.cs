@@ -23,35 +23,32 @@ namespace Butterfly.Game.Achievements
             this._achievements = new Dictionary<string, AchievementData>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this._achievements.Clear();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable table = EmulatorAchievementDao.GetAll(dbClient);
+            foreach (DataRow dataRow in table.Rows)
             {
-                DataTable table = EmulatorAchievementDao.GetAll(dbClient);
-                foreach (DataRow dataRow in table.Rows)
+                int Id = Convert.ToInt32(dataRow["id"]);
+                string Category = (string)dataRow["category"];
+                string GroupName = (string)dataRow["group_name"];
+
+                if (!GroupName.StartsWith("ACH_"))
                 {
-                    int Id = Convert.ToInt32(dataRow["id"]);
-                    string Category = (string)dataRow["category"];
-                    string GroupName = (string)dataRow["group_name"];
+                    GroupName = "ACH_" + GroupName;
+                }
 
-                    if (!GroupName.StartsWith("ACH_"))
-                    {
-                        GroupName = "ACH_" + GroupName;
-                    }
-
-                    AchievementLevel Level = new AchievementLevel(Convert.ToInt32(dataRow["level"]), Convert.ToInt32(dataRow["reward_pixels"]), Convert.ToInt32(dataRow["reward_points"]), Convert.ToInt32(dataRow["progress_needed"]));
-                    if (!this._achievements.ContainsKey(GroupName))
-                    {
-                        AchievementData achievement = new AchievementData(Id, GroupName, Category);
-                        achievement.AddLevel(Level);
-                        this._achievements.Add(GroupName, achievement);
-                    }
-                    else
-                    {
-                        this._achievements[GroupName].AddLevel(Level);
-                    }
+                AchievementLevel Level = new AchievementLevel(Convert.ToInt32(dataRow["level"]), Convert.ToInt32(dataRow["reward_pixels"]), Convert.ToInt32(dataRow["reward_points"]), Convert.ToInt32(dataRow["progress_needed"]));
+                if (!this._achievements.ContainsKey(GroupName))
+                {
+                    AchievementData achievement = new AchievementData(Id, GroupName, Category);
+                    achievement.AddLevel(Level);
+                    this._achievements.Add(GroupName, achievement);
+                }
+                else
+                {
+                    this._achievements[GroupName].AddLevel(Level);
                 }
             }
         }

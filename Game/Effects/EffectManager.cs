@@ -22,36 +22,33 @@ namespace Butterfly.Game.Effects
             this._effectsStaff = new List<int>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this._effects.Clear();
             this._effectsStaff.Clear();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable table = EmulatorEffectDao.GetAll(dbClient);
+            if (table == null)
             {
-                DataTable table = EmulatorEffectDao.GetAll(dbClient);
-                if (table == null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                foreach (DataRow dataRow in table.Rows)
-                {
-                    int EffectId = Convert.ToInt32(dataRow["id"]);
+            foreach (DataRow dataRow in table.Rows)
+            {
+                int effectId = Convert.ToInt32(dataRow["id"]);
 
-                    if (ButterflyEnvironment.EnumToBool((string)dataRow["only_staff"]))
+                if (ButterflyEnvironment.EnumToBool((string)dataRow["only_staff"]))
+                {
+                    if (!this._effectsStaff.Contains(effectId))
                     {
-                        if (!this._effectsStaff.Contains(EffectId))
-                        {
-                            this._effectsStaff.Add(EffectId);
-                        }
+                        this._effectsStaff.Add(effectId);
                     }
-                    else
+                }
+                else
+                {
+                    if (!this._effects.Contains(effectId))
                     {
-                        if (!this._effects.Contains(EffectId))
-                        {
-                            this._effects.Add(EffectId);
-                        }
+                        this._effects.Add(effectId);
                     }
                 }
             }

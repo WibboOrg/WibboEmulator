@@ -15,16 +15,14 @@ namespace Butterfly.Game.Catalog.Vouchers
             this._vouchers = new Dictionary<string, Voucher>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             if (this._vouchers.Count > 0)
             {
                 this._vouchers.Clear();
             }
 
-            DataTable GetVouchers = null;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                GetVouchers = CatalogVoucherDao.GetAll(dbClient);
+            DataTable GetVouchers = CatalogVoucherDao.GetAll(dbClient);
 
             if (GetVouchers != null)
             {

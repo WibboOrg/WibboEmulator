@@ -15,26 +15,22 @@ namespace Butterfly.Game.Chat.Styles
             this._styles = new Dictionary<int, ChatStyle>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             if (this._styles.Count > 0)
             {
                 this._styles.Clear();
             }
 
-            DataTable Table = null;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                Table = EmulatorChatStyleDao.GetAll(dbClient);
+            DataTable Table = EmulatorChatStyleDao.GetAll(dbClient);
 
-                if (Table != null)
+            if (Table != null)
+            {
+                foreach (DataRow Row in Table.Rows)
                 {
-                    foreach (DataRow Row in Table.Rows)
+                    if (!this._styles.ContainsKey(Convert.ToInt32(Row["id"])))
                     {
-                        if (!this._styles.ContainsKey(Convert.ToInt32(Row["id"])))
-                        {
-                            this._styles.Add(Convert.ToInt32(Row["id"]), new ChatStyle(Convert.ToInt32(Row["id"]), Convert.ToString(Row["name"]), Convert.ToString(Row["required_right"])));
-                        }
+                        this._styles.Add(Convert.ToInt32(Row["id"]), new ChatStyle(Convert.ToInt32(Row["id"]), Convert.ToString(Row["name"]), Convert.ToString(Row["required_right"])));
                     }
                 }
             }

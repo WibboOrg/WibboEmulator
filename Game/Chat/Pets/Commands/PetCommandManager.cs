@@ -15,13 +15,11 @@ namespace Butterfly.Game.Chat.Pets.Commands
             this._petCommands = new Dictionary<string, PetCommand>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this._petCommands.Clear();
 
-            DataTable table;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                table = EmulatorCommandPetDao.GetAll(dbClient);
+            DataTable table = EmulatorCommandPetDao.GetAll(dbClient);
 
             if (table == null)
             {

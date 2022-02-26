@@ -207,18 +207,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     case InteractionType.BADGE_TROC:
                         {
-                            string[] BadgeNotAllowedTroc = { "WBASSO", "ADM", "PRWRD1", "GPHWIB", "wibbo.helpeur", "WIBARC", "CRPOFFI", "ZEERSWS", "PRWRD1", "WBI1", "WBI2", "WBI3", "WBI4", "WBI5", "WBI6", "WBI7", "WBI8", "WBI9", "CASINOB", "WPREMIUM", "VIPFREE" };
-                            if (BadgeNotAllowedTroc.Contains(Data) || !ButterflyEnvironment.GetGame().GetCatalog().HasBadge(Data) || Data.StartsWith("MRUN"))
+                            if (ButterflyEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(Data) || !ButterflyEnvironment.GetGame().GetCatalog().HasBadge(Data))
                             {
                                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", Session.Langue));
                                 return;
                             }
 
-                            if (!Session.GetHabbo().GetBadgeComponent().HasBadge(Data))
-                            {
-                                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", Session.Langue));
-                                return;
-                            }
                             if (!Data.StartsWith("perso_"))
                             {
                                 Session.GetHabbo().GetBadgeComponent().RemoveBadge(Data);
@@ -231,16 +225,10 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         }
 
                     case InteractionType.BADGE_DISPLAY:
-                        string[] BadgeNotAllowed = { "WBASSO", "ADM", "PRWRD1", "GPHWIB", "wibbo.helpeur", "WIBARC", "CRPOFFI", "ZEERSWS", "PRWRD1", "WBI1", "WBI2", "WBI3", "WBI4", "WBI5", "WBI6", "WBI7", "CASINOB" };
-                        if (BadgeNotAllowed.Contains(Data))
+                        if (ButterflyEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(Data) || !Session.GetHabbo().GetBadgeComponent().HasBadge(Data))
                         {
                             Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", Session.Langue));
                             Session.SendPacket(new PurchaseOKComposer());
-                            return;
-                        }
-
-                        if (!Session.GetHabbo().GetBadgeComponent().HasBadge(Data))
-                        {
                             return;
                         }
 

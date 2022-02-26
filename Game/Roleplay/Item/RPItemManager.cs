@@ -27,28 +27,25 @@ namespace Butterfly.Game.Roleplay
             return item;
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this._items.Clear();
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            DataTable table = RoleplayItemDao.GetAll(dbClient);
+            if (table != null)
             {
-                DataTable table = RoleplayItemDao.GetAll(dbClient);
-                if (table != null)
+                foreach (DataRow dataRow in table.Rows)
                 {
-                    foreach (DataRow dataRow in table.Rows)
+                    if (!this._items.ContainsKey(Convert.ToInt32(dataRow["id"])))
                     {
-                        if (!this._items.ContainsKey(Convert.ToInt32(dataRow["id"])))
-                        {
-                            this._items.Add(Convert.ToInt32(dataRow["id"]),
-                                new RPItem(Convert.ToInt32(dataRow["id"]),
-                                (string)dataRow["name"],
-                                (string)dataRow["desc"],
-                                Convert.ToInt32(dataRow["price"]),
-                                (string)dataRow["type"],
-                                Convert.ToInt32(dataRow["value"]),
-                                ((string)dataRow["allowstack"]) == "1",
-                                RPItemCategorys.GetTypeFromString((string)dataRow["category"])));
-                        }
+                        this._items.Add(Convert.ToInt32(dataRow["id"]),
+                            new RPItem(Convert.ToInt32(dataRow["id"]),
+                            (string)dataRow["name"],
+                            (string)dataRow["desc"],
+                            Convert.ToInt32(dataRow["price"]),
+                            (string)dataRow["type"],
+                            Convert.ToInt32(dataRow["value"]),
+                            ((string)dataRow["allowstack"]) == "1",
+                            RPItemCategorys.GetTypeFromString((string)dataRow["category"])));
                     }
                 }
             }

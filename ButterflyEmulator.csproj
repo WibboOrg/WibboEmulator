@@ -691,6 +691,7 @@
     <Compile Include="Database\Daos\User\UserWebsocketDao.cs" />
     <Compile Include="Database\Daos\WordFilterRetroDao.cs" />
     <Compile Include="Game\Animation\AnimationManager.cs" />
+    <Compile Include="Game\Badges\BadgeManager.cs" />
     <Compile Include="Game\Catalog\CatalogBot.cs" />
     <Compile Include="Game\Catalog\Marketplace\MarketOffer.cs" />
     <Compile Include="Game\Catalog\Marketplace\MarketplaceManager.cs" />

@@ -1,4 +1,5 @@
-﻿using Butterfly.Game.Chat.Commands;
+﻿using Butterfly.Database.Interfaces;
+using Butterfly.Game.Chat.Commands;
 using Butterfly.Game.Chat.Emotions;
 using Butterfly.Game.Chat.Filter;
 using Butterfly.Game.Chat.Mentions;
@@ -52,12 +53,12 @@ namespace Butterfly.Game.Chat
             this._filter = new WordFilterManager();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
-            this._petCommands.Init();
-            this._commands.Init();
-            this._chatStyles.Init();
-            this._filter.Init();
+            this._petCommands.Init(dbClient);
+            this._commands.Init(dbClient);
+            this._chatStyles.Init(dbClient);
+            this._filter.Init(dbClient);
         }
 
         public ChatEmotionsManager GetEmotions()

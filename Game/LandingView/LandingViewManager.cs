@@ -16,18 +16,15 @@ namespace Butterfly.Game.LandingView
             this.HotelViewPromosIndexers = new List<Promotion>();
         }
 
-        public void Init()
+        public void Init(IQueryAdapter dbClient)
         {
             this.HotelViewPromosIndexers.Clear();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                DataTable dTable = EmulatorHotelviewPromoDao.GetAll(dbClient);
+            DataTable dTable = EmulatorHotelviewPromoDao.GetAll(dbClient);
 
-                foreach (DataRow dRow in dTable.Rows)
-                {
-                    this.HotelViewPromosIndexers.Add(new Promotion(Convert.ToInt32(dRow[0]), (string)dRow[1], (string)dRow[2], (string)dRow[3], Convert.ToInt32(dRow[4]), (string)dRow[5], (string)dRow[6]));
-                }
+            foreach (DataRow dRow in dTable.Rows)
+            {
+                this.HotelViewPromosIndexers.Add(new Promotion(Convert.ToInt32(dRow[0]), (string)dRow[1], (string)dRow[2], (string)dRow[3], Convert.ToInt32(dRow[4]), (string)dRow[5], (string)dRow[6]));
             }
         }
 
