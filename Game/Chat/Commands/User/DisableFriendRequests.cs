@@ -7,14 +7,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Session.GetHabbo().HasFriendRequestsDisabled)
+            if (Session.GetUser().HasFriendRequestsDisabled)
             {
-                Session.GetHabbo().HasFriendRequestsDisabled = false;
+                Session.GetUser().HasFriendRequestsDisabled = false;
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.true", Session.Langue));
             }
             else
             {
-                Session.GetHabbo().HasFriendRequestsDisabled = true;
+                Session.GetUser().HasFriendRequestsDisabled = true;
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.false", Session.Langue));
             }
 

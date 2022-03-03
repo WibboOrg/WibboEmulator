@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || !room.CheckRights(Session))
             {
                 return;
@@ -23,7 +23,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int Id = Packet.PopInt();
             string str = Packet.PopString();
 
-            Item userItem = Session.GetHabbo().GetInventoryComponent().GetItem(Id);
+            Item userItem = Session.GetUser().GetInventoryComponent().GetItem(Id);
             if (userItem == null)
             {
                 return;
@@ -46,7 +46,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 ItemDao.UpdateRoomIdAndUserId(dbClient, Id, room.Id, room.RoomData.OwnerId);
             }
 
-            Session.GetHabbo().GetInventoryComponent().RemoveItem(Id);
+            Session.GetUser().GetInventoryComponent().RemoveItem(Id);
         }
 
         private string WallPositionCheck(string wallPosition)

@@ -73,18 +73,18 @@ namespace Butterfly.Game.Quests
 
         public void ProgressUserQuest(Client Session, QuestType QuestType, int EventData = 0)
         {
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().CurrentQuestId <= 0)
+            if (Session == null || Session.GetUser() == null || Session.GetUser().CurrentQuestId <= 0)
             {
                 return;
             }
 
-            Quest quest = this.GetQuest(Session.GetHabbo().CurrentQuestId);
+            Quest quest = this.GetQuest(Session.GetUser().CurrentQuestId);
             if (quest == null || quest.GoalType != QuestType)
             {
                 return;
             }
 
-            int questProgress = Session.GetHabbo().GetQuestProgress(quest.Id);
+            int questProgress = Session.GetUser().GetQuestProgress(quest.Id);
             bool flag = false;
             int progress;
             if (QuestType != QuestType.EXPLORE_FIND_ITEM)
@@ -107,10 +107,10 @@ namespace Butterfly.Game.Quests
             }
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserQuestDao.Update(dbClient, Session.GetHabbo().Id, quest.Id, progress);
+                UserQuestDao.Update(dbClient, Session.GetUser().Id, quest.Id, progress);
             }
 
-            Session.GetHabbo().Quests[Session.GetHabbo().CurrentQuestId] = progress;
+            Session.GetUser().Quests[Session.GetUser().CurrentQuestId] = progress;
             Session.SendPacket(new QuestStartedComposer(Session, quest));
 
             if (!flag)
@@ -118,11 +118,11 @@ namespace Butterfly.Game.Quests
                 return;
             }
 
-            Session.GetHabbo().CurrentQuestId = 0;
-            Session.GetHabbo().LastCompleted = quest.Id;
+            Session.GetUser().CurrentQuestId = 0;
+            Session.GetUser().LastCompleted = quest.Id;
             Session.SendPacket(new QuestCompletedComposer(Session, quest));
-            Session.GetHabbo().Duckets += quest.Reward;
-            Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, 1));
+            Session.GetUser().Duckets += quest.Reward;
+            Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().Duckets, 1));
             this.SendQuestList(Session);
         }
 
@@ -153,8 +153,8 @@ namespace Butterfly.Game.Quests
                 }
                 if (quest.Number >= dictionary1[quest.Category])
                 {
-                    int questProgress = Session.GetHabbo().GetQuestProgress(quest.Id);
-                    if (Session.GetHabbo().CurrentQuestId != quest.Id && questProgress >= (long)quest.GoalData)
+                    int questProgress = Session.GetUser().GetQuestProgress(quest.Id);
+                    if (Session.GetUser().CurrentQuestId != quest.Id && questProgress >= (long)quest.GoalData)
                     {
                         dictionary1[quest.Category] = quest.Number + 1;
                     }
@@ -186,22 +186,22 @@ namespace Butterfly.Game.Quests
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserQuestDao.Replace(dbClient, Session.GetHabbo().Id, quest.Id);
+                UserQuestDao.Replace(dbClient, Session.GetUser().Id, quest.Id);
             }
 
-            Session.GetHabbo().CurrentQuestId = quest.Id;
+            Session.GetUser().CurrentQuestId = quest.Id;
             this.SendQuestList(Session);
             Session.SendPacket(new QuestStartedComposer(Session, quest));
         }
 
         public void GetCurrentQuest(Client Session)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!Session.GetUser().InRoom)
             {
                 return;
             }
 
-            Quest quest = this.GetQuest(Session.GetHabbo().LastCompleted);
+            Quest quest = this.GetQuest(Session.GetUser().LastCompleted);
             Quest nextQuestInSeries = this.GetNextQuestInSeries(quest.Category, quest.Number + 1);
             if (nextQuestInSeries == null)
             {
@@ -210,26 +210,26 @@ namespace Butterfly.Game.Quests
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserQuestDao.Replace(dbClient, Session.GetHabbo().Id, nextQuestInSeries.Id);
+                UserQuestDao.Replace(dbClient, Session.GetUser().Id, nextQuestInSeries.Id);
             }
 
-            Session.GetHabbo().CurrentQuestId = nextQuestInSeries.Id;
+            Session.GetUser().CurrentQuestId = nextQuestInSeries.Id;
             this.SendQuestList(Session);
             Session.SendPacket(new QuestStartedComposer(Session, nextQuestInSeries));
         }
 
         public void CancelQuest(Client Session)
         {
-            Quest quest = this.GetQuest(Session.GetHabbo().CurrentQuestId);
+            Quest quest = this.GetQuest(Session.GetUser().CurrentQuestId);
             if (quest == null)
             {
                 return;
             }
 
-            Session.GetHabbo().CurrentQuestId = 0;
+            Session.GetUser().CurrentQuestId = 0;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserQuestDao.Delete(dbClient, Session.GetHabbo().Id, quest.Id);
+                UserQuestDao.Delete(dbClient, Session.GetUser().Id, quest.Id);
             }
 
             Session.SendPacket(new QuestAbortedComposer());

@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         public void Parse(Client Session, ClientPacket Packet)
         {
             int id = Packet.PopInt();
-            CatalogItem Item = ButterflyEnvironment.GetGame().GetCatalog().FindItem(id, Session.GetHabbo().Rank);
+            CatalogItem Item = ButterflyEnvironment.GetGame().GetCatalog().FindItem(id, Session.GetUser().Rank);
             if (Item == null)
             {
                 return;
@@ -22,7 +22,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Page.Enabled || Page.MinimumRank > Session.GetHabbo().Rank)
+            if (!Page.Enabled || Page.MinimumRank > Session.GetUser().Rank)
             {
                 return;
             }

@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (Session == null || Session.GetUser() == null || !Session.GetUser().InRoom)
             {
                 return;
             }
@@ -19,7 +19,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int ItemId = Packet.PopInt();
             int GroupId = Packet.PopInt();
 
-            Item Item = Session.GetHabbo().CurrentRoom.GetRoomItemHandler().GetItem(ItemId);
+            Item Item = Session.GetUser().CurrentRoom.GetRoomItemHandler().GetItem(ItemId);
             if (Item == null)
             {
                 return;
@@ -35,7 +35,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Session.SendPacket(new GroupFurniSettingsComposer(Group, ItemId, Session.GetHabbo().Id));
+            Session.SendPacket(new GroupFurniSettingsComposer(Group, ItemId, Session.GetUser().Id));
             Session.SendPacket(new GroupInfoComposer(Group, Session, false));
         }
     }

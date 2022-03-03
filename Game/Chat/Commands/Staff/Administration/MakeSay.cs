@@ -15,13 +15,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             string username = Params[1];
             string Message = CommandManager.MergeParams(Params, 2);
 
-            RoomUser roomUserByHabbo = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            roomUserByHabbo.OnChat(Message, 0, false);
+            roomUserByUserId.OnChat(Message, 0, false);
 
         }
     }

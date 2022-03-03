@@ -1,7 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Handshake;
 using Butterfly.Communication.Packets.Outgoing.Help;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
@@ -93,7 +92,7 @@ namespace Butterfly.Game.Users
         public int CurrentQuestId;
         public int LastCompleted;
         public int LastQuestId;
-        public bool HabboinfoSaved;
+        public bool InfoSaved;
         public bool AcceptTrading;
         public bool HideInRoom;
         public int PubDectectCount = 0;
@@ -302,14 +301,14 @@ namespace Butterfly.Game.Users
 
         public void PrepareRoom(int Id, string Password = "", bool override_doorbell = false)
         {
-            if (this.GetClient() == null || this.GetClient().GetHabbo() == null)
+            if (this.GetClient() == null || this.GetClient().GetUser() == null)
             {
                 return;
             }
 
-            if (this.GetClient().GetHabbo().InRoom)
+            if (this.GetClient().GetUser().InRoom)
             {
-                Room OldRoom = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.GetClient().GetHabbo().CurrentRoomId);
+                Room OldRoom = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.GetClient().GetUser().CurrentRoomId);
 
                 if (OldRoom != null)
                 {
@@ -324,21 +323,21 @@ namespace Butterfly.Game.Users
                 return;
             }
 
-            if (this.GetClient().GetHabbo().IsTeleporting && this.GetClient().GetHabbo().TeleportingRoomID != Id)
+            if (this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID != Id)
             {
-                this.GetClient().GetHabbo().TeleportingRoomID = 0;
-                this.GetClient().GetHabbo().IsTeleporting = false;
-                this.GetClient().GetHabbo().TeleporterId = 0;
+                this.GetClient().GetUser().TeleportingRoomID = 0;
+                this.GetClient().GetUser().IsTeleporting = false;
+                this.GetClient().GetUser().TeleporterId = 0;
                 this.GetClient().SendPacket(new CloseConnectionComposer());
 
                 return;
             }
 
-            if (!this.GetClient().GetHabbo().HasFuse("fuse_mod") && room.UserIsBanned(this.GetClient().GetHabbo().Id))
+            if (!this.GetClient().GetUser().HasFuse("fuse_mod") && room.UserIsBanned(this.GetClient().GetUser().Id))
             {
-                if (room.HasBanExpired(this.GetClient().GetHabbo().Id))
+                if (room.HasBanExpired(this.GetClient().GetUser().Id))
                 {
-                    room.RemoveBan(this.GetClient().GetHabbo().Id);
+                    room.RemoveBan(this.GetClient().GetUser().Id);
                 }
                 else
                 {
@@ -349,7 +348,7 @@ namespace Butterfly.Game.Users
                 }
             }
 
-            if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.GetClient().GetHabbo().HasFuse("fuse_enter_full_rooms") && !ButterflyEnvironment.GetGame().GetPermissionManager().RankHasRight(this.GetClient().GetHabbo().Rank, "fuse_enter_full_rooms"))
+            if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.GetClient().GetUser().HasFuse("fuse_enter_full_rooms") && !ButterflyEnvironment.GetGame().GetPermissionManager().RankHasRight(this.GetClient().GetUser().Rank, "fuse_enter_full_rooms"))
             {
                 if (room.CloseFullRoom)
                 {
@@ -357,7 +356,7 @@ namespace Butterfly.Game.Users
                     room.CloseFullRoom = false;
                 }
 
-                if (this.GetClient().GetHabbo().Id != room.RoomData.OwnerId)
+                if (this.GetClient().GetUser().Id != room.RoomData.OwnerId)
                 {
                     this.GetClient().SendPacket(new CantConnectComposer(1));
 
@@ -368,10 +367,9 @@ namespace Butterfly.Game.Users
 
             string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "SeasonRunOff", "CasinoRunOff", "WibboParty", "MovieRunOff", "officialrooms", "Seonsaengnim", "Jason", "ElkunRUN" };
 
-            //if (!this.GetClient().GetHabbo().HasFuse("fuse_mod"))
-            if (this.GetClient().GetHabbo().Rank < 8)
+            if (this.GetClient().GetUser().Rank < 8)
             {
-                if (!(this.GetClient().GetHabbo().HasFuse("fuse_enter_any_room") && !OwnerEnterNotAllowed.Any(x => x == room.RoomData.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetHabbo().IsTeleporting && this.GetClient().GetHabbo().TeleportingRoomID == room.Id))
+                if (!(this.GetClient().GetUser().HasFuse("fuse_enter_any_room") && !OwnerEnterNotAllowed.Any(x => x == room.RoomData.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID == room.Id))
                 {
                     if (room.RoomData.State == 1 && (!override_doorbell && !room.CheckRights(this.GetClient())))
                     {
@@ -382,9 +380,9 @@ namespace Butterfly.Game.Users
                         else
                         {
                             this.GetClient().SendPacket(new DoorbellComposer(""));
-                            room.SendPacket(new DoorbellComposer(this.GetClient().GetHabbo().Username), true);
-                            this.GetClient().GetHabbo().LoadingRoomId = Id;
-                            this.GetClient().GetHabbo().AllowDoorBell = false;
+                            room.SendPacket(new DoorbellComposer(this.GetClient().GetUser().Username), true);
+                            this.GetClient().GetUser().LoadingRoomId = Id;
+                            this.GetClient().GetUser().AllowDoorBell = false;
                         }
                         return;
                     }
@@ -412,8 +410,8 @@ namespace Butterfly.Game.Users
             }
             else
             {
-                this.GetClient().GetHabbo().LoadingRoomId = Id;
-                this.GetClient().GetHabbo().AllowDoorBell = true;
+                this.GetClient().GetUser().LoadingRoomId = Id;
+                this.GetClient().GetUser().AllowDoorBell = true;
             }
 
         }
@@ -444,7 +442,7 @@ namespace Butterfly.Game.Users
             }
 
             Session.SendPacket(new RoomPropertyComposer("landscape", Room.RoomData.Landscape));
-            Session.SendPacket(new RoomRatingComposer(Room.RoomData.Score, !(Session.GetHabbo().RatedRooms.Contains(Room.Id) || Room.RoomData.OwnerId == Session.GetHabbo().Id)));
+            Session.SendPacket(new RoomRatingComposer(Room.RoomData.Score, !(Session.GetUser().RatedRooms.Contains(Room.Id) || Room.RoomData.OwnerId == Session.GetUser().Id)));
 
 
             return true;
@@ -478,9 +476,9 @@ namespace Butterfly.Game.Users
 
             Logging.WriteLine(this.Username + " has logged out.");
 
-            if (!this.HabboinfoSaved)
+            if (!this.InfoSaved)
             {
-                this.HabboinfoSaved = true;
+                this.InfoSaved = true;
                 TimeSpan TimeOnline = DateTime.Now - this.OnlineTime;
                 int TimeOnlineSec = (int)TimeOnline.TotalSeconds;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -516,7 +514,7 @@ namespace Butterfly.Game.Users
                 {
                     requester.SendPacket(new OnGuideSessionEndedComposer(1));
 
-                    requester.GetHabbo().GuideOtherUserId = 0;
+                    requester.GetUser().GuideOtherUserId = 0;
                 }
             }
             if (this.OnDuty)

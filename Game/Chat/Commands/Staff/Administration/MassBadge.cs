@@ -18,9 +18,9 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             foreach (Client Client in ButterflyEnvironment.GetGame().GetClientManager().GetClients.ToList())
             {
-                if (Client.GetHabbo() != null)
+                if (Client.GetUser() != null)
                 {
-                    Client.GetHabbo().GetBadgeComponent().GiveBadge(Badge, true);
+                    Client.GetUser().GetBadgeComponent().GiveBadge(Badge, true);
                     Client.SendPacket(new ReceiveBadgeComposer(Badge));
                     Client.SendNotification("Vous venez de recevoir le badge : " + Badge + " !");
                 }

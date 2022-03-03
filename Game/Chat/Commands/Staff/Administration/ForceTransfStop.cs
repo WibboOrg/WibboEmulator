@@ -15,21 +15,21 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             string username = Params[1];
 
-            RoomUser roomUserByHabbo = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            if (roomUserByHabbo.transformation && !roomUserByHabbo.IsSpectator)
+            if (roomUserByUserId.transformation && !roomUserByUserId.IsSpectator)
             {
-                Room RoomClient = roomUserByHabbo.Room;
+                Room RoomClient = roomUserByUserId.Room;
                 if (RoomClient != null)
                 {
-                    roomUserByHabbo.transformation = false;
+                    roomUserByUserId.transformation = false;
 
-                    RoomClient.SendPacket(new UserRemoveComposer(roomUserByHabbo.VirtualId));
-                    RoomClient.SendPacket(new UsersComposer(roomUserByHabbo));
+                    RoomClient.SendPacket(new UserRemoveComposer(roomUserByUserId.VirtualId));
+                    RoomClient.SendPacket(new UsersComposer(roomUserByUserId));
                 }
             }
 

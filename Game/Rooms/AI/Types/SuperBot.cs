@@ -49,7 +49,7 @@ namespace Butterfly.Game.Rooms.AI.Types
                 return;
             }
 
-            RoomUser OwnerUser = this.GetRoom().GetRoomUserManager().GetRoomUserByHabboId((this.GetBotData().OwnerId == 0) ? this.GetRoom().RoomData.OwnerId : this.GetBotData().OwnerId);
+            RoomUser OwnerUser = this.GetRoom().GetRoomUserManager().GetRoomUserByUserId((this.GetBotData().OwnerId == 0) ? this.GetRoom().RoomData.OwnerId : this.GetBotData().OwnerId);
             if (OwnerUser == null)
             {
                 this.GetRoom().GetRoomUserManager().RemoveBot(this._virtualId, false);

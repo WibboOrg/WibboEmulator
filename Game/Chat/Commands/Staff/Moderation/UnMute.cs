@@ -9,16 +9,16 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (TargetUser == null || TargetUser.GetHabbo() == null)
+            if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
             else
             {
-                User habboByUsername = TargetUser.GetHabbo();
+                User user = TargetUser.GetUser();
 
-                habboByUsername.SpamProtectionTime = 10;
-                habboByUsername.SpamEnable = true;
+                user.SpamProtectionTime = 10;
+                user.SpamEnable = true;
             }
         }
     }

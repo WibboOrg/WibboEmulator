@@ -11,14 +11,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         public void Parse(Client Session, ClientPacket Packet)
         {
             Session.SendPacket(new CloseConnectionComposer());
-            Session.GetHabbo().LoadingRoomId = 0;
+            Session.GetUser().LoadingRoomId = 0;
 
-            if (Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (Session.GetUser() == null || !Session.GetUser().InRoom)
             {
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room != null)
             {
                 room.GetRoomUserManager().RemoveUserFromRoom(Session, false, false);

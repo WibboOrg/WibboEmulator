@@ -7,7 +7,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(Session.GetHabbo().CurrentRoom);
+            ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(Session.GetUser().CurrentRoom);
         }
     }
 }

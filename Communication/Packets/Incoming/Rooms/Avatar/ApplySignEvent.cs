@@ -10,28 +10,28 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            roomUserByHabbo.Unidle();
+            roomUserByUserId.Unidle();
 
             int num = Packet.PopInt();
-            if (roomUserByHabbo.Statusses.ContainsKey("sign"))
+            if (roomUserByUserId.Statusses.ContainsKey("sign"))
             {
-                roomUserByHabbo.RemoveStatus("sign");
+                roomUserByUserId.RemoveStatus("sign");
             }
 
-            roomUserByHabbo.SetStatus("sign", Convert.ToString(num));
-            roomUserByHabbo.UpdateNeeded = true;
+            roomUserByUserId.SetStatus("sign", Convert.ToString(num));
+            roomUserByUserId.UpdateNeeded = true;
         }
     }
 }

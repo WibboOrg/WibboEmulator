@@ -11,21 +11,21 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Session.GetHabbo().FavouriteGroupId = 0;
+            Session.GetUser().FavouriteGroupId = 0;
 
-            if (Session.GetHabbo().InRoom)
+            if (Session.GetUser().InRoom)
             {
-                RoomUser User = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+                RoomUser User = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
                 if (User != null)
                 {
-                    Session.GetHabbo().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(null, User.VirtualId));
+                    Session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(null, User.VirtualId));
                 }
 
-                Session.GetHabbo().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(Session.GetHabbo().Id));
+                Session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(Session.GetUser().Id));
             }
             else
             {
-                Session.SendPacket(new RefreshFavouriteGroupComposer(Session.GetHabbo().Id));
+                Session.SendPacket(new RefreshFavouriteGroupComposer(Session.GetUser().Id));
             }
         }
     }

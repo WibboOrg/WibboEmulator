@@ -12,20 +12,20 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         public void Parse(Client Session, ClientPacket Packet)
         {
             int RoomId = Packet.PopInt();
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().UsersRooms == null)
+            if (Session == null || Session.GetUser() == null || Session.GetUser().UsersRooms == null)
             {
                 return;
             }
 
             Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
-            if (room == null || !(room.RoomData.OwnerName == Session.GetHabbo().Username))
+            if (room == null || !(room.RoomData.OwnerName == Session.GetUser().Username))
             {
                 return;
             }
 
-            if (Session.GetHabbo().GetInventoryComponent() != null)
+            if (Session.GetUser().GetInventoryComponent() != null)
             {
-                Session.GetHabbo().GetInventoryComponent().AddItemArray(room.GetRoomItemHandler().RemoveAllFurniture(Session));
+                Session.GetUser().GetInventoryComponent().AddItemArray(room.GetRoomItemHandler().RemoveAllFurniture(Session));
             }
 
             ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
@@ -36,21 +36,21 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 UserFavoriteDao.Delete(dbClient, RoomId);
                 RoomRightDao.Delete(dbClient, RoomId);
                 ItemDao.DeleteAllByRoomId(dbClient, RoomId);
-                UserDao.UpdateHomeRoom(dbClient, Session.GetHabbo().Id, 0);
+                UserDao.UpdateHomeRoom(dbClient, Session.GetUser().Id, 0);
                 BotUserDao.UpdateRoomBot(dbClient, RoomId);
                 BotPetDao.UpdateRoomIdByRoomId(dbClient, RoomId);
             }
 
-            if (Session.GetHabbo().UsersRooms.Contains(RoomId))
+            if (Session.GetUser().UsersRooms.Contains(RoomId))
             {
-                Session.GetHabbo().UsersRooms.Remove(RoomId);
+                Session.GetUser().UsersRooms.Remove(RoomId);
             }
 
-            if (Session.GetHabbo().FavoriteRooms != null)
+            if (Session.GetUser().FavoriteRooms != null)
             {
-                if (Session.GetHabbo().FavoriteRooms.Contains(RoomId))
+                if (Session.GetUser().FavoriteRooms.Contains(RoomId))
                 {
-                    Session.GetHabbo().FavoriteRooms.Remove(RoomId);
+                    Session.GetUser().FavoriteRooms.Remove(RoomId);
                 }
             }
         }

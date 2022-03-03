@@ -7,36 +7,36 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room room = Session.GetHabbo().CurrentRoom;
+            Room room = Session.GetUser().CurrentRoom;
             if (room == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            if (roomUserByHabbo.Statusses.ContainsKey("sit") || roomUserByHabbo.Statusses.ContainsKey("lay"))
+            if (roomUserByUserId.Statusses.ContainsKey("sit") || roomUserByUserId.Statusses.ContainsKey("lay"))
             {
                 return;
             }
 
-            if (roomUserByHabbo.RotBody % 2 == 0)
+            if (roomUserByUserId.RotBody % 2 == 0)
             {
                 if (UserRoom.transformation)
                 {
-                    roomUserByHabbo.SetStatus("sit", "");
+                    roomUserByUserId.SetStatus("sit", "");
                 }
                 else
                 {
-                    roomUserByHabbo.SetStatus("sit", "0.5");
+                    roomUserByUserId.SetStatus("sit", "0.5");
                 }
 
-                roomUserByHabbo.IsSit = true;
-                roomUserByHabbo.UpdateNeeded = true;
+                roomUserByUserId.IsSit = true;
+                roomUserByUserId.UpdateNeeded = true;
             }
 
         }

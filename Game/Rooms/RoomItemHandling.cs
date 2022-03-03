@@ -73,7 +73,7 @@ namespace Butterfly.Game.Rooms
                 roomItem.Interactor.OnRemove(Session, roomItem);
 
                 roomItem.Destroy();
-                listMessage.Add(new ObjectRemoveComposer(roomItem.Id, Session.GetHabbo().Id));
+                listMessage.Add(new ObjectRemoveComposer(roomItem.Id, Session.GetUser().Id));
                 items.Add((Item)roomItem);
             }
 
@@ -420,10 +420,10 @@ namespace Butterfly.Game.Rooms
 
                         foreach (RoomUser userForSquare in usersForSquare)
                         {
-                            if (userForSquare != null && (!userForSquare.SetStep && (userForSquare.AllowMoveToRoller || this._rollerSpeed == 0) && (!userForSquare.IsWalking || userForSquare.Freeze)) && nextRollerClear && (this._room.GetGameMap().CanWalk(nextCoord.X, nextCoord.Y) && this._room.GetGameMap().SquareTakingOpen(nextCoord.X, nextCoord.Y) && !this._rollerUsersMoved.Contains(userForSquare.HabboId)))
+                            if (userForSquare != null && (!userForSquare.SetStep && (userForSquare.AllowMoveToRoller || this._rollerSpeed == 0) && (!userForSquare.IsWalking || userForSquare.Freeze)) && nextRollerClear && (this._room.GetGameMap().CanWalk(nextCoord.X, nextCoord.Y) && this._room.GetGameMap().SquareTakingOpen(nextCoord.X, nextCoord.Y) && !this._rollerUsersMoved.Contains(userForSquare.UserId)))
                             {
                                 this._rollerMessages.Add(new SlideObjectBundleComposer(userForSquare.X, userForSquare.Y, userForSquare.Z, nextCoord.X, nextCoord.Y, nextZ, userForSquare.VirtualId, roller.Id, false));
-                                this._rollerUsersMoved.Add(userForSquare.HabboId);
+                                this._rollerUsersMoved.Add(userForSquare.UserId);
 
                                 userForSquare.SetPosRoller(nextCoord.X, nextCoord.Y, nextZ);
                             }
@@ -555,9 +555,9 @@ namespace Butterfly.Game.Rooms
                 PileMagic = true;
             }
 
-            if (Session != null && Session.GetHabbo() != null && Session.GetHabbo().CurrentRoom != null)
+            if (Session != null && Session.GetUser() != null && Session.GetUser().CurrentRoom != null)
             {
-                RoomUser roomUser = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+                RoomUser roomUser = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
                 if (roomUser != null)
                 {
                     ConstruitMode = roomUser.ConstruitEnable;

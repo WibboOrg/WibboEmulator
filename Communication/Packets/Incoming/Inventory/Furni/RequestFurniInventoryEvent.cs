@@ -12,19 +12,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
 
-            if (Session.GetHabbo().GetInventoryComponent() == null)
+            if (Session.GetUser().GetInventoryComponent() == null)
             {
                 return;
             }
 
-            Session.GetHabbo().GetInventoryComponent().LoadInventory();
+            Session.GetUser().GetInventoryComponent().LoadInventory();
 
-            IEnumerable<Item> Items = Session.GetHabbo().GetInventoryComponent().GetWallAndFloor;
+            IEnumerable<Item> Items = Session.GetUser().GetInventoryComponent().GetWallAndFloor;
             Session.SendPacket(new FurniListComposer(Items.ToList(), 1, 0));
         }
     }

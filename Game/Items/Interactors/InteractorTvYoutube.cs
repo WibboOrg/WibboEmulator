@@ -16,12 +16,12 @@ namespace Butterfly.Game.Items.Interactors
 
         public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }
 
-            if (Session.GetHabbo().SendWebPacket(new YoutubeTvComposer((UserHasRights) ? Item.Id : 0, Item.ExtraData)))
+            if (Session.GetUser().SendWebPacket(new YoutubeTvComposer((UserHasRights) ? Item.Id : 0, Item.ExtraData)))
             {
                 return;
             }
@@ -31,7 +31,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            RoomUser roomUser = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser roomUser = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             if (roomUser == null)
             {
                 return;

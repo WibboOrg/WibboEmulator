@@ -31,25 +31,25 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             int Time = ButterflyEnvironment.GetUnixTimestamp();
-            string ExtraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + Session.GetHabbo().Username + "\", \"s\":\"" + Session.GetHabbo().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
+            string ExtraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + Session.GetUser().Username + "\", \"s\":\"" + Session.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
 
-            Item ItemSmall = ItemFactory.CreateSingleItemNullable(ItemDataSmall, Session.GetHabbo(), ExtraData);
-            Session.GetHabbo().GetInventoryComponent().TryAddItem(ItemSmall);
+            Item ItemSmall = ItemFactory.CreateSingleItemNullable(ItemDataSmall, Session.GetUser(), ExtraData);
+            Session.GetUser().GetInventoryComponent().TryAddItem(ItemSmall);
 
-            Item Item = ItemFactory.CreateSingleItemNullable(ItemData, Session.GetHabbo(), ExtraData);
-            Session.GetHabbo().GetInventoryComponent().TryAddItem(Item);
+            Item Item = ItemFactory.CreateSingleItemNullable(ItemData, Session.GetUser(), ExtraData);
+            Session.GetUser().GetInventoryComponent().TryAddItem(Item);
 
             Session.SendPacket(new CameraPurchaseSuccesfullComposer());
 
-            if (Session.GetHabbo().LastPhotoId == photoId)
+            if (Session.GetUser().LastPhotoId == photoId)
             {
                 return;
             }
 
-            Session.GetHabbo().LastPhotoId = photoId;
+            Session.GetUser().LastPhotoId = photoId;
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                UserPhotoDao.Insert(dbClient, Session.GetHabbo().Id, photoId, Time);
+                UserPhotoDao.Insert(dbClient, Session.GetUser().Id, photoId, Time);
         }
     }
 }

@@ -9,22 +9,22 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = Session.GetHabbo().CurrentRoom;            if (room == null)
+            Room room = Session.GetUser().CurrentRoom;            if (room == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            if (roomUserByHabbo.Statusses.ContainsKey("sit") || roomUserByHabbo.Statusses.ContainsKey("lay"))
+            if (roomUserByUserId.Statusses.ContainsKey("sit") || roomUserByUserId.Statusses.ContainsKey("lay"))
             {
                 return;
             }
 
-            if (roomUserByHabbo.RotBody % 2 == 0)            {                roomUserByHabbo.SetStatus("sit", "0.5");                roomUserByHabbo.IsSit = true;                roomUserByHabbo.UpdateNeeded = true;            }
+            if (roomUserByUserId.RotBody % 2 == 0)            {                roomUserByUserId.SetStatus("sit", "0.5");                roomUserByUserId.IsSit = true;                roomUserByUserId.UpdateNeeded = true;            }
         }
     }
 }

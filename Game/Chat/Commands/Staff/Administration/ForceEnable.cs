@@ -14,7 +14,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             int.TryParse(Params[1], out int EnableNum);
 
-            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(EnableNum, Session.GetHabbo().HasFuse("fuse_sysadmin")))
+            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(EnableNum, Session.GetUser().HasFuse("fuse_sysadmin")))
             {
                 return;
             }

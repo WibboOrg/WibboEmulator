@@ -7,18 +7,18 @@ using System.Linq;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
-    internal class GetHabboGroupBadgesEvent : IPacketEvent
+    internal class GetUserGroupBadgesEvent : IPacketEvent
     {
         public double Delay => 250;
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().LoadingRoomId == 0)
+            if (Session == null || Session.GetUser() == null || Session.GetUser().LoadingRoomId == 0)
             {
                 return;
             }
 
-            Room Room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().LoadingRoomId);
+            Room Room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().LoadingRoomId);
             if (Room == null)
             {
                 return;
@@ -27,17 +27,17 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Dictionary<int, string> Badges = new Dictionary<int, string>();
             foreach (RoomUser User in Room.GetRoomUserManager().GetRoomUsers().ToList())
             {
-                if (User.IsBot || User.GetClient() == null || User.GetClient().GetHabbo() == null)
+                if (User.IsBot || User.GetClient() == null || User.GetClient().GetUser() == null)
                 {
                     continue;
                 }
 
-                if (User.GetClient().GetHabbo().FavouriteGroupId == 0 || Badges.ContainsKey(User.GetClient().GetHabbo().FavouriteGroupId))
+                if (User.GetClient().GetUser().FavouriteGroupId == 0 || Badges.ContainsKey(User.GetClient().GetUser().FavouriteGroupId))
                 {
                     continue;
                 }
 
-                if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(User.GetClient().GetHabbo().FavouriteGroupId, out Group Group))
+                if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(User.GetClient().GetUser().FavouriteGroupId, out Group Group))
                 {
                     continue;
                 }
@@ -48,9 +48,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
             }
 
-            if (Session.GetHabbo().FavouriteGroupId > 0)
+            if (Session.GetUser().FavouriteGroupId > 0)
             {
-                if (ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Session.GetHabbo().FavouriteGroupId, out Group Group))
+                if (ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Session.GetUser().FavouriteGroupId, out Group Group))
                 {
                     if (!Badges.ContainsKey(Group.Id))
                     {
@@ -59,8 +59,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
             }
 
-            Room.SendPacket(new HabboGroupBadgesComposer(Badges));
-            Session.SendPacket(new HabboGroupBadgesComposer(Badges));
+            Room.SendPacket(new UserGroupBadgesComposer(Badges));
+            Session.SendPacket(new UserGroupBadgesComposer(Badges));
         }
     }
 }

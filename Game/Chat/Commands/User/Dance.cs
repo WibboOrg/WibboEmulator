@@ -8,7 +8,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            RoomUser ThisUser = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser ThisUser = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             if (ThisUser == null)
                 return;
 
@@ -25,7 +25,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     UserRoom.SendWhisperChat("Entre un numéro entre 0 et 4");
                     return;
                 }
-                Session.GetHabbo().CurrentRoom.SendPacket(new DanceComposer(ThisUser.VirtualId, DanceId));
+                Session.GetUser().CurrentRoom.SendPacket(new DanceComposer(ThisUser.VirtualId, DanceId));
             }
             else
                 UserRoom.SendWhisperChat("Entre un numéro de danse valide");

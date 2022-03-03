@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int ItemId = Packet.PopInt();
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || !room.CheckRights(Session, true))
             {
                 return;

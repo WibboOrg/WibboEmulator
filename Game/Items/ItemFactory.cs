@@ -9,7 +9,7 @@ namespace Butterfly.Game.Items
 {
     public class ItemFactory
     {
-        public static Item CreateSingleItemNullable(ItemData Data, User Habbo, string ExtraData, int LimitedNumber = 0, int LimitedStack = 0)
+        public static Item CreateSingleItemNullable(ItemData Data, User user, string ExtraData, int LimitedNumber = 0, int LimitedStack = 0)
         {
             if (Data == null)
             {
@@ -20,7 +20,7 @@ namespace Butterfly.Game.Items
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                Item.Id = ItemDao.Insert(dbClient, Data.Id, Habbo.Id, ExtraData);
+                Item.Id = ItemDao.Insert(dbClient, Data.Id, user.Id, ExtraData);
 
                 if (LimitedNumber > 0)
                 {
@@ -31,7 +31,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public static Item CreateSingleItem(ItemData Data, User Habbo, string ExtraData, int ItemId, int LimitedNumber = 0, int LimitedStack = 0)
+        public static Item CreateSingleItem(ItemData Data, User user, string ExtraData, int ItemId, int LimitedNumber = 0, int LimitedStack = 0)
         {
             if (Data == null)
             {
@@ -41,7 +41,7 @@ namespace Butterfly.Game.Items
             int InsertId = 0;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                InsertId = ItemDao.Insert(dbClient, ItemId, Data.Id, Habbo.Id, ExtraData);
+                InsertId = ItemDao.Insert(dbClient, ItemId, Data.Id, user.Id, ExtraData);
 
                 if (LimitedNumber > 0 && InsertId > 0)
                 {
@@ -58,7 +58,7 @@ namespace Butterfly.Game.Items
             return Item;
         }
 
-        public static List<Item> CreateMultipleItems(ItemData Data, User Habbo, string ExtraData, int Amount)
+        public static List<Item> CreateMultipleItems(ItemData Data, User user, string ExtraData, int Amount)
         {
             if (Data == null) throw new InvalidOperationException("Data cannot be null.");
 
@@ -68,7 +68,7 @@ namespace Butterfly.Game.Items
             {
                 for (int i = 0; i < Amount; i++)
                 {
-                    int itemId = ItemDao.Insert(dbClient, Data.Id, Habbo.Id, ExtraData);
+                    int itemId = ItemDao.Insert(dbClient, Data.Id, user.Id, ExtraData);
 
                     Item Item = new Item(itemId, 0, Data.Id, ExtraData, 0, 0, 0, 0, 0, 0, "", null);
 
@@ -78,14 +78,14 @@ namespace Butterfly.Game.Items
             return Items;
         }
 
-        public static List<Item> CreateTeleporterItems(ItemData data, User habbo)
+        public static List<Item> CreateTeleporterItems(ItemData data, User user)
         {
             List<Item> Items = new List<Item>();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                int Item1Id = ItemDao.Insert(dbClient, data.Id, habbo.Id, "");
-                int Item2Id = ItemDao.Insert(dbClient, data.Id, habbo.Id, Item1Id.ToString());
+                int Item1Id = ItemDao.Insert(dbClient, data.Id, user.Id, "");
+                int Item2Id = ItemDao.Insert(dbClient, data.Id, user.Id, Item1Id.ToString());
 
                 Item Item1 = new Item(Item1Id, 0, data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
                 Item Item2 = new Item(Item2Id, 0, data.Id, "", 0, 0, 0, 0, 0, 0, "", null);

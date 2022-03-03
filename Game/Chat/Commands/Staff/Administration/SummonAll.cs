@@ -11,11 +11,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             foreach (Client Client in ButterflyEnvironment.GetGame().GetClientManager().GetClients.ToList())
             {
-                if (Client.GetHabbo() != null)
+                if (Client.GetUser() != null)
                 {
-                    Client.GetHabbo().IsTeleporting = true;
-                    Client.GetHabbo().TeleportingRoomID = Room.RoomData.Id;
-                    Client.GetHabbo().TeleporterId = 0;
+                    Client.GetUser().IsTeleporting = true;
+                    Client.GetUser().TeleportingRoomID = Room.RoomData.Id;
+                    Client.GetUser().TeleporterId = 0;
 
                     Client.SendPacket(new GetGuestRoomResultComposer(Client, Room.RoomData, false, true));
                 }

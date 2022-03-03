@@ -183,14 +183,14 @@ namespace Butterfly.Game.Rooms.Games
             user.ApplyEffect(0);
         }
 
-        public void throwBall(Item Item, RoomUser roomUserByHabbo)
+        public void throwBall(Item Item, RoomUser roomUserByUserId)
         {
-            if (Math.Abs((roomUserByHabbo.X - Item.X)) >= 2 || Math.Abs((roomUserByHabbo.Y - Item.Y)) >= 2)
+            if (Math.Abs((roomUserByUserId.X - Item.X)) >= 2 || Math.Abs((roomUserByUserId.Y - Item.Y)) >= 2)
             {
                 return;
             }
 
-            if (roomUserByHabbo.Team == TeamType.NONE || !this._gameStarted)
+            if (roomUserByUserId.Team == TeamType.NONE || !this._gameStarted)
             {
                 return;
             }
@@ -207,16 +207,16 @@ namespace Butterfly.Game.Rooms.Games
                 Tile.InteractionCountHelper = 1;
                 Tile.ExtraData = "1000";
                 Tile.UpdateState();
-                Tile.InteractingUser = roomUserByHabbo.UserId;
-                Tile.FreezePowerUp = roomUserByHabbo.BanzaiPowerUp;
+                Tile.InteractingUser = roomUserByUserId.UserId;
+                Tile.FreezePowerUp = roomUserByUserId.BanzaiPowerUp;
                 Tile.ReqUpdate(5);
-                roomUserByHabbo.CountFreezeBall -= 1;
-                switch (roomUserByHabbo.BanzaiPowerUp)
+                roomUserByUserId.CountFreezeBall -= 1;
+                switch (roomUserByUserId.BanzaiPowerUp)
                 {
                     case FreezePowerUp.GreenArrow:
                     case FreezePowerUp.OrangeSnowball:
                     case FreezePowerUp.BlueArrow:
-                        roomUserByHabbo.BanzaiPowerUp = FreezePowerUp.None;
+                        roomUserByUserId.BanzaiPowerUp = FreezePowerUp.None;
                         break;
                 }
             }
@@ -236,7 +236,7 @@ namespace Butterfly.Game.Rooms.Games
 
         public void onFreezeTiles(Item item, FreezePowerUp powerUp, int userID)
         {
-            if (this._roomInstance.GetRoomUserManager().GetRoomUserByHabboId(userID) == null)
+            if (this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(userID) == null)
             {
                 return;
             }

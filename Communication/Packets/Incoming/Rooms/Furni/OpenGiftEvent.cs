@@ -15,12 +15,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (Session == null || Session.GetUser() == null || !Session.GetUser().InRoom)
             {
                 return;
             }
 
-            Room Room = Session.GetHabbo().CurrentRoom;
+            Room Room = Session.GetUser().CurrentRoom;
             if (Room == null)
             {
                 return;
@@ -56,7 +56,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         UserPresentDao.Delete(dbClient, Present.Id);
                     }
 
-                    Session.GetHabbo().GetInventoryComponent().RemoveItem(Present.Id);
+                    Session.GetUser().GetInventoryComponent().RemoveItem(Present.Id);
                     return;
                 }
 
@@ -70,7 +70,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         UserPresentDao.Delete(dbClient, Present.Id);
                     }
 
-                    Session.GetHabbo().GetInventoryComponent().RemoveItem(Present.Id);
+                    Session.GetUser().GetInventoryComponent().RemoveItem(Present.Id);
                     return;
                 }
 
@@ -120,7 +120,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                     }
 
-                    Session.GetHabbo().GetInventoryComponent().TryAddItem(Present);
+                    Session.GetUser().GetInventoryComponent().TryAddItem(Present);
 
                     ItemIsInRoom = false;
                 }
@@ -132,7 +132,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                 }
 
-                Session.GetHabbo().GetInventoryComponent().TryAddItem(Present);
+                Session.GetUser().GetInventoryComponent().TryAddItem(Present);
 
                 ItemIsInRoom = false;
             }

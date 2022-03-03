@@ -9,10 +9,10 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
             : base(ServerPacketHeader.UNIT_INFO)
         {
             this.WriteInteger((Self) ? -1 : User.VirtualId);
-            this.WriteString(User.GetClient().GetHabbo().Look);
-            this.WriteString(User.GetClient().GetHabbo().Gender);
-            this.WriteString(User.GetClient().GetHabbo().Motto);
-            this.WriteInteger(User.GetClient().GetHabbo().AchievementPoints);
+            this.WriteString(User.GetClient().GetUser().Look);
+            this.WriteString(User.GetClient().GetUser().Gender);
+            this.WriteString(User.GetClient().GetUser().Motto);
+            this.WriteInteger(User.GetClient().GetUser().AchievementPoints);
         }
 
         public UserChangeComposer(RoomUser User) //Bot
@@ -29,10 +29,10 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
             : base(ServerPacketHeader.UNIT_INFO)
         {
             this.WriteInteger(-1);
-            this.WriteString(Client.GetHabbo().Look);
-            this.WriteString(Client.GetHabbo().Gender);
-            this.WriteString(Client.GetHabbo().Motto);
-            this.WriteInteger(Client.GetHabbo().AchievementPoints);
+            this.WriteString(Client.GetUser().Look);
+            this.WriteString(Client.GetUser().Gender);
+            this.WriteString(Client.GetUser().Motto);
+            this.WriteInteger(Client.GetUser().AchievementPoints);
         }
     }
 }

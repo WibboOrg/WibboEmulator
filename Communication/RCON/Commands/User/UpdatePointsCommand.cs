@@ -38,8 +38,8 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client.GetHabbo().WibboPoints += NbWb;
-            Client.SendPacket(new ActivityPointsComposer(Client.GetHabbo().WibboPoints));
+            Client.GetUser().WibboPoints += NbWb;
+            Client.SendPacket(new ActivityPointsComposer(Client.GetUser().WibboPoints));
 
             return true;
         }

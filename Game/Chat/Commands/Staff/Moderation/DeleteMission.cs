@@ -21,31 +21,31 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
-            else if (Session.GetHabbo().Rank <= TargetUser.GetHabbo().Rank)
+            else if (Session.GetUser().Rank <= TargetUser.GetUser().Rank)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.notpermitted", Session.Langue));
             }
             else
             {
-                TargetUser.GetHabbo().Motto = ButterflyEnvironment.GetLanguageManager().TryGetValue("user.unacceptable_motto", TargetUser.Langue);
+                TargetUser.GetUser().Motto = ButterflyEnvironment.GetLanguageManager().TryGetValue("user.unacceptable_motto", TargetUser.Langue);
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserDao.UpdateMotto(dbClient, TargetUser.GetHabbo().Id, TargetUser.GetHabbo().Motto);
+                    UserDao.UpdateMotto(dbClient, TargetUser.GetUser().Id, TargetUser.GetUser().Motto);
                 }
 
-                Room currentRoom2 = TargetUser.GetHabbo().CurrentRoom;
+                Room currentRoom2 = TargetUser.GetUser().CurrentRoom;
                 if (currentRoom2 == null)
                 {
                     return;
                 }
 
-                RoomUser roomUserByHabbo = currentRoom2.GetRoomUserManager().GetRoomUserByHabboId(TargetUser.GetHabbo().Id);
-                if (roomUserByHabbo == null)
+                RoomUser roomUserByUserId = currentRoom2.GetRoomUserManager().GetRoomUserByUserId(TargetUser.GetUser().Id);
+                if (roomUserByUserId == null)
                 {
                     return;
                 }
 
-                currentRoom2.SendPacket(new UserChangeComposer(roomUserByHabbo, false));
+                currentRoom2.SendPacket(new UserChangeComposer(roomUserByUserId, false));
             }
 
         }

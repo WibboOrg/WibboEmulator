@@ -14,12 +14,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!Session.GetUser().InRoom)
             {
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room Room))
+            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -38,7 +38,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (PetUser.PetData == null || PetUser.PetData.OwnerId != Session.GetHabbo().Id || PetUser.PetData.Type != 13)
+            if (PetUser.PetData == null || PetUser.PetData.OwnerId != Session.GetUser().Id || PetUser.PetData.Type != 13)
             {
                 return;
             }

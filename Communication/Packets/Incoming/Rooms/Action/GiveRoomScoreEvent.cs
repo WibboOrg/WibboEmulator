@@ -12,13 +12,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
-            if (room == null || Session.GetHabbo().RatedRooms.Contains(room.Id) || room.CheckRights(Session, true))
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            if (room == null || Session.GetUser().RatedRooms.Contains(room.Id) || room.CheckRights(Session, true))
             {
                 return;
             }
@@ -43,8 +43,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 RoomDao.UpdateScore(dbClient, room.Id, room.RoomData.Score);
             }
 
-            Session.GetHabbo().RatedRooms.Add(room.Id);
-            Session.SendPacket(new RoomRatingComposer(room.RoomData.Score, !(Session.GetHabbo().RatedRooms.Contains(room.Id) || room.RoomData.OwnerId == Session.GetHabbo().Id)));
+            Session.GetUser().RatedRooms.Add(room.Id);
+            Session.SendPacket(new RoomRatingComposer(room.RoomData.Score, !(Session.GetUser().RatedRooms.Contains(room.Id) || room.RoomData.OwnerId == Session.GetUser().Id)));
         }
     }
 }

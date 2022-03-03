@@ -39,8 +39,8 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client.GetHabbo().AchievementPoints = Client.GetHabbo().AchievementPoints + Winwin;
-            Client.SendPacket(new AchievementScoreComposer(Client.GetHabbo().AchievementPoints));
+            Client.GetUser().AchievementPoints = Client.GetUser().AchievementPoints + Winwin;
+            Client.SendPacket(new AchievementScoreComposer(Client.GetUser().AchievementPoints));
 
             return true;
         }

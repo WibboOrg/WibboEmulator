@@ -11,11 +11,11 @@ namespace Butterfly.Game.Items.Interactors
 
             if (Item.InteractingUser != 0)
             {
-                RoomUser roomUserByHabbo = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Item.InteractingUser);
-                if (roomUserByHabbo != null)
+                RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Item.InteractingUser);
+                if (roomUserByUserId != null)
                 {
-                    roomUserByHabbo.AllowOverride = false;
-                    roomUserByHabbo.CanWalk = true;
+                    roomUserByUserId.AllowOverride = false;
+                    roomUserByUserId.CanWalk = true;
                 }
                 Item.InteractingUser = 0;
             }
@@ -25,11 +25,11 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            RoomUser roomUserByHabbo1 = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Item.InteractingUser2);
-            if (roomUserByHabbo1 != null)
+            RoomUser roomUserByUserIdTwo = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Item.InteractingUser2);
+            if (roomUserByUserIdTwo != null)
             {
-                roomUserByHabbo1.AllowOverride = false;
-                roomUserByHabbo1.CanWalk = true;
+                roomUserByUserIdTwo.AllowOverride = false;
+                roomUserByUserIdTwo.CanWalk = true;
             }
 
             Item.InteractingUser2 = 0;
@@ -41,10 +41,10 @@ namespace Butterfly.Game.Items.Interactors
 
             if (Item.InteractingUser != 0)
             {
-                RoomUser roomUserByHabbo = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Item.InteractingUser);
-                if (roomUserByHabbo != null)
+                RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Item.InteractingUser);
+                if (roomUserByUserId != null)
                 {
-                    roomUserByHabbo.UnlockWalking();
+                    roomUserByUserId.UnlockWalking();
                 }
 
                 Item.InteractingUser = 0;
@@ -55,10 +55,10 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            RoomUser roomUserByHabbo1 = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Item.InteractingUser2);
-            if (roomUserByHabbo1 != null)
+            RoomUser roomUserByUserIdTwo = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Item.InteractingUser2);
+            if (roomUserByUserIdTwo != null)
             {
-                roomUserByHabbo1.UnlockWalking();
+                roomUserByUserIdTwo.UnlockWalking();
             }
 
             Item.InteractingUser2 = 0;
@@ -66,35 +66,35 @@ namespace Butterfly.Game.Items.Interactors
 
         public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
-            if (Item == null || Item.GetRoom() == null || (Session == null || Session.GetHabbo() == null))
+            if (Item == null || Item.GetRoom() == null || (Session == null || Session.GetUser() == null))
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            if (roomUserByHabbo.Coordinate == Item.Coordinate || roomUserByHabbo.Coordinate == Item.SquareInFront)
+            if (roomUserByUserId.Coordinate == Item.Coordinate || roomUserByUserId.Coordinate == Item.SquareInFront)
             {
                 if (Item.InteractingUser != 0)
                 {
                     return;
                 }
 
-                Item.InteractingUser = roomUserByHabbo.GetClient().GetHabbo().Id;
+                Item.InteractingUser = roomUserByUserId.GetClient().GetUser().Id;
                 Item.ReqUpdate(2);
             }
             else
             {
-                if (!roomUserByHabbo.CanWalk)
+                if (!roomUserByUserId.CanWalk)
                 {
                     return;
                 }
 
-                roomUserByHabbo.MoveTo(Item.SquareInFront);
+                roomUserByUserId.MoveTo(Item.SquareInFront);
             }
         }
 
@@ -105,7 +105,7 @@ namespace Butterfly.Game.Items.Interactors
 
             if (item.InteractingUser > 0)
             {
-                RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser);
+                RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
                 if (roomUserTarget != null)
                 {
                     if (roomUserTarget.Coordinate == item.Coordinate)
@@ -133,12 +133,12 @@ namespace Butterfly.Game.Items.Interactors
                                     roomItem.ReqUpdate(2);
                                 }
                             }
-                            else if (!roomUserTarget.IsBot && roomUserTarget != null && (roomUserTarget.GetClient() != null && roomUserTarget.GetClient().GetHabbo() != null))
+                            else if (!roomUserTarget.IsBot && roomUserTarget != null && (roomUserTarget.GetClient() != null && roomUserTarget.GetClient().GetUser() != null))
                             {
-                                roomUserTarget.GetClient().GetHabbo().IsTeleporting = true;
-                                roomUserTarget.GetClient().GetHabbo().TeleportingRoomID = teleRoomId;
-                                roomUserTarget.GetClient().GetHabbo().TeleporterId = linkedTele;
-                                roomUserTarget.GetClient().GetHabbo().PrepareRoom(teleRoomId, "");
+                                roomUserTarget.GetClient().GetUser().IsTeleporting = true;
+                                roomUserTarget.GetClient().GetUser().TeleportingRoomID = teleRoomId;
+                                roomUserTarget.GetClient().GetUser().TeleporterId = linkedTele;
+                                roomUserTarget.GetClient().GetUser().PrepareRoom(teleRoomId, "");
                             }
                             item.InteractingUser = 0;
                         }
@@ -172,7 +172,7 @@ namespace Butterfly.Game.Items.Interactors
 
             if (item.InteractingUser2 > 0)
             {
-                RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser2);
+                RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser2);
                 if (roomUserTarget != null)
                 {
                     keepDoorOpen = true;

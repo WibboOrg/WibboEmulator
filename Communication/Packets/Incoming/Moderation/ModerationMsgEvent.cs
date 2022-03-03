@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().HasFuse("fuse_alert"))
+            if (!Session.GetUser().HasFuse("fuse_alert"))
             {
                 return;
             }
@@ -20,12 +20,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             if (clientTarget == null)
                 return;
 
-            if (clientTarget.GetHabbo().Id == Session.GetHabbo().Id)
+            if (clientTarget.GetUser().Id == Session.GetUser().Id)
             {
                 return;
             }
 
-            if (clientTarget.GetHabbo().Rank >= Session.GetHabbo().Rank)
+            if (clientTarget.GetUser().Rank >= Session.GetUser().Rank)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.caution.missingrank", Session.Langue));
             }
@@ -35,7 +35,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetHabbo().Id, Session.GetHabbo().Username, 0, string.Empty, "ModTool", string.Format("Modtool alert ( {1} ): {0}", message, clientTarget.GetHabbo().Username));
+            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, "ModTool", string.Format("Modtool alert ( {1} ): {0}", message, clientTarget.GetUser().Username));
 
             clientTarget.SendNotification(message);
         }

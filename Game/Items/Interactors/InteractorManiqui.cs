@@ -18,7 +18,7 @@ namespace Butterfly.Game.Items.Interactors
 
         public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
-            if (Session == null || Session.GetHabbo() == null || Item == null)
+            if (Session == null || Session.GetUser() == null || Item == null)
             {
                 return;
             }
@@ -28,8 +28,8 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
-            string[] strArray = Session.GetHabbo().Look.Split(new char[1] { '.' });
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            string[] strArray = Session.GetUser().Look.Split(new char[1] { '.' });
             string str1 = "";
             foreach (string str2 in strArray)
             {
@@ -40,11 +40,11 @@ namespace Butterfly.Game.Items.Interactors
             }
 
             string str3 = str1 + Item.ExtraData.Split(new char[1] { ';' })[1];
-            Session.GetHabbo().Look = str3;
+            Session.GetUser().Look = str3;
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserDao.UpdateLook(dbClient, Session.GetHabbo().Id, str3);
+                UserDao.UpdateLook(dbClient, Session.GetUser().Id, str3);
             }
 
             if (room == null)
@@ -52,7 +52,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            RoomUser Roomuser = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser Roomuser = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             if (Roomuser == null)
             {
                 return;
@@ -63,7 +63,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            if (!Session.GetHabbo().InRoom)
+            if (!Session.GetUser().InRoom)
             {
                 return;
             }

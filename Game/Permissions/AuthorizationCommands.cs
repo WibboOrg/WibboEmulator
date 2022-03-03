@@ -31,7 +31,7 @@ namespace Butterfly.Game.Permissions
 
             if (this.MinRank > 0)
             {
-                if (this.MinRank <= (long)session.GetHabbo().Rank)
+                if (this.MinRank <= (long)session.GetUser().Rank)
                 {
                     return true;
                 }
@@ -40,12 +40,12 @@ namespace Butterfly.Game.Permissions
             {
                 if (this.MinRank == -1)
                 {
-                    if (session.GetHabbo().CurrentRoom.CheckRights(session))
+                    if (session.GetUser().CurrentRoom.CheckRights(session))
                     {
                         return true;
                     }
                 }
-                else if (this.MinRank == -2 && session.GetHabbo().CurrentRoom.CheckRights(session, true))
+                else if (this.MinRank == -2 && session.GetUser().CurrentRoom.CheckRights(session, true))
                 {
                     return true;
                 }
@@ -71,14 +71,14 @@ namespace Butterfly.Game.Permissions
                 return 0;
             }
 
-            if (this.MinRank > 2 && session.GetHabbo().Rank < 13 && RoomLangue != session.Langue)
+            if (this.MinRank > 2 && session.GetUser().Rank < 13 && RoomLangue != session.Langue)
             {
                 return 5;
             }
 
             if (this.MinRank > 0)
             {
-                if (this.MinRank <= session.GetHabbo().Rank)
+                if (this.MinRank <= session.GetUser().Rank)
                 {
                     return 0;
                 }
@@ -91,7 +91,7 @@ namespace Butterfly.Game.Permissions
             {
                 if (this.MinRank == -1)
                 {
-                    if (session.GetHabbo().CurrentRoom.CheckRights(session))
+                    if (session.GetUser().CurrentRoom.CheckRights(session))
                     {
                         return 0;
                     }
@@ -100,7 +100,7 @@ namespace Butterfly.Game.Permissions
                         return 3;
                     }
                 }
-                else if (this.MinRank == -2 && session.GetHabbo().CurrentRoom.CheckRights(session, true))
+                else if (this.MinRank == -2 && session.GetUser().CurrentRoom.CheckRights(session, true))
                 {
                     return 0;
                 }

@@ -8,46 +8,42 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("ADM"))
+            if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("ADM"))
             {
                 UserRoom.CurrentEffect = 540;
             }
-            else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("PRWRD1"))
+            else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("PRWRD1"))
             {
                 UserRoom.CurrentEffect = 580;
             }
-            else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("GPHWIB"))
+            else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("GPHWIB"))
             {
                 UserRoom.CurrentEffect = 557;
             }
-            else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("wibbo.helpeur"))
+            else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("wibbo.helpeur"))
             {
                 UserRoom.CurrentEffect = 544;
             }
-            else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WIBARC"))
+            else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("WIBARC"))
             {
                 UserRoom.CurrentEffect = 546;
             }
-            else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("CRPOFFI"))
+            else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("CRPOFFI"))
             {
                 UserRoom.CurrentEffect = 570;
             }
-            else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("ZEERSWS"))
+            else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("ZEERSWS"))
             {
                 UserRoom.CurrentEffect = 552;
             }
-            else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WBASSO"))
+            else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("WBASSO"))
             {
                 UserRoom.CurrentEffect = 576;
             }
-            else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WIBBOCOM"))
+            else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("WIBBOCOM"))
             {
                 UserRoom.CurrentEffect = 581;
             }
-            //else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("BALTIOFFI"))
-            //UserRoom.CurrentEffect = 578;
-            //else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WFMEM"))
-            //UserRoom.CurrentEffect = 579;
 
             if (UserRoom.CurrentEffect > 0)
             {

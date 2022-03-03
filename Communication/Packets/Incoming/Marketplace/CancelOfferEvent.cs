@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }
@@ -38,7 +38,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
                 return;
             }
 
-            if (Convert.ToInt32(Row["user_id"]) != Session.GetHabbo().Id)
+            if (Convert.ToInt32(Row["user_id"]) != Session.GetUser().Id)
             {
                 Session.SendPacket(new MarketplaceCancelOfferResultComposer(OfferId, false));
                 return;
@@ -51,13 +51,13 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                CatalogMarketplaceOfferDao.DeleteUserOffer(dbClient, OfferId, Session.GetHabbo().Id);
+                CatalogMarketplaceOfferDao.DeleteUserOffer(dbClient, OfferId, Session.GetUser().Id);
 
-            Item GiveItem = ItemFactory.CreateSingleItem(Item, Session.GetHabbo(), Convert.ToString(Row["extra_data"]), Convert.ToInt32(Row["furni_id"]), Convert.ToInt32(Row["limited_number"]), Convert.ToInt32(Row["limited_stack"]));
+            Item GiveItem = ItemFactory.CreateSingleItem(Item, Session.GetUser(), Convert.ToString(Row["extra_data"]), Convert.ToInt32(Row["furni_id"]), Convert.ToInt32(Row["limited_number"]), Convert.ToInt32(Row["limited_stack"]));
 
             if (GiveItem != null)
             {
-                Session.GetHabbo().GetInventoryComponent().TryAddItem(GiveItem);
+                Session.GetUser().GetInventoryComponent().TryAddItem(GiveItem);
                 Session.SendPacket(new FurniListNotificationComposer(GiveItem.Id, 1));
             }
 

@@ -17,12 +17,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         public double Delay => 200;
         public void Parse(Client session, ClientPacket Packet)
         {
-            if (session == null || session.GetHabbo() == null || !session.GetHabbo().InRoom)
+            if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
             {
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(session.GetUser().CurrentRoomId);
             if (room == null || !room.CheckRights(session))
             {
                 session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_not_owner}"));
@@ -48,7 +48,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Item userItem = session.GetHabbo().GetInventoryComponent().GetItem(ItemId);
+            Item userItem = session.GetUser().GetInventoryComponent().GetItem(ItemId);
             if (userItem == null)
             {
                 return;
@@ -56,7 +56,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (userItem.GetBaseItem().InteractionType == InteractionType.BADGE_TROC)
             {
-                if (session.GetHabbo().GetBadgeComponent().HasBadge(userItem.ExtraData))
+                if (session.GetUser().GetBadgeComponent().HasBadge(userItem.ExtraData))
                 {
                     session.SendNotification("Vous posséder déjà ce badge !");
                     return;
@@ -67,9 +67,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     ItemDao.Delete(dbClient, ItemId);
                 }
 
-                session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
+                session.GetUser().GetInventoryComponent().RemoveItem(ItemId);
 
-                session.GetHabbo().GetBadgeComponent().GiveBadge(userItem.ExtraData, true);
+                session.GetUser().GetBadgeComponent().GiveBadge(userItem.ExtraData, true);
                 session.SendPacket(new ReceiveBadgeComposer(userItem.ExtraData));
 
                 session.SendNotification("Vous avez reçu le badge: " + userItem.ExtraData + " !");
@@ -98,9 +98,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     return;
                 }
 
-                if (session.GetHabbo().ForceRot > -1)
+                if (session.GetUser().ForceRot > -1)
                 {
-                    rotation = session.GetHabbo().ForceRot;
+                    rotation = session.GetUser().ForceRot;
                 }
 
                 Item item = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, X, Y, 0.0, rotation, "", room);
@@ -111,19 +111,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, room.Id, room.RoomData.OwnerId);
                     }
 
-                    session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
+                    session.GetUser().GetInventoryComponent().RemoveItem(ItemId);
 
                     if (WiredUtillity.TypeIsWired(userItem.GetBaseItem().InteractionType))
                     {
                         WiredRegister.HandleRegister(room, item);
                     }
 
-                    if (session.GetHabbo().ForceUse > -1)
+                    if (session.GetUser().ForceUse > -1)
                     {
                         item.Interactor.OnTrigger(session, item, 0, true, false);
                     }
 
-                    if (session.GetHabbo().ForceOpenGift)
+                    if (session.GetUser().ForceOpenGift)
                     {
                         if (item.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
                         {
@@ -172,7 +172,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                             ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, room.Id, room.RoomData.OwnerId);
                         }
 
-                        session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
+                        session.GetUser().GetInventoryComponent().RemoveItem(ItemId);
                     }
                 }
                 else

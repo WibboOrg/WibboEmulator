@@ -18,7 +18,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 }*/
 
                 string BadgeCode = Params[2];
-                clientByUsername.GetHabbo().GetBadgeComponent().GiveBadge(BadgeCode, true);
+                clientByUsername.GetUser().GetBadgeComponent().GiveBadge(BadgeCode, true);
                 clientByUsername.SendPacket(new ReceiveBadgeComposer(BadgeCode));
             }
             else

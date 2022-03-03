@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Messenger
 {
-    internal class HabboSearchResultComposer : ServerPacket
+    internal class UserSearchResultComposer : ServerPacket
     {
-        public HabboSearchResultComposer(List<SearchResult> friend, List<SearchResult> other)
+        public UserSearchResultComposer(List<SearchResult> friend, List<SearchResult> other)
             : base(ServerPacketHeader.MESSENGER_SEARCH)
         {
             this.WriteInteger(friend.Count);

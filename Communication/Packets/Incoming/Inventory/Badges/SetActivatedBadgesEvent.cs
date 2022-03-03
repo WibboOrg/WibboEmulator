@@ -15,16 +15,16 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             if (Session == null)
                 return;
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
                 return;
-            if (Session.GetHabbo().GetBadgeComponent() == null)
+            if (Session.GetUser().GetBadgeComponent() == null)
                 return;
 
-            Session.GetHabbo().GetBadgeComponent().ResetSlots();
+            Session.GetUser().GetBadgeComponent().ResetSlots();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserBadgeDao.UpdateResetSlot(dbClient, Session.GetHabbo().Id);
+                UserBadgeDao.UpdateResetSlot(dbClient, Session.GetUser().Id);
             }
 
             for (int i = 0; i < 5; i++)
@@ -37,29 +37,29 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     continue;
                 }
 
-                if (!Session.GetHabbo().GetBadgeComponent().HasBadge(Badge) || Slot < 1 || Slot > 5)
+                if (!Session.GetUser().GetBadgeComponent().HasBadge(Badge) || Slot < 1 || Slot > 5)
                 {
                     continue;
                 }
 
-                Session.GetHabbo().GetBadgeComponent().GetBadge(Badge).Slot = Slot;
+                Session.GetUser().GetBadgeComponent().GetBadge(Badge).Slot = Slot;
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserBadgeDao.UpdateSlot(dbClient, Session.GetHabbo().Id, Slot, Badge);
+                    UserBadgeDao.UpdateSlot(dbClient, Session.GetUser().Id, Slot, Badge);
                 }
             }
 
             ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_BADGE, 0);
 
-            if (!Session.GetHabbo().InRoom)
-                Session.SendPacket(new HabboUserBadgesComposer(Session.GetHabbo()));
+            if (!Session.GetUser().InRoom)
+                Session.SendPacket(new UserBadgesComposer(Session.GetUser()));
             else 
             {
-                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
 
                 if(room != null)
-                    room.SendPacket(new HabboUserBadgesComposer(Session.GetHabbo()));
+                    room.SendPacket(new UserBadgesComposer(Session.GetUser()));
             }
         }
     }

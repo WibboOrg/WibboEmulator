@@ -241,9 +241,9 @@ namespace Butterfly
             string Name = "Unknown User";
 
             Client Client = GetGame().GetClientManager().GetClientByUserID(UserId);
-            if (Client != null && Client.GetHabbo() != null)
+            if (Client != null && Client.GetUser() != null)
             {
-                return Client.GetHabbo().Username;
+                return Client.GetUser().Username;
             }
 
             if (_usersCached.ContainsKey(UserId))
@@ -262,28 +262,28 @@ namespace Butterfly
             return Name;
         }
 
-        public static User GetHabboByUsername(string UserName)
+        public static User GetUserByUsername(string UserName)
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 int id = UserDao.GetIdByName(dbClient, UserName);
                 if (id > 0)
                 {
-                    return GetHabboById(Convert.ToInt32(id));
+                    return GetUserById(Convert.ToInt32(id));
                 }
 
                 return null;
             }
         }
 
-        public static User GetHabboById(int UserId)
+        public static User GetUserById(int UserId)
         {
             try
             {
                 Client Client = GetGame().GetClientManager().GetClientByUserID(UserId);
                 if (Client != null)
                 {
-                    User User = Client.GetHabbo();
+                    User User = Client.GetUser();
                     if (User != null && User.Id > 0)
                     {
                         if (_usersCached.ContainsKey(UserId))

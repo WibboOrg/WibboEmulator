@@ -12,13 +12,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int UserId = Packet.PopInt();
 
-            User User = ButterflyEnvironment.GetHabboById(UserId);
+            User User = ButterflyEnvironment.GetUserById(UserId);
             if (User == null)
                 return;
             if (User.GetBadgeComponent() == null)
                 return;
 
-            Session.SendPacket(new HabboUserBadgesComposer(User));
+            Session.SendPacket(new UserBadgesComposer(User));
         }
     }
 }

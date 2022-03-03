@@ -30,11 +30,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                     if (entry.Value)
                     {
-                        stringBuilder.Append("- " + guide.GetHabbo().Username + " (En service)\r");
+                        stringBuilder.Append("- " + guide.GetUser().Username + " (En service)\r");
                     }
                     else
                     {
-                        stringBuilder.Append("- " + guide.GetHabbo().Username + " (Disponible)\r");
+                        stringBuilder.Append("- " + guide.GetUser().Username + " (Disponible)\r");
                     }
                 }
 

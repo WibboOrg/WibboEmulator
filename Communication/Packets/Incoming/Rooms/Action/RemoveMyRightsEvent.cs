@@ -12,17 +12,17 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
 
-            if (!Session.GetHabbo().InRoom)
+            if (!Session.GetUser().InRoom)
             {
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room Room))
+            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -32,9 +32,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Room.UsersWithRights.Contains(Session.GetHabbo().Id))
+            if (Room.UsersWithRights.Contains(Session.GetUser().Id))
             {
-                RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+                RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
                 if (User != null && !User.IsBot)
                 {
                     User.RemoveStatus("flatctrl 1");
@@ -45,12 +45,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    RoomRightDao.Delete(dbClient, Room.Id, Session.GetHabbo().Id);
+                    RoomRightDao.Delete(dbClient, Room.Id, Session.GetUser().Id);
                 }
 
-                if (Room.UsersWithRights.Contains(Session.GetHabbo().Id))
+                if (Room.UsersWithRights.Contains(Session.GetUser().Id))
                 {
-                    Room.UsersWithRights.Remove(Session.GetHabbo().Id);
+                    Room.UsersWithRights.Remove(Session.GetUser().Id);
                 }
             }
         }

@@ -9,7 +9,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo().GetMessenger() == null)
+            if (Session.GetUser().GetMessenger() == null)
             {
                 return;
             }
@@ -18,20 +18,20 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             for (int index = 0; index < Count; ++index)
             {
                 int num2 = Packet.PopInt();
-                MessengerRequest request = Session.GetHabbo().GetMessenger().GetRequest(num2);
+                MessengerRequest request = Session.GetUser().GetMessenger().GetRequest(num2);
                 if (request != null)
                 {
-                    if (request.To != Session.GetHabbo().Id)
+                    if (request.To != Session.GetUser().Id)
                     {
                         break;
                     }
 
-                    if (!Session.GetHabbo().GetMessenger().FriendshipExists(request.To))
+                    if (!Session.GetUser().GetMessenger().FriendshipExists(request.To))
                     {
-                        Session.GetHabbo().GetMessenger().CreateFriendship(request.From);
+                        Session.GetUser().GetMessenger().CreateFriendship(request.From);
                     }
 
-                    Session.GetHabbo().GetMessenger().HandleRequest(num2);
+                    Session.GetUser().GetMessenger().HandleRequest(num2);
                 }
             }
         }

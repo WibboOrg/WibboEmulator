@@ -30,7 +30,7 @@ namespace Butterfly.Game.Rooms
             }
             else
             {
-                return room.GetRoomUserManager().GetRoomUserByHabboId(this.UserId);
+                return room.GetRoomUserManager().GetRoomUserByUserId(this.UserId);
             }
         }
 

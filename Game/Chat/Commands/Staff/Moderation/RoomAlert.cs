@@ -10,7 +10,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             string Message = CommandManager.MergeParams(Params, 1);
             foreach (RoomUser RoomUser in Room.GetRoomUserManager().GetRoomUsers())
             {
-                if (RoomUser == null || RoomUser.GetClient() == null || Session.GetHabbo().Id == RoomUser.UserId)
+                if (RoomUser == null || RoomUser.GetClient() == null || Session.GetUser().Id == RoomUser.UserId)
                     continue;
 
                 RoomUser.GetClient().SendNotification(Message);

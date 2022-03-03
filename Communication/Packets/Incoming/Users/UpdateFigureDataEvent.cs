@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
@@ -30,43 +30,43 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_CHANGE_LOOK, 0);
 
-            Session.GetHabbo().Look = Look;
-            Session.GetHabbo().Gender = Gender.ToLower();
+            Session.GetUser().Look = Look;
+            Session.GetUser().Gender = Gender.ToLower();
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserDao.UpdateLookAndGender(dbClient, Session.GetHabbo().Id, Look, Gender);
+                UserDao.UpdateLookAndGender(dbClient, Session.GetUser().Id, Look, Gender);
             }
 
             ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_AvatarLooks", 1);
 
-            if (!Session.GetHabbo().InRoom)
+            if (!Session.GetUser().InRoom)
             {
                 return;
             }
 
-            Room currentRoom = Session.GetHabbo().CurrentRoom;
+            Room currentRoom = Session.GetUser().CurrentRoom;
 
             if (currentRoom == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = currentRoom.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = currentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            if (roomUserByHabbo.transformation || roomUserByHabbo.IsSpectator)
+            if (roomUserByUserId.transformation || roomUserByUserId.IsSpectator)
             {
                 return;
             }
 
-            Session.SendPacket(new UserObjectComposer(Session.GetHabbo()));
-            Session.SendPacket(new UserChangeComposer(roomUserByHabbo, true));
+            Session.SendPacket(new UserObjectComposer(Session.GetUser()));
+            Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
 
-            currentRoom.SendPacket(new UserChangeComposer(roomUserByHabbo, false));
+            currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
         }
     }
 }

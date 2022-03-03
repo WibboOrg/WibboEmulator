@@ -24,18 +24,18 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
             }
 
             Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
-            if (Client == null || Client.GetHabbo() == null)
+            if (Client == null || Client.GetUser() == null)
             {
                 return;
             }
 
-            Room currentRoom = Client.GetHabbo().CurrentRoom;
+            Room currentRoom = Client.GetUser().CurrentRoom;
             if (currentRoom == null)
             {
                 return;
             }
 
-            RoomUser User = currentRoom.GetRoomUserManager().GetRoomUserByHabboId(Client.GetHabbo().Id);
+            RoomUser User = currentRoom.GetRoomUserManager().GetRoomUserByUserId(Client.GetUser().Id);
 
             if (User == null || (!User.CanWalk && !User.TeleportEnabled))
             {

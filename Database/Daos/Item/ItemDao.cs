@@ -38,9 +38,9 @@ namespace Butterfly.Database.Daos
 
         internal static int Insert(IQueryAdapter dbClient, int baseItem, int userId, string extraData)
         {
-            dbClient.SetQuery("INSERT INTO `item` (base_item,user_id,extra_data) VALUES (@baseId, @habboId, @extra_data)");
+            dbClient.SetQuery("INSERT INTO `item` (base_item,user_id,extra_data) VALUES (@baseId, @userId, @extra_data)");
             dbClient.AddParameter("baseId", baseItem);
-            dbClient.AddParameter("habboId", userId);
+            dbClient.AddParameter("userId", userId);
             dbClient.AddParameter("extra_data", extraData);
 
             return Convert.ToInt32(dbClient.InsertQuery());

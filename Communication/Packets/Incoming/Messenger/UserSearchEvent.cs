@@ -6,13 +6,13 @@ using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
-    internal class HabboSearchEvent : IPacketEvent
+    internal class UserSearchEvent : IPacketEvent
     {
         public double Delay => 1000;
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo().GetMessenger() == null)
+            if (Session.GetUser().GetMessenger() == null)
             {
                 return;
             }
@@ -29,9 +29,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             foreach (SearchResult searchResult2 in searchResult)
             {
-                if (searchResult2.UserId != Session.GetHabbo().Id)
+                if (searchResult2.UserId != Session.GetUser().Id)
                 {
-                    if (Session.GetHabbo().GetMessenger().FriendshipExists(searchResult2.UserId))
+                    if (Session.GetUser().GetMessenger().FriendshipExists(searchResult2.UserId))
                     {
                         friend.Add(searchResult2);
                     }
@@ -42,7 +42,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
             }
 
-            Session.SendPacket(new HabboSearchResultComposer(friend, other));
+            Session.SendPacket(new UserSearchResultComposer(friend, other));
         }
     }
 }

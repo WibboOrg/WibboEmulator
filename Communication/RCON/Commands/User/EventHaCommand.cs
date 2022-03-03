@@ -23,15 +23,15 @@ namespace Butterfly.Communication.RCON.Commands.User
             }
 
             Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
-            if (Client == null || Client.GetHabbo().CurrentRoom == null)
+            if (Client == null || Client.GetUser().CurrentRoom == null)
             {
                 return false;
             }
 
             string Message = parameters[2];
 
-            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetHabbo().Id, Client.GetHabbo().Username, 0, string.Empty, "eventha", string.Format("WbTool eventha: {0}", Message));
-            if (Client.Antipub(Message, "<eventalert>", Client.GetHabbo().CurrentRoom.Id))
+            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, 0, string.Empty, "eventha", string.Format("WbTool eventha: {0}", Message));
+            if (Client.Antipub(Message, "<eventalert>", Client.GetUser().CurrentRoom.Id))
             {
                 return false;
             }
@@ -47,10 +47,9 @@ namespace Butterfly.Communication.RCON.Commands.User
             Message = new Regex(@"\[i\](.*?)\[\/i\]").Replace(Message, "<i>$1</i>");
             Message = new Regex(@"\[u\](.*?)\[\/u\]").Replace(Message, "<u>$1</u>");
 
-            string AlertMessage = Message + "\r\n- " + Client.GetHabbo().Username;
-            ButterflyEnvironment.GetGame().GetClientManager().SendSuperNotif("Message des Staffs", AlertMessage, "game_promo_small", "event:navigator/goto/" + Client.GetHabbo().CurrentRoom.Id, "Je veux y accéder!", true, true);
-            //ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", AlertMessage, "Je veux y jouer !", Client.GetHabbo().CurrentRoom.Id));
-            Client.GetHabbo().CurrentRoom.CloseFullRoom = true;
+            string AlertMessage = Message + "\r\n- " + Client.GetUser().Username;
+            ButterflyEnvironment.GetGame().GetClientManager().SendSuperNotif("Message des Staffs", AlertMessage, "game_promo_small", "event:navigator/goto/" + Client.GetUser().CurrentRoom.Id, "Je veux y accéder!", true, true);
+            Client.GetUser().CurrentRoom.CloseFullRoom = true;
 
             return true;
         }

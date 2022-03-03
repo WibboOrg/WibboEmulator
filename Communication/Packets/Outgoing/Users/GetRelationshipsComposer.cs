@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
             : base(ServerPacketHeader.MESSENGER_RELATIONSHIPS)
         {
             this.WriteInteger(UserId);
-            this.WriteInteger(Relationships.Count); // Count //Habbo.Relationships.Count
+            this.WriteInteger(Relationships.Count);
             Random rand = new Random();
             ICollection<Relationship>relations = Relationships;
 
@@ -30,7 +30,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
             int Hates = RelationRandom.Count(x => x.Value.Type == 3);
             foreach (Relationship Rel in RelationRandom.Values)
             {
-                User HHab = ButterflyEnvironment.GetHabboById(Rel.UserId);
+                User HHab = ButterflyEnvironment.GetUserById(Rel.UserId);
                 if (HHab == null)
                 {
                     base.WriteInteger(0);

@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }
@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int RoomId = Packet.PopInt();
             string Password = Packet.PopString();
 
-            Session.GetHabbo().PrepareRoom(RoomId, Password);
+            Session.GetUser().PrepareRoom(RoomId, Password);
         }
     }
 }

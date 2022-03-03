@@ -10,19 +10,19 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             string username = Params[1];
 
-            RoomUser roomUserByHabbo = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            Client clientByUsername = roomUserByHabbo.GetClient();
+            Client clientByUsername = roomUserByUserId.GetClient();
             if (clientByUsername == null)
             {
                 return;
             }
 
-            if (clientByUsername.GetHabbo().SpectatorMode)
+            if (clientByUsername.GetUser().SpectatorMode)
             {
                 return;
             }
@@ -32,7 +32,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Room RoomClient = roomUserByHabbo.GetClient().GetHabbo().CurrentRoom;
+            Room RoomClient = roomUserByUserId.GetClient().GetUser().CurrentRoom;
             if (RoomClient == null)
             {
                 return;
@@ -56,18 +56,18 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 raceid = 0;
             }
 
-            if (!roomUserByHabbo.SetPetTransformation(Params[2], raceid))
+            if (!roomUserByUserId.SetPetTransformation(Params[2], raceid))
             {
                 Session.SendHugeNotif(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", Session.Langue));
                 return;
             }
 
-            roomUserByHabbo.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.transf.helpstop", Session.Langue));
+            roomUserByUserId.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.transf.helpstop", Session.Langue));
 
-            roomUserByHabbo.transformation = true;
+            roomUserByUserId.transformation = true;
 
-            RoomClient.SendPacket(new UserRemoveComposer(roomUserByHabbo.VirtualId));
-            RoomClient.SendPacket(new UsersComposer(roomUserByHabbo));
+            RoomClient.SendPacket(new UserRemoveComposer(roomUserByUserId.VirtualId));
+            RoomClient.SendPacket(new UsersComposer(roomUserByUserId));
 
         }
     }

@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             string UserName = Packet.PopString();
 
-            if (Session.GetHabbo().GetMessenger() == null || !Session.GetHabbo().GetMessenger().RequestBuddy(UserName))
+            if (Session.GetUser().GetMessenger() == null || !Session.GetUser().GetMessenger().RequestBuddy(UserName))
             {
                 return;
             }

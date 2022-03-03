@@ -412,7 +412,7 @@ namespace Butterfly.Game.Rooms
             List<RoomUser> list = new List<RoomUser>();
             foreach (RoomUser roomUser in this._roomUserManager.GetUserList().ToList())
             {
-                if (!roomUser.IsBot && !roomUser.GetClient().GetHabbo().HasFuse("fuse_no_kick"))
+                if (!roomUser.IsBot && !roomUser.GetClient().GetUser().HasFuse("fuse_no_kick"))
                 {
                     this.GetRoomUserManager().RemoveUserFromRoom(roomUser.GetClient(), true, true);
                 }
@@ -456,22 +456,22 @@ namespace Butterfly.Game.Rooms
 
         public int GetRightsLevel(Client Session)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return 0;
             }
 
-            if (Session.GetHabbo().Username == this.RoomData.OwnerName || Session.GetHabbo().HasFuse("fuse_any_room_controller"))
+            if (Session.GetUser().Username == this.RoomData.OwnerName || Session.GetUser().HasFuse("fuse_any_room_controller"))
             {
                 return 4;
             }
 
-            if (Session.GetHabbo().HasFuse("fuse_any_room_rights"))
+            if (Session.GetUser().HasFuse("fuse_any_room_rights"))
             {
                 return 3;
             }
 
-            if (this.UsersWithRights.Contains(Session.GetHabbo().Id))
+            if (this.UsersWithRights.Contains(Session.GetUser().Id))
             {
                 return 1;
             }
@@ -486,19 +486,19 @@ namespace Butterfly.Game.Rooms
 
         public bool CheckRights(Client Session, bool RequireOwnership = false)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return false;
             }
 
-            if (Session.GetHabbo().Username == this.RoomData.OwnerName || Session.GetHabbo().HasFuse("fuse_any_room_controller"))
+            if (Session.GetUser().Username == this.RoomData.OwnerName || Session.GetUser().HasFuse("fuse_any_room_controller"))
             {
                 return true;
             }
 
             if (!RequireOwnership)
             {
-                if (Session.GetHabbo().HasFuse("fuse_any_room_rights") || this.UsersWithRights.Contains(Session.GetHabbo().Id))
+                if (Session.GetUser().HasFuse("fuse_any_room_rights") || this.UsersWithRights.Contains(Session.GetUser().Id))
                 {
                     return true;
                 }
@@ -513,14 +513,14 @@ namespace Butterfly.Game.Rooms
                     return false;
                 }
 
-                if (this.RoomData.Group.IsAdmin(Session.GetHabbo().Id))
+                if (this.RoomData.Group.IsAdmin(Session.GetUser().Id))
                 {
                     return true;
                 }
 
                 if (this.RoomData.Group.AdminOnlyDeco == 0)
                 {
-                    if (this.RoomData.Group.IsMember(Session.GetHabbo().Id))
+                    if (this.RoomData.Group.IsMember(Session.GetUser().Id))
                     {
                         return true;
                     }
@@ -552,7 +552,7 @@ namespace Butterfly.Game.Rooms
                     continue;
                 }
 
-                if (!roomUser.IsBot && roomUser.GetClient().GetHabbo() == null)
+                if (!roomUser.IsBot && roomUser.GetClient().GetUser() == null)
                 {
                     continue;
                 }
@@ -809,17 +809,17 @@ namespace Butterfly.Game.Rooms
                         continue;
                     }
 
-                    if (User.GetClient() == null || User.GetClient().GetConnection() == null || User.GetClient().GetHabbo() == null)
+                    if (User.GetClient() == null || User.GetClient().GetConnection() == null || User.GetClient().GetUser() == null)
                     {
                         continue;
                     }
 
-                    if (UserMutedOnly && ThisUser != null && User.GetClient().GetHabbo().MutedUsers.Contains(ThisUser.UserId))
+                    if (UserMutedOnly && ThisUser != null && User.GetClient().GetUser().MutedUsers.Contains(ThisUser.UserId))
                     {
                         continue;
                     }
 
-                    if (ThisUser != null && ThisUser.GetClient() != null && ThisUser.GetClient().GetHabbo() != null && ThisUser.GetClient().GetHabbo().IgnoreAll && ThisUser != User)
+                    if (ThisUser != null && ThisUser.GetClient() != null && ThisUser.GetClient().GetUser() != null && ThisUser.GetClient().GetUser().IgnoreAll && ThisUser != User)
                     {
                         continue;
                     }
@@ -880,7 +880,7 @@ namespace Butterfly.Game.Rooms
                         continue;
                     }
 
-                    User.GetClient().GetHabbo().SendWebPacket(Message);
+                    User.GetClient().GetUser().SendWebPacket(Message);
                 }
             }
             catch (Exception ex)
@@ -1075,7 +1075,7 @@ namespace Butterfly.Game.Rooms
             }
             else
             {
-                return this.HasActiveTrade(User.GetClient().GetHabbo().Id);
+                return this.HasActiveTrade(User.GetClient().GetUser().Id);
             }
         }
 
@@ -1115,7 +1115,7 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            this.ActiveTrades.Add(new Trade(UserOne.GetClient().GetHabbo().Id, UserTwo.GetClient().GetHabbo().Id, this.Id));
+            this.ActiveTrades.Add(new Trade(UserOne.GetClient().GetUser().Id, UserTwo.GetClient().GetUser().Id, this.Id));
         }
 
         public void TryStopTrade(int UserId)

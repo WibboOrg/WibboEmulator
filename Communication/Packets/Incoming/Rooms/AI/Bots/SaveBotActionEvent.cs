@@ -15,12 +15,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!Session.GetUser().InRoom)
             {
                 return;
             }
 
-            Room Room = Session.GetHabbo().CurrentRoom;
+            Room Room = Session.GetUser().CurrentRoom;
             if (Room == null || !Room.CheckRights(Session, true))
             {
                 return;
@@ -64,14 +64,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 case 1:
                     {
                         //Change the defaults
-                        Bot.BotData.Look = Session.GetHabbo().Look;
-                        Bot.BotData.Gender = Session.GetHabbo().Gender;
+                        Bot.BotData.Look = Session.GetUser().Look;
+                        Bot.BotData.Gender = Session.GetUser().Gender;
 
                         Room.SendPacket(new UserChangeComposer(Bot));
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            BotUserDao.UpdateLookGender(dbClient, Bot.BotData.Id, Session.GetHabbo().Gender, Session.GetHabbo().Look);
+                            BotUserDao.UpdateLookGender(dbClient, Bot.BotData.Id, Session.GetUser().Gender, Session.GetUser().Look);
                         }
                         break;
                     }

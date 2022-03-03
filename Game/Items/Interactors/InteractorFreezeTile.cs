@@ -15,19 +15,19 @@ namespace Butterfly.Game.Items.Interactors
 
         public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
-            if (Session == null || Session.GetHabbo() == null || Item.InteractingUser > 0)
+            if (Session == null || Session.GetUser() == null || Item.InteractingUser > 0)
             {
                 return;
             }
 
-            string pName = Session.GetHabbo().Username;
-            RoomUser roomUserByHabbo = Item.GetRoom().GetRoomUserManager().GetRoomUserByName(pName);
-            if (roomUserByHabbo == null || roomUserByHabbo.CountFreezeBall == 0 || roomUserByHabbo.Freezed)
+            string pName = Session.GetUser().Username;
+            RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByName(pName);
+            if (roomUserByUserId == null || roomUserByUserId.CountFreezeBall == 0 || roomUserByUserId.Freezed)
             {
                 return;
             }
 
-            Item.GetRoom().GetFreeze().throwBall(Item, roomUserByHabbo);
+            Item.GetRoom().GetFreeze().throwBall(Item, roomUserByUserId);
         }
 
         public override void OnTick(Item item)
@@ -37,7 +37,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser);
+            RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
             if (roomUserTarget != null)
             {
                 roomUserTarget.CountFreezeBall = 1;

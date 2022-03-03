@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null || Session.GetHabbo().GetMessenger() == null)
+            if (Session.GetUser() == null || Session.GetUser().GetMessenger() == null)
             {
                 return;
             }
@@ -24,37 +24,37 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Session.GetHabbo().GetMessenger().FriendshipExists(User))
+            if (!Session.GetUser().GetMessenger().FriendshipExists(User))
             {
                 return;
             }
 
             if (Type == 0)
             {
-                if (Session.GetHabbo().GetMessenger().Relation.ContainsKey(User))
+                if (Session.GetUser().GetMessenger().Relation.ContainsKey(User))
                 {
-                    Session.GetHabbo().GetMessenger().Relation.Remove(User);
+                    Session.GetUser().GetMessenger().Relation.Remove(User);
                 }
             }
             else
             {
-                if (Session.GetHabbo().GetMessenger().Relation.ContainsKey(User))
+                if (Session.GetUser().GetMessenger().Relation.ContainsKey(User))
                 {
-                    Session.GetHabbo().GetMessenger().Relation[User].Type = Type;
+                    Session.GetUser().GetMessenger().Relation[User].Type = Type;
                 }
                 else
                 {
-                    Session.GetHabbo().GetMessenger().Relation.Add(User, new Relationship(User, Type));
+                    Session.GetUser().GetMessenger().Relation.Add(User, new Relationship(User, Type));
                 }
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                MessengerFriendshipDao.UpdateRelation(dbClient, Type, Session.GetHabbo().Id, User);
+                MessengerFriendshipDao.UpdateRelation(dbClient, Type, Session.GetUser().Id, User);
             }
 
-            Session.GetHabbo().GetMessenger().RelationChanged(User, Type);
-            Session.GetHabbo().GetMessenger().UpdateFriend(User, true);
+            Session.GetUser().GetMessenger().RelationChanged(User, Type);
+            Session.GetUser().GetMessenger().UpdateFriend(User, true);
         }
     }
 }

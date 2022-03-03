@@ -11,12 +11,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }
 
-            if (Session.GetHabbo().UsersRooms.Count >= 200)
+            if (Session.GetUser().UsersRooms.Count >= 200)
             {
                 Session.SendPacket(new CanCreateRoomComposer(true, 200));
                 return;

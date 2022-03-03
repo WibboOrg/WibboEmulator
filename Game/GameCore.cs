@@ -286,7 +286,7 @@ namespace Butterfly.Game
 
         public void Destroy()
         {
-            Console.WriteLine("Destroyed Habbo Hotel.");
+            Console.WriteLine("Destroyed Hotel.");
         }
     }
 }

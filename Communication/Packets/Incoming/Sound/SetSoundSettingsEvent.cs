@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
@@ -21,22 +21,22 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int Volume3 = Packet.PopInt();
 
 
-            if (Session.GetHabbo().ClientVolume[0] == Volume1 && Session.GetHabbo().ClientVolume[1] == Volume2 && Session.GetHabbo().ClientVolume[2] == Volume3)
+            if (Session.GetUser().ClientVolume[0] == Volume1 && Session.GetUser().ClientVolume[1] == Volume2 && Session.GetUser().ClientVolume[2] == Volume3)
             {
                 return;
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserDao.UpdateVolume(dbClient, Session.GetHabbo().Id, Volume1, +Volume2, +Volume3);
+                UserDao.UpdateVolume(dbClient, Session.GetUser().Id, Volume1, +Volume2, +Volume3);
             }
 
-            Session.GetHabbo().ClientVolume.Clear();
-            Session.GetHabbo().ClientVolume.Add(Volume1);
-            Session.GetHabbo().ClientVolume.Add(Volume2);
-            Session.GetHabbo().ClientVolume.Add(Volume3);
+            Session.GetUser().ClientVolume.Clear();
+            Session.GetUser().ClientVolume.Add(Volume1);
+            Session.GetUser().ClientVolume.Add(Volume2);
+            Session.GetUser().ClientVolume.Add(Volume3);
 
-            Session.GetHabbo().SendWebPacket(new SettingVolumeComposer(Volume3, Volume2, Volume1));
+            Session.GetUser().SendWebPacket(new SettingVolumeComposer(Volume3, Volume2, Volume1));
         }
     }
 }

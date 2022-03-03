@@ -16,7 +16,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (!UserRoom.transformation && !UserRoom.IsSpectator)
             {
-                Room RoomClient = Session.GetHabbo().CurrentRoom;
+                Room RoomClient = Session.GetUser().CurrentRoom;
                 if (RoomClient != null)
                 {
                     UserRoom.transfbot = !UserRoom.transfbot;

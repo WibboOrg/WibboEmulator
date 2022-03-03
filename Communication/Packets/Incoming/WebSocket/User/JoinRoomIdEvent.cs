@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
         public void Parse(WebClient Session, ClientPacket Packet)
         {
             Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
-            if (Client == null || Client.GetHabbo() == null)
+            if (Client == null || Client.GetUser() == null)
             {
                 return;
             }

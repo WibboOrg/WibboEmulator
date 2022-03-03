@@ -77,7 +77,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
             }
             else
             {
-                if (User.GetClient() == null || User.GetClient().GetHabbo() == null)
+                if (User.GetClient() == null || User.GetClient().GetUser() == null)
                 {
                     this.WriteInteger(0);
                     this.WriteString("");
@@ -100,14 +100,14 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                 }
                 else
                 {
-                    User Habbo = User.GetClient().GetHabbo();
+                    User user = User.GetClient().GetUser();
 
                     Group Group = null;
-                    if (Habbo != null)
+                    if (user != null)
                     {
-                        if (Habbo.FavouriteGroupId > 0)
+                        if (user.FavouriteGroupId > 0)
                         {
-                            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Habbo.FavouriteGroupId, out Group))
+                            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out Group))
                             {
                                 Group = null;
                             }
@@ -116,10 +116,10 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
 
                     if (User.transfbot)
                     {
-                        this.WriteInteger(Habbo.Id);
-                        this.WriteString(Habbo.Username);
+                        this.WriteInteger(user.Id);
+                        this.WriteString(user.Username);
                         this.WriteString("Beep beep.");
-                        this.WriteString(Habbo.Look);
+                        this.WriteString(user.Look);
                         this.WriteInteger(User.VirtualId);
                         this.WriteInteger(User.X);
                         this.WriteInteger(User.Y);
@@ -127,16 +127,16 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                         this.WriteInteger(0);
                         this.WriteInteger(4);
 
-                        this.WriteString(Habbo.Gender);
-                        this.WriteInteger(Habbo.Id);
-                        this.WriteString(Habbo.Username);
+                        this.WriteString(user.Gender);
+                        this.WriteInteger(user.Id);
+                        this.WriteString(user.Username);
                         this.WriteInteger(0);
                     }
                     else if (User.transformation)
                     {
-                        this.WriteInteger(Habbo.Id);
-                        this.WriteString(Habbo.Username);
-                        this.WriteString(Habbo.Motto);
+                        this.WriteInteger(user.Id);
+                        this.WriteString(user.Username);
+                        this.WriteString(user.Motto);
                         this.WriteString(User.transformationrace + " 2 2 -1 0 3 4 -1 0");
 
                         this.WriteInteger(User.VirtualId);
@@ -146,8 +146,8 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                         this.WriteInteger(4);
                         this.WriteInteger(2);
                         this.WriteInteger(0);
-                        this.WriteInteger(Habbo.Id);
-                        this.WriteString(Habbo.Username);
+                        this.WriteInteger(user.Id);
+                        this.WriteString(user.Username);
                         this.WriteInteger(1);
                         this.WriteBoolean(false);
                         this.WriteBoolean(false);
@@ -157,17 +157,17 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                     }
                     else
                     {
-                        this.WriteInteger(Habbo.Id);
-                        this.WriteString(Habbo.Username);
-                        this.WriteString(Habbo.Motto);
-                        this.WriteString(Habbo.Look);
+                        this.WriteInteger(user.Id);
+                        this.WriteString(user.Username);
+                        this.WriteString(user.Motto);
+                        this.WriteString(user.Look);
                         this.WriteInteger(User.VirtualId);
                         this.WriteInteger(User.X);
                         this.WriteInteger(User.Y);
                         this.WriteString(User.Z.ToString());
                         this.WriteInteger(0);
                         this.WriteInteger(1);
-                        this.WriteString(Habbo.Gender.ToLower());
+                        this.WriteString(user.Gender.ToLower());
 
                         if (Group != null)
                         {
@@ -183,7 +183,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                         }
 
                         this.WriteString("");//Whats this?
-                        this.WriteInteger(Habbo.AchievementPoints);
+                        this.WriteInteger(user.AchievementPoints);
                         this.WriteBoolean(false);
                     }
                 }

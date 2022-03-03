@@ -15,26 +15,26 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }
 
-            Room Room = Session.GetHabbo().CurrentRoom;
+            Room Room = Session.GetUser().CurrentRoom;
             if (Room == null)
             {
                 return;
             }
 
-            if (Room.UserIsMuted(Session.GetHabbo().Id))
+            if (Room.UserIsMuted(Session.GetUser().Id))
             {
-                if (!Room.HasMuteExpired(Session.GetHabbo().Id))
+                if (!Room.HasMuteExpired(Session.GetUser().Id))
                 {
                     return;
                 }
                 else
                 {
-                    Room.RemoveMute(Session.GetHabbo().Id);
+                    Room.RemoveMute(Session.GetUser().Id);
                 }
             }
 
@@ -54,7 +54,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             string Message = Params.Substring(ToUser.Length + 1);
             int Color = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Color, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !Session.GetHabbo().HasFuse(Style.RequiredRight)))
+            if (!ButterflyEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Color, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !Session.GetUser().HasFuse(Style.RequiredRight)))
             {
                 Color = 0;
             }
@@ -64,12 +64,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Session.GetHabbo().HasFuse("word_filter_override"))
+            if (!Session.GetUser().HasFuse("word_filter_override"))
             {
                 Message = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
             }
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
 
             if (User == null)
             {
@@ -81,29 +81,29 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().SpamFloodTime;
-            if (timeSpan.TotalSeconds > Session.GetHabbo().SpamProtectionTime && Session.GetHabbo().SpamEnable)
+            TimeSpan timeSpan = DateTime.Now - Session.GetUser().SpamFloodTime;
+            if (timeSpan.TotalSeconds > Session.GetUser().SpamProtectionTime && Session.GetUser().SpamEnable)
             {
                 User.FloodCount = 0;
-                Session.GetHabbo().SpamEnable = false;
+                Session.GetUser().SpamEnable = false;
             }
             else if (timeSpan.TotalSeconds > 4.0)
             {
                 User.FloodCount = 0;
             }
 
-            if (timeSpan.TotalSeconds < Session.GetHabbo().SpamProtectionTime && Session.GetHabbo().SpamEnable)
+            if (timeSpan.TotalSeconds < Session.GetUser().SpamProtectionTime && Session.GetUser().SpamEnable)
             {
-                int i = Session.GetHabbo().SpamProtectionTime - timeSpan.Seconds;
+                int i = Session.GetUser().SpamProtectionTime - timeSpan.Seconds;
                 User.GetClient().SendPacket(new FloodControlComposer(i));
                 return;
             }
-            else if (timeSpan.TotalSeconds < 4.0 && User.FloodCount > 5 && !Session.GetHabbo().HasFuse("fuse_mod"))
+            else if (timeSpan.TotalSeconds < 4.0 && User.FloodCount > 5 && !Session.GetUser().HasFuse("fuse_mod"))
             {
-                Session.GetHabbo().SpamProtectionTime = (Room.IsRoleplay || Session.GetHabbo().HasFuse("fuse_low_flood")) ? 5 : 30;
-                Session.GetHabbo().SpamEnable = true;
+                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasFuse("fuse_low_flood")) ? 5 : 30;
+                Session.GetUser().SpamEnable = true;
 
-                User.GetClient().SendPacket(new FloodControlComposer(Session.GetHabbo().SpamProtectionTime - timeSpan.Seconds));
+                User.GetClient().SendPacket(new FloodControlComposer(Session.GetUser().SpamProtectionTime - timeSpan.Seconds));
 
                 return;
             }
@@ -112,9 +112,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 User.LastMessageCount = 0;
                 User.LastMessage = "";
 
-                Session.GetHabbo().SpamProtectionTime = (Room.IsRoleplay || Session.GetHabbo().HasFuse("fuse_low_flood")) ? 5 : 30;
-                Session.GetHabbo().SpamEnable = true;
-                User.GetClient().SendPacket(new FloodControlComposer(Session.GetHabbo().SpamProtectionTime - timeSpan.Seconds));
+                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasFuse("fuse_low_flood")) ? 5 : 30;
+                Session.GetUser().SpamEnable = true;
+                User.GetClient().SendPacket(new FloodControlComposer(Session.GetUser().SpamProtectionTime - timeSpan.Seconds));
                 return;
             }
             else
@@ -126,7 +126,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 User.LastMessage = Message;
 
-                Session.GetHabbo().SpamFloodTime = DateTime.Now;
+                Session.GetUser().SpamFloodTime = DateTime.Now;
                 User.FloodCount++;
 
                 if (Message.StartsWith("@red@"))
@@ -179,7 +179,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     User.GetClient().SendPacket(new WhisperComposer(User.VirtualId, Message, Color));
 
-                    if (Session.GetHabbo().IgnoreAll)
+                    if (Session.GetUser().IgnoreAll)
                     {
                         return;
                     }
@@ -188,13 +188,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     {
                         RoomUser UserWhiper = Room.GetRoomUserManager().GetRoomUserByName(Username);
 
-                        if (UserWhiper == null || UserWhiper.GetClient() == null || UserWhiper.GetClient().GetHabbo() == null)
+                        if (UserWhiper == null || UserWhiper.GetClient() == null || UserWhiper.GetClient().GetUser() == null)
                         {
                             User.WhiperGroupUsers.Remove(Username);
                             continue;
                         }
 
-                        if (UserWhiper.IsSpectator || UserWhiper.IsBot || UserWhiper.UserId == User.UserId || UserWhiper.GetClient().GetHabbo().MutedUsers.Contains(Session.GetHabbo().Id))
+                        if (UserWhiper.IsSpectator || UserWhiper.IsBot || UserWhiper.UserId == User.UserId || UserWhiper.GetClient().GetUser().MutedUsers.Contains(Session.GetUser().Id))
                         {
                             User.WhiperGroupUsers.Remove(Username);
                             continue;
@@ -213,7 +213,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                
                     foreach (RoomUser roomUser in roomUserByRank)
                     {
-                        if (roomUser != null && roomUser.HabboId != User.HabboId && roomUser.GetClient() != null && roomUser.GetClient().GetHabbo().ViewMurmur && !User.WhiperGroupUsers.Contains(roomUser.GetUsername()))
+                        if (roomUser != null && roomUser.UserId != User.UserId && roomUser.GetClient() != null && roomUser.GetClient().GetUser().ViewMurmur && !User.WhiperGroupUsers.Contains(roomUser.GetUsername()))
                         {
                             roomUser.GetClient().SendPacket(MessageWhipser);
                         }
@@ -223,19 +223,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 {
                     User.GetClient().SendPacket(new WhisperComposer(User.VirtualId, Message, Color));
 
-                    if (Session.GetHabbo().IgnoreAll)
+                    if (Session.GetUser().IgnoreAll)
                     {
                         return;
                     }
 
                     RoomUser UserWhiper = Room.GetRoomUserManager().GetRoomUserByName(ToUser);
 
-                    if (UserWhiper == null || UserWhiper.GetClient() == null || UserWhiper.GetClient().GetHabbo() == null)
+                    if (UserWhiper == null || UserWhiper.GetClient() == null || UserWhiper.GetClient().GetUser() == null)
                     {
                         return;
                     }
 
-                    if (UserWhiper.IsSpectator || UserWhiper.IsBot || UserWhiper.UserId == User.UserId || UserWhiper.GetClient().GetHabbo().MutedUsers.Contains(Session.GetHabbo().Id))
+                    if (UserWhiper.IsSpectator || UserWhiper.IsBot || UserWhiper.UserId == User.UserId || UserWhiper.GetClient().GetUser().MutedUsers.Contains(Session.GetUser().Id))
                     {
                         return;
                     }
@@ -251,14 +251,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     WhisperComposer MessageWhipserStaff = new WhisperComposer(User.VirtualId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, Color);
                     foreach (RoomUser roomUser in roomUserByRank)
                     {
-                        if (roomUser != null && roomUser.GetClient() != null && roomUser.GetClient().GetHabbo() != null && roomUser.HabboId != User.HabboId && roomUser.GetClient() != null && roomUser.GetClient().GetHabbo().ViewMurmur && UserWhiper.UserId != roomUser.UserId)
+                        if (roomUser != null && roomUser.GetClient() != null && roomUser.GetClient().GetUser() != null && roomUser.UserId != User.UserId && roomUser.GetClient() != null && roomUser.GetClient().GetUser().ViewMurmur && UserWhiper.UserId != roomUser.UserId)
                         {
                             roomUser.GetClient().SendPacket(MessageWhipserStaff);
                         }
                     }
                 }
 
-                Session.GetHabbo().GetChatMessageManager().AddMessage(User.UserId, User.GetUsername(), User.RoomId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, UnixTimestamp.GetNow());
+                Session.GetUser().GetChatMessageManager().AddMessage(User.UserId, User.GetUsername(), User.RoomId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, UnixTimestamp.GetNow());
                 Room.GetChatMessageManager().AddMessage(User.UserId, User.GetUsername(), User.RoomId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, UnixTimestamp.GetNow());
             }
         }

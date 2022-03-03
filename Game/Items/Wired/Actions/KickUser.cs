@@ -32,9 +32,9 @@ namespace Butterfly.Game.Items.Wired.Actions
 
         public bool BeforeCycle(RoomUser user, Item item)
         {
-            if (user != null && user.GetClient() != null && user.GetClient().GetHabbo() != null)
+            if (user != null && user.GetClient() != null && user.GetClient().GetUser() != null)
             {
-                if (user.GetClient().GetHabbo().HasFuse("fuse_mod") || this.RoomInstance.RoomData.OwnerId == user.UserId)
+                if (user.GetClient().GetUser().HasFuse("fuse_mod") || this.RoomInstance.RoomData.OwnerId == user.UserId)
                 {
                     user.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("wired.kick.exception", user.GetClient().Langue));
                     

@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room Room))
+            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -32,7 +32,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Session.GetHabbo().GetInventoryComponent().TryGetPet(Packet.PopInt(), out Pet Pet))
+            if (!Session.GetUser().GetInventoryComponent().TryGetPet(Packet.PopInt(), out Pet Pet))
             {
                 return;
             }
@@ -76,13 +76,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 BotPetDao.UpdateRoomId(dbClient, Pet.PetId, Pet.RoomId);
             }
 
-            if (!Session.GetHabbo().GetInventoryComponent().TryRemovePet(Pet.PetId, out Pet ToRemove))
+            if (!Session.GetUser().GetInventoryComponent().TryRemovePet(Pet.PetId, out Pet ToRemove))
             {
                 Console.WriteLine("Error whilst removing pet: " + ToRemove.PetId);
                 return;
             }
 
-            Session.SendPacket(new PetInventoryComposer(Session.GetHabbo().GetInventoryComponent().GetPets()));
+            Session.SendPacket(new PetInventoryComposer(Session.GetUser().GetInventoryComponent().GetPets()));
         }
     }
 }

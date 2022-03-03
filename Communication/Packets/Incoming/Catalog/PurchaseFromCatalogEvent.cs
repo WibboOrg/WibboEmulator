@@ -39,7 +39,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Page.Enabled || Page.MinimumRank > Session.GetHabbo().Rank)
+            if (!Page.Enabled || Page.MinimumRank > Session.GetUser().Rank)
             {
                 return;
             }
@@ -71,7 +71,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int TotalPixelCost = Amount > 1 ? ((Item.CostDuckets * Amount) - ((int)Math.Floor((double)Amount / 6) * Item.CostDuckets)) : Item.CostDuckets;
             int TotalDiamondCost = Amount > 1 ? ((Item.CostWibboPoints * Amount) - ((int)Math.Floor((double)Amount / 6) * Item.CostWibboPoints)) : Item.CostWibboPoints;
 
-            if (Session.GetHabbo().Credits < TotalCreditsCost || Session.GetHabbo().Duckets < TotalPixelCost || Session.GetHabbo().WibboPoints < TotalDiamondCost)
+            if (Session.GetUser().Credits < TotalCreditsCost || Session.GetUser().Duckets < TotalPixelCost || Session.GetUser().WibboPoints < TotalDiamondCost)
             {
                 return;
             }
@@ -181,7 +181,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     break;
 
                 case InteractionType.TROPHY:
-                    ExtraData = Session.GetHabbo().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + Convert.ToChar(9) + ExtraData;
+                    ExtraData = Session.GetUser().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year + Convert.ToChar(9) + ExtraData;
                     break;
 
                 case InteractionType.MANNEQUIN:
@@ -199,28 +199,28 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         if (!ExtraData.StartsWith("perso_"))
                         {
-                            Session.GetHabbo().GetBadgeComponent().RemoveBadge(ExtraData);
+                            Session.GetUser().GetBadgeComponent().RemoveBadge(ExtraData);
                         }
 
-                        Session.SendPacket(new BadgesComposer(Session.GetHabbo().GetBadgeComponent().BadgeList));
+                        Session.SendPacket(new BadgesComposer(Session.GetUser().GetBadgeComponent().BadgeList));
 
                         break;
                     }
 
                 case InteractionType.BADGE_DISPLAY:
-                    if (ButterflyEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(ExtraData) || !Session.GetHabbo().GetBadgeComponent().HasBadge(ExtraData))
+                    if (ButterflyEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(ExtraData) || !Session.GetUser().GetBadgeComponent().HasBadge(ExtraData))
                     {
                         Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", Session.Langue));
                         Session.SendPacket(new PurchaseOKComposer());
                         return;
                     }
 
-                    ExtraData = ExtraData + Convert.ToChar(9) + Session.GetHabbo().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+                    ExtraData = ExtraData + Convert.ToChar(9) + Session.GetUser().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
                     break;
 
                 case InteractionType.BADGE:
                     {
-                        if (Session.GetHabbo().GetBadgeComponent().HasBadge(Item.Badge))
+                        if (Session.GetUser().GetBadgeComponent().HasBadge(Item.Badge))
                         {
                             Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buybadge.error", Session.Langue));
                             Session.SendPacket(new PurchaseOKComposer());
@@ -256,24 +256,24 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (Item.CostCredits > 0)
             {
-                Session.GetHabbo().Credits -= TotalCreditsCost;
-                Session.SendPacket(new CreditBalanceComposer(Session.GetHabbo().Credits));
+                Session.GetUser().Credits -= TotalCreditsCost;
+                Session.SendPacket(new CreditBalanceComposer(Session.GetUser().Credits));
             }
 
             if (Item.CostDuckets > 0)
             {
-                Session.GetHabbo().Duckets -= TotalPixelCost;
-                Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, Session.GetHabbo().Duckets));
+                Session.GetUser().Duckets -= TotalPixelCost;
+                Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().Duckets, Session.GetUser().Duckets));
             }
 
             if (Item.CostWibboPoints > 0)
             {
-                Session.GetHabbo().WibboPoints -= TotalDiamondCost;
-                Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().WibboPoints, 0, 105));
+                Session.GetUser().WibboPoints -= TotalDiamondCost;
+                Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserDao.UpdateRemovePoints(dbClient, Session.GetHabbo().Id, TotalDiamondCost);
+                    UserDao.UpdateRemovePoints(dbClient, Session.GetUser().Id, TotalDiamondCost);
                 }
             }
 
@@ -289,7 +289,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         default:
                             if (AmountPurchase > 1)
                             {
-                                List<Item> Items = ItemFactory.CreateMultipleItems(Item.Data, Session.GetHabbo(), ExtraData, AmountPurchase);
+                                List<Item> Items = ItemFactory.CreateMultipleItems(Item.Data, Session.GetUser(), ExtraData, AmountPurchase);
 
                                 if (Items != null)
                                 {
@@ -298,7 +298,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                             }
                             else
                             {
-                                NewItem = ItemFactory.CreateSingleItemNullable(Item.Data, Session.GetHabbo(), ExtraData, LimitedEditionSells, LimitedEditionStack);
+                                NewItem = ItemFactory.CreateSingleItemNullable(Item.Data, Session.GetUser(), ExtraData, LimitedEditionSells, LimitedEditionStack);
 
                                 if (NewItem != null)
                                 {
@@ -311,7 +311,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         case InteractionType.ARROW:
                             for (int i = 0; i < AmountPurchase; i++)
                             {
-                                List<Item> TeleItems = ItemFactory.CreateTeleporterItems(Item.Data, Session.GetHabbo());
+                                List<Item> TeleItems = ItemFactory.CreateTeleporterItems(Item.Data, Session.GetUser());
 
                                 if (TeleItems != null)
                                 {
@@ -324,7 +324,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                             {
                                 if (AmountPurchase > 1)
                                 {
-                                    List<Item> Items = ItemFactory.CreateMultipleItems(Item.Data, Session.GetHabbo(), ExtraData, AmountPurchase);
+                                    List<Item> Items = ItemFactory.CreateMultipleItems(Item.Data, Session.GetUser(), ExtraData, AmountPurchase);
 
                                     if (Items != null)
                                     {
@@ -337,7 +337,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                                 }
                                 else
                                 {
-                                    NewItem = ItemFactory.CreateSingleItemNullable(Item.Data, Session.GetHabbo(), ExtraData);
+                                    NewItem = ItemFactory.CreateSingleItemNullable(Item.Data, Session.GetUser(), ExtraData);
 
                                     if (NewItem != null)
                                     {
@@ -351,7 +351,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     foreach (Item PurchasedItem in GeneratedGenericItems)
                     {
-                        if (Session.GetHabbo().GetInventoryComponent().TryAddItem(PurchasedItem))
+                        if (Session.GetUser().GetInventoryComponent().TryAddItem(PurchasedItem))
                         {
                             Session.SendPacket(new FurniListNotificationComposer(PurchasedItem.Id, 1));
                         }
@@ -359,11 +359,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     break;
 
                 case "r":
-                    Bot Bot = BotUtility.CreateBot(Item.Data, Session.GetHabbo().Id);
+                    Bot Bot = BotUtility.CreateBot(Item.Data, Session.GetUser().Id);
                     if (Bot != null)
                     {
-                        Session.GetHabbo().GetInventoryComponent().TryAddBot(Bot);
-                        Session.SendPacket(new BotInventoryComposer(Session.GetHabbo().GetInventoryComponent().GetBots()));
+                        Session.GetUser().GetInventoryComponent().TryAddBot(Bot);
+                        Session.SendPacket(new BotInventoryComposer(Session.GetUser().GetInventoryComponent().GetBots()));
                         Session.SendPacket(new FurniListNotificationComposer(Bot.Id, 5));
                     }
                     break;
@@ -372,13 +372,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     {
                         string[] PetData = ExtraData.Split('\n');
 
-                        Pet GeneratedPet = PetUtility.CreatePet(Session.GetHabbo().Id, PetData[0], Item.Data.SpriteId, PetData[1], PetData[2]);
+                        Pet GeneratedPet = PetUtility.CreatePet(Session.GetUser().Id, PetData[0], Item.Data.SpriteId, PetData[1], PetData[2]);
                         if (GeneratedPet != null)
                         {
-                            Session.GetHabbo().GetInventoryComponent().TryAddPet(GeneratedPet);
+                            Session.GetUser().GetInventoryComponent().TryAddPet(GeneratedPet);
 
                             Session.SendPacket(new FurniListNotificationComposer(GeneratedPet.PetId, 3));
-                            Session.SendPacket(new PetInventoryComposer(Session.GetHabbo().GetInventoryComponent().GetPets()));
+                            Session.SendPacket(new PetInventoryComposer(Session.GetUser().GetInventoryComponent().GetPets()));
                         }
                         break;
                     }
@@ -389,9 +389,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     }
             }
 
-            if (!string.IsNullOrEmpty(Item.Badge) && !Session.GetHabbo().GetBadgeComponent().HasBadge(Item.Badge))
+            if (!string.IsNullOrEmpty(Item.Badge) && !Session.GetUser().GetBadgeComponent().HasBadge(Item.Badge))
             {
-                Session.GetHabbo().GetBadgeComponent().GiveBadge(Item.Badge, true);
+                Session.GetUser().GetBadgeComponent().GiveBadge(Item.Badge, true);
                 Session.SendPacket(new ReceiveBadgeComposer(Item.Badge));
 
                 Session.SendPacket(new FurniListNotificationComposer(0, 4));

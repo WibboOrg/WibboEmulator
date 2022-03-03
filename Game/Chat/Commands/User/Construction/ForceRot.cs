@@ -15,11 +15,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             int.TryParse(Params[1], out int num);
             if (num <= -1 || num >= 7)
             {
-                Session.GetHabbo().ForceRot = 0;
+                Session.GetUser().ForceRot = 0;
             }
             else
             {
-                Session.GetHabbo().ForceRot = num;
+                Session.GetUser().ForceRot = num;
             }
         }
     }

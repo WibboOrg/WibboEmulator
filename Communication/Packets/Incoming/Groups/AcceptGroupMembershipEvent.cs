@@ -20,7 +20,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if ((Session.GetHabbo().Id != Group.CreatorId && !Group.IsAdmin(Session.GetHabbo().Id)) && !Session.GetHabbo().HasFuse("group_delete_limit_override"))
+            if ((Session.GetUser().Id != Group.CreatorId && !Group.IsAdmin(Session.GetUser().Id)) && !Session.GetUser().HasFuse("group_delete_limit_override"))
             {
                 return;
             }
@@ -30,17 +30,17 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            User Habbo = ButterflyEnvironment.GetHabboById(UserId);
-            if (Habbo == null)
+            User user = ButterflyEnvironment.GetUserById(UserId);
+            if (user == null)
             {
                 return;
             }
 
             Group.HandleRequest(UserId, true);
 
-            Habbo.MyGroups.Add(Group.Id);
+            user.MyGroups.Add(Group.Id);
 
-            Session.SendPacket(new GroupMemberUpdatedComposer(GroupId, Habbo, 4));
+            Session.SendPacket(new GroupMemberUpdatedComposer(GroupId, user, 4));
         }
     }
 }

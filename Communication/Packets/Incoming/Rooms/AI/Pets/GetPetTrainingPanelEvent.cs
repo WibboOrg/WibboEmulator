@@ -10,20 +10,20 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (Session == null || Session.GetUser() == null || !Session.GetUser().InRoom)
             {
                 return;
             }
 
             int PetId = Packet.PopInt();
 
-            if (!Session.GetHabbo().CurrentRoom.GetRoomUserManager().TryGetPet(PetId, out RoomUser Pet))
+            if (!Session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(PetId, out RoomUser Pet))
             {
                 return;
             }
 
             //Continue as a regular pet..
-            if (Pet.RoomId != Session.GetHabbo().CurrentRoomId || Pet.PetData == null)
+            if (Pet.RoomId != Session.GetUser().CurrentRoomId || Pet.PetData == null)
             {
                 return;
             }

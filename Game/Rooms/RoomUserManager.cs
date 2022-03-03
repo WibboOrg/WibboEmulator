@@ -311,7 +311,7 @@ namespace Butterfly.Game.Rooms
                     case ItemEffectType.ICESKATES:
                         if (User.GetClient() != null)
                         {
-                            if (User.GetClient().GetHabbo().Gender == "M")
+                            if (User.GetClient().GetUser().Gender == "M")
                             {
                                 User.ApplyEffect(38);
                             }
@@ -335,7 +335,7 @@ namespace Butterfly.Game.Rooms
                     case ItemEffectType.NORMALSKATES:
                         if (User.GetClient() != null)
                         {
-                            if (User.GetClient().GetHabbo().Gender == "M")
+                            if (User.GetClient().GetUser().Gender == "M")
                             {
                                 User.ApplyEffect(55);
                             }
@@ -405,17 +405,16 @@ namespace Butterfly.Game.Rooms
                 return false;
             }
 
-            if (Session == null || Session.GetHabbo() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return false;
             }
 
             int PersonalID = this._primaryPrivateUserID++;
 
-            RoomUser User = new RoomUser(Session.GetHabbo().Id, this._room.Id, PersonalID, this._room)
+            RoomUser User = new RoomUser(Session.GetUser().Id, this._room.Id, PersonalID, this._room)
             {
-                UserId = Session.GetHabbo().Id,
-                IsSpectator = Session.GetHabbo().SpectatorMode
+                IsSpectator = Session.GetUser().SpectatorMode
             };
 
             if (!this._users.TryAdd(PersonalID, User))
@@ -423,16 +422,16 @@ namespace Butterfly.Game.Rooms
                 return false;
             }
 
-            if (Session.GetHabbo().Rank > 5 && !this._usersRank.Contains(User.UserId))
+            if (Session.GetUser().Rank > 5 && !this._usersRank.Contains(User.UserId))
             {
                 this._usersRank.Add(User.UserId);
             }
 
-            Session.GetHabbo().CurrentRoomId = this._room.Id;
-            Session.GetHabbo().LoadingRoomId = 0;
+            Session.GetUser().CurrentRoomId = this._room.Id;
+            Session.GetUser().LoadingRoomId = 0;
 
-            string Username = Session.GetHabbo().Username;
-            int UserId = Session.GetHabbo().Id;
+            string Username = Session.GetUser().Username;
+            int UserId = Session.GetUser().Id;
 
             if (this._usersByUsername.ContainsKey(Username.ToLower()))
             {
@@ -456,23 +455,23 @@ namespace Butterfly.Game.Rooms
             User.SetPos(Model.DoorX, Model.DoorY, Model.DoorZ);
             User.SetRot(Model.DoorOrientation, false);
 
-            if (Session.GetHabbo().IsTeleporting)
+            if (Session.GetUser().IsTeleporting)
             {
-                Item roomItem = this._room.GetRoomItemHandler().GetItem(User.GetClient().GetHabbo().TeleporterId);
+                Item roomItem = this._room.GetRoomItemHandler().GetItem(User.GetClient().GetUser().TeleporterId);
                 if (roomItem != null)
                 {
                     roomItem.GetRoom().GetGameMap().TeleportToItem(User, roomItem);
 
-                    roomItem.InteractingUser2 = Session.GetHabbo().Id;
+                    roomItem.InteractingUser2 = Session.GetUser().Id;
                     roomItem.ReqUpdate(1);
                 }
             }
 
-            if (User.GetClient() != null && User.GetClient().GetHabbo() != null)
+            if (User.GetClient() != null && User.GetClient().GetUser() != null)
             {
-                User.GetClient().GetHabbo().IsTeleporting = false;
-                User.GetClient().GetHabbo().TeleporterId = 0;
-                User.GetClient().GetHabbo().TeleportingRoomID = 0;
+                User.GetClient().GetUser().IsTeleporting = false;
+                User.GetClient().GetUser().TeleporterId = 0;
+                User.GetClient().GetUser().TeleportingRoomID = 0;
             }
 
             if (!User.IsSpectator)
@@ -487,7 +486,7 @@ namespace Butterfly.Game.Rooms
                 {
                     foreach (RoomUser StaffUser in roomUserByRank)
                     {
-                        if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetHabbo() != null && StaffUser.GetClient().GetHabbo().HasFuse("fuse_show_invisible")))
+                        if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetUser() != null && StaffUser.GetClient().GetUser().HasFuse("fuse_show_invisible")))
                         {
                             StaffUser.SendWhisperChat(User.GetUsername() + " est entré dans l'appart en mode invisible !", true);
                         }
@@ -501,7 +500,7 @@ namespace Butterfly.Game.Rooms
                 Session.SendPacket(new YouAreOwnerComposer());
                 Session.SendPacket(new YouAreControllerComposer(4));
 
-                if (Session.GetHabbo().HasFuse("ads_background"))
+                if (Session.GetUser().HasFuse("ads_background"))
                 {
                     Session.SendPacket(new UserRightsComposer(5));
                 }
@@ -513,9 +512,9 @@ namespace Butterfly.Game.Rooms
             }
             else
             {
-                if (Session.GetHabbo().HasFuse("ads_background"))
+                if (Session.GetUser().HasFuse("ads_background"))
                 {
-                    Session.SendPacket(new UserRightsComposer(Session.GetHabbo().Rank));
+                    Session.SendPacket(new UserRightsComposer(Session.GetUser().Rank));
                 }
 
                 Session.SendPacket(new YouAreNotControllerComposer());
@@ -523,39 +522,39 @@ namespace Butterfly.Game.Rooms
 
             if (!User.IsBot)
             {
-                if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("ADM")) // STAFF
+                if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("ADM")) // STAFF
                 {
                     User.CurrentEffect = 540;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("PRWRD1")) // PROWIRED
+                else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("PRWRD1")) // PROWIRED
                 {
                     User.CurrentEffect = 580;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("GPHWIB")) // GRAPHISTE
+                else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("GPHWIB")) // GRAPHISTE
                 {
                     User.CurrentEffect = 557;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("wibbo.helpeur")) // HELPEUR
+                else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("wibbo.helpeur")) // HELPEUR
                 {
                     User.CurrentEffect = 544;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WIBARC")) // ARCHI
+                else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("WIBARC")) // ARCHI
                 {
                     User.CurrentEffect = 546;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("CRPOFFI")) // CROUPIER
+                else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("CRPOFFI")) // CROUPIER
                 {
                     User.CurrentEffect = 570;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("ZEERSWS")) // WIBBOSTATIONORIGINERADIO
+                else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("ZEERSWS")) // WIBBOSTATIONORIGINERADIO
                 {
                     User.CurrentEffect = 552;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WBASSO")) // ASSOCIER ?
+                else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("WBASSO")) // ASSOCIER ?
                 {
                     User.CurrentEffect = 576;
                 }
-                else if (Session.GetHabbo().GetBadgeComponent().HasBadgeSlot("WIBBOCOM")) // AGENT DE COMMUNICATION
+                else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("WIBBOCOM")) // AGENT DE COMMUNICATION
                 {
                     User.CurrentEffect = 581;
                 }
@@ -578,42 +577,42 @@ namespace Butterfly.Game.Rooms
                 Bot.BotAI.OnUserEnterRoom(User);
             }
 
-            if (!User.IsBot && this._room.RoomData.OwnerName != User.GetClient().GetHabbo().Username)
+            if (!User.IsBot && this._room.RoomData.OwnerName != User.GetClient().GetUser().Username)
             {
                 ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.SOCIAL_VISIT, 0);
             }
 
             if (!User.IsBot)
             {
-                Session.GetHabbo().SendWebPacket(new InRoomComposer(true));
+                Session.GetUser().SendWebPacket(new InRoomComposer(true));
 
-                if (Session.GetHabbo().RolePlayId > 0 && this._room.RoomData.OwnerId != Session.GetHabbo().RolePlayId)
+                if (Session.GetUser().RolePlayId > 0 && this._room.RoomData.OwnerId != Session.GetUser().RolePlayId)
                 {
-                    RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Session.GetHabbo().RolePlayId);
+                    RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Session.GetUser().RolePlayId);
                     if (RPManager != null)
                     {
-                        RolePlayer Rp = RPManager.GetPlayer(Session.GetHabbo().Id);
+                        RolePlayer Rp = RPManager.GetPlayer(Session.GetUser().Id);
                         if (Rp != null)
                         {
-                            RPManager.RemovePlayer(Session.GetHabbo().Id);
+                            RPManager.RemovePlayer(Session.GetUser().Id);
                         }
                     }
-                    Session.GetHabbo().RolePlayId = 0;
+                    Session.GetUser().RolePlayId = 0;
                 }
 
-                if (this._room.IsRoleplay && this._room.RoomData.OwnerId != Session.GetHabbo().RolePlayId)
+                if (this._room.IsRoleplay && this._room.RoomData.OwnerId != Session.GetUser().RolePlayId)
                 {
                     RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.RoomData.OwnerId);
                     if (RPManager != null)
                     {
-                        RolePlayer Rp = RPManager.GetPlayer(Session.GetHabbo().Id);
+                        RolePlayer Rp = RPManager.GetPlayer(Session.GetUser().Id);
                         if (Rp == null)
                         {
-                            RPManager.AddPlayer(Session.GetHabbo().Id);
+                            RPManager.AddPlayer(Session.GetUser().Id);
                         }
                     }
 
-                    Session.GetHabbo().RolePlayId = this._room.RoomData.OwnerId;
+                    Session.GetUser().RolePlayId = this._room.RoomData.OwnerId;
                 }
             }
 
@@ -632,7 +631,7 @@ namespace Butterfly.Game.Rooms
                     return;
                 }
 
-                if (Session.GetHabbo() == null)
+                if (Session.GetUser() == null)
                 {
                     return;
                 }
@@ -646,7 +645,7 @@ namespace Butterfly.Game.Rooms
                     Session.SendPacket(new CloseConnectionComposer());
                 }
 
-                RoomUser User = this.GetRoomUserByHabboId(Session.GetHabbo().Id);
+                RoomUser User = this.GetRoomUserByUserId(Session.GetUser().Id);
                 if (User == null)
                 {
                     return;
@@ -687,9 +686,9 @@ namespace Butterfly.Game.Rooms
                     User.IsLay = false;
                 }
 
-                if (this._room.HasActiveTrade(Session.GetHabbo().Id))
+                if (this._room.HasActiveTrade(Session.GetUser().Id))
                 {
-                    this._room.TryStopTrade(Session.GetHabbo().Id);
+                    this._room.TryStopTrade(Session.GetUser().Id);
                 }
 
                 if (User.Roleplayer != null)
@@ -704,7 +703,7 @@ namespace Butterfly.Game.Rooms
                     {
                         foreach (RoomUser StaffUser in roomUserByRank)
                         {
-                            if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetHabbo() != null && StaffUser.GetClient().GetHabbo().HasFuse("fuse_show_invisible")))
+                            if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetUser() != null && StaffUser.GetClient().GetUser().HasFuse("fuse_show_invisible")))
                             {
                                 StaffUser.SendWhisperChat(User.GetUsername() + " était en mode invisible. Il vient de partir de l'appartement.", true);
                             }
@@ -712,15 +711,15 @@ namespace Butterfly.Game.Rooms
                     }
                 }
 
-                Session.GetHabbo().SendWebPacket(new InRoomComposer(false));
+                Session.GetUser().SendWebPacket(new InRoomComposer(false));
 
-                Session.GetHabbo().CurrentRoomId = 0;
-                Session.GetHabbo().LoadingRoomId = 0;
+                Session.GetUser().CurrentRoomId = 0;
+                Session.GetUser().LoadingRoomId = 0;
 
-                Session.GetHabbo().ForceUse = -1;
+                Session.GetUser().ForceUse = -1;
 
                 this._usersByUserID.TryRemove(User.UserId, out User);
-                this._usersByUsername.TryRemove(Session.GetHabbo().Username.ToLower(), out User);
+                this._usersByUsername.TryRemove(Session.GetUser().Username.ToLower(), out User);
 
                 this.RemoveRoomUser(User);
 
@@ -769,7 +768,7 @@ namespace Butterfly.Game.Rooms
             return User;
         }
 
-        public RoomUser GetRoomUserByHabboId(int pId)
+        public RoomUser GetRoomUserByUserId(int pId)
         {
             if (this._usersByUserID.ContainsKey(pId))
             {
@@ -795,7 +794,7 @@ namespace Butterfly.Game.Rooms
                     continue;
                 }
 
-                if (User.GetClient().GetHabbo() == null)
+                if (User.GetClient().GetUser() == null)
                 {
                     continue;
                 }
@@ -810,7 +809,7 @@ namespace Butterfly.Game.Rooms
                     continue;
                 }
 
-                if (User.GetClient().GetHabbo().IP != IPWeb)
+                if (User.GetClient().GetUser().IP != IPWeb)
                 {
                     continue;
                 }
@@ -850,7 +849,7 @@ namespace Butterfly.Game.Rooms
             List<RoomUser> list = new List<RoomUser>();
             foreach (int UserId in this._usersRank)
             {
-                RoomUser roomUser = this.GetRoomUserByHabboId(UserId);
+                RoomUser roomUser = this.GetRoomUserByUserId(UserId);
                 if (roomUser != null)
                 {
                     list.Add(roomUser);
@@ -962,7 +961,7 @@ namespace Butterfly.Game.Rooms
 
         private bool IsValid(RoomUser user)
         {
-            return user.IsBot || user.GetClient() != null && user.GetClient().GetHabbo() != null && user.GetClient().GetHabbo().CurrentRoomId == this._room.Id;
+            return user.IsBot || user.GetClient() != null && user.GetClient().GetUser() != null && user.GetClient().GetUser().CurrentRoomId == this._room.Id;
         }
 
         public bool TryGetPet(int PetId, out RoomUser Pet)
@@ -1072,7 +1071,7 @@ namespace Butterfly.Game.Rooms
                         }
 
                         User.CanWalk = true;
-                        roomItem.InteractingUser = User.GetClient().GetHabbo().Id;
+                        roomItem.InteractingUser = User.GetClient().GetUser().Id;
                         roomItem.ReqUpdate(2);
                         break;
                     case InteractionType.BANZAIGATEBLUE:
@@ -1194,15 +1193,15 @@ namespace Butterfly.Game.Rooms
                             break;
                         }
 
-                        if (User.GetClient().GetHabbo().LastMovFGate && User.GetClient().GetHabbo().BackupGender == User.GetClient().GetHabbo().Gender)
+                        if (User.GetClient().GetUser().LastMovFGate && User.GetClient().GetUser().BackupGender == User.GetClient().GetUser().Gender)
                         {
-                            User.GetClient().GetHabbo().LastMovFGate = false;
-                            User.GetClient().GetHabbo().Look = User.GetClient().GetHabbo().BackupLook;
+                            User.GetClient().GetUser().LastMovFGate = false;
+                            User.GetClient().GetUser().Look = User.GetClient().GetUser().BackupLook;
                         }
                         else
                         {
                             // mini Fix
-                            string _gateLook = ((User.GetClient().GetHabbo().Gender.ToUpper() == "M") ? roomItem.ExtraData.Split(',')[0] : roomItem.ExtraData.Split(',')[1]);
+                            string _gateLook = ((User.GetClient().GetUser().Gender.ToUpper() == "M") ? roomItem.ExtraData.Split(',')[0] : roomItem.ExtraData.Split(',')[1]);
                             if (_gateLook == "")
                             {
                                 break;
@@ -1221,7 +1220,7 @@ namespace Butterfly.Game.Rooms
                             gateLook = gateLook.Substring(0, gateLook.Length - 1);
 
                             // Generating New Look.
-                            string[] Parts = User.GetClient().GetHabbo().Look.Split('.');
+                            string[] Parts = User.GetClient().GetUser().Look.Split('.');
                             string NewLook = "";
                             foreach (string Part in Parts)
                             {
@@ -1234,15 +1233,15 @@ namespace Butterfly.Game.Rooms
                             }
                             NewLook += gateLook;
 
-                            User.GetClient().GetHabbo().BackupLook = User.GetClient().GetHabbo().Look;
-                            User.GetClient().GetHabbo().BackupGender = User.GetClient().GetHabbo().Gender;
-                            User.GetClient().GetHabbo().Look = NewLook;
-                            User.GetClient().GetHabbo().LastMovFGate = true;
+                            User.GetClient().GetUser().BackupLook = User.GetClient().GetUser().Look;
+                            User.GetClient().GetUser().BackupGender = User.GetClient().GetUser().Gender;
+                            User.GetClient().GetUser().Look = NewLook;
+                            User.GetClient().GetUser().LastMovFGate = true;
                         }
 
                         User.GetClient().SendPacket(new UserChangeComposer(User, true));
 
-                        if (User.GetClient().GetHabbo().InRoom)
+                        if (User.GetClient().GetUser().InRoom)
                         {
                             this._room.SendPacket(new UserChangeComposer(User, false));
                         }
@@ -1314,7 +1313,7 @@ namespace Butterfly.Game.Rooms
             {
                 if (!this.IsValid(User))
                 {
-                    if (User.GetClient() != null && User.GetClient().GetHabbo() != null)
+                    if (User.GetClient() != null && User.GetClient().GetUser() != null)
                     {
                         this.RemoveUserFromRoom(User.GetClient(), false, false);
                     }
@@ -1425,7 +1424,7 @@ namespace Butterfly.Game.Rooms
                     User.MoveWithBall = false;
                 }
 
-                if (User.IsWalking && !User.Freezed && !User.Freeze && !(this._room.FreezeRoom && (User.GetClient() != null && User.GetClient().GetHabbo().Rank < 6)))
+                if (User.IsWalking && !User.Freezed && !User.Freeze && !(this._room.FreezeRoom && (User.GetClient() != null && User.GetClient().GetUser().Rank < 6)))
                 {
                     this.CalculatePath(User);
 
@@ -1468,7 +1467,7 @@ namespace Butterfly.Game.Rooms
 
             foreach (RoomUser user in ToRemove)
             {
-                Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(user.HabboId);
+                Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(user.UserId);
                 if (clientByUserId != null)
                 {
                     this.RemoveUserFromRoom(clientByUserId, true, false);

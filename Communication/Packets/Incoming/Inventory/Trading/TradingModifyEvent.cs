@@ -9,19 +9,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            Trade userTrade = room.GetUserTrade(Session.GetHabbo().Id);
+            Trade userTrade = room.GetUserTrade(Session.GetUser().Id);
             if (userTrade == null)
             {
                 return;
             }
 
-            userTrade.Unaccept(Session.GetHabbo().Id);
+            userTrade.Unaccept(Session.GetUser().Id);
         }
     }
 }

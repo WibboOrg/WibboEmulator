@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         public double Delay => 5000;
 
         public void Parse(Client Session, ClientPacket Packet)
-        {            if (Session == null || Session.GetHabbo() != null)
+        {            if (Session == null || Session.GetUser() != null)
             {
                 return;
             }

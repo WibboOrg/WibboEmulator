@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().HasFuse("fuse_helptool"))
+            if (!Session.GetUser().HasFuse("fuse_helptool"))
             {
                 return;
             }
@@ -21,18 +21,18 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Packet.PopBoolean();
             Packet.PopBoolean();
 
-            if (onDuty && !Session.GetHabbo().OnDuty)
+            if (onDuty && !Session.GetUser().OnDuty)
             {
-                guideManager.AddGuide(Session.GetHabbo().Id);
-                Session.GetHabbo().OnDuty = true;
+                guideManager.AddGuide(Session.GetUser().Id);
+                Session.GetUser().OnDuty = true;
             }
             else
             {
-                guideManager.RemoveGuide(Session.GetHabbo().Id);
-                Session.GetHabbo().OnDuty = false;
+                guideManager.RemoveGuide(Session.GetUser().Id);
+                Session.GetUser().OnDuty = false;
             }
 
-            Session.SendPacket(new HelperToolComposer(Session.GetHabbo().OnDuty, guideManager.GuidesCount));
+            Session.SendPacket(new HelperToolComposer(Session.GetUser().OnDuty, guideManager.GuidesCount));
         }
     }
 }

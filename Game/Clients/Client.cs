@@ -127,7 +127,7 @@ namespace Butterfly.Game.Clients
                     packetList.Add(new NavigatorSettingsComposer(this._user.HomeRoom));
                     packetList.Add(new FavouritesComposer(this._user.FavoriteRooms));
                     packetList.Add(new FigureSetIdsComposer());
-                    packetList.Add(new UserRightsComposer(this._user.Rank < 2 ? 2 : this.GetHabbo().Rank));
+                    packetList.Add(new UserRightsComposer(this._user.Rank < 2 ? 2 : this.GetUser().Rank));
                     packetList.Add(new AvailabilityStatusComposer());
                     packetList.Add(new AchievementScoreComposer(this._user.AchievementPoints));
                     packetList.Add(new BuildersClubMembershipComposer());
@@ -136,7 +136,7 @@ namespace Butterfly.Game.Clients
                     packetList.Add(new SoundSettingsComposer(this._user.ClientVolume, false, false, false, 1));
                     packetList.Add(new AvatarEffectsComposer(ButterflyEnvironment.GetGame().GetEffectManager().GetEffects()));
 
-                    packetList.Add(new HabboActivityPointNotificationComposer(this._user.Duckets, 1));
+                    packetList.Add(new ActivityPointNotificationComposer(this._user.Duckets, 1));
                     packetList.Add(new CreditBalanceComposer(this._user.Credits));
 
                     if (this.IsNewUser())
@@ -167,29 +167,29 @@ namespace Butterfly.Game.Clients
 
         private bool IsNewUser()
         {
-            if (!this.GetHabbo().NewUser)
+            if (!this.GetUser().NewUser)
                 return false;
 
-            this.GetHabbo().NewUser = false;
+            this.GetUser().NewUser = false;
 
             int RoomId = 0;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                RoomId = RoomDao.InsertDuplicate(dbClient, this.GetHabbo().Username, ButterflyEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
+                RoomId = RoomDao.InsertDuplicate(dbClient, this.GetUser().Username, ButterflyEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
 
-                UserDao.UpdateNuxEnable(dbClient, this.GetHabbo().Id, RoomId);
+                UserDao.UpdateNuxEnable(dbClient, this.GetUser().Id, RoomId);
                 if (RoomId == 0)
                 {
                     return false;
                 }
 
-                ItemDao.InsertDuplicate(dbClient, this.GetHabbo().Id, RoomId);
+                ItemDao.InsertDuplicate(dbClient, this.GetUser().Id, RoomId);
             }
 
-            if (!this.GetHabbo().UsersRooms.Contains(RoomId))
-                this.GetHabbo().UsersRooms.Add(RoomId);
+            if (!this.GetUser().UsersRooms.Contains(RoomId))
+                this.GetUser().UsersRooms.Add(RoomId);
 
-            this.GetHabbo().HomeRoom = RoomId;
+            this.GetUser().HomeRoom = RoomId;
 
             return true;
         }
@@ -211,7 +211,7 @@ namespace Butterfly.Game.Clients
             return this._connection;
         }
 
-        public User GetHabbo()
+        public User GetUser()
         {
             return this._user;
         }
@@ -230,12 +230,12 @@ namespace Butterfly.Game.Clients
 
         public bool Antipub(string Message, string type, int RoomId = 0)
         {
-            if (this.GetHabbo() == null)
+            if (this.GetUser() == null)
             {
                 return false;
             }
 
-            if (this.GetHabbo().HasFuse("fuse_sysadmin"))
+            if (this.GetUser().HasFuse("fuse_sysadmin"))
             {
                 return false;
             }
@@ -249,7 +249,7 @@ namespace Butterfly.Game.Clients
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                LogChatDao.Insert(dbClient, this.GetHabbo().Id, RoomId, Message, type, this.GetHabbo().Username);
+                LogChatDao.Insert(dbClient, this.GetUser().Id, RoomId, Message, type, this.GetUser().Username);
             }
 
             if (!ButterflyEnvironment.GetGame().GetChatManager().GetFilter().Ispub(Message))
@@ -258,17 +258,17 @@ namespace Butterfly.Game.Clients
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        LogChatPubDao.Insert(dbClient, this.GetHabbo().Id, "A vérifié: " + type + Message, this.GetHabbo().Username);
+                        LogChatPubDao.Insert(dbClient, this.GetUser().Id, "A vérifié: " + type + Message, this.GetUser().Username);
                     }
 
                     foreach (Client Client in ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers())
                     {
-                        if (Client == null || Client.GetHabbo() == null)
+                        if (Client == null || Client.GetUser() == null)
                         {
                             continue;
                         }
 
-                        Client.GetHabbo().SendWebPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + Message));
+                        Client.GetUser().SendWebPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + Message));
                     }
 
                     return false;
@@ -277,7 +277,7 @@ namespace Butterfly.Game.Clients
                 return false;
             }
 
-            int PubCount = this.GetHabbo().PubDectectCount++;
+            int PubCount = this.GetUser().PubDectectCount++;
 
             if (type == "<CMD>")
             {
@@ -285,7 +285,7 @@ namespace Butterfly.Game.Clients
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                LogChatPubDao.Insert(dbClient, this.GetHabbo().Id, "Pub numero " + PubCount + ": " + type + Message, this.GetHabbo().Username);
+                LogChatPubDao.Insert(dbClient, this.GetUser().Id, "Pub numero " + PubCount + ": " + type + Message, this.GetUser().Username);
 
             if (PubCount < 3 && PubCount > 0)
             {
@@ -297,17 +297,17 @@ namespace Butterfly.Game.Clients
             }
             else if (PubCount == 4)
             {
-                ButterflyEnvironment.GetGame().GetClientManager().BanUser(this, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.GetHabbo().Username, true, false);
+                ButterflyEnvironment.GetGame().GetClientManager().BanUser(this, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.GetUser().Username, true, false);
             }
 
             foreach (Client Client in ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers())
             {
-                if (Client == null || Client.GetHabbo() == null)
+                if (Client == null || Client.GetUser() == null)
                 {
                     continue;
                 }
 
-                Client.GetHabbo().SendWebPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + Message));
+                Client.GetUser().SendWebPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + Message));
             }
 
             return true;
@@ -376,7 +376,7 @@ namespace Butterfly.Game.Clients
                 ButterflyEnvironment.GetGame().GetClientManager().OnlineNitroUsers--;
             }
 
-            if (this.GetHabbo() != null)
+            if (this.GetUser() != null)
             {
                 this._user.OnDisconnect();
             }

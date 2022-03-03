@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Packet.PopInt();
             int ItemId = Packet.PopInt();
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || !room.CheckRights(Session, true))
             {
                 return;
@@ -33,7 +33,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             room.GetRoomItemHandler().RemoveFurniture(Session, Item.Id);
-            Session.GetHabbo().GetInventoryComponent().AddItem(Item);
+            Session.GetUser().GetInventoryComponent().AddItem(Item);
             ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_PICK, 0);
         }
     }

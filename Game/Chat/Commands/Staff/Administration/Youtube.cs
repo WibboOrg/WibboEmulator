@@ -39,19 +39,19 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
             string VideoId = Split.Substring(0, 11);
 
-            RoomUser roomUserByHabbo = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
-            if (roomUserByHabbo == null || roomUserByHabbo.GetClient() == null || roomUserByHabbo.GetClient().GetHabbo() == null)
+            RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
+            if (roomUserByUserId == null || roomUserByUserId.GetClient() == null || roomUserByUserId.GetClient().GetUser() == null)
             {
                 return;
             }
 
-            if (Session.Langue != roomUserByHabbo.GetClient().Langue)
+            if (Session.Langue != roomUserByUserId.GetClient().Langue)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", roomUserByHabbo.GetClient().Langue), Session.Langue));
+                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", roomUserByUserId.GetClient().Langue), Session.Langue));
                 return;
             }
 
-            roomUserByHabbo.GetClient().GetHabbo().SendWebPacket(new YoutubeTvComposer(0, VideoId));
+            roomUserByUserId.GetClient().GetUser().SendWebPacket(new YoutubeTvComposer(0, VideoId));
         }
     }
 }

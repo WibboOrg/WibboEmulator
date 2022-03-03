@@ -14,15 +14,15 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int RoomId = Packet.PopInt();
             RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
-            if (RoomId != 0 && (roomData == null || roomData.OwnerName.ToLower() != Session.GetHabbo().Username.ToLower()))
+            if (RoomId != 0 && (roomData == null || roomData.OwnerName.ToLower() != Session.GetUser().Username.ToLower()))
             {
                 return;
             }
 
-            Session.GetHabbo().HomeRoom = RoomId;
+            Session.GetUser().HomeRoom = RoomId;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserDao.UpdateHomeRoom(dbClient, Session.GetHabbo().Id, RoomId);
+                UserDao.UpdateHomeRoom(dbClient, Session.GetUser().Id, RoomId);
             }
 
             Session.SendPacket(new NavigatorSettingsComposer(RoomId));

@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Group.CreatorId != Session.GetHabbo().Id && !Session.GetHabbo().HasFuse("group_management_override"))
+            if (Group.CreatorId != Session.GetUser().Id && !Session.GetUser().HasFuse("group_management_override"))
             {
                 return;
             }

@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().HasFuse("fuse_mod"))
+            if (!Session.GetUser().HasFuse("fuse_mod"))
             {
                 return;
             }

@@ -14,15 +14,15 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             string Username = Params[1];
 
-            RoomUser roomUserByHabbo = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByName(Username);
-            if (roomUserByHabbo == null || roomUserByHabbo.GetClient() == null)
+            RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(Username);
+            if (roomUserByUserId == null || roomUserByUserId.GetClient() == null)
             {
                 return;
             }
 
-            if (Session.Langue != roomUserByHabbo.GetClient().Langue)
+            if (Session.Langue != roomUserByUserId.GetClient().Langue)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", roomUserByHabbo.GetClient().Langue), Session.Langue));
+                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", roomUserByUserId.GetClient().Langue), Session.Langue));
                 return;
             }
 
@@ -31,12 +31,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, Session.GetHabbo().HasFuse("fuse_enablefull")))
+            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, Session.GetUser().HasFuse("fuse_enablefull")))
             {
                 return;
             }
 
-            roomUserByHabbo.ApplyEffect(NumEnable);
+            roomUserByUserId.ApplyEffect(NumEnable);
         }
     }
 }

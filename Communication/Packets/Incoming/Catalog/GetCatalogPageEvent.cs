@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             string CataMode = Packet.PopString();
 
             ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
-            if (Page == null || Page.MinimumRank > Session.GetHabbo().Rank)
+            if (Page == null || Page.MinimumRank > Session.GetUser().Rank)
             {
                 return;
             }

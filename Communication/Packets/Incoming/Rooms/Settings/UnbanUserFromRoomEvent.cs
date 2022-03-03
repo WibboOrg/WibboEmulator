@@ -10,12 +10,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client session, ClientPacket packet)
         {
-            if (!session.GetHabbo().InRoom)
+            if (!session.GetUser().InRoom)
             {
                 return;
             }
 
-            Room Instance = session.GetHabbo().CurrentRoom;
+            Room Instance = session.GetUser().CurrentRoom;
             if (Instance == null || !Instance.CheckRights(session, true))
             {
                 return;

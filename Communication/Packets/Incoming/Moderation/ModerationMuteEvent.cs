@@ -9,7 +9,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().HasFuse("fuse_no_kick"))
+            if (!Session.GetUser().HasFuse("fuse_no_kick"))
             {
                 return;
             }

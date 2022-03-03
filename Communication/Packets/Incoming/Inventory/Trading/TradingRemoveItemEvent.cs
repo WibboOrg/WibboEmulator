@@ -10,20 +10,20 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            Trade userTrade = room.GetUserTrade(Session.GetHabbo().Id);
-            Item userItem = Session.GetHabbo().GetInventoryComponent().GetItem(Packet.PopInt());
+            Trade userTrade = room.GetUserTrade(Session.GetUser().Id);
+            Item userItem = Session.GetUser().GetInventoryComponent().GetItem(Packet.PopInt());
             if (userTrade == null || userItem == null)
             {
                 return;
             }
 
-            userTrade.TakeBackItem(Session.GetHabbo().Id, userItem);
+            userTrade.TakeBackItem(Session.GetUser().Id, userItem);
         }
     }
 }

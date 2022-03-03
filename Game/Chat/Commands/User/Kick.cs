@@ -10,17 +10,17 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
 
-            if (TargetUser == null || TargetUser.GetHabbo() == null)
+            if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 return;
             }
 
-            if (Session.GetHabbo().Rank <= TargetUser.GetHabbo().Rank)
+            if (Session.GetUser().Rank <= TargetUser.GetUser().Rank)
             {
                 return;
             }
 
-            if (TargetUser.GetHabbo().CurrentRoomId < 1U)
+            if (TargetUser.GetUser().CurrentRoomId < 1U)
             {
                 return;
             }

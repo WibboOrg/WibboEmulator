@@ -13,12 +13,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || !room.CheckRights(Session, true))
             {
                 return;
@@ -31,14 +31,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             foreach (int num in room.UsersWithRights)
             {
-                RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(num);
-                if (roomUserByHabbo != null)
+                RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(num);
+                if (roomUserByUserId != null)
                 {
-                    if (!roomUserByHabbo.IsBot)
+                    if (!roomUserByUserId.IsBot)
                     {
-                        roomUserByHabbo.GetClient().SendPacket(new YouAreControllerComposer(0));
+                        roomUserByUserId.GetClient().SendPacket(new YouAreControllerComposer(0));
 
-                        roomUserByHabbo.UpdateNeeded = true;
+                        roomUserByUserId.UpdateNeeded = true;
                     }
                 }
 

@@ -7,7 +7,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Session.GetHabbo().ViewMurmur)
+            if (Session.GetUser().ViewMurmur)
             {
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.murmur.true", Session.Langue));
             }
@@ -16,7 +16,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.murmur.false", Session.Langue));
             }
 
-            Session.GetHabbo().ViewMurmur = !Session.GetHabbo().ViewMurmur;
+            Session.GetUser().ViewMurmur = !Session.GetUser().ViewMurmur;
 
         }
     }

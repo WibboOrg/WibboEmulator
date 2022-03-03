@@ -9,7 +9,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room currentRoom = Session.GetHabbo().CurrentRoom;
+            Room currentRoom = Session.GetUser().CurrentRoom;
             if (currentRoom == null)
             {
                 return;

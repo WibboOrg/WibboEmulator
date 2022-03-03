@@ -16,13 +16,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int ItemId = Packet.PopInt();
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || !room.CheckRights(Session, true))
             {
                 return;
             }
 
-            Item userItem = Session.GetHabbo().GetInventoryComponent().GetItem(ItemId);
+            Item userItem = Session.GetUser().GetInventoryComponent().GetItem(ItemId);
             if (userItem == null)
             {
                 return;
@@ -69,7 +69,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 ItemDao.Delete(dbClient, userItem.Id);
             }
 
-            Session.GetHabbo().GetInventoryComponent().RemoveItem(userItem.Id);
+            Session.GetUser().GetInventoryComponent().RemoveItem(userItem.Id);
             room.SendPacket(new RoomPropertyComposer(DecorationKey, userItem.ExtraData));
         }
     }

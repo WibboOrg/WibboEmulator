@@ -9,7 +9,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             bool EmptyAll = (Params.Length > 1 && Params[1] == "all");
 
-            Session.GetHabbo().GetInventoryComponent().ClearItems(EmptyAll);
+            Session.GetUser().GetInventoryComponent().ClearItems(EmptyAll);
             Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("empty.cleared", Session.Langue));
         }
     }

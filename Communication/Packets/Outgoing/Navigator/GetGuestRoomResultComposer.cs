@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Navigator
             this.WriteString(Data.Name);
             this.WriteInteger(Data.OwnerId);
             this.WriteString(Data.OwnerName);
-            this.WriteInteger((Session.GetHabbo().IsTeleporting) ? 0 : Data.State);
+            this.WriteInteger((Session.GetUser().IsTeleporting) ? 0 : Data.State);
             this.WriteInteger(Data.UsersNow);
             this.WriteInteger(Data.UsersMax);
             this.WriteString(Data.Description);
@@ -51,7 +51,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Navigator
             this.WriteInteger(Data.WhoCanKick); // who can kick
             this.WriteInteger(Data.BanFuse); // who can ban
 
-            this.WriteBoolean((Session != null) ? Data.OwnerName.ToLower() != Session.GetHabbo().Username.ToLower() : false);
+            this.WriteBoolean((Session != null) ? Data.OwnerName.ToLower() != Session.GetUser().Username.ToLower() : false);
             this.WriteInteger(Data.ChatType);  //ChatMode, ChatSize, ChatSpeed, HearingDistance, ExtraFlood is the order.
             this.WriteInteger(Data.ChatBalloon);
             this.WriteInteger(Data.ChatSpeed);

@@ -17,18 +17,18 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom)
+            if (Session == null || Session.GetUser() == null || !Session.GetUser().InRoom)
             {
                 return;
             }
 
-            Room Room = Session.GetHabbo().CurrentRoom;
+            Room Room = Session.GetUser().CurrentRoom;
             if (Room == null)
             {
                 return;
             }
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             if (User == null)
             {
                 return;
@@ -52,7 +52,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int Colour = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Colour, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !Session.GetHabbo().HasFuse(Style.RequiredRight)))
+            if (!ButterflyEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Colour, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !Session.GetUser().HasFuse(Style.RequiredRight)))
             {
                 Colour = 0;
             }
@@ -64,7 +64,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             User.Unidle();
 
-            if (Session.GetHabbo().Rank < 5 && Room.RoomMuted && !User.IsOwner() && !Session.GetHabbo().CurrentRoom.CheckRights(Session))
+            if (Session.GetUser().Rank < 5 && Room.RoomMuted && !User.IsOwner() && !Session.GetUser().CurrentRoom.CheckRights(Session))
             {
                 User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("room.muted", Session.Langue));
                 return;
@@ -80,42 +80,42 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Room.UserIsMuted(Session.GetHabbo().Id))
+            if (Room.UserIsMuted(Session.GetUser().Id))
             {
-                if (!Room.HasMuteExpired(Session.GetHabbo().Id))
+                if (!Room.HasMuteExpired(Session.GetUser().Id))
                 {
                     User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.muted", Session.Langue));
                     return;
                 }
                 else
                 {
-                    Room.RemoveMute(Session.GetHabbo().Id);
+                    Room.RemoveMute(Session.GetUser().Id);
                 }
             }
 
-            TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().SpamFloodTime;
-            if (timeSpan.TotalSeconds > Session.GetHabbo().SpamProtectionTime && Session.GetHabbo().SpamEnable)
+            TimeSpan timeSpan = DateTime.Now - Session.GetUser().SpamFloodTime;
+            if (timeSpan.TotalSeconds > Session.GetUser().SpamProtectionTime && Session.GetUser().SpamEnable)
             {
                 User.FloodCount = 0;
-                Session.GetHabbo().SpamEnable = false;
+                Session.GetUser().SpamEnable = false;
             }
             else if (timeSpan.TotalSeconds > 4.0)
             {
                 User.FloodCount = 0;
             }
 
-            if (timeSpan.TotalSeconds < Session.GetHabbo().SpamProtectionTime && Session.GetHabbo().SpamEnable)
+            if (timeSpan.TotalSeconds < Session.GetUser().SpamProtectionTime && Session.GetUser().SpamEnable)
             {
-                int i = Session.GetHabbo().SpamProtectionTime - timeSpan.Seconds;
+                int i = Session.GetUser().SpamProtectionTime - timeSpan.Seconds;
                 User.GetClient().SendPacket(new FloodControlComposer(i));
                 return;
             }
-            else if (timeSpan.TotalSeconds < 4.0 && User.FloodCount > 5 && !Session.GetHabbo().HasFuse("fuse_mod"))
+            else if (timeSpan.TotalSeconds < 4.0 && User.FloodCount > 5 && !Session.GetUser().HasFuse("fuse_mod"))
             {
-                Session.GetHabbo().SpamProtectionTime = (Room.IsRoleplay || Session.GetHabbo().HasFuse("fuse_low_flood")) ? 5 : 30;
-                Session.GetHabbo().SpamEnable = true;
+                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasFuse("fuse_low_flood")) ? 5 : 30;
+                Session.GetUser().SpamEnable = true;
 
-                User.GetClient().SendPacket(new FloodControlComposer(Session.GetHabbo().SpamProtectionTime - timeSpan.Seconds));
+                User.GetClient().SendPacket(new FloodControlComposer(Session.GetUser().SpamProtectionTime - timeSpan.Seconds));
 
                 return;
             }
@@ -124,9 +124,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 User.LastMessageCount = 0;
                 User.LastMessage = "";
 
-                Session.GetHabbo().SpamProtectionTime = (Room.IsRoleplay || Session.GetHabbo().HasFuse("fuse_low_flood")) ? 5 : 30;
-                Session.GetHabbo().SpamEnable = true;
-                User.GetClient().SendPacket(new FloodControlComposer(Session.GetHabbo().SpamProtectionTime - timeSpan.Seconds));
+                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasFuse("fuse_low_flood")) ? 5 : 30;
+                Session.GetUser().SpamEnable = true;
+                User.GetClient().SendPacket(new FloodControlComposer(Session.GetUser().SpamProtectionTime - timeSpan.Seconds));
                 return;
             }
             else
@@ -138,7 +138,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 User.LastMessage = Message;
 
-                Session.GetHabbo().SpamFloodTime = DateTime.Now;
+                Session.GetUser().SpamFloodTime = DateTime.Now;
                 User.FloodCount++;
 
                 if (Message.StartsWith("@red@") || Message.StartsWith("@rouge@"))
@@ -168,7 +168,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 if (Message.StartsWith(":", StringComparison.CurrentCulture) && ButterflyEnvironment.GetGame().GetChatManager().GetCommands().Parse(Session, User, Room, Message))
                 {
-                    Room.GetChatMessageManager().AddMessage(Session.GetHabbo().Id, Session.GetHabbo().Username, Room.Id, string.Format("{0} a utiliser la commande {1}", Session.GetHabbo().Username, Message), UnixTimestamp.GetNow());
+                    Room.GetChatMessageManager().AddMessage(Session.GetUser().Id, Session.GetUser().Username, Room.Id, string.Format("{0} a utiliser la commande {1}", Session.GetUser().Username, Message), UnixTimestamp.GetNow());
                     return;
                 }
 
@@ -178,8 +178,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
 
                 ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_CHAT, 0);
-                Session.GetHabbo().GetChatMessageManager().AddMessage(Session.GetHabbo().Id, Session.GetHabbo().Username, Room.Id, Message, UnixTimestamp.GetNow());
-                Room.GetChatMessageManager().AddMessage(Session.GetHabbo().Id, Session.GetHabbo().Username, Room.Id, Message, UnixTimestamp.GetNow());
+                Session.GetUser().GetChatMessageManager().AddMessage(Session.GetUser().Id, Session.GetUser().Username, Room.Id, Message, UnixTimestamp.GetNow());
+                Room.GetChatMessageManager().AddMessage(Session.GetUser().Id, Session.GetUser().Username, Room.Id, Message, UnixTimestamp.GetNow());
 
                 if (User.transfbot)
                 {
@@ -187,7 +187,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
             }
 
-            if (!Session.GetHabbo().HasFuse("word_filter_override"))
+            if (!Session.GetUser().HasFuse("word_filter_override"))
             {
                 Message = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
                 Message = new Regex(@"\[tag\](.*?)\[\/tag\]").Replace(Message, "<tag>$1</tag>");
@@ -201,18 +201,18 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Room.OnUserSay(User, Message, false);
 
-            if (User.IsSpectator && Session.GetHabbo().Rank < 11)
+            if (User.IsSpectator && Session.GetUser().Rank < 11)
             {
                 return;
             }
 
-            if (User.muted && !Session.GetHabbo().HasFuse("fuse_tool"))
+            if (User.muted && !Session.GetUser().HasFuse("fuse_tool"))
             {
                 User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.muted", Session.Langue));
                 return;
             }
 
-            if (!Session.GetHabbo().IgnoreAll)
+            if (!Session.GetUser().IgnoreAll)
             {
                 Message = ButterflyEnvironment.GetGame().GetChatManager().GetMention().Parse(Session, Message);
             }

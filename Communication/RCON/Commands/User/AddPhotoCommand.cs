@@ -38,14 +38,14 @@ namespace Butterfly.Communication.RCON.Commands.User
             }
 
             int Time = ButterflyEnvironment.GetUnixTimestamp();
-            string ExtraData = "{\"w\":\"" + "/photos/" + PhotoId + ".png" + "\", \"n\":\"" + Client.GetHabbo().Username + "\", \"s\":\"" + Client.GetHabbo().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
+            string ExtraData = "{\"w\":\"" + "/photos/" + PhotoId + ".png" + "\", \"n\":\"" + Client.GetUser().Username + "\", \"s\":\"" + Client.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
 
-            Item Item = ItemFactory.CreateSingleItemNullable(ItemData, Client.GetHabbo(), ExtraData);
-            Client.GetHabbo().GetInventoryComponent().TryAddItem(Item);
+            Item Item = ItemFactory.CreateSingleItemNullable(ItemData, Client.GetUser(), ExtraData);
+            Client.GetUser().GetInventoryComponent().TryAddItem(Item);
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserPhotoDao.Insert(dbClient, Client.GetHabbo().Id, PhotoId, Time);
+                UserPhotoDao.Insert(dbClient, Client.GetUser().Id, PhotoId, Time);
             }
 
             Client.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.valide", Client.Langue));

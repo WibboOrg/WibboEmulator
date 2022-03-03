@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int Id = Packet.PopInt();
             bool isConfirmed = Packet.PopBoolean();
 
-            Room Room = Session.GetHabbo().CurrentRoom;
+            Room Room = Session.GetUser().CurrentRoom;
             if (Room == null || !Room.CheckRights(Session))
             {
                 return;
@@ -33,8 +33,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int UserOneId = Item.InteractingUser;
             int UserTwoId = Item.InteractingUser2;
 
-            RoomUser UserOne = Room.GetRoomUserManager().GetRoomUserByHabboId(UserOneId);
-            RoomUser UserTwo = Room.GetRoomUserManager().GetRoomUserByHabboId(UserTwoId);
+            RoomUser UserOne = Room.GetRoomUserManager().GetRoomUserByUserId(UserOneId);
+            RoomUser UserTwo = Room.GetRoomUserManager().GetRoomUserByUserId(UserTwoId);
 
             if (UserOne == null && UserTwo == null)
             {
@@ -89,12 +89,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
             else
             {
-                if (UserOneId == Session.GetHabbo().Id)
+                if (UserOneId == Session.GetUser().Id)
                 {
                     Session.SendPacket(new LoveLockDialogueSetLockedComposer(Id));
                     UserOne.LLPartner = UserTwoId;
                 }
-                else if (UserTwoId == Session.GetHabbo().Id)
+                else if (UserTwoId == Session.GetUser().Id)
                 {
                     Session.SendPacket(new LoveLockDialogueSetLockedComposer(Id));
                     UserTwo.LLPartner = UserOneId;
@@ -106,7 +106,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
                 else
                 {
-                    Item.ExtraData = "1" + (char)5 + UserOne.GetUsername() + (char)5 + UserTwo.GetUsername() + (char)5 + UserOne.GetClient().GetHabbo().Look + (char)5 + UserTwo.GetClient().GetHabbo().Look + (char)5 + DateTime.Now.ToString("dd/MM/yyyy");
+                    Item.ExtraData = "1" + (char)5 + UserOne.GetUsername() + (char)5 + UserTwo.GetUsername() + (char)5 + UserOne.GetClient().GetUser().Look + (char)5 + UserTwo.GetClient().GetUser().Look + (char)5 + DateTime.Now.ToString("dd/MM/yyyy");
 
                     Item.InteractingUser = 0;
                     Item.InteractingUser2 = 0;

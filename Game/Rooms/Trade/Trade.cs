@@ -201,7 +201,7 @@ namespace Butterfly.Game.Rooms
             if (tradeUserOne.GetClient() == null || tradeUserTwo.GetClient() == null)
                 return;
 
-            if (tradeUserOne.GetClient().GetHabbo() == null || tradeUserTwo.GetClient().GetHabbo() == null)
+            if (tradeUserOne.GetClient().GetUser() == null || tradeUserTwo.GetClient().GetUser() == null)
                 return;
 
             this.SendMessageToUsers(new TradingUpdateComposer(tradeUserOne.UserId, tradeUserOne.OfferedItems, tradeUserTwo.UserId, tradeUserTwo.OfferedItems));
@@ -215,7 +215,7 @@ namespace Butterfly.Game.Rooms
             if (tradeUserOne.GetClient() == null || tradeUserTwo.GetClient() == null)
                 return false;
 
-            if (tradeUserOne.GetClient().GetHabbo() == null || tradeUserTwo.GetClient().GetHabbo() == null)
+            if (tradeUserOne.GetClient().GetUser() == null || tradeUserTwo.GetClient().GetUser() == null)
                 return false;
 
             List<Item> userOneItems = tradeUserOne.OfferedItems;
@@ -223,7 +223,7 @@ namespace Butterfly.Game.Rooms
 
             foreach (Item userItem in userOneItems)
             {
-                if (tradeUserOne.GetClient().GetHabbo().GetInventoryComponent().GetItem(userItem.Id) == null)
+                if (tradeUserOne.GetClient().GetUser().GetInventoryComponent().GetItem(userItem.Id) == null)
                 {
                     tradeUserOne.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserOne.GetClient().Langue));
                     tradeUserTwo.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserTwo.GetClient().Langue));
@@ -233,7 +233,7 @@ namespace Butterfly.Game.Rooms
 
             foreach (Item userItem in userTwoItems)
             {
-                if (tradeUserTwo.GetClient().GetHabbo().GetInventoryComponent().GetItem(userItem.Id) == null)
+                if (tradeUserTwo.GetClient().GetUser().GetInventoryComponent().GetItem(userItem.Id) == null)
                 {
                     tradeUserOne.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserOne.GetClient().Langue));
                     tradeUserTwo.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserTwo.GetClient().Langue));
@@ -243,14 +243,14 @@ namespace Butterfly.Game.Rooms
 
             foreach (Item userItem in userOneItems)
             {
-                tradeUserOne.GetClient().GetHabbo().GetInventoryComponent().RemoveItem(userItem.Id);
-                tradeUserTwo.GetClient().GetHabbo().GetInventoryComponent().AddItem(userItem);
+                tradeUserOne.GetClient().GetUser().GetInventoryComponent().RemoveItem(userItem.Id);
+                tradeUserTwo.GetClient().GetUser().GetInventoryComponent().AddItem(userItem);
             }
 
             foreach (Item userItem in userTwoItems)
             {
-                tradeUserTwo.GetClient().GetHabbo().GetInventoryComponent().RemoveItem(userItem.Id);
-                tradeUserOne.GetClient().GetHabbo().GetInventoryComponent().AddItem(userItem);
+                tradeUserTwo.GetClient().GetUser().GetInventoryComponent().RemoveItem(userItem.Id);
+                tradeUserOne.GetClient().GetUser().GetInventoryComponent().AddItem(userItem);
             }
 
             tradeUserTwo.GetClient().SendPacket(new FurniListNotificationComposer(userOneItems, 1));

@@ -1,6 +1,6 @@
 ﻿using Butterfly.Game.Rooms;
 
-namespace Plus.HabboHotel.Rooms
+namespace Butterfly.Game.Rooms
 {
     public static class RoomAccessUtility
     {

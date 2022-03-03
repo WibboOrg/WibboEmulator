@@ -665,9 +665,9 @@ namespace Butterfly.Game.Items.Wired.Actions
                             Room roomTarget = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
                             if (roomTarget != null && roomTarget.RoomData.OwnerId == this.RoomInstance.RoomData.OwnerId)
                             {
-                                user.GetClient().GetHabbo().IsTeleporting = true;
-                                user.GetClient().GetHabbo().TeleportingRoomID = RoomId;
-                                user.GetClient().GetHabbo().PrepareRoom(RoomId, "");
+                                user.GetClient().GetUser().IsTeleporting = true;
+                                user.GetClient().GetUser().TeleportingRoomID = RoomId;
+                                user.GetClient().GetUser().PrepareRoom(RoomId, "");
                             }
                         }
                         break;
@@ -1266,7 +1266,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         foreach (RoomUser RUser in this.RoomInstance.GetRoomUserManager().GetUserList().ToList())
                         {
-                            if (RUser != null && !RUser.IsBot && !RUser.GetClient().GetHabbo().HasFuse("fuse_no_kick") && this.RoomInstance.RoomData.OwnerId != RUser.UserId)
+                            if (RUser != null && !RUser.IsBot && !RUser.GetClient().GetUser().HasFuse("fuse_no_kick") && this.RoomInstance.RoomData.OwnerId != RUser.UserId)
                             {
                                 this.RoomInstance.GetRoomUserManager().RemoveUserFromRoom(RUser.GetClient(), true, false);
                             }
@@ -1282,7 +1282,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                         foreach (RoomUser RUser in this.RoomInstance.GetRoomUserManager().GetUserList().ToList())
                         {
-                            if (RUser != null && !RUser.IsBot && !RUser.GetClient().GetHabbo().HasFuse("fuse_no_kick"))
+                            if (RUser != null && !RUser.IsBot && !RUser.GetClient().GetUser().HasFuse("fuse_no_kick"))
                             {
                                 RUser.GetClient().SendNotification(value);
                             }
@@ -1748,7 +1748,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                         if (string.IsNullOrEmpty(Value))
                         {
-                            User.GetClient().GetHabbo().SendWebPacket(new BotChooseComposer(ChooseList));
+                            User.GetClient().GetUser().SendWebPacket(new BotChooseComposer(ChooseList));
                             break;
                         }
 
@@ -1777,7 +1777,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             ChooseList.Add(list.ToArray());
                         }
 
-                        User.GetClient().GetHabbo().SendWebPacket(new BotChooseComposer(ChooseList));
+                        User.GetClient().GetUser().SendWebPacket(new BotChooseComposer(ChooseList));
 
                         break;
                     }
@@ -1786,7 +1786,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                         List<string[]> ChooseList = new List<string[]>();
                         if (string.IsNullOrEmpty(Value))
                         {
-                            User.GetClient().GetHabbo().SendWebPacket(new BotChooseComposer(ChooseList));
+                            User.GetClient().GetUser().SendWebPacket(new BotChooseComposer(ChooseList));
                             break;
                         }
 
@@ -1830,35 +1830,35 @@ namespace Butterfly.Game.Items.Wired.Actions
                             }
                         }
 
-                        User.GetClient().GetHabbo().SendWebPacket(new BotChooseComposer(ChooseList));
+                        User.GetClient().GetUser().SendWebPacket(new BotChooseComposer(ChooseList));
 
                         break;
                     }
                 case "forcesound":
                     {
-                        User.GetClient().GetHabbo().ClientVolume.Clear();
-                        User.GetClient().GetHabbo().ClientVolume.Add(100);
-                        User.GetClient().GetHabbo().ClientVolume.Add(100);
-                        User.GetClient().GetHabbo().ClientVolume.Add(100);
+                        User.GetClient().GetUser().ClientVolume.Clear();
+                        User.GetClient().GetUser().ClientVolume.Add(100);
+                        User.GetClient().GetUser().ClientVolume.Add(100);
+                        User.GetClient().GetUser().ClientVolume.Add(100);
 
-                        User.GetClient().GetHabbo().SendWebPacket(new SettingVolumeComposer(100, 100, 100));
+                        User.GetClient().GetUser().SendWebPacket(new SettingVolumeComposer(100, 100, 100));
                         break;
                     }
                 case "stopsounduser":
                     {
-                        User.GetClient().GetHabbo().SendWebPacket(new StopSoundComposer(Value)); //Type = Trax
+                        User.GetClient().GetUser().SendWebPacket(new StopSoundComposer(Value)); //Type = Trax
 
                         break;
                     }
                 case "playsounduser":
                     {
-                        User.GetClient().GetHabbo().SendWebPacket(new PlaySoundComposer(Value, 1)); //Type = furni
+                        User.GetClient().GetUser().SendWebPacket(new PlaySoundComposer(Value, 1)); //Type = furni
 
                         break;
                     }
                 case "playmusicuser":
                     {
-                        User.GetClient().GetHabbo().SendWebPacket(new PlaySoundComposer(Value, 2, true)); //Type = Trax
+                        User.GetClient().GetUser().SendWebPacket(new PlaySoundComposer(Value, 2, true)); //Type = Trax
 
                         break;
                     }
@@ -2239,20 +2239,20 @@ namespace Butterfly.Game.Items.Wired.Actions
                             return;
                         }
 
-                        User.GetClient().GetHabbo().Credits += ValueNumber;
-                        User.GetClient().SendPacket(new CreditBalanceComposer(User.GetClient().GetHabbo().Credits));
+                        User.GetClient().GetUser().Credits += ValueNumber;
+                        User.GetClient().SendPacket(new CreditBalanceComposer(User.GetClient().GetUser().Credits));
                         break;
                     }
                 case "badge":
                     {
-                        User.GetClient().GetHabbo().GetBadgeComponent().GiveBadge(Value, true);
+                        User.GetClient().GetUser().GetBadgeComponent().GiveBadge(Value, true);
                         User.GetClient().SendPacket(new ReceiveBadgeComposer(Value));
                         break;
                     }
                 case "removebadge":
                     {
-                        User.GetClient().GetHabbo().GetBadgeComponent().RemoveBadge(Value);
-                        User.GetClient().SendPacket(new BadgesComposer(User.GetClient().GetHabbo().GetBadgeComponent().BadgeList));
+                        User.GetClient().GetUser().GetBadgeComponent().RemoveBadge(Value);
+                        User.GetClient().SendPacket(new BadgesComposer(User.GetClient().GetUser().GetBadgeComponent().BadgeList));
                         break;
                     }
 
@@ -2260,9 +2260,9 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         if (int.TryParse(Value, out int RoomId))
                         {
-                            User.GetClient().GetHabbo().IsTeleporting = true;
-                            User.GetClient().GetHabbo().TeleportingRoomID = RoomId;
-                            User.GetClient().GetHabbo().PrepareRoom(RoomId, "");
+                            User.GetClient().GetUser().IsTeleporting = true;
+                            User.GetClient().GetUser().TeleportingRoomID = RoomId;
+                            User.GetClient().GetUser().PrepareRoom(RoomId, "");
                         }
                         break;
                     }
@@ -2278,7 +2278,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     }
                 case "winmovierun":
                     {
-                        if (User.IsBot || User.GetClient() == null || User.GetClient().GetHabbo() == null || User.GetClient().GetHabbo().Rank > 4)
+                        if (User.IsBot || User.GetClient() == null || User.GetClient().GetUser() == null || User.GetClient().GetUser().Rank > 4)
                         {
                             break;
                         }
@@ -2291,14 +2291,14 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            UserDao.UpdateAddRunPoints(dbClient, User.GetClient().GetHabbo().Id);
+                            UserDao.UpdateAddRunPoints(dbClient, User.GetClient().GetUser().Id);
                         }
 
                         break;
                     }
                 case "givelot":
                     {
-                        if (User.IsBot || User.GetClient() == null || User.GetClient().GetHabbo() == null || User.GetClient().GetHabbo().Rank > 4)
+                        if (User.IsBot || User.GetClient() == null || User.GetClient().GetUser() == null || User.GetClient().GetUser().Rank > 4)
                         {
                             break;
                         }
@@ -2308,7 +2308,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             break;
                         }
 
-                        List<string> allowedOwner = new List<string>({ "LieuPublic", "MovieRunOff", "WibboGame", "WorldRunOff", "officialrooms", "SpringRun" });
+                        List<string> allowedOwner = new List<string>{ "LieuPublic", "MovieRunOff", "WibboGame", "WorldRunOff", "officialrooms", "SpringRun" };
 
                         if(!allowedOwner.Contains(User.Room.RoomData.OwnerName))
                         {
@@ -2329,19 +2329,19 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                         int NbLot = ButterflyEnvironment.GetRandomNumber(1, 3);
 
-                        if (User.GetClient().GetHabbo().Rank > 1)
+                        if (User.GetClient().GetUser().Rank > 1)
                         {
                             NbLot = ButterflyEnvironment.GetRandomNumber(3, 5);
                         }
 
                         int NbLotDeluxe = ButterflyEnvironment.GetRandomNumber(1, 4);
-                        if (User.GetClient().GetHabbo().Rank > 1)
+                        if (User.GetClient().GetUser().Rank > 1)
                         {
                             NbLotDeluxe = ButterflyEnvironment.GetRandomNumber(3, 4);
                         }
 
                         int NbBadge = ButterflyEnvironment.GetRandomNumber(1, 2);
-                        if (User.GetClient().GetHabbo().Rank > 1)
+                        if (User.GetClient().GetUser().Rank > 1)
                         {
                             NbBadge = ButterflyEnvironment.GetRandomNumber(2, 3);
                         }
@@ -2356,16 +2356,16 @@ namespace Butterfly.Game.Items.Wired.Actions
                             return;
                         }
 
-                        List<Item> Items = ItemFactory.CreateMultipleItems(ItemData, User.GetClient().GetHabbo(), "", NbLot);
-                        Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataBadge, User.GetClient().GetHabbo(), "", NbBadge));
+                        List<Item> Items = ItemFactory.CreateMultipleItems(ItemData, User.GetClient().GetUser(), "", NbLot);
+                        Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataBadge, User.GetClient().GetUser(), "", NbBadge));
                         if (NbLotDeluxe == 4)
                         {
-                            Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataDeluxe, User.GetClient().GetHabbo(), "", 1));
+                            Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataDeluxe, User.GetClient().GetUser(), "", 1));
                         }
 
                         foreach (Item PurchasedItem in Items)
                         {
-                            if (User.GetClient().GetHabbo().GetInventoryComponent().TryAddItem(PurchasedItem))
+                            if (User.GetClient().GetUser().GetInventoryComponent().TryAddItem(PurchasedItem))
                             {
                                 User.GetClient().SendPacket(new FurniListNotificationComposer(PurchasedItem.Id, 1));
                             }
@@ -2376,7 +2376,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            UserDao.UpdateAddGamePoints(dbClient, User.GetClient().GetHabbo().Id);
+                            UserDao.UpdateAddGamePoints(dbClient, User.GetClient().GetUser().Id);
                         }
 
                         ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(User.GetClient(), "ACH_Extrabox", 1);

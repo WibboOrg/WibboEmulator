@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!Session.GetUser().InRoom)
             {
                 return;
             }
@@ -24,7 +24,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room Room = Session.GetHabbo().CurrentRoom;
+            Room Room = Session.GetUser().CurrentRoom;
             if (Room == null || !Room.CheckRights(Session))
             {
                 return;

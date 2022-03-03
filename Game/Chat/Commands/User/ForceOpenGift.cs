@@ -7,9 +7,9 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Session.GetHabbo().ForceOpenGift = !Session.GetHabbo().ForceOpenGift;
+            Session.GetUser().ForceOpenGift = !Session.GetUser().ForceOpenGift;
 
-            if (Session.GetHabbo().ForceOpenGift)
+            if (Session.GetUser().ForceOpenGift)
             {
                 UserRoom.SendWhisperChat("ForceOpenGift activé");
             }

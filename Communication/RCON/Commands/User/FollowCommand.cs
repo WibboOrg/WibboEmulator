@@ -47,12 +47,12 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            if (Client2.GetHabbo() == null || Client2.GetHabbo().CurrentRoom == null)
+            if (Client2.GetUser() == null || Client2.GetUser().CurrentRoom == null)
             {
                 return false;
             }
 
-            Room room = Client2.GetHabbo().CurrentRoom;
+            Room room = Client2.GetUser().CurrentRoom;
             if (room == null)
             {
                 return false;

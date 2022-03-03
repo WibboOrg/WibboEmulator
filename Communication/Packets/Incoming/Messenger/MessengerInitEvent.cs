@@ -9,11 +9,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Session.GetHabbo().GetMessenger().OnStatusChanged();
+            Session.GetUser().GetMessenger().OnStatusChanged();
 
             Session.SendPacket(new MessengerInitComposer());
-            Session.SendPacket(new BuddyListComposer(Session.GetHabbo().GetMessenger().Friends));
-            Session.GetHabbo().GetMessenger().ProcessOfflineMessages();
+            Session.SendPacket(new BuddyListComposer(Session.GetUser().GetMessenger().Friends));
+            Session.GetUser().GetMessenger().ProcessOfflineMessages();
         }
     }
 }

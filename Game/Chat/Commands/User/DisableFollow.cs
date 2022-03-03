@@ -7,14 +7,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Session.GetHabbo().HideInRoom)
+            if (Session.GetUser().HideInRoom)
             {
-                Session.GetHabbo().HideInRoom = false;
+                Session.GetUser().HideInRoom = false;
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.followme.true", Session.Langue));
             }
             else
             {
-                Session.GetHabbo().HideInRoom = true;
+                Session.GetUser().HideInRoom = true;
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.followme.false", Session.Langue));
             }
 

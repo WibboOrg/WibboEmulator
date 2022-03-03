@@ -20,9 +20,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Session.GetHabbo().OnDuty == true)
+            if (Session.GetUser().OnDuty == true)
             {
-                guideManager.RemoveGuide(Session.GetHabbo().Id);
+                guideManager.RemoveGuide(Session.GetUser().Id);
             }
 
             int guideId = guideManager.GetRandomGuide();
@@ -37,8 +37,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.SendPacket(new OnGuideSessionAttachedComposer(false, userId, message, 30));
             guide.SendPacket(new OnGuideSessionAttachedComposer(true, userId, message, 15));
 
-            guide.GetHabbo().GuideOtherUserId = Session.GetHabbo().Id;
-            Session.GetHabbo().GuideOtherUserId = guide.GetHabbo().Id;
+            guide.GetUser().GuideOtherUserId = Session.GetUser().Id;
+            Session.GetUser().GuideOtherUserId = guide.GetUser().Id;
         }
     }
 }

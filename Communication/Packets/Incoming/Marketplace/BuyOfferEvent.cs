@@ -53,30 +53,30 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             }
             else
             {
-                if (Convert.ToInt32(Row["user_id"]) == Session.GetHabbo().Id)
+                if (Convert.ToInt32(Row["user_id"]) == Session.GetUser().Id)
                 {
                     Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.4", Session.Langue));
                     return;
                 }
 
-                if (Convert.ToInt32(Row["total_price"]) > Session.GetHabbo().WibboPoints)
+                if (Convert.ToInt32(Row["total_price"]) > Session.GetUser().WibboPoints)
                 {
                     Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.5", Session.Langue));
                     return;
                 }
 
-                Session.GetHabbo().WibboPoints -= Convert.ToInt32(Row["total_price"]);
-                Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().WibboPoints, 0, 105));
+                Session.GetUser().WibboPoints -= Convert.ToInt32(Row["total_price"]);
+                Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserDao.UpdateRemovePoints(dbClient, Session.GetHabbo().Id, Convert.ToInt32(Row["total_price"]));
+                    UserDao.UpdateRemovePoints(dbClient, Session.GetUser().Id, Convert.ToInt32(Row["total_price"]));
                 }
 
-                Item GiveItem = ItemFactory.CreateSingleItem(Item, Session.GetHabbo(), Convert.ToString(Row["extra_data"]), Convert.ToInt32(Row["furni_id"]), Convert.ToInt32(Row["limited_number"]), Convert.ToInt32(Row["limited_stack"]));
+                Item GiveItem = ItemFactory.CreateSingleItem(Item, Session.GetUser(), Convert.ToString(Row["extra_data"]), Convert.ToInt32(Row["furni_id"]), Convert.ToInt32(Row["limited_number"]), Convert.ToInt32(Row["limited_stack"]));
                 if (GiveItem != null)
                 {
-                    Session.GetHabbo().GetInventoryComponent().TryAddItem(GiveItem);
+                    Session.GetUser().GetInventoryComponent().TryAddItem(GiveItem);
                     Session.SendPacket(new FurniListNotificationComposer(GiveItem.Id, 1));
 
                     Session.SendPacket(new PurchaseOKComposer());

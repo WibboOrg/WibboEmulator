@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Quests
         {
             int questsInCategory = ButterflyEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(Quest.Category);
             int i = Quest.Number - 1;
-            int num = Session.GetHabbo().GetQuestProgress(Quest.Id);
+            int num = Session.GetUser().GetQuestProgress(Quest.Id);
             if (Quest.IsCompleted(num))
             {
                 i++;
@@ -21,7 +21,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Quests
             this.WriteInteger(questsInCategory);
             this.WriteInteger(0);
             this.WriteInteger(Quest.Id);
-            this.WriteBoolean(Session.GetHabbo().CurrentQuestId == Quest.Id);
+            this.WriteBoolean(Session.GetUser().CurrentQuestId == Quest.Id);
             this.WriteString(Quest.ActionName);
             this.WriteString(Quest.DataBit);
             this.WriteInteger(Quest.Reward);

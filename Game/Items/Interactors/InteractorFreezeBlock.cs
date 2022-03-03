@@ -15,19 +15,19 @@ namespace Butterfly.Game.Items.Interactors
 
         public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
-            if (Session == null || Session.GetHabbo() == null || Item.InteractingUser > 0)
+            if (Session == null || Session.GetUser() == null || Item.InteractingUser > 0)
             {
                 return;
             }
 
-            string name = Session.GetHabbo().Username;
-            RoomUser roomUserByHabbo = Item.GetRoom().GetRoomUserManager().GetRoomUserByName(name);
-            if (roomUserByHabbo == null || roomUserByHabbo.CountFreezeBall == 0 || roomUserByHabbo.Freezed)
+            string name = Session.GetUser().Username;
+            RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByName(name);
+            if (roomUserByUserId == null || roomUserByUserId.CountFreezeBall == 0 || roomUserByUserId.Freezed)
             {
                 return;
             }
 
-            Item.GetRoom().GetFreeze().throwBall(Item, roomUserByHabbo);
+            Item.GetRoom().GetFreeze().throwBall(Item, roomUserByUserId);
         }
 
         public override void OnTick(Item item)

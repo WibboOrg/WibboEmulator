@@ -294,7 +294,7 @@
     <Compile Include="Communication\Packets\Outgoing\Inventory\Pets\PetInventoryComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Inventory\Purse\ActivityPointsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Inventory\Purse\CreditBalanceComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Inventory\Purse\HabboActivityPointNotificationComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Inventory\Purse\ActivityPointNotificationComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingAcceptComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingClosedComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Inventory\Trading\TradingCompleteComposer.cs" />
@@ -312,7 +312,7 @@
     <Compile Include="Communication\Packets\Outgoing\Messenger\BuddyListComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Messenger\BuddyRequestsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Messenger\FriendListUpdateComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Messenger\HabboSearchResultComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Messenger\UserSearchResultComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Messenger\InstantMessageErrorComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Messenger\MessengerInitComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Messenger\NewBuddyRequestComposer.cs" />
@@ -362,7 +362,7 @@
     <Compile Include="Communication\Packets\Incoming\Messenger\FindNewFriendsEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Messenger\FollowFriendEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Messenger\GetBuddyRequestsEvent.cs" />
-    <Compile Include="Communication\Packets\Incoming\Messenger\HabboSearchEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Messenger\UserSearchEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Messenger\MessengerInitEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Messenger\RemoveBuddyEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Messenger\RequestBuddyEvent.cs" />
@@ -481,7 +481,7 @@
     <Compile Include="Communication\Packets\Incoming\Sound\SetSoundSettingsEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\ChangeNameEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\CheckValidNameEvent.cs" />
-    <Compile Include="Communication\Packets\Incoming\Users\GetHabboGroupBadgesEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Users\GetUserGroupBadgesEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\GetRelationshipsEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\GetSelectedBadgesEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\OpenPlayerProfileEvent.cs" />
@@ -568,8 +568,8 @@
     <Compile Include="Communication\Packets\Outgoing\Rooms\Wireds\WiredFurniConditionComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Sound\SoundSettingsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\GetRelationshipsComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Users\HabboGroupBadgesComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Users\HabboUserBadgesComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Users\UserGroupBadgesComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Users\UserBadgesComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\NameChangeUpdateComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\ProfileInformationComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\ReceiveBadgeComposer.cs" />
@@ -1031,7 +1031,7 @@
     <Compile Include="Game\Moderation\ModerationPresetActionMessages.cs" />
     <Compile Include="Game\Users\Messenger\Relationship.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Utilities\HabboEncoding.cs" />
+    <Compile Include="Utilities\IntEncoding.cs" />
     <Compile Include="Utilities\ServerPacketList.cs" />
     <Compile Include="Utilities\StringCharFilter.cs" />
     <Compile Include="Core\ConfigurationData.cs" />

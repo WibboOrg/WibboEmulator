@@ -8,9 +8,9 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
         public ModeratorSupportTicketComposer(ModerationTicket ticket)
             : base(ServerPacketHeader.ISSUE_INFO)
         {
-            User userReported = ButterflyEnvironment.GetHabboById(ticket.ReportedId);
-            User userSender = ButterflyEnvironment.GetHabboById(ticket.SenderId);
-            User userModerator = ButterflyEnvironment.GetHabboById(ticket.ModeratorId);
+            User userReported = ButterflyEnvironment.GetUserById(ticket.ReportedId);
+            User userSender = ButterflyEnvironment.GetUserById(ticket.SenderId);
+            User userModerator = ButterflyEnvironment.GetUserById(ticket.ModeratorId);
 
             WriteInteger(ticket.Id);
             WriteInteger(ticket.TabId);

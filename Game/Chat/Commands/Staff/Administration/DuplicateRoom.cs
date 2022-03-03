@@ -22,13 +22,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             {
                 Room.GetRoomItemHandler().SaveFurniture(dbClient);
 
-                RoomId = RoomDao.InsertDuplicate(dbClient, OldRoomId, Session.GetHabbo().Username);
+                RoomId = RoomDao.InsertDuplicate(dbClient, OldRoomId, Session.GetUser().Username);
 
                 RoomModelCustomDao.InsertDuplicate(dbClient, RoomId, OldRoomId);
 
                 List<int> furniIdAllow = new List<int>();
 
-                DataTable catalogItemTable = CatalogItemDao.GetItemIdByRank(dbClient, Session.GetHabbo().Rank);
+                DataTable catalogItemTable = CatalogItemDao.GetItemIdByRank(dbClient, Session.GetUser().Rank);
                 foreach (DataRow dataRow in catalogItemTable.Rows)
                 {
                     int.TryParse(dataRow["item_id"].ToString(), out int itemId);
@@ -59,7 +59,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                         continue;
                     }
 
-                    int ItemId = ItemDao.InsertDuplicate(dbClient, Session.GetHabbo().Id, RoomId, OldItemId);
+                    int ItemId = ItemDao.InsertDuplicate(dbClient, Session.GetUser().Id, RoomId, OldItemId);
 
                     newItemsId.Add(OldItemId, ItemId);
 
@@ -165,13 +165,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     ItemWiredDao.UpdateTriggerItem(dbClient, triggerItems, id);
                 }
 
-                BotUserDao.DupliqueAllBotInRoomId(dbClient, Session.GetHabbo().Id, RoomId, OldRoomId);
+                BotUserDao.DupliqueAllBotInRoomId(dbClient, Session.GetUser().Id, RoomId, OldRoomId);
 
-                BotPetDao.InsertDuplicate(dbClient, Session.GetHabbo().Id, RoomId, OldRoomId);
+                BotPetDao.InsertDuplicate(dbClient, Session.GetUser().Id, RoomId, OldRoomId);
             }
 
-            if(!Session.GetHabbo().UsersRooms.Contains(RoomId))
-                Session.GetHabbo().UsersRooms.Add(RoomId);
+            if(!Session.GetUser().UsersRooms.Contains(RoomId))
+                Session.GetUser().UsersRooms.Add(RoomId);
 
             Session.SendNotification("Copie de l'appartement " + OldRoomId + " en cours de chargement...");
             Session.SendPacket(new FlatCreatedComposer(RoomId, "Appart " + OldRoomId + " copie"));

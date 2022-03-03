@@ -9,24 +9,24 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetHabbo().GuideOtherUserId);
+            Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
 
             Session.SendPacket(new OnGuideSessionEndedComposer(1));
 
-            Session.GetHabbo().GuideOtherUserId = 0;
-            if (Session.GetHabbo().OnDuty)
+            Session.GetUser().GuideOtherUserId = 0;
+            if (Session.GetUser().OnDuty)
             {
-                ButterflyEnvironment.GetGame().GetHelpManager().EndService(Session.GetHabbo().Id);
+                ButterflyEnvironment.GetGame().GetHelpManager().EndService(Session.GetUser().Id);
             }
 
             if (requester != null)
             {
                 requester.SendPacket(new OnGuideSessionEndedComposer(1));
-                requester.GetHabbo().GuideOtherUserId = 0;
+                requester.GetUser().GuideOtherUserId = 0;
 
-                if (requester.GetHabbo().OnDuty)
+                if (requester.GetUser().OnDuty)
                 {
-                    ButterflyEnvironment.GetGame().GetHelpManager().EndService(requester.GetHabbo().Id);
+                    ButterflyEnvironment.GetGame().GetHelpManager().EndService(requester.GetUser().Id);
                 }
             }
         }

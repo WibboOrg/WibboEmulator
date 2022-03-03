@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            User User = ButterflyEnvironment.GetHabboById(Packet.PopInt());
+            User User = ButterflyEnvironment.GetUserById(Packet.PopInt());
             if (User == null)
                 return;
 

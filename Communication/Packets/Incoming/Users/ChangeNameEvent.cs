@@ -15,18 +15,18 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null || Session == null)
+            if (Session.GetUser() == null || Session == null)
             {
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            RoomUser roomUser = room.GetRoomUserManager().GetRoomUserByName(Session.GetHabbo().Username);
+            RoomUser roomUser = room.GetRoomUserManager().GetRoomUserByName(Session.GetUser().Username);
             if (roomUser == null)
             {
                 return;
@@ -34,15 +34,15 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             string newUsername = Packet.PopString();
 
-            if (!Session.GetHabbo().CanChangeName && Session.GetHabbo().Rank == 1)
+            if (!Session.GetUser().CanChangeName && Session.GetUser().Rank == 1)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.changename.error.1", Session.Langue));
                 return;
             }
 
-            if (newUsername == Session.GetHabbo().Username)
+            if (newUsername == Session.GetUser().Username)
             {
-                Session.SendPacket(new UpdateUsernameComposer(Session.GetHabbo().Username));
+                Session.SendPacket(new UpdateUsernameComposer(Session.GetUser().Username));
                 return;
             }
 
@@ -54,22 +54,22 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                RoomDao.UpdateOwner(dbClient, newUsername, Session.GetHabbo().Username);
+                RoomDao.UpdateOwner(dbClient, newUsername, Session.GetUser().Username);
 
-                UserDao.UpdateName(dbClient, Session.GetHabbo().Id, newUsername);
+                UserDao.UpdateName(dbClient, Session.GetUser().Id, newUsername);
 
-                LogFlagmeDao.Insert(dbClient, Session.GetHabbo().Id, Session.GetHabbo().Username, newUsername);
+                LogFlagmeDao.Insert(dbClient, Session.GetUser().Id, Session.GetUser().Username, newUsername);
             }
 
-            ButterflyEnvironment.GetGame().GetClientManager().UpdateClientUsername(Session.ConnectionID, Session.GetHabbo().Username, newUsername);
-            room.GetRoomUserManager().UpdateClientUsername(roomUser, Session.GetHabbo().Username, newUsername);
-            Session.GetHabbo().Username = newUsername;
-            Session.GetHabbo().CanChangeName = false;
+            ButterflyEnvironment.GetGame().GetClientManager().UpdateClientUsername(Session.ConnectionID, Session.GetUser().Username, newUsername);
+            room.GetRoomUserManager().UpdateClientUsername(roomUser, Session.GetUser().Username, newUsername);
+            Session.GetUser().Username = newUsername;
+            Session.GetUser().CanChangeName = false;
 
             Session.SendPacket(new UpdateUsernameComposer(newUsername));
-            Session.SendPacket(new UserObjectComposer(Session.GetHabbo()));
+            Session.SendPacket(new UserObjectComposer(Session.GetUser()));
 
-            foreach (int RoomId in Session.GetHabbo().UsersRooms)
+            foreach (int RoomId in Session.GetUser().UsersRooms)
             {
                 Room roomowner = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
                 if (roomowner != null)
@@ -82,7 +82,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             room.SendPacket(new UserNameChangeComposer(newUsername, roomUser.VirtualId));
 
-            if (Session.GetHabbo().Id == room.RoomData.OwnerId)
+            if (Session.GetUser().Id == room.RoomData.OwnerId)
             {
                 room.RoomData.OwnerName = newUsername;
                 room.SendPacket(new RoomInfoUpdatedComposer(room.Id));

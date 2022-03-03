@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().HasFuse("fuse_chatlogs"))
+            if (!Session.GetUser().HasFuse("fuse_chatlogs"))
             {
                 return;
             }
@@ -19,16 +19,16 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int userId = Packet.PopInt();
 
             Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
-            if (clientByUserId == null || clientByUserId.GetHabbo() == null)
+            if (clientByUserId == null || clientByUserId.GetUser() == null)
             {
                 List<ChatlogEntry> sortedMessages = new List<ChatlogEntry>();
-                Session.SendPacket(new ModeratorUserChatlogComposer(userId, "User not online", Session.GetHabbo().CurrentRoomId, sortedMessages));
+                Session.SendPacket(new ModeratorUserChatlogComposer(userId, "User not online", Session.GetUser().CurrentRoomId, sortedMessages));
             }
             else
             {
-                List<ChatlogEntry> sortedMessages = clientByUserId.GetHabbo().GetChatMessageManager().GetSortedMessages(0);
+                List<ChatlogEntry> sortedMessages = clientByUserId.GetUser().GetChatMessageManager().GetSortedMessages(0);
 
-                Session.SendPacket(new ModeratorUserChatlogComposer(userId, clientByUserId.GetHabbo().Username, Session.GetHabbo().CurrentRoomId, sortedMessages));
+                Session.SendPacket(new ModeratorUserChatlogComposer(userId, clientByUserId.GetUser().Username, Session.GetUser().CurrentRoomId, sortedMessages));
             }
         }
     }

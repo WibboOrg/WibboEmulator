@@ -27,11 +27,11 @@ namespace Butterfly.Game.Users.Messenger
         public void UpdateUser()
         {
             Client client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userId);
-            if (client != null && client.GetHabbo() != null && client.GetHabbo().GetMessenger() != null && !client.GetHabbo().GetMessenger().AppearOffline)
+            if (client != null && client.GetUser() != null && client.GetUser().GetMessenger() != null && !client.GetUser().GetMessenger().AppearOffline)
             {
                 this._isOnline = true;
-                this._look = client.GetHabbo().Look;
-                this._hideInRoom = client.GetHabbo().HideInRoom;
+                this._look = client.GetUser().Look;
+                this._hideInRoom = client.GetUser().HideInRoom;
             }
             else
             {

@@ -10,35 +10,35 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null || Session.GetHabbo().CurrentRoom == null)
+            if (Session.GetUser() == null || Session.GetUser().CurrentRoom == null)
             {
                 return;
             }
 
             int PetId = Packet.PopInt();
 
-            if (!Session.GetHabbo().CurrentRoom.GetRoomUserManager().TryGetPet(PetId, out RoomUser Pet))
+            if (!Session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(PetId, out RoomUser Pet))
             {
                 //Okay so, we've established we have no pets in this room by this virtual Id, let us check out users, maybe they're creeping as a pet?!
-                RoomUser User = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(PetId);
+                RoomUser User = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(PetId);
                 if (User == null)
                 {
                     return;
                 }
 
                 //Check some values first, please!
-                if (User.GetClient() == null || User.GetClient().GetHabbo() == null)
+                if (User.GetClient() == null || User.GetClient().GetUser() == null)
                 {
                     return;
                 }
 
                 //And boom! Let us send the information composer 8-).
-                Session.SendPacket(new PetInformationComposer(User.GetClient().GetHabbo()));
+                Session.SendPacket(new PetInformationComposer(User.GetClient().GetUser()));
                 return;
             }
 
             //Continue as a regular pet..
-            if (Pet.RoomId != Session.GetHabbo().CurrentRoomId || Pet.PetData == null)
+            if (Pet.RoomId != Session.GetUser().CurrentRoomId || Pet.PetData == null)
             {
                 return;
             }

@@ -53,7 +53,7 @@ namespace Butterfly.Game.Rooms.AI.Types
             RoomUser roomUser = this.GetRoomUser();
             roomUser.PetData.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 
-            if (roomUser.PetData.OwnerId != User.GetClient().GetHabbo().Id)
+            if (roomUser.PetData.OwnerId != User.GetClient().GetUser().Id)
             {
                 return;
             }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Users
 {
-    internal class HabboGroupBadgesComposer : ServerPacket
+    internal class UserGroupBadgesComposer : ServerPacket
     {
-        public HabboGroupBadgesComposer(Dictionary<int, string> Badges)
+        public UserGroupBadgesComposer(Dictionary<int, string> Badges)
             : base(ServerPacketHeader.GROUP_BADGES)
         {
             this.WriteInteger(Badges.Count);
@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
             }
         }
 
-        public HabboGroupBadgesComposer(Group Group)
+        public UserGroupBadgesComposer(Group Group)
             : base(ServerPacketHeader.GROUP_BADGES)
         {
             this.WriteInteger(1);//count

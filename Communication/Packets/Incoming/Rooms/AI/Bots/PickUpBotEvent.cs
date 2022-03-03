@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!Session.GetUser().InRoom)
             {
                 return;
             }
@@ -25,7 +25,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room Room = Session.GetHabbo().CurrentRoom;
+            Room Room = Session.GetUser().CurrentRoom;
             if (Room == null || !Room.CheckRights(Session, true))
             {
                 return;
@@ -33,14 +33,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (!Room.GetRoomUserManager().TryGetBot(BotId, out RoomUser BotUser))
             {
-                RoomUser TargetUser = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(BotId);
+                RoomUser TargetUser = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(BotId);
                 if (TargetUser == null)
                 {
                     return;
                 }
 
                 //Check some values first, please!
-                if (TargetUser.GetClient() == null || TargetUser.GetClient().GetHabbo() == null)
+                if (TargetUser.GetClient() == null || TargetUser.GetClient().GetUser() == null)
                 {
                     return;
                 }
@@ -60,8 +60,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 BotUserDao.UpdateRoomId(dbClient, BotId);
             }
 
-            Session.GetHabbo().GetInventoryComponent().TryAddBot(new Bot(BotUser.BotData.Id, BotUser.BotData.OwnerId, BotUser.BotData.Name, BotUser.BotData.Motto, BotUser.BotData.Look, BotUser.BotData.Gender, BotUser.BotData.WalkingEnabled, BotUser.BotData.AutomaticChat, BotUser.BotData.ChatText, BotUser.BotData.SpeakingInterval, BotUser.BotData.IsDancing, BotUser.BotData.Enable, BotUser.BotData.Handitem, BotUser.BotData.Status));
-            Session.SendPacket(new BotInventoryComposer(Session.GetHabbo().GetInventoryComponent().GetBots()));
+            Session.GetUser().GetInventoryComponent().TryAddBot(new Bot(BotUser.BotData.Id, BotUser.BotData.OwnerId, BotUser.BotData.Name, BotUser.BotData.Motto, BotUser.BotData.Look, BotUser.BotData.Gender, BotUser.BotData.WalkingEnabled, BotUser.BotData.AutomaticChat, BotUser.BotData.ChatText, BotUser.BotData.SpeakingInterval, BotUser.BotData.IsDancing, BotUser.BotData.Enable, BotUser.BotData.Handitem, BotUser.BotData.Status));
+            Session.SendPacket(new BotInventoryComposer(Session.GetUser().GetInventoryComponent().GetBots()));
             Room.GetRoomUserManager().RemoveBot(BotUser.VirtualId, false);
         }
     }

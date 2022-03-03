@@ -79,7 +79,7 @@ namespace Butterfly.Game.Users.Data
                     }
                 }
 
-                return GenerateHabbo(dUserInfo, dUserStats, changeName, ignoreAllExpire);
+                return GenerateUser(dUserInfo, dUserStats, changeName, ignoreAllExpire);
             }
             catch (Exception ex)
             {
@@ -115,10 +115,10 @@ namespace Butterfly.Game.Users.Data
                 }
             }
 
-            return GenerateHabbo(dUserInfo, dUserStats, false, 0);
+            return GenerateUser(dUserInfo, dUserStats, false, 0);
         }
 
-        public static User GenerateHabbo(DataRow dRow, DataRow dRow2, bool ChangeName, int ignoreAllExpire)
+        public static User GenerateUser(DataRow dRow, DataRow dRow2, bool ChangeName, int ignoreAllExpire)
         {
             int Id = Convert.ToInt32(dRow["id"]);
             string Username = (string)dRow["username"];

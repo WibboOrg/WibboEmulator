@@ -15,27 +15,27 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             string username = Params[1];
 
-            RoomUser roomUserByHabbo = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
-            if (roomUserByHabbo == null || roomUserByHabbo.GetClient() == null)
+            RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
+            if (roomUserByUserId == null || roomUserByUserId.GetClient() == null)
             {
                 return;
             }
 
-            if (Session.Langue != roomUserByHabbo.GetClient().Langue)
+            if (Session.Langue != roomUserByUserId.GetClient().Langue)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", roomUserByHabbo.GetClient().Langue), Session.Langue));
+                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", roomUserByUserId.GetClient().Langue), Session.Langue));
                 return;
             }
 
-            if (!roomUserByHabbo.transformation && !roomUserByHabbo.IsSpectator)
+            if (!roomUserByUserId.transformation && !roomUserByUserId.IsSpectator)
             {
-                Room RoomClient = Session.GetHabbo().CurrentRoom;
+                Room RoomClient = Session.GetUser().CurrentRoom;
                 if (RoomClient != null)
                 {
-                    roomUserByHabbo.transfbot = !roomUserByHabbo.transfbot;
+                    roomUserByUserId.transfbot = !roomUserByUserId.transfbot;
 
-                    RoomClient.SendPacket(new UserRemoveComposer(roomUserByHabbo.VirtualId));
-                    RoomClient.SendPacket(new UsersComposer(roomUserByHabbo));
+                    RoomClient.SendPacket(new UserRemoveComposer(roomUserByUserId.VirtualId));
+                    RoomClient.SendPacket(new UsersComposer(roomUserByUserId));
                 }
             }
 

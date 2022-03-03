@@ -75,20 +75,20 @@ namespace Butterfly.Game.Chat.Mentions
                 return false;
             }
 
-            if (TargetClient.GetHabbo() == null || TargetClient.GetHabbo().GetMessenger() == null)
+            if (TargetClient.GetUser() == null || TargetClient.GetUser().GetMessenger() == null)
             {
                 return false;
             }
 
-            if (!TargetClient.GetHabbo().GetMessenger().FriendshipExists(Session.GetHabbo().Id) && !Session.GetHabbo().HasFuse("fuse_mention"))
+            if (!TargetClient.GetUser().GetMessenger().FriendshipExists(Session.GetUser().Id) && !Session.GetUser().HasFuse("fuse_mention"))
             {
                 Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Tu as besoin d'être ami avec {TargetUsername} pour pouvoir le taguer"));
                 return false;
             }
 
-            if (!TargetClient.GetHabbo().SendWebPacket(new MentionComposer(Session.GetHabbo().Id, Session.GetHabbo().Username, Session.GetHabbo().Look, Message)))
+            if (!TargetClient.GetUser().SendWebPacket(new MentionComposer(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().Look, Message)))
             {
-                TargetClient.SendPacket(RoomNotificationComposer.SendBubble("mention", $"{Session.GetHabbo().Username} t'a tagué:\n\n{Message}", "event:navigator/goto/" + Session.GetHabbo().CurrentRoomId));
+                TargetClient.SendPacket(RoomNotificationComposer.SendBubble("mention", $"{Session.GetUser().Username} t'a tagué:\n\n{Message}", "event:navigator/goto/" + Session.GetUser().CurrentRoomId));
             }
 
             return true;
@@ -96,22 +96,22 @@ namespace Butterfly.Game.Chat.Mentions
 
         public bool EveryoneFriend(Client Session, string Message)
         {
-            if (Session.GetHabbo().Rank < 2)
+            if (Session.GetUser().Rank < 2)
             {
                 Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Vous devez être Premium pour utiliser @everyone"));
                 return false;
             }
 
-            TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().EveryoneTimer;
+            TimeSpan timeSpan = DateTime.Now - Session.GetUser().EveryoneTimer;
             if (timeSpan.TotalSeconds < 120)
             {
                 Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Veuille attendre 2 minute avant de pouvoir réutiliser @everyone"));
                 return false;
             }
 
-            Session.GetHabbo().EveryoneTimer = DateTime.Now;
+            Session.GetUser().EveryoneTimer = DateTime.Now;
 
-            List<Client> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetHabbo().GetMessenger().Friends.Keys);
+            List<Client> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetUser().GetMessenger().Friends.Keys);
 
             if (onlineUsers == null)
             {
@@ -120,13 +120,13 @@ namespace Butterfly.Game.Chat.Mentions
 
             foreach (Client TargetClient in onlineUsers)
             {
-                if (TargetClient != null && TargetClient.GetHabbo() != null && TargetClient.GetHabbo().GetMessenger() != null)
+                if (TargetClient != null && TargetClient.GetUser() != null && TargetClient.GetUser().GetMessenger() != null)
                 {
-                    if (TargetClient.GetHabbo().GetMessenger().FriendshipExists(Session.GetHabbo().Id))
+                    if (TargetClient.GetUser().GetMessenger().FriendshipExists(Session.GetUser().Id))
                     {
-                        if (!TargetClient.GetHabbo().SendWebPacket(new MentionComposer(Session.GetHabbo().Id, Session.GetHabbo().Username, Session.GetHabbo().Look, Message)))
+                        if (!TargetClient.GetUser().SendWebPacket(new MentionComposer(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().Look, Message)))
                         {
-                            TargetClient.SendPacket(RoomNotificationComposer.SendBubble("mention", $"{Session.GetHabbo().Username} t'a tagué:\n\n{Message}", "event:navigator/goto/" + Session.GetHabbo().CurrentRoomId));
+                            TargetClient.SendPacket(RoomNotificationComposer.SendBubble("mention", $"{Session.GetUser().Username} t'a tagué:\n\n{Message}", "event:navigator/goto/" + Session.GetUser().CurrentRoomId));
                         }
                     }
                 }

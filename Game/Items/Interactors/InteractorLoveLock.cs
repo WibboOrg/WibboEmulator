@@ -31,7 +31,7 @@ namespace Butterfly.Game.Items.Interactors
 
             if (Session != null)
             {
-                User = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+                User = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             }
 
             if (User == null)
@@ -80,8 +80,8 @@ namespace Butterfly.Game.Items.Interactors
                     UserOne.CanWalk = false;
                     UserTwo.CanWalk = false;
 
-                    Item.InteractingUser = UserOne.GetClient().GetHabbo().Id;
-                    Item.InteractingUser2 = UserTwo.GetClient().GetHabbo().Id;
+                    Item.InteractingUser = UserOne.GetClient().GetUser().Id;
+                    Item.InteractingUser2 = UserTwo.GetClient().GetUser().Id;
 
                     UserOne.GetClient().SendPacket(new LoveLockDialogueComposer(Item.Id));
                     UserTwo.GetClient().SendPacket(new LoveLockDialogueComposer(Item.Id));

@@ -24,7 +24,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             string Username = Params[1];
 
             Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Username);
-            if (TargetUser == null || TargetUser.GetHabbo() == null)
+            if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 RoomUser Bot = Room.GetRoomUserManager().GetBotByName(Username);
                 if (Bot == null || Bot.BotData == null)
@@ -32,20 +32,20 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     return;
                 }
 
-                Session.GetHabbo().Gender = Bot.BotData.Gender;
-                Session.GetHabbo().Look = Bot.BotData.Look;
+                Session.GetUser().Gender = Bot.BotData.Gender;
+                Session.GetUser().Look = Bot.BotData.Look;
             }
             else
             {
 
-                if (TargetUser.GetHabbo().PremiumProtect && !Session.GetHabbo().HasFuse("fuse_mod"))
+                if (TargetUser.GetUser().PremiumProtect && !Session.GetUser().HasFuse("fuse_mod"))
                 {
                     UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
                     return;
                 }
 
-                Session.GetHabbo().Gender = TargetUser.GetHabbo().Gender;
-                Session.GetHabbo().Look = TargetUser.GetHabbo().Look;
+                Session.GetUser().Gender = TargetUser.GetUser().Gender;
+                Session.GetUser().Look = TargetUser.GetUser().Look;
             }
 
             if (UserRoom.transformation || UserRoom.IsSpectator)
@@ -53,25 +53,25 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (!Session.GetHabbo().InRoom)
+            if (!Session.GetUser().InRoom)
             {
                 return;
             }
 
-            Room currentRoom = Session.GetHabbo().CurrentRoom;
+            Room currentRoom = Session.GetUser().CurrentRoom;
             if (currentRoom == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = UserRoom;
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = UserRoom;
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            Session.SendPacket(new UserChangeComposer(roomUserByHabbo, true));
-            currentRoom.SendPacket(new UserChangeComposer(roomUserByHabbo, false));
+            Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+            currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
 
         }
     }

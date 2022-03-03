@@ -78,7 +78,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     return;
                 }
 
-                if (TargetRoomUser.GetClient().GetHabbo().Id == Session.GetHabbo().Id)
+                if (TargetRoomUser.GetClient().GetUser().Id == Session.GetUser().Id)
                 {
                     return;
                 }

@@ -67,12 +67,12 @@ namespace Butterfly.Game.Achievements
 
             AchievementData AchievementData = this._achievements[AchievementGroup];
 
-            UserAchievement UserData = Session.GetHabbo().GetAchievementComponent().GetAchievementData(AchievementGroup);
+            UserAchievement UserData = Session.GetUser().GetAchievementComponent().GetAchievementData(AchievementGroup);
 
             if (UserData == null)
             {
                 UserData = new UserAchievement(AchievementGroup, 0, 0);
-                Session.GetHabbo().GetAchievementComponent().AddAchievement(UserData);
+                Session.GetUser().GetAchievementComponent().AddAchievement(UserData);
             }
 
             int TotalLevels = AchievementData.Levels.Count;
@@ -108,7 +108,7 @@ namespace Butterfly.Game.Achievements
                 int ProgressRemainder = NewProgress - TargetLevelData.Requirement;
                 NewProgress = 0;
 
-                Session.GetHabbo().GetBadgeComponent().GiveBadge(AchievementGroup + TargetLevel, true);
+                Session.GetUser().GetBadgeComponent().GiveBadge(AchievementGroup + TargetLevel, true);
                 Session.SendPacket(new ReceiveBadgeComposer(AchievementGroup + TargetLevel));
 
                 if (NewTarget > TotalLevels)
@@ -116,40 +116,40 @@ namespace Butterfly.Game.Achievements
                     NewTarget = TotalLevels;
                 }
 
-                Session.GetHabbo().Duckets += TargetLevelData.RewardPixels;
-                Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, 1));
+                Session.GetUser().Duckets += TargetLevelData.RewardPixels;
+                Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().Duckets, 1));
 
                 Session.SendPacket(new AchievementUnlockedComposer(AchievementData, TargetLevel, TargetLevelData.RewardPoints, TargetLevelData.RewardPixels));
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserAchievementDao.Replace(dbClient, Session.GetHabbo().Id, NewLevel, NewProgress, AchievementGroup);
-                    UserStatsDao.UpdateAchievementScore(dbClient, Session.GetHabbo().Id, TargetLevelData.RewardPoints);
+                    UserAchievementDao.Replace(dbClient, Session.GetUser().Id, NewLevel, NewProgress, AchievementGroup);
+                    UserStatsDao.UpdateAchievementScore(dbClient, Session.GetUser().Id, TargetLevelData.RewardPoints);
                 }
 
 
                 UserData.Level = NewLevel;
                 UserData.Progress = NewProgress;
 
-                Session.GetHabbo().AchievementPoints += TargetLevelData.RewardPoints;
-                Session.GetHabbo().Duckets += TargetLevelData.RewardPixels;
-                Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, 1));
-                Session.SendPacket(new AchievementScoreComposer(Session.GetHabbo().AchievementPoints));
+                Session.GetUser().AchievementPoints += TargetLevelData.RewardPoints;
+                Session.GetUser().Duckets += TargetLevelData.RewardPixels;
+                Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().Duckets, 1));
+                Session.SendPacket(new AchievementScoreComposer(Session.GetUser().AchievementPoints));
 
 
-                if (Session.GetHabbo().CurrentRoom != null)
+                if (Session.GetUser().CurrentRoom != null)
                 {
-                    RoomUser roomUserByHabbo = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-                    if (roomUserByHabbo != null)
+                    RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+                    if (roomUserByUserId != null)
                     {
-                        Session.SendPacket(new UserChangeComposer(roomUserByHabbo, true));
-                        Session.GetHabbo().CurrentRoom.SendPacket(new UserChangeComposer(roomUserByHabbo, false));
+                        Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+                        Session.GetUser().CurrentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
                     }
                 }
 
 
                 AchievementLevel NewLevelData = AchievementData.Levels[NewTarget];
-                Session.SendPacket(new AchievementProgressedComposer(AchievementData, NewTarget, NewLevelData, TotalLevels, Session.GetHabbo().GetAchievementComponent().GetAchievementData(AchievementGroup)));
+                Session.SendPacket(new AchievementProgressedComposer(AchievementData, NewTarget, NewLevelData, TotalLevels, Session.GetUser().GetAchievementComponent().GetAchievementData(AchievementGroup)));
 
                 return true;
             }
@@ -159,11 +159,11 @@ namespace Butterfly.Game.Achievements
                 UserData.Progress = NewProgress;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserAchievementDao.Replace(dbClient, Session.GetHabbo().Id, NewLevel, NewProgress, AchievementGroup);
+                    UserAchievementDao.Replace(dbClient, Session.GetUser().Id, NewLevel, NewProgress, AchievementGroup);
                 }
 
                 Session.SendPacket(new AchievementProgressedComposer(AchievementData, TargetLevel, TargetLevelData,
-                TotalLevels, Session.GetHabbo().GetAchievementComponent().GetAchievementData(AchievementGroup)));
+                TotalLevels, Session.GetUser().GetAchievementComponent().GetAchievementData(AchievementGroup)));
             }
 
             return false;

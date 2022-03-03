@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int ItemId = Packet.PopInt();
             string Name = Packet.PopString();
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || !room.CheckRights(Session, true))
             {
                 return;
@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             string Look = "";
-            foreach (string Part in Session.GetHabbo().Look.Split('.'))
+            foreach (string Part in Session.GetUser().Look.Split('.'))
             {
                 if (Part.StartsWith("ch") || Part.StartsWith("lg") || Part.StartsWith("cc") || Part.StartsWith("ca") || Part.StartsWith("sh") || Part.StartsWith("wa"))
                 {
@@ -47,7 +47,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Name = Name.Replace(";", ":");
 
-            roomItem.ExtraData = Session.GetHabbo().Gender.ToUpper() + ";" + Look + ";" + Name + ";";
+            roomItem.ExtraData = Session.GetUser().Gender.ToUpper() + ";" + Look + ";" + Name + ";";
             roomItem.UpdateState();
         }
     }

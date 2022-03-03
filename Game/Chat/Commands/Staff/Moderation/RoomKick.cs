@@ -10,8 +10,8 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room currentRoom = Session.GetHabbo().CurrentRoom;
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room currentRoom = Session.GetUser().CurrentRoom;
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
@@ -28,7 +28,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 List<RoomUser> userKick = new List<RoomUser>();
                 foreach (RoomUser user in currentRoom.GetRoomUserManager().GetUserList().ToList())
                 {
-                    if (user != null && !user.IsBot && !user.GetClient().GetHabbo().HasFuse("fuse_mod") && user.GetClient().GetHabbo().Id != Session.GetHabbo().Id)
+                    if (user != null && !user.IsBot && !user.GetClient().GetUser().HasFuse("fuse_mod") && user.GetClient().GetUser().Id != Session.GetUser().Id)
                     {
                         userKick.Add(user);
                     }

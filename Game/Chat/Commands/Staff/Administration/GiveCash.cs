@@ -16,7 +16,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 case "coins":
                 case "credits":
                     {
-                        if (!Session.GetHabbo().HasFuse("fuse_give_credits"))
+                        if (!Session.GetUser().HasFuse("fuse_give_credits"))
                         {
                             UserRoom.SendWhisperChat("Désolé, vous n'avez pas la permission...");
                             break;
@@ -26,13 +26,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             int Amount;
                             if (int.TryParse(Params[3], out Amount))
                             {
-                                TargetUser.GetHabbo().Credits += Amount;
-                                TargetUser.SendPacket(new CreditBalanceComposer(TargetUser.GetHabbo().Credits));
+                                TargetUser.GetUser().Credits += Amount;
+                                TargetUser.SendPacket(new CreditBalanceComposer(TargetUser.GetUser().Credits));
 
-                                if (TargetUser.GetHabbo().Id != Session.GetHabbo().Id)
-                                    TargetUser.SendNotification(Session.GetHabbo().Username + " t'a donné  " + Amount.ToString() + " crédit(s)!");
+                                if (TargetUser.GetUser().Id != Session.GetUser().Id)
+                                    TargetUser.SendNotification(Session.GetUser().Username + " t'a donné  " + Amount.ToString() + " crédit(s)!");
 
-                                UserRoom.SendWhisperChat("Tu as donné " + Amount + " crédit(s) à " + TargetUser.GetHabbo().Username + "!");
+                                UserRoom.SendWhisperChat("Tu as donné " + Amount + " crédit(s) à " + TargetUser.GetUser().Username + "!");
                                 break;
                             }
                             else
@@ -46,7 +46,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 case "wbpts":
                 case "wp":
                     {
-                        if (!Session.GetHabbo().HasFuse("fuse_give_wibbopoints"))
+                        if (!Session.GetUser().HasFuse("fuse_give_wibbopoints"))
                         {
                             UserRoom.SendWhisperChat("Désolé, vous n'avez pas la permission...");
                             break;
@@ -56,13 +56,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             int Amount;
                             if (int.TryParse(Params[3], out Amount))
                             {
-                                TargetUser.GetHabbo().WibboPoints += Amount;
-                                TargetUser.SendPacket(new HabboActivityPointNotificationComposer(TargetUser.GetHabbo().WibboPoints, 0, 105));
+                                TargetUser.GetUser().WibboPoints += Amount;
+                                TargetUser.SendPacket(new ActivityPointNotificationComposer(TargetUser.GetUser().WibboPoints, 0, 105));
 
-                                if (TargetUser.GetHabbo().Id != Session.GetHabbo().Id)
-                                    TargetUser.SendNotification(Session.GetHabbo().Username + " t'a donné " + Amount.ToString() + " WibboPoint(s)!");
+                                if (TargetUser.GetUser().Id != Session.GetUser().Id)
+                                    TargetUser.SendNotification(Session.GetUser().Username + " t'a donné " + Amount.ToString() + " WibboPoint(s)!");
 
-                                UserRoom.SendWhisperChat("Tu as donné " + Amount + " WibboPoint(s) à " + TargetUser.GetHabbo().Username + "!");
+                                UserRoom.SendWhisperChat("Tu as donné " + Amount + " WibboPoint(s) à " + TargetUser.GetUser().Username + "!");
                                 break;
                             }
                             else

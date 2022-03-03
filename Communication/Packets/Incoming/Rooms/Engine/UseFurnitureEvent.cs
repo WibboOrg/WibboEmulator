@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
@@ -87,7 +87,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int Request = Packet.PopInt();
 
             RoomItem.Interactor.OnTrigger(Session, RoomItem, Request, UserHasRights, false);
-            RoomItem.OnTrigger(room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id));
+            RoomItem.OnTrigger(room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         public void Parse(Client Session, ClientPacket Packet)
         {
             string newMotto = StringCharFilter.Escape(Packet.PopString());
-            if (newMotto == Session.GetHabbo().Motto)
+            if (newMotto == Session.GetUser().Motto)
             {
                 return;
             }
@@ -30,45 +30,45 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Session.GetHabbo().HasFuse("word_filter_override"))
+            if (!Session.GetUser().HasFuse("word_filter_override"))
             {
                 newMotto = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(newMotto);
             }
 
-            if (Session.GetHabbo().IgnoreAll)
+            if (Session.GetUser().IgnoreAll)
             {
                 return;
             }
 
-            Session.GetHabbo().Motto = newMotto;
+            Session.GetUser().Motto = newMotto;
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserDao.UpdateMotto(dbClient, Session.GetHabbo().Id, newMotto);
+                UserDao.UpdateMotto(dbClient, Session.GetUser().Id, newMotto);
             }
 
             ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_CHANGE_MOTTO, 0);
 
-            if (Session.GetHabbo().InRoom)
+            if (Session.GetUser().InRoom)
             {
-                Room currentRoom = Session.GetHabbo().CurrentRoom;
+                Room currentRoom = Session.GetUser().CurrentRoom;
                 if (currentRoom == null)
                 {
                     return;
                 }
 
-                RoomUser roomUserByHabbo = currentRoom.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-                if (roomUserByHabbo == null)
+                RoomUser roomUserByUserId = currentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+                if (roomUserByUserId == null)
                 {
                     return;
                 }
 
-                if (roomUserByHabbo.transformation || roomUserByHabbo.IsSpectator)
+                if (roomUserByUserId.transformation || roomUserByUserId.IsSpectator)
                 {
                     return;
                 }
 
-                currentRoom.SendPacket(new UserChangeComposer(roomUserByHabbo, false));
+                currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
             }
 
             ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_Motto", 1);

@@ -13,15 +13,15 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Room currentRoom = Session.GetHabbo().CurrentRoom;
+            Room currentRoom = Session.GetUser().CurrentRoom;
             if (currentRoom == null || UserRoom.InGame)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = UserRoom;
-            roomUserByHabbo.MoonwalkEnabled = !roomUserByHabbo.MoonwalkEnabled;
-            if (roomUserByHabbo.MoonwalkEnabled)
+            RoomUser roomUserByUserId = UserRoom;
+            roomUserByUserId.MoonwalkEnabled = !roomUserByUserId.MoonwalkEnabled;
+            if (roomUserByUserId.MoonwalkEnabled)
             {
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.true", Session.Langue));
             }

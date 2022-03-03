@@ -13,15 +13,15 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (TargetUser == null || TargetUser.GetHabbo() == null)
+            if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
-            else if (Session.GetHabbo().Rank <= TargetUser.GetHabbo().Rank)
+            else if (Session.GetUser().Rank <= TargetUser.GetUser().Rank)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
             }
-            else if (TargetUser.GetHabbo().CurrentRoomId <= 0)
+            else if (TargetUser.GetUser().CurrentRoomId <= 0)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("kick.error", Session.Langue));
             }
@@ -39,7 +39,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     banMinutes = 2;
                 }
 
-                Room.AddBan(TargetUser.GetHabbo().Id, banMinutes * 60);
+                Room.AddBan(TargetUser.GetUser().Id, banMinutes * 60);
                 Room.GetRoomUserManager().RemoveUserFromRoom(TargetUser, true, true);
             }
         }

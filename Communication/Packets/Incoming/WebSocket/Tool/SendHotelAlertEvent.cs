@@ -16,12 +16,12 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
             }
 
             Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
-            if (Client == null || Client.GetHabbo() == null)
+            if (Client == null || Client.GetUser() == null)
             {
                 return;
             }
 
-            if (!Client.GetHabbo().HasFuse("fuse_wibbotool"))
+            if (!Client.GetUser().HasFuse("fuse_wibbotool"))
             {
                 return;
             }
@@ -44,7 +44,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 
             if (!string.IsNullOrWhiteSpace(Url))
             {
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetHabbo().Id, Client.GetHabbo().Username, 0, string.Empty, "hal", string.Format("WbTool hal: {0} : {1}", Url, Message));
+                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, 0, string.Empty, "hal", string.Format("WbTool hal: {0} : {1}", Url, Message));
 
                 if (!Url.StartsWith("https://wibbo.org") && !Url.StartsWith("https://www.facebook.com/WibboHotelFR") && !Url.StartsWith("https://twitter.com/WibboOrg") && !Url.StartsWith("https://instagram.com/wibboorg"))
                 {
@@ -57,12 +57,12 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 
             if (EventAlert)
             {
-                if (Client.GetHabbo().CurrentRoom == null)
+                if (Client.GetUser().CurrentRoom == null)
                 {
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetHabbo().Id, Client.GetHabbo().Username, Client.GetHabbo().CurrentRoom.Id, string.Empty, "eventha", string.Format("WbTool eventha: {0}", Message));
+                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, Client.GetUser().CurrentRoom.Id, string.Empty, "eventha", string.Format("WbTool eventha: {0}", Message));
                 if (Client.Antipub(Message, "<eventalert>"))
                 {
                     return;
@@ -74,13 +74,13 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", Message, "Je veux y jouer !", Client.GetHabbo().CurrentRoom.Id, ""), Session.Langue, true);
+                ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", Message, "Je veux y jouer !", Client.GetUser().CurrentRoom.Id, ""), Session.Langue, true);
 
-                Client.GetHabbo().CurrentRoom.CloseFullRoom = true;
+                Client.GetUser().CurrentRoom.CloseFullRoom = true;
             }
             else
             {
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetHabbo().Id, Client.GetHabbo().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", Message));
+                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", Message));
                 if (Client.Antipub(Message, "<alert>"))
                 {
                     return;

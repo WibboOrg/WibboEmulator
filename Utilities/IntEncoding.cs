@@ -1,6 +1,6 @@
 ﻿namespace Butterfly.Utilities
 {
-    public class HabboEncoding
+    public class IntEncoding
     {
         public static int DecodeInt32(byte[] v)
         {

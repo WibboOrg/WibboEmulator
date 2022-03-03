@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int userId = Packet.PopInt();
             bool IsMe = Packet.PopBoolean();
 
-            User targetData = ButterflyEnvironment.GetHabboById(userId);
+            User targetData = ButterflyEnvironment.GetUserById(userId);
             if (targetData == null)
             {
                 return;

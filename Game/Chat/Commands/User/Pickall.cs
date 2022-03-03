@@ -19,7 +19,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Session.GetHabbo().GetInventoryComponent().AddItemArray(Room.GetRoomItemHandler().RemoveAllFurniture(Session));
+            Session.GetUser().GetInventoryComponent().AddItemArray(Room.GetRoomItemHandler().RemoveAllFurniture(Session));
             Session.SendPacket(new FurniListUpdateComposer());
 
         }

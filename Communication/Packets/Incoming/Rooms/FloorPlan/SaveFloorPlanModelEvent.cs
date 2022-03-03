@@ -24,7 +24,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int FloorThick = Packet.PopInt();
             int WallHeight = Packet.PopInt();
 
-            Room Room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room Room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (Room == null)
             {
                 return;

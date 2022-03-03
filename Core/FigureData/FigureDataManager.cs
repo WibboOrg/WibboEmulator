@@ -95,7 +95,7 @@ namespace Butterfly.Core.FigureData
             this._setTypes["hd"].Sets.Add(99999, new Set(99999, "U", 0, true));
         }
 
-        public string ProcessFigure(string figure, string gender, bool hasHabboClub)
+        public string ProcessFigure(string figure, string gender, bool hasClub)
         {
             try
             {
@@ -105,7 +105,7 @@ namespace Butterfly.Core.FigureData
 
                 string rebuildFigure = string.Empty;
 
-                #region Check clothing, colors & Habbo Club
+                #region Check clothing, colors & Club
                 string[] figureParts = figure.Split('.');
                 foreach (string part in figureParts.ToList())
                 {
@@ -241,7 +241,7 @@ namespace Butterfly.Core.FigureData
                             }
                             #endregion
 
-                            if (set.ClubLevel > 0 && !hasHabboClub)
+                            if (set.ClubLevel > 0 && !hasClub)
                             {
                                 partId = figureSet.Sets.FirstOrDefault(x => x.Value.Gender == gender || x.Value.Gender == "U" && x.Value.ClubLevel == 0).Value.Id;
 

@@ -17,7 +17,6 @@ namespace Butterfly.Game.Rooms
     public class RoomUser : IEquatable<RoomUser>
     {
         public int UserId { get; set; }
-        public int HabboId { get; set; }
         public int VirtualId { get; set; }
         public int RoomId { get; set; }
         public int IdleTime { get; set; }
@@ -142,7 +141,7 @@ namespace Butterfly.Game.Rooms
 
         public bool IsDancing => this.DanceId >= 1;
 
-        public bool NeedsAutokick => !this.IsBot && (this.GetClient() == null || this.GetClient().GetHabbo() == null || this.GetClient().GetHabbo().Rank < 2 && this.IdleTime >= 1200);
+        public bool NeedsAutokick => !this.IsBot && (this.GetClient() == null || this.GetClient().GetUser() == null || this.GetClient().GetUser().Rank < 2 && this.IdleTime >= 1200);
 
         public bool IsTrading => !this.IsBot && this.Statusses.ContainsKey("/trd");
 
@@ -168,10 +167,10 @@ namespace Butterfly.Game.Rooms
             }
         }
 
-        public RoomUser(int HabboId, int RoomId, int VirtualId, Room room)
+        public RoomUser(int userId, int RoomId, int VirtualId, Room room)
         {
             this.Freezed = false;
-            this.HabboId = HabboId;
+            this.UserId = userId;
             this.RoomId = RoomId;
             this.VirtualId = VirtualId;
             this.IdleTime = 0;
@@ -214,9 +213,9 @@ namespace Butterfly.Game.Rooms
             {
                 return this.PetData.Name;
             }
-            else if (this.GetClient() != null && this.GetClient().GetHabbo() != null)
+            else if (this.GetClient() != null && this.GetClient().GetUser() != null)
             {
-                return this.GetClient().GetHabbo().Username;
+                return this.GetClient().GetUser().Username;
             }
             else
             {
@@ -475,7 +474,7 @@ namespace Butterfly.Game.Rooms
 
             if (this.Client == null)
             {
-                this.Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.HabboId);
+                this.Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
             }
 
             return this.Client;

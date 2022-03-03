@@ -9,12 +9,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!Session.GetUser().InRoom)
             {
                 return;
             }
 
-            if (!Session.GetHabbo().EnterRoom(Session.GetHabbo().CurrentRoom))
+            if (!Session.GetUser().EnterRoom(Session.GetUser().CurrentRoom))
             {
                 Session.SendPacket(new CloseConnectionComposer());
             }

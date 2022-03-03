@@ -14,24 +14,24 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     continue;
                 }
 
-                if (User.GetHabbo() == null)
+                if (User.GetUser() == null)
                 {
                     continue;
                 }
 
-                if (User.GetHabbo().GetMessenger() == null)
+                if (User.GetUser().GetMessenger() == null)
                 {
                     continue;
                 }
 
-                if (!User.GetHabbo().GetMessenger().FriendshipExists(UserRoom.HabboId))
+                if (!User.GetUser().GetMessenger().FriendshipExists(UserRoom.UserId))
                 {
-                    User.GetHabbo().GetMessenger().OnNewFriendship(UserRoom.HabboId);
+                    User.GetUser().GetMessenger().OnNewFriendship(UserRoom.UserId);
                 }
 
-                if (!Session.GetHabbo().GetMessenger().FriendshipExists(User.GetHabbo().Id))
+                if (!Session.GetUser().GetMessenger().FriendshipExists(User.GetUser().Id))
                 {
-                    Session.GetHabbo().GetMessenger().OnNewFriendship(User.GetHabbo().Id);
+                    Session.GetUser().GetMessenger().OnNewFriendship(User.GetUser().Id);
                 }
             }
         }

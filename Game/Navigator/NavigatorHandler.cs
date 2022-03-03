@@ -203,7 +203,7 @@ namespace Butterfly.Game.Navigator
 
                     List<RoomData> MyRooms = new List<RoomData>();
 
-                    foreach (int RoomId in Session.GetHabbo().UsersRooms)
+                    foreach (int RoomId in Session.GetUser().UsersRooms)
                     {
                         RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
                         if (Data == null)
@@ -226,7 +226,7 @@ namespace Butterfly.Game.Navigator
 
                 case NavigatorCategoryType.MY_FAVORITES:
                     List<RoomData> Favourites = new List<RoomData>();
-                    foreach (int RoomId in Session.GetHabbo().FavoriteRooms)
+                    foreach (int RoomId in Session.GetUser().FavoriteRooms)
                     {
                         RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
                         if (Data == null)
@@ -252,7 +252,7 @@ namespace Butterfly.Game.Navigator
                 case NavigatorCategoryType.MY_GROUPS:
                     List<RoomData> MyGroups = new List<RoomData>();
 
-                    foreach (int GroupId in Session.GetHabbo().MyGroups.ToList())
+                    foreach (int GroupId in Session.GetUser().MyGroups.ToList())
                     {
                         if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
                         {
@@ -282,9 +282,9 @@ namespace Butterfly.Game.Navigator
 
                 /*case NavigatorCategoryType.MY_FRIENDS_ROOMS:
                     List<RoomData> MyFriendsRooms = new List<RoomData>();
-                    foreach (MessengerBuddy buddy in Session.GetHabbo().GetMessenger().GetFriends().Where(p => p.))
+                    foreach (MessengerBuddy buddy in Session.GetUser().GetMessenger().GetFriends().Where(p => p.))
                     {
-                        if (buddy == null || !buddy.InRoom || buddy.UserId == Session.GetHabbo().Id)
+                        if (buddy == null || !buddy.InRoom || buddy.UserId == Session.GetUser().Id)
                             continue;
 
                         if (!MyFriendsRooms.Contains(buddy.CurrentRoom.RoomData))
@@ -301,7 +301,7 @@ namespace Butterfly.Game.Navigator
                 case NavigatorCategoryType.MY_RIGHTS:
                     List<RoomData> MyRights = new List<RoomData>();
 
-                    foreach (int RoomId in Session.GetHabbo().RoomRightsList)
+                    foreach (int RoomId in Session.GetUser().RoomRightsList)
                     {
                         RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
                         if (Data == null)

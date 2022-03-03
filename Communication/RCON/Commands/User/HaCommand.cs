@@ -30,7 +30,7 @@ namespace Butterfly.Communication.RCON.Commands.User
 
             string Message = parameters[2];
 
-            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetHabbo().Id, Client.GetHabbo().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", Message));
+            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", Message));
             if (Client.Antipub(Message, "<alert>"))
             {
                 return false;
@@ -39,7 +39,7 @@ namespace Butterfly.Communication.RCON.Commands.User
             ButterflyEnvironment
                 .GetGame()
                 .GetClientManager()
-                .SendMessage(new BroadcastMessageAlertComposer(ButterflyEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", Client.Langue) + "\r\n" + Message + "\r\n- " + Client.GetHabbo().Username));
+                .SendMessage(new BroadcastMessageAlertComposer(ButterflyEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", Client.Langue) + "\r\n" + Message + "\r\n- " + Client.GetUser().Username));
             return true;
         }
     }

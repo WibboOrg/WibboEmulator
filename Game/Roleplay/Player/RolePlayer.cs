@@ -556,9 +556,9 @@ namespace Butterfly.Game.Roleplay.Player
                 else
                 {
                     this.SendPrison = false;
-                    User.GetClient().GetHabbo().IsTeleporting = true;
-                    User.GetClient().GetHabbo().TeleportingRoomID = RPManager.PrisonId;
-                    User.GetClient().GetHabbo().PrepareRoom(RPManager.PrisonId);
+                    User.GetClient().GetUser().IsTeleporting = true;
+                    User.GetClient().GetUser().TeleportingRoomID = RPManager.PrisonId;
+                    User.GetClient().GetUser().PrepareRoom(RPManager.PrisonId);
                 }
             }
 
@@ -571,9 +571,9 @@ namespace Butterfly.Game.Roleplay.Player
                 else
                 {
                     this.Dead = false;
-                    User.GetClient().GetHabbo().IsTeleporting = true;
-                    User.GetClient().GetHabbo().TeleportingRoomID = RPManager.HopitalId;
-                    User.GetClient().GetHabbo().PrepareRoom(RPManager.HopitalId);
+                    User.GetClient().GetUser().IsTeleporting = true;
+                    User.GetClient().GetUser().TeleportingRoomID = RPManager.HopitalId;
+                    User.GetClient().GetUser().PrepareRoom(RPManager.HopitalId);
                 }
             }
 

@@ -15,17 +15,17 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }
 
-            if (Session.GetHabbo().LoadingRoomId == 0)
+            if (Session.GetUser().LoadingRoomId == 0)
             {
                 return;
             }
 
-            Room Room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().LoadingRoomId);
+            Room Room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().LoadingRoomId);
             if (Room == null)
             {
                 return;
@@ -33,13 +33,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (Room.RoomData.State == 1)
             {
-                if (!Session.GetHabbo().AllowDoorBell)
+                if (!Session.GetUser().AllowDoorBell)
                 {
                     return;
                 }
                 else
                 {
-                    Session.GetHabbo().AllowDoorBell = false;
+                    Session.GetUser().AllowDoorBell = false;
                 }
             }
 
@@ -54,7 +54,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.SendPacket(new RoomEntryInfoComposer(Room.Id, Room.CheckRights(Session, true)));
             Session.SendPacket(new RoomVisualizationSettingsComposer(Room.RoomData.WallThickness, Room.RoomData.FloorThickness, Room.RoomData.Hidewall));
 
-            RoomUser ThisUser = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser ThisUser = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
 
             if (ThisUser != null)
             {
@@ -66,25 +66,25 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Room.GetRoomUserManager().UserEnter(ThisUser);
             }
 
-            if (Session.GetHabbo().Nuxenable)
+            if (Session.GetUser().Nuxenable)
             {
                 Session.SendPacket(new NuxAlertComposer(2));
 
-                Session.GetHabbo().PassedNuxCount++;
+                Session.GetUser().PassedNuxCount++;
                 Session.SendPacket(new InClientLinkComposer("nux/lobbyoffer/hide"));
                 Session.SendPacket(new InClientLinkComposer("helpBubble/add/BOTTOM_BAR_NAVIGATOR/nux.bot.info.navigator.1"));
             }
 
-            if (Session.GetHabbo().SpamEnable)
+            if (Session.GetUser().SpamEnable)
             {
-                TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().SpamFloodTime;
-                if (timeSpan.TotalSeconds < Session.GetHabbo().SpamProtectionTime)
+                TimeSpan timeSpan = DateTime.Now - Session.GetUser().SpamFloodTime;
+                if (timeSpan.TotalSeconds < Session.GetUser().SpamProtectionTime)
                 {
-                    Session.SendPacket(new FloodControlComposer(Session.GetHabbo().SpamProtectionTime - timeSpan.Seconds));
+                    Session.SendPacket(new FloodControlComposer(Session.GetUser().SpamProtectionTime - timeSpan.Seconds));
                 }
             }
 
-            if (Room.RoomData.OwnerId != Session.GetHabbo().Id)
+            if (Room.RoomData.OwnerId != Session.GetUser().Id)
             {
                 ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomEntry", 1);
             }
@@ -92,8 +92,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             double timeStampNow = UnixTimestamp.GetNow();
 
-            if (!Session.GetHabbo().Visits.ContainsKey(timeStampNow))
-                Session.GetHabbo().Visits.Add(timeStampNow, Room.Id);
+            if (!Session.GetUser().Visits.ContainsKey(timeStampNow))
+                Session.GetUser().Visits.Add(timeStampNow, Room.Id);
         }
     }
 }

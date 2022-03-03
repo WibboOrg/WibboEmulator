@@ -23,7 +23,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Session.GetHabbo().ForceUse = UseCount;
+            Session.GetUser().ForceUse = UseCount;
         }
     }
 }

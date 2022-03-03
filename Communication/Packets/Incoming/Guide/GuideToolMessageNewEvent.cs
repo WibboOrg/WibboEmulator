@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             string message = Packet.PopString();
 
-            Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetHabbo().GuideOtherUserId);
+            Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
             if (requester == null)
             {
                 return;
@@ -22,8 +22,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            requester.SendPacket(new OnGuideSessionMsgComposer(message, Session.GetHabbo().Id));
-            Session.SendPacket(new OnGuideSessionMsgComposer(message, Session.GetHabbo().Id));
+            requester.SendPacket(new OnGuideSessionMsgComposer(message, Session.GetUser().Id));
+            Session.SendPacket(new OnGuideSessionMsgComposer(message, Session.GetUser().Id));
         }
     }
 }

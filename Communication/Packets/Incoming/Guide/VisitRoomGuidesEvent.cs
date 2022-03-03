@@ -9,13 +9,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetHabbo().GuideOtherUserId);
+            Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
             if (requester == null)
             {
                 return;
             }
 
-            Session.SendPacket(new OnGuideSessionRequesterRoomComposer(requester.GetHabbo().CurrentRoomId));
+            Session.SendPacket(new OnGuideSessionRequesterRoomComposer(requester.GetUser().CurrentRoomId));
         }
     }
 }

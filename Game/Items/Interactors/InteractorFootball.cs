@@ -23,7 +23,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            RoomUser User = Ball.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser User = Ball.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
 
             if (User == null)
             {

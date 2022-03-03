@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             int ComissionPrice = Packet.PopInt();
             int ItemId = Packet.PopInt();
 
-            Item Item = Session.GetHabbo().GetInventoryComponent().GetItem(ItemId);
+            Item Item = Session.GetUser().GetInventoryComponent().GetItem(ItemId);
             if (Item == null)
             {
                 Session.SendPacket(new MarketplaceMakeOfferResultComposer(0));
@@ -47,11 +47,11 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             {
                 ItemDao.Delete(dbClient, ItemId);
 
-                CatalogMarketplaceOfferDao.Insert(dbClient, Item.GetBaseItem().ItemName, Item.ExtraData, ItemId, Item.BaseItem, Session.GetHabbo().Id, SellingPrice, TotalPrice, Item.GetBaseItem().SpriteId, ItemType, Item.Limited, Item.LimitedStack);
+                CatalogMarketplaceOfferDao.Insert(dbClient, Item.GetBaseItem().ItemName, Item.ExtraData, ItemId, Item.BaseItem, Session.GetUser().Id, SellingPrice, TotalPrice, Item.GetBaseItem().SpriteId, ItemType, Item.Limited, Item.LimitedStack);
 
             }
 
-            Session.GetHabbo().GetInventoryComponent().RemoveItem(ItemId);
+            Session.GetUser().GetInventoryComponent().RemoveItem(ItemId);
             Session.SendPacket(new MarketplaceMakeOfferResultComposer(1));
         }
     }

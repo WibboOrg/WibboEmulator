@@ -44,7 +44,7 @@ namespace Butterfly.Game.Clients
             foreach (int UserId in this._userStaff)
             {
                 Client Client = this.GetClientByUserID(UserId);
-                if (Client == null || Client.GetHabbo() == null)
+                if (Client == null || Client.GetUser() == null)
                 {
                     continue;
                 }
@@ -109,7 +109,7 @@ namespace Butterfly.Game.Clients
 
             if (clientByUserId != null)
             {
-                return clientByUserId.GetHabbo().Username;
+                return clientByUserId.GetUser().Username;
             }
 
             string username = "";
@@ -141,7 +141,7 @@ namespace Butterfly.Game.Clients
             foreach (int UserId in this._userStaff)
             {
                 Client Client = this.GetClientByUserID(UserId);
-                if (Client == null || Client.GetHabbo() == null)
+                if (Client == null || Client.GetUser() == null)
                 {
                     continue;
                 }
@@ -154,7 +154,7 @@ namespace Butterfly.Game.Clients
         {
             foreach (Client Client in this._clients.Values.ToList())
             {
-                if (Client == null || Client.GetHabbo() == null)
+                if (Client == null || Client.GetUser() == null)
                 {
                     continue;
                 }
@@ -256,15 +256,15 @@ namespace Butterfly.Game.Clients
                     continue;
                 }
 
-                if (client.GetHabbo() != null)
+                if (client.GetUser() != null)
                 {
                     try
                     {
-                        TimeSpan TimeOnline = DateTime.Now - client.GetHabbo().OnlineTime;
+                        TimeSpan TimeOnline = DateTime.Now - client.GetUser().OnlineTime;
                         int TimeOnlineSec = (int)TimeOnline.TotalSeconds;
 
-                        stringBuilder.Append(UserDao.BuildUpdateQuery(client.GetHabbo().Id, client.GetHabbo().Duckets, client.GetHabbo().Credits));
-                        stringBuilder.Append(UserStatsDao.BuildUpdateQuery(client.GetHabbo().Id, client.GetHabbo().FavouriteGroupId, TimeOnlineSec, client.GetHabbo().CurrentQuestId, client.GetHabbo().Respect, client.GetHabbo().DailyRespectPoints, client.GetHabbo().DailyPetRespectPoints));
+                        stringBuilder.Append(UserDao.BuildUpdateQuery(client.GetUser().Id, client.GetUser().Duckets, client.GetUser().Credits));
+                        stringBuilder.Append(UserStatsDao.BuildUpdateQuery(client.GetUser().Id, client.GetUser().FavouriteGroupId, TimeOnlineSec, client.GetUser().CurrentQuestId, client.GetUser().Respect, client.GetUser().DailyRespectPoints, client.GetUser().DailyPetRespectPoints));
 
                     }
                     catch
@@ -322,13 +322,13 @@ namespace Butterfly.Game.Clients
                 Reason = "Ne respect pas les régles";
             }
 
-            string Variable = Client.GetHabbo().Username.ToLower();
+            string Variable = Client.GetUser().Username.ToLower();
             string str = "user";
             double Expire = ButterflyEnvironment.GetUnixTimestamp() + LengthSeconds;
             if (IpBan)
             {
                 //Variable = Client.GetConnection().getIp();
-                Variable = Client.GetHabbo().IP;
+                Variable = Client.GetUser().IP;
                 str = "ip";
             }
 
@@ -347,7 +347,7 @@ namespace Butterfly.Game.Clients
             {
                 if (str == "user")
                 {
-                    UserDao.UpdateIsBanned(dbClient, Client.GetHabbo().Id);
+                    UserDao.UpdateIsBanned(dbClient, Client.GetUser().Id);
                 }
 
                 BanDao.InsertBan(dbClient, Expire, str, Variable, Reason, Moderator);

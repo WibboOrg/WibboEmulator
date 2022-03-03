@@ -13,7 +13,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
         {
-            if (user == null || user.IsBot || user.GetClient() == null || user.GetClient().GetHabbo() == null)
+            if (user == null || user.IsBot || user.GetClient() == null || user.GetClient().GetUser() == null)
             {
                 return false;
             }
@@ -23,7 +23,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                 return false;
             }
 
-            if (user.GetClient().GetHabbo().MyGroups.Contains(this.RoomInstance.RoomData.Group.Id))
+            if (user.GetClient().GetUser().MyGroups.Contains(this.RoomInstance.RoomData.Group.Id))
             {
                 return false;
             }

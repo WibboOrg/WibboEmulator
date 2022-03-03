@@ -42,7 +42,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             RoomData Room = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
-            if (Room == null || Room.OwnerId != session.GetHabbo().Id || Room.Group != null)
+            if (Room == null || Room.OwnerId != session.GetUser().Id || Room.Group != null)
             {
                 return;
             }
@@ -54,7 +54,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Badge += BadgePartUtility.WorkBadgeParts(i == 0, packet.PopInt().ToString(), packet.PopInt().ToString(), packet.PopInt().ToString());
             }
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryCreateGroup(session.GetHabbo(), Name, Description, RoomId, Badge, Colour1, Colour2, out Group Group))
+            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryCreateGroup(session.GetUser(), Name, Description, RoomId, Badge, Colour1, Colour2, out Group Group))
             {
                 return;
             }
@@ -65,15 +65,15 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int groupCost = 20;
 
-            if (session.GetHabbo().Credits < groupCost)
+            if (session.GetUser().Credits < groupCost)
             {
                 return;
             }
 
-            session.GetHabbo().Credits -= groupCost;
-            session.SendPacket(new CreditBalanceComposer(session.GetHabbo().Credits));
+            session.GetUser().Credits -= groupCost;
+            session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
 
-            if (session.GetHabbo().CurrentRoomId != Room.Id)
+            if (session.GetUser().CurrentRoomId != Room.Id)
             {
                 session.SendPacket(new RoomForwardComposer(Room.Id));
             }

@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client session, ClientPacket packet)
         {
-            Room room = session.GetHabbo().CurrentRoom;
+            Room room = session.GetUser().CurrentRoom;
             if (room == null)
             {
                 return;
@@ -50,8 +50,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int selectionCode = packet.PopInt();
 
-            bool isStaff = session.GetHabbo().HasFuse("fuse_superwired_staff");
-            bool isGod = session.GetHabbo().HasFuse("fuse_superwired_god");
+            bool isStaff = session.GetUser().HasFuse("fuse_superwired_staff");
+            bool isGod = session.GetUser().HasFuse("fuse_superwired_god");
 
             WiredRegister.HandleRegister(item, room, intParams, stringParam, stuffIds, selectionCode, 0, isStaff, isGod);
 

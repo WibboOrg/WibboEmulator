@@ -35,20 +35,20 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            RoomUser roomUserByHabbo = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            if (!Gamemap.TilesTouching(roomUserByHabbo.X, roomUserByHabbo.Y, Item.X, Item.Y))
+            if (!Gamemap.TilesTouching(roomUserByUserId.X, roomUserByUserId.Y, Item.X, Item.Y))
             {
-                roomUserByHabbo.MoveTo(Item.SquareInFront);
+                roomUserByUserId.MoveTo(Item.SquareInFront);
             }
             else
             {
-                Item.InteractingUser = Session.GetHabbo().Id;
-                roomUserByHabbo.SetRot(Rotation.Calculate(roomUserByHabbo.X, roomUserByHabbo.Y, Item.X, Item.Y), false);
+                Item.InteractingUser = Session.GetUser().Id;
+                roomUserByUserId.SetRot(Rotation.Calculate(roomUserByUserId.X, roomUserByUserId.Y, Item.X, Item.Y), false);
                 Item.ReqUpdate(2);
                 Item.ExtraData = "1";
                 Item.UpdateState(false, true);
@@ -62,11 +62,11 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            RoomUser roomUserByHabboEnable = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser);
-            if (roomUserByHabboEnable != null)
+            RoomUser roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+            if (roomUserByUserId != null)
             {
                 int vendingId = item.GetBaseItem().VendingIds[ButterflyEnvironment.GetRandomNumber(0, item.GetBaseItem().VendingIds.Count - 1)];
-                roomUserByHabboEnable.ApplyEffect(vendingId);
+                roomUserByUserId.ApplyEffect(vendingId);
             }
 
             item.InteractingUser = 0;

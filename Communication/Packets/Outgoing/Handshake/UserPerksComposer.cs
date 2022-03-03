@@ -4,13 +4,13 @@ namespace Butterfly.Communication.Packets.Outgoing.Handshake
 {
     internal class UserPerksComposer : ServerPacket
     {
-        public UserPerksComposer(User Habbo)
+        public UserPerksComposer(User user)
             : base(ServerPacketHeader.USER_PERKS)
         {
             this.WriteInteger(17); // Count
             this.WriteString("USE_GUIDE_TOOL");
             this.WriteString("");
-            this.WriteBoolean(Habbo.HasFuse("fuse_helptool"));
+            this.WriteBoolean(user.HasFuse("fuse_helptool"));
 
             this.WriteString("GIVE_GUIDE_TOURS");
             this.WriteString("requirement.unfulfilled.helper_le");

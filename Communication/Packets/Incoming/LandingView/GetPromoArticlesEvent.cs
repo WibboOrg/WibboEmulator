@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            LandingViewManager currentView = ButterflyEnvironment.GetGame().GetHotelView();            if (Session == null || Session.GetHabbo() == null)
+            LandingViewManager currentView = ButterflyEnvironment.GetGame().GetHotelView();            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }

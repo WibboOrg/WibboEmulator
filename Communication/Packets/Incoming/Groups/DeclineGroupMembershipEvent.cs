@@ -19,7 +19,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Session.GetHabbo().Id != Group.CreatorId && !Group.IsAdmin(Session.GetHabbo().Id))
+            if (Session.GetUser().Id != Group.CreatorId && !Group.IsAdmin(Session.GetUser().Id))
             {
                 return;
             }

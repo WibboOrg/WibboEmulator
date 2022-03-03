@@ -48,12 +48,12 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets
             this.WriteBoolean(false);
         }
 
-        public PetInformationComposer(User Habbo)
+        public PetInformationComposer(User user)
             : base(ServerPacketHeader.PET_INFO)
         {
-            this.WriteInteger(Habbo.Id);
-            this.WriteString(Habbo.Username);
-            this.WriteInteger(Habbo.Rank);
+            this.WriteInteger(user.Id);
+            this.WriteString(user.Username);
+            this.WriteInteger(user.Rank);
             this.WriteInteger(10);
             this.WriteInteger(0);
             this.WriteInteger(0);
@@ -61,10 +61,10 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets
             this.WriteInteger(100);
             this.WriteInteger(100);
             this.WriteInteger(100);
-            this.WriteInteger(Habbo.Respect);
-            this.WriteInteger(Habbo.Id);
+            this.WriteInteger(user.Respect);
+            this.WriteInteger(user.Id);
             this.WriteInteger(0);//account created
-            this.WriteString(Habbo.Username);
+            this.WriteString(user.Username);
             this.WriteInteger(1);//3 on hab
             this.WriteBoolean(false);
             this.WriteBoolean(false);

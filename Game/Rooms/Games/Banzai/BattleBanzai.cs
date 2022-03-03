@@ -218,7 +218,7 @@ namespace Butterfly.Game.Rooms.Games
                     this._roomInstance.GetGameMap().TeleportToItem(roomUser, this._roomInstance.GetGameItemHandler().GetExitTeleport());
                 }
 
-                TeamManager managerForBanzai = roomUser.GetClient().GetHabbo().CurrentRoom.GetTeamManager();
+                TeamManager managerForBanzai = roomUser.GetClient().GetUser().CurrentRoom.GetTeamManager();
                 managerForBanzai.OnUserLeave(roomUser);
                 this._roomInstance.GetGameManager().UpdateGatesTeamCounts();
                 roomUser.ApplyEffect(0);
@@ -250,7 +250,7 @@ namespace Butterfly.Game.Rooms.Games
                 return;
             }
 
-            this.HandleBanzaiTiles(new Point(newX, newY), team, this._roomInstance.GetRoomUserManager().GetRoomUserByHabboId(mover.GetHabbo().Id));
+            this.HandleBanzaiTiles(new Point(newX, newY), team, this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(mover.GetUser().Id));
         }
 
         private void SetTile(Item item, TeamType team, RoomUser user)

@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
 
             foreach (CatalogPage Parent in Pages)
             {
-                if (Parent.ParentId != -1 || Parent.MinimumRank > Session.GetHabbo().Rank)
+                if (Parent.ParentId != -1 || Parent.MinimumRank > Session.GetUser().Rank)
                 {
                     continue;
                 }
@@ -23,7 +23,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
 
                 foreach (CatalogPage child in Pages)
                 {
-                    if (child.ParentId != Parent.Id || child.MinimumRank > Session.GetHabbo().Rank)
+                    if (child.ParentId != Parent.Id || child.MinimumRank > Session.GetUser().Rank)
                     {
                         continue;
                     }
@@ -39,7 +39,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
 
                     foreach (CatalogPage SubChild in Pages)
                     {
-                        if (SubChild.ParentId != child.Id || SubChild.MinimumRank > Session.GetHabbo().Rank)
+                        if (SubChild.ParentId != child.Id || SubChild.MinimumRank > Session.GetUser().Rank)
                         {
                             continue;
                         }
@@ -55,7 +55,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
 
                         foreach (CatalogPage SubSubChild in Pages)
                         {
-                            if (SubSubChild.ParentId != SubChild.Id || SubSubChild.MinimumRank > Session.GetHabbo().Rank)
+                            if (SubSubChild.ParentId != SubChild.Id || SubSubChild.MinimumRank > Session.GetUser().Rank)
                             {
                                 continue;
                             }
@@ -122,7 +122,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
             int i = 0;
             foreach (CatalogPage Page in Pages)
             {
-                if (Page.MinimumRank > Session.GetHabbo().Rank || Page.ParentId != ParentId)
+                if (Page.MinimumRank > Session.GetUser().Rank || Page.ParentId != ParentId)
                 {
                     continue;
                 }

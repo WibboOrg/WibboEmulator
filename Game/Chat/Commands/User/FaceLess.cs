@@ -14,7 +14,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            string look = Session.GetHabbo().Look;
+            string look = Session.GetUser().Look;
 
             if (look.Contains("hd-"))
             {
@@ -30,14 +30,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                 look = look.Replace(hdcode, hdcodenoface);
 
-                Session.GetHabbo().Look = look;
+                Session.GetUser().Look = look;
 
-                if (!Session.GetHabbo().InRoom)
+                if (!Session.GetUser().InRoom)
                 {
                     return;
                 }
 
-                Room currentRoom = Session.GetHabbo().CurrentRoom;
+                Room currentRoom = Session.GetUser().CurrentRoom;
                 if (currentRoom == null)
                 {
                     return;

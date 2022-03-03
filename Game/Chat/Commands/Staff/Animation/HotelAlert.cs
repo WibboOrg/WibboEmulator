@@ -13,7 +13,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             {
                 return;
             }
-            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer(Message + "\r\n" + "- " + Session.GetHabbo().Username));
+            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer(Message + "\r\n" + "- " + Session.GetUser().Username));
         }
     }
 }

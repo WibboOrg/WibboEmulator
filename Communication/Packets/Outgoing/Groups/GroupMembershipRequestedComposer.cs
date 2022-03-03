@@ -4,15 +4,15 @@ namespace Butterfly.Communication.Packets.Outgoing.Groups
 {
     internal class GroupMembershipRequestedComposer : ServerPacket
     {
-        public GroupMembershipRequestedComposer(int GroupId, User Habbo, int Type)
+        public GroupMembershipRequestedComposer(int groupId, User user, int type)
             : base(ServerPacketHeader.GroupMembershipRequestedMessageComposer)
         {
-            this.WriteInteger(GroupId);//GroupId
-            this.WriteInteger(Type);//Type?
+            this.WriteInteger(groupId);//GroupId
+            this.WriteInteger(type);//Type?
             {
-                this.WriteInteger(Habbo.Id);//UserId
-                this.WriteString(Habbo.Username);
-                this.WriteString(Habbo.Look);
+                this.WriteInteger(user.Id);//UserId
+                this.WriteString(user.Username);
+                this.WriteString(user.Look);
                 this.WriteString(string.Empty);
             }
         }

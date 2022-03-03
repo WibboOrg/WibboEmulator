@@ -22,47 +22,48 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
             Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
-            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            if (clientByUsername == null || clientByUsername.GetUser() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));
                 return;
             }
-            User Habbo = clientByUsername.GetHabbo();
+
+            User user = clientByUsername.GetUser();
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.Append("Nom: " + Habbo.Username + "\r");
-            stringBuilder.Append("Id: " + Habbo.Id + "\r");
-            stringBuilder.Append("Mission: " + Habbo.Motto + "\r");
-            stringBuilder.Append("WibboPoints: " + Habbo.WibboPoints + "\r");
-            stringBuilder.Append("Cr�dits: " + Habbo.Credits + "\r");
-            stringBuilder.Append("Win-Win: " + Habbo.AchievementPoints + "\r");
-            stringBuilder.Append("Premium: " + ((Habbo.Rank > 1) ? "Oui" : "Non") + "\r");
-            stringBuilder.Append("Mazo Score: " + Habbo.MazoHighScore + "\r");
-            stringBuilder.Append("Respects: " + Habbo.Respect + "\r");
-            stringBuilder.Append("Dans un appart: " + ((Habbo.InRoom) ? "Oui" : "Non") + "\r");
+            stringBuilder.Append("Nom: " + user.Username + "\r");
+            stringBuilder.Append("Id: " + user.Id + "\r");
+            stringBuilder.Append("Mission: " + user.Motto + "\r");
+            stringBuilder.Append("WibboPoints: " + user.WibboPoints + "\r");
+            stringBuilder.Append("Crédits: " + user.Credits + "\r");
+            stringBuilder.Append("Win-Win: " + user.AchievementPoints + "\r");
+            stringBuilder.Append("Premium: " + ((user.Rank > 1) ? "Oui" : "Non") + "\r");
+            stringBuilder.Append("Mazo Score: " + user.MazoHighScore + "\r");
+            stringBuilder.Append("Respects: " + user.Respect + "\r");
+            stringBuilder.Append("Dans un appart: " + ((user.InRoom) ? "Oui" : "Non") + "\r");
 
-            if (Habbo.CurrentRoom != null && !Habbo.SpectatorMode)
+            if (user.CurrentRoom != null && !user.SpectatorMode)
             {
-                stringBuilder.Append("\r - Information sur l'appart  [" + Habbo.CurrentRoom.Id + "] - \r");
-                stringBuilder.Append("Propri�taire: " + Habbo.CurrentRoom.RoomData.OwnerName + "\r");
-                stringBuilder.Append("Nom: " + Habbo.CurrentRoom.RoomData.Name + "\r");
-                stringBuilder.Append("Utilisateurs: " + Habbo.CurrentRoom.UserCount + "/" + Habbo.CurrentRoom.RoomData.UsersMax + "\r");
+                stringBuilder.Append("\r - Information sur l'appart  [" + user.CurrentRoom.Id + "] - \r");
+                stringBuilder.Append("Propriétaire: " + user.CurrentRoom.RoomData.OwnerName + "\r");
+                stringBuilder.Append("Nom: " + user.CurrentRoom.RoomData.Name + "\r");
+                stringBuilder.Append("Utilisateurs: " + user.CurrentRoom.UserCount + "/" + user.CurrentRoom.RoomData.UsersMax + "\r");
             }
 
-            if (Session.GetHabbo().HasFuse("fuse_infouser"))
+            if (Session.GetUser().HasFuse("fuse_infouser"))
             {
                 stringBuilder.Append("\r - Autre information - \r");
                 stringBuilder.Append("MachineId: " + clientByUsername.MachineId + "\r");
-                stringBuilder.Append("IP Web: " + clientByUsername.GetHabbo().IP + "\r");
+                stringBuilder.Append("IP Web: " + clientByUsername.GetUser().IP + "\r");
                 stringBuilder.Append("IP Emu: " + clientByUsername.GetConnection().GetIp() + "\r");
                 stringBuilder.Append("Langue: " + clientByUsername.Langue.ToString() + "\r");
                 stringBuilder.Append("Client: " + ((clientByUsername.GetConnection().IsWebSocket) ? "Nitro" : "Flash") + "\r");
 
-                WebClients.WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(Habbo.Id);
+                WebClients.WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(user.Id);
                 if (ClientWeb != null)
                 {
                     stringBuilder.Append("WebSocket: En ligne" + "\r");
-                    if (Session.GetHabbo().Rank > 12)
+                    if (Session.GetUser().Rank > 12)
                     {
                         stringBuilder.Append("WebSocket Ip: " + ClientWeb.GetConnection().GetIp() + "\r");
                         stringBuilder.Append("Langue Web: " + ClientWeb.Langue.ToString() + "\r");

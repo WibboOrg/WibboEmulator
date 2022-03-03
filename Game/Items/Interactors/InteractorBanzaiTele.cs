@@ -31,12 +31,12 @@ namespace Butterfly.Game.Items.Interactors
 
             item.UpdateCounter = 1;
 
-            RoomUser roomUserByHabbo = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser);
-            if (roomUserByHabbo != null)
+            RoomUser roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+            if (roomUserByUserId != null)
             {
-                item.GetRoom().GetGameMap().TeleportToItem(roomUserByHabbo, item);
-                roomUserByHabbo.SetRot(ButterflyEnvironment.GetRandomNumber(0, 7), false);
-                roomUserByHabbo.CanWalk = true;
+                item.GetRoom().GetGameMap().TeleportToItem(roomUserByUserId, item);
+                roomUserByUserId.SetRot(ButterflyEnvironment.GetRandomNumber(0, 7), false);
+                roomUserByUserId.CanWalk = true;
             }
 
             item.InteractingUser = 0;

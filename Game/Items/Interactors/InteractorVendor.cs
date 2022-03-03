@@ -30,12 +30,12 @@ namespace Butterfly.Game.Items.Interactors
 
         public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
-            if (!(Item.ExtraData != "1") || Item.GetBaseItem().VendingIds.Count < 1 || (Item.InteractingUser != 0 || Session == null || Session.GetHabbo() == null))
+            if (!(Item.ExtraData != "1") || Item.GetBaseItem().VendingIds.Count < 1 || (Item.InteractingUser != 0 || Session == null || Session.GetUser() == null))
             {
                 return;
             }
 
-            RoomUser roomUserTarget = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser roomUserTarget = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             if (roomUserTarget == null)
             {
                 return;
@@ -47,7 +47,7 @@ namespace Butterfly.Game.Items.Interactors
             }
             else
             {
-                Item.InteractingUser = Session.GetHabbo().Id;
+                Item.InteractingUser = Session.GetUser().Id;
                 roomUserTarget.SetRot(Rotation.Calculate(roomUserTarget.X, roomUserTarget.Y, Item.X, Item.Y), false);
                 Item.ReqUpdate(2);
                 Item.ExtraData = "1";
@@ -62,7 +62,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(item.InteractingUser);
+            RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
             if (roomUserTarget != null)
             {
                 int handitemId = item.GetBaseItem().VendingIds[ButterflyEnvironment.GetRandomNumber(0, item.GetBaseItem().VendingIds.Count - 1)];

@@ -16,12 +16,12 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
             string Url = Packet.PopString();
 
             Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
-            if (Client == null || Client.GetHabbo() == null)
+            if (Client == null || Client.GetUser() == null)
             {
                 return;
             }
 
-            Room room = Client.GetHabbo().CurrentRoom;
+            Room room = Client.GetUser().CurrentRoom;
             if (room == null || !room.CheckRights(Client))
             {
                 return;

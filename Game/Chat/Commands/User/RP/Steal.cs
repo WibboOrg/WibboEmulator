@@ -32,7 +32,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             RoomUser TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(Params[1].ToString());
 
-            if (TargetRoomUser == null || TargetRoomUser.GetClient() == null || TargetRoomUser.GetClient().GetHabbo() == null)
+            if (TargetRoomUser == null || TargetRoomUser.GetClient() == null || TargetRoomUser.GetClient().GetUser() == null)
             {
                 return;
             }
@@ -43,7 +43,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (TargetRoomUser.GetClient().GetHabbo().Id == Session.GetHabbo().Id)
+            if (TargetRoomUser.GetClient().GetUser().Id == Session.GetUser().Id)
             {
                 return;
             }

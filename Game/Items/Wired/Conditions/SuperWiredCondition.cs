@@ -379,7 +379,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                 return false;
             }
 
-            if (User == null || User.GetClient() == null || User.GetClient().GetHabbo() == null)
+            if (User == null || User.GetClient() == null || User.GetClient().GetUser() == null)
             {
                 return false;
             }
@@ -907,7 +907,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                 case "missioncontais":
                 case "notmissioncontais":
                     {
-                        if (!user.IsBot && user.GetClient().GetHabbo().Motto.Contains(Value))
+                        if (!user.IsBot && user.GetClient().GetUser().Motto.Contains(Value))
                         {
                             Result = true;
                         }
@@ -917,7 +917,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                 case "mission":
                 case "notmission":
                     {
-                        if (!user.IsBot && user.GetClient().GetHabbo().Motto == Value)
+                        if (!user.IsBot && user.GetClient().GetUser().Motto == Value)
                         {
                             Result = true;
                         }
@@ -929,7 +929,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                     {
                         int.TryParse(Value, out int GroupId);
 
-                        if (!user.IsBot && user.GetClient().GetHabbo().FavouriteGroupId == GroupId)
+                        if (!user.IsBot && user.GetClient().GetUser().FavouriteGroupId == GroupId)
                         {
                             Result = true;
                         }
@@ -939,7 +939,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                 case "usergirl":
                 case "notusergirl":
                     {
-                        if (!user.IsBot && user.GetClient().GetHabbo().Gender.ToUpper() == "F")
+                        if (!user.IsBot && user.GetClient().GetUser().Gender.ToUpper() == "F")
                         {
                             Result = true;
                         }
@@ -949,7 +949,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                 case "userboy":
                 case "notuserboy":
                     {
-                        if (!user.IsBot && user.GetClient().GetHabbo().Gender.ToUpper() == "M")
+                        if (!user.IsBot && user.GetClient().GetUser().Gender.ToUpper() == "M")
                         {
                             Result = true;
                         }
@@ -1104,7 +1104,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                             break;
                         }
 
-                        if (user.IsBot || user.GetClient() != null && user.GetClient().GetHabbo() != null && user.GetClient().GetHabbo().MyGroups.Contains(GroupId))
+                        if (user.IsBot || user.GetClient() != null && user.GetClient().GetUser() != null && user.GetClient().GetUser().MyGroups.Contains(GroupId))
                         {
                             Result = true;
                         }
@@ -1184,12 +1184,12 @@ namespace Butterfly.Game.Items.Wired.Conditions
                 case "badge":
                 case "notbadge":
                     {
-                        if (user.IsBot || user.GetClient() == null || user.GetClient().GetHabbo() == null || user.GetClient().GetHabbo().GetBadgeComponent() == null)
+                        if (user.IsBot || user.GetClient() == null || user.GetClient().GetUser() == null || user.GetClient().GetUser().GetBadgeComponent() == null)
                         {
                             break;
                         }
 
-                        if (user.GetClient().GetHabbo().GetBadgeComponent().HasBadge(Value))
+                        if (user.GetClient().GetUser().GetBadgeComponent().HasBadge(Value))
                         {
                             Result = true;
                         }
@@ -1213,7 +1213,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                             break;
                         }
 
-                        if (user.GetClient().GetHabbo().Rank.ToString() == Value)
+                        if (user.GetClient().GetUser().Rank.ToString() == Value)
                         {
                             Result = true;
                         }
@@ -1227,7 +1227,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                             break;
                         }
 
-                        if (user.GetClient().GetHabbo().Rank > Convert.ToInt32(Value))
+                        if (user.GetClient().GetUser().Rank > Convert.ToInt32(Value))
                         {
                             Result = true;
                         }
@@ -1241,7 +1241,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                             break;
                         }
 
-                        if (user.GetClient().GetHabbo().Rank < Convert.ToInt32(Value))
+                        if (user.GetClient().GetUser().Rank < Convert.ToInt32(Value))
                         {
                             Result = true;
                         }

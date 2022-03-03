@@ -12,18 +12,18 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null || !Session.GetHabbo().InRoom || Session.GetHabbo().DailyPetRespectPoints == 0)
+            if (Session == null || Session.GetUser() == null || !Session.GetUser().InRoom || Session.GetUser().DailyPetRespectPoints == 0)
             {
                 return;
             }
 
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room Room))
+            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
 
-            RoomUser ThisUser = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser ThisUser = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             if (ThisUser == null)
             {
                 return;
@@ -31,22 +31,22 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int PetId = Packet.PopInt();
 
-            if (!Session.GetHabbo().CurrentRoom.GetRoomUserManager().TryGetPet(PetId, out RoomUser Pet))
+            if (!Session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(PetId, out RoomUser Pet))
             {
                 //Okay so, we've established we have no pets in this room by this virtual Id, let us check out users, maybe they're creeping as a pet?!
-                RoomUser TargetUser = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(PetId);
+                RoomUser TargetUser = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(PetId);
                 if (TargetUser == null)
                 {
                     return;
                 }
 
                 //Check some values first, please!
-                if (TargetUser.GetClient() == null || TargetUser.GetClient().GetHabbo() == null)
+                if (TargetUser.GetClient() == null || TargetUser.GetClient().GetUser() == null)
                 {
                     return;
                 }
 
-                if (TargetUser.GetClient().GetHabbo().Id == Session.GetHabbo().Id)
+                if (TargetUser.GetClient().GetUser().Id == Session.GetUser().Id)
                 {
                     return;
                 }
@@ -57,25 +57,25 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(TargetUser.GetClient(), "ACH_RespectEarned", 1);
 
                 //Take away from pet respect points, just in-case users abuse this..
-                Session.GetHabbo().DailyPetRespectPoints -= 1;
-                TargetUser.GetClient().GetHabbo().Respect += 1;
+                Session.GetUser().DailyPetRespectPoints -= 1;
+                TargetUser.GetClient().GetUser().Respect += 1;
 
                 //Apply the effect.
                 ThisUser.CarryItemID = 999999999;
                 ThisUser.CarryTimer = 5;
 
                 //Send the magic out.
-                Room.SendPacket(new RespectPetNotificationComposer(TargetUser.GetClient().GetHabbo(), TargetUser));
+                Room.SendPacket(new RespectPetNotificationComposer(TargetUser.GetClient().GetUser(), TargetUser));
                 Room.SendPacket(new CarryObjectComposer(ThisUser.VirtualId, ThisUser.CarryItemID));
                 return;
             }
 
-            if (Pet == null || Pet.PetData == null || Pet.RoomId != Session.GetHabbo().CurrentRoomId)
+            if (Pet == null || Pet.PetData == null || Pet.RoomId != Session.GetUser().CurrentRoomId)
             {
                 return;
             }
 
-            Session.GetHabbo().DailyPetRespectPoints -= 1;
+            Session.GetUser().DailyPetRespectPoints -= 1;
             ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_PetRespectGiver", 1);
 
             ThisUser.CarryItemID = 999999999;

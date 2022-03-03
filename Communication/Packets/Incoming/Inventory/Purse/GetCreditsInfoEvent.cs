@@ -9,8 +9,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Session.SendPacket(new CreditBalanceComposer(Session.GetHabbo().Credits));
-            Session.SendPacket(new ActivityPointsComposer(Session.GetHabbo().WibboPoints));
+            Session.SendPacket(new CreditBalanceComposer(Session.GetUser().Credits));
+            Session.SendPacket(new ActivityPointsComposer(Session.GetUser().WibboPoints));
         }
     }
 }

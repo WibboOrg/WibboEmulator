@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }
@@ -52,7 +52,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     foreach (int Id in MemberIds.ToList())
                     {
-                        User GroupMember = ButterflyEnvironment.GetHabboById(Id);
+                        User GroupMember = ButterflyEnvironment.GetUserById(Id);
                         if (GroupMember == null)
                         {
                             continue;
@@ -78,7 +78,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     foreach (int User in AdminIds.ToList())
                     {
-                        User GroupMember = ButterflyEnvironment.GetHabboById(User);
+                        User GroupMember = ButterflyEnvironment.GetUserById(User);
                         if (GroupMember == null)
                         {
                             continue;
@@ -104,7 +104,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     foreach (int Id in RequestIds.ToList())
                     {
-                        User GroupMember = ButterflyEnvironment.GetHabboById(Id);
+                        User GroupMember = ButterflyEnvironment.GetUserById(Id);
                         if (GroupMember == null)
                         {
                             continue;
@@ -118,7 +118,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     break;
             }
 
-            Session.SendPacket(new GroupMembersComposer(Group, Members.ToList(), MemberCount, Page, (Group.CreatorId == Session.GetHabbo().Id || Group.IsAdmin(Session.GetHabbo().Id)), RequestType, SearchVal));
+            Session.SendPacket(new GroupMembersComposer(Group, Members.ToList(), MemberCount, Page, (Group.CreatorId == Session.GetUser().Id || Group.IsAdmin(Session.GetUser().Id)), RequestType, SearchVal));
         }
 
         private List<int> GetSearchRequests(int groupeId, string searchVal)

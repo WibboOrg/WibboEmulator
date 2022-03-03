@@ -9,12 +9,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || (room.RoomData.BanFuse != 1 || !room.CheckRights(Session)) && !room.CheckRights(Session, true))
             {
                 return;
@@ -24,7 +24,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int num = Packet.PopInt();
             string str = Packet.PopString();
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(pId);
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(pId);
             int Time;
             if (str.Equals("RWUAM_BAN_USER_HOUR"))
             {
@@ -43,13 +43,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 Time = 429496729;
             }
-            if (roomUserByHabbo == null || roomUserByHabbo.IsBot || (room.CheckRights(roomUserByHabbo.GetClient(), true) || roomUserByHabbo.GetClient().GetHabbo().HasFuse("fuse_kickban")))
+            if (roomUserByUserId == null || roomUserByUserId.IsBot || (room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasFuse("fuse_kickban")))
             {
                 return;
             }
 
             room.AddBan(pId, Time);
-            room.GetRoomUserManager().RemoveUserFromRoom(roomUserByHabbo.GetClient(), true, true);
+            room.GetRoomUserManager().RemoveUserFromRoom(roomUserByUserId.GetClient(), true, true);
         }
     }
 }

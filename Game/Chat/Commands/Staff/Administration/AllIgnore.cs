@@ -15,12 +15,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (TargetUser == null || TargetUser.GetHabbo() == null)
+            if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 return;
             }
 
-            if (TargetUser.GetHabbo().Rank >= Session.GetHabbo().Rank)
+            if (TargetUser.GetUser().Rank >= Session.GetUser().Rank)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
                 return;
@@ -42,10 +42,10 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             string reason = CommandManager.MergeParams(Params, 3);
 
-            TargetUser.GetHabbo().IgnoreAllExpireTime = expireTime;
+            TargetUser.GetUser().IgnoreAllExpireTime = expireTime;
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                BanDao.InsertBan(dbClient, expireTime, "ignoreall", TargetUser.GetHabbo().Username, reason, Session.GetHabbo().Username);
+                BanDao.InsertBan(dbClient, expireTime, "ignoreall", TargetUser.GetUser().Username, reason, Session.GetUser().Username);
         }
     }
 }

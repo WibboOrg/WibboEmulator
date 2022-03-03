@@ -9,7 +9,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().HasFuse("fuse_alert"))
+            if (!Session.GetUser().HasFuse("fuse_alert"))
             {
                 return;
             }
@@ -23,9 +23,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetHabbo().Id, Session.GetHabbo().Username, 0, string.Empty, AlertMessage.Split(' ')[0].Replace(":", ""), string.Format("Modtool Roomalert: {0}", AlertMessage));
+            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, AlertMessage.Split(' ')[0].Replace(":", ""), string.Format("Modtool Roomalert: {0}", AlertMessage));
 
-            Session.GetHabbo().CurrentRoom.SendPacket(new BroadcastMessageAlertComposer(AlertMessage));
+            Session.GetUser().CurrentRoom.SendPacket(new BroadcastMessageAlertComposer(AlertMessage));
         }
     }
 }

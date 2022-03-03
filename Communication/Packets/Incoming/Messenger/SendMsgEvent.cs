@@ -9,14 +9,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().GetMessenger() == null)
+            if (Session == null || Session.GetUser() == null || Session.GetUser().GetMessenger() == null)
             {
                 return;
             }
 
             int userId = Packet.PopInt();
 
-            if (userId == Session.GetHabbo().Id)
+            if (userId == Session.GetUser().Id)
             {
                 return;
             }
@@ -27,31 +27,31 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().FloodTime;
+            TimeSpan timeSpan = DateTime.Now - Session.GetUser().FloodTime;
             if (timeSpan.Seconds > 4)
             {
-                Session.GetHabbo().FloodCount = 0;
+                Session.GetUser().FloodCount = 0;
             }
 
-            if (timeSpan.Seconds < 4 && Session.GetHabbo().FloodCount > 5 && Session.GetHabbo().Rank < 5)
+            if (timeSpan.Seconds < 4 && Session.GetUser().FloodCount > 5 && Session.GetUser().Rank < 5)
             {
                 return;
             }
 
-            Session.GetHabbo().FloodTime = DateTime.Now;
-            Session.GetHabbo().FloodCount++;
+            Session.GetUser().FloodTime = DateTime.Now;
+            Session.GetUser().FloodCount++;
 
             if (Session.Antipub("<" + userId + "> " + Message, "<MP>"))
             {
                 return;
             }
 
-            if (Session.GetHabbo().IgnoreAll)
+            if (Session.GetUser().IgnoreAll)
             {
                 return;
             }
 
-            Session.GetHabbo().GetMessenger().SendInstantMessage(userId, Message);
+            Session.GetUser().GetMessenger().SendInstantMessage(userId, Message);
         }
     }
 }

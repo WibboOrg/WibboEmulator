@@ -19,13 +19,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Group.CreatorId != Session.GetHabbo().Id && !Session.GetHabbo().HasFuse("group_delete_override"))
+            if (Group.CreatorId != Session.GetUser().Id && !Session.GetUser().HasFuse("group_delete_override"))
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.1", Session.Langue));
                 return;
             }
 
-            if (Group.MemberCount >= 100 && !Session.GetHabbo().HasFuse("group_delete_limit_override"))
+            if (Group.MemberCount >= 100 && !Session.GetUser().HasFuse("group_delete_limit_override"))
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.2", Session.Langue));
                 return;
@@ -48,9 +48,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 RoomDao.UpdateResetGroupId(dbClient, Group.RoomId);
                 UserStatsDao.UpdateRemoveAllGroupId(dbClient, Group.Id);
 
-                if (Group.CreatorId != Session.GetHabbo().Id)
+                if (Group.CreatorId != Session.GetUser().Id)
                 {
-                    LogStaffDao.Insert(dbClient, Session.GetHabbo().Username, $"Suppresion du groupe {Group.Id} crée par {Group.CreatorId}");
+                    LogStaffDao.Insert(dbClient, Session.GetUser().Username, $"Suppresion du groupe {Group.Id} crée par {Group.CreatorId}");
                 }
             }
 

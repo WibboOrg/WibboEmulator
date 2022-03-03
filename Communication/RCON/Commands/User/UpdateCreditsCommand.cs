@@ -33,11 +33,11 @@ namespace Butterfly.Communication.RCON.Commands.User
             int credits;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                credits = UserDao.GetCredits(dbClient, Client.GetHabbo().Id);
+                credits = UserDao.GetCredits(dbClient, Client.GetUser().Id);
             }
 
-            Client.GetHabbo().Credits = credits;
-            Client.SendPacket(new CreditBalanceComposer(Client.GetHabbo().Credits));
+            Client.GetUser().Credits = credits;
+            Client.SendPacket(new CreditBalanceComposer(Client.GetUser().Credits));
 
             return true;
         }

@@ -10,7 +10,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
@@ -20,37 +20,35 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            int Nombre = ButterflyEnvironment.GetRandomNumber(1, 3);
-            User Habbo = Session.GetHabbo();
+            int numberRandom = ButterflyEnvironment.GetRandomNumber(1, 3);
+            User user = Session.GetUser();
 
-            if (Nombre != 1) //Gagné bravo +1Point
+            if (numberRandom != 1)
             {
-                Habbo.Mazo += 1;
+                user.Mazo += 1;
 
-                if (Habbo.MazoHighScore < Habbo.Mazo)
+                if (user.MazoHighScore < user.Mazo)
                 {
-                    //SQL sauvegarde le score
-                    UserRoom.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.newscore", Session.Langue), Habbo.Mazo));
-                    Habbo.MazoHighScore = Habbo.Mazo;
+                    UserRoom.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.newscore", Session.Langue), user.Mazo));
+                    user.MazoHighScore = user.Mazo;
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        UserDao.UpdateMazoScore(dbClient, Habbo.Id, Habbo.MazoHighScore);
+                        UserDao.UpdateMazoScore(dbClient, user.Id, user.MazoHighScore);
                     }
                 }
                 else
                 {
-                    UserRoom.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.win", Session.Langue), Habbo.Mazo));
+                    UserRoom.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.win", Session.Langue), user.Mazo));
                 }
 
                 UserRoom.ApplyEffect(566, true);
                 UserRoom.TimerResetEffect = 4;
 
             }
-            else //Perdu remise à zero
+            else
             {
-                //Mettre l'enable
-                if (Habbo.Mazo > 0)
+                if (user.Mazo > 0)
                 {
                     UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.bigloose", Session.Langue));
                 }
@@ -59,7 +57,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.loose", Session.Langue));
                 }
 
-                Habbo.Mazo = 0;
+                user.Mazo = 0;
 
                 UserRoom.ApplyEffect(567, true);
                 UserRoom.TimerResetEffect = 4;
@@ -67,7 +65,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserDao.UpdateMazo(dbClient, Habbo.Id, Habbo.Mazo);
+                UserDao.UpdateMazo(dbClient, user.Id, user.Mazo);
             }
         }
     }

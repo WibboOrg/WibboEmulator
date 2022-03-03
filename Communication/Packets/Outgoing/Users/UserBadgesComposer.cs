@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Butterfly.Communication.Packets.Outgoing.Users
 {
-    internal class HabboUserBadgesComposer : ServerPacket
+    internal class UserBadgesComposer : ServerPacket
     {
-        public HabboUserBadgesComposer(User User)
+        public UserBadgesComposer(User User)
             : base(ServerPacketHeader.USER_BADGES_CURRENT)
         {
             this.WriteInteger(User.Id);

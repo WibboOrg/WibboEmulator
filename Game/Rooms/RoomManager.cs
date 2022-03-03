@@ -208,9 +208,9 @@ namespace Butterfly.Game.Rooms
                 int RoomId = 0;
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    RoomId = RoomDao.Insert(dbClient, Name, Desc, Session.GetHabbo().Username, Model, Category, MaxVisitors, TradeSettings);
+                    RoomId = RoomDao.Insert(dbClient, Name, Desc, Session.GetUser().Username, Model, Category, MaxVisitors, TradeSettings);
                 }
-                Session.GetHabbo().UsersRooms.Add(RoomId);
+                Session.GetUser().UsersRooms.Add(RoomId);
 
                 RoomData roomData = this.GenerateRoomData(RoomId);
 

@@ -10,12 +10,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
 
-            if (Session.GetHabbo().CurrentRoom == null)
+            if (Session.GetUser().CurrentRoom == null)
             {
                 return;
             }
@@ -28,13 +28,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            User habbo = gameclient.GetHabbo();
-            if (habbo == null || Session.GetHabbo().MutedUsers.Contains(habbo.Id))
+            User user = gameclient.GetUser();
+            if (user == null || Session.GetUser().MutedUsers.Contains(user.Id))
             {
                 return;
             }
 
-            Session.GetHabbo().MutedUsers.Add(habbo.Id);
+            Session.GetUser().MutedUsers.Add(user.Id);
 
             Session.SendPacket(new IgnoreStatusComposer(1, UserName));
         }

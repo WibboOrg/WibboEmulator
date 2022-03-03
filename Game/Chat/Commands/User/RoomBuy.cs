@@ -13,7 +13,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Session == null || Session.GetHabbo() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }
@@ -23,28 +23,28 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (Session.GetHabbo().WibboPoints - Room.RoomData.SellPrice <= 0)
+            if (Session.GetUser().WibboPoints - Room.RoomData.SellPrice <= 0)
             {
                 return;
             }
 
-            Session.GetHabbo().WibboPoints -= Room.RoomData.SellPrice;
-            Session.SendPacket(new ActivityPointsComposer(Session.GetHabbo().WibboPoints));
+            Session.GetUser().WibboPoints -= Room.RoomData.SellPrice;
+            Session.SendPacket(new ActivityPointsComposer(Session.GetUser().WibboPoints));
 
             Client ClientOwner = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Room.RoomData.OwnerId);
-            if (ClientOwner != null && ClientOwner.GetHabbo() != null)
+            if (ClientOwner != null && ClientOwner.GetUser() != null)
             {
-                ClientOwner.GetHabbo().WibboPoints += Room.RoomData.SellPrice;
-                ClientOwner.SendPacket(new ActivityPointsComposer(ClientOwner.GetHabbo().WibboPoints));
+                ClientOwner.GetUser().WibboPoints += Room.RoomData.SellPrice;
+                ClientOwner.SendPacket(new ActivityPointsComposer(ClientOwner.GetUser().WibboPoints));
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserDao.UpdateRemovePoints(dbClient, Session.GetHabbo().Id, Room.RoomData.SellPrice);
+                UserDao.UpdateRemovePoints(dbClient, Session.GetUser().Id, Room.RoomData.SellPrice);
                 UserDao.UpdateAddPoints(dbClient, Room.RoomData.OwnerId, Room.RoomData.SellPrice);
 
                 RoomRightDao.Delete(dbClient, Room.Id);
-                RoomDao.UpdateOwner(dbClient, Room.Id, Session.GetHabbo().Username);
+                RoomDao.UpdateOwner(dbClient, Room.Id, Session.GetUser().Username);
                 RoomDao.UpdatePrice(dbClient, Room.Id, 0);
             }
 

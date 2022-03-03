@@ -19,7 +19,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (Session.GetHabbo().SpectatorMode || UserRoom.InGame)
+            if (Session.GetUser().SpectatorMode || UserRoom.InGame)
             {
                 return;
             }

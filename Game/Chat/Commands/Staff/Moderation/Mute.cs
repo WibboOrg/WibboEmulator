@@ -15,21 +15,21 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (TargetUser == null || TargetUser.GetHabbo() == null)
+            if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
-            else if (TargetUser.GetHabbo().Rank >= Session.GetHabbo().Rank)
+            else if (TargetUser.GetUser().Rank >= Session.GetUser().Rank)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
             }
             else
             {
-                User habbo = TargetUser.GetHabbo();
+                User user = TargetUser.GetUser();
 
-                habbo.SpamProtectionTime = 300;
-                habbo.SpamEnable = true;
-                TargetUser.SendPacket(new FloodControlComposer(habbo.SpamProtectionTime));
+                user.SpamProtectionTime = 300;
+                user.SpamEnable = true;
+                TargetUser.SendPacket(new FloodControlComposer(user.SpamProtectionTime));
             }
         }
     }

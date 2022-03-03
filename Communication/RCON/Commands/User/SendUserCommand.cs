@@ -25,7 +25,7 @@ namespace Butterfly.Communication.RCON.Commands.User
             }
 
             Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
-            if (Client == null || Client.GetHabbo() == null)
+            if (Client == null || Client.GetUser() == null)
             {
                 return false;
             }

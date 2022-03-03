@@ -9,7 +9,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room currentRoom = Session.GetHabbo().CurrentRoom;
+            Room currentRoom = Session.GetUser().CurrentRoom;
             if (currentRoom == null)
             {
                 return;
@@ -24,9 +24,9 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     {
                         if (item_0.GetClient() != null)
                         {
-                            if (item_0.GetClient().GetHabbo() != null)
+                            if (item_0.GetClient().GetUser() != null)
                             {
-                                item_0.GetClient().GetHabbo().GetBadgeComponent().GiveBadge(local_0, true);
+                                item_0.GetClient().GetUser().GetBadgeComponent().GiveBadge(local_0, true);
                                 item_0.GetClient().SendPacket(new ReceiveBadgeComposer(local_0));
                             }
                         }

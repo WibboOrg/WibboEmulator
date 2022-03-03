@@ -9,7 +9,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Session.SendPacket(new BuddyRequestsComposer(Session.GetHabbo().GetMessenger().Requests));
+            Session.SendPacket(new BuddyRequestsComposer(Session.GetUser().GetMessenger().Requests));
         }
     }
 }

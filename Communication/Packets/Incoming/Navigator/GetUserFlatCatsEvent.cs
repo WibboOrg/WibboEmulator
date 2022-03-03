@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             ICollection<SearchResultList> Categories = ButterflyEnvironment.GetGame().GetNavigator().GetFlatCategories();
 
-            Session.SendPacket(new UserFlatCatsComposer(Categories, Session.GetHabbo().Rank));
+            Session.SendPacket(new UserFlatCatsComposer(Categories, Session.GetUser().Rank));
         }
     }
 }

@@ -242,22 +242,22 @@ namespace Butterfly.Game.Rooms
                 return false;
             }
 
-            if (User.GetClient().GetHabbo() == null)
+            if (User.GetClient().GetUser() == null)
             {
                 return false;
             }
 
-            if (User.GetClient().GetHabbo().Rank > 5)
+            if (User.GetClient().GetUser().Rank > 5)
             {
                 return false;
             }
 
-            if (User.GetClient().GetHabbo().MyGroups == null)
+            if (User.GetClient().GetUser().MyGroups == null)
             {
                 return true;
             }
 
-            if (User.GetClient().GetHabbo().MyGroups.Contains(Group.Id))
+            if (User.GetClient().GetUser().MyGroups.Contains(Group.Id))
             {
                 return false;
             }

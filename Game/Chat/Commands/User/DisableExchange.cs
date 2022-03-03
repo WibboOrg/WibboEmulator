@@ -7,14 +7,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Session.GetHabbo().AcceptTrading)
+            if (Session.GetUser().AcceptTrading)
             {
-                Session.GetHabbo().AcceptTrading = false;
+                Session.GetUser().AcceptTrading = false;
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.troc.true", Session.Langue));
             }
             else
             {
-                Session.GetHabbo().AcceptTrading = true;
+                Session.GetUser().AcceptTrading = true;
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.troc.false", Session.Langue));
             }
 

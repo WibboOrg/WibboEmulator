@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
@@ -18,14 +18,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (room.IsRoleplay)
             {
-                RoomUser RoomUser = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+                RoomUser RoomUser = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
                 RoomUser RoomUserTarget = room.GetRoomUserManager().GetRoomUserByVirtualId(Packet.PopInt());
-                if (RoomUser == null || RoomUser.GetClient() == null || RoomUser.GetClient().GetHabbo() == null)
+                if (RoomUser == null || RoomUser.GetClient() == null || RoomUser.GetClient().GetUser() == null)
                 {
                     return;
                 }
 
-                if (RoomUserTarget == null || RoomUserTarget.GetClient() == null || RoomUserTarget.GetClient().GetHabbo() == null)
+                if (RoomUserTarget == null || RoomUserTarget.GetClient() == null || RoomUserTarget.GetClient().GetUser() == null)
                 {
                     return;
                 }
@@ -59,24 +59,24 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             RoomUser roomUserByVirtualId = room.GetRoomUserManager().GetRoomUserByVirtualId(Packet.PopInt());
-            if (roomUserByVirtualId == null || roomUserByVirtualId.GetClient() == null || roomUserByVirtualId.GetClient().GetHabbo() == null)
+            if (roomUserByVirtualId == null || roomUserByVirtualId.GetClient() == null || roomUserByVirtualId.GetClient().GetUser() == null)
             {
                 return;
             }
 
-            if (!roomUserByVirtualId.GetClient().GetHabbo().AcceptTrading && Session.GetHabbo().Rank < 3)
+            if (!roomUserByVirtualId.GetClient().GetUser().AcceptTrading && Session.GetUser().Rank < 3)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.tradedisabled", Session.Langue));
             }
-            else if (roomUserByVirtualId.transformation || roomUserByHabbo.transformation || roomUserByHabbo.IsSpectator || roomUserByVirtualId.IsSpectator)
+            else if (roomUserByVirtualId.transformation || roomUserByUserId.transformation || roomUserByUserId.IsSpectator || roomUserByVirtualId.IsSpectator)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.3", Session.Langue));
             }
             else
             {
-                room.TryStartTrade(roomUserByHabbo, roomUserByVirtualId);
+                room.TryStartTrade(roomUserByUserId, roomUserByVirtualId);
             }
         }
     }

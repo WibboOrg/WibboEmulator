@@ -10,25 +10,25 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
 
-            if (Session.GetHabbo().CurrentRoom == null)
+            if (Session.GetUser().CurrentRoom == null)
             {
                 return;
             }
 
             string str = Packet.PopString();
 
-            User habbo = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(str).GetHabbo();
-            if (habbo == null || !Session.GetHabbo().MutedUsers.Contains(habbo.Id))
+            User user = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(str).GetUser();
+            if (user == null || !Session.GetUser().MutedUsers.Contains(user.Id))
             {
                 return;
             }
 
-            Session.GetHabbo().MutedUsers.Remove(habbo.Id);
+            Session.GetUser().MutedUsers.Remove(user.Id);
 
             Session.SendPacket(new IgnoreStatusComposer(3, str));
         }

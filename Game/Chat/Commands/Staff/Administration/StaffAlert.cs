@@ -27,22 +27,22 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     continue;
                 }
 
-                if (Staff.GetHabbo() == null)
+                if (Staff.GetUser() == null)
                 {
                     continue;
                 }
 
-                if (Staff.GetHabbo().CurrentRoom == null)
+                if (Staff.GetUser().CurrentRoom == null)
                 {
                     continue;
                 }
 
-                if (Staff.GetHabbo().Rank < 3)
+                if (Staff.GetUser().Rank < 3)
                 {
                     continue;
                 }
 
-                RoomUser User = Staff.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(Staff.GetHabbo().Id);
+                RoomUser User = Staff.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(Staff.GetUser().Id);
 
                 User.GetClient().SendPacket(new WhisperComposer(User.VirtualId, "[STAFF ALERT] " + MessageTxt + " - " + UserRoom.GetUsername(), 23));
             }

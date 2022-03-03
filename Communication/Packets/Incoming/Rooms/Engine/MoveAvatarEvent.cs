@@ -9,13 +9,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room currentRoom = Session.GetHabbo().CurrentRoom;
+            Room currentRoom = Session.GetUser().CurrentRoom;
             if (currentRoom == null)
             {
                 return;
             }
 
-            RoomUser User = currentRoom.GetRoomUserManager().GetRoomUserByHabboId((Session.GetHabbo().ControlUserId == 0) ? Session.GetHabbo().Id : Session.GetHabbo().ControlUserId);
+            RoomUser User = currentRoom.GetRoomUserManager().GetRoomUserByUserId((Session.GetUser().ControlUserId == 0) ? Session.GetUser().Id : Session.GetUser().ControlUserId);
             if (User == null || (!User.CanWalk && !User.TeleportEnabled))
             {
                 return;

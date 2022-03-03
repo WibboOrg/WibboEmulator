@@ -15,18 +15,18 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!Session.GetUser().InRoom)
             {
                 return;
             }
 
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().GetInventoryComponent() == null)
+            if (Session == null || Session.GetUser() == null || Session.GetUser().GetInventoryComponent() == null)
             {
                 return;
             }
 
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room Room))
+            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -42,14 +42,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
 
                 //Okay so, we've established we have no pets in this room by this virtual Id, let us check out users, maybe they're creeping as a pet?!
-                RoomUser TargetUser = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(PetId);
+                RoomUser TargetUser = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(PetId);
                 if (TargetUser == null)
                 {
                     return;
                 }
 
                 //Check some values first, please!
-                if (TargetUser.GetClient() == null || TargetUser.GetClient().GetHabbo() == null)
+                if (TargetUser.GetClient() == null || TargetUser.GetClient().GetUser() == null)
                 {
                     return;
                 }
@@ -64,7 +64,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Session.GetHabbo().Id != Pet.PetData.OwnerId && !Room.CheckRights(Session, true))
+            if (Session.GetUser().Id != Pet.PetData.OwnerId && !Room.CheckRights(Session, true))
             {
                 return;
             }
@@ -96,23 +96,23 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 BotPetDao.UpdateRoomId(dbClient, pet.PetId, 0);
             }
 
-            if (pet.OwnerId != Session.GetHabbo().Id)
+            if (pet.OwnerId != Session.GetUser().Id)
             {
                 Client Target = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(pet.OwnerId);
                 if (Target != null)
                 {
-                    Target.GetHabbo().GetInventoryComponent().TryAddPet(Pet.PetData);
+                    Target.GetUser().GetInventoryComponent().TryAddPet(Pet.PetData);
                     Room.GetRoomUserManager().RemoveBot(Pet.VirtualId, false);
 
-                    Target.SendPacket(new PetInventoryComposer(Target.GetHabbo().GetInventoryComponent().GetPets()));
+                    Target.SendPacket(new PetInventoryComposer(Target.GetUser().GetInventoryComponent().GetPets()));
                     return;
                 }
             }
             else
             {
-                Session.GetHabbo().GetInventoryComponent().TryAddPet(Pet.PetData);
+                Session.GetUser().GetInventoryComponent().TryAddPet(Pet.PetData);
                 Room.GetRoomUserManager().RemoveBot(Pet.VirtualId, false);
-                Session.SendPacket(new PetInventoryComposer(Session.GetHabbo().GetInventoryComponent().GetPets()));
+                Session.SendPacket(new PetInventoryComposer(Session.GetUser().GetInventoryComponent().GetPets()));
             }
         }
     }

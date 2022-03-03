@@ -23,20 +23,20 @@ namespace Butterfly.Game.Items.Interactors
         {
             if (Item.InteractingUser != 0)
             {
-                RoomUser roomUserByHabbo = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Item.InteractingUser);
-                if (roomUserByHabbo != null)
+                RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Item.InteractingUser);
+                if (roomUserByUserId != null)
                 {
-                    roomUserByHabbo.CanWalk = true;
+                    roomUserByUserId.CanWalk = true;
                 }
 
                 Item.InteractingUser = 0;
             }
             if (Item.InteractingUser2 != 0)
             {
-                RoomUser roomUserByHabbo1 = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Item.InteractingUser2);
-                if (roomUserByHabbo1 != null)
+                RoomUser roomUserByUserIdTwo = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Item.InteractingUser2);
+                if (roomUserByUserIdTwo != null)
                 {
-                    roomUserByHabbo1.CanWalk = true;
+                    roomUserByUserIdTwo.CanWalk = true;
                 }
 
                 Item.InteractingUser2 = 0;
@@ -59,20 +59,20 @@ namespace Butterfly.Game.Items.Interactors
         {
             if (Item.InteractingUser != 0)
             {
-                RoomUser roomUserByHabbo = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Item.InteractingUser);
-                if (roomUserByHabbo != null)
+                RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Item.InteractingUser);
+                if (roomUserByUserId != null)
                 {
-                    roomUserByHabbo.CanWalk = true;
+                    roomUserByUserId.CanWalk = true;
                 }
 
                 Item.InteractingUser = 0;
             }
             if (Item.InteractingUser2 != 0)
             {
-                RoomUser roomUserByHabbo1 = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Item.InteractingUser2);
-                if (roomUserByHabbo1 != null)
+                RoomUser roomUserByUserIdTwo = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Item.InteractingUser2);
+                if (roomUserByUserIdTwo != null)
                 {
-                    roomUserByHabbo1.CanWalk = true;
+                    roomUserByUserIdTwo.CanWalk = true;
                 }
 
                 Item.InteractingUser2 = 0;
@@ -119,9 +119,9 @@ namespace Butterfly.Game.Items.Interactors
             else
                 newState = (state < this.Modes ? state + 1 : 0);
 
-            if (Session != null && Session.GetHabbo() != null && Session.GetHabbo().ForceUse > -1)
+            if (Session != null && Session.GetUser() != null && Session.GetUser().ForceUse > -1)
             {
-                newState = (Session.GetHabbo().ForceUse <= this.Modes) ? Session.GetHabbo().ForceUse : 0;
+                newState = (Session.GetUser().ForceUse <= this.Modes) ? Session.GetUser().ForceUse : 0;
             }
 
             if (Item.GetBaseItem().InteractionType == InteractionType.GUILD_ITEM || Item.GetBaseItem().InteractionType == InteractionType.GUILD_GATE)
@@ -142,16 +142,16 @@ namespace Butterfly.Game.Items.Interactors
                     return;
                 }
 
-                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
                 if (room == null)
                 {
                     return;
                 }
 
-                RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-                if (roomUserByHabbo != null)
+                RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+                if (roomUserByUserId != null)
                 {
-                    Item.GetRoom().GetRoomUserManager().UpdateUserStatus(roomUserByHabbo, false);
+                    Item.GetRoom().GetRoomUserManager().UpdateUserStatus(roomUserByUserId, false);
                 }
             }
         }

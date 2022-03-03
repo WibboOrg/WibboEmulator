@@ -94,7 +94,7 @@ namespace Butterfly.Game.Items
 
             if (!ItemIsInRoom)
             {
-                Session.GetHabbo().GetInventoryComponent().TryAddItem(Present);
+                Session.GetUser().GetInventoryComponent().TryAddItem(Present);
             }
         }
 
@@ -168,7 +168,7 @@ namespace Butterfly.Game.Items
 
             if (!ItemIsInRoom)
             {
-                Session.GetHabbo().GetInventoryComponent().TryAddItem(Present);
+                Session.GetUser().GetInventoryComponent().TryAddItem(Present);
             }
         }
 
@@ -205,7 +205,7 @@ namespace Butterfly.Game.Items
 
             Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
 
-            string ExtraData = BadgeCode + Convert.ToChar(9) + Session.GetHabbo().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
+            string ExtraData = BadgeCode + Convert.ToChar(9) + Session.GetUser().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemDao.UpdateBaseItemAndExtraData(dbClient, Present.Id, LotData.Id, ExtraData);
@@ -244,18 +244,18 @@ namespace Butterfly.Game.Items
 
             if (!ItemIsInRoom)
             {
-                Session.GetHabbo().GetInventoryComponent().TryAddItem(Present);
+                Session.GetUser().GetInventoryComponent().TryAddItem(Present);
             }
 
-            if (!string.IsNullOrEmpty(BadgeCode) && !Session.GetHabbo().GetBadgeComponent().HasBadge(BadgeCode))
+            if (!string.IsNullOrEmpty(BadgeCode) && !Session.GetUser().GetBadgeComponent().HasBadge(BadgeCode))
             {
-                Session.GetHabbo().GetBadgeComponent().GiveBadge(BadgeCode, true);
+                Session.GetUser().GetBadgeComponent().GiveBadge(BadgeCode, true);
                 Session.SendPacket(new ReceiveBadgeComposer(BadgeCode));
 
-                RoomUser roomUserByHabbo = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-                if (roomUserByHabbo != null)
+                RoomUser roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+                if (roomUserByUserId != null)
                 {
-                    roomUserByHabbo.SendWhisperChat("Tu as reçu le badge: " + BadgeCode);
+                    roomUserByUserId.SendWhisperChat("Tu as reçu le badge: " + BadgeCode);
                 }
             }
         }
@@ -311,7 +311,7 @@ namespace Butterfly.Game.Items
 
             foreach (KeyValuePair<int, CatalogItem> Item in pageBadge.Items.OrderBy(a => Guid.NewGuid()).ToList())
             {
-                if (session.GetHabbo().GetBadgeComponent().HasBadge(Item.Value.Badge))
+                if (session.GetUser().GetBadgeComponent().HasBadge(Item.Value.Badge))
                 {
                     continue;
                 }
@@ -345,31 +345,31 @@ namespace Butterfly.Game.Items
             }
 
             int credits = ButterflyEnvironment.GetRandomNumber(100, 10000) * 1000;
-            session.GetHabbo().Credits += credits;
-            session.SendPacket(new CreditBalanceComposer(session.GetHabbo().Credits));
+            session.GetUser().Credits += credits;
+            session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
 
             int winwin = ButterflyEnvironment.GetRandomNumber(100, 1000);
-            session.GetHabbo().AchievementPoints += winwin;
+            session.GetUser().AchievementPoints += winwin;
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserStatsDao.UpdateAchievementScore(dbClient, session.GetHabbo().Id, winwin);
+                UserStatsDao.UpdateAchievementScore(dbClient, session.GetUser().Id, winwin);
             }
 
-            session.SendPacket(new AchievementScoreComposer(session.GetHabbo().AchievementPoints));
+            session.SendPacket(new AchievementScoreComposer(session.GetUser().AchievementPoints));
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(session.GetHabbo().Id);
-            if (roomUserByHabbo != null)
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            if (roomUserByUserId != null)
             {
-                session.SendPacket(new UserChangeComposer(roomUserByHabbo, true));
-                room.SendPacket(new UserChangeComposer(roomUserByHabbo, false));
+                session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+                room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
 
-                roomUserByHabbo.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("item.legendboxlot", session.Langue), credits, winwin, badgeCode, lotType));
+                roomUserByUserId.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("item.legendboxlot", session.Langue), credits, winwin, badgeCode, lotType));
             }
 
             if (!string.IsNullOrEmpty(badgeCode))
             {
-                session.GetHabbo().GetBadgeComponent().GiveBadge(badgeCode, true);
+                session.GetUser().GetBadgeComponent().GiveBadge(badgeCode, true);
                 session.SendPacket(new ReceiveBadgeComposer(badgeCode));
             }
 
@@ -412,7 +412,7 @@ namespace Butterfly.Game.Items
 
             if (!itemIsInRoom)
             {
-                session.GetHabbo().GetInventoryComponent().TryAddItem(present);
+                session.GetUser().GetInventoryComponent().TryAddItem(present);
             }
         }
     }

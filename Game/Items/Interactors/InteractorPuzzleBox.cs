@@ -22,46 +22,46 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            RoomUser roomUserByHabbo = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             Point point1 = new Point(Item.Coordinate.X + 1, Item.Coordinate.Y);
             Point point2 = new Point(Item.Coordinate.X - 1, Item.Coordinate.Y);
             Point point3 = new Point(Item.Coordinate.X, Item.Coordinate.Y + 1);
             Point point4 = new Point(Item.Coordinate.X, Item.Coordinate.Y - 1);
 
-            if (roomUserByHabbo == null)
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            if (roomUserByHabbo.Coordinate != point1 && roomUserByHabbo.Coordinate != point2 && (roomUserByHabbo.Coordinate != point3 && roomUserByHabbo.Coordinate != point4))
+            if (roomUserByUserId.Coordinate != point1 && roomUserByUserId.Coordinate != point2 && (roomUserByUserId.Coordinate != point3 && roomUserByUserId.Coordinate != point4))
             {
-                if (!roomUserByHabbo.CanWalk)
+                if (!roomUserByUserId.CanWalk)
                 {
                     return;
                 }
 
-                roomUserByHabbo.MoveTo(Item.SquareInFront);
+                roomUserByUserId.MoveTo(Item.SquareInFront);
             }
             else
             {
                 int newX = Item.Coordinate.X;
                 int newY = Item.Coordinate.Y;
-                if (roomUserByHabbo.Coordinate == point1)
+                if (roomUserByUserId.Coordinate == point1)
                 {
                     newX = Item.Coordinate.X - 1;
                     newY = Item.Coordinate.Y;
                 }
-                else if (roomUserByHabbo.Coordinate == point2)
+                else if (roomUserByUserId.Coordinate == point2)
                 {
                     newX = Item.Coordinate.X + 1;
                     newY = Item.Coordinate.Y;
                 }
-                else if (roomUserByHabbo.Coordinate == point3)
+                else if (roomUserByUserId.Coordinate == point3)
                 {
                     newX = Item.Coordinate.X;
                     newY = Item.Coordinate.Y - 1;
                 }
-                else if (roomUserByHabbo.Coordinate == point4)
+                else if (roomUserByUserId.Coordinate == point4)
                 {
                     newX = Item.Coordinate.X;
                     newY = Item.Coordinate.Y + 1;
@@ -76,7 +76,7 @@ namespace Butterfly.Game.Items.Interactors
                 int oldY = Item.Y;
                 double oldZ = Item.Z;
                 double newZ = Item.GetRoom().GetGameMap().SqAbsoluteHeight(newX, newY);
-                if (Item.GetRoom().GetRoomItemHandler().SetFloorItem(roomUserByHabbo.GetClient(), Item, newX, newY, Item.Rotation, false, false, false))
+                if (Item.GetRoom().GetRoomItemHandler().SetFloorItem(roomUserByUserId.GetClient(), Item, newX, newY, Item.Rotation, false, false, false))
                 {
                     Item.GetRoom().SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newX, newY, newZ, Item.Id));
                 }

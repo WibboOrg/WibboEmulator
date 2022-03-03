@@ -7,13 +7,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room room = Session.GetHabbo().CurrentRoom;
+            Room room = Session.GetUser().CurrentRoom;
             if (room == null)
             {
                 return;
             }
 
-            RoomUser roomuser = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser roomuser = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             if (roomuser == null)
             {
                 return;
@@ -30,18 +30,18 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (TargetUser.GetClient().GetHabbo().Id == Session.GetHabbo().Id)
+            if (TargetUser.GetClient().GetUser().Id == Session.GetUser().Id)
             {
                 return;
             }
 
-            if (TargetUser.GetClient().GetHabbo().PremiumProtect && !Session.GetHabbo().HasFuse("fuse_mod"))
+            if (TargetUser.GetClient().GetUser().PremiumProtect && !Session.GetUser().HasFuse("fuse_mod"))
             {
                 roomuser.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
                 return;
             }
 
-            RoomUser TUS = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+            RoomUser TUS = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             if (TUS == null)
                 return;
 

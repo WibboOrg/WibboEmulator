@@ -30,29 +30,29 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Session.GetHabbo().FavouriteGroupId = Group.Id;
+            Session.GetUser().FavouriteGroupId = Group.Id;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserStatsDao.UpdateGroupId(dbClient, Session.GetHabbo().FavouriteGroupId, Session.GetHabbo().Id);
+                UserStatsDao.UpdateGroupId(dbClient, Session.GetUser().FavouriteGroupId, Session.GetUser().Id);
             }
 
-            if (Session.GetHabbo().InRoom && Session.GetHabbo().CurrentRoom != null)
+            if (Session.GetUser().InRoom && Session.GetUser().CurrentRoom != null)
             {
-                Session.GetHabbo().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(Session.GetHabbo().Id));
+                Session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(Session.GetUser().Id));
                 if (Group != null)
                 {
-                    Session.GetHabbo().CurrentRoom.SendPacket(new HabboGroupBadgesComposer(Group));
+                    Session.GetUser().CurrentRoom.SendPacket(new UserGroupBadgesComposer(Group));
 
-                    RoomUser User = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+                    RoomUser User = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
                     if (User != null)
                     {
-                        Session.GetHabbo().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(Group, User.VirtualId));
+                        Session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(Group, User.VirtualId));
                     }
                 }
             }
             else
             {
-                Session.SendPacket(new RefreshFavouriteGroupComposer(Session.GetHabbo().Id));
+                Session.SendPacket(new RefreshFavouriteGroupComposer(Session.GetUser().Id));
             }
         }
     }

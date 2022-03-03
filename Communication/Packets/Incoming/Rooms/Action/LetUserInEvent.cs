@@ -11,12 +11,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || !room.CheckRights(Session))
             {
                 return;
@@ -26,17 +26,17 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             bool allowUserToEnter = Packet.PopBoolean();
 
             Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
-            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            if (clientByUsername == null || clientByUsername.GetUser() == null)
             {
                 return;
             }
 
-            if (clientByUsername.GetHabbo().LoadingRoomId != room.Id)
+            if (clientByUsername.GetUser().LoadingRoomId != room.Id)
             {
                 return;
             }
 
-            RoomUser user = room.GetRoomUserManager().GetRoomUserByHabboId(clientByUsername.GetHabbo().Id);
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByUserId(clientByUsername.GetUser().Id);
 
             if (user != null)
             {
@@ -47,9 +47,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 clientByUsername.SendPacket(new FlatAccessibleComposer(""));
 
-                clientByUsername.GetHabbo().AllowDoorBell = true;
+                clientByUsername.GetUser().AllowDoorBell = true;
 
-                if (!clientByUsername.GetHabbo().EnterRoom(Session.GetHabbo().CurrentRoom))
+                if (!clientByUsername.GetUser().EnterRoom(Session.GetUser().CurrentRoom))
                 {
                     clientByUsername.SendPacket(new CloseConnectionComposer());
                 }

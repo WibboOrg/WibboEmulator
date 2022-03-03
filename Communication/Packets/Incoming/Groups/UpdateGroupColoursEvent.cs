@@ -34,7 +34,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Group.CreatorId != Session.GetHabbo().Id)
+            if (Group.CreatorId != Session.GetUser().Id)
             {
                 return;
             }
@@ -48,9 +48,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Group.Colour2 = Colour2;
 
             Session.SendPacket(new GroupInfoComposer(Group, Session));
-            if (Session.GetHabbo().CurrentRoom != null)
+            if (Session.GetUser().CurrentRoom != null)
             {
-                foreach (Item Item in Session.GetHabbo().CurrentRoom.GetRoomItemHandler().GetFloor.ToList())
+                foreach (Item Item in Session.GetUser().CurrentRoom.GetRoomItemHandler().GetFloor.ToList())
                 {
                     if (Item == null || Item.GetBaseItem() == null)
                     {
@@ -62,7 +62,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         continue;
                     }
 
-                    Session.GetHabbo().CurrentRoom.SendPacket(new ObjectUpdateComposer(Item, Session.GetHabbo().CurrentRoom.RoomData.OwnerId));
+                    Session.GetUser().CurrentRoom.SendPacket(new ObjectUpdateComposer(Item, Session.GetUser().CurrentRoom.RoomData.OwnerId));
                 }
             }
         }

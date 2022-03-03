@@ -12,25 +12,25 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
         public void Parse(WebClient Session, ClientPacket Packet)
         {
             Client client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
-            if (client == null || client.GetHabbo() == null)
+            if (client == null || client.GetUser() == null)
             {
                 return;
             }
 
             int userId = Packet.PopInt();
             Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
-            if (clientByUserId == null || clientByUserId.GetHabbo() == null || !clientByUserId.GetHabbo().InRoom || (clientByUserId.GetHabbo().HideInRoom && !client.GetHabbo().HasFuse("fuse_mod")))
+            if (clientByUserId == null || clientByUserId.GetUser() == null || !clientByUserId.GetUser().InRoom || (clientByUserId.GetUser().HideInRoom && !client.GetUser().HasFuse("fuse_mod")))
             {
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(clientByUserId.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(clientByUserId.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            client.SendPacket(new RoomForwardComposer(clientByUserId.GetHabbo().CurrentRoomId));
+            client.SendPacket(new RoomForwardComposer(clientByUserId.GetUser().CurrentRoomId));
         }
     }
 }

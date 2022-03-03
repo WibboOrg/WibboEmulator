@@ -9,7 +9,7 @@ namespace Butterfly.Game.Users.Permissions
         private readonly List<string> _permissions;
         private readonly List<string> _commands;
 
-        public PermissionComponent(User habbo)
+        public PermissionComponent(User u)
         {
             _permissions = new List<string>();
             _commands = new List<string>();

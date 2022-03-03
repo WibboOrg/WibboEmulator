@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Settings
             this.WriteInteger(Instance.UsersWithRights.Count);
             foreach (int Id in Instance.UsersWithRights.ToList())
             {
-                User Data = ButterflyEnvironment.GetHabboById(Id);
+                User Data = ButterflyEnvironment.GetUserById(Id);
                 if (Data == null)
                 {
                     this.WriteInteger(0);

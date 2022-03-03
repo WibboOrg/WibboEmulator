@@ -50,7 +50,7 @@ namespace Butterfly.Game.Items.Interactors
             RoomUser roomUser = null;
             if (Session != null)
             {
-                roomUser = Item.GetRoom().GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+                roomUser = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             }
 
             if (roomUser == null)

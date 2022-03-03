@@ -23,10 +23,10 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            List<Item> Items = ItemFactory.CreateMultipleItems(ItemData, Session.GetHabbo(), "", NbLot);
+            List<Item> Items = ItemFactory.CreateMultipleItems(ItemData, Session.GetUser(), "", NbLot);
             foreach (Item PurchasedItem in Items)
             {
-                if (Session.GetHabbo().GetInventoryComponent().TryAddItem(PurchasedItem))
+                if (Session.GetUser().GetInventoryComponent().TryAddItem(PurchasedItem))
                 {
                     Session.SendPacket(new FurniListNotificationComposer(PurchasedItem.Id, 1));
                 }

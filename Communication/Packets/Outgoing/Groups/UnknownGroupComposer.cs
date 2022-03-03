@@ -2,11 +2,11 @@
 {
     internal class UnknownGroupComposer : ServerPacket
     {
-        public UnknownGroupComposer(int GroupId, int HabboId)
+        public UnknownGroupComposer(int groupId, int userId)
             : base(ServerPacketHeader.GROUP_MEMBERS_REFRESH)
         {
-            this.WriteInteger(GroupId);
-            this.WriteInteger(HabboId);
+            this.WriteInteger(groupId);
+            this.WriteInteger(userId);
         }
     }
 }

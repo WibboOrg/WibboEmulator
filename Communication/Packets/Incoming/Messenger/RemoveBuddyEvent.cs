@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo().GetMessenger() == null)
+            if (Session.GetUser().GetMessenger() == null)
             {
                 return;
             }
@@ -21,7 +21,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             for (int index = 0; index < count; index++)
             {
                 friendId = Packet.PopInt();
-                Session.GetHabbo().GetMessenger().DestroyFriendship(friendId);
+                Session.GetUser().GetMessenger().DestroyFriendship(friendId);
             }
         }
     }

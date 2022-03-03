@@ -14,12 +14,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
 
             if (room == null || !room.CheckRights(Session, true))
             {
@@ -39,14 +39,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 if(!userIds.Contains(UserId))
                     userIds.Add(UserId);
 
-                RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(UserId);
-                if (roomUserByHabbo != null && !roomUserByHabbo.IsBot)
+                RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(UserId);
+                if (roomUserByUserId != null && !roomUserByUserId.IsBot)
                 {
-                    roomUserByHabbo.GetClient().SendPacket(new YouAreControllerComposer(0));
+                    roomUserByUserId.GetClient().SendPacket(new YouAreControllerComposer(0));
 
-                    roomUserByHabbo.RemoveStatus("flatctrl 1");
-                    roomUserByHabbo.SetStatus("flatctrl 0", "");
-                    roomUserByHabbo.UpdateNeeded = true;
+                    roomUserByUserId.RemoveStatus("flatctrl 1");
+                    roomUserByUserId.SetStatus("flatctrl 0", "");
+                    roomUserByUserId.UpdateNeeded = true;
                 }
 
                 Session.SendPacket(new FlatControllerRemovedMessageComposer(room.Id, UserId));

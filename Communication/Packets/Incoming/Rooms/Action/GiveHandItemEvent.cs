@@ -10,37 +10,37 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo1 = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-            if (roomUserByHabbo1 == null || roomUserByHabbo1.CarryItemID <= 0 || roomUserByHabbo1.CarryTimer <= 0)
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            if (roomUserByUserId == null || roomUserByUserId.CarryItemID <= 0 || roomUserByUserId.CarryTimer <= 0)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo2 = room.GetRoomUserManager().GetRoomUserByHabboId(Packet.PopInt());
-            if (roomUserByHabbo2 == null)
+            RoomUser roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(Packet.PopInt());
+            if (roomUserByUserIdTarget == null)
             {
                 return;
             }
 
-            if (Math.Abs(roomUserByHabbo1.X - roomUserByHabbo2.X) >= 3 || Math.Abs(roomUserByHabbo1.Y - roomUserByHabbo2.Y) >= 3)
+            if (Math.Abs(roomUserByUserId.X - roomUserByUserIdTarget.X) >= 3 || Math.Abs(roomUserByUserId.Y - roomUserByUserIdTarget.Y) >= 3)
             {
-                roomUserByHabbo1.MoveTo(roomUserByHabbo2.X, roomUserByHabbo2.Y);
+                roomUserByUserId.MoveTo(roomUserByUserIdTarget.X, roomUserByUserIdTarget.Y);
                 return;
             }
 
-            roomUserByHabbo2.CarryItem(roomUserByHabbo1.CarryItemID);
-            roomUserByHabbo1.CarryItem(0);
+            roomUserByUserIdTarget.CarryItem(roomUserByUserId.CarryItemID);
+            roomUserByUserId.CarryItem(0);
         }
     }
 }

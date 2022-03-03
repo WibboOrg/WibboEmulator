@@ -22,7 +22,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Group.CreatorId != Session.GetHabbo().Id)
+            if (Group.CreatorId != Session.GetUser().Id)
             {
                 return;
             }

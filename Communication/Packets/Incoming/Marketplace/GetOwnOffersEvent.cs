@@ -9,7 +9,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Session.SendPacket(new MarketPlaceOwnOffersComposer(Session.GetHabbo().Id));
+            Session.SendPacket(new MarketPlaceOwnOffersComposer(Session.GetUser().Id));
         }
     }
 }

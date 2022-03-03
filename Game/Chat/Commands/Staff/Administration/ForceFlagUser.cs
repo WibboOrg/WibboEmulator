@@ -14,14 +14,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (clientByUsername == null || clientByUsername.GetHabbo() == null)
+            if (clientByUsername == null || clientByUsername.GetUser() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
                 return;
             }
 
-            clientByUsername.GetHabbo().CanChangeName = true;
-            clientByUsername.SendPacket(new UserObjectComposer(clientByUsername.GetHabbo()));
+            clientByUsername.GetUser().CanChangeName = true;
+            clientByUsername.SendPacket(new UserObjectComposer(clientByUsername.GetUser()));
             clientByUsername.SendNotification("Merci de procéder au changement de votre pseudonyme. Votre pseudonyme étant jugé comme innaproprié, vous serez banni sans aucun doute. \r\r Fermer cette fênetre et cliquez sur vous-même pour commencer à choisir un nouveau pseudonyme");
         }
     }

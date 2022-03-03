@@ -11,11 +11,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session != null && Session.GetHabbo() != null)
+            if (Session != null && Session.GetUser() != null)
             {
                 int ItemId = Packet.PopInt();
                 int HeightToSet = Packet.PopInt();
-                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
                 if ((room == null ? false : room.CheckRights(Session)))
                 {
                     Item item = room.GetRoomItemHandler().GetItem(ItemId);

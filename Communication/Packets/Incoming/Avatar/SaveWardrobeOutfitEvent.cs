@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             string look = Packet.PopString();
             string gender = Packet.PopString();
 
-            Session.GetHabbo().GetWardrobeComponent().AddWardobe(look, gender, slotId);
+            Session.GetUser().GetWardrobeComponent().AddWardobe(look, gender, slotId);
         }
     }
 }

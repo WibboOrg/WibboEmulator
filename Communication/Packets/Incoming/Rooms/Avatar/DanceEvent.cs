@@ -11,32 +11,32 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            roomUserByHabbo.Unidle();
+            roomUserByUserId.Unidle();
             int danceId = Packet.PopInt();
             if (danceId < 0 || danceId > 4 || !true && danceId > 1)
             {
                 danceId = 0;
             }
 
-            if (danceId > 0 && roomUserByHabbo.CarryItemID > 0)
+            if (danceId > 0 && roomUserByUserId.CarryItemID > 0)
             {
-                roomUserByHabbo.CarryItem(0);
+                roomUserByUserId.CarryItem(0);
             }
 
-            roomUserByHabbo.DanceId = danceId;
-            room.SendPacket(new DanceComposer(roomUserByHabbo.VirtualId, danceId));
+            roomUserByUserId.DanceId = danceId;
+            room.SendPacket(new DanceComposer(roomUserByUserId.VirtualId, danceId));
             ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_DANCE, 0);
         }
     }

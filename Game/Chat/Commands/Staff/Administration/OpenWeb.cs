@@ -14,12 +14,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (TargetUser == null || TargetUser.GetHabbo() == null)
+            if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 return;
             }
 
-            TargetUser.GetHabbo().SendWebPacket(new NavigateWebComposer(Params[2]));
+            TargetUser.GetUser().SendWebPacket(new NavigateWebComposer(Params[2]));
         }
     }
 }

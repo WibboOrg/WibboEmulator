@@ -46,7 +46,7 @@ namespace Butterfly.Game.Chat.Commands
 
         public bool Parse(Client Session, RoomUser User, Room Room, string Message)
         {
-            if (Session == null || Session.GetHabbo() == null || Session.GetHabbo().CurrentRoom == null)
+            if (Session == null || Session.GetUser() == null || Session.GetUser().CurrentRoom == null)
             {
                 return false;
             }
@@ -97,10 +97,10 @@ namespace Butterfly.Game.Chat.Commands
 
             if (CmdInfo.UserGotAuthorizationStaffLog())
             {
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetHabbo().Id, Session.GetHabbo().Username, Session.GetHabbo().CurrentRoomId, string.Empty, Split[0].ToLower(), string.Format("Tchat commande: {0}", string.Join(" ", Split)));
+                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().CurrentRoomId, string.Empty, Split[0].ToLower(), string.Format("Tchat commande: {0}", string.Join(" ", Split)));
             }
 
-            Cmd.Execute(Session, Session.GetHabbo().CurrentRoom, User, Split);
+            Cmd.Execute(Session, Session.GetUser().CurrentRoom, User, Split);
             return true;
         }
 
@@ -139,7 +139,7 @@ namespace Butterfly.Game.Chat.Commands
 
         public string GetCommandList(Client client)
         {
-            string rank = client.GetHabbo().Rank + client.GetHabbo().Langue.ToString();
+            string rank = client.GetUser().Rank + client.GetUser().Langue.ToString();
             if (this._listCommande.ContainsKey(rank))
             {
                 return this._listCommande[rank];

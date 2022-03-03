@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
@@ -25,13 +25,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Session.GetHabbo().FavoriteRooms.Remove(roomId);
+            Session.GetUser().FavoriteRooms.Remove(roomId);
 
             Session.SendPacket(new UpdateFavouriteRoomComposer(roomId, false));
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserFavoriteDao.Delete(dbClient, Session.GetHabbo().Id, roomId);
+                UserFavoriteDao.Delete(dbClient, Session.GetUser().Id, roomId);
             }
         }
     }

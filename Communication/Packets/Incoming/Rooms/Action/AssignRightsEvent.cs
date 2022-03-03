@@ -14,14 +14,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
 
             int UserId = Packet.PopInt();
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
@@ -38,7 +38,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
             else
             {
-                User Userright = ButterflyEnvironment.GetHabboById(UserId);
+                User Userright = ButterflyEnvironment.GetUserById(UserId);
                 if (Userright == null)
                 {
                     return;
@@ -53,17 +53,17 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 Session.SendPacket(new FlatControllerAddedComposer(room.Id, UserId, Userright.Username));
 
-                RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(UserId);
-                if (roomUserByHabbo == null || roomUserByHabbo.IsBot)
+                RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(UserId);
+                if (roomUserByUserId == null || roomUserByUserId.IsBot)
                 {
                     return;
                 }
 
-                roomUserByHabbo.RemoveStatus("flatctrl 0");
-                roomUserByHabbo.SetStatus("flatctrl 1", "");
-                roomUserByHabbo.UpdateNeeded = true;
+                roomUserByUserId.RemoveStatus("flatctrl 0");
+                roomUserByUserId.SetStatus("flatctrl 1", "");
+                roomUserByUserId.UpdateNeeded = true;
 
-                roomUserByHabbo.GetClient().SendPacket(new YouAreControllerComposer(1));
+                roomUserByUserId.GetClient().SendPacket(new YouAreControllerComposer(1));
             }
         }
     }

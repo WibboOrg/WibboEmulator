@@ -98,7 +98,7 @@ namespace Butterfly.Net
                         return;
                     }
 
-                    int MsgLen = HabboEncoding.DecodeInt32(Reader.ReadBytes(4));
+                    int MsgLen = IntEncoding.DecodeInt32(Reader.ReadBytes(4));
                     if (MsgLen < 2)
                     {
                         return;
@@ -118,7 +118,7 @@ namespace Butterfly.Net
 
                     using (BinaryReader R = new BinaryReader(new MemoryStream(Packet)))
                     {
-                        int Header = HabboEncoding.DecodeInt16(R.ReadBytes(2));
+                        int Header = IntEncoding.DecodeInt16(R.ReadBytes(2));
 
                         byte[] Content = new byte[Packet.Length - 2];
                         Buffer.BlockCopy(Packet, 2, Content, 0, Packet.Length - 2);

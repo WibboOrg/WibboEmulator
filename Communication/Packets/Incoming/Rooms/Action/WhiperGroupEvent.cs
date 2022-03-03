@@ -9,38 +9,38 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
             string name = Packet.PopString();
 
-            RoomUser roomOtherUserByHabbo = room.GetRoomUserManager().GetRoomUserByName(name);
-            if (roomOtherUserByHabbo == null)
+            RoomUser roomUserByUserTarget = room.GetRoomUserManager().GetRoomUserByName(name);
+            if (roomUserByUserTarget == null)
             {
                 return;
             }
 
-            if (!roomUserByHabbo.WhiperGroupUsers.Contains(roomOtherUserByHabbo.GetUsername()))
+            if (!roomUserByUserId.WhiperGroupUsers.Contains(roomUserByUserTarget.GetUsername()))
             {
-                if (roomUserByHabbo.WhiperGroupUsers.Count >= 5)
+                if (roomUserByUserId.WhiperGroupUsers.Count >= 5)
                 {
                     return;
                 }
 
-                roomUserByHabbo.WhiperGroupUsers.Add(roomOtherUserByHabbo.GetUsername());
+                roomUserByUserId.WhiperGroupUsers.Add(roomUserByUserTarget.GetUsername());
             }
             else
             {
-                roomUserByHabbo.WhiperGroupUsers.Remove(roomOtherUserByHabbo.GetUsername());
+                roomUserByUserId.WhiperGroupUsers.Remove(roomUserByUserTarget.GetUsername());
             }
         }
     }

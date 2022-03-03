@@ -18,25 +18,25 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(TargetUser.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(TargetUser.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(TargetUser.GetHabbo().Id);
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(TargetUser.GetUser().Id);
+            if (roomUserByUserIdTarget == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo2 = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-            if (roomUserByHabbo2 == null)
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            room.SendPacket(room.GetRoomItemHandler().TeleportUser(roomUserByHabbo, roomUserByHabbo2.Coordinate, 0, room.GetGameMap().SqAbsoluteHeight(roomUserByHabbo2.X, roomUserByHabbo2.Y)));
+            room.SendPacket(room.GetRoomItemHandler().TeleportUser(roomUserByUserIdTarget, roomUserByUserId.Coordinate, 0, room.GetGameMap().SqAbsoluteHeight(roomUserByUserId.X, roomUserByUserId.Y)));
         }
     }
 }

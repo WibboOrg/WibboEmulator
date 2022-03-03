@@ -1,6 +1,6 @@
 ﻿using Butterfly.Game.Moderation;
 
-namespace Butterfly.HabboHotel.Moderation
+namespace Butterfly.Game.Moderation
 {
     public static class BanTypeUtility
     {

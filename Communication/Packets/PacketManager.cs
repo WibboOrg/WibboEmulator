@@ -338,7 +338,7 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.MESSENGER_REQUEST, new RequestBuddyEvent());
             this._incomingPackets.Add(ClientPacketHeader.MESSENGER_CHAT, new SendMsgEvent());
             this._incomingPackets.Add(ClientPacketHeader.MESSENGER_ROOM_INVITE, new SendRoomInviteEvent());
-            this._incomingPackets.Add(ClientPacketHeader.MESSENGER_SEARCH, new HabboSearchEvent());
+            this._incomingPackets.Add(ClientPacketHeader.MESSENGER_SEARCH, new UserSearchEvent());
             this._incomingPackets.Add(ClientPacketHeader.MESSENGER_ACCEPT, new AcceptBuddyEvent());
             this._incomingPackets.Add(ClientPacketHeader.MESSENGER_DECLINE, new DeclineBuddyEvent());
         }
@@ -430,7 +430,7 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.MESSENGER_RELATIONSHIPS_UPDATE, new SetRelationshipEvent());
             this._incomingPackets.Add(ClientPacketHeader.CHECK_USERNAME, new CheckValidNameEvent());
             this._incomingPackets.Add(ClientPacketHeader.CHANGE_USERNAME, new ChangeNameEvent());
-            this._incomingPackets.Add(ClientPacketHeader.GROUP_BADGES, new GetHabboGroupBadgesEvent());
+            this._incomingPackets.Add(ClientPacketHeader.GROUP_BADGES, new GetUserGroupBadgesEvent());
         }
 
         private void RegisterSound()

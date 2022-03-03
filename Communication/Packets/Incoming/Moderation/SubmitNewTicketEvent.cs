@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (ButterflyEnvironment.GetGame().GetModerationManager().UsersHasPendingTicket(Session.GetHabbo().Id))
+            if (ButterflyEnvironment.GetGame().GetModerationManager().UsersHasPendingTicket(Session.GetUser().Id))
             {
                 return;
             }

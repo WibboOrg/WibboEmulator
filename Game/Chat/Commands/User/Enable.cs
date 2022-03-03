@@ -18,7 +18,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, Session.GetHabbo().HasFuse("fuse_enablefull")))
+            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, Session.GetUser().HasFuse("fuse_enablefull")))
             {
                 return;
             }

@@ -12,28 +12,28 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            if (roomUserByUserId == null)
             {
                 return;
             }
 
-            roomUserByHabbo.Unidle();
+            roomUserByUserId.Unidle();
             int i = Packet.PopInt();
-            roomUserByHabbo.DanceId = 0;
+            roomUserByUserId.DanceId = 0;
 
-            room.SendPacket(new ActionComposer(roomUserByHabbo.VirtualId, i));
+            room.SendPacket(new ActionComposer(roomUserByUserId.VirtualId, i));
 
             if (i == 5)
             {
-                roomUserByHabbo.IsAsleep = true;
-                room.SendPacket(new SleepComposer(roomUserByHabbo.VirtualId, true));
+                roomUserByUserId.IsAsleep = true;
+                room.SendPacket(new SleepComposer(roomUserByUserId.VirtualId, true));
             }
 
             ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_WAVE, 0);

@@ -33,14 +33,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             continue;
                         }
 
-                        Item NewItem = ItemFactory.CreateSingleItemNullable(Item.Data, Session.GetHabbo(), "", LimitedNumber, LimitedStack);
+                        Item NewItem = ItemFactory.CreateSingleItemNullable(Item.Data, Session.GetUser(), "", LimitedNumber, LimitedStack);
 
                         if (NewItem == null)
                         {
                             continue;
                         }
 
-                        if (Session.GetHabbo().GetInventoryComponent().TryAddItem(NewItem))
+                        if (Session.GetUser().GetInventoryComponent().TryAddItem(NewItem))
                         {
                             Session.SendPacket(new FurniListNotificationComposer(NewItem.Id, 1));
                         }

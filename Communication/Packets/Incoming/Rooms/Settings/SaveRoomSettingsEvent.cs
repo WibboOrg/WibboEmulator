@@ -24,7 +24,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!room.CheckRights(Session, true) && !Session.GetHabbo().HasFuse("fuse_settings_room"))
+            if (!room.CheckRights(Session, true) && !Session.GetUser().HasFuse("fuse_settings_room"))
             {
                 return;
             }

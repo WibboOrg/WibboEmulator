@@ -15,12 +15,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetHabbo().InRoom)
+            if (!Session.GetUser().InRoom)
             {
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetHabbo().CurrentRoomId, out Room Room))
+            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -54,36 +54,36 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 if (Exchange.GetBaseItem().ItemName.StartsWith("CF_") || Exchange.GetBaseItem().ItemName.StartsWith("CFC_"))
                 {
-                    Session.GetHabbo().Credits += Value;
-                    Session.SendPacket(new CreditBalanceComposer(Session.GetHabbo().Credits));
+                    Session.GetUser().Credits += Value;
+                    Session.SendPacket(new CreditBalanceComposer(Session.GetUser().Credits));
                 }
                 else if (Exchange.GetBaseItem().ItemName.StartsWith("PntEx_"))
                 {
-                    Session.GetHabbo().WibboPoints += Value;
-                    Session.SendPacket(new ActivityPointsComposer(Session.GetHabbo().WibboPoints));
+                    Session.GetUser().WibboPoints += Value;
+                    Session.SendPacket(new ActivityPointsComposer(Session.GetUser().WibboPoints));
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        UserDao.UpdateAddPoints(dbClient, Session.GetHabbo().Id, Value);
+                        UserDao.UpdateAddPoints(dbClient, Session.GetUser().Id, Value);
                     }
                 }
                 else if (Exchange.GetBaseItem().ItemName.StartsWith("WwnEx_"))
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        UserStatsDao.UpdateAchievementScore(dbClient, Session.GetHabbo().Id, Value);
+                        UserStatsDao.UpdateAchievementScore(dbClient, Session.GetUser().Id, Value);
                     }
 
-                    Session.GetHabbo().AchievementPoints += Value;
-                    Session.SendPacket(new AchievementScoreComposer(Session.GetHabbo().AchievementPoints));
+                    Session.GetUser().AchievementPoints += Value;
+                    Session.SendPacket(new AchievementScoreComposer(Session.GetUser().AchievementPoints));
 
                     if (Room != null)
                     {
-                        RoomUser roomUserByHabbo = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-                        if (roomUserByHabbo != null)
+                        RoomUser roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+                        if (roomUserByUserId != null)
                         {
-                            Session.SendPacket(new UserChangeComposer(roomUserByHabbo, true));
-                            Room.SendPacket(new UserChangeComposer(roomUserByHabbo, false));
+                            Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+                            Room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
                         }
                     }
                 }

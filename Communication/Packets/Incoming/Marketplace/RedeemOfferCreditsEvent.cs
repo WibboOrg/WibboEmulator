@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
             DataTable Table = null;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                Table = CatalogMarketplaceOfferDao.GetPriceByUserId(dbClient, Session.GetHabbo().Id);
+                Table = CatalogMarketplaceOfferDao.GetPriceByUserId(dbClient, Session.GetUser().Id);
 
             if (Table != null)
             {
@@ -28,13 +28,13 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
                 if (CreditsOwed >= 1)
                 {
-                    Session.GetHabbo().WibboPoints += CreditsOwed;
-                    Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().WibboPoints, 0, 105));
+                    Session.GetUser().WibboPoints += CreditsOwed;
+                    Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        CatalogMarketplaceOfferDao.Delete(dbClient, Session.GetHabbo().Id);
-                        UserDao.UpdateAddPoints(dbClient, Session.GetHabbo().Id, CreditsOwed);
+                        CatalogMarketplaceOfferDao.Delete(dbClient, Session.GetUser().Id);
+                        UserDao.UpdateAddPoints(dbClient, Session.GetUser().Id, CreditsOwed);
                     }
                 }
             }

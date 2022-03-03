@@ -168,17 +168,17 @@ namespace Butterfly.Game.Moderation
 
         public void SendNewTicket(Client Session, int Category, int ReportedUser, string Message)
         {
-            RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(Session.GetHabbo().CurrentRoomId);
+            RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(Session.GetUser().CurrentRoomId);
             int Id = 0;
             string roomname = (roomData == null) ? roomData.Name : "Aucun appart";
             int roomid = (roomData == null) ? roomData.Id : 0;
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                Id = ModerationTicketDao.Insert(dbClient, Message, roomname, Category, Session.GetHabbo().Id, ReportedUser, roomData.Id);
+                Id = ModerationTicketDao.Insert(dbClient, Message, roomname, Category, Session.GetUser().Id, ReportedUser, roomData.Id);
             }
 
-            ModerationTicket Ticket = new ModerationTicket(Id, 1, Category, Session.GetHabbo().Id, ReportedUser, Message, roomid, roomname, ButterflyEnvironment.GetUnixTimestamp());
+            ModerationTicket Ticket = new ModerationTicket(Id, 1, Category, Session.GetUser().Id, ReportedUser, Message, roomid, roomname, ButterflyEnvironment.GetUnixTimestamp());
             this._tickets.Add(Ticket);
             SendTicketToModerators(Ticket);
         }
@@ -190,30 +190,30 @@ namespace Butterfly.Game.Moderation
                 return;
             }
 
-            User UserReport = ButterflyEnvironment.GetHabboById(ReportedUser);
+            User UserReport = ButterflyEnvironment.GetUserById(ReportedUser);
             if (UserReport == null)
             {
                 return;
             }
 
-            Session.GetHabbo().GetMessenger().DestroyFriendship(UserReport.Id);
+            Session.GetUser().GetMessenger().DestroyFriendship(UserReport.Id);
 
             Session.SendPacket(new IgnoreStatusComposer(1, UserReport.Username));
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || (room.RoomData.BanFuse != 1 || !room.CheckRights(Session)) && !room.CheckRights(Session, true))
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = room.GetRoomUserManager().GetRoomUserByHabboId(UserReport.Id);
-            if (roomUserByHabbo == null || roomUserByHabbo.IsBot || (room.CheckRights(roomUserByHabbo.GetClient(), true) || roomUserByHabbo.GetClient().GetHabbo().HasFuse("fuse_mod") || roomUserByHabbo.GetClient().GetHabbo().HasFuse("fuse_no_kick")))
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(UserReport.Id);
+            if (roomUserByUserId == null || roomUserByUserId.IsBot || (room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasFuse("fuse_mod") || roomUserByUserId.GetClient().GetUser().HasFuse("fuse_no_kick")))
             {
                 return;
             }
 
             room.AddBan(UserReport.Id, 429496729);
-            room.GetRoomUserManager().RemoveUserFromRoom(roomUserByHabbo.GetClient(), true, true);
+            room.GetRoomUserManager().RemoveUserFromRoom(roomUserByUserId.GetClient(), true, true);
         }
 
         public ModerationTicket GetTicket(int TicketId)
@@ -242,14 +242,14 @@ namespace Butterfly.Game.Moderation
                 return;
             }
 
-            ticket.Pick(Session.GetHabbo().Id, true);
+            ticket.Pick(Session.GetUser().Id, true);
             SendTicketToModerators(ticket);
         }
 
         public void ReleaseTicket(Client Session, int TicketId)
         {
             ModerationTicket ticket = this.GetTicket(TicketId);
-            if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != Session.GetHabbo().Id)
+            if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != Session.GetUser().Id)
             {
                 return;
             }
@@ -261,7 +261,7 @@ namespace Butterfly.Game.Moderation
         public void CloseTicket(Client Session, int TicketId, int Result)
         {
             ModerationTicket ticket = this.GetTicket(TicketId);
-            if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != Session.GetHabbo().Id)
+            if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != Session.GetUser().Id)
             {
                 return;
             }
@@ -372,18 +372,18 @@ namespace Butterfly.Game.Moderation
         public static void KickUser(Client ModSession, int UserId, string Message, bool Soft)
         {
             Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
-            if (clientByUserId == null || clientByUserId.GetHabbo().CurrentRoomId < 1 || clientByUserId.GetHabbo().Id == ModSession.GetHabbo().Id)
+            if (clientByUserId == null || clientByUserId.GetUser().CurrentRoomId < 1 || clientByUserId.GetUser().Id == ModSession.GetUser().Id)
             {
                 return;
             }
 
-            if (clientByUserId.GetHabbo().Rank >= ModSession.GetHabbo().Rank)
+            if (clientByUserId.GetUser().Rank >= ModSession.GetUser().Rank)
             {
                 ModSession.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.kick.missingrank", ModSession.Langue));
             }
             else
             {
-                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(clientByUserId.GetHabbo().CurrentRoomId);
+                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(clientByUserId.GetUser().CurrentRoomId);
                 if (room == null)
                 {
                     return;
@@ -401,7 +401,7 @@ namespace Butterfly.Game.Moderation
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(ModSession.GetHabbo().Id, ModSession.GetHabbo().Username, 0, string.Empty, "Modtool", string.Format("Modtool kickalert: {0}", Message));
+                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(ModSession.GetUser().Id, ModSession.GetUser().Username, 0, string.Empty, "Modtool", string.Format("Modtool kickalert: {0}", Message));
 
                 clientByUserId.SendNotification(Message);
             }
@@ -410,19 +410,19 @@ namespace Butterfly.Game.Moderation
         public static void BanUser(Client ModSession, int UserId, int Length, string Message)
         {
             Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
-            if (clientByUserId == null || clientByUserId.GetHabbo().Id == ModSession.GetHabbo().Id)
+            if (clientByUserId == null || clientByUserId.GetUser().Id == ModSession.GetUser().Id)
             {
                 return;
             }
 
-            if (clientByUserId.GetHabbo().Rank >= ModSession.GetHabbo().Rank)
+            if (clientByUserId.GetUser().Rank >= ModSession.GetUser().Rank)
             {
                 ModSession.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.ban.missingrank", ModSession.Langue));
             }
             else
             {
                 double LengthSeconds = Length;
-                ButterflyEnvironment.GetGame().GetClientManager().BanUser(clientByUserId, ModSession.GetHabbo().Username, LengthSeconds, Message, false, false);
+                ButterflyEnvironment.GetGame().GetClientManager().BanUser(clientByUserId, ModSession.GetUser().Username, LengthSeconds, Message, false, false);
             }
         }
     }

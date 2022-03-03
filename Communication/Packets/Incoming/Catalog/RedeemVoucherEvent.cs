@@ -28,7 +28,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             bool haveVoucher = false;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                haveVoucher = UserVoucherDao.HaveVoucher(dbClient, Session.GetHabbo().Id, VoucherCode);
+                haveVoucher = UserVoucherDao.HaveVoucher(dbClient, Session.GetUser().Id, VoucherCode);
 
             if (!haveVoucher)
             {
@@ -37,20 +37,20 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             else
             {
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                    UserVoucherDao.Insert(dbClient, Session.GetHabbo().Id, VoucherCode);
+                    UserVoucherDao.Insert(dbClient, Session.GetUser().Id, VoucherCode);
             }
 
             Voucher.UpdateUses();
 
             if (Voucher.Type == VoucherType.CREDIT)
             {
-                Session.GetHabbo().Credits += Voucher.Value;
-                Session.SendPacket(new CreditBalanceComposer(Session.GetHabbo().Credits));
+                Session.GetUser().Credits += Voucher.Value;
+                Session.SendPacket(new CreditBalanceComposer(Session.GetUser().Credits));
             }
             else if (Voucher.Type == VoucherType.DUCKET)
             {
-                Session.GetHabbo().Duckets += Voucher.Value;
-                Session.SendPacket(new HabboActivityPointNotificationComposer(Session.GetHabbo().Duckets, Voucher.Value));
+                Session.GetUser().Duckets += Voucher.Value;
+                Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().Duckets, Voucher.Value));
             }
 
             //Session.SendPacket(new VoucherRedeemOkComposer());

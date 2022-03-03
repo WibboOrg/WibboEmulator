@@ -13,31 +13,31 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo1 = room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
-            if (roomUserByHabbo1 == null || roomUserByHabbo1.CarryItemID <= 0 || roomUserByHabbo1.CarryTimer <= 0)
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            if (roomUserByUserId == null || roomUserByUserId.CarryItemID <= 0 || roomUserByUserId.CarryTimer <= 0)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo2 = room.GetRoomUserManager().GetRoomUserByName(Params[1]);
-            if (roomUserByHabbo2 == null)
+            RoomUser roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByName(Params[1]);
+            if (roomUserByUserIdTarget == null)
             {
                 return;
             }
 
-            if (Math.Abs(roomUserByHabbo1.X - roomUserByHabbo2.X) >= 3 || Math.Abs(roomUserByHabbo1.Y - roomUserByHabbo2.Y) >= 3)
+            if (Math.Abs(roomUserByUserId.X - roomUserByUserIdTarget.X) >= 3 || Math.Abs(roomUserByUserId.Y - roomUserByUserIdTarget.Y) >= 3)
             {
                 return;
             }
 
-            roomUserByHabbo2.CarryItem(roomUserByHabbo1.CarryItemID);
-            roomUserByHabbo1.CarryItem(0);
+            roomUserByUserIdTarget.CarryItem(roomUserByUserId.CarryItemID);
+            roomUserByUserId.CarryItem(0);
 
         }
     }

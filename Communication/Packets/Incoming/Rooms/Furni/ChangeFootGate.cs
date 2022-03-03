@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             string gender = Packet.PopString();
             string look = Packet.PopString();
 
-            Room room = Session.GetHabbo().CurrentRoom;
+            Room room = Session.GetUser().CurrentRoom;
             if (room == null || !room.CheckRights(Session, true))
             {
                 return;

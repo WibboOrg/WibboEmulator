@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Settings
             this.WriteInteger(instance.GetBans().Count);//Count
             foreach (int Id in instance.GetBans().Keys)
             {
-                User Data = ButterflyEnvironment.GetHabboById(Id);
+                User Data = ButterflyEnvironment.GetUserById(Id);
 
                 if (Data == null)
                 {

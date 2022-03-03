@@ -7,9 +7,9 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Session.GetHabbo().PremiumProtect = !Session.GetHabbo().PremiumProtect;
+            Session.GetUser().PremiumProtect = !Session.GetUser().PremiumProtect;
 
-            if (Session.GetHabbo().PremiumProtect)
+            if (Session.GetUser().PremiumProtect)
             {
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.premium.true", Session.Langue));
             }

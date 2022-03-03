@@ -12,13 +12,13 @@ using Butterfly.Game.Users;namespace Butterfly.Communication.Packets.Incoming.
                 return;
             }
 
-            if (Session.GetHabbo().Id != Group.CreatorId || !Group.IsMember(UserId))
+            if (Session.GetUser().Id != Group.CreatorId || !Group.IsMember(UserId))
             {
                 return;
             }
 
-            User Habbo = ButterflyEnvironment.GetHabboById(UserId);
-            if (Habbo == null)
+            User user = ButterflyEnvironment.GetUserById(UserId);
+            if (user == null)
             {
                 return;
             }
@@ -27,7 +27,7 @@ using Butterfly.Game.Users;namespace Butterfly.Communication.Packets.Incoming.
 
             if (ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room Room))
             {
-                RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabboId(UserId);
+                RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(UserId);
                 if (User != null)
                 {
                     if (User.Statusses.ContainsKey("flatctrl 3"))
@@ -43,4 +43,4 @@ using Butterfly.Game.Users;namespace Butterfly.Communication.Packets.Incoming.
                 }
             }
 
-            Session.SendPacket(new GroupMemberUpdatedComposer(GroupId, Habbo, 2));        }    }}
+            Session.SendPacket(new GroupMemberUpdatedComposer(GroupId, user, 2));        }    }}

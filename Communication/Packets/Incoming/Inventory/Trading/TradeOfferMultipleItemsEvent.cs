@@ -10,13 +10,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            Trade userTrade = room.GetUserTrade(Session.GetHabbo().Id);
+            Trade userTrade = room.GetUserTrade(Session.GetUser().Id);
             if (userTrade == null)
             {
                 return;
@@ -26,13 +26,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             for (int i = 0; i < ItemCount; i++)
             {
                 int ItemId = Packet.PopInt();
-                Item userItem = Session.GetHabbo().GetInventoryComponent().GetItem(ItemId);
+                Item userItem = Session.GetUser().GetInventoryComponent().GetItem(ItemId);
                 if (userItem == null)
                 {
                     continue;
                 }
 
-                userTrade.OfferItem(Session.GetHabbo().Id, userItem, false);
+                userTrade.OfferItem(Session.GetUser().Id, userItem, false);
             }
 
             userTrade.UpdateTradeWindow();

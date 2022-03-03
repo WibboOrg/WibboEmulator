@@ -9,15 +9,15 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
 
-            if (Session.GetHabbo().SpectatorMode)
+            if (Session.GetUser().SpectatorMode)
             {
-                Session.GetHabbo().SpectatorMode = false;
-                Session.GetHabbo().HideInRoom = false;
+                Session.GetUser().SpectatorMode = false;
+                Session.GetUser().HideInRoom = false;
             }
             else
             {
-                Session.GetHabbo().SpectatorMode = true;
-                Session.GetHabbo().HideInRoom = true;
+                Session.GetUser().SpectatorMode = true;
+                Session.GetUser().HideInRoom = true;
             }
             Session.SendPacket(new GetGuestRoomResultComposer(Session, Room.RoomData, false, true));
         }

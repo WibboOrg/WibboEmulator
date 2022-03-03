@@ -21,18 +21,18 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     {
                         if (!Room.IsRoleplay)
                         {
-                            RoomUser superBot = Room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, Session.GetHabbo().Id, Room.Id, BotAIType.SuperBot, false, Session.GetHabbo().Username, "SuperBot", Session.GetHabbo().Gender, Session.GetHabbo().Look, UserRoom.X, UserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                            RoomUser superBot = Room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, Session.GetUser().Id, Room.Id, BotAIType.SuperBot, false, Session.GetUser().Username, "SuperBot", Session.GetUser().Gender, Session.GetUser().Look, UserRoom.X, UserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
                             superBot.BotData.FollowUser = UserRoom.VirtualId;
                         }
                         else
                         {
-                            Room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, Session.GetHabbo().Id, Room.Id, BotAIType.SuperBot, false, Session.GetHabbo().Username, "SuperBot", Session.GetHabbo().Gender, Session.GetHabbo().Look, UserRoom.X, UserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                            Room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, Session.GetUser().Id, Room.Id, BotAIType.SuperBot, false, Session.GetUser().Username, "SuperBot", Session.GetUser().Gender, Session.GetUser().Look, UserRoom.X, UserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
                         }
                     }
                 }
                 else if (Params.Length > 2)
                 {
-                    RoomUser GetUserRoom = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByName(Params[1]);
+                    RoomUser GetUserRoom = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(Params[1]);
                     if (GetUserRoom == null)
                     {
                         return;
@@ -47,7 +47,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     int.TryParse(Params[2], out count);
                     for (int i = 0; i < count; i++)
                     {
-                        RoomUser superBot = Room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, GetUserRoom.GetClient().GetHabbo().Id, Room.Id, BotAIType.SuperBot, false, GetUserRoom.GetClient().GetHabbo().Username, "SuperBot", GetUserRoom.GetClient().GetHabbo().Gender, GetUserRoom.GetClient().GetHabbo().Look, GetUserRoom.X, GetUserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                        RoomUser superBot = Room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, GetUserRoom.GetClient().GetUser().Id, Room.Id, BotAIType.SuperBot, false, GetUserRoom.GetClient().GetUser().Username, "SuperBot", GetUserRoom.GetClient().GetUser().Gender, GetUserRoom.GetClient().GetUser().Look, GetUserRoom.X, GetUserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
                         superBot.BotData.FollowUser = GetUserRoom.VirtualId;
                     }
                 }
@@ -63,33 +63,16 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                 foreach (Client GameClient in Users)
                 {
-                    if (GameClient.GetHabbo() == null)
+                    if (GameClient.GetUser() == null)
                     {
                         continue;
                     }
 
                     Point randomWalkableSquare = Room.GetGameMap().getRandomWalkableSquare(UserRoom.X, UserRoom.Y);
 
-                    RoomUser superBot = Room.GetRoomUserManager().DeploySuperBot(new RoomBot(0, Session.GetHabbo().Id, Room.Id, BotAIType.SuperBot, false, GameClient.GetHabbo().Username, GameClient.GetHabbo().Motto, GameClient.GetHabbo().Gender, GameClient.GetHabbo().Look, UserRoom.X, UserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                    RoomUser superBot = Room.GetRoomUserManager().DeploySuperBot(new RoomBot(0, Session.GetUser().Id, Room.Id, BotAIType.SuperBot, false, GameClient.GetUser().Username, GameClient.GetUser().Motto, GameClient.GetUser().Gender, GameClient.GetUser().Look, UserRoom.X, UserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
                     superBot.MoveTo(randomWalkableSquare, true);
                 }
-
-                /*
-                int Id = 1;
-                for (int Y = 0; Y < Room.GetGameMap().Model.MapSizeY; ++Y)
-                {
-                    for (int X = 0; X < Room.GetGameMap().Model.MapSizeX; ++X)
-                    {
-                        if (!Room.GetGameMap().CanWalk(X, Y, false))
-                            continue;
-
-                        Id++;
-                     
-                        RoomUser superBot = Room.GetRoomUserManager().DeploySuperBot(new RoomBot(-Id, Session.GetHabbo().Id, Room.Id, AIType.SuperBot, false, Session.GetHabbo().Username, Session.GetHabbo().Motto, Session.GetHabbo().Gender, Session.GetHabbo().Look, UserRoom.X, UserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
-                        superBot.MoveTo(X, Y, true);
-                    }
-                }
-                */
             }
         }
     }

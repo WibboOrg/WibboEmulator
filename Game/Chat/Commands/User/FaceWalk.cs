@@ -13,9 +13,9 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            RoomUser roomUserByHabbo = UserRoom;
-            roomUserByHabbo.FacewalkEnabled = !roomUserByHabbo.FacewalkEnabled;
-            if (roomUserByHabbo.FacewalkEnabled)
+            RoomUser roomUserByUserId = UserRoom;
+            roomUserByUserId.FacewalkEnabled = !roomUserByUserId.FacewalkEnabled;
+            if (roomUserByUserId.FacewalkEnabled)
             {
                 UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.true", Session.Langue));
             }

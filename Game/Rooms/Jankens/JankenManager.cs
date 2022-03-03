@@ -89,8 +89,8 @@ namespace Butterfly.Game.Rooms.Jankens
                     {
                         party.Started = false;
 
-                        RoomUser roomuserOne = this._roomInstance.GetRoomUserManager().GetRoomUserByHabboId(party.UserOne);
-                        RoomUser roomuserTwo = this._roomInstance.GetRoomUserManager().GetRoomUserByHabboId(party.UserTwo);
+                        RoomUser roomuserOne = this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(party.UserOne);
+                        RoomUser roomuserTwo = this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(party.UserTwo);
 
                         if (roomuserOne != null)
                         {
@@ -185,8 +185,8 @@ namespace Butterfly.Game.Rooms.Jankens
 
         private bool EndGame(Janken party)
         {
-            RoomUser roomuserOne = this._roomInstance.GetRoomUserManager().GetRoomUserByHabboId(party.UserOne);
-            RoomUser roomuserTwo = this._roomInstance.GetRoomUserManager().GetRoomUserByHabboId(party.UserTwo);
+            RoomUser roomuserOne = this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(party.UserOne);
+            RoomUser roomuserTwo = this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(party.UserTwo);
             if (roomuserOne == null && roomuserTwo == null)
             {
                 return true;
@@ -313,8 +313,8 @@ namespace Butterfly.Game.Rooms.Jankens
 
             if (!party.Started)
             {
-                RoomUser roomuserOne = this._roomInstance.GetRoomUserManager().GetRoomUserByHabboId(party.UserOne);
-                RoomUser roomuserTwo = this._roomInstance.GetRoomUserManager().GetRoomUserByHabboId(party.UserTwo);
+                RoomUser roomuserOne = this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(party.UserOne);
+                RoomUser roomuserTwo = this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(party.UserTwo);
 
                 if (roomuserOne != null)
                 {

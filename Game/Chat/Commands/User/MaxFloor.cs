@@ -15,7 +15,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             string Map = "";
             int TailleFloor = 50;
-            if (Session.GetHabbo().Rank > 1)
+            if (Session.GetUser().Rank > 1)
             {
                 TailleFloor = 75;
             }

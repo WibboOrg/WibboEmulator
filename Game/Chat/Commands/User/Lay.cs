@@ -7,14 +7,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetHabbo().CurrentRoomId);
+            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
             }
 
-            RoomUser roomUserByHabbo = UserRoom;
-            if (roomUserByHabbo == null)
+            RoomUser roomUserByUserId = UserRoom;
+            if (roomUserByUserId == null)
             {
                 return;
             }
@@ -29,23 +29,23 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
 
 
-                /*if (roomUserByHabbo.sentadoBol)
+                /*if (roomUserByUserId.sentadoBol)
                 {
-                  roomUserByHabbo.sentadoBol = false;
-                  roomUserByHabbo.RemoveStatus("sit");
+                  roomUserByUserId.sentadoBol = false;
+                  roomUserByUserId.RemoveStatus("sit");
                 }*/
-                if (roomUserByHabbo.Statusses.ContainsKey("lay") || roomUserByHabbo.Statusses.ContainsKey("sit"))
+                if (roomUserByUserId.Statusses.ContainsKey("lay") || roomUserByUserId.Statusses.ContainsKey("sit"))
                 {
                     return;
                 }
 
-                if (roomUserByHabbo.RotBody % 2 == 0 || roomUserByHabbo.transformation)
+                if (roomUserByUserId.RotBody % 2 == 0 || roomUserByUserId.transformation)
                 {
-                    if (roomUserByHabbo.RotBody == 4 || roomUserByHabbo.RotBody == 0 || roomUserByHabbo.transformation)
+                    if (roomUserByUserId.RotBody == 4 || roomUserByUserId.RotBody == 0 || roomUserByUserId.transformation)
                     {
-                        if (room.GetGameMap().CanWalk(roomUserByHabbo.X, roomUserByHabbo.Y + 1))
+                        if (room.GetGameMap().CanWalk(roomUserByUserId.X, roomUserByUserId.Y + 1))
                         {
-                            roomUserByHabbo.RotBody = 0;
+                            roomUserByUserId.RotBody = 0;
                         }
                         else
                         {
@@ -54,24 +54,24 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     }
                     else
                     {
-                        if (!room.GetGameMap().CanWalk(roomUserByHabbo.X + 1, roomUserByHabbo.Y))
+                        if (!room.GetGameMap().CanWalk(roomUserByUserId.X + 1, roomUserByUserId.Y))
                         {
                             return;
                         }
                     }
 
-                    //roomUserByHabbo.AddStatus("lay", Convert.ToString((double) room.GetGameMap().Model.SqFloorHeight[roomUserByHabbo.X, roomUserByHabbo.Y] + 0.85).Replace(",", "."));
+                    //roomUserByUserId.AddStatus("lay", Convert.ToString((double) room.GetGameMap().Model.SqFloorHeight[roomUserByUserId.X, roomUserByUserId.Y] + 0.85).Replace(",", "."));
                     if (UserRoom.transformation)
                     {
-                        roomUserByHabbo.SetStatus("lay", "");
+                        roomUserByUserId.SetStatus("lay", "");
                     }
                     else
                     {
-                        roomUserByHabbo.SetStatus("lay", "0.7");
+                        roomUserByUserId.SetStatus("lay", "0.7");
                     }
 
-                    roomUserByHabbo.IsLay = true;
-                    roomUserByHabbo.UpdateNeeded = true;
+                    roomUserByUserId.IsLay = true;
+                    roomUserByUserId.UpdateNeeded = true;
                 }
             }
             catch

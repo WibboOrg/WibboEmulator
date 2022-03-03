@@ -12,19 +12,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            TimeSpan timeSpan = DateTime.Now - Session.GetHabbo().FloodTime;
+            TimeSpan timeSpan = DateTime.Now - Session.GetUser().FloodTime;
             if (timeSpan.Seconds > 4)
             {
-                Session.GetHabbo().FloodCount = 0;
+                Session.GetUser().FloodCount = 0;
             }
 
-            if (timeSpan.Seconds < 4 && Session.GetHabbo().FloodCount > 5 && Session.GetHabbo().Rank < 5)
+            if (timeSpan.Seconds < 4 && Session.GetUser().FloodCount > 5 && Session.GetUser().Rank < 5)
             {
                 return;
             }
 
-            Session.GetHabbo().FloodTime = DateTime.Now;
-            Session.GetHabbo().FloodCount++;
+            Session.GetUser().FloodTime = DateTime.Now;
+            Session.GetUser().FloodCount++;
 
             int InviteCount = Packet.PopInt();
             if (InviteCount > 200)
@@ -53,14 +53,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Session.GetHabbo().IgnoreAll)
+            if (Session.GetUser().IgnoreAll)
             {
                 return;
             }
 
             foreach (int UserId in Targets)
             {
-                if (Session.GetHabbo().GetMessenger().FriendshipExists(UserId))
+                if (Session.GetUser().GetMessenger().FriendshipExists(UserId))
                 {
                     Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
                     if (clientByUserId == null)
@@ -68,9 +68,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         break;
                     }
 
-                    if (clientByUserId.GetHabbo().GetMessenger().FriendshipExists(Session.GetHabbo().Id))
+                    if (clientByUserId.GetUser().GetMessenger().FriendshipExists(Session.GetUser().Id))
                     {
-                        clientByUserId.SendPacket(new RoomInviteComposer(Session.GetHabbo().Id, TextMessage));
+                        clientByUserId.SendPacket(new RoomInviteComposer(Session.GetUser().Id, TextMessage));
                     }
                 }
             }

@@ -25,14 +25,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (UserId == Session.GetHabbo().Id)
+            if (UserId == Session.GetUser().Id)
             {
                 if (Group.IsMember(UserId))
                 {
                     Group.DeleteMember(UserId);
                 }
 
-                Session.GetHabbo().MyGroups.Remove(Group.Id);
+                Session.GetUser().MyGroups.Remove(Group.Id);
 
                 if (Group.IsAdmin(UserId))
                 {
@@ -47,7 +47,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         return;
                     }
 
-                    RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+                    RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
                     if (User != null)
                     {
                         User.RemoveStatus("flatctrl 1");
@@ -66,9 +66,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
 
                 Session.SendPacket(new GroupInfoComposer(Group, Session));
-                if (Session.GetHabbo().FavouriteGroupId == GroupId)
+                if (Session.GetUser().FavouriteGroupId == GroupId)
                 {
-                    Session.GetHabbo().FavouriteGroupId = 0;
+                    Session.GetUser().FavouriteGroupId = 0;
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         UserStatsDao.UpdateRemoveGroupId(dbClient, UserId);
@@ -81,7 +81,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                             return;
                         }
 
-                        RoomUser User = Room.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+                        RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
                         if (User != null)
                         {
                             User.RemoveStatus("flatctrl 1");
@@ -94,33 +94,33 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         }
                     }
 
-                    if (Session.GetHabbo().InRoom && Session.GetHabbo().CurrentRoom != null)
+                    if (Session.GetUser().InRoom && Session.GetUser().CurrentRoom != null)
                     {
-                        RoomUser User = Session.GetHabbo().CurrentRoom.GetRoomUserManager().GetRoomUserByHabboId(Session.GetHabbo().Id);
+                        RoomUser User = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
                         if (User != null)
                         {
-                            Session.GetHabbo().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(Group, User.VirtualId));
+                            Session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(Group, User.VirtualId));
                         }
 
-                        Session.GetHabbo().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(Session.GetHabbo().Id));
+                        Session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(Session.GetUser().Id));
                     }
                     else
                     {
-                        Session.SendPacket(new RefreshFavouriteGroupComposer(Session.GetHabbo().Id));
+                        Session.SendPacket(new RefreshFavouriteGroupComposer(Session.GetUser().Id));
                     }
                 }
                 return;
             }
             else
             {
-                if (Group.CreatorId == Session.GetHabbo().Id || Group.IsAdmin(Session.GetHabbo().Id))
+                if (Group.CreatorId == Session.GetUser().Id || Group.IsAdmin(Session.GetUser().Id))
                 {
                     if (!Group.IsMember(UserId))
                     {
                         return;
                     }
 
-                    if (Group.IsAdmin(UserId) && Group.CreatorId != Session.GetHabbo().Id)
+                    if (Group.IsAdmin(UserId) && Group.CreatorId != Session.GetUser().Id)
                     {
                         Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.groupremoveuser.error", Session.Langue));
                         return;
@@ -136,8 +136,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         Group.DeleteMember(UserId);
                     }
 
-                    User Habbo = ButterflyEnvironment.GetHabboById(UserId);
-                    Habbo.MyGroups.Remove(Group.Id);
+                    User user = ButterflyEnvironment.GetUserById(UserId);
+                    if(user != null)
+                        user.MyGroups.Remove(Group.Id);
 
                     int StartIndex = (1 - 1) * 14 + 14;
 
@@ -145,7 +146,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     List<int> MemberIds = Group.GetMembers.Skip(StartIndex).Take(14).ToList();
                     foreach (int Id in MemberIds.ToList())
                     {
-                        User GroupMember = ButterflyEnvironment.GetHabboById(Id);
+                        User GroupMember = ButterflyEnvironment.GetUserById(Id);
                         if (GroupMember == null)
                         {
                             continue;
@@ -160,7 +161,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     int FinishIndex = 14 < Members.Count ? 14 : Members.Count;
                     int MembersCount = Group.GetMembers.Count;
 
-                    Session.SendPacket(new GroupMembersComposer(Group, Members.Take(FinishIndex).ToList(), MembersCount, 1, (Group.CreatorId == Session.GetHabbo().Id || Group.IsAdmin(Session.GetHabbo().Id)), 0, ""));
+                    Session.SendPacket(new GroupMembersComposer(Group, Members.Take(FinishIndex).ToList(), MembersCount, 1, (Group.CreatorId == Session.GetUser().Id || Group.IsAdmin(Session.GetUser().Id)), 0, ""));
                 }
             }
         }

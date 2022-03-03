@@ -219,7 +219,7 @@ namespace Butterfly.Game.Items
                             string[] ExtraData = Item.ExtraData.Split(Convert.ToChar(5));
                             int Style = int.Parse(Item.ExtraData.Split(new char[1] { '\x0005' })[1]) * 1000 + int.Parse(Item.ExtraData.Split(new char[1] { '\x0005' })[2]);
 
-                            User Purchaser = ButterflyEnvironment.GetHabboById(int.Parse(Item.ExtraData.Split(new char[1] { ';' })[0]));
+                            User Purchaser = ButterflyEnvironment.GetUserById(int.Parse(Item.ExtraData.Split(new char[1] { ';' })[0]));
                             Message.WriteInteger(0);
                             Message.WriteInteger(1);
                             Message.WriteInteger(6);

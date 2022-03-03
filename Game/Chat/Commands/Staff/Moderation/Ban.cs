@@ -13,13 +13,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (TargetUser == null || TargetUser.GetHabbo() == null)
+            if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
                 return;
             }
 
-            if (TargetUser.GetHabbo().Rank >= Session.GetHabbo().Rank)
+            if (TargetUser.GetUser().Rank >= Session.GetUser().Rank)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
                 return;
@@ -33,8 +33,8 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             else
             {
                 string Raison = CommandManager.MergeParams(Params, 3);
-                ButterflyEnvironment.GetGame().GetClientManager().BanUser(TargetUser, Session.GetHabbo().Username, num, Raison, false, false);
-                UserRoom.SendWhisperChat("Tu as bannit " + TargetUser.GetHabbo().Username + " pour" + Raison + "!");
+                ButterflyEnvironment.GetGame().GetClientManager().BanUser(TargetUser, Session.GetUser().Username, num, Raison, false, false);
+                UserRoom.SendWhisperChat("Tu as bannit " + TargetUser.GetUser().Username + " pour" + Raison + "!");
                 if (Session.Antipub(Raison, "<CMD>", Room.Id))
                 {
                     return;

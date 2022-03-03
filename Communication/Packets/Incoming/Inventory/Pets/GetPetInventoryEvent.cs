@@ -9,19 +9,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetHabbo() == null)
+            if (Session.GetUser() == null)
             {
                 return;
             }
 
-            if (Session.GetHabbo().GetInventoryComponent() == null)
+            if (Session.GetUser().GetInventoryComponent() == null)
             {
                 return;
             }
 
-            Session.GetHabbo().GetInventoryComponent().LoadInventory();
+            Session.GetUser().GetInventoryComponent().LoadInventory();
 
-            Session.SendPacket(new PetInventoryComposer(Session.GetHabbo().GetInventoryComponent().GetPets()));
+            Session.SendPacket(new PetInventoryComposer(Session.GetUser().GetInventoryComponent().GetPets()));
         }
     }
 }
