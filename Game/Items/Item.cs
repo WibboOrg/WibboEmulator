@@ -311,7 +311,6 @@ namespace Butterfly.Game.Items
 
         public void Destroy()
         {
-            this._roomInstance = null;
             this.GetAffectedTiles.Clear();
 
             if (this.WiredHandler != null)
@@ -319,6 +318,7 @@ namespace Butterfly.Game.Items
                 this.WiredHandler.Dispose();
             }
 
+            this._roomInstance = null;
             this.WiredHandler = null;
 
             this.ItemTriggerEventHandler = null;

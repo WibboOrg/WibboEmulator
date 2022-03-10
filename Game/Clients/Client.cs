@@ -337,7 +337,7 @@ namespace Butterfly.Game.Clients
                 this._packetLastTimestamp = timestampNow + 1;
             }
 
-            if (this._packetCount >= 10)
+            if (this._packetCount >= 15)
                 return true;
 
             if (delay <= 0)
