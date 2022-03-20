@@ -131,7 +131,7 @@
         MANNEQUIN,
         TONER,
         BOT,
-        ADSBACKGROUND,
+        ADS_BACKGROUND,
         BADGE_DISPLAY,
         BADGE_TROC,
         TVYOUTUBE,
@@ -491,7 +491,7 @@
                 case "bot":
                     return InteractionType.BOT;
                 case "adsbackground":
-                    return InteractionType.ADSBACKGROUND;
+                    return InteractionType.ADS_BACKGROUND;
                 case "badge_display":
                     return InteractionType.BADGE_DISPLAY;
                 case "badge_troc":

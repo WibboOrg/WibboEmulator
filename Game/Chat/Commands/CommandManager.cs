@@ -368,7 +368,6 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(200, new SummonAll());
             this.Register(203, new RoomDance());
             this.Register(204, new GiveCash());
-
         }
         public void RegisterCommand()
         {

@@ -2,8 +2,6 @@
 {
     public static class ClientPacketHeader //PRODUCTION-201611291003-a-1161735
     {
-        public const int CameraPurchaseMessageEvent = 2408; //Custom
-
         public const int FindRandomFriendingRoomMessageEvent = 1703;
         public const int GenerateSecretKeyMessageEvent = 773;
         public const int UserNuxEvent = 1299;
@@ -13,6 +11,11 @@
         public const int RemoveGroupFavouriteMessageEvent = 1820;
         public const int FootballGateSaveLookEvent = 924;
 
+        public const int PHOTO_COMPETITION = 3959;
+        public const int PUBLISH_PHOTO = 2068;
+        public const int PURCHASE_PHOTO = 2408;
+        public const int RENDER_ROOM_THUMBNAIL = 1982;
+        public const int RENDER_ROOM = 3226;
         public const int UNIT_CHAT_WHISPER_GROUP = 1118;
         public const int GET_OCCUPIED_TILES = 1687;
         public const int POLL_ANSWER = 3505;

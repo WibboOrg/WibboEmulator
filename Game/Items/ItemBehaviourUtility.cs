@@ -116,7 +116,7 @@ namespace Butterfly.Game.Items
                     Message.WriteInteger(Item.GetBaseItem().Modes - 1); //Type de duré
                     break;
 
-                case InteractionType.ADSBACKGROUND:
+                case InteractionType.ADS_BACKGROUND:
                     if (!string.IsNullOrEmpty(Item.ExtraData))
                     {
                         Message.WriteInteger(0);

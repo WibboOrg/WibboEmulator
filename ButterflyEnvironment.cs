@@ -17,6 +17,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -34,12 +35,15 @@ namespace Butterfly
         private static FigureDataManager _figureManager;
         private static LanguageManager _languageManager;
 
+        private static HttpClient _httpClient = new HttpClient();
         private static Random _random = new Random();
         private static readonly ConcurrentDictionary<int, User> _usersCached = new ConcurrentDictionary<int, User>();
 
         public static DateTime ServerStarted;
         public static bool StaticEvents;
         public static string PatchDir;
+        public static string CameraUploadUrl;
+        public static string CameraThubmailUploadUrl;
 
         private static readonly List<char> Allowedchars = new List<char>(new[]
             {
@@ -130,6 +134,8 @@ namespace Butterfly
                 }
 
                 StaticEvents = _configuration.data["static.events"] == "true";
+                CameraUploadUrl = _configuration.data["camera.upload.url"];
+                CameraThubmailUploadUrl = _configuration.data["camera.thubmail.upload.url"];
 
                 Logging.WriteLine("EMULATOR -> READY!");
 
@@ -355,6 +361,11 @@ namespace Butterfly
         public static WebSocketManager GetWebSocketManager()
         {
             return _webSocketManager;
+        }
+
+        public static HttpClient GetHttpClient()
+        {
+            return _httpClient;
         }
 
         public static void PreformShutDown()

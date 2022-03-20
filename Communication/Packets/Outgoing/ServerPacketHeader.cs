@@ -12,6 +12,7 @@
         public const int RefreshFavouriteGroupMessageComposer = 876;
         public const int RespectPetNotificationMessageComposer = 2788;
 
+        public const int THUMBNAIL_STATUS = 3595;
         public const int ROOM_EFFECT = 4001;
         public const int QUESTION_ANSWERED = 2589;
         public const int QUESTION = 2665;
@@ -64,8 +65,8 @@
         public const int LOVELOCK_FURNI_FRIEND_COMFIRMED = 382;
         public const int LOVELOCK_FURNI_START = 3753;
         public const int PLAYING_GAME = 448;
-        public const int CAMERA_PRICE = 3878;
-        public const int CAMERA_URL = 3696;
+        public const int INIT_CAMERA = 3878;
+        public const int CAMERA_STORAGE_URL = 3696;
         public const int AUTHENTICATED = 2491;
         public const int USER_INFO = 2725;
         public const int USER_PERKS = 2586;

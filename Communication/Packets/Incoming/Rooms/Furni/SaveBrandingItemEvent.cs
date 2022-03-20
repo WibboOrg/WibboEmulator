@@ -11,15 +11,16 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            int ItemId = Packet.PopInt();
+            int itemId = Packet.PopInt();
+
             Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || !room.CheckRights(Session))
             {
                 return;
             }
 
-            Item roomItem = room.GetRoomItemHandler().GetItem(ItemId);
-            if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.ADSBACKGROUND)
+            Item roomItem = room.GetRoomItemHandler().GetItem(itemId);
+            if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.ADS_BACKGROUND)
             {
                 return;
             }

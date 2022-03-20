@@ -119,6 +119,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -133,7 +134,11 @@
     <Compile Include="Communication\Encryption\Keys\RSAKeys.cs" />
     <Compile Include="Communication\Packets\Incoming\Avatar\GetWardrobeEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Avatar\SaveWardrobeOutfitEvent.cs" />
-    <Compile Include="Communication\Packets\Incoming\Camera\CameraPurchaseEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Camera\PhotoCompetitionEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Camera\PublishPhotoEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Camera\PurchasePhotoEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Camera\RenderRoomEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Camera\RenderRoomThumbnailEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Camera\RequestCameraConfigurationEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Catalog\CheckPetNameEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Catalog\GetCatalogIndexEvent.cs" />
@@ -232,6 +237,7 @@
     <Compile Include="Communication\Packets\Outgoing\Camera\CameraPriceComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Camera\CameraPurchaseSuccesfullComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Camera\CameraURLComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Camera\ThumbnailStatusComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Catalog\CatalogIndexComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Catalog\CatalogItemDiscountComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Catalog\CatalogOfferComposer.cs" />

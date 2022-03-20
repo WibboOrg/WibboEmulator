@@ -210,6 +210,9 @@ namespace Butterfly.Game.Rooms.Wired
                 return;
             }
 
+            if (user != null && user.IsSpectator)
+                return;
+
             if (this._wiredUsed.ContainsKey(coordinate))
             {
                 if (this._wiredUsed[coordinate].Contains(user))

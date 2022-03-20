@@ -54,6 +54,7 @@ namespace Butterfly.Communication.Packets
             this.RegisterGuide();
             this.RegisterNux();
             this.RegisterForum();
+            this.RegisterCamera();
 
             this.RegisterWebPacket();
 
@@ -194,9 +195,16 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.CATALOG_REQUESET_PET_BREEDS, new GetSellablePetBreedsEvent());
             this._incomingPackets.Add(ClientPacketHeader.GROUP_MEMBERSHIPS, new GetGroupFurniConfigEvent());
             this._incomingPackets.Add(ClientPacketHeader.MARKETPLACE_CONFIG, new GetMarketplaceConfigurationEvent());
+        }
 
-            this._incomingPackets.Add(ClientPacketHeader.CameraPurchaseMessageEvent, new CameraPurchaseEvent());
+        private void RegisterCamera()
+        {
             this._incomingPackets.Add(ClientPacketHeader.CAMERA_PRICE, new RequestCameraConfigurationEvent());
+            this._incomingPackets.Add(ClientPacketHeader.RENDER_ROOM_THUMBNAIL, new RenderRoomThumbnailEvent());
+            this._incomingPackets.Add(ClientPacketHeader.RENDER_ROOM, new RenderRoomEvent());
+            this._incomingPackets.Add(ClientPacketHeader.PURCHASE_PHOTO, new PurchasePhotoEvent());
+            this._incomingPackets.Add(ClientPacketHeader.PUBLISH_PHOTO, new PublishPhotoEvent());
+            this._incomingPackets.Add(ClientPacketHeader.PHOTO_COMPETITION, new PhotoCompetitionEvent());
         }
 
         private void RegisterMarketplace()
