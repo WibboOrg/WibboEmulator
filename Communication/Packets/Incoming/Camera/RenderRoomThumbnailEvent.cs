@@ -39,16 +39,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (session.GetUser().LastPhotoId == photoId)
-            {
-                return;
-            }
-
-            session.GetUser().LastPhotoId = photoId;
-
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                UserPhotoDao.Insert(dbClient, session.GetUser().Id, photoId, time);
-
             session.SendPacket(new ThumbnailStatusComposer(true, true));
         }
     }
