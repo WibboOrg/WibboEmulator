@@ -3,7 +3,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
     internal class GiftWrappingConfigurationComposer : ServerPacket
     {
         public GiftWrappingConfigurationComposer()
-            : base(ServerPacketHeader.GIFT_CONFIG)
+            : base(ServerPacketHeader.GIFT_WRAPPER_CONFIG)
         {
             this.WriteBoolean(true);
             this.WriteInteger(1);

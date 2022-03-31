@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
     internal class CatalogIndexComposer : ServerPacket
     {
         public CatalogIndexComposer(Client Session, ICollection<CatalogPage> Pages, int Sub = 0)
-             : base(ServerPacketHeader.CATALOG_PAGES)
+             : base(ServerPacketHeader.CATALOG_PAGE_LIST)
         {
             this.WriteRootIndex(Session, Pages);
 

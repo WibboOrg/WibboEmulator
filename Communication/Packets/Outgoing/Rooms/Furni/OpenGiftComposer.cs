@@ -5,7 +5,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Furni
     internal class OpenGiftComposer : ServerPacket
     {
         public OpenGiftComposer(ItemData Data, string Text, Item Item, bool ItemIsInRoom)
-            : base(ServerPacketHeader.FURNITURE_OPEN_GIFT)
+            : base(ServerPacketHeader.GIFT_OPENED)
         {
             this.WriteString(Data.Type.ToString());
             this.WriteInteger(Data.SpriteId);

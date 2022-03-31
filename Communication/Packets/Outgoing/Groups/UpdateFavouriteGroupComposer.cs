@@ -5,7 +5,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Groups
     internal class UpdateFavouriteGroupComposer : ServerPacket
     {
         public UpdateFavouriteGroupComposer(Group Group, int VirtualId)
-            : base(ServerPacketHeader.UpdateFavouriteGroupMessageComposer)
+            : base(ServerPacketHeader.FAVORITE_GROUP_UDPATE)
         {
             this.WriteInteger(VirtualId);//Sends 0 on .COM
             this.WriteInteger(Group != null ? Group.Id : 0);

@@ -180,15 +180,17 @@ namespace Butterfly.Game.Chat.Commands
         }
 
 
-        public static async string MergeParams(string[] Params, int Start)
+        public static string MergeParams(string[] Params, int Start)
         {
-            var Merged = new StringBuilder();
+            StringBuilder Merged = new StringBuilder();
             for(int i = Start; i < Params.Length; i++)
             {
                 if (i > Start)
-                Merged.Append(" ");
+                    Merged.Append(" ");
+
                 Merged.Append(Params[i]);
             }
+
             return Merged.ToString();
         }
 

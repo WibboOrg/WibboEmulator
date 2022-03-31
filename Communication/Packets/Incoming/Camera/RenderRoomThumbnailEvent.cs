@@ -6,7 +6,7 @@ using Butterfly.Game.Rooms;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Butterfly.Communication.Packets.Incoming.Camera
 {
     internal class RenderRoomThumbnailEvent : IPacketEvent
     {

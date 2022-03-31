@@ -3,7 +3,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
     internal class CatalogItemDiscountComposer : ServerPacket
     {
         public CatalogItemDiscountComposer()
-            : base(ServerPacketHeader.DISCOUNT_CONFIG)
+            : base(ServerPacketHeader.BUNDLE_DISCOUNT_RULESET)
         {
             this.WriteInteger(100);//Most you can get.
             this.WriteInteger(6);

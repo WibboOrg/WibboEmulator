@@ -2,7 +2,7 @@
 using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Butterfly.Communication.Packets.Incoming.Camera
 {
     internal class PurchasePhotoEvent : IPacketEvent
     {

@@ -1,7 +1,6 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Camera;
-using Butterfly.Game.Clients;
+﻿using Butterfly.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Butterfly.Communication.Packets.Incoming.Camera
 {
     internal class PublishPhotoEvent : IPacketEvent
     {

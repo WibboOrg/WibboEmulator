@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
     internal class CatalogOfferComposer : ServerPacket
     {
         public CatalogOfferComposer(CatalogItem Item)
-            : base(ServerPacketHeader.CATALOG_SEARCH)
+            : base(ServerPacketHeader.PRODUCT_OFFER)
         {
             this.WriteInteger(Item.Id);
             this.WriteString(Item.Name);

@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Pets
     internal class RespectPetNotificationComposer : ServerPacket
     {
         public RespectPetNotificationComposer(Pet pet)
-            : base(ServerPacketHeader.RespectPetNotificationMessageComposer)
+            : base(ServerPacketHeader.PET_RESPECTED)
         {
             //TODO: Structure
             this.WriteInteger(pet.VirtualId);
@@ -23,7 +23,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Pets
         }
 
         public RespectPetNotificationComposer(User user, RoomUser rooomUser)
-            : base(ServerPacketHeader.RespectPetNotificationMessageComposer)
+            : base(ServerPacketHeader.PET_RESPECTED)
         {
             //TODO: Structure
             this.WriteInteger(rooomUser.VirtualId);

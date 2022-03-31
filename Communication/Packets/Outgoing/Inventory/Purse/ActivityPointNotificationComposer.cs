@@ -3,7 +3,7 @@
     internal class ActivityPointNotificationComposer : ServerPacket
     {
         public ActivityPointNotificationComposer(int Balance, int Notif, int Type = 0)
-            : base(ServerPacketHeader.USER_CURRENCY_UPDATE)
+            : base(ServerPacketHeader.ACTIVITY_POINT_NOTIFICATION)
         {
             this.WriteInteger(Balance);
             this.WriteInteger(Notif);

@@ -14,16 +14,16 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            string Cmd = Params[1];
+            string cmd = Params[1];
 
-            if (string.IsNullOrEmpty(Cmd))
+            if (string.IsNullOrEmpty(cmd))
             {
                 return;
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                switch (Cmd)
+                switch (cmd)
                 {
                     case "random":
                         {

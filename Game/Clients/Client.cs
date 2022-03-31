@@ -2,6 +2,7 @@
 using Butterfly.Communication.Packets.Incoming;
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.BuildersClub;
+using Butterfly.Communication.Packets.Outgoing.Campaign;
 using Butterfly.Communication.Packets.Outgoing.Handshake;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Achievements;
 using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
@@ -120,10 +121,10 @@ namespace Butterfly.Game.Clients
 
                     this._user.Init(this);
 
-                    ServerPacketList packetList = new ServerPacketList();
 
                     this.SendPacket(new AuthenticationOKComposer());
 
+                    ServerPacketList packetList = new ServerPacketList();
                     packetList.Add(new NavigatorSettingsComposer(this._user.HomeRoom));
                     packetList.Add(new FavouritesComposer(this._user.FavoriteRooms));
                     packetList.Add(new FigureSetIdsComposer());
@@ -138,6 +139,16 @@ namespace Butterfly.Game.Clients
 
                     packetList.Add(new ActivityPointNotificationComposer(this._user.Duckets, 1));
                     packetList.Add(new CreditBalanceComposer(this._user.Credits));
+
+                    /*int day = (int)DateTime.Now.Day;
+                    int days = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+
+                    List<int> missDays = new List<int>();
+                    for (int i = 0; i < day; i++)
+                        missDays.Add(i);
+
+                    packetList.Add(new CampaignCalendarDataComposer("", "", day, days, new List<int>(), missDays));
+                    packetList.Add(new InClientLinkComposer("openView/calendar"));*/
 
                     if (this.IsNewUser())
                     {

@@ -6,7 +6,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
     internal class PurchaseOKComposer : ServerPacket
     {
         public PurchaseOKComposer(CatalogItem Item, ItemData BaseItem)
-            : base(ServerPacketHeader.CATALOG_PURCHASE)
+            : base(ServerPacketHeader.CATALOG_PURCHASE_OK)
         {
             this.WriteInteger(BaseItem.Id);
             this.WriteString(BaseItem.ItemName);
@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
         }
 
         public PurchaseOKComposer()
-            : base(ServerPacketHeader.CATALOG_PURCHASE)
+            : base(ServerPacketHeader.CATALOG_PURCHASE_OK)
         {
             this.WriteInteger(0);
             this.WriteString("");

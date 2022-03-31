@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Outgoing
     internal class CfhTopicsInitComposer : ServerPacket
     {
         public CfhTopicsInitComposer(Dictionary<string, List<ModerationPresetActions>> UserActionPresets)
-            : base(ServerPacketHeader.MODERATION_TOPICS)
+            : base(ServerPacketHeader.CFH_TOPICS)
         {
 
             this.WriteInteger(UserActionPresets.Count);
