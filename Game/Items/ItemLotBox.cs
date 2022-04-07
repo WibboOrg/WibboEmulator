@@ -20,11 +20,11 @@ namespace Butterfly.Game.Items
         {
             int PageId;
 
-            if (ButterflyEnvironment.GetRandomNumber(1, 750) == 750) //Ultra rare
+            if (ButterflyEnvironment.GetRandomNumber(1, 750) == 750) //Epic rare
             {
                 PageId = 84641;
             }
-            else if (ButterflyEnvironment.GetRandomNumber(1, 100) == 100) //Extra rare
+            else if (ButterflyEnvironment.GetRandomNumber(1, 100) == 100) //Commun rare
             {
                 PageId = 98747;
             }

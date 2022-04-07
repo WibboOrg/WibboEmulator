@@ -38,12 +38,20 @@ namespace Butterfly.Game.Items.Interactors
                 {
                     Item.ExtraData = "0";
                     Item.UpdateState();
+
+                    if (roomUser.DiceCounterAmount > 0 && !roomUser.InGame)
+                    {
+                        roomUser.DiceCounterAmount = 0;
+                        roomUser.OnChat($"Dée: remise à 0 ({roomUser.GetUsername()})", 34);
+                    }
                 }
                 else
                 {
                     Item.ExtraData = "-1";
                     Item.UpdateState(false, true);
                     Item.ReqUpdate(4);
+
+                    Item.InteractingUser = roomUser.UserId;
                 }
             }
             else
@@ -54,8 +62,20 @@ namespace Butterfly.Game.Items.Interactors
 
         public override void OnTick(Item item)
         {
-            item.ExtraData = ButterflyEnvironment.GetRandomNumber(1, 6).ToString();
+            int numberDice = ButterflyEnvironment.GetRandomNumber(1, 6);
+
+            item.ExtraData = numberDice.ToString();
             item.UpdateState();
-        }
+
+            RoomUser user = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+            if (user != null)
+            {
+                if (!user.InGame)
+                {
+                    user.DiceCounterAmount += numberDice;
+                    user.OnChat($"Dée: +{numberDice} = {user.DiceCounterAmount} ({user.GetUsername()})", 34);
+                }
+            }
+         }
     }
 }

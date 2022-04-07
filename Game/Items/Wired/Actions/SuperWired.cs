@@ -1739,7 +1739,7 @@ namespace Butterfly.Game.Items.Wired.Actions
             {
                 case "usermute":
                     {
-                        User.muted = (Value == "true") ? true : false;
+                        User.IsMuted = (Value == "true") ? true : false;
                         break;
                     }
                 case "botchoosenav":

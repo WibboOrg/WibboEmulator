@@ -206,7 +206,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (User.muted && !Session.GetUser().HasFuse("fuse_tool"))
+            if (User.IsMuted && !Session.GetUser().HasFuse("fuse_tool"))
             {
                 User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.muted", Session.Langue));
                 return;

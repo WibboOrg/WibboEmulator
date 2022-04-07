@@ -8,7 +8,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (UserRoom.muted)
+            if (UserRoom.IsMuted)
             {
                 return;
             }

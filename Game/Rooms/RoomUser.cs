@@ -16,21 +16,21 @@ namespace Butterfly.Game.Rooms
 {
     public class RoomUser : IEquatable<RoomUser>
     {
-        public int UserId { get; set; }
-        public int VirtualId { get; set; }
-        public int RoomId { get; set; }
-        public int IdleTime { get; set; }
+        public int UserId;
+        public int VirtualId;
+        public int RoomId;
+        public int IdleTime;
 
-        public int X { get; set; }
-        public int Y { get; set; }
-        public double Z { get; set; }
-        public int GoalX { get; set; }
-        public int GoalY { get; set; }
+        public int X;
+        public int Y;
+        public double Z;
+        public int GoalX;
+        public int GoalY;
 
-        public bool SetStep { get; set; }
-        public int SetX { get; set; }
-        public int SetY { get; set; }
-        public double SetZ { get; set; }
+        public bool SetStep;
+        public int SetX;
+        public int SetY;
+        public double SetZ;
 
         public int LastBubble = 0;
         public int CarryItemID;
@@ -59,6 +59,7 @@ namespace Butterfly.Game.Rooms
         public bool ShieldActive;
         public int ShieldCounter;
         public int CountFreezeBall = 1;
+        public int DiceCounterAmount;
         public bool MoonwalkEnabled;
         public bool FacewalkEnabled;
         public bool RidingHorse;
@@ -120,7 +121,7 @@ namespace Butterfly.Game.Rooms
         public int UserTimer;
 
         public List<string> WhiperGroupUsers;
-        public bool muted;
+        public bool IsMuted;
 
         public Point Coordinate => new Point(this.X, this.Y);
 
