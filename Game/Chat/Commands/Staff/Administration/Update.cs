@@ -23,8 +23,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                switch (cmd)
+                switch (cmd.ToLower())
                 {
+                    case "staticevents":
+                        {
+                            ButterflyEnvironment.StaticEvents = !ButterflyEnvironment.StaticEvents;
+                            break;
+                        }
                     case "random":
                         {
                             ButterflyEnvironment.RegenRandom();

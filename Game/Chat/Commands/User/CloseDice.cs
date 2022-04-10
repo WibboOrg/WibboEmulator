@@ -18,6 +18,8 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
+            UserRoom.DiceCounterAmount = 0;
+
             userBooth.ForEach(x =>
             {
                 x.ExtraData = "0";
