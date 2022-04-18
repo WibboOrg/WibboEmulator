@@ -42,7 +42,7 @@ namespace Butterfly.Game.Items.Interactors
                     if (roomUser.DiceCounterAmount > 0 && !roomUser.InGame)
                     {
                         roomUser.DiceCounterAmount = 0;
-                        roomUser.OnChat($"Dée: remise à 0 ({roomUser.GetUsername()})", 34);
+                        roomUser.OnChat($"Dée: remise à 0 ({roomUser.GetUsername()})", 34); // déplacer
                     }
                 }
                 else
