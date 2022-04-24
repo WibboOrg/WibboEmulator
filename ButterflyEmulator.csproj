@@ -750,7 +750,7 @@
     <Compile Include="Game\Chat\Commands\Staff\Administration\AllEyesOnMe.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\RegenMaps.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\StartGameJD.cs" />
-    <Compile Include="Game\Chat\Commands\Staff\Moderation\DisableWhisper.cs" />
+    <Compile Include="Game\Chat\Commands\Staff\Moderation\DisableWhispers.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Moderation\StaffsOnline.cs" />
     <Compile Include="Game\Chat\Commands\User\Kick.cs" />
     <Compile Include="Game\Chat\Commands\User\Premium\GameTime.cs" />
@@ -861,7 +861,7 @@
     <Compile Include="Game\Chat\Commands\User\Commands.cs" />
     <Compile Include="Game\Chat\Commands\User\Construction\Construit.cs" />
     <Compile Include="Game\Chat\Commands\User\Construction\ConstruitStop.cs" />
-    <Compile Include="Game\Chat\Commands\Staff\Administration\Control.cs" />
+    <Compile Include="Game\Chat\Commands\Staff\Administration\ForceControlUser.cs" />
     <Compile Include="Game\Chat\Commands\User\Construction\Coords.cs" />
     <Compile Include="Game\Chat\Commands\User\Mimic.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Moderation\DeleteMission.cs" />
@@ -918,7 +918,7 @@
     <Compile Include="Game\Chat\Commands\Staff\Administration\MakeSayBot.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\ForceMimic.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\ForceEnable.cs" />
-    <Compile Include="Game\Chat\Commands\Staff\Administration\ForceEnabled.cs" />
+    <Compile Include="Game\Chat\Commands\Staff\Administration\ForceEnableUser.cs" />
     <Compile Include="Game\Chat\Commands\User\SetMax.cs" />
     <Compile Include="Game\Chat\Commands\User\SetSpeed.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\ForceTransf.cs" />

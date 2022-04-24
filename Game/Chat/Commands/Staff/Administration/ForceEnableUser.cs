@@ -3,7 +3,7 @@ using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Chat.Commands.Cmd
 {
-    internal class ForceEnabled : IChatCommand
+    internal class ForceEnableUser : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
@@ -31,7 +31,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, Session.GetUser().HasFuse("fuse_enablefull")))
+            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, Session.GetUser().HasFuse("fuse_fullenable")))
             {
                 return;
             }

@@ -46,7 +46,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 case "wbpts":
                 case "wp":
                     {
-                        if (!Session.GetUser().HasFuse("fuse_give_wibbopoints"))
+                        if (!Session.GetUser().HasFuse("fuse_give_wibbopoints")) //only Jason
                         {
                             UserRoom.SendWhisperChat("Désolé, vous n'avez pas la permission...");
                             break;

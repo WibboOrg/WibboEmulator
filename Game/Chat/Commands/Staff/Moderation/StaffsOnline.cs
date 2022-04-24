@@ -8,7 +8,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            string Output = "Les staffs en ligne\n";
+            string Output = "Les staffs en ligne: \n\n";
 
             List<Client> Staffs = ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers();
 
