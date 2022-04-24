@@ -365,7 +365,7 @@ namespace Butterfly.Game.Users
                 }
             }
 
-            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "SeasonRunOff", "CasinoRunOff", "WibboParty", "MovieRunOff", "officialrooms", "Seonsaengnim", "Jason", "ElkunRUN", "Himeros"};
+            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "WibboParty", "MovieRunOff", "officialrooms", "Seonsaengnim", "Jason", "ElkunRUN", "Himeros"};
 
             if (this.GetClient().GetUser().Rank < 8)
             {

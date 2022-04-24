@@ -2308,7 +2308,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             break;
                         }
 
-                        List<string> allowedOwner = new List<string>{ "LieuPublic", "MovieRunOff", "WibboGame", "WorldRunOff", "officialrooms", "SpringRun" };
+                        List<string> allowedOwner = new List<string>{ "LieuPublic", "MovieRunOff", "WibboGame", "WorldRunOff", "officialrooms" };
 
                         if(!allowedOwner.Contains(User.Room.RoomData.OwnerName))
                         {

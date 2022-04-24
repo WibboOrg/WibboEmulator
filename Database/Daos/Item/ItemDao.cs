@@ -149,9 +149,9 @@ namespace Butterfly.Database.Daos
             return dbClient.GetTable();
         }
 
-        internal static DataRow GetOneLimitedId(IQueryAdapter dbClient, int limitedNumber, int limitedStack, int itemId)
+        internal static DataRow GetOneLimitedId(IQueryAdapter dbClient, int limitedNumber, int itemId)
         {
-            dbClient.SetQuery("SELECT id FROM `item` WHERE id IN (SELECT item_id FROM `item_limited` WHERE limited_number = '" + limitedNumber + "' AND limited_stack = '" + limitedStack + "') AND base_item = '" + itemId + "' LIMIT 1");
+            dbClient.SetQuery("SELECT id FROM `item` WHERE id IN (SELECT item_id FROM `item_limited` WHERE limited_number = '" + limitedNumber + "') AND base_item = '" + itemId + "' LIMIT 1");
             return dbClient.GetRow();
         }
 

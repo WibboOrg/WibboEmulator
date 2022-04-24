@@ -98,5 +98,11 @@ namespace Butterfly.Database.Daos
             dbClient.SetQuery("SELECT SUM(asking_price) FROM `catalog_marketplace_offer` WHERE state = '2' AND user_id = '" + userId + "'");
             return dbClient.GetInteger();
         }
+
+        internal static DataRow GetOneLTD(IQueryAdapter dbClient, int itemId, int limitedNumber)
+        {
+            dbClient.SetQuery("SELECT offer_id FROM `catalog_marketplace_offer` WHERE item_id = '" + itemId + "' AND limited_number = '" + limitedNumber + "'");
+            return dbClient.GetRow();
+        }
     }
 }

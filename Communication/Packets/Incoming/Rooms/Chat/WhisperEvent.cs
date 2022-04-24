@@ -94,13 +94,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (timeSpan.TotalSeconds < Session.GetUser().SpamProtectionTime && Session.GetUser().SpamEnable)
             {
-                int i = Session.GetUser().SpamProtectionTime - timeSpan.Seconds;
-                User.GetClient().SendPacket(new FloodControlComposer(i));
+                int floodSeconds = Session.GetUser().SpamProtectionTime - timeSpan.Seconds;
+                User.GetClient().SendPacket(new FloodControlComposer(floodSeconds));
                 return;
             }
             else if (timeSpan.TotalSeconds < 4.0 && User.FloodCount > 5 && !Session.GetUser().HasFuse("fuse_mod"))
             {
-                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasFuse("fuse_low_flood")) ? 5 : 30;
+                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasFuse("fuse_low_flood")) ? 5 : 15;
                 Session.GetUser().SpamEnable = true;
 
                 User.GetClient().SendPacket(new FloodControlComposer(Session.GetUser().SpamProtectionTime - timeSpan.Seconds));
@@ -112,7 +112,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 User.LastMessageCount = 0;
                 User.LastMessage = "";
 
-                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasFuse("fuse_low_flood")) ? 5 : 30;
+                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasFuse("fuse_low_flood")) ? 5 : 15;
                 Session.GetUser().SpamEnable = true;
                 User.GetClient().SendPacket(new FloodControlComposer(Session.GetUser().SpamProtectionTime - timeSpan.Seconds));
                 return;

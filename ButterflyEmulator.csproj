@@ -728,7 +728,6 @@
     <Compile Include="Game\Items\ItemFactory.cs" />
     <Compile Include="Game\Items\ItemTemp.cs" />
     <Compile Include="Game\Moderation\BanTypeUtility.cs" />
-    <Compile Include="Game\Moderation\ModerationBan.cs" />
     <Compile Include="Game\Moderation\ModerationBanType.cs" />
     <Compile Include="Game\Moderation\ModerationTicket.cs" />
     <Compile Include="Game\Roleplay\Enemy\RPEnemy.cs" />

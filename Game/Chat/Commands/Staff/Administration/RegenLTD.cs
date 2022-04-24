@@ -26,9 +26,16 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                     for (int LimitedNumber = 1; LimitedNumber < LimitedStack + 1; LimitedNumber++)
                     {
-                        DataRow Row = ItemDao.GetOneLimitedId(dbClient, LimitedNumber, LimitedStack, Item.ItemId);
+                        DataRow Row = ItemDao.GetOneLimitedId(dbClient, LimitedNumber, Item.ItemId);
 
                         if (Row != null)
+                        {
+                            continue;
+                        }
+
+                        DataRow RowMarketPlace = CatalogMarketplaceOfferDao.GetOneLTD(dbClient, Item.ItemId, LimitedNumber);
+
+                        if(RowMarketPlace != null)
                         {
                             continue;
                         }
