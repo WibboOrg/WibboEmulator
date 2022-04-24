@@ -23,6 +23,7 @@ namespace Butterfly.Game.Chat.Emotions
                 { ">;[", ChatEmotions.ANGRY },
                 { ">;(", ChatEmotions.ANGRY },
                 { ">=(", ChatEmotions.ANGRY },
+                { ":@", ChatEmotions.ANGRY },
      
                 // Shocked
                 { ":o", ChatEmotions.SHOCKED },
