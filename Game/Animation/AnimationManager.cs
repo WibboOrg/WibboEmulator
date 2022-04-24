@@ -165,7 +165,7 @@ namespace Butterfly.Game.Animation
             if (this._timer >= this.ToSeconds(START_TIME - NOTIF_TIME) && !this._notif)
             {
                 this._notif = true;
-                ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifTopComposer("La prochaine animation de Jack & Daisy débutera dans 2 minutes"), Core.Language.FRANCAIS);
+                ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifTopComposer("Notre prochaine animation aura lieu dans deux minutes ! (Jack & Daisy)"), Core.Language.FRANCAIS);
             }
 
             if (this._timer >= this.ToSeconds(START_TIME))
