@@ -718,6 +718,7 @@
     <Compile Include="Game\Chat\Commands\Staff\Administration\GiveCash.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\RoomDance.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\RoomEffect.cs" />
+    <Compile Include="Game\Chat\Commands\Staff\Moderation\TradeBan.cs" />
     <Compile Include="Game\Chat\Commands\User\Dance.cs" />
     <Compile Include="Game\Guilds\BadgePartUtility.cs" />
     <Compile Include="Game\Guilds\GroupMember.cs" />
