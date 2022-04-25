@@ -19,7 +19,7 @@ using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms.AI;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Rooms.Pathfinding;
+using Butterfly.Game.Rooms.PathFinding;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

@@ -1,6 +1,6 @@
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Pathfinding;
+using Butterfly.Game.Rooms.PathFinding;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

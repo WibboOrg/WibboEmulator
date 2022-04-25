@@ -1,3 +1,4 @@
+using Butterfly.Game;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Guilds;
 using Butterfly.Game.Users;
@@ -8,37 +9,37 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
 {
     internal class ProfileInformationComposer : ServerPacket
     {
-        public ProfileInformationComposer(User user, Client session, List<Group> groups, int friendCount)
+        public ProfileInformationComposer(User habbo, Client session, List<Group> groups, int friendCount)
             : base(ServerPacketHeader.USER_PROFILE)
         {
-            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(user.AccountCreated);
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(habbo.AccountCreated);
 
-            this.WriteInteger(user.Id);
-            this.WriteString(user.Username);
-            this.WriteString(user.Look);
-            this.WriteString(user.Motto);
-            this.WriteString(origin.ToString("dd/MM/yyyy"));
-            this.WriteInteger(user.AchievementPoints);
-            this.WriteInteger(friendCount); // Friend Count
-            this.WriteBoolean(user.Id != session.GetUser().Id && session.GetUser().GetMessenger().FriendshipExists(user.Id)); //  Is friend
-            this.WriteBoolean(user.Id != session.GetUser().Id && !session.GetUser().GetMessenger().FriendshipExists(user.Id) && session.GetUser().GetMessenger().RequestExists(user.Id)); // Sent friend request
-            this.WriteBoolean((ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(user.Id)) != null);
+            WriteInteger(habbo.Id);
+            WriteString(habbo.Username);
+            WriteString(habbo.Look);
+            WriteString(habbo.Motto);
+            WriteString(origin.ToString("dd/MM/yyyy"));
+            WriteInteger(habbo.AchievementPoints);
+            WriteInteger(friendCount); // Friend Count
+            this.WriteBoolean(habbo.Id != session.GetUser().Id && session.GetUser().GetMessenger().FriendshipExists(habbo.Id)); //  Is friend
+            this.WriteBoolean(habbo.Id != session.GetUser().Id && !session.GetUser().GetMessenger().FriendshipExists(habbo.Id) && session.GetUser().GetMessenger().RequestExists(habbo.Id)); // Sent friend request
+            WriteBoolean((ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(habbo.Id)) != null);
 
-            this.WriteInteger(groups.Count);
+            WriteInteger(groups.Count);
             foreach (Group group in groups)
             {
-                this.WriteInteger(group.Id);
-                this.WriteString(group.Name);
-                this.WriteString(group.Badge);
-                this.WriteString(ButterflyEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour1, true));
-                this.WriteString(ButterflyEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour2, false));
-                this.WriteBoolean(user.FavouriteGroupId == group.Id); // todo favs
-                this.WriteInteger(0);//what the fuck
-                this.WriteBoolean(group != null ? group.ForumEnabled : true);
+                WriteInteger(group.Id);
+                WriteString(group.Name);
+                WriteString(group.Badge);
+                WriteString(ButterflyEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour1, true));
+                WriteString(ButterflyEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour2, false));
+                WriteBoolean(habbo.FavouriteGroupId == group.Id); // todo favs
+                WriteInteger(0);//what the fuck
+                WriteBoolean(group != null ? group.ForumEnabled : true);//HabboTalk
             }
 
-            this.WriteInteger(Convert.ToInt32(ButterflyEnvironment.GetUnixTimestamp() - user.LastOnline)); // Last online
-            this.WriteBoolean(true); // Show the profile
+            WriteInteger(Convert.ToInt32(ButterflyEnvironment.GetUnixTimestamp() - habbo.LastOnline)); // Last online
+            WriteBoolean(true); // Show the profile
         }
     }
 }

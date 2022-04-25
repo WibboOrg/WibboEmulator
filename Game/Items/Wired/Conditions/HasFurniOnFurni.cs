@@ -1,6 +1,6 @@
 ﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Pathfinding;
+using Butterfly.Game.Rooms.PathFinding;
 using Butterfly.Game.Items.Wired.Interfaces;
 using System.Data;
 
@@ -22,7 +22,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
 
             foreach (Item roomItem in this.Items)
             {
-                foreach (ThreeDCoord coord in roomItem.GetAffectedTiles.Values)
+                foreach (Coord coord in roomItem.GetAffectedTiles.Values)
                 {
                     if (this.RoomInstance.GetGameMap().Model.SqFloorHeight[coord.X, coord.Y] + this.RoomInstance.GetGameMap().ItemHeightMap[coord.X, coord.Y] > roomItem.TotalHeight)
                     {

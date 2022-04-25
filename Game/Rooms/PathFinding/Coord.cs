@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms.Pathfinding
+namespace Butterfly.Game.Rooms.PathFinding
 {
-    public struct ThreeDCoord : IEquatable<ThreeDCoord>
+    public struct Coord : IEquatable<Coord>
     {
         public int X { get; set; }
         public int Y { get; set; }
         public int Z { get; set; }
 
-        public ThreeDCoord(int x, int y, int z)
+        public Coord(int x, int y, int z)
         {
             this.X = x;
             this.Y = y;
             this.Z = z;
         }
 
-        public static bool operator ==(ThreeDCoord a, ThreeDCoord b)
+        public static bool operator ==(Coord a, Coord b)
         {
             if (a.X == b.X && a.Y == b.Y)
             {
@@ -28,12 +28,12 @@ namespace Butterfly.Game.Rooms.Pathfinding
             }
         }
 
-        public static bool operator !=(ThreeDCoord a, ThreeDCoord b)
+        public static bool operator !=(Coord a, Coord b)
         {
             return !(a == b);
         }
 
-        public bool Equals(ThreeDCoord comparedCoord)
+        public bool Equals(Coord comparedCoord)
         {
             if (this.X == comparedCoord.X && this.Y == comparedCoord.Y)
             {

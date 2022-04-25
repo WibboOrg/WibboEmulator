@@ -2,15 +2,19 @@
 {
     public struct SearchResult
     {
-        public int UserId { get; set; }
-        public string Username { get; set; }
-        public string Look { get; set; }
+        public int UserId;
+        public string Username;
+        public string Motto;
+        public string LastOnline;
+        public string Look;
 
-        public SearchResult(int userID, string username, string look)
+        public SearchResult(int UserId, string Username, string Motto, string LastOnline, string Look)
         {
-            this.UserId = userID;
-            this.Username = username;
-            this.Look = look;
+            this.UserId = UserId;
+            this.Username = Username;
+            this.Motto = Motto;
+            this.LastOnline = LastOnline;
+            this.Look = Look;
         }
     }
 }

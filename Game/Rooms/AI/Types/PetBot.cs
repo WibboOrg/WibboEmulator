@@ -1,7 +1,7 @@
 ﻿using Butterfly.Core;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Pets;
-using Butterfly.Game.Rooms.Pathfinding;
+using Butterfly.Game.Rooms.PathFinding;
 using System;
 using System.Drawing;
 

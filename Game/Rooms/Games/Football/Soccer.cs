@@ -1,6 +1,6 @@
 ﻿using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Rooms.Pathfinding;
+using Butterfly.Game.Rooms.PathFinding;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -19,7 +19,7 @@ namespace Butterfly.Game.Rooms.Games
         {
             foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.RED).Values)
             {
-                foreach (ThreeDCoord threeDcoord in roomItem.GetAffectedTiles.Values)
+                foreach (Coord threeDcoord in roomItem.GetAffectedTiles.Values)
                 {
                     if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                     {
@@ -30,7 +30,7 @@ namespace Butterfly.Game.Rooms.Games
             }
             foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.GREEN).Values)
             {
-                foreach (ThreeDCoord threeDcoord in roomItem.GetAffectedTiles.Values)
+                foreach (Coord threeDcoord in roomItem.GetAffectedTiles.Values)
                 {
                     if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                     {
@@ -41,7 +41,7 @@ namespace Butterfly.Game.Rooms.Games
             }
             foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.BLUE).Values)
             {
-                foreach (ThreeDCoord threeDcoord in roomItem.GetAffectedTiles.Values)
+                foreach (Coord threeDcoord in roomItem.GetAffectedTiles.Values)
                 {
                     if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                     {
@@ -52,7 +52,7 @@ namespace Butterfly.Game.Rooms.Games
             }
             foreach (Item roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.YELLOW).Values)
             {
-                foreach (ThreeDCoord threeDcoord in roomItem.GetAffectedTiles.Values)
+                foreach (Coord threeDcoord in roomItem.GetAffectedTiles.Values)
                 {
                     if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                     {

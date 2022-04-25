@@ -21,20 +21,22 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             if (ButterflyEnvironment.GetGame().GetClientManager().GetNameById(userId) != "")
             {
                 Client client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
-                DataRow row = null;
+                DataRow user = null;
+                DataRow info = null;
+
                 if (client == null)
                 {
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        row = UserDao.GetOneIdAndName(dbClient, userId);
+                        user = UserDao.GetOneIdAndName(dbClient, userId);
                     }
-                    if (row == null)
+                    if (user == null)
                     {
                         return;
                     }
                 }
 
-                Session.SendPacket(new ModeratorUserInfoComposer(row, client));
+                Session.SendPacket(new ModeratorUserInfoComposer(user, info));
             }
             else
             {

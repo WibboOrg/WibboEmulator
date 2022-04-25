@@ -9,7 +9,7 @@ using Butterfly.Game.Items;
 using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.Moodlight;
-using Butterfly.Game.Rooms.Pathfinding;
+using Butterfly.Game.Rooms.PathFinding;
 using Butterfly.Utilities;
 using System;
 using System.Collections.Concurrent;
@@ -336,7 +336,7 @@ namespace Butterfly.Game.Rooms
                 item.WiredHandler = null;
             }
 
-            foreach (ThreeDCoord threeDcoord in item.GetAffectedTiles.Values)
+            foreach (Coord threeDcoord in item.GetAffectedTiles.Values)
             {
                 List<RoomUser> userForSquare = this._room.GetGameMap().GetRoomUsers(new Point(threeDcoord.X, threeDcoord.Y));
                 if (userForSquare == null)
@@ -516,8 +516,8 @@ namespace Butterfly.Game.Rooms
                 NeedsReAdd = this._room.GetGameMap().RemoveFromMap(Item);
             }
 
-            Dictionary<int, ThreeDCoord> affectedTiles = Gamemap.GetAffectedTiles(Item.GetBaseItem().Length, Item.GetBaseItem().Width, newX, newY, newRot);
-            foreach (ThreeDCoord threeDcoord in affectedTiles.Values)
+            Dictionary<int, Coord> affectedTiles = Gamemap.GetAffectedTiles(Item.GetBaseItem().Length, Item.GetBaseItem().Width, newX, newY, newRot);
+            foreach (Coord threeDcoord in affectedTiles.Values)
             {
                 if (!this._room.GetGameMap().ValidTile(threeDcoord.X, threeDcoord.Y) || (this._room.GetGameMap().SquareHasUsers(threeDcoord.X, threeDcoord.Y) && !Item.GetBaseItem().IsSeat && Item.GetBaseItem().InteractionType != InteractionType.BED) || this._room.GetGameMap().Model.SqState[threeDcoord.X, threeDcoord.Y] != SquareStateType.OPEN)
                 {
@@ -535,7 +535,7 @@ namespace Butterfly.Game.Rooms
             List<Item> ItemsAffected = new List<Item>();
             List<Item> ItemsComplete = new List<Item>();
 
-            foreach (ThreeDCoord threeDcoord in affectedTiles.Values)
+            foreach (Coord threeDcoord in affectedTiles.Values)
             {
                 List<Item> Temp = this._room.GetGameMap().GetCoordinatedItems(new Point(threeDcoord.X, threeDcoord.Y));
                 if (Temp != null)
@@ -622,7 +622,7 @@ namespace Butterfly.Game.Rooms
 
             List<RoomUser> userForSquare = new List<RoomUser>();
 
-            foreach (ThreeDCoord threeDcoord in Item.GetAffectedTiles.Values)
+            foreach (Coord threeDcoord in Item.GetAffectedTiles.Values)
             {
                 userForSquare.AddRange(this._room.GetGameMap().GetRoomUsers(new Point(threeDcoord.X, threeDcoord.Y)));
             }
@@ -675,7 +675,7 @@ namespace Butterfly.Game.Rooms
 
             this._room.GetGameMap().AddItemToMap(Item);
 
-            foreach (ThreeDCoord threeDcoord in Item.GetAffectedTiles.Values)
+            foreach (Coord threeDcoord in Item.GetAffectedTiles.Values)
             {
                 userForSquare.AddRange(this._room.GetGameMap().GetRoomUsers(new Point(threeDcoord.X, threeDcoord.Y)));
             }

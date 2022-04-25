@@ -1,6 +1,6 @@
 ﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Pathfinding;
+using Butterfly.Game.Rooms.PathFinding;
 using Butterfly.Game.Items.Wired.Interfaces;
 using System.Data;
 using System.Drawing;
@@ -24,7 +24,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
 
             foreach (Item roomItem in this.Items)
             {
-                foreach (ThreeDCoord coor in roomItem.GetAffectedTiles.Values)
+                foreach (Coord coor in roomItem.GetAffectedTiles.Values)
                 {
                     coord = new Point(coor.X, coor.Y);
                     if (coord == user.Coordinate)

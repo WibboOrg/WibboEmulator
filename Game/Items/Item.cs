@@ -4,7 +4,7 @@ using Butterfly.Game.Items.Interactors;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Rooms.Pathfinding;
+using Butterfly.Game.Rooms.PathFinding;
 using Butterfly.Game.Items.Wired.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -48,7 +48,7 @@ namespace Butterfly.Game.Items
 
         private Room _roomInstance;
 
-        public Dictionary<int, ThreeDCoord> GetAffectedTiles { get; private set; }
+        public Dictionary<int, Coord> GetAffectedTiles { get; private set; }
 
         public int X { get; private set; }
 
@@ -66,7 +66,7 @@ namespace Butterfly.Game.Items
                 {
                     this.Coordinate
                 };
-                foreach (ThreeDCoord threeDcoord in this.GetAffectedTiles.Values)
+                foreach (Coord threeDcoord in this.GetAffectedTiles.Values)
                 {
                     list.Add(new Point(threeDcoord.X, threeDcoord.Y));
                 }
@@ -287,7 +287,7 @@ namespace Butterfly.Game.Items
             }
         }
 
-        public void SetState(int pX, int pY, double pZ, Dictionary<int, ThreeDCoord> Tiles)
+        public void SetState(int pX, int pY, double pZ, Dictionary<int, Coord> Tiles)
         {
             this.X = pX;
             this.Y = pY;

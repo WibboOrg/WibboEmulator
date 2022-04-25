@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Rooms.Pathfinding
+﻿namespace Butterfly.Game.Rooms.PathFinding
 {
     public static class Rotation
     {

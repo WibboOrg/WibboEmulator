@@ -1,5 +1,5 @@
 ﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms.Pathfinding;
+using Butterfly.Game.Rooms.PathFinding;
 using System.Collections.Generic;
 using System.Linq;
 using Butterfly.Game.Rooms;

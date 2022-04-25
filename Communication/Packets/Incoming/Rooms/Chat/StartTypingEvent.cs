@@ -22,7 +22,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            room.SendPacket(new UserTypingComposer(roomUserByUserId.VirtualId, 1));
+            room.SendPacket(new UserTypingComposer(roomUserByUserId.VirtualId, true));
         }
     }
 }

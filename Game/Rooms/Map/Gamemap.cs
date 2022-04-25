@@ -2,7 +2,7 @@
 using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Rooms.Pathfinding;
+using Butterfly.Game.Rooms.PathFinding;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -232,7 +232,7 @@ namespace Butterfly.Game.Rooms
                         continue;
                     }
 
-                    foreach (ThreeDCoord Point in item.GetAffectedTiles.Values)
+                    foreach (Coord Point in item.GetAffectedTiles.Values)
                     {
                         if (Point.X > MaxX)
                         {
@@ -779,13 +779,13 @@ namespace Butterfly.Game.Rooms
             return floorHeight + stackHeight;
         }
 
-        public static Dictionary<int, ThreeDCoord> GetAffectedTiles(int Length, int Width, int PosX, int PosY, int Rotation)
+        public static Dictionary<int, Coord> GetAffectedTiles(int Length, int Width, int PosX, int PosY, int Rotation)
         {
             int num = 1;
 
-            Dictionary<int, ThreeDCoord> PointList = new Dictionary<int, ThreeDCoord>
+            Dictionary<int, Coord> PointList = new Dictionary<int, Coord>
             {
-                { 0, new ThreeDCoord(PosX, PosY, 0) }
+                { 0, new Coord(PosX, PosY, 0) }
             };
 
             if (Length > 1)
@@ -794,11 +794,11 @@ namespace Butterfly.Game.Rooms
                 {
                     for (int z = 1; z < Length; z++)
                     {
-                        PointList.Add(num++, new ThreeDCoord(PosX, PosY + z, z));
+                        PointList.Add(num++, new Coord(PosX, PosY + z, z));
 
                         for (int index = 1; index < Width; index++)
                         {
-                            PointList.Add(num++, new ThreeDCoord(PosX + index, PosY + z, (z < index) ? index : z));
+                            PointList.Add(num++, new Coord(PosX + index, PosY + z, (z < index) ? index : z));
                         }
                     }
                 }
@@ -806,10 +806,10 @@ namespace Butterfly.Game.Rooms
                 {
                     for (int z = 1; z < Length; z++)
                     {
-                        PointList.Add(num++, new ThreeDCoord(PosX + z, PosY, z));
+                        PointList.Add(num++, new Coord(PosX + z, PosY, z));
                         for (int index = 1; index < Width; index++)
                         {
-                            PointList.Add(num++, new ThreeDCoord(PosX + z, PosY + index, (z < index) ? index : z));
+                            PointList.Add(num++, new Coord(PosX + z, PosY + index, (z < index) ? index : z));
                         }
                     }
                 }
@@ -821,10 +821,10 @@ namespace Butterfly.Game.Rooms
                 {
                     for (int z = 1; z < Width; z++)
                     {
-                        PointList.Add(num++, new ThreeDCoord(PosX + z, PosY, z));
+                        PointList.Add(num++, new Coord(PosX + z, PosY, z));
                         for (int index = 1; index < Length; index++)
                         {
-                            PointList.Add(num++, new ThreeDCoord(PosX + z, PosY + index, (z < index) ? index : z));
+                            PointList.Add(num++, new Coord(PosX + z, PosY + index, (z < index) ? index : z));
                         }
                     }
                 }
@@ -832,10 +832,10 @@ namespace Butterfly.Game.Rooms
                 {
                     for (int z = 1; z < Width; z++)
                     {
-                        PointList.Add(num++, new ThreeDCoord(PosX, PosY + z, z));
+                        PointList.Add(num++, new Coord(PosX, PosY + z, z));
                         for (int index = 1; index < Length; index++)
                         {
-                            PointList.Add(num++, new ThreeDCoord(PosX + index, PosY + z, (z < index) ? index : z));
+                            PointList.Add(num++, new Coord(PosX + index, PosY + z, (z < index) ? index : z));
                         }
                     }
                 }
