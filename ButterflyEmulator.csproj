@@ -716,7 +716,7 @@
     <Compile Include="Game\Catalog\Vouchers\VoucherType.cs" />
     <Compile Include="Game\Catalog\Vouchers\VoucherUtility.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\ForceSit.cs" />
-    <Compile Include="Game\Chat\Commands\Staff\Administration\GiveCash.cs" />
+    <Compile Include="Game\Chat\Commands\Staff\Administration\Give.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\RoomDance.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\RoomEffect.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Moderation\TradeBan.cs" />
@@ -860,7 +860,6 @@
     <Compile Include="Game\Chat\Commands\Staff\Administration\AddPhoto.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Moderation\Alert.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Moderation\Ban.cs" />
-    <Compile Include="Game\Chat\Commands\Staff\Administration\GiveCoins.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Moderation\Summon.cs" />
     <Compile Include="Game\Chat\Commands\User\Commands.cs" />
     <Compile Include="Game\Chat\Commands\User\Construction\Construit.cs" />

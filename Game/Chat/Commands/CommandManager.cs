@@ -311,7 +311,7 @@ namespace Butterfly.Game.Chat.Commands
 
         public void RegisterAdministrator()
         {
-            this.Register(12, new GiveCoins());
+            //this.Register(12, new GiveCoins()); ligne 366 -> this.Register(204, new Give());
             this.Register(15, new HotelAlert());
             this.Register(19, new RoomMute());
             this.Register(23, new RoomBadge());
@@ -363,7 +363,7 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(197, new AllEyesOnMe());
             this.Register(200, new SummonAll());
             this.Register(203, new RoomDance());
-            this.Register(204, new GiveCash());
+            this.Register(204, new Give());
         }
         public void RegisterCommand()
         {

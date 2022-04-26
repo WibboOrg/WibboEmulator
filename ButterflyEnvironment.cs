@@ -378,10 +378,10 @@ namespace Butterfly
             GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
             GetGame().Destroy();
             Thread.Sleep(20000); // 20 secondes
-            GetConnectionManager().Destroy();
-            GetGame().GetPacketManager().UnregisterAll();
-            GetGame().GetClientManager().CloseAll();
-            GetGame().GetRoomManager().RemoveAllRooms();
+            GetConnectionManager().Destroy(); // Destruction
+            GetGame().GetPacketManager().UnregisterAll(); // Dé-enregistrer les derniers achats du catalogue (uniquement mobis)
+            GetGame().GetClientManager().CloseAll(); // Fermeture de toutes les connexions
+            GetGame().GetRoomManager().RemoveAllRooms(); // Remise à zéro de la table room du SQL. 127.0.0.1...
 
             Console.WriteLine("Butterfly Emulateur s'est parfaitement éteint...");
 

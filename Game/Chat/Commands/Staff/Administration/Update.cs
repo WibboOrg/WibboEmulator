@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Catalog;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
@@ -120,6 +121,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                         {
                             ButterflyEnvironment.GetGame().GetModerationManager().Init(dbClient);
                             UserRoom.SendWhisperChat("Moderation mis à jour");
+                            ButterflyEnvironment.GetGame().GetClientManager().SendMessageStaff(new WhisperComposer(UserRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous !" + "L'équipe développement", 23));
                             break;
                         }
                     case "catalogue":
