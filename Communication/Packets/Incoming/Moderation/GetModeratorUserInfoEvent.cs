@@ -24,16 +24,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 DataRow user = null;
                 DataRow info = null;
 
-                if (client == null)
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        user = UserDao.GetOneIdAndName(dbClient, userId);
-                    }
-                    if (user == null)
-                    {
-                        return;
-                    }
+                    user = UserDao.GetOneInfo(dbClient, userId);
+                }
+
+                if (user == null)
+                {
+                    return;
                 }
 
                 Session.SendPacket(new ModeratorUserInfoComposer(user, info));

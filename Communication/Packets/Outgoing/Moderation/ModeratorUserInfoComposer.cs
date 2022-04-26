@@ -9,7 +9,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
         public ModeratorUserInfoComposer(DataRow User, DataRow Info)
             : base(ServerPacketHeader.MODERATION_USER_INFO)
         {
-            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Convert.ToDouble(Info["trading_locked"]));
+            DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Info != null ? Convert.ToDouble(Info["trading_locked"]) : 0);
 
             WriteInteger(User != null ? Convert.ToInt32(User["id"]) : 0);
             WriteString(User != null ? Convert.ToString(User["username"]) : "Unknown");
@@ -22,7 +22,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
             WriteInteger(Info != null ? Convert.ToInt32(Info["cautions"]) : 0);
             WriteInteger(Info != null ? Convert.ToInt32(Info["bans"]) : 0);
             WriteInteger(Info != null ? Convert.ToInt32(Info["trading_locks_count"]) : 0);//Trading lock counts
-            WriteString(Convert.ToDouble(Info["trading_locked"]) != 0 ? (origin.ToString("dd/MM/yyyy HH:mm:ss")) : "0");//Trading lock
+            WriteString(Info != null ? Convert.ToDouble(Info["trading_locked"]) != 0 ? (origin.ToString("dd/MM/yyyy HH:mm:ss")) : "0" : "0");//Trading lock
             WriteString("");//Purchases
             WriteInteger(0);//Itendity information tool
             WriteInteger(0);//Id bans.
