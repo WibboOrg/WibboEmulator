@@ -59,8 +59,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int TotalCreditsCost = Item.CostCredits;
             int TotalPixelCost = Item.CostDuckets;
             int TotalDiamondCost = Item.CostWibboPoints;
+            int TotalLimitCoinCost = Item.CostLimitCoins;
 
-            if (Session.GetUser().Credits < TotalCreditsCost || Session.GetUser().Duckets < TotalPixelCost || Session.GetUser().WibboPoints < TotalDiamondCost)
+            if (Session.GetUser().Credits < TotalCreditsCost || 
+                Session.GetUser().Duckets < TotalPixelCost || 
+                Session.GetUser().WibboPoints < TotalDiamondCost || 
+                Session.GetUser().LimitCoins < TotalLimitCoinCost)
             {
                 return;
             }
@@ -289,6 +293,17 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserDao.UpdateRemovePoints(dbClient, Session.GetUser().Id, TotalDiamondCost);
+                }
+            }
+
+            if (Item.CostLimitCoins > 0)
+            {
+                Session.GetUser().LimitCoins -= TotalDiamondCost;
+                Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().LimitCoins, 0, 55));
+
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                {
+                    UserDao.UpdateRemoveLimitCoins(dbClient, Session.GetUser().Id, TotalDiamondCost);
                 }
             }
 

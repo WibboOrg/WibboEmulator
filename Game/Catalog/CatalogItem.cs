@@ -17,10 +17,11 @@ namespace Butterfly.Game.Catalog
         public int LimitedEditionStack;
         public int LimitedEditionSells;
         public int CostWibboPoints;
+        public int CostLimitCoins;
         public string Badge;
 
         public CatalogItem(int Id, int ItemId, ItemData Data, string CatalogName, int PageId, int CostCredits, int CostPixels,
-            int CostWibboPoints, int Amount, int LimitedEditionSells, int LimitedEditionStack, bool HaveOffer, string Badge)
+            int CostWibboPoints, int CostLimitCoins, int Amount, int LimitedEditionSells, int LimitedEditionStack, bool HaveOffer, string Badge)
         {
             this.Id = Id;
             this.Name = CatalogName;
@@ -30,6 +31,7 @@ namespace Butterfly.Game.Catalog
             this.CostCredits = CostCredits;
             this.CostDuckets = CostPixels;
             this.CostWibboPoints = CostWibboPoints;
+            this.CostLimitCoins = CostLimitCoins;
             this.Amount = Amount;
             this.LimitedEditionSells = LimitedEditionSells;
             this.LimitedEditionStack = LimitedEditionStack;

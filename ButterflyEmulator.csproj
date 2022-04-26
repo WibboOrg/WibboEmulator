@@ -625,6 +625,7 @@
     <Compile Include="Communication\RCON\Commands\User\SendUserCommand.cs" />
     <Compile Include="Communication\RCON\Commands\User\SignoutCommand.cs" />
     <Compile Include="Communication\RCON\Commands\User\UpdateCreditsCommand.cs" />
+    <Compile Include="Communication\RCON\Commands\User\UpdateLimitCoinsCommand.cs" />
     <Compile Include="Communication\RCON\Commands\User\UpdatePointsCommand.cs" />
     <Compile Include="Communication\RCON\Commands\User\UserAlertCommand.cs" />
     <Compile Include="Communication\WebSocket\EncodeDecode.cs" />

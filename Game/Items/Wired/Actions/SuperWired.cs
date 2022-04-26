@@ -42,17 +42,17 @@ namespace Butterfly.Game.Items.Wired.Actions
             string effet;
             if (this.StringParam.Contains(":"))
             {
-                effet = this.StringParam.Split(':')[0].ToLower();
+                effet = this.StringParam.Split(':')[0];
             }
             else
             {
                 effet = this.StringParam;
             }
 
-            switch (effet)
+            switch (effet.ToLower())
             {
                 case "rpsendtimeuser":
-                case "TimeSpeed":
+                case "timespeed":
                 case "cyclehoureffect":
                 case "setenemy":
                 case "enemyaggrostop":

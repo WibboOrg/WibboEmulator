@@ -3,7 +3,7 @@ using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.RCON.Commands.User
 {
-    internal class UpdatePointsCommand : IRCONCommand
+    internal class UpdateLimitCoinsCommand : IRCONCommand
     {
         public bool TryExecute(string[] parameters)
         {
@@ -28,18 +28,18 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            if (!int.TryParse(parameters[2], out int NbWb))
+            if (!int.TryParse(parameters[2], out int amount))
             {
                 return false;
             }
 
-            if (NbWb == 0)
+            if (amount == 0)
             {
                 return false;
             }
 
-            Client.GetUser().WibboPoints += NbWb;
-            Client.SendPacket(new ActivityPointNotificationComposer(Client.GetUser().WibboPoints, 0, 105));
+            Client.GetUser().LimitCoins += amount;
+            Client.SendPacket(new ActivityPointNotificationComposer(Client.GetUser().LimitCoins, 0, 55));
 
             return true;
         }

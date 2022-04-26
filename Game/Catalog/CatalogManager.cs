@@ -109,7 +109,7 @@ namespace Butterfly.Game.Catalog
                     }
 
                     this._items[PageId].Add(Convert.ToInt32(Row["id"]), new CatalogItem(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["item_id"]),
-                        Data, Convert.ToString(Row["catalog_name"]), Convert.ToInt32(Row["page_id"]), Convert.ToInt32(Row["cost_credits"]), Convert.ToInt32(Row["cost_pixels"]), Convert.ToInt32(Row["cost_diamonds"]),
+                        Data, Convert.ToString(Row["catalog_name"]), Convert.ToInt32(Row["page_id"]), Convert.ToInt32(Row["cost_credits"]), Convert.ToInt32(Row["cost_pixels"]), Convert.ToInt32(Row["cost_diamonds"]), Convert.ToInt32(Row["cost_limitcoins"]),
                         Convert.ToInt32(Row["amount"]), Convert.ToInt32(Row["limited_sells"]), Convert.ToInt32(Row["limited_stack"]), ButterflyEnvironment.EnumToBool(Row["offer_active"].ToString()), Convert.ToString(Row["badge"])));
 
                     this._itemsPage.Add(Convert.ToInt32(Row["id"]), PageId);

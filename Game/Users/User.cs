@@ -39,6 +39,7 @@ namespace Butterfly.Game.Users
         public bool LastMovFGate;
         public int Credits;
         public int WibboPoints;
+        public int LimitCoins;
         public int AccountCreated;
         public int AchievementPoints;
         public int Duckets;
@@ -159,7 +160,7 @@ namespace Butterfly.Game.Users
         }
 
         public User(int Id, string Username, int Rank, string Motto, string Look, string Gender, int Credits,
-            int WPoint, int ActivityPoints, int HomeRoom, int Respect, int DailyRespectPoints,
+            int WPoint, int LimitCoins, int ActivityPoints, int HomeRoom, int Respect, int DailyRespectPoints,
             int DailyPetRespectPoints, bool HasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
             int LastOnline, int FavoriteGroup, int accountCreated, bool accepttrading, string ip, bool HideInroom,
             bool HideOnline, int MazoHighScore, int Mazo, string clientVolume, bool nuxenable, string MachineId, bool ChangeName, Language Langue, int ignoreAllExpire)
@@ -173,6 +174,7 @@ namespace Butterfly.Game.Users
             this.Gender = Gender.ToLower();
             this.Credits = Credits;
             this.WibboPoints = WPoint;
+            this.LimitCoins = LimitCoins;
             this.Duckets = ActivityPoints;
             this.AchievementPoints = achievementPoints;
             this.CurrentRoomId = 0;

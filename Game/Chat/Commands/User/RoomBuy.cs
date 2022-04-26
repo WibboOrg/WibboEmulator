@@ -29,13 +29,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             Session.GetUser().WibboPoints -= Room.RoomData.SellPrice;
-            Session.SendPacket(new ActivityPointsComposer(Session.GetUser().WibboPoints));
+            Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
             Client ClientOwner = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Room.RoomData.OwnerId);
             if (ClientOwner != null && ClientOwner.GetUser() != null)
             {
                 ClientOwner.GetUser().WibboPoints += Room.RoomData.SellPrice;
-                ClientOwner.SendPacket(new ActivityPointsComposer(ClientOwner.GetUser().WibboPoints));
+                ClientOwner.SendPacket(new ActivityPointNotificationComposer(ClientOwner.GetUser().WibboPoints, 0, 105));
             }
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())

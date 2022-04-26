@@ -50,6 +50,11 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
                         this.WriteInteger(Item.CostWibboPoints);
                         this.WriteInteger(105); // Diamonds
                     }
+                    else if (Item.CostLimitCoins > 0)
+                    {
+                        this.WriteInteger(Item.CostLimitCoins);
+                        this.WriteInteger(55);
+                    }
                     else
                     {
                         this.WriteInteger(Item.CostDuckets);

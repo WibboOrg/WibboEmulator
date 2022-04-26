@@ -35,6 +35,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             stringBuilder.Append("Id: " + user.Id + "\r");
             stringBuilder.Append("Mission: " + user.Motto + "\r");
             stringBuilder.Append("WibboPoints: " + user.WibboPoints + "\r");
+            stringBuilder.Append("LimitCoins: " + user.LimitCoins + "\r");
             stringBuilder.Append("Crédits: " + user.Credits + "\r");
             stringBuilder.Append("Win-Win: " + user.AchievementPoints + "\r");
             stringBuilder.Append("Premium: " + ((user.Rank > 1) ? "Oui" : "Non") + "\r");

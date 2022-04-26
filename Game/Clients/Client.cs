@@ -132,7 +132,6 @@ namespace Butterfly.Game.Clients
                     packetList.Add(new AvailabilityStatusComposer());
                     packetList.Add(new AchievementScoreComposer(this._user.AchievementPoints));
                     packetList.Add(new BuildersClubMembershipComposer());
-                    packetList.Add(new ActivityPointsComposer(this._user.WibboPoints));
                     packetList.Add(new CfhTopicsInitComposer(ButterflyEnvironment.GetGame().GetModerationManager().UserActionPresets));
                     packetList.Add(new SoundSettingsComposer(this._user.ClientVolume, false, false, false, 1));
                     packetList.Add(new AvatarEffectsComposer(ButterflyEnvironment.GetGame().GetEffectManager().GetEffects()));

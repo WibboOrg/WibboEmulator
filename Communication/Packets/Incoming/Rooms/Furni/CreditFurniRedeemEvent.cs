@@ -60,7 +60,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 else if (Exchange.GetBaseItem().ItemName.StartsWith("PntEx_"))
                 {
                     Session.GetUser().WibboPoints += Value;
-                    Session.SendPacket(new ActivityPointsComposer(Session.GetUser().WibboPoints));
+                    Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {

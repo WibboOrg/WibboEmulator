@@ -129,6 +129,7 @@ namespace Butterfly.Game.Users.Data
             int LastOnline = Convert.ToInt32(dRow["last_online"]);
             int Credits = Convert.ToInt32(dRow["credits"]);
             int Diamonds = Convert.ToInt32(dRow["vip_points"]);
+            int LimitCoins = Convert.ToInt32(dRow["limit_coins"]);
             int ActivityPoints = Convert.ToInt32(dRow["activity_points"]);
             int HomeRoom = Convert.ToInt32(dRow["home_room"]);
             int accountCreated = Convert.ToInt32(dRow["account_created"]);
@@ -151,7 +152,7 @@ namespace Butterfly.Game.Users.Data
             int achievementPoints = Convert.ToInt32(dRow2["achievement_score"]);
             int FavoriteGroup = Convert.ToInt32(dRow2["group_id"]);
 
-            return new User(Id, Username, Rank, Motto, Look, Gender, Credits, Diamonds, ActivityPoints, HomeRoom, Respect, DailyRespectPoints, DailyPetRespectPoints, HasFriendRequestsDisabled, currentQuestID, achievementPoints, LastOnline, FavoriteGroup, accountCreated, AcceptTrading, Ip, HideInroom, HideOnline, MazoHighScore, Mazo, clientVolume, NuxEnable, MachineId, ChangeName, Langue, ignoreAllExpire);
+            return new User(Id, Username, Rank, Motto, Look, Gender, Credits, Diamonds, LimitCoins, ActivityPoints, HomeRoom, Respect, DailyRespectPoints, DailyPetRespectPoints, HasFriendRequestsDisabled, currentQuestID, achievementPoints, LastOnline, FavoriteGroup, accountCreated, AcceptTrading, Ip, HideInroom, HideOnline, MazoHighScore, Mazo, clientVolume, NuxEnable, MachineId, ChangeName, Langue, ignoreAllExpire);
         }
     }
 }

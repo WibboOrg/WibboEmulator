@@ -70,8 +70,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int TotalCreditsCost = Amount > 1 ? ((Item.CostCredits * Amount) - ((int)Math.Floor((double)Amount / 6) * Item.CostCredits)) : Item.CostCredits;
             int TotalPixelCost = Amount > 1 ? ((Item.CostDuckets * Amount) - ((int)Math.Floor((double)Amount / 6) * Item.CostDuckets)) : Item.CostDuckets;
             int TotalDiamondCost = Amount > 1 ? ((Item.CostWibboPoints * Amount) - ((int)Math.Floor((double)Amount / 6) * Item.CostWibboPoints)) : Item.CostWibboPoints;
+            int TotalLimitCoinCost = Amount > 1 ? ((Item.CostLimitCoins * Amount) - ((int)Math.Floor((double)Amount / 6) * Item.CostLimitCoins)) : Item.CostLimitCoins;
 
-            if (Session.GetUser().Credits < TotalCreditsCost || Session.GetUser().Duckets < TotalPixelCost || Session.GetUser().WibboPoints < TotalDiamondCost)
+            if (Session.GetUser().Credits < TotalCreditsCost || 
+                Session.GetUser().Duckets < TotalPixelCost || 
+                Session.GetUser().WibboPoints < TotalDiamondCost ||
+                Session.GetUser().LimitCoins < TotalLimitCoinCost)
             {
                 return;
             }
@@ -274,6 +278,17 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserDao.UpdateRemovePoints(dbClient, Session.GetUser().Id, TotalDiamondCost);
+                }
+            }
+
+            if (Item.CostLimitCoins > 0)
+            {
+                Session.GetUser().LimitCoins -= TotalDiamondCost;
+                Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().LimitCoins, 0, 55));
+
+                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                {
+                    UserDao.UpdateRemoveLimitCoins(dbClient, Session.GetUser().Id, TotalDiamondCost);
                 }
             }
 
