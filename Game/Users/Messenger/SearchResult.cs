@@ -5,10 +5,10 @@
         public int UserId;
         public string Username;
         public string Motto;
-        public string LastOnline;
+        public int LastOnline;
         public string Look;
 
-        public SearchResult(int UserId, string Username, string Motto, string LastOnline, string Look)
+        public SearchResult(int UserId, string Username, string Motto, int LastOnline, string Look)
         {
             this.UserId = UserId;
             this.Username = Username;

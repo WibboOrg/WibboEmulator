@@ -18,7 +18,7 @@ namespace Butterfly.Game.Users.Messenger
 
                 foreach (DataRow dataRow in table.Rows)
                 {
-                    list.Add(new SearchResult(Convert.ToInt32(dataRow["id"]), (string)dataRow["username"], (string)dataRow["motto"], (string)dataRow["last_online"], (string)dataRow["look"]));
+                    list.Add(new SearchResult(Convert.ToInt32(dataRow["id"]), (string)dataRow["username"], (string)dataRow["motto"], Convert.ToInt32(dataRow["last_online"]), (string)dataRow["look"]));
                 }
             }
 
