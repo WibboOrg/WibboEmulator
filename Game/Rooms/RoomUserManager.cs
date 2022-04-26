@@ -486,7 +486,7 @@ namespace Butterfly.Game.Rooms
                 {
                     foreach (RoomUser StaffUser in roomUserByRank)
                     {
-                        if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetUser() != null && StaffUser.GetClient().GetUser().HasFuse("fuse_show_invisible")))
+                        if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetUser() != null && StaffUser.GetClient().GetUser().HasFuse("fuse_see_invisible")))
                         {
                             StaffUser.SendWhisperChat(User.GetUsername() + " est entré dans l'appart en mode invisible !", true);
                         }
@@ -703,7 +703,8 @@ namespace Butterfly.Game.Rooms
                     {
                         foreach (RoomUser StaffUser in roomUserByRank)
                         {
-                            if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetUser() != null && StaffUser.GetClient().GetUser().HasFuse("fuse_show_invisible")))
+                            if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetUser() != null && StaffUser.GetClient().GetUser().HasFuse("fuse_see_invisible")))
+                            /// UPDATE `emulator_fuseright` SET `fuse`='fuse_see_invisible' WHERE  `id`=20;
                             {
                                 StaffUser.SendWhisperChat(User.GetUsername() + " était en mode invisible. Il vient de partir de l'appartement.", true);
                             }

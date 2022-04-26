@@ -361,7 +361,7 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(195, new RegenMaps());
             this.Register(196, new AllAroundMe());
             this.Register(197, new AllEyesOnMe());
-            this.Register(200, new SummonAll());
+            this.Register(200, new SummonAll()); /// -> INSERT INTO `emulator_command` (`id`, `input`, `minrank`, `description_fr`) VALUES ('200', 'summonall', '13', 'Convoque tout les joueurs dans ton appartement (cmd dangereuse)');
             this.Register(203, new RoomDance());
             this.Register(204, new Give());
         }
