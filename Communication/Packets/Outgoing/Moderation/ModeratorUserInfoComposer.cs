@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
             WriteString("");//Purchases
             WriteInteger(0);//Itendity information tool
             WriteInteger(0);//Id bans.
-            WriteString(User != null ? Convert.ToString(User["mail"]) : "Unknown");
+            WriteString("Unknown"); //User != null ? Convert.ToString(User["mail"]) : > private
             WriteString("");//user_classification
         }
     }
