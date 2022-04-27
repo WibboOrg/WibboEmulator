@@ -233,6 +233,7 @@
     <Compile Include="Communication\Packets\Incoming\WebSocket\User\MoveUserEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\RolePlay\RpUseItemsEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\WebSocket\RolePlay\RpBuyItemsEvent.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Avatar\FigureUpdateComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Avatar\WardrobeComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\BuildersClub\BCBorrowedItemsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\BuildersClub\BuildersClubMembershipComposer.cs" />

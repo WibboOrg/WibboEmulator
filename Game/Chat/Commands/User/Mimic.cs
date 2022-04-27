@@ -1,6 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Clients;
+using Butterfly.Communication.Packets.Outgoing.Avatar;
 
 namespace Butterfly.Game.Chat.Commands.Cmd
 {
@@ -70,9 +71,9 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
+            Session.SendPacket(new FigureUpdateComposer(Session.GetUser().Look, Session.GetUser().Gender));
             Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
             currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
-
         }
     }
 }

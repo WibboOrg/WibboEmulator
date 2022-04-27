@@ -1,3 +1,4 @@
+using Butterfly.Communication.Packets.Outgoing.Avatar;
 using Butterfly.Communication.Packets.Outgoing.Handshake;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Daos;
@@ -63,6 +64,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
+            Session.SendPacket(new FigureUpdateComposer(Session.GetUser().Look, Session.GetUser().Gender));
             Session.SendPacket(new UserObjectComposer(Session.GetUser()));
             Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
 

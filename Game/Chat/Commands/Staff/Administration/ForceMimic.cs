@@ -1,3 +1,4 @@
+using Butterfly.Communication.Packets.Outgoing.Avatar;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
@@ -41,6 +42,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
+            clientByUsername.SendPacket(new FigureUpdateComposer(clientByUsername.GetUser().Look, clientByUsername.GetUser().Gender));
             clientByUsername.SendPacket(new UserChangeComposer(roomUserByUserId, true));
             currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
 

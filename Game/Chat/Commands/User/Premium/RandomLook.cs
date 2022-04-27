@@ -4,6 +4,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms;
+using Butterfly.Communication.Packets.Outgoing.Avatar;
 
 namespace Butterfly.Game.Chat.Commands.Cmd
 {
@@ -29,6 +30,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 Session.GetUser().Look = UserWardrobeDao.GetOneRandomLook(dbClient);
 
+            Session.SendPacket(new FigureUpdateComposer(Session.GetUser().Look, Session.GetUser().Gender));
             Session.SendPacket(new UserChangeComposer(UserRoom, true));
             Room.SendPacket(new UserChangeComposer(UserRoom, false));
 

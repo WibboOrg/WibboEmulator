@@ -1,4 +1,5 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
+﻿using Butterfly.Communication.Packets.Outgoing.Avatar;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
@@ -68,6 +69,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
+            Session.SendPacket(new FigureUpdateComposer(Session.GetUser().Look, Session.GetUser().Gender));
             room.SendPacket(new UserChangeComposer(Roomuser, false));
         }
 
