@@ -3,7 +3,7 @@
     internal class PlaySoundComposer : ServerPacket
     {
         public PlaySoundComposer(string Name, int Type, bool Loop = false)
-            : base(21)
+            : base(ServerPacketHeader.PLAY_SOUND)
         {
             this.WriteString(Name);
             this.WriteInteger(Type);

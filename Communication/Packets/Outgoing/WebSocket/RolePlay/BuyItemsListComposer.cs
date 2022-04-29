@@ -6,7 +6,7 @@ namespace Butterfly.Communication.Packets.Outgoing.WebSocket
     internal class BuyItemsListComposer : ServerPacket
     {
         public BuyItemsListComposer(List<RPItem> ItemsBuy)
-          : base(8)
+          : base(ServerPacketHeader.BUY_ITEMS_LIST)
         {
             this.WriteInteger(ItemsBuy.Count);
 

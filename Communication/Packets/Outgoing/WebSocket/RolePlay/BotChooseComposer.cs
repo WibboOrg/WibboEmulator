@@ -5,7 +5,7 @@ namespace Butterfly.Communication.Packets.Outgoing.WebSocket
     internal class BotChooseComposer : ServerPacket
     {
         public BotChooseComposer(List<string[]> ChooseList)
-          : base(23)
+          : base(ServerPacketHeader.BOT_CHOOSE)
         {
             this.WriteInteger(ChooseList.Count);
 

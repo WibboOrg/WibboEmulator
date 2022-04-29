@@ -3,7 +3,7 @@
     internal class RpStatsComposer : ServerPacket
     {
         public RpStatsComposer(int pRpId, int pHealth, int pHealMax, int pEnergy, int pHygiene, int pMoney, int pMoney1, int pMoney2, int pMoney3, int pMoney4, int pMunition, int pLevel)
-            : base(6)
+            : base(ServerPacketHeader.RP_STATS)
         {
             this.WriteInteger(pRpId);
             this.WriteInteger(pHealth);

@@ -3,7 +3,7 @@
     internal class MentionComposer : ServerPacket
     {
         public MentionComposer(int UserId, string Username, string Look, string Msg)
-         : base(24)
+         : base(ServerPacketHeader.MENTION)
         {
             this.WriteInteger(UserId);
             this.WriteString(Username);

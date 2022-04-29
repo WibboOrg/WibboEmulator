@@ -35,8 +35,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.GetUser().ClientVolume.Add(Volume1);
             Session.GetUser().ClientVolume.Add(Volume2);
             Session.GetUser().ClientVolume.Add(Volume3);
-
-            Session.GetUser().SendWebPacket(new SettingVolumeComposer(Volume3, Volume2, Volume1));
         }
     }
 }

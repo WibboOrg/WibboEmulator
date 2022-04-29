@@ -38,7 +38,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
             string VideoId = Split.Substring(0, 11);
 
-            Room.SendPacketWeb(new YoutubeTvComposer(0, VideoId));
+            Room.SendPacket(new YoutubeTvComposer(0, VideoId));
         }
     }
 }

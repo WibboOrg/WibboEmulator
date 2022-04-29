@@ -21,34 +21,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            if (Session.GetUser().SendWebPacket(new YoutubeTvComposer((UserHasRights) ? Item.Id : 0, Item.ExtraData)))
-            {
-                return;
-            }
-
-            if (!UserHasRights)
-            {
-                return;
-            }
-
-            RoomUser roomUser = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (roomUser == null)
-            {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(roomUser.LoaderVideoId) && string.IsNullOrEmpty(Item.ExtraData))
-            {
-                roomUser.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("item.tpyoutubehelp", Session.Langue));
-            }
-
-            if (!string.IsNullOrEmpty(roomUser.LoaderVideoId) && roomUser.LoaderVideoId != Item.ExtraData)
-            {
-                Item.ExtraData = roomUser.LoaderVideoId;
-                Item.UpdateState();
-
-                roomUser.LoaderVideoId = "";
-            }
+            Session.SendPacket(new YoutubeTvComposer((UserHasRights) ? Item.Id : 0, Item.ExtraData));
         }
 
         public override void OnTick(Item item)

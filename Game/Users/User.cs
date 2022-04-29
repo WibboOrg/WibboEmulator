@@ -147,18 +147,6 @@ namespace Butterfly.Game.Users
             }
         }
 
-        public bool SendWebPacket(IServerPacket Message)
-        {
-            WebClients.WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(this.Id);
-            if (ClientWeb != null)
-            {
-                ClientWeb.SendPacket(Message);
-                return true;
-            }
-
-            return false;
-        }
-
         public User(int Id, string Username, int Rank, string Motto, string Look, string Gender, int Credits,
             int WPoint, int LimitCoins, int ActivityPoints, int HomeRoom, int Respect, int DailyRespectPoints,
             int DailyPetRespectPoints, bool HasFriendRequestsDisabled, int currentQuestID, int achievementPoints,

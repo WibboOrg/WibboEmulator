@@ -848,46 +848,6 @@ namespace Butterfly.Game.Rooms
             }
         }
 
-        public void SendPacketWeb(IServerPacket Message)
-        {
-            try
-            {
-                if (Message == null)
-                {
-                    return;
-                }
-
-                if (this == null || this._roomUserManager == null)
-                {
-                    return;
-                }
-
-                List<RoomUser> Users = this._roomUserManager.GetUserList().ToList();
-                if (Users == null)
-                {
-                    return;
-                }
-
-                foreach (RoomUser User in Users)
-                {
-                    if (User == null || User.IsBot)
-                    {
-                        continue;
-                    }
-
-                    if (User.GetClient() == null || User.GetClient().GetConnection() == null)
-                    {
-                        continue;
-                    }
-
-                    User.GetClient().GetUser().SendWebPacket(Message);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logging.HandleException(ex, "Room.SendMessageWeb (" + this.Id + ")");
-            }
-        }
         public void SendPacket(IServerPacket Message, bool UsersWithRightsOnly = false)
         {
             try

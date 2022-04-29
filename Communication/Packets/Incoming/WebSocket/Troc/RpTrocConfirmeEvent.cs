@@ -1,29 +1,27 @@
 ﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.WebClients;
 
 namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {
-    internal class RpTrocConfirmeEvent : IPacketWebEvent
+    internal class RpTrocConfirmeEvent : IPacketEvent
     {
         public double Delay => 0;
 
-        public void Parse(WebClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
-            if (Client == null || Client.GetUser() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }
 
-            Room Room = Client.GetUser().CurrentRoom;
+            Room Room = Session.GetUser().CurrentRoom;
             if (Room == null || !Room.IsRoleplay)
             {
                 return;
             }
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Client.GetUser().Id);
+            RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             if (User == null)
             {
                 return;

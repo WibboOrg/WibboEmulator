@@ -6,7 +6,7 @@ namespace Butterfly.Communication.Packets.Outgoing.WebSocket.Troc
     internal class RpTrocUpdateItemsComposer : ServerPacket
     {
         public RpTrocUpdateItemsComposer(int UserId, Dictionary<int, int> Items)
-          : base(17)
+          : base(ServerPacketHeader.RP_TROC_UPDATE_ITEMS)
         {
             this.WriteInteger(UserId);
             this.WriteInteger(Items.Count);

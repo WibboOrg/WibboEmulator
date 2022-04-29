@@ -2,13 +2,22 @@
 {
     public static class ClientPacketHeader //PRODUCTION-201611291003-a-1161735
     {
-        public const int FindRandomFriendingRoomMessageEvent = 1703;
         public const int GenerateSecretKeyMessageEvent = 773;
         public const int UserNuxEvent = 1299;
         public const int CanCreateRoomMessageEvent = 2128;
         public const int GetPetTrainingPanelMessageEvent = 2161;
-        public const int OnBullyClickMessageEvent = 2455;
         public const int FootballGateSaveLookEvent = 924;
+
+        public const int SEND_ALERT = 10002;
+        public const int EDIT_TV = 10003;
+        public const int RP_BUY_ITEMS = 10008;
+        public const int RP_USE_ITEMS = 10009;
+        public const int RP_TROC_ADD_ITEM = 10011;
+        public const int RP_TROC_REMOVE_ITEM = 10012;
+        public const int RP_TROC_ACCEPTE = 10013;
+        public const int RP_TROC_CONFIRME = 10014;
+        public const int RP_TROC_STOP = 10015;
+        public const int BOT_CHOOSE = 10016;
 
         public const int ACHIEVEMENT_LIST = 219;
         public const int AUTHENTICATION = -1;

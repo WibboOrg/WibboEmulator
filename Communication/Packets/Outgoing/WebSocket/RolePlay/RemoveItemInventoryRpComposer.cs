@@ -3,7 +3,7 @@
     internal class RemoveItemInventoryRpComposer : ServerPacket
     {
         public RemoveItemInventoryRpComposer(int ItemId, int Count)
-          : base(11)
+          : base(ServerPacketHeader.REMOVE_ITEM_INVENTORY_RP)
         {
             this.WriteInteger(ItemId);
             this.WriteInteger(Count);

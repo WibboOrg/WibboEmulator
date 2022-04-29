@@ -1291,17 +1291,17 @@ namespace Butterfly.Game.Items.Wired.Actions
                     }
                 case "stopsoundroom":
                     {
-                        this.RoomInstance.SendPacketWeb(new StopSoundComposer(value));
+                        this.RoomInstance.SendPacket(new StopSoundComposer(value));
                         break;
                     }
                 case "playsoundroom":
                     {
-                        this.RoomInstance.SendPacketWeb(new PlaySoundComposer(value, 1)); //Type = Trax
+                        this.RoomInstance.SendPacket(new PlaySoundComposer(value, 1)); //Type = Trax
                         break;
                     }
                 case "playmusicroom":
                     {
-                        this.RoomInstance.SendPacketWeb(new PlaySoundComposer(value, 2, true)); //Type = Trax
+                        this.RoomInstance.SendPacket(new PlaySoundComposer(value, 2, true)); //Type = Trax
                         break;
                     }
                 case "configbot":
@@ -1748,7 +1748,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                         if (string.IsNullOrEmpty(Value))
                         {
-                            User.GetClient().GetUser().SendWebPacket(new BotChooseComposer(ChooseList));
+                            User.GetClient().SendPacket(new BotChooseComposer(ChooseList));
                             break;
                         }
 
@@ -1777,7 +1777,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             ChooseList.Add(list.ToArray());
                         }
 
-                        User.GetClient().GetUser().SendWebPacket(new BotChooseComposer(ChooseList));
+                        User.GetClient().SendPacket(new BotChooseComposer(ChooseList));
 
                         break;
                     }
@@ -1786,7 +1786,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                         List<string[]> ChooseList = new List<string[]>();
                         if (string.IsNullOrEmpty(Value))
                         {
-                            User.GetClient().GetUser().SendWebPacket(new BotChooseComposer(ChooseList));
+                            User.GetClient().SendPacket(new BotChooseComposer(ChooseList));
                             break;
                         }
 
@@ -1830,35 +1830,25 @@ namespace Butterfly.Game.Items.Wired.Actions
                             }
                         }
 
-                        User.GetClient().GetUser().SendWebPacket(new BotChooseComposer(ChooseList));
+                        User.GetClient().SendPacket(new BotChooseComposer(ChooseList));
 
-                        break;
-                    }
-                case "forcesound":
-                    {
-                        User.GetClient().GetUser().ClientVolume.Clear();
-                        User.GetClient().GetUser().ClientVolume.Add(100);
-                        User.GetClient().GetUser().ClientVolume.Add(100);
-                        User.GetClient().GetUser().ClientVolume.Add(100);
-
-                        User.GetClient().GetUser().SendWebPacket(new SettingVolumeComposer(100, 100, 100));
                         break;
                     }
                 case "stopsounduser":
                     {
-                        User.GetClient().GetUser().SendWebPacket(new StopSoundComposer(Value)); //Type = Trax
+                        User.GetClient().SendPacket(new StopSoundComposer(Value)); //Type = Trax
 
                         break;
                     }
                 case "playsounduser":
                     {
-                        User.GetClient().GetUser().SendWebPacket(new PlaySoundComposer(Value, 1)); //Type = furni
+                        User.GetClient().SendPacket(new PlaySoundComposer(Value, 1)); //Type = furni
 
                         break;
                     }
                 case "playmusicuser":
                     {
-                        User.GetClient().GetUser().SendWebPacket(new PlaySoundComposer(Value, 2, true)); //Type = Trax
+                        User.GetClient().SendPacket(new PlaySoundComposer(Value, 2, true)); //Type = Trax
 
                         break;
                     }

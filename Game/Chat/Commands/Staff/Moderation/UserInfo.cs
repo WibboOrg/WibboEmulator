@@ -58,22 +58,6 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 stringBuilder.Append("IP Web: " + clientByUsername.GetUser().IP + "\r");
                 stringBuilder.Append("IP Emu: " + clientByUsername.GetConnection().GetIp() + "\r");
                 stringBuilder.Append("Langue: " + clientByUsername.Langue.ToString() + "\r");
-                stringBuilder.Append("Client: " + ((clientByUsername.GetConnection().IsWebSocket) ? "Nitro" : "Flash") + "\r");
-
-                WebClients.WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(user.Id);
-                if (ClientWeb != null)
-                {
-                    stringBuilder.Append("WebSocket: En ligne" + "\r");
-                    if (Session.GetUser().Rank > 12)
-                    {
-                        stringBuilder.Append("WebSocket Ip: " + ClientWeb.GetConnection().GetIp() + "\r");
-                        stringBuilder.Append("Langue Web: " + ClientWeb.Langue.ToString() + "\r");
-                    }
-                }
-                else
-                {
-                    stringBuilder.Append("WebSocket: Hors ligne" + "\r");
-                }
             }
 
             Session.SendNotification(stringBuilder.ToString());

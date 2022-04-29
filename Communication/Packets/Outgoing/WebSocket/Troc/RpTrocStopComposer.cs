@@ -3,7 +3,7 @@
     internal class RpTrocStopComposer : ServerPacket
     {
         public RpTrocStopComposer()
-          : base(14)
+          : base(ServerPacketHeader.RP_TROC_STOP)
         {
         }
     }

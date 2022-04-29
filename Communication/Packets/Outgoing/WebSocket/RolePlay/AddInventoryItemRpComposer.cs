@@ -5,7 +5,7 @@ namespace Butterfly.Communication.Packets.Outgoing.WebSocket
     internal class AddInventoryItemRpComposer : ServerPacket
     {
         public AddInventoryItemRpComposer(RPItem Item, int pCount)
-          : base(10)
+          : base(ServerPacketHeader.ADD_INVENTORY_ITEM_RP)
         {
             this.WriteInteger(Item.Id);
             this.WriteString(Item.Name);

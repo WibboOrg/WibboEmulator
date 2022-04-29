@@ -8,7 +8,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room.SendPacketWeb(new StopSoundComposer((Params.Length != 2) ? "" : Params[1])); //Type = Trax
+            Room.SendPacket(new StopSoundComposer((Params.Length != 2) ? "" : Params[1])); //Type = Trax
         }
     }
 }

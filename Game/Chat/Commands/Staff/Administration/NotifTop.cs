@@ -14,7 +14,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifTopComposer(Message), Session.Langue);
+            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifTopComposer(Message));
         }
     }
 }

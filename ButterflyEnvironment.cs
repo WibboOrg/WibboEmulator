@@ -28,7 +28,6 @@ namespace Butterfly
     {
         private static ConfigurationData _configuration;
         private static ConnectionHandeling _connectionManager;
-        private static WebSocketManager _webSocketManager;
         private static GameCore _game;
         private static DatabaseManager _datebaseManager;
         private static RCONSocket _rcon;
@@ -120,11 +119,6 @@ namespace Butterfly
 
                 _figureManager = new FigureDataManager();
                 _figureManager.Init();
-
-                if (_configuration.data["Websocketenable"] == "true")
-                {
-                    _webSocketManager = new WebSocketManager(int.Parse(GetConfig().data["websocket.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]));
-                }
 
                 _connectionManager = new ConnectionHandeling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]));
 
@@ -356,11 +350,6 @@ namespace Butterfly
         public static DatabaseManager GetDatabaseManager()
         {
             return _datebaseManager;
-        }
-
-        public static WebSocketManager GetWebSocketManager()
-        {
-            return _webSocketManager;
         }
 
         public static HttpClient GetHttpClient()

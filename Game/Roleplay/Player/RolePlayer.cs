@@ -2,6 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Roleplay.Weapon;
 using Butterfly.Game.Rooms;
@@ -218,10 +219,10 @@ namespace Butterfly.Game.Roleplay.Player
 
         public void SendWebPacket(IServerPacket Message)
         {
-            WebClients.WebClient ClientWeb = ButterflyEnvironment.GetGame().GetClientWebManager().GetClientByUserID(this._id);
-            if (ClientWeb != null)
+            Client session = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this._id);
+            if (session != null)
             {
-                ClientWeb.SendPacket(Message);
+                session.SendPacket(Message);
             }
         }
 

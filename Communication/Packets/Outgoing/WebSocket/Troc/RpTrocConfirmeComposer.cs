@@ -3,7 +3,7 @@
     internal class RpTrocConfirmeComposer : ServerPacket
     {
         public RpTrocConfirmeComposer(int UserId)
-          : base(16)
+          : base(ServerPacketHeader.RP_TROC_CONFIRME)
         {
             this.WriteInteger(UserId);
         }

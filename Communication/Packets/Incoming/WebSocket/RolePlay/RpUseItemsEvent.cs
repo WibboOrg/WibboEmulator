@@ -3,33 +3,31 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Roleplay;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.WebClients;
 using System;
 
 namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {
-    internal class RpUseItemsEvent : IPacketWebEvent
+    internal class RpUseItemsEvent : IPacketEvent
     {
         public double Delay => 250;
 
-        public void Parse(WebClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int ItemId = Packet.PopInt();
             int UseCount = Packet.PopInt();
 
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
-            if (Client == null || Client.GetUser() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }
 
-            Room Room = Client.GetUser().CurrentRoom;
+            Room Room = Session.GetUser().CurrentRoom;
             if (Room == null || !Room.IsRoleplay)
             {
                 return;
             }
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Client.GetUser().Id);
+            RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             if (User == null)
             {
                 return;
@@ -48,7 +46,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 
             if (Rp.AggroTimer > 0)
             {
-                User.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.useitem.notallowed", Client.Langue), Math.Round((double)Rp.AggroTimer / 2)));
+                User.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.useitem.notallowed", Session.Langue), Math.Round((double)Rp.AggroTimer / 2)));
                 return;
             }
 
@@ -198,7 +196,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
                         }
 
                         Rp.WeaponCac = ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(RpItem.Value);
-                        User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.changearmecac", Client.Langue));
+                        User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.changearmecac", Session.Langue));
                         break;
                     }
                 case "weapon_far":
@@ -209,7 +207,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
                         }
 
                         Rp.WeaponGun = ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(RpItem.Value);
-                        User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.changearmefar", Client.Langue));
+                        User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.changearmefar", Session.Langue));
                         break;
                     }
             }

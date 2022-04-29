@@ -165,7 +165,7 @@ namespace Butterfly.Game.Animation
             if (this._timer >= this.ToSeconds(START_TIME - NOTIF_TIME) && !this._notif)
             {
                 this._notif = true;
-                ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifTopComposer("Notre prochaine animation aura lieu dans deux minutes ! (Jack & Daisy)"), Core.Language.FRANCAIS);
+                ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifTopComposer("Notre prochaine animation aura lieu dans deux minutes ! (Jack & Daisy)"));
             }
 
             if (this._timer >= this.ToSeconds(START_TIME))
@@ -211,7 +211,7 @@ namespace Butterfly.Game.Animation
 
             ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, "WibboGame", room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
 
-            ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer(
+            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer(
                 "gameauto",
                 "Message d'animation",
                 alertMessage,

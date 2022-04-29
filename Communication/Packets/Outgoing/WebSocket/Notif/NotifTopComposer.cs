@@ -3,7 +3,7 @@
     internal class NotifTopComposer : ServerPacket
     {
         public NotifTopComposer(string Message)
-         : base(18)
+         : base(ServerPacketHeader.NOTIF_TOP)
         {
             this.WriteString(Message);
         }

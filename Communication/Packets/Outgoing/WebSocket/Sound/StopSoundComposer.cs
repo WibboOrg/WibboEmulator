@@ -3,7 +3,7 @@
     internal class StopSoundComposer : ServerPacket
     {
         public StopSoundComposer(string Name)
-            : base(22)
+            : base(ServerPacketHeader.STOP_SOUND)
         {
             this.WriteString(Name);
         }

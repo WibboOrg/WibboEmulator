@@ -10,7 +10,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             ButterflyEnvironment.GetGame().GetAnimationManager().StartGame();
             UserRoom.SendWhisperChat("Lancement de l'animation de Jack & Daisy !");
-            ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifTopComposer("Petite animation à l'improviste ! (Jack & Daisy)"), Core.Language.FRANCAIS);
+            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifTopComposer("Petite animation à l'improviste ! (Jack & Daisy)"));
         }
     }
 }

@@ -14,11 +14,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             int OnlineUsers = ButterflyEnvironment.GetGame().GetClientManager().Count;
             int OnlineNitroUsers = ButterflyEnvironment.GetGame().GetClientManager().OnlineNitroUsers;
             int OnlineFlashUsers = OnlineUsers - OnlineNitroUsers;
-            int OnlineUsersFr = ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersFr;
-            int OnlineUsersEn = ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersEn;
-            int OnlineUsersBr = ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersBr;
 
-            int OnlineWeb = ButterflyEnvironment.GetGame().GetClientWebManager().Count;
             int RoomCount = ButterflyEnvironment.GetGame().GetRoomManager().Count;
 
 
@@ -31,10 +27,6 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                  "   Joueurs en ligne total: " + OnlineUsers + "\n" +
                  "   Joueurs en ligne sur Flash: " + OnlineFlashUsers + "\n" +
                  "   Joueurs en ligne sur Nitro: " + OnlineNitroUsers + "\n" +
-                 //"   Joueurs en ligne (FR): " + OnlineUsersFr + "\n" +
-                 //"   Joueurs en ligne (EN): " + OnlineUsersEn + "\n" +
-                 //"   Joueurs en ligne (BR): " + OnlineUsersBr + "\n" +
-                 //"   WebSocket en ligne: " + OnlineWeb + "\n" +
                  "   Appartements actifs: " + RoomCount + "\n" +
                  "   Uptime: " + Uptime.Days + " jour(s), " + Uptime.Hours + " heure(s) et " + Uptime.Minutes + " minutes.\n\n"));
 

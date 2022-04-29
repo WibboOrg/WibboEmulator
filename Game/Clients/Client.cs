@@ -45,6 +45,8 @@ namespace Butterfly.Game.Clients
 
         public int ConnectionID;
 
+        public bool ShowGameAlert;
+
         public Client(int ClientId, ConnectionInformation connection)
         {
             this.ConnectionID = ClientId;
@@ -278,7 +280,7 @@ namespace Butterfly.Game.Clients
                             continue;
                         }
 
-                        Client.GetUser().SendWebPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + Message));
+                        Client.SendPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + Message));
                     }
 
                     return false;
@@ -317,7 +319,7 @@ namespace Butterfly.Game.Clients
                     continue;
                 }
 
-                Client.GetUser().SendWebPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + Message));
+                Client.SendPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + Message));
             }
 
             return true;

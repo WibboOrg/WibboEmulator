@@ -584,8 +584,6 @@ namespace Butterfly.Game.Rooms
 
             if (!User.IsBot)
             {
-                Session.GetUser().SendWebPacket(new InRoomComposer(true));
-
                 if (Session.GetUser().RolePlayId > 0 && this._room.RoomData.OwnerId != Session.GetUser().RolePlayId)
                 {
                     RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Session.GetUser().RolePlayId);
@@ -711,8 +709,6 @@ namespace Butterfly.Game.Rooms
                         }
                     }
                 }
-
-                Session.GetUser().SendWebPacket(new InRoomComposer(false));
 
                 Session.GetUser().CurrentRoomId = 0;
                 Session.GetUser().LoadingRoomId = 0;

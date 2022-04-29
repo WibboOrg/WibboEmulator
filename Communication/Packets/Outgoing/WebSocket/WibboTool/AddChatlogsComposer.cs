@@ -3,7 +3,7 @@
     internal class AddChatlogsComposer : ServerPacket
     {
         public AddChatlogsComposer(int UserId, string Pseudo, string Message)
-          : base(7)
+          : base(ServerPacketHeader.ADD_CHATLOGS)
         {
             this.WriteInteger(UserId);
             this.WriteString(Pseudo);

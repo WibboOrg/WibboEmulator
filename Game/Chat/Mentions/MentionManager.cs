@@ -86,10 +86,7 @@ namespace Butterfly.Game.Chat.Mentions
                 return false;
             }
 
-            if (!TargetClient.GetUser().SendWebPacket(new MentionComposer(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().Look, Message)))
-            {
-                TargetClient.SendPacket(RoomNotificationComposer.SendBubble("mention", $"{Session.GetUser().Username} t'a tagué:\n\n{Message}", "event:navigator/goto/" + Session.GetUser().CurrentRoomId));
-            }
+            TargetClient.SendPacket(new MentionComposer(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().Look, Message));
 
             return true;
         }
@@ -124,10 +121,7 @@ namespace Butterfly.Game.Chat.Mentions
                 {
                     if (TargetClient.GetUser().GetMessenger().FriendshipExists(Session.GetUser().Id))
                     {
-                        if (!TargetClient.GetUser().SendWebPacket(new MentionComposer(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().Look, Message)))
-                        {
-                            TargetClient.SendPacket(RoomNotificationComposer.SendBubble("mention", $"{Session.GetUser().Username} t'a tagué:\n\n{Message}", "event:navigator/goto/" + Session.GetUser().CurrentRoomId));
-                        }
+                        TargetClient.SendPacket(new MentionComposer(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().Look, Message));
                     }
                 }
             }

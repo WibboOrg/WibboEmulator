@@ -9,10 +9,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (!Session.GetUser().SendWebPacket(new NavigateWebComposer("/forum/sujet/57389")))
-            {
-                Session.SendPacket(new InClientLinkComposer("habbopages/infosuperwired"));
-            }
+            Session.SendPacket(new InClientLinkComposer("habbopages/infosuperwired"));
 
             return;
         }

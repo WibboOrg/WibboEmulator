@@ -2,18 +2,22 @@
 using Butterfly.Game.Roleplay;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.WebClients;
 
 namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {
-    internal class RpBuyItemsEvent : IPacketWebEvent
+    internal class RpBuyItemsEvent : IPacketEvent
     {
         public double Delay => 250;
 
-        public void Parse(WebClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int ItemId = Packet.PopInt();
             int Count = Packet.PopInt();
+
+            if (Session == null || Session.GetUser() == null)
+            {
+                return;
+            }
 
             if (Count > 99)
             {
@@ -25,19 +29,13 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
                 Count = 1;
             }
 
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
-            if (Client == null || Client.GetUser() == null)
-            {
-                return;
-            }
-
-            Room Room = Client.GetUser().CurrentRoom;
+            Room Room = Session.GetUser().CurrentRoom;
             if (Room == null || !Room.IsRoleplay)
             {
                 return;
             }
 
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Client.GetUser().Id);
+            RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
             if (User == null)
             {
                 return;
@@ -62,7 +60,7 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 
             if (!RpItem.AllowStack && Rp.GetInventoryItem(RpItem.Id) != null)
             {
-                User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.itemown", Client.Langue));
+                User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.itemown", Session.Langue));
                 return;
             }
 
@@ -80,11 +78,11 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 
             if (RpItem.Price == 0)
             {
-                User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.itempick", Client.Langue));
+                User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.itempick", Session.Langue));
             }
             else
             {
-                User.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.itembuy", Client.Langue), RpItem.Price));
+                User.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.itembuy", Session.Langue), RpItem.Price));
             }
 
             Rp.Money -= RpItem.Price * Count;

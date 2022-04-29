@@ -88,7 +88,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                 }.ToArray()
             };
 
-            user.GetClient().GetUser().SendWebPacket(new BotChooseComposer(ChooseList));
+            user.GetClient().SendPacket(new BotChooseComposer(ChooseList));
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)

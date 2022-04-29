@@ -15,7 +15,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             string SongName = Params[1];
 
-            Room.SendPacketWeb(new PlaySoundComposer(SongName, 1)); //Type = Trax
+            Room.SendPacket(new PlaySoundComposer(SongName, 1)); //Type = Trax
         }
     }
 }

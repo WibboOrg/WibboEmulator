@@ -15,7 +15,6 @@ using Butterfly.Game.Permissions;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Chat;
 using Butterfly.Game.Moderation;
-using Butterfly.Game.WebClients;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -29,7 +28,6 @@ namespace Butterfly.Game
     public class GameCore
     {
         private readonly ClientManager _clientManager;
-        private readonly WebClientManager _clientWebManager;
         private readonly PermissionManager _permissionManager;
         private readonly CatalogManager _catalogManager;
         private readonly NavigatorManager _navigatorManager;
@@ -58,7 +56,6 @@ namespace Butterfly.Game
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 this._clientManager = new ClientManager();
-                this._clientWebManager = new WebClientManager();
 
                 this._permissionManager = new PermissionManager();
                 this._permissionManager.Init(dbClient);
@@ -157,11 +154,6 @@ namespace Butterfly.Game
         public ClientManager GetClientManager()
         {
             return this._clientManager;
-        }
-
-        public WebClientManager GetClientWebManager()
-        {
-            return this._clientWebManager;
         }
 
         public PermissionManager GetPermissionManager()

@@ -1,27 +1,20 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Game.Clients;
-using Butterfly.Game.WebClients;
 
 namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {
-    internal class SendHotelAlertEvent : IPacketWebEvent
+    internal class SendHotelAlertEvent : IPacketEvent
     {
         public double Delay => 1000;
 
-        public void Parse(WebClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }
 
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
-            if (Client == null || Client.GetUser() == null)
-            {
-                return;
-            }
-
-            if (!Client.GetUser().HasFuse("fuse_wibbotool"))
+            if (!Session.GetUser().HasFuse("fuse_wibbotool"))
             {
                 return;
             }
@@ -44,49 +37,49 @@ namespace Butterfly.Communication.Packets.Incoming.WebSocket
 
             if (!string.IsNullOrWhiteSpace(Url))
             {
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, 0, string.Empty, "hal", string.Format("WbTool hal: {0} : {1}", Url, Message));
+                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, "hal", string.Format("WbTool hal: {0} : {1}", Url, Message));
 
                 if (!Url.StartsWith("https://wibbo.org") && !Url.StartsWith("https://www.facebook.com/WibboHotelFR") && !Url.StartsWith("https://twitter.com/WibboOrg") && !Url.StartsWith("https://instagram.com/wibboorg"))
                 {
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer("annonce", "Message de communication", Message, "Allez voir !", 0, Url), Session.Langue);
+                ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer("annonce", "Message de communication", Message, "Allez voir !", 0, Url));
                 return;
             }
 
             if (EventAlert)
             {
-                if (Client.GetUser().CurrentRoom == null)
+                if (Session.GetUser().CurrentRoom == null)
                 {
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, Client.GetUser().CurrentRoom.Id, string.Empty, "eventha", string.Format("WbTool eventha: {0}", Message));
-                if (Client.Antipub(Message, "<eventalert>"))
+                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().CurrentRoom.Id, string.Empty, "eventha", string.Format("WbTool eventha: {0}", Message));
+                if (Session.Antipub(Message, "<eventalert>"))
                 {
                     return;
                 }
 
                 if (!ButterflyEnvironment.GetGame().GetAnimationManager().AllowAnimation())
                 {
-                    Client.SendNotification("Merci d'attendre que l'animation en cours soit terminer");
+                    Session.SendNotification("Merci d'attendre que l'animation en cours soit terminer");
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", Message, "Je veux y jouer !", Client.GetUser().CurrentRoom.Id, ""), Session.Langue, true);
+                ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", Message, "Je veux y jouer !", Session.GetUser().CurrentRoom.Id, ""));
 
-                Client.GetUser().CurrentRoom.CloseFullRoom = true;
+                Session.GetUser().CurrentRoom.CloseFullRoom = true;
             }
             else
             {
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", Message));
-                if (Client.Antipub(Message, "<alert>"))
+                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", Message));
+                if (Session.Antipub(Message, "<alert>"))
                 {
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetClientWebManager().SendMessage(new NotifAlertComposer("staff", "Message des Staffs", Message, "Compris !", 0, ""), Session.Langue);
+                ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer("staff", "Message des Staffs", Message, "Compris !", 0, ""));
             }
 
         }

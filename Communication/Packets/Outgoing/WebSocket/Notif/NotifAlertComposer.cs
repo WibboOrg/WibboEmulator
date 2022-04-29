@@ -3,7 +3,7 @@
     internal class NotifAlertComposer : ServerPacket
     {
         public NotifAlertComposer(string Image, string Title, string Message, string TextButton, int RoomId, string Url)
-         : base(12)
+         : base(ServerPacketHeader.NOTIF_ALERT)
         {
             this.WriteString(Image);
             this.WriteString(Title);

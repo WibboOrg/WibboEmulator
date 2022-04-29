@@ -1,28 +1,26 @@
 ﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms;
-using Butterfly.Game.WebClients;
 using System;
 
 namespace Butterfly.Communication.Packets.Incoming.WebSocket
 {
-    internal class EditTvYoutubeEvent : IPacketWebEvent
+    internal class EditTvYoutubeEvent : IPacketEvent
     {
         public double Delay => 500;
 
-        public void Parse(WebClient Session, ClientPacket Packet)
+        public void Parse(Client Session, ClientPacket Packet)
         {
             int ItemId = Packet.PopInt();
             string Url = Packet.PopString();
 
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.UserId);
-            if (Client == null || Client.GetUser() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }
 
-            Room room = Client.GetUser().CurrentRoom;
-            if (room == null || !room.CheckRights(Client))
+            Room room = Session.GetUser().CurrentRoom;
+            if (room == null || !room.CheckRights(Session))
             {
                 return;
             }

@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Outgoing.WebSocket
     internal class LoadInventoryRpComposer : ServerPacket
     {
         public LoadInventoryRpComposer(ConcurrentDictionary<int, RolePlayInventoryItem> Items)
-          : base(9)
+          : base(ServerPacketHeader.LOAD_INVENTORY_RP)
         {
             this.WriteInteger(Items.Count);
 

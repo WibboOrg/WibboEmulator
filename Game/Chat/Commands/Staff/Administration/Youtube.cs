@@ -51,7 +51,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            roomUserByUserId.GetClient().GetUser().SendWebPacket(new YoutubeTvComposer(0, VideoId));
+            roomUserByUserId.GetClient().SendPacket(new YoutubeTvComposer(0, VideoId));
         }
     }
 }

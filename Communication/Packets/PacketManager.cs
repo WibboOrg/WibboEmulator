@@ -6,7 +6,6 @@ using Butterfly.Communication.Packets.Incoming.Campaign;
 using Butterfly.Communication.Packets.Incoming.WebSocket;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
-using Butterfly.Game.WebClients;
 using System;
 using System.Collections.Generic;
 
@@ -15,12 +14,10 @@ namespace Butterfly.Communication.Packets
     public sealed class PacketManager
     {
         private readonly Dictionary<int, IPacketEvent> _incomingPackets;
-        private readonly Dictionary<int, IPacketWebEvent> _incomingWebPackets;
 
         public PacketManager()
         {
             this._incomingPackets = new Dictionary<int, IPacketEvent>();
-            this._incomingWebPackets = new Dictionary<int, IPacketWebEvent>();
         }
 
         public void Init(IQueryAdapter dbClient)
@@ -55,7 +52,6 @@ namespace Butterfly.Communication.Packets
             this.RegisterModeration();
             this.RegisterGuide();
             this.RegisterNux();
-            this.RegisterForum();
             this.RegisterCamera();
             this.RegisterCampaign();
 
@@ -97,76 +93,29 @@ namespace Butterfly.Communication.Packets
 
             pak.Parse(session, packet);
         }
-
-        public void TryExecuteWebPacket(WebClient session, ClientPacket packet)
-        {
-            if (!this._incomingWebPackets.TryGetValue(packet.Id, out IPacketWebEvent pak))
-            {
-                if (ButterflyEnvironment.StaticEvents)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(packet.ToString());
-                    Console.ResetColor();
-                }
-                return;
-            }
-
-            if (ButterflyEnvironment.StaticEvents)
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine(packet.ToString());
-                Console.ResetColor();
-            }
-
-            if (session.PacketTimeout(packet.Id, pak.Delay))
-            {
-                if (ButterflyEnvironment.StaticEvents)
-                {
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("[" + packet.Id + "] Spam detected");
-                    Console.ResetColor();
-                }
-                return;
-            }
-
-            pak.Parse(session, packet);
-        }
-
         private void RegisterWebPacket()
         {
-            this._incomingWebPackets.Add(1, new SSOTicketWebEvent());
-            this._incomingWebPackets.Add(2, new SendHotelAlertEvent());
-            this._incomingWebPackets.Add(3, new EditTvYoutubeEvent());
-            this._incomingWebPackets.Add(4, new PingWebEvent());
-
-            this._incomingWebPackets.Add(6, new MoveUserEvent());
-            this._incomingWebPackets.Add(7, new FollowUserIdEvent());
-            this._incomingWebPackets.Add(8, new RpBuyItemsEvent());
-            this._incomingWebPackets.Add(9, new RpUseItemsEvent());
-            this._incomingWebPackets.Add(10, new JoinRoomIdEvent());
-            this._incomingWebPackets.Add(11, new RpTrocAddItemEvent());
-            this._incomingWebPackets.Add(12, new RpTrocRemoveItemEvent());
-            this._incomingWebPackets.Add(13, new RpTrocAccepteEvent());
-            this._incomingWebPackets.Add(14, new RpTrocConfirmeEvent());
-            this._incomingWebPackets.Add(15, new RpTrocStopEvent());
-            this._incomingWebPackets.Add(16, new RpBotChooseEvent());
-            this._incomingWebPackets.Add(17, new DisconnectWebEvent());
+            this._incomingPackets.Add(ClientPacketHeader.SEND_ALERT, new SendHotelAlertEvent());
+            this._incomingPackets.Add(ClientPacketHeader.EDIT_TV, new EditTvYoutubeEvent());
+            this._incomingPackets.Add(ClientPacketHeader.RP_BUY_ITEMS, new RpBuyItemsEvent());
+            this._incomingPackets.Add(ClientPacketHeader.RP_USE_ITEMS, new RpUseItemsEvent());
+            this._incomingPackets.Add(ClientPacketHeader.RP_TROC_ADD_ITEM, new RpTrocAddItemEvent());
+            this._incomingPackets.Add(ClientPacketHeader.RP_TROC_REMOVE_ITEM, new RpTrocRemoveItemEvent());
+            this._incomingPackets.Add(ClientPacketHeader.RP_TROC_ACCEPTE, new RpTrocAccepteEvent());
+            this._incomingPackets.Add(ClientPacketHeader.RP_TROC_CONFIRME, new RpTrocConfirmeEvent());
+            this._incomingPackets.Add(ClientPacketHeader.RP_TROC_STOP, new RpTrocStopEvent());
+            this._incomingPackets.Add(ClientPacketHeader.BOT_CHOOSE, new RpBotChooseEvent());
         }
 
         public void UnregisterAll()
         {
             this._incomingPackets.Clear();
-            this._incomingWebPackets.Clear();
         }
 
         private void RegisterCampaign()
         {
             this._incomingPackets.Add(ClientPacketHeader.OPEN_CAMPAIGN_CALENDAR_DOOR, new OpenCampaignCalendarDoorEvent());
             this._incomingPackets.Add(ClientPacketHeader.OPEN_CAMPAIGN_CALENDAR_DOOR_STAFF, new OpenCampaignCalendarDoorAsStaffEvent());
-        }
-        private void RegisterForum()
-        {
-            this._incomingPackets.Add(ClientPacketHeader.GET_FORUM_THREADS, new GuildForumListEvent());
         }
 
         private void RegisterHandshake()
@@ -244,7 +193,6 @@ namespace Butterfly.Communication.Packets
         {
             this._incomingPackets.Add(ClientPacketHeader.NAVIGATOR_INIT, new InitializeNewNavigatorEvent());
             this._incomingPackets.Add(ClientPacketHeader.NAVIGATOR_SEARCH, new NavigatorSearchEvent());
-            this._incomingPackets.Add(ClientPacketHeader.FindRandomFriendingRoomMessageEvent, new FindRandomFriendingRoomEvent());
         }
         private void RegisterRoomConnection()
         {
