@@ -1154,7 +1154,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                 case "transf":
                 case "nottransf":
                     {
-                        if (user.transformation)
+                        if (user.IsTransf)
                         {
                             Result = true;
                         }

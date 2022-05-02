@@ -48,7 +48,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                         return;
                     }
 
-                    UserRoom.transformation = true;
+                    UserRoom.IsTransf = true;
 
                     Room.SendPacket(new UserRemoveComposer(UserRoom.VirtualId));
                     Room.SendPacket(new UsersComposer(UserRoom));

@@ -39,9 +39,9 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     return;
                 }
 
-                if (roomUserByUserId.RotBody % 2 == 0 || roomUserByUserId.transformation)
+                if (roomUserByUserId.RotBody % 2 == 0 || roomUserByUserId.IsTransf)
                 {
-                    if (roomUserByUserId.RotBody == 4 || roomUserByUserId.RotBody == 0 || roomUserByUserId.transformation)
+                    if (roomUserByUserId.RotBody == 4 || roomUserByUserId.RotBody == 0 || roomUserByUserId.IsTransf)
                     {
                         if (room.GetGameMap().CanWalk(roomUserByUserId.X, roomUserByUserId.Y + 1))
                         {
@@ -61,7 +61,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     }
 
                     //roomUserByUserId.AddStatus("lay", Convert.ToString((double) room.GetGameMap().Model.SqFloorHeight[roomUserByUserId.X, roomUserByUserId.Y] + 0.85).Replace(",", "."));
-                    if (UserRoom.transformation)
+                    if (UserRoom.IsTransf)
                     {
                         roomUserByUserId.SetStatus("lay", "");
                     }

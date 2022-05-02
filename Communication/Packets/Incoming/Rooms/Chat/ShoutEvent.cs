@@ -182,7 +182,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     Session.GetUser().GetChatMessageManager().AddMessage(Session.GetUser().Id, Session.GetUser().Username, Room.Id, Message, UnixTimestamp.GetNow());
                     Room.GetChatMessageManager().AddMessage(Session.GetUser().Id, Session.GetUser().Username, Room.Id, Message, UnixTimestamp.GetNow());
 
-                    if (User.transfbot)
+                    if (User.TransfBot)
                     {
                         Colour = 2;
                     }

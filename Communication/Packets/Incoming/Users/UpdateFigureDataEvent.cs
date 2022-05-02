@@ -59,7 +59,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (roomUserByUserId.transformation || roomUserByUserId.IsSpectator)
+            if (roomUserByUserId.IsTransf || roomUserByUserId.IsSpectator)
             {
                 return;
             }

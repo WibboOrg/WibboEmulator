@@ -2155,7 +2155,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         if (User.RotBody % 2 == 0)
                         {
-                            if (User.transformation)
+                            if (User.IsTransf)
                             {
                                 User.SetStatus("sit", "");
                             }
@@ -2174,7 +2174,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         if (User.RotBody % 2 == 0)
                         {
-                            if (User.transformation)
+                            if (User.IsTransf)
                             {
                                 User.SetStatus("lay", "");
                             }
@@ -2207,7 +2207,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                         if (User.SetPetTransformation(petName, raceId))
                         {
-                            User.transformation = true;
+                            User.IsTransf = true;
 
                             User.Room.SendPacket(new UserRemoveComposer(User.VirtualId));
                             User.Room.SendPacket(new UsersComposer(User));
@@ -2216,7 +2216,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     }
                 case "transfstop":
                     {
-                        User.transformation = false;
+                        User.IsTransf = false;
 
                         User.Room.SendPacket(new UserRemoveComposer(User.VirtualId));
                         User.Room.SendPacket(new UsersComposer(User));

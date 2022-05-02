@@ -114,7 +114,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                         }
                     }
 
-                    if (User.transfbot)
+                    if (User.TransfBot)
                     {
                         this.WriteInteger(user.Id);
                         this.WriteString(user.Username);
@@ -132,12 +132,12 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                         this.WriteString(user.Username);
                         this.WriteInteger(0);
                     }
-                    else if (User.transformation)
+                    else if (User.IsTransf)
                     {
                         this.WriteInteger(user.Id);
                         this.WriteString(user.Username);
                         this.WriteString(user.Motto);
-                        this.WriteString(User.transformationrace + " 2 2 -1 0 3 4 -1 0");
+                        this.WriteString(User.TransfRace + " 2 2 -1 0 3 4 -1 0");
 
                         this.WriteInteger(User.VirtualId);
                         this.WriteInteger(User.X);

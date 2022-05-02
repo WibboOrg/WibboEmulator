@@ -70,7 +70,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.tradedisabled", Session.Langue));
             }
-            else if (roomUserByVirtualId.transformation || roomUserByUserId.transformation || roomUserByUserId.IsSpectator || roomUserByVirtualId.IsSpectator)
+            else if (roomUserByVirtualId.IsTransf || roomUserByUserId.IsTransf || roomUserByUserId.IsSpectator || roomUserByVirtualId.IsSpectator)
             {
                 Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.3", Session.Langue));
             }

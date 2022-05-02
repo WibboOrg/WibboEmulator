@@ -9,7 +9,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (UserRoom.transformation || UserRoom.IsSpectator)
+            if (UserRoom.IsTransf || UserRoom.IsSpectator)
             {
                 return;
             }

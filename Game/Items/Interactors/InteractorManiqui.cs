@@ -59,7 +59,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            if (Roomuser.transformation || Roomuser.IsSpectator)
+            if (Roomuser.IsTransf || Roomuser.IsSpectator)
             {
                 return;
             }

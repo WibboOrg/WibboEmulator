@@ -26,7 +26,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (roomUserByUserId.RotBody % 2 == 0)
             {
-                if (UserRoom.transformation)
+                if (UserRoom.IsTransf)
                 {
                     roomUserByUserId.SetStatus("sit", "");
                 }

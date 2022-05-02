@@ -64,7 +64,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             roomUserByUserId.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.transf.helpstop", Session.Langue));
 
-            roomUserByUserId.transformation = true;
+            roomUserByUserId.IsTransf = true;
 
             RoomClient.SendPacket(new UserRemoveComposer(roomUserByUserId.VirtualId));
             RoomClient.SendPacket(new UsersComposer(roomUserByUserId));

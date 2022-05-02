@@ -14,12 +14,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (!UserRoom.transformation && !UserRoom.IsSpectator)
+            if (!UserRoom.IsTransf && !UserRoom.IsSpectator)
             {
                 Room RoomClient = Session.GetUser().CurrentRoom;
                 if (RoomClient != null)
                 {
-                    UserRoom.transfbot = !UserRoom.transfbot;
+                    UserRoom.TransfBot = !UserRoom.TransfBot;
 
                     RoomClient.SendPacket(new UserRemoveComposer(UserRoom.VirtualId));
                     RoomClient.SendPacket(new UsersComposer(UserRoom));

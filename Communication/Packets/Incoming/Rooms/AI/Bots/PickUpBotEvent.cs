@@ -45,7 +45,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     return;
                 }
 
-                TargetUser.transfbot = false;
+                TargetUser.TransfBot = false;
 
                 //Quickly remove the old user instance.
                 Room.SendPacket(new UserRemoveComposer(TargetUser.VirtualId));

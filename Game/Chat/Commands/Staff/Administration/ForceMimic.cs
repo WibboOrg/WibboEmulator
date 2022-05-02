@@ -32,7 +32,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             clientByUsername.GetUser().Gender = Session.GetUser().Gender;
             clientByUsername.GetUser().Look = Session.GetUser().Look;
 
-            if (roomUserByUserId.transformation || roomUserByUserId.IsSpectator)
+            if (roomUserByUserId.IsTransf || roomUserByUserId.IsSpectator)
             {
                 return;
             }

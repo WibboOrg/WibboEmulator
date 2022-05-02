@@ -49,7 +49,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 Session.GetUser().Look = TargetUser.GetUser().Look;
             }
 
-            if (UserRoom.transformation || UserRoom.IsSpectator)
+            if (UserRoom.IsTransf || UserRoom.IsSpectator)
             {
                 return;
             }

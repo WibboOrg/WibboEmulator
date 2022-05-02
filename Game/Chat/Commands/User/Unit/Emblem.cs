@@ -4,7 +4,7 @@ using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Chat.Commands.Cmd
 {
-    internal class Insignia : IChatCommand
+    internal class Emblem : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {

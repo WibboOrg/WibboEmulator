@@ -19,6 +19,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             UserRoom.DiceCounterAmount = 0;
+            UserRoom.DiceCounter = 0;
 
             userBooth.ForEach(x =>
             {

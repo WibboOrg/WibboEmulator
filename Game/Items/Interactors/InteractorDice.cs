@@ -42,6 +42,7 @@ namespace Butterfly.Game.Items.Interactors
                     if (roomUser.DiceCounterAmount > 0 && !roomUser.InGame)
                     {
                         roomUser.DiceCounterAmount = 0;
+                        roomUser.DiceCounter = 0;
                         roomUser.OnChat($"Dée: remise à 0 ({roomUser.GetUsername()})", 34); // déplacer
                     }
                 }
@@ -73,7 +74,8 @@ namespace Butterfly.Game.Items.Interactors
                 if (!user.InGame)
                 {
                     user.DiceCounterAmount += numberDice;
-                    user.OnChat($"Dée: +{numberDice} = {user.DiceCounterAmount} ({user.GetUsername()})", 34);
+                    user.DiceCounter++;
+                    user.OnChat($"Dée {user.DiceCounter}: +{numberDice} = {user.DiceCounterAmount} ({user.GetUsername()})", 34);
                 }
             }
          }

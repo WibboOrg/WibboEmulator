@@ -59,7 +59,6 @@ namespace Butterfly.Game.Rooms
         public bool ShieldActive;
         public int ShieldCounter;
         public int CountFreezeBall = 1;
-        public int DiceCounterAmount;
         public bool MoonwalkEnabled;
         public bool FacewalkEnabled;
         public bool RidingHorse;
@@ -74,15 +73,19 @@ namespace Butterfly.Game.Rooms
         public int FloodCount;
         public bool IsSpectator;
 
+        public int DiceCounterAmount;
+        public int DiceCounter;
+
         public bool ConstruitEnable = false;
         public bool ConstruitZMode = false;
         public double ConstruitHeigth = 1.0;
 
         public bool Freeze;
         public int FreezeEndCounter;
-        public bool transformation;
-        public bool transfbot;
-        public string transformationrace;
+
+        public bool IsTransf;
+        public bool TransfBot;
+        public string TransfRace;
 
         public bool AllowBall;
         public bool MoveWithBall;
@@ -460,7 +463,7 @@ namespace Butterfly.Game.Rooms
             }
             else
             {
-                this.transformationrace = RaceData;
+                this.TransfRace = RaceData;
 
                 return true;
             }

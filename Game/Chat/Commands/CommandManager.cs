@@ -243,7 +243,6 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(144, new Cmd.RockPaperScissors());
             this.Register(145, new RandomLook());
             this.Register(146, new Mazo());
-            this.Register(148, new LoadVideo());
             this.Register(149, new HideWireds());
             this.Register(150, new AllWarp());
             this.Register(151, new Use());
@@ -305,7 +304,7 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(107, new RoomEnable());
             this.Register(112, new WarpStaff());
             this.Register(115, new EventAlert());
-            this.Register(170, new Insignia());
+            this.Register(170, new Emblem());
             this.Register(198, new StaffsOnline());
         }
 

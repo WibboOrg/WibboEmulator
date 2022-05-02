@@ -5,7 +5,7 @@ using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Chat.Commands.Cmd
 {
-    internal class TransfBig : IChatCommand
+    internal class TransfLittle : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
@@ -19,18 +19,18 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (Session.GetUser().SpectatorMode)
+            if (Session.GetUser().SpectatorMode || UserRoom.InGame)
             {
                 return;
             }
 
-            if (!UserRoom.SetPetTransformation("big" + Params[1], 0))
+            if (!UserRoom.SetPetTransformation("little" + Params[1], 0))
             {
                 Session.SendHugeNotif(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.littleorbig.help", Session.Langue));
                 return;
             }
 
-            UserRoom.transformation = true;
+            UserRoom.IsTransf = true;
 
             Room.SendPacket(new UserRemoveComposer(UserRoom.VirtualId));
             Room.SendPacket(new UsersComposer(UserRoom));

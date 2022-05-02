@@ -1185,7 +1185,7 @@ namespace Butterfly.Game.Rooms
                         }
                         break;
                     case InteractionType.FBGATE:
-                        if (cyclegameitems || string.IsNullOrEmpty(roomItem.ExtraData) || !roomItem.ExtraData.Contains(',') || User == null || User.IsBot || User.transformation || User.IsSpectator)
+                        if (cyclegameitems || string.IsNullOrEmpty(roomItem.ExtraData) || !roomItem.ExtraData.Contains(',') || User == null || User.IsBot || User.IsTransf || User.IsSpectator)
                         {
                             break;
                         }
@@ -1266,7 +1266,7 @@ namespace Butterfly.Game.Rooms
                 {
                     if (!User.Statusses.ContainsKey("sit"))
                     {
-                        if (User.transformation)
+                        if (User.IsTransf)
                         {
                             User.SetStatus("sit", "");
                         }
@@ -1284,7 +1284,7 @@ namespace Butterfly.Game.Rooms
 
                     if (!User.Statusses.ContainsKey("lay"))
                     {
-                        if (User.transformation)
+                        if (User.IsTransf)
                         {
                             User.SetStatus("lay", "");
                         }
