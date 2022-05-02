@@ -122,6 +122,8 @@ namespace Butterfly.Game.Users
 
         public int RolePlayId;
         public double IgnoreAllExpireTime;
+
+        public bool AllowConsoleMessages;
         public bool IgnoreAll
         {
             get
@@ -232,6 +234,7 @@ namespace Butterfly.Game.Users
             this.Nuxenable = nuxenable;
             this.NewUser = nuxenable;
             this.Visits = new Dictionary<double, int>();
+            this.AllowConsoleMessages = true;
         }
 
         public void Init(Client client)
@@ -464,7 +467,7 @@ namespace Butterfly.Game.Users
                 ButterflyEnvironment.GetGame().GetClientManager().RemoveUserStaff(this.Id);
             }
 
-            Logging.WriteLine(this.Username + " has logged out.");
+            ExceptionLogger.WriteLine(this.Username + " has logged out.");
 
             if (!this.InfoSaved)
             {

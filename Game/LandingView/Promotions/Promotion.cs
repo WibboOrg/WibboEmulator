@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.LandingView
+﻿namespace Butterfly.Game.LandingView.Promotions
 {
     public class Promotion
     {

@@ -13,14 +13,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             if (Params.Length == 1)
             {
-                UserRoom.SendWhisperChat("Please enter a dance ID. (1-4)");
+                Session.SendWhisper("Please enter a dance ID. (1-4)");
                 return;
             }
 
             int DanceId = Convert.ToInt32(Params[1]);
             if (DanceId < 0 || DanceId > 4)
             {
-                UserRoom.SendWhisperChat("Please enter a dance ID. (1-4)");
+                Session.SendWhisper("Please enter a dance ID. (1-4)");
                 return;
             }
 

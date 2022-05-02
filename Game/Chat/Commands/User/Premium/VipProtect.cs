@@ -11,11 +11,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (Session.GetUser().PremiumProtect)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.premium.true", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.premium.true", Session.Langue));
             }
             else
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.premium.false", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.premium.false", Session.Langue));
             }
         }
     }

@@ -1,24 +1,10 @@
 ﻿namespace Butterfly.Game.Rooms
 {
-    public enum ItemEffectType
-    {
-        NONE,
-        SWIM,
-        SWIMLOW,
-        SWIMHALLOWEEN,
-        ICESKATES,
-        NORMALSKATES,
-        PUBLICPOOL,
-        TRAMPOLINE,
-        TREADMILL,
-        CROSSTRAINER,
-    }
-
     public static class ByteToItemEffectType
     {
-        public static ItemEffectType Parse(byte pByte)
+        public static ItemEffectType Parse(byte number)
         {
-            switch (pByte)
+            switch (number)
             {
                 case 0:
                     return ItemEffectType.NONE;

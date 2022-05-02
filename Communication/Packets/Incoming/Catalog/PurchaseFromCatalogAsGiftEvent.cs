@@ -7,7 +7,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Catalog;
 using Butterfly.Game.Catalog.Utilities;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using Butterfly.Game.Items;
 using Butterfly.Game.Users;
 using Butterfly.Utilities;

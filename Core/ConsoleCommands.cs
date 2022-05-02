@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Butterfly.Communication.Packets.Outgoing.Moderation;
+using System;
 
 namespace Butterfly.Core
 {
@@ -19,24 +20,39 @@ namespace Butterfly.Core
                 {
                     case "stop":
                     case "shutdown":
-                        Logging.LogMessage("Server exiting at " + DateTime.Now);
-                        Logging.DisablePrimaryWriting(true);
-                        Console.WriteLine("The server is saving users furniture, rooms, etc. WAIT FOR THE SERVER TO CLOSE, DO NOT EXIT THE PROCESS IN TASK MANAGER!!");
-                        ButterflyEnvironment.PreformShutDown();
-                        break;
+                        {
+                            ExceptionLogger.LogMessage("Server exiting at " + DateTime.Now);
+                            ExceptionLogger.DisablePrimaryWriting(true);
+                            Console.WriteLine("The server is saving users furniture, rooms, etc. WAIT FOR THE SERVER TO CLOSE, DO NOT EXIT THE PROCESS IN TASK MANAGER!!");
+                            ButterflyEnvironment.PreformShutDown();
+                            break;
+                        }
 
                     case "clear":
-                        Console.Clear();
-                        break;
+                        {
+                            Console.Clear();
+                            break;
+                        }
+
+                    case "alert":
+                        {
+                            string notice = inputData.Substring(6);
+
+                            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer(notice));
+
+                            Console.WriteLine("Alert successfully sent.");
+                            break;
+                        }
+
 
                     default:
-                        Logging.LogMessage(parameters[0].ToLower() + " is an unknown or unsupported command. Type help for more information");
+                        ExceptionLogger.LogMessage(parameters[0].ToLower() + " is an unknown or unsupported command. Type help for more information");
                         break;
                 }
             }
             catch (Exception e)
             {
-                Logging.LogMessage("Error in command [" + inputData + "]: " + e);
+                ExceptionLogger.LogMessage("Error in command [" + inputData + "]: " + e);
             }
         }
     }

@@ -11,11 +11,13 @@ using Butterfly.Communication.Packets.Outgoing.Misc;
 using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Notifications;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Communication.Packets.Outgoing.Sound;
 using Butterfly.Communication.Packets.Outgoing.WebSocket;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
+using Butterfly.Game.Rooms;
 using Butterfly.Game.Users;
 using Butterfly.Game.Users.Data;
 using Butterfly.Net;
@@ -173,7 +175,7 @@ namespace Butterfly.Game.Clients
             }
             catch (Exception ex)
             {
-                Logging.LogException("Invalid Dario bug duing user login: " + (ex).ToString());
+                ExceptionLogger.LogException("Invalid Dario bug duing user login: " + (ex).ToString());
             }
         }
 
@@ -214,7 +216,7 @@ namespace Butterfly.Game.Clients
             }
             catch (Exception ex)
             {
-                Logging.LogPacketException(Message.ToString(), (ex).ToString());
+                ExceptionLogger.LogPacketException(Message.ToString(), (ex).ToString());
             }
         }
 
@@ -324,7 +326,18 @@ namespace Butterfly.Game.Clients
 
             return true;
         }
+        public void SendWhisper(string message, bool Info = true)
+        {
+            if (GetUser() == null || GetUser().CurrentRoom == null)
+                return;
 
+            RoomUser user = GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(GetUser().Username);
+            if (user == null)
+                return;
+
+
+            SendPacket(new WhisperComposer(user.VirtualId, message, (Info) ? 34 : 0));
+        }
         public void SendNotification(string Message)
         {
             SendPacket(new BroadcastMessageAlertComposer(Message));

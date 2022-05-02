@@ -6,27 +6,27 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Butterfly.Game.Guilds
+namespace Butterfly.Game.Groups
 {
     public class GroupManager
     {
         private readonly ConcurrentDictionary<int, Group> _groups;
 
-        private readonly List<GroupBadgePart> _bases;
-        private readonly List<GroupBadgePart> _symbols;
-        private readonly List<GroupColour> _baseColours;
-        private readonly Dictionary<int, GroupColour> _symbolColours;
-        private readonly Dictionary<int, GroupColour> _backgroundColours;
+        private readonly List<GroupBadgeParts> _bases;
+        private readonly List<GroupBadgeParts> _symbols;
+        private readonly List<GroupColours> _baseColours;
+        private readonly Dictionary<int, GroupColours> _symbolColours;
+        private readonly Dictionary<int, GroupColours> _backgroundColours;
 
         public GroupManager()
         {
             this._groups = new ConcurrentDictionary<int, Group>();
 
-            this._bases = new List<GroupBadgePart>();
-            this._symbols = new List<GroupBadgePart>();
-            this._baseColours = new List<GroupColour>();
-            this._symbolColours = new Dictionary<int, GroupColour>();
-            this._backgroundColours = new Dictionary<int, GroupColour>();
+            this._bases = new List<GroupBadgeParts>();
+            this._symbols = new List<GroupBadgeParts>();
+            this._baseColours = new List<GroupColours>();
+            this._symbolColours = new Dictionary<int, GroupColours>();
+            this._backgroundColours = new Dictionary<int, GroupColours>();
         }
 
         public void Init(IQueryAdapter dbClient)
@@ -44,23 +44,23 @@ namespace Butterfly.Game.Guilds
                 switch (dRow["type"].ToString())
                 {
                     case "base":
-                        this._bases.Add(new GroupBadgePart(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
+                        this._bases.Add(new GroupBadgeParts(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
                         break;
 
                     case "symbol":
-                        this._symbols.Add(new GroupBadgePart(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
+                        this._symbols.Add(new GroupBadgeParts(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString(), dRow["secondvalue"].ToString()));
                         break;
 
                     case "color":
-                        this._baseColours.Add(new GroupColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                        this._baseColours.Add(new GroupColours(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
                         break;
 
                     case "color2":
-                        this._symbolColours.Add(Convert.ToInt32(dRow["id"]), new GroupColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                        this._symbolColours.Add(Convert.ToInt32(dRow["id"]), new GroupColours(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
                         break;
 
                     case "color3":
-                        this._backgroundColours.Add(Convert.ToInt32(dRow["id"]), new GroupColour(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
+                        this._backgroundColours.Add(Convert.ToInt32(dRow["id"]), new GroupColours(Convert.ToInt32(dRow["id"]), dRow["firstvalue"].ToString()));
                         break;
                 }
             }
@@ -173,14 +173,14 @@ namespace Butterfly.Game.Guilds
         }
 
 
-        public ICollection<GroupBadgePart> BadgeBases => this._bases;
+        public ICollection<GroupBadgeParts> BadgeBases => this._bases;
 
-        public ICollection<GroupBadgePart> BadgeSymbols => this._symbols;
+        public ICollection<GroupBadgeParts> BadgeSymbols => this._symbols;
 
-        public ICollection<GroupColour> BadgeBaseColours => this._baseColours;
+        public ICollection<GroupColours> BadgeBaseColours => this._baseColours;
 
-        public ICollection<GroupColour> BadgeSymbolColours => this._symbolColours.Values;
+        public ICollection<GroupColours> BadgeSymbolColours => this._symbolColours.Values;
 
-        public ICollection<GroupColour> BadgeBackColours => this._backgroundColours.Values;
+        public ICollection<GroupColours> BadgeBackColours => this._backgroundColours.Values;
     }
 }

@@ -9,7 +9,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             ButterflyEnvironment.GetGame().GetAnimationManager().StartGame();
-            UserRoom.SendWhisperChat("Lancement de l'animation de Jack & Daisy !");
+            Session.SendWhisper("Lancement de l'animation de Jack & Daisy !");
             ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifTopComposer("Petite animation à l'improviste ! (Jack & Daisy)"));
         }
     }

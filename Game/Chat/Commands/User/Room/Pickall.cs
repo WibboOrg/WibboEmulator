@@ -15,7 +15,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (Room.RoomData.SellPrice > 0)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.pickall", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.pickall", Session.Langue));
                 return;
             }
 

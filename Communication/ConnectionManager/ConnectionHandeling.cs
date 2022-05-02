@@ -41,7 +41,7 @@ namespace ConnectionManager
             }
             catch (Exception ex)
             {
-                Logging.LogException((ex).ToString());
+                ExceptionLogger.LogException((ex).ToString());
             }
         }
 

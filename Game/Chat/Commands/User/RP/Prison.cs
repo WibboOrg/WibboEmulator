@@ -66,7 +66,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             if (Math.Floor((double)(RpTwo.Health / (double)RpTwo.HealthMax) * 100) > 75)
             {
                 UserRoom.OnChat("*Tente d'arrêter " + TargetRoomUser.GetUsername() + "*");
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.prisonnotallowed", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.prisonnotallowed", Session.Langue));
                 return;
             }
 

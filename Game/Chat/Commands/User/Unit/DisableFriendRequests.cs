@@ -10,12 +10,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             if (Session.GetUser().HasFriendRequestsDisabled)
             {
                 Session.GetUser().HasFriendRequestsDisabled = false;
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.true", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.true", Session.Langue));
             }
             else
             {
                 Session.GetUser().HasFriendRequestsDisabled = true;
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.false", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.false", Session.Langue));
             }
 
         }

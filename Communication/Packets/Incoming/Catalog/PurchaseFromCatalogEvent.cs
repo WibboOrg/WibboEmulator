@@ -12,7 +12,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Catalog;
 using Butterfly.Game.Catalog.Utilities;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using Butterfly.Game.Items;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Users.Inventory.Bots;
@@ -170,7 +170,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     }
                     catch (Exception e)
                     {
-                        Logging.LogException((e).ToString());
+                        ExceptionLogger.LogException((e).ToString());
                     }
 
                     ExtraData = Number.ToString().Replace(',', '.');

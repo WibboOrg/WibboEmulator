@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Users;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using Butterfly.Game.Rooms;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Guilds
+﻿namespace Butterfly.Game.Groups
 {
     public static class BadgePartUtility
     {

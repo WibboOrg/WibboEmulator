@@ -1,12 +1,12 @@
-﻿namespace Butterfly.Game.Guilds
+﻿namespace Butterfly.Game.Groups
 {
-    public class GroupBadgePart
+    public class GroupBadgeParts
     {
         public int Id { get; private set; }
         public string AssetOne { get; private set; }
         public string AssetTwo { get; private set; }
 
-        public GroupBadgePart(int id, string assetOne, string assetTwo)
+        public GroupBadgeParts(int id, string assetOne, string assetTwo)
         {
             this.Id = id;
             this.AssetOne = assetOne;

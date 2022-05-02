@@ -17,11 +17,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             roomUserByUserId.FacewalkEnabled = !roomUserByUserId.FacewalkEnabled;
             if (roomUserByUserId.FacewalkEnabled)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.true", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.true", Session.Langue));
             }
             else
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.false", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.false", Session.Langue));
             }
         }
     }

@@ -39,12 +39,12 @@ namespace Butterfly.Net
 
                 if (!ButterflyEnvironment.GetRCONSocket().GetCommands().Parse(data))
                 {
-                    Logging.WriteLine("Failed to execute a MUS command. Raw data: " + data);
+                    ExceptionLogger.WriteLine("Failed to execute a MUS command. Raw data: " + data);
                 }
             }
             catch (Exception ex)
             {
-                Logging.LogException("Erreur mus: " + ex);
+                ExceptionLogger.LogException("Erreur mus: " + ex);
             }
 
             this.Dispose();

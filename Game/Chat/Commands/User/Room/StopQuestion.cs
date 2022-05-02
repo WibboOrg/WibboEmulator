@@ -10,7 +10,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             Room.SendPacket(new QuestionFinishedComposer(Room.VotedNoCount, Room.VotedYesCount));
 
-            UserRoom.SendWhisperChat("Question terminée!");
+            Session.SendWhisper("Question terminée!");
         }
     }
 }

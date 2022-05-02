@@ -1,11 +1,11 @@
-﻿namespace Butterfly.Game.Guilds
+﻿namespace Butterfly.Game.Groups
 {
-    public class GroupColour
+    public class GroupColours
     {
         public int Id { get; private set; }
         public string Colour { get; private set; }
 
-        public GroupColour(int id, string colour)
+        public GroupColours(int id, string colour)
         {
             this.Id = id;
             this.Colour = colour;

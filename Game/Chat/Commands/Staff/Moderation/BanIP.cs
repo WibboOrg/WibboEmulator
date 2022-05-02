@@ -32,7 +32,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             ButterflyEnvironment.GetGame().GetClientManager().BanUser(TargetUser, session.GetUser().Username, 788922000, reason, true, false);
-            userRoom.SendWhisperChat("Tu as banIP " + TargetUser.GetUser().Username + " pour" + reason + "!");
+            session.SendWhisper("Tu as banIP " + TargetUser.GetUser().Username + " pour" + reason + "!");
             session.Antipub(reason, "<CMD>");
 
             if (TargetUser.GetUser().Rank > 5 && session.GetUser().Rank < 12)

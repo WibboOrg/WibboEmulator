@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Butterfly.Core
 {
-    public static class Logging
+    public static class ExceptionLogger
     {
         public static bool DisabledState
         {

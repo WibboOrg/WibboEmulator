@@ -726,7 +726,7 @@ namespace Butterfly.Game.Rooms
             }
             catch (Exception ex)
             {
-                Logging.LogCriticalException("Error during removing user (" + Session.ConnectionID + ") from room:" + (ex).ToString());
+                ExceptionLogger.LogCriticalException("Error during removing user (" + Session.ConnectionID + ") from room:" + (ex).ToString());
             }
         }
 

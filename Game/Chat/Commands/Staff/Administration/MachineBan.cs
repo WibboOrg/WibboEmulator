@@ -35,7 +35,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 }
 
                 ButterflyEnvironment.GetGame().GetClientManager().BanUser(clientByUsername, Session.GetUser().Username, 788922000, Raison, true, true);
-                UserRoom.SendWhisperChat("Tu viens de bannir " + clientByUsername.GetUser().Username + " pour la raison : " + Raison +" !");
+                Session.SendWhisper("Tu viens de bannir " + clientByUsername.GetUser().Username + " pour la raison : " + Raison +" !");
                 Session.Antipub(Raison, "<CMD>");
                 return;
             }

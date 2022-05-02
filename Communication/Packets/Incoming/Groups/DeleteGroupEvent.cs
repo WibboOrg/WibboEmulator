@@ -1,7 +1,7 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

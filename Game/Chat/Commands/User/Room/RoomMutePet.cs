@@ -15,12 +15,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (room.RoomMutePets)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.roommutepet.true", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.roommutepet.true", Session.Langue));
                 room.RoomMutePets = false;
             }
             else
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.roommutepet.false", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.roommutepet.false", Session.Langue));
                 room.RoomMutePets = true;
             }
 

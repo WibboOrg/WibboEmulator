@@ -1,4 +1,4 @@
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using Butterfly.Game.Users;
 using System.Collections.Generic;
 

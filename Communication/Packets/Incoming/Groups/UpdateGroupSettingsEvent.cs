@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using Butterfly.Game.Rooms;
 using System.Linq;
 

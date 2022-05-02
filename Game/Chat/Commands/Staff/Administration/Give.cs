@@ -18,7 +18,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     {
                         if (!Session.GetUser().HasFuse("fuse_give_credits"))
                         {
-                            UserRoom.SendWhisperChat("Désolé, vous n'avez pas la permission...");
+                            Session.SendWhisper("Désolé, vous n'avez pas la permission...");
                             break;
                         }
                         else
@@ -32,12 +32,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                                 if (TargetUser.GetUser().Id != Session.GetUser().Id)
                                     TargetUser.SendNotification(Session.GetUser().Username + " t'a donné  " + Amount.ToString() + " crédit(s)!");
 
-                                UserRoom.SendWhisperChat("Tu as donné " + Amount + " crédit(s) à " + TargetUser.GetUser().Username + "!");
+                                Session.SendWhisper("Tu as donné " + Amount + " crédit(s) à " + TargetUser.GetUser().Username + "!");
                                 break;
                             }
                             else
                             {
-                                UserRoom.SendWhisperChat("Désolé, le montant n'est pas valide");
+                                Session.SendWhisper("Désolé, le montant n'est pas valide");
                                 break;
                             }
                         }
@@ -51,7 +51,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     {
                         if (!Session.GetUser().HasFuse("fuse_give_limitcoins")) //only Jason
                         {
-                            UserRoom.SendWhisperChat("Désolé, vous n'avez pas la permission...");
+                            Session.SendWhisper("Désolé, vous n'avez pas la permission...");
                             break;
                         }
                         else
@@ -65,12 +65,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                                 if (TargetUser.GetUser().Id != Session.GetUser().Id)
                                     TargetUser.SendNotification(Session.GetUser().Username + " t'a donné " + Amount.ToString() + " WibboPoint(s)!");
 
-                                UserRoom.SendWhisperChat("Tu as donné " + Amount + " WibboPoint(s) à " + TargetUser.GetUser().Username + "!");
+                                Session.SendWhisper("Tu as donné " + Amount + " WibboPoint(s) à " + TargetUser.GetUser().Username + "!");
                                 break;
                             }
                             else
                             {
-                                UserRoom.SendWhisperChat("Désolé, le montant n'est pas valide");
+                                Session.SendWhisper("Désolé, le montant n'est pas valide");
                                 break;
                             }
                         }
@@ -81,7 +81,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     {
                         if (!Session.GetUser().HasFuse("fuse_give_limitecoins")) // only Jason
                         {
-                            UserRoom.SendWhisperChat("Désolé, vous n'avez pas la permission...");
+                            Session.SendWhisper("Désolé, vous n'avez pas la permission...");
                             break;
                         }
                         else
@@ -95,19 +95,19 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                                 if (TargetUser.GetUser().Id != Session.GetUser().Id)
                                     TargetUser.SendNotification(Session.GetUser().Username + " t'a donné " + Amount.ToString() + " Limit'Coin(s)!");
 
-                                UserRoom.SendWhisperChat("Tu as donné " + Amount + " Limit'Coin(s) à " + TargetUser.GetUser().Username + "!");
+                                Session.SendWhisper("Tu as donné " + Amount + " Limit'Coin(s) à " + TargetUser.GetUser().Username + "!");
                                 break;
                             }
                             else
                             {
-                                UserRoom.SendWhisperChat("Désolé, le montant n'est pas valide");
+                                Session.SendWhisper("Désolé, le montant n'est pas valide");
                                 break;
                             }
                         }
                     }
 
                 default:
-                    UserRoom.SendWhisperChat("'" + UpdateVal + "' n'est pas une monnaie ! ");
+                    Session.SendWhisper("'" + UpdateVal + "' n'est pas une monnaie ! ");
                     break;
             }
         }

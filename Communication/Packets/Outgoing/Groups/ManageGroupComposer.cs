@@ -1,4 +1,4 @@
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 
 namespace Butterfly.Communication.Packets.Outgoing.Groups
 {

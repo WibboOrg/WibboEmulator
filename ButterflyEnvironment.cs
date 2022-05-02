@@ -101,7 +101,7 @@ namespace Butterfly
 
                     if (TryCount > 10)
                     {
-                        Logging.WriteLine("Failed to connect to the specified MySQL server.");
+                        ExceptionLogger.WriteLine("Failed to connect to the specified MySQL server.");
                         Console.ReadKey(true);
                         Environment.Exit(1);
                         return;
@@ -131,31 +131,31 @@ namespace Butterfly
                 CameraUploadUrl = _configuration.data["camera.upload.url"];
                 CameraThubmailUploadUrl = _configuration.data["camera.thubmail.upload.url"];
 
-                Logging.WriteLine("EMULATOR -> READY!");
+                ExceptionLogger.WriteLine("EMULATOR -> READY!");
 
                 if (Debugger.IsAttached)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Logging.WriteLine("Server is debugging: Console writing enabled");
+                    ExceptionLogger.WriteLine("Server is debugging: Console writing enabled");
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
                 else
                 {
-                    Logging.WriteLine("Server is not debugging: Console writing disabled");
-                    Logging.DisablePrimaryWriting(false);
+                    ExceptionLogger.WriteLine("Server is not debugging: Console writing disabled");
+                    ExceptionLogger.DisablePrimaryWriting(false);
                 }
             }
             catch (KeyNotFoundException ex)
             {
-                Logging.WriteLine("Please check your configuration file - some values appear to be missing.");
-                Logging.WriteLine("Press any key to shut down ...");
-                Logging.WriteLine((ex).ToString());
+                ExceptionLogger.WriteLine("Please check your configuration file - some values appear to be missing.");
+                ExceptionLogger.WriteLine("Press any key to shut down ...");
+                ExceptionLogger.WriteLine((ex).ToString());
                 Console.ReadKey(true);
             }
             catch (InvalidOperationException ex)
             {
-                Logging.WriteLine("Failed to initialize ButterflyEmulator: " + ex.Message);
-                Logging.WriteLine("Press any key to shut down ...");
+                ExceptionLogger.WriteLine("Failed to initialize ButterflyEmulator: " + ex.Message);
+                ExceptionLogger.WriteLine("Press any key to shut down ...");
                 Console.ReadKey(true);
             }
             catch (Exception ex)

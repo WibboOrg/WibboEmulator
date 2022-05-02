@@ -489,7 +489,7 @@ namespace Butterfly.Game.Rooms
             }
             catch (Exception ex)
             {
-                Logging.LogCriticalException("Error during saving furniture for room " + this._room.Id + ". Stack: " + (ex).ToString());
+                ExceptionLogger.LogCriticalException("Error during saving furniture for room " + this._room.Id + ". Stack: " + (ex).ToString());
             }
         }
 

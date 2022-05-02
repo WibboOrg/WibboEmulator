@@ -9,7 +9,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             Session.ShowGameAlert = !Session.ShowGameAlert;
 
-            UserRoom.SendWhisperChat(Session.ShowGameAlert ? "Alerte d'animation activée" : "Alerte d'animation désactivée", true);
+            Session.SendWhisper(Session.ShowGameAlert ? "Alerte d'animation activée" : "Alerte d'animation désactivée", true);
         }
     }
 }

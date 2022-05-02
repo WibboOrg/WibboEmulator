@@ -265,7 +265,7 @@ namespace Butterfly.Game.Rooms.AI.Types
                 }
                 catch (Exception ex)
                 {
-                    Logging.HandleException(ex, "PetBot.OnTimerTick");
+                    ExceptionLogger.HandleException(ex, "PetBot.OnTimerTick");
                 }
             }
             else

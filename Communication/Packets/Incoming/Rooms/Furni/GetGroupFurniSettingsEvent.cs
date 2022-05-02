@@ -1,6 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using Butterfly.Game.Items;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

@@ -34,14 +34,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     case "random":
                         {
                             ButterflyEnvironment.RegenRandom();
-                            UserRoom.SendWhisperChat("Random mis à jour");
+                            Session.SendWhisper("Random mis à jour");
                             break;
                         }
                     case "view":
                     case "vue":
                         {
                             ButterflyEnvironment.GetGame().GetHotelView().Init(dbClient);
-                            UserRoom.SendWhisperChat("Vue et promotion mises à jour");
+                            Session.SendWhisper("Vue et promotion mises à jour");
                             break;
                         }
                     case "text":
@@ -49,14 +49,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     case "locale":
                         {
                             ButterflyEnvironment.GetLanguageManager().Init(dbClient);
-                            UserRoom.SendWhisperChat("Local mis à jour");
+                            Session.SendWhisper("Local mis à jour");
                             break;
                         }
 
                     case "wibbogame":
                         {
                             ButterflyEnvironment.GetGame().GetAnimationManager().Init(dbClient);
-                            UserRoom.SendWhisperChat("Wibbo Game mis à jour");
+                            Session.SendWhisper("Wibbo Game mis à jour");
                             break;
                         }
                     case "autogame":
@@ -64,11 +64,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                             if (!ButterflyEnvironment.GetGame().GetAnimationManager().ToggleForceDisabled())
                             {
-                                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.autogame.false", Session.Langue));
+                                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.autogame.false", Session.Langue));
                             }
                             else
                             {
-                                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.autogame.true", Session.Langue));
+                                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.autogame.true", Session.Langue));
                             }
 
                             break;
@@ -76,51 +76,51 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     case "rpitems":
                         {
                             ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().Init(dbClient);
-                            UserRoom.SendWhisperChat("RP Items mis à jour");
+                            Session.SendWhisper("RP Items mis à jour");
                             break;
                         }
                     case "rpweapon":
                         {
                             ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().Init(dbClient);
-                            UserRoom.SendWhisperChat("RP Weapon mis à jour");
+                            Session.SendWhisper("RP Weapon mis à jour");
                             break;
                         }
                     case "rpenemy":
                         {
                             ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().Init(dbClient);
-                            UserRoom.SendWhisperChat("RP Enemy mis à jour");
+                            Session.SendWhisper("RP Enemy mis à jour");
                             break;
                         }
                     case "cmd":
                     case "commands":
                         {
                             ButterflyEnvironment.GetGame().GetChatManager().GetCommands().Init(dbClient);
-                            UserRoom.SendWhisperChat("Commands mis à jour");
+                            Session.SendWhisper("Commands mis à jour");
                             break;
                         }
                     case "role":
                         {
                             ButterflyEnvironment.GetGame().GetPermissionManager().Init(dbClient);
-                            UserRoom.SendWhisperChat("Rôle mis à jour");
+                            Session.SendWhisper("Rôle mis à jour");
                             break;
                         }
                     case "effet":
                         {
                             ButterflyEnvironment.GetGame().GetEffectManager().Init(dbClient);
-                            UserRoom.SendWhisperChat("Effet mis à jour");
+                            Session.SendWhisper("Effet mis à jour");
                             break;
                         }
                     case "rp":
                     case "roleplay":
                         {
                             ButterflyEnvironment.GetGame().GetRoleplayManager().Init(dbClient);
-                            UserRoom.SendWhisperChat("Role play mis à jour");
+                            Session.SendWhisper("Role play mis à jour");
                             break;
                         }
                     case "modo":
                         {
                             ButterflyEnvironment.GetGame().GetModerationManager().Init(dbClient);
-                            UserRoom.SendWhisperChat("Moderation mis à jour");
+                            Session.SendWhisper("Moderation mis à jour");
                             ButterflyEnvironment.GetGame().GetClientManager().SendMessageStaff(new WhisperComposer(UserRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous !" + "L'équipe développement", 23));
                             break;
                         }
@@ -130,46 +130,46 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             ButterflyEnvironment.GetGame().GetItemManager().Init(dbClient);
                             ButterflyEnvironment.GetGame().GetCatalog().Init(dbClient, ButterflyEnvironment.GetGame().GetItemManager());
                             ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new CatalogUpdatedComposer());
-                            UserRoom.SendWhisperChat("Catalogue mis à jour");
+                            Session.SendWhisper("Catalogue mis à jour");
                             break;
                         }
                     case "navigateur":
                     case "navi":
                         {
                             ButterflyEnvironment.GetGame().GetNavigator().Init(dbClient);
-                            UserRoom.SendWhisperChat("Navigateur mis à jour");
+                            Session.SendWhisper("Navigateur mis à jour");
                             break;
                         }
                     case "filter":
                     case "filtre":
                         {
                             ButterflyEnvironment.GetGame().GetChatManager().GetFilter().Init(dbClient);
-                            UserRoom.SendWhisperChat("Filtre mis à jour");
+                            Session.SendWhisper("Filtre mis à jour");
                             break;
                         }
                     case "items":
                     case "furni":
                         {
                             ButterflyEnvironment.GetGame().GetItemManager().Init(dbClient);
-                            UserRoom.SendWhisperChat("Items mis à jour");
+                            Session.SendWhisper("Items mis à jour");
                             break;
                         }
                     case "model":
                         {
                             ButterflyEnvironment.GetGame().GetRoomManager().Init(dbClient);
-                            UserRoom.SendWhisperChat("Model mis à jour");
+                            Session.SendWhisper("Model mis à jour");
                             break;
                         }
                     case "mutant":
                     case "figure":
                         {
                             ButterflyEnvironment.GetFigureManager().Init();
-                            UserRoom.SendWhisperChat("Mutant/Figure mises à jour");
+                            Session.SendWhisper("Mutant/Figure mises à jour");
                             break;
                         }
                     default:
                         {
-                            UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.notfound", Session.Langue));
+                            Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.notfound", Session.Langue));
                             return;
                         }
                 }

@@ -1,6 +1,6 @@
 using Butterfly.Game;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using Butterfly.Game.Users;
 using System;
 using System.Collections.Generic;

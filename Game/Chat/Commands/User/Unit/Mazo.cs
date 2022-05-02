@@ -29,7 +29,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                 if (user.MazoHighScore < user.Mazo)
                 {
-                    UserRoom.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.newscore", Session.Langue), user.Mazo));
+                    Session.SendWhisper(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.newscore", Session.Langue), user.Mazo));
                     user.MazoHighScore = user.Mazo;
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -39,7 +39,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 }
                 else
                 {
-                    UserRoom.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.win", Session.Langue), user.Mazo));
+                    Session.SendWhisper(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.win", Session.Langue), user.Mazo));
                 }
 
                 UserRoom.ApplyEffect(566, true);
@@ -50,11 +50,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             {
                 if (user.Mazo > 0)
                 {
-                    UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.bigloose", Session.Langue));
+                    Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.bigloose", Session.Langue));
                 }
                 else
                 {
-                    UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.loose", Session.Langue));
+                    Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.loose", Session.Langue));
                 }
 
                 user.Mazo = 0;

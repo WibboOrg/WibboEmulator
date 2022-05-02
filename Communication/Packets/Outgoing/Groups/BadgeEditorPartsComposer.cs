@@ -1,16 +1,16 @@
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Groups
 {
     internal class BadgeEditorPartsComposer : ServerPacket
     {
-        public BadgeEditorPartsComposer(ICollection<GroupBadgePart> bases, ICollection<GroupBadgePart> symbols, ICollection<GroupColour> baseColours, ICollection<GroupColour> symbolColours,
-          ICollection<GroupColour> backgroundColours)
+        public BadgeEditorPartsComposer(ICollection<GroupBadgeParts> bases, ICollection<GroupBadgeParts> symbols, ICollection<GroupColours> baseColours, ICollection<GroupColours> symbolColours,
+          ICollection<GroupColours> backgroundColours)
             : base(ServerPacketHeader.GROUP_BADGE_PARTS)
         {
             this.WriteInteger(bases.Count);
-            foreach (GroupBadgePart part in bases)
+            foreach (GroupBadgeParts part in bases)
             {
                 this.WriteInteger(part.Id);
                 this.WriteString(part.AssetOne);
@@ -18,7 +18,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Groups
             }
 
             this.WriteInteger(symbols.Count);
-            foreach (GroupBadgePart part in symbols)
+            foreach (GroupBadgeParts part in symbols)
             {
                 this.WriteInteger(part.Id);
                 this.WriteString(part.AssetOne);
@@ -26,21 +26,21 @@ namespace Butterfly.Communication.Packets.Outgoing.Groups
             }
 
             this.WriteInteger(baseColours.Count);
-            foreach (GroupColour colour in baseColours)
+            foreach (GroupColours colour in baseColours)
             {
                 this.WriteInteger(colour.Id);
                 this.WriteString(colour.Colour);
             }
 
             this.WriteInteger(symbolColours.Count);
-            foreach (GroupColour colour in symbolColours)
+            foreach (GroupColours colour in symbolColours)
             {
                 this.WriteInteger(colour.Id);
                 this.WriteString(colour.Colour);
             }
 
             this.WriteInteger(backgroundColours.Count);
-            foreach (GroupColour colour in backgroundColours)
+            foreach (GroupColours colour in backgroundColours)
             {
                 this.WriteInteger(colour.Id);
                 this.WriteString(colour.Colour);

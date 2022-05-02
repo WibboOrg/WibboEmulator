@@ -34,7 +34,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             {
                 string Raison = CommandManager.MergeParams(Params, 3);
                 ButterflyEnvironment.GetGame().GetClientManager().BanUser(TargetUser, Session.GetUser().Username, num, Raison, false, false);
-                UserRoom.SendWhisperChat("Tu as bannit " + TargetUser.GetUser().Username + " pour" + Raison + "!");
+                Session.SendWhisper("Tu as bannit " + TargetUser.GetUser().Username + " pour" + Raison + "!");
                 if (Session.Antipub(Raison, "<CMD>", Room.Id))
                 {
                     return;

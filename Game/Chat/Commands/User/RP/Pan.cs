@@ -32,13 +32,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (Rp.Munition <= 0)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.munitionnotfound", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.munitionnotfound", Session.Langue));
                 return;
             }
 
             if (Rp.GunLoad <= 0)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.reloadweapon", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.reloadweapon", Session.Langue));
                 return;
             }
 

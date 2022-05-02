@@ -37,8 +37,8 @@ namespace Butterfly
 
         private static void MyHandler(object sender, UnhandledExceptionEventArgs args)
         {
-            Logging.DisablePrimaryWriting(true);
-            Logging.LogCriticalException("SYSTEM CRITICAL EXCEPTION: " + ((Exception)args.ExceptionObject).ToString());
+            ExceptionLogger.DisablePrimaryWriting(true);
+            ExceptionLogger.LogCriticalException("SYSTEM CRITICAL EXCEPTION: " + ((Exception)args.ExceptionObject).ToString());
 
             ButterflyEnvironment.PreformShutDown();
         }

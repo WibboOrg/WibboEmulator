@@ -2,7 +2,7 @@ using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

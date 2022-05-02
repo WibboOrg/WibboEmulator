@@ -12,35 +12,35 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             if (Params.Length != 2)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.1", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.1", Session.Langue));
                 return;
             }
 
             if (!int.TryParse(Params[1], out int Prix))
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.2", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.2", Session.Langue));
                 return;
             }
             if (Prix < 1)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.3", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.3", Session.Langue));
                 return;
             }
             if (Prix > 99999999)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.4", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.4", Session.Langue));
                 return;
             }
 
             if (Room.RoomData.Group != null)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.5", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.5", Session.Langue));
                 return;
             }
 
             if (Room.RoomData.SellPrice > 0)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.6", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.6", Session.Langue));
                 return;
             }
 
@@ -51,7 +51,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             Room.RoomData.SellPrice = Prix;
 
-            UserRoom.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.valide", Session.Langue), Prix));
+            Session.SendWhisper(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.valide", Session.Langue), Prix));
 
             foreach (RoomUser user in Room.GetRoomUserManager().GetUserList().ToList())
             {

@@ -41,7 +41,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                 if (TargetUser.GetUser().PremiumProtect && !Session.GetUser().HasFuse("fuse_mod"))
                 {
-                    UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
+                    Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
                     return;
                 }
 

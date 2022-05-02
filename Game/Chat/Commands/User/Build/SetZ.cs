@@ -31,7 +31,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             UserRoom.ConstruitZMode = true;
             UserRoom.ConstruitHeigth = Result;
 
-            UserRoom.SendWhisperChat("SetZ: " + Result);
+            Session.SendWhisper("SetZ: " + Result);
 
             if (Result >= 0)
             {

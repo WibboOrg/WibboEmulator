@@ -272,6 +272,7 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(190, new CloseDice());
             this.Register(199, new Kick());
             this.Register(201, new Dance());
+            this.Register(205, new DND());
         }
         
         public void RegisterPremium()

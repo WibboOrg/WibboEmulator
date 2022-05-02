@@ -1,4 +1,4 @@
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.AI;
 using Butterfly.Game.Users;

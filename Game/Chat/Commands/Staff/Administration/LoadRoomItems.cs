@@ -25,7 +25,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             Room.GetRoomItemHandler().LoadFurniture(RoomId);
             Room.GetGameMap().GenerateMaps(true);
-            UserRoom.SendWhisperChat("Mobi de l'appart n° " + RoomId + " chargé!");
+            Session.SendWhisper("Mobi de l'appart n° " + RoomId + " chargé!");
             Session.SendPacket(new GetGuestRoomResultComposer(Session, Room.RoomData, false, true));
         }
     }

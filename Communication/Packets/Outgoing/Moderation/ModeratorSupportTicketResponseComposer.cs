@@ -6,6 +6,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
             : base(ServerPacketHeader.CFH_REPLY)
         {
             WriteString(messageAlert);
+            WriteString("");
         }
     }
 }

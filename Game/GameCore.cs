@@ -4,7 +4,7 @@ using Butterfly.Game.Achievements;
 using Butterfly.Game.Animation;
 using Butterfly.Game.Catalog;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using Butterfly.Game.Help;
 using Butterfly.Game.Items;
 using Butterfly.Game.LandingView;
@@ -108,7 +108,7 @@ namespace Butterfly.Game
                 this._animationManager.Init(dbClient);
 
                 DatabaseCleanup(dbClient);
-                LowPriorityWorker.Init(dbClient);
+                ServerStatusUpdater.Init(dbClient);
 
                 this._moduleWatch = new Stopwatch();
             }
@@ -227,7 +227,7 @@ namespace Butterfly.Game
                 {
                     this._moduleWatch.Restart();
 
-                    LowPriorityWorker.Process();
+                    ServerStatusUpdater.Process();
 
                     if (this._moduleWatch.ElapsedMilliseconds > 500)
                     {

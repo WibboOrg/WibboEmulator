@@ -284,7 +284,7 @@ namespace Butterfly.Game.Clients
             }
             catch (Exception ex)
             {
-                Logging.HandleException(ex, "GameClientManager.CloseAll()");
+                ExceptionLogger.HandleException(ex, "GameClientManager.CloseAll()");
             }
             Console.WriteLine("Done saving users inventory!");
             Console.WriteLine("Closing server connections...");
@@ -309,7 +309,7 @@ namespace Butterfly.Game.Clients
             }
             catch (Exception ex)
             {
-                Logging.LogCriticalException((ex).ToString());
+                ExceptionLogger.LogCriticalException((ex).ToString());
             }
             this._clients.Clear();
             Console.WriteLine("Connections closed!");

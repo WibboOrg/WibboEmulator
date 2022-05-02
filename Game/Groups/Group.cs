@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-namespace Butterfly.Game.Guilds
+namespace Butterfly.Game.Groups
 {
     public class Group
     {

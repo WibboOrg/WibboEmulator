@@ -40,7 +40,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                     if (Session.Langue != GetUserRoom.GetClient().Langue)
                     {
-                        UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", GetUserRoom.GetClient().Langue), Session.Langue));
+                        Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", GetUserRoom.GetClient().Langue), Session.Langue));
                         return;
                     }
 

@@ -37,7 +37,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (TargetUser.GetClient().GetUser().PremiumProtect && !Session.GetUser().HasFuse("fuse_mod"))
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
                 return;
             }
 
@@ -79,7 +79,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
             else
             {
-                UserRoom.SendWhisperChat(Params[1] + " est trop loin de vous.");
+                Session.SendWhisper(Params[1] + " est trop loin de vous.");
                 return;
             }
 

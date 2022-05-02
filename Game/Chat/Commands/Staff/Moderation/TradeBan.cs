@@ -10,7 +10,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (Params.Length == 1)
             {
-                UserRoom.SendWhisperChat("Il semble que vous ayez oublié des valeurs? (jours ou pseudonyme)");
+                Session.SendWhisper("Il semble que vous ayez oublié des valeurs? (jours ou pseudonyme)");
                 return;
             }
         }

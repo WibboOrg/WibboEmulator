@@ -26,7 +26,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 Item.GetRoom().GetGameMap().UpdateMapForItem(Item);
             }
 
-            UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.pyramide", Session.Langue));
+            Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.pyramide", Session.Langue));
         }
     }
 }

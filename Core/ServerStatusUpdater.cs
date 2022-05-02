@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Butterfly.Core
 {
-    public class LowPriorityWorker
+    public class ServerStatusUpdater
     {
         private static int UserPeak;
         private static bool isExecuted = false;
@@ -16,6 +16,9 @@ namespace Butterfly.Core
 
             lowPriorityProcessWatch = new Stopwatch();
             lowPriorityProcessWatch.Start();
+
+            Console.Title = "Butterfly Emulator - start-up in progress...";
+            Console.WriteLine("Server Status Updater has been started.");
         }
 
 
@@ -41,8 +44,8 @@ namespace Butterfly.Core
 
                     TimeSpan Uptime = DateTime.Now - ButterflyEnvironment.ServerStarted;
 
-                    Console.Title = "Butterfly | Démarré depuis : " + Uptime.Days + " jours " + Uptime.Hours + " heures " + Uptime.Minutes + " minutes | "
-                         + UsersOnline + " Joueurs en ligne " + " | " + RoomsLoaded + " Appartement en ligne";
+                    Console.Title = "Butterfly | Démarré depuis : " + Uptime.Days + " jour(s) " + Uptime.Hours + " heures " + Uptime.Minutes + " minutes | "
+                         + UsersOnline + " Joueur(s) en ligne " + " | " + RoomsLoaded + " Appartement(s) en ligne";
 
                     using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
@@ -50,7 +53,7 @@ namespace Butterfly.Core
                         EmulatorStatusDao.UpdateScore(dbClient, UsersOnline, RoomsLoaded, UserPeak);
                     }
                 }
-                catch (Exception e) { Logging.LogThreadException(e.ToString(), "Server status update task"); }
+                catch (Exception e) { ExceptionLogger.LogThreadException(e.ToString(), "Server status update task"); }
             }
         }
     }

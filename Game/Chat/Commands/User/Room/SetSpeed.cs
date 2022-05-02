@@ -24,7 +24,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
             catch
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.intonly", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.intonly", Session.Langue));
             }
 
         }

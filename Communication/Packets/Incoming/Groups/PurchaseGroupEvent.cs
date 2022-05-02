@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

@@ -70,7 +70,7 @@ namespace Butterfly.Net
                     }
                     catch (Exception e)
                     {
-                        Logging.LogException($"Length: {Data.Length} Message: {e.Message}");
+                        ExceptionLogger.LogException($"Length: {Data.Length} Message: {e.Message}");
                         return;
                     }
                 }
@@ -138,7 +138,7 @@ namespace Butterfly.Net
             }
             catch (Exception e)
             {
-                Logging.LogException("Packet Error : " + e.Message);
+                ExceptionLogger.LogException("Packet Error : " + e.Message);
             }
         }
 

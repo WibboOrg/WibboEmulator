@@ -10,7 +10,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             if (Params.Length == 1)
             {
-                UserRoom.SendWhisperChat("Entre un numéro à ta danse");
+                Session.SendWhisper("Entre un numéro à ta danse");
             }
 
             int DanceId;
@@ -18,13 +18,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             {
                 if (DanceId > 4 || DanceId < 0)
                 {
-                    UserRoom.SendWhisperChat("Entre un numéro entre 0 et 4");
+                    Session.SendWhisper("Entre un numéro entre 0 et 4");
                     return;
                 }
                 Session.GetUser().CurrentRoom.SendPacket(new DanceComposer(UserRoom.VirtualId, DanceId));
             }
             else
-                UserRoom.SendWhisperChat("Entre un numéro de danse valide");
+                Session.SendWhisper("Entre un numéro de danse valide");
         }
     }
 }

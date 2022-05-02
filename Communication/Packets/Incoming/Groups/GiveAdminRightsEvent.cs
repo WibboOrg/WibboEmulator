@@ -1,7 +1,7 @@
 using Butterfly.Communication.Packets.Outgoing.Groups;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Guilds;
+using Butterfly.Game.Groups;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Users;
 

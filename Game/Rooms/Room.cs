@@ -670,7 +670,7 @@ namespace Butterfly.Game.Rooms
             catch (Exception ex)
             {
                 this.isCycling = false;
-                Logging.LogCriticalException("Sub crash in room cycle: " + (ex).ToString());
+                ExceptionLogger.LogCriticalException("Sub crash in room cycle: " + (ex).ToString());
             }
             finally
             {
@@ -778,7 +778,7 @@ namespace Butterfly.Game.Rooms
 
         public void OnRoomCrash(Exception e)
         {
-            Logging.LogThreadException((e).ToString(), "Room cycle task for room " + this.Id);
+            ExceptionLogger.LogThreadException((e).ToString(), "Room cycle task for room " + this.Id);
             //ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
         }
 
@@ -844,7 +844,7 @@ namespace Butterfly.Game.Rooms
             }
             catch (Exception ex)
             {
-                Logging.HandleException(ex, "Room.SendMessage (" + this.Id + ")");
+                ExceptionLogger.HandleException(ex, "Room.SendMessage (" + this.Id + ")");
             }
         }
 
@@ -890,7 +890,7 @@ namespace Butterfly.Game.Rooms
             }
             catch (Exception ex)
             {
-                Logging.HandleException(ex, "Room.SendMessage (" + this.Id + ")");
+                ExceptionLogger.HandleException(ex, "Room.SendMessage (" + this.Id + ")");
             }
         }
 

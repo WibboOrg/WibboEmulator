@@ -181,7 +181,7 @@ namespace Butterfly.Game.Rooms
             }
             catch (Exception ex)
             {
-                Logging.LogThreadException((ex).ToString(), "Trade task");
+                ExceptionLogger.LogThreadException((ex).ToString(), "Trade task");
             }
         }
 

@@ -231,7 +231,7 @@ namespace Butterfly.Game.Items
                 this._roomInstance = room;
                 if (this.GetBaseItem() == null)
                 {
-                    Logging.LogException("Unknown baseID: " + mBaseItem);
+                    ExceptionLogger.LogException("Unknown baseID: " + mBaseItem);
                 }
 
                 switch (this.GetBaseItem().InteractionType)

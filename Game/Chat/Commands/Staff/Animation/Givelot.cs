@@ -86,7 +86,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             string DeluxeMessage = (NbLotDeluxe == 4) ? " Et une RareBox Deluxe !" : "";
             roomUserByUserId.GetClient().SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByUserId.GetClient().Langue), NbLot, NbBadge) + DeluxeMessage);
-            UserRoom.SendWhisperChat(roomUserByUserId.GetUsername() + " à reçu " + NbLot + " RareBox et " + NbBadge + " BadgeBox!" + DeluxeMessage);
+            Session.SendWhisper(roomUserByUserId.GetUsername() + " à reçu " + NbLot + " RareBox et " + NbBadge + " BadgeBox!" + DeluxeMessage);
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {

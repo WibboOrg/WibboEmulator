@@ -70,7 +70,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                 TargetRoomUser.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.vole.receive", TargetRoomUser.GetClient().Langue), NumberMoney, UserRoom.GetUsername()));
 
-                UserRoom.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.vole.send", Session.Langue), NumberMoney, TargetRoomUser.GetUsername()));
+                Session.SendWhisper(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.vole.send", Session.Langue), NumberMoney, TargetRoomUser.GetUsername()));
                 UserRoom.OnChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.vole.send.chat", Session.Langue), TargetRoomUser.GetUsername()), 0, true);
             }
         }

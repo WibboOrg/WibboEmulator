@@ -83,7 +83,7 @@ namespace Butterfly.Game.Users.Data
             }
             catch (Exception ex)
             {
-                Logging.HandleException(ex, "UserDataFactory.GetUserData");            
+                ExceptionLogger.HandleException(ex, "UserDataFactory.GetUserData");            
                 return null;
             }
         }

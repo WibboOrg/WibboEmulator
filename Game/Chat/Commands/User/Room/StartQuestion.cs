@@ -12,7 +12,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (string.IsNullOrWhiteSpace(Question))
             {
-                UserRoom.SendWhisperChat("Votre question ne peut pas être vide");
+                Session.SendWhisper("Votre question ne peut pas être vide");
                 return;
             }
 

@@ -16,11 +16,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));
             }
             else if ((TargetUser.GetUser().HideInRoom) && !Session.GetUser().HasFuse("fuse_mod"))
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.follow.notallowed", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.follow.notallowed", Session.Langue));
             }
             else
             {

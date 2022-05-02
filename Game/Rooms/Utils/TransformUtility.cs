@@ -6,7 +6,7 @@
         {
             switch (namePet.ToLower())
             {
-                case "bigeuthanasie":
+                /*case "bigeuthanasie":
                     {
                         return "85 0 FFFFFF";
                     }
@@ -29,7 +29,7 @@
                 case "bigxorcist":
                     {
                         return "80 0 FFFFFF";
-                    }
+                    }*/
                 case "littlejason":
                     {
                         return "79 0 FFFFFF";
@@ -47,7 +47,7 @@
                         return "76 0 FFFFFF";
 
                     }
-                case "littleleanie":
+                /*case "littleleanie":
                     {
                         return "75 0 FFFFFF";
 
@@ -66,7 +66,7 @@
                     {
                         return "72 0 FFFFFF";
 
-                    }
+                    }*/
                 case "littleboy1":
                     {
                         return "62 0 FFFFFF";

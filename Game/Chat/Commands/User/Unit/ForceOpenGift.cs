@@ -11,11 +11,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (Session.GetUser().ForceOpenGift)
             {
-                UserRoom.SendWhisperChat("ForceOpenGift activé");
+                Session.SendWhisper("ForceOpenGift activé");
             }
             else
             {
-                UserRoom.SendWhisperChat("ForceOpenGift désactivé");
+                Session.SendWhisper("ForceOpenGift désactivé");
             }
         }
     }

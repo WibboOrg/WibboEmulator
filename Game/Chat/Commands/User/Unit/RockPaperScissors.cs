@@ -40,7 +40,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             RoomUser roomuser = room.GetRoomUserManager().GetRoomUserByName(Username);
             if (roomuser == null)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
                 return;
             }
 

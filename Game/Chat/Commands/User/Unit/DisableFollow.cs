@@ -10,12 +10,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             if (Session.GetUser().HideInRoom)
             {
                 Session.GetUser().HideInRoom = false;
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.followme.true", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.followme.true", Session.Langue));
             }
             else
             {
                 Session.GetUser().HideInRoom = true;
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.followme.false", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.followme.false", Session.Langue));
             }
 
         }

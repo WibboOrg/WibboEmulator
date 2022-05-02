@@ -10,12 +10,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             if (Session.GetUser().AcceptTrading)
             {
                 Session.GetUser().AcceptTrading = false;
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.troc.true", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.troc.true", Session.Langue));
             }
             else
             {
                 Session.GetUser().AcceptTrading = true;
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.troc.false", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.troc.false", Session.Langue));
             }
 
         }

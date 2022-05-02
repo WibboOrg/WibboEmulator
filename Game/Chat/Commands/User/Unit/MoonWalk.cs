@@ -23,11 +23,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             roomUserByUserId.MoonwalkEnabled = !roomUserByUserId.MoonwalkEnabled;
             if (roomUserByUserId.MoonwalkEnabled)
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.true", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.true", Session.Langue));
             }
             else
             {
-                UserRoom.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.false", Session.Langue));
+                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.false", Session.Langue));
             }
         }
     }
