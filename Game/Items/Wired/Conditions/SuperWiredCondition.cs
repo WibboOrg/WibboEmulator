@@ -430,28 +430,6 @@ namespace Butterfly.Game.Items.Wired.Conditions
 
                         break;
                     }
-                case "hygieneplus":
-                    {
-                        int.TryParse(Value, out int ValueInt);
-
-                        if (Rp.Hygiene >= ValueInt)
-                        {
-                            Result = true;
-                        }
-
-                        break;
-                    }
-                case "hygienemoins":
-                    {
-                        int.TryParse(Value, out int ValueInt);
-
-                        if (Rp.Hygiene < ValueInt)
-                        {
-                            Result = true;
-                        }
-
-                        break;
-                    }
                 case "munition":
                     {
                         int.TryParse(Value, out int ValueInt);
@@ -499,86 +477,6 @@ namespace Butterfly.Game.Items.Wired.Conditions
                     {
                         int.TryParse(Value, out int ValueInt);
                         if (Rp.Money < ValueInt)
-                        {
-                            Result = true;
-                        }
-
-                        break;
-                    }
-                case "money1plus":
-                    {
-                        int.TryParse(Value, out int ValueInt);
-                        if (Rp.Money1 >= ValueInt)
-                        {
-                            Result = true;
-                        }
-
-                        break;
-                    }
-                case "money1moins":
-                    {
-                        int.TryParse(Value, out int ValueInt);
-                        if (Rp.Money1 < ValueInt)
-                        {
-                            Result = true;
-                        }
-
-                        break;
-                    }
-                case "money2plus":
-                    {
-                        int.TryParse(Value, out int ValueInt);
-                        if (Rp.Money2 >= ValueInt)
-                        {
-                            Result = true;
-                        }
-
-                        break;
-                    }
-                case "money2moins":
-                    {
-                        int.TryParse(Value, out int ValueInt);
-                        if (Rp.Money2 < ValueInt)
-                        {
-                            Result = true;
-                        }
-
-                        break;
-                    }
-                case "money3plus":
-                    {
-                        int.TryParse(Value, out int ValueInt);
-                        if (Rp.Money3 >= ValueInt)
-                        {
-                            Result = true;
-                        }
-
-                        break;
-                    }
-                case "money3moins":
-                    {
-                        int.TryParse(Value, out int ValueInt);
-                        if (Rp.Money3 < ValueInt)
-                        {
-                            Result = true;
-                        }
-
-                        break;
-                    }
-                case "money4plus":
-                    {
-                        int.TryParse(Value, out int ValueInt);
-                        if (Rp.Money >= ValueInt)
-                        {
-                            Result = true;
-                        }
-
-                        break;
-                    }
-                case "money4moins":
-                    {
-                        int.TryParse(Value, out int ValueInt);
-                        if (Rp.Money4 < ValueInt)
                         {
                             Result = true;
                         }
@@ -1164,7 +1062,7 @@ namespace Butterfly.Game.Items.Wired.Conditions
                 case "username":
                 case "notusername":
                     {
-                        if (user.GetUsername() == Value)
+                        if (user.GetUsername().ToLower() == Value.ToLower())
                         {
                             Result = true;
                         }

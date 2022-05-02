@@ -43,11 +43,11 @@ namespace Butterfly.Game.Roleplay
                 if (dRow == null)
                 {
                     UserRoleplayDao.Insert(dbClient, UserId, this._id);
-                    player = new RolePlayer(this._id, UserId, 100, 0, 0, 0, 0, 0, 0, 0, 100, 100, 0, 0);
+                    player = new RolePlayer(this._id, UserId, 100, 0, 0, 0, 100, 0, 0);
                 }
                 else
                 {
-                    player = new RolePlayer(this._id, UserId, Convert.ToInt32(dRow["health"]), Convert.ToInt32(dRow["money"]), Convert.ToInt32(dRow["money_1"]), Convert.ToInt32(dRow["money_2"]), Convert.ToInt32(dRow["money_3"]), Convert.ToInt32(dRow["money_4"]), Convert.ToInt32(dRow["munition"]), Convert.ToInt32(dRow["exp"]), Convert.ToInt32(dRow["energy"]), Convert.ToInt32(dRow["hygiene"]), Convert.ToInt32(dRow["weapon_far"]), Convert.ToInt32(dRow["weapon_cac"]));
+                    player = new RolePlayer(this._id, UserId, Convert.ToInt32(dRow["health"]), Convert.ToInt32(dRow["money"]), Convert.ToInt32(dRow["munition"]), Convert.ToInt32(dRow["exp"]), Convert.ToInt32(dRow["energy"]), Convert.ToInt32(dRow["weapon_far"]), Convert.ToInt32(dRow["weapon_cac"]));
                 }
             }
 

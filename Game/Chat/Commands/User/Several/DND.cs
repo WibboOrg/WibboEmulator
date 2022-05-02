@@ -8,7 +8,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             Session.GetUser().AllowConsoleMessages = !Session.GetUser().AllowConsoleMessages;
-            Session.SendWhisper("Tu" + (Session.GetUser().AllowConsoleMessages == true ? "acceptes" : "refuses") + "les messages dans ta console d'amis");
+            Session.SendWhisper("Tu " + (Session.GetUser().AllowConsoleMessages == true ? "acceptes" : "refuses") + " les messages dans ta console d'amis");
         }
     }
 }

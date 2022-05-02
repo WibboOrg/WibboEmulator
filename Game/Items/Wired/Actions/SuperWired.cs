@@ -69,15 +69,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                 case "rpexp":
                 case "rpremoveexp":
                 case "removemoney":
-                case "removemoney1":
-                case "removemoney2":
-                case "removemoney3":
-                case "removemoney4":
                 case "addmoney":
-                case "addmoney1":
-                case "addmoney2":
-                case "addmoney3":
-                case "addmoney4":
                 case "work":
                 case "health":
                 case "healthplus":
@@ -787,24 +779,6 @@ namespace Butterfly.Game.Items.Wired.Actions
                         Rp.SendUpdate();
                         break;
                     }
-                case "removehygiene":
-                    {
-                        int.TryParse(value, out int Nb);
-
-                        Rp.RemoveHygiene(Nb);
-
-                        Rp.SendUpdate();
-                        break;
-                    }
-                case "addhygiene":
-                    {
-                        int.TryParse(value, out int Nb);
-
-                        Rp.AddHygiene(Nb);
-
-                        Rp.SendUpdate();
-                        break;
-                    }
                 case "weaponfarid":
                     {
                         int.TryParse(value, out int Nb);
@@ -926,130 +900,6 @@ namespace Butterfly.Game.Items.Wired.Actions
                         }
 
                         Rp.Money += Nb;
-                        Rp.SendUpdate();
-                        break;
-                    }
-                case "removemoney1":
-                    {
-                        int.TryParse(value, out int Nb);
-                        if (Nb <= 0)
-                        {
-                            break;
-                        }
-
-                        if (Rp.Money1 - Nb < 0)
-                        {
-                            Rp.Money1 = 0;
-                        }
-                        else
-                        {
-                            Rp.Money1 -= Nb;
-                        }
-                        Rp.SendUpdate();
-                        break;
-                    }
-                case "addmoney1":
-                    {
-                        int.TryParse(value, out int Nb);
-                        if (Nb <= 0)
-                        {
-                            break;
-                        }
-
-                        Rp.Money1 += Nb;
-                        Rp.SendUpdate();
-                        break;
-                    }
-                case "removemoney2":
-                    {
-                        int.TryParse(value, out int Nb);
-                        if (Nb <= 0)
-                        {
-                            break;
-                        }
-
-                        if (Rp.Money2 - Nb < 0)
-                        {
-                            Rp.Money2 = 0;
-                        }
-                        else
-                        {
-                            Rp.Money2 -= Nb;
-                        }
-                        Rp.SendUpdate();
-                        break;
-                    }
-                case "addmoney2":
-                    {
-                        int.TryParse(value, out int Nb);
-                        if (Nb <= 0)
-                        {
-                            break;
-                        }
-
-                        Rp.Money2 += Nb;
-                        Rp.SendUpdate();
-                        break;
-                    }
-                case "removemoney3":
-                    {
-                        int.TryParse(value, out int Nb);
-                        if (Nb <= 0)
-                        {
-                            break;
-                        }
-
-                        if (Rp.Money3 - Nb < 0)
-                        {
-                            Rp.Money3 = 0;
-                        }
-                        else
-                        {
-                            Rp.Money3 -= Nb;
-                        }
-                        Rp.SendUpdate();
-                        break;
-                    }
-                case "addmoney3":
-                    {
-                        int.TryParse(value, out int Nb);
-                        if (Nb <= 0)
-                        {
-                            break;
-                        }
-
-                        Rp.Money3 += Nb;
-                        Rp.SendUpdate();
-                        break;
-                    }
-                case "removemoney4":
-                    {
-                        int.TryParse(value, out int Nb);
-                        if (Nb <= 0)
-                        {
-                            break;
-                        }
-
-                        if (Rp.Money4 - Nb < 0)
-                        {
-                            Rp.Money4 = 0;
-                        }
-                        else
-                        {
-                            Rp.Money4 -= Nb;
-                        }
-                        Rp.SendUpdate();
-                        break;
-                    }
-                case "addmoney4":
-                    {
-                        int.TryParse(value, out int Nb);
-                        if (Nb <= 0)
-                        {
-                            break;
-                        }
-
-                        Rp.Money4 += Nb;
                         Rp.SendUpdate();
                         break;
                     }

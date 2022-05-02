@@ -44,10 +44,6 @@ namespace Butterfly.Game.Items.Wired.Actions
                 if (user.Roleplayer != null)
                 {
                     textMessage = textMessage.Replace("#money#", user.Roleplayer.Money.ToString());
-                    textMessage = textMessage.Replace("#money1#", user.Roleplayer.Money1.ToString());
-                    textMessage = textMessage.Replace("#money2#", user.Roleplayer.Money2.ToString());
-                    textMessage = textMessage.Replace("#money3#", user.Roleplayer.Money3.ToString());
-                    textMessage = textMessage.Replace("#money4#", user.Roleplayer.Money4.ToString());
                 }
             }
 

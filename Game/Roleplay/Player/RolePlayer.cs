@@ -24,10 +24,6 @@ namespace Butterfly.Game.Roleplay.Player
         public int HealthMax;
 
         public int Money;
-        public int Money1;
-        public int Money2;
-        public int Money3;
-        public int Money4;
         public int Munition;
         public int GunLoad;
         public int Exp;
@@ -37,7 +33,6 @@ namespace Butterfly.Game.Roleplay.Player
         public RPWeapon WeaponGun;
         public RPWeapon WeaponCac;
         public int Energy;
-        public int Hygiene;
         public int GunLoadTimer;
         public int PrisonTimer;
         public int DeadTimer;
@@ -50,18 +45,13 @@ namespace Butterfly.Game.Roleplay.Player
         public bool NeedUpdate;
         public bool Dispose;
 
-        public RolePlayer(int pRpId, int pId, int pHealth, int pMoney, int pMoney1, int pMoney2, int pMoney3, int pMoney4, int pMunition, int pExp, int pEnergy, int pHygiene, int pWeaponGun, int pWeaponCac)
+        public RolePlayer(int pRpId, int pId, int pHealth, int pMoney, int pMunition, int pExp, int pEnergy, int pWeaponGun, int pWeaponCac)
         {
             this._rpId = pRpId;
             this._id = pId;
             this.Health = pHealth;
             this.Energy = pEnergy;
-            this.Hygiene = pHygiene;
             this.Money = pMoney;
-            this.Money1 = pMoney1;
-            this.Money2 = pMoney2;
-            this.Money3 = pMoney3;
-            this.Money4 = pMoney4;
             this.Munition = pMunition;
             this.Exp = pExp;
             this.PvpEnable = true;
@@ -105,12 +95,7 @@ namespace Butterfly.Game.Roleplay.Player
         {
             this.Health = 100;
             this.Energy = 100;
-            this.Hygiene = 100;
             this.Money = 0;
-            this.Money1 = 0;
-            this.Money2 = 0;
-            this.Money3 = 0;
-            this.Money4 = 0;
             this.Munition = 0;
             this.Exp = 0;
             this.Level = 1;
@@ -125,7 +110,7 @@ namespace Butterfly.Game.Roleplay.Player
             {
                 UserRoleplayItemDao.Delete(dbClient, this._id, this._rpId);
                 UserRoleplayDao.Delete(dbClient, this._id, this._rpId);
-                UserRoleplayDao.Update(dbClient, this._id, this._rpId, this.Health, this.Energy, this.Hygiene, this.Money, this.Money1, this.Money2, this.Money3, this.Money4, this.Munition, this.Exp, this.WeaponGun.Id, this.WeaponCac.Id);
+                UserRoleplayDao.Update(dbClient, this._id, this._rpId, this.Health, this.Energy, this.Money, this.Munition, this.Exp, this.WeaponGun.Id, this.WeaponCac.Id);
             }
 
             this.SendWebPacket(new LoadInventoryRpComposer(this._inventory));
@@ -362,30 +347,6 @@ namespace Butterfly.Game.Roleplay.Player
             }
         }
 
-        internal void AddHygiene(int Nb)
-        {
-            if (this.Hygiene + Nb > 100)
-            {
-                this.Hygiene = 100;
-            }
-            else
-            {
-                this.Hygiene += Nb;
-            }
-        }
-
-        internal void RemoveHygiene(int Nb)
-        {
-            if (this.Hygiene - Nb < 0)
-            {
-                this.Hygiene = 0;
-            }
-            else
-            {
-                this.Hygiene -= Nb;
-            }
-        }
-
         public void Hit(RoomUser User, int Dmg, Room Room, bool Ralentie = false, bool Murmur = false, bool Aggro = true)
         {
             if (this.Dead || this.SendPrison)
@@ -460,7 +421,7 @@ namespace Butterfly.Game.Roleplay.Player
         {
             if (SendNow)
             {
-                this.SendWebPacket(new RpStatsComposer((!this.Dispose) ? this._rpId : 0, this.Health, this.HealthMax, this.Energy, this.Hygiene, this.Money, this.Money1, this.Money2, this.Money3, this.Money4, this.Munition, this.Level));
+                this.SendWebPacket(new RpStatsComposer((!this.Dispose) ? this._rpId : 0, this.Health, this.HealthMax, this.Energy, this.Money, this.Munition, this.Level));
             }
             else
             {
@@ -581,7 +542,7 @@ namespace Butterfly.Game.Roleplay.Player
             if (this.NeedUpdate)
             {
                 this.NeedUpdate = false;
-                this.SendWebPacket(new RpStatsComposer((!this.Dispose) ? this._rpId : 0, this.Health, this.HealthMax, this.Energy, this.Hygiene, this.Money, this.Money1, this.Money2, this.Money3, this.Money4, this.Munition, this.Level));
+                this.SendWebPacket(new RpStatsComposer((!this.Dispose) ? this._rpId : 0, this.Health, this.HealthMax, this.Energy, this.Money, this.Munition, this.Level));
             }
         }
 
@@ -595,10 +556,10 @@ namespace Butterfly.Game.Roleplay.Player
             this.Dispose = true;
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserRoleplayDao.Update(dbClient, this._id, this._rpId, this.Health, this.Energy, this.Hygiene, this.Money, this.Money1, this.Money2, this.Money3, this.Money4, this.Munition, this.Exp, this.WeaponGun.Id, this.WeaponCac.Id);
+                UserRoleplayDao.Update(dbClient, this._id, this._rpId, this.Health, this.Energy, this.Money, this.Munition, this.Exp, this.WeaponGun.Id, this.WeaponCac.Id);
             }
 
-            this.SendWebPacket(new RpStatsComposer(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+            this.SendWebPacket(new RpStatsComposer(0, 0, 0, 0, 0, 0, 0));
             this._inventory.Clear();
         }
     }
