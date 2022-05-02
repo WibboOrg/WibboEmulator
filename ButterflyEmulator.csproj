@@ -104,7 +104,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>w.ico</ApplicationIcon>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Butterfly.Program</StartupObject>
@@ -614,7 +614,20 @@
     <Compile Include="Communication\RCON\Commands\User\UpdatePointsCommand.cs" />
     <Compile Include="Communication\RCON\Commands\User\UserAlertCommand.cs" />
     <Compile Include="Communication\WebSocket\EncodeDecode.cs" />
+    <Compile Include="Core\ConfigurationData.cs" />
+    <Compile Include="Core\ConsoleCommands.cs" />
+    <Compile Include="Core\ExceptionLogger.cs" />
+    <Compile Include="Core\FigureData\FigureDataManager.cs" />
+    <Compile Include="Core\FigureData\Types\Color.cs" />
+    <Compile Include="Core\FigureData\Types\FigureSet.cs" />
+    <Compile Include="Core\FigureData\Types\Palette.cs" />
+    <Compile Include="Core\FigureData\Types\Part.cs" />
+    <Compile Include="Core\FigureData\Types\Set.cs" />
+    <Compile Include="Core\FigureData\Types\SetType.cs" />
+    <Compile Include="Core\FigureData\Types\SetTypeUtility.cs" />
     <Compile Include="Core\IDGenerator.cs" />
+    <Compile Include="Core\Language\LanguageManager.cs" />
+    <Compile Include="Core\ServerStatusUpdater.cs" />
     <Compile Include="Database\Daos\BanDao.cs" />
     <Compile Include="Database\Daos\Bot\BotPetDao.cs" />
     <Compile Include="Database\Daos\Bot\BotUserDao.cs" />
@@ -686,6 +699,7 @@
     <Compile Include="Database\Daos\User\UserWardrobeDao.cs" />
     <Compile Include="Database\Daos\User\UserWebsocketDao.cs" />
     <Compile Include="Database\Daos\WordFilterRetroDao.cs" />
+    <Compile Include="Database\LoggingMySql.cs" />
     <Compile Include="Game\Animation\AnimationManager.cs" />
     <Compile Include="Game\Badges\BadgeManager.cs" />
     <Compile Include="Game\Calendars\CalendarManager.cs" />
@@ -705,19 +719,23 @@
     <Compile Include="Game\Chat\Commands\Staff\Administration\RoomDance.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\RoomEffect.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Moderation\TradeBan.cs" />
-    <Compile Include="Game\Chat\Commands\User\BreakWalk.cs" />
     <Compile Include="Game\Chat\Commands\User\Casino\Poke.cs" />
     <Compile Include="Game\Chat\Commands\User\DND.cs" />
     <Compile Include="Game\Chat\Commands\User\LoadVideo.cs" />
     <Compile Include="Game\Chat\Commands\User\Unit\Dance.cs" />
-    <Compile Include="Game\Guilds\BadgePartUtility.cs" />
-    <Compile Include="Game\Guilds\GroupMember.cs" />
-    <Compile Include="Game\Guilds\GroupType.cs" />
+    <Compile Include="Game\Groups\BadgePartUtility.cs" />
+    <Compile Include="Game\Groups\Group.cs" />
+    <Compile Include="Game\Groups\GroupBadgeParts.cs" />
+    <Compile Include="Game\Groups\GroupColours.cs" />
+    <Compile Include="Game\Groups\GroupManager.cs" />
+    <Compile Include="Game\Groups\GroupMember.cs" />
+    <Compile Include="Game\Groups\GroupType.cs" />
     <Compile Include="Game\Items\Interactors\InteractorBanzaiTele.cs" />
     <Compile Include="Game\Items\Interactors\InteractorFreezeBlock.cs" />
     <Compile Include="Game\Items\ItemLotBox.cs" />
     <Compile Include="Game\Items\ItemFactory.cs" />
     <Compile Include="Game\Items\ItemTemp.cs" />
+    <Compile Include="Game\LandingView\Promotions\Promotion.cs" />
     <Compile Include="Game\Moderation\BanTypeUtility.cs" />
     <Compile Include="Game\Moderation\ModerationBanType.cs" />
     <Compile Include="Game\Moderation\ModerationTicket.cs" />
@@ -784,6 +802,7 @@
     <Compile Include="Game\Chat\Commands\User\Unit\ConfigBot.cs" />
     <Compile Include="Game\Chat\Commands\User\Unit\FastWalk.cs" />
     <Compile Include="Game\Chat\Commands\User\Unit\TransfBig.cs" />
+    <Compile Include="Game\Rooms\ItemEffectType.cs" />
     <Compile Include="Game\Rooms\Map\Movement\MovementUtility.cs" />
     <Compile Include="Game\Rooms\Map\Movement\MovementState.cs" />
     <Compile Include="Game\Rooms\PathFinding\Vector2D.cs" />
@@ -814,19 +833,8 @@
     <Compile Include="Game\Users\Permissions\PermissionComponent.cs" />
     <Compile Include="Game\Users\Wardrobes\Wardrobe.cs" />
     <Compile Include="Game\Users\Wardrobes\WardrobeComponent.cs" />
-    <Compile Include="Core\ConsoleCommands.cs" />
-    <Compile Include="Core\FigureData\Types\Color.cs" />
-    <Compile Include="Core\FigureData\Types\FigureSet.cs" />
-    <Compile Include="Core\FigureData\Types\Palette.cs" />
-    <Compile Include="Core\FigureData\Types\Part.cs" />
-    <Compile Include="Core\FigureData\Types\Set.cs" />
-    <Compile Include="Core\FigureData\Types\SetType.cs" />
-    <Compile Include="Core\FigureData\Types\SetTypeUtility.cs" />
     <Compile Include="Game\Catalog\CatalogPromotion.cs" />
     <Compile Include="Game\Effects\EffectManager.cs" />
-    <Compile Include="Game\Guilds\GroupBadgePart.cs" />
-    <Compile Include="Game\Guilds\GroupColour.cs" />
-    <Compile Include="Game\LandingView\Promotion.cs" />
     <Compile Include="Game\Items\Interactors\InteractorLoveLock.cs" />
     <Compile Include="Game\Items\ItemBehaviourUtility.cs" />
     <Compile Include="Game\Navigator\FeaturedRoom.cs" />
@@ -964,7 +972,6 @@
     <Compile Include="Database\Interfaces\IDatabaseClient.cs" />
     <Compile Include="Database\Interfaces\IQueryAdapter.cs" />
     <Compile Include="Database\Interfaces\IRegularQueryAdapter.cs" />
-    <Compile Include="Database\Logging.cs" />
     <Compile Include="Utilities\Enclosure\Algorithm\GametileUpdate.cs" />
     <Compile Include="Utilities\Enclosure\GameField.cs" />
     <Compile Include="Utilities\Enclosure\PointField.cs" />
@@ -1011,7 +1018,6 @@
     <Compile Include="Communication\Packets\Incoming\ClientPacketHeader.cs" />
     <Compile Include="Communication\Packets\Outgoing\ServerPacketHeader.cs" />
     <Compile Include="Game\Items\Interactors\InteractorTimer.cs" />
-    <Compile Include="Core\FigureData\FigureDataManager.cs" />
     <Compile Include="Game\LandingView\LandingViewManager.cs" />
     <Compile Include="Game\Items\Wired\Conditions\FurniHasNoUser.cs" />
     <Compile Include="Game\Items\Wired\Conditions\FurniStatePosMatchNegative.cs" />
@@ -1030,17 +1036,12 @@
     <Compile Include="Utilities\IntEncoding.cs" />
     <Compile Include="Utilities\ServerPacketList.cs" />
     <Compile Include="Utilities\StringCharFilter.cs" />
-    <Compile Include="Core\ConfigurationData.cs" />
     <Compile Include="Communication\ConnectionManager\ConnectionHandeling.cs" />
-    <Compile Include="Core\Language\LanguageManager.cs" />
-    <Compile Include="Core\Logging.cs" />
     <Compile Include="Game\GameCore.cs" />
     <Compile Include="Game\Achievements\AchievementData.cs" />
     <Compile Include="Game\Achievements\AchievementLevel.cs" />
     <Compile Include="Game\Achievements\AchievementManager.cs" />
     <Compile Include="Game\Users\Achievements\UserAchievement.cs" />
-    <Compile Include="Game\Guilds\Group.cs" />
-    <Compile Include="Game\Guilds\GroupManager.cs" />
     <Compile Include="Game\Items\InteractionType.cs" />
     <Compile Include="Game\Items\ItemData.cs" />
     <Compile Include="Game\Items\ItemDataManager.cs" />
@@ -1087,7 +1088,6 @@
     <Compile Include="Game\Chat\Logs\ChatlogManager.cs" />
     <Compile Include="Game\Clients\Client.cs" />
     <Compile Include="Game\Clients\ClientManager.cs" />
-    <Compile Include="Core\LowPriorityWorker.cs" />
     <Compile Include="Game\Navigator\NavigatorManager.cs" />
     <Compile Include="Game\Rooms\PathFinding\Coord.cs" />
     <Compile Include="Game\Rooms\PathFinding\Pathfinder.cs" />
@@ -1182,7 +1182,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Configuration\figuredata.xml" />
-    <Content Include="w.ico" />
+    <Content Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
