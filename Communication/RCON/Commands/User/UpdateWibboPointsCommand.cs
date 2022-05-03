@@ -1,12 +1,13 @@
-﻿using Butterfly.Game.Clients;
+﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
+using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.RCON.Commands.User
 {
-    internal class SignOutCommand : IRCONCommand
+    internal class UpdateWibboPointsCommand : IRCONCommand
     {
         public bool TryExecute(string[] parameters)
         {
-            if (parameters.Length != 2)
+            if (parameters.Length != 3)
             {
                 return false;
             }
@@ -16,7 +17,7 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            if (Userid <= 0)
+            if (Userid == 0)
             {
                 return false;
             }
@@ -27,7 +28,19 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client.Disconnect();
+            if (!int.TryParse(parameters[2], out int NbWb))
+            {
+                return false;
+            }
+
+            if (NbWb == 0)
+            {
+                return false;
+            }
+
+            Client.GetUser().WibboPoints += NbWb;
+            Client.SendPacket(new ActivityPointNotificationComposer(Client.GetUser().WibboPoints, 0, 105));
+
             return true;
         }
     }

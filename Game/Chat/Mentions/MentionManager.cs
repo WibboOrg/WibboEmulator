@@ -1,5 +1,6 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
-using Butterfly.Communication.Packets.Outgoing.Custom;
+﻿using Butterfly.Communication.Packets.Outgoing.Notifications.NotifCustom;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
+
 
 using Butterfly.Game.Clients;
 using System;

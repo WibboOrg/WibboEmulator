@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Custom;
+using Butterfly.Communication.Packets.Outgoing.RolePlay;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;

@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Custom.Troc;
+using Butterfly.Communication.Packets.Outgoing.RolePlay.Troc;
 using Butterfly.Game.Roleplay.Item;
 using Butterfly.Game.Roleplay.Player;
 using System.Collections.Concurrent;

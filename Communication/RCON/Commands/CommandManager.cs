@@ -44,8 +44,8 @@ namespace Butterfly.Communication.RCON.Commands
             this.Register("addphoto", new AddPhotoCommand());
             this.Register("addwinwin", new AddWinwinCommand());
             this.Register("updatecredits", new UpdateCreditsCommand());
-            this.Register("updatepoints", new UpdatePointsCommand());
-            this.Register("signout", new SignoutCommand());
+            this.Register("updatepoints", new UpdateWibboPointsCommand());
+            this.Register("signout", new SignOutCommand());
             this.Register("ha", new HaCommand());
             this.Register("eventha", new EventHaCommand());
             this.Register("useralert", new UserAlertCommand());

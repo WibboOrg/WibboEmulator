@@ -5,7 +5,7 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-using Butterfly.Communication.Packets.Outgoing.Custom;
+
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;

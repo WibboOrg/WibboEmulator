@@ -11,7 +11,7 @@ using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Communication.Packets.Outgoing.Sound;
-using Butterfly.Communication.Packets.Outgoing.Custom;
+using Butterfly.Communication.Packets.Outgoing.WibboTool;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
