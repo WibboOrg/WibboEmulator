@@ -1,8 +1,6 @@
-﻿using Buttefly.Communication.Encryption.Crypto.Prng;
-using Butterfly.Communication.Packets.Incoming;
+﻿using Butterfly.Communication.Packets.Incoming;
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.BuildersClub;
-using Butterfly.Communication.Packets.Outgoing.Campaign;
 using Butterfly.Communication.Packets.Outgoing.Handshake;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Achievements;
 using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
@@ -13,7 +11,7 @@ using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Communication.Packets.Outgoing.Sound;
-using Butterfly.Communication.Packets.Outgoing.WebSocket;
+using Butterfly.Communication.Packets.Outgoing.Custom;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
@@ -41,9 +39,6 @@ namespace Butterfly.Game.Clients
 
         public string MachineId;
         public Language Langue;
-        public bool IsWebSocket;
-
-        public ARC4 RC4Client = null;
 
         public int ConnectionID;
 
@@ -93,7 +88,6 @@ namespace Butterfly.Game.Clients
                     ButterflyEnvironment.GetGame().GetClientManager().LogClonesOut(user.Id);
                     this._user = user;
                     this.Langue = user.Langue;
-                    this.IsWebSocket = this._connection.IsWebSocket;
 
                     ButterflyEnvironment.GetGame().GetClientManager().RegisterClient(this, user.Id, user.Username);
 
@@ -108,11 +102,6 @@ namespace Butterfly.Game.Clients
                     else if (this.Langue == Language.PORTUGAIS)
                     {
                         ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersBr++;
-                    }
-
-                    if (this.IsWebSocket)
-                    {
-                        ButterflyEnvironment.GetGame().GetClientManager().OnlineNitroUsers++;
                     }
 
                     if (this._user.MachineId != this.MachineId && this.MachineId != null)
@@ -396,11 +385,6 @@ namespace Butterfly.Game.Clients
                 ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersBr--;
             }
 
-            if (this.IsWebSocket)
-            {
-                ButterflyEnvironment.GetGame().GetClientManager().OnlineNitroUsers--;
-            }
-
             if (this.GetUser() != null)
             {
                 this._user.OnDisconnect();
@@ -415,7 +399,6 @@ namespace Butterfly.Game.Clients
             this._user = null;
             this._connection = null;
             this._packetParser = null;
-            this.RC4Client = null;
         }
 
         public void Disconnect()

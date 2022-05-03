@@ -1,7 +1,4 @@
-﻿using Buttefly.Communication.Encryption;
-using Buttefly.Communication.Encryption.Keys;
-using Butterfly.Communication.Packets.Outgoing.Moderation;
-using Butterfly.Communication.WebSocket;
+﻿using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Core;
 using Butterfly.Core.FigureData;
 using Butterfly.Database;
@@ -19,7 +16,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 
 namespace Butterfly
@@ -107,8 +103,6 @@ namespace Butterfly
                         return;
                     }
                 }
-
-                EncryptionV2.Initialize(new RSAKeys());
 
                 _languageManager = new LanguageManager();
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())

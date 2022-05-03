@@ -12,8 +12,6 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             TimeSpan Uptime = DateTime.Now - ButterflyEnvironment.ServerStarted;
 
             int OnlineUsers = ButterflyEnvironment.GetGame().GetClientManager().Count;
-            int OnlineNitroUsers = ButterflyEnvironment.GetGame().GetClientManager().OnlineNitroUsers;
-            int OnlineFlashUsers = OnlineUsers - OnlineNitroUsers;
 
             int RoomCount = ButterflyEnvironment.GetGame().GetRoomManager().Count;
 
@@ -24,9 +22,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                  "   Mike, Sledmore, Joopie, Tweeny, \n" +
                  "   JasonDhose, Leenster, Moogly, Niels, AKllX, rbi0s\n\n" +
                  "   <b>Information sur le serveur</b>:\n" +
-                 "   Joueurs en ligne total: " + OnlineUsers + "\n" +
-                 "   Joueurs en ligne sur Flash: " + OnlineFlashUsers + "\n" +
-                 "   Joueurs en ligne sur Nitro: " + OnlineNitroUsers + "\n" +
+                 "   Joueurs en ligne: " + OnlineUsers + "\n" +
                  "   Appartements actifs: " + RoomCount + "\n" +
                  "   Uptime: " + Uptime.Days + " jour(s), " + Uptime.Hours + " heure(s) et " + Uptime.Minutes + " minutes.\n\n"));
 

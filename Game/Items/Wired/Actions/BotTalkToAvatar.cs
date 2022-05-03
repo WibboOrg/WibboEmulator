@@ -1,4 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing.WebSocket;
+﻿using Butterfly.Communication.Packets.Outgoing.Custom;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.AI;

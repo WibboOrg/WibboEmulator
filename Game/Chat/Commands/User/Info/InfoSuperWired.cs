@@ -1,5 +1,5 @@
 using Butterfly.Communication.Packets.Outgoing.Notifications;
-using Butterfly.Communication.Packets.Outgoing.WebSocket;
+using Butterfly.Communication.Packets.Outgoing.Custom;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 

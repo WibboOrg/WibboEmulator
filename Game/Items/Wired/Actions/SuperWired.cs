@@ -4,7 +4,7 @@ using Butterfly.Communication.Packets.Outgoing.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Communication.Packets.Outgoing.WebSocket;
+using Butterfly.Communication.Packets.Outgoing.Custom;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Rooms;

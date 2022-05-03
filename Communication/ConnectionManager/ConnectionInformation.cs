@@ -19,7 +19,6 @@ namespace ConnectionManager
         public IDataParser Parser;
         public event ConnectionChange ConnectionClose;
         public delegate void ConnectionChange(ConnectionInformation information);
-        public bool IsWebSocket;
 
         public ConnectionInformation(Socket dataStream, int connectionID, IDataParser parser, string ip)
         {
@@ -179,7 +178,7 @@ namespace ConnectionManager
             }
         }
 
-        public void SendData(byte[] packet)
+        public void SendData(byte[] packet, bool ignoreEncode = false)
         {
             if (!this._isConnected)
             {
@@ -188,10 +187,7 @@ namespace ConnectionManager
 
             try
             {
-                if (this.IsWebSocket)
-                {
-                    packet = EncodeDecode.EncodeMessage(packet);
-                }
+                if(!ignoreEncode) packet = EncodeDecode.EncodeMessage(packet);
 
                 this._dataSocket.BeginSend(packet, 0, packet.Length, SocketFlags.None, this._sendCallback, null);
             }

@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.WebSocket;
+using Butterfly.Communication.Packets.Outgoing.Custom;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
@@ -113,7 +113,7 @@ namespace Butterfly.Game.Roleplay.Player
                 UserRoleplayDao.Update(dbClient, this._id, this._rpId, this.Health, this.Energy, this.Money, this.Munition, this.Exp, this.WeaponGun.Id, this.WeaponCac.Id);
             }
 
-            this.SendWebPacket(new LoadInventoryRpComposer(this._inventory));
+            this.SendPacket(new LoadInventoryRpComposer(this._inventory));
             this.SendUpdate();
         }
 
@@ -132,7 +132,7 @@ namespace Butterfly.Game.Roleplay.Player
             }
 
 
-            this.SendWebPacket(new LoadInventoryRpComposer(this._inventory));
+            this.SendPacket(new LoadInventoryRpComposer(this._inventory));
         }
 
         internal RolePlayInventoryItem GetInventoryItem(int Id)
@@ -169,7 +169,7 @@ namespace Butterfly.Game.Roleplay.Player
             }
 
 
-            this.SendWebPacket(new AddInventoryItemRpComposer(RPItem, count));
+            this.SendPacket(new AddInventoryItemRpComposer(RPItem, count));
         }
 
         internal void RemoveInventoryItem(int ItemId, int Count = 1)
@@ -199,10 +199,10 @@ namespace Butterfly.Game.Roleplay.Player
                 }
             }
 
-            this.SendWebPacket(new RemoveItemInventoryRpComposer(ItemId, Count));
+            this.SendPacket(new RemoveItemInventoryRpComposer(ItemId, Count));
         }
 
-        public void SendWebPacket(IServerPacket Message)
+        public void SendPacket(IServerPacket Message)
         {
             Client session = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this._id);
             if (session != null)
@@ -421,7 +421,7 @@ namespace Butterfly.Game.Roleplay.Player
         {
             if (SendNow)
             {
-                this.SendWebPacket(new RpStatsComposer((!this.Dispose) ? this._rpId : 0, this.Health, this.HealthMax, this.Energy, this.Money, this.Munition, this.Level));
+                this.SendPacket(new RpStatsComposer((!this.Dispose) ? this._rpId : 0, this.Health, this.HealthMax, this.Energy, this.Money, this.Munition, this.Level));
             }
             else
             {
@@ -431,7 +431,7 @@ namespace Butterfly.Game.Roleplay.Player
 
         public void SendItemsList(List<RPItem> ItemsList)
         {
-            this.SendWebPacket(new BuyItemsListComposer(ItemsList));
+            this.SendPacket(new BuyItemsListComposer(ItemsList));
         }
 
         public void OnCycle(RoomUser User, RolePlayerManager RPManager)
@@ -542,7 +542,7 @@ namespace Butterfly.Game.Roleplay.Player
             if (this.NeedUpdate)
             {
                 this.NeedUpdate = false;
-                this.SendWebPacket(new RpStatsComposer((!this.Dispose) ? this._rpId : 0, this.Health, this.HealthMax, this.Energy, this.Money, this.Munition, this.Level));
+                this.SendPacket(new RpStatsComposer((!this.Dispose) ? this._rpId : 0, this.Health, this.HealthMax, this.Energy, this.Money, this.Munition, this.Level));
             }
         }
 
@@ -559,7 +559,7 @@ namespace Butterfly.Game.Roleplay.Player
                 UserRoleplayDao.Update(dbClient, this._id, this._rpId, this.Health, this.Energy, this.Money, this.Munition, this.Exp, this.WeaponGun.Id, this.WeaponCac.Id);
             }
 
-            this.SendWebPacket(new RpStatsComposer(0, 0, 0, 0, 0, 0, 0));
+            this.SendPacket(new RpStatsComposer(0, 0, 0, 0, 0, 0, 0));
             this._inventory.Clear();
         }
     }

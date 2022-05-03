@@ -3,7 +3,7 @@ using Butterfly.Communication.Packets.Incoming.Marketplace;
 using Butterfly.Communication.Packets.Incoming.Structure;
 using Butterfly.Communication.Packets.Incoming.Camera;
 using Butterfly.Communication.Packets.Incoming.Campaign;
-using Butterfly.Communication.Packets.Incoming.WebSocket;
+using Butterfly.Communication.Packets.Incoming.Custom;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using System;
@@ -125,7 +125,6 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.USER_INFO, new InfoRetrieveEvent());
             this._incomingPackets.Add(ClientPacketHeader.CLIENT_PONG, new PingEvent());
 
-            this._incomingPackets.Add(ClientPacketHeader.GenerateSecretKeyMessageEvent, new GenerateSecretKeyEvent());
             this._incomingPackets.Add(ClientPacketHeader.SECURITY_MACHINE, new UniqueIDEvent());
         }
 

@@ -1,8 +1,7 @@
 ﻿namespace Butterfly.Communication.Packets
 {
-    public static class ClientPacketHeader //PRODUCTION-201611291003-a-1161735
+    public static class ClientPacketHeader
     {
-        public const int GenerateSecretKeyMessageEvent = 773;
         public const int UserNuxEvent = 1299;
         public const int CanCreateRoomMessageEvent = 2128;
         public const int GetPetTrainingPanelMessageEvent = 2161;

@@ -20,7 +20,6 @@ namespace Butterfly.Game.Clients
         public ConcurrentDictionary<string, int> _usernameRegister;
         public ConcurrentDictionary<int, int> _userIDRegister;
 
-        public int OnlineNitroUsers;
         public int OnlineUsersFr;
         public int OnlineUsersEn;
         public int OnlineUsersBr;

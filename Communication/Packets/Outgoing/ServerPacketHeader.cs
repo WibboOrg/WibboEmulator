@@ -1,9 +1,7 @@
 ﻿namespace Butterfly.Communication.Packets.Outgoing
 {
-    public static class ServerPacketHeader //PRODUCTION-201611291003-a-1161735
+    public static class ServerPacketHeader
     {
-        public const int InitCryptoMessageComposer = 1347;
-        public const int SecretKeyMessageComposer = 3885;
         public const int NuxAlertComposer = 1243;
         public const int PetTrainingPanelMessageComposer = 1164;
         public const int CanCreateRoomMessageComposer = 378;

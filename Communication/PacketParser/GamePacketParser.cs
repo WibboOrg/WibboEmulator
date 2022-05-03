@@ -18,7 +18,6 @@ namespace Butterfly.Net
         private readonly Client _currentClient;
         private bool _halfDataRecieved = false;
         private byte[] _halfData = null;
-        private bool _isWebSocket = false;
         private bool _policySended = false;
 
         public GamePacketParser(Client me)
@@ -43,41 +42,18 @@ namespace Butterfly.Net
                 {
                     this.PolicyRequest(Data);
 
-                    this._isWebSocket = true;
                     this._policySended = true;
-                    this._currentClient.GetConnection().IsWebSocket = true;
-
                     return;
                 }
 
-                if (!this._policySended && (Data[0] == 60 && Data[1] == 112))
+                try
                 {
-                    this._currentClient.GetConnection().SendData(Encoding.Default.GetBytes(GetXmlPolicy()));
-
-                    this._isWebSocket = false;
-                    this._policySended = true;
-                    this._currentClient.GetConnection().IsWebSocket = false;
-
+                    Data = EncodeDecode.DecodeMessage(Data);
+                }
+                catch (Exception e)
+                {
+                    ExceptionLogger.LogException($"Length: {Data.Length} Message: {e.Message}");
                     return;
-                }
-
-
-                if (this._isWebSocket)
-                {
-                    try
-                    {
-                        Data = EncodeDecode.DecodeMessage(Data);
-                    }
-                    catch (Exception e)
-                    {
-                        ExceptionLogger.LogException($"Length: {Data.Length} Message: {e.Message}");
-                        return;
-                    }
-                }
-
-                if (this._currentClient != null && this._currentClient.RC4Client != null && !deciphered)
-                {
-                    this._currentClient.RC4Client.Decrypt(ref Data);
                 }
 
                 if (this._halfDataRecieved)
@@ -105,11 +81,8 @@ namespace Butterfly.Net
                     }
                     else if ((Reader.BaseStream.Length - 4) < MsgLen)
                     {
-                        if (!this._isWebSocket)
-                        {
-                            this._halfData = Data;
-                            this._halfDataRecieved = true;
-                        }
+                        this._halfData = Data;
+                        this._halfDataRecieved = true;
 
                         return;
                     }
@@ -172,7 +145,7 @@ namespace Butterfly.Net
                  ;
 
             // which one should I use? none of them fires the onopen method
-            this._currentClient.GetConnection().SendData(Encoding.UTF8.GetBytes(response));
+            this._currentClient.GetConnection().SendData(Encoding.UTF8.GetBytes(response), true);
         }
 
         private static string GetXmlPolicy()

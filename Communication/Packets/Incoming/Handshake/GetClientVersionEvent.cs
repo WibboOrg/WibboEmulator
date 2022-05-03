@@ -1,5 +1,4 @@
-﻿using Buttefly.Communication.Encryption;
-using Butterfly.Communication.Packets.Outgoing.Handshake;
+﻿using Butterfly.Communication.Packets.Outgoing.Handshake;
 using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
@@ -24,11 +23,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 return;
             }
-
-            string Prime = EncryptionV2.GetRsaDiffieHellmanPrimeKey();
-            string Generator = EncryptionV2.GetRsaDiffieHellmanGeneratorKey();
-
-            Session.SendPacket(new InitCryptoComposer(Prime, Generator));
         }
     }
 }

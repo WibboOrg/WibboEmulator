@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.WebSocket.Troc;
+using Butterfly.Communication.Packets.Outgoing.Custom.Troc;
 using Butterfly.Game.Roleplay.Item;
 using Butterfly.Game.Roleplay.Player;
 using System.Collections.Concurrent;
@@ -94,13 +94,13 @@ namespace Butterfly.Game.Roleplay.Troc
             RolePlayer PlayerOne = RPManager.GetPlayer(Troc.UserOne.UserId);
             if (PlayerOne != null)
             {
-                PlayerOne.SendWebPacket(packet);
+                PlayerOne.SendPacket(packet);
             }
 
             RolePlayer PlayerTwo = RPManager.GetPlayer(Troc.UserTwo.UserId);
             if (PlayerTwo != null)
             {
-                PlayerTwo.SendWebPacket(packet);
+                PlayerTwo.SendPacket(packet);
             }
         }
 
@@ -116,14 +116,14 @@ namespace Butterfly.Game.Roleplay.Troc
             if (PlayerOne != null)
             {
                 PlayerOne.TradeId = 0;
-                PlayerOne.SendWebPacket(new RpTrocStopComposer());
+                PlayerOne.SendPacket(new RpTrocStopComposer());
             }
 
             RolePlayer PlayerTwo = RPManager.GetPlayer(Troc.UserTwo.UserId);
             if (PlayerTwo != null)
             {
                 PlayerTwo.TradeId = 0;
-                PlayerTwo.SendWebPacket(new RpTrocStopComposer());
+                PlayerTwo.SendPacket(new RpTrocStopComposer());
             }
 
             this._usersTrade.TryRemove(Troc.Id, out Troc);
@@ -316,10 +316,10 @@ namespace Butterfly.Game.Roleplay.Troc
             this._usersTrade.TryAdd(this._tradeId, new RPTroc(this._tradeId, RPId, UserOne, UserTwo));
 
             PlayerOne.TradeId = this._tradeId;
-            PlayerOne.SendWebPacket(new RpTrocStartComposer(UserTwo, UserNameTwo));
+            PlayerOne.SendPacket(new RpTrocStartComposer(UserTwo, UserNameTwo));
 
             PlayerTwo.TradeId = this._tradeId;
-            PlayerTwo.SendWebPacket(new RpTrocStartComposer(UserOne, UserNameOne));
+            PlayerTwo.SendPacket(new RpTrocStartComposer(UserOne, UserNameOne));
         }
 
         public void RemoveTrade(int TrocId)

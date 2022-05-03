@@ -12,11 +12,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Session.RC4Client == null && !Session.GetConnection().IsWebSocket)
-            {
-                return;
-            }
-
             string SSOTicket = Packet.PopString();            int Timer = Packet.PopInt();
 
             //if (Timer <= 0) return;
