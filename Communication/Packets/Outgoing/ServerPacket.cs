@@ -35,16 +35,6 @@ namespace Butterfly.Communication.Packets.Outgoing
             this.WriteByte(new byte[1] { b ? (byte)1 : (byte)0 }, false);
         }
 
-        public void WriteStringUtf8(string s)
-        {
-            byte[] MessageOld = Encoding.GetEncoding("Windows-1252").GetBytes(s);
-            string MessageString = this.Encoding.GetString(MessageOld);
-
-            byte[] Message = this.Encoding.GetBytes(MessageString);
-            this.WriteShort(Message.Length);
-            this.WriteByte(Message, false);
-        }
-
         public void WriteString(string s)
         {
             byte[] Message = this.Encoding.GetBytes(s);

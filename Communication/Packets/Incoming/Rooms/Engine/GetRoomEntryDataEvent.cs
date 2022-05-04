@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 {
     internal class GetRoomEntryDataEvent : IPacketEvent
     {
-        public double Delay => 500;
+        public double Delay => 0;
 
         public void Parse(Client Session, ClientPacket Packet)
         {
