@@ -1,7 +1,8 @@
 bin
-.vs
 obj
 debug.log
+.vs
+.vscode
 .vs/Butterfly Emulator/v17/HierarchyCache.v1.txt
 .vs/Butterfly Emulator/v17/.suo
 .vs/Butterfly Emulator/v17/fileList.bin
