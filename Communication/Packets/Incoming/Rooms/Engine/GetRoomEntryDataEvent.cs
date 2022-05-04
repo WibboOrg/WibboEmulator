@@ -89,7 +89,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomEntry", 1);
             }
 
-
             double timeStampNow = UnixTimestamp.GetNow();
 
             if (!Session.GetUser().Visits.ContainsKey(timeStampNow))

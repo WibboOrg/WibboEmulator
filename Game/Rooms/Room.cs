@@ -532,9 +532,7 @@ namespace Butterfly.Game.Rooms
         public void SendObjects(Client Session)
         {
             ServerPacketList packetList = new ServerPacketList();
-            packetList.Add(this.GetGameMap().Model.SerializeRelativeHeightmap());
-            packetList.Add(this.GetGameMap().Model.GetHeightmap());
-
+            
             foreach (RoomUser roomUser in this._roomUserManager.GetUserList().ToList())
             {
                 if (roomUser == null)

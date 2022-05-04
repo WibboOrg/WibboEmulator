@@ -437,6 +437,8 @@ namespace Butterfly.Game.Users
             Session.SendPacket(new RoomPropertyComposer("landscape", Room.RoomData.Landscape));
             Session.SendPacket(new RoomRatingComposer(Room.RoomData.Score, !(Session.GetUser().RatedRooms.Contains(Room.Id) || Room.RoomData.OwnerId == Session.GetUser().Id)));
 
+            Session.SendPacket(Room.GetGameMap().Model.SerializeRelativeHeightmap());
+            Session.SendPacket(Room.GetGameMap().Model.GetHeightmap());
 
             return true;
         }

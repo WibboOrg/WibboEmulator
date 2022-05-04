@@ -499,11 +499,6 @@ namespace Butterfly.Game.Rooms
                 User.SetStatus("flatctrl", "4");
                 Session.SendPacket(new YouAreOwnerComposer());
                 Session.SendPacket(new YouAreControllerComposer(4));
-
-                if (Session.GetUser().HasFuse("ads_background"))
-                {
-                    Session.SendPacket(new UserRightsComposer(5));
-                }
             }
             else if (this._room.CheckRights(Session))
             {
@@ -512,10 +507,6 @@ namespace Butterfly.Game.Rooms
             }
             else
             {
-                if (Session.GetUser().HasFuse("ads_background"))
-                {
-                    Session.SendPacket(new UserRightsComposer(Session.GetUser().Rank));
-                }
 
                 Session.SendPacket(new YouAreNotControllerComposer());
             }
