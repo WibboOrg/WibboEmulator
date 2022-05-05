@@ -213,11 +213,11 @@ namespace Butterfly.Game.Animation
             ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, "WibboGame", room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
 
             ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer(
-                "gameauto",
-                "Message d'animation",
-                alertMessage,
-                "Je veux y jouer !",
-                room.Id,
+                "gameauto", // image
+                "Message d'animation", // title
+                alertMessage, // string_>alert
+                "Je veux y jouer !", // button
+                room.Id, //guide
                 ""
             ));
         }

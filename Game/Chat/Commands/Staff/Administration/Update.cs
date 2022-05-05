@@ -37,7 +37,9 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             Session.SendWhisper("Random mis à jour");
                             break;
                         }
+                    case "landingview":
                     case "view":
+                    case "lv":
                     case "vue":
                         {
                             ButterflyEnvironment.GetGame().GetHotelView().Init(dbClient);
