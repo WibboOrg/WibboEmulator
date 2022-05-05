@@ -22,11 +22,13 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Database.Daos;
 using Butterfly.Game.Effects;
 using Butterfly.Game.Badges;
+using Butterfly.Game.Bots;
 
 namespace Butterfly.Game
 {
     public class GameCore
     {
+        private readonly BotManager _botManager;
         private readonly ClientManager _clientManager;
         private readonly PermissionManager _permissionManager;
         private readonly CatalogManager _catalogManager;
@@ -55,6 +57,9 @@ namespace Butterfly.Game
         {
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
+                this._botManager = new BotManager();
+                this._botManager.Init();
+
                 this._clientManager = new ClientManager();
 
                 this._permissionManager = new PermissionManager();
@@ -116,6 +121,10 @@ namespace Butterfly.Game
 
         #region Return values
 
+        public BotManager GetBotManager()
+        {
+            return this._botManager;
+        }
         public AnimationManager GetAnimationManager()
         {
             return this._animationManager;

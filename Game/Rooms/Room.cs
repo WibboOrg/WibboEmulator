@@ -25,6 +25,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Butterfly.Utilities.Events;
 using Butterfly.Utilities;
+using Butterfly.Game.Rooms.Trading;
 
 namespace Butterfly.Game.Rooms
 {

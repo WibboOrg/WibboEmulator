@@ -601,6 +601,13 @@
     <Compile Include="Communication\RCON\Commands\User\UpdateLimitCoinsCommand.cs" />
     <Compile Include="Communication\RCON\Commands\User\UpdateWibboPointsCommand.cs" />
     <Compile Include="Communication\RCON\Commands\User\UserAlertCommand.cs" />
+    <Compile Include="Game\Bots\BotManager.cs" />
+    <Compile Include="Game\Chat\Commands\Staff\Administration\DisabledWibboGame.cs" />
+    <Compile Include="Game\Rooms\AI\Responses\BotResponse.cs" />
+    <Compile Include="Game\Rooms\AI\Speech\RandomSpeech.cs" />
+    <Compile Include="Game\Rooms\AI\Types\BartenderBot.cs" />
+    <Compile Include="Game\Users\Messenger\MessengerMessageErrors.cs" />
+    <Compile Include="Game\Users\Messenger\MessengerMessageErrorsUtility.cs" />
     <Compile Include="Utilities\EncodeDecode.cs" />
     <Compile Include="Core\ConfigurationData.cs" />
     <Compile Include="Core\ConsoleCommands.cs" />
@@ -778,7 +785,7 @@
     <Compile Include="Game\Chat\Commands\Staff\Administration\AllIgnore.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Gestion\LoadRoomItems.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\NotifTop.cs" />
-    <Compile Include="Game\Chat\Commands\Staff\Administration\Update.cs" />
+    <Compile Include="Game\Chat\Commands\Staff\Gestion\Update.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Gestion\SummonAll.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\SuperBot.cs" />
     <Compile Include="Game\Chat\Commands\User\Several\TransfLittle.cs" />
@@ -1019,9 +1026,10 @@
     <Compile Include="Game\Items\Wired\Actions\SuperWired.cs" />
     <Compile Include="Game\Items\Wired\Triggers\Repeaterlong.cs" />
     <Compile Include="Game\Moderation\ModerationPresetActionMessages.cs" />
-    <Compile Include="Game\Users\Messenger\Relationship.cs" />
+    <Compile Include="Game\Users\Relationships\Relationship.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Utilities\IntEncoding.cs" />
+    <Compile Include="Utilities\RandomNumber.cs" />
     <Compile Include="Utilities\ServerPacketList.cs" />
     <Compile Include="Utilities\StringCharFilter.cs" />
     <Compile Include="Communication\ConnectionManager\ConnectionHandeling.cs" />
@@ -1106,8 +1114,8 @@
     <Compile Include="Game\Rooms\RoomModel.cs" />
     <Compile Include="Game\Rooms\RoomUser.cs" />
     <Compile Include="Game\Rooms\ByteToItemEffectType.cs" />
-    <Compile Include="Game\Rooms\Trade\Trade.cs" />
-    <Compile Include="Game\Rooms\Trade\TradeUser.cs" />
+    <Compile Include="Game\Rooms\Trading\Trade.cs" />
+    <Compile Include="Game\Rooms\Trading\TradeUser.cs" />
     <Compile Include="Game\Rooms\RoomUserManager.cs" />
     <Compile Include="Game\Rooms\Games\Freeze\Freeze.cs" />
     <Compile Include="Game\Rooms\Games\Banzai\BattleBanzai.cs" />
@@ -1155,7 +1163,7 @@
     <Compile Include="Game\Users\Messenger\MessengerRequest.cs" />
     <Compile Include="Game\Users\Messenger\SearchResult.cs" />
     <Compile Include="Game\Users\Messenger\SearchResultFactory.cs" />
-    <Compile Include="Game\Users\UserFactory.cs" />
+    <Compile Include="Game\Users\Authentificator\UserFactory.cs" />
     <Compile Include="Game\Permissions\AuthorizationCommands.cs" />
     <Compile Include="Game\Chat\Commands\CommandManager.cs" />
     <Compile Include="Communication\Packets\Outgoing\ServerPacket.cs" />

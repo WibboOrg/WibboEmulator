@@ -4,7 +4,7 @@ using Butterfly.Database.Interfaces;
 using System;
 using System.Data;
 
-namespace Butterfly.Game.Users.Data
+namespace Butterfly.Game.Users.Authenticator
 {
     public class UserFactory
     {

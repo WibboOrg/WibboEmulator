@@ -40,7 +40,7 @@ namespace Butterfly.Game.Chat.Commands
             RegisterPremium();
             RegisterModeration();
             RegisterAdministrator();
-            RegisterGod();
+            RegisterGestion();
 
         }
 
@@ -349,7 +349,7 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(202, new ForceSit());
         }
 
-        public void RegisterGod()
+        public void RegisterGestion()
         {
             this.Register(28, new ShutDown());
             this.Register(166, new Update());
@@ -363,6 +363,7 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(200, new SummonAll()); /// -> INSERT INTO `emulator_command` (`id`, `input`, `minrank`, `description_fr`) VALUES ('200', 'summonall', '13', 'Convoque tout les joueurs dans ton appartement (cmd dangereuse)');
             this.Register(203, new RoomDance());
             this.Register(204, new Give());
+            this.Register(206, new DisabledWibboGame());
         }
         public void RegisterCommand()
         {

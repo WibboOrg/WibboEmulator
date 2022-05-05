@@ -17,7 +17,7 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Users;
-using Butterfly.Game.Users.Data;
+using Butterfly.Game.Users.Authenticator;
 using Butterfly.Net;
 using Butterfly.Utilities;
 using ConnectionManager;

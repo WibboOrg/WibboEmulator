@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Users.Messenger
+﻿namespace Butterfly.Game.Users.Relationships
 {
     public class Relationship
     {

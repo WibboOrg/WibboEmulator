@@ -2,7 +2,7 @@
 using Butterfly.Game.Items;
 using System.Collections.Generic;
 
-namespace Butterfly.Game.Rooms
+namespace Butterfly.Game.Rooms.Trading
 {
     public class TradeUser
     {

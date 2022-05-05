@@ -1,5 +1,6 @@
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
+using Butterfly.Game.Rooms.Trading;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

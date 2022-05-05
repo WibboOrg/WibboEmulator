@@ -16,6 +16,7 @@ using Butterfly.Game.Users.Achievements;
 using Butterfly.Game.Users.Badges;
 using Butterfly.Game.Users.Inventory;
 using Butterfly.Game.Users.Messenger;
+using Butterfly.Game.Users.Permissions;
 using Butterfly.Game.Users.Wardrobes;
 using System;
 using System.Collections.Generic;
@@ -124,6 +125,9 @@ namespace Butterfly.Game.Users
         public double IgnoreAllExpireTime;
 
         public bool AllowConsoleMessages;
+        public bool AllowMessengerInvites;
+
+        private PermissionComponent _permissions;
         public bool IgnoreAll
         {
             get
@@ -234,7 +238,8 @@ namespace Butterfly.Game.Users
             this.Nuxenable = nuxenable;
             this.NewUser = nuxenable;
             this.Visits = new Dictionary<double, int>();
-            this.AllowConsoleMessages = true;
+            this.AllowConsoleMessages = false;
+            this.AllowMessengerInvites = false;
         }
 
         public void Init(Client client)
@@ -247,6 +252,7 @@ namespace Butterfly.Game.Users
             this._wardrobeComponent = new WardrobeComponent(this);
             this._messengerComponent = new MessengerComponent(this);
             this._chatMessageManager = new ChatlogManager();
+            this._permissions = new PermissionComponent(this);
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
@@ -598,6 +604,11 @@ namespace Butterfly.Game.Users
         public ChatlogManager GetChatMessageManager()
         {
             return this._chatMessageManager;
+        }
+
+        public PermissionComponent GetPermissions()
+        {
+            return this._permissions;
         }
 
         public int GetQuestProgress(int p)

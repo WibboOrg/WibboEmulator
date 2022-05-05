@@ -2,6 +2,7 @@
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
+using Butterfly.Game.Users.Relationships;
 using Butterfly.Utilities;
 using System;
 using System.Collections.Generic;
@@ -384,6 +385,17 @@ namespace Butterfly.Game.Users.Messenger
                 }
 
                 return;
+            }
+
+            if (!Client.GetUser().AllowConsoleMessages)
+            {
+                this.GetClient().SendPacket(new InstantMessageErrorComposer(7, ToId));
+                return;
+            }
+
+            if (Client.GetUser().FloodCount > 0)
+            {
+                this.GetClient().SendPacket(new InstantMessageErrorComposer(4, ToId));
             }
 
             Client.SendPacket(new NewConsoleComposer(this._userInstance.Id, Message));

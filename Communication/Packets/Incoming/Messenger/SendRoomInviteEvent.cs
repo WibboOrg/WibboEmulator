@@ -63,7 +63,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 if (Session.GetUser().GetMessenger().FriendshipExists(UserId))
                 {
                     Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
-                    if (clientByUserId == null)
+                    if (clientByUserId == null || clientByUserId.GetUser().AllowConsoleMessages == false)
                     {
                         break;
                     }

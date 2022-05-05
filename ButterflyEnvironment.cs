@@ -7,7 +7,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Users;
-using Butterfly.Game.Users.Data;
+using Butterfly.Game.Users.Authenticator;
 using Butterfly.Net;
 using ConnectionManager;
 using System;
