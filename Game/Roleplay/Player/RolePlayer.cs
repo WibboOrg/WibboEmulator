@@ -1,5 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.RolePlay;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
@@ -520,7 +521,7 @@ namespace Butterfly.Game.Roleplay.Player
                     this.SendPrison = false;
                     User.GetClient().GetUser().IsTeleporting = true;
                     User.GetClient().GetUser().TeleportingRoomID = RPManager.PrisonId;
-                    User.GetClient().GetUser().PrepareRoom(RPManager.PrisonId);
+                    User.GetClient().SendPacket(new RoomForwardComposer(RPManager.PrisonId));
                 }
             }
 
@@ -535,7 +536,7 @@ namespace Butterfly.Game.Roleplay.Player
                     this.Dead = false;
                     User.GetClient().GetUser().IsTeleporting = true;
                     User.GetClient().GetUser().TeleportingRoomID = RPManager.HopitalId;
-                    User.GetClient().GetUser().PrepareRoom(RPManager.HopitalId);
+                    User.GetClient().SendPacket(new RoomForwardComposer(RPManager.HopitalId));
                 }
             }
 

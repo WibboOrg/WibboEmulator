@@ -20,6 +20,7 @@ using Butterfly.Game.Rooms.AI;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Badges;
 using Butterfly.Communication.Packets.Outgoing.RolePlay;
 using Butterfly.Communication.Packets.Outgoing.Sound.SoundCustom;
+using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 
 namespace Butterfly.Game.Items.Wired.Actions
 {
@@ -661,7 +662,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             {
                                 user.GetClient().GetUser().IsTeleporting = true;
                                 user.GetClient().GetUser().TeleportingRoomID = RoomId;
-                                user.GetClient().GetUser().PrepareRoom(RoomId, "");
+                                user.GetClient().SendPacket(new RoomForwardComposer(RoomId));
                             }
                         }
                         break;
@@ -1580,9 +1581,9 @@ namespace Butterfly.Game.Items.Wired.Actions
             }
         }
 
-        private void UserCommand(string Cmd, string Value, RoomUser User, Item TriggerItem)
+        private void UserCommand(string Cmd, string Value, RoomUser user, Item TriggerItem)
         {
-            if (User == null || User.IsBot || User.GetClient() == null)
+            if (user == null || user.IsBot || user.GetClient() == null)
             {
                 return;
             }
@@ -1591,7 +1592,7 @@ namespace Butterfly.Game.Items.Wired.Actions
             {
                 case "usermute":
                     {
-                        User.IsMuted = (Value == "true") ? true : false;
+                        user.IsMuted = (Value == "true") ? true : false;
                         break;
                     }
                 case "botchoosenav":
@@ -1600,7 +1601,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                         if (string.IsNullOrEmpty(Value))
                         {
-                            User.GetClient().SendPacket(new BotChooseComposer(ChooseList));
+                            user.GetClient().SendPacket(new BotChooseComposer(ChooseList));
                             break;
                         }
 
@@ -1629,7 +1630,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             ChooseList.Add(list.ToArray());
                         }
 
-                        User.GetClient().SendPacket(new BotChooseComposer(ChooseList));
+                        user.GetClient().SendPacket(new BotChooseComposer(ChooseList));
 
                         break;
                     }
@@ -1638,7 +1639,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                         List<string[]> ChooseList = new List<string[]>();
                         if (string.IsNullOrEmpty(Value))
                         {
-                            User.GetClient().SendPacket(new BotChooseComposer(ChooseList));
+                            user.GetClient().SendPacket(new BotChooseComposer(ChooseList));
                             break;
                         }
 
@@ -1649,7 +1650,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                 List<string> list = pChoose.Split(';').ToList();
                                 if (list.Count == 3)
                                 {
-                                    RoomUser BotOrPet = User.Room.GetRoomUserManager().GetBotByName(list[0]);
+                                    RoomUser BotOrPet = user.Room.GetRoomUserManager().GetBotByName(list[0]);
                                     if (BotOrPet != null && BotOrPet.BotData != null)
                                     {
                                         list.Add(BotOrPet.BotData.Look);
@@ -1668,7 +1669,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             List<string> list = Value.Split(';').ToList();
                             if (list.Count == 3)
                             {
-                                RoomUser BotOrPet = User.Room.GetRoomUserManager().GetBotByName(list[0]);
+                                RoomUser BotOrPet = user.Room.GetRoomUserManager().GetBotByName(list[0]);
                                 if (BotOrPet != null && BotOrPet.BotData != null)
                                 {
                                     list.Add(BotOrPet.BotData.Look);
@@ -1682,25 +1683,25 @@ namespace Butterfly.Game.Items.Wired.Actions
                             }
                         }
 
-                        User.GetClient().SendPacket(new BotChooseComposer(ChooseList));
+                        user.GetClient().SendPacket(new BotChooseComposer(ChooseList));
 
                         break;
                     }
                 case "stopsounduser":
                     {
-                        User.GetClient().SendPacket(new StopSoundComposer(Value)); //Type = Trax
+                        user.GetClient().SendPacket(new StopSoundComposer(Value)); //Type = Trax
 
                         break;
                     }
                 case "playsounduser":
                     {
-                        User.GetClient().SendPacket(new PlaySoundComposer(Value, 1)); //Type = furni
+                        user.GetClient().SendPacket(new PlaySoundComposer(Value, 1)); //Type = furni
 
                         break;
                     }
                 case "playmusicuser":
                     {
-                        User.GetClient().SendPacket(new PlaySoundComposer(Value, 2, true)); //Type = Trax
+                        user.GetClient().SendPacket(new PlaySoundComposer(Value, 2, true)); //Type = Trax
 
                         break;
                     }
@@ -1708,11 +1709,11 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         if (Value == "true")
                         {
-                            User.AllowMoveTo = true;
+                            user.AllowMoveTo = true;
                         }
                         else
                         {
-                            User.AllowMoveTo = false;
+                            user.AllowMoveTo = false;
                         }
 
                         break;
@@ -1721,11 +1722,11 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         if (Value == "true")
                         {
-                            User.ReverseWalk = true;
+                            user.ReverseWalk = true;
                         }
                         else
                         {
-                            User.ReverseWalk = false;
+                            user.ReverseWalk = false;
                         }
 
                         break;
@@ -1734,18 +1735,18 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         if (Value == "true")
                         {
-                            User.WalkSpeed = true;
+                            user.WalkSpeed = true;
                         }
                         else
                         {
-                            User.WalkSpeed = false;
+                            user.WalkSpeed = false;
                         }
 
                         break;
                     }
                 case "openpage":
                     {
-                        User.GetClient().SendPacket(new InClientLinkComposer("habbopages/" + Value));
+                        user.GetClient().SendPacket(new InClientLinkComposer("habbopages/" + Value));
                         break;
                     }
                 case "rot":
@@ -1757,76 +1758,76 @@ namespace Butterfly.Game.Items.Wired.Actions
                             ValueInt = 0;
                         }
 
-                        if (User.RotBody == ValueInt && User.RotHead == ValueInt)
+                        if (user.RotBody == ValueInt && user.RotHead == ValueInt)
                         {
                             break;
                         }
 
-                        User.RotBody = ValueInt;
-                        User.RotHead = ValueInt;
-                        User.UpdateNeeded = true;
+                        user.RotBody = ValueInt;
+                        user.RotHead = ValueInt;
+                        user.UpdateNeeded = true;
 
                         break;
                     }
                 case "stand":
                     {
-                        if (User.Statusses.ContainsKey("lay"))
+                        if (user.Statusses.ContainsKey("lay"))
                         {
-                            User.RemoveStatus("lay");
+                            user.RemoveStatus("lay");
                         }
 
-                        if (User.Statusses.ContainsKey("sit"))
+                        if (user.Statusses.ContainsKey("sit"))
                         {
-                            User.RemoveStatus("sit");
+                            user.RemoveStatus("sit");
                         }
 
-                        if (User.Statusses.ContainsKey("sign"))
+                        if (user.Statusses.ContainsKey("sign"))
                         {
-                            User.RemoveStatus("sign");
+                            user.RemoveStatus("sign");
                         }
 
-                        User.UpdateNeeded = true;
+                        user.UpdateNeeded = true;
                         break;
                     }
                 case "allowshoot":
                     {
                         if (Value == "true")
                         {
-                            User.AllowShoot = true;
+                            user.AllowShoot = true;
                         }
                         else
                         {
-                            User.AllowShoot = false;
+                            user.AllowShoot = false;
                         }
 
                         break;
                     }
                 case "addpointteam":
                     {
-                        if (User.Team == TeamType.NONE)
+                        if (user.Team == TeamType.NONE)
                         {
                             break;
                         }
 
                         int.TryParse(Value, out int Count);
 
-                        if (User.Room == null)
+                        if (user.Room == null)
                         {
                             break;
                         }
 
-                        User.Room.GetGameManager().AddPointToTeam(User.Team, Count, User);
+                        user.Room.GetGameManager().AddPointToTeam(user.Team, Count, user);
                         break;
                     }
                 case "ingame":
                     {
                         if (Value == "true")
                         {
-                            User.InGame = true;
+                            user.InGame = true;
                         }
                         else
                         {
-                            User.InGame = false;
+                            user.InGame = false;
                         }
 
                         break;
@@ -1835,7 +1836,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         int.TryParse(Value, out int Points);
 
-                        User.UserTimer = Points;
+                        user.UserTimer = Points;
 
                         break;
                     }
@@ -1848,7 +1849,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             break;
                         }
 
-                        User.UserTimer += Points;
+                        user.UserTimer += Points;
 
                         break;
                     }
@@ -1861,13 +1862,13 @@ namespace Butterfly.Game.Items.Wired.Actions
                             break;
                         }
 
-                        if (Points >= User.UserTimer)
+                        if (Points >= user.UserTimer)
                         {
-                            User.UserTimer = 0;
+                            user.UserTimer = 0;
                         }
                         else
                         {
-                            User.UserTimer -= Points;
+                            user.UserTimer -= Points;
                         }
 
                         break;
@@ -1876,7 +1877,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         int.TryParse(Value, out int Points);
 
-                        User.WiredPoints = Points;
+                        user.WiredPoints = Points;
 
                         break;
                     }
@@ -1889,7 +1890,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             break;
                         }
 
-                        User.WiredPoints += Points;
+                        user.WiredPoints += Points;
 
                         break;
                     }
@@ -1902,13 +1903,13 @@ namespace Butterfly.Game.Items.Wired.Actions
                             break;
                         }
 
-                        if (Points >= User.WiredPoints)
+                        if (Points >= user.WiredPoints)
                         {
-                            User.WiredPoints = 0;
+                            user.WiredPoints = 0;
                         }
                         else
                         {
-                            User.WiredPoints -= Points;
+                            user.WiredPoints -= Points;
                         }
                         break;
                     }
@@ -1916,25 +1917,25 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         int.TryParse(Value, out int Seconde);
                         Seconde *= 2;
-                        User.Freeze = true;
-                        User.FreezeEndCounter = Seconde;
+                        user.Freeze = true;
+                        user.FreezeEndCounter = Seconde;
                         break;
                     }
                 case "unfreeze":
                     {
-                        User.Freeze = false;
-                        User.FreezeEndCounter = 0;
+                        user.Freeze = false;
+                        user.FreezeEndCounter = 0;
                         break;
                     }
                 case "breakwalk":
                     {
                         if (Value == "true")
                         {
-                            User.BreakWalkEnable = true;
+                            user.BreakWalkEnable = true;
                         }
                         else
                         {
-                            User.BreakWalkEnable = false;
+                            user.BreakWalkEnable = false;
                         }
 
                         break;
@@ -1951,7 +1952,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             return;
                         }
 
-                        User.ApplyEffect(NumEnable);
+                        user.ApplyEffect(NumEnable);
                         break;
                     }
                 case "enablestaff":
@@ -1966,12 +1967,12 @@ namespace Butterfly.Game.Items.Wired.Actions
                             return;
                         }
 
-                        User.ApplyEffect(NumEnable);
+                        user.ApplyEffect(NumEnable);
                         break;
                     }
                 case "dance":
                     {
-                        if (User.Room == null)
+                        if (user.Room == null)
                         {
                             break;
                         }
@@ -1983,14 +1984,14 @@ namespace Butterfly.Game.Items.Wired.Actions
                                 danceId = 0;
                             }
 
-                            if (danceId > 0 && User.CarryItemID > 0)
+                            if (danceId > 0 && user.CarryItemID > 0)
                             {
-                                User.CarryItem(0);
+                                user.CarryItem(0);
                             }
 
-                            User.DanceId = danceId;
+                            user.DanceId = danceId;
 
-                            User.Room.SendPacket(new DanceComposer(User.VirtualId, danceId));
+                            user.Room.SendPacket(new DanceComposer(user.VirtualId, danceId));
                         }
                         break;
                     }
@@ -1998,45 +1999,45 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         if (int.TryParse(Value, out int carryid))
                         {
-                            User.CarryItem(carryid, true);
+                            user.CarryItem(carryid, true);
                         }
 
                         break;
                     }
                 case "sit":
                     {
-                        if (User.RotBody % 2 == 0)
+                        if (user.RotBody % 2 == 0)
                         {
-                            if (User.IsTransf)
+                            if (user.IsTransf)
                             {
-                                User.SetStatus("sit", "");
+                                user.SetStatus("sit", "");
                             }
                             else
                             {
-                                User.SetStatus("sit", "0.5");
+                                user.SetStatus("sit", "0.5");
                             }
 
-                            User.IsSit = true;
-                            User.UpdateNeeded = true;
+                            user.IsSit = true;
+                            user.UpdateNeeded = true;
                         }
                         break;
                     }
 
                 case "lay":
                     {
-                        if (User.RotBody % 2 == 0)
+                        if (user.RotBody % 2 == 0)
                         {
-                            if (User.IsTransf)
+                            if (user.IsTransf)
                             {
-                                User.SetStatus("lay", "");
+                                user.SetStatus("lay", "");
                             }
                             else
                             {
-                                User.SetStatus("lay", "0.7");
+                                user.SetStatus("lay", "0.7");
                             }
 
-                            User.IsLay = true;
-                            User.UpdateNeeded = true;
+                            user.IsLay = true;
+                            user.UpdateNeeded = true;
                         }
                         break;
                     }
@@ -2057,21 +2058,21 @@ namespace Butterfly.Game.Items.Wired.Actions
                             petName = Value.Split(' ')[0];
                         }
 
-                        if (User.SetPetTransformation(petName, raceId))
+                        if (user.SetPetTransformation(petName, raceId))
                         {
-                            User.IsTransf = true;
+                            user.IsTransf = true;
 
-                            User.Room.SendPacket(new UserRemoveComposer(User.VirtualId));
-                            User.Room.SendPacket(new UsersComposer(User));
+                            user.Room.SendPacket(new UserRemoveComposer(user.VirtualId));
+                            user.Room.SendPacket(new UsersComposer(user));
                         }
                         break;
                     }
                 case "transfstop":
                     {
-                        User.IsTransf = false;
+                        user.IsTransf = false;
 
-                        User.Room.SendPacket(new UserRemoveComposer(User.VirtualId));
-                        User.Room.SendPacket(new UsersComposer(User));
+                        user.Room.SendPacket(new UserRemoveComposer(user.VirtualId));
+                        user.Room.SendPacket(new UsersComposer(user));
                         break;
                     }
                 case "coins":
@@ -2081,20 +2082,20 @@ namespace Butterfly.Game.Items.Wired.Actions
                             return;
                         }
 
-                        User.GetClient().GetUser().Credits += ValueNumber;
-                        User.GetClient().SendPacket(new CreditBalanceComposer(User.GetClient().GetUser().Credits));
+                        user.GetClient().GetUser().Credits += ValueNumber;
+                        user.GetClient().SendPacket(new CreditBalanceComposer(user.GetClient().GetUser().Credits));
                         break;
                     }
                 case "badge":
                     {
-                        User.GetClient().GetUser().GetBadgeComponent().GiveBadge(Value, true);
-                        User.GetClient().SendPacket(new ReceiveBadgeComposer(Value));
+                        user.GetClient().GetUser().GetBadgeComponent().GiveBadge(Value, true);
+                        user.GetClient().SendPacket(new ReceiveBadgeComposer(Value));
                         break;
                     }
                 case "removebadge":
                     {
-                        User.GetClient().GetUser().GetBadgeComponent().RemoveBadge(Value);
-                        User.GetClient().SendPacket(new BadgesComposer(User.GetClient().GetUser().GetBadgeComponent().BadgeList));
+                        user.GetClient().GetUser().GetBadgeComponent().RemoveBadge(Value);
+                        user.GetClient().SendPacket(new BadgesComposer(user.GetClient().GetUser().GetBadgeComponent().BadgeList));
                         break;
                     }
 
@@ -2102,67 +2103,67 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         if (int.TryParse(Value, out int RoomId))
                         {
-                            User.GetClient().GetUser().IsTeleporting = true;
-                            User.GetClient().GetUser().TeleportingRoomID = RoomId;
-                            User.GetClient().GetUser().PrepareRoom(RoomId, "");
+                            user.GetClient().GetUser().IsTeleporting = true;
+                            user.GetClient().GetUser().TeleportingRoomID = RoomId;
+                            user.GetClient().SendPacket(new RoomForwardComposer(RoomId));
                         }
                         break;
                     }
                 case "alert":
                     {
-                        User.GetClient().SendNotification(Value);
+                        user.GetClient().SendNotification(Value);
                         break;
                     }
                 case "achievement":
                     {
-                        ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(User.GetClient(), Value, 1);
+                        ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), Value, 1);
                         break;
                     }
                 case "winmovierun":
                     {
-                        if (User.IsBot || User.GetClient() == null || User.GetClient().GetUser() == null || User.GetClient().GetUser().Rank > 4)
+                        if (user.IsBot || user.GetClient() == null || user.GetClient().GetUser() == null || user.GetClient().GetUser().Rank > 4)
                         {
                             break;
                         }
 
 
-                        if (User.GetUsername() == User.Room.RoomData.OwnerName)
+                        if (user.GetUsername() == user.Room.RoomData.OwnerName)
                         {
                             break;
                         }
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            UserDao.UpdateAddRunPoints(dbClient, User.GetClient().GetUser().Id);
+                            UserDao.UpdateAddRunPoints(dbClient, user.GetClient().GetUser().Id);
                         }
 
                         break;
                     }
                 case "givelot":
                     {
-                        if (User.IsBot || User.GetClient() == null || User.GetClient().GetUser() == null || User.GetClient().GetUser().Rank > 4)
+                        if (user.IsBot || user.GetClient() == null || user.GetClient().GetUser() == null || user.GetClient().GetUser().Rank > 4)
                         {
                             break;
                         }
 
-                        if(User.GetUsername() == User.Room.RoomData.OwnerName)
+                        if(user.GetUsername() == user.Room.RoomData.OwnerName)
                         {
                             break;
                         }
 
                         List<string> allowedOwner = new List<string>{ "LieuPublic", "MovieRunOff", "WibboGame", "WorldRunOff", "officialrooms" };
 
-                        if(!allowedOwner.Contains(User.Room.RoomData.OwnerName))
+                        if(!allowedOwner.Contains(user.Room.RoomData.OwnerName))
                         {
                             break;
                         }
 
-                        if (User.WiredGivelot)
+                        if (user.WiredGivelot)
                         {
                             break;
                         }
 
-                        User.WiredGivelot = true;
+                        user.WiredGivelot = true;
 
                         if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(12018410, out ItemData ItemData))
                         {
@@ -2171,19 +2172,19 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                         int NbLot = ButterflyEnvironment.GetRandomNumber(1, 3);
 
-                        if (User.GetClient().GetUser().Rank > 1)
+                        if (user.GetClient().GetUser().Rank > 1)
                         {
                             NbLot = ButterflyEnvironment.GetRandomNumber(3, 5);
                         }
 
                         int NbLotDeluxe = ButterflyEnvironment.GetRandomNumber(1, 4);
-                        if (User.GetClient().GetUser().Rank > 1)
+                        if (user.GetClient().GetUser().Rank > 1)
                         {
                             NbLotDeluxe = ButterflyEnvironment.GetRandomNumber(3, 4);
                         }
 
                         int NbBadge = ButterflyEnvironment.GetRandomNumber(1, 2);
-                        if (User.GetClient().GetUser().Rank > 1)
+                        if (user.GetClient().GetUser().Rank > 1)
                         {
                             NbBadge = ButterflyEnvironment.GetRandomNumber(2, 3);
                         }
@@ -2198,31 +2199,31 @@ namespace Butterfly.Game.Items.Wired.Actions
                             return;
                         }
 
-                        List<Item> Items = ItemFactory.CreateMultipleItems(ItemData, User.GetClient().GetUser(), "", NbLot);
-                        Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataBadge, User.GetClient().GetUser(), "", NbBadge));
+                        List<Item> Items = ItemFactory.CreateMultipleItems(ItemData, user.GetClient().GetUser(), "", NbLot);
+                        Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataBadge, user.GetClient().GetUser(), "", NbBadge));
                         if (NbLotDeluxe == 4)
                         {
-                            Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataDeluxe, User.GetClient().GetUser(), "", 1));
+                            Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataDeluxe, user.GetClient().GetUser(), "", 1));
                         }
 
                         foreach (Item PurchasedItem in Items)
                         {
-                            if (User.GetClient().GetUser().GetInventoryComponent().TryAddItem(PurchasedItem))
+                            if (user.GetClient().GetUser().GetInventoryComponent().TryAddItem(PurchasedItem))
                             {
-                                User.GetClient().SendPacket(new FurniListNotificationComposer(PurchasedItem.Id, 1));
+                                user.GetClient().SendPacket(new FurniListNotificationComposer(PurchasedItem.Id, 1));
                             }
                         }
 
                         string DeluxeMessage = (NbLotDeluxe == 4) ? " Et une RareBox Deluxe !" : "";
-                        User.GetClient().SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", User.GetClient().Langue), NbLot, NbBadge) + DeluxeMessage);
+                        user.GetClient().SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", user.GetClient().Langue), NbLot, NbBadge) + DeluxeMessage);
 
                         using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            UserDao.UpdateAddGamePoints(dbClient, User.GetClient().GetUser().Id);
+                            UserDao.UpdateAddGamePoints(dbClient, user.GetClient().GetUser().Id);
                         }
 
-                        ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(User.GetClient(), "ACH_Extrabox", 1);
-                        ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, User.Room.RoomData.OwnerName, User.RoomId, string.Empty, "givelot", "SuperWired givelot: " + User.GetUsername());
+                        ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), "ACH_Extrabox", 1);
+                        ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, user.Room.RoomData.OwnerName, user.RoomId, string.Empty, "givelot", "SuperWired givelot: " + user.GetUsername());
 
                         break;
                     }

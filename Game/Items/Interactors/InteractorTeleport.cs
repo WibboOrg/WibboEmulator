@@ -1,4 +1,5 @@
-﻿using Butterfly.Game.Clients;
+﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
+using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Items.Interactors
@@ -138,7 +139,7 @@ namespace Butterfly.Game.Items.Interactors
                                 roomUserTarget.GetClient().GetUser().IsTeleporting = true;
                                 roomUserTarget.GetClient().GetUser().TeleportingRoomID = teleRoomId;
                                 roomUserTarget.GetClient().GetUser().TeleporterId = linkedTele;
-                                roomUserTarget.GetClient().GetUser().PrepareRoom(teleRoomId, "");
+                                roomUserTarget.GetClient().SendPacket(new RoomForwardComposer(teleRoomId));
                             }
                             item.InteractingUser = 0;
                         }
