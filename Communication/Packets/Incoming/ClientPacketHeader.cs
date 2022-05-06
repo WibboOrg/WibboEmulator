@@ -9,6 +9,7 @@
 
         public const int SEND_ALERT = 10002;
         public const int EDIT_TV = 10003;
+        public const int MOVE_AVATAR_KEYBOARD = 10006;
         public const int RP_BUY_ITEMS = 10008;
         public const int RP_USE_ITEMS = 10009;
         public const int RP_TROC_ADD_ITEM = 10011;

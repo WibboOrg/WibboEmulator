@@ -100,6 +100,7 @@ namespace Butterfly.Communication.Packets
         {
             this._incomingPackets.Add(ClientPacketHeader.SEND_ALERT, new SendHotelAlertEvent());
             this._incomingPackets.Add(ClientPacketHeader.EDIT_TV, new EditTvYoutubeEvent());
+            this._incomingPackets.Add(ClientPacketHeader.MOVE_AVATAR_KEYBOARD, new MoveAvatarKeyboardEvent());
             this._incomingPackets.Add(ClientPacketHeader.RP_BUY_ITEMS, new RpBuyItemsEvent());
             this._incomingPackets.Add(ClientPacketHeader.RP_USE_ITEMS, new RpUseItemsEvent());
             this._incomingPackets.Add(ClientPacketHeader.RP_TROC_ADD_ITEM, new RpTrocAddItemEvent());

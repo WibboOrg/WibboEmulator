@@ -206,6 +206,7 @@
     <Compile Include="Communication\Packets\Incoming\Marketplace\GetOwnOffersEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Marketplace\MakeOfferEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Action\WhiperGroupEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Rooms\Engine\MoveAvatarKeyboardEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Polls\AnswerPollEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\FloorPlan\GetOccupiedTilesEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Furni\Wired\UpdateActionEvent.cs" />

@@ -21,16 +21,16 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            int pX = Packet.PopInt();
-            int pY = Packet.PopInt();
+            int targetX = Packet.PopInt();
+            int targetY = Packet.PopInt();
 
             if (User.ReverseWalk)
             {
-                pX = User.SetX + (User.SetX - pX);
-                pY = User.SetY + (User.SetY - pY);
+                targetX = User.SetX + (User.SetX - targetX);
+                targetY = User.SetY + (User.SetY - targetY);
             }
 
-            User.MoveTo(pX, pY, (User.AllowOverride || User.TeleportEnabled || User.ReverseWalk));
+            User.MoveTo(targetX, targetY, (User.AllowOverride || User.TeleportEnabled || User.ReverseWalk));
         }
     }
 }
