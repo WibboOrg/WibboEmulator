@@ -10,7 +10,7 @@ using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.Communication.Packets.Outgoing.Sound;
+using Butterfly.Communication.Packets.Outgoing.Settings;
 using Butterfly.Communication.Packets.Outgoing.WibboTool;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
@@ -126,7 +126,7 @@ namespace Butterfly.Game.Clients
                     packetList.Add(new AchievementScoreComposer(this._user.AchievementPoints));
                     packetList.Add(new BuildersClubMembershipComposer());
                     packetList.Add(new CfhTopicsInitComposer(ButterflyEnvironment.GetGame().GetModerationManager().UserActionPresets));
-                    packetList.Add(new SoundSettingsComposer(this._user.ClientVolume, false, false, false, 1));
+                    packetList.Add(new UserSettingsComposer(this._user.ClientVolume, this._user.OldChat, this._user.IgnoreRoomInvites, this._user.CameraFollowDisabled, 1, 0));
                     packetList.Add(new AvatarEffectsComposer(ButterflyEnvironment.GetGame().GetEffectManager().GetEffects()));
 
                     packetList.Add(new ActivityPointNotificationComposer(this._user.Duckets, 1));

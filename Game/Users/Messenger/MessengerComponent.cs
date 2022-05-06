@@ -387,7 +387,7 @@ namespace Butterfly.Game.Users.Messenger
                 return;
             }
 
-            if (!Client.GetUser().AllowConsoleMessages)
+            if (Client.GetUser().IgnoreRoomInvites)
             {
                 this.GetClient().SendPacket(new InstantMessageErrorComposer(7, ToId));
                 return;

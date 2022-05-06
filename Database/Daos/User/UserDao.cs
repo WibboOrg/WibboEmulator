@@ -64,7 +64,7 @@ namespace Butterfly.Database.Daos
 
         internal static DataRow GetOneByTicket(IQueryAdapter dbClient, string sessionTicket)
         {
-            dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `last_offline`, `jetons`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `mail_valide`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned` FROM `user` WHERE auth_ticket = @sso LIMIT 1");
+            dbClient.SetQuery("SELECT `id`, `username`, `auth_ticket`, `rank`, `credits`, `activity_points`, `look`, `gender`, `motto`, `account_created`, `last_online`, `online`, `ip_last`, `machine_id`, `home_room`, `block_newfriends`, `hide_online`, `hide_inroom`, `camera_follow_disabled`, `ignore_room_invite`, `last_offline`, `jetons`, `mois_vip`, `volume`, `vip_points`, `limit_coins`, `accept_trading`, `mail_valide`, `lastdailycredits`, `hide_gamealert`, `ipcountry`, `game_points`, `game_points_month`, `mazoscore`, `mazo`, `nux_enable`, `langue`, `run_points`, `run_points_month`, `is_banned` FROM `user` WHERE auth_ticket = @sso LIMIT 1");
             dbClient.AddParameter("sso", sessionTicket);
             return dbClient.GetRow();
         }
@@ -130,6 +130,16 @@ namespace Butterfly.Database.Daos
             dbClient.SetQuery("UPDATE `user` SET `motto` = @motto WHERE `id` = '" + userId + "'");
             dbClient.AddParameter("motto", motto);
             dbClient.RunQuery();
+        }
+
+        internal static void UpdateIgnoreRoomInvites(IQueryAdapter dbClient, int userId, bool flag)
+        {
+            dbClient.RunQuery("UPDATE `user` SET `ignore_room_invite` = '" + ButterflyEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
+        }
+
+        internal static void UpdateCameraFollowDisabled(IQueryAdapter dbClient, int userId, bool flag)
+        {
+            dbClient.RunQuery("UPDATE `user` SET `camera_follow_disabled` = '" + ButterflyEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
         }
 
         internal static void UpdateVolume(IQueryAdapter dbClient, int userId, int volume1, int volume2, int volume3)

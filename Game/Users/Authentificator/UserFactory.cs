@@ -141,6 +141,8 @@ namespace Butterfly.Game.Users.Authenticator
             int Mazo = Convert.ToInt32(dRow["mazo"]);
             string clientVolume = (string)dRow["volume"];
             bool NuxEnable = ButterflyEnvironment.EnumToBool(dRow["nux_enable"].ToString());
+            bool IgnoreRoomInvite = ButterflyEnvironment.EnumToBool(dRow["ignore_room_invite"].ToString());
+            bool CameraFollowDisabled = ButterflyEnvironment.EnumToBool(dRow["camera_follow_disabled"].ToString());
             string MachineId = (string)dRow["machine_id"];
             Language Langue = LanguageManager.ParseLanguage((string)dRow["langue"]);
 
@@ -152,7 +154,7 @@ namespace Butterfly.Game.Users.Authenticator
             int achievementPoints = Convert.ToInt32(dRow2["achievement_score"]);
             int FavoriteGroup = Convert.ToInt32(dRow2["group_id"]);
 
-            return new User(Id, Username, Rank, Motto, Look, Gender, Credits, Diamonds, LimitCoins, ActivityPoints, HomeRoom, Respect, DailyRespectPoints, DailyPetRespectPoints, HasFriendRequestsDisabled, currentQuestID, achievementPoints, LastOnline, FavoriteGroup, accountCreated, AcceptTrading, Ip, HideInroom, HideOnline, MazoHighScore, Mazo, clientVolume, NuxEnable, MachineId, ChangeName, Langue, ignoreAllExpire);
+            return new User(Id, Username, Rank, Motto, Look, Gender, Credits, Diamonds, LimitCoins, ActivityPoints, HomeRoom, Respect, DailyRespectPoints, DailyPetRespectPoints, HasFriendRequestsDisabled, currentQuestID, achievementPoints, LastOnline, FavoriteGroup, accountCreated, AcceptTrading, Ip, HideInroom, HideOnline, MazoHighScore, Mazo, clientVolume, NuxEnable, MachineId, ChangeName, Langue, ignoreAllExpire, IgnoreRoomInvite, CameraFollowDisabled);
         }
     }
 }

@@ -2,7 +2,7 @@ using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
-    internal class SetChatPreferenceEvent : IPacketEvent
+    internal class UserSettingsOldChatEvent : IPacketEvent
     {
         public double Delay => 0;
 

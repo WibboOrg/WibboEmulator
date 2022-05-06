@@ -40,7 +40,7 @@ namespace Butterfly.Communication.Packets
             this.RegisterRoomEngine();
             this.RegisterFurni();
             this.RegisterUsers();
-            this.RegisterSound();
+            this.RegisterSettings();
             this.RegisterMisc();
             this.RegisterInventory();
             this.RegisterPurse();
@@ -58,7 +58,7 @@ namespace Butterfly.Communication.Packets
             this.RegisterCamera();
             this.RegisterCampaign();
 
-            this.RegisterWebPacket();
+            this.RegisterCustom();
 
             Console.WriteLine("Logged " + this._incomingPackets.Count + " packet handler(s)!");
         }
@@ -96,7 +96,13 @@ namespace Butterfly.Communication.Packets
 
             pak.Parse(session, packet);
         }
-        private void RegisterWebPacket()
+
+        public void UnregisterAll()
+        {
+            this._incomingPackets.Clear();
+        }
+
+        private void RegisterCustom()
         {
             this._incomingPackets.Add(ClientPacketHeader.SEND_ALERT, new SendHotelAlertEvent());
             this._incomingPackets.Add(ClientPacketHeader.EDIT_TV, new EditTvYoutubeEvent());
@@ -109,11 +115,6 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.RP_TROC_CONFIRME, new RpTrocConfirmeEvent());
             this._incomingPackets.Add(ClientPacketHeader.RP_TROC_STOP, new RpTrocStopEvent());
             this._incomingPackets.Add(ClientPacketHeader.BOT_CHOOSE, new RpBotChooseEvent());
-        }
-
-        public void UnregisterAll()
-        {
-            this._incomingPackets.Clear();
         }
 
         private void RegisterCampaign()
@@ -388,7 +389,6 @@ namespace Butterfly.Communication.Packets
         private void RegisterUsers()
         {
             this._incomingPackets.Add(ClientPacketHeader.USER_SUBSCRIPTION, new ScrGetUserInfoMessageEvent());
-            this._incomingPackets.Add(ClientPacketHeader.USER_SETTINGS_OLD_CHAT, new SetChatPreferenceEvent());
 
             this._incomingPackets.Add(ClientPacketHeader.USER_RESPECT, new RespectUserEvent());
             this._incomingPackets.Add(ClientPacketHeader.USER_FIGURE, new UpdateFigureDataEvent());
@@ -401,9 +401,12 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.GROUP_BADGES, new GetUserGroupBadgesEvent());
         }
 
-        private void RegisterSound()
+        private void RegisterSettings()
         {
-            this._incomingPackets.Add(ClientPacketHeader.USER_SETTINGS_VOLUME, new SetSoundSettingsEvent());
+            this._incomingPackets.Add(ClientPacketHeader.USER_SETTINGS_OLD_CHAT, new UserSettingsOldChatEvent());
+            this._incomingPackets.Add(ClientPacketHeader.USER_SETTINGS_INVITES, new UserSettingsRoomInvitesEvent());
+            this._incomingPackets.Add(ClientPacketHeader.USER_SETTINGS_CAMERA, new UserSettingsCameraFollowEvent());
+            this._incomingPackets.Add(ClientPacketHeader.USER_SETTINGS_VOLUME, new UserSettingsSoundEvent());
         }
 
         private void RegisterMisc()

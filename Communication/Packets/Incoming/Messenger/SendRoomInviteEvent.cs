@@ -1,3 +1,4 @@
+using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Messenger;
 using Butterfly.Game.Clients;
 using Butterfly.Utilities;
@@ -26,29 +27,29 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Session.GetUser().FloodTime = DateTime.Now;
             Session.GetUser().FloodCount++;
 
-            int InviteCount = Packet.PopInt();
-            if (InviteCount > 200)
+            int inviteCount = Packet.PopInt();
+            if (inviteCount > 100)
             {
                 return;
             }
 
-            List<int> Targets = new List<int>();
-            for (int i = 0; i < InviteCount; ++i)
+            List<int> targets = new List<int>();
+            for (int i = 0; i < inviteCount; ++i)
             {
                 int Id = Packet.PopInt();
                 if (i < 100)
                 {
-                    Targets.Add(Id);
+                    targets.Add(Id);
                 }
             }
 
-            string TextMessage = StringCharFilter.Escape(Packet.PopString());
-            if (TextMessage.Length > 121)
+            string textMessage = StringCharFilter.Escape(Packet.PopString());
+            if (textMessage.Length > 121)
             {
-                TextMessage = TextMessage.Substring(0, 121);
+                textMessage = textMessage.Substring(0, 121);
             }
 
-            if (Session.Antipub(TextMessage, "<RM>"))
+            if (Session.Antipub(textMessage, "<RM>"))
             {
                 return;
             }
@@ -58,19 +59,22 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            foreach (int UserId in Targets)
+
+            ServerPacket roomInvitePacket = new RoomInviteComposer(Session.GetUser().Id, textMessage);
+
+            foreach (int UserId in targets)
             {
                 if (Session.GetUser().GetMessenger().FriendshipExists(UserId))
                 {
                     Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
-                    if (clientByUserId == null || clientByUserId.GetUser().AllowConsoleMessages == false)
+                    if (clientByUserId == null || clientByUserId.GetUser().IgnoreRoomInvites)
                     {
                         break;
                     }
 
                     if (clientByUserId.GetUser().GetMessenger().FriendshipExists(Session.GetUser().Id))
                     {
-                        clientByUserId.SendPacket(new RoomInviteComposer(Session.GetUser().Id, TextMessage));
+                        clientByUserId.SendPacket(roomInvitePacket);
                     }
                 }
             }

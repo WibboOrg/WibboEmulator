@@ -5,7 +5,7 @@ using Butterfly.Game.Clients;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
-    internal class SetSoundSettingsEvent : IPacketEvent
+    internal class UserSettingsSoundEvent : IPacketEvent
     {
         public double Delay => 250;
 

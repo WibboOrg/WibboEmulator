@@ -219,6 +219,8 @@
     <Compile Include="Communication\Packets\Incoming\RolePlay\Troc\RpTrocStopEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\RolePlay\RpUseItemsEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\RolePlay\RpBuyItemsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Settings\UserSettingsCameraFollowEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Settings\UserSettingsRoomInvitesEvent.cs" />
     <Compile Include="Communication\Packets\Outgoing\Avatar\FigureUpdateComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Avatar\WardrobeComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\BuildersClub\BCBorrowedItemsComposer.cs" />
@@ -472,7 +474,7 @@
     <Compile Include="Communication\Packets\Incoming\Rooms\Settings\SaveRoomSettingsEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Settings\ToggleMuteToolEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Rooms\Settings\UnbanUserFromRoomEvent.cs" />
-    <Compile Include="Communication\Packets\Incoming\Sound\SetSoundSettingsEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Settings\UserSettingsSoundEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\ChangeNameEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\CheckValidNameEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\GetUserGroupBadgesEvent.cs" />
@@ -481,7 +483,7 @@
     <Compile Include="Communication\Packets\Incoming\Users\OpenPlayerProfileEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\RespectUserEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\ScrGetUserInfoEvent.cs" />
-    <Compile Include="Communication\Packets\Incoming\Users\SetChatPreferenceEvent.cs" />
+    <Compile Include="Communication\Packets\Incoming\Settings\UserSettingsOldChatEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\SetRelationshipEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Users\UpdateFigureDataEvent.cs" />
     <Compile Include="Communication\Packets\Incoming\Televisions\EditTvYoutubeEvent.cs" />
@@ -557,7 +559,7 @@
     <Compile Include="Communication\Packets\Outgoing\Rooms\Wireds\WiredFurniTriggerComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Wireds\WiredFurniActionComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Rooms\Wireds\WiredFurniConditionComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Sound\SoundSettingsComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Settings\UserSettingsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\GetRelationshipsComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\UserGroupBadgesComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Users\UserBadgesComposer.cs" />
@@ -569,9 +571,9 @@
     <Compile Include="Communication\Packets\Outgoing\Users\UpdateUsernameComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Notifications\NotifCustom\MentionComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\RolePlay\BotChooseComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Sound\SoundCustom\PlaySoundComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Sound\PlaySoundComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\Notifications\NotifCustom\NotifTopComposer.cs" />
-    <Compile Include="Communication\Packets\Outgoing\Sound\SoundCustom\StopSoundComposer.cs" />
+    <Compile Include="Communication\Packets\Outgoing\Sound\StopSoundComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\RolePlay\Troc\RpTrocAccepteComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\RolePlay\Troc\RpTrocConfirmeComposer.cs" />
     <Compile Include="Communication\Packets\Outgoing\RolePlay\Troc\RpTrocStartComposer.cs" />

@@ -124,8 +124,9 @@ namespace Butterfly.Game.Users
         public int RolePlayId;
         public double IgnoreAllExpireTime;
 
-        public bool AllowConsoleMessages;
-        public bool AllowMessengerInvites;
+        public bool IgnoreRoomInvites;
+        public bool CameraFollowDisabled;
+        public bool OldChat;
 
         private PermissionComponent _permissions;
         public bool IgnoreAll
@@ -157,7 +158,8 @@ namespace Butterfly.Game.Users
             int WPoint, int LimitCoins, int ActivityPoints, int HomeRoom, int Respect, int DailyRespectPoints,
             int DailyPetRespectPoints, bool HasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
             int LastOnline, int FavoriteGroup, int accountCreated, bool accepttrading, string ip, bool HideInroom,
-            bool HideOnline, int MazoHighScore, int Mazo, string clientVolume, bool nuxenable, string MachineId, bool ChangeName, Language Langue, int ignoreAllExpire)
+            bool HideOnline, int MazoHighScore, int Mazo, string clientVolume, bool nuxenable, string MachineId,
+            bool ChangeName, Language Langue, int ignoreAllExpire, bool IgnoreRoomInvite, bool CameraFollowDisabled)
         {
             this.Id = Id;
             this.Username = Username;
@@ -238,8 +240,10 @@ namespace Butterfly.Game.Users
             this.Nuxenable = nuxenable;
             this.NewUser = nuxenable;
             this.Visits = new Dictionary<double, int>();
-            this.AllowConsoleMessages = false;
-            this.AllowMessengerInvites = false;
+
+            this.IgnoreRoomInvites = IgnoreRoomInvite;
+            this.CameraFollowDisabled = CameraFollowDisabled;
+            this.OldChat = false;
         }
 
         public void Init(Client client)
