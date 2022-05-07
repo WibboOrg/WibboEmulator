@@ -25,7 +25,31 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            room.SendPacket(new ObjectUpdateComposer(roomItem, room.RoomData.OwnerId));
+            string Look = "";
+            foreach (string Part in Session.GetUser().Look.Split('.'))
+            {
+                if (Part.StartsWith("ch") || Part.StartsWith("lg") || Part.StartsWith("cc") || Part.StartsWith("ca") || Part.StartsWith("sh") || Part.StartsWith("wa"))
+                {
+                    Look = Look + Part + ".";
+                }
+            }
+
+            Look = Look.Substring(0, Look.Length - 1);
+            if (Look.Length > 200)
+            {
+                Look = Look.Substring(0, 200);
+            }
+
+            string[] Stuff = roomItem.ExtraData.Split(new char[1] { ';' });
+            string Name = "";
+
+            if (Stuff.Length >= 3)
+            {
+                Name = Stuff[2];
+            }
+
+            roomItem.ExtraData = Session.GetUser().Gender.ToUpper() + ";" + Look + ";" + Name;
+            roomItem.UpdateState();
         }
     }
 }

@@ -30,22 +30,22 @@ namespace Butterfly.Game.Items.Interactors
             }
 
             Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-            string[] strArray = Session.GetUser().Look.Split(new char[1] { '.' });
-            string str1 = "";
-            foreach (string str2 in strArray)
+            string[] lookSplit = Session.GetUser().Look.Split(new char[1] { '.' });
+            string lookCode = "";
+            foreach (string part in lookSplit)
             {
-                if (!str2.StartsWith("ch") && !str2.StartsWith("lg") && (!str2.StartsWith("cc") && !str2.StartsWith("ca")) && (!str2.StartsWith("sh") && !str2.StartsWith("wa")))
+                if (!part.StartsWith("ch") && !part.StartsWith("lg") && (!part.StartsWith("cc") && !part.StartsWith("ca")) && (!part.StartsWith("sh") && !part.StartsWith("wa")))
                 {
-                    str1 = str1 + str2 + ".";
+                    lookCode = lookCode + part + ".";
                 }
             }
 
-            string str3 = str1 + Item.ExtraData.Split(new char[1] { ';' })[1];
-            Session.GetUser().Look = str3;
+            string look = lookCode + Item.ExtraData.Split(new char[1] { ';' })[1];
+            Session.GetUser().Look = look;
 
             using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserDao.UpdateLook(dbClient, Session.GetUser().Id, str3);
+                UserDao.UpdateLook(dbClient, Session.GetUser().Id, look);
             }
 
             if (room == null)

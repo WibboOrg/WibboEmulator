@@ -205,7 +205,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         break;
 
                     case InteractionType.MANNEQUIN:
-                        ItemExtraData = "m" + Convert.ToChar(5) + ".ch-210-1321.lg-285-92" + Convert.ToChar(5) + "Default Mannequin";
+                        ItemExtraData = "m;ch-210-1321.lg-285-92;Mannequin";
                         break;
 
                     case InteractionType.BADGE_TROC:

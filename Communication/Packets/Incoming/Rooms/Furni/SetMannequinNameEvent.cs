@@ -47,7 +47,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Name = Name.Replace(";", ":");
 
-            roomItem.ExtraData = Session.GetUser().Gender.ToUpper() + ";" + Look + ";" + Name + ";";
+            roomItem.ExtraData = Session.GetUser().Gender.ToUpper() + ";" + Look + ";" + Name;
             roomItem.UpdateState();
         }
     }
