@@ -29,7 +29,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 room.MoodlightData.Enable();
             }
 
-            roomItem.ExtraData = room.MoodlightData.GenerateExtraData();            roomItem.UpdateState();
+            roomItem.ExtraData = room.MoodlightData.GenerateExtraData();            roomItem.UpdateState();
         }
     }
 }
