@@ -2,7 +2,7 @@ using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Butterfly.Communication.Packets.Incoming.Guide
 {
     internal class GuideInviteToRoomEvent : IPacketEvent
     {

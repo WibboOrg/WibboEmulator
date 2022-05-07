@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Butterfly.Database
 {
-    public static class LoggingMySql
+    public static class ExceptionSQL
     {
         public static bool DisabledState
         {

@@ -1,4 +1,5 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
+﻿using Butterfly.Communication.Packets.Interfaces;
+using Butterfly.Communication.Packets.Outgoing;
 using System;
 
 namespace Butterfly.Utilities

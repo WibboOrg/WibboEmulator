@@ -62,7 +62,7 @@ namespace Butterfly.Database
             }
             catch (Exception e)
             {
-                LoggingMySql.LogException(e.ToString());
+                ExceptionSQL.LogException(e.ToString());
                 return null;
             }
         }

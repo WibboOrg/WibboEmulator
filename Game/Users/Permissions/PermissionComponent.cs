@@ -15,7 +15,7 @@ namespace Butterfly.Game.Users.Permissions
             _commands = new List<string>();
         }
 
-        public bool Init(IQueryAdapter dbClient)
+        public bool Init(IQueryAdapter dbClient, User user)
         {
             if (_permissions.Count > 0)
                 _permissions.Clear();

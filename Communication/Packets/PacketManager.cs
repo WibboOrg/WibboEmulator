@@ -11,6 +11,7 @@ using Butterfly.Communication.Packets.Incoming.WibboTool;
 using Butterfly.Communication.Packets.Incoming.Televisions;
 using Butterfly.Communication.Packets.Incoming.RolePlay;
 using Butterfly.Communication.Packets.Incoming.RolePlay.Troc;
+using Butterfly.Communication.Packets.Incoming.Guide;
 
 namespace Butterfly.Communication.Packets
 {

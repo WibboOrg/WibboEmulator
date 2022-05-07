@@ -9,7 +9,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            TimeSpan Uptime = DateTime.Now - ButterflyEnvironment.ServerStarted;
+            /// TimeSpan Uptime = DateTime.Now - ButterflyEnvironment.ServerStarted;
 
             Session.SendPacket(new BroadcastMessageAlertComposer("<b>Butterfly Edition Wibbo</b>\n\n" +
                 "   <b>Credits</b>:\n" +

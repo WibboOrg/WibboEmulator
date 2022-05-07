@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing
+﻿namespace Butterfly.Communication.Packets.Interfaces
 {
     public interface IServerPacket
     {

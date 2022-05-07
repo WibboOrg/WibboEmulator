@@ -2,7 +2,7 @@ using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Help;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Butterfly.Communication.Packets.Incoming.Guide
 {
     internal class GetHelperToolConfigurationEvent : IPacketEvent
     {
