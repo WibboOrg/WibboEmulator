@@ -100,6 +100,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             break;
                         }
                     case "role":
+                    case "fuse":
                         {
                             ButterflyEnvironment.GetGame().GetPermissionManager().Init(dbClient);
                             Session.SendWhisper("Rôle mis à jour");

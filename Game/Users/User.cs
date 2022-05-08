@@ -351,7 +351,7 @@ namespace Butterfly.Game.Users
                 }
             }
 
-            if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.GetClient().GetUser().HasFuse("fuse_enter_full_rooms") && !ButterflyEnvironment.GetGame().GetPermissionManager().RankHasRight(this.GetClient().GetUser().Rank, "fuse_enter_full_rooms"))
+            if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.GetClient().GetUser().HasFuse("fuse_enter_full_rooms") && !this.GetClient().GetUser().HasFuse("fuse_enter_full_rooms"))
             {
                 if (room.CloseFullRoom)
                 {

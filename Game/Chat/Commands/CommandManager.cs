@@ -20,7 +20,7 @@ namespace Butterfly.Game.Chat.Commands
         private readonly Dictionary<string, AuthorizationCommands> _commandRegisterInvokeable;
         private readonly Dictionary<string, string> _listCommande;
         private readonly Dictionary<int, IChatCommand> _commands;
-        private string _prefix = ":";
+        private readonly string _prefix = ":";
 
         public CommandManager()
         {
@@ -33,18 +33,17 @@ namespace Butterfly.Game.Chat.Commands
         {
 
             InitInvokeableRegister(dbClient);
+
             RegisterCommand();
-            _commands.Clear();
-
-
             RegisterPlayer();
+            RegisterOwner();
+            RegisterUserRight();
             RegisterPremium();
             RegisterAssStaffs();
             RegisterModeration();
             RegisterAnimation();
             RegisterAdministrator();
             RegisterGestion();
-
         }
 
         public bool Parse(Client Session, RoomUser User, Room Room, string Message)
@@ -192,7 +191,7 @@ namespace Butterfly.Game.Chat.Commands
         public static string MergeParams(string[] Params, int Start)
         {
             StringBuilder Merged = new StringBuilder();
-            for(int i = Start; i < Params.Length; i++)
+            for (int i = Start; i < Params.Length; i++)
             {
                 if (i > Start)
                     Merged.Append(" ");
@@ -203,7 +202,7 @@ namespace Butterfly.Game.Chat.Commands
             return Merged.ToString();
         }
 
-        public void RegisterPlayer()
+        public void RegisterOwner()
         {
             this.Register(1, new Pickall());
             this.Register(2, new Unload());
@@ -211,6 +210,10 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(4, new RoomFreeze());
             this.Register(5, new MaxFloor());
             this.Register(6, new AutoFloor());
+        }
+
+        public void RegisterUserRight()
+        {
             this.Register(7, new SetSpeed());
             this.Register(8, new DisableDiagonal());
             this.Register(9, new SetMax());
@@ -239,10 +242,14 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(32, new StopQuestion());
             this.Register(33, new RoomYouTube());
             this.Register(34, new Kick());
+        }
+
+        public void RegisterPlayer()
+        {
             this.Register(35, new Coords());
             this.Register(36, new HandItem());
             this.Register(37, new Enable());
-            //this.Register(38, new Cmd.Commands());
+            //this.Register(38, new Commands());
             this.Register(39, new About());
             this.Register(40, new ForceRot());
             this.Register(41, new EmptyItems());
@@ -266,7 +273,7 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(59, new EmptyBots());
             this.Register(60, new DisableFollow());
             this.Register(61, new InfoSuperWired());
-            this.Register(62, new Cmd.RockPaperScissors());
+            this.Register(62, new RockPaperScissors());
             this.Register(63, new Mazo());
             this.Register(64, new LoadVideo());
             this.Register(65, new UseStop());
@@ -284,7 +291,7 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(77, new DND());
 
         }
-        
+
         public void RegisterPremium()
         {
             this.Register(79, new UserInfo());
@@ -386,6 +393,7 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(153, new RegenLTD());
             this.Register(154, new SummonAll());
         }
+
         public void RegisterCommand()
         {
             this._commands.Clear();
