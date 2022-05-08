@@ -398,7 +398,7 @@ namespace Butterfly.Game.Users
                 }
             }
 
-            string[] OwnerEnterDenied = {"Seonsaengnim"};
+            /*string[] OwnerEnterDenied = {"Seonsaengnim"};
 
             if (this.GetClient().GetUser().Username = "-BlackHeart-")
             {
@@ -426,7 +426,7 @@ namespace Butterfly.Game.Users
                         return;
                     }
                 }
-            }
+            }*/
 
             if (room.RoomData.OwnerName == "WibboGame" || room.RoomData.OwnerName == "WibboParty")
             {
