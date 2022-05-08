@@ -398,7 +398,7 @@ namespace Butterfly.Game.Users
                 }
             }
 
-            string[] OwnerEnterDenied = {"Jason", "Seonsaengnim", "Fantah", "Himeros"};
+            string[] OwnerEnterDenied = {"Seonsaengnim"};
 
             if (this.GetClient().GetUser().Username = "-BlackHeart-")
             {
