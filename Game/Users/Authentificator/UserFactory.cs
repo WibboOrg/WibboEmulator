@@ -15,7 +15,7 @@ namespace Butterfly.Game.Users.Authenticator
                 int userId;
                 DataRow dUserInfo;
                 DataRow dUserStats;
-                int ignoreAllExpire = 0;
+                double ignoreAllExpire = 0;
                 bool changeName = false;
 
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -32,7 +32,7 @@ namespace Butterfly.Game.Users.Authenticator
                         return null;
                     }
 
-                    int IgnoreAll = BanDao.GetOneIgnoreAll(dbClient, dUserInfo["username"].ToString());
+                    double IgnoreAll = BanDao.GetOneIgnoreAll(dbClient, dUserInfo["username"].ToString());
                     if (IgnoreAll > 0)
                     {
                         ignoreAllExpire = IgnoreAll;
@@ -118,7 +118,7 @@ namespace Butterfly.Game.Users.Authenticator
             return GenerateUser(dUserInfo, dUserStats, false, 0);
         }
 
-        public static User GenerateUser(DataRow dRow, DataRow dRow2, bool ChangeName, int ignoreAllExpire)
+        public static User GenerateUser(DataRow dRow, DataRow dRow2, bool ChangeName, double ignoreAllExpire)
         {
             int Id = Convert.ToInt32(dRow["id"]);
             string Username = (string)dRow["username"];

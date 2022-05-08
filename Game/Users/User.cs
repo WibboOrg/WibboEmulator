@@ -159,7 +159,7 @@ namespace Butterfly.Game.Users
             int DailyPetRespectPoints, bool HasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
             int LastOnline, int FavoriteGroup, int accountCreated, bool accepttrading, string ip, bool HideInroom,
             bool HideOnline, int MazoHighScore, int Mazo, string clientVolume, bool nuxenable, string MachineId,
-            bool ChangeName, Language Langue, int ignoreAllExpire, bool IgnoreRoomInvite, bool CameraFollowDisabled)
+            bool ChangeName, Language Langue, double ignoreAllExpire, bool IgnoreRoomInvite, bool CameraFollowDisabled)
         {
             this.Id = Id;
             this.Username = Username;

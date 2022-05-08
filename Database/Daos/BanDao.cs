@@ -1,4 +1,5 @@
 ﻿using Butterfly.Database.Interfaces;
+using System.Data;
 
 namespace Butterfly.Database.Daos
 {
@@ -25,12 +26,18 @@ namespace Butterfly.Database.Daos
             return dbClient.FindsResult();
         }
 
-        internal static int GetOneIgnoreAll(IQueryAdapter dbClient, string username)
+        internal static double GetOneIgnoreAll(IQueryAdapter dbClient, string username)
         {
             dbClient.SetQuery("SELECT `expire` FROM `ban` WHERE `bantype` = 'ignoreall' AND `value` = @username");
             dbClient.AddParameter("username", username);
 
-            return dbClient.GetInteger();
+            DataRow row = dbClient.GetRow();
+
+            if (row == null) return 0;
+
+            double.TryParse(row[0].ToString(), out double expire);
+
+            return expire;
         }
 
         internal static void InsertBan(IQueryAdapter dbClient, double expireTime, string banType, string username, string reason, string modName)
