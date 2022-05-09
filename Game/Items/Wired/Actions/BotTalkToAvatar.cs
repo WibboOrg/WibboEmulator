@@ -28,7 +28,7 @@ namespace Butterfly.Game.Items.Wired.Actions
             string name = splitData[0].ToString();
             string message = splitData[1].ToString();
 
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(message) || user == null || user.GetClient() == null || user.GetClient().GetUser() == null)
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(message) || user == null || user.GetClient() == null)
             {
                 return false;
             }
@@ -47,7 +47,7 @@ namespace Butterfly.Game.Items.Wired.Actions
             textMessage = textMessage.Replace("#roomname#", this.RoomInstance.RoomData.Name.ToString());
             textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.VotedYesCount.ToString());
             textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.VotedNoCount.ToString());
-            textMessage = textMessage.Replace("#wpcount#", user.GetClient().GetUser().WibboPoints.ToString());
+            textMessage = textMessage.Replace("#wpcount#", user.GetClient().GetUser() != null ? user.GetClient().GetUser().WibboPoints.ToString() : "0");
 
             if (user.Roleplayer != null)
             {

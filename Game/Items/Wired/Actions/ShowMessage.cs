@@ -18,7 +18,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                 return false;
             }
 
-            if (user != null && !user.IsBot && user.GetClient() != null && user.GetClient().GetUser() != null)
+            if (user != null && !user.IsBot && user.GetClient() != null)
             {
                 string textMessage = this.StringParam;
                 textMessage = textMessage.Replace("#username#", user.GetUsername());
@@ -26,7 +26,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                 textMessage = textMessage.Replace("#roomname#", this.RoomInstance.GetWiredHandler().GetRoom().RoomData.Name.ToString());
                 textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.GetWiredHandler().GetRoom().VotedYesCount.ToString());
                 textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.GetWiredHandler().GetRoom().VotedNoCount.ToString());
-                textMessage = textMessage.Replace("#wpcount#", user.GetClient().GetUser().WibboPoints.ToString());
+                textMessage = textMessage.Replace("#wpcount#", user.GetClient().GetUser() != null ? user.GetClient().GetUser().WibboPoints.ToString() : "0");
 
                 if (user.Roleplayer != null)
                 {
