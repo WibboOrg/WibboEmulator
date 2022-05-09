@@ -26,7 +26,6 @@ namespace Butterfly.Game.Items.Wired.Actions
                 textMessage = textMessage.Replace("#roomname#", this.RoomInstance.GetWiredHandler().GetRoom().RoomData.Name.ToString());
                 textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.GetWiredHandler().GetRoom().VotedYesCount.ToString());
                 textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.GetWiredHandler().GetRoom().VotedNoCount.ToString());
-                textMessage = textMessage.Replace("#wpcount#", user.GetClient().GetUser().WibboPoints.ToString());
 
                 if (user.Roleplayer != null)
                 {
