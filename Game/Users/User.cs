@@ -398,36 +398,6 @@ namespace Butterfly.Game.Users
                 }
             }
 
-            /*string[] OwnerEnterDenied = {"Seonsaengnim"};
-
-            if (this.GetClient().GetUser().Username = "-BlackHeart-")
-            {
-                if (!(this.GetClient().GetUser().HasFuse("fuse_enter_any_room") && !OwnerEnterDenied.Any(x => x == room.RoomData.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID == room.Id))
-                {
-                    if (room.RoomData.State == 1 && (!override_doorbell && !room.CheckRights(this.GetClient())))
-                    {
-                        if (room.UserCount == 0)
-                        {
-                            this.GetClient().SendPacket(new FlatAccessDeniedComposer(""));
-                        }
-                        else
-                        {
-                            this.GetClient().SendPacket(new DoorbellComposer(""));
-                            room.SendPacket(new DoorbellComposer(this.GetClient().GetUser().Username), true);
-                            this.GetClient().GetUser().LoadingRoomId = Id;
-                            this.GetClient().GetUser().AllowDoorBell = false;
-                        }
-                        return;
-                    }
-                    else if (room.RoomData.State == 2 && Password.ToLower() != room.RoomData.Password.ToLower())
-                    {
-                        this.GetClient().SendPacket(new GenericErrorComposer(-100002));
-                        this.GetClient().SendPacket(new CloseConnectionComposer());
-                        return;
-                    }
-                }
-            }*/
-
             if (room.RoomData.OwnerName == "WibboGame" || room.RoomData.OwnerName == "WibboParty")
             {
                 if (room.GetRoomUserManager().GetUserByTracker(this.IP, this.GetClient().MachineId) != null)

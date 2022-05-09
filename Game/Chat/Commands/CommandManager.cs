@@ -289,7 +289,7 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(75, new ForceOpenGift());
             this.Register(76, new CloseDice());
             this.Register(77, new DND());
-
+            this.Register(78, new Dance());
         }
 
         public void RegisterPremium()
