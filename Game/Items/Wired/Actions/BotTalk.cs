@@ -33,7 +33,7 @@ namespace Butterfly.Game.Items.Wired.Actions
             }
 
             string textMessage = message;
-            if (user != null)
+            if (user != null && user.GetClient() != null && user.GetClient().GetUser() != null)
             {
                 textMessage = textMessage.Replace("#username#", user.GetUsername());
                 textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());

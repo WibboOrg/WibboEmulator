@@ -28,7 +28,7 @@ namespace Butterfly.Game.Items.Wired.Actions
             string name = splitData[0].ToString();
             string message = splitData[1].ToString();
 
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(message) || user == null || user.GetClient() == null)
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(message) || user == null || user.GetClient() == null || user.GetClient().GetUser() == null)
             {
                 return false;
             }

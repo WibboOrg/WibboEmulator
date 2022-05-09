@@ -18,7 +18,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                 return false;
             }
 
-            if (user != null && !user.IsBot && user.GetClient() != null)
+            if (user != null && !user.IsBot && user.GetClient() != null && user.GetClient().GetUser() != null)
             {
                 string textMessage = this.StringParam;
                 textMessage = textMessage.Replace("#username#", user.GetUsername());
