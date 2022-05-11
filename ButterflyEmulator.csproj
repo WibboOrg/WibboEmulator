@@ -695,7 +695,6 @@
     <Compile Include="Database\Daos\User\UserStatsDao.cs" />
     <Compile Include="Database\Daos\User\UserVoucherDao.cs" />
     <Compile Include="Database\Daos\User\UserWardrobeDao.cs" />
-    <Compile Include="Database\Daos\User\UserWebsocketDao.cs" />
     <Compile Include="Database\Daos\WordFilterRetroDao.cs" />
     <Compile Include="Database\ExceptionSQL.cs" />
     <Compile Include="Game\Animation\AnimationManager.cs" />
