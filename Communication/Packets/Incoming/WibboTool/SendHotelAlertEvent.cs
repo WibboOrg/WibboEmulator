@@ -32,7 +32,7 @@ namespace Butterfly.Communication.Packets.Incoming.WibboTool
 
             if (Preview)
             {
-                Session.SendPacket(new NotifAlertComposer("staff", "Message de teste", Message, "Super !", 0, Url));
+                Session.SendPacket(new NotifAlertComposer("staff", "Message de test", Message, "Super !", 0, Url));
                 return;
             }
 

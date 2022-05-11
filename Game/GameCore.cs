@@ -279,7 +279,6 @@ namespace Butterfly.Game
             #if !DEBUG
             UserDao.UpdateAllOnline(dbClient);
             UserDao.UpdateAllTicket(dbClient);
-            UserWebsocketDao.UpdateReset(dbClient);
             RoomDao.UpdateResetUsersNow(dbClient);
             EmulatorStatusDao.UpdateReset(dbClient);
             #endif
