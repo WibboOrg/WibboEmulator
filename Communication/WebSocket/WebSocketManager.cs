@@ -150,7 +150,6 @@ namespace Butterfly.Communication.WebSocket
 
     public class GameWebSocket : WebSocketBehavior
     {
-
         protected override void OnError(WebSocketSharp.ErrorEventArgs e)
         {
             //Console.WriteLine(e.Message);

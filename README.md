@@ -1,2 +1,0 @@
-# WibboEmulator
-Wibbo Emulator
