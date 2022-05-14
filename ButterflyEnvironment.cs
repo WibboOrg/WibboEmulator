@@ -1,4 +1,5 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Moderation;
+﻿using Butterfly.Communication.ConnectionManager;
+using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Core;
 using Butterfly.Core.FigureData;
 using Butterfly.Database;
@@ -9,7 +10,6 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Users;
 using Butterfly.Game.Users.Authenticator;
 using Butterfly.Net;
-using ConnectionManager;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -17,13 +17,15 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading;
+using System.IO;
+using Butterfly.Communication.WebSocket;
 
 namespace Butterfly
 {
     public static class ButterflyEnvironment
     {
         private static ConfigurationData _configuration;
-        private static ConnectionHandeling _connectionManager;
+        private static WebSocketManager _connectionManager;
         private static GameCore _game;
         private static DatabaseManager _datebaseManager;
         private static RCONSocket _rcon;
@@ -57,7 +59,7 @@ namespace Butterfly
             ServerStarted = DateTime.Now;
             Console.ForegroundColor = ConsoleColor.Gray;
 
-            PatchDir = System.IO.Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/";
+            PatchDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/";
 
             Console.Title = "Butterfly Emulator";
 
@@ -112,7 +114,8 @@ namespace Butterfly
                 _figureManager = new FigureDataManager();
                 _figureManager.Init();
 
-                _connectionManager = new ConnectionHandeling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]));
+                //_connectionManager = new ConnectionHandeling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]));
+                _connectionManager = new WebSocketManager((int.Parse(GetConfig().data["game.tcp.port"])));
 
                 if (_configuration.data["Musenable"] == "true")
                 {
@@ -328,7 +331,7 @@ namespace Butterfly
             return _configuration;
         }
 
-        public static ConnectionHandeling GetConnectionManager()
+        public static WebSocketManager GetConnectionManager()
         {
             return _connectionManager;
         }

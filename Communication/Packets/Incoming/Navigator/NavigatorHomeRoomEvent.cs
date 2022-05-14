@@ -6,9 +6,9 @@ using Butterfly.Game.Rooms;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {
-    internal class UpdateNavigatorSettingsEvent : IPacketEvent
+    internal class NavigatorHomeRoomEvent : IPacketEvent
     {
-        public double Delay => 1000;
+        public double Delay => 500;
 
         public void Parse(Client Session, ClientPacket Packet)
         {
@@ -25,7 +25,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 UserDao.UpdateHomeRoom(dbClient, Session.GetUser().Id, RoomId);
             }
 
-            Session.SendPacket(new NavigatorSettingsComposer(RoomId));
+            Session.SendPacket(new NavigatorHomeRoomComposer(RoomId, 0));
         }
     }
 }

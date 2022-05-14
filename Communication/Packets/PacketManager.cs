@@ -33,7 +33,6 @@ namespace Butterfly.Communication.Packets
             this.RegisterCatalog();
             this.RegisterNavigator();
             this.RegisterMarketplace();
-            this.RegisterNewNavigator();
             this.RegisterRoomAction();
             this.RegisterQuests();
             this.RegisterRoomConnection();
@@ -184,23 +183,15 @@ namespace Butterfly.Communication.Packets
 
         private void RegisterNavigator()
         {
-            this._incomingPackets.Add(ClientPacketHeader.ROOM_FAVORITE, new AddFavouriteRoomEvent());
-            this._incomingPackets.Add(ClientPacketHeader.NAVIGATOR_CATEGORIES, new GetUserFlatCatsEvent());
-            this._incomingPackets.Add(ClientPacketHeader.ROOM_FAVORITE_REMOVE, new RemoveFavouriteRoomEvent());
-            this._incomingPackets.Add(ClientPacketHeader.DESKTOP_VIEW, new GoToHotelViewEvent());
-            this._incomingPackets.Add(ClientPacketHeader.USER_HOME_ROOM, new UpdateNavigatorSettingsEvent());
-            this._incomingPackets.Add(ClientPacketHeader.CanCreateRoomMessageEvent, new CanCreateRoomEvent());
-            this._incomingPackets.Add(ClientPacketHeader.ROOM_CREATE, new CreateFlatEvent());
-            this._incomingPackets.Add(ClientPacketHeader.ROOM_INFO, new GetGuestRoomEvent());
-        }
-
-        private void RegisterNewNavigator()
-        {
             this._incomingPackets.Add(ClientPacketHeader.NAVIGATOR_INIT, new InitializeNewNavigatorEvent());
             this._incomingPackets.Add(ClientPacketHeader.NAVIGATOR_SEARCH, new NavigatorSearchEvent());
+            this._incomingPackets.Add(ClientPacketHeader.NAVIGATOR_SETTINGS, new NavigatorSettingsEvent());
+            this._incomingPackets.Add(ClientPacketHeader.NAVIGATOR_CATEGORIES, new GetUserFlatCatsEvent());
         }
+
         private void RegisterRoomConnection()
         {
+            this._incomingPackets.Add(ClientPacketHeader.DESKTOP_VIEW, new GoToHotelViewEvent());
             this._incomingPackets.Add(ClientPacketHeader.ROOM_ENTER, new OpenFlatConnectionEvent());
             this._incomingPackets.Add(ClientPacketHeader.GO_TO_FLAT, new GoToFlatEvent());
         }
@@ -258,6 +249,12 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.FURNITURE_MULTISTATE, new UseFurnitureEvent());
             this._incomingPackets.Add(ClientPacketHeader.FURNITURE_WALL_MULTISTATE, new UseFurnitureEvent());
             this._incomingPackets.Add(ClientPacketHeader.POLL_ANSWER, new AnswerPollEvent());
+            this._incomingPackets.Add(ClientPacketHeader.ROOM_FAVORITE, new AddFavouriteRoomEvent());
+            this._incomingPackets.Add(ClientPacketHeader.ROOM_FAVORITE_REMOVE, new RemoveFavouriteRoomEvent());
+            this._incomingPackets.Add(ClientPacketHeader.USER_HOME_ROOM, new NavigatorHomeRoomEvent());
+            this._incomingPackets.Add(ClientPacketHeader.CanCreateRoomMessageEvent, new CanCreateRoomEvent());
+            this._incomingPackets.Add(ClientPacketHeader.ROOM_CREATE, new CreateFlatEvent());
+            this._incomingPackets.Add(ClientPacketHeader.ROOM_INFO, new GetGuestRoomEvent());
         }
 
         private void RegisterRoomChat()

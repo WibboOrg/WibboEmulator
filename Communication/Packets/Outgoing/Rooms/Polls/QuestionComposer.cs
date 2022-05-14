@@ -15,8 +15,6 @@
             this.WriteString(answer);//content
             this.WriteInteger(0);
             this.WriteInteger(0);
-            //MessageTwo.WriteString("0");
-            //MessageTwo.WriteString("1");
         }
     }
 }

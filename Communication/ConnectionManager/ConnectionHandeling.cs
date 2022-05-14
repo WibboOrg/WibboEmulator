@@ -1,9 +1,9 @@
-﻿using Butterfly;
+﻿/*using Butterfly;
 using Butterfly.Core;
 using Butterfly.Net;
 using System;
 
-namespace ConnectionManager
+namespace Butterfly.Communication.ConnectionManager
 {
     public class ConnectionHandeling
     {
@@ -52,3 +52,4 @@ namespace ConnectionManager
         }
     }
 }
+*/

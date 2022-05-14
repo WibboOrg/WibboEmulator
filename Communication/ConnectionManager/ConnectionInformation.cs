@@ -1,13 +1,12 @@
-﻿using Butterfly.Communication.WebSocket;
-using SharedPacketLib;
+﻿using Butterfly.Utilities;
 using System;
 using System.Net.Sockets;
 
-namespace ConnectionManager
+namespace Butterfly.Communication.ConnectionManager
 {
     public class ConnectionInformation : IDisposable
     {
-        private static readonly int BUFFER_SIZE = 8192 * 10;
+        public static readonly int BUFFER_SIZE = 65535;
 
         private readonly Socket _dataSocket;
         private readonly string _ip;
@@ -30,7 +29,7 @@ namespace ConnectionManager
             this._dataSocket.ReceiveTimeout = 1000 * 30;
             this._dataSocket.SendBufferSize = BUFFER_SIZE;
             this._dataSocket.ReceiveBufferSize = BUFFER_SIZE;
-            this._dataSocket.DontFragment = false;
+            this._dataSocket.DontFragment = true;
 
             this._sendCallback = new AsyncCallback(this.SentData);
 

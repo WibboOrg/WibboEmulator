@@ -8,6 +8,7 @@ using Butterfly.Game.Chat.Styles;
 using Butterfly.Utilities;
 using System;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

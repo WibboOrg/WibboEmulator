@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Butterfly.Communication.WebSocket
+namespace Butterfly.Utilities
 {
     internal static class EncodeDecode
     {

@@ -1,4 +1,4 @@
-﻿using SharedPacketLib;
+﻿using Butterfly.Communication.ConnectionManager;
 using System;
 
 namespace Butterfly.Net
@@ -9,7 +9,7 @@ namespace Butterfly.Net
 
         public event InitialPacketParser.NoParamDelegate SwitchParserRequest;
 
-        public void HandlePacketData(byte[] packet, bool deciphered = false)
+        public void HandlePacketData(byte[] packet, bool isDecoded = false)
         {
             if (this.SwitchParserRequest == null)
             {

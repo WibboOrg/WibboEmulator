@@ -1,12 +1,11 @@
-﻿using Butterfly.Communication.Packets.Interfaces;
-using Butterfly.Communication.Packets.Outgoing;
+﻿using Butterfly.Communication.ConnectionManager;
+using Butterfly.Communication.Packets.Interfaces;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
-
+using Butterfly.Communication.WebSocket;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Users.Messenger;
-using ConnectionManager;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -17,9 +16,9 @@ namespace Butterfly.Game.Clients
 {
     public class ClientManager
     {
-        public ConcurrentDictionary<int, Client> _clients;
-        public ConcurrentDictionary<string, int> _usernameRegister;
-        public ConcurrentDictionary<int, int> _userIDRegister;
+        public ConcurrentDictionary<string, Client> _clients;
+        public ConcurrentDictionary<string, string> _usernameRegister;
+        public ConcurrentDictionary<int, string> _userIDRegister;
 
         public int OnlineUsersFr;
         public int OnlineUsersEn;
@@ -31,9 +30,9 @@ namespace Butterfly.Game.Clients
 
         public ClientManager()
         {
-            this._clients = new ConcurrentDictionary<int, Client>();
-            this._usernameRegister = new ConcurrentDictionary<string, int>();
-            this._userIDRegister = new ConcurrentDictionary<int, int>();
+            this._clients = new ConcurrentDictionary<string, Client>();
+            this._usernameRegister = new ConcurrentDictionary<string, string>();
+            this._userIDRegister = new ConcurrentDictionary<int, string>();
             this._userStaff = new List<int>();
         }
 
@@ -53,6 +52,13 @@ namespace Butterfly.Game.Clients
             }
 
             return Users;
+        }
+
+        public Client GetClientById(string clientID)
+        {
+            this.TryGetClient(clientID, out Client client);
+
+            return client;
         }
 
         public Client GetClientByUserID(int userID)
@@ -86,7 +92,7 @@ namespace Butterfly.Game.Clients
             return null;
         }
 
-        public bool UpdateClientUsername(int ClientId, string OldUsername, string NewUsername)
+        public bool UpdateClientUsername(string ClientId, string OldUsername, string NewUsername)
         {
             if (!this._usernameRegister.ContainsKey(OldUsername.ToLower()))
             {
@@ -98,7 +104,7 @@ namespace Butterfly.Game.Clients
             return true;
         }
 
-        public bool TryGetClient(int ClientId, out Client Client)
+        public bool TryGetClient(string ClientId, out Client Client)
         {
             return this._clients.TryGetValue(ClientId, out Client);
         }
@@ -163,10 +169,10 @@ namespace Butterfly.Game.Clients
             }
         }
 
-        public void CreateAndStartClient(int clientID, ConnectionInformation connection)
+        public void CreateAndStartClient(string clientID, GameWebSocket connection)
         {
             Client Client = new Client(clientID, connection);
-            if (this._clients.TryAdd(Client.ConnectionID, Client))
+            if (this._clients.TryAdd(clientID, Client))
             {
                 Client.StartConnection();
             }
@@ -176,7 +182,7 @@ namespace Butterfly.Game.Clients
             }
         }
 
-        public void DisposeConnection(int clientID)
+        public void DisposeConnection(string clientID)
         {
             if (!this.TryGetClient(clientID, out Client Client))
             {
@@ -225,7 +231,7 @@ namespace Butterfly.Game.Clients
 
         public void UnregisterClient(int userid, string username)
         {
-            this._userIDRegister.TryRemove(userid, out int Client);
+            this._userIDRegister.TryRemove(userid, out string Client);
             this._usernameRegister.TryRemove(username.ToLower(), out Client);
         }
 

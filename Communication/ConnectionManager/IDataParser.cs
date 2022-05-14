@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace SharedPacketLib
+namespace Butterfly.Communication.ConnectionManager
 {
     public interface IDataParser : IDisposable, ICloneable
     {
-        void HandlePacketData(byte[] packet, bool deciphered = false);
+        void HandlePacketData(byte[] packet, bool isDecoded = false);
     }
 }

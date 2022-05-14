@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         public void Parse(Client Session, ClientPacket Packet)
         {
             Session.SendPacket(new CreditBalanceComposer(Session.GetUser().Credits));
-            Session.SendPacket(new ActivityPointsComposer(Session.GetUser().WibboPoints));
+            Session.SendPacket(new ActivityPointsComposer(Session.GetUser().WibboPoints, Session.GetUser().LimitCoins));
         }
     }
 }

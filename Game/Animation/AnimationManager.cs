@@ -13,7 +13,7 @@ namespace Butterfly.Game.Animation
 {
     public class AnimationManager
     {
-        private const int MIN_USERS = 80;
+        private const int MIN_USERS = 70;
         private const int START_TIME = 20;
         private const int NOTIF_TIME = 2;
         private const int CLOSE_TIME = 1;

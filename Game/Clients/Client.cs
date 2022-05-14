@@ -1,4 +1,5 @@
-﻿using Butterfly.Communication.Packets.Incoming;
+﻿using Butterfly.Communication.ConnectionManager;
+using Butterfly.Communication.Packets.Incoming;
 using Butterfly.Communication.Packets.Interfaces;
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.BuildersClub;
@@ -13,6 +14,7 @@ using Butterfly.Communication.Packets.Outgoing.Notifications;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Communication.Packets.Outgoing.Settings;
 using Butterfly.Communication.Packets.Outgoing.WibboTool;
+using Butterfly.Communication.WebSocket;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
@@ -21,7 +23,6 @@ using Butterfly.Game.Users;
 using Butterfly.Game.Users.Authenticator;
 using Butterfly.Net;
 using Butterfly.Utilities;
-using ConnectionManager;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,7 +31,7 @@ namespace Butterfly.Game.Clients
 {
     public class Client
     {
-        private ConnectionInformation _connection;
+        private GameWebSocket _connection;
         private GamePacketParser _packetParser;
         private User _user;
 
@@ -41,11 +42,11 @@ namespace Butterfly.Game.Clients
         public string MachineId;
         public Language Langue;
 
-        public int ConnectionID;
+        public string ConnectionID;
 
         public bool ShowGameAlert;
 
-        public Client(int ClientId, ConnectionInformation connection)
+        public Client(string ClientId, GameWebSocket connection)
         {
             this.ConnectionID = ClientId;
             this.Langue = Language.FRANCAIS;
@@ -62,10 +63,10 @@ namespace Butterfly.Game.Clients
         {
             this._packetParser.OnNewPacket += new GamePacketParser.HandlePacket(this.OnNewPacket);
 
-            byte[] packet = (this._connection.Parser as InitialPacketParser).CurrentData;
+            /*byte[] packet = (this._connection.Parser as InitialPacketParser).CurrentData;
             this._connection.Parser.Dispose();
             this._connection.Parser = this._packetParser;
-            this._connection.Parser.HandlePacketData(packet);
+            this._connection.Parser.HandlePacketData(packet);*/
         }
 
         public void TryAuthenticate(string AuthTicket)
@@ -119,7 +120,7 @@ namespace Butterfly.Game.Clients
                     this.SendPacket(new AuthenticationOKComposer());
 
                     ServerPacketList packetList = new ServerPacketList();
-                    packetList.Add(new NavigatorSettingsComposer(this._user.HomeRoom));
+                    packetList.Add(new NavigatorHomeRoomComposer(this._user.HomeRoom, this._user.HomeRoom));
                     packetList.Add(new FavouritesComposer(this._user.FavoriteRooms));
                     packetList.Add(new FigureSetIdsComposer());
                     packetList.Add(new UserRightsComposer(this._user.Rank < 2 ? 2 : this.GetUser().Rank));
@@ -210,7 +211,7 @@ namespace Butterfly.Game.Clients
             }
         }
 
-        public ConnectionInformation GetConnection()
+        public GameWebSocket GetConnection()
         {
             return this._connection;
         }
@@ -222,14 +223,14 @@ namespace Butterfly.Game.Clients
 
         public void StartConnection()
         {
-            if (this._connection == null)
+            /*if (this._connection == null)
             {
                 return;
             }
 
             (this._connection.Parser as InitialPacketParser).SwitchParserRequest += new InitialPacketParser.NoParamDelegate(this.SwitchParserRequest);
 
-            this._connection.StartPacketProcessing();
+            this._connection.StartPacketProcessing();*/
         }
 
         public bool Antipub(string Message, string type, int RoomId = 0)
@@ -350,7 +351,7 @@ namespace Butterfly.Game.Clients
                 this._packetLastTimestamp = timestampNow + 1;
             }
 
-            if (this._packetCount >= 15)
+            if (this._packetCount >= 20)
                 return true;
 
             if (delay <= 0)

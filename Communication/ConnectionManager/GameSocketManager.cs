@@ -1,12 +1,11 @@
-﻿using SharedPacketLib;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace ConnectionManager
+namespace Butterfly.Communication.ConnectionManager
 {
     public class GameSocketManager
     {

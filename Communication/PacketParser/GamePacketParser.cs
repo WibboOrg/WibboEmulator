@@ -1,9 +1,8 @@
-﻿using Butterfly.Communication.Packets.Incoming;
-using Butterfly.Communication.WebSocket;
+﻿using Butterfly.Communication.ConnectionManager;
+using Butterfly.Communication.Packets.Incoming;
 using Butterfly.Core;
 using Butterfly.Game.Clients;
 using Butterfly.Utilities;
-using SharedPacketLib;
 using System;
 using System.IO;
 using System.Security.Cryptography;
@@ -16,9 +15,9 @@ namespace Butterfly.Net
         public event HandlePacket OnNewPacket;
 
         private readonly Client _currentClient;
+
         private bool _halfDataRecieved = false;
-        private byte[] _halfData = null;
-        private bool _policySended = false;
+        private byte[] _halfData = new byte[0];
 
         public GamePacketParser(Client me)
         {
@@ -26,7 +25,7 @@ namespace Butterfly.Net
             this._currentClient = me;
         }
 
-        public void HandlePacketData(byte[] Data, bool deciphered = false)
+        public void HandlePacketData(byte[] bytes, bool isDecoded = false)
         {
             try
             {
@@ -35,77 +34,126 @@ namespace Butterfly.Net
                     return;
                 }
 
-                if (Data.Length < 4)
+                if (bytes.Length < 4)
                     return;
 
-                if (!this._policySended && (Data[0] == 71 && Data[1] == 69))
+                bool isFrament = false;
+
+                if (!isDecoded)
                 {
-                    this.PolicyRequest(Data);
+                    int controlFrame = ParseControlFrame(bytes[0]);
 
-                    this._policySended = true;
-                    return;
+                    if (controlFrame == (int)ControlFrame.NA)
+                    {
+                        this.PolicyRequest(bytes);
+                        return;
+                    }
+                    else if ((int)(controlFrame & (int)ControlFrame.Ping) > 0 ||
+                        (int)(controlFrame & (int)ControlFrame.Pong) > 0)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        if ((int)(controlFrame & (int)ControlFrame.CloseConnection) > 0)
+                        {
+                            return;
+                        }
+
+                        if ((int)(controlFrame & (int)ControlFrame.Binary) == 0)
+                        {
+                            return;
+                        }
+
+                        if ((int)(controlFrame & (int)ControlFrame.ContinueFrame) > 0)
+                        {
+                            isFrament = true;
+                        }
+                    }
                 }
 
-                try
+                if(isFrament)
                 {
-                    Data = EncodeDecode.DecodeMessage(Data);
-                }
-                catch (Exception e)
-                {
-                    ExceptionLogger.LogException($"Length: {Data.Length} Message: {e.Message}");
-                    return;
+                    this._halfDataRecieved = true;
                 }
 
                 if (this._halfDataRecieved)
                 {
-                    byte[] FullDataRcv = new byte[this._halfData.Length + Data.Length];
-                    Buffer.BlockCopy(this._halfData, 0, FullDataRcv, 0, this._halfData.Length);
-                    Buffer.BlockCopy(Data, 0, FullDataRcv, this._halfData.Length, Data.Length);
+                    byte[] fullDataRcv = new byte[this._halfData.Length + bytes.Length];
+                    Buffer.BlockCopy(this._halfData, 0, fullDataRcv, 0, this._halfData.Length);
+                    Buffer.BlockCopy(bytes, 0, fullDataRcv, this._halfData.Length, bytes.Length);
 
-                    this._halfDataRecieved = false; // mark done this round
-                    this.HandlePacketData(FullDataRcv, true); // repeat now we have the combined array
+                    if (!isFrament)
+                    {
+                        this._halfDataRecieved = false;
+                        this._halfData = new byte[0];
+                        this.HandlePacketData(fullDataRcv);
+                    }
+                    else
+                    {
+                        this._halfData = fullDataRcv;
+                    }
                     return;
                 }
 
-                using (BinaryReader Reader = new BinaryReader(new MemoryStream(Data)))
-                {
-                    if (Data.Length < 4)
-                    {
-                        return;
-                    }
 
-                    int MsgLen = IntEncoding.DecodeInt32(Reader.ReadBytes(4));
-                    if (MsgLen < 2)
+                byte[] dataDecoded = null;
+                if (!isDecoded)
+                {
+                    try
+                    {
+                        dataDecoded = EncodeDecode.DecodeMessage(bytes);
+                    }
+                    catch (Exception e)
+                    {
+                        ExceptionLogger.LogException($"Length: {bytes.Length} Message: {e.Message}");
+                        return;
+                    }
+                }
+
+                if (dataDecoded == null)
+                    return;
+
+                if (dataDecoded.Length < 4)
+                {
+                    return;
+                }
+
+                using (BinaryReader reader = new BinaryReader(new MemoryStream(dataDecoded)))
+                {
+                    int msgLen = IntEncoding.DecodeInt32(reader.ReadBytes(4));
+
+                    if (msgLen < 2 || msgLen > 1024000)
                     {
                         return;
                     }
-                    else if ((Reader.BaseStream.Length - 4) < MsgLen)
+                    else if ((reader.BaseStream.Length - 4) < msgLen)
                     {
-                        this._halfData = Data;
+                        this._halfData = bytes;
                         this._halfDataRecieved = true;
 
                         return;
                     }
 
-                    byte[] Packet = Reader.ReadBytes(MsgLen);
+                    byte[] packet = reader.ReadBytes(msgLen);
 
-                    using (BinaryReader R = new BinaryReader(new MemoryStream(Packet)))
+                    using (BinaryReader r = new BinaryReader(new MemoryStream(packet)))
                     {
-                        int Header = IntEncoding.DecodeInt16(R.ReadBytes(2));
+                        int header = IntEncoding.DecodeInt16(r.ReadBytes(2));
 
-                        byte[] Content = new byte[Packet.Length - 2];
-                        Buffer.BlockCopy(Packet, 2, Content, 0, Packet.Length - 2);
+                        byte[] content = new byte[packet.Length - 2];
+                        Buffer.BlockCopy(packet, 2, content, 0, packet.Length - 2);
 
-                        ClientPacket Message = new ClientPacket(Header, Content);
-                        OnNewPacket.Invoke(Message);
+                        ClientPacket message = new ClientPacket(header, content);
+                        OnNewPacket.Invoke(message);
                     }
 
-                    if (Reader.BaseStream.Length - 4 > MsgLen)
+                    if (reader.BaseStream.Length - 4 > msgLen)
                     {
-                        byte[] Extra = new byte[Reader.BaseStream.Length - Reader.BaseStream.Position];
-                        Buffer.BlockCopy(Data, (int)Reader.BaseStream.Position, Extra, 0, ((int)Reader.BaseStream.Length - (int)Reader.BaseStream.Position));
+                        byte[] extra = new byte[reader.BaseStream.Length - reader.BaseStream.Position];
+                        Buffer.BlockCopy(dataDecoded, (int)reader.BaseStream.Position, extra, 0, ((int)reader.BaseStream.Length - (int)reader.BaseStream.Position));
 
-                        this.HandlePacketData(Extra, true);
+                        this.HandlePacketData(extra, true);
                     }
                 }
             }
@@ -113,6 +161,70 @@ namespace Butterfly.Net
             {
                 ExceptionLogger.LogException("Packet Error : " + e.Message);
             }
+        }
+
+        public enum ControlFrame { NA = 0, CloseConnection = 1, Ping = 2, Pong = 4, Text = 8, Binary = 16, ContinueFrame = 32, FinalFrame = 64 };
+
+        private int ParseControlFrame(byte controlFrame)
+        {
+            int rv = (int)ControlFrame.NA;
+            bool isFinalFrame = (controlFrame & 0x80) == 0x80;
+            byte opCode = (byte)((controlFrame & 0x0F));
+            if (opCode >= 0x3 && opCode <= 0x7 ||
+                opCode >= 0xB && opCode <= 0xF)//special frame, ignore it
+            {
+                Console.WriteLine("Reserved Frame received");
+                return rv;
+            }
+            if (opCode == 0x8 || opCode == 0x0 || opCode == 0x1 || opCode == 0x2 || opCode == 0x9 || opCode == 0xA) //proceed furter
+            {
+                if (opCode == 0x0) //continue frame
+                {
+                    rv |= (int)ControlFrame.ContinueFrame;
+                    Console.WriteLine("Continue Frame received");
+                }
+                if (opCode == 0x1) //text frame
+                {
+                    rv |= (int)ControlFrame.Text;
+                    Console.WriteLine("Text Frame received");
+                }
+                if (opCode == 0x2) //binary frame
+                {
+                    rv |= (int)ControlFrame.Binary;
+                    Console.WriteLine("Binary frame received");
+                }
+                if (opCode == 0x8) //connection closed
+                {
+                    rv |= (int)ControlFrame.CloseConnection;
+                    Console.WriteLine("CloseConnection Frame received");
+                }
+                if (opCode == 0x9) //ping
+                {
+                    rv |= (int)ControlFrame.Ping;
+                    Console.WriteLine("PING received");
+                }
+                if (opCode == 0xA) //pong
+                {
+                    rv |= (int)ControlFrame.Pong;
+                    Console.WriteLine("PONG received");
+                }
+            }
+            else // invalid control bit, must close the connection
+            {
+                Console.WriteLine("invalid control frame received, must close connection");
+                rv = (int)ControlFrame.CloseConnection;
+            }
+            if (isFinalFrame) //Final frame ...
+            {
+                rv |= (int)ControlFrame.FinalFrame;
+                Console.WriteLine("Final frame received");
+            }
+            else
+            {
+                rv |= (int)ControlFrame.ContinueFrame;
+                Console.WriteLine("Continue frame received");
+            }
+            return rv;
         }
 
         private void PolicyRequest(byte[] packet)
@@ -145,7 +257,7 @@ namespace Butterfly.Net
                  ;
 
             // which one should I use? none of them fires the onopen method
-            this._currentClient.GetConnection().SendData(Encoding.UTF8.GetBytes(response), true);
+            //this._currentClient.GetConnection().SendData(Encoding.UTF8.GetBytes(response), true);
         }
 
         private static string GetXmlPolicy()
