@@ -211,7 +211,7 @@ namespace Butterfly.Communication.WebSocket
 
         public string GetIp()
         {
-            return this.Context.Host;
+            return (this.Headers["X-Forwarded-For"] != null) ? this.Headers["X-Forwarded-For"] : this.Context.Host.Split(':')[0];
         }
     }
 }
