@@ -115,9 +115,9 @@ namespace Butterfly
                 _figureManager.Init();
 
                 //_connectionManager = new ConnectionHandeling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]));
-                _connectionManager = new WebSocketManager((int.Parse(GetConfig().data["game.tcp.port"])));
+                _connectionManager = new WebSocketManager(int.Parse(GetConfig().data["game.ws.port"]), GetConfig().data["game.ssl.enable"] == "true", GetConfig().data["game.ssl.password"]));
 
-                if (_configuration.data["Musenable"] == "true")
+                if (_configuration.data["mus.tcp.enable"] == "true")
                 {
                     _rcon = new RCONSocket(int.Parse(GetConfig().data["mus.tcp.port"]), GetConfig().data["mus.tcp.allowedaddr"].Split(new char[1] { ';' }));
                 }

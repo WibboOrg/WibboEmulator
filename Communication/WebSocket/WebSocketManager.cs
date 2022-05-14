@@ -22,18 +22,18 @@ namespace Butterfly.Communication.WebSocket
         private ConcurrentDictionary<string, int> _lastTimeConnection;
         private List<string> _bannedIp;
 
-        public WebSocketManager(int port)
+        public WebSocketManager(int port, bool isSecure, string certificatePassword)
         {
             this._ipConnectionsCount = new ConcurrentDictionary<string, int>();
             this._lastTimeConnection = new ConcurrentDictionary<string, int>();
             this._bannedIp = new List<string>();
 
-            string PatchDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/certificate.pfx";
-
-            Console.WriteLine(PatchDir);
-
-            this._webSocketServer = new WebSocketServer(IPAddress.Any, port, true);
-            this._webSocketServer.SslConfiguration.ServerCertificate = new X509Certificate2(PatchDir, "test123");
+            this._webSocketServer = new WebSocketServer(IPAddress.Any, port, isSecure);
+            if (isSecure)
+            {
+                string patchCertificate = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/certificate.pfx";
+                this._webSocketServer.SslConfiguration.ServerCertificate = new X509Certificate2(patchCertificate, certificatePassword);
+            }
             this._webSocketServer.AddWebSocketService<GameWebSocket>("/");
             this._webSocketServer.Start();
 
@@ -153,7 +153,7 @@ namespace Butterfly.Communication.WebSocket
 
         protected override void OnError(WebSocketSharp.ErrorEventArgs e)
         {
-            Console.WriteLine(e.Message);
+            //Console.WriteLine(e.Message);
         }
 
         protected override void OnClose(CloseEventArgs e)
