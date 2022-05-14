@@ -25,7 +25,7 @@ namespace Butterfly
     public static class ButterflyEnvironment
     {
         private static ConfigurationData _configuration;
-        private static WebSocketManager _connectionManager;
+        private static WebSocketManager _webSocketManager;
         private static GameCore _game;
         private static DatabaseManager _datebaseManager;
         private static RCONSocket _rcon;
@@ -115,7 +115,7 @@ namespace Butterfly
                 _figureManager.Init();
 
                 //_connectionManager = new ConnectionHandeling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]));
-                _connectionManager = new WebSocketManager(int.Parse(GetConfig().data["game.ws.port"]), GetConfig().data["game.ssl.enable"] == "true", GetConfig().data["game.ssl.password"]));
+                _webSocketManager = new WebSocketManager(int.Parse(GetConfig().data["game.ws.port"]), GetConfig().data["game.ssl.enable"] == "true", GetConfig().data["game.ssl.password"]);
 
                 if (_configuration.data["mus.tcp.enable"] == "true")
                 {
@@ -331,9 +331,9 @@ namespace Butterfly
             return _configuration;
         }
 
-        public static WebSocketManager GetConnectionManager()
+        public static WebSocketManager GetWebSocketManager()
         {
-            return _connectionManager;
+            return _webSocketManager;
         }
 
         public static RCONSocket GetRCONSocket()
@@ -366,7 +366,7 @@ namespace Butterfly
             GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
             GetGame().Destroy();
             Thread.Sleep(20000); // 20 secondes
-            GetConnectionManager().Destroy(); // Destruction
+            GetWebSocketManager().Destroy(); // Destruction
             GetGame().GetPacketManager().UnregisterAll(); // Dé-enregistrer les derniers achats du catalogue (uniquement mobis)
             GetGame().GetClientManager().CloseAll(); // Fermeture de toutes les connexions
             GetGame().GetRoomManager().RemoveAllRooms(); // Remise à zéro de la table room du SQL. 127.0.0.1...

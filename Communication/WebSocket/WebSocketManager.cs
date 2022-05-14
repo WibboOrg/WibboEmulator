@@ -158,7 +158,7 @@ namespace Butterfly.Communication.WebSocket
 
         protected override void OnClose(CloseEventArgs e)
         {
-            ButterflyEnvironment.GetConnectionManager().DisposeClient(this);
+            ButterflyEnvironment.GetWebSocketManager().DisposeClient(this);
         }
 
         protected override void OnMessage(MessageEventArgs e)
@@ -210,7 +210,7 @@ namespace Butterfly.Communication.WebSocket
 
         protected override void OnOpen()
         {
-            ButterflyEnvironment.GetConnectionManager().CreatedClient(this);
+            ButterflyEnvironment.GetWebSocketManager().CreatedClient(this);
         }
 
         public void SendData(byte[] bytes)
