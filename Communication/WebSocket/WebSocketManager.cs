@@ -6,6 +6,8 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using WebSocketSharp;
 using WebSocketSharp.Server;
@@ -26,9 +28,18 @@ namespace Butterfly.Communication.WebSocket
             this._lastTimeConnection = new ConcurrentDictionary<string, int>();
             this._bannedIp = new List<string>();
 
-            this._webSocketServer = new WebSocketServer(IPAddress.Any, port);
+            string PatchDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/certificate.pfx";
+
+            Console.WriteLine(PatchDir);
+
+            this._webSocketServer = new WebSocketServer(IPAddress.Any, port, true);
+            this._webSocketServer.SslConfiguration.ServerCertificate = new X509Certificate2(PatchDir, "test123");
             this._webSocketServer.AddWebSocketService<GameWebSocket>("/");
             this._webSocketServer.Start();
+
+            #if DEBUG
+            this._webSocketServer.Log.Level = LogLevel.Trace;
+            #endif
         }
 
         public void DisposeClient(GameWebSocket connection)
@@ -139,6 +150,12 @@ namespace Butterfly.Communication.WebSocket
 
     public class GameWebSocket : WebSocketBehavior
     {
+
+        protected override void OnError(WebSocketSharp.ErrorEventArgs e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
         protected override void OnClose(CloseEventArgs e)
         {
             ButterflyEnvironment.GetConnectionManager().DisposeClient(this);
