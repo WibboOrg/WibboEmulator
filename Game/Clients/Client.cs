@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.ConnectionManager;
-using Butterfly.Communication.Packets.Incoming;
+﻿using Butterfly.Communication.Packets.Incoming;
 using Butterfly.Communication.Packets.Interfaces;
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.BuildersClub;
@@ -32,7 +31,6 @@ namespace Butterfly.Game.Clients
     public class Client
     {
         private GameWebSocket _connection;
-        private GamePacketParser _packetParser;
         private User _user;
 
         private Dictionary<int, double> _packetTimeout;
@@ -43,7 +41,6 @@ namespace Butterfly.Game.Clients
         public Language Langue;
 
         public string ConnectionID;
-
         public bool ShowGameAlert;
 
         public Client(string ClientId, GameWebSocket connection)
@@ -55,18 +52,6 @@ namespace Butterfly.Game.Clients
             this._packetTimeout = new Dictionary<int, double>();
             this._packetCount = 0;
             this._packetLastTimestamp = UnixTimestamp.GetNow();
-
-            this._packetParser = new GamePacketParser(this);
-        }
-
-        private void SwitchParserRequest()
-        {
-            this._packetParser.OnNewPacket += new GamePacketParser.HandlePacket(this.OnNewPacket);
-
-            /*byte[] packet = (this._connection.Parser as InitialPacketParser).CurrentData;
-            this._connection.Parser.Dispose();
-            this._connection.Parser = this._packetParser;
-            this._connection.Parser.HandlePacketData(packet);*/
         }
 
         public void TryAuthenticate(string AuthTicket)
@@ -219,18 +204,6 @@ namespace Butterfly.Game.Clients
         public User GetUser()
         {
             return this._user;
-        }
-
-        public void StartConnection()
-        {
-            /*if (this._connection == null)
-            {
-                return;
-            }
-
-            (this._connection.Parser as InitialPacketParser).SwitchParserRequest += new InitialPacketParser.NoParamDelegate(this.SwitchParserRequest);
-
-            this._connection.StartPacketProcessing();*/
         }
 
         public bool Antipub(string Message, string type, int RoomId = 0)
@@ -398,7 +371,6 @@ namespace Butterfly.Game.Clients
             this._packetTimeout = null;
             this._user = null;
             this._connection = null;
-            this._packetParser = null;
         }
 
         public void Disconnect()

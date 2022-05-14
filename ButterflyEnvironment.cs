@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.ConnectionManager;
-using Butterfly.Communication.Packets.Outgoing.Moderation;
+﻿using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Core;
 using Butterfly.Core.FigureData;
 using Butterfly.Database;

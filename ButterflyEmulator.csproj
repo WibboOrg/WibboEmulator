@@ -963,9 +963,6 @@
     <Compile Include="Utilities\Astar\Algorithm\IWeightAddable.cs" />
     <Compile Include="Utilities\Astar\Algorithm\PriorityQueue.cs" />
     <Compile Include="ButterflyEnvironment.cs" />
-    <Compile Include="Communication\ConnectionManager\ConnectionInformation.cs" />
-    <Compile Include="Communication\ConnectionManager\IDataParser.cs" />
-    <Compile Include="Communication\ConnectionManager\GameSocketManager.cs" />
     <Compile Include="Utilities\ConsoleWriter\Writer.cs" />
     <Compile Include="Database\Adapter\NormalQueryReactor.cs" />
     <Compile Include="Database\Adapter\QueryAdapter.cs" />
@@ -1039,7 +1036,6 @@
     <Compile Include="Utilities\RandomNumber.cs" />
     <Compile Include="Utilities\ServerPacketList.cs" />
     <Compile Include="Utilities\StringCharFilter.cs" />
-    <Compile Include="Communication\ConnectionManager\ConnectionHandeling.cs" />
     <Compile Include="Game\GameCore.cs" />
     <Compile Include="Game\Achievements\AchievementData.cs" />
     <Compile Include="Game\Achievements\AchievementLevel.cs" />
@@ -1175,8 +1171,6 @@
     <Compile Include="Game\Chat\Commands\CommandManager.cs" />
     <Compile Include="Communication\Packets\Outgoing\ServerPacket.cs" />
     <Compile Include="Communication\Packets\PacketManager.cs" />
-    <Compile Include="Communication\PacketParser\GamePacketParser.cs" />
-    <Compile Include="Communication\PacketParser\InitialPacketParser.cs" />
     <Compile Include="Communication\RCON\RCONSocket.cs" />
     <Compile Include="Communication\RCON\RCONConnection.cs" />
     <Compile Include="Utilities\QueryChunk.cs" />

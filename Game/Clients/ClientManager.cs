@@ -171,14 +171,8 @@ namespace Butterfly.Game.Clients
         public void CreateAndStartClient(string clientID, GameWebSocket connection)
         {
             Client Client = new Client(clientID, connection);
-            if (this._clients.TryAdd(clientID, Client))
-            {
-                Client.StartConnection();
-            }
-            else
-            {
+            if (!this._clients.TryAdd(clientID, Client))
                 connection.Dispose();
-            }
         }
 
         public void DisposeConnection(string clientID)
