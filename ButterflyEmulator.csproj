@@ -1182,6 +1182,10 @@
     <Content Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".vs\ButterflyEmulator\config\applicationhost.config" />
+    <None Include=".vs\ButterflyEmulator\v17\.suo" />
+    <None Include=".vs\slnx.sqlite" />
+    <None Include=".vs\VSWorkspaceState.json" />
     <None Include="packages.config" />
     <None Include="bin\Configuration\settings.ini" />
     <None Include="bin\Configuration\settings.new.ini" />
