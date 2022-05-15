@@ -1,10 +1,4 @@
 obj
 debug.log
 .vs
-
-bin/ButterflyEmulator.exe
-bin/ButterflyEmulator.exe.config
-bin/ButterflyEmulator.pdb
-bin/MySql.Data.dll
-bin/Configuration/settings.ini
-bin/Configuration/figuredata.xml
+bin
