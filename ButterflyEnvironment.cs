@@ -18,6 +18,7 @@ using System.Reflection;
 using System.Threading;
 using System.IO;
 using Butterfly.Communication.WebSocket;
+using System.Linq;
 
 namespace Butterfly
 {
@@ -37,6 +38,7 @@ namespace Butterfly
 
         public static DateTime ServerStarted;
         public static bool StaticEvents;
+        public static List<string> WebSocketOrigins;
         public static string PatchDir;
         public static string CameraUploadUrl;
         public static string CameraThubmailUploadUrl;
@@ -87,7 +89,6 @@ namespace Butterfly
                 _configuration = new ConfigurationData(PatchDir + "configuration/settings.ini", false);
                 _datebaseManager = new DatabaseManager(uint.Parse(GetConfig().data["db.pool.maxsize"]), uint.Parse(GetConfig().data["db.pool.minsize"]), GetConfig().data["db.hostname"], uint.Parse(GetConfig().data["db.port"]), GetConfig().data["db.username"], GetConfig().data["db.password"], GetConfig().data["db.name"]);
 
-
                 int TryCount = 0;
                 while (!_datebaseManager.IsConnected())
                 {
@@ -113,12 +114,12 @@ namespace Butterfly
                 _figureManager = new FigureDataManager();
                 _figureManager.Init();
 
-                //_connectionManager = new ConnectionHandeling(int.Parse(GetConfig().data["game.tcp.port"]), int.Parse(GetConfig().data["game.tcp.conlimit"]), int.Parse(GetConfig().data["game.tcp.conperip"]));
+                WebSocketOrigins = GetConfig().data["game.ws.origins"].Split(',').ToList();
                 _webSocketManager = new WebSocketManager(int.Parse(GetConfig().data["game.ws.port"]), GetConfig().data["game.ssl.enable"] == "true", GetConfig().data["game.ssl.password"]);
 
                 if (_configuration.data["mus.tcp.enable"] == "true")
                 {
-                    _rcon = new RCONSocket(int.Parse(GetConfig().data["mus.tcp.port"]), GetConfig().data["mus.tcp.allowedaddr"].Split(new char[1] { ';' }));
+                    _rcon = new RCONSocket(int.Parse(GetConfig().data["mus.tcp.port"]), GetConfig().data["mus.tcp.allowedaddr"].Split(','));
                 }
 
                 StaticEvents = _configuration.data["static.events"] == "true";

@@ -1,4 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Incoming;
+using Butterfly.Core;
 using Butterfly.Game.Clients;
 using Butterfly.Utilities;
 using System;
@@ -18,9 +19,9 @@ namespace Butterfly.Communication.WebSocket
     {
         private WebSocketServer _webSocketServer;
 
-        private ConcurrentDictionary<string, int> _ipConnectionsCount;
-        private ConcurrentDictionary<string, int> _lastTimeConnection;
-        private List<string> _bannedIp;
+        private readonly ConcurrentDictionary<string, int> _ipConnectionsCount;
+        private readonly ConcurrentDictionary<string, int> _lastTimeConnection;
+        private readonly List<string> _bannedIp;
 
         public WebSocketManager(int port, bool isSecure, string certificatePassword)
         {
@@ -37,9 +38,9 @@ namespace Butterfly.Communication.WebSocket
             this._webSocketServer.AddWebSocketService<GameWebSocket>("/");
             this._webSocketServer.Start();
 
-            #if DEBUG
+#if DEBUG
             this._webSocketServer.Log.Level = LogLevel.Trace;
-            #endif
+#endif
         }
 
         public void DisposeClient(GameWebSocket connection)
@@ -57,8 +58,9 @@ namespace Butterfly.Communication.WebSocket
 
             this.AlterIpConnectionCount(ip, (this.GetAmountOfConnectionFromIp(ip) + 1));
 
-            if (this._bannedIp.Contains(ip))
+            if (this._bannedIp.Contains(ip) || !ButterflyEnvironment.WebSocketOrigins.Contains(connection.GetOrigin()) || connection.GetUserAgent() == "" || )
             {
+                ExceptionLogger.LogDenial("[IP: " + connection.GetIp() + "] [Origin: " + connection.GetOrigin() + "] [User-Agent: " + connection.GetUserAgent() + "]");
                 return;
             }
 
@@ -69,8 +71,6 @@ namespace Butterfly.Communication.WebSocket
             }
             else
             {
-                Console.WriteLine("[Connection limit] " + ip + "(" + ConnectionCount + ")");
-
                 if (this._lastTimeConnection.ContainsKey(ip))
                 {
                     if (!this._lastTimeConnection.TryGetValue(ip, out int lastTime))
@@ -82,8 +82,6 @@ namespace Butterfly.Communication.WebSocket
 
                     if (now - lastTime < 2)
                     {
-                        Console.WriteLine("[Connection banned] " + ip + "(" + ConnectionCount + ")");
-
                         this._bannedIp.Add(ip);
                     }
 
@@ -223,6 +221,16 @@ namespace Butterfly.Communication.WebSocket
         public void Dispose()
         {
             this.Close();
+        }
+
+        public string GetUserAgent()
+        {
+            return (this.Headers["User-Agent"] != null) ? this.Headers["User-Agent"] : "";
+        }
+
+        public string GetOrigin()
+        {
+            return (this.Headers["Origin"] != null) ? this.Headers["Origin"] : "";
         }
 
         public string GetIp()
