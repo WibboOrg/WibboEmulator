@@ -1,4 +1,4 @@
-﻿using Butterfly.Communication.Packets.Interfaces;
+﻿using Butterfly.Communication.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;

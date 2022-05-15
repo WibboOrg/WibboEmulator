@@ -1,4 +1,4 @@
-﻿using Butterfly.Communication.Packets.Interfaces;
+﻿using Butterfly.Communication.Interfaces;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 using Butterfly.Communication.WebSocket;
 using Butterfly.Core;

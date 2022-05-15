@@ -1,5 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Incoming;
-using Butterfly.Communication.Packets.Interfaces;
+using Butterfly.Communication.Interfaces;
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.BuildersClub;
 using Butterfly.Communication.Packets.Outgoing.Handshake;

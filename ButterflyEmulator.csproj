@@ -63,7 +63,7 @@
     <FileAlignment>512</FileAlignment>
     <DocumentationFile>
     </DocumentationFile>
-    <WarningLevel>2</WarningLevel>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\</OutputPath>
@@ -108,6 +108,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Butterfly.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

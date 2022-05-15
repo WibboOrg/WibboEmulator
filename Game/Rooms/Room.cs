@@ -26,7 +26,7 @@ using System.Threading.Tasks;
 using Butterfly.Utilities.Events;
 using Butterfly.Utilities;
 using Butterfly.Game.Rooms.Trading;
-using Butterfly.Communication.Packets.Interfaces;
+using Butterfly.Communication.Interfaces;
 
 namespace Butterfly.Game.Rooms
 {
