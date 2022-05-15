@@ -35,6 +35,16 @@ namespace Butterfly.Game.Permissions
             }
         }
 
+        public bool RankExactRight(int RankId, string Fuse)
+        {
+            if (!this._rights.ContainsKey(Fuse))
+            {
+                return false;
+            }
+
+            return RankId == this._rights[Fuse];
+        }
+
         public bool RankHasRight(int RankId, string Fuse)
         {
             if (!this._rights.ContainsKey(Fuse))

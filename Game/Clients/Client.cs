@@ -3,6 +3,7 @@ using Butterfly.Communication.Packets.Interfaces;
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.BuildersClub;
 using Butterfly.Communication.Packets.Outgoing.Handshake;
+using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Achievements;
 using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
@@ -17,6 +18,7 @@ using Butterfly.Communication.WebSocket;
 using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
+using Butterfly.Game.Help;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Users;
 using Butterfly.Game.Users.Authenticator;
@@ -142,6 +144,15 @@ namespace Butterfly.Game.Clients
                             ButterflyEnvironment.GetGame().GetModerationManager().UserMessagePresets(),
                             ButterflyEnvironment.GetGame().GetModerationManager().RoomMessagePresets(),
                             ButterflyEnvironment.GetGame().GetModerationManager().Tickets()));
+                    }
+
+                    if (this._user.HasExactFuse("fuse_helptool"))
+                    {
+                        HelpManager guideManager = ButterflyEnvironment.GetGame().GetHelpManager();
+                        guideManager.AddGuide(this._user.Id);
+                        this._user.OnDuty = true;
+
+                        packetList.Add(new HelperToolComposer(this._user.OnDuty, guideManager.GuidesCount));
                     }
 
                     this.SendPacket(packetList);

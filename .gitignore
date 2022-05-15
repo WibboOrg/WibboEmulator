@@ -1,7 +1,6 @@
 obj
 debug.log
-
-root/.ssh/id_rsa
+.vs
 
 bin/ButterflyEmulator.exe
 bin/ButterflyEmulator.exe.config
@@ -9,8 +8,3 @@ bin/ButterflyEmulator.pdb
 bin/MySql.Data.dll
 bin/Configuration/settings.ini
 bin/Configuration/figuredata.xml
-.vs/Butterfly Emulator/DesignTimeBuild/.dtbcache.v2
-.vs/Butterfly Emulator/v16/.suo
-.vs/Butterfly Emulator/v17/.futdcache.v1
-.vs/ButterflyEmulator/v17/HierarchyCache.v1.txt
-.vs/ButterflyEmulator/v17/.suo

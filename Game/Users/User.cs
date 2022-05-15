@@ -453,6 +453,16 @@ namespace Butterfly.Game.Users
             return true;
         }
 
+        public bool HasExactFuse(string Fuse)
+        {
+            if (ButterflyEnvironment.GetGame().GetPermissionManager().RankExactRight(this.Rank, Fuse))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public bool HasFuse(string Fuse)
         {
             if (ButterflyEnvironment.GetGame().GetPermissionManager().RankHasRight(this.Rank, Fuse))
