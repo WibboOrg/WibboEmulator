@@ -58,7 +58,7 @@ namespace Butterfly.Communication.WebSocket
 
             this.AlterIpConnectionCount(ip, (this.GetAmountOfConnectionFromIp(ip) + 1));
 
-            if (this._bannedIp.Contains(ip) || !ButterflyEnvironment.WebSocketOrigins.Contains(connection.GetOrigin()) || connection.GetUserAgent() == "" || )
+            if (this._bannedIp.Contains(ip) || !ButterflyEnvironment.WebSocketOrigins.Contains(connection.GetOrigin()) || connection.GetUserAgent() == "")
             {
                 ExceptionLogger.LogDenial("[IP: " + connection.GetIp() + "] [Origin: " + connection.GetOrigin() + "] [User-Agent: " + connection.GetUserAgent() + "]");
                 return;
