@@ -38,9 +38,9 @@ namespace Butterfly.Communication.WebSocket
             this._webSocketServer.AddWebSocketService<GameWebSocket>("/");
             this._webSocketServer.Start();
 
-#if DEBUG
+            #if DEBUG
             this._webSocketServer.Log.Level = LogLevel.Trace;
-#endif
+            #endif
         }
 
         public void DisposeClient(GameWebSocket connection)
@@ -56,13 +56,13 @@ namespace Butterfly.Communication.WebSocket
         {
             string ip = connection.GetIp();
 
-            this.AlterIpConnectionCount(ip, (this.GetAmountOfConnectionFromIp(ip) + 1));
-
-            if (this._bannedIp.Contains(ip) || !ButterflyEnvironment.WebSocketOrigins.Contains(connection.GetOrigin()) || connection.GetUserAgent() == "")
+            if (ip.Contains(",") || this._bannedIp.Contains(ip) || !ButterflyEnvironment.WebSocketOrigins.Contains(connection.GetOrigin()) || connection.GetUserAgent() == "")
             {
                 ExceptionLogger.LogDenial("[IP: " + connection.GetIp() + "] [Origin: " + connection.GetOrigin() + "] [User-Agent: " + connection.GetUserAgent() + "]");
                 return;
             }
+
+            this.AlterIpConnectionCount(ip, (this.GetAmountOfConnectionFromIp(ip) + 1));
 
             int ConnectionCount = this.GetAmountOfConnectionFromIp(ip);
             if (ConnectionCount <= 10)
@@ -200,7 +200,15 @@ namespace Butterfly.Communication.WebSocket
                     Buffer.BlockCopy(packet, 2, content, 0, packet.Length - 2);
 
                     ClientPacket message = new ClientPacket(header, content);
-                    ButterflyEnvironment.GetGame().GetPacketManager().TryExecutePacket(client, message);
+
+                    try
+                    {
+                        ButterflyEnvironment.GetGame().GetPacketManager().TryExecutePacket(client, message);
+                    }
+                    catch (Exception ex)
+                    {
+                        ExceptionLogger.LogPacketException(message.ToString(), (ex).ToString());
+                    }
                 }
             }
         }
@@ -225,17 +233,17 @@ namespace Butterfly.Communication.WebSocket
 
         public string GetUserAgent()
         {
-            return (this.Headers["User-Agent"] != null) ? this.Headers["User-Agent"] : "";
+            return this.Headers["User-Agent"] ?? "";
         }
 
         public string GetOrigin()
         {
-            return (this.Headers["Origin"] != null) ? this.Headers["Origin"] : "";
+            return this.Headers["Origin"] ?? "";
         }
 
         public string GetIp()
         {
-            return (this.Headers["X-Forwarded-For"] != null) ? this.Headers["X-Forwarded-For"] : this.Context.Host.Split(':')[0];
+            return this.Headers["CF-Connecting-IP"] ?? this.Context.Host.Split(':')[0];
         }
     }
 }

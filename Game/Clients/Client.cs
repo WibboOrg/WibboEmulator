@@ -195,18 +195,6 @@ namespace Butterfly.Game.Clients
             return true;
         }
 
-        private void OnNewPacket(ClientPacket Message)
-        {
-            try
-            {
-                ButterflyEnvironment.GetGame().GetPacketManager().TryExecutePacket(this, Message);
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.LogPacketException(Message.ToString(), (ex).ToString());
-            }
-        }
-
         public GameWebSocket GetConnection()
         {
             return this._connection;
