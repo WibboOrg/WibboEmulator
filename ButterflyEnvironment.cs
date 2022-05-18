@@ -32,7 +32,7 @@ namespace Butterfly
         private static FigureDataManager _figureManager;
         private static LanguageManager _languageManager;
 
-        private static HttpClient _httpClient = new HttpClient();
+        private static readonly HttpClient _httpClient = new HttpClient();
         private static Random _random = new Random();
         private static readonly ConcurrentDictionary<int, User> _usersCached = new ConcurrentDictionary<int, User>();
 
