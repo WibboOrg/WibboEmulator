@@ -57,7 +57,6 @@ namespace Butterfly.Communication.Packets
             this.RegisterNux();
             this.RegisterCamera();
             this.RegisterCampaign();
-
             this.RegisterCustom();
 
             Console.WriteLine("Logged " + this._incomingPackets.Count + " packet handler(s)!");

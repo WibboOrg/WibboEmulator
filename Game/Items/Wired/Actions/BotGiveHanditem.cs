@@ -33,7 +33,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                 
             this.StringParam = row["trigger_data"].ToString();
 
-            if (int.TryParse(row["trigger_data2"].ToString(), out int handItemId))
+            if (int.TryParse(row["trigger_data_2"].ToString(), out int handItemId))
                 this.IntParams.Add(handItemId);
         }
     }
