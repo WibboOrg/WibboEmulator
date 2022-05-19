@@ -65,7 +65,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             User.Unidle();
 
-            if (Session.GetUser().Rank < 5 && Room.RoomMuted && !User.IsOwner() && !Session.GetUser().CurrentRoom.CheckRights(Session))
+            if (!Session.GetUser().HasFuse("fuse_mod") && Room.RoomMuted && !User.IsOwner() && !Session.GetUser().CurrentRoom.CheckRights(Session))
             {
                 User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("room.muted", Session.Langue));
                 return;
@@ -204,12 +204,6 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (User.IsSpectator && Session.GetUser().Rank < 11)
             {
-                return;
-            }
-
-            if (User.IsMuted && !Session.GetUser().HasFuse("fuse_tool"))
-            {
-                User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.muted", Session.Langue));
                 return;
             }
 

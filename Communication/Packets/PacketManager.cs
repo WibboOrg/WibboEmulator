@@ -379,14 +379,12 @@ namespace Butterfly.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.FootballGateSaveLookEvent, new ChangeFootGate());
             this._incomingPackets.Add(ClientPacketHeader.PRESENT_OPEN_PRESENT, new OpenGiftEvent());
             this._incomingPackets.Add(ClientPacketHeader.FURNITURE_GROUP_INFO, new GetGroupFurniSettingsEvent());
-
             this._incomingPackets.Add(ClientPacketHeader.FRIEND_FURNI_CONFIRM_LOCK, new ConfirmLoveLockEvent());
         }
 
         private void RegisterUsers()
         {
             this._incomingPackets.Add(ClientPacketHeader.USER_SUBSCRIPTION, new ScrGetUserInfoMessageEvent());
-
             this._incomingPackets.Add(ClientPacketHeader.USER_RESPECT, new RespectUserEvent());
             this._incomingPackets.Add(ClientPacketHeader.USER_FIGURE, new UpdateFigureDataEvent());
             this._incomingPackets.Add(ClientPacketHeader.USER_PROFILE, new OpenPlayerProfileEvent());

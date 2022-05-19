@@ -37,7 +37,6 @@ namespace Butterfly.Game.Rooms
 
     public class Room
     {
-        public bool RoomMuted;
         public bool isCycling;
         public int IsLagging;
         public bool CycleEnded;
@@ -71,6 +70,7 @@ namespace Butterfly.Game.Rooms
         private readonly Dictionary<int, double> _bans;
         private readonly Dictionary<int, double> _mutes;
 
+        public bool RoomMuted;
         public bool RoomMutePets;
         public bool FreezeRoom;
         public bool PushPullAllowed;

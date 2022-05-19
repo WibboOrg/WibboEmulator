@@ -124,7 +124,6 @@ namespace Butterfly.Game.Rooms
         public int UserTimer;
 
         public List<string> WhiperGroupUsers;
-        public bool IsMuted;
 
         public Point Coordinate => new Point(this.X, this.Y);
 
