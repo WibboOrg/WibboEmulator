@@ -13,6 +13,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             {
                 if (Client.GetUser() != null)
                 {
+                    if (Client.GetUser().CurrentRoom != null && Client.GetUser().CurrentRoom.Id == Session.GetUser().CurrentRoom.Id)
+                    {
+                        return;
+                    }
+
                     Client.GetUser().IsTeleporting = true;
                     Client.GetUser().TeleportingRoomID = Room.RoomData.Id;
                     Client.GetUser().TeleporterId = 0;

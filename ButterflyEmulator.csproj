@@ -763,7 +763,7 @@
     <Compile Include="Game\Roleplay\Enemy\RoleBot.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\AllAroundMe.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\AllEyesOnMe.cs" />
-    <Compile Include="Game\Chat\Commands\Staff\Administration\RegenMaps.cs" />
+    <Compile Include="Game\Chat\Commands\Staff\Administration\RegenMap.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Administration\StartGameJD.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Moderation\DisableWhispers.cs" />
     <Compile Include="Game\Chat\Commands\Staff\Moderation\StaffsOnline.cs" />

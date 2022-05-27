@@ -382,7 +382,7 @@ namespace Butterfly.Game.Chat.Commands
             this.Register(142, new ForceEnableUser());
             this.Register(143, new TransfBot());
             this.Register(144, new AllFriends());
-            this.Register(145, new RegenMaps());
+            this.Register(145, new RegenMap());
             this.Register(146, new ShutDown());
             this.Register(147, new MachineBan());
             this.Register(148, new ExtraBox());

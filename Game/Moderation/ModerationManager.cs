@@ -342,7 +342,7 @@ namespace Butterfly.Game.Moderation
             if (LockRoom)
             {
                 room.RoomData.State = 1;
-                room.RoomData.Name = "Cet appart ne respect par les conditions d'utilisation";
+                room.RoomData.Name = "Cet appart ne respecte par les conditions d'utilisation";
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     RoomDao.UpdateState(dbClient, room.Id);
@@ -352,7 +352,7 @@ namespace Butterfly.Game.Moderation
             if (InappropriateRoom)
             {
                 room.RoomData.Name = "Inapproprié pour l'hôtel";
-                room.RoomData.Description = "Malheureusement, cet appartement ne peut pas figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
+                room.RoomData.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
                 room.ClearTags();
                 room.RoomData.Tags.Clear();
                 using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())

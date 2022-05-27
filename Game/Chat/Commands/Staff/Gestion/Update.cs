@@ -61,7 +61,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             Session.SendWhisper("Wibbo Game mis à jour");
                             break;
                         }
-                    case "autogame":
+                    /*case "autogame":
                         {
                             if (!ButterflyEnvironment.GetGame().GetAnimationManager().ToggleForceDisabled())
                             {
@@ -73,7 +73,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             }
 
                             break;
-                        }
+                        }*/
                     case "rpitems":
                         {
                             ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().Init(dbClient);
@@ -119,7 +119,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             Session.SendWhisper("Role play mis à jour");
                             break;
                         }
-                    case "modo":
+                    case "moderation":
                         {
                             ButterflyEnvironment.GetGame().GetModerationManager().Init(dbClient);
                             Session.SendWhisper("Moderation mis à jour");

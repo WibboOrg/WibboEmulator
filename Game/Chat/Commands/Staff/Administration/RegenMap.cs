@@ -3,7 +3,7 @@ using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Chat.Commands.Cmd
 {
-    internal class RegenMaps : IChatCommand
+    internal class RegenMap : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
