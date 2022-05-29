@@ -41,9 +41,10 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             stringBuilder.Append("Premium: " + ((user.Rank > 1) ? "Oui" : "Non") + "\r");
             stringBuilder.Append("Mazo Score: " + user.MazoHighScore + "\r");
             stringBuilder.Append("Respects: " + user.Respect + "\r");
+
             stringBuilder.Append("Dans un appart: " + ((user.InRoom) ? "Oui" : "Non") + "\r");
 
-            if (user.CurrentRoom != null && !user.SpectatorMode)
+            if (user.CurrentRoom != null)
             {
                 stringBuilder.Append("\r - Information sur l'appart  [" + user.CurrentRoom.Id + "] - \r");
                 stringBuilder.Append("Propriétaire: " + user.CurrentRoom.RoomData.OwnerName + "\r");
