@@ -44,7 +44,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             stringBuilder.Append("Dans un appart: " + ((user.InRoom) ? "Oui" : "Non") + "\r");
 
-            if (user.CurrentRoom != null)
+            if (user.CurrentRoom != null && !user.SpectatorMode)
             {
                 stringBuilder.Append("\r - Information sur l'appart  [" + user.CurrentRoom.Id + "] - \r");
                 stringBuilder.Append("Propriétaire: " + user.CurrentRoom.RoomData.OwnerName + "\r");
