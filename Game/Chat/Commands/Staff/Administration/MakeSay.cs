@@ -11,6 +11,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             {
                 return;
             }
+            
+            Client clientByUsername = roomUserByUserId.GetClient();
+            if (clientByUsername.GetUser().SpectatorMode)
+            {
+                return;
+            }
 
             string username = Params[1];
             string Message = CommandManager.MergeParams(Params, 2);
