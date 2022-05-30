@@ -33,8 +33,11 @@ namespace Butterfly.Communication.WebSocket
             {
                 string patchCertificate = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/certificate.pfx";
                 this._webSocketServer.SslConfiguration.ServerCertificate = new X509Certificate2(patchCertificate, certificatePassword);
+                //this._webSocketServer.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
+                //this._webSocketServer.SslConfiguration.CheckCertificateRevocation = true;
+                //this._webSocketServer.SslConfiguration.ClientCertificateRequired = true;
             }
-            this._webSocketServer.AddWebSocketService<GameWebSocket>("/");
+            this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => new GameWebSocket() { IgnoreExtensions = true });
             this._webSocketServer.Start();
 
             #if DEBUG
