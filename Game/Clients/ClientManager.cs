@@ -318,7 +318,7 @@ namespace Butterfly.Game.Clients
         {
             if (string.IsNullOrEmpty(Reason))
             {
-                Reason = "Ne respect pas les régles";
+                Reason = "Non respect des règles de conditions générales d'utilisations ainsi que la Wibbo Attitude";
             }
 
             string Variable = Client.GetUser().Username.ToLower();
