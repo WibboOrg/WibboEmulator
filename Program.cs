@@ -8,7 +8,6 @@ namespace Butterfly
         public static void Main()
         {
             Console.ForegroundColor = ConsoleColor.White;
-            Console.CursorVisible = false;
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += MyHandler;
 
