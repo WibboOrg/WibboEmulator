@@ -10,8 +10,8 @@ namespace Butterfly.Database.Adapter
         protected IDatabaseClient client;
         protected MySqlCommand command;
 
-
         public bool dbEnabled = true;
+
         public QueryAdapter(IDatabaseClient Client)
         {
             this.client = Client;
