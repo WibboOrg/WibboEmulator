@@ -3,9 +3,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Items.Wired.Interfaces;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace Butterfly.Game.Items.Wired.Actions
 {

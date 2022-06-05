@@ -8,9 +8,6 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Catalog;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Butterfly.Game.Items
 {

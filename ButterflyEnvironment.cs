@@ -9,16 +9,10 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Users;
 using Butterfly.Game.Users.Authenticator;
 using Butterfly.Net;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http;
 using System.Reflection;
-using System.Threading;
-using System.IO;
 using Butterfly.Communication.WebSocket;
-using System.Linq;
 
 namespace Butterfly
 {
@@ -86,7 +80,7 @@ namespace Butterfly
 
             try
             {
-                _configuration = new ConfigurationData(PatchDir + "configuration/settings.ini", false);
+                _configuration = new ConfigurationData(PatchDir + "Config/settings.ini", false);
                 _datebaseManager = new DatabaseManager(uint.Parse(GetConfig().data["db.pool.maxsize"]), uint.Parse(GetConfig().data["db.pool.minsize"]), GetConfig().data["db.hostname"], uint.Parse(GetConfig().data["db.port"]), GetConfig().data["db.username"], GetConfig().data["db.password"], GetConfig().data["db.name"]);
 
                 int TryCount = 0;

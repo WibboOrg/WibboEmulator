@@ -1,5 +1,4 @@
 using Butterfly.Game.LandingView.Promotions;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.LandingView
 {

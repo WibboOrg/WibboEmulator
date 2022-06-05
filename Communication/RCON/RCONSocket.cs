@@ -1,6 +1,4 @@
 ﻿using Butterfly.Communication.RCON.Commands;
-using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 

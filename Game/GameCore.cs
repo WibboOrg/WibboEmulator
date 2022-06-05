@@ -15,14 +15,12 @@ using Butterfly.Game.Permissions;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Chat;
 using Butterfly.Game.Moderation;
-using System;
 using System.Diagnostics;
-using System.Threading;
 using Butterfly.Database.Interfaces;
-using Butterfly.Database.Daos;
 using Butterfly.Game.Effects;
 using Butterfly.Game.Badges;
 using Butterfly.Game.Bots;
+using Butterfly.Database.Daos;
 
 namespace Butterfly.Game
 {

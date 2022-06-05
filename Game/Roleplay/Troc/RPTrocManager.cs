@@ -1,10 +1,8 @@
 ﻿using Butterfly.Communication.Interfaces;
-using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.RolePlay.Troc;
 using Butterfly.Game.Roleplay.Item;
 using Butterfly.Game.Roleplay.Player;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 
 namespace Butterfly.Game.Roleplay.Troc
 {

@@ -1,7 +1,4 @@
 ﻿using Butterfly.Core.FigureData.Types;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Xml;
 
 namespace Butterfly.Core.FigureData
@@ -38,7 +35,7 @@ namespace Butterfly.Core.FigureData
             }
 
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(ButterflyEnvironment.PatchDir + "/configuration/figuredata.xml");
+            xDoc.Load(ButterflyEnvironment.PatchDir + "Config/figuredata.xml");
 
             XmlNodeList Colors = xDoc.GetElementsByTagName("colors");
             foreach (XmlNode Node in Colors)

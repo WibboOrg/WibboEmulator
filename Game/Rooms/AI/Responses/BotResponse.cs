@@ -1,6 +1,4 @@
 ﻿using Butterfly.Game.Catalog.Utilities;
-using System;
-using System.Collections.Generic;
 
 namespace Butterfly.Game.Rooms.AI.Responses
 {

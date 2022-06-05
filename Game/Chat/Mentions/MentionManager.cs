@@ -3,8 +3,6 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
 
 
 using Butterfly.Game.Clients;
-using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Butterfly.Game.Chat.Mentions

@@ -1,9 +1,6 @@
 ﻿using Butterfly.Game.Groups;
 using Butterfly.Game.Items;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace Butterfly.Game.Rooms
 {

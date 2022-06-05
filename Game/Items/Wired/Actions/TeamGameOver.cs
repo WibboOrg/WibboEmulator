@@ -3,7 +3,6 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Items.Wired.Interfaces;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Items.Wired.Actions

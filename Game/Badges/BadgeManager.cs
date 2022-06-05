@@ -1,5 +1,4 @@
 ﻿using Butterfly.Database.Interfaces;
-using System.Collections.Generic;
 
 namespace Butterfly.Game.Badges
 {

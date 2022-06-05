@@ -1,7 +1,6 @@
 ﻿using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.PathFinding;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Butterfly.Game.Rooms.Games

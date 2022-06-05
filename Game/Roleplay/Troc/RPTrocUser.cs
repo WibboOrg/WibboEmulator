@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Butterfly.Game.Roleplay.Troc
+﻿namespace Butterfly.Game.Roleplay.Troc
 {
     public class RPTrocUser
     {

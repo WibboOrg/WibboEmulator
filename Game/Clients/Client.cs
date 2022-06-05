@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Incoming;
-using Butterfly.Communication.Interfaces;
+﻿using Butterfly.Communication.Interfaces;
 using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.BuildersClub;
 using Butterfly.Communication.Packets.Outgoing.Handshake;
@@ -22,11 +21,7 @@ using Butterfly.Game.Help;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Users;
 using Butterfly.Game.Users.Authenticator;
-using Butterfly.Net;
 using Butterfly.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Butterfly.Game.Clients
 {

@@ -2,9 +2,7 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Freeze;
 using Butterfly.Game.Items;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Butterfly.Game.Rooms.Games

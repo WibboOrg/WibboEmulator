@@ -3,7 +3,6 @@ using Butterfly.Game.Items.Wired.Conditions;
 using Butterfly.Game.Items.Wired.Actions;
 using Butterfly.Game.Items.Wired.Interfaces;
 using Butterfly.Game.Items.Wired.Triggers;
-using System.Collections.Generic;
 using Butterfly.Database.Daos;
 using System.Data;
 using Butterfly.Game.Rooms;
@@ -19,7 +18,7 @@ namespace Butterfly.Game.Items.Wired
             {
                 #region Trigger
                 case InteractionType.TRIGGER_ONCE:
-                    handler = new Timer(item, room);
+                    handler = new TimerTrigger(item, room);
                     break;
                 case InteractionType.TRIGGER_AVATAR_ENTERS_ROOM:
                     handler = new EntersRoom(item, room);

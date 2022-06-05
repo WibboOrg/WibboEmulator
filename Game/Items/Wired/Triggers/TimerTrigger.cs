@@ -1,18 +1,17 @@
 ﻿using Butterfly.Database.Interfaces;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Items.Wired.Interfaces;
-using System;
 using System.Data;
 using Butterfly.Game.Rooms.Wired;
 
 namespace Butterfly.Game.Items.Wired.Triggers
 {
-    public class Timer : WiredTriggerBase, IWired, IWiredCycleable
+    public class TimerTrigger : WiredTriggerBase, IWired, IWiredCycleable
     {
         public int DelayCycle { get => (this.IntParams.Count > 0) ? this.IntParams[0] : 0; }
         private readonly RoomEventDelegate delegateFunction;
 
-        public Timer(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_ONCE)
+        public TimerTrigger(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_ONCE)
         {
             this.delegateFunction = new RoomEventDelegate(this.ResetTimer);
             this.RoomInstance.GetWiredHandler().TrgTimer += this.delegateFunction;

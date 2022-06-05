@@ -6,8 +6,6 @@ using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.PathFinding;
 using Butterfly.Game.Items.Wired.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using Butterfly.Utilities.Events;
 

@@ -1,6 +1,5 @@
 ﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using System.Collections.Generic;
 
 namespace Butterfly.Game.Items.Wired
 {

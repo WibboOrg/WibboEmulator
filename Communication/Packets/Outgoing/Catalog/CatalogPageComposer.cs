@@ -2,7 +2,6 @@ using Butterfly.Core;
 using Butterfly.Game.Catalog;
 using Butterfly.Game.Catalog.Utilities;
 using Butterfly.Game.Items;
-using System.Linq;
 
 namespace Butterfly.Communication.Packets.Outgoing.Catalog
 {

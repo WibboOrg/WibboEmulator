@@ -1,8 +1,6 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Roleplay.Item;
-using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Roleplay

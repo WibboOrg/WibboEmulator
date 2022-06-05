@@ -1,8 +1,5 @@
 using Butterfly.Game.Users;
 using Butterfly.Game.Users.Relationships;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Butterfly.Communication.Packets.Outgoing.Users
 {

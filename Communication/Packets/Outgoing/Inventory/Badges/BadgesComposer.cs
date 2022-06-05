@@ -1,5 +1,4 @@
 using Butterfly.Game.Users.Badges;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Inventory.Badges
 {

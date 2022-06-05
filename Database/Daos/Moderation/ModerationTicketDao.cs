@@ -1,5 +1,4 @@
 using Butterfly.Database.Interfaces;
-using System;
 using System.Data;
 
 namespace Butterfly.Database.Daos

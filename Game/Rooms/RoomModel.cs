@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Butterfly.Game.Rooms
+﻿namespace Butterfly.Game.Rooms
 {
     public class RoomModel
     {

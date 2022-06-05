@@ -1,5 +1,4 @@
 ﻿using Butterfly.Communication.Interfaces;
-using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.RolePlay;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
 using Butterfly.Database.Daos;
@@ -8,9 +7,7 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Roleplay.Weapon;
 using Butterfly.Game.Rooms;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Roleplay.Player

@@ -1,7 +1,6 @@
 ﻿
 using Butterfly.Communication.Packets.Outgoing.Televisions;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Items.Interactors
 {

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace Butterfly.Game.Catalog.Pets
+﻿namespace Butterfly.Game.Catalog.Pets
 {
     public class PetRaceManager
     {

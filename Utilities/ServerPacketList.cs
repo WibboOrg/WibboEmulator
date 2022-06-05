@@ -1,6 +1,4 @@
 ﻿using Butterfly.Communication.Interfaces;
-using Butterfly.Communication.Packets.Outgoing;
-using System;
 
 namespace Butterfly.Utilities
 {

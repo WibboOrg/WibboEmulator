@@ -3,7 +3,6 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Roleplay;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms;
-using System;
 
 namespace Butterfly.Communication.Packets.Incoming.RolePlay
 {

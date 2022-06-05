@@ -1,6 +1,4 @@
-﻿using Butterfly.Game.Rooms;
-
-namespace Butterfly.Game.Rooms
+﻿namespace Butterfly.Game.Rooms
 {
     public static class RoomAccessUtility
     {

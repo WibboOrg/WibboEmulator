@@ -2,9 +2,7 @@
 using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Items.Wired.Interfaces;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace Butterfly.Game.Rooms.Wired
 {

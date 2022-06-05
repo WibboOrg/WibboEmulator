@@ -1,6 +1,5 @@
 ﻿using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using System;
 using System.Text;
 
 namespace Butterfly.Game.Rooms

@@ -3,7 +3,6 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Roleplay.Enemy;
 using Butterfly.Game.Roleplay.Troc;
 using Butterfly.Game.Roleplay.Weapon;
-using System;
 using System.Collections.Concurrent;
 using System.Data;
 

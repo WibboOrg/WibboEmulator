@@ -5,9 +5,7 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Users.Inventory.Bots;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Users.Inventory

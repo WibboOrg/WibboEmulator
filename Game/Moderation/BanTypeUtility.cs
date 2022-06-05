@@ -1,6 +1,4 @@
-﻿using Butterfly.Game.Moderation;
-
-namespace Butterfly.Game.Moderation
+﻿namespace Butterfly.Game.Moderation
 {
     public static class BanTypeUtility
     {

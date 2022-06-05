@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Wireds
+﻿namespace Butterfly.Communication.Packets.Outgoing.Rooms.Wireds
 {
     internal class WiredFurniConditionComposer : ServerPacket
     {

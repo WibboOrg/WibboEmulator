@@ -2,8 +2,6 @@
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Items.Wired.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Items.Wired.Conditions

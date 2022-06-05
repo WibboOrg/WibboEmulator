@@ -5,7 +5,6 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.AI;
-using System;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

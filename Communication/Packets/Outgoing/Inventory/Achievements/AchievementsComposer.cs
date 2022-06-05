@@ -1,7 +1,6 @@
 using Butterfly.Game.Achievements;
 using Butterfly.Game.Users.Achievements;
 using Butterfly.Game.Clients;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Inventory.Achievements
 {

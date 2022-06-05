@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Data;
-using System.Collections.Generic;
-using Butterfly.Database.Interfaces;
+﻿using System.Data;
 using Butterfly.Game.Rooms.AI.Responses;
 using Butterfly.Game.Rooms.AI;
 

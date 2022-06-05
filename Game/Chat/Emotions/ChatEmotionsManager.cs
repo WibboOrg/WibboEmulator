@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Butterfly.Game.Chat.Emotions
+﻿namespace Butterfly.Game.Chat.Emotions
 {
     public sealed class ChatEmotionsManager
     {

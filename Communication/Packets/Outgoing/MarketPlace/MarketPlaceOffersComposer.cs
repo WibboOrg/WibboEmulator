@@ -1,5 +1,4 @@
 ﻿using Butterfly.Game.Catalog.Marketplace;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.MarketPlace
 {

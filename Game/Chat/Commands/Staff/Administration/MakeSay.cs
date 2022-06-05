@@ -12,14 +12,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
             
-            Client clientByUsername = roomUserByUserId.GetClient();
-            if (clientByUsername.GetUser().SpectatorMode)
+            if (UserRoom.GetClient().GetUser().SpectatorMode)
             {
                 return;
             }
 
             string username = Params[1];
-            string Message = CommandManager.MergeParams(Params, 2);
+            string message = CommandManager.MergeParams(Params, 2);
 
             RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
             if (roomUserByUserId == null)
@@ -27,7 +26,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            roomUserByUserId.OnChat(Message, 0, false);
+            roomUserByUserId.OnChat(message, 0, false);
 
         }
     }

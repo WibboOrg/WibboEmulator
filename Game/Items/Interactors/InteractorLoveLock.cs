@@ -1,7 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Furni;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using System;
 using System.Drawing;
 
 namespace Butterfly.Game.Items.Interactors

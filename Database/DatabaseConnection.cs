@@ -1,7 +1,6 @@
 ﻿using Butterfly.Database.Adapter;
 using Butterfly.Database.Interfaces;
 using MySql.Data.MySqlClient;
-using System;
 using System.Data;
 
 namespace Butterfly.Database

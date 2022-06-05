@@ -1,7 +1,5 @@
 using Butterfly.Game.Clients;
 using Butterfly.Game.Navigator;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Butterfly.Communication.Packets.Outgoing.Navigator.New
 {

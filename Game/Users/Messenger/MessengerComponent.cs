@@ -4,10 +4,7 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Users.Relationships;
 using Butterfly.Utilities;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace Butterfly.Game.Users.Messenger
 {

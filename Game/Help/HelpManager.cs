@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Butterfly.Game.Help
+﻿namespace Butterfly.Game.Help
 {
     public class HelpManager
     {

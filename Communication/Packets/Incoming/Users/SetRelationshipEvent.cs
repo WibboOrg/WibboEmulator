@@ -1,7 +1,6 @@
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
-using Butterfly.Game.Users.Messenger;
 using Butterfly.Game.Users.Relationships;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure

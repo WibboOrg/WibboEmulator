@@ -1,7 +1,6 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Roleplay.Player;
-using System;
 using System.Collections.Concurrent;
 using System.Data;
 

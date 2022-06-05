@@ -1,6 +1,5 @@
 using Butterfly.Game.Clients;
 using Butterfly.Game.Quests;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Quests
 {

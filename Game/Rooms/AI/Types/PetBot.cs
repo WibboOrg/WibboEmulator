@@ -2,7 +2,6 @@
 using Butterfly.Game.Clients;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Rooms.PathFinding;
-using System;
 using System.Drawing;
 
 namespace Butterfly.Game.Rooms.AI.Types

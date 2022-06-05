@@ -1,10 +1,6 @@
 ﻿using Butterfly.Game.Clients;
-using System.Net.Http;
-using System.IO;
 using Butterfly.Communication.Packets.Outgoing.Camera;
 using Butterfly.Game.Rooms;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
 
 namespace Butterfly.Communication.Packets.Incoming.Camera
 {

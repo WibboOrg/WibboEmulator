@@ -1,7 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Rooms.AI.Bots;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using System.Linq;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

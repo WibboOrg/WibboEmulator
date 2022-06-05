@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Butterfly.Game.Chat.Logs
+﻿namespace Butterfly.Game.Chat.Logs
 {
     public class ChatlogEntry
     {

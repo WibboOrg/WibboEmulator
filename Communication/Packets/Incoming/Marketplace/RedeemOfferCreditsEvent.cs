@@ -2,7 +2,6 @@
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
-using System;
 using System.Data;
 
 namespace Butterfly.Communication.Packets.Incoming.Marketplace

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Butterfly.Core.FigureData.Types
+﻿namespace Butterfly.Core.FigureData.Types
 {
     internal class FigureSet
     {

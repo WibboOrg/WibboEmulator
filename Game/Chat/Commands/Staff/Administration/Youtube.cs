@@ -1,6 +1,5 @@
 
 using Butterfly.Game.Clients;
-using System;
 using Butterfly.Game.Rooms;
 using Butterfly.Communication.Packets.Outgoing.Televisions;
 

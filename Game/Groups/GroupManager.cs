@@ -1,9 +1,7 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Users;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Groups

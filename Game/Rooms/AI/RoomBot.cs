@@ -1,6 +1,5 @@
 ﻿using Butterfly.Game.Roleplay.Enemy;
 using Butterfly.Game.Rooms.AI.Types;
-using System.Collections.Generic;
 
 namespace Butterfly.Game.Rooms.AI
 {

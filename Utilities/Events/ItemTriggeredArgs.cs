@@ -1,6 +1,5 @@
 ﻿using Butterfly.Game.Items;
 using Butterfly.Game.Rooms;
-using System;
 
 namespace Butterfly.Utilities.Events
 {

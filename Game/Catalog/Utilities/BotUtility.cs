@@ -3,7 +3,6 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms.AI;
 using Butterfly.Game.Users.Inventory.Bots;
-using System;
 using System.Data;
 
 namespace Butterfly.Game.Catalog.Utilities

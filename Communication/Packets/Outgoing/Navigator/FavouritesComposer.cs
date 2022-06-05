@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Butterfly.Communication.Packets.Outgoing.Navigator
 {
     internal class FavouritesComposer : ServerPacket

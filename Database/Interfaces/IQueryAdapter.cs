@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Butterfly.Database.Interfaces
+﻿namespace Butterfly.Database.Interfaces
 {
     public interface IQueryAdapter : IRegularQueryAdapter, IDisposable
     {

@@ -1,6 +1,5 @@
 ﻿//using System.Diagnostics;
 using AStar.Algorithm;
-using System.Collections.Generic;
 
 namespace Astar.Algorithm
 {

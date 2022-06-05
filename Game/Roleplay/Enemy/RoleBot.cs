@@ -4,8 +4,6 @@ using Butterfly.Game.Roleplay.Weapon;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Rooms.PathFinding;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Butterfly.Game.Roleplay.Enemy

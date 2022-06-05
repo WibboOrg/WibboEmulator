@@ -1,5 +1,4 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Moderation;
-using System;
 
 namespace Butterfly.Core
 {

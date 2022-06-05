@@ -2,8 +2,6 @@
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items.Interactors;
 using Butterfly.Game.Users;
-using System;
-using System.Collections.Generic;
 
 namespace Butterfly.Game.Items
 {

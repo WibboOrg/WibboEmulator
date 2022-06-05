@@ -5,8 +5,6 @@ using Butterfly.Communication.Packets.Incoming.Camera;
 using Butterfly.Communication.Packets.Incoming.Campaign;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
-using System;
-using System.Collections.Generic;
 using Butterfly.Communication.Packets.Incoming.WibboTool;
 using Butterfly.Communication.Packets.Incoming.Televisions;
 using Butterfly.Communication.Packets.Incoming.RolePlay;

@@ -1,7 +1,5 @@
 ﻿using Astar.Algorithm;
 using Enclosure.Algorithm;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Enclosure

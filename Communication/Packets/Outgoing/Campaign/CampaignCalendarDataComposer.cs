@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Butterfly.Communication.Packets.Outgoing.Campaign
+﻿namespace Butterfly.Communication.Packets.Outgoing.Campaign
 {
     internal class CampaignCalendarDataComposer : ServerPacket
     {

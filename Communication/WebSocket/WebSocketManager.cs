@@ -2,10 +2,7 @@
 using Butterfly.Core;
 using Butterfly.Game.Clients;
 using Butterfly.Utilities;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
@@ -31,7 +28,7 @@ namespace Butterfly.Communication.WebSocket
             this._webSocketServer = new WebSocketServer(IPAddress.Any, port, isSecure);
             if (isSecure)
             {
-                string patchCertificate = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/certificate.pfx";
+                string patchCertificate = ButterflyEnvironment.PatchDir + "Config/certificate.pfx";
                 this._webSocketServer.SslConfiguration.ServerCertificate = new X509Certificate2(patchCertificate, certificatePassword);
                 //this._webSocketServer.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
                 //this._webSocketServer.SslConfiguration.CheckCertificateRevocation = true;

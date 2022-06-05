@@ -1,5 +1,4 @@
 ﻿using MySql.Data.MySqlClient;
-using System;
 
 namespace Butterfly.Database.Interfaces
 {

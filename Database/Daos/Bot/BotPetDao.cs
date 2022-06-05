@@ -3,8 +3,6 @@ using Butterfly.Game.Pets;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.AI;
 using Butterfly.Utilities;
-using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Database.Daos

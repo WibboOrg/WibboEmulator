@@ -8,8 +8,6 @@ using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms.AI;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Rooms.Utils;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Butterfly.Game.Rooms

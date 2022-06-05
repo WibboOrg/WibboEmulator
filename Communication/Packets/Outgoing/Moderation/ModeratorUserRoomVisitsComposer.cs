@@ -1,7 +1,6 @@
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Users;
 using Butterfly.Utilities;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {

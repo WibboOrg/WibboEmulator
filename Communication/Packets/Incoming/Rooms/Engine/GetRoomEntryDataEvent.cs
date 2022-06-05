@@ -5,7 +5,6 @@ using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using Butterfly.Utilities;
-using System;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

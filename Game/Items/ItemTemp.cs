@@ -1,5 +1,4 @@
 ﻿using Butterfly.Game.Rooms.Map.Movement;
-using System;
 
 namespace Butterfly.Game.Items
 {

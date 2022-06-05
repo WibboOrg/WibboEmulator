@@ -1,10 +1,7 @@
 ﻿using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace Butterfly.Game.Navigator
 {

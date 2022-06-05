@@ -2,7 +2,6 @@
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Game.Items.Wired.Interfaces;
-using System;
 using System.Data;
 using System.Drawing;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;

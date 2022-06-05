@@ -1,6 +1,4 @@
 using Butterfly.Game.Users.Inventory.Bots;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Butterfly.Communication.Packets.Outgoing.Inventory.Bots
 {

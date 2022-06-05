@@ -1,6 +1,4 @@
 ﻿using Butterfly.Database.Interfaces;
-using System;
-using System.Collections.Generic;
 
 namespace Butterfly.Game.Users.Permissions
 {

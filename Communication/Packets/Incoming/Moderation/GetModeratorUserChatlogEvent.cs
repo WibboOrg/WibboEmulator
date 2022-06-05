@@ -1,7 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Moderation;
 using Butterfly.Game.Chat.Logs;
 using Butterfly.Game.Clients;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

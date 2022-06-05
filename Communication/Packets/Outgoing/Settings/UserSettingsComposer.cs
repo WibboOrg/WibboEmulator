@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Butterfly.Communication.Packets.Outgoing.Settings
 {
     internal class UserSettingsComposer : ServerPacket

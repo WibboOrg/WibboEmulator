@@ -1,7 +1,6 @@
 ﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.Map.Movement;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Butterfly.Game.Items.Interactors

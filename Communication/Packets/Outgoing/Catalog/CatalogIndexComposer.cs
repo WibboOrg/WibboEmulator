@@ -1,7 +1,6 @@
 using Butterfly.Core;
 using Butterfly.Game.Catalog;
 using Butterfly.Game.Clients;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Catalog
 {

@@ -1,8 +1,6 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Users.Badges

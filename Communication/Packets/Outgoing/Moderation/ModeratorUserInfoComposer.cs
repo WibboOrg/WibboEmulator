@@ -1,5 +1,3 @@
-using Butterfly.Game.Clients;
-using System;
 using System.Data;
 
 namespace Butterfly.Communication.Packets.Outgoing.Moderation

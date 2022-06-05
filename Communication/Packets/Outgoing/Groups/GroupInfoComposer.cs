@@ -1,6 +1,5 @@
 using Butterfly.Game.Clients;
 using Butterfly.Game.Groups;
-using System;
 
 namespace Butterfly.Communication.Packets.Outgoing.Groups
 {

@@ -4,8 +4,6 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Items.Wired;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using Butterfly.Game.Rooms;
 

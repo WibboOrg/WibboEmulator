@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Butterfly.Game.Rooms.Games
+﻿namespace Butterfly.Game.Rooms.Games
 {
     public class TeamManager
     {

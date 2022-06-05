@@ -1,7 +1,6 @@
 using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
 using Butterfly.Game.Rooms;
-using System;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

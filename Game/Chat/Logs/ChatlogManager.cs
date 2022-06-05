@@ -1,8 +1,5 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using Butterfly.Utilities;
-using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Game.Chat.Logs

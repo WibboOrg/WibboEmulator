@@ -2,7 +2,6 @@
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Items.Wired.Interfaces;
 using System.Data;
-using System.Linq;
 
 namespace Butterfly.Game.Items.Wired.Actions
 {

@@ -1,6 +1,5 @@
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms.Games;
-using System;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Chat.Commands.Cmd

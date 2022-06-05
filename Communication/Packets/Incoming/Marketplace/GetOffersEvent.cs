@@ -3,8 +3,6 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Catalog.Marketplace;
 using Butterfly.Game.Clients;
-using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Communication.Packets.Incoming.Marketplace

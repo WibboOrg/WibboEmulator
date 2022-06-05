@@ -1,6 +1,5 @@
 using Butterfly.Game.Chat.Logs;
 using Butterfly.Utilities;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Moderation
 {

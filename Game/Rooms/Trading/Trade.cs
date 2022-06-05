@@ -5,8 +5,6 @@ using Butterfly.Core;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Items;
-using System;
-using System.Collections.Generic;
 
 namespace Butterfly.Game.Rooms.Trading
 {

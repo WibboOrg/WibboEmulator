@@ -1,8 +1,6 @@
 ﻿using Butterfly.Communication.Packets.Outgoing.Pets;
 using Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using Butterfly.Game.Rooms;
-using System;
-using System.Collections.Generic;
 
 namespace Butterfly.Game.Pets
 {

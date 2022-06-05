@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-
-public sealed class IDGenerator
+﻿public sealed class IDGenerator
 {
     private const string Encode_32_Chars = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
     private static readonly char[] _buffer = new char[13];

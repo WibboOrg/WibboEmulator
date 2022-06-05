@@ -1,14 +1,10 @@
 ﻿using Butterfly.Core;
-using Butterfly.Utilities;
-using System;
-using System.Security.Permissions;
 
 namespace Butterfly
 {
     public static class Program
     {
         [STAThread]
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         public static void Main()
         {
             Console.ForegroundColor = ConsoleColor.White;
@@ -25,7 +21,7 @@ namespace Butterfly
                     Console.Write("Command> ");
                     string Input = Console.ReadLine();
 
-                    if (Input.Length > 0)
+                    if (Input != null && Input.Length > 0)
                     {
                         string s = Input.Split(' ')[0];
 

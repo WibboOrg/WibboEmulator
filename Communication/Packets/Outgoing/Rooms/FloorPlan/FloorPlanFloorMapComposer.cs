@@ -1,6 +1,5 @@
 using Butterfly.Game.Items;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.FloorPlan

@@ -1,6 +1,4 @@
 using Butterfly.Game.Items;
-using System;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Inventory.Trading
 {

@@ -16,10 +16,6 @@ using Butterfly.Game.Groups;
 using Butterfly.Game.Items;
 using Butterfly.Game.Pets;
 using Butterfly.Game.Users.Inventory.Bots;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

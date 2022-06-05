@@ -1,6 +1,5 @@
 ﻿using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
-using System.Collections.Generic;
 
 namespace Butterfly.Game.Rooms.Trading
 {

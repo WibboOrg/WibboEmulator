@@ -7,8 +7,6 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Catalog.Marketplace;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
-using System;
-using System.Collections.Generic;
 using System.Data;
 
 namespace Butterfly.Communication.Packets.Incoming.Marketplace

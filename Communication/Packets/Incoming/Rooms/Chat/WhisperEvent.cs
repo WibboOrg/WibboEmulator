@@ -4,8 +4,6 @@ using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Chat.Styles;
 using Butterfly.Utilities;
-using System;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

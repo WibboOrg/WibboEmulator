@@ -11,7 +11,6 @@ using Butterfly.Game.Groups;
 using Butterfly.Game.Items;
 using Butterfly.Game.Users;
 using Butterfly.Utilities;
-using System;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

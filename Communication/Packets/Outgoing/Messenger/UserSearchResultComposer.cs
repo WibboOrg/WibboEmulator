@@ -1,5 +1,4 @@
 using Butterfly.Game.Users.Messenger;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.Messenger
 {

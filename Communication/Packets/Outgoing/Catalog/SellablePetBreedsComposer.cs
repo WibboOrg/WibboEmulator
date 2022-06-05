@@ -1,6 +1,4 @@
 using Butterfly.Game.Catalog.Pets;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Butterfly.Communication.Packets.Outgoing.Catalog
 {

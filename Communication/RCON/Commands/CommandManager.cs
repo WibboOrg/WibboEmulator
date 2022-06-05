@@ -1,7 +1,5 @@
 ﻿using Butterfly.Communication.RCON.Commands.Hotel;
 using Butterfly.Communication.RCON.Commands.User;
-using System;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.RCON.Commands
 {

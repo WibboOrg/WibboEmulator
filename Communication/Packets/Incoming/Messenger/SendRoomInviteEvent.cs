@@ -2,8 +2,6 @@ using Butterfly.Communication.Packets.Outgoing;
 using Butterfly.Communication.Packets.Outgoing.Messenger;
 using Butterfly.Game.Clients;
 using Butterfly.Utilities;
-using System;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

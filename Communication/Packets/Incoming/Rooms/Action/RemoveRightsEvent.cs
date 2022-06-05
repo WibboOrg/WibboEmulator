@@ -4,7 +4,6 @@ using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Rooms;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

@@ -3,8 +3,6 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Rooms;
 using Butterfly.Game.Rooms.AI;
 using Butterfly.Game.Items.Wired.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
 using Butterfly.Communication.Packets.Outgoing.RolePlay;

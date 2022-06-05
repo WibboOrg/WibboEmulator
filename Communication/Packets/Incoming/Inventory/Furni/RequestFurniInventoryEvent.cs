@@ -1,8 +1,6 @@
 using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Items;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

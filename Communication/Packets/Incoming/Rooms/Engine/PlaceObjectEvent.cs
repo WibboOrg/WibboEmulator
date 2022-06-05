@@ -7,8 +7,6 @@ using Butterfly.Game.Items;
 using Butterfly.Game.Items.Wired;
 using Butterfly.Game.Quests;
 using Butterfly.Game.Rooms;
-using System;
-using System.Linq;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

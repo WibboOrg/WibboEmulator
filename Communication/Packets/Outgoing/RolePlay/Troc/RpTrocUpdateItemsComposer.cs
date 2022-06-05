@@ -1,5 +1,4 @@
 ﻿using Butterfly.Game.Roleplay;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Outgoing.RolePlay.Troc
 {

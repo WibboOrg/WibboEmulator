@@ -3,7 +3,6 @@ using Butterfly.Communication.Packets.Outgoing.Navigator.New;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Navigator;
 using Butterfly.Utilities;
-using System.Collections.Generic;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

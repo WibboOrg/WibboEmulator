@@ -1,7 +1,5 @@
 ﻿using Butterfly.Game.Items;
 using Butterfly.Utilities.Events;
-using System;
-using System.Collections.Generic;
 
 namespace Butterfly.Game.Rooms.Games
 {

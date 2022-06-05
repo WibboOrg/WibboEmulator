@@ -1,5 +1,4 @@
 using Butterfly.Game.Clients;
-using System.Linq;
 using Butterfly.Game.Rooms;
 
 namespace Butterfly.Game.Chat.Commands.Cmd

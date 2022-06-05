@@ -1,5 +1,4 @@
 using Butterfly.Game.Clients;
-using System;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

@@ -3,7 +3,6 @@ using Butterfly.Game.Rooms;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms.Games;
 using Butterfly.Game.Items.Wired.Interfaces;
-using System;
 using System.Data;
 
 namespace Butterfly.Game.Items.Wired.Conditions

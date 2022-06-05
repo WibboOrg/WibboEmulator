@@ -1,5 +1,4 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Handshake;
+﻿using Butterfly.Communication.Packets.Outgoing.Handshake;
 using Butterfly.Communication.Packets.Outgoing.Help;
 using Butterfly.Communication.Packets.Outgoing.Navigator;
 using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
@@ -18,10 +17,7 @@ using Butterfly.Game.Users.Inventory;
 using Butterfly.Game.Users.Messenger;
 using Butterfly.Game.Users.Permissions;
 using Butterfly.Game.Users.Wardrobes;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 
 namespace Butterfly.Game.Users
 {

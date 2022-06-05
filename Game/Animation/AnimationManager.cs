@@ -3,11 +3,8 @@ using Butterfly.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
 using Butterfly.Game.Rooms;
-using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Linq;
 
 namespace Butterfly.Game.Animation
 {

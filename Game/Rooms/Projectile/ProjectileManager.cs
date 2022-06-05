@@ -1,11 +1,9 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
+﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
 using Butterfly.Game.Items;
 using Butterfly.Game.Roleplay.Player;
 using Butterfly.Game.Rooms.Map.Movement;
 using Butterfly.Utilities;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Butterfly.Game.Rooms.Projectile

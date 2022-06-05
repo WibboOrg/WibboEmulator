@@ -1,5 +1,4 @@
 ﻿using Butterfly.Core;
-using System.Collections.Generic;
 
 namespace Butterfly.Game.Catalog
 {

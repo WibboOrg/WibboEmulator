@@ -5,7 +5,6 @@ using Butterfly.Database.Interfaces;
 using Butterfly.Game.Clients;
 using Butterfly.Game.Groups;
 using Butterfly.Game.Items;
-using System.Linq;
 
 namespace Butterfly.Communication.Packets.Incoming.Structure
 {

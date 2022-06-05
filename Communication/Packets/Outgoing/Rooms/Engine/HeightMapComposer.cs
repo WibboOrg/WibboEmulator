@@ -1,5 +1,4 @@
 using Butterfly.Game.Rooms;
-using System;
 
 namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
 {

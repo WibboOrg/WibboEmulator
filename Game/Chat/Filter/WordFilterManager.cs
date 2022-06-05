@@ -1,9 +1,6 @@
 ﻿using Butterfly.Database.Daos;
 using Butterfly.Database.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Butterfly.Game.Chat.Filter
