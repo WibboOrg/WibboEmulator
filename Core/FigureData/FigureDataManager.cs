@@ -35,7 +35,7 @@ namespace Wibbo.Core.FigureData
             }
 
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(WibboEnvironment.PatchDir + "Config/figuredata.xml");
+            xDoc.Load(WibboEnvironment.PatchDir + "Configuration/figuredata.xml");
 
             XmlNodeList Colors = xDoc.GetElementsByTagName("colors");
             foreach (XmlNode Node in Colors)

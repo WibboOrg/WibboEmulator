@@ -80,7 +80,7 @@ namespace Wibbo
 
             try
             {
-                _configuration = new ConfigurationData(PatchDir + "Config/settings.ini", false);
+                _configuration = new ConfigurationData(PatchDir + "Configuration/settings.ini", false);
                 _datebaseManager = new DatabaseManager(uint.Parse(GetConfig().data["db.pool.maxsize"]), uint.Parse(GetConfig().data["db.pool.minsize"]), GetConfig().data["db.hostname"], uint.Parse(GetConfig().data["db.port"]), GetConfig().data["db.username"], GetConfig().data["db.password"], GetConfig().data["db.name"]);
 
                 int TryCount = 0;

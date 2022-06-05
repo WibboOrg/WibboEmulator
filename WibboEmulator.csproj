@@ -38,13 +38,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Config\certificate.pfx">
+    <None Update="Configuration\certificate.pfx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Config\figuredata.xml">
+    <None Update="Configuration\figuredata.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Config\settings.ini">
+    <None Update="Configuration\settings.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
