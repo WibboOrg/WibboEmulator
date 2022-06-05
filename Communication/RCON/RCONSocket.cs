@@ -1,8 +1,8 @@
-﻿using Butterfly.Communication.RCON.Commands;
+﻿using Wibbo.Communication.RCON.Commands;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Butterfly.Net
+namespace Wibbo.Net
 {
     public class RCONSocket
     {

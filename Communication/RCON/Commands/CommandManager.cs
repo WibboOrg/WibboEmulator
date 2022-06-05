@@ -1,7 +1,7 @@
-﻿using Butterfly.Communication.RCON.Commands.Hotel;
-using Butterfly.Communication.RCON.Commands.User;
+﻿using Wibbo.Communication.RCON.Commands.Hotel;
+using Wibbo.Communication.RCON.Commands.User;
 
-namespace Butterfly.Communication.RCON.Commands
+namespace Wibbo.Communication.RCON.Commands
 {
     public class CommandManager
     {

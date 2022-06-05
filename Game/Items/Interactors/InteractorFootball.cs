@@ -1,9 +1,9 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Map.Movement;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.Map.Movement;
 using System.Drawing;
 
-namespace Butterfly.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorFootball : FurniInteractor
     {

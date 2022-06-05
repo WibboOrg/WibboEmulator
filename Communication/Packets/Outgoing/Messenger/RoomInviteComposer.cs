@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Messenger
+namespace Wibbo.Communication.Packets.Outgoing.Messenger
 {
     internal class RoomInviteComposer : ServerPacket
     {

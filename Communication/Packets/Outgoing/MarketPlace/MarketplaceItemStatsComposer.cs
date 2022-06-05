@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.MarketPlace
+﻿namespace Wibbo.Communication.Packets.Outgoing.MarketPlace
 {
     internal class MarketplaceItemStatsComposer : ServerPacket
     {
@@ -6,7 +6,7 @@
             : base(ServerPacketHeader.MARKETPLACE_ITEM_STATS)
         {
             this.WriteInteger(AveragePrice);//Avg price in last 7 days.
-            this.WriteInteger(ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().OfferCountForSprite(SpriteId));
+            this.WriteInteger(WibboEnvironment.GetGame().GetCatalog().GetMarketplace().OfferCountForSprite(SpriteId));
             this.WriteInteger(7);//Day
 
             this.WriteInteger(4);//Count

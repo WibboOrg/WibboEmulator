@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Rooms.Jankens
+﻿namespace Wibbo.Game.Rooms.Jankens
 {
     public class Janken
     {

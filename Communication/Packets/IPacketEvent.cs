@@ -1,7 +1,7 @@
-﻿using Butterfly.Communication.Packets.Incoming;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Incoming;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets
+namespace Wibbo.Communication.Packets
 {
     public interface IPacketEvent
     {

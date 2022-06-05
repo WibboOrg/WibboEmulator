@@ -1,7 +1,7 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.RCON.Commands.User
+namespace Wibbo.Communication.RCON.Commands.User
 {
     internal class UpdateLimitCoinsCommand : IRCONCommand
     {
@@ -22,7 +22,7 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
             if (Client == null)
             {
                 return false;

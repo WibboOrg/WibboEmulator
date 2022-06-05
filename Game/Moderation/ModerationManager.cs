@@ -1,14 +1,14 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Users;
+﻿using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
 using System.Data;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Action;
-using Butterfly.Communication.Packets.Outgoing.Moderation;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Action;
+using Wibbo.Communication.Packets.Outgoing.Moderation;
 
-namespace Butterfly.Game.Moderation
+namespace Wibbo.Game.Moderation
 {
     public class ModerationManager
     {
@@ -165,17 +165,17 @@ namespace Butterfly.Game.Moderation
 
         public void SendNewTicket(Client Session, int Category, int ReportedUser, string Message)
         {
-            RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(Session.GetUser().CurrentRoomId);
+            RoomData roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(Session.GetUser().CurrentRoomId);
             int Id = 0;
             string roomname = (roomData == null) ? roomData.Name : "Aucun appart";
             int roomid = (roomData == null) ? roomData.Id : 0;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 Id = ModerationTicketDao.Insert(dbClient, Message, roomname, Category, Session.GetUser().Id, ReportedUser, roomData.Id);
             }
 
-            ModerationTicket Ticket = new ModerationTicket(Id, 1, Category, Session.GetUser().Id, ReportedUser, Message, roomid, roomname, ButterflyEnvironment.GetUnixTimestamp());
+            ModerationTicket Ticket = new ModerationTicket(Id, 1, Category, Session.GetUser().Id, ReportedUser, Message, roomid, roomname, WibboEnvironment.GetUnixTimestamp());
             this._tickets.Add(Ticket);
             SendTicketToModerators(Ticket);
         }
@@ -187,7 +187,7 @@ namespace Butterfly.Game.Moderation
                 return;
             }
 
-            User UserReport = ButterflyEnvironment.GetUserById(ReportedUser);
+            User UserReport = WibboEnvironment.GetUserById(ReportedUser);
             if (UserReport == null)
             {
                 return;
@@ -197,7 +197,7 @@ namespace Butterfly.Game.Moderation
 
             Session.SendPacket(new IgnoreStatusComposer(1, UserReport.Username));
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || (room.RoomData.BanFuse != 1 || !room.CheckRights(Session)) && !room.CheckRights(Session, true))
             {
                 return;
@@ -263,7 +263,7 @@ namespace Butterfly.Game.Moderation
                 return;
             }
 
-            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(ticket.SenderId);
+            Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(ticket.SenderId);
 
             TicketStatusType NewStatus;
             string MessageAlert;
@@ -317,12 +317,12 @@ namespace Butterfly.Game.Moderation
 
         public static void SendTicketToModerators(ModerationTicket Ticket)
         {
-            ButterflyEnvironment.GetGame().GetClientManager().SendMessageStaff(new ModeratorSupportTicketComposer(Ticket));
+            WibboEnvironment.GetGame().GetClientManager().SendMessageStaff(new ModeratorSupportTicketComposer(Ticket));
         }
 
         public void LogStaffEntry(int userId, string modName, int roomId, string target, string type, string description)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 LogCommandDao.Insert(dbClient, userId, modName, roomId, target, type, description + " " + target);
             }
@@ -330,7 +330,7 @@ namespace Butterfly.Game.Moderation
 
         public static void PerformRoomAction(Client ModSession, int RoomId, bool KickUsers, bool LockRoom, bool InappropriateRoom)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
             if (room == null)
             {
                 return;
@@ -340,7 +340,7 @@ namespace Butterfly.Game.Moderation
             {
                 room.RoomData.State = 1;
                 room.RoomData.Name = "Cet appart ne respecte par les conditions d'utilisation";
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     RoomDao.UpdateState(dbClient, room.Id);
                 }
@@ -352,7 +352,7 @@ namespace Butterfly.Game.Moderation
                 room.RoomData.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
                 room.ClearTags();
                 room.RoomData.Tags.Clear();
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     RoomDao.UpdateCaptionDescTags(dbClient, room.Id);
                 }
@@ -368,7 +368,7 @@ namespace Butterfly.Game.Moderation
 
         public static void KickUser(Client ModSession, int UserId, string Message, bool Soft)
         {
-            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+            Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
             if (clientByUserId == null || clientByUserId.GetUser().CurrentRoomId < 1 || clientByUserId.GetUser().Id == ModSession.GetUser().Id)
             {
                 return;
@@ -376,11 +376,11 @@ namespace Butterfly.Game.Moderation
 
             if (clientByUserId.GetUser().Rank >= ModSession.GetUser().Rank)
             {
-                ModSession.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.kick.missingrank", ModSession.Langue));
+                ModSession.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("moderation.kick.missingrank", ModSession.Langue));
             }
             else
             {
-                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(clientByUserId.GetUser().CurrentRoomId);
+                Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(clientByUserId.GetUser().CurrentRoomId);
                 if (room == null)
                 {
                     return;
@@ -398,7 +398,7 @@ namespace Butterfly.Game.Moderation
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(ModSession.GetUser().Id, ModSession.GetUser().Username, 0, string.Empty, "Modtool", string.Format("Modtool kickalert: {0}", Message));
+                WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(ModSession.GetUser().Id, ModSession.GetUser().Username, 0, string.Empty, "Modtool", string.Format("Modtool kickalert: {0}", Message));
 
                 clientByUserId.SendNotification(Message);
             }
@@ -406,7 +406,7 @@ namespace Butterfly.Game.Moderation
 
         public static void BanUser(Client ModSession, int UserId, int Length, string Message)
         {
-            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+            Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
             if (clientByUserId == null || clientByUserId.GetUser().Id == ModSession.GetUser().Id)
             {
                 return;
@@ -414,12 +414,12 @@ namespace Butterfly.Game.Moderation
 
             if (clientByUserId.GetUser().Rank >= ModSession.GetUser().Rank)
             {
-                ModSession.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.ban.missingrank", ModSession.Langue));
+                ModSession.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("moderation.ban.missingrank", ModSession.Langue));
             }
             else
             {
                 double LengthSeconds = Length;
-                ButterflyEnvironment.GetGame().GetClientManager().BanUser(clientByUserId, ModSession.GetUser().Username, LengthSeconds, Message, false, false);
+                WibboEnvironment.GetGame().GetClientManager().BanUser(clientByUserId, ModSession.GetUser().Username, LengthSeconds, Message, false, false);
             }
         }
     }

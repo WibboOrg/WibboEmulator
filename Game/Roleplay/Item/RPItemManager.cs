@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Roleplay.Item;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Roleplay.Item;
 using System.Data;
 
-namespace Butterfly.Game.Roleplay
+namespace Wibbo.Game.Roleplay
 {
     public class RPItemManager
     {

@@ -1,5 +1,5 @@
-﻿using Butterfly.Database.Interfaces;
-namespace Butterfly.Database.Daos
+﻿using Wibbo.Database.Interfaces;
+namespace Wibbo.Database.Daos
 {
     class UserPhotoDao
     {

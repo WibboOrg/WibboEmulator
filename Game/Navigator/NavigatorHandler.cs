@@ -1,12 +1,12 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Rooms;
 using System.Data;
 
-namespace Butterfly.Game.Navigator
+namespace Wibbo.Game.Navigator
 {
     internal static class NavigatorHandler
     {
@@ -27,7 +27,7 @@ namespace Butterfly.Game.Navigator
                             if (SearchData.Length > 0)
                             {
                                 DataTable GetRooms = null;
-                                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                 {
                                     if (SearchData.ToLower().StartsWith("owner:"))
                                     {
@@ -40,7 +40,7 @@ namespace Butterfly.Game.Navigator
                                 {
                                     foreach (DataRow Row in GetRooms.Rows)
                                     {
-                                        RoomData RoomData = ButterflyEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(Row["id"]), Row);
+                                        RoomData RoomData = WibboEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(Row["id"]), Row);
                                         if (RoomData != null && !Results.Contains(RoomData))
                                         {
                                             Results.Add(RoomData);
@@ -58,7 +58,7 @@ namespace Butterfly.Game.Navigator
                         else if (SearchData.ToLower().StartsWith("tag:"))
                         {
                             SearchData = SearchData.Remove(0, 4);
-                            ICollection<RoomData> TagMatches = ButterflyEnvironment.GetGame().GetRoomManager().SearchTaggedRooms(SearchData);
+                            ICollection<RoomData> TagMatches = WibboEnvironment.GetGame().GetRoomManager().SearchTaggedRooms(SearchData);
 
                             Message.WriteInteger(TagMatches.Count);
                             foreach (RoomData Data in TagMatches.ToList())
@@ -69,7 +69,7 @@ namespace Butterfly.Game.Navigator
                         else if (SearchData.ToLower().StartsWith("group:"))
                         {
                             SearchData = SearchData.Remove(0, 6);
-                            ICollection<RoomData> GroupRooms = ButterflyEnvironment.GetGame().GetRoomManager().SearchGroupRooms(SearchData);
+                            ICollection<RoomData> GroupRooms = WibboEnvironment.GetGame().GetRoomManager().SearchGroupRooms(SearchData);
 
                             Message.WriteInteger(GroupRooms.Count);
                             foreach (RoomData Data in GroupRooms.ToList())
@@ -82,7 +82,7 @@ namespace Butterfly.Game.Navigator
                             if (SearchData.Length > 0)
                             {
                                 DataTable Table = null;
-                                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                 {
                                     Table = RoomDao.GetAllSearch(dbClient, SearchData);
                                 }
@@ -97,7 +97,7 @@ namespace Butterfly.Game.Navigator
                                             continue;
                                         }
 
-                                        RoomData RData = ButterflyEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(Row["id"]), Row);
+                                        RoomData RData = WibboEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(Row["id"]), Row);
                                         if (RData != null && !Results.Contains(RData))
                                         {
                                             Results.Add(RData);
@@ -125,7 +125,7 @@ namespace Butterfly.Game.Navigator
                 case NavigatorCategoryType.FEATURED_CASINO:
                     #region Featured
                     List<RoomData> Rooms = new List<RoomData>();
-                    ICollection<FeaturedRoom> Featured = ButterflyEnvironment.GetGame().GetNavigator().GetFeaturedRooms(Session.Langue);
+                    ICollection<FeaturedRoom> Featured = WibboEnvironment.GetGame().GetNavigator().GetFeaturedRooms(Session.Langue);
                     foreach (FeaturedRoom FeaturedItem in Featured.ToList())
                     {
                         if (FeaturedItem == null)
@@ -138,7 +138,7 @@ namespace Butterfly.Game.Navigator
                             continue;
                         }
 
-                        RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(FeaturedItem.RoomId);
+                        RoomData Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(FeaturedItem.RoomId);
                         if (Data == null)
                         {
                             continue;
@@ -162,7 +162,7 @@ namespace Butterfly.Game.Navigator
                     {
                         List<RoomData> PopularRooms = new List<RoomData>();
 
-                        PopularRooms.AddRange(ButterflyEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, 50, Session.Langue)); //FetchLimit
+                        PopularRooms.AddRange(WibboEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, 50, Session.Langue)); //FetchLimit
 
                         Message.WriteInteger(PopularRooms.Count);
                         foreach (RoomData Data in PopularRooms.ToList())
@@ -174,7 +174,7 @@ namespace Butterfly.Game.Navigator
 
                 case NavigatorCategoryType.RECOMMENDED:
                     {
-                        List<RoomData> RecommendedRooms = ButterflyEnvironment.GetGame().GetRoomManager().GetRecommendedRooms(FetchLimit);
+                        List<RoomData> RecommendedRooms = WibboEnvironment.GetGame().GetRoomManager().GetRecommendedRooms(FetchLimit);
 
                         Message.WriteInteger(RecommendedRooms.Count);
                         foreach (RoomData Data in RecommendedRooms.ToList())
@@ -186,7 +186,7 @@ namespace Butterfly.Game.Navigator
 
                 case NavigatorCategoryType.CATEGORY:
                     {
-                        List<RoomData> GetRoomsByCategory = ButterflyEnvironment.GetGame().GetRoomManager().GetRoomsByCategory(SearchResult.Id, FetchLimit);
+                        List<RoomData> GetRoomsByCategory = WibboEnvironment.GetGame().GetRoomManager().GetRoomsByCategory(SearchResult.Id, FetchLimit);
 
                         Message.WriteInteger(GetRoomsByCategory.Count);
                         foreach (RoomData Data in GetRoomsByCategory.ToList())
@@ -202,7 +202,7 @@ namespace Butterfly.Game.Navigator
 
                     foreach (int RoomId in Session.GetUser().UsersRooms)
                     {
-                        RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+                        RoomData Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
                         if (Data == null)
                         {
                             continue;
@@ -225,7 +225,7 @@ namespace Butterfly.Game.Navigator
                     List<RoomData> Favourites = new List<RoomData>();
                     foreach (int RoomId in Session.GetUser().FavoriteRooms)
                     {
-                        RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+                        RoomData Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
                         if (Data == null)
                         {
                             continue;
@@ -251,12 +251,12 @@ namespace Butterfly.Game.Navigator
 
                     foreach (int GroupId in Session.GetUser().MyGroups.ToList())
                     {
-                        if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+                        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
                         {
                             continue;
                         }
 
-                        RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(Group.RoomId);
+                        RoomData Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(Group.RoomId);
                         if (Data == null)
                         {
                             continue;
@@ -300,7 +300,7 @@ namespace Butterfly.Game.Navigator
 
                     foreach (int RoomId in Session.GetUser().RoomRightsList)
                     {
-                        RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+                        RoomData Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
                         if (Data == null)
                         {
                             continue;

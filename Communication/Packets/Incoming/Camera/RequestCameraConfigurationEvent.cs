@@ -1,7 +1,7 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Camera;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.Camera;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Camera
+namespace Wibbo.Communication.Packets.Incoming.Camera
 {
     internal class RequestCameraConfigurationEvent : IPacketEvent
     {

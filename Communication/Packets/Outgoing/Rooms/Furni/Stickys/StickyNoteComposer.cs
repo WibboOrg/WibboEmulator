@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Stickys
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Furni.Stickys
 {
     internal class StickyNoteComposer : ServerPacket
     {

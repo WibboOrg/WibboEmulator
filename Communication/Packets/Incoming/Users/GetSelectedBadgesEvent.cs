@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Users;
+using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetSelectedBadgesEvent : IPacketEvent
     {
@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int UserId = Packet.PopInt();
 
-            User User = ButterflyEnvironment.GetUserById(UserId);
+            User User = WibboEnvironment.GetUserById(UserId);
             if (User == null)
                 return;
             if (User.GetBadgeComponent() == null)

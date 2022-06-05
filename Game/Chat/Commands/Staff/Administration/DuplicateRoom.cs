@@ -1,13 +1,13 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Items.Wired;
+﻿using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Items.Wired;
 using System.Data;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class DuplicateRoom : IChatCommand
     {
@@ -16,7 +16,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             int OldRoomId = Room.Id;
             int RoomId;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 Room.GetRoomItemHandler().SaveFurniture(dbClient);
 
@@ -51,7 +51,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                         continue;
                     }
 
-                    ButterflyEnvironment.GetGame().GetItemManager().GetItem(baseID, out ItemData Data);
+                    WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out ItemData Data);
                     if (Data == null || Data.IsRare)
                     {
                         continue;

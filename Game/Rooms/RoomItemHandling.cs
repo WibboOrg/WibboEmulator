@@ -1,21 +1,21 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
+﻿using Wibbo.Communication.Packets.Outgoing;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
 
-using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Items.Wired;
-using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Rooms.Moodlight;
-using Butterfly.Game.Rooms.PathFinding;
-using Butterfly.Utilities;
+using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Items.Wired;
+using Wibbo.Game.Rooms.Map.Movement;
+using Wibbo.Game.Rooms.Moodlight;
+using Wibbo.Game.Rooms.PathFinding;
+using Wibbo.Utilities;
 using System.Collections.Concurrent;
 using System.Data;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     public class RoomItemHandling
     {
@@ -89,7 +89,7 @@ namespace Butterfly.Game.Rooms
             this._itemsTemp.Clear();
             this._updateItems.Clear();
             this._rollers.Clear();
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemDao.UpdateRoomIdAndUserId(dbClient, this._room.RoomData.OwnerId, this._room.Id);
             }
@@ -117,7 +117,7 @@ namespace Butterfly.Game.Rooms
                 this._wallItems.Clear();
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 int itemID;
                 int UserId;
@@ -148,7 +148,7 @@ namespace Butterfly.Game.Rooms
                     Limited = !DBNull.Value.Equals(dataRow[10]) ? Convert.ToInt32(dataRow[10]) : 0;
                     LimitedTo = !DBNull.Value.Equals(dataRow[11]) ? Convert.ToInt32(dataRow[11]) : 0;
 
-                    ButterflyEnvironment.GetGame().GetItemManager().GetItem(baseID, out ItemData Data);
+                    WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out ItemData Data);
 
                     if (Data == null)
                     {
@@ -325,7 +325,7 @@ namespace Butterfly.Game.Rooms
 
             if (item.WiredHandler != null)
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     ItemWiredDao.Delete(dbClient, item.Id);
 
                 item.WiredHandler.Dispose();
@@ -638,7 +638,7 @@ namespace Butterfly.Game.Rooms
                 {
                     if (Session != null)
                     {
-                        Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("room.itemplaced", Session.Langue));
+                        Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.itemplaced", Session.Langue));
                     }
 
                     return true;

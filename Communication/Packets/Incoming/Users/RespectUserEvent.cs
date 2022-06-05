@@ -1,10 +1,10 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
-using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Quests;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RespectUserEvent : IPacketEvent
     {
@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || Session.GetUser().DailyRespectPoints <= 0)
             {
                 return;
@@ -29,9 +29,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_RESPECT, 0);
-            ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserIdTarget.GetClient(), "ACH_RespectEarned", 1);
-            ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RespectGiven", 1);
+            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_RESPECT, 0);
+            WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserIdTarget.GetClient(), "ACH_RespectEarned", 1);
+            WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RespectGiven", 1);
             Session.GetUser().DailyRespectPoints--;
             roomUserByUserIdTarget.GetClient().GetUser().Respect++;
 

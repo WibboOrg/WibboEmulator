@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 
-namespace Butterfly.Database.Interfaces
+namespace Wibbo.Database.Interfaces
 {
     public interface IDatabaseClient : IDisposable
     {

@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects
+namespace Wibbo.Communication.Packets.Outgoing.Inventory.AvatarEffects
 {
     internal class AvatarEffectComposer : ServerPacket
     {

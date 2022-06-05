@@ -1,8 +1,8 @@
 ﻿using System.Data;
-using Butterfly.Game.Rooms.AI.Responses;
-using Butterfly.Game.Rooms.AI;
+using Wibbo.Game.Rooms.AI.Responses;
+using Wibbo.Game.Rooms.AI;
 
-namespace Butterfly.Game.Bots
+namespace Wibbo.Game.Bots
 {
     public class BotManager
     {

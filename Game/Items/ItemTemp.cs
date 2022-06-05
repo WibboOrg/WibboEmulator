@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Rooms.Map.Movement;
+﻿using Wibbo.Game.Rooms.Map.Movement;
 
-namespace Butterfly.Game.Items
+namespace Wibbo.Game.Items
 {
     public class ItemTemp : IEquatable<ItemTemp>
     {

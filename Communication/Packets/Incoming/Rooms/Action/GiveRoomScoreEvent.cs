@@ -1,10 +1,10 @@
-using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GiveRoomScoreEvent : IPacketEvent
     {
@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || Session.GetUser().RatedRooms.Contains(room.Id) || room.CheckRights(Session, true))
             {
                 return;
@@ -38,7 +38,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoomDao.UpdateScore(dbClient, room.Id, room.RoomData.Score);
             }

@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 using System.Text;
 
-namespace Butterfly.Game.Rooms.Moodlight
+namespace Wibbo.Game.Rooms.Moodlight
 {
     public class MoodlightData
     {
@@ -19,21 +19,21 @@ namespace Butterfly.Game.Rooms.Moodlight
 
             DataRow Row = null;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 Row = ItemMoodlightDao.GetOne(dbClient, ItemId);
             }
 
             if (Row == null)
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     ItemMoodlightDao.Insert(dbClient, ItemId);
                     Row = ItemMoodlightDao.GetOne(dbClient, ItemId);
                 }
             }
 
-            this.Enabled = ButterflyEnvironment.EnumToBool(Row["enabled"].ToString());
+            this.Enabled = WibboEnvironment.EnumToBool(Row["enabled"].ToString());
             this.CurrentPreset = Convert.ToInt32(Row["current_preset"]);
             this.Presets = new List<MoodlightPreset>
             {
@@ -47,7 +47,7 @@ namespace Butterfly.Game.Rooms.Moodlight
         {
             this.Enabled = true;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemMoodlightDao.UpdateEnable(dbClient, this.ItemId, 1);
             }
@@ -57,7 +57,7 @@ namespace Butterfly.Game.Rooms.Moodlight
         {
             this.Enabled = false;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemMoodlightDao.UpdateEnable(dbClient, this.ItemId, 0);
             }
@@ -91,7 +91,7 @@ namespace Butterfly.Game.Rooms.Moodlight
                     break;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemMoodlightDao.Update(dbClient, this.ItemId, Color, Pr, Intensity, BgOnly);
             }
@@ -110,7 +110,7 @@ namespace Butterfly.Game.Rooms.Moodlight
                 Bits[0] = "#000000";
             }
 
-            return new MoodlightPreset(Bits[0], int.Parse(Bits[1]), ButterflyEnvironment.EnumToBool(Bits[2]));
+            return new MoodlightPreset(Bits[0], int.Parse(Bits[1]), WibboEnvironment.EnumToBool(Bits[2]));
         }
 
         public MoodlightPreset GetPreset(int i)

@@ -1,9 +1,9 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Navigator;
+﻿using Wibbo.Communication.Packets.Outgoing.Navigator;
 
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.RCON.Commands.User
+namespace Wibbo.Communication.RCON.Commands.User
 {
     internal class FollowCommand : IRCONCommand
     {
@@ -24,7 +24,7 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
             if (Client == null)
             {
                 return false;
@@ -41,7 +41,7 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client Client2 = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid2);
+            Client Client2 = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid2);
             if (Client2 == null)
             {
                 return false;

@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Help;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Help;
+using Wibbo.Communication.Packets.Outgoing.Help;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Help;
 
-namespace Butterfly.Communication.Packets.Incoming.Guide
+namespace Wibbo.Communication.Packets.Incoming.Guide
 {
     internal class GetHelperToolConfigurationEvent : IPacketEvent
     {
@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Guide
                 return;
             }
 
-            HelpManager guideManager = ButterflyEnvironment.GetGame().GetHelpManager();
+            HelpManager guideManager = WibboEnvironment.GetGame().GetHelpManager();
             bool onDuty = Packet.PopBoolean();
             Packet.PopBoolean();
             Packet.PopBoolean();

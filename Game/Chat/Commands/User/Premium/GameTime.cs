@@ -1,15 +1,15 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class GameTime : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (ButterflyEnvironment.GetGame().GetAnimationManager().IsActivate())
+            if (WibboEnvironment.GetGame().GetAnimationManager().IsActivate())
             {
-                string Time = ButterflyEnvironment.GetGame().GetAnimationManager().GetTime();
+                string Time = WibboEnvironment.GetGame().GetAnimationManager().GetTime();
                 Session.SendWhisper("Prochaine animation de Jack & Daisy dans " + Time);
             }
             else

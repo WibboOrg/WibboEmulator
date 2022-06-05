@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Items;
-using Butterfly.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Game.Items;
+using Wibbo.Game.Items.Wired.Interfaces;
 
-namespace Butterfly.Game.Rooms.Wired
+namespace Wibbo.Game.Rooms.Wired
 {
     public class WiredCycle
     {

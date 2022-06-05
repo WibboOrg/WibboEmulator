@@ -1,4 +1,7 @@
+.vs
+
+bin
 obj
 debug.log
-.vs
-bin
+
+Config

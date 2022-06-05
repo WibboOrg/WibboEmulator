@@ -4,20 +4,9 @@ _Mise à jour par Meth0d, Matinmine, Carlos, Super0ca, Mike, Sledmore, Joopie, T
 _Mise à jour par JasonDhose, Isp et Symbiosis entre 2011 jusqu'à maintenant._
 
 ### Pour démarrer, vous devez :
-- Remplir le fichier settings.new.ini
-- Remplacer settings.new.ini en settings.ini
-- Ajouter le figuredata.xml de votre serveur dans le bin/Configuration/
+- Remplir le fichier settings.ini dans le dossier Config
+- Ajouter le figuredata.xml de votre serveur dans le dossier Config
 - Générer ou démarrer le projet.
-
-Si vous avez réussis la configuration vous êtes censés avoir : 
-- Un fichier nommé "bin" à la racine de votre émulateur
-![image](https://user-images.githubusercontent.com/88250803/168443197-44e253d8-b268-4f7c-92e5-40cdd581ae2d.png)
-
-- Un fichier nommé "Configuration" qui est dans le dossier bin
-![image](https://user-images.githubusercontent.com/88250803/168443212-d8eee256-8048-422a-a3e6-dfbcc961619c.png)
-
-- Et les fichiers settings.ini & figuredata.xml dans votre fichier Configuration.
-![image](https://user-images.githubusercontent.com/88250803/168443222-2c5881b5-f408-432d-b8a4-9cfb174108b6.png)
 
 ### Sur les 10 dernières années, Wibbo Emulator a connu une augmentation des mises à jour, que ce soit pour les commandes ou l'amélioration de l'interface sur le client !
 - Commande qui permet de dupliquer des appartements

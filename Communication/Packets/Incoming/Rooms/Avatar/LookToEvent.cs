@@ -1,8 +1,8 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.PathFinding;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.PathFinding;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class LookToEvent : IPacketEvent
     {
@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;

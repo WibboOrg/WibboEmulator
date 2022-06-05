@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class ForceEnable : IChatCommand
     {
@@ -14,7 +14,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             int.TryParse(Params[1], out int EnableNum);
 
-            if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(EnableNum, Session.GetUser().HasFuse("fuse_sysadmin")))
+            if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(EnableNum, Session.GetUser().HasFuse("fuse_sysadmin")))
             {
                 return;
             }

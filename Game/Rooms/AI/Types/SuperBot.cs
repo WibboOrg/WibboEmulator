@@ -1,10 +1,10 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
 
-using Butterfly.Game.Clients;
+using Wibbo.Game.Clients;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms.AI.Types
+namespace Wibbo.Game.Rooms.AI.Types
 {
     public class SuperBot : BotAI
     {
@@ -14,12 +14,12 @@ namespace Butterfly.Game.Rooms.AI.Types
         public SuperBot(int VirtualId)
         {
             this._virtualId = VirtualId;
-            this._actionTimer = ButterflyEnvironment.GetRandomNumber(0, 60);
+            this._actionTimer = WibboEnvironment.GetRandomNumber(0, 60);
         }
 
         public override void OnSelfEnterRoom()
         {
-            this.GetRoomUser().MoveTo(this.GetRoomUser().X + ButterflyEnvironment.GetRandomNumber(-10, 10), this.GetRoomUser().Y + ButterflyEnvironment.GetRandomNumber(-10, 10), true);
+            this.GetRoomUser().MoveTo(this.GetRoomUser().X + WibboEnvironment.GetRandomNumber(-10, 10), this.GetRoomUser().Y + WibboEnvironment.GetRandomNumber(-10, 10), true);
         }
 
         public override void OnSelfLeaveRoom(bool Kicked)
@@ -65,7 +65,7 @@ namespace Butterfly.Game.Rooms.AI.Types
                     this.GetRoomUser().MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
                 }
 
-                this._actionTimer = ButterflyEnvironment.GetRandomNumber(10, 60);
+                this._actionTimer = WibboEnvironment.GetRandomNumber(10, 60);
             }
             else
             {
@@ -107,7 +107,7 @@ namespace Butterfly.Game.Rooms.AI.Types
                         int NewX = user.X;
                         int NewY = user.Y;
 
-                        switch (ButterflyEnvironment.GetRandomNumber(1, 3))
+                        switch (WibboEnvironment.GetRandomNumber(1, 3))
                         {
                             case 1:
                                 NewY--;
@@ -119,7 +119,7 @@ namespace Butterfly.Game.Rooms.AI.Types
                                 break;
                         }
 
-                        switch (ButterflyEnvironment.GetRandomNumber(1, 3))
+                        switch (WibboEnvironment.GetRandomNumber(1, 3))
                         {
                             case 1:
                                 NewX--;

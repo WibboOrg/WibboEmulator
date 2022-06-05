@@ -1,13 +1,13 @@
-using Butterfly.Communication.Packets.Outgoing.Inventory.Achievements;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Achievements;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class CreditFurniRedeemEvent : IPacketEvent
     {
@@ -20,7 +20,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -41,7 +41,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemDao.Delete(dbClient, Exchange.Id);
             }
@@ -62,14 +62,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     Session.GetUser().WibboPoints += Value;
                     Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         UserDao.UpdateAddPoints(dbClient, Session.GetUser().Id, Value);
                     }
                 }
                 else if (Exchange.GetBaseItem().ItemName.StartsWith("WwnEx_"))
                 {
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         UserStatsDao.UpdateAchievementScore(dbClient, Session.GetUser().Id, Value);
                     }

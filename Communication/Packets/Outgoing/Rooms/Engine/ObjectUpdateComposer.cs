@@ -1,7 +1,7 @@
-using Butterfly.Game.Items;
-using Butterfly.Game.Items.Wired;
+using Wibbo.Game.Items;
+using Wibbo.Game.Items.Wired;
 
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class ObjectUpdateComposer : ServerPacket
     {

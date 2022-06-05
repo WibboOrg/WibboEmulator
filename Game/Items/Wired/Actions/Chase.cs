@@ -1,12 +1,12 @@
-﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.Map.Movement;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
 using System.Drawing;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
 
-namespace Butterfly.Game.Items.Wired.Actions
+namespace Wibbo.Game.Items.Wired.Actions
 {
     public class Chase : WiredActionBase, IWiredEffect, IWired
     {

@@ -1,7 +1,7 @@
-using Butterfly.Game.Catalog.Utilities;
-using Butterfly.Game.Items;
+using Wibbo.Game.Catalog.Utilities;
+using Wibbo.Game.Items;
 
-namespace Butterfly.Communication.Packets.Outgoing.Inventory.Furni
+namespace Wibbo.Communication.Packets.Outgoing.Inventory.Furni
 {
     internal class FurniListComposer : ServerPacket
     {

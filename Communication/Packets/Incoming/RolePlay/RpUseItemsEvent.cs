@@ -1,10 +1,10 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Notifications;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Roleplay;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Notifications;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Roleplay;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.RolePlay
+namespace Wibbo.Communication.Packets.Incoming.RolePlay
 {
     internal class RpUseItemsEvent : IPacketEvent
     {
@@ -45,11 +45,11 @@ namespace Butterfly.Communication.Packets.Incoming.RolePlay
 
             if (Rp.AggroTimer > 0)
             {
-                User.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.useitem.notallowed", Session.Langue), Math.Round((double)Rp.AggroTimer / 2)));
+                User.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.useitem.notallowed", Session.Langue), Math.Round((double)Rp.AggroTimer / 2)));
                 return;
             }
 
-            RPItem RpItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
+            RPItem RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
             if (RpItem == null)
             {
                 return;
@@ -194,8 +194,8 @@ namespace Butterfly.Communication.Packets.Incoming.RolePlay
                             break;
                         }
 
-                        Rp.WeaponCac = ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(RpItem.Value);
-                        User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.changearmecac", Session.Langue));
+                        Rp.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(RpItem.Value);
+                        User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.changearmecac", Session.Langue));
                         break;
                     }
                 case "weapon_far":
@@ -205,8 +205,8 @@ namespace Butterfly.Communication.Packets.Incoming.RolePlay
                             break;
                         }
 
-                        Rp.WeaponGun = ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(RpItem.Value);
-                        User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.changearmefar", Session.Langue));
+                        Rp.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(RpItem.Value);
+                        User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.changearmefar", Session.Langue));
                         break;
                     }
             }

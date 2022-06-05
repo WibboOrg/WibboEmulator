@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
 
-namespace Butterfly.Game.Rooms.Trading
+namespace Wibbo.Game.Rooms.Trading
 {
     public class TradeUser
     {
@@ -22,7 +22,7 @@ namespace Butterfly.Game.Rooms.Trading
 
         public RoomUser GetRoomUser()
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this._roomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(this._roomId);
             if (room == null)
             {
                 return null;
@@ -35,7 +35,7 @@ namespace Butterfly.Game.Rooms.Trading
 
         public Client GetClient()
         {
-            return ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
+            return WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
         }
     }
 }

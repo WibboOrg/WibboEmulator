@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorDice : FurniInteractor
     {
@@ -63,7 +63,7 @@ namespace Butterfly.Game.Items.Interactors
 
         public override void OnTick(Item item)
         {
-            int numberDice = ButterflyEnvironment.GetRandomNumber(1, 6);
+            int numberDice = WibboEnvironment.GetRandomNumber(1, 6);
 
             item.ExtraData = numberDice.ToString();
             item.UpdateState();

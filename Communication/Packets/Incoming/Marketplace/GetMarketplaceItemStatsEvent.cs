@@ -1,9 +1,9 @@
-﻿using Butterfly.Communication.Packets.Outgoing.MarketPlace;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.MarketPlace;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Marketplace
+namespace Wibbo.Communication.Packets.Incoming.Marketplace
 {
     internal class GetMarketplaceItemStatsEvent : IPacketEvent
     {
@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             int SpriteId = Packet.PopInt();
 
             int avgprice = 0;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 avgprice = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, SpriteId);
 
             Session.SendPacket(new MarketplaceItemStatsComposer(ItemId, SpriteId, avgprice));

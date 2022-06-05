@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Items;
+﻿using Wibbo.Game.Items;
 
-namespace Butterfly.Game.Catalog
+namespace Wibbo.Game.Catalog
 {
     public class CatalogItem
     {

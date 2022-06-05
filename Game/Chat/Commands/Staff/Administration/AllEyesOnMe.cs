@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms.PathFinding;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms.PathFinding;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class AllEyesOnMe : IChatCommand
     {

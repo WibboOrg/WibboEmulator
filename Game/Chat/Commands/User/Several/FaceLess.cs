@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class FaceLess : IChatCommand
     {

@@ -1,8 +1,8 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Diagnostics;
 
-namespace Butterfly.Core
+namespace Wibbo.Core
 {
     public class ServerStatusUpdater
     {
@@ -30,23 +30,23 @@ namespace Butterfly.Core
                 lowPriorityProcessWatch.Restart();
                 try
                 {
-                    int UsersOnline = ButterflyEnvironment.GetGame().GetClientManager().Count;
+                    int UsersOnline = WibboEnvironment.GetGame().GetClientManager().Count;
 
-                    ButterflyEnvironment.GetGame().GetAnimationManager().OnUpdateUsersOnline(UsersOnline);
+                    WibboEnvironment.GetGame().GetAnimationManager().OnUpdateUsersOnline(UsersOnline);
 
                     if (UsersOnline > UserPeak)
                     {
                         UserPeak = UsersOnline;
                     }
 
-                    int RoomsLoaded = ButterflyEnvironment.GetGame().GetRoomManager().Count;
+                    int RoomsLoaded = WibboEnvironment.GetGame().GetRoomManager().Count;
 
-                    TimeSpan Uptime = DateTime.Now - ButterflyEnvironment.ServerStarted;
+                    TimeSpan Uptime = DateTime.Now - WibboEnvironment.ServerStarted;
 
                     Console.Title = "Butterfly | Démarré depuis : " + Uptime.Days + " jour(s) " + Uptime.Hours + " heures " + Uptime.Minutes + " minutes | "
                          + UsersOnline + " Joueur(s) en ligne " + " | " + RoomsLoaded + " Appartement(s) en ligne";
 
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         EmulatorStatsDao.Insert(dbClient, UsersOnline, RoomsLoaded);
                         EmulatorStatusDao.UpdateScore(dbClient, UsersOnline, RoomsLoaded, UserPeak);

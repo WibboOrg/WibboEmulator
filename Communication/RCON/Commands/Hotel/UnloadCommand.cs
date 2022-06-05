@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.RCON.Commands.Hotel
+namespace Wibbo.Communication.RCON.Commands.Hotel
 {
     internal class UnloadCommand : IRCONCommand
     {
@@ -22,13 +22,13 @@ namespace Butterfly.Communication.RCON.Commands.Hotel
                 return false;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
             if (room == null)
             {
                 return false;
             }
 
-            ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
+            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
             return true;
         }
     }

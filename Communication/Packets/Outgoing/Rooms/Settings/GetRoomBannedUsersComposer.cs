@@ -1,7 +1,7 @@
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Users;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Settings
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Settings
 {
     internal class GetRoomBannedUsersComposer : ServerPacket
     {
@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Settings
             this.WriteInteger(instance.GetBans().Count);//Count
             foreach (int Id in instance.GetBans().Keys)
             {
-                User Data = ButterflyEnvironment.GetUserById(Id);
+                User Data = WibboEnvironment.GetUserById(Id);
 
                 if (Data == null)
                 {

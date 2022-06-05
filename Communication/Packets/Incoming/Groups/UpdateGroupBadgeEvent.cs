@@ -1,10 +1,10 @@
-using Butterfly.Communication.Packets.Outgoing.Groups;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class UpdateGroupBadgeEvent : IPacketEvent
     {
@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int GroupId = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
             {
                 return;
             }
@@ -34,7 +34,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Group.Badge = (string.IsNullOrWhiteSpace(Badge) ? "b05114s06114" : Badge);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 GuildDao.UpdateBadge(dbClient, Group.Id, Group.Badge);
             }

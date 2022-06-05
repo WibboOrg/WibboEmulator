@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Moderation;
-using Butterfly.Game.Chat.Logs;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Moderation;
+using Wibbo.Game.Chat.Logs;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetModeratorUserChatlogEvent : IPacketEvent
     {
@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int userId = Packet.PopInt();
 
-            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
             if (clientByUserId == null || clientByUserId.GetUser() == null)
             {
                 List<ChatlogEntry> sortedMessages = new List<ChatlogEntry>();

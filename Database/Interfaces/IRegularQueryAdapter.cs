@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Butterfly.Database.Interfaces
+namespace Wibbo.Database.Interfaces
 {
     public interface IRegularQueryAdapter
     {

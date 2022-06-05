@@ -1,13 +1,13 @@
 ﻿
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.AI;
-using Butterfly.Game.Items.Wired.Interfaces;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.AI;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.Communication.Packets.Outgoing.RolePlay;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
+using Wibbo.Communication.Packets.Outgoing.RolePlay;
 
-namespace Butterfly.Game.Items.Wired.Actions
+namespace Wibbo.Game.Items.Wired.Actions
 {
     public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
     {

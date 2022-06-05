@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class RoomMutePet : IChatCommand
     {
@@ -15,12 +15,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (room.RoomMutePets)
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.roommutepet.true", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roommutepet.true", Session.Langue));
                 room.RoomMutePets = false;
             }
             else
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.roommutepet.false", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roommutepet.false", Session.Langue));
                 room.RoomMutePets = true;
             }
 

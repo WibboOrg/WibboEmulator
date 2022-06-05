@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class WarpStaff : IChatCommand
     {
@@ -12,13 +12,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
             if (TargetUser == null)
             {
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(TargetUser.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(TargetUser.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;

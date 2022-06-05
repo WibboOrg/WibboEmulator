@@ -1,14 +1,14 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
 
-using Butterfly.Game.Clients;
-using Butterfly.Game.Quests;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Chat.Styles;
-using Butterfly.Utilities;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Chat.Styles;
+using Wibbo.Utilities;
 using System.Text.RegularExpressions;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class ChatEvent : IPacketEvent
     {
@@ -51,7 +51,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int Colour = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Colour, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !Session.GetUser().HasFuse(Style.RequiredRight)))
+            if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Colour, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !Session.GetUser().HasFuse(Style.RequiredRight)))
             {
                 Colour = 0;
             }
@@ -65,7 +65,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (!Session.GetUser().HasFuse("fuse_mod") && Room.RoomMuted && !User.IsOwner() && !Session.GetUser().CurrentRoom.CheckRights(Session))
             {
-                User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("room.muted", Session.Langue));
+                User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("room.muted", Session.Langue));
                 return;
             }
 
@@ -73,7 +73,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 if (!Room.GetJanken().PickChoice(User, Message))
                 {
-                    User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.choice", Session.Langue));
+                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.choice", Session.Langue));
                 }
 
                 return;
@@ -83,7 +83,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 if (!Room.HasMuteExpired(Session.GetUser().Id))
                 {
-                    User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.muted", Session.Langue));
+                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("user.muted", Session.Langue));
                     return;
                 }
                 else
@@ -165,7 +165,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     User.ChatTextColor = "";
                 }
 
-                if (Message.StartsWith(":", StringComparison.CurrentCulture) && ButterflyEnvironment.GetGame().GetChatManager().GetCommands().Parse(Session, User, Room, Message))
+                if (Message.StartsWith(":", StringComparison.CurrentCulture) && WibboEnvironment.GetGame().GetChatManager().GetCommands().Parse(Session, User, Room, Message))
                 {
                     Room.GetChatMessageManager().AddMessage(Session.GetUser().Id, Session.GetUser().Username, Room.Id, string.Format("{0} a utilisé la commande {1}", Session.GetUser().Username, Message), UnixTimestamp.GetNow());
                     return;
@@ -176,7 +176,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_CHAT, 0);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_CHAT, 0);
                 Session.GetUser().GetChatMessageManager().AddMessage(Session.GetUser().Id, Session.GetUser().Username, Room.Id, Message, UnixTimestamp.GetNow());
                 Room.GetChatMessageManager().AddMessage(Session.GetUser().Id, Session.GetUser().Username, Room.Id, Message, UnixTimestamp.GetNow());
 
@@ -188,7 +188,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (!Session.GetUser().HasFuse("word_filter_override"))
             {
-                Message = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
+                Message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
                 Message = new Regex(@"\[tag\](.*?)\[\/tag\]").Replace(Message, "<tag>$1</tag>");
             }
 
@@ -207,7 +207,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (!Session.GetUser().IgnoreAll)
             {
-                Message = ButterflyEnvironment.GetGame().GetChatManager().GetMention().Parse(Session, Message);
+                Message = WibboEnvironment.GetGame().GetChatManager().GetMention().Parse(Session, Message);
             }
 
             if (!string.IsNullOrEmpty(User.ChatTextColor))

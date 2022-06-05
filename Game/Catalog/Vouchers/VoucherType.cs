@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Catalog.Vouchers
+﻿namespace Wibbo.Game.Catalog.Vouchers
 {
     public enum VoucherType
     {

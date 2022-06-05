@@ -1,10 +1,10 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Roleplay.Player;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Roleplay.Player;
 using System.Collections.Concurrent;
 using System.Data;
 
-namespace Butterfly.Game.Roleplay
+namespace Wibbo.Game.Roleplay
 {
     public class RolePlayerManager
     {
@@ -36,7 +36,7 @@ namespace Butterfly.Game.Roleplay
 
             RolePlayer player = null;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 DataRow dRow = UserRoleplayDao.GetOne(dbClient, UserId, this._id);
                 if (dRow == null)

@@ -1,10 +1,10 @@
-﻿using Butterfly.Communication.Interfaces;
-using Butterfly.Communication.Packets.Outgoing.RolePlay.Troc;
-using Butterfly.Game.Roleplay.Item;
-using Butterfly.Game.Roleplay.Player;
+﻿using Wibbo.Communication.Interfaces;
+using Wibbo.Communication.Packets.Outgoing.RolePlay.Troc;
+using Wibbo.Game.Roleplay.Item;
+using Wibbo.Game.Roleplay.Player;
 using System.Collections.Concurrent;
 
-namespace Butterfly.Game.Roleplay.Troc
+namespace Wibbo.Game.Roleplay.Troc
 {
     public class RPTrocManager
     {
@@ -84,7 +84,7 @@ namespace Butterfly.Game.Roleplay.Troc
 
         private void SendPacketUsers(IServerPacket packet, RPTroc Troc)
         {
-            RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Troc.RPId);
+            RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Troc.RPId);
             if (RPManager == null)
             {
                 return;
@@ -105,7 +105,7 @@ namespace Butterfly.Game.Roleplay.Troc
 
         private void CloseTrade(RPTroc Troc)
         {
-            RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Troc.RPId);
+            RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Troc.RPId);
             if (RPManager == null)
             {
                 return;
@@ -130,7 +130,7 @@ namespace Butterfly.Game.Roleplay.Troc
 
         private bool EndTrade(RPTroc Troc)
         {
-            RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Troc.RPId);
+            RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Troc.RPId);
             if (RPManager == null)
             {
                 return false;
@@ -215,13 +215,13 @@ namespace Butterfly.Game.Roleplay.Troc
                 return;
             }
 
-            RPItem RpItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
+            RPItem RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
             if (RpItem == null || RpItem.Category == RPItemCategory.QUETE || !RpItem.AllowStack)
             {
                 return;
             }
 
-            RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Troc.RPId);
+            RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Troc.RPId);
             if (RPManager == null)
             {
                 return;
@@ -268,7 +268,7 @@ namespace Butterfly.Game.Roleplay.Troc
                 return;
             }
 
-            RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Troc.RPId);
+            RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Troc.RPId);
             if (RPManager == null)
             {
                 return;
@@ -298,7 +298,7 @@ namespace Butterfly.Game.Roleplay.Troc
 
         public void AddTrade(int RPId, int UserOne, int UserTwo, string UserNameOne, string UserNameTwo)
         {
-            RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(RPId);
+            RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(RPId);
             if (RPManager == null)
             {
                 return;

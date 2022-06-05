@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Help;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Help;
+using Wibbo.Communication.Packets.Outgoing.Help;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Help;
 
-namespace Butterfly.Communication.Packets.Incoming.Guide
+namespace Wibbo.Communication.Packets.Incoming.Guide
 {
     internal class OnGuideEvent : IPacketEvent
     {
@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.Guide
             int userId = Packet.PopInt();
             string message = Packet.PopString();
 
-            HelpManager guideManager = ButterflyEnvironment.GetGame().GetHelpManager();
+            HelpManager guideManager = WibboEnvironment.GetGame().GetHelpManager();
             if (guideManager.GuidesCount <= 0)
             {
                 Session.SendPacket(new OnGuideSessionErrorComposer(2));
@@ -32,7 +32,7 @@ namespace Butterfly.Communication.Packets.Incoming.Guide
                 return;
             }
 
-            Client guide = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(guideId);
+            Client guide = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(guideId);
 
             Session.SendPacket(new OnGuideSessionAttachedComposer(false, userId, message, 30));
             guide.SendPacket(new OnGuideSessionAttachedComposer(true, userId, message, 15));

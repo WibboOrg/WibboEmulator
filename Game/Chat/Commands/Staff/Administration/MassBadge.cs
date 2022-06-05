@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class MassBadge : IChatCommand
     {
@@ -15,7 +15,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            foreach (Client Client in ButterflyEnvironment.GetGame().GetClientManager().GetClients.ToList())
+            foreach (Client Client in WibboEnvironment.GetGame().GetClientManager().GetClients.ToList())
             {
                 if (Client.GetUser() != null)
                 {

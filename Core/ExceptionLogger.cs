@@ -1,7 +1,7 @@
 ﻿using ConsoleWriter;
 using System.Text;
 
-namespace Butterfly.Core
+namespace Wibbo.Core
 {
     public static class ExceptionLogger
     {

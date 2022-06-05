@@ -1,9 +1,9 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Rooms.Jankens;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms.Jankens;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class RockPaperScissors : IChatCommand
     {
@@ -40,7 +40,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             RoomUser roomuser = room.GetRoomUserManager().GetRoomUserByName(Username);
             if (roomuser == null)
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
                 return;
             }
 

@@ -1,9 +1,9 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetUserGroupBadgesEvent : IPacketEvent
     {
@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room Room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().LoadingRoomId);
+            Room Room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().LoadingRoomId);
             if (Room == null)
             {
                 return;
@@ -35,7 +35,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     continue;
                 }
 
-                if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(User.GetClient().GetUser().FavouriteGroupId, out Group Group))
+                if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(User.GetClient().GetUser().FavouriteGroupId, out Group Group))
                 {
                     continue;
                 }
@@ -48,7 +48,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (Session.GetUser().FavouriteGroupId > 0)
             {
-                if (ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Session.GetUser().FavouriteGroupId, out Group Group))
+                if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(Session.GetUser().FavouriteGroupId, out Group Group))
                 {
                     if (!Badges.ContainsKey(Group.Id))
                     {

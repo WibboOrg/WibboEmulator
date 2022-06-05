@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Chat
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Chat
 {
     internal class WhisperComposer : ServerPacket
     {
@@ -7,7 +7,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Chat
         {
             WriteInteger(VirtualId);
             WriteString(Text);
-            WriteInteger(ButterflyEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(Text));
+            WriteInteger(WibboEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(Text));
             WriteInteger(Colour);
 
             WriteInteger(0);

@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
 
-namespace Butterfly.Communication.Packets.Outgoing.Groups
+namespace Wibbo.Communication.Packets.Outgoing.Groups
 {
     internal class GroupInfoComposer : ServerPacket
     {
@@ -17,14 +17,14 @@ namespace Butterfly.Communication.Packets.Outgoing.Groups
             this.WriteString(Group.Description);
             this.WriteString(Group.Badge);
             this.WriteInteger(Group.RoomId);
-            this.WriteString((ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(Group.RoomId) == null) ? "No room found.." : ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(Group.RoomId).Name);    // room name
+            this.WriteString((WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(Group.RoomId) == null) ? "No room found.." : WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(Group.RoomId).Name);    // room name
             this.WriteInteger(Group.CreatorId == Session.GetUser().Id ? 3 : Group.HasRequest(Session.GetUser().Id) ? 2 : Group.IsMember(Session.GetUser().Id) ? 1 : 0);
             this.WriteInteger(Group.MemberCount); // Members
             this.WriteBoolean(false);//?? CHANGED
             this.WriteString(Origin.Day + "-" + Origin.Month + "-" + Origin.Year);
             this.WriteBoolean(Group.CreatorId == Session.GetUser().Id);
             this.WriteBoolean(Group.IsAdmin(Session.GetUser().Id)); // admin
-            this.WriteString(ButterflyEnvironment.GetUsernameById(Group.CreatorId));
+            this.WriteString(WibboEnvironment.GetUsernameById(Group.CreatorId));
             this.WriteBoolean(NewWindow); // Show group info
             this.WriteBoolean(Group.AdminOnlyDeco == 0); // Any user can place furni in home room
             this.WriteInteger(Group.CreatorId == Session.GetUser().Id ? Group.RequestCount : Group.IsAdmin(Session.GetUser().Id) ? Group.RequestCount : Group.IsMember(Session.GetUser().Id) ? 0 : 0); // Pending users

@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Clients;
+﻿using Wibbo.Game.Clients;
 
-namespace Butterfly.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorLoveShuffler : FurniInteractor
     {
@@ -30,7 +30,7 @@ namespace Butterfly.Game.Items.Interactors
         {
             if (item.ExtraData == "0")
             {
-                item.ExtraData = ButterflyEnvironment.GetRandomNumber(1, 4).ToString();
+                item.ExtraData = WibboEnvironment.GetRandomNumber(1, 4).ToString();
                 item.ReqUpdate(20);
             }
             else if (item.ExtraData != "-1")

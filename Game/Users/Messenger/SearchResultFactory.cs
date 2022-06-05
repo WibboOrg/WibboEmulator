@@ -1,8 +1,8 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Users.Messenger
+namespace Wibbo.Game.Users.Messenger
 {
     public class SearchResultFactory
     {
@@ -10,7 +10,7 @@ namespace Butterfly.Game.Users.Messenger
         {
             List<SearchResult> list = new List<SearchResult>();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 DataTable table = UserDao.GetAllSearchUsers(dbClient, query);
 

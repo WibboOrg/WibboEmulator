@@ -1,13 +1,13 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class AllFriends : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            foreach (Client User in ButterflyEnvironment.GetGame().GetClientManager().GetClients)
+            foreach (Client User in WibboEnvironment.GetGame().GetClientManager().GetClients)
             {
                 if (User == null)
                 {

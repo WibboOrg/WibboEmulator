@@ -1,11 +1,11 @@
-﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
-using Butterfly.Game.Rooms.Wired;
-using Butterfly.Utilities.Events;
+using Wibbo.Game.Rooms.Wired;
+using Wibbo.Utilities.Events;
 
-namespace Butterfly.Game.Items.Wired
+namespace Wibbo.Game.Items.Wired
 {
     public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
     {

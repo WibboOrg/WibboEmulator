@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Groups;
+using Wibbo.Communication.Packets.Outgoing.Groups;
 
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RemoveGroupFavouriteEvent : IPacketEvent
     {

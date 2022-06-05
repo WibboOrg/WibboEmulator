@@ -1,7 +1,7 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 
-namespace Butterfly.Game.Items.Wired
+namespace Wibbo.Game.Items.Wired
 {
     public class WiredUtillity
     {

@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.AI.Bots;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.AI.Bots;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class OpenBotActionEvent : IPacketEvent
     {

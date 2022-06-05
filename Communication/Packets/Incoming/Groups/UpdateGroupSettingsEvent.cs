@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Groups;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Permissions;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class UpdateGroupSettingsEvent : IPacketEvent
     {
@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int GroupId = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
             {
                 return;
             }
@@ -56,14 +56,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 GuildDao.UpdateStateAndDeco(dbClient, Group.Id, (Group.GroupType == GroupType.OPEN ? 0 : Group.GroupType == GroupType.LOCKED ? 1 : 2), FurniOptions);
             }
 
             Group.AdminOnlyDeco = FurniOptions;
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room Room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room Room))
             {
                 return;
             }

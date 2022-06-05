@@ -1,6 +1,6 @@
-using Butterfly.Game.LandingView.Promotions;
+using Wibbo.Game.LandingView.Promotions;
 
-namespace Butterfly.Communication.Packets.Outgoing.LandingView
+namespace Wibbo.Communication.Packets.Outgoing.LandingView
 {
     internal class PromoArticlesComposer : ServerPacket
     {

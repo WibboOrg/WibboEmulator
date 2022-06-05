@@ -1,8 +1,8 @@
-using Butterfly.Core;
-using Butterfly.Game.Catalog;
-using Butterfly.Game.Clients;
+using Wibbo.Core;
+using Wibbo.Game.Catalog;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Outgoing.Catalog
+namespace Wibbo.Communication.Packets.Outgoing.Catalog
 {
     internal class CatalogIndexComposer : ServerPacket
     {

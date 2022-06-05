@@ -1,6 +1,6 @@
-using Butterfly.Game.Pets;
+using Wibbo.Game.Pets;
 
-namespace Butterfly.Communication.Packets.Outgoing.Inventory.Pets
+namespace Wibbo.Communication.Packets.Outgoing.Inventory.Pets
 {
     internal class PetInventoryComposer : ServerPacket
     {

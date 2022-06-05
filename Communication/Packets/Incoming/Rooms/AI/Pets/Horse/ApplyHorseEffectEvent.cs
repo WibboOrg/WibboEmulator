@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.AI.Pets;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class ApplyHorseEffectEvent : IPacketEvent
     {
@@ -19,7 +19,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -46,7 +46,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             if (Item.Data.InteractionType == InteractionType.HORSE_SADDLE_1)
             {
                 PetUser.PetData.Saddle = 9;
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     BotPetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 1);
                     ItemDao.Delete(dbClient, Item.Id);
@@ -58,7 +58,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             else if (Item.Data.InteractionType == InteractionType.HORSE_SADDLE_2)
             {
                 PetUser.PetData.Saddle = 10;
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     BotPetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 2);
                     ItemDao.Delete(dbClient, Item.Id);
@@ -75,7 +75,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Parse += int.Parse(HairType);
 
                 PetUser.PetData.PetHair = Parse;
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     BotPetDao.UpdatePethair(dbClient, PetUser.PetData.PetId, PetUser.PetData.PetHair);
                     ItemDao.Delete(dbClient, Item.Id);
@@ -92,7 +92,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 HairDye += int.Parse(HairType);
                 PetUser.PetData.HairDye = HairDye;
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     BotPetDao.UpdateHairdye(dbClient, PetUser.PetData.PetId, PetUser.PetData.HairDye);
                     ItemDao.Delete(dbClient, Item.Id);
@@ -125,7 +125,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 PetUser.PetData.Race = RaceLast.ToString();
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     BotPetDao.UpdateRace(dbClient, PetUser.PetData.PetId, PetUser.PetData.Race);
                     ItemDao.Delete(dbClient, Item.Id);

@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Prison : IChatCommand
     {
@@ -65,7 +65,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             if (Math.Floor((double)(RpTwo.Health / (double)RpTwo.HealthMax) * 100) > 75)
             {
                 UserRoom.OnChat("*Tente d'arrêter " + TargetRoomUser.GetUsername() + "*");
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.prisonnotallowed", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("rp.prisonnotallowed", Session.Langue));
                 return;
             }
 

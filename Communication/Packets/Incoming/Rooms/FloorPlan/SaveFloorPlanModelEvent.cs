@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Notifications;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 using System.Text.RegularExpressions;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class SaveFloorPlanModelEvent : IPacketEvent
     {
@@ -22,7 +22,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int FloorThick = Packet.PopInt();
             int WallHeight = Packet.PopInt();
 
-            Room Room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room Room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (Room == null)
             {
                 return;
@@ -35,7 +35,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (Room.RoomData.SellPrice > 0)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.8", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.8", Session.Langue));
                 return;
             }
 
@@ -131,7 +131,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 WallHeight = 15;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoomModelCustomDao.Replace(dbClient, Room.Id, DoorX, DoorY, DoorZ, DoorDirection, Map, WallHeight);
                 RoomDao.UpdateModelWallThickFloorThick(dbClient, Room.Id, WallThick, FloorThick);
@@ -139,7 +139,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             List<RoomUser> UsersToReturn = Room.GetRoomUserManager().GetRoomUsers().ToList();
 
-            ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
+            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
 
 
             foreach (RoomUser User in UsersToReturn)

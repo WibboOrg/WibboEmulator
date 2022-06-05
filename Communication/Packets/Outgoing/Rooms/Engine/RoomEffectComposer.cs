@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
+﻿namespace Wibbo.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class RoomEffectComposer : ServerPacket
     {

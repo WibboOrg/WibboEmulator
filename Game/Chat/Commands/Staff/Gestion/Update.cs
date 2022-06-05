@@ -1,10 +1,10 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Catalog;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Update : IChatCommand
     {
@@ -22,18 +22,18 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 switch (cmd.ToLower())
                 {
                     case "staticevents":
                         {
-                            ButterflyEnvironment.StaticEvents = !ButterflyEnvironment.StaticEvents;
+                            WibboEnvironment.StaticEvents = !WibboEnvironment.StaticEvents;
                             break;
                         }
                     case "random":
                         {
-                            ButterflyEnvironment.RegenRandom();
+                            WibboEnvironment.RegenRandom();
                             Session.SendWhisper("Random mis à jour");
                             break;
                         }
@@ -42,7 +42,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     case "lv":
                     case "vue":
                         {
-                            ButterflyEnvironment.GetGame().GetHotelView().Init(dbClient);
+                            WibboEnvironment.GetGame().GetHotelView().Init(dbClient);
                             Session.SendWhisper("Vue et promotion mises à jour");
                             break;
                         }
@@ -50,14 +50,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     case "texte":
                     case "locale":
                         {
-                            ButterflyEnvironment.GetLanguageManager().Init(dbClient);
+                            WibboEnvironment.GetLanguageManager().Init(dbClient);
                             Session.SendWhisper("Local mis à jour");
                             break;
                         }
 
                     case "wibbogame":
                         {
-                            ButterflyEnvironment.GetGame().GetAnimationManager().Init(dbClient);
+                            WibboEnvironment.GetGame().GetAnimationManager().Init(dbClient);
                             Session.SendWhisper("Wibbo Game mis à jour");
                             break;
                         }
@@ -76,102 +76,102 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                         }*/
                     case "rpitems":
                         {
-                            ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().Init(dbClient);
+                            WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().Init(dbClient);
                             Session.SendWhisper("RP Items mis à jour");
                             break;
                         }
                     case "rpweapon":
                         {
-                            ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().Init(dbClient);
+                            WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().Init(dbClient);
                             Session.SendWhisper("RP Weapon mis à jour");
                             break;
                         }
                     case "rpenemy":
                         {
-                            ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().Init(dbClient);
+                            WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().Init(dbClient);
                             Session.SendWhisper("RP Enemy mis à jour");
                             break;
                         }
                     case "cmd":
                     case "commands":
                         {
-                            ButterflyEnvironment.GetGame().GetChatManager().GetCommands().Init(dbClient);
+                            WibboEnvironment.GetGame().GetChatManager().GetCommands().Init(dbClient);
                             Session.SendWhisper("Commands mis à jour");
                             break;
                         }
                     case "role":
                     case "fuse":
                         {
-                            ButterflyEnvironment.GetGame().GetPermissionManager().Init(dbClient);
+                            WibboEnvironment.GetGame().GetPermissionManager().Init(dbClient);
                             Session.SendWhisper("Rôle mis à jour");
                             break;
                         }
                     case "effet":
                         {
-                            ButterflyEnvironment.GetGame().GetEffectManager().Init(dbClient);
+                            WibboEnvironment.GetGame().GetEffectManager().Init(dbClient);
                             Session.SendWhisper("Effet mis à jour");
                             break;
                         }
                     case "rp":
                     case "roleplay":
                         {
-                            ButterflyEnvironment.GetGame().GetRoleplayManager().Init(dbClient);
+                            WibboEnvironment.GetGame().GetRoleplayManager().Init(dbClient);
                             Session.SendWhisper("Role play mis à jour");
                             break;
                         }
                     case "moderation":
                         {
-                            ButterflyEnvironment.GetGame().GetModerationManager().Init(dbClient);
+                            WibboEnvironment.GetGame().GetModerationManager().Init(dbClient);
                             Session.SendWhisper("Moderation mis à jour");
-                            ButterflyEnvironment.GetGame().GetClientManager().SendMessageStaff(new WhisperComposer(UserRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous !" + "L'équipe développement", 23));
+                            WibboEnvironment.GetGame().GetClientManager().SendMessageStaff(new WhisperComposer(UserRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous !" + "L'équipe développement", 23));
                             break;
                         }
                     case "catalogue":
                     case "cata":
                         {
-                            ButterflyEnvironment.GetGame().GetItemManager().Init(dbClient);
-                            ButterflyEnvironment.GetGame().GetCatalog().Init(dbClient, ButterflyEnvironment.GetGame().GetItemManager());
-                            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new CatalogUpdatedComposer());
+                            WibboEnvironment.GetGame().GetItemManager().Init(dbClient);
+                            WibboEnvironment.GetGame().GetCatalog().Init(dbClient, WibboEnvironment.GetGame().GetItemManager());
+                            WibboEnvironment.GetGame().GetClientManager().SendMessage(new CatalogUpdatedComposer());
                             Session.SendWhisper("Catalogue mis à jour");
                             break;
                         }
                     case "navigateur":
                     case "navi":
                         {
-                            ButterflyEnvironment.GetGame().GetNavigator().Init(dbClient);
+                            WibboEnvironment.GetGame().GetNavigator().Init(dbClient);
                             Session.SendWhisper("Navigateur mis à jour");
                             break;
                         }
                     case "filter":
                     case "filtre":
                         {
-                            ButterflyEnvironment.GetGame().GetChatManager().GetFilter().Init(dbClient);
+                            WibboEnvironment.GetGame().GetChatManager().GetFilter().Init(dbClient);
                             Session.SendWhisper("Filtre mis à jour");
                             break;
                         }
                     case "items":
                     case "furni":
                         {
-                            ButterflyEnvironment.GetGame().GetItemManager().Init(dbClient);
+                            WibboEnvironment.GetGame().GetItemManager().Init(dbClient);
                             Session.SendWhisper("Items mis à jour");
                             break;
                         }
                     case "model":
                         {
-                            ButterflyEnvironment.GetGame().GetRoomManager().Init(dbClient);
+                            WibboEnvironment.GetGame().GetRoomManager().Init(dbClient);
                             Session.SendWhisper("Model mis à jour");
                             break;
                         }
                     case "mutant":
                     case "figure":
                         {
-                            ButterflyEnvironment.GetFigureManager().Init();
+                            WibboEnvironment.GetFigureManager().Init();
                             Session.SendWhisper("Mutant/Figure mises à jour");
                             break;
                         }
                     default:
                         {
-                            Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.notfound", Session.Langue));
+                            Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.notfound", Session.Langue));
                             return;
                         }
                 }

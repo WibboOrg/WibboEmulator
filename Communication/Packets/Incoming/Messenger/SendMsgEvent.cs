@@ -1,6 +1,6 @@
-using Butterfly.Game.Clients;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class SendMsgEvent : IPacketEvent
     {
@@ -20,7 +20,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            string Message = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
+            string Message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
             if (string.IsNullOrWhiteSpace(Message))
             {
                 return;

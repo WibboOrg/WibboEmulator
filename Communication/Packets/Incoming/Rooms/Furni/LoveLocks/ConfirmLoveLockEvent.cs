@@ -1,11 +1,11 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Furni;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Furni.Furni;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class ConfirmLoveLockEvent : IPacketEvent
     {
@@ -39,19 +39,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 Item.InteractingUser = 0;
                 Item.InteractingUser2 = 0;
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", Session.Langue));
                 return;
             }
             else if (UserOne.GetClient() == null || UserTwo.GetClient() == null)
             {
                 Item.InteractingUser = 0;
                 Item.InteractingUser2 = 0;
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", Session.Langue));
                 return;
             }
             else if (UserOne == null)
             {
-                UserTwo.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", UserTwo.GetClient().Langue));
+                UserTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", UserTwo.GetClient().Langue));
                 UserTwo.LLPartner = 0;
                 Item.InteractingUser = 0;
                 Item.InteractingUser2 = 0;
@@ -59,7 +59,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
             else if (UserTwo == null)
             {
-                UserOne.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", UserOne.GetClient().Langue));
+                UserOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", UserOne.GetClient().Langue));
                 UserOne.LLPartner = 0;
                 Item.InteractingUser = 0;
                 Item.InteractingUser2 = 0;
@@ -67,10 +67,10 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
             else if (Item.ExtraData.Contains(Convert.ToChar(5).ToString()))
             {
-                UserTwo.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.2", UserTwo.GetClient().Langue));
+                UserTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.2", UserTwo.GetClient().Langue));
                 UserTwo.LLPartner = 0;
 
-                UserOne.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.2", UserOne.GetClient().Langue));
+                UserOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.2", UserOne.GetClient().Langue));
                 UserOne.LLPartner = 0;
 
                 Item.InteractingUser = 0;
@@ -118,7 +118,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     UserOne.GetClient().SendPacket(new LoveLockDialogueCloseComposer(Id));
                     UserTwo.GetClient().SendPacket(new LoveLockDialogueCloseComposer(Id));
 
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         ItemDao.UpdateExtradata(dbClient, Item.Id, Item.ExtraData);
                     }

@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Catalog;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
+using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetSellablePetBreedsEvent : IPacketEvent
     {
@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             string Type = Packet.PopString();
 
-            ItemData Item = ButterflyEnvironment.GetGame().GetItemManager().GetItemByName(Type);
+            ItemData Item = WibboEnvironment.GetGame().GetItemManager().GetItemByName(Type);
             if (Item == null)
             {
                 return;
@@ -20,7 +20,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int PetId = Item.SpriteId;
 
-            Session.SendPacket(new SellablePetBreedsComposer(Type, PetId, ButterflyEnvironment.GetGame().GetCatalog().GetRacesForRaceId(PetId)));
+            Session.SendPacket(new SellablePetBreedsComposer(Type, PetId, WibboEnvironment.GetGame().GetCatalog().GetRacesForRaceId(PetId)));
         }
     }
 }

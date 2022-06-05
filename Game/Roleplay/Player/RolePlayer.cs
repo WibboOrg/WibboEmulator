@@ -1,16 +1,16 @@
-﻿using Butterfly.Communication.Interfaces;
-using Butterfly.Communication.Packets.Outgoing.RolePlay;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Roleplay.Weapon;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Interfaces;
+using Wibbo.Communication.Packets.Outgoing.RolePlay;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Roleplay.Weapon;
+using Wibbo.Game.Rooms;
 using System.Collections.Concurrent;
 using System.Data;
 
-namespace Butterfly.Game.Roleplay.Player
+namespace Wibbo.Game.Roleplay.Player
 {
     public class RolePlayer
     {
@@ -54,8 +54,8 @@ namespace Butterfly.Game.Roleplay.Player
             this.Munition = pMunition;
             this.Exp = pExp;
             this.PvpEnable = true;
-            this.WeaponCac = ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(pWeaponCac);
-            this.WeaponGun = ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(pWeaponGun);
+            this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(pWeaponCac);
+            this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(pWeaponGun);
 
             this.GunLoad = 6;
             this.GunLoadTimer = 0;
@@ -100,12 +100,12 @@ namespace Butterfly.Game.Roleplay.Player
             this.Level = 1;
             this.HealthMax = 100;
 
-            this.WeaponCac = ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(0);
-            this.WeaponGun = ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(0);
+            this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(0);
+            this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(0);
 
             this._inventory.Clear();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserRoleplayItemDao.Delete(dbClient, this._id, this._rpId);
                 UserRoleplayDao.Delete(dbClient, this._id, this._rpId);
@@ -119,7 +119,7 @@ namespace Butterfly.Game.Roleplay.Player
         public void LoadInventory()
         {
             DataTable Table;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 Table = UserRoleplayItemDao.GetAll(dbClient, this._id, this._rpId);
 
             foreach (DataRow dataRow in Table.Rows)
@@ -143,7 +143,7 @@ namespace Butterfly.Game.Roleplay.Player
 
         internal void AddInventoryItem(int itemId, int count = 1)
         {
-            RPItem RPItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
+            RPItem RPItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
             if (RPItem == null)
             {
                 return;
@@ -152,7 +152,7 @@ namespace Butterfly.Game.Roleplay.Player
             RolePlayInventoryItem Item = this.GetInventoryItem(itemId);
             if (Item == null)
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     int Id = UserRoleplayItemDao.Insert(dbClient, this._id, this._rpId, itemId, count);
                     this._inventory.TryAdd(itemId, new RolePlayInventoryItem(Id, itemId, count));
@@ -161,7 +161,7 @@ namespace Butterfly.Game.Roleplay.Player
             else
             {
                 Item.Count += count;
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserRoleplayItemDao.UpdateAddCount(dbClient, Item.Id, count);
                 }
@@ -183,7 +183,7 @@ namespace Butterfly.Game.Roleplay.Player
             {
                 Item.Count -= Count;
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserRoleplayItemDao.UpdateRemoveCount(dbClient, Item.Id, Count);
                 }
@@ -192,7 +192,7 @@ namespace Butterfly.Game.Roleplay.Player
             {
                 this._inventory.TryRemove(ItemId, out Item);
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserRoleplayItemDao.Delete(dbClient, this._id);
                 }
@@ -203,7 +203,7 @@ namespace Butterfly.Game.Roleplay.Player
 
         public void SendPacket(IServerPacket Message)
         {
-            Client session = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this._id);
+            Client session = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._id);
             if (session != null)
             {
                 session.SendPacket(Message);
@@ -367,7 +367,7 @@ namespace Butterfly.Game.Roleplay.Player
 
                 if (User.GetClient() != null)
                 {
-                    User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.userdead", User.GetClient().Langue));
+                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.userdead", User.GetClient().Langue));
                 }
 
                 if (this.Money > 10)
@@ -389,7 +389,7 @@ namespace Butterfly.Game.Roleplay.Player
                     {
                         if (User.GetClient() != null)
                         {
-                            User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.hitslow", User.GetClient().Langue));
+                            User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hitslow", User.GetClient().Langue));
                         }
                     }
                     this.SlowTimer = 6;
@@ -404,11 +404,11 @@ namespace Butterfly.Game.Roleplay.Player
                 {
                     if (Murmur)
                     {
-                        User.OnChatMe(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.hit", User.GetClient().Langue), this.Health, this.HealthMax, Dmg), 0, true);
+                        User.OnChatMe(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", User.GetClient().Langue), this.Health, this.HealthMax, Dmg), 0, true);
                     }
                     else
                     {
-                        User.OnChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.hit", User.GetClient().Langue), this.Health, this.HealthMax, Dmg), 0, true);
+                        User.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", User.GetClient().Langue), this.Health, this.HealthMax, Dmg), 0, true);
                     }
                 }
             }
@@ -553,7 +553,7 @@ namespace Butterfly.Game.Roleplay.Player
             }
 
             this.Dispose = true;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserRoleplayDao.Update(dbClient, this._id, this._rpId, this.Health, this.Energy, this.Money, this.Munition, this.Exp, this.WeaponGun.Id, this.WeaponCac.Id);
             }

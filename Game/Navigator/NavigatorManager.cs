@@ -1,9 +1,9 @@
-﻿using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Navigator
+namespace Wibbo.Game.Navigator
 {
     public sealed class NavigatorManager
     {

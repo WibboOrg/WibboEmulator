@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 using System.Text.RegularExpressions;
 
-namespace Butterfly.Game.Chat.Filter
+namespace Wibbo.Game.Chat.Filter
 {
     public sealed class WordFilterManager
     {
@@ -55,7 +55,7 @@ namespace Butterfly.Game.Chat.Filter
             {
                 this._pubWords.Add(Word);
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     WordFilterRetroDao.Insert(dbClient, Word);
             }
         }

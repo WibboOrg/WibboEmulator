@@ -1,6 +1,6 @@
-using Butterfly.Game.Clients;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetQuestListEvent : IPacketEvent
     {
@@ -8,7 +8,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            ButterflyEnvironment.GetGame().GetQuestManager().SendQuestList(Session, false);
+            WibboEnvironment.GetGame().GetQuestManager().SendQuestList(Session, false);
         }
     }
 }

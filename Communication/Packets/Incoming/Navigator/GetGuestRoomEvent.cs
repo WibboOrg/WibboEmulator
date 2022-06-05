@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetGuestRoomEvent : IPacketEvent
     {
@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int roomID = Packet.PopInt();
 
-            RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomID);
+            RoomData roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomID);
             if (roomData == null)
             {
                 return;

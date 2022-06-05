@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms.Map.Movement;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class GunFire : IChatCommand
     {

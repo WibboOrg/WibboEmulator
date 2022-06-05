@@ -1,7 +1,7 @@
-using Butterfly.Database.Interfaces;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class ItemMoodlightDao
     {
@@ -18,7 +18,7 @@ namespace Butterfly.Database.Daos
 
         internal static void Update(IQueryAdapter dbClient, int itemId, string color, string pr, int intensity, bool bgOnly)
         {
-            dbClient.SetQuery("UPDATE `item_moodlight` SET `preset_" + pr + "` = '@color," + intensity + "," + ButterflyEnvironment.BoolToEnum(bgOnly) + "' WHERE item_id = '" + itemId + "' LIMIT 1");
+            dbClient.SetQuery("UPDATE `item_moodlight` SET `preset_" + pr + "` = '@color," + intensity + "," + WibboEnvironment.BoolToEnum(bgOnly) + "' WHERE item_id = '" + itemId + "' LIMIT 1");
             dbClient.AddParameter("color", color);
             dbClient.RunQuery();
         }

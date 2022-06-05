@@ -1,11 +1,11 @@
-﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Items.Wired.Conditions
+namespace Wibbo.Game.Items.Wired.Conditions
 {
     public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
     {

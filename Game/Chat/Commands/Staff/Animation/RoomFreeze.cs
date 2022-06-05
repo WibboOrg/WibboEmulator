@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class RoomFreeze : IChatCommand
     {
@@ -11,11 +11,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (Room.FreezeRoom)
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.roomfreeze.true", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roomfreeze.true", Session.Langue));
             }
             else
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.roomfreeze.false", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roomfreeze.false", Session.Langue));
             }
         }
     }

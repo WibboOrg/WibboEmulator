@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Database.Interfaces
+﻿namespace Wibbo.Database.Interfaces
 {
     public interface IQueryAdapter : IRegularQueryAdapter, IDisposable
     {

@@ -1,7 +1,7 @@
 ﻿using ConsoleWriter;
 using System.Text;
 
-namespace Butterfly.Database
+namespace Wibbo.Database
 {
     public static class ExceptionSQL
     {

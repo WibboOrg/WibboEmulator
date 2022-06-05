@@ -1,10 +1,10 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Permissions;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RemoveMyRightsEvent : IPacketEvent
     {
@@ -22,7 +22,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -43,7 +43,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     User.GetClient().SendPacket(new YouAreNotControllerComposer());
                 }
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     RoomRightDao.Delete(dbClient, Room.Id, Session.GetUser().Id);
                 }

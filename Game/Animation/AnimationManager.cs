@@ -1,12 +1,12 @@
 ﻿
-using Butterfly.Communication.Packets.Outgoing.Notifications.NotifCustom;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Notifications.NotifCustom;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
 using System.Data;
 using System.Diagnostics;
 
-namespace Butterfly.Game.Animation
+namespace Wibbo.Game.Animation
 {
     public class AnimationManager
     {
@@ -148,7 +148,7 @@ namespace Butterfly.Game.Animation
             {
                 if (this._timer >= this.ToSeconds(CLOSE_TIME))
                 {
-                    Room room = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(this._roomIdGame);
+                    Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(this._roomIdGame);
 
                     this._started = false;
 
@@ -163,7 +163,7 @@ namespace Butterfly.Game.Animation
             if (this._timer >= this.ToSeconds(START_TIME - NOTIF_TIME) && !this._notif)
             {
                 this._notif = true;
-                ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifTopComposer("Notre prochaine animation aura lieu dans deux minutes ! (Jack & Daisy)"));
+                WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifTopComposer("Notre prochaine animation aura lieu dans deux minutes ! (Jack & Daisy)"));
             }
 
             if (this._timer >= this.ToSeconds(START_TIME))
@@ -183,7 +183,7 @@ namespace Butterfly.Game.Animation
             int RoomId = this._roomId[this._RoomIdIndex]; //ButterflyEnvironment.GetRandomNumber(0, this._roomId.Count - 1)
             this._RoomIdIndex++;
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
             if (room == null)
             {
                 return;
@@ -207,9 +207,9 @@ namespace Butterfly.Game.Animation
                 "[br][br]" +
                 "- Jack et Daisy";
 
-            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, "WibboGame", room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
+            WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, "WibboGame", room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
 
-            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer(
+            WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer(
                 "gameauto", // image
                 "Message d'animation", // title
                 alertMessage, // string_>alert

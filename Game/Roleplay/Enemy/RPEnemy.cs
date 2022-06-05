@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Roleplay.Enemy
+﻿namespace Wibbo.Game.Roleplay.Enemy
 {
     public class RPEnemy
     {

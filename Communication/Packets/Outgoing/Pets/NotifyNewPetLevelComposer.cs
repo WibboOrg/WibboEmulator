@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Pets
+namespace Wibbo.Communication.Packets.Outgoing.Pets
 {
     internal class NotifyNewPetLevelComposer : ServerPacket
     {

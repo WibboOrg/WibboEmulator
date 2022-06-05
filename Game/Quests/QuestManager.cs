@@ -1,12 +1,12 @@
-﻿using Butterfly.Communication.Packets.Incoming;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Communication.Packets.Outgoing.Quests;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Incoming;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Communication.Packets.Outgoing.Quests;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
 using System.Data;
 
-namespace Butterfly.Game.Quests
+namespace Wibbo.Game.Quests
 {
     public class QuestManager
     {
@@ -103,7 +103,7 @@ namespace Butterfly.Game.Quests
                 progress = quest.GoalData;
                 flag = true;
             }
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserQuestDao.Update(dbClient, Session.GetUser().Id, quest.Id, progress);
             }
@@ -182,7 +182,7 @@ namespace Butterfly.Game.Quests
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserQuestDao.Replace(dbClient, Session.GetUser().Id, quest.Id);
             }
@@ -206,7 +206,7 @@ namespace Butterfly.Game.Quests
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserQuestDao.Replace(dbClient, Session.GetUser().Id, nextQuestInSeries.Id);
             }
@@ -225,7 +225,7 @@ namespace Butterfly.Game.Quests
             }
 
             Session.GetUser().CurrentQuestId = 0;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserQuestDao.Delete(dbClient, Session.GetUser().Id, quest.Id);
             }

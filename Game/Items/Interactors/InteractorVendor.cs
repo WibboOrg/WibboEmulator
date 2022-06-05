@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.PathFinding;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.PathFinding;
 
-namespace Butterfly.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorVendor : FurniInteractor
     {
@@ -65,7 +65,7 @@ namespace Butterfly.Game.Items.Interactors
             RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
             if (roomUserTarget != null)
             {
-                int handitemId = item.GetBaseItem().VendingIds[ButterflyEnvironment.GetRandomNumber(0, item.GetBaseItem().VendingIds.Count - 1)];
+                int handitemId = item.GetBaseItem().VendingIds[WibboEnvironment.GetRandomNumber(0, item.GetBaseItem().VendingIds.Count - 1)];
                 roomUserTarget.CarryItem(handitemId);
             }
 

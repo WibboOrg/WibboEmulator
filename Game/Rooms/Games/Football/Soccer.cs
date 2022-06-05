@@ -1,9 +1,9 @@
-﻿using Butterfly.Game.Items;
-using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Rooms.PathFinding;
+﻿using Wibbo.Game.Items;
+using Wibbo.Game.Rooms.Map.Movement;
+using Wibbo.Game.Rooms.PathFinding;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms.Games
+namespace Wibbo.Game.Rooms.Games
 {
     public class Soccer
     {

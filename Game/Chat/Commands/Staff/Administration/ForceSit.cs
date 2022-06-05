@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Rooms;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Game.Rooms;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class ForceSit : IChatCommand
     {

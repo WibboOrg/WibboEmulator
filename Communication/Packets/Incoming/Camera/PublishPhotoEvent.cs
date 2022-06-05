@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Clients;
+﻿using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Camera
+namespace Wibbo.Communication.Packets.Incoming.Camera
 {
     internal class PublishPhotoEvent : IPacketEvent
     {

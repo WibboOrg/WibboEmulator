@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class EmptyItems : IChatCommand
     {
@@ -10,7 +10,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             bool EmptyAll = (Params.Length > 1 && Params[1] == "all");
 
             Session.GetUser().GetInventoryComponent().ClearItems(EmptyAll);
-            Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("empty.cleared", Session.Langue));
+            Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", Session.Langue));
         }
     }
 }

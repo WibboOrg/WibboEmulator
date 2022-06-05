@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Rooms.Map.Movement
+﻿namespace Wibbo.Game.Rooms.Map.Movement
 {
     public enum MovementState
     {

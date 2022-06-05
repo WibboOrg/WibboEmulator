@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Clients;
+﻿using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.RCON.Commands.User
+namespace Wibbo.Communication.RCON.Commands.User
 {
     internal class UserAlertCommand : IRCONCommand
     {
@@ -21,7 +21,7 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
             if (Client == null)
             {
                 return false;

@@ -1,18 +1,18 @@
-using Butterfly.Communication.Packets.Outgoing.Catalog;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Badges;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Catalog;
-using Butterfly.Game.Catalog.Utilities;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Items;
-using Butterfly.Game.Users;
-using Butterfly.Utilities;
+using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Badges;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Catalog;
+using Wibbo.Game.Catalog.Utilities;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Items;
+using Wibbo.Game.Users;
+using Wibbo.Utilities;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
     {
@@ -30,7 +30,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int Colour = Packet.PopInt();
             bool dnow = Packet.PopBoolean();
 
-            if (!ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page))
+            if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page))
             {
                 return;
             }
@@ -50,7 +50,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetItemManager().GetGift(SpriteId, out ItemData PresentData) || PresentData.InteractionType != InteractionType.GIFT)
+            if (!WibboEnvironment.GetGame().GetItemManager().GetGift(SpriteId, out ItemData PresentData) || PresentData.InteractionType != InteractionType.GIFT)
             {
                 return;
             }
@@ -68,7 +68,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            User user = ButterflyEnvironment.GetUserByUsername(GiftUser);
+            User user = WibboEnvironment.GetUserByUsername(GiftUser);
             if (user == null)
             {
                 //Session.SendPacket(new GiftWrappingErrorComposer());
@@ -77,7 +77,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if ((DateTime.Now - Session.GetUser().LastGiftPurchaseTime).TotalSeconds <= 15.0)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buygift.flood", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buygift.flood", Session.Langue));
 
                 Session.GetUser().GiftPurchasingWarnings += 1;
                 if (Session.GetUser().GiftPurchasingWarnings >= 25)
@@ -96,7 +96,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             string ED = Session.GetUser().Id + ";" + GiftMessage + Convert.ToChar(5) + Ribbon + Convert.ToChar(5) + Colour;
 
             int NewItemId = 0;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 NewItemId = ItemDao.Insert(dbClient, PresentData.Id, user.Id, ED);
 
@@ -121,7 +121,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         }
 
                         Group groupItem;
-                        if (ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Groupid, out groupItem))
+                        if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(Groupid, out groupItem))
                         {
                             ItemExtraData = "0;" + groupItem.Id;
                         }
@@ -156,7 +156,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                                 return;
                             }
 
-                            ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_PetLover", 1);
+                            WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_PetLover", 1);
                         }
                         catch
                         {
@@ -209,9 +209,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     case InteractionType.BADGE_TROC:
                         {
-                            if (ButterflyEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(Data) || !ButterflyEnvironment.GetGame().GetCatalog().HasBadge(Data))
+                            if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(Data) || !WibboEnvironment.GetGame().GetCatalog().HasBadge(Data))
                             {
-                                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", Session.Langue));
+                                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", Session.Langue));
                                 return;
                             }
 
@@ -227,9 +227,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         }
 
                     case InteractionType.BADGE_DISPLAY:
-                        if (ButterflyEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(Data) || !Session.GetUser().GetBadgeComponent().HasBadge(Data))
+                        if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(Data) || !Session.GetUser().GetBadgeComponent().HasBadge(Data))
                         {
-                            Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", Session.Langue));
+                            Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", Session.Langue));
                             Session.SendPacket(new PurchaseOKComposer());
                             return;
                         }
@@ -251,7 +251,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Item GiveItem = ItemFactory.CreateSingleItem(PresentData, user, ED, NewItemId);
             if (GiveItem != null)
             {
-                Client Receiver = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(user.Id);
+                Client Receiver = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(user.Id);
                 if (Receiver != null)
                 {
                     Receiver.GetUser().GetInventoryComponent().TryAddItem(GiveItem);
@@ -262,10 +262,10 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 if (user.Id != Session.GetUser().Id && !string.IsNullOrWhiteSpace(GiftMessage))
                 {
-                    ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_GiftGiver", 1);
+                    WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_GiftGiver", 1);
                     if (Receiver != null)
                     {
-                        ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Receiver, "ACH_GiftReceiver", 1);
+                        WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Receiver, "ACH_GiftReceiver", 1);
                     }
                 }
             }
@@ -289,7 +289,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.GetUser().WibboPoints -= TotalDiamondCost;
                 Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserDao.UpdateRemovePoints(dbClient, Session.GetUser().Id, TotalDiamondCost);
                 }
@@ -300,7 +300,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.GetUser().LimitCoins -= TotalDiamondCost;
                 Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().LimitCoins, 0, 55));
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserDao.UpdateRemoveLimitCoins(dbClient, Session.GetUser().Id, TotalDiamondCost);
                 }

@@ -1,7 +1,7 @@
-using Butterfly.Game.Groups;
-using Butterfly.Game.Users;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Outgoing.Groups
+namespace Wibbo.Communication.Packets.Outgoing.Groups
 {
     internal class GroupMembersComposer : ServerPacket
     {

@@ -1,7 +1,7 @@
-using Butterfly.Database.Interfaces;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class RoleplayEnemyDao
     {
@@ -70,7 +70,7 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateResetPosition(IQueryAdapter dbClient, int rpId, bool resetPosition)
         {
-            dbClient.RunQuery("UPDATE `roleplay_enemy` SET reset_position = '" + ButterflyEnvironment.BoolToEnum(resetPosition) + "' WHERE id = '" + rpId + "'");
+            dbClient.RunQuery("UPDATE `roleplay_enemy` SET reset_position = '" + WibboEnvironment.BoolToEnum(resetPosition) + "' WHERE id = '" + rpId + "'");
         }
 
         internal static void UpdateLostAggroDistance(IQueryAdapter dbClient, int rpId, int lostAggroDistance)
@@ -80,7 +80,7 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateZombieMode(IQueryAdapter dbClient, int rpId, bool zombieMode)
         {
-            dbClient.RunQuery("UPDATE `roleplay_enemy` SET zombie_mode = '" + ButterflyEnvironment.BoolToEnum(zombieMode) + "' WHERE id = '" + rpId + "'");
+            dbClient.RunQuery("UPDATE `roleplay_enemy` SET zombie_mode = '" + WibboEnvironment.BoolToEnum(zombieMode) + "' WHERE id = '" + rpId + "'");
         }
     }
 }

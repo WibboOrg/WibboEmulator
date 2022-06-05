@@ -1,11 +1,11 @@
-﻿using Butterfly.Communication.Packets.Outgoing.MarketPlace;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Catalog.Utilities;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
+﻿using Wibbo.Communication.Packets.Outgoing.MarketPlace;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Catalog.Utilities;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
 
-namespace Butterfly.Communication.Packets.Incoming.Marketplace
+namespace Wibbo.Communication.Packets.Incoming.Marketplace
 {
     internal class MakeOfferEvent : IPacketEvent
     {
@@ -35,7 +35,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
                 return;
             }
 
-            int Comission = ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().CalculateComissionPrice(SellingPrice);
+            int Comission = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().CalculateComissionPrice(SellingPrice);
             int TotalPrice = SellingPrice + Comission;
             int ItemType = 1;
             if (Item.GetBaseItem().Type == 'i')
@@ -43,7 +43,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
                 ItemType++;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemDao.Delete(dbClient, ItemId);
 

@@ -1,8 +1,8 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class InitTradeEvent : IPacketEvent
     {
@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
@@ -44,18 +44,18 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetRoleplayManager().GetTrocManager().AddTrade(room.RoomData.OwnerId, RoomUser.UserId, RoomUserTarget.UserId, RoomUser.GetUsername(), RoomUserTarget.GetUsername());
+                WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().AddTrade(room.RoomData.OwnerId, RoomUser.UserId, RoomUserTarget.UserId, RoomUser.GetUsername(), RoomUserTarget.GetUsername());
                 return;
             }
 
             if (room.RoomData.TrocStatus == 0)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.1", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.1", Session.Langue));
                 return;
             }
             else if (room.RoomData.TrocStatus == 1 && !room.CheckRights(Session))
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.2", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.2", Session.Langue));
                 return;
             }
 
@@ -68,11 +68,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (!roomUserByVirtualId.GetClient().GetUser().AcceptTrading && Session.GetUser().Rank < 3)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.tradedisabled", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.tradedisabled", Session.Langue));
             }
             else if (roomUserByVirtualId.IsTransf || roomUserByUserId.IsTransf || roomUserByUserId.IsSpectator || roomUserByVirtualId.IsSpectator)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.3", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.3", Session.Langue));
             }
             else
             {

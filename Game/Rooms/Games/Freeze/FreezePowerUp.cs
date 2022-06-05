@@ -1,4 +1,4 @@
-namespace Butterfly.Game.Rooms.Games
+namespace Wibbo.Game.Rooms.Games
 {
     public enum FreezePowerUp
     {

@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Cac : IChatCommand
     {
@@ -65,7 +65,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     return;
                 }
 
-                int Dmg = ButterflyEnvironment.GetRandomNumber(Rp.WeaponCac.DmgMin, Rp.WeaponCac.DmgMax);
+                int Dmg = WibboEnvironment.GetRandomNumber(Rp.WeaponCac.DmgMin, Rp.WeaponCac.DmgMax);
                 BotOrPet.BotData.RoleBot.Hit(BotOrPet, Dmg, Room, UserRoom.VirtualId, -1);
 
             }
@@ -92,7 +92,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     return;
                 }
 
-                int Dmg = ButterflyEnvironment.GetRandomNumber(Rp.WeaponCac.DmgMin, Rp.WeaponCac.DmgMax);
+                int Dmg = WibboEnvironment.GetRandomNumber(Rp.WeaponCac.DmgMin, Rp.WeaponCac.DmgMax);
 
                 Rp.AggroTimer = 30;
                 RpTwo.Hit(TargetRoomUser, Dmg, Room);

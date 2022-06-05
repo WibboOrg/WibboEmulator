@@ -1,16 +1,16 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Pets;
-using Butterfly.Game.Roleplay;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms.AI;
-using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Rooms.Utils;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Roleplay;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms.AI;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms.Utils;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     public class RoomUser : IEquatable<RoomUser>
     {
@@ -152,7 +152,7 @@ namespace Butterfly.Game.Rooms
         {
             get
             {
-                RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this.GetRoom().RoomData.OwnerId);
+                RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this.GetRoom().RoomData.OwnerId);
                 if (RPManager == null)
                 {
                     return null;
@@ -475,7 +475,7 @@ namespace Butterfly.Game.Rooms
 
             if (this.Client == null)
             {
-                this.Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
+                this.Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
             }
 
             return this.Client;
@@ -485,7 +485,7 @@ namespace Butterfly.Game.Rooms
         {
             if (this.Room == null)
             {
-                this.Room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.RoomId);
+                this.Room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(this.RoomId);
             }
 
             return this.Room;

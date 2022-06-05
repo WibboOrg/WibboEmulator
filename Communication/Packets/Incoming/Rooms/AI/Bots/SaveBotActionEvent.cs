@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.AI;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.AI;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class SaveBotActionEvent : IPacketEvent
     {
@@ -68,7 +68,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         Room.SendPacket(new UserChangeComposer(Bot));
 
-                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             BotUserDao.UpdateLookGender(dbClient, Bot.BotData.Id, Session.GetUser().Gender, Session.GetUser().Look);
                         }
@@ -119,7 +119,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         RoomBot.ChatText = Text;
                         RoomBot.LoadRandomSpeech(Text);
 
-                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             BotUserDao.UpdateChat(dbClient, BotId, RoomBot.AutomaticChat, RoomBot.SpeakingInterval, RoomBot.MixSentences, RoomBot.ChatText);
                         }
@@ -132,7 +132,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 case 3:
                     {
                         Bot.BotData.WalkingEnabled = !Bot.BotData.WalkingEnabled;
-                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             BotUserDao.UpdateWalkEnabled(dbClient, Bot.BotData.Id, Bot.BotData.WalkingEnabled);
                         }
@@ -157,7 +157,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         Room.SendPacket(new DanceComposer(Bot.VirtualId, Bot.DanceId));
 
-                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             BotUserDao.UpdateIsDancing(dbClient, Bot.BotData.Id, Bot.BotData.IsDancing);
                         }
@@ -185,7 +185,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                         Bot.BotData.Name = DataString;
 
-                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                             BotUserDao.UpdateName(dbClient, Bot.BotData.Id, DataString);
 
                         Room.SendPacket(new UserNameChangeComposer(Bot.BotData.Name, Bot.VirtualId));

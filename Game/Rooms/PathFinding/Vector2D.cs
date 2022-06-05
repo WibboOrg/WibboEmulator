@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Rooms.PathFinding
+﻿namespace Wibbo.Game.Rooms.PathFinding
 {
     public class Vector2D
     {

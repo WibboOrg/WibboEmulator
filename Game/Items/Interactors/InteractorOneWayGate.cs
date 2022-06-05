@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorOneWayGate : FurniInteractor
     {

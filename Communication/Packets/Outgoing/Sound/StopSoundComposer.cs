@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.Sound.SoundCustom
+﻿namespace Wibbo.Communication.Packets.Outgoing.Sound.SoundCustom
 {
     internal class StopSoundComposer : ServerPacket
     {

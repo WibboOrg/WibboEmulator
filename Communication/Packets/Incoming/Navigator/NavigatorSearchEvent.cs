@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Navigator.New;
+using Wibbo.Communication.Packets.Outgoing.Navigator.New;
 
-using Butterfly.Game.Clients;
-using Butterfly.Game.Navigator;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Navigator;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class NavigatorSearchEvent : IPacketEvent
     {
@@ -18,18 +18,18 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (!string.IsNullOrEmpty(Search))
             {
-                if (ButterflyEnvironment.GetGame().GetNavigator().TryGetSearchResultList(0, out SearchResultList QueryResult))
+                if (WibboEnvironment.GetGame().GetNavigator().TryGetSearchResultList(0, out SearchResultList QueryResult))
                 {
                     Categories.Add(QueryResult);
                 }
             }
             else
             {
-                Categories = ButterflyEnvironment.GetGame().GetNavigator().GetCategorysForSearch(Category);
+                Categories = WibboEnvironment.GetGame().GetNavigator().GetCategorysForSearch(Category);
                 if (Categories.Count == 0)
                 {
                     //Are we going in deep?!
-                    Categories = ButterflyEnvironment.GetGame().GetNavigator().GetResultByIdentifier(Category);
+                    Categories = WibboEnvironment.GetGame().GetNavigator().GetResultByIdentifier(Category);
                     if (Categories.Count > 0)
                     {
                         Session.SendPacket(new NavigatorSearchResultSetComposer(Category, Search, Categories, Session, 2, 50));

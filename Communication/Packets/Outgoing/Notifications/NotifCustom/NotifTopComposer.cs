@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.Notifications.NotifCustom
+﻿namespace Wibbo.Communication.Packets.Outgoing.Notifications.NotifCustom
 {
     internal class NotifTopComposer : ServerPacket
     {

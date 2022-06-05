@@ -1,8 +1,8 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Catalog.Vouchers
+namespace Wibbo.Game.Catalog.Vouchers
 {
     public class VoucherManager
     {

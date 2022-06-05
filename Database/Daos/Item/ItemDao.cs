@@ -1,10 +1,10 @@
-﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.Items;
-using Butterfly.Utilities;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Items;
+using Wibbo.Utilities;
 using System.Collections.Concurrent;
 using System.Data;
 
-namespace Butterfly.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class ItemDao
     {

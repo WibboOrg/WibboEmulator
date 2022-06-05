@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class DisableFollow : IChatCommand
     {
@@ -10,12 +10,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             if (Session.GetUser().HideInRoom)
             {
                 Session.GetUser().HideInRoom = false;
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.followme.true", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.followme.true", Session.Langue));
             }
             else
             {
                 Session.GetUser().HideInRoom = true;
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.followme.false", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.followme.false", Session.Langue));
             }
 
         }

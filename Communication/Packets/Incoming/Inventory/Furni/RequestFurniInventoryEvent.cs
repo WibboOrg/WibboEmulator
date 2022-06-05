@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RequestFurniInventoryEvent : IPacketEvent
     {

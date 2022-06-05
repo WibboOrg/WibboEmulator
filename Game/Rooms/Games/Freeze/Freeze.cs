@@ -1,11 +1,11 @@
-﻿using Butterfly.Communication.Packets.Outgoing.GameCenter;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Freeze;
-using Butterfly.Game.Items;
+﻿using Wibbo.Communication.Packets.Outgoing.GameCenter;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Freeze;
+using Wibbo.Game.Items;
 using System.Collections;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms.Games
+namespace Wibbo.Game.Rooms.Games
 {
     public class Freeze
     {
@@ -293,7 +293,7 @@ namespace Butterfly.Game.Rooms.Games
                 return;
             }
 
-            switch (ButterflyEnvironment.GetRandomNumber(1, 14))
+            switch (WibboEnvironment.GetRandomNumber(1, 14))
             {
                 case 2:
                     item.ExtraData = "2000";

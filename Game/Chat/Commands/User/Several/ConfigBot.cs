@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class ConfigBot : IChatCommand
     {
@@ -31,7 +31,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                         int.TryParse(Params[3], out int IntValue);
 
-                        if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
+                        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
                         {
                             return;
                         }
@@ -45,7 +45,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                         {
                             Bot.BotData.Enable = IntValue;
 
-                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                 BotUserDao.UpdateEnable(dbClient, Bot.BotData.Id, IntValue);
                         }
                         break;
@@ -68,7 +68,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                         {
                             Bot.BotData.Handitem = IntValue;
 
-                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                 BotUserDao.UpdateHanditem(dbClient, Bot.BotData.Id, IntValue);
                         }
                         break;
@@ -94,7 +94,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                         {
                             Bot.BotData.Rot = IntValue;
 
-                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                 BotUserDao.UpdateRotation(dbClient, Bot.BotData.Id, Bot.RotBody);
                         }
                         break;
@@ -109,7 +109,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             Bot.IsSit = false;
                             Bot.UpdateNeeded = true;
 
-                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                             {
                                 BotUserDao.UpdateStatus0(dbClient, Bot.BotData.Id);
                             }
@@ -125,7 +125,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                             Bot.BotData.Status = 1;
 
-                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                             {
                                 BotUserDao.UpdateStatus1(dbClient, Bot.BotData.Id);
                             }
@@ -142,7 +142,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                             Bot.IsSit = false;
                             Bot.UpdateNeeded = true;
 
-                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                             {
                                 BotUserDao.UpdateStatus0(dbClient, Bot.BotData.Id);
                             }
@@ -158,7 +158,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                             Bot.BotData.Status = 2;
 
-                            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                 BotUserDao.UpdateStatus2(dbClient, Bot.BotData.Id);
                         }
                         break;

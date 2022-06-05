@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Users.Relationships
+﻿namespace Wibbo.Game.Users.Relationships
 {
     public class Relationship
     {

@@ -1,8 +1,8 @@
-using Butterfly.Game.Catalog;
-using Butterfly.Game.Catalog.Utilities;
-using Butterfly.Game.Items;
+using Wibbo.Game.Catalog;
+using Wibbo.Game.Catalog.Utilities;
+using Wibbo.Game.Items;
 
-namespace Butterfly.Communication.Packets.Outgoing.Catalog
+namespace Wibbo.Communication.Packets.Outgoing.Catalog
 {
     internal class CatalogOfferComposer : ServerPacket
     {
@@ -44,7 +44,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
                 }
                 else if (Item.Data.InteractionType == InteractionType.BOT)//Bots
                 {
-                    if (!ButterflyEnvironment.GetGame().GetCatalog().TryGetBot(Item.ItemId, out CatalogBot CatalogBot))
+                    if (!WibboEnvironment.GetGame().GetCatalog().TryGetBot(Item.ItemId, out CatalogBot CatalogBot))
                     {
                         this.WriteString("hd-180-7.ea-1406-62.ch-210-1321.hr-831-49.ca-1813-62.sh-295-1321.lg-285-92");
                     }

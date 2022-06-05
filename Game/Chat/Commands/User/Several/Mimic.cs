@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Clients;
-using Butterfly.Communication.Packets.Outgoing.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Avatar;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Mimic : IChatCommand
     {
@@ -24,7 +24,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             string Username = Params[1];
 
-            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Username);
+            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Username);
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 RoomUser Bot = Room.GetRoomUserManager().GetBotByName(Username);
@@ -41,7 +41,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                 if (TargetUser.GetUser().PremiumProtect && !Session.GetUser().HasFuse("fuse_mod"))
                 {
-                    Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
+                    Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
                     return;
                 }
 

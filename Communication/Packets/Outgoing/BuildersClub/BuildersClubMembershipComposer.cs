@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.BuildersClub
+namespace Wibbo.Communication.Packets.Outgoing.BuildersClub
 {
     internal class BuildersClubMembershipComposer : ServerPacket
     {

@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Users;
-using Butterfly.Game.Users.Relationships;
+using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Users;
+using Wibbo.Game.Users.Relationships;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetRelationshipsEvent : IPacketEvent
     {
@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            User User = ButterflyEnvironment.GetUserById(Packet.PopInt());
+            User User = WibboEnvironment.GetUserById(Packet.PopInt());
             if (User == null)
                 return;
 

@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Games;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.Games;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Poke : IChatCommand
     {

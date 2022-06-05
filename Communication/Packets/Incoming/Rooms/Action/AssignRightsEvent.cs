@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Settings;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Users;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Permissions;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Settings;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class AssignRightsEvent : IPacketEvent
     {
@@ -21,7 +21,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int UserId = Packet.PopInt();
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
@@ -34,11 +34,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (room.UsersWithRights.Contains(UserId))
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.giverights.error", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.giverights.error", Session.Langue));
             }
             else
             {
-                User Userright = ButterflyEnvironment.GetUserById(UserId);
+                User Userright = WibboEnvironment.GetUserById(UserId);
                 if (Userright == null)
                 {
                     return;
@@ -46,7 +46,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 room.UsersWithRights.Add(UserId);
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     RoomRightDao.Insert(dbClient, room.Id, UserId);
                 }

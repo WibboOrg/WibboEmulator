@@ -8,6 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="bin\Debug\ref\**" />
+    <Compile Remove="bin\Debug\runtimes\**" />
+    <EmbeddedResource Remove="bin\Debug\ref\**" />
+    <EmbeddedResource Remove="bin\Debug\runtimes\**" />
+    <None Remove="bin\Debug\ref\**" />
+    <None Remove="bin\Debug\runtimes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="LICENSE" />
+    <None Remove="README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="favicon.ico" />
   </ItemGroup>
 

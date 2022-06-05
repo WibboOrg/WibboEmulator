@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Items.Wired.Interfaces
+namespace Wibbo.Game.Items.Wired.Interfaces
 {
     public interface IWiredCondition : IWired
     {

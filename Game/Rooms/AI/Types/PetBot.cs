@@ -1,10 +1,10 @@
-﻿using Butterfly.Core;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Pets;
-using Butterfly.Game.Rooms.PathFinding;
+﻿using Wibbo.Core;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Rooms.PathFinding;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms.AI.Types
+namespace Wibbo.Game.Rooms.AI.Types
 {
     public class PetBot : BotAI
     {
@@ -69,11 +69,11 @@ namespace Butterfly.Game.Rooms.AI.Types
             else
             {
                 string input = Message.Substring(roomUser.PetData.Name.ToLower().Length + 1);
-                int randomNumber = ButterflyEnvironment.GetRandomNumber(1, 8);
+                int randomNumber = WibboEnvironment.GetRandomNumber(1, 8);
                 if (roomUser.PetData.Energy > 10 && randomNumber < 6)
                 {
                     this.RemovePetStatus();
-                    switch (ButterflyEnvironment.GetGame().GetChatManager().GetPetCommands().TryInvoke(input))
+                    switch (WibboEnvironment.GetGame().GetChatManager().GetPetCommands().TryInvoke(input))
                     {
                         case 0: //Libre
                             this.RemovePetStatus();
@@ -207,7 +207,7 @@ namespace Butterfly.Game.Rooms.AI.Types
                         case 20:
                             break;
                         default:
-                            string[] strArray = ButterflyEnvironment.GetLanguageManager().TryGetValue("pet.unknowncommand", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
+                            string[] strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.unknowncommand", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
                             Random random = new Random();
                             roomUser.OnChat(strArray[random.Next(0, strArray.Length - 1)], 0, false);
                             break;
@@ -222,7 +222,7 @@ namespace Butterfly.Game.Rooms.AI.Types
                     {
                         if (roomUser.PetData.Energy < 10)
                         {
-                            string[] strArray = ButterflyEnvironment.GetLanguageManager().TryGetValue("pet.tired", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
+                            string[] strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.tired", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
                             Random random = new Random();
                             roomUser.OnChat(strArray[random.Next(0, strArray.Length - 1)], 0, false);
                             roomUser.SetStatus("lay", roomUser.Z.ToString());
@@ -233,7 +233,7 @@ namespace Butterfly.Game.Rooms.AI.Types
                         }
                         else
                         {
-                            string[] strArray = ButterflyEnvironment.GetLanguageManager().TryGetValue("pet.lazy", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
+                            string[] strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.lazy", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
                             Random random = new Random();
                             roomUser.OnChat(strArray[random.Next(0, strArray.Length - 1)], 0, false);
                             roomUser.PetData.PetEnergy(false);
@@ -254,7 +254,7 @@ namespace Butterfly.Game.Rooms.AI.Types
                 try
                 {
                     this.RemovePetStatus();
-                    this._actionTimer = ButterflyEnvironment.GetRandomNumber(10, 60);
+                    this._actionTimer = WibboEnvironment.GetRandomNumber(10, 60);
                     if (!this.GetRoomUser().RidingHorse && this.GetRoomUser().PetData.Type != 16)
                     {
                         this.RemovePetStatus();
@@ -276,7 +276,7 @@ namespace Butterfly.Game.Rooms.AI.Types
             {
                 this.RemovePetStatus();
                 this.GetRoomUser().PetData.PetEnergy(true);
-                this._energyTimer = ButterflyEnvironment.GetRandomNumber(30, 120);
+                this._energyTimer = WibboEnvironment.GetRandomNumber(30, 120);
             }
             else
             {

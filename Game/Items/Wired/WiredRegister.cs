@@ -1,13 +1,13 @@
-﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.Items.Wired.Conditions;
-using Butterfly.Game.Items.Wired.Actions;
-using Butterfly.Game.Items.Wired.Interfaces;
-using Butterfly.Game.Items.Wired.Triggers;
-using Butterfly.Database.Daos;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Items.Wired.Conditions;
+using Wibbo.Game.Items.Wired.Actions;
+using Wibbo.Game.Items.Wired.Interfaces;
+using Wibbo.Game.Items.Wired.Triggers;
+using Wibbo.Database.Daos;
 using System.Data;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Items.Wired
+namespace Wibbo.Game.Items.Wired
 {
     public class WiredRegister
     {
@@ -231,7 +231,7 @@ namespace Butterfly.Game.Items.Wired
                 handler.Init(intParams, stringParam, stuffIds, selectionCode, delay, isStaff, isGod);
                 handler.LoadItems();
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     handler.SaveToDatabase(dbClient);
                 }

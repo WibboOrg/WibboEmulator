@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.GameCenter
+﻿namespace Wibbo.Communication.Packets.Outgoing.GameCenter
 {
     internal class IsPlayingComposer : ServerPacket
     {

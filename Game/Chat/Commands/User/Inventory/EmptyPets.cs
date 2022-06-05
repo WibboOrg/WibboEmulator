@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Inventory.Pets;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Pets;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class EmptyPets : IChatCommand
     {
@@ -10,7 +10,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             Session.GetUser().GetInventoryComponent().ClearPets();
             Session.SendPacket(new PetInventoryComposer(Session.GetUser().GetInventoryComponent().GetPets()));
-            Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("empty.cleared", Session.Langue));
+            Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", Session.Langue));
 
         }
     }

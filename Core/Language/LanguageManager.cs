@@ -1,8 +1,8 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Core
+namespace Wibbo.Core
 {
     public enum Language
     {

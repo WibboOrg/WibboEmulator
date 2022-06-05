@@ -1,10 +1,10 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Wireds;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items.Wired.Interfaces;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Wired;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Wireds;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items.Wired.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.Wired;
 
-namespace Butterfly.Game.Items.Wired
+namespace Wibbo.Game.Items.Wired
 {
     public class WiredActionBase : WiredBase, IWiredCycleable
     {

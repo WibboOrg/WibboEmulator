@@ -1,6 +1,6 @@
-﻿using Butterfly.Core;
+﻿using Wibbo.Core;
 
-namespace Butterfly.Game.Navigator
+namespace Wibbo.Game.Navigator
 {
     public class FeaturedRoom
     {

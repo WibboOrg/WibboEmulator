@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Rooms;
 
-namespace Butterfly.Utilities.Events
+namespace Wibbo.Utilities.Events
 {
     public class UserWalksOnArgs : EventArgs
     {

@@ -1,8 +1,8 @@
-using Butterfly.Database.Interfaces;
+using Wibbo.Database.Interfaces;
 using System.Data;
 using System.Text;
 
-namespace Butterfly.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class CatalogMarketplaceOfferDao
     {
@@ -21,7 +21,7 @@ namespace Butterfly.Database.Daos
         internal static DataTable GetAll(IQueryAdapter dbClient, string searchQuery, int minCost, int maxCost, int filterMode)
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append("WHERE state = '1' AND timestamp >= " + ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp());
+            builder.Append("WHERE state = '1' AND timestamp >= " + WibboEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp());
             if (minCost >= 0)
             {
                 builder.Append(" AND total_price > " + minCost);
@@ -70,7 +70,7 @@ namespace Butterfly.Database.Daos
 
         internal static void Insert(IQueryAdapter dbClient, string itemName, string extraData, int itemId, int baseItem, int userId, int sellingPrice, int totalPrice, int spriteId, int itemType, int limited, int limitedStack)
         {
-            dbClient.SetQuery("INSERT INTO `catalog_marketplace_offer` (furni_id,item_id,user_id,asking_price,total_price,public_name,sprite_id,item_type,timestamp,extra_data,limited_number,limited_stack) VALUES ('" + itemId + "','" + baseItem + "','" + userId + "','" + sellingPrice + "','" + totalPrice + "',@public_name,'" + spriteId + "','" + itemType + "','" + ButterflyEnvironment.GetUnixTimestamp() + "',@extra_data, '" + limited + "', '" + limitedStack + "')");
+            dbClient.SetQuery("INSERT INTO `catalog_marketplace_offer` (furni_id,item_id,user_id,asking_price,total_price,public_name,sprite_id,item_type,timestamp,extra_data,limited_number,limited_stack) VALUES ('" + itemId + "','" + baseItem + "','" + userId + "','" + sellingPrice + "','" + totalPrice + "',@public_name,'" + spriteId + "','" + itemType + "','" + WibboEnvironment.GetUnixTimestamp() + "',@extra_data, '" + limited + "', '" + limitedStack + "')");
             dbClient.AddParameter("public_name", itemName);
             dbClient.AddParameter("extra_data", extraData);
             dbClient.RunQuery();

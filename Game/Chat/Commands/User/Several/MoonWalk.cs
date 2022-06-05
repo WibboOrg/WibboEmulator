@@ -1,8 +1,8 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class MoonWalk : IChatCommand
     {
@@ -23,11 +23,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             roomUserByUserId.MoonwalkEnabled = !roomUserByUserId.MoonwalkEnabled;
             if (roomUserByUserId.MoonwalkEnabled)
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.true", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.true", Session.Langue));
             }
             else
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.false", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.false", Session.Langue));
             }
         }
     }

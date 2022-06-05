@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Moderation;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Moderation;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class ModerationBanEvent : IPacketEvent
     {

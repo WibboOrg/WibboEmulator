@@ -1,8 +1,8 @@
-using Butterfly.Game.Items;
+using Wibbo.Game.Items;
 using System.Collections.Concurrent;
 using System.Drawing;
 
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.FloorPlan
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.FloorPlan
 {
     internal class FloorPlanFloorMapComposer : ServerPacket
     {

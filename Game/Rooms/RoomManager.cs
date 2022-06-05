@@ -1,12 +1,12 @@
-﻿using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
 using System.Collections.Concurrent;
 using System.Data;
 using System.Diagnostics;
 
-namespace Butterfly.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     public class RoomManager
     {
@@ -29,7 +29,7 @@ namespace Butterfly.Game.Rooms
         private static RoomModel GetCustomData(int roomID)
         {
             DataRow row;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 row = RoomModelCustomDao.GetOne(dbClient, roomID);
             }
@@ -84,7 +84,7 @@ namespace Butterfly.Game.Rooms
             }
 
             DataRow Row = null;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 Row = RoomDao.GetOne(dbClient, RoomId);
             }
@@ -186,23 +186,23 @@ namespace Butterfly.Game.Rooms
             }
             else if (Name.Length < 3)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", Session.Langue));
                 return null;
             }
             else if (Name.Length > 200)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", Session.Langue));
                 return null;
             }
             else if (Desc.Length > 200)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", Session.Langue));
                 return null;
             }
             else
             {
                 int RoomId = 0;
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     RoomId = RoomDao.Insert(dbClient, Name, Desc, Session.GetUser().Username, Model, Category, MaxVisitors, TradeSettings);
                 }
@@ -435,7 +435,7 @@ namespace Butterfly.Game.Rooms
                     continue;
                 }
 
-                ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
+                WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
                 Console.Clear();
                 Console.WriteLine("<<- SERVER SHUTDOWN ->> ROOM ITEM SAVE: " + string.Format("{0:0.##}", (num / (double)count * 100.0)) + "%");
                 num++;

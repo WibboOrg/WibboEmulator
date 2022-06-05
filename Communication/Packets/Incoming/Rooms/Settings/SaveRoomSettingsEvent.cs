@@ -1,13 +1,13 @@
-using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Settings;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Settings;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 using System.Text;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class SaveRoomSettingsEvent : IPacketEvent
     {
@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int RoomId = Packet.PopInt();
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
             if (room == null)
             {
                 return;
@@ -149,7 +149,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 str5 = "hide";
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoomDao.UpdateAll(dbClient, room.Id, room.RoomData.Name, room.RoomData.Description, room.RoomData.Password, (stringBuilder).ToString(), CategoryId, str5, MaxUsers, AllowPets, AllowPetsEat, AllowWalkthrough, room.RoomData.Hidewall, room.RoomData.FloorThickness, room.RoomData.WallThickness, mutefuse, kickfuse, banfuse, ChatType, ChatBalloon, ChatSpeed, ChatMaxDistance, ChatFloodProtection, TrocStatus);
             }

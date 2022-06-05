@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Messenger;
-using Butterfly.Game.Clients;
-using Butterfly.Utilities;
+using Wibbo.Communication.Packets.Outgoing;
+using Wibbo.Communication.Packets.Outgoing.Messenger;
+using Wibbo.Game.Clients;
+using Wibbo.Utilities;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class SendRoomInviteEvent : IPacketEvent
     {
@@ -64,7 +64,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 if (Session.GetUser().GetMessenger().FriendshipExists(UserId))
                 {
-                    Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+                    Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
                     if (clientByUserId == null || clientByUserId.GetUser().IgnoreRoomInvites)
                     {
                         break;

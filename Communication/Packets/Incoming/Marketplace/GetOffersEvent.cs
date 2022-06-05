@@ -1,11 +1,11 @@
-﻿using Butterfly.Communication.Packets.Outgoing.MarketPlace;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Catalog.Marketplace;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.MarketPlace;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Catalog.Marketplace;
+using Wibbo.Game.Clients;
 using System.Data;
 
-namespace Butterfly.Communication.Packets.Incoming.Marketplace
+namespace Wibbo.Communication.Packets.Incoming.Marketplace
 {
     internal class GetOffersEvent : IPacketEvent
     {
@@ -20,21 +20,21 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
             DataTable table = null;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 table = CatalogMarketplaceOfferDao.GetAll(dbClient, SearchQuery, MinCost, MaxCost, FilterMode);
             }
 
-            ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();
-            ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Clear();
+            WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();
+            WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Clear();
             if (table != null)
             {
                 foreach (DataRow row in table.Rows)
                 {
-                    if (!ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Contains(Convert.ToInt32(row["offer_id"])))
+                    if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Contains(Convert.ToInt32(row["offer_id"])))
                     {
-                        ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Add(Convert.ToInt32(row["offer_id"]));
-                        ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Add(new MarketOffer(Convert.ToInt32(row["offer_id"]), Convert.ToInt32(row["sprite_id"]), Convert.ToInt32(row["total_price"]), int.Parse(row["item_type"].ToString()), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"])));
+                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Add(Convert.ToInt32(row["offer_id"]));
+                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Add(new MarketOffer(Convert.ToInt32(row["offer_id"]), Convert.ToInt32(row["sprite_id"]), Convert.ToInt32(row["total_price"]), int.Parse(row["item_type"].ToString()), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"])));
                     }
                 }
             }
@@ -42,7 +42,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             Dictionary<int, MarketOffer> dictionary = new Dictionary<int, MarketOffer>();
             Dictionary<int, int> dictionary2 = new Dictionary<int, int>();
 
-            foreach (MarketOffer item in ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems)
+            foreach (MarketOffer item in WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems)
             {
                 if (dictionary.ContainsKey(item.SpriteId))
                 {

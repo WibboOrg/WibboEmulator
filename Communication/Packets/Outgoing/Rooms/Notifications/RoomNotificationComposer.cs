@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Notifications
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Notifications
 {
     internal class RoomNotificationComposer : ServerPacket
     {

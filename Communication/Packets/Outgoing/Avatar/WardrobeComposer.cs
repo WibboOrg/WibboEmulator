@@ -1,6 +1,6 @@
-using Butterfly.Game.Users.Wardrobes;
+using Wibbo.Game.Users.Wardrobes;
 
-namespace Butterfly.Communication.Packets.Outgoing.Avatar
+namespace Wibbo.Communication.Packets.Outgoing.Avatar
 {
     internal class WardrobeComposer : ServerPacket
     {

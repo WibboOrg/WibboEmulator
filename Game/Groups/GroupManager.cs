@@ -1,10 +1,10 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Users;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Users;
 using System.Collections.Concurrent;
 using System.Data;
 
-namespace Butterfly.Game.Groups
+namespace Wibbo.Game.Groups
 {
     public class GroupManager
     {
@@ -73,7 +73,7 @@ namespace Butterfly.Game.Groups
                 return this._groups.TryGetValue(id, out Group);
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 DataRow Row = GuildDao.GetOne(dbClient, id);
 
@@ -94,13 +94,13 @@ namespace Butterfly.Game.Groups
 
         public bool TryCreateGroup(User Player, string Name, string Description, int RoomId, string Badge, int Colour1, int Colour2, out Group Group)
         {
-            Group = new Group(0, Name, Description, Badge, RoomId, Player.Id, ButterflyEnvironment.GetUnixTimestamp(), 0, Colour1, Colour2, 0, false);
+            Group = new Group(0, Name, Description, Badge, RoomId, Player.Id, WibboEnvironment.GetUnixTimestamp(), 0, Colour1, Colour2, 0, false);
             if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Badge))
             {
                 return false;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 Group.Id = GuildDao.Insert(dbClient, Group.Name, Group.Description, Group.CreatorId, Group.Badge, Group.RoomId, Group.Colour1, Group.Colour2);
 

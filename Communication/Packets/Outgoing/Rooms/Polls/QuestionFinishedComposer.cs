@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.Rooms.Polls
+﻿namespace Wibbo.Communication.Packets.Outgoing.Rooms.Polls
 {
     internal class QuestionFinishedComposer : ServerPacket
     {

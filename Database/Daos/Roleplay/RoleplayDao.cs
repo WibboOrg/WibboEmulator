@@ -1,8 +1,8 @@
 
-using Butterfly.Database.Interfaces;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class RoleplayDao
     {

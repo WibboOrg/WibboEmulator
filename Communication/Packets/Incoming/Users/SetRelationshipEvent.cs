@@ -1,9 +1,9 @@
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Users.Relationships;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Users.Relationships;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class SetRelationshipEvent : IPacketEvent
     {
@@ -48,7 +48,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 MessengerFriendshipDao.UpdateRelation(dbClient, Type, Session.GetUser().Id, User);
             }

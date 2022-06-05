@@ -1,6 +1,6 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Interfaces;
 
-namespace Butterfly.Database.Adapter
+namespace Wibbo.Database.Adapter
 {
     public class NormaldbClient : QueryAdapter, IQueryAdapter, IRegularQueryAdapter, IDisposable
     {

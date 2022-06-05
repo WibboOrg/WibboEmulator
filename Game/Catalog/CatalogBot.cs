@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Catalog
+﻿namespace Wibbo.Game.Catalog
 {
     public class CatalogBot
     {

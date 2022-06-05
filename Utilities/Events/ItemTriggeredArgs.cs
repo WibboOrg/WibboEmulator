@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Items;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Items;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Utilities.Events
+namespace Wibbo.Utilities.Events
 {
     public class ItemTriggeredArgs : EventArgs
     {

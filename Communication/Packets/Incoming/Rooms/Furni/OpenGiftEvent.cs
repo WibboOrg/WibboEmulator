@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Furni;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Furni;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Rooms;
 using System.Data;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class OpenGiftEvent : IPacketEvent
     {
@@ -40,7 +40,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             if (Present.GetBaseItem().InteractionType == InteractionType.GIFT)
             {
                 DataRow Data = null;
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     Data = UserPresentDao.GetOne(dbClient, Present.Id);
                 }
@@ -49,7 +49,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 {
                     Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id);
 
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         ItemDao.Delete(dbClient, Present.Id);
                         UserPresentDao.Delete(dbClient, Present.Id);
@@ -59,11 +59,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     return;
                 }
 
-                if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(Data["base_id"]), out ItemData BaseItem))
+                if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(Data["base_id"]), out ItemData BaseItem))
                 {
                     Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id);
 
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         ItemDao.Delete(dbClient, Present.Id);
                         UserPresentDao.Delete(dbClient, Present.Id);
@@ -99,7 +99,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemDao.UpdateBaseItemAndExtraData(dbClient, Present.Id, Convert.ToInt32(Row["base_id"]), Row["extra_data"].ToString());
 
@@ -114,7 +114,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
                 {
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                     }
@@ -126,7 +126,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
             else
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                 }

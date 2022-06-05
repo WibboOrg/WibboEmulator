@@ -1,15 +1,15 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Utilities;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Utilities;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class AllWarp : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             Room currentRoom = Session.GetUser().CurrentRoom;
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;

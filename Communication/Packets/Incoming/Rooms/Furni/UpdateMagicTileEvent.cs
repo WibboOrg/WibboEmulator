@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class UpdateMagicTileEvent : IPacketEvent
     {
@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 int ItemId = Packet.PopInt();
                 int HeightToSet = Packet.PopInt();
-                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+                Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
                 if ((room == null ? false : room.CheckRights(Session)))
                 {
                     Item item = room.GetRoomItemHandler().GetItem(ItemId);

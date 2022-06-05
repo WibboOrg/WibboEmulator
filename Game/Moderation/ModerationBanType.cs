@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Moderation
+﻿namespace Wibbo.Game.Moderation
 {
     public enum ModerationBanType
     {

@@ -1,12 +1,12 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Catalog.Marketplace;
-using Butterfly.Game.Catalog.Pets;
-using Butterfly.Game.Catalog.Vouchers;
-using Butterfly.Game.Items;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Catalog.Marketplace;
+using Wibbo.Game.Catalog.Pets;
+using Wibbo.Game.Catalog.Vouchers;
+using Wibbo.Game.Items;
 using System.Data;
 
-namespace Butterfly.Game.Catalog
+namespace Wibbo.Game.Catalog
 {
     public class CatalogManager
     {
@@ -107,7 +107,7 @@ namespace Butterfly.Game.Catalog
 
                     this._items[PageId].Add(Convert.ToInt32(Row["id"]), new CatalogItem(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["item_id"]),
                         Data, Convert.ToString(Row["catalog_name"]), Convert.ToInt32(Row["page_id"]), Convert.ToInt32(Row["cost_credits"]), Convert.ToInt32(Row["cost_pixels"]), Convert.ToInt32(Row["cost_diamonds"]), Convert.ToInt32(Row["cost_limitcoins"]),
-                        Convert.ToInt32(Row["amount"]), Convert.ToInt32(Row["limited_sells"]), Convert.ToInt32(Row["limited_stack"]), ButterflyEnvironment.EnumToBool(Row["offer_active"].ToString()), Convert.ToString(Row["badge"])));
+                        Convert.ToInt32(Row["amount"]), Convert.ToInt32(Row["limited_sells"]), Convert.ToInt32(Row["limited_stack"]), WibboEnvironment.EnumToBool(Row["offer_active"].ToString()), Convert.ToString(Row["badge"])));
 
                     this._itemsPage.Add(Convert.ToInt32(Row["id"]), PageId);
                 }

@@ -1,14 +1,14 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
-using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Items.Wired;
-using Butterfly.Game.Quests;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Notifications;
+using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Items.Wired;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class PlaceObjectEvent : IPacketEvent
     {
@@ -21,7 +21,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(session.GetUser().CurrentRoomId);
             if (room == null || !room.CheckRights(session))
             {
                 session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_not_owner}"));
@@ -30,7 +30,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (room.RoomData.SellPrice > 0)
             {
-                session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
                 return;
             }
 
@@ -61,7 +61,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     return;
                 }
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     ItemDao.Delete(dbClient, ItemId);
                 }
@@ -105,7 +105,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Item item = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, X, Y, 0.0, rotation, "", room);
                 if (room.GetRoomItemHandler().SetFloorItem(session, item, X, Y, rotation, true, false, true))
                 {
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, room.Id, room.RoomData.OwnerId);
                     }
@@ -142,7 +142,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         }
                     }
 
-                    ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_PLACE, 0);
+                    WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_PLACE, 0);
                 }
                 else
                 {
@@ -166,7 +166,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     Item roomItem = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallPos, room);
                     if (room.GetRoomItemHandler().SetWallItem(session, roomItem))
                     {
-                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, room.Id, room.RoomData.OwnerId);
                         }

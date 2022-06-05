@@ -1,14 +1,14 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class SummonAll : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            foreach (Client Client in ButterflyEnvironment.GetGame().GetClientManager().GetClients.ToList())
+            foreach (Client Client in WibboEnvironment.GetGame().GetClientManager().GetClients.ToList())
             {
                 if (Client.GetUser() != null)
                 {

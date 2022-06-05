@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms.AI.Responses;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms.AI.Responses;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms.AI.Types
+namespace Wibbo.Game.Rooms.AI.Types
 {
     public class BartenderBot : BotAI
     {
@@ -11,8 +11,8 @@ namespace Butterfly.Game.Rooms.AI.Types
 
         public BartenderBot(int VirtualId)
         {
-            this.SpeechTimer = ButterflyEnvironment.GetRandomNumber(10, 40);
-            this.ActionTimer = ButterflyEnvironment.GetRandomNumber(10, 30);
+            this.SpeechTimer = WibboEnvironment.GetRandomNumber(10, 40);
+            this.ActionTimer = WibboEnvironment.GetRandomNumber(10, 30);
         }
 
         public override void OnSelfEnterRoom()
@@ -39,7 +39,7 @@ namespace Butterfly.Game.Rooms.AI.Types
             if (Gamemap.TileDistance(GetRoomUser().X, GetRoomUser().Y, User.X, User.Y) > 8)
                 return;
 
-            BotResponse Response = ButterflyEnvironment.GetGame().GetBotManager().GetResponse(GetBotData().AiType, Message);
+            BotResponse Response = WibboEnvironment.GetGame().GetBotManager().GetResponse(GetBotData().AiType, Message);
             if (Response == null)
                 return;
         }
@@ -76,7 +76,7 @@ namespace Butterfly.Game.Rooms.AI.Types
                     Point randomWalkableSquare = this.GetRoom().GetGameMap().getRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
                     this.GetRoomUser().MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
                 }
-                this.ActionTimer = ButterflyEnvironment.GetRandomNumber(10, 60);
+                this.ActionTimer = WibboEnvironment.GetRandomNumber(10, 60);
             }
             else
             {

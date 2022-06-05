@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Outgoing.Navigator
+namespace Wibbo.Communication.Packets.Outgoing.Navigator
 {
     internal class GetGuestRoomResultComposer : ServerPacket
     {

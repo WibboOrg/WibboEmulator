@@ -1,9 +1,9 @@
-using Butterfly.Game.Chat.Logs;
-using Butterfly.Game.Moderation;
-using Butterfly.Game.Rooms;
-using Butterfly.Utilities;
+using Wibbo.Game.Chat.Logs;
+using Wibbo.Game.Moderation;
+using Wibbo.Game.Rooms;
+using Wibbo.Utilities;
 
-namespace Butterfly.Communication.Packets.Outgoing.Moderation
+namespace Wibbo.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorTicketChatlogComposer : ServerPacket
     {

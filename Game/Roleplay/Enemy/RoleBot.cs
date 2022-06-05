@@ -1,12 +1,12 @@
-﻿using Butterfly.Game.Items;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Roleplay.Weapon;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Rooms.PathFinding;
+﻿using Wibbo.Game.Items;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Roleplay.Weapon;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.Map.Movement;
+using Wibbo.Game.Rooms.PathFinding;
 using System.Drawing;
 
-namespace Butterfly.Game.Roleplay.Enemy
+namespace Wibbo.Game.Roleplay.Enemy
 {
     public class RoleBot
     {
@@ -43,8 +43,8 @@ namespace Butterfly.Game.Roleplay.Enemy
             this.DodgeTimer = 0;
             this.GunCharger = 6;
             this.GunLoadTimer = 0;
-            this.DodgeStartCount = ButterflyEnvironment.GetRandomNumber(2, 4);
-            this.ActionTimer = ButterflyEnvironment.GetRandomNumber(10, 30);
+            this.DodgeStartCount = WibboEnvironment.GetRandomNumber(2, 4);
+            this.ActionTimer = WibboEnvironment.GetRandomNumber(10, 30);
         }
 
         public void SetConfig(RPEnemy EnemyConfig)
@@ -52,8 +52,8 @@ namespace Butterfly.Game.Roleplay.Enemy
             this.Config = EnemyConfig;
 
             this.Health = this.Config.Health;
-            this.WeaponGun = ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(this.Config.WeaponGunId);
-            this.WeaponCac = ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(this.Config.WeaponCacId);
+            this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(this.Config.WeaponGunId);
+            this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(this.Config.WeaponCacId);
         }
 
         private bool IsAllowZone(RoomUser Bot)
@@ -194,7 +194,7 @@ namespace Butterfly.Game.Roleplay.Enemy
 
                 if (this.Config.LootItemId > 0)
                 {
-                    RPItem Item = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(this.Config.LootItemId);
+                    RPItem Item = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(this.Config.LootItemId);
                     if (Item != null)
                     {
                         Room.GetRoomItemHandler().AddTempItem(Bot.VirtualId, 3996, Bot.SetX, Bot.SetY, Bot.Z, Item.Name, this.Config.LootItemId, InteractionTypeTemp.RPITEM);
@@ -225,11 +225,11 @@ namespace Butterfly.Game.Roleplay.Enemy
                     {
                         this.Dodge = true;
                         this.DodgeTimer = 3;
-                        this.DodgeStartCount = ButterflyEnvironment.GetRandomNumber(2, 4);
+                        this.DodgeStartCount = WibboEnvironment.GetRandomNumber(2, 4);
                     }
                 }
 
-                Bot.OnChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.hit", Room.RoomData.Langue), this.Health, this.Config.Health, Dmg), (Bot.IsPet) ? 0 : 2, true);
+                Bot.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", Room.RoomData.Langue), this.Health, this.Config.Health, Dmg), (Bot.IsPet) ? 0 : 2, true);
             }
         }
 
@@ -256,7 +256,7 @@ namespace Butterfly.Game.Roleplay.Enemy
                 }
 
                 this.GunCharger--;
-                int Dmg = ButterflyEnvironment.GetRandomNumber(this.WeaponGun.DmgMin, this.WeaponGun.DmgMax);
+                int Dmg = WibboEnvironment.GetRandomNumber(this.WeaponGun.DmgMin, this.WeaponGun.DmgMax);
 
                 Room.GetProjectileManager().AddProjectile(Bot.VirtualId, Bot.SetX, Bot.SetY, Bot.SetZ, movement, Dmg, this.WeaponGun.Distance, this.Config.TeamId, true);
             }
@@ -264,7 +264,7 @@ namespace Butterfly.Game.Roleplay.Enemy
 
         private void Cac(RoomUser Bot, Room Room, RoomUser User)
         {
-            int Dmg = ButterflyEnvironment.GetRandomNumber(this.WeaponCac.DmgMin, this.WeaponCac.DmgMax);
+            int Dmg = WibboEnvironment.GetRandomNumber(this.WeaponCac.DmgMin, this.WeaponCac.DmgMax);
 
             if (!User.IsBot)
             {
@@ -428,11 +428,11 @@ namespace Butterfly.Game.Roleplay.Enemy
                 {
                     if (DistanceX < DistanceY)
                     {
-                        Bot.MoveTo(UserX + ((ButterflyEnvironment.GetRandomNumber(1, 2) == 2) ? 1 : -1), BotY, true);
+                        Bot.MoveTo(UserX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? 1 : -1), BotY, true);
                     }
                     else
                     {
-                        Bot.MoveTo(BotX, UserY + ((ButterflyEnvironment.GetRandomNumber(1, 2) == 2) ? 1 : -1), true);
+                        Bot.MoveTo(BotX, UserY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? 1 : -1), true);
                     }
                 }
                 return false;
@@ -449,22 +449,22 @@ namespace Butterfly.Game.Roleplay.Enemy
                 {
                     if (User.X > BotX)
                     {
-                        Bot.MoveTo(BotX, BotY + ButterflyEnvironment.GetRandomNumber(1, 3), true);
+                        Bot.MoveTo(BotX, BotY + WibboEnvironment.GetRandomNumber(1, 3), true);
                     }
                     else
                     {
-                        Bot.MoveTo(BotX, BotY - ButterflyEnvironment.GetRandomNumber(1, 3), true);
+                        Bot.MoveTo(BotX, BotY - WibboEnvironment.GetRandomNumber(1, 3), true);
                     }
                 }
                 else
                 {
                     if (User.Y > BotY)
                     {
-                        Bot.MoveTo(BotX - ButterflyEnvironment.GetRandomNumber(1, 3), BotY, true);
+                        Bot.MoveTo(BotX - WibboEnvironment.GetRandomNumber(1, 3), BotY, true);
                     }
                     else
                     {
-                        Bot.MoveTo(BotX + ButterflyEnvironment.GetRandomNumber(1, 3), BotY, true);
+                        Bot.MoveTo(BotX + WibboEnvironment.GetRandomNumber(1, 3), BotY, true);
                     }
                 }
                 return false;
@@ -474,13 +474,13 @@ namespace Butterfly.Game.Roleplay.Enemy
             {
                 if ((this.WeaponGun.Id == 0 || this.GunCharger == 0) && this.WeaponCac.Id != 0) //Déplace le bot au cac si il est uniquement cac
                 {
-                    Bot.MoveTo(UserX + ((ButterflyEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), UserY + ((ButterflyEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), true);
+                    Bot.MoveTo(UserX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), UserY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), true);
                 }
                 else if (this.WeaponGun.Id != 0 && this.GunCharger != 0) //Si le bot a une arme distance
                 {
                     if ((this.WeaponCac.Id == 0 || this.GunCharger == 0) && ((BotX == User.X && BotY == User.Y) || (BotX == UserX && BotY == UserY))) //Eloigné le bot si l'utilisateur est sur sa case et que le bot n'a pas d'arme cac
                     {
-                        Bot.MoveTo(UserX + ((ButterflyEnvironment.GetRandomNumber(1, 2) == 2) ? -5 : 5), UserY + ((ButterflyEnvironment.GetRandomNumber(1, 2) == 2) ? -5 : 5), true);
+                        Bot.MoveTo(UserX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -5 : 5), UserY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -5 : 5), true);
                         return false;
                     }
 
@@ -495,7 +495,7 @@ namespace Butterfly.Game.Roleplay.Enemy
 
                         if (this.CheckCollisionDir(Bot, Room, Rot, DistanceX, DistanceY)) //Check si la balle peut passer
                         {
-                            Bot.MoveTo(UserX + ((ButterflyEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), UserY + ((ButterflyEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), true);
+                            Bot.MoveTo(UserX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), UserY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), true);
                             return false;
                         }
                     }
@@ -503,7 +503,7 @@ namespace Butterfly.Game.Roleplay.Enemy
                     {
                         if (DistanceX < 3 && DistanceY < 3)
                         {
-                            Bot.MoveTo(UserX + ((ButterflyEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), UserY + ((ButterflyEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), true);
+                            Bot.MoveTo(UserX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), UserY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), true);
                         }
                         else
                         {
@@ -514,11 +514,11 @@ namespace Butterfly.Game.Roleplay.Enemy
 
                             if (DistanceX < DistanceY)
                             {
-                                Bot.MoveTo(UserX, (DistanceY > 5) ? BotY - ButterflyEnvironment.GetRandomNumber(1, 2) : BotY + ButterflyEnvironment.GetRandomNumber(1, 2), true);
+                                Bot.MoveTo(UserX, (DistanceY > 5) ? BotY - WibboEnvironment.GetRandomNumber(1, 2) : BotY + WibboEnvironment.GetRandomNumber(1, 2), true);
                             }
                             else
                             {
-                                Bot.MoveTo((DistanceX > 5) ? BotX - ButterflyEnvironment.GetRandomNumber(1, 2) : BotX + ButterflyEnvironment.GetRandomNumber(1, 2), UserY, true);
+                                Bot.MoveTo((DistanceX > 5) ? BotX - WibboEnvironment.GetRandomNumber(1, 2) : BotX + WibboEnvironment.GetRandomNumber(1, 2), UserY, true);
                             }
                         }
                         return false;
@@ -687,7 +687,7 @@ namespace Butterfly.Game.Roleplay.Enemy
                 return;
             }
 
-            this.ActionTimer = ButterflyEnvironment.GetRandomNumber(15, 30);
+            this.ActionTimer = WibboEnvironment.GetRandomNumber(15, 30);
             if (this.ActionTimer >= 25 && !this.Config.ZombieMode)
             {
                 if (this.ActionTimer == 30)
@@ -731,9 +731,9 @@ namespace Butterfly.Game.Roleplay.Enemy
                 if (this.Config.ZoneDistance > 0)
                 {
                     //Bouge le bot aléatoirement dans sa zone
-                    int LenghtX = ButterflyEnvironment.GetRandomNumber(0, this.Config.ZoneDistance);
-                    int LenghtY = ButterflyEnvironment.GetRandomNumber(0, this.Config.ZoneDistance);
-                    Bot.MoveTo(Bot.BotData.X + ((ButterflyEnvironment.GetRandomNumber(1, 2) == 2) ? -LenghtX : LenghtX), Bot.BotData.Y + ((ButterflyEnvironment.GetRandomNumber(1, 2) == 2) ? -LenghtY : LenghtY), true);
+                    int LenghtX = WibboEnvironment.GetRandomNumber(0, this.Config.ZoneDistance);
+                    int LenghtY = WibboEnvironment.GetRandomNumber(0, this.Config.ZoneDistance);
+                    Bot.MoveTo(Bot.BotData.X + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -LenghtX : LenghtX), Bot.BotData.Y + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -LenghtY : LenghtY), true);
                 }
             }
         }

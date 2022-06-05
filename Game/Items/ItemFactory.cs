@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Items.Interactors;
-using Butterfly.Game.Users;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Items.Interactors;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Game.Items
+namespace Wibbo.Game.Items
 {
     public class ItemFactory
     {
@@ -16,7 +16,7 @@ namespace Butterfly.Game.Items
 
             Item Item = new Item(0, 0, Data.Id, ExtraData, LimitedNumber, LimitedStack, 0, 0, 0, 0, "", null);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 Item.Id = ItemDao.Insert(dbClient, Data.Id, user.Id, ExtraData);
 
@@ -37,7 +37,7 @@ namespace Butterfly.Game.Items
             }
 
             int InsertId = 0;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 InsertId = ItemDao.Insert(dbClient, ItemId, Data.Id, user.Id, ExtraData);
 
@@ -62,7 +62,7 @@ namespace Butterfly.Game.Items
 
             List<Item> Items = new List<Item>();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 for (int i = 0; i < Amount; i++)
                 {
@@ -80,7 +80,7 @@ namespace Butterfly.Game.Items
         {
             List<Item> Items = new List<Item>();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 int Item1Id = ItemDao.Insert(dbClient, data.Id, user.Id, "");
                 int Item2Id = ItemDao.Insert(dbClient, data.Id, user.Id, Item1Id.ToString());
@@ -99,7 +99,7 @@ namespace Butterfly.Game.Items
 
         public static void CreateMoodlightData(Item Item)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemMoodlightDao.Insert(dbClient, Item.Id);
             }

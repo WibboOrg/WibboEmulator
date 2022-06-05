@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class RoomRemoveSell : IChatCommand
     {
@@ -21,12 +21,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             Room.RoomData.SellPrice = 0;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoomDao.UpdatePrice(dbClient, Room.Id, 0);
             }
 
-            Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.remove", Session.Langue));
+            Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.remove", Session.Langue));
         }
     }
 }

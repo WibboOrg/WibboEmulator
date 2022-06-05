@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Communication.Packets.Outgoing.Camera;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Camera;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Camera
+namespace Wibbo.Communication.Packets.Incoming.Camera
 {
     internal class RenderRoomThumbnailEvent : IPacketEvent
     {
@@ -20,13 +20,13 @@ namespace Butterfly.Communication.Packets.Incoming.Camera
             if (room == null)
                 return;
 
-            int time = ButterflyEnvironment.GetUnixTimestamp();
+            int time = WibboEnvironment.GetUnixTimestamp();
             string pictureName = $"thumbnail_{room.Id}";
 
             MultipartFormDataContent content = new MultipartFormDataContent("Upload");
             content.Add(new StreamContent(new MemoryStream(photoBinary)), "photo", pictureName);
 
-            HttpResponseMessage response = await ButterflyEnvironment.GetHttpClient().PostAsync(ButterflyEnvironment.CameraThubmailUploadUrl, content);
+            HttpResponseMessage response = await WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.CameraThubmailUploadUrl, content);
 
             string photoId = await response.Content.ReadAsStringAsync();
 

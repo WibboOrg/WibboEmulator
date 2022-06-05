@@ -1,11 +1,11 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Avatar;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorManiqui : FurniInteractor
     {
@@ -29,7 +29,7 @@ namespace Butterfly.Game.Items.Interactors
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             string[] lookSplit = Session.GetUser().Look.Split(new char[1] { '.' });
             string lookCode = "";
             foreach (string part in lookSplit)
@@ -43,7 +43,7 @@ namespace Butterfly.Game.Items.Interactors
             string look = lookCode + Item.ExtraData.Split(new char[1] { ';' })[1];
             Session.GetUser().Look = look;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserDao.UpdateLook(dbClient, Session.GetUser().Id, look);
             }

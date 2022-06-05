@@ -1,12 +1,12 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Messenger;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Users.Relationships;
-using Butterfly.Utilities;
+﻿using Wibbo.Communication.Packets.Outgoing.Messenger;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Users.Relationships;
+using Wibbo.Utilities;
 using System.Data;
 
-namespace Butterfly.Game.Users.Messenger
+namespace Wibbo.Game.Users.Messenger
 {
     public class MessengerComponent : IDisposable
     {
@@ -93,7 +93,7 @@ namespace Butterfly.Game.Users.Messenger
 
         public void Dispose()
         {
-            List<Client> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(this.Friends.Keys);
+            List<Client> onlineUsers = WibboEnvironment.GetGame().GetClientManager().GetClientsById(this.Friends.Keys);
 
             foreach (Client gameClient in onlineUsers)
             {
@@ -120,7 +120,7 @@ namespace Butterfly.Game.Users.Messenger
                 return;
             }
 
-            List<Client> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(this.Friends.Keys);
+            List<Client> onlineUsers = WibboEnvironment.GetGame().GetClientManager().GetClientsById(this.Friends.Keys);
 
             if (onlineUsers == null)
             {
@@ -167,7 +167,7 @@ namespace Butterfly.Game.Users.Messenger
 
         public void HandleAllRequests()
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 MessengerRequestDao.Delete(dbClient, this._userInstance.Id);
             }
@@ -177,7 +177,7 @@ namespace Butterfly.Game.Users.Messenger
 
         public void HandleRequest(int sender)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 MessengerRequestDao.Delete(dbClient, this._userInstance.Id, sender);
             }
@@ -187,14 +187,14 @@ namespace Butterfly.Game.Users.Messenger
 
         public void CreateFriendship(int friendID)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 MessengerFriendshipDao.Replace(dbClient, this._userInstance.Id, friendID);
                 MessengerFriendshipDao.Replace(dbClient, friendID, this._userInstance.Id);
             }
 
             this.OnNewFriendship(friendID);
-            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
+            Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
             if (clientByUserId == null || clientByUserId.GetUser().GetMessenger() == null)
             {
                 return;
@@ -210,13 +210,13 @@ namespace Butterfly.Game.Users.Messenger
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 MessengerFriendshipDao.Delete(dbClient, this._userInstance.Id, friendID);
             }
 
             this.OnDestroyFriendship(friendID);
-            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
+            Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
             if (clientByUserId == null || clientByUserId.GetUser().GetMessenger() == null)
             {
                 return;
@@ -227,12 +227,12 @@ namespace Butterfly.Game.Users.Messenger
 
         public void OnNewFriendship(int friendID)
         {
-            Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
+            Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
             MessengerBuddy friend;
             if (clientByUserId == null || clientByUserId.GetUser() == null)
             {
                 string username;
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     username = UserDao.GetNameById(dbClient, friendID);
                 }
@@ -265,7 +265,7 @@ namespace Butterfly.Game.Users.Messenger
                 return true;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 return MessengerFriendshipDao.haveFriend(dbClient, this._userInstance.Id, requestID);
             }
@@ -286,13 +286,13 @@ namespace Butterfly.Game.Users.Messenger
 
         public bool RequestBuddy(string UserQuery)
         {
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(UserQuery);
+            Client clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(UserQuery);
             int sender;
             bool flag;
             if (clientByUsername == null)
             {
                 DataRow dataRow = null;
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     dataRow = UserDao.GetOneIdAndBlockNewFriend(dbClient, UserQuery.ToLower());
                 }
@@ -303,7 +303,7 @@ namespace Butterfly.Game.Users.Messenger
                 }
 
                 sender = Convert.ToInt32(dataRow["id"]);
-                flag = ButterflyEnvironment.EnumToBool(dataRow["block_newfriends"].ToString());
+                flag = WibboEnvironment.EnumToBool(dataRow["block_newfriends"].ToString());
             }
             else
             {
@@ -320,7 +320,7 @@ namespace Butterfly.Game.Users.Messenger
 
             if (flag)
             {
-                this.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.textamigo.error", this.GetClient().Langue));
+                this.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.textamigo.error", this.GetClient().Langue));
                 return false;
             }
             else
@@ -330,18 +330,18 @@ namespace Butterfly.Game.Users.Messenger
                     return false;
                 }
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     MessengerRequestDao.Replace(dbClient, this._userInstance.Id, sender);
                 }
 
-                Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(sender);
+                Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(sender);
                 if (clientByUserId == null || clientByUserId.GetUser() == null)
                 {
                     return false;
                 }
 
-                MessengerRequest request = new MessengerRequest(sender, this._userInstance.Id, ButterflyEnvironment.GetGame().GetClientManager().GetNameById(this._userInstance.Id));
+                MessengerRequest request = new MessengerRequest(sender, this._userInstance.Id, WibboEnvironment.GetGame().GetClientManager().GetNameById(this._userInstance.Id));
                 clientByUserId.GetUser().GetMessenger().OnNewRequest(this._userInstance.Id);
 
                 clientByUserId.SendPacket(new NewBuddyRequestComposer(request));
@@ -362,7 +362,7 @@ namespace Butterfly.Game.Users.Messenger
                 return;
             }
 
-            this.Requests.Add(friendID, new MessengerRequest(this._userInstance.Id, friendID, ButterflyEnvironment.GetGame().GetClientManager().GetNameById(friendID)));
+            this.Requests.Add(friendID, new MessengerRequest(this._userInstance.Id, friendID, WibboEnvironment.GetGame().GetClientManager().GetNameById(friendID)));
         }
 
         public void SendInstantMessage(int ToId, string Message)
@@ -373,10 +373,10 @@ namespace Butterfly.Game.Users.Messenger
                 return;
             }
 
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(ToId);
+            Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(ToId);
             if (Client == null || Client.GetUser() == null || Client.GetUser().GetMessenger() == null)
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     MessengerOfflineMessageDao.Insert(dbClient, ToId, this.GetClient().GetUser().Id, Message);
                 }
@@ -401,13 +401,13 @@ namespace Butterfly.Game.Users.Messenger
         public void ProcessOfflineMessages()
         {
             DataTable GetMessages = null;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 GetMessages = MessengerOfflineMessageDao.GetAll(dbClient, this._userInstance.Id);
 
                 if (GetMessages != null)
                 {
-                    Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
+                    Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
                     if (Client == null)
                     {
                         return;
@@ -417,7 +417,7 @@ namespace Butterfly.Game.Users.Messenger
 
                     foreach (DataRow Row in GetMessages.Rows)
                     {
-                        packetList.Add(new NewConsoleComposer(Convert.ToInt32(Row["from_id"]), Convert.ToString(Row["message"]), (ButterflyEnvironment.GetUnixTimestamp() - Convert.ToInt32(Row["timestamp"]))));
+                        packetList.Add(new NewConsoleComposer(Convert.ToInt32(Row["from_id"]), Convert.ToString(Row["message"]), (WibboEnvironment.GetUnixTimestamp() - Convert.ToInt32(Row["timestamp"]))));
                     }
 
                     Client.SendPacket(packetList);
@@ -434,7 +434,7 @@ namespace Butterfly.Game.Users.Messenger
 
         private Client GetClient()
         {
-            return ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
+            return WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
         }
     }
 }

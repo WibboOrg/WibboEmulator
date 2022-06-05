@@ -1,7 +1,7 @@
-﻿using Butterfly.Communication.Packets.Incoming;
-using Butterfly.Core;
-using Butterfly.Game.Clients;
-using Butterfly.Utilities;
+﻿using Wibbo.Communication.Packets.Incoming;
+using Wibbo.Core;
+using Wibbo.Game.Clients;
+using Wibbo.Utilities;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Reflection;
@@ -9,7 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
-namespace Butterfly.Communication.WebSocket
+namespace Wibbo.Communication.WebSocket
 {
     public class WebSocketManager
     {
@@ -28,7 +28,7 @@ namespace Butterfly.Communication.WebSocket
             this._webSocketServer = new WebSocketServer(IPAddress.Any, port, isSecure);
             if (isSecure)
             {
-                string patchCertificate = ButterflyEnvironment.PatchDir + "Config/certificate.pfx";
+                string patchCertificate = WibboEnvironment.PatchDir + "Config/certificate.pfx";
                 this._webSocketServer.SslConfiguration.ServerCertificate = new X509Certificate2(patchCertificate, certificatePassword);
                 //this._webSocketServer.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
                 //this._webSocketServer.SslConfiguration.CheckCertificateRevocation = true;
@@ -48,14 +48,14 @@ namespace Butterfly.Communication.WebSocket
 
             this.AlterIpConnectionCount(ip, (this.GetAmountOfConnectionFromIp(ip) - 1));
 
-            ButterflyEnvironment.GetGame().GetClientManager().DisposeConnection(connection.ID);
+            WibboEnvironment.GetGame().GetClientManager().DisposeConnection(connection.ID);
         }
 
         public void CreatedClient(GameWebSocket connection)
         {
             string ip = connection.GetIp();
 
-            if (ip.Contains(",") || this._bannedIp.Contains(ip) || !ButterflyEnvironment.WebSocketOrigins.Contains(connection.GetOrigin()) || connection.GetUserAgent() == "")
+            if (ip.Contains(",") || this._bannedIp.Contains(ip) || !WibboEnvironment.WebSocketOrigins.Contains(connection.GetOrigin()) || connection.GetUserAgent() == "")
             {
                 ExceptionLogger.LogDenial("[IP: " + connection.GetIp() + "] [Origin: " + connection.GetOrigin() + "] [User-Agent: " + connection.GetUserAgent() + "]");
                 return;
@@ -66,7 +66,7 @@ namespace Butterfly.Communication.WebSocket
             int ConnectionCount = this.GetAmountOfConnectionFromIp(ip);
             if (ConnectionCount <= 10)
             {
-                ButterflyEnvironment.GetGame().GetClientManager().CreateAndStartClient(connection.ID, connection);
+                WibboEnvironment.GetGame().GetClientManager().CreateAndStartClient(connection.ID, connection);
             }
             else
             {
@@ -154,7 +154,7 @@ namespace Butterfly.Communication.WebSocket
 
         protected override void OnClose(CloseEventArgs e)
         {
-            ButterflyEnvironment.GetWebSocketManager().DisposeClient(this);
+            WibboEnvironment.GetWebSocketManager().DisposeClient(this);
         }
 
         protected override void OnMessage(MessageEventArgs e)
@@ -171,7 +171,7 @@ namespace Butterfly.Communication.WebSocket
                 return;
             }
 
-            Client client = ButterflyEnvironment.GetGame().GetClientManager().GetClientById(this.ID);
+            Client client = WibboEnvironment.GetGame().GetClientManager().GetClientById(this.ID);
 
             if (client == null)
                 return;
@@ -202,7 +202,7 @@ namespace Butterfly.Communication.WebSocket
 
                     try
                     {
-                        ButterflyEnvironment.GetGame().GetPacketManager().TryExecutePacket(client, message);
+                        WibboEnvironment.GetGame().GetPacketManager().TryExecutePacket(client, message);
                     }
                     catch (Exception ex)
                     {
@@ -214,7 +214,7 @@ namespace Butterfly.Communication.WebSocket
 
         protected override void OnOpen()
         {
-            ButterflyEnvironment.GetWebSocketManager().CreatedClient(this);
+            WibboEnvironment.GetWebSocketManager().CreatedClient(this);
         }
 
         public void SendData(byte[] bytes)

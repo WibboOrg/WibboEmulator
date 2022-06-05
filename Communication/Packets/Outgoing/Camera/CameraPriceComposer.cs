@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Camera
+namespace Wibbo.Communication.Packets.Outgoing.Camera
 {
     internal class CameraPriceComposer : ServerPacket
     {

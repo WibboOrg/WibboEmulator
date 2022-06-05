@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Settings
+namespace Wibbo.Communication.Packets.Outgoing.Settings
 {
     internal class UserSettingsComposer : ServerPacket
     {

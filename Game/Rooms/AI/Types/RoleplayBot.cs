@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Clients;
+﻿using Wibbo.Game.Clients;
 
-namespace Butterfly.Game.Rooms.AI.Types
+namespace Wibbo.Game.Rooms.AI.Types
 {
     public class RoleplayBot : BotAI
     {

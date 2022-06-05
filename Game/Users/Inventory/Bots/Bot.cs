@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Users.Inventory.Bots
+﻿namespace Wibbo.Game.Users.Inventory.Bots
 {
     public class Bot
     {

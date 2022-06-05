@@ -1,6 +1,6 @@
-using Butterfly.Game.Catalog.Utilities;
+using Wibbo.Game.Catalog.Utilities;
 
-namespace Butterfly.Communication.Packets.Outgoing.Catalog
+namespace Wibbo.Communication.Packets.Outgoing.Catalog
 {
     internal class CheckPetNameComposer : ServerPacket
     {

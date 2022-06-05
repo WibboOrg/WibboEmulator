@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Catalog;
-using Butterfly.Communication.Packets.Outgoing.Groups;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
+using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class JoinGroupEvent : IPacketEvent
     {
@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Packet.PopInt(), out Group Group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(Packet.PopInt(), out Group Group))
             {
                 return;
             }
@@ -41,7 +41,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             else
             {
                 Session.GetUser().MyGroups.Add(Group.Id);
-                Session.SendPacket(new GroupFurniConfigComposer(ButterflyEnvironment.GetGame().GetGroupManager().GetGroupsForUser(Session.GetUser().MyGroups)));
+                Session.SendPacket(new GroupFurniConfigComposer(WibboEnvironment.GetGame().GetGroupManager().GetGroupsForUser(Session.GetUser().MyGroups)));
                 Session.SendPacket(new GroupInfoComposer(Group, Session));
 
                 if (Session.GetUser().CurrentRoom != null)

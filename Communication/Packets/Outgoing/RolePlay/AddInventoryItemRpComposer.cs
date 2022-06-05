@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Roleplay;
+﻿using Wibbo.Game.Roleplay;
 
-namespace Butterfly.Communication.Packets.Outgoing.RolePlay
+namespace Wibbo.Communication.Packets.Outgoing.RolePlay
 {
     internal class AddInventoryItemRpComposer : ServerPacket
     {

@@ -1,6 +1,6 @@
-using Butterfly.Game.Groups;
+using Wibbo.Game.Groups;
 
-namespace Butterfly.Communication.Packets.Outgoing.Groups
+namespace Wibbo.Communication.Packets.Outgoing.Groups
 {
     internal class UpdateFavouriteGroupComposer : ServerPacket
     {

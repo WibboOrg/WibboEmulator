@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Core
+﻿namespace Wibbo.Core
 {
     public class ConfigurationData
     {

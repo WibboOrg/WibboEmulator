@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Help
+﻿namespace Wibbo.Game.Help
 {
     public class HelpManager
     {
@@ -30,7 +30,7 @@
                 return 0;
             }
 
-            int RandomId = List[ButterflyEnvironment.GetRandomNumber(0, List.Count - 1)];
+            int RandomId = List[WibboEnvironment.GetRandomNumber(0, List.Count - 1)];
             this.GuidesOnDuty[RandomId] = true;
 
             return RandomId;

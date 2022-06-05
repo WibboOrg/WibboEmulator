@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class DisableExchange : IChatCommand
     {
@@ -10,12 +10,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             if (Session.GetUser().AcceptTrading)
             {
                 Session.GetUser().AcceptTrading = false;
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.troc.true", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.troc.true", Session.Langue));
             }
             else
             {
                 Session.GetUser().AcceptTrading = true;
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.troc.false", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.troc.false", Session.Langue));
             }
 
         }

@@ -1,7 +1,7 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Campaign;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.Campaign;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Campaign
+namespace Wibbo.Communication.Packets.Incoming.Campaign
 {
     internal class OpenCampaignCalendarDoorAsStaffEvent : IPacketEvent
     {

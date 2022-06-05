@@ -1,8 +1,8 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Wireds;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Wireds;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Items.Wired
+namespace Wibbo.Game.Items.Wired
 {
     public class WiredConditionBase : WiredBase
     {

@@ -1,7 +1,7 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class BanDao
     {
@@ -17,7 +17,7 @@ namespace Butterfly.Database.Daos
         internal static bool IsBanned(IQueryAdapter dbClient, string username, string ip, string ipTwo, string machineId)
         {
             dbClient.SetQuery("SELECT `id` FROM `ban` WHERE `expire` > @nowtime AND ((`bantype` = 'user' AND `value` = @username) OR (`bantype` = 'ip' AND `value` = @IP1) OR (`bantype` = 'ip' AND `value` = @IP2) OR (`bantype` = 'machine' AND `value` = @machineid)) LIMIT 1");
-            dbClient.AddParameter("nowtime", ButterflyEnvironment.GetUnixTimestamp());
+            dbClient.AddParameter("nowtime", WibboEnvironment.GetUnixTimestamp());
             dbClient.AddParameter("username", username);
             dbClient.AddParameter("IP1", ip);
             dbClient.AddParameter("IP2", ipTwo);

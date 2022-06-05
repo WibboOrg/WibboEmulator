@@ -1,7 +1,7 @@
-using Butterfly.Game.Users;
-using Butterfly.Game.Users.Relationships;
+using Wibbo.Game.Users;
+using Wibbo.Game.Users.Relationships;
 
-namespace Butterfly.Communication.Packets.Outgoing.Users
+namespace Wibbo.Communication.Packets.Outgoing.Users
 {
     internal class GetRelationshipsComposer : ServerPacket
     {
@@ -27,7 +27,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
             int Hates = RelationRandom.Count(x => x.Value.Type == 3);
             foreach (Relationship Rel in RelationRandom.Values)
             {
-                User HHab = ButterflyEnvironment.GetUserById(Rel.UserId);
+                User HHab = WibboEnvironment.GetUserById(Rel.UserId);
                 if (HHab == null)
                 {
                     base.WriteInteger(0);

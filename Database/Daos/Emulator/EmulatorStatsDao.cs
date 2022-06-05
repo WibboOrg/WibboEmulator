@@ -1,6 +1,6 @@
-using Butterfly.Database.Interfaces;
+using Wibbo.Database.Interfaces;
 
-namespace Butterfly.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class EmulatorStatsDao
     {

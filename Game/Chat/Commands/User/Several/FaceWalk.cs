@@ -1,8 +1,8 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class FaceWalk : IChatCommand
     {
@@ -17,11 +17,11 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             roomUserByUserId.FacewalkEnabled = !roomUserByUserId.FacewalkEnabled;
             if (roomUserByUserId.FacewalkEnabled)
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.true", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.true", Session.Langue));
             }
             else
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.false", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.false", Session.Langue));
             }
         }
     }

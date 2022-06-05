@@ -1,7 +1,7 @@
-using Butterfly.Communication.Packets.Outgoing.Help;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Help;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Guide
+namespace Wibbo.Communication.Packets.Incoming.Guide
 {
     internal class GuideEndSessionEvent : IPacketEvent
     {
@@ -9,14 +9,14 @@ namespace Butterfly.Communication.Packets.Incoming.Guide
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
+            Client requester = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
 
             Session.SendPacket(new OnGuideSessionEndedComposer(1));
 
             Session.GetUser().GuideOtherUserId = 0;
             if (Session.GetUser().OnDuty)
             {
-                ButterflyEnvironment.GetGame().GetHelpManager().EndService(Session.GetUser().Id);
+                WibboEnvironment.GetGame().GetHelpManager().EndService(Session.GetUser().Id);
             }
 
             if (requester != null)
@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Incoming.Guide
 
                 if (requester.GetUser().OnDuty)
                 {
-                    ButterflyEnvironment.GetGame().GetHelpManager().EndService(requester.GetUser().Id);
+                    WibboEnvironment.GetGame().GetHelpManager().EndService(requester.GetUser().Id);
                 }
             }
         }

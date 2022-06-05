@@ -1,7 +1,7 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 
-namespace Butterfly.Game.Catalog.Vouchers
+namespace Wibbo.Game.Catalog.Vouchers
 {
     public class Voucher
     {
@@ -24,7 +24,7 @@ namespace Butterfly.Game.Catalog.Vouchers
         {
             this.CurrentUses += 1;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 CatalogVoucherDao.Update(dbClient, this._code);
             }

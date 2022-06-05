@@ -1,7 +1,7 @@
-using Butterfly.Communication.Packets.Outgoing.Inventory.Bots;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Bots;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetBotInventoryEvent : IPacketEvent
     {

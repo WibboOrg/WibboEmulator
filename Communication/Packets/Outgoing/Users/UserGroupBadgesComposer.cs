@@ -1,6 +1,6 @@
-using Butterfly.Game.Groups;
+using Wibbo.Game.Groups;
 
-namespace Butterfly.Communication.Packets.Outgoing.Users
+namespace Wibbo.Communication.Packets.Outgoing.Users
 {
     internal class UserGroupBadgesComposer : ServerPacket
     {

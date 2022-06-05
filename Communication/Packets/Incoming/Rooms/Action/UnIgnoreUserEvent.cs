@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Action;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Users;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Action;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class UnIgnoreUserEvent : IPacketEvent
     {
@@ -22,7 +22,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             string str = Packet.PopString();
 
-            User user = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(str).GetUser();
+            User user = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(str).GetUser();
             if (user == null || !Session.GetUser().MutedUsers.Contains(user.Id))
             {
                 return;

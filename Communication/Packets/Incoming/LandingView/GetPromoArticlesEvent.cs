@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.LandingView;
-using Butterfly.Game.Clients;
-using Butterfly.Game.LandingView;
+using Wibbo.Communication.Packets.Outgoing.LandingView;
+using Wibbo.Game.Clients;
+using Wibbo.Game.LandingView;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetPromoArticlesEvent : IPacketEvent
     {
@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            LandingViewManager currentView = ButterflyEnvironment.GetGame().GetHotelView();            if (Session == null || Session.GetUser() == null)
+            LandingViewManager currentView = WibboEnvironment.GetGame().GetHotelView();            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }

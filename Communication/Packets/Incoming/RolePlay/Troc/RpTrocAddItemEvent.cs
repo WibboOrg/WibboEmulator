@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.RolePlay.Troc
+namespace Wibbo.Communication.Packets.Incoming.RolePlay.Troc
 {
     internal class RpTrocAddItemEvent : IPacketEvent
     {
@@ -35,7 +35,7 @@ namespace Butterfly.Communication.Packets.Incoming.RolePlay.Troc
                 return;
             }
 
-            ButterflyEnvironment.GetGame().GetRoleplayManager().GetTrocManager().AddItem(Rp.TradeId, User.UserId, ItemId);
+            WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().AddItem(Rp.TradeId, User.UserId, ItemId);
         }
     }
 }

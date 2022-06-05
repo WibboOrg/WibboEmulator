@@ -1,13 +1,13 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class UserDao
     {
         internal static string BuildUpdateQuery(int userId, int duckets, int credits)
         {
-            return "UPDATE `user` SET `user`.online = '0', `user`.last_online = '" + ButterflyEnvironment.GetUnixTimestamp() + "', activity_points = '" + duckets + "', credits = '" + credits + "' WHERE id = '" + userId + "';";
+            return "UPDATE `user` SET `user`.online = '0', `user`.last_online = '" + WibboEnvironment.GetUnixTimestamp() + "', activity_points = '" + duckets + "', credits = '" + credits + "' WHERE id = '" + userId + "';";
         }
 
         internal static int GetIdByName(IQueryAdapter dbClient, string name)
@@ -134,12 +134,12 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateIgnoreRoomInvites(IQueryAdapter dbClient, int userId, bool flag)
         {
-            dbClient.RunQuery("UPDATE `user` SET `ignore_room_invite` = '" + ButterflyEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
+            dbClient.RunQuery("UPDATE `user` SET `ignore_room_invite` = '" + WibboEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
         }
 
         internal static void UpdateCameraFollowDisabled(IQueryAdapter dbClient, int userId, bool flag)
         {
-            dbClient.RunQuery("UPDATE `user` SET `camera_follow_disabled` = '" + ButterflyEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
+            dbClient.RunQuery("UPDATE `user` SET `camera_follow_disabled` = '" + WibboEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
         }
 
         internal static void UpdateVolume(IQueryAdapter dbClient, int userId, int volume1, int volume2, int volume3)
@@ -209,7 +209,7 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateOffline(IQueryAdapter dbClient, int userId, int duckets, int credits)
         {
-            dbClient.RunQuery("UPDATE `user` SET `online` = '0', `last_online` = '" + ButterflyEnvironment.GetUnixTimestamp() + "', `activity_points` = '" + duckets + "', `credits` = '" + credits + "' WHERE `id` = '" + userId + "'");
+            dbClient.RunQuery("UPDATE `user` SET `online` = '0', `last_online` = '" + WibboEnvironment.GetUnixTimestamp() + "', `activity_points` = '" + duckets + "', `credits` = '" + credits + "' WHERE `id` = '" + userId + "'");
         }
 
         internal static void UpdateLastDailyCredits(IQueryAdapter dbClient, int userId, string lastDailyCredits)

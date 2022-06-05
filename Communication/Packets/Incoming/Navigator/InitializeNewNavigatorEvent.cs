@@ -1,10 +1,10 @@
-using Butterfly.Communication.Packets.Outgoing.Navigator.New;
+using Wibbo.Communication.Packets.Outgoing.Navigator.New;
 
-using Butterfly.Game.Clients;
-using Butterfly.Game.Navigator;
-using Butterfly.Utilities;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Navigator;
+using Wibbo.Utilities;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class InitializeNewNavigatorEvent : IPacketEvent
     {
@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            ICollection<TopLevelItem> TopLevelItems = ButterflyEnvironment.GetGame().GetNavigator().GetTopLevelItems();
+            ICollection<TopLevelItem> TopLevelItems = WibboEnvironment.GetGame().GetNavigator().GetTopLevelItems();
 
             ServerPacketList packetList = new ServerPacketList();
             packetList.Add(new NavigatorMetaDataParserComposer(TopLevelItems));

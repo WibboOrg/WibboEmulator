@@ -1,7 +1,7 @@
-﻿using Butterfly.Core.FigureData.Types;
+﻿using Wibbo.Core.FigureData.Types;
 using System.Xml;
 
-namespace Butterfly.Core.FigureData
+namespace Wibbo.Core.FigureData
 {
     public class FigureDataManager
     {
@@ -35,7 +35,7 @@ namespace Butterfly.Core.FigureData
             }
 
             XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(ButterflyEnvironment.PatchDir + "Config/figuredata.xml");
+            xDoc.Load(WibboEnvironment.PatchDir + "Config/figuredata.xml");
 
             XmlNodeList Colors = xDoc.GetElementsByTagName("colors");
             foreach (XmlNode Node in Colors)

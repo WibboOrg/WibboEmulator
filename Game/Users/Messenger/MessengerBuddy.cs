@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Clients;
+﻿using Wibbo.Game.Clients;
 
-namespace Butterfly.Game.Users.Messenger
+namespace Wibbo.Game.Users.Messenger
 {
     public class MessengerBuddy
     {
@@ -26,7 +26,7 @@ namespace Butterfly.Game.Users.Messenger
 
         public void UpdateUser()
         {
-            Client client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userId);
+            Client client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userId);
             if (client != null && client.GetUser() != null && client.GetUser().GetMessenger() != null && !client.GetUser().GetMessenger().AppearOffline)
             {
                 this._isOnline = true;

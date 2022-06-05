@@ -1,6 +1,6 @@
-using Butterfly.Game.Items;
+using Wibbo.Game.Items;
 
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Furni
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Furni
 {
     internal class OpenGiftComposer : ServerPacket
     {

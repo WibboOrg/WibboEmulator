@@ -1,14 +1,14 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Quests;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Quests;
 
-namespace Butterfly.Communication.Packets.Outgoing.Quests
+namespace Wibbo.Communication.Packets.Outgoing.Quests
 {
     internal class QuestStartedComposer : ServerPacket
     {
         public QuestStartedComposer(Client Session, Quest Quest)
             : base(ServerPacketHeader.QUEST)
         {
-            int questsInCategory = ButterflyEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(Quest.Category);
+            int questsInCategory = WibboEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(Quest.Category);
             int i = Quest == null ? questsInCategory : Quest.Number - 1;
             int num = Quest == null ? 0 : Session.GetUser().GetQuestProgress(Quest.Id);
             if (Quest != null && Quest.IsCompleted(num))

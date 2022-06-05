@@ -1,10 +1,10 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class DeleteMission : IChatCommand
     {
@@ -16,19 +16,19 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             string username = Params[1];
-            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
+            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
             if (TargetUser == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
             else if (Session.GetUser().Rank <= TargetUser.GetUser().Rank)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.notpermitted", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.notpermitted", Session.Langue));
             }
             else
             {
-                TargetUser.GetUser().Motto = ButterflyEnvironment.GetLanguageManager().TryGetValue("user.unacceptable_motto", TargetUser.Langue);
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                TargetUser.GetUser().Motto = WibboEnvironment.GetLanguageManager().TryGetValue("user.unacceptable_motto", TargetUser.Langue);
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserDao.UpdateMotto(dbClient, TargetUser.GetUser().Id, TargetUser.GetUser().Motto);
                 }

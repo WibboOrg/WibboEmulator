@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Roleplay.Enemy;
-using Butterfly.Game.Rooms.AI.Types;
+﻿using Wibbo.Game.Roleplay.Enemy;
+using Wibbo.Game.Rooms.AI.Types;
 
-namespace Butterfly.Game.Rooms.AI
+namespace Wibbo.Game.Rooms.AI
 {
     public class RoomBot
     {
@@ -34,7 +34,7 @@ namespace Butterfly.Game.Rooms.AI
 
         public bool IsPet => this.AiType == BotAIType.Pet || this.AiType == BotAIType.RoleplayPet;
 
-        public string OwnerName => ButterflyEnvironment.GetGame().GetClientManager().GetNameById(this.OwnerId);
+        public string OwnerName => WibboEnvironment.GetGame().GetClientManager().GetNameById(this.OwnerId);
 
         public RoomBot(int BotId, int OwnerId, int RoomId, BotAIType AiType, bool WalkingEnabled, string Name, string Motto, string Gender, string Look, int X, int Y, double Z, int Rot, bool ChatEnabled, string ChatText, int ChatSeconds, bool IsDancing, int pEffectEnable, int pHanditemId, int pStatus)
         {
@@ -93,7 +93,7 @@ namespace Butterfly.Game.Rooms.AI
 
         public string GetRandomSpeech()
         {
-            return this.RandomSpeech[ButterflyEnvironment.GetRandomNumber(0, this.RandomSpeech.Count - 1)];
+            return this.RandomSpeech[WibboEnvironment.GetRandomNumber(0, this.RandomSpeech.Count - 1)];
         }
 
         public BotAI GenerateBotAI(int VirtualId)

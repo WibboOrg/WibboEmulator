@@ -1,7 +1,7 @@
-﻿using Butterfly.Core;
+﻿using Wibbo.Core;
 using System.Collections.Concurrent;
 
-namespace Butterfly.Game.Rooms.Jankens
+namespace Wibbo.Game.Rooms.Jankens
 {
     public class JankenManager
     {
@@ -48,12 +48,12 @@ namespace Butterfly.Game.Rooms.Jankens
                     party.Started = true;
                     User.PartyId = party.UserOne;
 
-                    User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.start", User.GetClient().Langue));
-                    DuelUser.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.start", DuelUser.GetClient().Langue));
+                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.start", User.GetClient().Langue));
+                    DuelUser.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.start", DuelUser.GetClient().Langue));
                 }
                 else
                 {
-                    User.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.notwork", User.GetClient().Langue), DuelUser.GetUsername()));
+                    User.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("janken.notwork", User.GetClient().Langue), DuelUser.GetUsername()));
                 }
             }
             else
@@ -61,7 +61,7 @@ namespace Butterfly.Game.Rooms.Jankens
                 User.PartyId = User.UserId;
                 this._party.TryAdd(User.PartyId, new Janken(User.UserId, DuelUser.UserId));
 
-                User.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.wait", User.GetClient().Langue), DuelUser.GetUsername()));
+                User.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("janken.wait", User.GetClient().Langue), DuelUser.GetUsername()));
                 DuelUser.SendWhisperChat(User.GetUsername() + " vous défie au JanKen! Utilisez la commande :janken " + User.GetUsername() + " pour accepter le défie");
             }
         }
@@ -176,7 +176,7 @@ namespace Butterfly.Game.Rooms.Jankens
 
             if (User.GetClient() != null)
             {
-                User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.confirmechoice", User.GetClient().Langue) + this.GetStringChoix(choice, User.GetClient().Langue));
+                User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.confirmechoice", User.GetClient().Langue) + this.GetStringChoix(choice, User.GetClient().Langue));
             }
 
             return true;
@@ -193,30 +193,30 @@ namespace Butterfly.Game.Rooms.Jankens
 
             if (roomuserOne == null)
             {
-                roomuserTwo.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserTwo.GetClient().Langue));
+                roomuserTwo.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserTwo.GetClient().Langue));
                 return true;
             }
             else if (roomuserTwo == null)
             {
-                roomuserOne.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserOne.GetClient().Langue));
+                roomuserOne.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserOne.GetClient().Langue));
                 return true;
             }
 
             if (party.ChoiceOne == JankenType.NONE && party.ChoiceTwo == JankenType.NONE)
             {
-                roomuserTwo.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.annule", roomuserTwo.GetClient().Langue));
-                roomuserOne.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.annule", roomuserOne.GetClient().Langue));
+                roomuserTwo.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.annule", roomuserTwo.GetClient().Langue));
+                roomuserOne.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.annule", roomuserOne.GetClient().Langue));
                 return true;
             }
 
             if (party.ChoiceOne == JankenType.NONE)
             {
-                roomuserTwo.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserTwo.GetClient().Langue));
+                roomuserTwo.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserTwo.GetClient().Langue));
                 return true;
             }
             else if (party.ChoiceTwo == JankenType.NONE)
             {
-                roomuserOne.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserOne.GetClient().Langue));
+                roomuserOne.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.forfait", roomuserOne.GetClient().Langue));
                 return true;
             }
 
@@ -227,8 +227,8 @@ namespace Butterfly.Game.Rooms.Jankens
 
                 party.Timer = 0;
 
-                roomuserOne.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.nul", roomuserOne.GetClient().Langue));
-                roomuserTwo.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.nul", roomuserTwo.GetClient().Langue));
+                roomuserOne.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.nul", roomuserOne.GetClient().Langue));
+                roomuserTwo.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.nul", roomuserTwo.GetClient().Langue));
 
                 this.EnableEffet(roomuserOne, party.ChoiceOne);
                 this.EnableEffet(roomuserTwo, party.ChoiceTwo);
@@ -240,8 +240,8 @@ namespace Butterfly.Game.Rooms.Jankens
                 (party.ChoiceOne == JankenType.PAPER && party.ChoiceTwo == JankenType.ROCK) ||
                 (party.ChoiceOne == JankenType.ROCK && party.ChoiceTwo == JankenType.SCISSORS))
             {
-                roomuserOne.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.win", roomuserOne.GetClient().Langue), this.GetStringChoix(party.ChoiceOne, roomuserOne.GetClient().Langue), this.GetStringChoix(party.ChoiceTwo, roomuserOne.GetClient().Langue), roomuserTwo.GetUsername()));
-                roomuserTwo.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.loose", roomuserTwo.GetClient().Langue), this.GetStringChoix(party.ChoiceOne, roomuserTwo.GetClient().Langue), this.GetStringChoix(party.ChoiceTwo, roomuserTwo.GetClient().Langue), roomuserOne.GetUsername()));
+                roomuserOne.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("janken.win", roomuserOne.GetClient().Langue), this.GetStringChoix(party.ChoiceOne, roomuserOne.GetClient().Langue), this.GetStringChoix(party.ChoiceTwo, roomuserOne.GetClient().Langue), roomuserTwo.GetUsername()));
+                roomuserTwo.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("janken.loose", roomuserTwo.GetClient().Langue), this.GetStringChoix(party.ChoiceOne, roomuserTwo.GetClient().Langue), this.GetStringChoix(party.ChoiceTwo, roomuserTwo.GetClient().Langue), roomuserOne.GetUsername()));
 
                 this.EnableEffet(roomuserOne, party.ChoiceOne);
                 this.EnableEffet(roomuserTwo, party.ChoiceTwo);
@@ -253,8 +253,8 @@ namespace Butterfly.Game.Rooms.Jankens
                 (party.ChoiceOne == JankenType.PAPER && party.ChoiceTwo == JankenType.SCISSORS) ||
                 (party.ChoiceOne == JankenType.ROCK && party.ChoiceTwo == JankenType.PAPER))
             {
-                roomuserTwo.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.win", roomuserTwo.GetClient().Langue), this.GetStringChoix(party.ChoiceTwo, roomuserTwo.GetClient().Langue), this.GetStringChoix(party.ChoiceOne, roomuserTwo.GetClient().Langue), roomuserOne.GetUsername()));
-                roomuserOne.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.loose", roomuserOne.GetClient().Langue), this.GetStringChoix(party.ChoiceTwo, roomuserOne.GetClient().Langue), this.GetStringChoix(party.ChoiceOne, roomuserOne.GetClient().Langue), roomuserTwo.GetUsername()));
+                roomuserTwo.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("janken.win", roomuserTwo.GetClient().Langue), this.GetStringChoix(party.ChoiceTwo, roomuserTwo.GetClient().Langue), this.GetStringChoix(party.ChoiceOne, roomuserTwo.GetClient().Langue), roomuserOne.GetUsername()));
+                roomuserOne.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("janken.loose", roomuserOne.GetClient().Langue), this.GetStringChoix(party.ChoiceTwo, roomuserOne.GetClient().Langue), this.GetStringChoix(party.ChoiceOne, roomuserOne.GetClient().Langue), roomuserTwo.GetUsername()));
 
                 this.EnableEffet(roomuserOne, party.ChoiceOne);
                 this.EnableEffet(roomuserTwo, party.ChoiceTwo);
@@ -269,11 +269,11 @@ namespace Butterfly.Game.Rooms.Jankens
             switch (Choix)
             {
                 case JankenType.SCISSORS:
-                    return ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.ciseaux", langue);
+                    return WibboEnvironment.GetLanguageManager().TryGetValue("janken.ciseaux", langue);
                 case JankenType.PAPER:
-                    return ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.feuille", langue);
+                    return WibboEnvironment.GetLanguageManager().TryGetValue("janken.feuille", langue);
                 case JankenType.ROCK:
-                    return ButterflyEnvironment.GetLanguageManager().TryGetValue("janken.pierre", langue);
+                    return WibboEnvironment.GetLanguageManager().TryGetValue("janken.pierre", langue);
                 default:
                     return "";
             }

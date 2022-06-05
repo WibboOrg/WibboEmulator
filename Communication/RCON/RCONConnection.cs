@@ -1,8 +1,8 @@
-﻿using Butterfly.Core;
+﻿using Wibbo.Core;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Butterfly.Net
+namespace Wibbo.Net
 {
     public class RCONConnection
     {
@@ -36,7 +36,7 @@ namespace Butterfly.Net
 
                 string data = this.Encoding.GetString(this._buffer, 0, bytes);
 
-                if (!ButterflyEnvironment.GetRCONSocket().GetCommands().Parse(data))
+                if (!WibboEnvironment.GetRCONSocket().GetCommands().Parse(data))
                 {
                     ExceptionLogger.WriteLine("Failed to execute a MUS command. Raw data: " + data);
                 }

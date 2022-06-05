@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Help;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Help;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Guide
+namespace Wibbo.Communication.Packets.Incoming.Guide
 {
     internal class GuideInviteToRoomEvent : IPacketEvent
     {
@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Guide
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
+            Client requester = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
             if (requester == null)
             {
                 return;

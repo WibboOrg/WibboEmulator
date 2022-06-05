@@ -1,13 +1,13 @@
-using Butterfly.Communication.Packets.Outgoing.Inventory.Pets;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Pets;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Pets;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Rooms;
 using System.Drawing;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class PickUpPetEvent : IPacketEvent
     {
@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -91,14 +91,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             pet.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 BotPetDao.UpdateRoomId(dbClient, pet.PetId, 0);
             }
 
             if (pet.OwnerId != Session.GetUser().Id)
             {
-                Client Target = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(pet.OwnerId);
+                Client Target = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(pet.OwnerId);
                 if (Target != null)
                 {
                     Target.GetUser().GetInventoryComponent().TryAddPet(Pet.PetData);

@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class SetSpeed : IChatCommand
     {
@@ -24,7 +24,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
             catch
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.intonly", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.intonly", Session.Langue));
             }
 
         }

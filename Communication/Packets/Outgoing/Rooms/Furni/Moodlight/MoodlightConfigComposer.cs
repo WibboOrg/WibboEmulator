@@ -1,6 +1,6 @@
-using Butterfly.Game.Rooms.Moodlight;
+using Wibbo.Game.Rooms.Moodlight;
 
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Moodlight
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Furni.Moodlight
 {
     internal class MoodlightConfigComposer : ServerPacket
     {
@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Moodlight
             {
                 i++;
                 this.WriteInteger(i);
-                this.WriteInteger(int.Parse(ButterflyEnvironment.BoolToEnum(moodlightPreset.BackgroundOnly)) + 1);
+                this.WriteInteger(int.Parse(WibboEnvironment.BoolToEnum(moodlightPreset.BackgroundOnly)) + 1);
                 this.WriteString(moodlightPreset.ColorCode);
                 this.WriteInteger(moodlightPreset.ColorIntensity);
             }

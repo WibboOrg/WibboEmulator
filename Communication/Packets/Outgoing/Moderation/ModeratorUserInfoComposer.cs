@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace Butterfly.Communication.Packets.Outgoing.Moderation
+namespace Wibbo.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorUserInfoComposer : ServerPacket
     {
@@ -12,9 +12,9 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
             WriteInteger(User != null ? Convert.ToInt32(User["id"]) : 0);
             WriteString(User != null ? Convert.ToString(User["username"]) : "Unknown");
             WriteString(User != null ? Convert.ToString(User["look"]) : "Unknown");
-            WriteInteger(User != null ? Convert.ToInt32(Math.Ceiling((ButterflyEnvironment.GetUnixTimestamp() - Convert.ToDouble(User["account_created"])) / 60)) : 0);
-            WriteInteger(User != null ? Convert.ToInt32(Math.Ceiling((ButterflyEnvironment.GetUnixTimestamp() - Convert.ToDouble(User["last_online"])) / 60)) : 0);
-            WriteBoolean(User != null ? ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Convert.ToInt32(User["id"])) != null : false);
+            WriteInteger(User != null ? Convert.ToInt32(Math.Ceiling((WibboEnvironment.GetUnixTimestamp() - Convert.ToDouble(User["account_created"])) / 60)) : 0);
+            WriteInteger(User != null ? Convert.ToInt32(Math.Ceiling((WibboEnvironment.GetUnixTimestamp() - Convert.ToDouble(User["last_online"])) / 60)) : 0);
+            WriteBoolean(User != null ? WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Convert.ToInt32(User["id"])) != null : false);
             WriteInteger(Info != null ? Convert.ToInt32(Info["cfhs"]) : 0);
             WriteInteger(Info != null ? Convert.ToInt32(Info["cfhs_abusive"]) : 0);
             WriteInteger(Info != null ? Convert.ToInt32(Info["cautions"]) : 0);

@@ -1,9 +1,9 @@
 
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Communication.Packets.Outgoing.Televisions;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Televisions;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class RoomYouTube : IChatCommand
     {

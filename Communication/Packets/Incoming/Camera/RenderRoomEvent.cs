@@ -1,10 +1,10 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Communication.Packets.Outgoing.Camera;
-using Butterfly.Game.Rooms;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Camera;
+using Wibbo.Game.Rooms;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 
-namespace Butterfly.Communication.Packets.Incoming.Camera
+namespace Wibbo.Communication.Packets.Incoming.Camera
 {
     internal class RenderRoomEvent : IPacketEvent
     {
@@ -23,19 +23,19 @@ namespace Butterfly.Communication.Packets.Incoming.Camera
             if (room == null)
                 return;
 
-            int time = ButterflyEnvironment.GetUnixTimestamp();
+            int time = WibboEnvironment.GetUnixTimestamp();
             string pictureName = $"{session.GetUser().Id}_{room.Id}_{time}";
 
             MultipartFormDataContent content = new MultipartFormDataContent("Upload");
             content.Add(new StreamContent(new MemoryStream(photoBinary)), "photo", pictureName);
 
-            HttpResponseMessage response = await ButterflyEnvironment.GetHttpClient().PostAsync(ButterflyEnvironment.CameraUploadUrl, content);
+            HttpResponseMessage response = await WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.CameraUploadUrl, content);
 
             string photoId = await response.Content.ReadAsStringAsync();
 
             if (string.IsNullOrEmpty(photoId) || pictureName != photoId)
             {
-                session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
                 return;
             }
 
@@ -48,7 +48,7 @@ namespace Butterfly.Communication.Packets.Incoming.Camera
 
             session.GetUser().LastPhotoId = photoId;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 UserPhotoDao.Insert(dbClient, session.GetUser().Id, photoId, time);
         }
     }

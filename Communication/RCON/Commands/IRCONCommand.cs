@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.RCON.Commands
+﻿namespace Wibbo.Communication.RCON.Commands
 {
     public interface IRCONCommand
     {

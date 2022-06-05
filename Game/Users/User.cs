@@ -1,25 +1,25 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Handshake;
-using Butterfly.Communication.Packets.Outgoing.Help;
-using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Chat.Logs;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Roleplay;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Users.Achievements;
-using Butterfly.Game.Users.Badges;
-using Butterfly.Game.Users.Inventory;
-using Butterfly.Game.Users.Messenger;
-using Butterfly.Game.Users.Permissions;
-using Butterfly.Game.Users.Wardrobes;
+﻿using Wibbo.Communication.Packets.Outgoing.Handshake;
+using Wibbo.Communication.Packets.Outgoing.Help;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
+using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Chat.Logs;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Roleplay;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users.Achievements;
+using Wibbo.Game.Users.Badges;
+using Wibbo.Game.Users.Inventory;
+using Wibbo.Game.Users.Messenger;
+using Wibbo.Game.Users.Permissions;
+using Wibbo.Game.Users.Wardrobes;
 using System.Data;
 
-namespace Butterfly.Game.Users
+namespace Wibbo.Game.Users
 {
     public class User
     {
@@ -129,7 +129,7 @@ namespace Butterfly.Game.Users
         {
             get
             {
-                return this.IgnoreAllExpireTime > ButterflyEnvironment.GetUnixTimestamp();
+                return this.IgnoreAllExpireTime > WibboEnvironment.GetUnixTimestamp();
             }
         }
 
@@ -145,7 +145,7 @@ namespace Butterfly.Game.Users
                 }
                 else
                 {
-                    return ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.CurrentRoomId);
+                    return WibboEnvironment.GetGame().GetRoomManager().GetRoom(this.CurrentRoomId);
                 }
             }
         }
@@ -162,7 +162,7 @@ namespace Butterfly.Game.Users
             this.Rank = Rank;
             this.Motto = Motto;
             this.MachineId = MachineId;
-            this.Look = ButterflyEnvironment.GetFigureManager().ProcessFigure(Look, Gender, true);
+            this.Look = WibboEnvironment.GetFigureManager().ProcessFigure(Look, Gender, true);
             this.Gender = Gender.ToLower();
             this.Credits = Credits;
             this.WibboPoints = WPoint;
@@ -254,7 +254,7 @@ namespace Butterfly.Game.Users
             this._chatMessageManager = new ChatlogManager();
             this._permissions = new PermissionComponent(this);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 this._badgeComponent.Init(dbClient);
                 this._wardrobeComponent.Init(dbClient);
@@ -307,7 +307,7 @@ namespace Butterfly.Game.Users
 
             if (this.GetClient().GetUser().InRoom)
             {
-                Room OldRoom = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this.GetClient().GetUser().CurrentRoomId);
+                Room OldRoom = WibboEnvironment.GetGame().GetRoomManager().GetRoom(this.GetClient().GetUser().CurrentRoomId);
 
                 if (OldRoom != null)
                 {
@@ -315,7 +315,7 @@ namespace Butterfly.Game.Users
                 }
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(Id);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(Id);
             if (room == null)
             {
                 this.GetClient().SendPacket(new CloseConnectionComposer());
@@ -451,7 +451,7 @@ namespace Butterfly.Game.Users
 
         public bool HasExactFuse(string Fuse)
         {
-            if (ButterflyEnvironment.GetGame().GetPermissionManager().RankExactRight(this.Rank, Fuse))
+            if (WibboEnvironment.GetGame().GetPermissionManager().RankExactRight(this.Rank, Fuse))
             {
                 return true;
             }
@@ -461,7 +461,7 @@ namespace Butterfly.Game.Users
 
         public bool HasFuse(string Fuse)
         {
-            if (ButterflyEnvironment.GetGame().GetPermissionManager().RankHasRight(this.Rank, Fuse))
+            if (WibboEnvironment.GetGame().GetPermissionManager().RankHasRight(this.Rank, Fuse))
             {
                 return true;
             }
@@ -478,11 +478,11 @@ namespace Butterfly.Game.Users
 
             this.Disconnected = true;
 
-            ButterflyEnvironment.GetGame().GetClientManager().UnregisterClient(this.Id, this.Username);
+            WibboEnvironment.GetGame().GetClientManager().UnregisterClient(this.Id, this.Username);
 
             if (this.HasFuse("fuse_mod"))
             {
-                ButterflyEnvironment.GetGame().GetClientManager().RemoveUserStaff(this.Id);
+                WibboEnvironment.GetGame().GetClientManager().RemoveUserStaff(this.Id);
             }
 
             ExceptionLogger.WriteLine(this.Username + " has logged out.");
@@ -492,7 +492,7 @@ namespace Butterfly.Game.Users
                 this.InfoSaved = true;
                 TimeSpan TimeOnline = DateTime.Now - this.OnlineTime;
                 int TimeOnlineSec = (int)TimeOnline.TotalSeconds;
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits);
                     UserStatsDao.UpdateAll(dbClient, this.Id, this.FavouriteGroupId, TimeOnlineSec, this.CurrentQuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
@@ -506,7 +506,7 @@ namespace Butterfly.Game.Users
 
             if (this.RolePlayId > 0)
             {
-                RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this.RolePlayId);
+                RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this.RolePlayId);
                 if (RPManager != null)
                 {
                     RolePlayer Rp = RPManager.GetPlayer(this.Id);
@@ -520,7 +520,7 @@ namespace Butterfly.Game.Users
 
             if (this.GuideOtherUserId != 0)
             {
-                Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this.GuideOtherUserId);
+                Client requester = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this.GuideOtherUserId);
                 if (requester != null)
                 {
                     requester.SendPacket(new OnGuideSessionEndedComposer(1));
@@ -530,7 +530,7 @@ namespace Butterfly.Game.Users
             }
             if (this.OnDuty)
             {
-                ButterflyEnvironment.GetGame().GetHelpManager().RemoveGuide(this.Id);
+                WibboEnvironment.GetGame().GetHelpManager().RemoveGuide(this.Id);
             }
 
             if (this._messengerComponent != null)

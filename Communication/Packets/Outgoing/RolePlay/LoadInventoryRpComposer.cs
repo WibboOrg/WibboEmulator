@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Roleplay;
-using Butterfly.Game.Roleplay.Player;
+﻿using Wibbo.Game.Roleplay;
+using Wibbo.Game.Roleplay.Player;
 using System.Collections.Concurrent;
 
-namespace Butterfly.Communication.Packets.Outgoing.RolePlay
+namespace Wibbo.Communication.Packets.Outgoing.RolePlay
 {
     internal class LoadInventoryRpComposer : ServerPacket
     {
@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Outgoing.RolePlay
 
             foreach (RolePlayInventoryItem Item in Items.Values)
             {
-                RPItem RpItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(Item.ItemId);
+                RPItem RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(Item.ItemId);
 
                 this.WriteInteger(Item.ItemId);
                 this.WriteString(RpItem.Name);

@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Settings
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Settings
 {
     internal class RoomChatOptionsComposer : ServerPacket
     {

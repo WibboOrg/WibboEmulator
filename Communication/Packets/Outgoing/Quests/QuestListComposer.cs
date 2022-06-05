@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Quests;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Quests;
 
-namespace Butterfly.Communication.Packets.Outgoing.Quests
+namespace Wibbo.Communication.Packets.Outgoing.Quests
 {
     internal class QuestListComposer : ServerPacket
     {
@@ -30,7 +30,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Quests
 
         private void SerializeQuest(Client Session, Quest Quest, string Category)
         {
-            int questsInCategory = ButterflyEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(Category);
+            int questsInCategory = WibboEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(Category);
             int i = Quest == null ? questsInCategory : Quest.Number - 1;
             int num = Quest == null ? 0 : Session.GetUser().GetQuestProgress(Quest.Id);
             if (Quest != null && Quest.IsCompleted(num))

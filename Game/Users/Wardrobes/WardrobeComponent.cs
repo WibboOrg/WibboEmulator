@@ -1,8 +1,8 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Users.Wardrobes
+namespace Wibbo.Game.Users.Wardrobes
 {
     public class WardrobeComponent : IDisposable
     {
@@ -48,12 +48,12 @@ namespace Butterfly.Game.Users.Wardrobes
             if (this._wardrobes.ContainsKey(slotId))
                 this._wardrobes.Remove(slotId);
 
-            look = ButterflyEnvironment.GetFigureManager().ProcessFigure(look, gender, true);
+            look = WibboEnvironment.GetFigureManager().ProcessFigure(look, gender, true);
 
             Wardrobe wardrobe = new Wardrobe(slotId, look, gender);
             this._wardrobes.Add(slotId, wardrobe);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 UserWardrobeDao.Insert(dbClient, this._userInstance.Id, slotId, look, gender.ToUpper());
         }
 

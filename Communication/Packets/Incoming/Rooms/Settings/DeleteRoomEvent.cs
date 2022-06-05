@@ -1,9 +1,9 @@
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class DeleteRoomEvent : IPacketEvent
     {
@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
             if (room == null || !(room.RoomData.OwnerName == Session.GetUser().Username))
             {
                 return;
@@ -28,9 +28,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Session.GetUser().GetInventoryComponent().AddItemArray(room.GetRoomItemHandler().RemoveAllFurniture(Session));
             }
 
-            ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
+            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoomDao.Delete(dbClient, RoomId);
                 UserFavoriteDao.Delete(dbClient, RoomId);

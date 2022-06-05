@@ -1,10 +1,10 @@
-﻿using Butterfly.Game.Items;
-using Butterfly.Game.Items.Wired;
-using Butterfly.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Game.Items;
+using Wibbo.Game.Items.Wired;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Collections.Concurrent;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms.Wired
+namespace Wibbo.Game.Rooms.Wired
 {
     public class WiredHandler
     {
@@ -257,7 +257,7 @@ namespace Butterfly.Game.Rooms.Wired
             {
                 int CountAct = ActionStack.Count - 1;
 
-                int RdnWired = ButterflyEnvironment.GetRandomNumber(0, CountAct);
+                int RdnWired = WibboEnvironment.GetRandomNumber(0, CountAct);
                 Item ActRand = ActionStack[RdnWired];
                 ((IWiredEffect)ActRand.WiredHandler).Handle(user, item);
             }

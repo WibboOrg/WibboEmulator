@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Handshake
+namespace Wibbo.Communication.Packets.Outgoing.Handshake
 {
     internal class GenericErrorComposer : ServerPacket
     {

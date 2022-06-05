@@ -1,6 +1,6 @@
-using Butterfly.Game.Clients;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class CloseTicketEvent : IPacketEvent
     {
@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Packet.PopInt();
             int TicketId = Packet.PopInt();
 
-            ButterflyEnvironment.GetGame().GetModerationManager().CloseTicket(Session, Packet.PopInt(), Result);
+            WibboEnvironment.GetGame().GetModerationManager().CloseTicket(Session, Packet.PopInt(), Result);
         }
     }
 }

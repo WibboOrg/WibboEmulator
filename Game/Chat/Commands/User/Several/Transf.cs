@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms.Games;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms.Games;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Transf : IChatCommand
     {
@@ -43,7 +43,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
                     if (!UserRoom.SetPetTransformation(Params[1], raceid))
                     {
-                        Session.SendHugeNotif(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", Session.Langue));
+                        Session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", Session.Langue));
                         return;
                     }
 
@@ -55,7 +55,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
             else
             {
-                Session.SendHugeNotif(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", Session.Langue));
+                Session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", Session.Langue));
             }
 
         }

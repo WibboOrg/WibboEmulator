@@ -1,8 +1,8 @@
-using Butterfly.Game.Pets;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Users;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Outgoing.Pets
+namespace Wibbo.Communication.Packets.Outgoing.Pets
 {
     internal class RespectPetNotificationComposer : ServerPacket
     {

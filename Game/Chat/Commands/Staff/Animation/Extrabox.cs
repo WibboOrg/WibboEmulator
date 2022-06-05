@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class ExtraBox : IChatCommand
     {
@@ -17,7 +17,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(12018410, out ItemData ItemData))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(12018410, out ItemData ItemData))
             {
                 return;
             }

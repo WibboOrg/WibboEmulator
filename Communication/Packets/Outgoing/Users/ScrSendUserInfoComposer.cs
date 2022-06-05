@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.Users
+﻿namespace Wibbo.Communication.Packets.Outgoing.Users
 {
     internal class ScrSendUserInfoComposer : ServerPacket
     {

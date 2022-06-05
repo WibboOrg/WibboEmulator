@@ -1,9 +1,9 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Roleplay;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Roleplay;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.RolePlay
+namespace Wibbo.Communication.Packets.Incoming.RolePlay
 {
     internal class RpBuyItemsEvent : IPacketEvent
     {
@@ -52,7 +52,7 @@ namespace Butterfly.Communication.Packets.Incoming.RolePlay
                 return;
             }
 
-            RPItem RpItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
+            RPItem RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
             if (RpItem == null)
             {
                 return;
@@ -60,7 +60,7 @@ namespace Butterfly.Communication.Packets.Incoming.RolePlay
 
             if (!RpItem.AllowStack && Rp.GetInventoryItem(RpItem.Id) != null)
             {
-                User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.itemown", Session.Langue));
+                User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itemown", Session.Langue));
                 return;
             }
 
@@ -78,11 +78,11 @@ namespace Butterfly.Communication.Packets.Incoming.RolePlay
 
             if (RpItem.Price == 0)
             {
-                User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.itempick", Session.Langue));
+                User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itempick", Session.Langue));
             }
             else
             {
-                User.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.itembuy", Session.Langue), RpItem.Price));
+                User.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itembuy", Session.Langue), RpItem.Price));
             }
 
             Rp.Money -= RpItem.Price * Count;

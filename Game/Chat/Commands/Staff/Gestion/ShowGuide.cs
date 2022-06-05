@@ -1,15 +1,15 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Help;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Help;
 using System.Text;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class ShowGuide : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            HelpManager guideManager = ButterflyEnvironment.GetGame().GetHelpManager();
+            HelpManager guideManager = WibboEnvironment.GetGame().GetHelpManager();
             if (guideManager.GuidesCount <= 0)
             {
                 Session.SendHugeNotif("Aucun guide n'utilise la Guide tool");
@@ -21,7 +21,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 stringBuilder.Append("Guide en service (" + guideManager.GuidesCount + "):\r\r");
                 foreach (KeyValuePair<int, bool> entry in guideManager.GuidesOnDuty)
                 {
-                    Client guide = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(entry.Key);
+                    Client guide = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(entry.Key);
                     if (guide == null)
                     {
                         continue;

@@ -1,9 +1,9 @@
-using Butterfly.Game.Groups;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.AI;
-using Butterfly.Game.Users;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.AI;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class UsersComposer : ServerPacket
     {
@@ -105,7 +105,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
                     {
                         if (user.FavouriteGroupId > 0)
                         {
-                            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out Group))
+                            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out Group))
                             {
                                 Group = null;
                             }

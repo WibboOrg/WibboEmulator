@@ -1,8 +1,8 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
+﻿using Wibbo.Communication.Packets.Outgoing;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
 using System.Text;
 
-namespace Butterfly.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     public class RoomModelDynamic
     {

@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Groups;
-using Butterfly.Game.Items;
+﻿using Wibbo.Game.Groups;
+using Wibbo.Game.Items;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     public class GameItemHandler
     {
@@ -219,7 +219,7 @@ namespace Butterfly.Game.Rooms
 
             Item item = Enumerable.FirstOrDefault<Item>(this._groupGate[Coordinate]);
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out Group Group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out Group Group))
             {
                 return true;
             }
@@ -273,7 +273,7 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            int countID = ButterflyEnvironment.GetRandomNumber(0, count - 1);
+            int countID = WibboEnvironment.GetRandomNumber(0, count - 1);
             Item BanzaiItem2 = Enumerable.ElementAt<Item>(banzaiTeleports2, (int)countID);
 
             if (BanzaiItem2 == null)

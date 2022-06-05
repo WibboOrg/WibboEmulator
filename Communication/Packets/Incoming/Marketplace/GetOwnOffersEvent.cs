@@ -1,7 +1,7 @@
-﻿using Butterfly.Communication.Packets.Outgoing.MarketPlace;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.MarketPlace;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Marketplace
+namespace Wibbo.Communication.Packets.Incoming.Marketplace
 {
     internal class GetOwnOffersEvent : IPacketEvent
     {

@@ -1,6 +1,6 @@
-using Butterfly.Game.Catalog.Pets;
+using Wibbo.Game.Catalog.Pets;
 
-namespace Butterfly.Communication.Packets.Outgoing.Catalog
+namespace Wibbo.Communication.Packets.Outgoing.Catalog
 {
     internal class SellablePetBreedsComposer : ServerPacket
     {

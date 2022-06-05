@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Messenger;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Users.Messenger;
-using Butterfly.Utilities;
+using Wibbo.Communication.Packets.Outgoing.Messenger;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Users.Messenger;
+using Wibbo.Utilities;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class UserSearchEvent : IPacketEvent
     {

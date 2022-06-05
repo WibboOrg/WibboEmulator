@@ -1,8 +1,8 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorTeleport : FurniInteractor
     {

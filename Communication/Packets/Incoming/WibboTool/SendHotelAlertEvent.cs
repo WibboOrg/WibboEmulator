@@ -1,8 +1,8 @@
 ﻿
-using Butterfly.Communication.Packets.Outgoing.Notifications.NotifCustom;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Notifications.NotifCustom;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.WibboTool
+namespace Wibbo.Communication.Packets.Incoming.WibboTool
 {
     internal class SendHotelAlertEvent : IPacketEvent
     {
@@ -38,14 +38,14 @@ namespace Butterfly.Communication.Packets.Incoming.WibboTool
 
             if (!string.IsNullOrWhiteSpace(Url))
             {
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, "hal", string.Format("WibbbTool HaL: {0} : {1}", Url, Message));
+                WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, "hal", string.Format("WibbbTool HaL: {0} : {1}", Url, Message));
 
                 if (!Url.StartsWith("https://wibbo.org") && !Url.StartsWith("https://www.facebook.com/WibboHotelFR") && !Url.StartsWith("https://twitter.com/WibboOrg") && !Url.StartsWith("https://instagram.com/wibboorg"))
                 {
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer("annonce", "Message de communication", Message, "Allez voir !", 0, Url));
+                WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer("annonce", "Message de communication", Message, "Allez voir !", 0, Url));
                 return;
             }
 
@@ -56,31 +56,31 @@ namespace Butterfly.Communication.Packets.Incoming.WibboTool
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().CurrentRoom.Id, string.Empty, "eventha", string.Format("WibbobTool EventHa: {0}", Message));
+                WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().CurrentRoom.Id, string.Empty, "eventha", string.Format("WibbobTool EventHa: {0}", Message));
                 if (Session.Antipub(Message, "<eventalert>"))
                 {
                     return;
                 }
 
-                if (!ButterflyEnvironment.GetGame().GetAnimationManager().AllowAnimation())
+                if (!WibboEnvironment.GetGame().GetAnimationManager().AllowAnimation())
                 {
                     Session.SendNotification("Vous pourrez lancer l'alerte une fois que l'animation en cours sera terminé.");
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", Message, "Je veux y jouer !", Session.GetUser().CurrentRoom.Id, ""));
+                WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", Message, "Je veux y jouer !", Session.GetUser().CurrentRoom.Id, ""));
 
                 Session.GetUser().CurrentRoom.CloseFullRoom = true;
             }
             else
             {
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", Message));
+                WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", Message));
                 if (Session.Antipub(Message, "<alert>"))
                 {
                     return;
                 }
 
-                ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer("staff", "Message de l'Équipe", Message, "Compris !", 0, ""));
+                WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer("staff", "Message de l'Équipe", Message, "Compris !", 0, ""));
             }
 
         }

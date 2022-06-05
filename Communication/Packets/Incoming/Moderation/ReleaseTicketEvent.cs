@@ -1,6 +1,6 @@
-using Butterfly.Game.Clients;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class ReleaseTicketEvent : IPacketEvent
     {
@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int num = Packet.PopInt();
             for (int index = 0; index < num; ++index)
             {
-                ButterflyEnvironment.GetGame().GetModerationManager().ReleaseTicket(Session, Packet.PopInt());
+                WibboEnvironment.GetGame().GetModerationManager().ReleaseTicket(Session, Packet.PopInt());
             }
         }
     }

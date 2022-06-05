@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
 
-namespace Butterfly.Game.Items
+namespace Wibbo.Game.Items
 {
     public class ItemDataManager
     {
@@ -43,19 +43,19 @@ namespace Butterfly.Game.Items
                         int width = Convert.ToInt32(Row["width"]);
                         int length = Convert.ToInt32(Row["length"]);
                         double height = Convert.ToDouble(Row["stack_height"]);
-                        bool allowStack = ButterflyEnvironment.EnumToBool(Row["can_stack"].ToString());
-                        bool allowWalk = ButterflyEnvironment.EnumToBool(Row["is_walkable"].ToString());
-                        bool allowSit = ButterflyEnvironment.EnumToBool(Row["can_sit"].ToString());
-                        bool allowRecycle = ButterflyEnvironment.EnumToBool(Row["allow_recycle"].ToString());
-                        bool allowTrade = ButterflyEnvironment.EnumToBool(Row["allow_trade"].ToString());
+                        bool allowStack = WibboEnvironment.EnumToBool(Row["can_stack"].ToString());
+                        bool allowWalk = WibboEnvironment.EnumToBool(Row["is_walkable"].ToString());
+                        bool allowSit = WibboEnvironment.EnumToBool(Row["can_sit"].ToString());
+                        bool allowRecycle = WibboEnvironment.EnumToBool(Row["allow_recycle"].ToString());
+                        bool allowTrade = WibboEnvironment.EnumToBool(Row["allow_trade"].ToString());
                         bool allowGift = Convert.ToInt32(Row["allow_gift"]) == 1;
-                        bool allowInventoryStack = ButterflyEnvironment.EnumToBool(Row["allow_inventory_stack"].ToString());
+                        bool allowInventoryStack = WibboEnvironment.EnumToBool(Row["allow_inventory_stack"].ToString());
                         InteractionType interactionType = InteractionTypes.GetTypeFromString(Convert.ToString(Row["interaction_type"]));
                         int cycleCount = Convert.ToInt32(Row["interaction_modes_count"]);
                         string vendingIDS = Convert.ToString(Row["vending_ids"]);
                         string heightAdjustable = Convert.ToString(Row["height_adjustable"]);
                         int effectId = Convert.ToInt32(Row["effect_id"]);
-                        bool isRare = ButterflyEnvironment.EnumToBool(Row["is_rare"].ToString());
+                        bool isRare = WibboEnvironment.EnumToBool(Row["is_rare"].ToString());
 
                         if (!this._gifts.ContainsKey(spriteID) && interactionType == InteractionType.GIFT)
                         {

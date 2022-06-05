@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Inventory.Trading
+namespace Wibbo.Communication.Packets.Outgoing.Inventory.Trading
 {
     internal class TradingFinishComposer : ServerPacket
     {

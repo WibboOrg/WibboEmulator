@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Pickall : IChatCommand
     {
@@ -15,7 +15,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (Room.RoomData.SellPrice > 0)
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.pickall", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.pickall", Session.Langue));
                 return;
             }
 

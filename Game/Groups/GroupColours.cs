@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Groups
+﻿namespace Wibbo.Game.Groups
 {
     public class GroupColours
     {

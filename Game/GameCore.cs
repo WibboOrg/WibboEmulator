@@ -1,28 +1,28 @@
-﻿using Butterfly.Communication.Packets;
-using Butterfly.Core;
-using Butterfly.Game.Achievements;
-using Butterfly.Game.Animation;
-using Butterfly.Game.Catalog;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Help;
-using Butterfly.Game.Items;
-using Butterfly.Game.LandingView;
-using Butterfly.Game.Navigator;
-using Butterfly.Game.Quests;
-using Butterfly.Game.Roleplay;
-using Butterfly.Game.Permissions;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Chat;
-using Butterfly.Game.Moderation;
+﻿using Wibbo.Communication.Packets;
+using Wibbo.Core;
+using Wibbo.Game.Achievements;
+using Wibbo.Game.Animation;
+using Wibbo.Game.Catalog;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Help;
+using Wibbo.Game.Items;
+using Wibbo.Game.LandingView;
+using Wibbo.Game.Navigator;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Roleplay;
+using Wibbo.Game.Permissions;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Chat;
+using Wibbo.Game.Moderation;
 using System.Diagnostics;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Effects;
-using Butterfly.Game.Badges;
-using Butterfly.Game.Bots;
-using Butterfly.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Effects;
+using Wibbo.Game.Badges;
+using Wibbo.Game.Bots;
+using Wibbo.Database.Daos;
 
-namespace Butterfly.Game
+namespace Wibbo.Game
 {
     public class GameCore
     {
@@ -53,7 +53,7 @@ namespace Butterfly.Game
 
         public GameCore()
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 this._botManager = new BotManager();
                 this._botManager.Init();

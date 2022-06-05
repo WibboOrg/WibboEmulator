@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class AllIgnore : IChatCommand
     {
@@ -14,7 +14,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 return;
@@ -22,7 +22,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (TargetUser.GetUser().Rank >= Session.GetUser().Rank)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
                 return;
             }
 
@@ -34,17 +34,17 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (lengthSeconds <= 600)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("ban.toolesstime", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("ban.toolesstime", Session.Langue));
                 return;
             }
 
-            double expireTime = ButterflyEnvironment.GetUnixTimestamp() + lengthSeconds;
+            double expireTime = WibboEnvironment.GetUnixTimestamp() + lengthSeconds;
 
             string reason = CommandManager.MergeParams(Params, 3);
 
             TargetUser.GetUser().IgnoreAllExpireTime = expireTime;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 BanDao.InsertBan(dbClient, expireTime, "ignoreall", TargetUser.GetUser().Username, reason, Session.GetUser().Username);
         }
     }

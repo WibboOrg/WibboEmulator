@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Items;
-using Butterfly.Utilities.Events;
+﻿using Wibbo.Game.Items;
+using Wibbo.Utilities.Events;
 
-namespace Butterfly.Game.Rooms.Games
+namespace Wibbo.Game.Rooms.Games
 {
     public class GameManager
     {

@@ -1,17 +1,17 @@
-﻿using Butterfly.Communication.Packets.Incoming;
-using Butterfly.Communication.Packets.Incoming.Marketplace;
-using Butterfly.Communication.Packets.Incoming.Structure;
-using Butterfly.Communication.Packets.Incoming.Camera;
-using Butterfly.Communication.Packets.Incoming.Campaign;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Communication.Packets.Incoming.WibboTool;
-using Butterfly.Communication.Packets.Incoming.Televisions;
-using Butterfly.Communication.Packets.Incoming.RolePlay;
-using Butterfly.Communication.Packets.Incoming.RolePlay.Troc;
-using Butterfly.Communication.Packets.Incoming.Guide;
+﻿using Wibbo.Communication.Packets.Incoming;
+using Wibbo.Communication.Packets.Incoming.Marketplace;
+using Wibbo.Communication.Packets.Incoming.Structure;
+using Wibbo.Communication.Packets.Incoming.Camera;
+using Wibbo.Communication.Packets.Incoming.Campaign;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Communication.Packets.Incoming.WibboTool;
+using Wibbo.Communication.Packets.Incoming.Televisions;
+using Wibbo.Communication.Packets.Incoming.RolePlay;
+using Wibbo.Communication.Packets.Incoming.RolePlay.Troc;
+using Wibbo.Communication.Packets.Incoming.Guide;
 
-namespace Butterfly.Communication.Packets
+namespace Wibbo.Communication.Packets
 {
     public sealed class PacketManager
     {
@@ -64,7 +64,7 @@ namespace Butterfly.Communication.Packets
         {
             if (!this._incomingPackets.TryGetValue(packet.Id, out IPacketEvent pak))
             {
-                if (ButterflyEnvironment.StaticEvents)
+                if (WibboEnvironment.StaticEvents)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(packet.ToString());
@@ -73,7 +73,7 @@ namespace Butterfly.Communication.Packets
                 return;
             }
 
-            if (ButterflyEnvironment.StaticEvents)
+            if (WibboEnvironment.StaticEvents)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(packet.ToString());
@@ -82,7 +82,7 @@ namespace Butterfly.Communication.Packets
             
             if(session.PacketTimeout(packet.Id, pak.Delay))
             {
-                if (ButterflyEnvironment.StaticEvents)
+                if (WibboEnvironment.StaticEvents)
                 {
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine("[" + packet.Id + "] Spam detected");

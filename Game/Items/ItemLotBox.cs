@@ -1,15 +1,15 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Achievements;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Furni;
-using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Catalog;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Achievements;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Furni;
+using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Catalog;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Items
+namespace Wibbo.Game.Items
 {
     internal static class ItemLotBox
     {
@@ -17,19 +17,19 @@ namespace Butterfly.Game.Items
         {
             int PageId;
 
-            if (ButterflyEnvironment.GetRandomNumber(1, 750) == 750) //Epic rare
+            if (WibboEnvironment.GetRandomNumber(1, 750) == 750) //Epic rare
             {
                 PageId = 84641;
             }
-            else if (ButterflyEnvironment.GetRandomNumber(1, 100) == 100) //Commun rare
+            else if (WibboEnvironment.GetRandomNumber(1, 100) == 100) //Commun rare
             {
                 PageId = 98747;
             }
-            else if (ButterflyEnvironment.GetRandomNumber(1, 75) == 75) //WibboPoint
+            else if (WibboEnvironment.GetRandomNumber(1, 75) == 75) //WibboPoint
             {
                 PageId = 15987;
             }
-            else if (ButterflyEnvironment.GetRandomNumber(1, 25) == 25) //Pièce Win-win
+            else if (WibboEnvironment.GetRandomNumber(1, 25) == 25) //Pièce Win-win
             {
                 PageId = 456465;
             }
@@ -38,23 +38,23 @@ namespace Butterfly.Game.Items
                 PageId = 894948; //Rare
             }
 
-            ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
+            WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
             if (Page == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
                 return;
             }
 
-            ItemData LotData = Page.Items.ElementAt(ButterflyEnvironment.GetRandomNumber(0, Page.Items.Count - 1)).Value.Data;
+            ItemData LotData = Page.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, Page.Items.Count - 1)).Value.Data;
             if (LotData == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
                 return;
             }
 
             Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemDao.UpdateBaseItem(dbClient, Present.Id, LotData.Id);
             }
@@ -69,7 +69,7 @@ namespace Butterfly.Game.Items
             {
                 if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
                 {
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                     }
@@ -79,7 +79,7 @@ namespace Butterfly.Game.Items
             }
             else
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                 }
@@ -99,11 +99,11 @@ namespace Butterfly.Game.Items
         {
             int PageId;
 
-            if (ButterflyEnvironment.GetRandomNumber(1, 200) == 200) //Epique
+            if (WibboEnvironment.GetRandomNumber(1, 200) == 200) //Epique
             {
                 PageId = 1635463617;
             }
-            else if (ButterflyEnvironment.GetRandomNumber(1, 20) == 20) //Commun
+            else if (WibboEnvironment.GetRandomNumber(1, 20) == 20) //Commun
             {
                 PageId = 1635463616;
             }
@@ -112,23 +112,23 @@ namespace Butterfly.Game.Items
                 PageId = 91700214; //Basique
             }
 
-            ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
+            WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
             if (Page == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
                 return;
             }
 
-            ItemData LotData = Page.Items.ElementAt(ButterflyEnvironment.GetRandomNumber(0, Page.Items.Count - 1)).Value.Data;
+            ItemData LotData = Page.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, Page.Items.Count - 1)).Value.Data;
             if (LotData == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
                 return;
             }
 
             Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemDao.UpdateBaseItem(dbClient, Present.Id, LotData.Id);
             }
@@ -143,7 +143,7 @@ namespace Butterfly.Game.Items
             {
                 if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
                 {
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                     }
@@ -153,7 +153,7 @@ namespace Butterfly.Game.Items
             }
             else
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                 }
@@ -176,34 +176,34 @@ namespace Butterfly.Game.Items
             int PageId = 987987;
 
             List<int> PageBadgeList = new List<int>(new int[] { 8948, 18171, 18172, 18173, 18174, 18175, 18176, 18177, 18178, 18179, 18180, 18181, 18182, 18183 });
-            int PageBadgeId = PageBadgeList[ButterflyEnvironment.GetRandomNumber(0, PageBadgeList.Count - 1)];
-            ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(PageBadgeId, out CatalogPage PageBadge);
+            int PageBadgeId = PageBadgeList[WibboEnvironment.GetRandomNumber(0, PageBadgeList.Count - 1)];
+            WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageBadgeId, out CatalogPage PageBadge);
             if (PageBadge == null)
             {
                 return;
             }
 
-            string BadgeCode = PageBadge.Items.ElementAt(ButterflyEnvironment.GetRandomNumber(0, PageBadge.Items.Count - 1)).Value.Badge;
+            string BadgeCode = PageBadge.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, PageBadge.Items.Count - 1)).Value.Badge;
 
 
-            ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
+            WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
             if (Page == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
                 return;
             }
 
-            ItemData LotData = Page.Items.ElementAt(ButterflyEnvironment.GetRandomNumber(0, Page.Items.Count - 1)).Value.Data;
+            ItemData LotData = Page.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, Page.Items.Count - 1)).Value.Data;
             if (LotData == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
                 return;
             }
 
             Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
 
             string ExtraData = BadgeCode + Convert.ToChar(9) + Session.GetUser().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemDao.UpdateBaseItemAndExtraData(dbClient, Present.Id, LotData.Id, ExtraData);
             }
@@ -219,7 +219,7 @@ namespace Butterfly.Game.Items
             {
                 if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
                 {
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                     }
@@ -229,7 +229,7 @@ namespace Butterfly.Game.Items
             }
             else
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                 }
@@ -264,29 +264,29 @@ namespace Butterfly.Game.Items
             string lotType = "";
             int forceItem = 0;
 
-            if (ButterflyEnvironment.GetRandomNumber(1, 100) == 100) //Legendaire
+            if (WibboEnvironment.GetRandomNumber(1, 100) == 100) //Legendaire
             {
                 pageId = 14514;
                 lotType = "Légendaire";
             }
-            else if (ButterflyEnvironment.GetRandomNumber(1, 75) == 75) //Royal
+            else if (WibboEnvironment.GetRandomNumber(1, 75) == 75) //Royal
             {
                 pageId = 584545;
                 lotType = "Royal";
                 forceItem = 37951979;
             }
-            else if (ButterflyEnvironment.GetRandomNumber(1, 30) == 30) //Royal
+            else if (WibboEnvironment.GetRandomNumber(1, 30) == 30) //Royal
             {
                 pageId = 584545;
                 lotType = "Royal";
                 forceItem = 70223722;
             }
-            else if (ButterflyEnvironment.GetRandomNumber(1, 15) == 15) //Epique
+            else if (WibboEnvironment.GetRandomNumber(1, 15) == 15) //Epique
             {
                 pageId = 84641;
                 lotType = "épique";
             }
-            else if (ButterflyEnvironment.GetRandomNumber(1, 5) == 5) //Royal
+            else if (WibboEnvironment.GetRandomNumber(1, 5) == 5) //Royal
             {
                 pageId = 584545;
                 lotType = "Royal";
@@ -300,9 +300,9 @@ namespace Butterfly.Game.Items
 
             int pageBadgeId = 841878;
 
-            if (!ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(pageBadgeId, out CatalogPage pageBadge))
+            if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageBadgeId, out CatalogPage pageBadge))
             {
-                session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
                 return;
             }
 
@@ -318,9 +318,9 @@ namespace Butterfly.Game.Items
             }
 
             
-            if (!ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out CatalogPage page))
+            if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out CatalogPage page))
             {
-                session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
                 return;
             }
 
@@ -328,7 +328,7 @@ namespace Butterfly.Game.Items
 
             if (forceItem == 0)
             {
-                lotData = page.Items.ElementAt(ButterflyEnvironment.GetRandomNumber(0, page.Items.Count - 1)).Value.Data;
+                lotData = page.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, page.Items.Count - 1)).Value.Data;
             }
             else
             {
@@ -337,18 +337,18 @@ namespace Butterfly.Game.Items
 
             if (lotData == null)
             {
-                session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
                 return;
             }
 
-            int credits = ButterflyEnvironment.GetRandomNumber(100, 10000) * 1000;
+            int credits = WibboEnvironment.GetRandomNumber(100, 10000) * 1000;
             session.GetUser().Credits += credits;
             session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
 
-            int winwin = ButterflyEnvironment.GetRandomNumber(100, 1000);
+            int winwin = WibboEnvironment.GetRandomNumber(100, 1000);
             session.GetUser().AchievementPoints += winwin;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserStatsDao.UpdateAchievementScore(dbClient, session.GetUser().Id, winwin);
             }
@@ -361,7 +361,7 @@ namespace Butterfly.Game.Items
                 session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
                 room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
 
-                roomUserByUserId.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("item.legendboxlot", session.Langue), credits, winwin, badgeCode, lotType));
+                roomUserByUserId.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("item.legendboxlot", session.Langue), credits, winwin, badgeCode, lotType));
             }
 
             if (!string.IsNullOrEmpty(badgeCode))
@@ -372,7 +372,7 @@ namespace Butterfly.Game.Items
 
             room.GetRoomItemHandler().RemoveFurniture(session, present.Id);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemDao.UpdateBaseItem(dbClient, present.Id, lotData.Id);
             }
@@ -387,7 +387,7 @@ namespace Butterfly.Game.Items
             {
                 if (!room.GetRoomItemHandler().SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
                 {
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         ItemDao.UpdateResetRoomId(dbClient, present.Id);
                     }
@@ -397,7 +397,7 @@ namespace Butterfly.Game.Items
             }
             else
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     ItemDao.UpdateResetRoomId(dbClient, present.Id);
                 }

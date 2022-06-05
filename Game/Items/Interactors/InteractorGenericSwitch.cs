@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Quests;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorGenericSwitch : FurniInteractor
     {
@@ -94,7 +94,7 @@ namespace Butterfly.Game.Items.Interactors
         {
             if (Session != null)
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_SWITCH, 0);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_SWITCH, 0);
             }
 
             if (!UserHasRights || this.Modes == 0)
@@ -142,7 +142,7 @@ namespace Butterfly.Game.Items.Interactors
                     return;
                 }
 
-                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+                Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
                 if (room == null)
                 {
                     return;

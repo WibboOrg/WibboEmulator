@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Freeze
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Freeze
 {
     internal class UpdateFreezeLivesComposer : ServerPacket
     {

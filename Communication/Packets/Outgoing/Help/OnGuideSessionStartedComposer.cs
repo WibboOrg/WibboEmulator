@@ -1,6 +1,6 @@
-using Butterfly.Game.Users;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Outgoing.Help
+namespace Wibbo.Communication.Packets.Outgoing.Help
 {
     internal class OnGuideSessionStartedComposer : ServerPacket
     {

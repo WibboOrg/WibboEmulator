@@ -1,10 +1,10 @@
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.AI;
-using Butterfly.Utilities;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.AI;
+using Wibbo.Utilities;
 using System.Data;
 
-namespace Butterfly.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class BotUserDao
     {
@@ -53,21 +53,21 @@ namespace Butterfly.Database.Daos
         {
             dbClient.SetQuery("UPDATE `bot_user` SET chat_enabled = @AutomaticChat, chat_seconds = @SpeakingInterval, is_mixchat = @MixChat, chat_text = @ChatText WHERE id = @id LIMIT 1");
             dbClient.AddParameter("id", botId);
-            dbClient.AddParameter("AutomaticChat", ButterflyEnvironment.BoolToEnum(automaticChat));
+            dbClient.AddParameter("AutomaticChat", WibboEnvironment.BoolToEnum(automaticChat));
             dbClient.AddParameter("SpeakingInterval", speakingInterval);
-            dbClient.AddParameter("MixChat", ButterflyEnvironment.BoolToEnum(mixChat));
+            dbClient.AddParameter("MixChat", WibboEnvironment.BoolToEnum(mixChat));
             dbClient.AddParameter("ChatText", chatText);
             dbClient.RunQuery();
         }
 
         internal static void UpdateWalkEnabled(IQueryAdapter dbClient, int botId, bool balkingEnabled)
         {
-            dbClient.RunQuery("UPDATE `bot_user` SET walk_enabled = '" + ButterflyEnvironment.BoolToEnum(balkingEnabled) + "' WHERE id = '" + botId + "'");
+            dbClient.RunQuery("UPDATE `bot_user` SET walk_enabled = '" + WibboEnvironment.BoolToEnum(balkingEnabled) + "' WHERE id = '" + botId + "'");
         }
 
         internal static void UpdateIsDancing(IQueryAdapter dbClient, int botId, bool isDancing)
         {
-            dbClient.RunQuery("UPDATE `bot_user` SET is_dancing = '" + ButterflyEnvironment.BoolToEnum(isDancing) + "' WHERE id = '" + botId + "'");
+            dbClient.RunQuery("UPDATE `bot_user` SET is_dancing = '" + WibboEnvironment.BoolToEnum(isDancing) + "' WHERE id = '" + botId + "'");
         }
 
         internal static void UpdateName(IQueryAdapter dbClient, int botId, string name)

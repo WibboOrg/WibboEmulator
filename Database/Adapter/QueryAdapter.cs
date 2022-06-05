@@ -1,9 +1,9 @@
-﻿using Butterfly.Core;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Core;
+using Wibbo.Database.Interfaces;
 using MySql.Data.MySqlClient;
 using System.Data;
 
-namespace Butterfly.Database.Adapter
+namespace Wibbo.Database.Adapter
 {
     public class QueryAdapter : IRegularQueryAdapter
     {

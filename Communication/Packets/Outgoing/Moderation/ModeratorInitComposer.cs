@@ -1,6 +1,6 @@
-using Butterfly.Game.Moderation;
+using Wibbo.Game.Moderation;
 
-namespace Butterfly.Communication.Packets.Outgoing.Moderation
+namespace Wibbo.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorInitComposer : ServerPacket
     {
@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
                 WriteInteger(Ticket.TabId); // state
                 WriteInteger(4); // type (3 or 4 for new style)
                 WriteInteger(Ticket.Type); // priority
-                WriteInteger((int)(ButterflyEnvironment.GetUnixTimestamp() - Ticket.Timestamp) * 1000); // -->> timestamp
+                WriteInteger((int)(WibboEnvironment.GetUnixTimestamp() - Ticket.Timestamp) * 1000); // -->> timestamp
                 WriteInteger(Ticket.Score); // priority
                 WriteInteger(Ticket.SenderId);
                 WriteInteger(Ticket.SenderId); // sender id 8 ints

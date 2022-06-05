@@ -1,8 +1,8 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Handshake;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.Handshake;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class ForceFlagUser : IChatCommand
     {
@@ -13,10 +13,10 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            Client clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
             if (clientByUsername == null || clientByUsername.GetUser() == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
                 return;
             }
 

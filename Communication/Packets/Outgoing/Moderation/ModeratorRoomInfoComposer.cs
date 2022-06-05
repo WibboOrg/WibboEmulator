@@ -1,6 +1,6 @@
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Outgoing.Moderation
+namespace Wibbo.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorRoomInfoComposer : ServerPacket
     {

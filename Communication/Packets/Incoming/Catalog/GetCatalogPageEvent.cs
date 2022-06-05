@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Catalog;
-using Butterfly.Game.Catalog;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Game.Catalog;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetCatalogPageEvent : IPacketEvent
     {
@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int Something = Packet.PopInt();
             string CataMode = Packet.PopString();
 
-            ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
+            WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
             if (Page == null || Page.MinimumRank > Session.GetUser().Rank)
             {
                 return;

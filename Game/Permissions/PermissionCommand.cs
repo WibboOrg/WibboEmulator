@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Permissions
+﻿namespace Wibbo.Game.Permissions
 {
     class PermissionCommand
     {

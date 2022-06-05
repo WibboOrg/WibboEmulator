@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Catalog.Utilities;
+﻿using Wibbo.Game.Catalog.Utilities;
 
-namespace Butterfly.Game.Rooms.AI.Responses
+namespace Wibbo.Game.Rooms.AI.Responses
 {
     public class BotResponse
     {

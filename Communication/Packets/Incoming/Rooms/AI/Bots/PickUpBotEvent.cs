@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Inventory.Bots;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Users.Inventory.Bots;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Bots;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users.Inventory.Bots;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class PickUpBotEvent : IPacketEvent
     {
@@ -55,7 +55,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 BotUserDao.UpdateRoomId(dbClient, BotId);
             }

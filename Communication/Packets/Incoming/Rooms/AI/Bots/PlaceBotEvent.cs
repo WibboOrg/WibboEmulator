@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Inventory.Bots;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.AI;
-using Butterfly.Game.Users.Inventory.Bots;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Bots;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.AI;
+using Wibbo.Game.Users.Inventory.Bots;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class PlaceBotEvent : IPacketEvent
     {
@@ -19,7 +19,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room Room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room Room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (Room == null || !Room.CheckRights(Session, true))
             {
                 return;
@@ -41,11 +41,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (Room.GetRoomUserManager().BotPetCount >= 30)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.placebot.error", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.placebot.error", Session.Langue));
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 BotUserDao.UpdatePosition(dbClient, Bot.Id, Room.Id, X, Y);
             }

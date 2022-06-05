@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Users.Achievements
+﻿namespace Wibbo.Game.Users.Achievements
 {
     public class UserAchievement
     {

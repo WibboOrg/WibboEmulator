@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Butterfly.Game.Rooms.Map.Movement
+namespace Wibbo.Game.Rooms.Map.Movement
 {
     public static class MovementUtility
     {
@@ -29,7 +29,7 @@ namespace Butterfly.Game.Rooms.Map.Movement
             switch (state)
             {
                 case MovementState.random:
-                    switch (ButterflyEnvironment.GetRandomNumber(1, 4))
+                    switch (WibboEnvironment.GetRandomNumber(1, 4))
                     {
                         case 1:
                             HandleMovement(ref coordinate, MovementState.up);
@@ -46,7 +46,7 @@ namespace Butterfly.Game.Rooms.Map.Movement
                     }
                     break;
                 case MovementState.leftright:
-                    if (ButterflyEnvironment.GetRandomNumber(0, 1) == 1)
+                    if (WibboEnvironment.GetRandomNumber(0, 1) == 1)
                     {
                         HandleMovement(ref coordinate, MovementState.left);
                         break;
@@ -57,7 +57,7 @@ namespace Butterfly.Game.Rooms.Map.Movement
                         break;
                     }
                 case MovementState.updown:
-                    if (ButterflyEnvironment.GetRandomNumber(0, 1) == 1)
+                    if (WibboEnvironment.GetRandomNumber(0, 1) == 1)
                     {
                         HandleMovement(ref coordinate, MovementState.up);
                         break;
@@ -156,7 +156,7 @@ namespace Butterfly.Game.Rooms.Map.Movement
 
                 case MovementDirection.random:
                     {
-                        switch (ButterflyEnvironment.GetRandomNumber(1, 4))
+                        switch (WibboEnvironment.GetRandomNumber(1, 4))
                         {
                             case 1:
                                 {
@@ -287,7 +287,7 @@ namespace Butterfly.Game.Rooms.Map.Movement
                     HandleCounterClockwiseRotation(ref rotation);
                     return rotation;
                 case RotationState.RANDOM:
-                    if (ButterflyEnvironment.GetRandomNumber(0, 1) == 1)
+                    if (WibboEnvironment.GetRandomNumber(0, 1) == 1)
                     {
                         HandleClockwiseRotation(ref rotation);
                     }

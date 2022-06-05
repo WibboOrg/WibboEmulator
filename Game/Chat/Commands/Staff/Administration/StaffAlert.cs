@@ -1,8 +1,8 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class StaffAlert : IChatCommand
     {
@@ -20,7 +20,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            foreach (Client Staff in ButterflyEnvironment.GetGame().GetClientManager().GetClients)
+            foreach (Client Staff in WibboEnvironment.GetGame().GetClientManager().GetClients)
             {
                 if (Staff == null)
                 {

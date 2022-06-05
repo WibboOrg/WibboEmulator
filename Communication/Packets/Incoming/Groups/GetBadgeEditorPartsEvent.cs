@@ -1,7 +1,7 @@
-using Butterfly.Communication.Packets.Outgoing.Groups;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetBadgeEditorPartsEvent : IPacketEvent
     {
@@ -15,11 +15,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             Session.SendPacket(new BadgeEditorPartsComposer(
-                ButterflyEnvironment.GetGame().GetGroupManager().BadgeBases,
-                ButterflyEnvironment.GetGame().GetGroupManager().BadgeSymbols,
-                ButterflyEnvironment.GetGame().GetGroupManager().BadgeBaseColours,
-                ButterflyEnvironment.GetGame().GetGroupManager().BadgeSymbolColours,
-                ButterflyEnvironment.GetGame().GetGroupManager().BadgeBackColours));
+                WibboEnvironment.GetGame().GetGroupManager().BadgeBases,
+                WibboEnvironment.GetGame().GetGroupManager().BadgeSymbols,
+                WibboEnvironment.GetGame().GetGroupManager().BadgeBaseColours,
+                WibboEnvironment.GetGame().GetGroupManager().BadgeSymbolColours,
+                WibboEnvironment.GetGame().GetGroupManager().BadgeBackColours));
         }
     }
 }

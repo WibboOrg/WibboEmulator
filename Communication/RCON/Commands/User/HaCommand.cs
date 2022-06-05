@@ -1,7 +1,7 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Moderation;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.Moderation;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.RCON.Commands.User
+namespace Wibbo.Communication.RCON.Commands.User
 {
     internal class HaCommand : IRCONCommand
     {
@@ -22,7 +22,7 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
             if (Client == null)
             {
                 return false;
@@ -30,16 +30,16 @@ namespace Butterfly.Communication.RCON.Commands.User
 
             string Message = parameters[2];
 
-            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", Message));
+            WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", Message));
             if (Client.Antipub(Message, "<alert>"))
             {
                 return false;
             }
 
-            ButterflyEnvironment
+            WibboEnvironment
                 .GetGame()
                 .GetClientManager()
-                .SendMessage(new BroadcastMessageAlertComposer(ButterflyEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", Client.Langue) + "\r\n" + Message + "\r\n- " + Client.GetUser().Username));
+                .SendMessage(new BroadcastMessageAlertComposer(WibboEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", Client.Langue) + "\r\n" + Message + "\r\n- " + Client.GetUser().Username));
             return true;
         }
     }

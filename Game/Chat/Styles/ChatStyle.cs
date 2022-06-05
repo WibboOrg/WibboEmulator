@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Chat.Styles
+﻿namespace Wibbo.Game.Chat.Styles
 {
     public sealed class ChatStyle
     {

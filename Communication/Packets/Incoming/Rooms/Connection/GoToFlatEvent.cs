@@ -1,7 +1,7 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GoToFlatEvent : IPacketEvent
     {

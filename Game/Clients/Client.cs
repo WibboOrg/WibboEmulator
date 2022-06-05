@@ -1,29 +1,29 @@
-﻿using Butterfly.Communication.Interfaces;
-using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.BuildersClub;
-using Butterfly.Communication.Packets.Outgoing.Handshake;
-using Butterfly.Communication.Packets.Outgoing.Help;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Achievements;
-using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Communication.Packets.Outgoing.Misc;
-using Butterfly.Communication.Packets.Outgoing.Moderation;
-using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Communication.Packets.Outgoing.Notifications;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.Communication.Packets.Outgoing.Settings;
-using Butterfly.Communication.Packets.Outgoing.WibboTool;
-using Butterfly.Communication.WebSocket;
-using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Help;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Users;
-using Butterfly.Game.Users.Authenticator;
-using Butterfly.Utilities;
+﻿using Wibbo.Communication.Interfaces;
+using Wibbo.Communication.Packets.Outgoing;
+using Wibbo.Communication.Packets.Outgoing.BuildersClub;
+using Wibbo.Communication.Packets.Outgoing.Handshake;
+using Wibbo.Communication.Packets.Outgoing.Help;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Achievements;
+using Wibbo.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Communication.Packets.Outgoing.Misc;
+using Wibbo.Communication.Packets.Outgoing.Moderation;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Communication.Packets.Outgoing.Notifications;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
+using Wibbo.Communication.Packets.Outgoing.Settings;
+using Wibbo.Communication.Packets.Outgoing.WibboTool;
+using Wibbo.Communication.WebSocket;
+using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Help;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
+using Wibbo.Game.Users.Authenticator;
+using Wibbo.Utilities;
 
-namespace Butterfly.Game.Clients
+namespace Wibbo.Game.Clients
 {
     public class Client
     {
@@ -69,28 +69,28 @@ namespace Butterfly.Game.Clients
                 }
                 else
                 {
-                    ButterflyEnvironment.GetGame().GetClientManager().LogClonesOut(user.Id);
+                    WibboEnvironment.GetGame().GetClientManager().LogClonesOut(user.Id);
                     this._user = user;
                     this.Langue = user.Langue;
 
-                    ButterflyEnvironment.GetGame().GetClientManager().RegisterClient(this, user.Id, user.Username);
+                    WibboEnvironment.GetGame().GetClientManager().RegisterClient(this, user.Id, user.Username);
 
                     if (this.Langue == Language.FRANCAIS)
                     {
-                        ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersFr++;
+                        WibboEnvironment.GetGame().GetClientManager().OnlineUsersFr++;
                     }
                     else if (this.Langue == Language.ANGLAIS)
                     {
-                        ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersEn++;
+                        WibboEnvironment.GetGame().GetClientManager().OnlineUsersEn++;
                     }
                     else if (this.Langue == Language.PORTUGAIS)
                     {
-                        ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersBr++;
+                        WibboEnvironment.GetGame().GetClientManager().OnlineUsersBr++;
                     }
 
                     if (this._user.MachineId != this.MachineId && this.MachineId != null)
                     {
-                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             UserDao.UpdateMachineId(dbClient, this._user.Id, this.MachineId);
                         }
@@ -109,9 +109,9 @@ namespace Butterfly.Game.Clients
                     packetList.Add(new AvailabilityStatusComposer());
                     packetList.Add(new AchievementScoreComposer(this._user.AchievementPoints));
                     packetList.Add(new BuildersClubMembershipComposer());
-                    packetList.Add(new CfhTopicsInitComposer(ButterflyEnvironment.GetGame().GetModerationManager().UserActionPresets));
+                    packetList.Add(new CfhTopicsInitComposer(WibboEnvironment.GetGame().GetModerationManager().UserActionPresets));
                     packetList.Add(new UserSettingsComposer(this._user.ClientVolume, this._user.OldChat, this._user.IgnoreRoomInvites, this._user.CameraFollowDisabled, 1, 0));
-                    packetList.Add(new AvatarEffectsComposer(ButterflyEnvironment.GetGame().GetEffectManager().GetEffects()));
+                    packetList.Add(new AvatarEffectsComposer(WibboEnvironment.GetGame().GetEffectManager().GetEffects()));
 
                     packetList.Add(new ActivityPointNotificationComposer(this._user.Duckets, 1));
                     packetList.Add(new CreditBalanceComposer(this._user.Credits));
@@ -134,16 +134,16 @@ namespace Butterfly.Game.Clients
 
                     if (this._user.HasFuse("fuse_mod"))
                     {
-                        ButterflyEnvironment.GetGame().GetClientManager().AddUserStaff(this._user.Id);
+                        WibboEnvironment.GetGame().GetClientManager().AddUserStaff(this._user.Id);
                         packetList.Add(new ModeratorInitComposer(
-                            ButterflyEnvironment.GetGame().GetModerationManager().UserMessagePresets(),
-                            ButterflyEnvironment.GetGame().GetModerationManager().RoomMessagePresets(),
-                            ButterflyEnvironment.GetGame().GetModerationManager().Tickets()));
+                            WibboEnvironment.GetGame().GetModerationManager().UserMessagePresets(),
+                            WibboEnvironment.GetGame().GetModerationManager().RoomMessagePresets(),
+                            WibboEnvironment.GetGame().GetModerationManager().Tickets()));
                     }
 
                     if (this._user.HasExactFuse("fuse_helptool"))
                     {
-                        HelpManager guideManager = ButterflyEnvironment.GetGame().GetHelpManager();
+                        HelpManager guideManager = WibboEnvironment.GetGame().GetHelpManager();
                         guideManager.AddGuide(this._user.Id);
                         this._user.OnDuty = true;
 
@@ -169,9 +169,9 @@ namespace Butterfly.Game.Clients
             this.GetUser().NewUser = false;
 
             int RoomId = 0;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                RoomId = RoomDao.InsertDuplicate(dbClient, this.GetUser().Username, ButterflyEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
+                RoomId = RoomDao.InsertDuplicate(dbClient, this.GetUser().Username, WibboEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
 
                 UserDao.UpdateNuxEnable(dbClient, this.GetUser().Id, RoomId);
                 if (RoomId == 0)
@@ -217,21 +217,21 @@ namespace Butterfly.Game.Clients
                 return false;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 LogChatDao.Insert(dbClient, this.GetUser().Id, RoomId, Message, type, this.GetUser().Username);
             }
 
-            if (!ButterflyEnvironment.GetGame().GetChatManager().GetFilter().Ispub(Message))
+            if (!WibboEnvironment.GetGame().GetChatManager().GetFilter().Ispub(Message))
             {
-                if (ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessageWord(Message))
+                if (WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessageWord(Message))
                 {
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         LogChatPubDao.Insert(dbClient, this.GetUser().Id, "A vérifié: " + type + Message, this.GetUser().Username);
                     }
 
-                    foreach (Client Client in ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers())
+                    foreach (Client Client in WibboEnvironment.GetGame().GetClientManager().GetStaffUsers())
                     {
                         if (Client == null || Client.GetUser() == null)
                         {
@@ -254,23 +254,23 @@ namespace Butterfly.Game.Clients
                 PubCount = 4;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 LogChatPubDao.Insert(dbClient, this.GetUser().Id, "Pub numero " + PubCount + ": " + type + Message, this.GetUser().Username);
 
             if (PubCount < 3 && PubCount > 0)
             {
-                this.SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.1", this.Langue), PubCount));
+                this.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.1", this.Langue), PubCount));
             }
             else if (PubCount == 3)
             {
-                this.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.2", this.Langue));
+                this.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.2", this.Langue));
             }
             else if (PubCount == 4)
             {
-                ButterflyEnvironment.GetGame().GetClientManager().BanUser(this, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.GetUser().Username, true, false);
+                WibboEnvironment.GetGame().GetClientManager().BanUser(this, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.GetUser().Username, true, false);
             }
 
-            foreach (Client Client in ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers())
+            foreach (Client Client in WibboEnvironment.GetGame().GetClientManager().GetStaffUsers())
             {
                 if (Client == null || Client.GetUser() == null)
                 {
@@ -341,15 +341,15 @@ namespace Butterfly.Game.Clients
         {
             if (this.Langue == Language.FRANCAIS)
             {
-                ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersFr--;
+                WibboEnvironment.GetGame().GetClientManager().OnlineUsersFr--;
             }
             else if (this.Langue == Language.ANGLAIS)
             {
-                ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersEn--;
+                WibboEnvironment.GetGame().GetClientManager().OnlineUsersEn--;
             }
             else if (this.Langue == Language.PORTUGAIS)
             {
-                ButterflyEnvironment.GetGame().GetClientManager().OnlineUsersBr--;
+                WibboEnvironment.GetGame().GetClientManager().OnlineUsersBr--;
             }
 
             if (this.GetUser() != null)

@@ -1,11 +1,11 @@
-using Butterfly.Communication.Packets.Outgoing.Groups;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Users;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Permissions;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GiveAdminRightsEvent : IPacketEvent
     {
@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int GroupId = Packet.PopInt();
             int UserId = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
             {
                 return;
             }
@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            User user = ButterflyEnvironment.GetUserById(UserId);
+            User user = WibboEnvironment.GetUserById(UserId);
             if (user == null)
             {
                 return;
@@ -34,7 +34,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Group.MakeAdmin(UserId);
 
-            if (ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room Room))
+            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room Room))
             {
                 RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(UserId);
                 if (User != null)

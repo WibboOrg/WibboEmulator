@@ -1,9 +1,9 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Quests;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class PickupObjectEvent : IPacketEvent
     {
@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Packet.PopInt();
             int ItemId = Packet.PopInt();
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || !room.CheckRights(Session, true))
             {
                 return;
@@ -28,13 +28,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (room.RoomData.SellPrice > 0)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", Session.Langue));
                 return;
             }
 
             room.GetRoomItemHandler().RemoveFurniture(Session, Item.Id);
             Session.GetUser().GetInventoryComponent().AddItem(Item);
-            ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_PICK, 0);
+            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_PICK, 0);
         }
     }
 }

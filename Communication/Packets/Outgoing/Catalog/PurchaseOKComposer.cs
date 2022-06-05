@@ -1,7 +1,7 @@
-using Butterfly.Game.Catalog;
-using Butterfly.Game.Items;
+using Wibbo.Game.Catalog;
+using Wibbo.Game.Items;
 
-namespace Butterfly.Communication.Packets.Outgoing.Catalog
+namespace Wibbo.Communication.Packets.Outgoing.Catalog
 {
     internal class PurchaseOKComposer : ServerPacket
     {

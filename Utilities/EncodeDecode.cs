@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Utilities
+﻿namespace Wibbo.Utilities
 {
     internal static class EncodeDecode
     {

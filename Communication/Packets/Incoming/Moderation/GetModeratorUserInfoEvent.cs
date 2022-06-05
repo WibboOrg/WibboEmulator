@@ -1,10 +1,10 @@
-using Butterfly.Communication.Packets.Outgoing.Moderation;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Moderation;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
 using System.Data;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetModeratorUserInfoEvent : IPacketEvent
     {
@@ -18,13 +18,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             int userId = Packet.PopInt();
-            if (ButterflyEnvironment.GetGame().GetClientManager().GetNameById(userId) != "")
+            if (WibboEnvironment.GetGame().GetClientManager().GetNameById(userId) != "")
             {
-                Client client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+                Client client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
                 DataRow user = null;
                 DataRow info = null;
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     user = UserDao.GetOneInfo(dbClient, userId);
                 }
@@ -38,7 +38,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
             else
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("user.loadusererror", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.loadusererror", Session.Langue));
             }
         }
     }

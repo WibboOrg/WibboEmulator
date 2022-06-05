@@ -1,11 +1,11 @@
-using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Quests;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class SetActivatedBadgesEvent : IPacketEvent
     {
@@ -22,7 +22,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Session.GetUser().GetBadgeComponent().ResetSlots();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserBadgeDao.UpdateResetSlot(dbClient, Session.GetUser().Id);
             }
@@ -44,19 +44,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                 Session.GetUser().GetBadgeComponent().GetBadge(Badge).Slot = Slot;
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserBadgeDao.UpdateSlot(dbClient, Session.GetUser().Id, Slot, Badge);
                 }
             }
 
-            ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_BADGE, 0);
+            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_BADGE, 0);
 
             if (!Session.GetUser().InRoom)
                 Session.SendPacket(new UserBadgesComposer(Session.GetUser()));
             else 
             {
-                Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+                Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
 
                 if(room != null)
                     room.SendPacket(new UserBadgesComposer(Session.GetUser()));

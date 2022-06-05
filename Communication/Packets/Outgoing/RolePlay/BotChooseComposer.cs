@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.RolePlay
+﻿namespace Wibbo.Communication.Packets.Outgoing.RolePlay
 {
     internal class BotChooseComposer : ServerPacket
     {

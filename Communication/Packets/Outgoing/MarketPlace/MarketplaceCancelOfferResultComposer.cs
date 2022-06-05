@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.MarketPlace
+﻿namespace Wibbo.Communication.Packets.Outgoing.MarketPlace
 {
     internal class MarketplaceCancelOfferResultComposer : ServerPacket
     {

@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Catalog;
-using Butterfly.Communication.Packets.Outgoing.Groups;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class PurchaseGroupEvent : IPacketEvent
     {
@@ -14,8 +14,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client session, ClientPacket packet)
         {
-            string Name = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
-            string Description = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+            string Name = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+            string Description = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
             int RoomId = packet.PopInt();
             int Colour1 = packet.PopInt();
             int Colour2 = packet.PopInt();
@@ -41,7 +41,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            RoomData Room = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+            RoomData Room = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
             if (Room == null || Room.OwnerId != session.GetUser().Id || Room.Group != null)
             {
                 return;
@@ -54,7 +54,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 Badge += BadgePartUtility.WorkBadgeParts(i == 0, packet.PopInt().ToString(), packet.PopInt().ToString(), packet.PopInt().ToString());
             }
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryCreateGroup(session.GetUser(), Name, Description, RoomId, Badge, Colour1, Colour2, out Group Group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryCreateGroup(session.GetUser(), Name, Description, RoomId, Badge, Colour1, Colour2, out Group Group))
             {
                 return;
             }

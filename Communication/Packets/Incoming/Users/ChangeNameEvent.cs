@@ -1,13 +1,13 @@
-using Butterfly.Communication.Packets.Outgoing.Handshake;
-using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Handshake;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class ChangeNameEvent : IPacketEvent
     {
@@ -20,7 +20,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
@@ -36,7 +36,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (!Session.GetUser().CanChangeName && Session.GetUser().Rank == 1)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.changename.error.1", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.changename.error.1", Session.Langue));
                 return;
             }
 
@@ -48,11 +48,11 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (this.NameAvailable(newUsername) != 1)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.changename.error.2", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.changename.error.2", Session.Langue));
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoomDao.UpdateOwner(dbClient, newUsername, Session.GetUser().Username);
 
@@ -61,7 +61,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 LogFlagmeDao.Insert(dbClient, Session.GetUser().Id, Session.GetUser().Username, newUsername);
             }
 
-            ButterflyEnvironment.GetGame().GetClientManager().UpdateClientUsername(Session.ConnectionID, Session.GetUser().Username, newUsername);
+            WibboEnvironment.GetGame().GetClientManager().UpdateClientUsername(Session.ConnectionID, Session.GetUser().Username, newUsername);
             room.GetRoomUserManager().UpdateClientUsername(roomUser, Session.GetUser().Username, newUsername);
             Session.GetUser().Username = newUsername;
             Session.GetUser().CanChangeName = false;
@@ -71,13 +71,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             foreach (int RoomId in Session.GetUser().UsersRooms)
             {
-                Room roomowner = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
+                Room roomowner = WibboEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
                 if (roomowner != null)
                 {
                     roomowner.RoomData.OwnerName = newUsername;
                 }
 
-                ButterflyEnvironment.GetGame().GetRoomManager().RoomDataRemove(RoomId);
+                WibboEnvironment.GetGame().GetRoomManager().RoomDataRemove(RoomId);
             }
 
             room.SendPacket(new UserNameChangeComposer(newUsername, roomUser.VirtualId));
@@ -103,12 +103,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return -2;
             }
 
-            if (!ButterflyEnvironment.IsValidAlphaNumeric(Username))
+            if (!WibboEnvironment.IsValidAlphaNumeric(Username))
             {
                 return -1;
             }
 
-            return ButterflyEnvironment.UsernameExists(Username) ? 0 : 1;
+            return WibboEnvironment.UsernameExists(Username) ? 0 : 1;
         }
     }
 }

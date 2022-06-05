@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.WibboTool
+﻿namespace Wibbo.Communication.Packets.Outgoing.WibboTool
 {
     internal class AddChatlogsComposer : ServerPacket
     {

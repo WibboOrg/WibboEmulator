@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Quests;
-using Butterfly.Game.Rooms;
-using Butterfly.Utilities;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Rooms;
+using Wibbo.Utilities;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class ChangeMottoEvent : IPacketEvent
     {
@@ -32,7 +32,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (!Session.GetUser().HasFuse("word_filter_override"))
             {
-                newMotto = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(newMotto);
+                newMotto = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(newMotto);
             }
 
             if (Session.GetUser().IgnoreAll)
@@ -42,12 +42,12 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Session.GetUser().Motto = newMotto;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserDao.UpdateMotto(dbClient, Session.GetUser().Id, newMotto);
             }
 
-            ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_CHANGE_MOTTO, 0);
+            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_CHANGE_MOTTO, 0);
 
             if (Session.GetUser().InRoom)
             {
@@ -71,7 +71,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
             }
 
-            ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_Motto", 1);
+            WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_Motto", 1);
         }
     }
 }

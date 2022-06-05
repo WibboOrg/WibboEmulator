@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.RolePlay.Troc
+﻿namespace Wibbo.Communication.Packets.Outgoing.RolePlay.Troc
 {
     internal class RpTrocStartComposer : ServerPacket
     {

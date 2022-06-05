@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Core.FigureData.Types
+﻿namespace Wibbo.Core.FigureData.Types
 {
     internal class Part
     {

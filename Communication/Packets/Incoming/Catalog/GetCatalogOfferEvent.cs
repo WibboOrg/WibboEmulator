@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Catalog;
-using Butterfly.Game.Catalog;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Game.Catalog;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetCatalogOfferEvent : IPacketEvent
     {
@@ -11,13 +11,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         public void Parse(Client Session, ClientPacket Packet)
         {
             int id = Packet.PopInt();
-            CatalogItem Item = ButterflyEnvironment.GetGame().GetCatalog().FindItem(id, Session.GetUser().Rank);
+            CatalogItem Item = WibboEnvironment.GetGame().GetCatalog().FindItem(id, Session.GetUser().Rank);
             if (Item == null)
             {
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(Item.PageID, out CatalogPage Page))
+            if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(Item.PageID, out CatalogPage Page))
             {
                 return;
             }

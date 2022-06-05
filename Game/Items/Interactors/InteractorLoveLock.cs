@@ -1,9 +1,9 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Furni.Furni;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Furni.Furni;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 using System.Drawing;
 
-namespace Butterfly.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorLoveLock : FurniInteractor
     {

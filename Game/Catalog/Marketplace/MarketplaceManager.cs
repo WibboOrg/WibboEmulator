@@ -1,7 +1,7 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 
-namespace Butterfly.Game.Catalog.Marketplace
+namespace Wibbo.Game.Catalog.Marketplace
 {
     public class MarketplaceManager
     {
@@ -31,7 +31,7 @@ namespace Butterfly.Game.Catalog.Marketplace
                 return 0;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 num = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, SpriteID);
 
@@ -51,7 +51,7 @@ namespace Butterfly.Game.Catalog.Marketplace
 
         public double FormatTimestamp()
         {
-            return (ButterflyEnvironment.GetUnixTimestamp() - 172800);
+            return (WibboEnvironment.GetUnixTimestamp() - 172800);
         }
 
         public int OfferCountForSprite(int SpriteID)

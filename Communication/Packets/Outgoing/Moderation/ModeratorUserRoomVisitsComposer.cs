@@ -1,8 +1,8 @@
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Users;
-using Butterfly.Utilities;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
+using Wibbo.Utilities;
 
-namespace Butterfly.Communication.Packets.Outgoing.Moderation
+namespace Wibbo.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorUserRoomVisitsComposer : ServerPacket
     {
@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Moderation
 
             foreach (KeyValuePair<double, int> Visit in Visits)
             {
-                RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(Visit.Value);
+                RoomData roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(Visit.Value);
 
                 WriteInteger(roomData.Id);
                 WriteString(roomData.Name);

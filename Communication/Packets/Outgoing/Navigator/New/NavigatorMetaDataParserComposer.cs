@@ -1,6 +1,6 @@
-using Butterfly.Game.Navigator;
+using Wibbo.Game.Navigator;
 
-namespace Butterfly.Communication.Packets.Outgoing.Navigator.New
+namespace Wibbo.Communication.Packets.Outgoing.Navigator.New
 {
     internal class NavigatorMetaDataParserComposer : ServerPacket
     {

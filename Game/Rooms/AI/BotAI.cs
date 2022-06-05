@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Clients;
+﻿using Wibbo.Game.Clients;
 
-namespace Butterfly.Game.Rooms.AI
+namespace Wibbo.Game.Rooms.AI
 {
     public abstract class BotAI
     {

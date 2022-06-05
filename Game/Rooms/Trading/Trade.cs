@@ -1,12 +1,12 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Trading;
-using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Items;
+﻿using Wibbo.Communication.Packets.Outgoing;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Trading;
+using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Items;
 
-namespace Butterfly.Game.Rooms.Trading
+namespace Wibbo.Game.Rooms.Trading
 {
     public class Trade
     {
@@ -223,8 +223,8 @@ namespace Butterfly.Game.Rooms.Trading
             {
                 if (tradeUserOne.GetClient().GetUser().GetInventoryComponent().GetItem(userItem.Id) == null)
                 {
-                    tradeUserOne.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserOne.GetClient().Langue));
-                    tradeUserTwo.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserTwo.GetClient().Langue));
+                    tradeUserOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserOne.GetClient().Langue));
+                    tradeUserTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserTwo.GetClient().Langue));
                     return false;
                 }
             }
@@ -233,8 +233,8 @@ namespace Butterfly.Game.Rooms.Trading
             {
                 if (tradeUserTwo.GetClient().GetUser().GetInventoryComponent().GetItem(userItem.Id) == null)
                 {
-                    tradeUserOne.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserOne.GetClient().Langue));
-                    tradeUserTwo.GetClient().SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserTwo.GetClient().Langue));
+                    tradeUserOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserOne.GetClient().Langue));
+                    tradeUserTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserTwo.GetClient().Langue));
                     return false;
                 }
             }
@@ -305,7 +305,7 @@ namespace Butterfly.Game.Rooms.Trading
 
             LogsTwoString = LogsTwoString.TrimEnd(',');
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 LogTradeDao.Insert(dbClient, this._oneId, this._twoId, LogsOneString, LogsTwoString, this._roomId);
             }
@@ -358,7 +358,7 @@ namespace Butterfly.Game.Rooms.Trading
 
         private Room GetRoom()
         {
-            return ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(this._roomId);
+            return WibboEnvironment.GetGame().GetRoomManager().GetRoom(this._roomId);
         }
     }
 }

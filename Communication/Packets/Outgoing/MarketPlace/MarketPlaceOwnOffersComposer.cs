@@ -1,15 +1,15 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Communication.Packets.Outgoing.MarketPlace
+namespace Wibbo.Communication.Packets.Outgoing.MarketPlace
 {
     internal class MarketPlaceOwnOffersComposer : ServerPacket
     {
         public MarketPlaceOwnOffersComposer(int UserId)
            : base(ServerPacketHeader.MARKETPLACE_OWN_ITEMS)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 DataTable table = CatalogMarketplaceOfferDao.GetOneByUserId(dbClient, UserId);
 
@@ -21,7 +21,7 @@ namespace Butterfly.Communication.Packets.Outgoing.MarketPlace
                     this.WriteInteger(table.Rows.Count);
                     foreach (DataRow row in table.Rows)
                     {
-                        int num2 = Convert.ToInt32(Math.Floor((double)(((((double)row["timestamp"]) + 172800.0) - ButterflyEnvironment.GetUnixTimestamp()) / 60.0)));
+                        int num2 = Convert.ToInt32(Math.Floor((double)(((((double)row["timestamp"]) + 172800.0) - WibboEnvironment.GetUnixTimestamp()) / 60.0)));
                         int num3 = int.Parse(row["state"].ToString());
                         if ((num2 <= 0) && (num3 != 2))
                         {

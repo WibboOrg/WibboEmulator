@@ -1,6 +1,6 @@
-using Butterfly.Game.Groups;
+using Wibbo.Game.Groups;
 
-namespace Butterfly.Communication.Packets.Outgoing.Catalog
+namespace Wibbo.Communication.Packets.Outgoing.Catalog
 {
     internal class GroupFurniConfigComposer : ServerPacket
     {
@@ -13,8 +13,8 @@ namespace Butterfly.Communication.Packets.Outgoing.Catalog
                 this.WriteInteger(group.Id);
                 this.WriteString(group.Name);
                 this.WriteString(group.Badge);
-                this.WriteString(ButterflyEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour1, true));
-                this.WriteString(ButterflyEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour2, false));
+                this.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour1, true));
+                this.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour2, false));
                 this.WriteBoolean(false);
                 this.WriteInteger(group.CreatorId);
                 this.WriteBoolean(group.ForumEnabled);

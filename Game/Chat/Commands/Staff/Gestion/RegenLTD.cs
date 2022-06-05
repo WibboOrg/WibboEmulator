@@ -1,24 +1,24 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Catalog;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Catalog;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
 using System.Data;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class RegenLTD : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (!ButterflyEnvironment.GetGame().GetCatalog().TryGetPage(984897, out CatalogPage Page))
+            if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(984897, out CatalogPage Page))
             {
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 foreach (CatalogItem Item in Page.Items.Values)
                 {

@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Roleplay.Item
+﻿namespace Wibbo.Game.Roleplay.Item
 {
     public enum RPItemCategory
     {

@@ -1,7 +1,7 @@
-using Butterfly.Communication.Packets.Outgoing.Help;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Help;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Guide
+namespace Wibbo.Communication.Packets.Incoming.Guide
 {
     internal class CancellInviteGuideEvent : IPacketEvent
     {
@@ -9,7 +9,7 @@ namespace Butterfly.Communication.Packets.Incoming.Guide
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Client requester = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
+            Client requester = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
 
             Session.SendPacket(new OnGuideSessionDetachedComposer());
 

@@ -1,9 +1,9 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.RCON.Commands.User
+namespace Wibbo.Communication.RCON.Commands.User
 {
     internal class UpdateCreditsCommand : IRCONCommand
     {
@@ -24,14 +24,14 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
             if (Client == null)
             {
                 return false;
             }
 
             int credits;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 credits = UserDao.GetCredits(dbClient, Client.GetUser().Id);
             }

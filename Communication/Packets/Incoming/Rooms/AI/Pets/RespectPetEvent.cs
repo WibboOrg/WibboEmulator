@@ -1,10 +1,10 @@
-using Butterfly.Communication.Packets.Outgoing.Pets;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Quests;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Pets;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RespectPetEvent : IPacketEvent
     {
@@ -18,7 +18,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -52,9 +52,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
 
                 //And boom! Let us send some respect points.
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_RESPECT);
-                ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RespectGiven", 1);
-                ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(TargetUser.GetClient(), "ACH_RespectEarned", 1);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_RESPECT);
+                WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RespectGiven", 1);
+                WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(TargetUser.GetClient(), "ACH_RespectEarned", 1);
 
                 //Take away from pet respect points, just in-case users abuse this..
                 Session.GetUser().DailyPetRespectPoints -= 1;
@@ -76,7 +76,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             Session.GetUser().DailyPetRespectPoints -= 1;
-            ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_PetRespectGiver", 1);
+            WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_PetRespectGiver", 1);
 
             ThisUser.CarryItemID = 999999999;
             ThisUser.CarryTimer = 5;

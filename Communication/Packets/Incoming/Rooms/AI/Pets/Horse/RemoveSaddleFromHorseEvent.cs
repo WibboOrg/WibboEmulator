@@ -1,15 +1,15 @@
-using Butterfly.Communication.Packets.Outgoing.Catalog;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
-using Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Catalog.Utilities;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Communication.Packets.Outgoing.Rooms.AI.Pets;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Catalog.Utilities;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RemoveSaddleFromHorseEvent : IPacketEvent
     {
@@ -22,7 +22,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -43,13 +43,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             //Remove the saddle from the pet.
             PetUser.PetData.Saddle = 0;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 BotPetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 0);
             }
 
             //Give the saddle back to the user.
-            if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(SaddleId, out ItemData ItemData))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(SaddleId, out ItemData ItemData))
             {
                 return;
             }

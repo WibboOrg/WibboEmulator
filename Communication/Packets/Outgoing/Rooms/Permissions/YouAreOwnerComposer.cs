@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Permissions
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Permissions
 {
     internal class YouAreOwnerComposer : ServerPacket
     {

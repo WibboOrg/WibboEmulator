@@ -1,11 +1,11 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Notifications.NotifCustom;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
+﻿using Wibbo.Communication.Packets.Outgoing.Notifications.NotifCustom;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Notifications;
 
 
-using Butterfly.Game.Clients;
+using Wibbo.Game.Clients;
 using System.Text.RegularExpressions;
 
-namespace Butterfly.Game.Chat.Mentions
+namespace Wibbo.Game.Chat.Mentions
 {
     public class MentionManager
     {
@@ -62,7 +62,7 @@ namespace Butterfly.Game.Chat.Mentions
 
         public bool SendNotif(Client Session, string TargetUsername, string Message)
         {
-            Client TargetClient = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(TargetUsername);
+            Client TargetClient = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(TargetUsername);
 
             if (TargetClient == null)
             {
@@ -107,7 +107,7 @@ namespace Butterfly.Game.Chat.Mentions
 
             Session.GetUser().EveryoneTimer = DateTime.Now;
 
-            List<Client> onlineUsers = ButterflyEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetUser().GetMessenger().Friends.Keys);
+            List<Client> onlineUsers = WibboEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetUser().GetMessenger().Friends.Keys);
 
             if (onlineUsers == null)
             {

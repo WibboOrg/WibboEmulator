@@ -1,8 +1,8 @@
-using Butterfly.Game.Pets;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Users;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.AI.Pets
 {
     internal class PetInformationComposer : ServerPacket
     {
@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets
             : base(ServerPacketHeader.PET_INFO)
         {
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Pet.RoomId, out Room Room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Pet.RoomId, out Room Room))
             {
                 return;
             }

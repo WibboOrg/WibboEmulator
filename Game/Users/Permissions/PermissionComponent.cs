@@ -1,6 +1,6 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Interfaces;
 
-namespace Butterfly.Game.Users.Permissions
+namespace Wibbo.Game.Users.Permissions
 {
     public sealed class PermissionComponent : IDisposable
     {

@@ -1,10 +1,10 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class DeleteGroupEvent : IPacketEvent
     {
@@ -14,33 +14,33 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             int groupId = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out Group Group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out Group Group))
             {
                 return;
             }
 
             if (Group.CreatorId != Session.GetUser().Id && !Session.GetUser().HasFuse("group_delete_override"))
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.1", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.1", Session.Langue));
                 return;
             }
 
             if (Group.MemberCount >= 100 && !Session.GetUser().HasFuse("group_delete_limit_override"))
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.2", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.2", Session.Langue));
                 return;
             }
 
-            Room Room = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(Group.RoomId);
+            Room Room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(Group.RoomId);
 
             if (Room != null)
             {
                 Room.RoomData.Group = null;
             }
 
-            ButterflyEnvironment.GetGame().GetGroupManager().DeleteGroup(Group.Id);
+            WibboEnvironment.GetGame().GetGroupManager().DeleteGroup(Group.Id);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 GuildDao.Delete(dbClient, Group.Id);
                 GuildMembershipDao.Delete(dbClient, Group.Id);
@@ -54,9 +54,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 }
             }
 
-            ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
+            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
 
-            Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.succes", Session.Langue));
+            Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.succes", Session.Langue));
         }
     }
 }

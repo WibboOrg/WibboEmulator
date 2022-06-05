@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class MachineBan : IChatCommand
     {
@@ -12,10 +12,10 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            Client clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
             if (clientByUsername == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
             else if (string.IsNullOrEmpty(clientByUsername.MachineId))
             {
@@ -23,8 +23,8 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
             else if (clientByUsername.GetUser().Rank >= Session.GetUser().Rank)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
-                ButterflyEnvironment.GetGame().GetClientManager().BanUser(Session, "Robot", 788922000, "Votre compte a été banni par s�curit�", false, false);
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
+                WibboEnvironment.GetGame().GetClientManager().BanUser(Session, "Robot", 788922000, "Votre compte a été banni par s�curit�", false, false);
             }
             else
             {
@@ -34,7 +34,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                     Raison = CommandManager.MergeParams(Params, 2);
                 }
 
-                ButterflyEnvironment.GetGame().GetClientManager().BanUser(clientByUsername, Session.GetUser().Username, 788922000, Raison, true, true);
+                WibboEnvironment.GetGame().GetClientManager().BanUser(clientByUsername, Session.GetUser().Username, 788922000, Raison, true, true);
                 Session.SendWhisper("Tu viens de bannir " + clientByUsername.GetUser().Username + " pour la raison : " + Raison +" !");
                 Session.Antipub(Raison, "<CMD>");
                 return;

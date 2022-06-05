@@ -1,14 +1,14 @@
-﻿using Butterfly.Communication.Interfaces;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
-using Butterfly.Communication.WebSocket;
-using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Users.Messenger;
+﻿using Wibbo.Communication.Interfaces;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Notifications;
+using Wibbo.Communication.WebSocket;
+using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Users.Messenger;
 using System.Collections.Concurrent;
 using System.Text;
 
-namespace Butterfly.Game.Clients
+namespace Wibbo.Game.Clients
 {
     public class ClientManager
     {
@@ -115,7 +115,7 @@ namespace Butterfly.Game.Clients
             }
 
             string username = "";
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 username = UserDao.GetNameById(dbClient, Id);
             }
@@ -272,7 +272,7 @@ namespace Butterfly.Game.Clients
             {
                 if (stringBuilder.Length > 0)
                 {
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         dbClient.RunQuery((stringBuilder).ToString());
                     }
@@ -320,7 +320,7 @@ namespace Butterfly.Game.Clients
 
             string Variable = Client.GetUser().Username.ToLower();
             string str = "user";
-            double Expire = ButterflyEnvironment.GetUnixTimestamp() + LengthSeconds;
+            double Expire = WibboEnvironment.GetUnixTimestamp() + LengthSeconds;
             if (IpBan)
             {
                 //Variable = Client.GetConnection().getIp();
@@ -339,7 +339,7 @@ namespace Butterfly.Game.Clients
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 if (str == "user")
                 {

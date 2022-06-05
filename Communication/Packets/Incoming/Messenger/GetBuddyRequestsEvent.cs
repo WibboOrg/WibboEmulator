@@ -1,7 +1,7 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Messenger;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.Messenger;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetBuddyRequestsEvent : IPacketEvent
     {

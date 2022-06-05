@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Clients;
+﻿using Wibbo.Game.Clients;
 
-namespace Butterfly.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorHabboWheel : FurniInteractor
     {
@@ -29,7 +29,7 @@ namespace Butterfly.Game.Items.Interactors
 
         public override void OnTick(Item item)
         {
-            item.ExtraData = ButterflyEnvironment.GetRandomNumber(1, 10).ToString();
+            item.ExtraData = WibboEnvironment.GetRandomNumber(1, 10).ToString();
             item.UpdateState();
         }
     }

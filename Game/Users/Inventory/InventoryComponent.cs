@@ -1,14 +1,14 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Pets;
-using Butterfly.Game.Users.Inventory.Bots;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Users.Inventory.Bots;
 using System.Collections.Concurrent;
 using System.Data;
 
-namespace Butterfly.Game.Users.Inventory
+namespace Wibbo.Game.Users.Inventory
 {
     public class InventoryComponent : IDisposable
     {
@@ -32,7 +32,7 @@ namespace Butterfly.Game.Users.Inventory
         {
             if (All)
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     ItemDao.DeleteAll(dbClient, this._userInstance.Id);
                 }
@@ -41,14 +41,14 @@ namespace Butterfly.Game.Users.Inventory
             }
             else
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     ItemDao.DeleteAllWithoutRare(dbClient, this._userInstance.Id);
                 }
 
                 this._userItems.Clear();
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     DataTable table = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id);
 
@@ -71,7 +71,7 @@ namespace Butterfly.Game.Users.Inventory
 
         public void ClearPets()
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 BotPetDao.Delete(dbClient, this._userInstance.Id);
             }
@@ -81,7 +81,7 @@ namespace Butterfly.Game.Users.Inventory
 
         public void ClearBots()
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 BotUserDao.Delete(dbClient, this._userInstance.Id);
 
             this._botItems.Clear();
@@ -187,7 +187,7 @@ namespace Butterfly.Game.Users.Inventory
             this._botItems.Clear();
             this._petsItems.Clear();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 DataTable dItems = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id);
 
@@ -239,7 +239,7 @@ namespace Butterfly.Game.Users.Inventory
 
         public Item AddNewItem(int Id, int BaseItem, string ExtraData, int Limited = 0, int LimitedStack = 0)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemDao.UpdateRoomIdAndUserId(dbClient, Id, 0, this._userInstance.Id);
             }
@@ -276,7 +276,7 @@ namespace Butterfly.Game.Users.Inventory
 
         private Client GetClient()
         {
-            return ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
+            return WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
         }
 
         public void AddItemArray(List<Item> RoomItemList)
@@ -289,7 +289,7 @@ namespace Butterfly.Game.Users.Inventory
 
         public void AddItem(Item item)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ItemDao.UpdateRoomIdAndUserId(dbClient, item.Id, 0, this._userInstance.Id);
             }

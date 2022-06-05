@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Roleplay.Troc
+﻿namespace Wibbo.Game.Roleplay.Troc
 {
     public class RPTroc
     {

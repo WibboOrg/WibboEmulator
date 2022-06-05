@@ -1,10 +1,10 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.LandingView.Promotions;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.LandingView.Promotions;
 using System.Data;
 
 
-namespace Butterfly.Game.LandingView
+namespace Wibbo.Game.LandingView
 {
     public class LandingViewManager
     {

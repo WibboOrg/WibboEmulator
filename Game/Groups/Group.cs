@@ -1,8 +1,8 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Groups
+namespace Wibbo.Game.Groups
 {
     public class Group
     {
@@ -61,7 +61,7 @@ namespace Butterfly.Game.Groups
 
         public void InitMembers()
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 DataTable GetMembers = GuildMembershipDao.GetAll(dbClient, this.Id);
 
@@ -160,7 +160,7 @@ namespace Butterfly.Game.Groups
 
             this._administrators.Add(userId);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 1);
             }
@@ -180,7 +180,7 @@ namespace Butterfly.Game.Groups
                 this._members.Add(userId);
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 0);
             }
@@ -188,7 +188,7 @@ namespace Butterfly.Game.Groups
 
         public void AddMember(int userId)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 if (this.IsAdmin(userId))
                 {
@@ -236,7 +236,7 @@ namespace Butterfly.Game.Groups
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 GuildMembershipDao.Delete(dbClient, this.Id, userId);
             }
@@ -244,7 +244,7 @@ namespace Butterfly.Game.Groups
 
         public void HandleRequest(int userId, bool Accepted)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 if (Accepted)
                 {

@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.Rooms.Wireds
+﻿namespace Wibbo.Communication.Packets.Outgoing.Rooms.Wireds
 {
     internal class WiredFurniTriggerComposer : ServerPacket
     {

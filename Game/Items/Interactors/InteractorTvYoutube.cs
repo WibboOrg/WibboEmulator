@@ -1,8 +1,8 @@
 ﻿
-using Butterfly.Communication.Packets.Outgoing.Televisions;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Televisions;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorTvYoutube : FurniInteractor
     {

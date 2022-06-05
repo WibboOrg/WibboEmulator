@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class StaffsOnline : IChatCommand
     {
@@ -9,7 +9,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
         {
             string Output = "Les staffs en ligne: \n\n";
 
-            List<Client> Staffs = ButterflyEnvironment.GetGame().GetClientManager().GetStaffUsers();
+            List<Client> Staffs = WibboEnvironment.GetGame().GetClientManager().GetStaffUsers();
 
             if (Staffs.Count > 0)
             {

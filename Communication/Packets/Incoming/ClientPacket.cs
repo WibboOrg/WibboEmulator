@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Butterfly.Communication.Packets.Incoming
+namespace Wibbo.Communication.Packets.Incoming
 {
     public class ClientPacket
     {

@@ -1,6 +1,6 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Moderation;
+﻿using Wibbo.Communication.Packets.Outgoing.Moderation;
 
-namespace Butterfly.Core
+namespace Wibbo.Core
 {
     public class ConsoleCommands
     {
@@ -23,7 +23,7 @@ namespace Butterfly.Core
                             ExceptionLogger.LogMessage("Server exiting at " + DateTime.Now);
                             ExceptionLogger.DisablePrimaryWriting(true);
                             Console.WriteLine("The server is saving users furniture, rooms, etc. WAIT FOR THE SERVER TO CLOSE, DO NOT EXIT THE PROCESS IN TASK MANAGER!!");
-                            ButterflyEnvironment.PreformShutDown();
+                            WibboEnvironment.PreformShutDown();
                             break;
                         }
 
@@ -37,7 +37,7 @@ namespace Butterfly.Core
                         {
                             string notice = inputData.Substring(6);
 
-                            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer(notice));
+                            WibboEnvironment.GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer(notice));
 
                             Console.WriteLine("Alert successfully sent.");
                             break;

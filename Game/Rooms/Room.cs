@@ -1,28 +1,28 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Pets;
-using Butterfly.Game.Roleplay;
-using Butterfly.Game.Rooms.AI;
-using Butterfly.Game.Chat.Logs;
-using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Rooms.Jankens;
-using Butterfly.Game.Rooms.Moodlight;
-using Butterfly.Game.Rooms.Projectile;
-using Butterfly.Game.Rooms.Wired;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
+using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Roleplay;
+using Wibbo.Game.Rooms.AI;
+using Wibbo.Game.Chat.Logs;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms.Jankens;
+using Wibbo.Game.Rooms.Moodlight;
+using Wibbo.Game.Rooms.Projectile;
+using Wibbo.Game.Rooms.Wired;
 using System.Data;
-using Butterfly.Utilities.Events;
-using Butterfly.Utilities;
-using Butterfly.Game.Rooms.Trading;
-using Butterfly.Communication.Interfaces;
+using Wibbo.Utilities.Events;
+using Wibbo.Utilities;
+using Wibbo.Game.Rooms.Trading;
+using Wibbo.Communication.Interfaces;
 
-namespace Butterfly.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     public delegate void RoomEventDelegate(object sender, EventArgs e);
     public delegate void RoomUserSaysDelegate(object sender, UserSaysArgs e, ref bool messageHandled);
@@ -93,7 +93,7 @@ namespace Butterfly.Game.Rooms
 
         public Room(RoomData Data)
         {
-            RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Data.OwnerId);
+            RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Data.OwnerId);
             if (RPManager != null)
             {
                 this.Roleplay = new RoomRoleplay();
@@ -364,7 +364,7 @@ namespace Butterfly.Game.Rooms
         private void LoadBots()
         {
             DataTable table;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 table = BotUserDao.GetOneByRoomId(dbClient, this.Id);
                 if (table == null)
@@ -386,7 +386,7 @@ namespace Butterfly.Game.Rooms
 
         public void InitPets()
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 DataTable table = BotPetDao.GetAllByRoomId(dbClient, this.Id);
                 if (table == null)
@@ -434,7 +434,7 @@ namespace Butterfly.Game.Rooms
         {
             this.UsersWithRights = new List<int>();
             DataTable dataTable = new DataTable();
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dataTable = RoomRightDao.GetAllByRoomId(dbClient, this.RoomData.Id);
             }
@@ -618,7 +618,7 @@ namespace Butterfly.Game.Rooms
                     {
                         if (this.IdleTime >= 60)
                         {
-                            ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
+                            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
 
                             return;
                         }
@@ -650,7 +650,7 @@ namespace Butterfly.Game.Rooms
                     else
                     {
                         this._saveFurnitureTimer = 0;
-                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             this.GetRoomItemHandler().SaveFurniture(dbClient);
                         }
@@ -938,7 +938,7 @@ namespace Butterfly.Game.Rooms
             }
             this._cancellationTokenSources.Clear();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 this.GetRoomItemHandler().SaveFurniture(dbClient);
             }
@@ -983,12 +983,12 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            this._bans.Add(pId, ButterflyEnvironment.GetUnixTimestamp() + Time);
+            this._bans.Add(pId, WibboEnvironment.GetUnixTimestamp() + Time);
         }
 
         public bool HasBanExpired(int pId)
         {
-            return !this.UserIsBanned(pId) || this._bans[pId] - ButterflyEnvironment.GetUnixTimestamp() <= 0.0;
+            return !this.UserIsBanned(pId) || this._bans[pId] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
         }
 
         public Dictionary<int, double> GetMute()
@@ -1013,12 +1013,12 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            this._mutes.Add(pId, ButterflyEnvironment.GetUnixTimestamp() + Time);
+            this._mutes.Add(pId, WibboEnvironment.GetUnixTimestamp() + Time);
         }
 
         public bool HasMuteExpired(int pId)
         {
-            return !this.UserIsMuted(pId) || this._mutes[pId] - ButterflyEnvironment.GetUnixTimestamp() <= 0.0;
+            return !this.UserIsMuted(pId) || this._mutes[pId] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
         }
 
         public bool HasActiveTrade(RoomUser User)
@@ -1087,7 +1087,7 @@ namespace Butterfly.Game.Rooms
         public void SetMaxUsers(int MaxUsers)
         {
             this.RoomData.UsersMax = MaxUsers;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoomDao.UpdateUsersMax(dbClient, this.Id, MaxUsers);
             }

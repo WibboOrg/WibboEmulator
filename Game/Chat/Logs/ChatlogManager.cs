@@ -1,8 +1,8 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Chat.Logs
+namespace Wibbo.Game.Chat.Logs
 {
     public class ChatlogManager
     {
@@ -32,7 +32,7 @@ namespace Butterfly.Game.Chat.Logs
         public void LoadRoomChatlogs(int roomId)
         {
             DataTable table;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 table = LogChatDao.GetAllByRoomId(dbClient, roomId);
                 if (table == null)

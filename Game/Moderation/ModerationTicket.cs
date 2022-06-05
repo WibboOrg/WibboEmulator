@@ -1,7 +1,7 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 
-namespace Butterfly.Game.Moderation
+namespace Wibbo.Game.Moderation
 {
     public class ModerationTicket
     {
@@ -61,7 +61,7 @@ namespace Butterfly.Game.Moderation
         public string GetNameById(int Id)
         {
             string username = "";
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 username = UserDao.GetNameById(dbClient, Id);
             }
@@ -73,14 +73,14 @@ namespace Butterfly.Game.Moderation
         {
             this.Status = TicketStatusType.PICKED;
             this.ModeratorId = moderatorId;
-            this.Timestamp = ButterflyEnvironment.GetUnixTimestamp();
+            this.Timestamp = WibboEnvironment.GetUnixTimestamp();
 
             if (!UpdateInDb)
             {
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ModerationTicketDao.UpdateStatusPicked(dbClient, moderatorId, this.Id);
             }
@@ -108,7 +108,7 @@ namespace Butterfly.Game.Moderation
                     break;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ModerationTicketDao.UpdateStatus(dbClient, str, this.Id);
             }
@@ -123,7 +123,7 @@ namespace Butterfly.Game.Moderation
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ModerationTicketDao.UpdateStatusOpen(dbClient, this.Id);
             }
@@ -138,7 +138,7 @@ namespace Butterfly.Game.Moderation
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 ModerationTicketDao.UpdateStatusDeleted(dbClient, this.Id);
             }

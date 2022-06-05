@@ -1,4 +1,4 @@
-﻿using Butterfly;
+﻿using Wibbo;
 using System.Collections;
 using System.Text;
 
@@ -140,7 +140,7 @@ namespace ConsoleWriter
         {
             try
             {
-                FileStream fileStream = new FileStream(ButterflyEnvironment.PatchDir + path, FileMode.Append, FileAccess.Write);
+                FileStream fileStream = new FileStream(WibboEnvironment.PatchDir + path, FileMode.Append, FileAccess.Write);
                 byte[] bytes = Encoding.ASCII.GetBytes(Environment.NewLine + content);
                 fileStream.Write(bytes, 0, bytes.Length);
                 fileStream.Dispose();

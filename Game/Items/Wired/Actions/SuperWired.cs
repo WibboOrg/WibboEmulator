@@ -1,26 +1,26 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Communication.Packets.Outgoing.Notifications;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Communication.Packets.Outgoing.Users;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Communication.Packets.Outgoing.Notifications;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Users;
 
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Roleplay;
-using Butterfly.Game.Roleplay.Enemy;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Items.Wired.Interfaces;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Roleplay;
+using Wibbo.Game.Roleplay.Enemy;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
-using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Rooms.AI;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Badges;
-using Butterfly.Communication.Packets.Outgoing.RolePlay;
-using Butterfly.Communication.Packets.Outgoing.Sound.SoundCustom;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms.AI;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Badges;
+using Wibbo.Communication.Packets.Outgoing.RolePlay;
+using Wibbo.Communication.Packets.Outgoing.Sound.SoundCustom;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
 
-namespace Butterfly.Game.Items.Wired.Actions
+namespace Wibbo.Game.Items.Wired.Actions
 {
     public class SuperWired : WiredActionBase, IWired, IWiredEffect
     {
@@ -261,11 +261,11 @@ namespace Butterfly.Game.Items.Wired.Actions
                         RPEnemy RPEnemyConfig;
                         if (!BotOrPet.IsPet)
                         {
-                            RPEnemyConfig = ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().GetEnemyBot(BotOrPet.BotData.Id);
+                            RPEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().GetEnemyBot(BotOrPet.BotData.Id);
                         }
                         else
                         {
-                            RPEnemyConfig = ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().GetEnemyPet(BotOrPet.BotData.Id);
+                            RPEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().GetEnemyPet(BotOrPet.BotData.Id);
                         }
 
                         if (RPEnemyConfig == null)
@@ -295,7 +295,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     RPEnemyConfig.Health = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
                                         RoleplayEnemyDao.UpdateHealth(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
@@ -322,7 +322,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     RPEnemyConfig.WeaponGunId = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
                                         RoleplayEnemyDao.UpdateWeaponFarId(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
@@ -349,7 +349,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     RPEnemyConfig.WeaponCacId = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
                                         RoleplayEnemyDao.UpdateWeaponCacId(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
@@ -376,7 +376,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     RPEnemyConfig.DeadTimer = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
                                         RoleplayEnemyDao.UpdateDeadTimer(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
@@ -403,7 +403,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     RPEnemyConfig.LootItemId = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
                                         RoleplayEnemyDao.UpdateLootItemId(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
@@ -430,7 +430,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     RPEnemyConfig.MoneyDrop = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
                                         RoleplayEnemyDao.UpdateMoneyDrop(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
@@ -457,7 +457,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     RPEnemyConfig.TeamId = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
                                         RoleplayEnemyDao.UpdateTeamId(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
@@ -484,7 +484,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     RPEnemyConfig.AggroDistance = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
                                         RoleplayEnemyDao.UpdateAggroDistance(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
@@ -511,7 +511,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     RPEnemyConfig.ZoneDistance = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
                                         RoleplayEnemyDao.UpdateZoneDistance(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
@@ -523,7 +523,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     RPEnemyConfig.ResetPosition = (Params[2] == "true");
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
                                         RoleplayEnemyDao.UpdateResetPosition(dbClient, RPEnemyConfig.Id, RPEnemyConfig.ResetPosition);
                                     }
@@ -550,7 +550,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     RPEnemyConfig.LostAggroDistance = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
                                         RoleplayEnemyDao.UpdateLostAggroDistance(dbClient, RPEnemyConfig.Id, ParamInt);
                                     }
@@ -562,7 +562,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     RPEnemyConfig.ZombieMode = (Params[2] == "true");
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                                     {
                                         RoleplayEnemyDao.UpdateZombieMode(dbClient, RPEnemyConfig.Id, RPEnemyConfig.ZombieMode);
                                     }
@@ -582,14 +582,14 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                         if (!BotOrPet.IsPet)
                         {
-                            ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().RemoveEnemyBot(BotOrPet.BotData.Id);
+                            WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().RemoveEnemyBot(BotOrPet.BotData.Id);
                             BotOrPet.BotData.RoleBot = null;
                             BotOrPet.BotData.AiType = BotAIType.Generic;
                             BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                         }
                         else
                         {
-                            ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().RemoveEnemyPet(BotOrPet.BotData.Id);
+                            WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().RemoveEnemyPet(BotOrPet.BotData.Id);
                             BotOrPet.BotData.RoleBot = null;
                             BotOrPet.BotData.AiType = BotAIType.Pet;
                             BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
@@ -606,7 +606,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                         if (!BotOrPet.IsPet)
                         {
-                            RPEnemy RPEnemyConfig = ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().AddEnemyBot(BotOrPet.BotData.Id);
+                            RPEnemy RPEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().AddEnemyBot(BotOrPet.BotData.Id);
                             if (RPEnemyConfig != null)
                             {
                                 BotOrPet.BotData.RoleBot = new RoleBot(RPEnemyConfig);
@@ -616,7 +616,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                         }
                         else
                         {
-                            RPEnemy RPEnemyConfig = ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().AddEnemyPet(BotOrPet.BotData.Id);
+                            RPEnemy RPEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().AddEnemyPet(BotOrPet.BotData.Id);
                             if (RPEnemyConfig != null)
                             {
                                 BotOrPet.BotData.RoleBot = new RoleBot(RPEnemyConfig);
@@ -655,7 +655,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         if (int.TryParse(value, out int RoomId))
                         {
-                            Room roomTarget = ButterflyEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
+                            Room roomTarget = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
                             if (roomTarget != null && roomTarget.RoomData.OwnerId == this.RoomInstance.RoomData.OwnerId)
                             {
                                 user.GetClient().GetUser().IsTeleporting = true;
@@ -669,7 +669,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         int.TryParse(value, out int ItemId);
 
-                        RPItem RpItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
+                        RPItem RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
                         if (RpItem == null)
                         {
                             break;
@@ -682,7 +682,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     {
                         int.TryParse(value, out int ItemId);
 
-                        RPItem RpItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
+                        RPItem RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
                         if (RpItem == null)
                         {
                             break;
@@ -731,7 +731,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                     continue;
                                 }
 
-                                RPItem RpItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(Id);
+                                RPItem RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(Id);
                                 if (RpItem == null)
                                 {
                                     continue;
@@ -748,7 +748,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                 break;
                             }
 
-                            RPItem RpItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(Id);
+                            RPItem RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(Id);
                             if (RpItem == null)
                             {
                                 break;
@@ -788,7 +788,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             Nb = 0;
                         }
 
-                        Rp.WeaponGun = ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(Nb);
+                        Rp.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(Nb);
 
                         break;
                     }
@@ -801,7 +801,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             Nb = 0;
                         }
 
-                        Rp.WeaponCac = ButterflyEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(Nb);
+                        Rp.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(Nb);
                         break;
                     }
                 case "pvp":
@@ -1064,7 +1064,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             return;
                         }
 
-                        if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, false))
+                        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, false))
                         {
                             return;
                         }
@@ -1176,7 +1176,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                                     int.TryParse(Params[2], out int IntValue);
 
-                                    if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
+                                    if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
                                     {
                                         return;
                                     }
@@ -1329,7 +1329,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                 case "jackanddaisy":
                     {
                         RoomUser Bot;
-                        if (ButterflyEnvironment.GetRandomNumber(0, 1) == 1)
+                        if (WibboEnvironment.GetRandomNumber(0, 1) == 1)
                         {
                             Bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName("Jack");
                         }
@@ -1425,7 +1425,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                 }
                         }
 
-                        string TextMessage = Phrases[ButterflyEnvironment.GetRandomNumber(0, Phrases.Count - 1)];
+                        string TextMessage = Phrases[WibboEnvironment.GetRandomNumber(0, Phrases.Count - 1)];
                         if (user != null)
                         {
                             TextMessage = TextMessage.Replace("#username#", user.GetUsername());
@@ -1613,7 +1613,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                                 continue;
                             }
 
-                            RoomData RoomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+                            RoomData RoomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
 
                             if (RoomData == null)
                             {
@@ -1948,7 +1948,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             return;
                         }
 
-                        if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, false))
+                        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, false))
                         {
                             return;
                         }
@@ -1963,7 +1963,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             return;
                         }
 
-                        if (!ButterflyEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, true))
+                        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, true))
                         {
                             return;
                         }
@@ -2117,7 +2117,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                     }
                 case "achievement":
                     {
-                        ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), Value, 1);
+                        WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), Value, 1);
                         break;
                     }
                 case "winmovierun":
@@ -2133,7 +2133,7 @@ namespace Butterfly.Game.Items.Wired.Actions
                             break;
                         }
 
-                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             UserDao.UpdateAddRunPoints(dbClient, user.GetClient().GetUser().Id);
                         }
@@ -2166,36 +2166,36 @@ namespace Butterfly.Game.Items.Wired.Actions
 
                         user.WiredGivelot = true;
 
-                        if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(12018410, out ItemData ItemData))
+                        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(12018410, out ItemData ItemData))
                         {
                             break;
                         }
 
-                        int NbLot = ButterflyEnvironment.GetRandomNumber(1, 3);
+                        int NbLot = WibboEnvironment.GetRandomNumber(1, 3);
 
                         if (user.GetClient().GetUser().Rank > 1)
                         {
-                            NbLot = ButterflyEnvironment.GetRandomNumber(3, 5);
+                            NbLot = WibboEnvironment.GetRandomNumber(3, 5);
                         }
 
-                        int NbLotDeluxe = ButterflyEnvironment.GetRandomNumber(1, 4);
+                        int NbLotDeluxe = WibboEnvironment.GetRandomNumber(1, 4);
                         if (user.GetClient().GetUser().Rank > 1)
                         {
-                            NbLotDeluxe = ButterflyEnvironment.GetRandomNumber(3, 4);
+                            NbLotDeluxe = WibboEnvironment.GetRandomNumber(3, 4);
                         }
 
-                        int NbBadge = ButterflyEnvironment.GetRandomNumber(1, 2);
+                        int NbBadge = WibboEnvironment.GetRandomNumber(1, 2);
                         if (user.GetClient().GetUser().Rank > 1)
                         {
-                            NbBadge = ButterflyEnvironment.GetRandomNumber(2, 3);
+                            NbBadge = WibboEnvironment.GetRandomNumber(2, 3);
                         }
 
-                        if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(91947063, out ItemData ItemDataBadge))
+                        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(91947063, out ItemData ItemDataBadge))
                         {
                             return;
                         }
 
-                        if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(618784, out ItemData ItemDataDeluxe))
+                        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(618784, out ItemData ItemDataDeluxe))
                         {
                             return;
                         }
@@ -2216,15 +2216,15 @@ namespace Butterfly.Game.Items.Wired.Actions
                         }
 
                         string DeluxeMessage = (NbLotDeluxe == 4) ? " Et une RareBox Deluxe !" : "";
-                        user.GetClient().SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", user.GetClient().Langue), NbLot, NbBadge) + DeluxeMessage);
+                        user.GetClient().SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", user.GetClient().Langue), NbLot, NbBadge) + DeluxeMessage);
 
-                        using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
                             UserDao.UpdateAddGamePoints(dbClient, user.GetClient().GetUser().Id);
                         }
 
-                        ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), "ACH_Extrabox", 1);
-                        ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, user.Room.RoomData.OwnerName, user.RoomId, string.Empty, "givelot", "SuperWired givelot: " + user.GetUsername());
+                        WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), "ACH_Extrabox", 1);
+                        WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, user.Room.RoomData.OwnerName, user.RoomId, string.Empty, "givelot", "SuperWired givelot: " + user.GetUsername());
 
                         break;
                     }

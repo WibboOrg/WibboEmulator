@@ -1,10 +1,10 @@
-﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.PathFinding;
-using Butterfly.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.PathFinding;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Items.Wired.Conditions
+namespace Wibbo.Game.Items.Wired.Conditions
 {
     public class HasFurniOnFurniNegative : WiredConditionBase, IWiredCondition, IWired
     {

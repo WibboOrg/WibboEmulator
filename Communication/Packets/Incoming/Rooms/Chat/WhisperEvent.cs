@@ -1,11 +1,11 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
 
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Chat.Styles;
-using Butterfly.Utilities;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Chat.Styles;
+using Wibbo.Utilities;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class WhisperEvent : IPacketEvent
     {
@@ -52,7 +52,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             string Message = Params.Substring(ToUser.Length + 1);
             int Color = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Color, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !Session.GetUser().HasFuse(Style.RequiredRight)))
+            if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Color, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !Session.GetUser().HasFuse(Style.RequiredRight)))
             {
                 Color = 0;
             }
@@ -64,7 +64,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (!Session.GetUser().HasFuse("word_filter_override"))
             {
-                Message = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
+                Message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
             }
 
             RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
@@ -207,7 +207,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         return;
                     }
 
-                    WhisperComposer MessageWhipser = new WhisperComposer(User.VirtualId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, Color);
+                    WhisperComposer MessageWhipser = new WhisperComposer(User.VirtualId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, Color);
                
                     foreach (RoomUser roomUser in roomUserByRank)
                     {
@@ -246,7 +246,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         return;
                     }
 
-                    WhisperComposer MessageWhipserStaff = new WhisperComposer(User.VirtualId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, Color);
+                    WhisperComposer MessageWhipserStaff = new WhisperComposer(User.VirtualId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, Color);
                     foreach (RoomUser roomUser in roomUserByRank)
                     {
                         if (roomUser != null && roomUser.GetClient() != null && roomUser.GetClient().GetUser() != null && roomUser.UserId != User.UserId && roomUser.GetClient() != null && roomUser.GetClient().GetUser().ViewMurmur && UserWhiper.UserId != roomUser.UserId)
@@ -256,8 +256,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     }
                 }
 
-                Session.GetUser().GetChatMessageManager().AddMessage(User.UserId, User.GetUsername(), User.RoomId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, UnixTimestamp.GetNow());
-                Room.GetChatMessageManager().AddMessage(User.UserId, User.GetUsername(), User.RoomId, ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, UnixTimestamp.GetNow());
+                Session.GetUser().GetChatMessageManager().AddMessage(User.UserId, User.GetUsername(), User.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, UnixTimestamp.GetNow());
+                Room.GetChatMessageManager().AddMessage(User.UserId, User.GetUsername(), User.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", Session.Langue) + ToUser + ": " + Message, UnixTimestamp.GetNow());
             }
         }
     }

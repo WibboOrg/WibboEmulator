@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Users
+namespace Wibbo.Communication.Packets.Outgoing.Users
 {
     internal class NameChangeUpdateComposer : ServerPacket
     {
@@ -46,12 +46,12 @@ namespace Butterfly.Communication.Packets.Outgoing.Users
                 return -2;
             }
 
-            if (!ButterflyEnvironment.IsValidAlphaNumeric(Username))
+            if (!WibboEnvironment.IsValidAlphaNumeric(Username))
             {
                 return -1;
             }
 
-            return ButterflyEnvironment.UsernameExists(Username) ? 0 : 1;
+            return WibboEnvironment.UsernameExists(Username) ? 0 : 1;
         }
     }
 }

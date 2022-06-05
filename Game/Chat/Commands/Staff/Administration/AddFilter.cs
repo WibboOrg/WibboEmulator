@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class AddFilter : IChatCommand
     {
@@ -12,7 +12,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            ButterflyEnvironment.GetGame().GetChatManager().GetFilter().AddFilterPub(Params[1].ToLower());
+            WibboEnvironment.GetGame().GetChatManager().GetFilter().AddFilterPub(Params[1].ToLower());
             Session.SendWhisper("Le mot" + Params[1] + " vient d'être ajouté au filtre");
         }
     }

@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Catalog.Marketplace;
+﻿using Wibbo.Game.Catalog.Marketplace;
 
-namespace Butterfly.Communication.Packets.Outgoing.MarketPlace
+namespace Wibbo.Communication.Packets.Outgoing.MarketPlace
 {
     internal class MarketPlaceOffersComposer : ServerPacket
     {
@@ -24,7 +24,7 @@ namespace Butterfly.Communication.Packets.Outgoing.MarketPlace
 
                     this.WriteInteger(pair.Value.TotalPrice);
                     this.WriteInteger(0);
-                    this.WriteInteger(ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().AvgPriceForSprite(pair.Value.SpriteId));
+                    this.WriteInteger(WibboEnvironment.GetGame().GetCatalog().GetMarketplace().AvgPriceForSprite(pair.Value.SpriteId));
                     this.WriteInteger(dictionary2[pair.Value.SpriteId]);
                 }
             }

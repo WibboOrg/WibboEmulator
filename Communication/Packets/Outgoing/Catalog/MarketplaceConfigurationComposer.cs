@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.Catalog
+﻿namespace Wibbo.Communication.Packets.Outgoing.Catalog
 {
     internal class MarketplaceConfigurationComposer : ServerPacket
     {

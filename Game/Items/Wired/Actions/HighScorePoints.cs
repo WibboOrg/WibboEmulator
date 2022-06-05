@@ -1,11 +1,11 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Items.Wired.Actions
+namespace Wibbo.Game.Items.Wired.Actions
 {
     public class HighScorePoints : WiredActionBase, IWired, IWiredEffect
     {
@@ -45,7 +45,7 @@ namespace Butterfly.Game.Items.Wired.Actions
         {
             base.Dispose();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 this.SaveToDatabase(dbClient);
             }

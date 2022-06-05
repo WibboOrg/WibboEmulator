@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class LoadVideo : IChatCommand
     {
@@ -15,7 +15,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             string Url = Params[1];
             if (string.IsNullOrEmpty(Url) || (!Url.Contains("?v=") && !Url.Contains("youtu.be/"))) //https://youtu.be/_mNig3ZxYbM
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.loadvideo.incorrect", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.loadvideo.incorrect", Session.Langue));
                 UserRoom.LoaderVideoId = "";
                 return;
             }
@@ -33,12 +33,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (Split.Length < 11)
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.loadvideo.incorrect", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.loadvideo.incorrect", Session.Langue));
                 return;
             }
             UserRoom.LoaderVideoId = Split.Substring(0, 11);
 
-            Session.SendWhisper(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.loadvideo", Session.Langue), UserRoom.LoaderVideoId));
+            Session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.loadvideo", Session.Langue), UserRoom.LoaderVideoId));
 
         }
     }

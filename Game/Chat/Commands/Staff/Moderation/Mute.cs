@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Users;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Users;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Mute : IChatCommand
     {
@@ -14,14 +14,14 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
             }
             else if (TargetUser.GetUser().Rank >= Session.GetUser().Rank)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
             }
             else
             {

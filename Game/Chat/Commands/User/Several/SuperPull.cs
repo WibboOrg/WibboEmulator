@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class SuperPull : IChatCommand
     {
@@ -37,7 +37,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (TargetUser.GetClient().GetUser().PremiumProtect && !Session.GetUser().HasFuse("fuse_mod"))
             {
-                roomuser.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
+                roomuser.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
                 return;
             }
 

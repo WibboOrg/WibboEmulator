@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Roleplay.Item;
+﻿using Wibbo.Game.Roleplay.Item;
 
-namespace Butterfly.Game.Roleplay
+namespace Wibbo.Game.Roleplay
 {
     public class RPItem
     {

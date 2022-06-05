@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Items
+﻿namespace Wibbo.Game.Items
 {
     public class ItemData
     {

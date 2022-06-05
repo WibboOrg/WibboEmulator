@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Roleplay;
+﻿using Wibbo.Game.Roleplay;
 
-namespace Butterfly.Communication.Packets.Outgoing.RolePlay.Troc
+namespace Wibbo.Communication.Packets.Outgoing.RolePlay.Troc
 {
     internal class RpTrocUpdateItemsComposer : ServerPacket
     {
@@ -12,7 +12,7 @@ namespace Butterfly.Communication.Packets.Outgoing.RolePlay.Troc
 
             foreach (KeyValuePair<int, int> Item in Items)
             {
-                RPItem RpItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(Item.Key);
+                RPItem RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(Item.Key);
 
                 this.WriteInteger(Item.Key);
                 this.WriteString((RpItem == null) ? "" : RpItem.Name);

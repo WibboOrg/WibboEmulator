@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
 
-namespace Butterfly.Communication.RCON.Commands.User
+namespace Wibbo.Communication.RCON.Commands.User
 {
     internal class AddPhotoCommand : IRCONCommand
     {
@@ -24,7 +24,7 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
             if (Client == null)
             {
                 return false;
@@ -32,23 +32,23 @@ namespace Butterfly.Communication.RCON.Commands.User
 
             string PhotoId = parameters[2];
 
-            if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(4581, out ItemData ItemData))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(4581, out ItemData ItemData))
             {
                 return false;
             }
 
-            int Time = ButterflyEnvironment.GetUnixTimestamp();
+            int Time = WibboEnvironment.GetUnixTimestamp();
             string ExtraData = "{\"w\":\"" + "/photos/" + PhotoId + ".png" + "\", \"n\":\"" + Client.GetUser().Username + "\", \"s\":\"" + Client.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
 
             Item Item = ItemFactory.CreateSingleItemNullable(ItemData, Client.GetUser(), ExtraData);
             Client.GetUser().GetInventoryComponent().TryAddItem(Item);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserPhotoDao.Insert(dbClient, Client.GetUser().Id, PhotoId, Time);
             }
 
-            Client.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.valide", Client.Langue));
+            Client.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.valide", Client.Langue));
 
             return true;
         }

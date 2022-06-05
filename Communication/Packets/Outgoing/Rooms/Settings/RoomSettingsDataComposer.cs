@@ -1,6 +1,6 @@
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Settings
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Settings
 {
     internal class RoomSettingsDataComposer : ServerPacket
     {

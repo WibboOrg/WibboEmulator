@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Moderation;
-using Butterfly.Game.Chat.Logs;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Moderation;
+using Wibbo.Game.Chat.Logs;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetModeratorRoomChatlogEvent : IPacketEvent
     {
@@ -19,7 +19,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             Packet.PopInt(); //useless
             int roomID = Packet.PopInt();
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(roomID);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(roomID);
             if (room == null)
             {
                 return;

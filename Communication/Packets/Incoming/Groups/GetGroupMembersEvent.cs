@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Groups;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Users;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Users;
 using System.Data;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetGroupMembersEvent : IPacketEvent
     {
@@ -24,7 +24,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             string SearchVal = Packet.PopString();
             int RequestType = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
             {
                 return;
             }
@@ -49,7 +49,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     foreach (int Id in MemberIds.ToList())
                     {
-                        User GroupMember = ButterflyEnvironment.GetUserById(Id);
+                        User GroupMember = WibboEnvironment.GetUserById(Id);
                         if (GroupMember == null)
                         {
                             continue;
@@ -75,7 +75,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     foreach (int User in AdminIds.ToList())
                     {
-                        User GroupMember = ButterflyEnvironment.GetUserById(User);
+                        User GroupMember = WibboEnvironment.GetUserById(User);
                         if (GroupMember == null)
                         {
                             continue;
@@ -101,7 +101,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     foreach (int Id in RequestIds.ToList())
                     {
-                        User GroupMember = ButterflyEnvironment.GetUserById(Id);
+                        User GroupMember = WibboEnvironment.GetUserById(Id);
                         if (GroupMember == null)
                         {
                             continue;
@@ -123,7 +123,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             List<int> MembersId = new List<int>();
 
             DataTable MembresTable = null;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 MembresTable = GuildRequestDao.GetAllBySearch(dbClient, groupeId, searchVal);
 
             foreach (DataRow row in MembresTable.Rows)
@@ -142,7 +142,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             List<int> MembersId = new List<int>();
 
             DataTable MembresTable = null;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 MembresTable = GuildMembershipDao.GetAllUserIdBySearchAndStaff(dbClient, GroupeId, SearchVal);
 
             foreach (DataRow row in MembresTable.Rows)
@@ -161,7 +161,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             List<int> MembersId = new List<int>();
 
             DataTable MembresTable = null;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 MembresTable = GuildMembershipDao.GetAllUserIdBySearch(dbClient, GroupeId, SearchVal);
             }

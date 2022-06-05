@@ -1,29 +1,29 @@
-﻿using Butterfly.Communication.Packets.Outgoing.GameCenter;
-using Butterfly.Communication.Packets.Outgoing.Handshake;
-using Butterfly.Communication.Packets.Outgoing.Inventory.AvatarEffects;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Avatar;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
+﻿using Wibbo.Communication.Packets.Outgoing.GameCenter;
+using Wibbo.Communication.Packets.Outgoing.Handshake;
+using Wibbo.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Permissions;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
 
-using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Pets;
-using Butterfly.Game.Quests;
-using Butterfly.Game.Roleplay;
-using Butterfly.Game.Roleplay.Enemy;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms.AI;
-using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Rooms.PathFinding;
+using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Roleplay;
+using Wibbo.Game.Roleplay.Enemy;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms.AI;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms.Map.Movement;
+using Wibbo.Game.Rooms.PathFinding;
 using System.Collections.Concurrent;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     public delegate void UserAndItemDelegate(RoomUser user, Item item);
 
@@ -135,11 +135,11 @@ namespace Butterfly.Game.Rooms
                 RPEnemy Enemy;
                 if (Bot.IsPet)
                 {
-                    Enemy = ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().GetEnemyPet(Bot.Id);
+                    Enemy = WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().GetEnemyPet(Bot.Id);
                 }
                 else
                 {
-                    Enemy = ButterflyEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().GetEnemyBot(Bot.Id);
+                    Enemy = WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().GetEnemyBot(Bot.Id);
                 }
 
                 if (Enemy != null)
@@ -292,7 +292,7 @@ namespace Butterfly.Game.Rooms
                         User.ApplyEffect(29);
                         if (User.GetClient() != null)
                         {
-                            ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 1948);
+                            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 1948);
                         }
 
                         User.CurrentItemEffect = itemEffectType;
@@ -325,7 +325,7 @@ namespace Butterfly.Game.Rooms
                         User.CurrentItemEffect = ItemEffectType.ICESKATES;
                         if (User.GetClient() != null)
                         {
-                            ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 1413);
+                            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 1413);
                         }
 
                         break;
@@ -349,7 +349,7 @@ namespace Butterfly.Game.Rooms
                         User.CurrentItemEffect = itemEffectType;
                         if (User.GetClient() != null)
                         {
-                            ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 2199);
+                            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.EXPLORE_FIND_ITEM, 2199);
                         }
 
                         break;
@@ -567,14 +567,14 @@ namespace Butterfly.Game.Rooms
 
             if (!User.IsBot && this._room.RoomData.OwnerName != User.GetClient().GetUser().Username)
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.SOCIAL_VISIT, 0);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.SOCIAL_VISIT, 0);
             }
 
             if (!User.IsBot)
             {
                 if (Session.GetUser().RolePlayId > 0 && this._room.RoomData.OwnerId != Session.GetUser().RolePlayId)
                 {
-                    RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Session.GetUser().RolePlayId);
+                    RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Session.GetUser().RolePlayId);
                     if (RPManager != null)
                     {
                         RolePlayer Rp = RPManager.GetPlayer(Session.GetUser().Id);
@@ -588,7 +588,7 @@ namespace Butterfly.Game.Rooms
 
                 if (this._room.IsRoleplay && this._room.RoomData.OwnerId != Session.GetUser().RolePlayId)
                 {
-                    RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.RoomData.OwnerId);
+                    RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.RoomData.OwnerId);
                     if (RPManager != null)
                     {
                         RolePlayer Rp = RPManager.GetPlayer(Session.GetUser().Id);
@@ -679,7 +679,7 @@ namespace Butterfly.Game.Rooms
 
                 if (User.Roleplayer != null)
                 {
-                    ButterflyEnvironment.GetGame().GetRoleplayManager().GetTrocManager().RemoveTrade(User.Roleplayer.TradeId);
+                    WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().RemoveTrade(User.Roleplayer.TradeId);
                 }
 
                 if (User.IsSpectator)
@@ -735,7 +735,7 @@ namespace Butterfly.Game.Rooms
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoomDao.UpdateUsersNow(dbClient, this._room.Id, count);
             }
@@ -1320,7 +1320,7 @@ namespace Butterfly.Game.Rooms
 
                 if (this._room.IsRoleplay)
                 {
-                    RolePlayerManager RPManager = ButterflyEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.RoomData.OwnerId);
+                    RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.RoomData.OwnerId);
                     if (RPManager != null)
                     {
                         if (User.IsBot)
@@ -1452,7 +1452,7 @@ namespace Butterfly.Game.Rooms
 
             foreach (RoomUser user in ToRemove)
             {
-                Client clientByUserId = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(user.UserId);
+                Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(user.UserId);
                 if (clientByUserId != null)
                 {
                     this.RemoveUserFromRoom(clientByUserId, true, false);
@@ -1610,7 +1610,7 @@ namespace Butterfly.Game.Rooms
                         Rp.SendUpdate();
                         if (User.GetClient() != null)
                         {
-                            User.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.pickdollard", User.GetClient().Langue), ItemTmp.Value));
+                            User.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.pickdollard", User.GetClient().Langue), ItemTmp.Value));
                         }
 
                         User.OnChat("*Récupère un objet au sol*");
@@ -1618,14 +1618,14 @@ namespace Butterfly.Game.Rooms
                     }
                     else if (ItemTmp != null && ItemTmp.InteractionType == InteractionTypeTemp.RPITEM)
                     {
-                        RPItem RpItem = ButterflyEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemTmp.Value);
+                        RPItem RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemTmp.Value);
                         if (RpItem != null)
                         {
                             if (!RpItem.AllowStack && Rp.GetInventoryItem(RpItem.Id) != null)
                             {
                                 if (User.GetClient() != null)
                                 {
-                                    User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.itemown", User.GetClient().Langue));
+                                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itemown", User.GetClient().Langue));
                                 }
                             }
                             else
@@ -1634,7 +1634,7 @@ namespace Butterfly.Game.Rooms
 
                                 if (User.GetClient() != null)
                                 {
-                                    User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.itempick", User.GetClient().Langue));
+                                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itempick", User.GetClient().Langue));
                                 }
                             }
                         }

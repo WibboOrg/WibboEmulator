@@ -1,9 +1,9 @@
-﻿using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Users.Authenticator
+namespace Wibbo.Game.Users.Authenticator
 {
     public class UserFactory
     {
@@ -17,7 +17,7 @@ namespace Butterfly.Game.Users.Authenticator
                 double ignoreAllExpire = 0;
                 bool changeName = false;
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     dUserInfo = UserDao.GetOneByTicket(dbClient, sessionTicket);
                     if (dUserInfo == null)
@@ -39,9 +39,9 @@ namespace Butterfly.Game.Users.Authenticator
 
                     userId = Convert.ToInt32(dUserInfo["id"]);
                     string username = (string)dUserInfo["username"];
-                    if (ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId) != null)
+                    if (WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId) != null)
                     {
-                        ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId).Disconnect();
+                        WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId).Disconnect();
                         return null;
                     }
 
@@ -92,12 +92,12 @@ namespace Butterfly.Game.Users.Authenticator
             DataRow dUserInfo;
             DataRow dUserStats;
 
-            if (ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId) != null)
+            if (WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId) != null)
             {
                 return null;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 dUserInfo = UserDao.GetOne(dbClient, userId);
                 if (dUserInfo == null)
@@ -132,23 +132,23 @@ namespace Butterfly.Game.Users.Authenticator
             int ActivityPoints = Convert.ToInt32(dRow["activity_points"]);
             int HomeRoom = Convert.ToInt32(dRow["home_room"]);
             int accountCreated = Convert.ToInt32(dRow["account_created"]);
-            bool AcceptTrading = ButterflyEnvironment.EnumToBool(dRow["accept_trading"].ToString());
+            bool AcceptTrading = WibboEnvironment.EnumToBool(dRow["accept_trading"].ToString());
             string Ip = dRow["ip_last"].ToString();
-            bool HideInroom = ButterflyEnvironment.EnumToBool(dRow["hide_inroom"].ToString());
-            bool HideOnline = ButterflyEnvironment.EnumToBool(dRow["hide_online"].ToString());
+            bool HideInroom = WibboEnvironment.EnumToBool(dRow["hide_inroom"].ToString());
+            bool HideOnline = WibboEnvironment.EnumToBool(dRow["hide_online"].ToString());
             int MazoHighScore = Convert.ToInt32(dRow["mazoscore"]);
             int Mazo = Convert.ToInt32(dRow["mazo"]);
             string clientVolume = (string)dRow["volume"];
-            bool NuxEnable = ButterflyEnvironment.EnumToBool(dRow["nux_enable"].ToString());
-            bool IgnoreRoomInvite = ButterflyEnvironment.EnumToBool(dRow["ignore_room_invite"].ToString());
-            bool CameraFollowDisabled = ButterflyEnvironment.EnumToBool(dRow["camera_follow_disabled"].ToString());
+            bool NuxEnable = WibboEnvironment.EnumToBool(dRow["nux_enable"].ToString());
+            bool IgnoreRoomInvite = WibboEnvironment.EnumToBool(dRow["ignore_room_invite"].ToString());
+            bool CameraFollowDisabled = WibboEnvironment.EnumToBool(dRow["camera_follow_disabled"].ToString());
             string MachineId = (string)dRow["machine_id"];
             Language Langue = LanguageManager.ParseLanguage((string)dRow["langue"]);
 
             int Respect = Convert.ToInt32(dRow2["respect"]);
             int DailyRespectPoints = Convert.ToInt32(dRow2["daily_respect_points"]);
             int DailyPetRespectPoints = Convert.ToInt32(dRow2["daily_pet_respect_points"]);
-            bool HasFriendRequestsDisabled = ButterflyEnvironment.EnumToBool(dRow["block_newfriends"].ToString());
+            bool HasFriendRequestsDisabled = WibboEnvironment.EnumToBool(dRow["block_newfriends"].ToString());
             int currentQuestID = Convert.ToInt32(dRow2["quest_id"]);
             int achievementPoints = Convert.ToInt32(dRow2["achievement_score"]);
             int FavoriteGroup = Convert.ToInt32(dRow2["group_id"]);

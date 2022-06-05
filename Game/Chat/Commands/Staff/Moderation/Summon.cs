@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Summon : IChatCommand
     {
@@ -13,10 +13,10 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client TargetUser = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));
                 return;
             }
             else if (TargetUser.GetUser().CurrentRoom != null && TargetUser.GetUser().CurrentRoom.Id == Session.GetUser().CurrentRoom.Id)

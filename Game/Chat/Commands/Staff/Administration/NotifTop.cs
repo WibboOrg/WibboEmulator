@@ -1,9 +1,9 @@
 ﻿
-using Butterfly.Communication.Packets.Outgoing.Notifications.NotifCustom;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Notifications.NotifCustom;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class NotifTop : IChatCommand
     {
@@ -15,7 +15,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            ButterflyEnvironment.GetGame().GetClientManager().SendMessage(new NotifTopComposer(Message));
+            WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifTopComposer(Message));
         }
     }
 }

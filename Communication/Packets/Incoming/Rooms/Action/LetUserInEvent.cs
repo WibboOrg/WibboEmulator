@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class LetUserInEvent : IPacketEvent
     {
@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null || !room.CheckRights(Session))
             {
                 return;
@@ -25,7 +25,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             string username = Packet.PopString();
             bool allowUserToEnter = Packet.PopBoolean();
 
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
+            Client clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
             if (clientByUsername == null || clientByUsername.GetUser() == null)
             {
                 return;

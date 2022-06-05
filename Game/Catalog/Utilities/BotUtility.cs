@@ -1,22 +1,22 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Items;
-using Butterfly.Game.Rooms.AI;
-using Butterfly.Game.Users.Inventory.Bots;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Items;
+using Wibbo.Game.Rooms.AI;
+using Wibbo.Game.Users.Inventory.Bots;
 using System.Data;
 
-namespace Butterfly.Game.Catalog.Utilities
+namespace Wibbo.Game.Catalog.Utilities
 {
     public static class BotUtility
     {
         public static Bot CreateBot(ItemData Data, int OwnerId)
         {
-            if (!ButterflyEnvironment.GetGame().GetCatalog().TryGetBot(Data.Id, out CatalogBot CataBot))
+            if (!WibboEnvironment.GetGame().GetCatalog().TryGetBot(Data.Id, out CatalogBot CataBot))
             {
                 return null;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 int Id = BotUserDao.InsertAndGetId(dbClient, OwnerId, CataBot.Name, CataBot.Motto, CataBot.Figure, CataBot.Gender);
 

@@ -1,22 +1,22 @@
-using Butterfly.Game.Moderation;
-using Butterfly.Game.Users;
+using Wibbo.Game.Moderation;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Outgoing.Moderation
+namespace Wibbo.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorSupportTicketComposer : ServerPacket
     {
         public ModeratorSupportTicketComposer(ModerationTicket ticket)
             : base(ServerPacketHeader.ISSUE_INFO)
         {
-            User userReported = ButterflyEnvironment.GetUserById(ticket.ReportedId);
-            User userSender = ButterflyEnvironment.GetUserById(ticket.SenderId);
-            User userModerator = ButterflyEnvironment.GetUserById(ticket.ModeratorId);
+            User userReported = WibboEnvironment.GetUserById(ticket.ReportedId);
+            User userSender = WibboEnvironment.GetUserById(ticket.SenderId);
+            User userModerator = WibboEnvironment.GetUserById(ticket.ModeratorId);
 
             WriteInteger(ticket.Id);
             WriteInteger(ticket.TabId);
             WriteInteger(3);
             WriteInteger(ticket.Type);
-            WriteInteger((int)(ButterflyEnvironment.GetUnixTimestamp() - ticket.Timestamp) * 1000);
+            WriteInteger((int)(WibboEnvironment.GetUnixTimestamp() - ticket.Timestamp) * 1000);
             WriteInteger(ticket.Score);
             WriteInteger(ticket.SenderId);
             WriteInteger(ticket.SenderId);

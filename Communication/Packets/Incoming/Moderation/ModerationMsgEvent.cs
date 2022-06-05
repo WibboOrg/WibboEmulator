@@ -1,6 +1,6 @@
-using Butterfly.Game.Clients;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class ModerationMsgEvent : IPacketEvent
     {
@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int userId = Packet.PopInt();
             string message = Packet.PopString();
 
-            Client clientTarget = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            Client clientTarget = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
             if (clientTarget == null)
                 return;
 
@@ -27,7 +27,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (clientTarget.GetUser().Rank >= Session.GetUser().Rank)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("moderation.caution.missingrank", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("moderation.caution.missingrank", Session.Langue));
             }
 
             if (Session.Antipub(message, "<MT>"))
@@ -35,7 +35,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, "ModTool", string.Format("Modtool alert ( {1} ): {0}", message, clientTarget.GetUser().Username));
+            WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, "ModTool", string.Format("Modtool alert ( {1} ): {0}", message, clientTarget.GetUser().Username));
 
             clientTarget.SendNotification(message);
         }

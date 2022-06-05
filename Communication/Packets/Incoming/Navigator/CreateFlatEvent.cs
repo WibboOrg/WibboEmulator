@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
 
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class CreateFlatEvent : IPacketEvent
     {
@@ -39,7 +39,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 TradeSettings = 0;
             }
 
-            RoomData NewRoom = ButterflyEnvironment.GetGame().GetRoomManager().CreateRoom(Session, Name, Description, RoomModel, Category, MaxVisitors, TradeSettings);
+            RoomData NewRoom = WibboEnvironment.GetGame().GetRoomManager().CreateRoom(Session, Name, Description, RoomModel, Category, MaxVisitors, TradeSettings);
             if (NewRoom == null)
             {
                 return;

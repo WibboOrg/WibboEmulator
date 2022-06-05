@@ -1,11 +1,11 @@
-using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class GiveLot : IChatCommand
     {
@@ -25,45 +25,45 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(Params[1]);
             if (roomUserByUserId == null || roomUserByUserId.GetClient() == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
                 return;
             }
             if (roomUserByUserId.GetUsername() == Session.GetUser().Username || roomUserByUserId.GetClient().GetUser().IP == Session.GetUser().IP)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", Session.Langue));
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + roomUserByUserId.GetUsername());
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", Session.Langue));
+                WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + roomUserByUserId.GetUsername());
                 return;
             }
 
-            int NbLot = ButterflyEnvironment.GetRandomNumber(1, 3);
+            int NbLot = WibboEnvironment.GetRandomNumber(1, 3);
             if (roomUserByUserId.GetClient().GetUser().Rank > 1)
             {
-                NbLot = ButterflyEnvironment.GetRandomNumber(3, 5);
+                NbLot = WibboEnvironment.GetRandomNumber(3, 5);
             }
 
-            int NbLotDeluxe = ButterflyEnvironment.GetRandomNumber(1, 4);
+            int NbLotDeluxe = WibboEnvironment.GetRandomNumber(1, 4);
             if (roomUserByUserId.GetClient().GetUser().Rank > 1)
             {
-                NbLotDeluxe = ButterflyEnvironment.GetRandomNumber(3, 4);
+                NbLotDeluxe = WibboEnvironment.GetRandomNumber(3, 4);
             }
 
-            int NbBadge = ButterflyEnvironment.GetRandomNumber(1, 2);
+            int NbBadge = WibboEnvironment.GetRandomNumber(1, 2);
             if (roomUserByUserId.GetClient().GetUser().Rank > 1)
             {
-                NbBadge = ButterflyEnvironment.GetRandomNumber(2, 3);
+                NbBadge = WibboEnvironment.GetRandomNumber(2, 3);
             }
 
-            if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(12018410, out ItemData ItemData))
-            {
-                return;
-            }
-
-            if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(91947063, out ItemData ItemDataBadge))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(12018410, out ItemData ItemData))
             {
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(618784, out ItemData ItemDataDeluxe))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(91947063, out ItemData ItemDataBadge))
+            {
+                return;
+            }
+
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(618784, out ItemData ItemDataDeluxe))
             {
                 return;
             }
@@ -84,15 +84,15 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             }
 
             string DeluxeMessage = (NbLotDeluxe == 4) ? " Et une RareBox Deluxe !" : "";
-            roomUserByUserId.GetClient().SendNotification(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByUserId.GetClient().Langue), NbLot, NbBadge) + DeluxeMessage);
+            roomUserByUserId.GetClient().SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByUserId.GetClient().Langue), NbLot, NbBadge) + DeluxeMessage);
             Session.SendWhisper(roomUserByUserId.GetUsername() + " à reçu " + NbLot + " RareBox et " + NbBadge + " BadgeBox!" + DeluxeMessage);
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserDao.UpdateAddGamePoints(dbClient, roomUserByUserId.GetClient().GetUser().Id);
             }
 
-            ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserId.GetClient(), "ACH_Extrabox", 1);
+            WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserId.GetClient(), "ACH_Extrabox", 1);
         }
     }
 }

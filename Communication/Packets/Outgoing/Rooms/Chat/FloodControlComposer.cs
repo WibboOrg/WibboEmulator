@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Chat
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Chat
 {
     internal class FloodControlComposer : ServerPacket
     {

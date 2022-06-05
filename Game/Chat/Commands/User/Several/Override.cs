@@ -1,7 +1,7 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Override : IChatCommand
     {
@@ -10,12 +10,12 @@ namespace Butterfly.Game.Chat.Commands.Cmd
             if (UserRoom.AllowOverride)
             {
                 UserRoom.AllowOverride = false;
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("override.disabled", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("override.disabled", Session.Langue));
             }
             else
             {
                 UserRoom.AllowOverride = true;
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("override.enabled", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("override.enabled", Session.Langue));
             }
         }
     }

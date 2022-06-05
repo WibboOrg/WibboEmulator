@@ -1,15 +1,15 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
 using System.Data;
 
-namespace Butterfly.Game.Items
+namespace Wibbo.Game.Items
 {
     public static class ItemTeleporterFinder
     {
         public static int GetLinkedTele(int teleId)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 DataRow row = ItemTeleportDao.GetOne(dbClient, teleId);
                 if (row == null)
@@ -40,7 +40,7 @@ namespace Butterfly.Game.Items
                 return room.Id;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 DataRow row = ItemDao.GetOneRoomId(dbClient, teleId);
                 if (row == null)

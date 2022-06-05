@@ -1,7 +1,7 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Interfaces;
 using System.Text;
 
-namespace Butterfly.Utilities
+namespace Wibbo.Utilities
 {
     public class QueryChunk
     {

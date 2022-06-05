@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Catalog.Pets
+﻿namespace Wibbo.Game.Catalog.Pets
 {
     public class PetRace
     {

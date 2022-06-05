@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing
+﻿namespace Wibbo.Communication.Packets.Outgoing
 {
     public static class ServerPacketHeader
     {

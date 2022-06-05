@@ -1,6 +1,6 @@
-﻿using Butterfly.Game.Moderation;
+﻿using Wibbo.Game.Moderation;
 
-namespace Butterfly.Communication.Packets.Outgoing
+namespace Wibbo.Communication.Packets.Outgoing
 {
     internal class CfhTopicsInitComposer : ServerPacket
     {

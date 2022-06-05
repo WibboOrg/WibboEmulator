@@ -1,6 +1,6 @@
-﻿using Butterfly.Communication.Interfaces;
+﻿using Wibbo.Communication.Interfaces;
 
-namespace Butterfly.Utilities
+namespace Wibbo.Utilities
 {
     public class ServerPacketList
     {

@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Notifications;
-using Butterfly.Game.Clients;
-using Butterfly.Utilities;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Notifications;
+using Wibbo.Game.Clients;
+using Wibbo.Utilities;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class SubmitNewTicketEvent : IPacketEvent
     {
@@ -10,7 +10,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (ButterflyEnvironment.GetGame().GetModerationManager().UsersHasPendingTicket(Session.GetUser().Id))
+            if (WibboEnvironment.GetGame().GetModerationManager().UsersHasPendingTicket(Session.GetUser().Id))
             {
                 return;
             }
@@ -22,9 +22,9 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int chatEntriesCount = Packet.PopInt();
             //chatEntries = Packet.PopString();
 
-            ButterflyEnvironment.GetGame().GetModerationManager().SendNewTicket(Session, TicketType, ReporterId, Message);
-            ButterflyEnvironment.GetGame().GetModerationManager().ApplySanction(Session, ReporterId);
-            ButterflyEnvironment.GetGame().GetClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", "Un nouveau ticket vient d'arriver sur le support"));
+            WibboEnvironment.GetGame().GetModerationManager().SendNewTicket(Session, TicketType, ReporterId, Message);
+            WibboEnvironment.GetGame().GetModerationManager().ApplySanction(Session, ReporterId);
+            WibboEnvironment.GetGame().GetClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", "Un nouveau ticket vient d'arriver sur le support"));
         }
     }
 }

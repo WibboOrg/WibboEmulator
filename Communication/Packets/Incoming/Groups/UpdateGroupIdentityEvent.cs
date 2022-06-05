@@ -1,10 +1,10 @@
-using Butterfly.Communication.Packets.Outgoing.Groups;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class UpdateGroupIdentityEvent : IPacketEvent
     {
@@ -13,8 +13,8 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         public void Parse(Client Session, ClientPacket Packet)
         {
             int GroupId = Packet.PopInt();
-            string Name = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
-            string Desc = ButterflyEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
+            string Name = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
+            string Desc = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
 
             if (Name.Length > 50)
             {
@@ -26,7 +26,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
             {
                 return;
             }
@@ -36,7 +36,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 GuildDao.UpdateNameAndDesc(dbClient, GroupId, Name, Desc);
             }

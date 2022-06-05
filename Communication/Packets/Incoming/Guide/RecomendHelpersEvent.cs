@@ -1,7 +1,7 @@
-using Butterfly.Communication.Packets.Outgoing.Help;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Help;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Guide
+namespace Wibbo.Communication.Packets.Incoming.Guide
 {
     internal class RecomendHelpersEvent : IPacketEvent
     {

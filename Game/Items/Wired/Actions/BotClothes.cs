@@ -1,10 +1,10 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Items.Wired.Interfaces;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Items.Wired.Interfaces;
+using Wibbo.Game.Rooms;
 using System.Data;
 
-namespace Butterfly.Game.Items.Wired.Actions
+namespace Wibbo.Game.Items.Wired.Actions
 {
     public class BotClothes : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
     {

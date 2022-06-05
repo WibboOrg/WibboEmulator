@@ -1,6 +1,6 @@
-﻿using Butterfly.Core;
+﻿using Wibbo.Core;
 
-namespace Butterfly
+namespace Wibbo
 {
     public static class Program
     {
@@ -11,7 +11,7 @@ namespace Butterfly
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += MyHandler;
 
-            ButterflyEnvironment.Initialize();
+            WibboEnvironment.Initialize();
 
             while (true)
             {
@@ -35,7 +35,7 @@ namespace Butterfly
             ExceptionLogger.DisablePrimaryWriting(true);
             ExceptionLogger.LogCriticalException("SYSTEM CRITICAL EXCEPTION: " + ((Exception)args.ExceptionObject).ToString());
 
-            ButterflyEnvironment.PreformShutDown();
+            WibboEnvironment.PreformShutDown();
         }
     }
 }

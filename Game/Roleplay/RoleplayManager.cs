@@ -1,12 +1,12 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Roleplay.Enemy;
-using Butterfly.Game.Roleplay.Troc;
-using Butterfly.Game.Roleplay.Weapon;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Roleplay.Enemy;
+using Wibbo.Game.Roleplay.Troc;
+using Wibbo.Game.Roleplay.Weapon;
 using System.Collections.Concurrent;
 using System.Data;
 
-namespace Butterfly.Game.Roleplay
+namespace Wibbo.Game.Roleplay
 {
     public class RoleplayManager
     {

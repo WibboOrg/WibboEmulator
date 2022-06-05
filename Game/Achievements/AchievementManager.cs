@@ -1,15 +1,15 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Achievements;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Achievements;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 using System.Data;
-using Butterfly.Game.Users.Achievements;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Game.Users.Achievements;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
 
-namespace Butterfly.Game.Achievements
+namespace Wibbo.Game.Achievements
 {
     public class AchievementManager
     {
@@ -118,7 +118,7 @@ namespace Butterfly.Game.Achievements
 
                 Session.SendPacket(new AchievementUnlockedComposer(AchievementData, TargetLevel, TargetLevelData.RewardPoints, TargetLevelData.RewardPixels));
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserAchievementDao.Replace(dbClient, Session.GetUser().Id, NewLevel, NewProgress, AchievementGroup);
                     UserStatsDao.UpdateAchievementScore(dbClient, Session.GetUser().Id, TargetLevelData.RewardPoints);
@@ -154,7 +154,7 @@ namespace Butterfly.Game.Achievements
             {
                 UserData.Level = NewLevel;
                 UserData.Progress = NewProgress;
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserAchievementDao.Replace(dbClient, Session.GetUser().Id, NewLevel, NewProgress, AchievementGroup);
                 }

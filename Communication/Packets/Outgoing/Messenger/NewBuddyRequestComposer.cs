@@ -1,6 +1,6 @@
-using Butterfly.Game.Users.Messenger;
+using Wibbo.Game.Users.Messenger;
 
-namespace Butterfly.Communication.Packets.Outgoing.Messenger
+namespace Wibbo.Communication.Packets.Outgoing.Messenger
 {
     internal class NewBuddyRequestComposer : ServerPacket
     {

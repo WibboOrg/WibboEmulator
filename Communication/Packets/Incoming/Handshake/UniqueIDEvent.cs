@@ -1,7 +1,7 @@
-using Butterfly.Communication.Packets.Outgoing.Handshake;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Handshake;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class UniqueIDEvent : IPacketEvent
     {

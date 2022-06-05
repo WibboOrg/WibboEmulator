@@ -1,10 +1,10 @@
-using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RemoveFavouriteRoomEvent : IPacketEvent
     {
@@ -19,7 +19,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int roomId = Packet.PopInt();
 
-            RoomData roomdata = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+            RoomData roomdata = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
             if (roomdata == null)
             {
                 return;
@@ -29,7 +29,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             Session.SendPacket(new UpdateFavouriteRoomComposer(roomId, false));
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserFavoriteDao.Delete(dbClient, Session.GetUser().Id, roomId);
             }

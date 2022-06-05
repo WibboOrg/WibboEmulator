@@ -1,22 +1,22 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Moderation;
-using Butterfly.Core;
-using Butterfly.Core.FigureData;
-using Butterfly.Database;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Users;
-using Butterfly.Game.Users.Authenticator;
-using Butterfly.Net;
+﻿using Wibbo.Communication.Packets.Outgoing.Moderation;
+using Wibbo.Core;
+using Wibbo.Core.FigureData;
+using Wibbo.Database;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Users;
+using Wibbo.Game.Users.Authenticator;
+using Wibbo.Net;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
-using Butterfly.Communication.WebSocket;
+using Wibbo.Communication.WebSocket;
 
-namespace Butterfly
+namespace Wibbo
 {
-    public static class ButterflyEnvironment
+    public static class WibboEnvironment
     {
         private static ConfigurationData _configuration;
         private static WebSocketManager _webSocketManager;
@@ -99,7 +99,7 @@ namespace Butterfly
                 }
 
                 _languageManager = new LanguageManager();
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     _languageManager.Init(dbClient);
 
                 _game = new GameCore();
@@ -213,7 +213,7 @@ namespace Butterfly
 
         public static bool UsernameExists(string username)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 int integer = UserDao.GetIdByName(dbClient, username);
                 if (integer <= 0)
@@ -240,7 +240,7 @@ namespace Butterfly
                 return _usersCached[UserId].Username;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 Name = UserDao.GetNameById(dbClient, UserId);
 
             if (string.IsNullOrEmpty(Name))
@@ -253,7 +253,7 @@ namespace Butterfly
 
         public static User GetUserByUsername(string UserName)
         {
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 int id = UserDao.GetIdByName(dbClient, UserName);
                 if (id > 0)

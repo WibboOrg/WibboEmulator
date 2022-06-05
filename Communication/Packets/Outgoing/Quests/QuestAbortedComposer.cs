@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Quests
+namespace Wibbo.Communication.Packets.Outgoing.Quests
 {
     internal class QuestAbortedComposer : ServerPacket
     {

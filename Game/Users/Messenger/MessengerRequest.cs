@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Users.Messenger
+﻿namespace Wibbo.Game.Users.Messenger
 {
     public class MessengerRequest
     {

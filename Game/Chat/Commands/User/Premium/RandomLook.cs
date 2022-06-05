@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Rooms;
-using Butterfly.Communication.Packets.Outgoing.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Avatar;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class RandomLook : IChatCommand
     {
@@ -27,7 +27,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 Session.GetUser().Look = UserWardrobeDao.GetOneRandomLook(dbClient);
 
             Session.SendPacket(new FigureUpdateComposer(Session.GetUser().Look, Session.GetUser().Gender));

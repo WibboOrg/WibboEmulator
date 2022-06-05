@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Chat.Logs
+﻿namespace Wibbo.Game.Chat.Logs
 {
     public class ChatlogEntry
     {

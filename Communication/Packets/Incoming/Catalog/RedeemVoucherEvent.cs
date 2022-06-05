@@ -1,11 +1,11 @@
-using Butterfly.Communication.Packets.Outgoing.Catalog;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Catalog.Vouchers;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Catalog.Vouchers;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RedeemVoucherEvent : IPacketEvent
     {
@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             string VoucherCode = Packet.PopString().Replace("\r", "");
 
-            if (!ButterflyEnvironment.GetGame().GetCatalog().GetVoucherManager().TryGetVoucher(VoucherCode, out Voucher Voucher))
+            if (!WibboEnvironment.GetGame().GetCatalog().GetVoucherManager().TryGetVoucher(VoucherCode, out Voucher Voucher))
             {
                 Session.SendPacket(new VoucherRedeemErrorComposer(0));
                 return;
@@ -27,7 +27,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             bool haveVoucher = false;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 haveVoucher = UserVoucherDao.HaveVoucher(dbClient, Session.GetUser().Id, VoucherCode);
 
             if (!haveVoucher)
@@ -36,7 +36,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
             else
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     UserVoucherDao.Insert(dbClient, Session.GetUser().Id, VoucherCode);
             }
 

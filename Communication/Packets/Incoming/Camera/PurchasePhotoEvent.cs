@@ -1,8 +1,8 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Camera;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
+﻿using Wibbo.Communication.Packets.Outgoing.Camera;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
 
-namespace Butterfly.Communication.Packets.Incoming.Camera
+namespace Wibbo.Communication.Packets.Incoming.Camera
 {
     internal class PurchasePhotoEvent : IPacketEvent
     {
@@ -16,29 +16,29 @@ namespace Butterfly.Communication.Packets.Incoming.Camera
             {
                 photoId = session.GetUser().LastPhotoId;
             }
-            else if(!ButterflyEnvironment.IsValidAlphaNumeric(photoId) || photoId.Length != 32)
+            else if(!WibboEnvironment.IsValidAlphaNumeric(photoId) || photoId.Length != 32)
             {
-                session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
                 return;
             }
 
             if (string.IsNullOrEmpty(photoId))
             {
-                session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(4581, out ItemData ItemData))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(4581, out ItemData ItemData))
             {
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(4597, out ItemData ItemDataSmall))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(4597, out ItemData ItemDataSmall))
             {
                 return;
             }
 
-            int Time = ButterflyEnvironment.GetUnixTimestamp();
+            int Time = WibboEnvironment.GetUnixTimestamp();
             string ExtraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.GetUser().Username + "\", \"s\":\"" + session.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
 
             Item ItemSmall = ItemFactory.CreateSingleItemNullable(ItemDataSmall, session.GetUser(), ExtraData);

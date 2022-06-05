@@ -1,7 +1,7 @@
-using Butterfly.Game.Achievements;
-using Butterfly.Game.Users.Achievements;
+using Wibbo.Game.Achievements;
+using Wibbo.Game.Users.Achievements;
 
-namespace Butterfly.Communication.Packets.Outgoing.Inventory.Achievements
+namespace Wibbo.Communication.Packets.Outgoing.Inventory.Achievements
 {
     internal class AchievementProgressedComposer : ServerPacket
     {

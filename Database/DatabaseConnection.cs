@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Adapter;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Adapter;
+using Wibbo.Database.Interfaces;
 using MySql.Data.MySqlClient;
 using System.Data;
 
-namespace Butterfly.Database
+namespace Wibbo.Database
 {
     public class DatabaseConnection : IDatabaseClient, IDisposable
     {

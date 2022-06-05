@@ -1,8 +1,8 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Users;
+﻿using Wibbo.Communication.Packets.Outgoing;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Game.Items
+namespace Wibbo.Game.Items
 {
     internal static class ItemBehaviourUtility
     {
@@ -37,7 +37,7 @@ namespace Butterfly.Game.Items
                 case InteractionType.GUILD_ITEM:
                 case InteractionType.GUILD_GATE:
                     Group Group = null;
-                    if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(Item.GroupId, out Group))
+                    if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(Item.GroupId, out Group))
                     {
                         Message.WriteInteger(0);
                         Message.WriteInteger(0);
@@ -51,8 +51,8 @@ namespace Butterfly.Game.Items
                         Message.WriteString(Item.ExtraData.Split(new char[1] { ';' })[0]);
                         Message.WriteString(Group.Id.ToString());
                         Message.WriteString(Group.Badge);
-                        Message.WriteString(ButterflyEnvironment.GetGame().GetGroupManager().GetColourCode(Group.Colour1, true));
-                        Message.WriteString(ButterflyEnvironment.GetGame().GetGroupManager().GetColourCode(Group.Colour2, false));
+                        Message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(Group.Colour1, true));
+                        Message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(Group.Colour2, false));
                     }
                     break;
 
@@ -216,7 +216,7 @@ namespace Butterfly.Game.Items
                             string[] ExtraData = Item.ExtraData.Split(Convert.ToChar(5));
                             int Style = int.Parse(Item.ExtraData.Split(new char[1] { '\x0005' })[1]) * 1000 + int.Parse(Item.ExtraData.Split(new char[1] { '\x0005' })[2]);
 
-                            User Purchaser = ButterflyEnvironment.GetUserById(int.Parse(Item.ExtraData.Split(new char[1] { ';' })[0]));
+                            User Purchaser = WibboEnvironment.GetUserById(int.Parse(Item.ExtraData.Split(new char[1] { ';' })[0]));
                             Message.WriteInteger(0);
                             Message.WriteInteger(1);
                             Message.WriteInteger(6);

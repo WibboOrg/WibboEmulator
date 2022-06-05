@@ -1,6 +1,6 @@
-using Butterfly.Game.Pets;
+using Wibbo.Game.Pets;
 
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.AI.Pets
 {
     internal class PetTrainingPanelComposer : ServerPacket
     {

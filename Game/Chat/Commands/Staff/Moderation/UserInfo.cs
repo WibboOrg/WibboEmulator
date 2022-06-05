@@ -1,9 +1,9 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Users;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Users;
 using System.Text;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class UserInfo : IChatCommand
     {
@@ -18,13 +18,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (string.IsNullOrEmpty(username))
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.userparammissing", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.userparammissing", Session.Langue));
                 return;
             }
-            Client clientByUsername = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
+            Client clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
             if (clientByUsername == null || clientByUsername.GetUser() == null)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));
                 return;
             }
 

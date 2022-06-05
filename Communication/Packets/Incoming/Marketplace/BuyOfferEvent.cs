@@ -1,15 +1,15 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Catalog;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Furni;
-using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Communication.Packets.Outgoing.MarketPlace;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Catalog.Marketplace;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
+﻿using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Communication.Packets.Outgoing.MarketPlace;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Catalog.Marketplace;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
 using System.Data;
 
-namespace Butterfly.Communication.Packets.Incoming.Marketplace
+namespace Wibbo.Communication.Packets.Incoming.Marketplace
 {
     internal class BuyOfferEvent : IPacketEvent
     {
@@ -20,7 +20,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             int OfferId = Packet.PopInt();
 
             DataRow Row = null;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 Row = CatalogMarketplaceOfferDao.GetOneByOfferId(dbClient, OfferId);
 
             if (Row == null)
@@ -31,21 +31,21 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
             if (Convert.ToString(Row["state"]) == "2")
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.1", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.1", Session.Langue));
                 this.ReloadOffers(Session);
                 return;
             }
 
-            if (ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp() > (Convert.ToDouble(Row["timestamp"])))
+            if (WibboEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp() > (Convert.ToDouble(Row["timestamp"])))
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.2", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.2", Session.Langue));
                 this.ReloadOffers(Session);
                 return;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(Row["item_id"]), out ItemData Item))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(Row["item_id"]), out ItemData Item))
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.3", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.3", Session.Langue));
                 this.ReloadOffers(Session);
                 return;
             }
@@ -53,20 +53,20 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             {
                 if (Convert.ToInt32(Row["user_id"]) == Session.GetUser().Id)
                 {
-                    Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.4", Session.Langue));
+                    Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.4", Session.Langue));
                     return;
                 }
 
                 if (Convert.ToInt32(Row["total_price"]) > Session.GetUser().WibboPoints)
                 {
-                    Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.5", Session.Langue));
+                    Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.5", Session.Langue));
                     return;
                 }
 
                 Session.GetUser().WibboPoints -= Convert.ToInt32(Row["total_price"]);
                 Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserDao.UpdateRemovePoints(dbClient, Session.GetUser().Id, Convert.ToInt32(Row["total_price"]));
                 }
@@ -81,32 +81,32 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
                 }
 
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     CatalogMarketplaceOfferDao.UpdateState(dbClient, OfferId);
 
                     CatalogMarketplaceDataDao.Replace(dbClient, Item.SpriteId, Convert.ToInt32(Row["total_price"]));
 
-                    if (ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.ContainsKey(Item.SpriteId) && ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(Item.SpriteId))
+                    if (WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.ContainsKey(Item.SpriteId) && WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(Item.SpriteId))
                     {
-                        int num3 = ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts[Item.SpriteId];
-                        int num4 = (ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages[Item.SpriteId] += Convert.ToInt32(Row["total_price"]));
+                        int num3 = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts[Item.SpriteId];
+                        int num4 = (WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages[Item.SpriteId] += Convert.ToInt32(Row["total_price"]));
 
-                        ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Remove(Item.SpriteId);
-                        ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Add(Item.SpriteId, num4);
-                        ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Remove(Item.SpriteId);
-                        ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Add(Item.SpriteId, num3 + 1);
+                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Remove(Item.SpriteId);
+                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Add(Item.SpriteId, num4);
+                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Remove(Item.SpriteId);
+                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Add(Item.SpriteId, num3 + 1);
                     }
                     else
                     {
-                        if (!ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.ContainsKey(Item.SpriteId))
+                        if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.ContainsKey(Item.SpriteId))
                         {
-                            ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Add(Item.SpriteId, Convert.ToInt32(Row["total_price"]));
+                            WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Add(Item.SpriteId, Convert.ToInt32(Row["total_price"]));
                         }
 
-                        if (!ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(Item.SpriteId))
+                        if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(Item.SpriteId))
                         {
-                            ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Add(Item.SpriteId, 1);
+                            WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Add(Item.SpriteId, 1);
                         }
                     }
                 }
@@ -124,20 +124,20 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
 
             DataTable table = null;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 table = CatalogMarketplaceOfferDao.GetAll(dbClient, SearchQuery, MinCost, MaxCost, FilterMode);
 
-            ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();
-            ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Clear();
+            WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();
+            WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Clear();
             if (table != null)
             {
                 foreach (DataRow row in table.Rows)
                 {
-                    if (!ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Contains(Convert.ToInt32(row["offer_id"])))
+                    if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Contains(Convert.ToInt32(row["offer_id"])))
                     {
                         MarketOffer item = new MarketOffer(Convert.ToInt32(row["offer_id"]), Convert.ToInt32(row["sprite_id"]), Convert.ToInt32(row["total_price"]), int.Parse(row["item_type"].ToString()), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
-                        ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Add(Convert.ToInt32(row["offer_id"]));
-                        ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Add(item);
+                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Add(Convert.ToInt32(row["offer_id"]));
+                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Add(item);
                     }
                 }
             }
@@ -145,7 +145,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             Dictionary<int, MarketOffer> dictionary = new Dictionary<int, MarketOffer>();
             Dictionary<int, int> dictionary2 = new Dictionary<int, int>();
 
-            foreach (MarketOffer item in ButterflyEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems)
+            foreach (MarketOffer item in WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems)
             {
                 if (dictionary.ContainsKey(item.SpriteId))
                 {

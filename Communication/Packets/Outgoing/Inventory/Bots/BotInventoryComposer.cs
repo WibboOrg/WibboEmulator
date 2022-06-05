@@ -1,6 +1,6 @@
-using Butterfly.Game.Users.Inventory.Bots;
+using Wibbo.Game.Users.Inventory.Bots;
 
-namespace Butterfly.Communication.Packets.Outgoing.Inventory.Bots
+namespace Wibbo.Communication.Packets.Outgoing.Inventory.Bots
 {
     internal class BotInventoryComposer : ServerPacket
     {

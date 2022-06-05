@@ -1,9 +1,9 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Misc;
-using Butterfly.Communication.Packets.Outgoing.Notifications;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Users;
+﻿using Wibbo.Communication.Packets.Outgoing.Misc;
+using Wibbo.Communication.Packets.Outgoing.Notifications;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RoomNuxAlertEvent : IPacketEvent
     {

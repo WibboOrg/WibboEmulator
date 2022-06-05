@@ -1,7 +1,7 @@
-﻿using Butterfly.Core;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Core;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Game.Permissions
+namespace Wibbo.Game.Permissions
 {
     public struct AuthorizationCommands
     {

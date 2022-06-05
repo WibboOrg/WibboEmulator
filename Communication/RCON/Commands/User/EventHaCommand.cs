@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Clients;
+﻿using Wibbo.Game.Clients;
 using System.Text.RegularExpressions;
 
-namespace Butterfly.Communication.RCON.Commands.User
+namespace Wibbo.Communication.RCON.Commands.User
 {
     internal class EventHaCommand : IRCONCommand
     {
@@ -22,7 +22,7 @@ namespace Butterfly.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client Client = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
             if (Client == null || Client.GetUser().CurrentRoom == null)
             {
                 return false;
@@ -30,13 +30,13 @@ namespace Butterfly.Communication.RCON.Commands.User
 
             string Message = parameters[2];
 
-            ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, 0, string.Empty, "eventha", string.Format("WbTool eventha: {0}", Message));
+            WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, 0, string.Empty, "eventha", string.Format("WbTool eventha: {0}", Message));
             if (Client.Antipub(Message, "<eventalert>", Client.GetUser().CurrentRoom.Id))
             {
                 return false;
             }
 
-            if (!ButterflyEnvironment.GetGame().GetAnimationManager().AllowAnimation())
+            if (!WibboEnvironment.GetGame().GetAnimationManager().AllowAnimation())
             {
                 return false;
             }
@@ -48,7 +48,7 @@ namespace Butterfly.Communication.RCON.Commands.User
             Message = new Regex(@"\[u\](.*?)\[\/u\]").Replace(Message, "<u>$1</u>");
 
             string AlertMessage = Message + "\r\n- " + Client.GetUser().Username;
-            ButterflyEnvironment.GetGame().GetClientManager().SendSuperNotif("Message des Staffs", AlertMessage, "game_promo_small", "event:navigator/goto/" + Client.GetUser().CurrentRoom.Id, "Je veux y accéder!", true, true);
+            WibboEnvironment.GetGame().GetClientManager().SendSuperNotif("Message des Staffs", AlertMessage, "game_promo_small", "event:navigator/goto/" + Client.GetUser().CurrentRoom.Id, "Je veux y accéder!", true, true);
             Client.GetUser().CurrentRoom.CloseFullRoom = true;
 
             return true;

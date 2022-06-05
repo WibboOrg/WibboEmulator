@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Help
+namespace Wibbo.Communication.Packets.Outgoing.Help
 {
     internal class HelperToolComposer : ServerPacket
     {

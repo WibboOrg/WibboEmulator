@@ -1,13 +1,13 @@
-using Butterfly.Communication.Packets.Outgoing.Groups;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Permissions;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Users;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Permissions;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RemoveGroupMemberEvent : IPacketEvent
     {
@@ -18,7 +18,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int GroupId = Packet.PopInt();
             int UserId = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
             {
                 return;
             }
@@ -40,7 +40,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     }
 
 
-                    if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room Room))
+                    if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room Room))
                     {
                         return;
                     }
@@ -58,7 +58,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     }
                 }
 
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     GuildMembershipDao.Delete(dbClient, GroupId, UserId);
                 }
@@ -67,14 +67,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 if (Session.GetUser().FavouriteGroupId == GroupId)
                 {
                     Session.GetUser().FavouriteGroupId = 0;
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         UserStatsDao.UpdateRemoveGroupId(dbClient, UserId);
                     }
 
                     if (Group.AdminOnlyDeco == 0)
                     {
-                        if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room Room))
+                        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room Room))
                         {
                             return;
                         }
@@ -120,7 +120,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
                     if (Group.IsAdmin(UserId) && Group.CreatorId != Session.GetUser().Id)
                     {
-                        Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.groupremoveuser.error", Session.Langue));
+                        Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupremoveuser.error", Session.Langue));
                         return;
                     }
 
@@ -134,7 +134,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                         Group.DeleteMember(UserId);
                     }
 
-                    User user = ButterflyEnvironment.GetUserById(UserId);
+                    User user = WibboEnvironment.GetUserById(UserId);
                     if(user != null)
                         user.MyGroups.Remove(Group.Id);
 
@@ -144,7 +144,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                     List<int> MemberIds = Group.GetMembers.Skip(StartIndex).Take(14).ToList();
                     foreach (int Id in MemberIds.ToList())
                     {
-                        User GroupMember = ButterflyEnvironment.GetUserById(Id);
+                        User GroupMember = WibboEnvironment.GetUserById(Id);
                         if (GroupMember == null)
                         {
                             continue;

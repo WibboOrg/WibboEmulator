@@ -1,7 +1,7 @@
-﻿using Butterfly.Communication.Packets.Outgoing;
-using Butterfly.Game.Navigator;
+﻿using Wibbo.Communication.Packets.Outgoing;
+using Wibbo.Game.Navigator;
 
-namespace Butterfly.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     internal static class RoomAppender
     {
@@ -32,7 +32,7 @@ namespace Butterfly.Game.Rooms
                 RoomType += 2;
             }
 
-            if (ButterflyEnvironment.GetGame().GetNavigator().TryGetFeaturedRoom(Data.Id, out FeaturedRoom Item))
+            if (WibboEnvironment.GetGame().GetNavigator().TryGetFeaturedRoom(Data.Id, out FeaturedRoom Item))
             {
                 RoomType += 1;
             }

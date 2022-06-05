@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorBanzaiTele : FurniInteractor
     {
@@ -35,7 +35,7 @@ namespace Butterfly.Game.Items.Interactors
             if (roomUserByUserId != null)
             {
                 item.GetRoom().GetGameMap().TeleportToItem(roomUserByUserId, item);
-                roomUserByUserId.SetRot(ButterflyEnvironment.GetRandomNumber(0, 7), false);
+                roomUserByUserId.SetRot(WibboEnvironment.GetRandomNumber(0, 7), false);
                 roomUserByUserId.CanWalk = true;
             }
 

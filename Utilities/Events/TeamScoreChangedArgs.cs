@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Games;
+﻿using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.Games;
 
-namespace Butterfly.Utilities.Events
+namespace Wibbo.Utilities.Events
 {
     public class TeamScoreChangedArgs : EventArgs
     {

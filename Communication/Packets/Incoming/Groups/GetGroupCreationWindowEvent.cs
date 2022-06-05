@@ -1,8 +1,8 @@
-using Butterfly.Communication.Packets.Outgoing.Groups;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetGroupCreationWindowEvent : IPacketEvent
     {
@@ -18,7 +18,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             List<RoomData> ValidRooms = new List<RoomData>();
             foreach (int RoomId in Session.GetUser().UsersRooms)
             {
-                RoomData Data = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+                RoomData Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
                 if (Data == null)
                     continue;
 

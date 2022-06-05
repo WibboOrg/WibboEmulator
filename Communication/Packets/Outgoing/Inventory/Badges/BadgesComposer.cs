@@ -1,6 +1,6 @@
-using Butterfly.Game.Users.Badges;
+using Wibbo.Game.Users.Badges;
 
-namespace Butterfly.Communication.Packets.Outgoing.Inventory.Badges
+namespace Wibbo.Communication.Packets.Outgoing.Inventory.Badges
 {
     internal class BadgesComposer : ServerPacket
     {

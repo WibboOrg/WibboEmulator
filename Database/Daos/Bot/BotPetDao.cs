@@ -1,11 +1,11 @@
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Pets;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.AI;
-using Butterfly.Utilities;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.AI;
+using Wibbo.Utilities;
 using System.Data;
 
-namespace Butterfly.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class BotPetDao
     {
@@ -63,7 +63,7 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateAnyoneRide(IQueryAdapter dbClient, int petId, bool anyoneCanRide)
         {
-            dbClient.RunQuery("UPDATE `bot_pet` SET anyone_ride = '" + ButterflyEnvironment.BoolToEnum(anyoneCanRide) + "' WHERE id = '" + petId + "' LIMIT 1");
+            dbClient.RunQuery("UPDATE `bot_pet` SET anyone_ride = '" + WibboEnvironment.BoolToEnum(anyoneCanRide) + "' WHERE id = '" + petId + "' LIMIT 1");
         }
 
         internal static void UpdateRoomId(IQueryAdapter dbClient, int petId, int roomId)
@@ -88,7 +88,7 @@ namespace Butterfly.Database.Daos
         internal static void InsertDuplicate(IQueryAdapter dbClient, int userId, int roomId, int oldRoomId)
         {
             dbClient.RunQuery("INSERT INTO `bot_pet` (user_id, room_id, name, race, color, type, experience, energy, nutrition, respect, createstamp, x, y, z, have_saddle, hairdye, pethair, anyone_ride) " +
-                "SELECT '" + userId + "', '" + roomId + "', name, race, color, type, experience, energy, nutrition, respect, '" + ButterflyEnvironment.GetUnixTimestamp() + "', x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM `bot_pet` WHERE room_id = '" + oldRoomId + "'");
+                "SELECT '" + userId + "', '" + roomId + "', name, race, color, type, experience, energy, nutrition, respect, '" + WibboEnvironment.GetUnixTimestamp() + "', x, y, z, have_saddle, hairdye, pethair, anyone_ride FROM `bot_pet` WHERE room_id = '" + oldRoomId + "'");
         }
 
 

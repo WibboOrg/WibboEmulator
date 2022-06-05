@@ -1,13 +1,13 @@
-using Butterfly.Communication.Packets.Outgoing.Avatar;
-using Butterfly.Communication.Packets.Outgoing.Handshake;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Quests;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Handshake;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class UpdateFigureDataEvent : IPacketEvent
     {
@@ -27,19 +27,19 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Look = ButterflyEnvironment.GetFigureManager().ProcessFigure(Look, Gender, true);
+            Look = WibboEnvironment.GetFigureManager().ProcessFigure(Look, Gender, true);
 
-            ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_CHANGE_LOOK, 0);
+            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_CHANGE_LOOK, 0);
 
             Session.GetUser().Look = Look;
             Session.GetUser().Gender = Gender.ToLower();
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserDao.UpdateLookAndGender(dbClient, Session.GetUser().Id, Look, Gender);
             }
 
-            ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_AvatarLooks", 1);
+            WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_AvatarLooks", 1);
 
             if (!Session.GetUser().InRoom)
             {

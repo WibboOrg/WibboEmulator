@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.AI.Pets;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 using System.Drawing;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RideHorseEvent : IPacketEvent
     {
@@ -17,7 +17,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
 
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -56,7 +56,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             {
                 if (Pet.RidingHorse)
                 {
-                    string Speechtxt = ButterflyEnvironment.GetLanguageManager().TryGetValue("pet.alreadymounted", Session.Langue);
+                    string Speechtxt = WibboEnvironment.GetLanguageManager().TryGetValue("pet.alreadymounted", Session.Langue);
                     Pet.OnChat(Speechtxt, 0, false);
                 }
                 else if (User.RidingHorse)

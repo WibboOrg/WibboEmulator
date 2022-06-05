@@ -1,12 +1,12 @@
-﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.Chat.Commands;
-using Butterfly.Game.Chat.Emotions;
-using Butterfly.Game.Chat.Filter;
-using Butterfly.Game.Chat.Mentions;
-using Butterfly.Game.Chat.Pets.Commands;
-using Butterfly.Game.Chat.Styles;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Chat.Commands;
+using Wibbo.Game.Chat.Emotions;
+using Wibbo.Game.Chat.Filter;
+using Wibbo.Game.Chat.Mentions;
+using Wibbo.Game.Chat.Pets.Commands;
+using Wibbo.Game.Chat.Styles;
 
-namespace Butterfly.Game.Chat
+namespace Wibbo.Game.Chat
 {
     public sealed class ChatManager
     {

@@ -1,15 +1,15 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Core;
-using Butterfly.Game.Items.Interactors;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Rooms.PathFinding;
-using Butterfly.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Core;
+using Wibbo.Game.Items.Interactors;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms.Map.Movement;
+using Wibbo.Game.Rooms.PathFinding;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Drawing;
-using Butterfly.Utilities.Events;
+using Wibbo.Utilities.Events;
 
-namespace Butterfly.Game.Items
+namespace Wibbo.Game.Items
 {
     public delegate void OnItemTrigger(object sender, ItemTriggeredArgs e);
 
@@ -198,7 +198,7 @@ namespace Butterfly.Game.Items
 
         public Item(int mId, int RoomId, int mBaseItem, string ExtraData, int limitedNumber, int limitedStack, int X, int Y, double Z, int Rot, string wallCoord, Room room)
         {
-            if (ButterflyEnvironment.GetGame().GetItemManager().GetItem(mBaseItem, out ItemData Data))
+            if (WibboEnvironment.GetGame().GetItemManager().GetItem(mBaseItem, out ItemData Data))
             {
                 this.Id = mId;
                 this.RoomId = RoomId;
@@ -409,7 +409,7 @@ namespace Butterfly.Game.Items
                     {
                         if (this.GetRoom().GetGameMap().CanStackItem(X + 1, Y + 1, true) && this.GetRoom().GetGameMap().CanStackItem(X - 1, Y - 1, true))
                         {
-                            if (ButterflyEnvironment.GetRandomNumber(1, 2) == 1)
+                            if (WibboEnvironment.GetRandomNumber(1, 2) == 1)
                             {
                                 this.MovementDir = MovementDirection.downright;
                             }
@@ -440,7 +440,7 @@ namespace Butterfly.Game.Items
                     {
                         if (this.GetRoom().GetGameMap().CanStackItem(X - 1, Y + 1, true) && this.GetRoom().GetGameMap().CanStackItem(X + 1, Y - 1, true))
                         {
-                            if (ButterflyEnvironment.GetRandomNumber(1, 2) == 1)
+                            if (WibboEnvironment.GetRandomNumber(1, 2) == 1)
                             {
                                 this.MovementDir = MovementDirection.downleft;
                             }
@@ -471,7 +471,7 @@ namespace Butterfly.Game.Items
                     {
                         if (this.GetRoom().GetGameMap().CanStackItem(X - 1, Y + 1, true) && this.GetRoom().GetGameMap().CanStackItem(X + 1, Y - 1, true))
                         {
-                            if (ButterflyEnvironment.GetRandomNumber(1, 2) == 1)
+                            if (WibboEnvironment.GetRandomNumber(1, 2) == 1)
                             {
                                 this.MovementDir = MovementDirection.downleft;
                             }
@@ -502,7 +502,7 @@ namespace Butterfly.Game.Items
                     {
                         if (this.GetRoom().GetGameMap().CanStackItem(X + 1, Y + 1, true) && this.GetRoom().GetGameMap().CanStackItem(X - 1, Y - 1, true))
                         {
-                            if (ButterflyEnvironment.GetRandomNumber(1, 2) == 1)
+                            if (WibboEnvironment.GetRandomNumber(1, 2) == 1)
                             {
                                 this.MovementDir = MovementDirection.downright;
                             }
@@ -635,7 +635,7 @@ namespace Butterfly.Game.Items
         {
             if (this.Data == null)
             {
-                if (ButterflyEnvironment.GetGame().GetItemManager().GetItem(this.BaseItem, out ItemData itemData))
+                if (WibboEnvironment.GetGame().GetItemManager().GetItem(this.BaseItem, out ItemData itemData))
                 {
                     this.Data = itemData;
                 }

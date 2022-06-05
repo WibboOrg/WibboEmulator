@@ -1,21 +1,21 @@
-﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Items.Wired.Conditions
+namespace Wibbo.Game.Items.Wired.Conditions
 {
     public class DateRangeActive : WiredConditionBase, IWiredCondition, IWired
     {
         public DateRangeActive(Item item, Room room) : base(item, room, (int)WiredConditionType.DATE_RANGE_ACTIVE)
         {
-            this.IntParams.Add(ButterflyEnvironment.GetUnixTimestamp());
-            this.IntParams.Add(ButterflyEnvironment.GetUnixTimestamp());
+            this.IntParams.Add(WibboEnvironment.GetUnixTimestamp());
+            this.IntParams.Add(WibboEnvironment.GetUnixTimestamp());
         }
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
         {
-            int unixNow = ButterflyEnvironment.GetUnixTimestamp();
+            int unixNow = WibboEnvironment.GetUnixTimestamp();
 
             int startDate = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
             int endDate = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;

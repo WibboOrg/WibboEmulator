@@ -1,14 +1,14 @@
-﻿using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Chat.Commands.Cmd;
+﻿using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Chat.Commands.Cmd;
 using System.Data;
 using System.Text;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Permissions;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Permissions;
 
-namespace Butterfly.Game.Chat.Commands
+namespace Wibbo.Game.Chat.Commands
 {
     public class CommandManager
     {
@@ -56,7 +56,7 @@ namespace Butterfly.Game.Chat.Commands
 
             if (Message == _prefix + "commands")
             {
-                Session.SendHugeNotif(ButterflyEnvironment.GetGame().GetChatManager().GetCommands().GetCommandList(Session));
+                Session.SendHugeNotif(WibboEnvironment.GetGame().GetChatManager().GetCommands().GetCommandList(Session));
                 return true;
             }
 
@@ -82,16 +82,16 @@ namespace Butterfly.Game.Chat.Commands
             switch (AutorisationType)
             {
                 case 2:
-                    User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.premium", Session.Langue));
+                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.premium", Session.Langue));
                     return true;
                 case 3:
-                    User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.accred", Session.Langue));
+                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.accred", Session.Langue));
                     return true;
                 case 4:
-                    User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.owner", Session.Langue));
+                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.owner", Session.Langue));
                     return true;
                 case 5:
-                    User.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue", Session.Langue));
+                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue", Session.Langue));
                     return true;
             }
             if (!CmdInfo.UserGotAuthorization(Session))
@@ -101,7 +101,7 @@ namespace Butterfly.Game.Chat.Commands
 
             if (CmdInfo.UserGotAuthorizationStaffLog())
             {
-                ButterflyEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().CurrentRoomId, string.Empty, Split[0].ToLower(), string.Format("Tchat commande: {0}", string.Join(" ", Split)));
+                WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().CurrentRoomId, string.Empty, Split[0].ToLower(), string.Format("Tchat commande: {0}", string.Join(" ", Split)));
             }
 
             Cmd.Execute(Session, Session.GetUser().CurrentRoom, User, Split);

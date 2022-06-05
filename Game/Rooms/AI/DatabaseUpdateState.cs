@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Pets
+﻿namespace Wibbo.Game.Pets
 {
     public enum DatabaseUpdateState
     {

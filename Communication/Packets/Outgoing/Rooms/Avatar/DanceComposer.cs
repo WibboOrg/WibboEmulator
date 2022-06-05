@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Avatar
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Avatar
 {
     internal class DanceComposer : ServerPacket
     {

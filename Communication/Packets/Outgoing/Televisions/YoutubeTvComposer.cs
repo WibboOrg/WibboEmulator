@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Communication.Packets.Outgoing.Televisions
+﻿namespace Wibbo.Communication.Packets.Outgoing.Televisions
 {
     internal class YoutubeTvComposer : ServerPacket
     {

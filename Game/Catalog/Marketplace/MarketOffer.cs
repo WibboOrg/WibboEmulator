@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Catalog.Marketplace
+﻿namespace Wibbo.Game.Catalog.Marketplace
 {
     public class MarketOffer
     {

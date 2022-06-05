@@ -1,6 +1,6 @@
-﻿using Butterfly.Utilities.Events;
+﻿using Wibbo.Utilities.Events;
 
-namespace Butterfly.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     public delegate void TeamScoreChangedDelegate(object sender, TeamScoreChangedArgs e);
 }

@@ -1,12 +1,12 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Game.Items;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Utilities;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Game.Items;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms.Map.Movement;
+using Wibbo.Utilities;
 using System.Collections.Concurrent;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms.Projectile
+namespace Wibbo.Game.Rooms.Projectile
 {
     public class ProjectileManager
     {

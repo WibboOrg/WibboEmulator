@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Items.Wired.Actions
+namespace Wibbo.Game.Items.Wired.Actions
 {
     public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
     {
@@ -21,7 +21,7 @@ namespace Butterfly.Game.Items.Wired.Actions
 
             if (this.Items.Count > 1)
             {
-                Item roomItem = this.Items[ButterflyEnvironment.GetRandomNumber(0, this.Items.Count - 1)];
+                Item roomItem = this.Items[WibboEnvironment.GetRandomNumber(0, this.Items.Count - 1)];
                 if (roomItem == null)
                 {
                     return false;

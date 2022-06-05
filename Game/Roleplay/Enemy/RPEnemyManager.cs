@@ -1,8 +1,8 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Roleplay.Enemy
+namespace Wibbo.Game.Roleplay.Enemy
 {
     public class RPEnemyManager
     {
@@ -75,7 +75,7 @@ namespace Butterfly.Game.Roleplay.Enemy
                 return this.GetEnemyBot(BotId);
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoleplayEnemyDao.Insert(dbClient, BotId, "bot");
             }
@@ -92,7 +92,7 @@ namespace Butterfly.Game.Roleplay.Enemy
                 return this.GetEnemyPet(PetId);
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoleplayEnemyDao.Insert(dbClient, PetId, "pet");
             }
@@ -109,7 +109,7 @@ namespace Butterfly.Game.Roleplay.Enemy
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoleplayEnemyDao.Delete(dbClient, BotId);
             }
@@ -124,7 +124,7 @@ namespace Butterfly.Game.Roleplay.Enemy
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoleplayEnemyDao.Delete(dbClient, PetId);
             }

@@ -1,8 +1,8 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Steal : IChatCommand
     {
@@ -67,10 +67,10 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 Rp.SendUpdate();
                 RpTwo.SendUpdate();
 
-                TargetRoomUser.SendWhisperChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.vole.receive", TargetRoomUser.GetClient().Langue), NumberMoney, UserRoom.GetUsername()));
+                TargetRoomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.receive", TargetRoomUser.GetClient().Langue), NumberMoney, UserRoom.GetUsername()));
 
-                Session.SendWhisper(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.vole.send", Session.Langue), NumberMoney, TargetRoomUser.GetUsername()));
-                UserRoom.OnChat(string.Format(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.vole.send.chat", Session.Langue), TargetRoomUser.GetUsername()), 0, true);
+                Session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.send", Session.Langue), NumberMoney, TargetRoomUser.GetUsername()));
+                UserRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.send.chat", Session.Langue), TargetRoomUser.GetUsername()), 0, true);
             }
         }
     }

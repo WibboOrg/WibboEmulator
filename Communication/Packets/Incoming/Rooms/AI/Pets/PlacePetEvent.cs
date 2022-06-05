@@ -1,12 +1,12 @@
-using Butterfly.Communication.Packets.Outgoing.Inventory.Pets;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Pets;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Rooms.AI;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Pets;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.AI;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class PlacePetEvent : IPacketEvent
     {
@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!ButterflyEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
             {
                 return;
             }
@@ -27,7 +27,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (Room.GetRoomUserManager().BotPetCount >= 30)
             {
-                Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("notif.placepet.error", Session.Langue));
+                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.placepet.error", Session.Langue));
                 return;
             }
 
@@ -70,7 +70,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             
             Pet.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 BotPetDao.UpdateRoomId(dbClient, Pet.PetId, Pet.RoomId);
             }

@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Butterfly.Utilities
+namespace Wibbo.Utilities
 {
     internal static class StringCharFilter
     {

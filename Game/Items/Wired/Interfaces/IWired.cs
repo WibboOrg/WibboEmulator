@@ -1,8 +1,8 @@
-﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
 using System.Data;
 
-namespace Butterfly.Game.Items.Wired.Interfaces
+namespace Wibbo.Game.Items.Wired.Interfaces
 {
     public interface IWired
     {

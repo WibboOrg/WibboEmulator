@@ -1,7 +1,7 @@
-﻿using Butterfly.Communication.Interfaces;
+﻿using Wibbo.Communication.Interfaces;
 using System.Text;
 
-namespace Butterfly.Communication.Packets.Outgoing
+namespace Wibbo.Communication.Packets.Outgoing
 {
     public class ServerPacket : IServerPacket
     {

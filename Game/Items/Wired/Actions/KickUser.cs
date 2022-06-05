@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Interfaces;
-using Butterfly.Game.Rooms;
-using Butterfly.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
 
-namespace Butterfly.Game.Items.Wired.Actions
+namespace Wibbo.Game.Items.Wired.Actions
 {
     public class KickUser : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
     {   
@@ -36,7 +36,7 @@ namespace Butterfly.Game.Items.Wired.Actions
             {
                 if (user.GetClient().GetUser().HasFuse("fuse_mod") || this.RoomInstance.RoomData.OwnerId == user.UserId)
                 {
-                    user.SendWhisperChat(ButterflyEnvironment.GetLanguageManager().TryGetValue("wired.kick.exception", user.GetClient().Langue));
+                    user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("wired.kick.exception", user.GetClient().Langue));
                     
                     return false;
                 }

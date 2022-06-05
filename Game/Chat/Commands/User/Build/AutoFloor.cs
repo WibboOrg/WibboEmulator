@@ -1,11 +1,11 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Rooms.Session;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 using System.Drawing;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class AutoFloor : IChatCommand
     {
@@ -38,7 +38,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             Map = Map.TrimEnd(Convert.ToChar(13));
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 RoomModelCustomDao.Replace(dbClient, Room.Id, Room.GetGameMap().Model.DoorX, Room.GetGameMap().Model.DoorY, Room.GetGameMap().Model.DoorZ, Room.GetGameMap().Model.DoorOrientation, Map, Room.GetGameMap().Model.WallHeight);
                 RoomDao.UpdateModel(dbClient, Room.Id);
@@ -46,7 +46,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             List<RoomUser> UsersToReturn = Room.GetRoomUserManager().GetRoomUsers().ToList();
 
-            ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
+            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
 
 
             foreach (RoomUser User in UsersToReturn)

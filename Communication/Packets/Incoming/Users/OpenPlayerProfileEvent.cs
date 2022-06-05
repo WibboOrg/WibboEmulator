@@ -1,11 +1,11 @@
-using Butterfly.Communication.Packets.Outgoing.Users;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Users;
+using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class OpenPlayerProfileEvent : IPacketEvent
     {
@@ -16,13 +16,13 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int userId = Packet.PopInt();
             bool IsMe = Packet.PopBoolean();
 
-            User targetData = ButterflyEnvironment.GetUserById(userId);
+            User targetData = WibboEnvironment.GetUserById(userId);
             if (targetData == null)
             {
                 return;
             }
 
-            List<Group> Groups = ButterflyEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.MyGroups);
+            List<Group> Groups = WibboEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.MyGroups);
 
             int friendCount = 0;
 
@@ -32,7 +32,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
             else
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     friendCount = MessengerFriendshipDao.GetCount(dbClient, userId);
                 }

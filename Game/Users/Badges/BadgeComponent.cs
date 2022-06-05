@@ -1,9 +1,9 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Collections;
 using System.Data;
 
-namespace Butterfly.Game.Users.Badges
+namespace Wibbo.Game.Users.Badges
 {
     public class BadgeComponent : IDisposable
     {
@@ -106,7 +106,7 @@ namespace Butterfly.Game.Users.Badges
 
             if (InDatabase)
             {
-                using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
                     UserBadgeDao.Insert(dbClient, this._userInstance.Id, Slot, Badge);
                 }
@@ -129,7 +129,7 @@ namespace Butterfly.Game.Users.Badges
                 return;
             }
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 UserBadgeDao.Delete(dbClient, this._userInstance.Id, Badge);
 
             this._badges.Remove(this.GetBadge(Badge).Code);

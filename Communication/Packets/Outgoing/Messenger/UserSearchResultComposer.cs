@@ -1,6 +1,6 @@
-using Butterfly.Game.Users.Messenger;
+using Wibbo.Game.Users.Messenger;
 
-namespace Butterfly.Communication.Packets.Outgoing.Messenger
+namespace Wibbo.Communication.Packets.Outgoing.Messenger
 {
     internal class UserSearchResultComposer : ServerPacket
     {
@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Messenger
                 this.WriteInteger(search.UserId);
                 this.WriteString(search.Username);
                 this.WriteString(""); //motto
-                this.WriteBoolean(ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(search.UserId) != null);
+                this.WriteBoolean(WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(search.UserId) != null);
                 this.WriteBoolean(false);
                 this.WriteString(string.Empty);
                 this.WriteInteger(0);
@@ -27,7 +27,7 @@ namespace Butterfly.Communication.Packets.Outgoing.Messenger
                 this.WriteInteger(search.UserId);
                 this.WriteString(search.Username);
                 this.WriteString(""); //motto
-                this.WriteBoolean(ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(search.UserId) != null);
+                this.WriteBoolean(WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(search.UserId) != null);
                 this.WriteBoolean(false);
                 this.WriteString(string.Empty);
                 this.WriteInteger(0);

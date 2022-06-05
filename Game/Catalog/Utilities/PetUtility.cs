@@ -1,8 +1,8 @@
-﻿using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Pets;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Pets;
 
-namespace Butterfly.Game.Catalog.Utilities
+namespace Wibbo.Game.Catalog.Utilities
 {
     public static class PetUtility
     {
@@ -13,7 +13,7 @@ namespace Butterfly.Game.Catalog.Utilities
                 return false;
             }
 
-            if (!ButterflyEnvironment.IsValidAlphaNumeric(PetName))
+            if (!WibboEnvironment.IsValidAlphaNumeric(PetName))
             {
                 return false;
             }
@@ -23,11 +23,11 @@ namespace Butterfly.Game.Catalog.Utilities
 
         public static Pet CreatePet(int UserId, string Name, int Type, string Race, string Color)
         {
-            Pet pet = new Pet(404, UserId, 0, Name, Type, Race, Color, 0, 100, 100, 0, ButterflyEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 1, -1, false);
+            Pet pet = new Pet(404, UserId, 0, Name, Type, Race, Color, 0, 100, 100, 0, WibboEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 1, -1, false);
 
             pet.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 pet.PetId = BotPetDao.InsertGetId(dbClient, pet.PetId, pet.Name, pet.Race, pet.Color, pet.OwnerId, pet.Type, pet.CreationStamp);
             }

@@ -1,10 +1,10 @@
-using Butterfly.Communication.Packets.Outgoing.Groups;
+using Wibbo.Communication.Packets.Outgoing.Groups;
 
-using Butterfly.Game.Clients;
-using Butterfly.Game.Groups;
-using Butterfly.Game.Users;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Users;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class AcceptGroupMembershipEvent : IPacketEvent
     {
@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             int GroupId = Packet.PopInt();
             int UserId = Packet.PopInt();
 
-            if (!ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
             {
                 return;
             }
@@ -30,7 +30,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            User user = ButterflyEnvironment.GetUserById(UserId);
+            User user = WibboEnvironment.GetUserById(UserId);
             if (user == null)
             {
                 return;

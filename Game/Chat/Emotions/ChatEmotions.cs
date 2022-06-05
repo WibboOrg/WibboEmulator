@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Chat.Emotions
+﻿namespace Wibbo.Game.Chat.Emotions
 {
     internal enum ChatEmotions
     {

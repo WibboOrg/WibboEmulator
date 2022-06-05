@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Rooms.Moodlight
+﻿namespace Wibbo.Game.Rooms.Moodlight
 {
     public class MoodlightPreset
     {

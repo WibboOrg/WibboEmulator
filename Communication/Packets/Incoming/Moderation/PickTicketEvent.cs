@@ -1,6 +1,6 @@
-using Butterfly.Game.Clients;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class PickTicketEvent : IPacketEvent
     {
@@ -14,7 +14,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
             }
 
             Packet.PopInt();
-            ButterflyEnvironment.GetGame().GetModerationManager().PickTicket(Session, Packet.PopInt());
+            WibboEnvironment.GetGame().GetModerationManager().PickTicket(Session, Packet.PopInt());
         }
     }
 }

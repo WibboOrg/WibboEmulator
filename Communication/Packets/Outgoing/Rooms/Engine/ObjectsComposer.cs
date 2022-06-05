@@ -1,8 +1,8 @@
-using Butterfly.Game.Items;
-using Butterfly.Game.Items.Wired;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Items;
+using Wibbo.Game.Items.Wired;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.Engine
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class ObjectsComposer : ServerPacket
     {

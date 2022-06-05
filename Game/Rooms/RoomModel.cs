@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Rooms
+﻿namespace Wibbo.Game.Rooms
 {
     public class RoomModel
     {

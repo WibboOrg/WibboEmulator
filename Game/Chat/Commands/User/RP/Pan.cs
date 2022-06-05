@@ -1,9 +1,9 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Roleplay.Player;
-using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms.Map.Movement;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Pan : IChatCommand
     {
@@ -32,13 +32,13 @@ namespace Butterfly.Game.Chat.Commands.Cmd
 
             if (Rp.Munition <= 0)
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.munitionnotfound", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("rp.munitionnotfound", Session.Langue));
                 return;
             }
 
             if (Rp.GunLoad <= 0)
             {
-                Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("rp.reloadweapon", Session.Langue));
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("rp.reloadweapon", Session.Langue));
                 return;
             }
 
@@ -67,7 +67,7 @@ namespace Butterfly.Game.Chat.Commands.Cmd
                 Rp.Munition--;
                 Rp.GunLoad--;
 
-                int Dmg = ButterflyEnvironment.GetRandomNumber(Rp.WeaponGun.DmgMin, Rp.WeaponGun.DmgMax);
+                int Dmg = WibboEnvironment.GetRandomNumber(Rp.WeaponGun.DmgMin, Rp.WeaponGun.DmgMax);
                 Room.GetProjectileManager().AddProjectile(UserRoom.VirtualId, UserRoom.SetX, UserRoom.SetY, UserRoom.SetZ, movement, Dmg, Rp.WeaponGun.Distance);
             }
 

@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Clients;
+﻿using Wibbo.Game.Clients;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms.AI.Types
+namespace Wibbo.Game.Rooms.AI.Types
 {
     public class GenericBot : BotAI
     {
@@ -10,8 +10,8 @@ namespace Butterfly.Game.Rooms.AI.Types
 
         public GenericBot(int VirtualId)
         {
-            this.SpeechTimer = ButterflyEnvironment.GetRandomNumber(10, 40);
-            this.ActionTimer = ButterflyEnvironment.GetRandomNumber(10, 30);
+            this.SpeechTimer = WibboEnvironment.GetRandomNumber(10, 40);
+            this.ActionTimer = WibboEnvironment.GetRandomNumber(10, 30);
         }
 
         public override void OnSelfEnterRoom()
@@ -66,7 +66,7 @@ namespace Butterfly.Game.Rooms.AI.Types
                     Point randomWalkableSquare = this.GetRoom().GetGameMap().getRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
                     this.GetRoomUser().MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
                 }
-                this.ActionTimer = ButterflyEnvironment.GetRandomNumber(10, 60);
+                this.ActionTimer = WibboEnvironment.GetRandomNumber(10, 60);
             }
             else
             {

@@ -1,6 +1,6 @@
-using Butterfly.Game.Items;
+using Wibbo.Game.Items;
 
-namespace Butterfly.Communication.Packets.Outgoing.Inventory.Trading
+namespace Wibbo.Communication.Packets.Outgoing.Inventory.Trading
 {
     internal class TradingUpdateComposer : ServerPacket
     {

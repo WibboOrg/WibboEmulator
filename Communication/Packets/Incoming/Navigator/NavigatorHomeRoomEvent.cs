@@ -1,10 +1,10 @@
-using Butterfly.Communication.Packets.Outgoing.Navigator;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class NavigatorHomeRoomEvent : IPacketEvent
     {
@@ -13,14 +13,14 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         public void Parse(Client Session, ClientPacket Packet)
         {
             int RoomId = Packet.PopInt();
-            RoomData roomData = ButterflyEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+            RoomData roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
             if (RoomId != 0 && (roomData == null || roomData.OwnerName.ToLower() != Session.GetUser().Username.ToLower()))
             {
                 return;
             }
 
             Session.GetUser().HomeRoom = RoomId;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 UserDao.UpdateHomeRoom(dbClient, Session.GetUser().Id, RoomId);
             }

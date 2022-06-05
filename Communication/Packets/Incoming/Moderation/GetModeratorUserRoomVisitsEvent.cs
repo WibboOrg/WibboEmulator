@@ -1,7 +1,7 @@
-using Butterfly.Communication.Packets.Outgoing.Moderation;
-using Butterfly.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Moderation;
+using Wibbo.Game.Clients;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetModeratorUserRoomVisitsEvent : IPacketEvent
     {
@@ -16,7 +16,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             int userId = Packet.PopInt();
 
-            Client clientTarget = ButterflyEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            Client clientTarget = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
 
             if (clientTarget == null)
             {

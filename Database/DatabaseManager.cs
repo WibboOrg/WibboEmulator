@@ -1,7 +1,7 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Interfaces;
 using MySql.Data.MySqlClient;
 
-namespace Butterfly.Database
+namespace Wibbo.Database
 {
     public sealed class DatabaseManager
     {

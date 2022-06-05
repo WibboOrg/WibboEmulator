@@ -1,9 +1,9 @@
-using Butterfly.Communication.Packets.Outgoing.BuildersClub;
-using Butterfly.Communication.Packets.Outgoing.Catalog;
-using Butterfly.Game.Clients;
-using Butterfly.Utilities;
+using Wibbo.Communication.Packets.Outgoing.BuildersClub;
+using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Game.Clients;
+using Wibbo.Utilities;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetCatalogIndexEvent : IPacketEvent
     {
@@ -13,7 +13,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
         {
             ServerPacketList packetList = new ServerPacketList();
 
-            packetList.Add(new CatalogIndexComposer(Session, ButterflyEnvironment.GetGame().GetCatalog().GetPages()));//, Sub));
+            packetList.Add(new CatalogIndexComposer(Session, WibboEnvironment.GetGame().GetCatalog().GetPages()));//, Sub));
             packetList.Add(new CatalogItemDiscountComposer());
             packetList.Add(new BCBorrowedItemsComposer());
 

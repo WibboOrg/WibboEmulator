@@ -1,10 +1,10 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Inventory.Purse;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
 using System.Data;
 
-namespace Butterfly.Communication.Packets.Incoming.Marketplace
+namespace Wibbo.Communication.Packets.Incoming.Marketplace
 {
     internal class RedeemOfferCreditsEvent : IPacketEvent
     {
@@ -15,7 +15,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
             int CreditsOwed = 0;
 
             DataTable Table = null;
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 Table = CatalogMarketplaceOfferDao.GetPriceByUserId(dbClient, Session.GetUser().Id);
 
             if (Table != null)
@@ -30,7 +30,7 @@ namespace Butterfly.Communication.Packets.Incoming.Marketplace
                     Session.GetUser().WibboPoints += CreditsOwed;
                     Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
-                    using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
                         CatalogMarketplaceOfferDao.Delete(dbClient, Session.GetUser().Id);
                         UserDao.UpdateAddPoints(dbClient, Session.GetUser().Id, CreditsOwed);

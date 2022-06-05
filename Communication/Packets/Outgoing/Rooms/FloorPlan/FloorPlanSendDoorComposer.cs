@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.FloorPlan
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.FloorPlan
 {
     internal class FloorPlanSendDoorComposer : ServerPacket
     {

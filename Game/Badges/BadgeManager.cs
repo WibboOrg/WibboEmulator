@@ -1,6 +1,6 @@
-﻿using Butterfly.Database.Interfaces;
+﻿using Wibbo.Database.Interfaces;
 
-namespace Butterfly.Game.Badges
+namespace Wibbo.Game.Badges
 {
     public class BadgeManager
     {

@@ -1,9 +1,9 @@
-using Butterfly.Game.Clients;
-using Butterfly.Game.Items;
-using Butterfly.Game.Quests;
-using Butterfly.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class UseFurnitureEvent : IPacketEvent
     {
@@ -11,7 +11,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
+            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             if (room == null)
             {
                 return;
@@ -27,55 +27,55 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (RoomItem.GetBaseItem().ItemName == "bw_lgchair")
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 1936);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 1936);
             }
             else if (RoomItem.GetBaseItem().ItemName.Contains("bw_sboard"))
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 1969);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 1969);
             }
             else if (RoomItem.GetBaseItem().ItemName.Contains("bw_van"))
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 1956);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 1956);
             }
             else if (RoomItem.GetBaseItem().ItemName.Contains("party_floor"))
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 1369);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 1369);
             }
             else if (RoomItem.GetBaseItem().ItemName.Contains("party_ball"))
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 1375);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 1375);
             }
             else if (RoomItem.GetBaseItem().ItemName.Contains("jukebox"))
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 1019);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 1019);
             }
             else if (RoomItem.GetBaseItem().ItemName.Contains("bb_gate"))
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2050);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2050);
             }
             else if (RoomItem.GetBaseItem().ItemName == "bb_patch1")
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2040);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2040);
             }
             else if (RoomItem.GetBaseItem().ItemName == "bb_rnd_tele")
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2049);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2049);
             }
             else if (RoomItem.GetBaseItem().ItemName.Contains("es_gate_"))
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2167);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2167);
             }
             else if (RoomItem.GetBaseItem().ItemName.Contains("es_score_"))
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2172);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2172);
             }
             else if (RoomItem.GetBaseItem().ItemName.Contains("es_exit"))
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2166);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2166);
             }
             else if (RoomItem.GetBaseItem().ItemName == "es_tagging")
             {
-                ButterflyEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2148);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.EXPLORE_FIND_ITEM, 2148);
             }
 
             bool UserHasRights = false;

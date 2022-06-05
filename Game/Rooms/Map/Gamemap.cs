@@ -1,12 +1,12 @@
-﻿using Butterfly.Game.Items;
-using Butterfly.Game.Items.Wired;
-using Butterfly.Game.Rooms.Games;
-using Butterfly.Game.Rooms.Map.Movement;
-using Butterfly.Game.Rooms.PathFinding;
+﻿using Wibbo.Game.Items;
+using Wibbo.Game.Items.Wired;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms.Map.Movement;
+using Wibbo.Game.Rooms.PathFinding;
 using System.Collections.Concurrent;
 using System.Drawing;
 
-namespace Butterfly.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     public class Gamemap
     {
@@ -34,7 +34,7 @@ namespace Butterfly.Game.Rooms
             this.ObliqueDisable = true;
             this.DiagonalEnabled = true;
 
-            RoomModel mStaticModel = ButterflyEnvironment.GetGame().GetRoomManager().GetModel(room.RoomData.ModelName, room.Id);
+            RoomModel mStaticModel = WibboEnvironment.GetGame().GetRoomManager().GetModel(room.RoomData.ModelName, room.Id);
             if (mStaticModel == null)
             {
                 throw new Exception("No modeldata found for roomID " + room.Id);
@@ -176,8 +176,8 @@ namespace Butterfly.Game.Rooms
 
         public Point getRandomWalkableSquare(int x, int y)
         {
-            int rx = ButterflyEnvironment.GetRandomNumber(x - 5, x + 5);
-            int ry = ButterflyEnvironment.GetRandomNumber(y - 5, y + 5);
+            int rx = WibboEnvironment.GetRandomNumber(x - 5, x + 5);
+            int ry = WibboEnvironment.GetRandomNumber(y - 5, y + 5);
 
             if (this.Model.DoorX == rx || this.Model.DoorY == ry || !this.CanWalk(rx, ry))
             {

@@ -1,10 +1,10 @@
-﻿using Butterfly.Core;
-using Butterfly.Database.Daos;
-using Butterfly.Database.Interfaces;
-using Butterfly.Game.Groups;
+﻿using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Groups;
 using System.Data;
 
-namespace Butterfly.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     public class RoomData
     {
@@ -56,7 +56,7 @@ namespace Butterfly.Game.Rooms
             {
                 if (this.mModel == null)
                 {
-                    this.mModel = ButterflyEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, this.Id);
+                    this.mModel = WibboEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, this.Id);
                 }
 
                 return this.mModel;
@@ -101,7 +101,7 @@ namespace Butterfly.Game.Rooms
             this.TrocStatus = 2;
             this.Group = null;
             this.AllowRightsOverride = false;
-            this.mModel = ButterflyEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, pId);
+            this.mModel = WibboEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, pId);
             this.HideWireds = false;
             this.SellPrice = 0;
         }
@@ -115,7 +115,7 @@ namespace Butterfly.Game.Rooms
             this.OwnerId = 0;
             this.Langue = Language.FRANCAIS;
 
-            using (IQueryAdapter dbClient = ButterflyEnvironment.GetDatabaseManager().GetQueryReactor())
+            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 DataRow UserRow = UserDao.GetIdAndLangue(dbClient, this.OwnerName);
                 if (UserRow != null)
@@ -147,11 +147,11 @@ namespace Butterfly.Game.Rooms
             this.ModelName = (string)Row["model_name"];
             this.Score = Convert.ToInt32(Row["score"]);
             this.Tags = new List<string>();
-            this.AllowPets = ButterflyEnvironment.EnumToBool(Row["allow_pets"].ToString());
-            this.AllowPetsEating = ButterflyEnvironment.EnumToBool(Row["allow_pets_eat"].ToString());
-            this.AllowWalkthrough = ButterflyEnvironment.EnumToBool(Row["allow_walkthrough"].ToString());
-            this.AllowRightsOverride = ButterflyEnvironment.EnumToBool(Row["allow_rightsoverride"].ToString());
-            this.Hidewall = ButterflyEnvironment.EnumToBool(Row["allow_hidewall"].ToString());
+            this.AllowPets = WibboEnvironment.EnumToBool(Row["allow_pets"].ToString());
+            this.AllowPetsEating = WibboEnvironment.EnumToBool(Row["allow_pets_eat"].ToString());
+            this.AllowWalkthrough = WibboEnvironment.EnumToBool(Row["allow_walkthrough"].ToString());
+            this.AllowRightsOverride = WibboEnvironment.EnumToBool(Row["allow_rightsoverride"].ToString());
+            this.Hidewall = WibboEnvironment.EnumToBool(Row["allow_hidewall"].ToString());
             this.Password = (string)Row["password"];
             this.Wallpaper = (string)Row["wallpaper"];
             this.Floor = (string)Row["floor"];
@@ -169,9 +169,9 @@ namespace Butterfly.Game.Rooms
             this.WhoCanKick = Convert.ToInt32((string)Row["moderation_kick_fuse"]);
             this.BanFuse = Convert.ToInt32((string)Row["moderation_ban_fuse"]);
             this.GroupId = Convert.ToInt32(Row["group_id"]);
-            ButterflyEnvironment.GetGame().GetGroupManager().TryGetGroup(this.GroupId, out Group Group);
+            WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(this.GroupId, out Group Group);
             this.Group = Group;
-            this.HideWireds = ButterflyEnvironment.EnumToBool(Row["allow_hidewireds"].ToString());
+            this.HideWireds = WibboEnvironment.EnumToBool(Row["allow_hidewireds"].ToString());
 
             this.TrocStatus = Convert.ToInt32((string)Row["troc_status"]);
 
@@ -184,7 +184,7 @@ namespace Butterfly.Game.Rooms
 
             this.SellPrice = Convert.ToInt32(Row["price"]);
 
-            this.mModel = ButterflyEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, this.Id);
+            this.mModel = WibboEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, this.Id);
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿using Butterfly.Core;
+﻿using Wibbo.Core;
 
-namespace Butterfly.Game.Catalog
+namespace Wibbo.Game.Catalog
 {
     public class CatalogPage
     {

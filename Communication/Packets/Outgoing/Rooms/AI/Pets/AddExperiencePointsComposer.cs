@@ -1,4 +1,4 @@
-namespace Butterfly.Communication.Packets.Outgoing.Rooms.AI.Pets
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.AI.Pets
 {
     internal class AddExperiencePointsComposer : ServerPacket
     {

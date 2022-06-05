@@ -1,7 +1,7 @@
-using Butterfly.Database.Interfaces;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace Butterfly.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class ModerationTicketDao
     {
@@ -13,7 +13,7 @@ namespace Butterfly.Database.Daos
 
         internal static int Insert(IQueryAdapter dbClient, string message, string roomname, int category, int userId, int reportedUser, int roomId)
         {
-            dbClient.SetQuery("INSERT INTO `moderation_ticket` (score,type,status,sender_id,reported_id,moderator_id,message,room_id,room_name,timestamp) VALUES (1,'" + category + "','open','" + userId + "','" + reportedUser + "','0',@message,'" + roomId + "',@name,'" + ButterflyEnvironment.GetUnixTimestamp() + "')");
+            dbClient.SetQuery("INSERT INTO `moderation_ticket` (score,type,status,sender_id,reported_id,moderator_id,message,room_id,room_name,timestamp) VALUES (1,'" + category + "','open','" + userId + "','" + reportedUser + "','0',@message,'" + roomId + "',@name,'" + WibboEnvironment.GetUnixTimestamp() + "')");
             dbClient.AddParameter("message", message);
             dbClient.AddParameter("name", roomname);
             return Convert.ToInt32(dbClient.InsertQuery());
@@ -21,7 +21,7 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateStatusPicked(IQueryAdapter dbClient, int moderatorId, int id)
         {
-            dbClient.RunQuery("UPDATE `moderation_ticket` SET status = 'picked', moderator_id = '" + moderatorId + "', timestamp = '" + ButterflyEnvironment.GetUnixTimestamp() + "' WHERE id = '" + id + "'");
+            dbClient.RunQuery("UPDATE `moderation_ticket` SET status = 'picked', moderator_id = '" + moderatorId + "', timestamp = '" + WibboEnvironment.GetUnixTimestamp() + "' WHERE id = '" + id + "'");
         }
 
         internal static void UpdateStatus(IQueryAdapter dbClient, string str, int id)

@@ -1,12 +1,12 @@
-﻿using Butterfly.Communication.Packets.Outgoing.Misc;
-using Butterfly.Communication.Packets.Outgoing.Notifications;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Chat;
-using Butterfly.Communication.Packets.Outgoing.Rooms.Engine;
-using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
-using Butterfly.Utilities;
+﻿using Wibbo.Communication.Packets.Outgoing.Misc;
+using Wibbo.Communication.Packets.Outgoing.Notifications;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Utilities;
 
-namespace Butterfly.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetRoomEntryDataEvent : IPacketEvent
     {
@@ -24,7 +24,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room Room = ButterflyEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().LoadingRoomId);
+            Room Room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().LoadingRoomId);
             if (Room == null)
             {
                 return;
@@ -85,7 +85,7 @@ namespace Butterfly.Communication.Packets.Incoming.Structure
 
             if (Room.RoomData.OwnerId != Session.GetUser().Id)
             {
-                ButterflyEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomEntry", 1);
+                WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomEntry", 1);
             }
 
             double timeStampNow = UnixTimestamp.GetNow();

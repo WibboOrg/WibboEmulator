@@ -1,6 +1,6 @@
-using Butterfly.Database.Interfaces;
+using Wibbo.Database.Interfaces;
 
-namespace Butterfly.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class EmulatorStatusDao
     {
@@ -17,7 +17,7 @@ namespace Butterfly.Database.Daos
 
         internal static void UpdateReset(IQueryAdapter dbClient)
         {
-            dbClient.RunQuery("UPDATE `emulator_status` SET status = '1', users_online = '0', rooms_loaded = '0', stamp = '" + ButterflyEnvironment.GetUnixTimestamp() + "'");
+            dbClient.RunQuery("UPDATE `emulator_status` SET status = '1', users_online = '0', rooms_loaded = '0', stamp = '" + WibboEnvironment.GetUnixTimestamp() + "'");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Roleplay.Player
+﻿namespace Wibbo.Game.Roleplay.Player
 {
     public class RolePlayInventoryItem
     {

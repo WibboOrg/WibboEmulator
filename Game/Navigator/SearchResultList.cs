@@ -1,4 +1,4 @@
-﻿namespace Butterfly.Game.Navigator
+﻿namespace Wibbo.Game.Navigator
 {
     public class SearchResultList
     {

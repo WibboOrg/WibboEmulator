@@ -1,7 +1,7 @@
-﻿using Butterfly.Game.Clients;
-using Butterfly.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace Butterfly.Communication.Packets.Incoming.RolePlay
+namespace Wibbo.Communication.Packets.Incoming.RolePlay
 {
     internal class RpBotChooseEvent : IPacketEvent
     {
