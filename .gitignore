@@ -4,5 +4,4 @@ bin
 obj
 debug.log
 
-Config\figuredata.xml
-Config\settings.ini
+Config
