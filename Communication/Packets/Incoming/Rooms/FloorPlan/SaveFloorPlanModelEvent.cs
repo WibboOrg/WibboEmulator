@@ -55,14 +55,14 @@ namespace Wibbo.Communication.Packets.Incoming.Structure
 
             if (string.IsNullOrEmpty(Map))
             {
-                Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entr� un Floormap invalide! (Map vide)"));
+                Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entré un Floormap invalide! (Map vide)"));
                 return;
             }
 
             if (Map.Any(letter => !validLetters.Contains(letter)))
             {
                 //Logging.LogException("Erreur map: " + Map);
-                Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entr� un Floormap invalide! (Code map)"));
+                Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entré un Floormap invalide! (Code map)"));
                 return;
             }
 
@@ -89,7 +89,7 @@ namespace Wibbo.Communication.Packets.Incoming.Structure
 
             if (!isValid)
             {
-                Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entr� un Floormap invalide! (Forme)"));
+                Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entré un Floormap invalide! (Forme)"));
                 return;
             }
 

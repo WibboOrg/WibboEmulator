@@ -167,7 +167,7 @@ namespace Wibbo.Communication.Packets.Incoming.Structure
 
                 if (Message.StartsWith(":", StringComparison.CurrentCulture) && WibboEnvironment.GetGame().GetChatManager().GetCommands().Parse(Session, User, Room, Message))
                 {
-                    Room.GetChatMessageManager().AddMessage(Session.GetUser().Id, Session.GetUser().Username, Room.Id, string.Format("{0} a utilisé la commande {1}", Session.GetUser().Username, Message), UnixTimestamp.GetNow());
+                    Room.GetChatMessageManager().AddMessage(Session.GetUser().Id, Session.GetUser().Username, Room.Id, string.Format("{0} a utilisÃ© la commande {1}", Session.GetUser().Username, Message), UnixTimestamp.GetNow());
                     return;
                 }
 

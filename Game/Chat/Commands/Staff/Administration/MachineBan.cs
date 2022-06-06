@@ -24,7 +24,7 @@ namespace Wibbo.Game.Chat.Commands.Cmd
             else if (clientByUsername.GetUser().Rank >= Session.GetUser().Rank)
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
-                WibboEnvironment.GetGame().GetClientManager().BanUser(Session, "Robot", 788922000, "Votre compte a été banni par s�curit�", false, false);
+                WibboEnvironment.GetGame().GetClientManager().BanUser(Session, "Robot", 788922000, "Votre compte a été banni par sécurité", false, false);
             }
             else
             {

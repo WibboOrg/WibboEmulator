@@ -28,7 +28,7 @@ namespace Wibbo.Communication.WebSocket
             this._webSocketServer = new WebSocketServer(IPAddress.Any, port, isSecure);
             if (isSecure)
             {
-                string patchCertificate = WibboEnvironment.PatchDir + "Config/certificate.pfx";
+                string patchCertificate = WibboEnvironment.PatchDir + "Configuration/certificate.pfx";
                 this._webSocketServer.SslConfiguration.ServerCertificate = new X509Certificate2(patchCertificate, certificatePassword);
                 //this._webSocketServer.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
                 //this._webSocketServer.SslConfiguration.CheckCertificateRevocation = true;
