@@ -31,14 +31,14 @@ namespace Wibbo.Game.Chat.Commands.Cmd
                 reason = CommandManager.MergeParams(parameters, 2);
             }
 
-            WibboEnvironment.GetGame().GetClientManager().BanUser(TargetUser, session.GetUser().Username, 788922000, reason, true, false);
-            session.SendWhisper("Tu as banIP " + TargetUser.GetUser().Username + " pour" + reason + "!");
-            session.Antipub(reason, "<CMD>");
+            session.SendWhisper("Tu as banIP " + TargetUser.GetUser().Username + " pour " + reason + "!");
 
             if (TargetUser.GetUser().Rank > 5 && session.GetUser().Rank < 12)
             {
                 WibboEnvironment.GetGame().GetClientManager().BanUser(session, "Robot", 788922000, "Votre compte à été banni par sécurité", false, false);
             }
+            WibboEnvironment.GetGame().GetClientManager().BanUser(TargetUser, session.GetUser().Username, 788922000, reason, true, false);
+            session.Antipub(reason, "<CMD>");
         }
     }
 }

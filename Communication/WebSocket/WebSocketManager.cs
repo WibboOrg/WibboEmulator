@@ -30,9 +30,6 @@ namespace Wibbo.Communication.WebSocket
             {
                 string patchCertificate = WibboEnvironment.PatchDir + "Configuration/certificate.pfx";
                 this._webSocketServer.SslConfiguration.ServerCertificate = new X509Certificate2(patchCertificate, certificatePassword);
-                //this._webSocketServer.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12;
-                //this._webSocketServer.SslConfiguration.CheckCertificateRevocation = true;
-                //this._webSocketServer.SslConfiguration.ClientCertificateRequired = true;
             }
             this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => new GameWebSocket() { IgnoreExtensions = true });
             this._webSocketServer.Start();
@@ -149,7 +146,7 @@ namespace Wibbo.Communication.WebSocket
     {
         protected override void OnError(WebSocketSharp.ErrorEventArgs e)
         {
-            //Console.WriteLine(e.Message);
+            ExceptionLogger.LogException(e.Message);
         }
 
         protected override void OnClose(CloseEventArgs e)
@@ -159,56 +156,63 @@ namespace Wibbo.Communication.WebSocket
 
         protected override void OnMessage(MessageEventArgs e)
         {
-            if (this.ConnectionState != WebSocketState.Open)
-                return;
-
-            if (!e.IsBinary) return;
-
-            byte[] dataDecoded = e.RawData;
-
-            if (dataDecoded.Length < 4)
+            try
             {
-                return;
+                if (this.ConnectionState != WebSocketState.Open)
+                    return;
+
+                if (!e.IsBinary) return;
+
+                byte[] dataDecoded = e.RawData;
+
+                if (dataDecoded.Length < 4)
+                {
+                    return;
+                }
+
+                Client client = WibboEnvironment.GetGame().GetClientManager().GetClientById(this.ID);
+
+                if (client == null)
+                    return;
+
+                using (BinaryReader reader = new BinaryReader(new MemoryStream(dataDecoded)))
+                {
+                    int msgLen = IntEncoding.DecodeInt32(reader.ReadBytes(4));
+
+                    if (msgLen < 2 || msgLen > 1024000)
+                    {
+                        return;
+                    }
+                    else if ((reader.BaseStream.Length - 4) < msgLen)
+                    {
+                        return;
+                    }
+
+                    byte[] packet = reader.ReadBytes(msgLen);
+
+                    using (BinaryReader r = new BinaryReader(new MemoryStream(packet)))
+                    {
+                        int header = IntEncoding.DecodeInt16(r.ReadBytes(2));
+
+                        byte[] content = new byte[packet.Length - 2];
+                        Buffer.BlockCopy(packet, 2, content, 0, packet.Length - 2);
+
+                        ClientPacket message = new ClientPacket(header, content);
+
+                        try
+                        {
+                            WibboEnvironment.GetGame().GetPacketManager().TryExecutePacket(client, message);
+                        }
+                        catch (Exception ex)
+                        {
+                            ExceptionLogger.LogPacketException(message.ToString(), (ex).ToString());
+                        }
+                    }
+                }
             }
-
-            Client client = WibboEnvironment.GetGame().GetClientManager().GetClientById(this.ID);
-
-            if (client == null)
-                return;
-
-            using (BinaryReader reader = new BinaryReader(new MemoryStream(dataDecoded)))
+            catch (Exception ex)
             {
-                int msgLen = IntEncoding.DecodeInt32(reader.ReadBytes(4));
-
-                if (msgLen < 2 || msgLen > 1024000)
-                {
-                    return;
-                }
-                else if ((reader.BaseStream.Length - 4) < msgLen)
-                {
-                    return;
-                }
-
-                byte[] packet = reader.ReadBytes(msgLen);
-
-                using (BinaryReader r = new BinaryReader(new MemoryStream(packet)))
-                {
-                    int header = IntEncoding.DecodeInt16(r.ReadBytes(2));
-
-                    byte[] content = new byte[packet.Length - 2];
-                    Buffer.BlockCopy(packet, 2, content, 0, packet.Length - 2);
-
-                    ClientPacket message = new ClientPacket(header, content);
-
-                    try
-                    {
-                        WibboEnvironment.GetGame().GetPacketManager().TryExecutePacket(client, message);
-                    }
-                    catch (Exception ex)
-                    {
-                        ExceptionLogger.LogPacketException(message.ToString(), (ex).ToString());
-                    }
-                }
+                ExceptionLogger.LogException((ex).ToString());
             }
         }
 

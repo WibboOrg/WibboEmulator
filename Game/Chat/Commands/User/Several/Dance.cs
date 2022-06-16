@@ -8,7 +8,7 @@ namespace Wibbo.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Params.Length == 1)
+            if (Params.Length < 1)
             {
                 Session.SendWhisper("Entre un numéro à ta danse");
             }

@@ -33,12 +33,10 @@ namespace Wibbo.Game.Chat.Commands.Cmd
             else
             {
                 string Raison = CommandManager.MergeParams(Params, 3);
+                Session.SendWhisper("Tu as bannit " + TargetUser.GetUser().Username + " pour " + Raison + "!");
+
                 WibboEnvironment.GetGame().GetClientManager().BanUser(TargetUser, Session.GetUser().Username, num, Raison, false, false);
-                Session.SendWhisper("Tu as bannit " + TargetUser.GetUser().Username + " pour" + Raison + "!");
-                if (Session.Antipub(Raison, "<CMD>", Room.Id))
-                {
-                    return;
-                }
+                Session.Antipub(Raison, "<CMD>", Room.Id);
             }
         }
     }

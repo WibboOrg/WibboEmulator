@@ -7,8 +7,12 @@ namespace Wibbo.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
+            if (Params.Length < 1)
+                return;
+
             int.TryParse(Params[1], out int MaxUsers);
-            if (MaxUsers > 10000 || MaxUsers <= 0)
+
+            if ((MaxUsers > 75 || MaxUsers <= 0) && !Session.GetUser().HasFuse("fuse_mod"))
             {
                 Room.SetMaxUsers(75);
             }

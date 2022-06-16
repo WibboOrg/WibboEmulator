@@ -39,8 +39,9 @@ namespace Wibbo.Game.Chat.Commands.Cmd
                 else
                 {
                     string Raison = CommandManager.MergeParams(Params, 3);
-                    WibboEnvironment.GetGame().GetClientManager().BanUser(TargetUser, Session.GetUser().Username, num, Raison, false, false);
                     Session.SendWhisper("Tu as SuperBan " + TargetUser.GetUser().Username + " pour" + Raison + "!");
+
+                    WibboEnvironment.GetGame().GetClientManager().BanUser(TargetUser, Session.GetUser().Username, num, Raison, false, false);
                     Session.Antipub(Raison, "<CMD>");
                 }
             }
