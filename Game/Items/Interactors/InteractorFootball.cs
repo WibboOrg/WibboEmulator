@@ -135,7 +135,6 @@ namespace Wibbo.Game.Items.Interactors
 
             Point NewPoint = item.GetMoveCoord(OldX, OldY, 1);
 
-
             int Length;
             if (item.InteractionCountHelper > 3)
             {
@@ -186,7 +185,7 @@ namespace Wibbo.Game.Items.Interactors
                 {
                     item.GetNewDir(NewX, NewY);
                     item.InteractionCountHelper--;
-                    return;
+                    break;
                 }
 
                 if (!item.GetRoom().GetGameMap().SquareTakingOpen(NewPoint.X, NewPoint.Y))
