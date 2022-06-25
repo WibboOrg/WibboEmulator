@@ -364,7 +364,7 @@ namespace WibboEmulator.Game.Users
                 }
             }
 
-            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "WibboParty", "MovieRunOff", "officialrooms", "Seonsaengnim", "Jason", "ElkunRUN", "Himeros", "NightRUN" };
+            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "WibboParty", "MovieRunOff", "officialrooms", "ElkunRUN", "Himeros", "NightRUN" };
 
             if (this.GetClient().GetUser().Rank < 8)
             {
