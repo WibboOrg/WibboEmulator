@@ -28,6 +28,9 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
 
             HttpResponseMessage response = await WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.CameraThubmailUploadUrl, content);
 
+            if (!response.IsSuccessStatusCode)
+                return;
+
             string photoId = await response.Content.ReadAsStringAsync();
 
             if (string.IsNullOrEmpty(photoId) || pictureName != photoId)

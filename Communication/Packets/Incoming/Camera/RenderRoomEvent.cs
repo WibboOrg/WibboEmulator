@@ -30,6 +30,12 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
 
             HttpResponseMessage response = await WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.CameraUploadUrl, content);
 
+            if (!response.IsSuccessStatusCode)
+            {
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue));
+                return;
+            }
+
             string photoId = await response.Content.ReadAsStringAsync();
 
             if (string.IsNullOrEmpty(photoId) || pictureName != photoId)

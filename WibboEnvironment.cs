@@ -418,11 +418,11 @@ namespace WibboEmulator
             GetGame().Destroy();
             Thread.Sleep(20000); // 20 secondes
             GetWebSocketManager().Destroy(); // Destruction
-            GetGame().GetPacketManager().UnregisterAll(); // Dé-enregistrer les derniers achats du catalogue (uniquement mobis)
+            GetGame().GetPacketManager().UnregisterAll(); // Dé-enregistrer les packets
             GetGame().GetClientManager().CloseAll(); // Fermeture de toutes les connexions
-            GetGame().GetRoomManager().RemoveAllRooms(); // Remise à zéro de la table room du SQL. 127.0.0.1...
+            GetGame().GetRoomManager().RemoveAllRooms(); // Remise à zéro de la table room du SQL
 
-            Console.WriteLine("Butterfly Emulateur s'est parfaitement éteint...");
+            Console.WriteLine("Wibbo Emulateur s'est parfaitement éteint...");
 
             Thread.Sleep(1000);
             Environment.Exit(0);

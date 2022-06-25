@@ -16,7 +16,6 @@ namespace WibboEmulator.Core
             lowPriorityProcessWatch = new Stopwatch();
             lowPriorityProcessWatch.Start();
 
-            Console.Title = "Butterfly Emulator - start-up in progress...";
             Console.WriteLine("Server Status Updater has been started.");
         }
 

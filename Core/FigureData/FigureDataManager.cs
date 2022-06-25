@@ -42,6 +42,12 @@ namespace WibboEmulator.Core.FigureData
 
             HttpResponseMessage response = await WibboEnvironment.GetHttpClient().GetAsync(WibboEnvironment.FigureDataUrl + "?cache=" + WibboEnvironment.GetUnixTimestamp());
 
+            if(!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Error load figuredata");
+                return;
+            }
+
             string jsonString = await response.Content.ReadAsStringAsync();
 
             JsonSerializerOptions options = new JsonSerializerOptions
