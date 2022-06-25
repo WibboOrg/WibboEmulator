@@ -14,14 +14,22 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             }
 
             Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));
             }
+
             else if ((TargetUser.GetUser().HideInRoom) && !Session.GetUser().HasFuse("fuse_mod"))
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.follow.notallowed", Session.Langue));
             }
+
+            else if (TargetUser.GetUser().Rank >= 8)
+            {
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.follow.notallowed", Session.Langue));
+            }
+
             else
             {
                 Room currentRoom = TargetUser.GetUser().CurrentRoom;

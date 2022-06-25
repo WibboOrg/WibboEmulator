@@ -31,6 +31,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             User user = clientByUsername.GetUser();
             StringBuilder stringBuilder = new StringBuilder();
 
+            stringBuilder.Append("- Information sur l'utilisateur [" + user.Username + "] -\r");
             stringBuilder.Append("Nom: " + user.Username + "\r");
             stringBuilder.Append("Id: " + user.Id + "\r");
             stringBuilder.Append("Mission: " + user.Motto + "\r");
