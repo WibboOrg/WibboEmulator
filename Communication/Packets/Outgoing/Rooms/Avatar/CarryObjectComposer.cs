@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Avatar
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar
 {
     internal class CarryObjectComposer : ServerPacket
     {

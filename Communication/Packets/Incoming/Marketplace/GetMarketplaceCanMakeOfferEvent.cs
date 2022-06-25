@@ -1,7 +1,7 @@
-﻿using Wibbo.Communication.Packets.Outgoing.MarketPlace;
-using Wibbo.Game.Clients;
+﻿using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Communication.Packets.Incoming.Marketplace
+namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
 {
     internal class GetMarketplaceCanMakeOfferEvent : IPacketEvent
     {

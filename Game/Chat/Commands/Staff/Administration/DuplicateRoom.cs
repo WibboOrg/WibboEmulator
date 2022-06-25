@@ -1,13 +1,13 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Navigator;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Items;
-using Wibbo.Game.Items.Wired;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Navigator;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Items;
+using WibboEmulator.Game.Items.Wired;
 using System.Data;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class DuplicateRoom : IChatCommand
     {

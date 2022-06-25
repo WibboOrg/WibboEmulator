@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Database.Interfaces
+﻿namespace WibboEmulator.Database.Interfaces
 {
     public interface IQueryAdapter : IRegularQueryAdapter, IDisposable
     {

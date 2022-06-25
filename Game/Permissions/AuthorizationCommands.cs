@@ -1,7 +1,7 @@
-﻿using Wibbo.Core;
-using Wibbo.Game.Clients;
+﻿using WibboEmulator.Core;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Game.Permissions
+namespace WibboEmulator.Game.Permissions
 {
     public struct AuthorizationCommands
     {

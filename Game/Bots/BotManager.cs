@@ -1,8 +1,8 @@
 ﻿using System.Data;
-using Wibbo.Game.Rooms.AI.Responses;
-using Wibbo.Game.Rooms.AI;
+using WibboEmulator.Game.Rooms.AI.Responses;
+using WibboEmulator.Game.Rooms.AI;
 
-namespace Wibbo.Game.Bots
+namespace WibboEmulator.Game.Bots
 {
     public class BotManager
     {

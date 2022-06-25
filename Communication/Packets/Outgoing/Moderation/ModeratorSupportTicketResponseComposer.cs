@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Moderation
+namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorSupportTicketResponseComposer : ServerPacket
     {

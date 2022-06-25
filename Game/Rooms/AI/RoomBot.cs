@@ -1,7 +1,7 @@
-﻿using Wibbo.Game.Roleplay.Enemy;
-using Wibbo.Game.Rooms.AI.Types;
+﻿using WibboEmulator.Game.Roleplay.Enemy;
+using WibboEmulator.Game.Rooms.AI.Types;
 
-namespace Wibbo.Game.Rooms.AI
+namespace WibboEmulator.Game.Rooms.AI
 {
     public class RoomBot
     {

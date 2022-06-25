@@ -1,8 +1,8 @@
-﻿using Wibbo.Communication.Packets.Outgoing;
-using Wibbo.Game.Groups;
-using Wibbo.Game.Users;
+﻿using WibboEmulator.Communication.Packets.Outgoing;
+using WibboEmulator.Game.Groups;
+using WibboEmulator.Game.Users;
 
-namespace Wibbo.Game.Items
+namespace WibboEmulator.Game.Items
 {
     internal static class ItemBehaviourUtility
     {

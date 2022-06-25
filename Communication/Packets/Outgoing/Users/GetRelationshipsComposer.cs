@@ -1,7 +1,7 @@
-using Wibbo.Game.Users;
-using Wibbo.Game.Users.Relationships;
+using WibboEmulator.Game.Users;
+using WibboEmulator.Game.Users.Relationships;
 
-namespace Wibbo.Communication.Packets.Outgoing.Users
+namespace WibboEmulator.Communication.Packets.Outgoing.Users
 {
     internal class GetRelationshipsComposer : ServerPacket
     {

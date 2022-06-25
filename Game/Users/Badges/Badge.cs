@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Users.Badges
+﻿namespace WibboEmulator.Game.Users.Badges
 {
     public class Badge
     {

@@ -1,10 +1,10 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Items.Wired.Interfaces;
-using Wibbo.Game.Rooms;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Items.Wired.Interfaces;
+using WibboEmulator.Game.Rooms;
 using System.Data;
 
-namespace Wibbo.Game.Items.Wired.Actions
+namespace WibboEmulator.Game.Items.Wired.Actions
 {
     public class BotClothes : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
     {

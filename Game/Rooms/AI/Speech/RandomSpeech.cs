@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Rooms.AI.Speech
+﻿namespace WibboEmulator.Game.Rooms.AI.Speech
 {
     public class RandomSpeech
     {

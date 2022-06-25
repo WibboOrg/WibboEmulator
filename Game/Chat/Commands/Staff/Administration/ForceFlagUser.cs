@@ -1,8 +1,8 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Handshake;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Clients;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Handshake;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class ForceFlagUser : IChatCommand
     {

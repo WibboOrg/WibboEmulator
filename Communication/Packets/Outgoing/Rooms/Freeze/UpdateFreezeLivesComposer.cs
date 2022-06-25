@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Freeze
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Freeze
 {
     internal class UpdateFreezeLivesComposer : ServerPacket
     {

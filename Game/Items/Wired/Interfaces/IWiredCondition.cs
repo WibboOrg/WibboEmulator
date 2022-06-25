@@ -1,6 +1,6 @@
-﻿using Wibbo.Game.Rooms;
+﻿using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Items.Wired.Interfaces
+namespace WibboEmulator.Game.Items.Wired.Interfaces
 {
     public interface IWiredCondition : IWired
     {

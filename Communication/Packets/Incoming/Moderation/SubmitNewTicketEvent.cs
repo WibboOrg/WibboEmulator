@@ -1,8 +1,8 @@
-using Wibbo.Communication.Packets.Outgoing.Rooms.Notifications;
-using Wibbo.Game.Clients;
-using Wibbo.Utilities;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Utilities;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class SubmitNewTicketEvent : IPacketEvent
     {

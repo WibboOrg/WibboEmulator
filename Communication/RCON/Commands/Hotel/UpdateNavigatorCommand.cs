@@ -1,6 +1,6 @@
-﻿using Wibbo.Database.Interfaces;
+﻿using WibboEmulator.Database.Interfaces;
 
-namespace Wibbo.Communication.RCON.Commands.Hotel
+namespace WibboEmulator.Communication.RCON.Commands.Hotel
 {
     internal class UpdateNavigatorCommand : IRCONCommand
     {

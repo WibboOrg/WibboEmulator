@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Users
+namespace WibboEmulator.Communication.Packets.Outgoing.Users
 {
     internal class RespectNotificationComposer : ServerPacket
     {

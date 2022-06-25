@@ -1,6 +1,6 @@
-using Wibbo.Game.Moderation;
+using WibboEmulator.Game.Moderation;
 
-namespace Wibbo.Communication.Packets.Outgoing.Moderation
+namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorInitComposer : ServerPacket
     {

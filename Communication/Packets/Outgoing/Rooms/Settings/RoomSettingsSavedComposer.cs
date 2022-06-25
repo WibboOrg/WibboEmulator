@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Settings
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings
 {
     internal class RoomSettingsSavedComposer : ServerPacket
     {

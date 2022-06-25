@@ -1,8 +1,8 @@
-﻿using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
+﻿using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace Wibbo.Communication.Packets.Outgoing.MarketPlace
+namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace
 {
     internal class MarketPlaceOwnOffersComposer : ServerPacket
     {

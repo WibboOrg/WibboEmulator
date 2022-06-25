@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Communication.Packets.Outgoing.Televisions
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Televisions
 {
     internal class YoutubeTvComposer : ServerPacket
     {

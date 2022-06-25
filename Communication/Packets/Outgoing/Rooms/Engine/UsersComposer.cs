@@ -1,9 +1,9 @@
-using Wibbo.Game.Groups;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Rooms.AI;
-using Wibbo.Game.Users;
+using WibboEmulator.Game.Groups;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Rooms.AI;
+using WibboEmulator.Game.Users;
 
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Engine
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class UsersComposer : ServerPacket
     {

@@ -1,6 +1,6 @@
-using Wibbo.Game.Catalog.Pets;
+using WibboEmulator.Game.Catalog.Pets;
 
-namespace Wibbo.Communication.Packets.Outgoing.Catalog
+namespace WibboEmulator.Communication.Packets.Outgoing.Catalog
 {
     internal class SellablePetBreedsComposer : ServerPacket
     {

@@ -1,11 +1,11 @@
-﻿using Wibbo.Communication.Packets.Outgoing.MarketPlace;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Catalog.Marketplace;
-using Wibbo.Game.Clients;
+﻿using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Catalog.Marketplace;
+using WibboEmulator.Game.Clients;
 using System.Data;
 
-namespace Wibbo.Communication.Packets.Incoming.Marketplace
+namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
 {
     internal class GetOffersEvent : IPacketEvent
     {

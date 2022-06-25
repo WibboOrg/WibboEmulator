@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Settings
+namespace WibboEmulator.Communication.Packets.Outgoing.Settings
 {
     internal class UserSettingsComposer : ServerPacket
     {

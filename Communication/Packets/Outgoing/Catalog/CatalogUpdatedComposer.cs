@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Catalog
+namespace WibboEmulator.Communication.Packets.Outgoing.Catalog
 {
     internal class CatalogUpdatedComposer : ServerPacket
     {

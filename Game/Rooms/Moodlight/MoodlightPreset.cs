@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Rooms.Moodlight
+﻿namespace WibboEmulator.Game.Rooms.Moodlight
 {
     public class MoodlightPreset
     {

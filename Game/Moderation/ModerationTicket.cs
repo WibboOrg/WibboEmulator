@@ -1,7 +1,7 @@
-﻿using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
+﻿using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
 
-namespace Wibbo.Game.Moderation
+namespace WibboEmulator.Game.Moderation
 {
     public class ModerationTicket
     {

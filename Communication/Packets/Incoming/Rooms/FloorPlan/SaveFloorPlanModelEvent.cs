@@ -1,12 +1,12 @@
-using Wibbo.Communication.Packets.Outgoing.Rooms.Notifications;
-using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
 using System.Text.RegularExpressions;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class SaveFloorPlanModelEvent : IPacketEvent
     {
@@ -61,7 +61,6 @@ namespace Wibbo.Communication.Packets.Incoming.Structure
 
             if (Map.Any(letter => !validLetters.Contains(letter)))
             {
-                //Logging.LogException("Erreur map: " + Map);
                 Session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entré un Floormap invalide! (Code map)"));
                 return;
             }
@@ -97,7 +96,7 @@ namespace Wibbo.Communication.Packets.Incoming.Structure
 
             try
             {
-                DoorZ = parse(modelData[DoorY][DoorX]);
+                DoorZ = Parse(modelData[DoorY][DoorX]);
             }
             catch { }
 
@@ -141,7 +140,6 @@ namespace Wibbo.Communication.Packets.Incoming.Structure
 
             WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
 
-
             foreach (RoomUser User in UsersToReturn)
             {
                 if (User == null || User.GetClient() == null)
@@ -153,7 +151,7 @@ namespace Wibbo.Communication.Packets.Incoming.Structure
             }
         }
 
-        private static short parse(char input)
+        private static short Parse(char input)
         {
 
             switch (input)

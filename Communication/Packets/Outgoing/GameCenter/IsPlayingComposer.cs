@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Communication.Packets.Outgoing.GameCenter
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.GameCenter
 {
     internal class IsPlayingComposer : ServerPacket
     {

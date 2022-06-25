@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Communication.Packets.Outgoing.Notifications.NotifCustom
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom
 {
     internal class NotifTopComposer : ServerPacket
     {

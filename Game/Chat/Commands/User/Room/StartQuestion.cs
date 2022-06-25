@@ -1,8 +1,8 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Polls;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Polls;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class StartQuestion : IChatCommand
     {

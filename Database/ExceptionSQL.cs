@@ -1,7 +1,7 @@
 ﻿using ConsoleWriter;
 using System.Text;
 
-namespace Wibbo.Database
+namespace WibboEmulator.Database
 {
     public static class ExceptionSQL
     {

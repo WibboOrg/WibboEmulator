@@ -1,6 +1,6 @@
-using Wibbo.Game.LandingView.Promotions;
+using WibboEmulator.Game.LandingView.Promotions;
 
-namespace Wibbo.Communication.Packets.Outgoing.LandingView
+namespace WibboEmulator.Communication.Packets.Outgoing.LandingView
 {
     internal class PromoArticlesComposer : ServerPacket
     {

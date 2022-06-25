@@ -1,9 +1,9 @@
-﻿using Wibbo.Database.Interfaces;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Items.Wired.Interfaces;
+﻿using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Items.Wired.Interfaces;
 using System.Data;
 
-namespace Wibbo.Game.Items.Wired.Conditions
+namespace WibboEmulator.Game.Items.Wired.Conditions
 {
     public class RoomUserCount : WiredConditionBase, IWiredCondition, IWired
     {

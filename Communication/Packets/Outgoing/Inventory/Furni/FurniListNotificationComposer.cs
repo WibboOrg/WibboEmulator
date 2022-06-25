@@ -1,6 +1,6 @@
-using Wibbo.Game.Items;
+using WibboEmulator.Game.Items;
 
-namespace Wibbo.Communication.Packets.Outgoing.Inventory.Furni
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni
 {
     internal class FurniListNotificationComposer : ServerPacket
     {

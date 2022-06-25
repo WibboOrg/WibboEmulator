@@ -1,7 +1,7 @@
-using Wibbo.Game.Clients;
-using Wibbo.Game.Groups;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Groups;
 
-namespace Wibbo.Communication.Packets.Outgoing.Groups
+namespace WibboEmulator.Communication.Packets.Outgoing.Groups
 {
     internal class GroupInfoComposer : ServerPacket
     {

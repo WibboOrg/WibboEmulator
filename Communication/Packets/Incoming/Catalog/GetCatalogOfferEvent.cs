@@ -1,8 +1,8 @@
-using Wibbo.Communication.Packets.Outgoing.Catalog;
-using Wibbo.Game.Catalog;
-using Wibbo.Game.Clients;
+using WibboEmulator.Communication.Packets.Outgoing.Catalog;
+using WibboEmulator.Game.Catalog;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class GetCatalogOfferEvent : IPacketEvent
     {

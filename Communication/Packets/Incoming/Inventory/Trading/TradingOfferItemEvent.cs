@@ -1,9 +1,9 @@
-using Wibbo.Game.Clients;
-using Wibbo.Game.Items;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Rooms.Trading;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Items;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Rooms.Trading;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class TradingOfferItemEvent : IPacketEvent
     {

@@ -1,7 +1,7 @@
-using Wibbo.Communication.Packets.Outgoing.Handshake;
-using Wibbo.Game.Clients;
+using WibboEmulator.Communication.Packets.Outgoing.Handshake;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class UniqueIDEvent : IPacketEvent
     {

@@ -1,6 +1,6 @@
-﻿using Wibbo.Game.Clients;
+﻿using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Game.Items.Interactors
+namespace WibboEmulator.Game.Items.Interactors
 {
     public class InteractorAlert : FurniInteractor
     {

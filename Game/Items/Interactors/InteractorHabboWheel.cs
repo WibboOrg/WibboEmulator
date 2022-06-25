@@ -1,18 +1,17 @@
-﻿using Wibbo.Game.Clients;
+﻿using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Game.Items.Interactors
+namespace WibboEmulator.Game.Items.Interactors
 {
     public class InteractorHabboWheel : FurniInteractor
     {
         public override void OnPlace(Client Session, Item Item)
         {
-            Item.ExtraData = "-1";
-            Item.ReqUpdate(10);
+            Item.ExtraData = "0";
         }
 
         public override void OnRemove(Client Session, Item Item)
         {
-            Item.ExtraData = "-1";
+            Item.ExtraData = "0";
         }
 
         public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
@@ -24,6 +23,7 @@ namespace Wibbo.Game.Items.Interactors
 
             Item.ExtraData = "-1";
             Item.UpdateState();
+
             Item.ReqUpdate(10);
         }
 

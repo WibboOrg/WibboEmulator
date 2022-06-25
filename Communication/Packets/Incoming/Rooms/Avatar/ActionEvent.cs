@@ -1,10 +1,10 @@
-using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 
-using Wibbo.Game.Clients;
-using Wibbo.Game.Quests;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Quests;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class ActionEvent : IPacketEvent
     {

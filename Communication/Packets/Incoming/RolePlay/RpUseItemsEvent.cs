@@ -1,10 +1,10 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Notifications;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Roleplay;
-using Wibbo.Game.Roleplay.Player;
-using Wibbo.Game.Rooms;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Notifications;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Roleplay;
+using WibboEmulator.Game.Roleplay.Player;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Communication.Packets.Incoming.RolePlay
+namespace WibboEmulator.Communication.Packets.Incoming.RolePlay
 {
     internal class RpUseItemsEvent : IPacketEvent
     {

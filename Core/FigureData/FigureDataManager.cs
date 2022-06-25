@@ -1,7 +1,13 @@
-﻿using Wibbo.Core.FigureData.Types;
+﻿using WibboEmulator.Core.FigureData.Types;
+using WibboEmulator.Core.FigureData.JsonObject;
 using System.Xml;
+using System.Runtime.Serialization.Json;
+using System.Text;
+using System.Xml.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace Wibbo.Core.FigureData
+namespace WibboEmulator.Core.FigureData
 {
     public class FigureDataManager
     {
@@ -22,7 +28,7 @@ namespace Wibbo.Core.FigureData
             };
         }
 
-        public void Init()
+        public async void Init()
         {
             if (this._palettes.Count > 0)
             {
@@ -34,55 +40,43 @@ namespace Wibbo.Core.FigureData
                 this._setTypes.Clear();
             }
 
-            XmlDocument xDoc = new XmlDocument();
-            xDoc.Load(WibboEnvironment.PatchDir + "Configuration/figuredata.xml");
+            HttpResponseMessage response = await WibboEnvironment.GetHttpClient().GetAsync(WibboEnvironment.FigureDataUrl + "?cache=" + WibboEnvironment.GetUnixTimestamp());
 
-            XmlNodeList Colors = xDoc.GetElementsByTagName("colors");
-            foreach (XmlNode Node in Colors)
+            string jsonString = await response.Content.ReadAsStringAsync();
+
+            JsonSerializerOptions options = new JsonSerializerOptions
             {
-                foreach (XmlNode Child in Node.ChildNodes)
-                {
-                    this._palettes.Add(Convert.ToInt32(Child.Attributes["id"].Value), new Palette(Convert.ToInt32(Child.Attributes["id"].Value)));
+                PropertyNameCaseInsensitive = true,
+            };
 
-                    foreach (XmlNode Sub in Child.ChildNodes)
-                    {
-                        this._palettes[Convert.ToInt32(Child.Attributes["id"].Value)].Colors.Add(Convert.ToInt32(Sub.Attributes["id"].Value), new Color(Convert.ToInt32(Sub.Attributes["id"].Value), Convert.ToInt32(Sub.Attributes["index"].Value), Convert.ToInt32(Sub.Attributes["club"].Value), Convert.ToInt32(Sub.Attributes["selectable"].Value) == 1, Convert.ToString(Sub.InnerText)));
-                    }
+            FigureDataRoot? figureData = JsonSerializer.Deserialize<FigureDataRoot>(jsonString, options);
+
+            foreach (FigureDataPalette palette in figureData.Palettes)
+            {
+                this._palettes.Add(palette.Id, new Palette(palette.Id));
+
+                foreach (FigureDataColor color in palette.Colors)
+                {
+                    this._palettes[palette.Id].Colors.Add(Convert.ToInt32(color.Id), new Color(color.Id, color.Index, color.Club, color.Selectable));
                 }
             }
 
-            XmlNodeList Sets = xDoc.GetElementsByTagName("sets");
-            foreach (XmlNode Node in Sets)
+            foreach (FigureDataSetType Child in figureData.SetTypes)
             {
-                foreach (XmlNode Child in Node.ChildNodes)
+                this._setTypes.Add(Child.Type, new FigureSet(SetTypeUtility.GetSetType(Child.Type), Child.PaletteId));
+
+                foreach (FigureDataSet set in Child.Sets)
                 {
-                    this._setTypes.Add(Child.Attributes["type"].Value, new FigureSet(SetTypeUtility.GetSetType(Child.Attributes["type"].Value), Convert.ToInt32(Child.Attributes["paletteid"].Value)));
+                    if (!this._setTypes[Child.Type].Sets.ContainsKey(set.Id))
+                        this._setTypes[Child.Type].Sets.Add(set.Id, new Set(set.Id, set.Gender, set.Club, set.Colorable));
 
-                    foreach (XmlNode Sub in Child.ChildNodes)
+                    foreach (FigureDataPart part in set.Parts)
                     {
-                        try
+                        if (part.Type != null)
                         {
-                            this._setTypes[Child.Attributes["type"].Value].Sets.Add(Convert.ToInt32(Sub.Attributes["id"].Value), new Set(Convert.ToInt32(Sub.Attributes["id"].Value), Convert.ToString(Sub.Attributes["gender"].Value), Convert.ToInt32(Sub.Attributes["club"].Value), Convert.ToInt32(Sub.Attributes["colorable"].Value) == 1));
-                        }
-                        catch
-                        {
-                            Console.WriteLine("Erreur 1 anti mutant Id: " + Sub.Attributes["id"].Value);
-                        }
-
-                        foreach (XmlNode Subb in Sub.ChildNodes)
-                        {
-                            if (Subb.Attributes["type"] != null)
-                            {
-                                try
-                                {
-                                    this._setTypes[Child.Attributes["type"].Value].Sets[Convert.ToInt32(Sub.Attributes["id"].Value)].Parts.Add(Convert.ToInt32(Subb.Attributes["id"].Value) + "-" + Subb.Attributes["type"].Value,
-                                      new Part(Convert.ToInt32(Subb.Attributes["id"].Value), SetTypeUtility.GetSetType(Child.Attributes["type"].Value), Convert.ToInt32(Subb.Attributes["colorable"].Value) == 1, Convert.ToInt32(Subb.Attributes["index"].Value), Convert.ToInt32(Subb.Attributes["colorindex"].Value)));
-                                }
-                                catch
-                                {
-                                    Console.WriteLine("Erreur 2 anti mutant Id: " + Sub.Attributes["id"].Value);
-                                }
-                            }
+                            if (!this._setTypes[Child.Type].Sets[set.Id].Parts.ContainsKey(part.Id + "-" + part.Type))
+                                this._setTypes[Child.Type].Sets[set.Id].Parts.Add(part.Id + "-" + part.Type,
+                              new Part(part.Id, SetTypeUtility.GetSetType(Child.Type), part.Colorable, part.Index, part.Colorindex));
                         }
                     }
                 }

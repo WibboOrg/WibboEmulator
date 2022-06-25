@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Communication.Packets.Outgoing
+﻿namespace WibboEmulator.Communication.Packets.Outgoing
 {
     public static class ServerPacketHeader
     {

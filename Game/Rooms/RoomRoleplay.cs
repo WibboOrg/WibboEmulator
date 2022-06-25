@@ -1,4 +1,4 @@
-namespace Wibbo.Game.Rooms
+namespace WibboEmulator.Game.Rooms
 {
     public class RoomRoleplay
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Wibbo.Communication.Packets.Incoming
+namespace WibboEmulator.Communication.Packets.Incoming
 {
     public class ClientPacket
     {

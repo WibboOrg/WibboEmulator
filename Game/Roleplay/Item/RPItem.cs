@@ -1,6 +1,6 @@
-﻿using Wibbo.Game.Roleplay.Item;
+﻿using WibboEmulator.Game.Roleplay.Item;
 
-namespace Wibbo.Game.Roleplay
+namespace WibboEmulator.Game.Roleplay
 {
     public class RPItem
     {

@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Rooms.AI
+﻿namespace WibboEmulator.Game.Rooms.AI
 {
     public enum BotAIType
     {

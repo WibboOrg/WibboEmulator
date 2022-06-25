@@ -1,10 +1,10 @@
-﻿using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Users;
+﻿using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Users;
 using System.Collections.Concurrent;
 using System.Data;
 
-namespace Wibbo.Game.Groups
+namespace WibboEmulator.Game.Groups
 {
     public class GroupManager
     {

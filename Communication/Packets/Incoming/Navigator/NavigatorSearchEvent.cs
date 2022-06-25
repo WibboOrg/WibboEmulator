@@ -1,9 +1,9 @@
-using Wibbo.Communication.Packets.Outgoing.Navigator.New;
+using WibboEmulator.Communication.Packets.Outgoing.Navigator.New;
 
-using Wibbo.Game.Clients;
-using Wibbo.Game.Navigator;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Navigator;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class NavigatorSearchEvent : IPacketEvent
     {

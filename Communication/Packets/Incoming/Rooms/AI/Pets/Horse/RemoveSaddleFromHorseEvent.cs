@@ -1,15 +1,15 @@
-using Wibbo.Communication.Packets.Outgoing.Catalog;
-using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
-using Wibbo.Communication.Packets.Outgoing.Rooms.AI.Pets;
-using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Catalog.Utilities;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Items;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Communication.Packets.Outgoing.Catalog;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Catalog.Utilities;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Items;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class RemoveSaddleFromHorseEvent : IPacketEvent
     {

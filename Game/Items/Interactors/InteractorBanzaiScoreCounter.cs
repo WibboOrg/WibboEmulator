@@ -1,7 +1,7 @@
-﻿using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms.Games;
+﻿using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms.Games;
 
-namespace Wibbo.Game.Items.Interactors
+namespace WibboEmulator.Game.Items.Interactors
 {
     public class InteractorBanzaiScoreCounter : FurniInteractor
     {

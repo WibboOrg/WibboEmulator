@@ -1,12 +1,12 @@
-﻿using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Catalog.Marketplace;
-using Wibbo.Game.Catalog.Pets;
-using Wibbo.Game.Catalog.Vouchers;
-using Wibbo.Game.Items;
+﻿using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Catalog.Marketplace;
+using WibboEmulator.Game.Catalog.Pets;
+using WibboEmulator.Game.Catalog.Vouchers;
+using WibboEmulator.Game.Items;
 using System.Data;
 
-namespace Wibbo.Game.Catalog
+namespace WibboEmulator.Game.Catalog
 {
     public class CatalogManager
     {

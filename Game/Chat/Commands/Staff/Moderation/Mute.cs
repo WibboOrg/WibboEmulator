@@ -1,9 +1,9 @@
-using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Users;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Users;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class Mute : IChatCommand
     {

@@ -1,13 +1,13 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Catalog;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Items;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Catalog;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Items;
 using System.Data;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class RegenLTD : IChatCommand
     {

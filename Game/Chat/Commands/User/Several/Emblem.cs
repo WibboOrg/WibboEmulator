@@ -1,8 +1,8 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Inventory.AvatarEffects;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class Emblem : IChatCommand
     {

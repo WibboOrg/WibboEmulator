@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Permissions
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions
 {
     internal class YouAreOwnerComposer : ServerPacket
     {

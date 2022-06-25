@@ -1,7 +1,7 @@
-using Wibbo.Communication.Packets.Outgoing.LandingView;
-using Wibbo.Game.Clients;
+using WibboEmulator.Communication.Packets.Outgoing.LandingView;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class RefreshCampaignEvent : IPacketEvent
     {

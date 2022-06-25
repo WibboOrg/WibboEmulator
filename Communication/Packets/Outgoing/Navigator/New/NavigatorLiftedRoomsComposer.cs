@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Navigator.New
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator.New
 {
     internal class NavigatorLiftedRoomsComposer : ServerPacket
     {

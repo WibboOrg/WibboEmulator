@@ -1,9 +1,9 @@
-﻿using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
+﻿using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
 using System.Data;
 using System.Text.RegularExpressions;
 
-namespace Wibbo.Game.Chat.Filter
+namespace WibboEmulator.Game.Chat.Filter
 {
     public sealed class WordFilterManager
     {

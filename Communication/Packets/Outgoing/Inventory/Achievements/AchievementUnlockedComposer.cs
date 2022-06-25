@@ -1,6 +1,6 @@
-using Wibbo.Game.Achievements;
+using WibboEmulator.Game.Achievements;
 
-namespace Wibbo.Communication.Packets.Outgoing.Inventory.Achievements
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements
 {
     internal class AchievementUnlockedComposer : ServerPacket
     {

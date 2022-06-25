@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Groups
+﻿namespace WibboEmulator.Game.Groups
 {
     public class GroupMember
     {

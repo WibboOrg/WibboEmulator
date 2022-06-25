@@ -1,9 +1,9 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Clients;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Communication.RCON.Commands.User
+namespace WibboEmulator.Communication.RCON.Commands.User
 {
     internal class UpdateCreditsCommand : IRCONCommand
     {

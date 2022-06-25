@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Communication.Packets.Outgoing.Avatar
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Avatar
 {
     internal class FigureUpdateComposer : ServerPacket
     {

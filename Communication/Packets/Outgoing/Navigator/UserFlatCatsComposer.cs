@@ -1,6 +1,6 @@
-using Wibbo.Game.Navigator;
+using WibboEmulator.Game.Navigator;
 
-namespace Wibbo.Communication.Packets.Outgoing.Navigator
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
 {
     internal class UserFlatCatsComposer : ServerPacket
     {

@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.AI.Pets
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets
 {
     internal class AddExperiencePointsComposer : ServerPacket
     {

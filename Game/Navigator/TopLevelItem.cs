@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Navigator
+﻿namespace WibboEmulator.Game.Navigator
 {
     public class TopLevelItem
     {

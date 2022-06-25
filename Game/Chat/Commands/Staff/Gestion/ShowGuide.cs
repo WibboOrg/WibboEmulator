@@ -1,9 +1,9 @@
-using Wibbo.Game.Clients;
-using Wibbo.Game.Help;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Help;
 using System.Text;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class ShowGuide : IChatCommand
     {

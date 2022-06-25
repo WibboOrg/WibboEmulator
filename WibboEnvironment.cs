@@ -1,20 +1,20 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Moderation;
-using Wibbo.Core;
-using Wibbo.Core.FigureData;
-using Wibbo.Database;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Users;
-using Wibbo.Game.Users.Authenticator;
-using Wibbo.Net;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Core;
+using WibboEmulator.Core.FigureData;
+using WibboEmulator.Database;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Users;
+using WibboEmulator.Game.Users.Authenticator;
+using WibboEmulator.Net;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
-using Wibbo.Communication.WebSocket;
+using WibboEmulator.Communication.WebSocket;
 
-namespace Wibbo
+namespace WibboEmulator
 {
     public static class WibboEnvironment
     {
@@ -35,6 +35,7 @@ namespace Wibbo
         public static List<string> WebSocketOrigins;
         public static string PatchDir;
         public static string CameraUploadUrl;
+        public static string FigureDataUrl;
         public static string CameraThubmailUploadUrl;
 
         private static readonly List<char> Allowedchars = new List<char>(new[]
@@ -98,6 +99,11 @@ namespace Wibbo
                     }
                 }
 
+                StaticEvents = _configuration.data["static.events"] == "true";
+                CameraUploadUrl = _configuration.data["camera.upload.url"];
+                FigureDataUrl = _configuration.data["figuredata.url"];
+                CameraThubmailUploadUrl = _configuration.data["camera.thubmail.upload.url"];
+
                 _languageManager = new LanguageManager();
                 using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     _languageManager.Init(dbClient);
@@ -115,10 +121,6 @@ namespace Wibbo
                 {
                     _rcon = new RCONSocket(int.Parse(GetConfig().data["mus.tcp.port"]), GetConfig().data["mus.tcp.allowedaddr"].Split(','));
                 }
-
-                StaticEvents = _configuration.data["static.events"] == "true";
-                CameraUploadUrl = _configuration.data["camera.upload.url"];
-                CameraThubmailUploadUrl = _configuration.data["camera.thubmail.upload.url"];
 
                 ExceptionLogger.WriteLine("EMULATOR -> READY!");
 

@@ -1,11 +1,11 @@
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Pets;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Rooms.AI;
-using Wibbo.Utilities;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Pets;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Rooms.AI;
+using WibboEmulator.Utilities;
 using System.Data;
 
-namespace Wibbo.Database.Daos
+namespace WibboEmulator.Database.Daos
 {
     class BotPetDao
     {

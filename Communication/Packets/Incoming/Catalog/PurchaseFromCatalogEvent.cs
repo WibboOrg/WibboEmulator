@@ -1,23 +1,23 @@
-using Wibbo.Communication.Packets.Outgoing.Catalog;
-using Wibbo.Communication.Packets.Outgoing.Inventory.Badges;
-using Wibbo.Communication.Packets.Outgoing.Inventory.Bots;
-using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
-using Wibbo.Communication.Packets.Outgoing.Inventory.Pets;
-using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
-using Wibbo.Communication.Packets.Outgoing.Users;
+using WibboEmulator.Communication.Packets.Outgoing.Catalog;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Communication.Packets.Outgoing.Users;
 
-using Wibbo.Core;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Catalog;
-using Wibbo.Game.Catalog.Utilities;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Groups;
-using Wibbo.Game.Items;
-using Wibbo.Game.Pets;
-using Wibbo.Game.Users.Inventory.Bots;
+using WibboEmulator.Core;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Catalog;
+using WibboEmulator.Game.Catalog.Utilities;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Groups;
+using WibboEmulator.Game.Items;
+using WibboEmulator.Game.Pets;
+using WibboEmulator.Game.Users.Inventory.Bots;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class PurchaseFromCatalogEvent : IPacketEvent
     {

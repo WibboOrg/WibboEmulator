@@ -1,8 +1,8 @@
-﻿using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
+﻿using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace Wibbo.Game.Chat.Logs
+namespace WibboEmulator.Game.Chat.Logs
 {
     public class ChatlogManager
     {

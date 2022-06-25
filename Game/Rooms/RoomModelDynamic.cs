@@ -1,8 +1,8 @@
-﻿using Wibbo.Communication.Packets.Outgoing;
-using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+﻿using WibboEmulator.Communication.Packets.Outgoing;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using System.Text;
 
-namespace Wibbo.Game.Rooms
+namespace WibboEmulator.Game.Rooms
 {
     public class RoomModelDynamic
     {

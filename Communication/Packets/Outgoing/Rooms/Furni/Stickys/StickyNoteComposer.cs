@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Furni.Stickys
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Stickys
 {
     internal class StickyNoteComposer : ServerPacket
     {

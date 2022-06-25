@@ -1,28 +1,28 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Inventory.AvatarEffects;
-using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
-using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
-using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
-using Wibbo.Core;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Items;
-using Wibbo.Game.Pets;
-using Wibbo.Game.Roleplay;
-using Wibbo.Game.Rooms.AI;
-using Wibbo.Game.Chat.Logs;
-using Wibbo.Game.Rooms.Games;
-using Wibbo.Game.Rooms.Jankens;
-using Wibbo.Game.Rooms.Moodlight;
-using Wibbo.Game.Rooms.Projectile;
-using Wibbo.Game.Rooms.Wired;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Core;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Items;
+using WibboEmulator.Game.Pets;
+using WibboEmulator.Game.Roleplay;
+using WibboEmulator.Game.Rooms.AI;
+using WibboEmulator.Game.Chat.Logs;
+using WibboEmulator.Game.Rooms.Games;
+using WibboEmulator.Game.Rooms.Jankens;
+using WibboEmulator.Game.Rooms.Moodlight;
+using WibboEmulator.Game.Rooms.Projectile;
+using WibboEmulator.Game.Rooms.Wired;
 using System.Data;
-using Wibbo.Utilities.Events;
-using Wibbo.Utilities;
-using Wibbo.Game.Rooms.Trading;
-using Wibbo.Communication.Interfaces;
+using WibboEmulator.Utilities.Events;
+using WibboEmulator.Utilities;
+using WibboEmulator.Game.Rooms.Trading;
+using WibboEmulator.Communication.Interfaces;
 
-namespace Wibbo.Game.Rooms
+namespace WibboEmulator.Game.Rooms
 {
     public delegate void RoomEventDelegate(object sender, EventArgs e);
     public delegate void RoomUserSaysDelegate(object sender, UserSaysArgs e, ref bool messageHandled);

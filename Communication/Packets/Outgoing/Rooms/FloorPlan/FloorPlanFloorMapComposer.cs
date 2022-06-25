@@ -1,8 +1,8 @@
-using Wibbo.Game.Items;
+using WibboEmulator.Game.Items;
 using System.Collections.Concurrent;
 using System.Drawing;
 
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.FloorPlan
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.FloorPlan
 {
     internal class FloorPlanFloorMapComposer : ServerPacket
     {

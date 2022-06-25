@@ -1,12 +1,12 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
-using Wibbo.Game.Items;
-using Wibbo.Game.Roleplay.Player;
-using Wibbo.Game.Rooms.Map.Movement;
-using Wibbo.Utilities;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Game.Items;
+using WibboEmulator.Game.Roleplay.Player;
+using WibboEmulator.Game.Rooms.Map.Movement;
+using WibboEmulator.Utilities;
 using System.Collections.Concurrent;
 using System.Drawing;
 
-namespace Wibbo.Game.Rooms.Projectile
+namespace WibboEmulator.Game.Rooms.Projectile
 {
     public class ProjectileManager
     {

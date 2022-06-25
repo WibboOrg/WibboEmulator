@@ -1,9 +1,9 @@
-﻿using Wibbo.Core;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
+﻿using WibboEmulator.Core;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace Wibbo.Game.Navigator
+namespace WibboEmulator.Game.Navigator
 {
     public sealed class NavigatorManager
     {

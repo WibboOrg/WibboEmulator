@@ -1,6 +1,6 @@
-using Wibbo.Game.Items;
+using WibboEmulator.Game.Items;
 
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Engine
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class ItemUpdateComposer : ServerPacket
     {

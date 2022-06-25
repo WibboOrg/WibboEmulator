@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Core
+﻿namespace WibboEmulator.Core
 {
     public class ConfigurationData
     {

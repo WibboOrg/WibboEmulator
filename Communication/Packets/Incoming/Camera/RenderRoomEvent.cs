@@ -1,10 +1,10 @@
-﻿using Wibbo.Game.Clients;
-using Wibbo.Communication.Packets.Outgoing.Camera;
-using Wibbo.Game.Rooms;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
+﻿using WibboEmulator.Game.Clients;
+using WibboEmulator.Communication.Packets.Outgoing.Camera;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
 
-namespace Wibbo.Communication.Packets.Incoming.Camera
+namespace WibboEmulator.Communication.Packets.Incoming.Camera
 {
     internal class RenderRoomEvent : IPacketEvent
     {
@@ -14,7 +14,6 @@ namespace Wibbo.Communication.Packets.Incoming.Camera
         {
             int photoLength = packet.PopInt();
             byte[] photoBinary = packet.ReadBytes(photoLength);
-            //byte[] photoBinary = Encoding.ASCII.GetBytes(packet.PopString());
 
             if (session.GetUser() == null)
                 return;
@@ -35,7 +34,7 @@ namespace Wibbo.Communication.Packets.Incoming.Camera
 
             if (string.IsNullOrEmpty(photoId) || pictureName != photoId)
             {
-                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue));
                 return;
             }
 
