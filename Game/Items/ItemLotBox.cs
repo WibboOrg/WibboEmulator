@@ -67,6 +67,11 @@ namespace WibboEmulator.Game.Items
                 pageId = 15987;
                 forceItem = 4082;
             }
+            else if (WibboEnvironment.GetRandomNumber(1, 250 * 2) == 250 * 2) //Pièce Win-win
+            {
+                pageId = 456465;
+                forceItem = 7934;
+            }
             else if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic) == ProbalilityEpic) //Epique
             {
                 pageId = 1635463733;
@@ -76,9 +81,15 @@ namespace WibboEmulator.Game.Items
                 pageId = 15987;
                 forceItem = 4083;
             }
+            else if (WibboEnvironment.GetRandomNumber(1, 100 * 2) == 100 * 2) //Pièce Win-win
+            {
+                pageId = 456465;
+                forceItem = 7932;
+            }
             else if (WibboEnvironment.GetRandomNumber(1, 75 * 2) == 75 * 2) //Pièce Win-win
             {
                 pageId = 456465;
+                forceItem = 7931;
             }
             else if (WibboEnvironment.GetRandomNumber(1, 50 * 2) == 50 * 2) //50 WibboPoint
             {
@@ -93,6 +104,11 @@ namespace WibboEmulator.Game.Items
             else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun) == ProbalilityCommun) //Commun
             {
                 pageId = 1635463732;
+            }
+            else if (WibboEnvironment.GetRandomNumber(1, 5 * 2) == 5 * 2) //Pièce Win-win
+            {
+                pageId = 456465;
+                forceItem = 7928;
             }
             else if (WibboEnvironment.GetRandomNumber(1, ProbalilityBasic) == ProbalilityBasic) //Basique
             {
