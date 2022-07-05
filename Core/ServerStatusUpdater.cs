@@ -43,13 +43,11 @@ namespace WibboEmulator.Core
                     TimeSpan Uptime = DateTime.Now - WibboEnvironment.ServerStarted;
 
                     //Console.Title = "Butterfly | Démarré depuis : " + Uptime.Days + " jour(s) " + Uptime.Hours + " heures " + Uptime.Minutes + " minutes | "
-                         //+ UsersOnline + " Joueur(s) en ligne " + " | " + RoomsLoaded + " Appartement(s) en ligne";
+                    //+ UsersOnline + " Joueur(s) en ligne " + " | " + RoomsLoaded + " Appartement(s) en ligne";
 
-                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        EmulatorStatsDao.Insert(dbClient, UsersOnline, RoomsLoaded);
-                        EmulatorStatusDao.UpdateScore(dbClient, UsersOnline, RoomsLoaded, UserPeak);
-                    }
+                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    EmulatorStatsDao.Insert(dbClient, UsersOnline, RoomsLoaded);
+                    EmulatorStatusDao.UpdateScore(dbClient, UsersOnline, RoomsLoaded, UserPeak);
                 }
                 catch (Exception e) { ExceptionLogger.LogThreadException(e.ToString(), "Server status update task"); }
             }

@@ -132,6 +132,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                         {
                             ItemLotBox.OpenDeluxeBox(session, item, room);
                         }
+                        else if (item.GetBaseItem().InteractionType == InteractionType.LOOTBOX2022)
+                        {
+                            ItemLotBox.OpenLootBox2022(session, item, room);
+                        }
                         else if (item.GetBaseItem().InteractionType == InteractionType.LEGENDBOX)
                         {
                             ItemLotBox.OpenLegendBox(session, item, room);

@@ -86,7 +86,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
             this.WriteInteger(Item.Y);
             this.WriteInteger(Item.Rotation);
             this.WriteString(string.Format("{0:0.00}", Item.Z));
-            this.WriteString(string.Empty);
+            this.WriteString(Item.GetBaseItem().Height.ToString());
 
             if (Item.Limited > 0)
             {
@@ -101,8 +101,8 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
                 ItemBehaviourUtility.GenerateExtradata(Item, this);
             }
 
-            this.WriteInteger(-1); // to-do: check
-            this.WriteInteger(1); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
+            this.WriteInteger(-1); // expires
+            this.WriteInteger(2); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
             this.WriteInteger(UserID);
         }
     }

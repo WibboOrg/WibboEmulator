@@ -53,8 +53,8 @@ namespace WibboEmulator.Game.Users.Wardrobes
             Wardrobe wardrobe = new Wardrobe(slotId, look, gender);
             this._wardrobes.Add(slotId, wardrobe);
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                UserWardrobeDao.Insert(dbClient, this._userInstance.Id, slotId, look, gender.ToUpper());
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            UserWardrobeDao.Insert(dbClient, this._userInstance.Id, slotId, look, gender.ToUpper());
         }
 
         public Dictionary<int, Wardrobe> GetWardrobes()

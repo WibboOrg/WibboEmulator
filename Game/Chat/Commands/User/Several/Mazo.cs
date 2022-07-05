@@ -32,10 +32,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     Session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.newscore", Session.Langue), user.Mazo));
                     user.MazoHighScore = user.Mazo;
 
-                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        UserDao.UpdateMazoScore(dbClient, user.Id, user.MazoHighScore);
-                    }
+                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    UserDao.UpdateMazoScore(dbClient, user.Id, user.MazoHighScore);
                 }
                 else
                 {

@@ -245,13 +245,11 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 }
 
                 Interlocked.Increment(ref Item.LimitedEditionSells);
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    CatalogItemDao.UpdateLimited(dbClient, Item.Id, Item.LimitedEditionSells);
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                CatalogItemDao.UpdateLimited(dbClient, Item.Id, Item.LimitedEditionSells);
 
-                    LimitedEditionSells = Item.LimitedEditionSells;
-                    LimitedEditionStack = Item.LimitedEditionStack;
-                }
+                LimitedEditionSells = Item.LimitedEditionSells;
+                LimitedEditionStack = Item.LimitedEditionStack;
             }
 
             if (Item.CostCredits > 0)
@@ -271,10 +269,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 Session.GetUser().WibboPoints -= TotalDiamondCost;
                 Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserDao.UpdateRemovePoints(dbClient, Session.GetUser().Id, TotalDiamondCost);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserDao.UpdateRemovePoints(dbClient, Session.GetUser().Id, TotalDiamondCost);
             }
 
             if (Item.CostLimitCoins > 0)
@@ -282,10 +278,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 Session.GetUser().LimitCoins -= TotalDiamondCost;
                 Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().LimitCoins, 0, 55));
 
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserDao.UpdateRemoveLimitCoins(dbClient, Session.GetUser().Id, TotalDiamondCost);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserDao.UpdateRemoveLimitCoins(dbClient, Session.GetUser().Id, TotalDiamondCost);
             }
 
             switch (Item.Data.Type.ToString().ToLower())

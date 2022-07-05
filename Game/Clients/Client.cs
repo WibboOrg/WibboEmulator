@@ -90,10 +90,8 @@ namespace WibboEmulator.Game.Clients
 
                     if (this._user.MachineId != this.MachineId && this.MachineId != null)
                     {
-                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                        {
-                            UserDao.UpdateMachineId(dbClient, this._user.Id, this.MachineId);
-                        }
+                        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        UserDao.UpdateMachineId(dbClient, this._user.Id, this.MachineId);
                     }
 
                     this._user.Init(this);

@@ -254,47 +254,45 @@ namespace WibboEmulator.Game.Users
             this._chatMessageManager = new ChatlogManager();
             this._permissions = new PermissionComponent(this);
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            this._badgeComponent.Init(dbClient);
+            this._wardrobeComponent.Init(dbClient);
+            this._achievementComponent.Init(dbClient);
+            this._messengerComponent.Init(dbClient, this.HideOnline);
+            this._chatMessageManager.LoadUserChatlogs(dbClient, this.Id);
+
+            DataTable dUserRooms = RoomDao.GetAllByOwner(dbClient, this.Username);
+            foreach (DataRow dRow in dUserRooms.Rows)
             {
-                this._badgeComponent.Init(dbClient);
-                this._wardrobeComponent.Init(dbClient);
-                this._achievementComponent.Init(dbClient);
-                this._messengerComponent.Init(dbClient, this.HideOnline);
-                this._chatMessageManager.LoadUserChatlogs(dbClient, this.Id);
+                this.UsersRooms.Add(Convert.ToInt32(dRow["id"]));
+            }
 
-                DataTable dUserRooms = RoomDao.GetAllByOwner(dbClient, this.Username);
-                foreach (DataRow dRow in dUserRooms.Rows)
-                {
-                    this.UsersRooms.Add(Convert.ToInt32(dRow["id"]));
-                }
+            DataTable dGroupMemberships = GuildMembershipDao.GetOneByUserId(dbClient, this.Id);
+            foreach (DataRow dRow in dGroupMemberships.Rows)
+            {
+                this.MyGroups.Add(Convert.ToInt32(dRow["group_id"]));
+            }
 
-                DataTable dGroupMemberships = GuildMembershipDao.GetOneByUserId(dbClient, this.Id);
-                foreach (DataRow dRow in dGroupMemberships.Rows)
-                {
-                    this.MyGroups.Add(Convert.ToInt32(dRow["group_id"]));
-                }
+            DataTable dQuests = UserQuestDao.GetAll(dbClient, this.Id);
+            foreach (DataRow dataRow in dQuests.Rows)
+            {
+                int questId = Convert.ToInt32(dataRow["quest_id"]);
+                int progress = Convert.ToInt32(dataRow["progress"]);
+                this.Quests.Add(questId, progress);
+            }
 
-                DataTable dQuests = UserQuestDao.GetAll(dbClient, this.Id);
-                foreach (DataRow dataRow in dQuests.Rows)
-                {
-                    int questId = Convert.ToInt32(dataRow["quest_id"]);
-                    int progress = Convert.ToInt32(dataRow["progress"]);
-                    this.Quests.Add(questId, progress);
-                }
+            DataTable dFavorites = UserFavoriteDao.GetAll(dbClient, this.Id);
+            foreach (DataRow dataRow in dFavorites.Rows)
+            {
+                int roomId = Convert.ToInt32(dataRow["room_id"]);
+                this.FavoriteRooms.Add(roomId);
+            }
 
-                DataTable dFavorites = UserFavoriteDao.GetAll(dbClient, this.Id);
-                foreach (DataRow dataRow in dFavorites.Rows)
-                {
-                    int roomId = Convert.ToInt32(dataRow["room_id"]);
-                    this.FavoriteRooms.Add(roomId);
-                }
-
-                DataTable dRoomRights = RoomRightDao.GetAllByUserId(dbClient, this.Id);
-                foreach (DataRow dataRow in dRoomRights.Rows)
-                {
-                    int roomId = Convert.ToInt32(dataRow["room_id"]);
-                    this.RoomRightsList.Add(roomId);
-                }
+            DataTable dRoomRights = RoomRightDao.GetAllByUserId(dbClient, this.Id);
+            foreach (DataRow dataRow in dRoomRights.Rows)
+            {
+                int roomId = Convert.ToInt32(dataRow["room_id"]);
+                this.RoomRightsList.Add(roomId);
             }
         }
 
@@ -492,11 +490,9 @@ namespace WibboEmulator.Game.Users
                 this.InfoSaved = true;
                 TimeSpan TimeOnline = DateTime.Now - this.OnlineTime;
                 int TimeOnlineSec = (int)TimeOnline.TotalSeconds;
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits);
-                    UserStatsDao.UpdateAll(dbClient, this.Id, this.FavouriteGroupId, TimeOnlineSec, this.CurrentQuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserDao.UpdateOffline(dbClient, this.Id, this.Duckets, this.Credits);
+                UserStatsDao.UpdateAll(dbClient, this.Id, this.FavouriteGroupId, TimeOnlineSec, this.CurrentQuestId, this.Respect, this.DailyRespectPoints, this.DailyPetRespectPoints);
             }
 
             if (this.InRoom && this.CurrentRoom != null)

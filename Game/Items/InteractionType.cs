@@ -171,6 +171,7 @@
         DELUXEBOX,
         LEGENDBOX,
         BADGEBOX,
+        LOOTBOX2022,
         EXCHANGE,
         HORSE_SADDLE_1,
         HORSE_SADDLE_2,
@@ -484,6 +485,8 @@
                     return InteractionType.LEGENDBOX;
                 case "badgebox":
                     return InteractionType.BADGEBOX;
+                case "lootbox2022":
+                    return InteractionType.LOOTBOX2022;
                 case "maniqui":
                     return InteractionType.MANNEQUIN;
                 case "bgupdater":

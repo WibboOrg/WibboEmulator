@@ -26,10 +26,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             }
 
             room.GetRoomItemHandler().RemoveFurniture(Session, roomItem.Id);
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                ItemDao.Delete(dbClient, roomItem.Id);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            ItemDao.Delete(dbClient, roomItem.Id);
         }
     }
 }

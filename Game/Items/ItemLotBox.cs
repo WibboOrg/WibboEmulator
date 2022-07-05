@@ -13,167 +13,124 @@ namespace WibboEmulator.Game.Items
 {
     internal static class ItemLotBox
     {
-        public static void OpenExtrabox(Client Session, Item Present, Room Room)
+        private static readonly int ProbalilityLegendary = 1000 * 2;
+        private static readonly int ProbalilityEpic = 100 * 2;
+        private static readonly int ProbalilityCommun = 10 * 2;
+        private static readonly int ProbalilityBasic = 1 * 2;
+
+        public static void OpenExtrabox(Client session, Item present, Room room)
         {
-            int PageId;
+            int pageId;
+            int forceItem = 0;
 
-            if (WibboEnvironment.GetRandomNumber(1, 750) == 750) //Epic rare
+            if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic * 3) == ProbalilityEpic * 3) //Epic
             {
-                PageId = 84641;
+                pageId = 84641;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 100) == 100) //Commun rare
+            else if (WibboEnvironment.GetRandomNumber(1, 75 * 3) == 75 * 3) //Pièce Win-win
             {
-                PageId = 98747;
+                pageId = 456465;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 75) == 75) //WibboPoint
+            else if (WibboEnvironment.GetRandomNumber(1, 50 * 3) == 50 * 3) //50 WibboPoint
             {
-                PageId = 15987;
+                pageId = 15987;
+                forceItem = 10993;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 25) == 25) //Pièce Win-win
+            else if (WibboEnvironment.GetRandomNumber(1, 10 * 3) == 10 * 3) //10 WibboPoint
             {
-                PageId = 456465;
+                pageId = 15987;
+                forceItem = 11068;
             }
-            else
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun * 3) == ProbalilityCommun * 3) //Commun
             {
-                PageId = 894948; //Rare
-            }
-
-            WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
-            if (Page == null)
-            {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
-                return;
-            }
-
-            ItemData LotData = Page.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, Page.Items.Count - 1)).Value.Data;
-            if (LotData == null)
-            {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
-                return;
-            }
-
-            Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
-
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                ItemDao.UpdateBaseItem(dbClient, Present.Id, LotData.Id);
-            }
-
-            string FurniType = Present.GetBaseItem().Type.ToString().ToLower();
-            Present.BaseItem = LotData.Id;
-            Present.ResetBaseItem();
-
-            bool ItemIsInRoom = true;
-
-            if (Present.Data.Type == 's')
-            {
-                if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
-                {
-                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        ItemDao.UpdateResetRoomId(dbClient, Present.Id);
-                    }
-
-                    ItemIsInRoom = false;
-                }
+                pageId = 98747;
             }
             else
             {
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    ItemDao.UpdateResetRoomId(dbClient, Present.Id);
-                }
-
-                ItemIsInRoom = false;
+                pageId = 894948; //Basique
             }
 
-            Session.SendPacket(new OpenGiftComposer(Present.Data, Present.ExtraData, Present, ItemIsInRoom));
-
-            if (!ItemIsInRoom)
-            {
-                Session.GetUser().GetInventoryComponent().TryAddItem(Present);
-            }
+            EndOpenBox(session, present, room, pageId, forceItem);
         }
 
-        public static void OpenDeluxeBox(Client Session, Item Present, Room Room)
+        public static void OpenLootBox2022(Client session, Item present, Room room)
         {
-            int PageId;
+            int pageId;
+            int forceItem = 0;
 
-            if (WibboEnvironment.GetRandomNumber(1, 200) == 200) //Epique
+            if (WibboEnvironment.GetRandomNumber(1, ProbalilityLegendary) == ProbalilityLegendary) //Legendaires
             {
-                PageId = 1635463617;
+                pageId = 1635463734;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 20) == 20) //Commun
+            else if (WibboEnvironment.GetRandomNumber(1, 500 * 2) == 500 * 2) //500 WibboPoint
             {
-                PageId = 1635463616;
+                pageId = 15987;
+                forceItem = 4082;
             }
-            else
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic) == ProbalilityEpic) //Epique
             {
-                PageId = 91700214; //Basique
+                pageId = 1635463733;
             }
-
-            WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
-            if (Page == null)
+            else if (WibboEnvironment.GetRandomNumber(1, 200 * 2) == 200 * 2) //200 WibboPoint
             {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
-                return;
+                pageId = 15987;
+                forceItem = 4083;
             }
-
-            ItemData LotData = Page.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, Page.Items.Count - 1)).Value.Data;
-            if (LotData == null)
+            else if (WibboEnvironment.GetRandomNumber(1, 75 * 2) == 75 * 2) //Pièce Win-win
             {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
-                return;
+                pageId = 456465;
             }
-
-            Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
-
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            else if (WibboEnvironment.GetRandomNumber(1, 50 * 2) == 50 * 2) //50 WibboPoint
             {
-                ItemDao.UpdateBaseItem(dbClient, Present.Id, LotData.Id);
+                pageId = 15987;
+                forceItem = 10993;
             }
-
-            string FurniType = Present.GetBaseItem().Type.ToString().ToLower();
-            Present.BaseItem = LotData.Id;
-            Present.ResetBaseItem();
-
-            bool ItemIsInRoom = true;
-
-            if (Present.Data.Type == 's')
+            else if (WibboEnvironment.GetRandomNumber(1, 10 * 2) == 10 * 2) //10 WibboPoint
             {
-                if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
-                {
-                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        ItemDao.UpdateResetRoomId(dbClient, Present.Id);
-                    }
-
-                    ItemIsInRoom = false;
-                }
+                pageId = 15987;
+                forceItem = 11068;
+            }
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun) == ProbalilityCommun) //Commun
+            {
+                pageId = 1635463732;
+            }
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityBasic) == ProbalilityBasic) //Basique
+            {
+                pageId = 1635463731;
             }
             else
             {
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    ItemDao.UpdateResetRoomId(dbClient, Present.Id);
-                }
-
-                ItemIsInRoom = false;
+                pageId = 15987;
+                forceItem = 23584;
             }
 
-            Session.SendPacket(new OpenGiftComposer(Present.Data, Present.ExtraData, Present, ItemIsInRoom));
-
-            if (!ItemIsInRoom)
-            {
-                Session.GetUser().GetInventoryComponent().TryAddItem(Present);
-            }
+            EndOpenBox(session, present, room, pageId, forceItem);
         }
 
-        public static void OpenBadgeBox(Client Session, Item Present, Room Room)
+        public static void OpenDeluxeBox(Client session, Item present, Room room)
         {
+            int pageId = 0;
 
+            if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic) == ProbalilityEpic) //Epique
+            {
+                pageId = 1635463617;
+            }
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun) == ProbalilityCommun) //Commun
+            {
+                pageId = 1635463616;
+            }
+            else
+            {
+                pageId = 91700214; //Basique
+            }
+
+            EndOpenBox(session, present, room, pageId);
+        }
+
+        public static void OpenBadgeBox(Client session, Item present, Room room)
+        {
             //Présentoir et badge
-            int PageId = 987987;
+            int pageId = 987987;
 
             List<int> PageBadgeList = new List<int>(new int[] { 8948, 18171, 18172, 18173, 18174, 18175, 18176, 18177, 18178, 18179, 18180, 18181, 18182, 18183 });
             int PageBadgeId = PageBadgeList[WibboEnvironment.GetRandomNumber(0, PageBadgeList.Count - 1)];
@@ -185,76 +142,19 @@ namespace WibboEmulator.Game.Items
 
             string BadgeCode = PageBadge.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, PageBadge.Items.Count - 1)).Value.Badge;
 
-
-            WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
-            if (Page == null)
+            if (!string.IsNullOrEmpty(BadgeCode) && !session.GetUser().GetBadgeComponent().HasBadge(BadgeCode))
             {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
-                return;
-            }
+                session.GetUser().GetBadgeComponent().GiveBadge(BadgeCode, true);
+                session.SendPacket(new ReceiveBadgeComposer(BadgeCode));
 
-            ItemData LotData = Page.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, Page.Items.Count - 1)).Value.Data;
-            if (LotData == null)
-            {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", Session.Langue));
-                return;
-            }
-
-            Room.GetRoomItemHandler().RemoveFurniture(Session, Present.Id);
-
-            string ExtraData = BadgeCode + Convert.ToChar(9) + Session.GetUser().Username + Convert.ToChar(9) + DateTime.Now.Day + "-" + DateTime.Now.Month + "-" + DateTime.Now.Year;
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                ItemDao.UpdateBaseItemAndExtraData(dbClient, Present.Id, LotData.Id, ExtraData);
-            }
-
-            Present.ExtraData = ExtraData;
-
-            Present.BaseItem = LotData.Id;
-            Present.ResetBaseItem();
-
-            bool ItemIsInRoom = true;
-
-            if (Present.Data.Type == 's')
-            {
-                if (!Room.GetRoomItemHandler().SetFloorItem(Session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
-                {
-                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        ItemDao.UpdateResetRoomId(dbClient, Present.Id);
-                    }
-
-                    ItemIsInRoom = false;
-                }
-            }
-            else
-            {
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    ItemDao.UpdateResetRoomId(dbClient, Present.Id);
-                }
-
-                ItemIsInRoom = false;
-            }
-
-            Session.SendPacket(new OpenGiftComposer(Present.Data, Present.ExtraData, Present, ItemIsInRoom));
-
-            if (!ItemIsInRoom)
-            {
-                Session.GetUser().GetInventoryComponent().TryAddItem(Present);
-            }
-
-            if (!string.IsNullOrEmpty(BadgeCode) && !Session.GetUser().GetBadgeComponent().HasBadge(BadgeCode))
-            {
-                Session.GetUser().GetBadgeComponent().GiveBadge(BadgeCode, true);
-                Session.SendPacket(new ReceiveBadgeComposer(BadgeCode));
-
-                RoomUser roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+                RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
                 if (roomUserByUserId != null)
                 {
                     roomUserByUserId.SendWhisperChat("Tu as reçu le badge: " + BadgeCode);
                 }
             }
+
+            EndOpenBox(session, present, room, pageId);
         }
 
         public static void OpenLegendBox(Client session, Item present, Room room)
@@ -264,7 +164,7 @@ namespace WibboEmulator.Game.Items
             string lotType = "";
             int forceItem = 0;
 
-            if (WibboEnvironment.GetRandomNumber(1, 100) == 100) //Legendaire
+            if (WibboEnvironment.GetRandomNumber(1, ProbalilityLegendary / 20) == ProbalilityLegendary / 20) //Legendaire
             {
                 pageId = 14514;
                 lotType = "Légendaire";
@@ -281,7 +181,7 @@ namespace WibboEmulator.Game.Items
                 lotType = "Royal";
                 forceItem = 70223722;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 15) == 15) //Epique
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic / 20) == ProbalilityEpic / 20) //Epique
             {
                 pageId = 84641;
                 lotType = "épique";
@@ -317,30 +217,6 @@ namespace WibboEmulator.Game.Items
                 break;
             }
 
-            
-            if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out CatalogPage page))
-            {
-                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
-                return;
-            }
-
-            ItemData lotData = null;
-
-            if (forceItem == 0)
-            {
-                lotData = page.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, page.Items.Count - 1)).Value.Data;
-            }
-            else
-            {
-                lotData = page.GetItem(forceItem).Data;
-            }
-
-            if (lotData == null)
-            {
-                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
-                return;
-            }
-
             int credits = WibboEnvironment.GetRandomNumber(100, 10000) * 1000;
             session.GetUser().Credits += credits;
             session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
@@ -370,6 +246,34 @@ namespace WibboEmulator.Game.Items
                 session.SendPacket(new ReceiveBadgeComposer(badgeCode));
             }
 
+            EndOpenBox(session, present, room, pageId, forceItem);
+        }
+
+        private static void EndOpenBox(Client session, Item present, Room room, int pageId, int forceItem = 0)
+        {
+            WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out CatalogPage page);
+            if (page == null)
+            {
+                 session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+                 return;
+            }
+
+            ItemData lotData;
+            if (forceItem == 0)
+            {
+                lotData = page.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, page.Items.Count - 1)).Value.Data;
+            }
+            else
+            {
+                lotData = page.GetItem(forceItem).Data;
+            }
+
+            if (lotData == null)
+            {
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+                return;
+            }
+
             room.GetRoomItemHandler().RemoveFurniture(session, present.Id);
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -377,11 +281,10 @@ namespace WibboEmulator.Game.Items
                 ItemDao.UpdateBaseItem(dbClient, present.Id, lotData.Id);
             }
 
-            string furniType = present.GetBaseItem().Type.ToString().ToLower();
             present.BaseItem = lotData.Id;
             present.ResetBaseItem();
 
-            bool itemIsInRoom = true;
+            bool ItemIsInRoom = true;
 
             if (present.Data.Type == 's')
             {
@@ -392,7 +295,7 @@ namespace WibboEmulator.Game.Items
                         ItemDao.UpdateResetRoomId(dbClient, present.Id);
                     }
 
-                    itemIsInRoom = false;
+                    ItemIsInRoom = false;
                 }
             }
             else
@@ -402,12 +305,12 @@ namespace WibboEmulator.Game.Items
                     ItemDao.UpdateResetRoomId(dbClient, present.Id);
                 }
 
-                itemIsInRoom = false;
+                ItemIsInRoom = false;
             }
 
-            session.SendPacket(new OpenGiftComposer(present.Data, present.ExtraData, present, itemIsInRoom));
+            session.SendPacket(new OpenGiftComposer(present.Data, present.ExtraData, present, ItemIsInRoom));
 
-            if (!itemIsInRoom)
+            if (!ItemIsInRoom)
             {
                 session.GetUser().GetInventoryComponent().TryAddItem(present);
             }

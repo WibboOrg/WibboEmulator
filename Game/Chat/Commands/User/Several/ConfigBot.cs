@@ -45,8 +45,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                         {
                             Bot.BotData.Enable = IntValue;
 
-                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                BotUserDao.UpdateEnable(dbClient, Bot.BotData.Id, IntValue);
+                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                            BotUserDao.UpdateEnable(dbClient, Bot.BotData.Id, IntValue);
                         }
                         break;
                     }
@@ -68,8 +68,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                         {
                             Bot.BotData.Handitem = IntValue;
 
-                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                BotUserDao.UpdateHanditem(dbClient, Bot.BotData.Id, IntValue);
+                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                            BotUserDao.UpdateHanditem(dbClient, Bot.BotData.Id, IntValue);
                         }
                         break;
                     }
@@ -94,8 +94,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                         {
                             Bot.BotData.Rot = IntValue;
 
-                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                BotUserDao.UpdateRotation(dbClient, Bot.BotData.Id, Bot.RotBody);
+                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                            BotUserDao.UpdateRotation(dbClient, Bot.BotData.Id, Bot.RotBody);
                         }
                         break;
                     }
@@ -109,10 +109,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                             Bot.IsSit = false;
                             Bot.UpdateNeeded = true;
 
-                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                            {
-                                BotUserDao.UpdateStatus0(dbClient, Bot.BotData.Id);
-                            }
+                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                            BotUserDao.UpdateStatus0(dbClient, Bot.BotData.Id);
                         }
                         else
                         {
@@ -125,10 +123,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
                             Bot.BotData.Status = 1;
 
-                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                            {
-                                BotUserDao.UpdateStatus1(dbClient, Bot.BotData.Id);
-                            }
+                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                            BotUserDao.UpdateStatus1(dbClient, Bot.BotData.Id);
                         }
                         break;
                     }
@@ -142,10 +138,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                             Bot.IsSit = false;
                             Bot.UpdateNeeded = true;
 
-                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                            {
-                                BotUserDao.UpdateStatus0(dbClient, Bot.BotData.Id);
-                            }
+                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                            BotUserDao.UpdateStatus0(dbClient, Bot.BotData.Id);
                         }
                         else
                         {
@@ -158,8 +152,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
                             Bot.BotData.Status = 2;
 
-                            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                BotUserDao.UpdateStatus2(dbClient, Bot.BotData.Id);
+                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                            BotUserDao.UpdateStatus2(dbClient, Bot.BotData.Id);
                         }
                         break;
                     }

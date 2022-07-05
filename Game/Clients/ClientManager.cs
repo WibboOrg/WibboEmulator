@@ -272,10 +272,8 @@ namespace WibboEmulator.Game.Clients
             {
                 if (stringBuilder.Length > 0)
                 {
-                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        dbClient.RunQuery((stringBuilder).ToString());
-                    }
+                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    dbClient.RunQuery((stringBuilder).ToString());
                 }
             }
             catch (Exception ex)

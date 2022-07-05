@@ -289,10 +289,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 Session.GetUser().WibboPoints -= TotalDiamondCost;
                 Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserDao.UpdateRemovePoints(dbClient, Session.GetUser().Id, TotalDiamondCost);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserDao.UpdateRemovePoints(dbClient, Session.GetUser().Id, TotalDiamondCost);
             }
 
             if (Item.CostLimitCoins > 0)
@@ -300,10 +298,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 Session.GetUser().LimitCoins -= TotalDiamondCost;
                 Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().LimitCoins, 0, 55));
 
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserDao.UpdateRemoveLimitCoins(dbClient, Session.GetUser().Id, TotalDiamondCost);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserDao.UpdateRemoveLimitCoins(dbClient, Session.GetUser().Id, TotalDiamondCost);
             }
 
             Session.GetUser().LastGiftPurchaseTime = DateTime.Now;

@@ -18,39 +18,37 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            foreach (CatalogItem Item in Page.Items.Values)
             {
-                foreach (CatalogItem Item in Page.Items.Values)
+                int LimitedStack = Item.LimitedEditionStack;
+
+                for (int LimitedNumber = 1; LimitedNumber < LimitedStack + 1; LimitedNumber++)
                 {
-                    int LimitedStack = Item.LimitedEditionStack;
+                    DataRow Row = ItemDao.GetOneLimitedId(dbClient, LimitedNumber, Item.ItemId);
 
-                    for (int LimitedNumber = 1; LimitedNumber < LimitedStack + 1; LimitedNumber++)
+                    if (Row != null)
                     {
-                        DataRow Row = ItemDao.GetOneLimitedId(dbClient, LimitedNumber, Item.ItemId);
+                        continue;
+                    }
 
-                        if (Row != null)
-                        {
-                            continue;
-                        }
+                    DataRow RowMarketPlace = CatalogMarketplaceOfferDao.GetOneLTD(dbClient, Item.ItemId, LimitedNumber);
 
-                        DataRow RowMarketPlace = CatalogMarketplaceOfferDao.GetOneLTD(dbClient, Item.ItemId, LimitedNumber);
+                    if (RowMarketPlace != null)
+                    {
+                        continue;
+                    }
 
-                        if(RowMarketPlace != null)
-                        {
-                            continue;
-                        }
+                    Item NewItem = ItemFactory.CreateSingleItemNullable(Item.Data, Session.GetUser(), "", LimitedNumber, LimitedStack);
 
-                        Item NewItem = ItemFactory.CreateSingleItemNullable(Item.Data, Session.GetUser(), "", LimitedNumber, LimitedStack);
+                    if (NewItem == null)
+                    {
+                        continue;
+                    }
 
-                        if (NewItem == null)
-                        {
-                            continue;
-                        }
-
-                        if (Session.GetUser().GetInventoryComponent().TryAddItem(NewItem))
-                        {
-                            Session.SendPacket(new FurniListNotificationComposer(NewItem.Id, 1));
-                        }
+                    if (Session.GetUser().GetInventoryComponent().TryAddItem(NewItem))
+                    {
+                        Session.SendPacket(new FurniListNotificationComposer(NewItem.Id, 1));
                     }
                 }
             }

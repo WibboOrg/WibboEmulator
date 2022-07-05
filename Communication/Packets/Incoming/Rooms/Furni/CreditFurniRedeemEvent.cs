@@ -62,10 +62,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     Session.GetUser().WibboPoints += Value;
                     Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
-                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        UserDao.UpdateAddPoints(dbClient, Session.GetUser().Id, Value);
-                    }
+                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    UserDao.UpdateAddPoints(dbClient, Session.GetUser().Id, Value);
                 }
                 else if (Exchange.GetBaseItem().ItemName.StartsWith("WwnEx_"))
                 {
@@ -77,14 +75,11 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     Session.GetUser().AchievementPoints += Value;
                     Session.SendPacket(new AchievementScoreComposer(Session.GetUser().AchievementPoints));
 
-                    if (Room != null)
+                    RoomUser roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+                    if (roomUserByUserId != null)
                     {
-                        RoomUser roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-                        if (roomUserByUserId != null)
-                        {
-                            Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
-                            Room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
-                        }
+                         Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+                         Room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
                     }
                 }
             }

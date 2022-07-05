@@ -9,17 +9,15 @@ namespace WibboEmulator.Game.Items
     {
         public static int GetLinkedTele(int teleId)
         {
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            DataRow row = ItemTeleportDao.GetOne(dbClient, teleId);
+            if (row == null)
             {
-                DataRow row = ItemTeleportDao.GetOne(dbClient, teleId);
-                if (row == null)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return Convert.ToInt32(row[0]);
-                }
+                return 0;
+            }
+            else
+            {
+                return Convert.ToInt32(row[0]);
             }
         }
 
@@ -40,17 +38,15 @@ namespace WibboEmulator.Game.Items
                 return room.Id;
             }
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            DataRow row = ItemDao.GetOneRoomId(dbClient, teleId);
+            if (row == null)
             {
-                DataRow row = ItemDao.GetOneRoomId(dbClient, teleId);
-                if (row == null)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return Convert.ToInt32(row[0]);
-                }
+                return 0;
+            }
+            else
+            {
+                return Convert.ToInt32(row[0]);
             }
         }
 

@@ -15,12 +15,12 @@ using WibboEmulator.Game.Permissions;
 using WibboEmulator.Game.Rooms;
 using WibboEmulator.Game.Chat;
 using WibboEmulator.Game.Moderation;
-using System.Diagnostics;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Game.Effects;
 using WibboEmulator.Game.Badges;
 using WibboEmulator.Game.Bots;
 using WibboEmulator.Database.Daos;
+using System.Diagnostics;
 
 namespace WibboEmulator.Game
 {
@@ -53,68 +53,66 @@ namespace WibboEmulator.Game
 
         public GameCore()
         {
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                this._botManager = new BotManager();
-                this._botManager.Init();
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            this._botManager = new BotManager();
+            this._botManager.Init();
 
-                this._clientManager = new ClientManager();
+            this._clientManager = new ClientManager();
 
-                this._permissionManager = new PermissionManager();
-                this._permissionManager.Init(dbClient);
+            this._permissionManager = new PermissionManager();
+            this._permissionManager.Init(dbClient);
 
-                this._itemDataManager = new ItemDataManager();
-                this._itemDataManager.Init(dbClient);
+            this._itemDataManager = new ItemDataManager();
+            this._itemDataManager.Init(dbClient);
 
-                this._catalogManager = new CatalogManager();
-                this._catalogManager.Init(dbClient, this._itemDataManager);
+            this._catalogManager = new CatalogManager();
+            this._catalogManager.Init(dbClient, this._itemDataManager);
 
-                this._navigatorManager = new NavigatorManager();
-                this._navigatorManager.Init(dbClient);
+            this._navigatorManager = new NavigatorManager();
+            this._navigatorManager.Init(dbClient);
 
-                this._roleplayManager = new RoleplayManager();
-                this._roleplayManager.Init(dbClient);
+            this._roleplayManager = new RoleplayManager();
+            this._roleplayManager.Init(dbClient);
 
-                this._roomManager = new RoomManager();
-                this._roomManager.Init(dbClient);
+            this._roomManager = new RoomManager();
+            this._roomManager.Init(dbClient);
 
-                this._groupManager = new GroupManager();
-                this._groupManager.Init(dbClient);
+            this._groupManager = new GroupManager();
+            this._groupManager.Init(dbClient);
 
-                this._moderationManager = new ModerationManager();
-                this._moderationManager.Init(dbClient);
+            this._moderationManager = new ModerationManager();
+            this._moderationManager.Init(dbClient);
 
-                this._questManager = new QuestManager();
-                this._questManager.Init(dbClient);
+            this._questManager = new QuestManager();
+            this._questManager.Init(dbClient);
 
-                this._landingViewManager = new LandingViewManager();
-                this._landingViewManager.Init(dbClient);
+            this._landingViewManager = new LandingViewManager();
+            this._landingViewManager.Init(dbClient);
 
-                this._helpManager = new HelpManager();
+            this._helpManager = new HelpManager();
 
-                this._packetManager = new PacketManager();
-                this._packetManager.Init(dbClient);
+            this._packetManager = new PacketManager();
+            this._packetManager.Init(dbClient);
 
-                this._chatManager = new ChatManager();
-                this._chatManager.Init(dbClient);
+            this._chatManager = new ChatManager();
+            this._chatManager.Init(dbClient);
 
-                this._effectManager = new EffectManager();
-                this._effectManager.Init(dbClient);
+            this._effectManager = new EffectManager();
+            this._effectManager.Init(dbClient);
 
-                this._badgeManager = new BadgeManager();
-                this._badgeManager.Init(dbClient);
+            this._badgeManager = new BadgeManager();
+            this._badgeManager.Init(dbClient);
 
-                this._achievementManager = new AchievementManager();
-                this._achievementManager.Init(dbClient);
+            this._achievementManager = new AchievementManager();
+            this._achievementManager.Init(dbClient);
 
-                this._animationManager = new AnimationManager();
-                this._animationManager.Init(dbClient);
+            this._animationManager = new AnimationManager();
+            this._animationManager.Init(dbClient);
 
-                DatabaseCleanup(dbClient);
-                ServerStatusUpdater.Init(dbClient);
+            DatabaseCleanup(dbClient);
+            ServerStatusUpdater.Init(dbClient);
 
-                this._moduleWatch = new Stopwatch();
-            }
+            this._moduleWatch = new Stopwatch();
         }
 
         #region Return values
@@ -284,6 +282,7 @@ namespace WibboEmulator.Game
 
         public void Destroy()
         {
+            this.GameLoopActive = false;
             Console.WriteLine("Destroyed Hotel.");
         }
     }

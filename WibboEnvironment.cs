@@ -1,4 +1,5 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Core;
 using WibboEmulator.Core.FigureData;
 using WibboEmulator.Database;
@@ -12,7 +13,6 @@ using WibboEmulator.Net;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
-using WibboEmulator.Communication.WebSocket;
 
 namespace WibboEmulator
 {
@@ -30,13 +30,13 @@ namespace WibboEmulator
         private static Random _random = new Random();
         private static readonly ConcurrentDictionary<int, User> _usersCached = new ConcurrentDictionary<int, User>();
 
-        public static DateTime ServerStarted;
-        public static bool StaticEvents;
-        public static List<string> WebSocketOrigins;
-        public static string PatchDir;
-        public static string CameraUploadUrl;
-        public static string FigureDataUrl;
-        public static string CameraThubmailUploadUrl;
+        public static DateTime ServerStarted { get; set; }
+        public static bool StaticEvents { get; set; }
+        public static List<string> WebSocketOrigins { get; set; }
+        public static string PatchDir { get; set; }
+        public static string CameraUploadUrl { get; set; }
+        public static string FigureDataUrl { get; set; }
+        public static string CameraThubmailUploadUrl { get; set; }
 
         private static readonly List<char> Allowedchars = new List<char>(new[]
             {
@@ -50,8 +50,6 @@ namespace WibboEmulator
 
         public static void Initialize()
         {
-            Console.Clear();
-
             ServerStarted = DateTime.Now;
             Console.ForegroundColor = ConsoleColor.Gray;
 
@@ -270,16 +268,14 @@ namespace WibboEmulator
 
         public static bool UsernameExists(string username)
         {
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            int integer = UserDao.GetIdByName(dbClient, username);
+            if (integer <= 0)
             {
-                int integer = UserDao.GetIdByName(dbClient, username);
-                if (integer <= 0)
-                {
-                    return false;
-                }
-
-                return true;
+                return false;
             }
+
+            return true;
         }
 
         public static string GetUsernameById(int UserId)
@@ -310,16 +306,14 @@ namespace WibboEmulator
 
         public static User GetUserByUsername(string UserName)
         {
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            int id = UserDao.GetIdByName(dbClient, UserName);
+            if (id > 0)
             {
-                int id = UserDao.GetIdByName(dbClient, UserName);
-                if (id > 0)
-                {
-                    return GetUserById(Convert.ToInt32(id));
-                }
-
-                return null;
+                return GetUserById(Convert.ToInt32(id));
             }
+
+            return null;
         }
 
         public static User GetUserById(int UserId)
@@ -412,15 +406,13 @@ namespace WibboEmulator
             Console.Clear();
             Console.WriteLine("Extinction du serveur...");
 
-            Console.Title = "BUTTERFLY : EXTINCTION";
-
             GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
             GetGame().Destroy();
             Thread.Sleep(20000); // 20 secondes
-            GetWebSocketManager().Destroy(); // Destruction
+            GetWebSocketManager().Destroy(); // Eteindre le websocket server
             GetGame().GetPacketManager().UnregisterAll(); // Dé-enregistrer les packets
-            GetGame().GetClientManager().CloseAll(); // Fermeture de toutes les connexions
-            GetGame().GetRoomManager().RemoveAllRooms(); // Remise à zéro de la table room du SQL
+            GetGame().GetClientManager().CloseAll(); // Fermeture et enregistrement de toutes les utilisteurs
+            GetGame().GetRoomManager().RemoveAllRooms(); // Fermerture et enregistrer des apparts
 
             Console.WriteLine("Wibbo Emulateur s'est parfaitement éteint...");
 

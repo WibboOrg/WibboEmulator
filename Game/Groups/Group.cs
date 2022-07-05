@@ -61,50 +61,48 @@ namespace WibboEmulator.Game.Groups
 
         public void InitMembers()
         {
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            DataTable GetMembers = GuildMembershipDao.GetAll(dbClient, this.Id);
+
+            if (GetMembers != null)
             {
-                DataTable GetMembers = GuildMembershipDao.GetAll(dbClient, this.Id);
-
-                if (GetMembers != null)
+                foreach (DataRow Row in GetMembers.Rows)
                 {
-                    foreach (DataRow Row in GetMembers.Rows)
-                    {
-                        int UserId = Convert.ToInt32(Row["user_id"]);
-                        bool IsAdmin = Convert.ToInt32(Row["rank"]) != 0;
+                    int UserId = Convert.ToInt32(Row["user_id"]);
+                    bool IsAdmin = Convert.ToInt32(Row["rank"]) != 0;
 
-                        if (IsAdmin)
+                    if (IsAdmin)
+                    {
+                        if (!this._administrators.Contains(UserId))
                         {
-                            if (!this._administrators.Contains(UserId))
-                            {
-                                this._administrators.Add(UserId);
-                            }
+                            this._administrators.Add(UserId);
                         }
-                        else
+                    }
+                    else
+                    {
+                        if (!this._members.Contains(UserId))
                         {
-                            if (!this._members.Contains(UserId))
-                            {
-                                this._members.Add(UserId);
-                            }
+                            this._members.Add(UserId);
                         }
                     }
                 }
+            }
 
-                DataTable GetRequests = GuildRequestDao.GetAll(dbClient, this.Id);
+            DataTable GetRequests = GuildRequestDao.GetAll(dbClient, this.Id);
 
-                if (GetRequests != null)
+            if (GetRequests != null)
+            {
+                foreach (DataRow Row in GetRequests.Rows)
                 {
-                    foreach (DataRow Row in GetRequests.Rows)
-                    {
-                        int UserId = Convert.ToInt32(Row["user_id"]);
+                    int UserId = Convert.ToInt32(Row["user_id"]);
 
-                        if (this._members.Contains(UserId) || this._administrators.Contains(UserId))
-                        {
-                            GuildRequestDao.Delete(dbClient, this.Id, UserId);
-                        }
-                        else if (!this._requests.Contains(UserId))
-                        {
-                            this._requests.Add(UserId);
-                        }
+                    if (this._members.Contains(UserId) || this._administrators.Contains(UserId))
+                    {
+                        GuildRequestDao.Delete(dbClient, this.Id, UserId);
+                    }
+                    else if (!this._requests.Contains(UserId))
+                    {
+                        this._requests.Add(UserId);
                     }
                 }
             }
@@ -160,10 +158,8 @@ namespace WibboEmulator.Game.Groups
 
             this._administrators.Add(userId);
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 1);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 1);
         }
 
         public void TakeAdmin(int userId)
@@ -180,37 +176,33 @@ namespace WibboEmulator.Game.Groups
                 this._members.Add(userId);
             }
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 0);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 0);
         }
 
         public void AddMember(int userId)
         {
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            if (this.IsAdmin(userId))
             {
-                if (this.IsAdmin(userId))
+                GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 0);
+                this._administrators.Remove(userId);
+                this._members.Add(userId);
+            }
+            else if (this.GroupType == GroupType.LOCKED)
+            {
+                GuildRequestDao.Insert(dbClient, this.Id, userId);
+                if (!this._requests.Contains(userId))
                 {
-                    GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 0);
-                    this._administrators.Remove(userId);
+                    this._requests.Add(userId);
+                }
+            }
+            else
+            {
+                GuildMembershipDao.Insert(dbClient, this.Id, userId);
+                if (!this._members.Contains(userId))
+                {
                     this._members.Add(userId);
-                }
-                else if (this.GroupType == GroupType.LOCKED)
-                {
-                    GuildRequestDao.Insert(dbClient, this.Id, userId);
-                    if (!this._requests.Contains(userId))
-                    {
-                        this._requests.Add(userId);
-                    }
-                }
-                else
-                {
-                    GuildMembershipDao.Insert(dbClient, this.Id, userId);
-                    if (!this._members.Contains(userId))
-                    {
-                        this._members.Add(userId);
-                    }
                 }
             }
         }
@@ -236,10 +228,8 @@ namespace WibboEmulator.Game.Groups
                 return;
             }
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                GuildMembershipDao.Delete(dbClient, this.Id, userId);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            GuildMembershipDao.Delete(dbClient, this.Id, userId);
         }
 
         public void HandleRequest(int userId, bool Accepted)

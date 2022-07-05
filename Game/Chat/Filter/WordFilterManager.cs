@@ -55,8 +55,8 @@ namespace WibboEmulator.Game.Chat.Filter
             {
                 this._pubWords.Add(Word);
 
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    WordFilterRetroDao.Insert(dbClient, Word);
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                WordFilterRetroDao.Insert(dbClient, Word);
             }
         }
 

@@ -30,8 +30,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
                 Session.GetUser().FavoriteRooms.Add(roomId);
 
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    UserFavoriteDao.Insert(dbClient, Session.GetUser().Id, roomId);
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserFavoriteDao.Insert(dbClient, Session.GetUser().Id, roomId);
             }
         }
     }

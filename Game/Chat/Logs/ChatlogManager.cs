@@ -32,18 +32,16 @@ namespace WibboEmulator.Game.Chat.Logs
         public void LoadRoomChatlogs(int roomId)
         {
             DataTable table;
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            table = LogChatDao.GetAllByRoomId(dbClient, roomId);
+            if (table == null)
             {
-                table = LogChatDao.GetAllByRoomId(dbClient, roomId);
-                if (table == null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                foreach (DataRow Row in table.Rows)
-                {
-                    this.AddMessage(Convert.ToInt32(Row["user_id"]), Row["user_name"].ToString(), Convert.ToInt32(Row["room_id"]), Row["type"].ToString() + Row["message"].ToString(), (double)Row["timestamp"]);
-                }
+            foreach (DataRow Row in table.Rows)
+            {
+                this.AddMessage(Convert.ToInt32(Row["user_id"]), Row["user_name"].ToString(), Convert.ToInt32(Row["room_id"]), Row["type"].ToString() + Row["message"].ToString(), (double)Row["timestamp"]);
             }
         }
 

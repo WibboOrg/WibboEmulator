@@ -80,10 +80,8 @@ namespace WibboEmulator.Game.Moderation
                 return;
             }
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                ModerationTicketDao.UpdateStatusPicked(dbClient, moderatorId, this.Id);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            ModerationTicketDao.UpdateStatusPicked(dbClient, moderatorId, this.Id);
         }
 
         public void Close(TicketStatusType NewStatus, bool UpdateInDb)
@@ -108,10 +106,8 @@ namespace WibboEmulator.Game.Moderation
                     break;
             }
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                ModerationTicketDao.UpdateStatus(dbClient, str, this.Id);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            ModerationTicketDao.UpdateStatus(dbClient, str, this.Id);
         }
 
         public void Release(bool UpdateInDb)
@@ -123,10 +119,8 @@ namespace WibboEmulator.Game.Moderation
                 return;
             }
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                ModerationTicketDao.UpdateStatusOpen(dbClient, this.Id);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            ModerationTicketDao.UpdateStatusOpen(dbClient, this.Id);
         }
 
         public void Delete(bool UpdateInDb)
@@ -138,10 +132,8 @@ namespace WibboEmulator.Game.Moderation
                 return;
             }
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                ModerationTicketDao.UpdateStatusDeleted(dbClient, this.Id);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            ModerationTicketDao.UpdateStatusDeleted(dbClient, this.Id);
         }
     }
 }

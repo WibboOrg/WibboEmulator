@@ -305,10 +305,8 @@ namespace WibboEmulator.Game.Rooms.Trading
 
             LogsTwoString = LogsTwoString.TrimEnd(',');
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                LogTradeDao.Insert(dbClient, this._oneId, this._twoId, LogsOneString, LogsTwoString, this._roomId);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            LogTradeDao.Insert(dbClient, this._oneId, this._twoId, LogsOneString, LogsTwoString, this._roomId);
         }
 
         public void CloseTradeClean()

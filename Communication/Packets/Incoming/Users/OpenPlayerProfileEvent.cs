@@ -32,10 +32,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             }
             else
             {
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    friendCount = MessengerFriendshipDao.GetCount(dbClient, userId);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                friendCount = MessengerFriendshipDao.GetCount(dbClient, userId);
             }
 
             Session.SendPacket(new ProfileInformationComposer(targetData, Session, Groups, friendCount));

@@ -187,40 +187,38 @@ namespace WibboEmulator.Game.Users.Inventory
             this._botItems.Clear();
             this._petsItems.Clear();
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            DataTable dItems = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id);
+
+            foreach (DataRow dataRow in dItems.Rows)
             {
-                DataTable dItems = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id);
+                int Id = Convert.ToInt32(dataRow["id"]);
+                int BaseItem = Convert.ToInt32(dataRow["base_item"]);
+                string ExtraData = DBNull.Value.Equals(dataRow["extra_data"]) ? string.Empty : (string)dataRow["extra_data"];
+                int Limited = DBNull.Value.Equals(dataRow["limited_number"]) ? 0 : Convert.ToInt32(dataRow["limited_number"]);
+                int LimitedTo = DBNull.Value.Equals(dataRow["limited_stack"]) ? 0 : Convert.ToInt32(dataRow["limited_stack"]);
 
-                foreach (DataRow dataRow in dItems.Rows)
+                Item userItem = new Item(Id, 0, BaseItem, ExtraData, Limited, LimitedTo, 0, 0, 0.0, 0, "", null);
+                this._userItems.TryAdd(Id, userItem);
+            }
+
+            DataTable dPets = BotPetDao.GetAllByUserId(dbClient, this._userInstance.Id);
+            if (dPets != null)
+            {
+                foreach (DataRow Row in dPets.Rows)
                 {
-                    int Id = Convert.ToInt32(dataRow["id"]);
-                    int BaseItem = Convert.ToInt32(dataRow["base_item"]);
-                    string ExtraData = DBNull.Value.Equals(dataRow["extra_data"]) ? string.Empty : (string)dataRow["extra_data"];
-                    int Limited = DBNull.Value.Equals(dataRow["limited_number"]) ? 0 : Convert.ToInt32(dataRow["limited_number"]);
-                    int LimitedTo = DBNull.Value.Equals(dataRow["limited_stack"]) ? 0 : Convert.ToInt32(dataRow["limited_stack"]);
-
-                    Item userItem = new Item(Id, 0, BaseItem, ExtraData, Limited, LimitedTo, 0, 0, 0.0, 0, "", null);
-                    this._userItems.TryAdd(Id, userItem);
+                    Pet pet = new Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)(Row["anyone_ride"]) == "1");
+                    this._petsItems.TryAdd(pet.PetId, pet);
                 }
+            }
 
-                DataTable dPets = BotPetDao.GetAllByUserId(dbClient, this._userInstance.Id);
-                if (dPets != null)
+            DataTable dBots = BotUserDao.GetAllByUserId(dbClient, this._userInstance.Id);
+            if (dBots != null)
+            {
+                foreach (DataRow Row in dBots.Rows)
                 {
-                    foreach (DataRow Row in dPets.Rows)
-                    {
-                        Pet pet = new Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)(Row["anyone_ride"]) == "1");
-                        this._petsItems.TryAdd(pet.PetId, pet);
-                    }
-                }
-
-                DataTable dBots = BotUserDao.GetAllByUserId(dbClient, this._userInstance.Id);
-                if (dBots != null)
-                {
-                    foreach (DataRow Row in dBots.Rows)
-                    {
-                        Bot bot = new Bot(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), (string)Row["name"], (string)Row["motto"], (string)Row["look"], (string)Row["gender"], (string)Row["walk_enabled"] == "1", (string)Row["chat_enabled"] == "1", (string)Row["chat_text"], Convert.ToInt32(Row["chat_seconds"]), (string)Row["is_dancing"] == "1", Convert.ToInt32(Row["enable"]), Convert.ToInt32(Row["handitem"]), Convert.ToInt32((string)Row["status"]));
-                        this._botItems.TryAdd(Convert.ToInt32(Row["id"]), bot);
-                    }
+                    Bot bot = new Bot(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), (string)Row["name"], (string)Row["motto"], (string)Row["look"], (string)Row["gender"], (string)Row["walk_enabled"] == "1", (string)Row["chat_enabled"] == "1", (string)Row["chat_text"], Convert.ToInt32(Row["chat_seconds"]), (string)Row["is_dancing"] == "1", Convert.ToInt32(Row["enable"]), Convert.ToInt32(Row["handitem"]), Convert.ToInt32((string)Row["status"]));
+                    this._botItems.TryAdd(Convert.ToInt32(Row["id"]), bot);
                 }
             }
         }

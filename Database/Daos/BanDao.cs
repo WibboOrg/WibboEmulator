@@ -5,15 +5,6 @@ namespace WibboEmulator.Database.Daos
 {
     class BanDao
     {
-        internal static bool IsBannedByIP(IQueryAdapter dbClient, int nowTime, string ip)
-        {
-            dbClient.SetQuery("SELECT `id` FROM `ban` WHERE `expire` > @nowtime AND (`bantype` = 'ip' AND `value` = @ip) LIMIT 1");
-            dbClient.AddParameter("nowtime", nowTime);
-            dbClient.AddParameter("ip", ip);
-
-            return dbClient.FindsResult();
-        }
-
         internal static bool IsBanned(IQueryAdapter dbClient, string username, string ip, string ipTwo, string machineId)
         {
             dbClient.SetQuery("SELECT `id` FROM `ban` WHERE `expire` > @nowtime AND ((`bantype` = 'user' AND `value` = @username) OR (`bantype` = 'ip' AND `value` = @IP1) OR (`bantype` = 'ip' AND `value` = @IP2) OR (`bantype` = 'machine' AND `value` = @machineid)) LIMIT 1");

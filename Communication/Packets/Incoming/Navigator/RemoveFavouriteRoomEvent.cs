@@ -29,10 +29,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             Session.SendPacket(new UpdateFavouriteRoomComposer(roomId, false));
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                UserFavoriteDao.Delete(dbClient, Session.GetUser().Id, roomId);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            UserFavoriteDao.Delete(dbClient, Session.GetUser().Id, roomId);
         }
     }
 }

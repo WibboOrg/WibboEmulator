@@ -265,10 +265,8 @@ namespace WibboEmulator.Game.Users.Messenger
                 return true;
             }
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                return MessengerFriendshipDao.haveFriend(dbClient, this._userInstance.Id, requestID);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            return MessengerFriendshipDao.haveFriend(dbClient, this._userInstance.Id, requestID);
         }
 
         public bool FriendshipExists(int friendID)
@@ -376,10 +374,8 @@ namespace WibboEmulator.Game.Users.Messenger
             Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(ToId);
             if (Client == null || Client.GetUser() == null || Client.GetUser().GetMessenger() == null)
             {
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    MessengerOfflineMessageDao.Insert(dbClient, ToId, this.GetClient().GetUser().Id, Message);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                MessengerOfflineMessageDao.Insert(dbClient, ToId, this.GetClient().GetUser().Id, Message);
 
                 return;
             }
@@ -401,29 +397,27 @@ namespace WibboEmulator.Game.Users.Messenger
         public void ProcessOfflineMessages()
         {
             DataTable GetMessages = null;
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            GetMessages = MessengerOfflineMessageDao.GetAll(dbClient, this._userInstance.Id);
+
+            if (GetMessages != null)
             {
-                GetMessages = MessengerOfflineMessageDao.GetAll(dbClient, this._userInstance.Id);
-
-                if (GetMessages != null)
+                Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
+                if (Client == null)
                 {
-                    Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
-                    if (Client == null)
-                    {
-                        return;
-                    }
-
-                    ServerPacketList packetList = new ServerPacketList();
-
-                    foreach (DataRow Row in GetMessages.Rows)
-                    {
-                        packetList.Add(new NewConsoleComposer(Convert.ToInt32(Row["from_id"]), Convert.ToString(Row["message"]), (WibboEnvironment.GetUnixTimestamp() - Convert.ToInt32(Row["timestamp"]))));
-                    }
-
-                    Client.SendPacket(packetList);
-
-                    MessengerOfflineMessageDao.Delete(dbClient, this._userInstance.Id);
+                    return;
                 }
+
+                ServerPacketList packetList = new ServerPacketList();
+
+                foreach (DataRow Row in GetMessages.Rows)
+                {
+                    packetList.Add(new NewConsoleComposer(Convert.ToInt32(Row["from_id"]), Convert.ToString(Row["message"]), (WibboEnvironment.GetUnixTimestamp() - Convert.ToInt32(Row["timestamp"]))));
+                }
+
+                Client.SendPacket(packetList);
+
+                MessengerOfflineMessageDao.Delete(dbClient, this._userInstance.Id);
             }
         }
 

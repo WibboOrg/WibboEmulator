@@ -42,10 +42,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
         {
             base.Dispose();
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                this.SaveToDatabase(dbClient);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            this.SaveToDatabase(dbClient);
         }
 
         public void SaveToDatabase(IQueryAdapter dbClient)

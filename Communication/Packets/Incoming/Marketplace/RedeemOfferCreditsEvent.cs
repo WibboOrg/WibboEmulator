@@ -30,11 +30,9 @@ namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
                     Session.GetUser().WibboPoints += CreditsOwed;
                     Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
-                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        CatalogMarketplaceOfferDao.Delete(dbClient, Session.GetUser().Id);
-                        UserDao.UpdateAddPoints(dbClient, Session.GetUser().Id, CreditsOwed);
-                    }
+                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    CatalogMarketplaceOfferDao.Delete(dbClient, Session.GetUser().Id);
+                    UserDao.UpdateAddPoints(dbClient, Session.GetUser().Id, CreditsOwed);
                 }
             }
         }

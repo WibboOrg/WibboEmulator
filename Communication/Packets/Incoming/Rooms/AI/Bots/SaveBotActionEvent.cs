@@ -68,10 +68,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
                         Room.SendPacket(new UserChangeComposer(Bot));
 
-                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                        {
-                            BotUserDao.UpdateLookGender(dbClient, Bot.BotData.Id, Session.GetUser().Gender, Session.GetUser().Look);
-                        }
+                        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        BotUserDao.UpdateLookGender(dbClient, Bot.BotData.Id, Session.GetUser().Gender, Session.GetUser().Look);
                         break;
                     }
                 #endregion
@@ -119,10 +117,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                         RoomBot.ChatText = Text;
                         RoomBot.LoadRandomSpeech(Text);
 
-                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                        {
-                            BotUserDao.UpdateChat(dbClient, BotId, RoomBot.AutomaticChat, RoomBot.SpeakingInterval, RoomBot.MixSentences, RoomBot.ChatText);
-                        }
+                        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        BotUserDao.UpdateChat(dbClient, BotId, RoomBot.AutomaticChat, RoomBot.SpeakingInterval, RoomBot.MixSentences, RoomBot.ChatText);
 
                         break;
                     }
@@ -132,10 +128,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 case 3:
                     {
                         Bot.BotData.WalkingEnabled = !Bot.BotData.WalkingEnabled;
-                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                        {
-                            BotUserDao.UpdateWalkEnabled(dbClient, Bot.BotData.Id, Bot.BotData.WalkingEnabled);
-                        }
+                        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        BotUserDao.UpdateWalkEnabled(dbClient, Bot.BotData.Id, Bot.BotData.WalkingEnabled);
                         break;
                     }
                 #endregion
@@ -157,10 +151,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
                         Room.SendPacket(new DanceComposer(Bot.VirtualId, Bot.DanceId));
 
-                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                        {
-                            BotUserDao.UpdateIsDancing(dbClient, Bot.BotData.Id, Bot.BotData.IsDancing);
-                        }
+                        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        BotUserDao.UpdateIsDancing(dbClient, Bot.BotData.Id, Bot.BotData.IsDancing);
 
                         break;
                     }

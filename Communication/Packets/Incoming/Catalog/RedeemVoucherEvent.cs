@@ -36,8 +36,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             }
             else
             {
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    UserVoucherDao.Insert(dbClient, Session.GetUser().Id, VoucherCode);
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserVoucherDao.Insert(dbClient, Session.GetUser().Id, VoucherCode);
             }
 
             Voucher.UpdateUses();

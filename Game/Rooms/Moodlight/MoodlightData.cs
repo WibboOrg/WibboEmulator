@@ -26,11 +26,9 @@ namespace WibboEmulator.Game.Rooms.Moodlight
 
             if (Row == null)
             {
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    ItemMoodlightDao.Insert(dbClient, ItemId);
-                    Row = ItemMoodlightDao.GetOne(dbClient, ItemId);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                ItemMoodlightDao.Insert(dbClient, ItemId);
+                Row = ItemMoodlightDao.GetOne(dbClient, ItemId);
             }
 
             this.Enabled = WibboEnvironment.EnumToBool(Row["enabled"].ToString());
@@ -47,20 +45,16 @@ namespace WibboEmulator.Game.Rooms.Moodlight
         {
             this.Enabled = true;
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                ItemMoodlightDao.UpdateEnable(dbClient, this.ItemId, 1);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            ItemMoodlightDao.UpdateEnable(dbClient, this.ItemId, 1);
         }
 
         public void Disable()
         {
             this.Enabled = false;
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                ItemMoodlightDao.UpdateEnable(dbClient, this.ItemId, 0);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            ItemMoodlightDao.UpdateEnable(dbClient, this.ItemId, 0);
         }
 
         public void UpdatePreset(int Preset, string Color, int Intensity, bool BgOnly, bool Hax = false)

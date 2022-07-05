@@ -117,88 +117,86 @@ namespace WibboEmulator.Game.Rooms
                 this._wallItems.Clear();
             }
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            int itemID;
+            int UserId;
+            int baseID;
+            string ExtraData;
+            int x;
+            int y;
+            double z;
+            sbyte n;
+            string wallposs;
+            int Limited;
+            int LimitedTo;
+            string wallCoord;
+
+            DataTable itemTable = ItemDao.GetAll(dbClient, (RoomId == 0) ? this._room.Id : RoomId);
+
+            foreach (DataRow dataRow in itemTable.Rows)
             {
-                int itemID;
-                int UserId;
-                int baseID;
-                string ExtraData;
-                int x;
-                int y;
-                double z;
-                sbyte n;
-                string wallposs;
-                int Limited;
-                int LimitedTo;
-                string wallCoord;
+                itemID = Convert.ToInt32(dataRow[0]);
+                UserId = Convert.ToInt32(dataRow[1]);
+                baseID = Convert.ToInt32(dataRow[3]);
+                ExtraData = !DBNull.Value.Equals(dataRow[4]) ? (string)dataRow[4] : string.Empty;
+                x = Convert.ToInt32(dataRow[5]);
+                y = Convert.ToInt32(dataRow[6]);
+                z = Convert.ToDouble(dataRow[7]);
+                n = Convert.ToSByte(dataRow[8]);
+                wallposs = !DBNull.Value.Equals(dataRow[9]) ? (string)(dataRow[9]) : string.Empty;
+                Limited = !DBNull.Value.Equals(dataRow[10]) ? Convert.ToInt32(dataRow[10]) : 0;
+                LimitedTo = !DBNull.Value.Equals(dataRow[11]) ? Convert.ToInt32(dataRow[11]) : 0;
 
-                DataTable itemTable = ItemDao.GetAll(dbClient, (RoomId == 0) ? this._room.Id : RoomId);
+                WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out ItemData Data);
 
-                foreach (DataRow dataRow in itemTable.Rows)
+                if (Data == null)
                 {
-                    itemID = Convert.ToInt32(dataRow[0]);
-                    UserId = Convert.ToInt32(dataRow[1]);
-                    baseID = Convert.ToInt32(dataRow[3]);
-                    ExtraData = !DBNull.Value.Equals(dataRow[4]) ? (string)dataRow[4] : string.Empty;
-                    x = Convert.ToInt32(dataRow[5]);
-                    y = Convert.ToInt32(dataRow[6]);
-                    z = Convert.ToDouble(dataRow[7]);
-                    n = Convert.ToSByte(dataRow[8]);
-                    wallposs = !DBNull.Value.Equals(dataRow[9]) ? (string)(dataRow[9]) : string.Empty;
-                    Limited = !DBNull.Value.Equals(dataRow[10]) ? Convert.ToInt32(dataRow[10]) : 0;
-                    LimitedTo = !DBNull.Value.Equals(dataRow[11]) ? Convert.ToInt32(dataRow[11]) : 0;
+                    continue;
+                }
 
-                    WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out ItemData Data);
-
-                    if (Data == null)
+                if (Data.Type.ToString() == "i")
+                {
+                    if (string.IsNullOrEmpty(wallposs))
                     {
-                        continue;
+                        wallCoord = "w=0,0 l=0,0 l";
+                    }
+                    else
+                    {
+                        wallCoord = wallposs;
                     }
 
-                    if (Data.Type.ToString() == "i")
+                    Item roomItem = new Item(itemID, this._room.Id, baseID, ExtraData, Limited, LimitedTo, 0, 0, 0.0, 0, wallCoord, this._room);
+                    if (!this._wallItems.ContainsKey(itemID))
                     {
-                        if (string.IsNullOrEmpty(wallposs))
-                        {
-                            wallCoord = "w=0,0 l=0,0 l";
-                        }
-                        else
-                        {
-                            wallCoord = wallposs;
-                        }
-
-                        Item roomItem = new Item(itemID, this._room.Id, baseID, ExtraData, Limited, LimitedTo, 0, 0, 0.0, 0, wallCoord, this._room);
-                        if (!this._wallItems.ContainsKey(itemID))
-                        {
-                            this._wallItems.TryAdd(itemID, roomItem);
-                        }
-
-                        if (roomItem.GetBaseItem().InteractionType == InteractionType.MOODLIGHT)
-                        {
-                            if (this._room.MoodlightData == null)
-                            {
-                                this._room.MoodlightData = new MoodlightData(roomItem.Id);
-                            }
-                        }
+                        this._wallItems.TryAdd(itemID, roomItem);
                     }
-                    else //Is flooritem
-                    {
-                        Item roomItem = new Item(itemID, this._room.Id, baseID, ExtraData, Limited, LimitedTo, x, y, (double)z, n, "", this._room);
 
-                        if (!this._floorItems.ContainsKey(itemID))
+                    if (roomItem.GetBaseItem().InteractionType == InteractionType.MOODLIGHT)
+                    {
+                        if (this._room.MoodlightData == null)
                         {
-                            this._floorItems.TryAdd(itemID, roomItem);
+                            this._room.MoodlightData = new MoodlightData(roomItem.Id);
                         }
                     }
                 }
-
-                if (RoomId == 0)
+                else //Is flooritem
                 {
-                    foreach (Item Item in this._floorItems.Values)
+                    Item roomItem = new Item(itemID, this._room.Id, baseID, ExtraData, Limited, LimitedTo, x, y, (double)z, n, "", this._room);
+
+                    if (!this._floorItems.ContainsKey(itemID))
                     {
-                        if (WiredUtillity.TypeIsWired(Item.GetBaseItem().InteractionType))
-                        {
-                            WiredRegister.HandleRegister(Item, this._room, dbClient);
-                        }
+                        this._floorItems.TryAdd(itemID, roomItem);
+                    }
+                }
+            }
+
+            if (RoomId == 0)
+            {
+                foreach (Item Item in this._floorItems.Values)
+                {
+                    if (WiredUtillity.TypeIsWired(Item.GetBaseItem().InteractionType))
+                    {
+                        WiredRegister.HandleRegister(Item, this._room, dbClient);
                     }
                 }
             }

@@ -24,10 +24,8 @@ namespace WibboEmulator.Game.Catalog.Vouchers
         {
             this.CurrentUses += 1;
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                CatalogVoucherDao.Update(dbClient, this._code);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            CatalogVoucherDao.Update(dbClient, this._code);
         }
 
         public string Code

@@ -61,10 +61,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 }
             }
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                RoomRightDao.DeleteList(dbClient, room.Id, userIds);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            RoomRightDao.DeleteList(dbClient, room.Id, userIds);
         }
     }
 }

@@ -322,10 +322,8 @@ namespace WibboEmulator.Game.Moderation
 
         public void LogStaffEntry(int userId, string modName, int roomId, string target, string type, string description)
         {
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                LogCommandDao.Insert(dbClient, userId, modName, roomId, target, type, description + " " + target);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            LogCommandDao.Insert(dbClient, userId, modName, roomId, target, type, description + " " + target);
         }
 
         public static void PerformRoomAction(Client ModSession, int RoomId, bool KickUsers, bool LockRoom, bool InappropriateRoom)
@@ -340,10 +338,8 @@ namespace WibboEmulator.Game.Moderation
             {
                 room.RoomData.State = 1;
                 room.RoomData.Name = "Cet appart ne respecte par les conditions d'utilisation";
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    RoomDao.UpdateState(dbClient, room.Id);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                RoomDao.UpdateState(dbClient, room.Id);
             }
 
             if (InappropriateRoom)
@@ -352,10 +348,8 @@ namespace WibboEmulator.Game.Moderation
                 room.RoomData.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
                 room.ClearTags();
                 room.RoomData.Tags.Clear();
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    RoomDao.UpdateCaptionDescTags(dbClient, room.Id);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                RoomDao.UpdateCaptionDescTags(dbClient, room.Id);
             }
 
             if (KickUsers)

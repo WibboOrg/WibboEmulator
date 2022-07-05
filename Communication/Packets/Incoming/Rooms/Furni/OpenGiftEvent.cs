@@ -83,6 +83,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             {
                 ItemLotBox.OpenDeluxeBox(Session, Present, Room);
             }
+            else if (Present.GetBaseItem().InteractionType == InteractionType.LOOTBOX2022)
+            {
+                ItemLotBox.OpenLootBox2022(Session, Present, Room);
+            }
             else if (Present.GetBaseItem().InteractionType == InteractionType.LEGENDBOX)
             {
                 ItemLotBox.OpenLegendBox(Session, Present, Room);

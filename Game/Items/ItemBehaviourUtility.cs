@@ -170,6 +170,22 @@ namespace WibboEmulator.Game.Items
                     }
                     break;
 
+                case InteractionType.LOOTBOX2022:
+                    {
+                        Message.WriteInteger(0);
+                        Message.WriteInteger(1);
+                        Message.WriteInteger(4);
+                        Message.WriteString("MESSAGE");
+                        Message.WriteString("Bravo tu as reçu une RareBox ! Ouvre-là pour y découvrir ton lot");
+                        Message.WriteString("PURCHASER_NAME");
+                        Message.WriteString("Wibbo");
+                        Message.WriteString("PRODUCT_CODE");
+                        Message.WriteString("A1 KUMIANKKA");
+                        Message.WriteString("PURCHASER_FIGURE");
+                        Message.WriteString("");
+                    }
+                    break;
+
                 case InteractionType.BADGEBOX:
                     {
                         Message.WriteInteger(0);

@@ -118,10 +118,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     UserOne.GetClient().SendPacket(new LoveLockDialogueCloseComposer(Id));
                     UserTwo.GetClient().SendPacket(new LoveLockDialogueCloseComposer(Id));
 
-                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        ItemDao.UpdateExtradata(dbClient, Item.Id, Item.ExtraData);
-                    }
+                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    ItemDao.UpdateExtradata(dbClient, Item.Id, Item.ExtraData);
                 }
             }
         }

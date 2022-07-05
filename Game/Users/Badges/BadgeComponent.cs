@@ -106,10 +106,8 @@ namespace WibboEmulator.Game.Users.Badges
 
             if (InDatabase)
             {
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserBadgeDao.Insert(dbClient, this._userInstance.Id, Slot, Badge);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserBadgeDao.Insert(dbClient, this._userInstance.Id, Slot, Badge);
             }
             this._badges.Add(Badge, new Badge(Badge, Slot));
         }

@@ -41,7 +41,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
         private void CheckPermission()
         {
             string effet;
-            if (this.StringParam.Contains(":"))
+            if (this.StringParam.Contains(':'))
             {
                 effet = this.StringParam.Split(':')[0];
             }
@@ -295,10 +295,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                     RPEnemyConfig.Health = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                    {
-                                        RoleplayEnemyDao.UpdateHealth(dbClient, RPEnemyConfig.Id, ParamInt);
-                                    }
+                                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                                    RoleplayEnemyDao.UpdateHealth(dbClient, RPEnemyConfig.Id, ParamInt);
 
                                     break;
                                 }
@@ -322,10 +320,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                     RPEnemyConfig.WeaponGunId = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                    {
-                                        RoleplayEnemyDao.UpdateWeaponFarId(dbClient, RPEnemyConfig.Id, ParamInt);
-                                    }
+                                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                                    RoleplayEnemyDao.UpdateWeaponFarId(dbClient, RPEnemyConfig.Id, ParamInt);
 
                                     break;
                                 }
@@ -349,10 +345,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                     RPEnemyConfig.WeaponCacId = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                    {
-                                        RoleplayEnemyDao.UpdateWeaponCacId(dbClient, RPEnemyConfig.Id, ParamInt);
-                                    }
+                                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                                    RoleplayEnemyDao.UpdateWeaponCacId(dbClient, RPEnemyConfig.Id, ParamInt);
 
                                     break;
                                 }
@@ -376,10 +370,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                     RPEnemyConfig.DeadTimer = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                    {
-                                        RoleplayEnemyDao.UpdateDeadTimer(dbClient, RPEnemyConfig.Id, ParamInt);
-                                    }
+                                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                                    RoleplayEnemyDao.UpdateDeadTimer(dbClient, RPEnemyConfig.Id, ParamInt);
 
                                     break;
                                 }
@@ -403,10 +395,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                     RPEnemyConfig.LootItemId = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                    {
-                                        RoleplayEnemyDao.UpdateLootItemId(dbClient, RPEnemyConfig.Id, ParamInt);
-                                    }
+                                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                                    RoleplayEnemyDao.UpdateLootItemId(dbClient, RPEnemyConfig.Id, ParamInt);
 
                                     break;
                                 }
@@ -430,10 +420,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                     RPEnemyConfig.MoneyDrop = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                    {
-                                        RoleplayEnemyDao.UpdateMoneyDrop(dbClient, RPEnemyConfig.Id, ParamInt);
-                                    }
+                                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                                    RoleplayEnemyDao.UpdateMoneyDrop(dbClient, RPEnemyConfig.Id, ParamInt);
 
                                     break;
                                 }
@@ -457,10 +445,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                     RPEnemyConfig.TeamId = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                    {
-                                        RoleplayEnemyDao.UpdateTeamId(dbClient, RPEnemyConfig.Id, ParamInt);
-                                    }
+                                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                                    RoleplayEnemyDao.UpdateTeamId(dbClient, RPEnemyConfig.Id, ParamInt);
 
                                     break;
                                 }
@@ -484,10 +470,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                     RPEnemyConfig.AggroDistance = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                    {
-                                        RoleplayEnemyDao.UpdateAggroDistance(dbClient, RPEnemyConfig.Id, ParamInt);
-                                    }
+                                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                                    RoleplayEnemyDao.UpdateAggroDistance(dbClient, RPEnemyConfig.Id, ParamInt);
 
                                     break;
                                 }
@@ -511,10 +495,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                     RPEnemyConfig.ZoneDistance = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                    {
-                                        RoleplayEnemyDao.UpdateZoneDistance(dbClient, RPEnemyConfig.Id, ParamInt);
-                                    }
+                                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                                    RoleplayEnemyDao.UpdateZoneDistance(dbClient, RPEnemyConfig.Id, ParamInt);
 
                                     break;
                                 }
@@ -523,10 +505,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                     RPEnemyConfig.ResetPosition = (Params[2] == "true");
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                    {
-                                        RoleplayEnemyDao.UpdateResetPosition(dbClient, RPEnemyConfig.Id, RPEnemyConfig.ResetPosition);
-                                    }
+                                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                                    RoleplayEnemyDao.UpdateResetPosition(dbClient, RPEnemyConfig.Id, RPEnemyConfig.ResetPosition);
 
                                     break;
                                 }
@@ -550,10 +530,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                     RPEnemyConfig.LostAggroDistance = ParamInt;
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                    {
-                                        RoleplayEnemyDao.UpdateLostAggroDistance(dbClient, RPEnemyConfig.Id, ParamInt);
-                                    }
+                                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                                    RoleplayEnemyDao.UpdateLostAggroDistance(dbClient, RPEnemyConfig.Id, ParamInt);
 
                                     break;
                                 }
@@ -562,10 +540,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                     RPEnemyConfig.ZombieMode = (Params[2] == "true");
                                     BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
-                                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                                    {
-                                        RoleplayEnemyDao.UpdateZombieMode(dbClient, RPEnemyConfig.Id, RPEnemyConfig.ZombieMode);
-                                    }
+                                    using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                                    RoleplayEnemyDao.UpdateZombieMode(dbClient, RPEnemyConfig.Id, RPEnemyConfig.ZombieMode);
 
                                     break;
                                 }
@@ -2133,10 +2109,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                        {
-                            UserDao.UpdateAddRunPoints(dbClient, user.GetClient().GetUser().Id);
-                        }
+                        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        UserDao.UpdateAddRunPoints(dbClient, user.GetClient().GetUser().Id);
 
                         break;
                     }

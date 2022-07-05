@@ -32,10 +32,8 @@ namespace WibboEmulator.Database.Adapter
             bool hasRows = false;
             try
             {
-                using (MySqlDataReader reader = this.command.ExecuteReader())
-                {
-                    hasRows = reader.HasRows;
-                }
+                using MySqlDataReader reader = this.command.ExecuteReader();
+                hasRows = reader.HasRows;
             }
             catch (Exception exception)
             {
@@ -116,10 +114,8 @@ namespace WibboEmulator.Database.Adapter
 
             try
             {
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(this.command))
-                {
-                    adapter.Fill(dataTable);
-                }
+                using MySqlDataAdapter adapter = new MySqlDataAdapter(this.command);
+                adapter.Fill(dataTable);
             }
             catch (Exception exception)
             {

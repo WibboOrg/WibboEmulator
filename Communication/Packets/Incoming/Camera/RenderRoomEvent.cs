@@ -53,8 +53,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
 
             session.GetUser().LastPhotoId = photoId;
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                UserPhotoDao.Insert(dbClient, session.GetUser().Id, photoId, time);
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            UserPhotoDao.Insert(dbClient, session.GetUser().Id, photoId, time);
         }
     }
 }

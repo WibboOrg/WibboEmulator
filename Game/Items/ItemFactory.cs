@@ -16,17 +16,15 @@ namespace WibboEmulator.Game.Items
 
             Item Item = new Item(0, 0, Data.Id, ExtraData, LimitedNumber, LimitedStack, 0, 0, 0, 0, "", null);
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            Item.Id = ItemDao.Insert(dbClient, Data.Id, user.Id, ExtraData);
+
+            if (LimitedNumber > 0)
             {
-                Item.Id = ItemDao.Insert(dbClient, Data.Id, user.Id, ExtraData);
-
-                if (LimitedNumber > 0)
-                {
-                    ItemLimitedDao.Insert(dbClient, Item.Id, LimitedNumber, LimitedStack);
-                }
-
-                return Item;
+                ItemLimitedDao.Insert(dbClient, Item.Id, LimitedNumber, LimitedStack);
             }
+
+            return Item;
         }
 
         public static Item CreateSingleItem(ItemData Data, User user, string ExtraData, int ItemId, int LimitedNumber = 0, int LimitedStack = 0)
@@ -99,10 +97,8 @@ namespace WibboEmulator.Game.Items
 
         public static void CreateMoodlightData(Item Item)
         {
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                ItemMoodlightDao.Insert(dbClient, Item.Id);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            ItemMoodlightDao.Insert(dbClient, Item.Id);
         }
 
         public static FurniInteractor CreateInteractor(Item item)

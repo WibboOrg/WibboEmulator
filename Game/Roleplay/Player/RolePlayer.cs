@@ -152,19 +152,15 @@ namespace WibboEmulator.Game.Roleplay.Player
             RolePlayInventoryItem Item = this.GetInventoryItem(itemId);
             if (Item == null)
             {
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    int Id = UserRoleplayItemDao.Insert(dbClient, this._id, this._rpId, itemId, count);
-                    this._inventory.TryAdd(itemId, new RolePlayInventoryItem(Id, itemId, count));
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                int Id = UserRoleplayItemDao.Insert(dbClient, this._id, this._rpId, itemId, count);
+                this._inventory.TryAdd(itemId, new RolePlayInventoryItem(Id, itemId, count));
             }
             else
             {
                 Item.Count += count;
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserRoleplayItemDao.UpdateAddCount(dbClient, Item.Id, count);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserRoleplayItemDao.UpdateAddCount(dbClient, Item.Id, count);
             }
 
 
@@ -183,19 +179,15 @@ namespace WibboEmulator.Game.Roleplay.Player
             {
                 Item.Count -= Count;
 
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserRoleplayItemDao.UpdateRemoveCount(dbClient, Item.Id, Count);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserRoleplayItemDao.UpdateRemoveCount(dbClient, Item.Id, Count);
             }
             else
             {
                 this._inventory.TryRemove(ItemId, out Item);
 
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserRoleplayItemDao.Delete(dbClient, this._id);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserRoleplayItemDao.Delete(dbClient, this._id);
             }
 
             this.SendPacket(new RemoveItemInventoryRpComposer(ItemId, Count));

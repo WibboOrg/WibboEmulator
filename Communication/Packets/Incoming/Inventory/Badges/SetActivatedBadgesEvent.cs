@@ -44,10 +44,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
                 Session.GetUser().GetBadgeComponent().GetBadge(Badge).Slot = Slot;
 
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserBadgeDao.UpdateSlot(dbClient, Session.GetUser().Id, Slot, Badge);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                UserBadgeDao.UpdateSlot(dbClient, Session.GetUser().Id, Slot, Badge);
             }
 
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_BADGE, 0);

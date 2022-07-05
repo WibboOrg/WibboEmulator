@@ -364,42 +364,38 @@ namespace WibboEmulator.Game.Rooms
         private void LoadBots()
         {
             DataTable table;
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            table = BotUserDao.GetOneByRoomId(dbClient, this.Id);
+            if (table == null)
             {
-                table = BotUserDao.GetOneByRoomId(dbClient, this.Id);
-                if (table == null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                foreach (DataRow Row in table.Rows)
+            foreach (DataRow Row in table.Rows)
+            {
+                RoomBot roomBot = new RoomBot(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (this.IsRoleplay) ? BotAIType.RoleplayBot : BotAIType.Generic, (string)Row["walk_enabled"] == "1", (string)Row["name"], (string)Row["motto"], (string)Row["gender"], (string)Row["look"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), Convert.ToInt32(Row["z"]), Convert.ToInt32(Row["rotation"]), (string)Row["chat_enabled"] == "1", (string)Row["chat_text"], Convert.ToInt32(Row["chat_seconds"]), (string)Row["is_dancing"] == "1", Convert.ToInt32(Row["enable"]), Convert.ToInt32(Row["handitem"]), Convert.ToInt32((string)Row["status"]));
+                RoomUser roomUser = this.GetRoomUserManager().DeployBot(roomBot, null);
+                if (roomBot.IsDancing)
                 {
-                    RoomBot roomBot = new RoomBot(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (this.IsRoleplay) ? BotAIType.RoleplayBot : BotAIType.Generic, (string)Row["walk_enabled"] == "1", (string)Row["name"], (string)Row["motto"], (string)Row["gender"], (string)Row["look"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), Convert.ToInt32(Row["z"]), Convert.ToInt32(Row["rotation"]), (string)Row["chat_enabled"] == "1", (string)Row["chat_text"], Convert.ToInt32(Row["chat_seconds"]), (string)Row["is_dancing"] == "1", Convert.ToInt32(Row["enable"]), Convert.ToInt32(Row["handitem"]), Convert.ToInt32((string)Row["status"]));
-                    RoomUser roomUser = this.GetRoomUserManager().DeployBot(roomBot, null);
-                    if (roomBot.IsDancing)
-                    {
-                        roomUser.DanceId = 3;
-                    }
+                    roomUser.DanceId = 3;
                 }
             }
         }
 
         public void InitPets()
         {
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            DataTable table = BotPetDao.GetAllByRoomId(dbClient, this.Id);
+            if (table == null)
             {
-                DataTable table = BotPetDao.GetAllByRoomId(dbClient, this.Id);
-                if (table == null)
-                {
-                    return;
-                }
+                return;
+            }
 
-                foreach (DataRow Row in table.Rows)
-                {
-                    Pet PetData = new Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)(Row["anyone_ride"]) == "1");
-                    List<string> list = new List<string>();
-                    this._roomUserManager.DeployBot(new RoomBot(PetData.PetId, PetData.OwnerId, this.Id, BotAIType.Pet, true, PetData.Name, "", "", PetData.Look, PetData.X, PetData.Y, PetData.Z, 0, false, "", 0, false, 0, 0, 0), PetData);
-                }
+            foreach (DataRow Row in table.Rows)
+            {
+                Pet PetData = new Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)(Row["anyone_ride"]) == "1");
+                List<string> list = new List<string>();
+                this._roomUserManager.DeployBot(new RoomBot(PetData.PetId, PetData.OwnerId, this.Id, BotAIType.Pet, true, PetData.Name, "", "", PetData.Look, PetData.X, PetData.Y, PetData.Z, 0, false, "", 0, false, 0, 0, 0), PetData);
             }
         }
 
@@ -650,10 +646,8 @@ namespace WibboEmulator.Game.Rooms
                     else
                     {
                         this._saveFurnitureTimer = 0;
-                        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                        {
-                            this.GetRoomItemHandler().SaveFurniture(dbClient);
-                        }
+                        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                        this.GetRoomItemHandler().SaveFurniture(dbClient);
                     }
                 }
                 catch (Exception ex)
@@ -1087,10 +1081,8 @@ namespace WibboEmulator.Game.Rooms
         public void SetMaxUsers(int MaxUsers)
         {
             this.RoomData.UsersMax = MaxUsers;
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                RoomDao.UpdateUsersMax(dbClient, this.Id, MaxUsers);
-            }
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            RoomDao.UpdateUsersMax(dbClient, this.Id, MaxUsers);
         }
 
         public void SetTimeout(int delay, Action callBack)
