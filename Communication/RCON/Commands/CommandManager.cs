@@ -43,6 +43,7 @@ namespace WibboEmulator.Communication.RCON.Commands
             this.Register("addwinwin", new AddWinwinCommand());
             this.Register("updatecredits", new UpdateCreditsCommand());
             this.Register("updatepoints", new UpdateWibboPointsCommand());
+            this.Register("updateltc", new UpdateLimitCoinsCommand());
             this.Register("signout", new SignOutCommand());
             this.Register("ha", new HaCommand());
             this.Register("eventha", new EventHaCommand());

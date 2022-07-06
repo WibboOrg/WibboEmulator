@@ -12,17 +12,17 @@ namespace WibboEmulator.Communication.RCON.Commands.User
                 return false;
             }
 
-            if (!int.TryParse(parameters[1], out int Userid))
+            if (!int.TryParse(parameters[1], out int userId))
             {
                 return false;
             }
 
-            if (Userid == 0)
+            if (userId == 0)
             {
                 return false;
             }
 
-            Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
             if (Client == null)
             {
                 return false;
