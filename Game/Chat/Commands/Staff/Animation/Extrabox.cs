@@ -17,7 +17,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(12018410, out ItemData ItemData))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(73917766, out ItemData ItemData))
             {
                 return;
             }

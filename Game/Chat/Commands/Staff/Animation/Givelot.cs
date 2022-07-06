@@ -35,10 +35,10 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            int NbLot = WibboEnvironment.GetRandomNumber(1, 3);
+            int NbLot = 1;
             if (roomUserByUserId.GetClient().GetUser().Rank > 1)
             {
-                NbLot = WibboEnvironment.GetRandomNumber(3, 5);
+                NbLot = 2;
             }
 
             int NbLotDeluxe = WibboEnvironment.GetRandomNumber(1, 4);
@@ -53,7 +53,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 NbBadge = WibboEnvironment.GetRandomNumber(2, 3);
             }
 
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(12018410, out ItemData ItemData))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(73917766, out ItemData ItemData))
             {
                 return;
             }

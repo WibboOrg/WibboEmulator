@@ -2140,16 +2140,16 @@ namespace WibboEmulator.Game.Items.Wired.Actions
 
                         user.WiredGivelot = true;
 
-                        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(12018410, out ItemData ItemData))
+                        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(73917766, out ItemData ItemData))
                         {
                             break;
                         }
 
-                        int NbLot = WibboEnvironment.GetRandomNumber(1, 3);
+                        int NbLot = 1;
 
                         if (user.GetClient().GetUser().Rank > 1)
                         {
-                            NbLot = WibboEnvironment.GetRandomNumber(3, 5);
+                            NbLot = 2;
                         }
 
                         int NbLotDeluxe = WibboEnvironment.GetRandomNumber(1, 4);
