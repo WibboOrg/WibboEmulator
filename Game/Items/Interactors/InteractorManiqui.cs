@@ -24,7 +24,7 @@ namespace WibboEmulator.Game.Items.Interactors
                 return;
             }
 
-            if (!Item.ExtraData.Contains(";"))
+            if (!Item.ExtraData.Contains(';'))
             {
                 return;
             }

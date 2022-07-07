@@ -25,7 +25,7 @@ namespace WibboEmulator.Game.Items.Wired.Conditions
         private void CheckPermission()
         {
             string effet;
-            if (this.StringParam.Contains(":"))
+            if (this.StringParam.Contains(':'))
             {
                 effet = this.StringParam.Split(':')[0].ToLower();
             }
@@ -180,7 +180,7 @@ namespace WibboEmulator.Game.Items.Wired.Conditions
 
 
             string Effect;
-            if (this.StringParam.Contains(":"))
+            if (this.StringParam.Contains(':'))
             {
                 Effect = this.StringParam.Split(':')[0].ToLower();
                 Value = this.StringParam.Split(':')[1];

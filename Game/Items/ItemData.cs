@@ -46,7 +46,7 @@
             this.InteractionType = InteractionType;
             this.Modes = Modes;
             this.VendingIds = new List<int>();
-            if (VendingIds.Contains(","))
+            if (VendingIds.Contains(','))
             {
                 foreach (string VendingId in VendingIds.Split(','))
                 {
@@ -70,7 +70,7 @@
 
             try
             {
-                if (AdjustableHeights.Contains(","))
+                if (AdjustableHeights.Contains(','))
                 {
                     foreach (string H in AdjustableHeights.Split(','))
                     {

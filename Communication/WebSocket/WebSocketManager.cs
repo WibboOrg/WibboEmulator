@@ -52,7 +52,7 @@ namespace WibboEmulator.Communication.WebSocket
         {
             string ip = connection.GetIp();
 
-            if (ip.Contains(",") || this._bannedIp.Contains(ip) || !WibboEnvironment.WebSocketOrigins.Contains(connection.GetOrigin()) || connection.GetUserAgent() == "")
+            if (ip.Contains(',') || this._bannedIp.Contains(ip) || !WibboEnvironment.WebSocketOrigins.Contains(connection.GetOrigin()) || connection.GetUserAgent() == "")
             {
                 ExceptionLogger.LogDenial("[IP: " + ip + "] [Origin: " + connection.GetOrigin() + "] [User-Agent: " + connection.GetUserAgent() + "]");
                 return;

@@ -24,7 +24,7 @@ namespace WibboEmulator.Game.Rooms.AI.Responses
             ResponseType = ResponseMode;
 
             BeverageIds = new List<int>();
-            if (ResponseBeverages.Contains(","))
+            if (ResponseBeverages.Contains(','))
             {
                 foreach (string VendingId in ResponseBeverages.Split(','))
                 {

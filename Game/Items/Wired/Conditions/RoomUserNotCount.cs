@@ -44,7 +44,7 @@ namespace WibboEmulator.Game.Items.Wired.Conditions
             this.IntParams.Clear();
 
             string triggerData = row["trigger_data"].ToString();
-            if (!triggerData.Contains(":"))
+            if (!triggerData.Contains(':'))
             {
                 return;
             }

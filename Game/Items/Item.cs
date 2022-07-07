@@ -269,7 +269,7 @@ namespace WibboEmulator.Game.Items
                     case InteractionType.GUILD_GATE:
                         if (!string.IsNullOrEmpty(ExtraData))
                         {
-                            if (ExtraData.Contains(";"))
+                            if (ExtraData.Contains(';'))
                             {
                                 int.TryParse(this.ExtraData.Split(new char[1] { ';' })[1], out this.GroupId);
                             }
@@ -620,7 +620,7 @@ namespace WibboEmulator.Game.Items
                 case InteractionType.GUILD_GATE:
                     if (!string.IsNullOrEmpty(this.ExtraData))
                     {
-                        if (this.ExtraData.Contains(";"))
+                        if (this.ExtraData.Contains(';'))
                         {
                             int.TryParse(this.ExtraData.Split(new char[1] { ';' })[1], out this.GroupId);
                         }

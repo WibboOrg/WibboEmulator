@@ -168,7 +168,7 @@ namespace WibboEmulator.Game.Items.Wired
             this.Z = z;
             this.Rot = rot;
 
-            if (int.TryParse(extraData, out int result) || (!extraData.Contains(";") && !extraData.Contains(":")))
+            if (int.TryParse(extraData, out int result) || (!extraData.Contains(';') && !extraData.Contains(':')))
             {
                 this.ExtraData = extraData;
             }

@@ -198,7 +198,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             string wBit = data[0].Substring(3, data[0].Length - 3);
             string lBit = data[1].Substring(2, data[1].Length - 2);
 
-            if (!wBit.Contains(",") || !lBit.Contains(","))
+            if (!wBit.Contains(',') || !lBit.Contains(','))
             {
                 position = null;
                 return false;

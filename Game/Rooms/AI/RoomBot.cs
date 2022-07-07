@@ -72,7 +72,7 @@ namespace WibboEmulator.Game.Rooms.AI
 
         public void LoadRandomSpeech(string Text)
         {
-            if (!Text.Contains("\r"))
+            if (!Text.Contains('\r'))
             {
                 return;
             }

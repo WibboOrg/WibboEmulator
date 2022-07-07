@@ -116,7 +116,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     if (OldItem.Length <= 0) 
                         continue;
 
-                    if (OldItem.Contains(":"))
+                    if (OldItem.Contains(':'))
                     {
                         foreach (string oldItem in OldItem.Split(';'))
                         {

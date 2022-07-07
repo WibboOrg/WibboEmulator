@@ -37,7 +37,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             }
 
             string Params = StringCharFilter.Escape(Packet.PopString());
-            if (string.IsNullOrEmpty(Params) || Params.Length > 100 || !Params.Contains(" "))
+            if (string.IsNullOrEmpty(Params) || Params.Length > 100 || !Params.Contains(' '))
             {
                 return;
             }

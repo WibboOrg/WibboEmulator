@@ -14,7 +14,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
 
         public override bool OnCycle(RoomUser user, Item item)
         {
-            if (!this.StringParam.Contains("\t"))
+            if (!this.StringParam.Contains('\t'))
                 return false;
 
             string[] messageAndName = this.StringParam.Split('\t');
@@ -74,7 +74,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
 
             string Data = row["trigger_data"].ToString();
 
-            if (!Data.Contains("\t"))
+            if (!Data.Contains('\t'))
             {
                 return;
             }

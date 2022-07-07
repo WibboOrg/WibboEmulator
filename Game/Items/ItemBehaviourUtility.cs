@@ -265,7 +265,7 @@ namespace WibboEmulator.Game.Items
                     Message.WriteInteger(0);
                     Message.WriteInteger(1);
                     Message.WriteInteger(3);
-                    if (Item.ExtraData.Contains(";"))
+                    if (Item.ExtraData.Contains(';'))
                     {
                         string[] Stuff = Item.ExtraData.Split(new char[1] { ';' });
                         Message.WriteString("GENDER");
@@ -287,7 +287,7 @@ namespace WibboEmulator.Game.Items
                     break;
 
                 case InteractionType.TONER:
-                    if (Item.ExtraData.Contains(","))
+                    if (Item.ExtraData.Contains(','))
                     {
                         Message.WriteInteger(0);
                         Message.WriteInteger(5);

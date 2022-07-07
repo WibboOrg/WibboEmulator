@@ -200,7 +200,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
 
 
             string command;
-            if (this.StringParam.Contains(":"))
+            if (this.StringParam.Contains(':'))
             {
                 command = this.StringParam.Split(':')[0].ToLower();
                 value = this.StringParam.Split(':')[1];
@@ -698,7 +698,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        if (value.Contains(","))
+                        if (value.Contains(','))
                         {
                             foreach (string pId in value.Split(','))
                             {
@@ -1620,7 +1620,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        if (Value.Contains(","))
+                        if (Value.Contains(','))
                         {
                             foreach (string pChoose in Value.Split(','))
                             {
@@ -2022,7 +2022,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     {
                         int raceId = 0;
                         string petName = Value;
-                        if (Value.Contains(" "))
+                        if (Value.Contains(' '))
                         {
                             if (int.TryParse(Value.Split(' ')[1], out raceId))
                             {

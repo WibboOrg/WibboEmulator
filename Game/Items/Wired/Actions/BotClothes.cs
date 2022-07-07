@@ -14,7 +14,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
 
         public override bool OnCycle(RoomUser user, Item item)
         {
-            if (string.IsNullOrWhiteSpace(this.StringParam) || !this.StringParam.Contains("\t"))
+            if (string.IsNullOrWhiteSpace(this.StringParam) || !this.StringParam.Contains('\t'))
             {
                 return false;
             }
@@ -53,7 +53,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
 
             string triggerData = row["trigger_data"].ToString();
 
-            if (string.IsNullOrWhiteSpace(triggerData) || !triggerData.Contains("\t"))
+            if (string.IsNullOrWhiteSpace(triggerData) || !triggerData.Contains('\t'))
             {
                 return;
             }
