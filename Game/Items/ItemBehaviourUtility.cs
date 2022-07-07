@@ -11,8 +11,17 @@ namespace WibboEmulator.Game.Items
             switch (Item.GetBaseItem().InteractionType)
             {
                 default:
-                    Message.WriteInteger(1);
                     Message.WriteInteger(0);
+                    Message.WriteInteger(1);
+                    Message.WriteInteger(Item.GetBaseItem().RarityLevel > 0 ? 2 : 1);
+
+                    if (Item.GetBaseItem().RarityLevel > 0)
+                    {
+                        Message.WriteString("rarity");
+                        Message.WriteString(Item.GetBaseItem().RarityLevel.ToString());
+                    }
+
+                    Message.WriteString("state");
                     Message.WriteString((Item.GetBaseItem().InteractionType != InteractionType.TONER && Item.GetBaseItem().InteractionType != InteractionType.FBGATE) ? Item.ExtraData : string.Empty);
                     break;
 

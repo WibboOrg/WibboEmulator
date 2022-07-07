@@ -52,7 +52,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     }
 
                     WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out ItemData Data);
-                    if (Data == null || Data.IsRare)
+                    if (Data == null || Data.IsRare || Data.RarityLevel > 0)
                     {
                         continue;
                     }

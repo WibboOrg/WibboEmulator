@@ -23,10 +23,11 @@
         public List<double> AdjustableHeights;
         public int EffectId;
         public bool IsRare;
+        public int RarityLevel;
 
         public ItemData(int Id, int Sprite, string Name, string Type, int Width, int Length, double Height, bool Stackable, bool Walkable, bool IsSeat,
             bool AllowRecycle, bool AllowTrade, bool AllowGift, bool AllowInventoryStack, InteractionType InteractionType, int Modes,
-            string VendingIds, string AdjustableHeights, int EffectId, bool IsRare)
+            string VendingIds, string AdjustableHeights, int EffectId, bool IsRare, int rarityLevel)
         {
             this.Id = Id;
             this.SpriteId = Sprite;
@@ -89,6 +90,7 @@
 
             this.EffectId = EffectId;
             this.IsRare = IsRare;
+            this.RarityLevel = rarityLevel;
         }
     }
 }

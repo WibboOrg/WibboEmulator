@@ -18,7 +18,7 @@ namespace WibboEmulator.Game.Catalog.Utilities
                 return false;
             }
 
-            if (Item.Data.IsRare)
+            if (Item.Data.IsRare || Item.Data.RarityLevel > 0)
             {
                 return false;
             }
@@ -65,7 +65,7 @@ namespace WibboEmulator.Game.Catalog.Utilities
                 return true;
             }
 
-            if (Item.Data.IsRare)
+            if (Item.Data.IsRare || Item.Data.RarityLevel > 0)
             {
                 return true;
             }
