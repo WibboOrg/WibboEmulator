@@ -15,8 +15,8 @@ namespace WibboEmulator.Game.Badges
         {
             this._notAllowed.Clear();
 
-            this._notAllowed.AddRange(new List<string>{ "WBASSO", "ADM", "PRWRD1", "GPHWIB", "wibbo.helpeur", "WIBARC", "CRPOFFI", "ZEERSWS", "PRWRD1", "WBI1", "WBI2",
-                "WBI3", "WBI4", "WBI5", "WBI6", "WBI7", "WBI8", "WBI9", "CASINOB", "WPREMIUM", "VIPFREE", "CCECT01", "CCECT02", "CCECP2022" });
+            this._notAllowed.AddRange(new List<string>{ "WBASSO", "ADM", "PRWRD1", "GPHWIB", "wibbo.helpeur", "WIBARC", "CRPOFFI", "ZEERSWS", "PRWRD1", 
+                "WBI1", "WBI2", "WBI3", "WBI4", "WBI5", "WBI6", "WBI7", "WBI8", "WBI9", "CASINOB", "WPREMIUM", "VIPFREE", "CCECT01", "CCECT02", "CCECP2022" });
         }
 
         public bool HaveNotAllowed(string badgeId)
