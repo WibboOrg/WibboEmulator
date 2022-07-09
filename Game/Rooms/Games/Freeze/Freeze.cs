@@ -1,11 +1,11 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Freeze;
-using WibboEmulator.Game.Items;
+﻿using Wibbo.Communication.Packets.Outgoing.GameCenter;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Freeze;
+using Wibbo.Game.Items;
 using System.Collections;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms.Games
+namespace Wibbo.Game.Rooms.Games
 {
     public class Freeze
     {

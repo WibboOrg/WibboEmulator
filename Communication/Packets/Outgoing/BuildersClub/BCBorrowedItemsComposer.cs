@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.BuildersClub
+namespace Wibbo.Communication.Packets.Outgoing.BuildersClub
 {
     internal class BCBorrowedItemsComposer : ServerPacket
     {

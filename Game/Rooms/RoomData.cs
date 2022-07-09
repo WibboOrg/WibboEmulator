@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Groups;
+﻿using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Groups;
 using System.Data;
 
-namespace WibboEmulator.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     public class RoomData
     {

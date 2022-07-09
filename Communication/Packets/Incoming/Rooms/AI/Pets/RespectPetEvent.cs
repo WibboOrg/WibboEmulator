@@ -1,10 +1,10 @@
-using WibboEmulator.Communication.Packets.Outgoing.Pets;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Quests;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Pets;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RespectPetEvent : IPacketEvent
     {

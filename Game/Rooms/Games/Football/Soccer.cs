@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Rooms.Map.Movement;
-using WibboEmulator.Game.Rooms.PathFinding;
+﻿using Wibbo.Game.Items;
+using Wibbo.Game.Rooms.Map.Movement;
+using Wibbo.Game.Rooms.PathFinding;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms.Games
+namespace Wibbo.Game.Rooms.Games
 {
     public class Soccer
     {

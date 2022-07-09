@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Chat.Pets.Commands
+namespace Wibbo.Game.Chat.Pets.Commands
 {
     public class PetCommandManager
     {

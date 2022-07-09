@@ -1,28 +1,28 @@
-﻿using WibboEmulator.Communication.Packets;
-using WibboEmulator.Core;
-using WibboEmulator.Game.Achievements;
-using WibboEmulator.Game.Animation;
-using WibboEmulator.Game.Catalog;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Groups;
-using WibboEmulator.Game.Help;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.LandingView;
-using WibboEmulator.Game.Navigator;
-using WibboEmulator.Game.Quests;
-using WibboEmulator.Game.Roleplay;
-using WibboEmulator.Game.Permissions;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Chat;
-using WibboEmulator.Game.Moderation;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Effects;
-using WibboEmulator.Game.Badges;
-using WibboEmulator.Game.Bots;
-using WibboEmulator.Database.Daos;
+﻿using Wibbo.Communication.Packets;
+using Wibbo.Core;
+using Wibbo.Game.Achievements;
+using Wibbo.Game.Animation;
+using Wibbo.Game.Catalog;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Help;
+using Wibbo.Game.Items;
+using Wibbo.Game.LandingView;
+using Wibbo.Game.Navigator;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Roleplay;
+using Wibbo.Game.Permissions;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Chat;
+using Wibbo.Game.Moderation;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Effects;
+using Wibbo.Game.Badges;
+using Wibbo.Game.Bots;
+using Wibbo.Database.Daos;
 using System.Diagnostics;
 
-namespace WibboEmulator.Game
+namespace Wibbo.Game
 {
     public class GameCore
     {

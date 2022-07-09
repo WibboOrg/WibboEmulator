@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms.AI.Responses;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms.AI.Responses;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms.AI.Types
+namespace Wibbo.Game.Rooms.AI.Types
 {
     public class BartenderBot : BotAI
     {

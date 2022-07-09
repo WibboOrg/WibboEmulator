@@ -1,6 +1,6 @@
-using WibboEmulator.Game.Rooms;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Settings
 {
     internal class RoomSettingsDataComposer : ServerPacket
     {

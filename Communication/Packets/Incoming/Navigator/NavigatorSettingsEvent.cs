@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Navigator;
+﻿using Wibbo.Communication.Packets.Outgoing.Navigator;
 
-using WibboEmulator.Game.Clients;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class NavigatorSettingsEvent : IPacketEvent
     {

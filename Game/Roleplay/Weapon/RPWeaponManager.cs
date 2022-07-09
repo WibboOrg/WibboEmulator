@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Roleplay.Weapon
+namespace Wibbo.Game.Roleplay.Weapon
 {
     public class RPWeaponManager
     {

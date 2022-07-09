@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Core;
+﻿using Wibbo.Core;
 using System.Collections.Concurrent;
 
-namespace WibboEmulator.Game.Rooms.Jankens
+namespace Wibbo.Game.Rooms.Jankens
 {
     public class JankenManager
     {

@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Collections;
 using System.Data;
 
-namespace WibboEmulator.Game.Users.Badges
+namespace Wibbo.Game.Users.Badges
 {
     public class BadgeComponent : IDisposable
     {

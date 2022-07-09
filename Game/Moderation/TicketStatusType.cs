@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Moderation
+﻿namespace Wibbo.Game.Moderation
 {
     public enum TicketStatusType
     {

@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Database.Interfaces;
 using MySql.Data.MySqlClient;
 
-namespace WibboEmulator.Database
+namespace Wibbo.Database
 {
     public sealed class DatabaseManager
     {

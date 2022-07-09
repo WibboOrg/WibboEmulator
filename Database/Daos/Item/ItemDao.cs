@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Utilities;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Items;
+using Wibbo.Utilities;
 using System.Collections.Concurrent;
 using System.Data;
 
-namespace WibboEmulator.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class ItemDao
     {

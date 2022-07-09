@@ -1,11 +1,11 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Avatar;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorManiqui : FurniInteractor
     {

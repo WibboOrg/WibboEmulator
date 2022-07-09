@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 
-namespace WibboEmulator.Game.Catalog.Marketplace
+namespace Wibbo.Game.Catalog.Marketplace
 {
     public class MarketplaceManager
     {

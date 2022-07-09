@@ -1,15 +1,15 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni;
-using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Catalog;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Achievements;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Furni;
+using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Catalog;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Game.Items
+namespace Wibbo.Game.Items
 {
     internal static class ItemLotBox
     {

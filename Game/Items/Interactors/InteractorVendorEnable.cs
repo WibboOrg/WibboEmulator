@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Rooms.PathFinding;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.PathFinding;
 
-namespace WibboEmulator.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorVendorEnable : FurniInteractor
     {

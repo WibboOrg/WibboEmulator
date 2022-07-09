@@ -1,12 +1,12 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading;
-using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Items;
+﻿using Wibbo.Communication.Packets.Outgoing;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Trading;
+using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Items;
 
-namespace WibboEmulator.Game.Rooms.Trading
+namespace Wibbo.Game.Rooms.Trading
 {
     public class Trade
     {

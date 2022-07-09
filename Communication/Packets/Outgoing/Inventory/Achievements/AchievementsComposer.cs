@@ -1,8 +1,8 @@
-using WibboEmulator.Game.Achievements;
-using WibboEmulator.Game.Users.Achievements;
-using WibboEmulator.Game.Clients;
+using Wibbo.Game.Achievements;
+using Wibbo.Game.Users.Achievements;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements
+namespace Wibbo.Communication.Packets.Outgoing.Inventory.Achievements
 {
     internal class AchievementsComposer : ServerPacket
     {

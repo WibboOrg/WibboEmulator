@@ -1,8 +1,8 @@
-using WibboEmulator.Game.Pets;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Users;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Pets
+namespace Wibbo.Communication.Packets.Outgoing.Pets
 {
     internal class RespectPetNotificationComposer : ServerPacket
     {

@@ -1,11 +1,11 @@
-using WibboEmulator.Communication.Packets.Outgoing.Catalog;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Catalog.Vouchers;
-using WibboEmulator.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Catalog.Vouchers;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class RedeemVoucherEvent : IPacketEvent
     {

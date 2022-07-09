@@ -1,14 +1,14 @@
-﻿using WibboEmulator.Communication.Interfaces;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
-using WibboEmulator.Communication.WebSocket;
-using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Users.Messenger;
+﻿using Wibbo.Communication.Interfaces;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Notifications;
+using Wibbo.Communication.WebSocket;
+using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Users.Messenger;
 using System.Collections.Concurrent;
 using System.Text;
 
-namespace WibboEmulator.Game.Clients
+namespace Wibbo.Game.Clients
 {
     public class ClientManager
     {

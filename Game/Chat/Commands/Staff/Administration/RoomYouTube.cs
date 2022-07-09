@@ -1,9 +1,9 @@
 
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Communication.Packets.Outgoing.Televisions;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Televisions;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class RoomYouTube : IChatCommand
     {

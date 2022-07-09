@@ -1,8 +1,8 @@
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Users;
-using WibboEmulator.Utilities;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
+using Wibbo.Utilities;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
+namespace Wibbo.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorUserRoomVisitsComposer : ServerPacket
     {

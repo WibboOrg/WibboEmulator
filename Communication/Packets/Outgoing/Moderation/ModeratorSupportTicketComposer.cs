@@ -1,7 +1,7 @@
-using WibboEmulator.Game.Moderation;
-using WibboEmulator.Game.Users;
+using Wibbo.Game.Moderation;
+using Wibbo.Game.Users;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
+namespace Wibbo.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorSupportTicketComposer : ServerPacket
     {

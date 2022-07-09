@@ -1,7 +1,7 @@
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
-using WibboEmulator.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Bots;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetBotInventoryEvent : IPacketEvent
     {

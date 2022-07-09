@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Game.Clients;
+﻿using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Game.Items.Interactors
+namespace Wibbo.Game.Items.Interactors
 {
     public class InteractorHabboWheel : FurniInteractor
     {

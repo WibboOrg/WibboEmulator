@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Camera
+﻿namespace Wibbo.Communication.Packets.Outgoing.Camera
 {
     internal class ThumbnailStatusComposer : ServerPacket
     {

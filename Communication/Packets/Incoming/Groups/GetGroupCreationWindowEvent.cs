@@ -1,8 +1,8 @@
-using WibboEmulator.Communication.Packets.Outgoing.Groups;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetGroupCreationWindowEvent : IPacketEvent
     {

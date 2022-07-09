@@ -1,8 +1,8 @@
-using WibboEmulator.Communication.Packets.Outgoing.Navigator;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Follow : IChatCommand
     {

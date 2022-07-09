@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Diagnostics;
 
-namespace WibboEmulator.Core
+namespace Wibbo.Core
 {
     public class ServerStatusUpdater
     {

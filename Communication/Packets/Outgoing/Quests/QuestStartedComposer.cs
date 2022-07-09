@@ -1,7 +1,7 @@
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Quests;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Quests;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Quests
+namespace Wibbo.Communication.Packets.Outgoing.Quests
 {
     internal class QuestStartedComposer : ServerPacket
     {

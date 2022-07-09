@@ -1,9 +1,9 @@
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Quests;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class UseFurnitureEvent : IPacketEvent
     {

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace
+﻿namespace Wibbo.Communication.Packets.Outgoing.MarketPlace
 {
     internal class MarketplaceItemStatsComposer : ServerPacket
     {

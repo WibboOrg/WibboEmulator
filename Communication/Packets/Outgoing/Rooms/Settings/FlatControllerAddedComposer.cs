@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Settings
 {
     internal class FlatControllerAddedComposer : ServerPacket
     {

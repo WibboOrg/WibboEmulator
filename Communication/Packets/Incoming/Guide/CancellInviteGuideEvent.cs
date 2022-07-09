@@ -1,7 +1,7 @@
-using WibboEmulator.Communication.Packets.Outgoing.Help;
-using WibboEmulator.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Help;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Guide
+namespace Wibbo.Communication.Packets.Incoming.Guide
 {
     internal class CancellInviteGuideEvent : IPacketEvent
     {

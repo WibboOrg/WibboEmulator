@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Avatar
 {
     internal class ActionComposer : ServerPacket
     {

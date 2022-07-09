@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Pets;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
-using WibboEmulator.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Pets;
+using Wibbo.Communication.Packets.Outgoing.Rooms.AI.Pets;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Game.Pets
+namespace Wibbo.Game.Pets
 {
     public class Pet
     {

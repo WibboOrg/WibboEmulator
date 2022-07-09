@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Game.Roleplay;
+﻿using Wibbo.Game.Roleplay;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc
+namespace Wibbo.Communication.Packets.Outgoing.RolePlay.Troc
 {
     internal class RpTrocUpdateItemsComposer : ServerPacket
     {

@@ -1,29 +1,29 @@
-﻿using WibboEmulator.Communication.Interfaces;
-using WibboEmulator.Communication.Packets.Outgoing;
-using WibboEmulator.Communication.Packets.Outgoing.BuildersClub;
-using WibboEmulator.Communication.Packets.Outgoing.Handshake;
-using WibboEmulator.Communication.Packets.Outgoing.Help;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
-using WibboEmulator.Communication.Packets.Outgoing.Misc;
-using WibboEmulator.Communication.Packets.Outgoing.Moderation;
-using WibboEmulator.Communication.Packets.Outgoing.Navigator;
-using WibboEmulator.Communication.Packets.Outgoing.Notifications;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
-using WibboEmulator.Communication.Packets.Outgoing.Settings;
-using WibboEmulator.Communication.Packets.Outgoing.WibboTool;
-using WibboEmulator.Communication.WebSocket;
-using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Help;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Users;
-using WibboEmulator.Game.Users.Authenticator;
-using WibboEmulator.Utilities;
+﻿using Wibbo.Communication.Interfaces;
+using Wibbo.Communication.Packets.Outgoing;
+using Wibbo.Communication.Packets.Outgoing.BuildersClub;
+using Wibbo.Communication.Packets.Outgoing.Handshake;
+using Wibbo.Communication.Packets.Outgoing.Help;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Achievements;
+using Wibbo.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Communication.Packets.Outgoing.Misc;
+using Wibbo.Communication.Packets.Outgoing.Moderation;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Communication.Packets.Outgoing.Notifications;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
+using Wibbo.Communication.Packets.Outgoing.Settings;
+using Wibbo.Communication.Packets.Outgoing.WibboTool;
+using Wibbo.Communication.WebSocket;
+using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Help;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
+using Wibbo.Game.Users.Authenticator;
+using Wibbo.Utilities;
 
-namespace WibboEmulator.Game.Clients
+namespace Wibbo.Game.Clients
 {
     public class Client
     {

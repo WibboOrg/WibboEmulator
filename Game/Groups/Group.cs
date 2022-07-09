@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Groups
+namespace Wibbo.Game.Groups
 {
     public class Group
     {

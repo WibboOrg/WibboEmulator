@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Users.Messenger
+﻿namespace Wibbo.Game.Users.Messenger
 {
     public struct SearchResult
     {

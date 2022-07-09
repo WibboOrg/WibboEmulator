@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Catalog
+namespace Wibbo.Communication.Packets.Outgoing.Catalog
 {
     internal class CatalogItemDiscountComposer : ServerPacket
     {

@@ -1,10 +1,10 @@
-using WibboEmulator.Communication.Packets.Outgoing.Moderation;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Moderation;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
 using System.Data;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetModeratorUserInfoEvent : IPacketEvent
     {

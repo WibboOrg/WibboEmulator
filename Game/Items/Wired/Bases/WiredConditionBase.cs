@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Wireds;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Game.Items.Wired
+namespace Wibbo.Game.Items.Wired
 {
     public class WiredConditionBase : WiredBase
     {

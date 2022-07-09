@@ -1,9 +1,9 @@
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Communication.Packets.Outgoing.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Avatar;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Mimic : IChatCommand
     {

@@ -1,8 +1,8 @@
 
-using WibboEmulator.Database.Interfaces;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class RoleplayDao
     {

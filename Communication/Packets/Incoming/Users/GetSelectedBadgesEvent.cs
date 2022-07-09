@@ -1,8 +1,8 @@
-using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Users;
+using Wibbo.Communication.Packets.Outgoing.Users;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Users;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetSelectedBadgesEvent : IPacketEvent
     {

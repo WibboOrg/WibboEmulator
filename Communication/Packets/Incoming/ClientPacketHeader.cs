@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets
+﻿namespace Wibbo.Communication.Packets
 {
     public static class ClientPacketHeader
     {

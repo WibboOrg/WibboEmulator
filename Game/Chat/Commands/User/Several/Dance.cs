@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
+﻿using Wibbo.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Dance : IChatCommand
     {

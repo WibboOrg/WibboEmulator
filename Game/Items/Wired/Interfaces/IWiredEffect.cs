@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Game.Rooms;
+﻿using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Game.Items.Wired.Interfaces
+namespace Wibbo.Game.Items.Wired.Interfaces
 {
     public interface IWiredEffect
     {

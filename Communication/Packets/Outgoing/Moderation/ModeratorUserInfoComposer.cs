@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
+namespace Wibbo.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorUserInfoComposer : ServerPacket
     {

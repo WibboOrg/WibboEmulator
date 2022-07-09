@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Database.Interfaces;
 using System.Text;
 
-namespace WibboEmulator.Utilities
+namespace Wibbo.Utilities
 {
     public class QueryChunk
     {

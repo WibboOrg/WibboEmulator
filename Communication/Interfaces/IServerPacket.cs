@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Interfaces
+﻿namespace Wibbo.Communication.Interfaces
 {
     public interface IServerPacket
     {

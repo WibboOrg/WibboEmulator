@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Game.Clients;
-using WibboEmulator.Communication.Packets.Outgoing.Camera;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Camera;
+using Wibbo.Game.Rooms;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Camera
+namespace Wibbo.Communication.Packets.Incoming.Camera
 {
     internal class RenderRoomEvent : IPacketEvent
     {

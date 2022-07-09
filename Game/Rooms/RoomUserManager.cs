@@ -1,29 +1,29 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
-using WibboEmulator.Communication.Packets.Outgoing.Handshake;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+﻿using Wibbo.Communication.Packets.Outgoing.GameCenter;
+using Wibbo.Communication.Packets.Outgoing.Handshake;
+using Wibbo.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Permissions;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
 
-using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Pets;
-using WibboEmulator.Game.Quests;
-using WibboEmulator.Game.Roleplay;
-using WibboEmulator.Game.Roleplay.Enemy;
-using WibboEmulator.Game.Roleplay.Player;
-using WibboEmulator.Game.Rooms.AI;
-using WibboEmulator.Game.Rooms.Games;
-using WibboEmulator.Game.Rooms.Map.Movement;
-using WibboEmulator.Game.Rooms.PathFinding;
+using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Roleplay;
+using Wibbo.Game.Roleplay.Enemy;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms.AI;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms.Map.Movement;
+using Wibbo.Game.Rooms.PathFinding;
 using System.Collections.Concurrent;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms
+namespace Wibbo.Game.Rooms
 {
     public delegate void UserAndItemDelegate(RoomUser user, Item item);
 

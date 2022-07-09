@@ -1,6 +1,6 @@
-using WibboEmulator.Database.Interfaces;
+using Wibbo.Database.Interfaces;
 
-namespace WibboEmulator.Database.Daos
+namespace Wibbo.Database.Daos
 {
     class MessengerFriendshipDao
     {

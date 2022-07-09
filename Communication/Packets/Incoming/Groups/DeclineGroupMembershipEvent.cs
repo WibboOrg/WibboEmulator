@@ -1,9 +1,9 @@
-using WibboEmulator.Communication.Packets.Outgoing.Groups;
+using Wibbo.Communication.Packets.Outgoing.Groups;
 
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Groups;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class DeclineGroupMembershipEvent : IPacketEvent
     {

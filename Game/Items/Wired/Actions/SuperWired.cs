@@ -1,26 +1,26 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
-using WibboEmulator.Communication.Packets.Outgoing.Notifications;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Communication.Packets.Outgoing.Users;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Communication.Packets.Outgoing.Notifications;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Users;
 
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Roleplay;
-using WibboEmulator.Game.Roleplay.Enemy;
-using WibboEmulator.Game.Roleplay.Player;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Roleplay;
+using Wibbo.Game.Roleplay.Enemy;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
-using WibboEmulator.Game.Rooms.Games;
-using WibboEmulator.Game.Rooms.AI;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
-using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
-using WibboEmulator.Communication.Packets.Outgoing.Sound.SoundCustom;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms.AI;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Badges;
+using Wibbo.Communication.Packets.Outgoing.RolePlay;
+using Wibbo.Communication.Packets.Outgoing.Sound.SoundCustom;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
 
-namespace WibboEmulator.Game.Items.Wired.Actions
+namespace Wibbo.Game.Items.Wired.Actions
 {
     public class SuperWired : WiredActionBase, IWired, IWiredEffect
     {

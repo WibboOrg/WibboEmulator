@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Help
+namespace Wibbo.Communication.Packets.Outgoing.Help
 {
     internal class OpenHelpToolComposer : ServerPacket
     {

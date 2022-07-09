@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
+namespace Wibbo.Communication.Packets.Outgoing.Navigator
 {
     internal class RoomRatingComposer : ServerPacket
     {

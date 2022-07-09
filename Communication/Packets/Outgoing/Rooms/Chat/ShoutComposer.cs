@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Chat
 {
     internal class ShoutComposer : ServerPacket
     {

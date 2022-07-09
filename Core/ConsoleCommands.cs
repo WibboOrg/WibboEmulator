@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+﻿using Wibbo.Communication.Packets.Outgoing.Moderation;
 
-namespace WibboEmulator.Core
+namespace Wibbo.Core
 {
     public class ConsoleCommands
     {

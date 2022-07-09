@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Achievements
+﻿namespace Wibbo.Game.Achievements
 {
     public class AchievementData
     {

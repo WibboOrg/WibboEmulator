@@ -1,8 +1,8 @@
-using WibboEmulator.Communication.Packets.Outgoing.Navigator;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Navigator;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Navigator;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetUserFlatCatsEvent : IPacketEvent
     {

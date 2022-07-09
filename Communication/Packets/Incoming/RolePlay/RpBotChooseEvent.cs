@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.RolePlay
+namespace Wibbo.Communication.Packets.Incoming.RolePlay
 {
     internal class RpBotChooseEvent : IPacketEvent
     {

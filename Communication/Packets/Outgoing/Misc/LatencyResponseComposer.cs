@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Misc
+namespace Wibbo.Communication.Packets.Outgoing.Misc
 {
     internal class LatencyResponseComposer : ServerPacket
     {

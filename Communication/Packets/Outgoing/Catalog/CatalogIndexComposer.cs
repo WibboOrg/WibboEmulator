@@ -1,8 +1,8 @@
-using WibboEmulator.Core;
-using WibboEmulator.Game.Catalog;
-using WibboEmulator.Game.Clients;
+using Wibbo.Core;
+using Wibbo.Game.Catalog;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Catalog
+namespace Wibbo.Communication.Packets.Outgoing.Catalog
 {
     internal class CatalogIndexComposer : ServerPacket
     {

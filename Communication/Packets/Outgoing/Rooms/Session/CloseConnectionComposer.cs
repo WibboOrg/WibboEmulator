@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Session
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Session
 {
     internal class CloseConnectionComposer : ServerPacket
     {

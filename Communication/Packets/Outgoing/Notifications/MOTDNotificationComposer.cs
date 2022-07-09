@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Notifications
+namespace Wibbo.Communication.Packets.Outgoing.Notifications
 {
     internal class MOTDNotificationComposer : ServerPacket
     {

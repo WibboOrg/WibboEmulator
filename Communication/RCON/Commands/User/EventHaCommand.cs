@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Game.Clients;
+﻿using Wibbo.Game.Clients;
 using System.Text.RegularExpressions;
 
-namespace WibboEmulator.Communication.RCON.Commands.User
+namespace Wibbo.Communication.RCON.Commands.User
 {
     internal class EventHaCommand : IRCONCommand
     {

@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Core;
-using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Core;
+using Wibbo.Database.Interfaces;
 using MySql.Data.MySqlClient;
 using System.Data;
 
-namespace WibboEmulator.Database.Adapter
+namespace Wibbo.Database.Adapter
 {
     public class QueryAdapter : IRegularQueryAdapter
     {

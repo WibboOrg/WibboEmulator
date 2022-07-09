@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Achievements;
 
-using WibboEmulator.Game.Clients;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.RCON.Commands.User
+namespace Wibbo.Communication.RCON.Commands.User
 {
     internal class AddWinwinCommand : IRCONCommand
     {

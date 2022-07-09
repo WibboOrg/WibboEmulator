@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Game.Rooms;
+﻿using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Utilities.Events
+namespace Wibbo.Utilities.Events
 {
     public class UserSaysArgs : EventArgs
     {

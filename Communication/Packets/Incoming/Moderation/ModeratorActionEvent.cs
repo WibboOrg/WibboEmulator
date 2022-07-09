@@ -1,7 +1,7 @@
-using WibboEmulator.Communication.Packets.Outgoing.Moderation;
-using WibboEmulator.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Moderation;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class ModeratorActionEvent : IPacketEvent
     {

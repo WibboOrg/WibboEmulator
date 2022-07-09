@@ -1,5 +1,5 @@
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Game.Clients;using WibboEmulator.Game.Items;using WibboEmulator.Game.Quests;using WibboEmulator.Game.Rooms;namespace WibboEmulator.Communication.Packets.Incoming.Structure{    internal class MoveObjectEvent : IPacketEvent    {
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Game.Clients;using Wibbo.Game.Items;using Wibbo.Game.Quests;using Wibbo.Game.Rooms;namespace Wibbo.Communication.Packets.Incoming.Structure{    internal class MoveObjectEvent : IPacketEvent    {
         public double Delay => 200;
 
         public void Parse(Client Session, ClientPacket Packet)        {            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);            if (room == null || !room.CheckRights(Session))

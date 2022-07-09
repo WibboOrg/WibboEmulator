@@ -1,8 +1,8 @@
-using WibboEmulator.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Communication.Packets.Outgoing.Catalog;
 
-using WibboEmulator.Game.Clients;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class CheckPetNameEvent : IPacketEvent
     {

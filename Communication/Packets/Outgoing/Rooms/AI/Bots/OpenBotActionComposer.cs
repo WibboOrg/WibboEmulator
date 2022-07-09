@@ -1,6 +1,6 @@
-using WibboEmulator.Game.Rooms;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Bots
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.AI.Bots
 {
     internal class OpenBotActionComposer : ServerPacket
     {

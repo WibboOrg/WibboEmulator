@@ -1,13 +1,13 @@
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Pets;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Pets;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Rooms;
 using System.Drawing;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class PickUpPetEvent : IPacketEvent
     {

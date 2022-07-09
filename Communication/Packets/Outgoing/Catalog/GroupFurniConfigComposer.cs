@@ -1,6 +1,6 @@
-using WibboEmulator.Game.Groups;
+using Wibbo.Game.Groups;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Catalog
+namespace Wibbo.Communication.Packets.Outgoing.Catalog
 {
     internal class GroupFurniConfigComposer : ServerPacket
     {

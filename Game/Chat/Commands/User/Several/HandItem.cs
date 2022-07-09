@@ -1,8 +1,8 @@
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms.Games;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms.Games;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class HandItem : IChatCommand
     {

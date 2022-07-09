@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Camera;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
+﻿using Wibbo.Communication.Packets.Outgoing.Camera;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Camera
+namespace Wibbo.Communication.Packets.Incoming.Camera
 {
     internal class PurchasePhotoEvent : IPacketEvent
     {

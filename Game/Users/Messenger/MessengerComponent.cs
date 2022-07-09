@@ -1,12 +1,12 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Messenger;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Users.Relationships;
-using WibboEmulator.Utilities;
+﻿using Wibbo.Communication.Packets.Outgoing.Messenger;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Users.Relationships;
+using Wibbo.Utilities;
 using System.Data;
 
-namespace WibboEmulator.Game.Users.Messenger
+namespace Wibbo.Game.Users.Messenger
 {
     public class MessengerComponent : IDisposable
     {

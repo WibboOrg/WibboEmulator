@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Sound.SoundCustom
+﻿namespace Wibbo.Communication.Packets.Outgoing.Sound.SoundCustom
 {
     internal class PlaySoundComposer : ServerPacket
     {

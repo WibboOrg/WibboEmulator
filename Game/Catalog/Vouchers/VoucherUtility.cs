@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Catalog.Vouchers
+﻿namespace Wibbo.Game.Catalog.Vouchers
 {
     public static class VoucherUtility
     {

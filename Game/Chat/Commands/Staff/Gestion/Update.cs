@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Catalog;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+﻿using Wibbo.Communication.Packets.Outgoing.Catalog;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class Update : IChatCommand
     {
