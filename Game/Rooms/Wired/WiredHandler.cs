@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Items.Wired;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Game.Items;
+using Wibbo.Game.Items.Wired;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Collections.Concurrent;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms.Wired
+namespace Wibbo.Game.Rooms.Wired
 {
     public class WiredHandler
     {

@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Core;
+﻿using Wibbo.Core;
 
-namespace WibboEmulator.Game.Catalog
+namespace Wibbo.Game.Catalog
 {
     public class CatalogPromotion
     {

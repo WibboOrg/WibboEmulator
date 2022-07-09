@@ -1,10 +1,10 @@
-using WibboEmulator.Communication.Packets.Outgoing.Groups;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Groups;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class UpdateGroupBadgeEvent : IPacketEvent
     {

@@ -1,17 +1,17 @@
-﻿using WibboEmulator.Communication.Packets.Incoming;
-using WibboEmulator.Communication.Packets.Incoming.Marketplace;
-using WibboEmulator.Communication.Packets.Incoming.Structure;
-using WibboEmulator.Communication.Packets.Incoming.Camera;
-using WibboEmulator.Communication.Packets.Incoming.Campaign;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Communication.Packets.Incoming.WibboTool;
-using WibboEmulator.Communication.Packets.Incoming.Televisions;
-using WibboEmulator.Communication.Packets.Incoming.RolePlay;
-using WibboEmulator.Communication.Packets.Incoming.RolePlay.Troc;
-using WibboEmulator.Communication.Packets.Incoming.Guide;
+﻿using Wibbo.Communication.Packets.Incoming;
+using Wibbo.Communication.Packets.Incoming.Marketplace;
+using Wibbo.Communication.Packets.Incoming.Structure;
+using Wibbo.Communication.Packets.Incoming.Camera;
+using Wibbo.Communication.Packets.Incoming.Campaign;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Communication.Packets.Incoming.WibboTool;
+using Wibbo.Communication.Packets.Incoming.Televisions;
+using Wibbo.Communication.Packets.Incoming.RolePlay;
+using Wibbo.Communication.Packets.Incoming.RolePlay.Troc;
+using Wibbo.Communication.Packets.Incoming.Guide;
 
-namespace WibboEmulator.Communication.Packets
+namespace Wibbo.Communication.Packets
 {
     public sealed class PacketManager
     {

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Chat.Emotions
+﻿namespace Wibbo.Game.Chat.Emotions
 {
     public sealed class ChatEmotionsManager
     {

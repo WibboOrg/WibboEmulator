@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Rooms
+﻿namespace Wibbo.Game.Rooms
 {
     public enum ItemEffectType
     {

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms.Map.Movement
+namespace Wibbo.Game.Rooms.Map.Movement
 {
     public static class MovementUtility
     {

@@ -1,6 +1,6 @@
-using WibboEmulator.Game.Items;
+using Wibbo.Game.Items;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Furni
 {
     internal class OpenGiftComposer : ServerPacket
     {

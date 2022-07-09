@@ -1,6 +1,6 @@
-using WibboEmulator.Game.Users.Messenger;
+using Wibbo.Game.Users.Messenger;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Messenger
+namespace Wibbo.Communication.Packets.Outgoing.Messenger
 {
     internal class FriendListUpdateComposer : ServerPacket
     {

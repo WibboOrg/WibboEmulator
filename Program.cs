@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Core;
+﻿using Wibbo.Core;
 
-namespace WibboEmulator
+namespace Wibbo
 {
     public static class Program
     {

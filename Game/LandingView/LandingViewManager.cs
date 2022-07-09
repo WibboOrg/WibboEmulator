@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.LandingView.Promotions;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.LandingView.Promotions;
 using System.Data;
 
 
-namespace WibboEmulator.Game.LandingView
+namespace Wibbo.Game.LandingView
 {
     public class LandingViewManager
     {

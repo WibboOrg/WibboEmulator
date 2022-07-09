@@ -1,13 +1,13 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
+﻿using Wibbo.Communication.Packets.Outgoing.GameCenter;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Avatar;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
 using Enclosure;
 using System.Collections;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms.Games
+namespace Wibbo.Game.Rooms.Games
 {
     public class BattleBanzai
     {

@@ -1,8 +1,8 @@
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Bots;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.AI.Bots;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class OpenBotActionEvent : IPacketEvent
     {

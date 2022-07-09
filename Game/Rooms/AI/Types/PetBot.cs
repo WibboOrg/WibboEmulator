@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Core;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Pets;
-using WibboEmulator.Game.Rooms.PathFinding;
+﻿using Wibbo.Core;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Pets;
+using Wibbo.Game.Rooms.PathFinding;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms.AI.Types
+namespace Wibbo.Game.Rooms.AI.Types
 {
     public class PetBot : BotAI
     {

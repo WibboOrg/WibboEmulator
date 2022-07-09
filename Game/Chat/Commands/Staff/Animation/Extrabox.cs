@@ -1,9 +1,9 @@
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Furni;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class ExtraBox : IChatCommand
     {

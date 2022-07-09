@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading
+namespace Wibbo.Communication.Packets.Outgoing.Inventory.Trading
 {
     internal class TradingCompleteComposer : ServerPacket
     {

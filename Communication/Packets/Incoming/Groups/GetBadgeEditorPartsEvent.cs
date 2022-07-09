@@ -1,7 +1,7 @@
-using WibboEmulator.Communication.Packets.Outgoing.Groups;
-using WibboEmulator.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetBadgeEditorPartsEvent : IPacketEvent
     {

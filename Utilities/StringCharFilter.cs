@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace WibboEmulator.Utilities
+namespace Wibbo.Utilities
 {
     internal static class StringCharFilter
     {

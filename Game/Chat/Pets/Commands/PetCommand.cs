@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Chat.Pets.Commands
+﻿namespace Wibbo.Game.Chat.Pets.Commands
 {
     public struct PetCommand
     {

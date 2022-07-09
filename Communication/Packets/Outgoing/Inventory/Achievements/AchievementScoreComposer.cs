@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements
+﻿namespace Wibbo.Communication.Packets.Outgoing.Inventory.Achievements
 {
     internal class AchievementScoreComposer : ServerPacket
     {

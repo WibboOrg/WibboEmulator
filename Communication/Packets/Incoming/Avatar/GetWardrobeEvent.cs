@@ -1,7 +1,7 @@
-using WibboEmulator.Communication.Packets.Outgoing.Avatar;
-using WibboEmulator.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Avatar;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetWardrobeEvent : IPacketEvent
     {

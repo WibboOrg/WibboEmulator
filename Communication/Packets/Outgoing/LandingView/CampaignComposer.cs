@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.LandingView
+namespace Wibbo.Communication.Packets.Outgoing.LandingView
 {
     internal class CampaignComposer : ServerPacket
     {

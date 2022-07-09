@@ -1,13 +1,13 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Items.Wired.Conditions;
-using WibboEmulator.Game.Items.Wired.Actions;
-using WibboEmulator.Game.Items.Wired.Interfaces;
-using WibboEmulator.Game.Items.Wired.Triggers;
-using WibboEmulator.Database.Daos;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Items.Wired.Conditions;
+using Wibbo.Game.Items.Wired.Actions;
+using Wibbo.Game.Items.Wired.Interfaces;
+using Wibbo.Game.Items.Wired.Triggers;
+using Wibbo.Database.Daos;
 using System.Data;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Game.Items.Wired
+namespace Wibbo.Game.Items.Wired
 {
     public class WiredRegister
     {

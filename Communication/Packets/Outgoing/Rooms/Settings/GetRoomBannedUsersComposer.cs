@@ -1,7 +1,7 @@
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Users;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Settings
 {
     internal class GetRoomBannedUsersComposer : ServerPacket
     {

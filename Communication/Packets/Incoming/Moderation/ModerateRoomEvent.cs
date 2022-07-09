@@ -1,7 +1,7 @@
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Moderation;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Moderation;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class ModerateRoomEvent : IPacketEvent
     {

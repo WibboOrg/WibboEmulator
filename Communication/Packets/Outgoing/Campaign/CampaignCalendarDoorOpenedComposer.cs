@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Campaign
+﻿namespace Wibbo.Communication.Packets.Outgoing.Campaign
 {
     internal class CampaignCalendarDoorOpenedComposer : ServerPacket
     {

@@ -1,9 +1,9 @@
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Stickys;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Furni.Stickys;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetStickyNoteEvent : IPacketEvent
     {

@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Game.Clients;
+﻿using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Camera
+namespace Wibbo.Communication.Packets.Incoming.Camera
 {
     internal class PhotoCompetitionEvent : IPacketEvent
     {

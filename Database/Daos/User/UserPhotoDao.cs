@@ -1,5 +1,5 @@
-﻿using WibboEmulator.Database.Interfaces;
-namespace WibboEmulator.Database.Daos
+﻿using Wibbo.Database.Interfaces;
+namespace Wibbo.Database.Daos
 {
     class UserPhotoDao
     {

@@ -1,8 +1,8 @@
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Chat.Logs;
-using WibboEmulator.Utilities;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Chat.Logs;
+using Wibbo.Utilities;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
+namespace Wibbo.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorRoomChatlogComposer : ServerPacket
     {

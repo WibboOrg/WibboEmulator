@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Furni
+﻿namespace Wibbo.Communication.Packets.Outgoing.Rooms.Furni.Furni
 {
     internal class LoveLockDialogueComposer : ServerPacket
     {

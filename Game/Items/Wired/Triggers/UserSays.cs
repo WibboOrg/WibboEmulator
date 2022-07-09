@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
-using WibboEmulator.Utilities.Events;
+using Wibbo.Utilities.Events;
 
-namespace WibboEmulator.Game.Items.Wired.Triggers
+namespace Wibbo.Game.Items.Wired.Triggers
 {
     public class UserSays : WiredTriggerBase, IWired
     {

@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Rooms.PathFinding;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.PathFinding;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Items.Wired.Conditions
+namespace Wibbo.Game.Items.Wired.Conditions
 {
     public class HasFurniOnFurniNegative : WiredConditionBase, IWiredCondition, IWired
     {

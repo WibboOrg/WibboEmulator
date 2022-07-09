@@ -1,7 +1,7 @@
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class UserChangeComposer : ServerPacket
     {

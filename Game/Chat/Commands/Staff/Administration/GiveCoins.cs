@@ -1,8 +1,8 @@
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class GiveCoins : IChatCommand
     {

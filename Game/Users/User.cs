@@ -1,25 +1,25 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Handshake;
-using WibboEmulator.Communication.Packets.Outgoing.Help;
-using WibboEmulator.Communication.Packets.Outgoing.Navigator;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
-using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Chat.Logs;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Roleplay;
-using WibboEmulator.Game.Roleplay.Player;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Users.Achievements;
-using WibboEmulator.Game.Users.Badges;
-using WibboEmulator.Game.Users.Inventory;
-using WibboEmulator.Game.Users.Messenger;
-using WibboEmulator.Game.Users.Permissions;
-using WibboEmulator.Game.Users.Wardrobes;
+﻿using Wibbo.Communication.Packets.Outgoing.Handshake;
+using Wibbo.Communication.Packets.Outgoing.Help;
+using Wibbo.Communication.Packets.Outgoing.Navigator;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
+using Wibbo.Core;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Chat.Logs;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Roleplay;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users.Achievements;
+using Wibbo.Game.Users.Badges;
+using Wibbo.Game.Users.Inventory;
+using Wibbo.Game.Users.Messenger;
+using Wibbo.Game.Users.Permissions;
+using Wibbo.Game.Users.Wardrobes;
 using System.Data;
 
-namespace WibboEmulator.Game.Users
+namespace Wibbo.Game.Users
 {
     public class User
     {

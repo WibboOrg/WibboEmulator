@@ -1,6 +1,6 @@
-using WibboEmulator.Game.Clients;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class ReleaseTicketEvent : IPacketEvent
     {

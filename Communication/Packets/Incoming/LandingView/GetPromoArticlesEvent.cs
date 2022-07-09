@@ -1,8 +1,8 @@
-using WibboEmulator.Communication.Packets.Outgoing.LandingView;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.LandingView;
+using Wibbo.Communication.Packets.Outgoing.LandingView;
+using Wibbo.Game.Clients;
+using Wibbo.Game.LandingView;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetPromoArticlesEvent : IPacketEvent
     {

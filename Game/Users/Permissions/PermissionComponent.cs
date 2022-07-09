@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Database.Interfaces;
 
-namespace WibboEmulator.Game.Users.Permissions
+namespace Wibbo.Game.Users.Permissions
 {
     public sealed class PermissionComponent : IDisposable
     {

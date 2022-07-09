@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.Hotel
+﻿namespace Wibbo.Communication.RCON.Commands.Hotel
 {
     internal class ShutdownCommand : IRCONCommand
     {

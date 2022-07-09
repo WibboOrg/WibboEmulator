@@ -1,8 +1,8 @@
 ﻿
-using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
-using WibboEmulator.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Notifications.NotifCustom;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.WibboTool
+namespace Wibbo.Communication.Packets.Incoming.WibboTool
 {
     internal class SendHotelAlertEvent : IPacketEvent
     {

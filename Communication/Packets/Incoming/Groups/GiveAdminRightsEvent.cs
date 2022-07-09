@@ -1,11 +1,11 @@
-using WibboEmulator.Communication.Packets.Outgoing.Groups;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Groups;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Users;
+using Wibbo.Communication.Packets.Outgoing.Groups;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Permissions;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Groups;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Users;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GiveAdminRightsEvent : IPacketEvent
     {

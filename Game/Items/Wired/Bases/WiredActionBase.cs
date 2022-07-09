@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items.Wired.Interfaces;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Rooms.Wired;
+﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Wireds;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items.Wired.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.Wired;
 
-namespace WibboEmulator.Game.Items.Wired
+namespace Wibbo.Game.Items.Wired
 {
     public class WiredActionBase : WiredBase, IWiredCycleable
     {

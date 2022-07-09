@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
-using WibboEmulator.Game.Clients;
+﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.RCON.Commands.User
+namespace Wibbo.Communication.RCON.Commands.User
 {
     internal class UpdateWibboPointsCommand : IRCONCommand
     {

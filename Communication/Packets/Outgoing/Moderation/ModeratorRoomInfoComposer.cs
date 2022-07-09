@@ -1,6 +1,6 @@
-using WibboEmulator.Game.Rooms;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
+namespace Wibbo.Communication.Packets.Outgoing.Moderation
 {
     internal class ModeratorRoomInfoComposer : ServerPacket
     {

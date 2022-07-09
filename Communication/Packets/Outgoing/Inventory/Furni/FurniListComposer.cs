@@ -1,7 +1,7 @@
-using WibboEmulator.Game.Catalog.Utilities;
-using WibboEmulator.Game.Items;
+using Wibbo.Game.Catalog.Utilities;
+using Wibbo.Game.Items;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni
+namespace Wibbo.Communication.Packets.Outgoing.Inventory.Furni
 {
     internal class FurniListComposer : ServerPacket
     {

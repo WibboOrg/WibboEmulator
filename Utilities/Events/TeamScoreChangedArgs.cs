@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Rooms.Games;
+﻿using Wibbo.Game.Rooms;
+using Wibbo.Game.Rooms.Games;
 
-namespace WibboEmulator.Utilities.Events
+namespace Wibbo.Utilities.Events
 {
     public class TeamScoreChangedArgs : EventArgs
     {

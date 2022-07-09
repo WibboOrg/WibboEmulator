@@ -1,12 +1,12 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Misc;
-using WibboEmulator.Communication.Packets.Outgoing.Notifications;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Utilities;
+﻿using Wibbo.Communication.Packets.Outgoing.Misc;
+using Wibbo.Communication.Packets.Outgoing.Notifications;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
+using Wibbo.Utilities;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetRoomEntryDataEvent : IPacketEvent
     {

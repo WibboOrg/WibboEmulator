@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Utilities
+﻿namespace Wibbo.Utilities
 {
     public enum EndingType
     {

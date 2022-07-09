@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Game.Clients;
+﻿using Wibbo.Game.Clients;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms.AI.Types
+namespace Wibbo.Game.Rooms.AI.Types
 {
     public class GenericBot : BotAI
     {

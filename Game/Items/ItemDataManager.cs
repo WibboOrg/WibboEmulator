@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 
 
-namespace WibboEmulator.Game.Items
+namespace Wibbo.Game.Items
 {
     public class ItemDataManager
     {

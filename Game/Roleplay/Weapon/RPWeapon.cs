@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Roleplay.Weapon
+﻿namespace Wibbo.Game.Roleplay.Weapon
 {
     public class RPWeapon
     {

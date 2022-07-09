@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Users
+namespace Wibbo.Communication.Packets.Outgoing.Users
 {
     internal class NameChangeUpdateComposer : ServerPacket
     {

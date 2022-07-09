@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Rooms;
+using Wibbo.Game.Items.Wired.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Items.Wired.Conditions
+namespace Wibbo.Game.Items.Wired.Conditions
 {
     public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
     {

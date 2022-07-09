@@ -1,12 +1,12 @@
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Quests;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Items;
+using Wibbo.Game.Quests;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class ApplyDecorationEvent : IPacketEvent
     {

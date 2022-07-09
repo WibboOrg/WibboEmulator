@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+﻿using Wibbo.Game.Items;
+using Wibbo.Game.Items.Wired.Interfaces;
 
-namespace WibboEmulator.Game.Rooms.Wired
+namespace Wibbo.Game.Rooms.Wired
 {
     public class WiredCycle
     {

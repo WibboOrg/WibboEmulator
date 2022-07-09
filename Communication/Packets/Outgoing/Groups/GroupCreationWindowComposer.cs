@@ -1,6 +1,6 @@
-using WibboEmulator.Game.Rooms;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Groups
+namespace Wibbo.Communication.Packets.Outgoing.Groups
 {
     internal class GroupCreationWindowComposer : ServerPacket
     {

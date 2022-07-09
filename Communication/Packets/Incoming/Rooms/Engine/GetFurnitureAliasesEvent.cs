@@ -1,7 +1,7 @@
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Game.Clients;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using Wibbo.Game.Clients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class GetFurnitureAliasesMessageEvent : IPacketEvent
     {

@@ -1,11 +1,11 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
+﻿using Wibbo.Communication.Packets.Outgoing.Notifications.NotifCustom;
+using Wibbo.Communication.Packets.Outgoing.Rooms.Notifications;
 
 
-using WibboEmulator.Game.Clients;
+using Wibbo.Game.Clients;
 using System.Text.RegularExpressions;
 
-namespace WibboEmulator.Game.Chat.Mentions
+namespace Wibbo.Game.Chat.Mentions
 {
     public class MentionManager
     {

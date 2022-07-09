@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
+namespace Wibbo.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class UserRemoveComposer : ServerPacket
     {

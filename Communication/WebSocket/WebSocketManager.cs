@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Communication.Packets.Incoming;
-using WibboEmulator.Core;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Utilities;
+﻿using Wibbo.Communication.Packets.Incoming;
+using Wibbo.Core;
+using Wibbo.Game.Clients;
+using Wibbo.Utilities;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Reflection;
@@ -9,7 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 
-namespace WibboEmulator.Communication.WebSocket
+namespace Wibbo.Communication.WebSocket
 {
     public class WebSocketManager
     {

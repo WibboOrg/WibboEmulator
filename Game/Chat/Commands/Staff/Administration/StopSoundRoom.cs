@@ -1,9 +1,9 @@
 ﻿
-using WibboEmulator.Communication.Packets.Outgoing.Sound.SoundCustom;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using Wibbo.Communication.Packets.Outgoing.Sound.SoundCustom;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace Wibbo.Game.Chat.Commands.Cmd
 {
     internal class StopSoundRoom : IChatCommand
     {

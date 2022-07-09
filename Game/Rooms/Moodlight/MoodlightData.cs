@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Database.Daos;
+using Wibbo.Database.Interfaces;
 using System.Data;
 using System.Text;
 
-namespace WibboEmulator.Game.Rooms.Moodlight
+namespace Wibbo.Game.Rooms.Moodlight
 {
     public class MoodlightData
     {

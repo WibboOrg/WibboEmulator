@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Game.Catalog.Marketplace;
+﻿using Wibbo.Game.Catalog.Marketplace;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace
+namespace Wibbo.Communication.Packets.Outgoing.MarketPlace
 {
     internal class MarketPlaceOffersComposer : ServerPacket
     {

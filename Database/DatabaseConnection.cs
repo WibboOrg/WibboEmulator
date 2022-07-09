@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Database.Adapter;
-using WibboEmulator.Database.Interfaces;
+﻿using Wibbo.Database.Adapter;
+using Wibbo.Database.Interfaces;
 using MySql.Data.MySqlClient;
 using System.Data;
 
-namespace WibboEmulator.Database
+namespace Wibbo.Database
 {
     public class DatabaseConnection : IDatabaseClient, IDisposable
     {

@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Roleplay.Player;
-using WibboEmulator.Game.Rooms;
+﻿using Wibbo.Game.Clients;
+using Wibbo.Game.Roleplay.Player;
+using Wibbo.Game.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.RolePlay.Troc
+namespace Wibbo.Communication.Packets.Incoming.RolePlay.Troc
 {
     internal class RpTrocConfirmeEvent : IPacketEvent
     {

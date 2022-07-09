@@ -1,10 +1,10 @@
-using WibboEmulator.Communication.Packets.Outgoing.Navigator.New;
+using Wibbo.Communication.Packets.Outgoing.Navigator.New;
 
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Navigator;
-using WibboEmulator.Utilities;
+using Wibbo.Game.Clients;
+using Wibbo.Game.Navigator;
+using Wibbo.Utilities;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+namespace Wibbo.Communication.Packets.Incoming.Structure
 {
     internal class InitializeNewNavigatorEvent : IPacketEvent
     {

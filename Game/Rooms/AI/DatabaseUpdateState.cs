@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Pets
+﻿namespace Wibbo.Game.Pets
 {
     public enum DatabaseUpdateState
     {
