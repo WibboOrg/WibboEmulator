@@ -1,9 +1,9 @@
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms.Games;
-using Wibbo.Game.Rooms.Jankens;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms.Games;
+using WibboEmulator.Game.Rooms.Jankens;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class RockPaperScissors : IChatCommand
     {

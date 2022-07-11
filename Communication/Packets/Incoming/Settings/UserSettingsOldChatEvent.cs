@@ -1,6 +1,6 @@
-using Wibbo.Game.Clients;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class UserSettingsOldChatEvent : IPacketEvent
     {

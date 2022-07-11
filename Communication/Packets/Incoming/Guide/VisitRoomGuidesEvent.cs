@@ -1,7 +1,7 @@
-using Wibbo.Communication.Packets.Outgoing.Help;
-using Wibbo.Game.Clients;
+using WibboEmulator.Communication.Packets.Outgoing.Help;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Communication.Packets.Incoming.Guide
+namespace WibboEmulator.Communication.Packets.Incoming.Guide
 {
     internal class VisitRoomGuidesEvent : IPacketEvent
     {

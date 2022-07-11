@@ -1,12 +1,12 @@
 ﻿
-using Wibbo.Communication.Packets.Outgoing.Notifications.NotifCustom;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Rooms;
 using System.Data;
 using System.Diagnostics;
 
-namespace Wibbo.Game.Animation
+namespace WibboEmulator.Game.Animation
 {
     public class AnimationManager
     {

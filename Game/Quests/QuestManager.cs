@@ -1,12 +1,12 @@
-﻿using Wibbo.Communication.Packets.Incoming;
-using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
-using Wibbo.Communication.Packets.Outgoing.Quests;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Clients;
+﻿using WibboEmulator.Communication.Packets.Incoming;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Communication.Packets.Outgoing.Quests;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Clients;
 using System.Data;
 
-namespace Wibbo.Game.Quests
+namespace WibboEmulator.Game.Quests
 {
     public class QuestManager
     {

@@ -1,8 +1,8 @@
-using Wibbo.Game.Items;
-using Wibbo.Game.Items.Wired;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Game.Items;
+using WibboEmulator.Game.Items.Wired;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Engine
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class ObjectsComposer : ServerPacket
     {

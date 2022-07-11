@@ -1,7 +1,7 @@
-﻿using Wibbo.Game.Rooms;
-using Wibbo.Game.Clients;
+﻿using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class ForceSit : IChatCommand
     {

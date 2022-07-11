@@ -1,6 +1,6 @@
-using Wibbo.Database.Interfaces;
+using WibboEmulator.Database.Interfaces;
 
-namespace Wibbo.Database.Daos
+namespace WibboEmulator.Database.Daos
 {
     class EmulatorStatusDao
     {

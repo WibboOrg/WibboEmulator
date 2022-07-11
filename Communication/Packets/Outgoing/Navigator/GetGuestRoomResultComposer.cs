@@ -1,7 +1,7 @@
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Communication.Packets.Outgoing.Navigator
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
 {
     internal class GetGuestRoomResultComposer : ServerPacket
     {

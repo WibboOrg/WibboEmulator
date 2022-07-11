@@ -1,8 +1,8 @@
-﻿using Wibbo.Core;
+﻿using WibboEmulator.Core;
 using System.Net.Sockets;
 using System.Text;
 
-namespace Wibbo.Net
+namespace WibboEmulator.Net
 {
     public class RCONConnection
     {

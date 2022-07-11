@@ -1,9 +1,9 @@
-﻿using Wibbo.Core;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
+﻿using WibboEmulator.Core;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace Wibbo.Game.Users.Authenticator
+namespace WibboEmulator.Game.Users.Authenticator
 {
     public class UserFactory
     {

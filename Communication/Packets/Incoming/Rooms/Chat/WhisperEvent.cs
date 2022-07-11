@@ -1,11 +1,11 @@
-using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Chat.Styles;
-using Wibbo.Utilities;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Chat.Styles;
+using WibboEmulator.Utilities;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class WhisperEvent : IPacketEvent
     {

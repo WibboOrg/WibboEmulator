@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.LandingView.Promotions
+﻿namespace WibboEmulator.Game.LandingView.Promotions
 {
     public class Promotion
     {

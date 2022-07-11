@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wibbo.Core.FigureData.JsonObject
+namespace WibboEmulator.Core.FigureData.JsonObject
 {
     public class FigureDataRoot
     {

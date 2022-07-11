@@ -1,9 +1,9 @@
-using Wibbo.Communication.Packets.Outgoing.Moderation;
-using Wibbo.Game.Chat.Logs;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Game.Chat.Logs;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class GetModeratorRoomChatlogEvent : IPacketEvent
     {

@@ -1,6 +1,6 @@
-using Wibbo.Game.Users.Messenger;
+using WibboEmulator.Game.Users.Messenger;
 
-namespace Wibbo.Communication.Packets.Outgoing.Messenger
+namespace WibboEmulator.Communication.Packets.Outgoing.Messenger
 {
     internal class BuddyListComposer : ServerPacket
     {

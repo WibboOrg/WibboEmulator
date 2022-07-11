@@ -1,7 +1,7 @@
-using Wibbo.Game.Clients;
-using Wibbo.Game.Navigator;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Navigator;
 
-namespace Wibbo.Communication.Packets.Outgoing.Navigator.New
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator.New
 {
     internal class NavigatorSearchResultSetComposer : ServerPacket
     {

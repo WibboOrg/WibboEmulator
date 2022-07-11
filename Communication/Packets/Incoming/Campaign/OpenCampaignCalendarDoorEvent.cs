@@ -1,7 +1,7 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Campaign;
-using Wibbo.Game.Clients;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Campaign;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Communication.Packets.Incoming.Campaign
+namespace WibboEmulator.Communication.Packets.Incoming.Campaign
 {
     internal class OpenCampaignCalendarDoorEvent : IPacketEvent
     {

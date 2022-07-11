@@ -1,8 +1,8 @@
-﻿using Wibbo.Game.Clients;
-using Wibbo.Game.Items;
-using Wibbo.Game.Rooms;
+﻿using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Items;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Communication.Packets.Incoming.Televisions
+namespace WibboEmulator.Communication.Packets.Incoming.Televisions
 {
     internal class EditTvYoutubeEvent : IPacketEvent
     {

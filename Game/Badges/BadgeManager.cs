@@ -1,6 +1,6 @@
-﻿using Wibbo.Database.Interfaces;
+﻿using WibboEmulator.Database.Interfaces;
 
-namespace Wibbo.Game.Badges
+namespace WibboEmulator.Game.Badges
 {
     public class BadgeManager
     {

@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Rooms.Map.Movement
+﻿namespace WibboEmulator.Game.Rooms.Map.Movement
 {
     public enum MovementState
     {

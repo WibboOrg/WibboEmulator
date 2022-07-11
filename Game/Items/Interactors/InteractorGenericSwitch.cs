@@ -1,8 +1,8 @@
-﻿using Wibbo.Game.Clients;
-using Wibbo.Game.Quests;
-using Wibbo.Game.Rooms;
+﻿using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Quests;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Items.Interactors
+namespace WibboEmulator.Game.Items.Interactors
 {
     public class InteractorGenericSwitch : FurniInteractor
     {

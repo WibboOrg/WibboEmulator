@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Wibbo.Properties {
+namespace WibboEmulator.Properties {
     using System;
     
     

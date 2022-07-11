@@ -1,4 +1,4 @@
-﻿using Wibbo;
+﻿using WibboEmulator;
 using System.Collections;
 using System.Text;
 

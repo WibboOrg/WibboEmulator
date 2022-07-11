@@ -1,7 +1,7 @@
-﻿using Wibbo.Communication.RCON.Commands.Hotel;
-using Wibbo.Communication.RCON.Commands.User;
+﻿using WibboEmulator.Communication.RCON.Commands.Hotel;
+using WibboEmulator.Communication.RCON.Commands.User;
 
-namespace Wibbo.Communication.RCON.Commands
+namespace WibboEmulator.Communication.RCON.Commands
 {
     public class CommandManager
     {

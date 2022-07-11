@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Communication.Packets.Outgoing.Rooms.Polls
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Polls
 {
     internal class QuestionComposer : ServerPacket
     {

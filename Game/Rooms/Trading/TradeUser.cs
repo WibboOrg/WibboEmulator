@@ -1,7 +1,7 @@
-﻿using Wibbo.Game.Clients;
-using Wibbo.Game.Items;
+﻿using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Items;
 
-namespace Wibbo.Game.Rooms.Trading
+namespace WibboEmulator.Game.Rooms.Trading
 {
     public class TradeUser
     {

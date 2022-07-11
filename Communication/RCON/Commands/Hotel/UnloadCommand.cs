@@ -1,6 +1,6 @@
-﻿using Wibbo.Game.Rooms;
+﻿using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Communication.RCON.Commands.Hotel
+namespace WibboEmulator.Communication.RCON.Commands.Hotel
 {
     internal class UnloadCommand : IRCONCommand
     {

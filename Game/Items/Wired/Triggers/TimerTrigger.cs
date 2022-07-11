@@ -1,10 +1,10 @@
-﻿using Wibbo.Database.Interfaces;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Items.Wired.Interfaces;
+﻿using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Items.Wired.Interfaces;
 using System.Data;
-using Wibbo.Game.Rooms.Wired;
+using WibboEmulator.Game.Rooms.Wired;
 
-namespace Wibbo.Game.Items.Wired.Triggers
+namespace WibboEmulator.Game.Items.Wired.Triggers
 {
     public class TimerTrigger : WiredTriggerBase, IWired, IWiredCycleable
     {

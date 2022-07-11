@@ -1,5 +1,5 @@
-﻿using Wibbo.Core.FigureData.Types;
-using Wibbo.Core.FigureData.JsonObject;
+﻿using WibboEmulator.Core.FigureData.Types;
+using WibboEmulator.Core.FigureData.JsonObject;
 using System.Xml;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -7,7 +7,7 @@ using System.Xml.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Wibbo.Core.FigureData
+namespace WibboEmulator.Core.FigureData
 {
     public class FigureDataManager
     {

@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Quests
+namespace WibboEmulator.Communication.Packets.Outgoing.Quests
 {
     internal class QuestAbortedComposer : ServerPacket
     {

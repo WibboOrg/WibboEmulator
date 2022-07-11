@@ -1,7 +1,7 @@
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Users;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Users;
 
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Settings
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings
 {
     internal class RoomRightsListComposer : ServerPacket
     {

@@ -1,9 +1,9 @@
-using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms.Games;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms.Games;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class TransfBot : IChatCommand
     {

@@ -1,6 +1,6 @@
-using Wibbo.Game.Users;
+using WibboEmulator.Game.Users;
 
-namespace Wibbo.Communication.Packets.Outgoing.Help
+namespace WibboEmulator.Communication.Packets.Outgoing.Help
 {
     internal class OnGuideSessionStartedComposer : ServerPacket
     {

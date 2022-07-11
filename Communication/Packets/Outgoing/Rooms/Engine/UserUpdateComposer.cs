@@ -1,7 +1,7 @@
-using Wibbo.Game.Rooms;
+using WibboEmulator.Game.Rooms;
 using System.Text;
 
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Engine
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class UserUpdateComposer : ServerPacket
     {

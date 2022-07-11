@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Core.FigureData.Types
+﻿namespace WibboEmulator.Core.FigureData.Types
 {
     internal class FigureSet
     {

@@ -1,10 +1,10 @@
-using Wibbo.Communication.Packets.Outgoing.Groups;
+using WibboEmulator.Communication.Packets.Outgoing.Groups;
 
-using Wibbo.Game.Clients;
-using Wibbo.Game.Groups;
-using Wibbo.Game.Users;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Groups;
+using WibboEmulator.Game.Users;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class AcceptGroupMembershipEvent : IPacketEvent
     {

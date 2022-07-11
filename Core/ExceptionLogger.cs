@@ -1,7 +1,7 @@
 ﻿using ConsoleWriter;
 using System.Text;
 
-namespace Wibbo.Core
+namespace WibboEmulator.Core
 {
     public static class ExceptionLogger
     {

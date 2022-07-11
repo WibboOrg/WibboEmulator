@@ -1,4 +1,4 @@
-namespace Wibbo.Game.Rooms.Games
+namespace WibboEmulator.Game.Rooms.Games
 {
     public enum FreezePowerUp
     {

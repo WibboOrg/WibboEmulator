@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Inventory.Furni
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni
 {
     internal class FurniListRemoveComposer : ServerPacket
     {

@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Quests
+﻿namespace WibboEmulator.Game.Quests
 {
     public enum QuestType
     {

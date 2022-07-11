@@ -1,11 +1,11 @@
-﻿using Wibbo.Database.Interfaces;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Roleplay.Player;
-using Wibbo.Game.Rooms.Games;
-using Wibbo.Game.Items.Wired.Interfaces;
+﻿using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Roleplay.Player;
+using WibboEmulator.Game.Rooms.Games;
+using WibboEmulator.Game.Items.Wired.Interfaces;
 using System.Data;
 
-namespace Wibbo.Game.Items.Wired.Conditions
+namespace WibboEmulator.Game.Items.Wired.Conditions
 {
     public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
     {

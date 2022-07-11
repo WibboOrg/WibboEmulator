@@ -1,9 +1,9 @@
-using Wibbo.Communication.Packets.Outgoing;
-using Wibbo.Communication.Packets.Outgoing.Messenger;
-using Wibbo.Game.Clients;
-using Wibbo.Utilities;
+using WibboEmulator.Communication.Packets.Outgoing;
+using WibboEmulator.Communication.Packets.Outgoing.Messenger;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Utilities;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class SendRoomInviteEvent : IPacketEvent
     {

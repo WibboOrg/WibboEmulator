@@ -1,6 +1,6 @@
-﻿using Wibbo.Game.Items;
+﻿using WibboEmulator.Game.Items;
 
-namespace Wibbo.Game.Catalog
+namespace WibboEmulator.Game.Catalog
 {
     public class CatalogItem
     {

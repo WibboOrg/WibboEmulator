@@ -1,6 +1,6 @@
-﻿using Wibbo.Game.Users;
+﻿using WibboEmulator.Game.Users;
 
-namespace Wibbo.Communication.Packets.Outgoing.Groups
+namespace WibboEmulator.Communication.Packets.Outgoing.Groups
 {
     internal class GroupMemberUpdatedComposer : ServerPacket
     {

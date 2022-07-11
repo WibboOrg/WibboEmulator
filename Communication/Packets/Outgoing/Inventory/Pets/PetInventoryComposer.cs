@@ -1,6 +1,6 @@
-using Wibbo.Game.Pets;
+using WibboEmulator.Game.Pets;
 
-namespace Wibbo.Communication.Packets.Outgoing.Inventory.Pets
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets
 {
     internal class PetInventoryComposer : ServerPacket
     {

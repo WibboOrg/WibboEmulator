@@ -1,6 +1,6 @@
-﻿using Wibbo.Game.Moderation;
+﻿using WibboEmulator.Game.Moderation;
 
-namespace Wibbo.Communication.Packets.Outgoing
+namespace WibboEmulator.Communication.Packets.Outgoing
 {
     internal class CfhTopicsInitComposer : ServerPacket
     {

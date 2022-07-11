@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Utilities
+﻿namespace WibboEmulator.Utilities
 {
     static class UnixTimestamp
     {

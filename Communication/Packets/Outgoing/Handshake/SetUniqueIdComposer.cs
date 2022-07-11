@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Handshake
+namespace WibboEmulator.Communication.Packets.Outgoing.Handshake
 {
     internal class SetUniqueIdComposer : ServerPacket
     {

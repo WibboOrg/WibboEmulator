@@ -1,8 +1,8 @@
-﻿using Wibbo.Game.Groups;
-using Wibbo.Game.Items;
+﻿using WibboEmulator.Game.Groups;
+using WibboEmulator.Game.Items;
 using System.Drawing;
 
-namespace Wibbo.Game.Rooms
+namespace WibboEmulator.Game.Rooms
 {
     public class GameItemHandler
     {

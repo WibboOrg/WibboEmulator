@@ -1,10 +1,10 @@
-﻿using Wibbo.Database.Interfaces;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Rooms.Games;
-using Wibbo.Game.Items.Wired.Interfaces;
+﻿using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Rooms.Games;
+using WibboEmulator.Game.Items.Wired.Interfaces;
 using System.Data;
 
-namespace Wibbo.Game.Items.Wired.Actions
+namespace WibboEmulator.Game.Items.Wired.Actions
 {
     public class GiveScore : WiredActionBase, IWiredEffect, IWired
     {

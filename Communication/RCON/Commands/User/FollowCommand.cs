@@ -1,9 +1,9 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Navigator;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Communication.RCON.Commands.User
+namespace WibboEmulator.Communication.RCON.Commands.User
 {
     internal class FollowCommand : IRCONCommand
     {

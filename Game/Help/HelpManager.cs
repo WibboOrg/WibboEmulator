@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Help
+﻿namespace WibboEmulator.Game.Help
 {
     public class HelpManager
     {

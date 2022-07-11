@@ -1,8 +1,8 @@
-﻿using Wibbo.Communication.RCON.Commands;
+﻿using WibboEmulator.Communication.RCON.Commands;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Wibbo.Net
+namespace WibboEmulator.Net
 {
     public class RCONSocket
     {

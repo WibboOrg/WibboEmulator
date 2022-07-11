@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Navigator
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
 {
     internal class FlatCreatedComposer : ServerPacket
     {

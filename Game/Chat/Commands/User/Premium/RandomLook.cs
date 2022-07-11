@@ -1,12 +1,12 @@
-using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms.Games;
-using Wibbo.Game.Rooms;
-using Wibbo.Communication.Packets.Outgoing.Avatar;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms.Games;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Communication.Packets.Outgoing.Avatar;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class RandomLook : IChatCommand
     {

@@ -1,6 +1,6 @@
-﻿using Wibbo.Communication.Interfaces;
+﻿using WibboEmulator.Communication.Interfaces;
 
-namespace Wibbo.Utilities
+namespace WibboEmulator.Utilities
 {
     public class ServerPacketList
     {
