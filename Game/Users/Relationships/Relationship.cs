@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Users.Relationships
+﻿namespace WibboEmulator.Game.Users.Relationships
 {
     public class Relationship
     {

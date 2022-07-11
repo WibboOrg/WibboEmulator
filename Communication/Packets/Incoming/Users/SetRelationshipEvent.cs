@@ -1,9 +1,9 @@
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Users.Relationships;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Users.Relationships;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class SetRelationshipEvent : IPacketEvent
     {

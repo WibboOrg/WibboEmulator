@@ -1,6 +1,6 @@
-﻿using Wibbo.Database.Interfaces;
+﻿using WibboEmulator.Database.Interfaces;
 
-namespace Wibbo.Database.Adapter
+namespace WibboEmulator.Database.Adapter
 {
     public class NormaldbClient : QueryAdapter, IQueryAdapter, IRegularQueryAdapter, IDisposable
     {

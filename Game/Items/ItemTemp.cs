@@ -1,6 +1,6 @@
-﻿using Wibbo.Game.Rooms.Map.Movement;
+﻿using WibboEmulator.Game.Rooms.Map.Movement;
 
-namespace Wibbo.Game.Items
+namespace WibboEmulator.Game.Items
 {
     public class ItemTemp : IEquatable<ItemTemp>
     {

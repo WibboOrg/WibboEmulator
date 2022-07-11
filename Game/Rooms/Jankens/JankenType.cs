@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Rooms.Jankens
+﻿namespace WibboEmulator.Game.Rooms.Jankens
 {
     public enum JankenType
     {

@@ -1,7 +1,7 @@
-﻿using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
+﻿using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Items.Wired
+namespace WibboEmulator.Game.Items.Wired
 {
     public class WiredBase
     {

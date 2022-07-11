@@ -1,9 +1,9 @@
-using Wibbo.Communication.Packets.Outgoing.Messenger;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Users.Messenger;
-using Wibbo.Utilities;
+using WibboEmulator.Communication.Packets.Outgoing.Messenger;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Users.Messenger;
+using WibboEmulator.Utilities;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class UserSearchEvent : IPacketEvent
     {

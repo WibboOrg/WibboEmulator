@@ -1,8 +1,8 @@
-using Wibbo.Communication.Packets.Outgoing.Help;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Help;
+using WibboEmulator.Communication.Packets.Outgoing.Help;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Help;
 
-namespace Wibbo.Communication.Packets.Incoming.Guide
+namespace WibboEmulator.Communication.Packets.Incoming.Guide
 {
     internal class OnGuideEvent : IPacketEvent
     {

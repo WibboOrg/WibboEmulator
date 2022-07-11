@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Communication.Packets.Outgoing.WibboTool
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.WibboTool
 {
     internal class AddChatlogsComposer : ServerPacket
     {

@@ -1,7 +1,7 @@
-using Wibbo.Game.Clients;
-using Wibbo.Game.Users.Messenger;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Users.Messenger;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class AcceptBuddyEvent : IPacketEvent
     {

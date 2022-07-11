@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 
-namespace Wibbo.Database.Interfaces
+namespace WibboEmulator.Database.Interfaces
 {
     public interface IDatabaseClient : IDisposable
     {

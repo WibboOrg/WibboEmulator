@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Notifications
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications
 {
     internal class RoomNotificationComposer : ServerPacket
     {

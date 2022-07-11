@@ -1,12 +1,12 @@
-using Wibbo.Communication.Packets.Outgoing.Inventory.Bots;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Rooms.AI;
-using Wibbo.Game.Users.Inventory.Bots;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Rooms.AI;
+using WibboEmulator.Game.Users.Inventory.Bots;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class PlaceBotEvent : IPacketEvent
     {

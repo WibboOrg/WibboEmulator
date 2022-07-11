@@ -1,7 +1,7 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Inventory.Purse;
-using Wibbo.Game.Clients;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Communication.RCON.Commands.User
+namespace WibboEmulator.Communication.RCON.Commands.User
 {
     internal class UpdateLimitCoinsCommand : IRCONCommand
     {

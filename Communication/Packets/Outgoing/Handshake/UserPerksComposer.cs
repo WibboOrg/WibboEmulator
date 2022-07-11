@@ -1,6 +1,6 @@
-using Wibbo.Game.Users;
+using WibboEmulator.Game.Users;
 
-namespace Wibbo.Communication.Packets.Outgoing.Handshake
+namespace WibboEmulator.Communication.Packets.Outgoing.Handshake
 {
     internal class UserPerksComposer : ServerPacket
     {

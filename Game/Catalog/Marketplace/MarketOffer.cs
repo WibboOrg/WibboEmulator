@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Catalog.Marketplace
+﻿namespace WibboEmulator.Game.Catalog.Marketplace
 {
     public class MarketOffer
     {

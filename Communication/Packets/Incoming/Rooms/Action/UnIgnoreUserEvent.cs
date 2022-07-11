@@ -1,8 +1,8 @@
-using Wibbo.Communication.Packets.Outgoing.Rooms.Action;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Users;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Users;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class UnIgnoreUserEvent : IPacketEvent
     {

@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Engine
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class ItemRemoveComposer : ServerPacket
     {

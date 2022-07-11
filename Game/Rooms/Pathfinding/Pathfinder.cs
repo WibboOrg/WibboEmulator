@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Rooms.PathFinding
+﻿namespace WibboEmulator.Game.Rooms.PathFinding
 {
     public static class Pathfinder
     {

@@ -1,7 +1,7 @@
-﻿using Wibbo.Communication.Interfaces;
+﻿using WibboEmulator.Communication.Interfaces;
 using System.Text;
 
-namespace Wibbo.Communication.Packets.Outgoing
+namespace WibboEmulator.Communication.Packets.Outgoing
 {
     public class ServerPacket : IServerPacket
     {

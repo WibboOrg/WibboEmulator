@@ -1,6 +1,6 @@
-﻿using Wibbo.Game.Clients;
+﻿using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Communication.RCON.Commands.User
+namespace WibboEmulator.Communication.RCON.Commands.User
 {
     internal class SignOutCommand : IRCONCommand
     {

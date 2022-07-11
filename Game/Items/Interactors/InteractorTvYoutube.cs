@@ -1,8 +1,8 @@
 ﻿
-using Wibbo.Communication.Packets.Outgoing.Televisions;
-using Wibbo.Game.Clients;
+using WibboEmulator.Communication.Packets.Outgoing.Televisions;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Game.Items.Interactors
+namespace WibboEmulator.Game.Items.Interactors
 {
     public class InteractorTvYoutube : FurniInteractor
     {

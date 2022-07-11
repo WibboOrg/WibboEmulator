@@ -1,6 +1,6 @@
-﻿using Wibbo.Utilities.Events;
+﻿using WibboEmulator.Utilities.Events;
 
-namespace Wibbo.Game.Rooms
+namespace WibboEmulator.Game.Rooms
 {
     public delegate void TeamScoreChangedDelegate(object sender, TeamScoreChangedArgs e);
 }

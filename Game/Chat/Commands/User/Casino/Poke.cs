@@ -1,8 +1,8 @@
-﻿using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Rooms.Games;
+﻿using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Rooms.Games;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class Poke : IChatCommand
     {

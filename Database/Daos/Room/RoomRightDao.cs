@@ -1,8 +1,8 @@
-using Wibbo.Database.Interfaces;
+using WibboEmulator.Database.Interfaces;
 using System.Data;
 using System.Text;
 
-namespace Wibbo.Database.Daos
+namespace WibboEmulator.Database.Daos
 {
     class RoomRightDao
     {

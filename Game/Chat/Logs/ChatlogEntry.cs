@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Chat.Logs
+﻿namespace WibboEmulator.Game.Chat.Logs
 {
     public class ChatlogEntry
     {

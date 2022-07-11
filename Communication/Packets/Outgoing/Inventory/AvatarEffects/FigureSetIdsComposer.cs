@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Communication.Packets.Outgoing.Inventory.AvatarEffects
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects
 {
     internal class FigureSetIdsComposer : ServerPacket
     {

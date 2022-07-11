@@ -1,7 +1,7 @@
-using Wibbo.Game.Clients;
-using Wibbo.Game.Quests;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Quests;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class RequestBuddyEvent : IPacketEvent
     {

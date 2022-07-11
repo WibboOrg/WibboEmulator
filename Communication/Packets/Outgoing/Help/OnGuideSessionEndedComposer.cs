@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Help
+namespace WibboEmulator.Communication.Packets.Outgoing.Help
 {
     internal class OnGuideSessionEndedComposer : ServerPacket
     {

@@ -1,8 +1,8 @@
-﻿using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
+﻿using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace Wibbo.Game.Chat.Styles
+namespace WibboEmulator.Game.Chat.Styles
 {
     public sealed class ChatStyleManager
     {

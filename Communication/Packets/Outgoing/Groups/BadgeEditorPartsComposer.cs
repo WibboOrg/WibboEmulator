@@ -1,6 +1,6 @@
-using Wibbo.Game.Groups;
+using WibboEmulator.Game.Groups;
 
-namespace Wibbo.Communication.Packets.Outgoing.Groups
+namespace WibboEmulator.Communication.Packets.Outgoing.Groups
 {
     internal class BadgeEditorPartsComposer : ServerPacket
     {

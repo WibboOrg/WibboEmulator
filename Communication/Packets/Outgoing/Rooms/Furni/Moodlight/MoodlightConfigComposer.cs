@@ -1,6 +1,6 @@
-using Wibbo.Game.Rooms.Moodlight;
+using WibboEmulator.Game.Rooms.Moodlight;
 
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Furni.Moodlight
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Moodlight
 {
     internal class MoodlightConfigComposer : ServerPacket
     {

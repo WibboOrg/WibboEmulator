@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Communication.RCON.Commands
+﻿namespace WibboEmulator.Communication.RCON.Commands
 {
     public interface IRCONCommand
     {

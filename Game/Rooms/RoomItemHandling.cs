@@ -1,21 +1,21 @@
-﻿using Wibbo.Communication.Packets.Outgoing;
-using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+﻿using WibboEmulator.Communication.Packets.Outgoing;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 
-using Wibbo.Core;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Items;
-using Wibbo.Game.Items.Wired;
-using Wibbo.Game.Rooms.Map.Movement;
-using Wibbo.Game.Rooms.Moodlight;
-using Wibbo.Game.Rooms.PathFinding;
-using Wibbo.Utilities;
+using WibboEmulator.Core;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Items;
+using WibboEmulator.Game.Items.Wired;
+using WibboEmulator.Game.Rooms.Map.Movement;
+using WibboEmulator.Game.Rooms.Moodlight;
+using WibboEmulator.Game.Rooms.PathFinding;
+using WibboEmulator.Utilities;
 using System.Collections.Concurrent;
 using System.Data;
 using System.Drawing;
 
-namespace Wibbo.Game.Rooms
+namespace WibboEmulator.Game.Rooms
 {
     public class RoomItemHandling
     {

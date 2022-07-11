@@ -1,8 +1,8 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Rooms.Wireds;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Items.Wired
+namespace WibboEmulator.Game.Items.Wired
 {
     public class WiredTriggerBase : WiredBase
     {

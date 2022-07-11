@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Roleplay.Item
+﻿namespace WibboEmulator.Game.Roleplay.Item
 {
     public enum RPItemCategory
     {

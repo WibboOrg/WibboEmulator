@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Messenger
+namespace WibboEmulator.Communication.Packets.Outgoing.Messenger
 {
     internal class RoomInviteComposer : ServerPacket
     {

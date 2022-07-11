@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Users.Wardrobes
+﻿namespace WibboEmulator.Game.Users.Wardrobes
 {
     public class Wardrobe
     {

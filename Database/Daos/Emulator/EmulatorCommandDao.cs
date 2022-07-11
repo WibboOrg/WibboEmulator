@@ -1,7 +1,7 @@
-using Wibbo.Database.Interfaces;
+using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace Wibbo.Database.Daos
+namespace WibboEmulator.Database.Daos
 {
     class EmulatorCommandDao
     {

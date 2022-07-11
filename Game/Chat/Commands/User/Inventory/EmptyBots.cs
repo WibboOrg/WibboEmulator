@@ -1,8 +1,8 @@
-using Wibbo.Communication.Packets.Outgoing.Inventory.Bots;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Clients;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class EmptyBots : IChatCommand
     {

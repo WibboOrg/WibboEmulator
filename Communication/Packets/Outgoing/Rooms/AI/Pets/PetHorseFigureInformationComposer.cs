@@ -1,6 +1,6 @@
-using Wibbo.Game.Rooms;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.AI.Pets
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets
 {
     internal class PetHorseFigureInformationComposer : ServerPacket
     {

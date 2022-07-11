@@ -1,8 +1,8 @@
-using Wibbo.Communication.Packets.Outgoing.Catalog;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Items;
+using WibboEmulator.Communication.Packets.Outgoing.Catalog;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Items;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class GetSellablePetBreedsEvent : IPacketEvent
     {

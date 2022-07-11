@@ -1,8 +1,8 @@
-using Wibbo.Communication.Packets.Outgoing.Rooms.Chat;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Communication.Packets.Incoming.Structure
+namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class StartTypingEvent : IPacketEvent
     {

@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Rooms.Utils
+﻿namespace WibboEmulator.Game.Rooms.Utils
 {
     internal static class TransformUtility
     {

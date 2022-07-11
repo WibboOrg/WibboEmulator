@@ -1,4 +1,4 @@
-﻿namespace Wibbo.Game.Items
+﻿namespace WibboEmulator.Game.Items
 {
     public class ItemData
     {

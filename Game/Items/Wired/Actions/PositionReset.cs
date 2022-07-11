@@ -1,10 +1,10 @@
-﻿using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Items.Wired.Interfaces;
+﻿using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Items.Wired.Interfaces;
 using System.Data;
 
-namespace Wibbo.Game.Items.Wired.Actions
+namespace WibboEmulator.Game.Items.Wired.Actions
 {
     public class PositionReset : WiredActionBase, IWired, IWiredEffect
     {

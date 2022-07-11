@@ -1,7 +1,7 @@
-﻿using Wibbo.Communication.Packets.Incoming;
-using Wibbo.Game.Clients;
+﻿using WibboEmulator.Communication.Packets.Incoming;
+using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Communication.Packets
+namespace WibboEmulator.Communication.Packets
 {
     public interface IPacketEvent
     {

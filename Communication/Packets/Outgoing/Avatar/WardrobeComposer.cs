@@ -1,6 +1,6 @@
-using Wibbo.Game.Users.Wardrobes;
+using WibboEmulator.Game.Users.Wardrobes;
 
-namespace Wibbo.Communication.Packets.Outgoing.Avatar
+namespace WibboEmulator.Communication.Packets.Outgoing.Avatar
 {
     internal class WardrobeComposer : ServerPacket
     {

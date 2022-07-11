@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Rooms.Action
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Action
 {
     internal class IgnoreStatusComposer : ServerPacket
     {

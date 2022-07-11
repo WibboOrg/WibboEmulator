@@ -1,7 +1,7 @@
-﻿using Wibbo.Game.Items;
-using Wibbo.Game.Rooms;
+﻿using WibboEmulator.Game.Items;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Utilities.Events
+namespace WibboEmulator.Utilities.Events
 {
     public class ItemTriggeredArgs : EventArgs
     {

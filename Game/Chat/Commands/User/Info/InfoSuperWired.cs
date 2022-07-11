@@ -1,9 +1,9 @@
-using Wibbo.Communication.Packets.Outgoing.Notifications;
+using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 
-using Wibbo.Game.Clients;
-using Wibbo.Game.Rooms;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
 
-namespace Wibbo.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class InfoSuperWired : IChatCommand
     {

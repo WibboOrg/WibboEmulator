@@ -1,6 +1,6 @@
-using Wibbo.Game.Groups;
+using WibboEmulator.Game.Groups;
 
-namespace Wibbo.Communication.Packets.Outgoing.Users
+namespace WibboEmulator.Communication.Packets.Outgoing.Users
 {
     internal class UserGroupBadgesComposer : ServerPacket
     {

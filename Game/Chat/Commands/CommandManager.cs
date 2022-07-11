@@ -1,14 +1,14 @@
-﻿using Wibbo.Core;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Chat.Commands.Cmd;
+﻿using WibboEmulator.Core;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Chat.Commands.Cmd;
 using System.Data;
 using System.Text;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Permissions;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Permissions;
 
-namespace Wibbo.Game.Chat.Commands
+namespace WibboEmulator.Game.Chat.Commands
 {
     public class CommandManager
     {

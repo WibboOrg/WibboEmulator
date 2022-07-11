@@ -1,6 +1,6 @@
-using Wibbo.Game.Items;
+using WibboEmulator.Game.Items;
 
-namespace Wibbo.Communication.Packets.Outgoing.Inventory.Trading
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading
 {
     internal class TradingUpdateComposer : ServerPacket
     {

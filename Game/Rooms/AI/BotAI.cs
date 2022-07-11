@@ -1,6 +1,6 @@
-﻿using Wibbo.Game.Clients;
+﻿using WibboEmulator.Game.Clients;
 
-namespace Wibbo.Game.Rooms.AI
+namespace WibboEmulator.Game.Rooms.AI
 {
     public abstract class BotAI
     {

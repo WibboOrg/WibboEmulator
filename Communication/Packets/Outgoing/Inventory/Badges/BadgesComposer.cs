@@ -1,6 +1,6 @@
-using Wibbo.Game.Users.Badges;
+using WibboEmulator.Game.Users.Badges;
 
-namespace Wibbo.Communication.Packets.Outgoing.Inventory.Badges
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges
 {
     internal class BadgesComposer : ServerPacket
     {

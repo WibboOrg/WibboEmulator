@@ -1,4 +1,4 @@
-namespace Wibbo.Communication.Packets.Outgoing.Inventory.Purse
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse
 {
     internal class ActivityPointsComposer : ServerPacket
     {

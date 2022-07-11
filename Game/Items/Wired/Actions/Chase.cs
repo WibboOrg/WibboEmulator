@@ -1,12 +1,12 @@
-﻿using Wibbo.Database.Interfaces;
-using Wibbo.Game.Rooms;
-using Wibbo.Game.Rooms.Map.Movement;
-using Wibbo.Game.Items.Wired.Interfaces;
+﻿using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Rooms;
+using WibboEmulator.Game.Rooms.Map.Movement;
+using WibboEmulator.Game.Items.Wired.Interfaces;
 using System.Data;
 using System.Drawing;
-using Wibbo.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 
-namespace Wibbo.Game.Items.Wired.Actions
+namespace WibboEmulator.Game.Items.Wired.Actions
 {
     public class Chase : WiredActionBase, IWiredEffect, IWired
     {

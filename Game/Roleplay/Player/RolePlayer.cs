@@ -1,16 +1,16 @@
-﻿using Wibbo.Communication.Interfaces;
-using Wibbo.Communication.Packets.Outgoing.RolePlay;
-using Wibbo.Communication.Packets.Outgoing.Rooms.Session;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Items;
-using Wibbo.Game.Roleplay.Weapon;
-using Wibbo.Game.Rooms;
+﻿using WibboEmulator.Communication.Interfaces;
+using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Items;
+using WibboEmulator.Game.Roleplay.Weapon;
+using WibboEmulator.Game.Rooms;
 using System.Collections.Concurrent;
 using System.Data;
 
-namespace Wibbo.Game.Roleplay.Player
+namespace WibboEmulator.Game.Roleplay.Player
 {
     public class RolePlayer
     {

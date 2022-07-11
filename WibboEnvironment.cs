@@ -1,20 +1,20 @@
-﻿using Wibbo.Communication.Packets.Outgoing.Moderation;
-using Wibbo.Communication.WebSocket;
-using Wibbo.Core;
-using Wibbo.Core.FigureData;
-using Wibbo.Database;
-using Wibbo.Database.Daos;
-using Wibbo.Database.Interfaces;
-using Wibbo.Game;
-using Wibbo.Game.Clients;
-using Wibbo.Game.Users;
-using Wibbo.Game.Users.Authenticator;
-using Wibbo.Net;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Communication.WebSocket;
+using WibboEmulator.Core;
+using WibboEmulator.Core.FigureData;
+using WibboEmulator.Database;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Game;
+using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Users;
+using WibboEmulator.Game.Users.Authenticator;
+using WibboEmulator.Net;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Wibbo
+namespace WibboEmulator
 {
     public static class WibboEnvironment
     {
