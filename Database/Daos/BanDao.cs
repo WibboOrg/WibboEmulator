@@ -19,7 +19,7 @@ namespace WibboEmulator.Database.Daos
 
         internal static double GetOneIgnoreAll(IQueryAdapter dbClient, string username)
         {
-            dbClient.SetQuery("SELECT `expire` FROM `ban` WHERE `bantype` = 'ignoreall' AND `value` = @username");
+            dbClient.SetQuery("SELECT `expire` FROM `ban` WHERE `bantype` = 'ignoreall' AND `value` = @username LIMIT 1");
             dbClient.AddParameter("username", username);
 
             DataRow row = dbClient.GetRow();

@@ -14,13 +14,13 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
-            if (TargetUser == null || TargetUser.GetUser() == null)
+            Client targetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (targetUser == null || targetUser.GetUser() == null)
             {
                 return;
             }
 
-            if (TargetUser.GetUser().Rank >= Session.GetUser().Rank)
+            if (targetUser.GetUser().Rank >= Session.GetUser().Rank)
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
                 return;
@@ -39,13 +39,18 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             }
 
             double expireTime = WibboEnvironment.GetUnixTimestamp() + lengthSeconds;
-
             string reason = CommandManager.MergeParams(Params, 3);
 
-            TargetUser.GetUser().IgnoreAllExpireTime = expireTime;
-
             using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            BanDao.InsertBan(dbClient, expireTime, "ignoreall", TargetUser.GetUser().Username, reason, Session.GetUser().Username);
+            double isIgnoreall = BanDao.GetOneIgnoreAll(dbClient, targetUser.GetUser().Username);
+            if (isIgnoreall == 0)
+            {
+                BanDao.InsertBan(dbClient, expireTime, "ignoreall", targetUser.GetUser().Username, reason, Session.GetUser().Username);
+            }
+
+            targetUser.GetUser().IgnoreAllExpireTime = expireTime;
+
+            Session.SendWhisper("Tu as ignoreall " + targetUser.GetUser().Username + " pour " + reason + "!");
         }
     }
 }
