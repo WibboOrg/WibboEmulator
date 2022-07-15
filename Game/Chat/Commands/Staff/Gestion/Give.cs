@@ -71,7 +71,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                                 break;
                             }
                         }
-                    }
+                    } 
 
                 case "limitcoins":
                 case "ltc":
@@ -87,7 +87,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                             if (int.TryParse(Params[3], out Amount))
                             {
                                 TargetUser.GetUser().WibboPoints += Amount;
-                                TargetUser.SendPacket(new ActivityPointNotificationComposer(TargetUser.GetUser().WibboPoints, 0, 55));
+                                TargetUser.SendPacket(new ActivityPointNotificationComposer(TargetUser.GetUser().LimitCoins, 0, 55));
 
                                 if (TargetUser.GetUser().Id != Session.GetUser().Id)
                                     TargetUser.SendNotification(Session.GetUser().Username + " t'a donné " + Amount.ToString() + " Limit'Coin(s)!");
