@@ -330,7 +330,7 @@ namespace WibboEmulator.Game.Users
                 return;
             }
 
-            if (!this.GetClient().GetUser().HasFuse("fuse_mod") && room.UserIsBanned(this.GetClient().GetUser().Id))
+            if (!this.GetClient().GetUser().HasPermission("perm_mod") && room.UserIsBanned(this.GetClient().GetUser().Id))
             {
                 if (room.HasBanExpired(this.GetClient().GetUser().Id))
                 {
@@ -345,7 +345,7 @@ namespace WibboEmulator.Game.Users
                 }
             }
 
-            if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.GetClient().GetUser().HasFuse("fuse_enter_full_rooms") && !this.GetClient().GetUser().HasFuse("fuse_enter_full_rooms"))
+            if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.GetClient().GetUser().HasPermission("perm_enter_full_rooms") && !this.GetClient().GetUser().HasPermission("perm_enter_full_rooms"))
             {
                 if (room.CloseFullRoom)
                 {
@@ -366,7 +366,7 @@ namespace WibboEmulator.Game.Users
 
             if (this.GetClient().GetUser().Rank < 8)
             {
-                if (!(this.GetClient().GetUser().HasFuse("fuse_enter_any_room") && !OwnerEnterNotAllowed.Any(x => x == room.RoomData.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID == room.Id))
+                if (!(this.GetClient().GetUser().HasPermission("perm_access_apartments") && !OwnerEnterNotAllowed.Any(x => x == room.RoomData.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID == room.Id))
                 {
                     if (room.RoomData.State == 1 && (!override_doorbell && !room.CheckRights(this.GetClient())))
                     {
@@ -447,7 +447,7 @@ namespace WibboEmulator.Game.Users
             return true;
         }
 
-        public bool HasExactFuse(string Fuse)
+        public bool HasExactPermission(string Fuse)
         {
             if (WibboEnvironment.GetGame().GetPermissionManager().RankExactRight(this.Rank, Fuse))
             {
@@ -457,7 +457,7 @@ namespace WibboEmulator.Game.Users
             return false;
         }
 
-        public bool HasFuse(string Fuse)
+        public bool HasPermission(string Fuse)
         {
             if (WibboEnvironment.GetGame().GetPermissionManager().RankHasRight(this.Rank, Fuse))
             {
@@ -478,7 +478,7 @@ namespace WibboEmulator.Game.Users
 
             WibboEnvironment.GetGame().GetClientManager().UnregisterClient(this.Id, this.Username);
 
-            if (this.HasFuse("fuse_mod"))
+            if (this.HasPermission("perm_mod"))
             {
                 WibboEnvironment.GetGame().GetClientManager().RemoveUserStaff(this.Id);
             }

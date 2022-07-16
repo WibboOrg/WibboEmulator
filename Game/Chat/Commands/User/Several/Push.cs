@@ -52,7 +52,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (TargetRoomUser.GetClient().GetUser().PremiumProtect && !Session.GetUser().HasFuse("fuse_mod"))
+            if (TargetRoomUser.GetClient().GetUser().PremiumProtect && !Session.GetUser().HasPermission("perm_mod"))
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
                 return;

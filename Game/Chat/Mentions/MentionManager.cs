@@ -79,7 +79,7 @@ namespace WibboEmulator.Game.Chat.Mentions
                 return false;
             }
 
-            if (!TargetClient.GetUser().GetMessenger().FriendshipExists(Session.GetUser().Id) && !Session.GetUser().HasFuse("fuse_mention"))
+            if (!TargetClient.GetUser().GetMessenger().FriendshipExists(Session.GetUser().Id) && !Session.GetUser().HasPermission("perm_mention"))
             {
                 Session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Tu as besoin d'être ami avec {TargetUsername} pour pouvoir le taguer"));
                 return false;

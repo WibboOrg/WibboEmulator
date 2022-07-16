@@ -12,7 +12,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
             int.TryParse(Params[1], out int MaxUsers);
 
-            if ((MaxUsers > 75 || MaxUsers <= 0) && !Session.GetUser().HasFuse("fuse_mod"))
+            if ((MaxUsers > 75 || MaxUsers <= 0) && !Session.GetUser().HasPermission("perm_mod"))
             {
                 Room.SetMaxUsers(75);
             }

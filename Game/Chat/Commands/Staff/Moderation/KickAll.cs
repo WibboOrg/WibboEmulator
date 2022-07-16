@@ -17,7 +17,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             List<RoomUser> local_1 = new List<RoomUser>();
             foreach (RoomUser user in room.GetRoomUserManager().GetUserList().ToList())
             {
-                if (!user.IsBot && !user.GetClient().GetUser().HasFuse("fuse_no_kick") && Session.GetUser().Id != user.GetClient().GetUser().Id)
+                if (!user.IsBot && !user.GetClient().GetUser().HasPermission("perm_no_kick") && Session.GetUser().Id != user.GetClient().GetUser().Id)
                 {
                     user.GetClient().SendNotification("Tu as été exclu de cet appart.");
 

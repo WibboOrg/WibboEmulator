@@ -25,7 +25,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 List<RoomUser> userKick = new List<RoomUser>();
                 foreach (RoomUser user in currentRoom.GetRoomUserManager().GetUserList().ToList())
                 {
-                    if (user != null && !user.IsBot && !user.GetClient().GetUser().HasFuse("fuse_mod") && user.GetClient().GetUser().Id != Session.GetUser().Id)
+                    if (user != null && !user.IsBot && !user.GetClient().GetUser().HasPermission("perm_mod") && user.GetClient().GetUser().Id != Session.GetUser().Id)
                     {
                         userKick.Add(user);
                     }

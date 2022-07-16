@@ -19,13 +19,13 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Group.CreatorId != Session.GetUser().Id && !Session.GetUser().HasFuse("group_delete_override"))
+            if (Group.CreatorId != Session.GetUser().Id && !Session.GetUser().HasPermission("perm_delete_group"))
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.1", Session.Langue));
                 return;
             }
 
-            if (Group.MemberCount >= 100 && !Session.GetUser().HasFuse("group_delete_limit_override"))
+            if (Group.MemberCount >= 100 && !Session.GetUser().HasPermission("perm_delete_group_limit"))
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.2", Session.Langue));
                 return;

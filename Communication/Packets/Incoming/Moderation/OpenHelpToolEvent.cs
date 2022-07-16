@@ -9,7 +9,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session.GetUser() == null || Session.GetUser().HasFuse("fuse_helptool"))
+            if (Session.GetUser() == null || Session.GetUser().HasPermission("perm_helptool"))
                 return;
 
             Session.SendPacket(new OpenHelpToolComposer(0));

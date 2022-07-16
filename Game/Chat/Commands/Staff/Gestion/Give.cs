@@ -16,7 +16,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 case "coins":
                 case "credits":
                     {
-                        if (!Session.GetUser().HasFuse("fuse_give_credits"))
+                        if (!Session.GetUser().HasPermission("perm_give_credits"))
                         {
                             Session.SendWhisper("Désolé, vous n'avez pas la permission...");
                             break;
@@ -46,7 +46,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 case "wbpts":
                 case "wp":
                     {
-                        if (!Session.GetUser().HasFuse("fuse_give_wibbopoints")) //only Jason
+                        if (!Session.GetUser().HasPermission("perm_give_wibbopoints")) //only Jason
                         {
                             Session.SendWhisper("Désolé, vous n'avez pas la permission...");
                             break;
@@ -76,7 +76,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 case "limitcoins":
                 case "ltc":
                     {
-                        if (!Session.GetUser().HasFuse("fuse_give_limitcoins")) // only Jason
+                        if (!Session.GetUser().HasPermission("perm_give_limitcoins")) // only Jason
                         {
                             Session.SendWhisper("Désolé, vous n'avez pas la permission...");
                             break;

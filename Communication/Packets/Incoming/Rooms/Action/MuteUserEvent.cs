@@ -27,7 +27,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             int Time = Packet.PopInt() * 60;
 
-            if (roomUserByUserId == null || roomUserByUserId.IsBot || (room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasFuse("fuse_mod") || roomUserByUserId.GetClient().GetUser().HasFuse("fuse_no_mute")))
+            if (roomUserByUserId == null || roomUserByUserId.IsBot || (room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_mod") || roomUserByUserId.GetClient().GetUser().HasPermission("fuse_no_mute")))
             {
                 return;
             }

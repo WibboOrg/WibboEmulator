@@ -483,7 +483,7 @@ namespace WibboEmulator.Game.Rooms
                 {
                     foreach (RoomUser StaffUser in roomUserByRank)
                     {
-                        if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetUser() != null && StaffUser.GetClient().GetUser().HasFuse("fuse_see_invisible")))
+                        if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetUser() != null && StaffUser.GetClient().GetUser().HasPermission("perm_show_invisible")))
                         {
                             StaffUser.SendWhisperChat(User.GetUsername() + " est entré dans l'appart en mode invisible !", true);
                         }
@@ -689,8 +689,7 @@ namespace WibboEmulator.Game.Rooms
                     {
                         foreach (RoomUser StaffUser in roomUserByRank)
                         {
-                            if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetUser() != null && StaffUser.GetClient().GetUser().HasFuse("fuse_see_invisible")))
-                            /// UPDATE `emulator_fuseright` SET `fuse`='fuse_see_invisible' WHERE  `id`=20;
+                            if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetUser() != null && StaffUser.GetClient().GetUser().HasPermission("perm_show_invisible")))
                             {
                                 StaffUser.SendWhisperChat(User.GetUsername() + " était en mode invisible. Il vient de partir de l'appartement.", true);
                             }

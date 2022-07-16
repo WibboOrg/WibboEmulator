@@ -3,11 +3,11 @@ using System.Data;
 
 namespace WibboEmulator.Database.Daos
 {
-    class EmulatorFuserightDao
+    class EmulatorPermissionDao
     {
         internal static DataTable GetAll(IQueryAdapter dbClient)
         {
-            dbClient.SetQuery("SELECT `fuse`, `rank` FROM `emulator_fuseright`");
+            dbClient.SetQuery("SELECT `fuse`, `rank` FROM `emulator_permission`");
             return dbClient.GetTable();
         }
     }

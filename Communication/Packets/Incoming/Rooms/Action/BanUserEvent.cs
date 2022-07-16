@@ -43,7 +43,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
                 Time = 429496729;
             }
-            if (roomUserByUserId == null || roomUserByUserId.IsBot || (room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasFuse("fuse_kickban")))
+            if (roomUserByUserId == null || roomUserByUserId.IsBot || (room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_kick")))
             {
                 return;
             }

@@ -404,7 +404,7 @@ namespace WibboEmulator.Game.Rooms
             List<RoomUser> list = new List<RoomUser>();
             foreach (RoomUser roomUser in this._roomUserManager.GetUserList().ToList())
             {
-                if (!roomUser.IsBot && !roomUser.GetClient().GetUser().HasFuse("fuse_no_kick"))
+                if (!roomUser.IsBot && !roomUser.GetClient().GetUser().HasPermission("perm_no_kick"))
                 {
                     this.GetRoomUserManager().RemoveUserFromRoom(roomUser.GetClient(), true, true);
                 }
@@ -453,12 +453,12 @@ namespace WibboEmulator.Game.Rooms
                 return 0;
             }
 
-            if (Session.GetUser().Username == this.RoomData.OwnerName || Session.GetUser().HasFuse("fuse_any_room_controller"))
+            if (Session.GetUser().Username == this.RoomData.OwnerName || Session.GetUser().HasPermission("perm_owner_all_rooms"))
             {
                 return 4;
             }
 
-            if (Session.GetUser().HasFuse("fuse_any_room_rights"))
+            if (Session.GetUser().HasPermission("perm_room_rights"))
             {
                 return 3;
             }
@@ -483,14 +483,14 @@ namespace WibboEmulator.Game.Rooms
                 return false;
             }
 
-            if (Session.GetUser().Username == this.RoomData.OwnerName || Session.GetUser().HasFuse("fuse_any_room_controller"))
+            if (Session.GetUser().Username == this.RoomData.OwnerName || Session.GetUser().HasPermission("perm_owner_all_rooms"))
             {
                 return true;
             }
 
             if (!RequireOwnership)
             {
-                if (Session.GetUser().HasFuse("fuse_any_room_rights") || this.UsersWithRights.Contains(Session.GetUser().Id))
+                if (Session.GetUser().HasPermission("perm_room_rights") || this.UsersWithRights.Contains(Session.GetUser().Id))
                 {
                     return true;
                 }

@@ -10,7 +10,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Guide
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetUser().HasFuse("fuse_helptool"))
+            if (!Session.GetUser().HasPermission("perm_helptool"))
             {
                 return;
             }

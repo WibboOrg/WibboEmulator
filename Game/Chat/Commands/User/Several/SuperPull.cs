@@ -35,7 +35,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (TargetUser.GetClient().GetUser().PremiumProtect && !Session.GetUser().HasFuse("fuse_mod"))
+            if (TargetUser.GetClient().GetUser().PremiumProtect && !Session.GetUser().HasPermission("perm_mod"))
             {
                 roomuser.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
                 return;

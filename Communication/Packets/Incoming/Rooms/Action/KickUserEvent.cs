@@ -23,7 +23,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             int pId = Packet.PopInt();
 
             RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(pId);
-            if (roomUserByUserId == null || roomUserByUserId.IsBot || (room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasFuse("fuse_mod")) || roomUserByUserId.GetClient().GetUser().HasFuse("fuse_no_kick"))
+            if (roomUserByUserId == null || roomUserByUserId.IsBot || (room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_mod")) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_no_kick"))
             {
                 return;
             }

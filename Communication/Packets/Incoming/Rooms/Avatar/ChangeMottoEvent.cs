@@ -30,7 +30,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Session.GetUser().HasFuse("word_filter_override"))
+            if (!Session.GetUser().HasPermission("word_filter_override"))
             {
                 newMotto = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(newMotto);
             }

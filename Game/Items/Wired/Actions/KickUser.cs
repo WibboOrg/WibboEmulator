@@ -34,7 +34,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
         {
             if (user != null && user.GetClient() != null && user.GetClient().GetUser() != null)
             {
-                if (user.GetClient().GetUser().HasFuse("fuse_mod") || this.RoomInstance.RoomData.OwnerId == user.UserId)
+                if (user.GetClient().GetUser().HasPermission("perm_mod") || this.RoomInstance.RoomData.OwnerId == user.UserId)
                 {
                     user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("wired.kick.exception", user.GetClient().Langue));
                     

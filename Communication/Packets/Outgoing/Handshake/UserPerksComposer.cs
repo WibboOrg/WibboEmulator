@@ -10,7 +10,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Handshake
             this.WriteInteger(17); // Count
             this.WriteString("USE_GUIDE_TOOL");
             this.WriteString("");
-            this.WriteBoolean(user.HasFuse("fuse_helptool"));
+            this.WriteBoolean(user.HasPermission("perm_helptool"));
 
             this.WriteString("GIVE_GUIDE_TOURS");
             this.WriteString("requirement.unfulfilled.helper_le");

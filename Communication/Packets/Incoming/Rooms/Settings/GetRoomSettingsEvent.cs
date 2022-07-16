@@ -16,7 +16,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Room.CheckRights(Session, true) && !Session.GetUser().HasFuse("fuse_settings_room"))
+            if (!Room.CheckRights(Session, true) && !Session.GetUser().HasPermission("perm_"))
             {
                 return;
             }

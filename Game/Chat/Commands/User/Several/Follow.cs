@@ -20,7 +20,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));
             }
 
-            else if ((TargetUser.GetUser().HideInRoom) && !Session.GetUser().HasFuse("fuse_mod"))
+            else if ((TargetUser.GetUser().HideInRoom) && !Session.GetUser().HasPermission("perm_mod"))
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.follow.notallowed", Session.Langue));
             }

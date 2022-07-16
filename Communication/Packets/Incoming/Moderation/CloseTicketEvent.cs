@@ -8,7 +8,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (Session == null || Session.GetUser() == null || !Session.GetUser().HasFuse("fuse_mod"))
+            if (Session == null || Session.GetUser() == null || !Session.GetUser().HasPermission("perm_mod"))
             {
                 return;
             }

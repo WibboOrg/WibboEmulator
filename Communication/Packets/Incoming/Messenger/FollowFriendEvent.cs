@@ -12,7 +12,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
         {
             int userId = Packet.PopInt();
             Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
-            if (clientByUserId == null || clientByUserId.GetUser() == null || !clientByUserId.GetUser().InRoom || (clientByUserId.GetUser().HideInRoom && !Session.GetUser().HasFuse("fuse_mod")))
+            if (clientByUserId == null || clientByUserId.GetUser() == null || !clientByUserId.GetUser().InRoom || (clientByUserId.GetUser().HideInRoom && !Session.GetUser().HasPermission("perm_mod")))
             {
                 return;
             }

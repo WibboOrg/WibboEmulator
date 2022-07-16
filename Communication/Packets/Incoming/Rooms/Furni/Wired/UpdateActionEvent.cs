@@ -51,8 +51,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             int selectionCode = packet.PopInt();
 
-            bool isStaff = session.GetUser().HasFuse("fuse_superwired_staff");
-            bool isGod = session.GetUser().HasFuse("fuse_superwired_god");
+            bool isStaff = session.GetUser().HasPermission("perm_superwired_staff");
+            bool isGod = session.GetUser().HasPermission("perm_superwired_god");
 
             WiredRegister.HandleRegister(item, room, intParams, stringParam, stuffIds, selectionCode, delay, isStaff, isGod);
 

@@ -15,7 +15,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.WibboTool
                 return;
             }
 
-            if (!Session.GetUser().HasFuse("fuse_wibbotool"))
+            if (!Session.GetUser().HasPermission("perm_wibbotool"))
             {
                 return;
             }

@@ -9,7 +9,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            if (!Session.GetUser().HasFuse("fuse_ban"))
+            if (!Session.GetUser().HasPermission("perm_ban"))
             {
                 return;
             }

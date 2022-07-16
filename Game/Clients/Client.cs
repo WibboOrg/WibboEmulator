@@ -130,7 +130,7 @@ namespace WibboEmulator.Game.Clients
                         packetList.Add(new InClientLinkComposer("nux/lobbyoffer/hide"));
                     }
 
-                    if (this._user.HasFuse("fuse_mod"))
+                    if (this._user.HasPermission("perm_mod"))
                     {
                         WibboEnvironment.GetGame().GetClientManager().AddUserStaff(this._user.Id);
                         packetList.Add(new ModeratorInitComposer(
@@ -139,7 +139,7 @@ namespace WibboEmulator.Game.Clients
                             WibboEnvironment.GetGame().GetModerationManager().Tickets()));
                     }
 
-                    if (this._user.HasExactFuse("fuse_helptool"))
+                    if (this._user.HasExactPermission("perm_helptool"))
                     {
                         HelpManager guideManager = WibboEnvironment.GetGame().GetHelpManager();
                         guideManager.AddGuide(this._user.Id);
@@ -205,7 +205,7 @@ namespace WibboEmulator.Game.Clients
                 return false;
             }
 
-            if (this.GetUser().HasFuse("fuse_sysadmin"))
+            if (this.GetUser().HasPermission("perm_god"))
             {
                 return false;
             }

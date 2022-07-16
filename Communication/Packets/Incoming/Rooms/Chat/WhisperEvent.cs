@@ -52,7 +52,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             string Message = Params.Substring(ToUser.Length + 1);
             int Color = Packet.PopInt();
 
-            if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Color, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !Session.GetUser().HasFuse(Style.RequiredRight)))
+            if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Color, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !Session.GetUser().HasPermission(Style.RequiredRight)))
             {
                 Color = 0;
             }
@@ -62,7 +62,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Session.GetUser().HasFuse("word_filter_override"))
+            if (!Session.GetUser().HasPermission("word_filter_override"))
             {
                 Message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
             }
@@ -96,9 +96,9 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 User.GetClient().SendPacket(new FloodControlComposer(floodSeconds));
                 return;
             }
-            else if (timeSpan.TotalSeconds < 4.0 && User.FloodCount > 5 && !Session.GetUser().HasFuse("fuse_mod"))
+            else if (timeSpan.TotalSeconds < 4.0 && User.FloodCount > 5 && !Session.GetUser().HasPermission("perm_mod"))
             {
-                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasFuse("fuse_low_flood")) ? 5 : 15;
+                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasPermission("fuse_low_flood")) ? 5 : 15;
                 Session.GetUser().SpamEnable = true;
 
                 User.GetClient().SendPacket(new FloodControlComposer(Session.GetUser().SpamProtectionTime - timeSpan.Seconds));
@@ -110,7 +110,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 User.LastMessageCount = 0;
                 User.LastMessage = "";
 
-                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasFuse("fuse_low_flood")) ? 5 : 15;
+                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasPermission("fuse_low_flood")) ? 5 : 15;
                 Session.GetUser().SpamEnable = true;
                 User.GetClient().SendPacket(new FloodControlComposer(Session.GetUser().SpamProtectionTime - timeSpan.Seconds));
                 return;

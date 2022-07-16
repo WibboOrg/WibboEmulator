@@ -51,7 +51,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             int color = packet.PopInt();
 
-            if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(color, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !session.GetUser().HasFuse(Style.RequiredRight)))
+            if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(color, out ChatStyle Style) || (Style.RequiredRight.Length > 0 && !session.GetUser().HasPermission(Style.RequiredRight)))
             {
                 color = 0;
             }
@@ -63,7 +63,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             user.Unidle();
 
-            if (!session.GetUser().HasFuse("fuse_mod") && room.RoomMuted && !user.IsOwner() && !session.GetUser().CurrentRoom.CheckRights(session))
+            if (!session.GetUser().HasPermission("perm_mod") && room.RoomMuted && !user.IsOwner() && !session.GetUser().CurrentRoom.CheckRights(session))
             {
                 user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("room.muted", session.Langue));
                 return;
@@ -109,9 +109,9 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 user.GetClient().SendPacket(new FloodControlComposer(i));
                 return;
             }
-            else if (timeSpan.TotalSeconds < 4.0 && user.FloodCount > 5 && !session.GetUser().HasFuse("fuse_mod"))
+            else if (timeSpan.TotalSeconds < 4.0 && user.FloodCount > 5 && !session.GetUser().HasPermission("perm_mod"))
             {
-                session.GetUser().SpamProtectionTime = (room.IsRoleplay || session.GetUser().HasFuse("fuse_low_flood")) ? 5 : 15;
+                session.GetUser().SpamProtectionTime = (room.IsRoleplay || session.GetUser().HasPermission("fuse_low_flood")) ? 5 : 15;
                 session.GetUser().SpamEnable = true;
 
                 user.GetClient().SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
@@ -123,7 +123,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 user.LastMessageCount = 0;
                 user.LastMessage = "";
 
-                session.GetUser().SpamProtectionTime = (room.IsRoleplay || session.GetUser().HasFuse("fuse_low_flood")) ? 5 : 15;
+                session.GetUser().SpamProtectionTime = (room.IsRoleplay || session.GetUser().HasPermission("fuse_low_flood")) ? 5 : 15;
                 session.GetUser().SpamEnable = true;
                 user.GetClient().SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
                 return;
@@ -186,7 +186,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 }
             }
 
-            if (!session.GetUser().HasFuse("word_filter_override"))
+            if (!session.GetUser().HasPermission("word_filter_override"))
             {
                 message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(message);
                 message = new Regex(@"\[tag\](.*?)\[\/tag\]").Replace(message, "<tag>$1</tag>");

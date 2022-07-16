@@ -53,7 +53,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 stringBuilder.Append("Utilisateurs: " + user.CurrentRoom.UserCount + "/" + user.CurrentRoom.RoomData.UsersMax + "\r");
             }
 
-            if (Session.GetUser().HasFuse("fuse_infouser"))
+            if (Session.GetUser().HasPermission("perm_god"))
             {
                 stringBuilder.Append("\r - Autre information - \r");
                 stringBuilder.Append("MachineId: " + clientByUsername.MachineId + "\r");

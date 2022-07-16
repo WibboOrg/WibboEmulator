@@ -14,7 +14,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
             int.TryParse(Params[1], out int EnableNum);
 
-            if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(EnableNum, Session.GetUser().HasFuse("fuse_sysadmin")))
+            if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(EnableNum, Session.GetUser().HasPermission("perm_god")))
             {
                 return;
             }

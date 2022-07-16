@@ -23,7 +23,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!room.CheckRights(Session, true) && !Session.GetUser().HasFuse("fuse_settings_room"))
+            if (!room.CheckRights(Session, true) && !Session.GetUser().HasPermission("perm_settings_room"))
             {
                 return;
             }

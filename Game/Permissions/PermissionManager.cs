@@ -20,7 +20,7 @@ namespace WibboEmulator.Game.Permissions
             this._rights.Clear();
             this._commands.Clear();
 
-            DataTable table = EmulatorFuserightDao.GetAll(dbClient);
+            DataTable table = EmulatorPermissionDao.GetAll(dbClient);
 
             if (table == null)
             {
