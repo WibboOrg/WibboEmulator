@@ -98,11 +98,10 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                         Session.SendWhisper("Commands mis à jour");
                         break;
                     }
-                case "role":
-                case "fuse":
+                case "permission":
                     {
                         WibboEnvironment.GetGame().GetPermissionManager().Init(dbClient);
-                        Session.SendWhisper("Rôle mis à jour");
+                        Session.SendWhisper("Permissions mises à jour !");
                         break;
                     }
                 case "effet":
@@ -122,7 +121,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     {
                         WibboEnvironment.GetGame().GetModerationManager().Init(dbClient);
                         Session.SendWhisper("Moderation mis à jour");
-                        WibboEnvironment.GetGame().GetClientManager().SendMessageStaff(new WhisperComposer(UserRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous !" + "L'équipe développement", 23));
+                        WibboEnvironment.GetGame().GetClientManager().SendMessageStaff(new WhisperComposer(UserRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous sur Wibbo !", 23));
                         break;
                     }
                 case "catalogue":
