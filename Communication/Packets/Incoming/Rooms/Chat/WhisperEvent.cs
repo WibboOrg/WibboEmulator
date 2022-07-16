@@ -98,7 +98,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             }
             else if (timeSpan.TotalSeconds < 4.0 && User.FloodCount > 5 && !Session.GetUser().HasPermission("perm_mod"))
             {
-                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasPermission("fuse_low_flood")) ? 5 : 15;
+                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasPermission("perm_flood_premium")) ? 5 : 15;
                 Session.GetUser().SpamEnable = true;
 
                 User.GetClient().SendPacket(new FloodControlComposer(Session.GetUser().SpamProtectionTime - timeSpan.Seconds));
@@ -110,7 +110,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 User.LastMessageCount = 0;
                 User.LastMessage = "";
 
-                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasPermission("fuse_low_flood")) ? 5 : 15;
+                Session.GetUser().SpamProtectionTime = (Room.IsRoleplay || Session.GetUser().HasPermission("perm_flood_premium")) ? 5 : 15;
                 Session.GetUser().SpamEnable = true;
                 User.GetClient().SendPacket(new FloodControlComposer(Session.GetUser().SpamProtectionTime - timeSpan.Seconds));
                 return;
