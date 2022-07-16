@@ -29,7 +29,7 @@ namespace WibboEmulator.Game.Permissions
 
             foreach (DataRow dataRow in table.Rows)
             {
-                this._rights.Add((string)dataRow["fuse"], Convert.ToInt32(dataRow["rank"]));
+                this._rights.Add((string)dataRow["permission"], Convert.ToInt32(dataRow["rank"]));
             }
         }
 
