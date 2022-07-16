@@ -62,7 +62,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (!Session.GetUser().HasPermission("word_filter_override"))
+            if (!Session.GetUser().HasPermission("perm_word_filter_override"))
             {
                 Message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
             }

@@ -186,7 +186,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 }
             }
 
-            if (!session.GetUser().HasPermission("word_filter_override"))
+            if (!session.GetUser().HasPermission("perm_word_filter_override"))
             {
                 message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(message);
                 message = new Regex(@"\[tag\](.*?)\[\/tag\]").Replace(message, "<tag>$1</tag>");

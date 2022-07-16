@@ -17,7 +17,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Group.CreatorId != Session.GetUser().Id && !Session.GetUser().HasPermission("group_management_override"))
+            if (Group.CreatorId != Session.GetUser().Id && !Session.GetUser().HasPermission("perm_owner_all_rooms"))
             {
                 return;
             }
