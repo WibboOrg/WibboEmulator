@@ -62,7 +62,7 @@ namespace WibboEmulator.Game.Items
             {
                 pageId = 1635463734;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 500 * 2) == 500 * 2) //500 WibboPoint
+            else if (WibboEnvironment.GetRandomNumber(1, 500 * 2) == 500 * 2) //500 WibboPoints
             {
                 pageId = 15987;
                 forceItem = 4082;
@@ -76,7 +76,7 @@ namespace WibboEmulator.Game.Items
             {
                 pageId = 1635463733;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 200 * 2) == 200 * 2) //200 WibboPoint
+            else if (WibboEnvironment.GetRandomNumber(1, 200 * 2) == 200 * 2) //200 WibboPoints
             {
                 pageId = 15987;
                 forceItem = 4083;
@@ -91,12 +91,12 @@ namespace WibboEmulator.Game.Items
                 pageId = 456465;
                 forceItem = 7931;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 50 * 2) == 50 * 2) //50 WibboPoint
+            else if (WibboEnvironment.GetRandomNumber(1, 50 * 2) == 50 * 2) //50 WibboPoints
             {
                 pageId = 15987;
                 forceItem = 10993;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 10 * 2) == 10 * 2) //10 WibboPoint
+            else if (WibboEnvironment.GetRandomNumber(1, 10 * 2) == 10 * 2) //10 WibboPoints
             {
                 pageId = 15987;
                 forceItem = 11068;
@@ -148,7 +148,7 @@ namespace WibboEmulator.Game.Items
             //Présentoir et badge
             int pageId = 987987;
 
-            List<int> PageBadgeList = new List<int>(new int[] { 8948, 18171, 18172, 18173, 18174, 18175, 18176, 18177, 18178, 18179, 18180, 18181, 18182, 18183 });
+            List<int> PageBadgeList = new List<int>(new int[] { 18183 });
             int PageBadgeId = PageBadgeList[WibboEnvironment.GetRandomNumber(0, PageBadgeList.Count - 1)];
             WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageBadgeId, out CatalogPage PageBadge);
             if (PageBadge == null)
@@ -187,13 +187,13 @@ namespace WibboEmulator.Game.Items
             }
             else if (WibboEnvironment.GetRandomNumber(1, 75) == 75) //Royal
             {
-                pageId = 584545;
+                pageId = 14514;
                 lotType = "Royal";
                 forceItem = 37951979;
             }
             else if (WibboEnvironment.GetRandomNumber(1, 30) == 30) //Royal
             {
-                pageId = 584545;
+                pageId = 14514;
                 lotType = "Royal";
                 forceItem = 70223722;
             }
@@ -204,7 +204,7 @@ namespace WibboEmulator.Game.Items
             }
             else if (WibboEnvironment.GetRandomNumber(1, 5) == 5) //Royal
             {
-                pageId = 584545;
+                pageId = 14514;
                 lotType = "Royal";
                 forceItem = 52394359;
             }
