@@ -7,7 +7,7 @@ namespace WibboEmulator.Database.Daos
     {
         internal static DataTable GetAll(IQueryAdapter dbClient)
         {
-            dbClient.SetQuery("SELECT `fuse`, `rank` FROM `emulator_permission`");
+            dbClient.SetQuery("SELECT `rank`, `permission` FROM `emulator_permission`");
             return dbClient.GetTable();
         }
     }
