@@ -1,11 +1,13 @@
 # Bienvenue sur Wibbo Emulator !
 
+![image](https://user-images.githubusercontent.com/88250803/179401543-116ec89a-cf48-4781-9cac-a27378e56d71.png)
+
 _Mise à jour par Meth0d, Matinmine, Carlos, Super0ca, Mike, Sledmore, Joopie, Tweeny, Leenster, Moogly, Niels, AkLLx, RBi0s, entre 2011 & 2015_
-_Mise à jour par JasonDhose, Isp et Symbiosis entre 2011 jusqu'à maintenant._
+_Mise à jour par JKodad, Iseonpa et Symbiosis entre 2011 jusqu'à maintenant._
 
 ### Pour démarrer, vous devez :
 - Remplir le fichier settings.ini dans le dossier Config
-- Ajouter le lien de votre furnidata en .json dans le fichier seeting qui se situe dans Configuration
+- Ajouter le lien de votre furnidata en .json dans le fichier settings qui se situe dans Configuration
 - Générer ou démarrer le projet.
 
 ### Sur les 10 dernières années, Wibbo Emulator a connu une augmentation des mises à jour, que ce soit pour les commandes ou l'amélioration de l'interface sur le client !
