@@ -5,7 +5,7 @@ _Mise à jour par JasonDhose, Isp et Symbiosis entre 2011 jusqu'à maintenant._
 
 ### Pour démarrer, vous devez :
 - Remplir le fichier settings.ini dans le dossier Config
-- Ajouter le figuredata.xml de votre serveur dans le dossier Config
+- Ajouter le lien de votre furnidata en .json dans le fichier seeting qui se situe dans Configuration
 - Générer ou démarrer le projet.
 
 ### Sur les 10 dernières années, Wibbo Emulator a connu une augmentation des mises à jour, que ce soit pour les commandes ou l'amélioration de l'interface sur le client !
