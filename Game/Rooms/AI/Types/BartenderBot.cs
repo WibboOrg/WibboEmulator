@@ -33,15 +33,6 @@ namespace WibboEmulator.Game.Rooms.AI.Types
 
         public override void OnUserSay(RoomUser User, string Message)
         {
-            if (User == null || User.GetClient() == null || User.GetClient().GetUser() == null)
-                return;
-
-            if (Gamemap.TileDistance(GetRoomUser().X, GetRoomUser().Y, User.X, User.Y) > 8)
-                return;
-
-            BotResponse Response = WibboEnvironment.GetGame().GetBotManager().GetResponse(GetBotData().AiType, Message);
-            if (Response == null)
-                return;
         }
 
         public override void OnUserShout(RoomUser User, string Message)

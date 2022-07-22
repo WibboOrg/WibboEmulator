@@ -1786,14 +1786,14 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        int.TryParse(Value, out int Count);
+                        int.TryParse(Value, out int count);
 
                         if (user.Room == null)
                         {
                             break;
                         }
 
-                        user.Room.GetGameManager().AddPointToTeam(user.Team, Count, user);
+                        user.Room.GetGameManager().AddPointToTeam(user.Team, count, user);
                         break;
                     }
                 case "ingame":
@@ -1826,7 +1826,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        user.UserTimer += Points;
+                        if(user.UserTimer + Points <= int.MaxValue)
+                            user.UserTimer += Points;
 
                         break;
                     }
@@ -1867,7 +1868,8 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        user.WiredPoints += Points;
+                        if(user.WiredPoints + Points <= int.MaxValue)
+                            user.WiredPoints += Points;
 
                         break;
                     }

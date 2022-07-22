@@ -18,15 +18,14 @@ using WibboEmulator.Game.Moderation;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Game.Effects;
 using WibboEmulator.Game.Badges;
-using WibboEmulator.Game.Bots;
 using WibboEmulator.Database.Daos;
 using System.Diagnostics;
+using WibboEmulator.Game.Loots;
 
 namespace WibboEmulator.Game
 {
     public class GameCore
     {
-        private readonly BotManager _botManager;
         private readonly ClientManager _clientManager;
         private readonly PermissionManager _permissionManager;
         private readonly CatalogManager _catalogManager;
@@ -45,6 +44,7 @@ namespace WibboEmulator.Game
         private readonly BadgeManager _badgeManager;
         private readonly RoleplayManager _roleplayManager;
         private readonly AnimationManager _animationManager;
+        private readonly LootManager _lootManager;
 
         private Thread _gameLoop;
         public bool GameLoopActive;
@@ -54,8 +54,6 @@ namespace WibboEmulator.Game
         public GameCore()
         {
             using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            this._botManager = new BotManager();
-            this._botManager.Init();
 
             this._clientManager = new ClientManager();
 
@@ -109,6 +107,9 @@ namespace WibboEmulator.Game
             this._animationManager = new AnimationManager();
             this._animationManager.Init(dbClient);
 
+            this._lootManager = new LootManager();
+            this._lootManager.Init(dbClient);
+
             DatabaseCleanup(dbClient);
             ServerStatusUpdater.Init(dbClient);
 
@@ -117,10 +118,11 @@ namespace WibboEmulator.Game
 
         #region Return values
 
-        public BotManager GetBotManager()
+        public LootManager GetLootManager()
         {
-            return this._botManager;
+            return this._lootManager;
         }
+
         public AnimationManager GetAnimationManager()
         {
             return this._animationManager;

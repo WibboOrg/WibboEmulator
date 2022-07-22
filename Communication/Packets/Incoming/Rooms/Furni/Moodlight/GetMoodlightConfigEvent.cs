@@ -6,7 +6,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
     internal class GetMoodlightConfigEvent : IPacketEvent
     {
-        public double Delay => 250;
+        public double Delay => 0;
 
         public void Parse(Client Session, ClientPacket Packet)
         {

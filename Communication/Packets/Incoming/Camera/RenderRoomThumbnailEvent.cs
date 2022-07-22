@@ -11,6 +11,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
         public async void Parse(Client session, ClientPacket packet)
         {
             int photoLength = packet.PopInt();
+
+            if (photoLength > 40000)
+                return;
+
             byte[] photoBinary = packet.ReadBytes(photoLength);
 
             if (session.GetUser() == null)
@@ -20,7 +24,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
             if (room == null)
                 return;
 
-            int time = WibboEnvironment.GetUnixTimestamp();
             string pictureName = $"thumbnail_{room.Id}";
 
             MultipartFormDataContent content = new MultipartFormDataContent("Upload");

@@ -7,6 +7,7 @@ using WibboEmulator.Game.Pets;
 using WibboEmulator.Game.Users.Inventory.Bots;
 using System.Collections.Concurrent;
 using System.Data;
+using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Game.Users.Inventory
 {
@@ -32,37 +33,49 @@ namespace WibboEmulator.Game.Users.Inventory
         {
             if (All)
             {
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+                //ItemDao.DeleteAll(dbClient, this._userInstance.Id);
+
+                Dictionary<int, int> rareAmounts = new Dictionary<int, int>();
+                foreach (Item roomItem in this.GetWallAndFloor)
                 {
-                    ItemDao.DeleteAll(dbClient, this._userInstance.Id);
+                    if (roomItem == null || roomItem.GetBaseItem() == null || !roomItem.GetBaseItem().IsRare)
+                        continue;
+
+                    if (!rareAmounts.TryGetValue(roomItem.BaseItem, out int value))
+                        rareAmounts.Add(roomItem.BaseItem, 1);
+                    else
+                    {
+                        rareAmounts.Remove(roomItem.BaseItem);
+                        rareAmounts.Add(roomItem.BaseItem, value + 1);
+                    }
                 }
 
-                this._userItems.Clear();
+                Console.WriteLine(rareAmounts.Count);
+
+                //this._userItems.Clear();
             }
             else
             {
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    ItemDao.DeleteAllWithoutRare(dbClient, this._userInstance.Id);
-                }
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+                ItemDao.DeleteAllWithoutRare(dbClient, this._userInstance.Id);
 
                 this._userItems.Clear();
 
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+                DataTable table = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id);
+
+                foreach (DataRow dataRow in table.Rows)
                 {
-                    DataTable table = ItemDao.GetAllByUserId(dbClient, this._userInstance.Id);
+                    int Id = Convert.ToInt32(dataRow["id"]);
+                    int BaseItem = Convert.ToInt32(dataRow["base_item"]);
+                    string ExtraData = DBNull.Value.Equals(dataRow["extra_data"]) ? string.Empty : (string)dataRow["extra_data"];
+                    int Limited = DBNull.Value.Equals(dataRow["limited_number"]) ? 0 : Convert.ToInt32(dataRow["limited_number"]);
+                    int LimitedTo = DBNull.Value.Equals(dataRow["limited_stack"]) ? 0 : Convert.ToInt32(dataRow["limited_stack"]);
 
-                    foreach (DataRow dataRow in table.Rows)
-                    {
-                        int Id = Convert.ToInt32(dataRow["id"]);
-                        int BaseItem = Convert.ToInt32(dataRow["base_item"]);
-                        string ExtraData = DBNull.Value.Equals(dataRow["extra_data"]) ? string.Empty : (string)dataRow["extra_data"];
-                        int Limited = DBNull.Value.Equals(dataRow["limited_number"]) ? 0 : Convert.ToInt32(dataRow["limited_number"]);
-                        int LimitedTo = DBNull.Value.Equals(dataRow["limited_stack"]) ? 0 : Convert.ToInt32(dataRow["limited_stack"]);
-
-                        Item userItem = new Item(Id, 0, BaseItem, ExtraData, Limited, LimitedTo, 0, 0, 0.0, 0, "", null);
-                        this._userItems.TryAdd(Id, userItem);
-                    }
+                    Item userItem = new Item(Id, 0, BaseItem, ExtraData, Limited, LimitedTo, 0, 0, 0.0, 0, "", null);
+                    this._userItems.TryAdd(Id, userItem);
                 }
             }
 

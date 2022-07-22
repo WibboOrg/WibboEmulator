@@ -1,11 +1,10 @@
 ﻿using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Game.Badges
+namespace WibboEmulator.Game.Calendars
 {
     public class CalendarManager
     {
-        private string _campaignName;
-        private string _campaignImage;
+        private Dictionary<int, CalendarItem> _calendarItem;
         private int _currentDay;
         private int _campaignDays;
 
@@ -15,20 +14,14 @@ namespace WibboEmulator.Game.Badges
 
         public void Init(IQueryAdapter dbClient)
         {
-            this._campaignName = "";
-            this._campaignImage = "";
+            this._calendarItem = new Dictionary<int, CalendarItem>();
             this._currentDay = 0;
             this._campaignDays = 0;
         }
 
-        public string CampaignName()
+        public Dictionary<int, CalendarItem> CalendarItem()
         {
-            return this._campaignName;
-        }
-
-        public string CampaignImage()
-        {
-            return this._campaignImage;
+            return this._calendarItem;
         }
 
         public int CurrentDay()

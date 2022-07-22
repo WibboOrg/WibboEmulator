@@ -13,6 +13,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
         public async void Parse(Client session, ClientPacket packet)
         {
             int photoLength = packet.PopInt();
+
+            if (photoLength > 250000)
+                return;
+
             byte[] photoBinary = packet.ReadBytes(photoLength);
 
             if (session.GetUser() == null)

@@ -7,12 +7,42 @@ using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Game.Catalog;
 using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Loots;
 using WibboEmulator.Game.Rooms;
 
 namespace WibboEmulator.Game.Items
 {
     internal static class ItemLotBox
     {
+        public static void OpenLootBox(Client session, Item present, Room room)
+        {
+            List<Loot> loots = WibboEnvironment.GetGame().GetLootManager().GetLoots(present.GetBaseItem().InteractionType);
+
+            int pageId = 0;
+            int forceItem = 0;
+
+            foreach (Loot loot in loots.OrderBy(x => x.Probability).Where(x => x.Probability != 0))
+            {
+                if (WibboEnvironment.GetRandomNumber(1, loot.Probability) == loot.Probability)
+                {
+                    if (loot.PageId > 0)
+                    {
+                        pageId = loot.PageId;
+                        forceItem = loot.ItemId;
+                    }
+
+                    if (loot.Category == "badge")
+                    {
+
+                    }
+
+                    break;
+                }
+            }
+
+            EndOpenBox(session, present, room, pageId, forceItem);
+        }
+
         private static readonly int ProbalilityLegendary = 1000 * 2;
         private static readonly int ProbalilityEpic = 100 * 2;
         private static readonly int ProbalilityCommun = 10 * 2;
