@@ -324,6 +324,9 @@ namespace WibboEmulator.Game.Items
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
+                if(lotData.IsRare)
+                    LogLootBoxDao.Insert(dbClient, session.GetUser().Id, present.Id, lotData.Id);
+
                 ItemDao.UpdateBaseItem(dbClient, present.Id, lotData.Id);
             }
 

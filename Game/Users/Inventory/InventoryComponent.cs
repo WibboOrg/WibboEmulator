@@ -35,7 +35,7 @@ namespace WibboEmulator.Game.Users.Inventory
             {
                 using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
-                //ItemDao.DeleteAll(dbClient, this._userInstance.Id);
+                ItemDao.DeleteAll(dbClient, this._userInstance.Id);
 
                 Dictionary<int, int> rareAmounts = new Dictionary<int, int>();
                 foreach (Item roomItem in this.GetWallAndFloor)
@@ -52,9 +52,9 @@ namespace WibboEmulator.Game.Users.Inventory
                     }
                 }
 
-                Console.WriteLine(rareAmounts.Count);
+                ItemStatDao.UpdateRemove(dbClient, rareAmounts);
 
-                //this._userItems.Clear();
+                this._userItems.Clear();
             }
             else
             {
