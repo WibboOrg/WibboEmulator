@@ -57,9 +57,9 @@ namespace WibboEmulator.Game.Items
                         int effectId = Convert.ToInt32(Row["effect_id"]);
                         bool isRare = WibboEnvironment.EnumToBool(Row["is_rare"].ToString());
                         int rarityLevel = Convert.ToInt32(Row["rarity_level"].ToString());
+                        int amount = !DBNull.Value.Equals(Row["amount"]) ? Convert.ToInt32(Convert.ToString(Row["amount"])) : -1;
 
-
-                        ItemData itemData = new ItemData(id, spriteID, itemName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowGift, allowInventoryStack, interactionType, cycleCount, vendingIDS, heightAdjustable, effectId, isRare, rarityLevel);
+                        ItemData itemData = new ItemData(id, spriteID, itemName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowGift, allowInventoryStack, interactionType, cycleCount, vendingIDS, heightAdjustable, effectId, isRare, rarityLevel, amount);
 
                         if (!this._gifts.ContainsKey(spriteID) && interactionType == InteractionType.GIFT)
                         {

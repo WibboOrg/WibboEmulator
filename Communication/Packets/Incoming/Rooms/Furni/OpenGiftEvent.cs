@@ -77,23 +77,23 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             }
             else if (Present.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
             {
-                ItemLotBox.OpenExtrabox(Session, Present, Room);
+                ItemLootBox.OpenExtrabox(Session, Present, Room);
             }
             else if (Present.GetBaseItem().InteractionType == InteractionType.DELUXEBOX)
             {
-                ItemLotBox.OpenDeluxeBox(Session, Present, Room);
+                ItemLootBox.OpenDeluxeBox(Session, Present, Room);
             }
             else if (Present.GetBaseItem().InteractionType == InteractionType.LOOTBOX2022)
             {
-                ItemLotBox.OpenLootBox2022(Session, Present, Room);
+                ItemLootBox.OpenLootBox2022(Session, Present, Room);
             }
             else if (Present.GetBaseItem().InteractionType == InteractionType.LEGENDBOX)
             {
-                ItemLotBox.OpenLegendBox(Session, Present, Room);
+                ItemLootBox.OpenLegendBox(Session, Present, Room);
             }
             else if (Present.GetBaseItem().InteractionType == InteractionType.BADGEBOX)
             {
-                ItemLotBox.OpenBadgeBox(Session, Present, Room);
+                ItemLootBox.OpenBadgeBox(Session, Present, Room);
             }
         }
 

@@ -12,7 +12,7 @@ using WibboEmulator.Game.Rooms;
 
 namespace WibboEmulator.Game.Items
 {
-    internal static class ItemLotBox
+    internal static class ItemLootBox
     {
         public static void OpenLootBox(Client session, Item present, Room room)
         {
@@ -325,7 +325,13 @@ namespace WibboEmulator.Game.Items
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
                 if(lotData.IsRare)
-                    LogLootBoxDao.Insert(dbClient, session.GetUser().Id, present.Id, lotData.Id);
+                    LogLootBoxDao.Insert(dbClient, present.Data.InteractionType.ToString(), session.GetUser().Id, present.Id, lotData.Id);
+
+                if (lotData.Amount >= 0)
+                {
+                    ItemStatDao.UpdateAdd(dbClient, lotData.Id);
+                    lotData.Amount += 1;
+                }
 
                 ItemDao.UpdateBaseItem(dbClient, present.Id, lotData.Id);
             }

@@ -8,21 +8,34 @@ namespace WibboEmulator.Game.Items
     {
         public static void GenerateExtradata(Item Item, ServerPacket Message)
         {
-            switch (Item.GetBaseItem().InteractionType)
+            ItemData itemData = Item.GetBaseItem();
+
+            switch (itemData.InteractionType)
             {
                 default:
                     Message.WriteInteger(0);
                     Message.WriteInteger(1);
-                    Message.WriteInteger(Item.GetBaseItem().RarityLevel > 0 ? 2 : 1);
 
-                    if (Item.GetBaseItem().RarityLevel > 0)
+                    int totalSets = 1;
+                    if (itemData.RarityLevel > 0) totalSets++;
+                    if (itemData.Amount >= 0) totalSets++;
+
+                    Message.WriteInteger(totalSets);
+
+                    if (itemData.RarityLevel > 0)
                     {
                         Message.WriteString("rarity");
-                        Message.WriteString(Item.GetBaseItem().RarityLevel.ToString());
+                        Message.WriteString(itemData.RarityLevel.ToString());
+                    }
+                    
+                    if (itemData.Amount >= 0)
+                    {
+                        Message.WriteString("amount");
+                        Message.WriteString(itemData.Amount.ToString());
                     }
 
                     Message.WriteString("state");
-                    Message.WriteString((Item.GetBaseItem().InteractionType != InteractionType.TONER && Item.GetBaseItem().InteractionType != InteractionType.FBGATE) ? Item.ExtraData : string.Empty);
+                    Message.WriteString((itemData.InteractionType != InteractionType.TONER && itemData.InteractionType != InteractionType.FBGATE) ? Item.ExtraData : string.Empty);
                     break;
 
                 case InteractionType.WALLPAPER:
@@ -119,7 +132,7 @@ namespace WibboEmulator.Game.Items
 
                     Message.WriteString(Item.ExtraData);
                     Message.WriteInteger(ClickNumber);
-                    Message.WriteInteger(Item.GetBaseItem().Modes - 1); //Type de duré
+                    Message.WriteInteger(itemData.Modes - 1); //Type de duré
                     break;
 
                 case InteractionType.ADS_BACKGROUND:

@@ -132,23 +132,23 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     {
                         if (item.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
                         {
-                            ItemLotBox.OpenExtrabox(session, item, room);
+                            ItemLootBox.OpenExtrabox(session, item, room);
                         }
                         else if (item.GetBaseItem().InteractionType == InteractionType.DELUXEBOX)
                         {
-                            ItemLotBox.OpenDeluxeBox(session, item, room);
+                            ItemLootBox.OpenDeluxeBox(session, item, room);
                         }
                         else if (item.GetBaseItem().InteractionType == InteractionType.LOOTBOX2022)
                         {
-                            ItemLotBox.OpenLootBox2022(session, item, room);
+                            ItemLootBox.OpenLootBox2022(session, item, room);
                         }
                         else if (item.GetBaseItem().InteractionType == InteractionType.LEGENDBOX)
                         {
-                            ItemLotBox.OpenLegendBox(session, item, room);
+                            ItemLootBox.OpenLegendBox(session, item, room);
                         }
                         else if (item.GetBaseItem().InteractionType == InteractionType.BADGEBOX)
                         {
-                            ItemLotBox.OpenBadgeBox(session, item, room);
+                            ItemLootBox.OpenBadgeBox(session, item, room);
                         }
                     }
 

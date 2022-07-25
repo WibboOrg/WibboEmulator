@@ -40,8 +40,10 @@ namespace WibboEmulator.Game.Users.Inventory
                 Dictionary<int, int> rareAmounts = new Dictionary<int, int>();
                 foreach (Item roomItem in this.GetWallAndFloor)
                 {
-                    if (roomItem == null || roomItem.GetBaseItem() == null || !roomItem.GetBaseItem().IsRare)
+                    if (roomItem == null || roomItem.GetBaseItem() == null || roomItem.GetBaseItem().Amount < 0)
                         continue;
+
+                    roomItem.Data.Amount -= 1;
 
                     if (!rareAmounts.TryGetValue(roomItem.BaseItem, out int value))
                         rareAmounts.Add(roomItem.BaseItem, 1);
