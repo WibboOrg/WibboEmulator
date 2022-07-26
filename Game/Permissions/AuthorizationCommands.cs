@@ -56,7 +56,7 @@ namespace WibboEmulator.Game.Permissions
 
         public bool UserGotAuthorizationStaffLog()
         {
-            if (this.MinRank >= 4)
+            if (this.MinRank >= 3)
             {
                 return true;
             }
