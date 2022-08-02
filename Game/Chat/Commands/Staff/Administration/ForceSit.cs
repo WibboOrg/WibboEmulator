@@ -14,10 +14,10 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             if (User == null)
                 return;
 
-            if (User.Statusses.ContainsKey("lie") || User.IsLay || User.RidingHorse || User.IsWalking || User.IsSit)
+            if (User.ContainStatus("lay") || User.IsLay || User.RidingHorse || User.IsWalking || User.IsSit)
                 return;
 
-            if (!User.Statusses.ContainsKey("sit"))
+            if (!User.ContainStatus("sit"))
             {
                 if ((User.RotBody % 2) == 0)
                 {
@@ -26,7 +26,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
                     try
                     {
-                        User.Statusses.Add("sit", "1.0");
+                        User.SetStatus("sit", "1.0");
                         User.Z -= 0.35;
                         User.IsSit = true;
                         User.UpdateNeeded = true;
@@ -36,7 +36,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 else
                 {
                     User.RotBody--;
-                    User.Statusses.Add("sit", "1.0");
+                    User.SetStatus("sit", "1.0");
                     User.Z -= 0.35;
                     User.IsSit = true;
                     User.UpdateNeeded = true;
@@ -45,8 +45,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             else if (User.IsSit == true)
             {
                 User.Z += 0.35;
-                User.Statusses.Remove("sit");
-                User.Statusses.Remove("1.0");
+                User.RemoveStatus("sit");
                 User.IsSit = false;
                 User.UpdateNeeded = true;
             }

@@ -24,7 +24,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             roomUserByUserId.Unidle();
 
             int num = Packet.PopInt();
-            if (roomUserByUserId.Statusses.ContainsKey("sign"))
+            if (roomUserByUserId.ContainStatus("sign"))
             {
                 roomUserByUserId.RemoveStatus("sign");
             }

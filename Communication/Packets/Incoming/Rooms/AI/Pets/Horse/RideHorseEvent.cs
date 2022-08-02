@@ -65,10 +65,12 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 }
                 else
                 {
-                    if (Pet.Statusses.Count > 0)
-                    {
-                        Pet.Statusses.Clear();
-                    }
+                    User.RemoveStatus("sit");
+                    User.RemoveStatus("lay");
+                    User.RemoveStatus("snf");
+                    User.RemoveStatus("eat");
+                    User.RemoveStatus("ded");
+                    User.RemoveStatus("jmp");
 
                     int NewX2 = Pet.X;
                     int NewY2 = Pet.Y;
@@ -102,12 +104,12 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             {
                 if (User.VirtualId == Pet.HorseID)
                 {
-                    Pet.Statusses.Remove("sit");
-                    Pet.Statusses.Remove("lay");
-                    Pet.Statusses.Remove("snf");
-                    Pet.Statusses.Remove("eat");
-                    Pet.Statusses.Remove("ded");
-                    Pet.Statusses.Remove("jmp");
+                    Pet.RemoveStatus("sit");
+                    Pet.RemoveStatus("lay");
+                    Pet.RemoveStatus("snf");
+                    Pet.RemoveStatus("eat");
+                    Pet.RemoveStatus("ded");
+                    Pet.RemoveStatus("jmp");
                     User.RidingHorse = false;
                     User.HorseID = 0;
                     Pet.RidingHorse = false;

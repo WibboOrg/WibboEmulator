@@ -37,7 +37,7 @@ namespace WibboEmulator.Game.Catalog
         {
             this.Id = Id;
             this.ParentId = ParentId;
-            this.Enabled = Enabled.ToLower() == "1" ? true : false;
+            this.Enabled = Enabled.ToLower() == "1";
 
             this.Caption = Caption;
             this.CaptionEn = CaptionEn;

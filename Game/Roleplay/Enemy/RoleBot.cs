@@ -713,7 +713,7 @@ namespace WibboEmulator.Game.Roleplay.Enemy
                         {
                             if (Bot.IsPet)
                             {
-                                Bot.SetStatus("sit", "");
+                                Bot.SetStatus("sit", "0");
                             }
                             else
                             {

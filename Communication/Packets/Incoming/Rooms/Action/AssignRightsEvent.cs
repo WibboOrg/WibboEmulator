@@ -59,8 +59,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     return;
                 }
 
-                roomUserByUserId.RemoveStatus("flatctrl 0");
-                roomUserByUserId.SetStatus("flatctrl 1", "");
+                roomUserByUserId.RemoveStatus("flatctrl");
+                roomUserByUserId.SetStatus("flatctrl", "1");
                 roomUserByUserId.UpdateNeeded = true;
 
                 roomUserByUserId.GetClient().SendPacket(new YouAreControllerComposer(1));

@@ -48,7 +48,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
                     if (User != null)
                     {
-                        User.RemoveStatus("flatctrl 1");
+                        User.RemoveStatus("flatctrl");
                         User.UpdateNeeded = true;
 
                         if (User.GetClient() != null)
@@ -82,7 +82,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                         RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
                         if (User != null)
                         {
-                            User.RemoveStatus("flatctrl 1");
+                            User.RemoveStatus("flatctrl");
                             User.UpdateNeeded = true;
 
                             if (User.GetClient() != null)

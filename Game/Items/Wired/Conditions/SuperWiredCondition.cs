@@ -1021,7 +1021,7 @@ namespace WibboEmulator.Game.Items.Wired.Conditions
                 case "sit":
                 case "notsit":
                     {
-                        if (user.Statusses.ContainsKey("sit"))
+                        if (user.ContainStatus("sit"))
                         {
                             Result = true;
                         }
@@ -1031,7 +1031,7 @@ namespace WibboEmulator.Game.Items.Wired.Conditions
                 case "lay":
                 case "notlay":
                     {
-                        if (user.Statusses.ContainsKey("lay"))
+                        if (user.ContainStatus("lay"))
                         {
                             Result = true;
                         }

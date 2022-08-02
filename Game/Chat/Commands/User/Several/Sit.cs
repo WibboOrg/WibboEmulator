@@ -19,7 +19,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (roomUserByUserId.Statusses.ContainsKey("sit") || roomUserByUserId.Statusses.ContainsKey("lay"))
+            if (roomUserByUserId.ContainStatus("sit") || roomUserByUserId.ContainStatus("lay"))
             {
                 return;
             }
@@ -28,7 +28,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             {
                 if (UserRoom.IsTransf)
                 {
-                    roomUserByUserId.SetStatus("sit", "");
+                    roomUserByUserId.SetStatus("sit", "0");
                 }
                 else
                 {

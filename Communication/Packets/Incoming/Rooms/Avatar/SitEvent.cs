@@ -19,7 +19,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (roomUserByUserId.Statusses.ContainsKey("sit") || roomUserByUserId.Statusses.ContainsKey("lay"))
+            if (roomUserByUserId.ContainStatus("sit") || roomUserByUserId.ContainStatus("lay"))
             {
                 return;
             }

@@ -1014,17 +1014,17 @@ namespace WibboEmulator.Game.Items.Wired.Actions
 
                 case "stand":
                     {
-                        if (user.Statusses.ContainsKey("lay"))
+                        if (user.ContainStatus("lay"))
                         {
                             user.RemoveStatus("lay");
                         }
 
-                        if (user.Statusses.ContainsKey("sit"))
+                        if (user.ContainStatus("sit"))
                         {
                             user.RemoveStatus("sit");
                         }
 
-                        if (user.Statusses.ContainsKey("sign"))
+                        if (user.ContainStatus("sign"))
                         {
                             user.RemoveStatus("sign");
                         }
@@ -1748,17 +1748,17 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "stand":
                     {
-                        if (user.Statusses.ContainsKey("lay"))
+                        if (user.ContainStatus("lay"))
                         {
                             user.RemoveStatus("lay");
                         }
 
-                        if (user.Statusses.ContainsKey("sit"))
+                        if (user.ContainStatus("sit"))
                         {
                             user.RemoveStatus("sit");
                         }
 
-                        if (user.Statusses.ContainsKey("sign"))
+                        if (user.ContainStatus("sign"))
                         {
                             user.RemoveStatus("sign");
                         }
@@ -1989,7 +1989,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                         {
                             if (user.IsTransf)
                             {
-                                user.SetStatus("sit", "");
+                                user.SetStatus("sit", "0");
                             }
                             else
                             {
@@ -2008,7 +2008,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                         {
                             if (user.IsTransf)
                             {
-                                user.SetStatus("lay", "");
+                                user.SetStatus("lay", "0");
                             }
                             else
                             {

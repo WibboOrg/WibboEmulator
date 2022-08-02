@@ -34,7 +34,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                   roomUserByUserId.sentadoBol = false;
                   roomUserByUserId.RemoveStatus("sit");
                 }*/
-                if (roomUserByUserId.Statusses.ContainsKey("lay") || roomUserByUserId.Statusses.ContainsKey("sit"))
+                if (roomUserByUserId.ContainStatus("lay") || roomUserByUserId.ContainStatus("sit"))
                 {
                     return;
                 }
@@ -63,7 +63,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     //roomUserByUserId.AddStatus("lay", Convert.ToString((double) room.GetGameMap().Model.SqFloorHeight[roomUserByUserId.X, roomUserByUserId.Y] + 0.85).Replace(",", "."));
                     if (UserRoom.IsTransf)
                     {
-                        roomUserByUserId.SetStatus("lay", "");
+                        roomUserByUserId.SetStatus("lay", "0");
                     }
                     else
                     {

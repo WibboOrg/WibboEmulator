@@ -45,7 +45,7 @@ namespace WibboEmulator.Game.Rooms.Trading
 
             foreach (TradeUser tradeUser in this._users)
             {
-                if (!tradeUser.GetRoomUser().Statusses.ContainsKey("/trd"))
+                if (!tradeUser.GetRoomUser().ContainStatus("/trd"))
                 {
                     tradeUser.GetRoomUser().SetStatus("/trd", "");
                     tradeUser.GetRoomUser().UpdateNeeded = true;

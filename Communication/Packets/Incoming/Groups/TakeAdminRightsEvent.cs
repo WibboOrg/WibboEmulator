@@ -30,9 +30,9 @@ using WibboEmulator.Game.Users;namespace WibboEmulator.Communication.Packets.I
                 RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(UserId);
                 if (User != null)
                 {
-                    if (User.Statusses.ContainsKey("flatctrl 3"))
+                    if (User.ContainStatus("flatctrl"))
                     {
-                        User.RemoveStatus("flatctrl 3");
+                        User.RemoveStatus("flatctrl");
                     }
 
                     User.UpdateNeeded = true;

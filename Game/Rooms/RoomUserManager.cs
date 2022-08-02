@@ -86,7 +86,7 @@ namespace WibboEmulator.Game.Rooms
 
             roomUser.BotAI.Init(Bot.Id, roomUser, this._room);
 
-            roomUser.SetStatus("flatctrl 4", "");
+            roomUser.SetStatus("flatctrl", "4");
             this.UpdateUserStatus(roomUser, false);
             roomUser.UpdateNeeded = true;
 
@@ -169,7 +169,7 @@ namespace WibboEmulator.Game.Rooms
                 roomUser.BotAI.Init(Bot.Id, roomUser, this._room);
             }
 
-            roomUser.SetStatus("flatctrl 4", "");
+            roomUser.SetStatus("flatctrl", "4");
 
             if (Bot.Status == 1)
             {
@@ -965,19 +965,19 @@ namespace WibboEmulator.Game.Rooms
                 return;
             }
 
-            if (User.Statusses.ContainsKey("lay") || User.Statusses.ContainsKey("sit") || User.Statusses.ContainsKey("sign"))
+            if (User.ContainStatus("lay") || User.ContainStatus("sit") || User.ContainStatus("sign"))
             {
-                if (User.Statusses.ContainsKey("lay"))
+                if (User.ContainStatus("lay"))
                 {
                     User.RemoveStatus("lay");
                 }
 
-                if (User.Statusses.ContainsKey("sit"))
+                if (User.ContainStatus("sit"))
                 {
                     User.RemoveStatus("sit");
                 }
 
-                if (User.Statusses.ContainsKey("sign"))
+                if (User.ContainStatus("sign"))
                 {
                     User.RemoveStatus("sign");
                 }
@@ -1008,7 +1008,7 @@ namespace WibboEmulator.Game.Rooms
 
                 if (roomItem.GetBaseItem().IsSeat)
                 {
-                    if (!User.Statusses.ContainsKey("sit"))
+                    if (!User.ContainStatus("sit"))
                     {
                         User.SetStatus("sit", roomItem.Height.ToString());
                         User.IsSit = true;
@@ -1022,7 +1022,7 @@ namespace WibboEmulator.Game.Rooms
                 switch (roomItem.GetBaseItem().InteractionType)
                 {
                     case InteractionType.BED:
-                        if (!User.Statusses.ContainsKey("lay"))
+                        if (!User.ContainStatus("lay"))
                         {
                             User.SetStatus("lay", roomItem.Height.ToString() + " null");
                             User.IsLay = true;
@@ -1251,11 +1251,11 @@ namespace WibboEmulator.Game.Rooms
             {
                 if (User.IsSit)
                 {
-                    if (!User.Statusses.ContainsKey("sit"))
+                    if (!User.ContainStatus("sit"))
                     {
                         if (User.IsTransf)
                         {
-                            User.SetStatus("sit", "");
+                            User.SetStatus("sit", "0");
                         }
                         else
                         {
@@ -1269,11 +1269,11 @@ namespace WibboEmulator.Game.Rooms
                 else if (User.IsLay)
                 {
 
-                    if (!User.Statusses.ContainsKey("lay"))
+                    if (!User.ContainStatus("lay"))
                     {
                         if (User.IsTransf)
                         {
-                            User.SetStatus("lay", "");
+                            User.SetStatus("lay", "0");
                         }
                         else
                         {
@@ -1419,7 +1419,7 @@ namespace WibboEmulator.Game.Rooms
                         roomUserByVirtualId.UpdateNeeded = true;
                     }
                 }
-                else if (User.Statusses.ContainsKey("mv"))
+                else if (User.ContainStatus("mv"))
                 {
                     User.RemoveStatus("mv");
                     User.IsWalking = false;

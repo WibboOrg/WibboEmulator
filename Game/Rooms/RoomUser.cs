@@ -66,7 +66,7 @@ namespace WibboEmulator.Game.Rooms
         public bool IsWalking;
         public bool UpdateNeeded;
         public bool IsAsleep;
-        public Dictionary<string, string> Statusses;
+        public Dictionary<string, string> _statusses;
         public int DanceId;
         public int FloodCount;
         public bool IsSpectator;
@@ -144,7 +144,7 @@ namespace WibboEmulator.Game.Rooms
 
         public bool NeedsAutokick => !this.IsBot && (this.GetClient() == null || this.GetClient().GetUser() == null || this.GetClient().GetUser().Rank < 2 && this.IdleTime >= 1200);
 
-        public bool IsTrading => !this.IsBot && this.Statusses.ContainsKey("/trd");
+        public bool IsTrading => !this.IsBot && this.ContainStatus("/trd");
 
         public bool IsBot => this.BotData != null;
 
@@ -168,6 +168,14 @@ namespace WibboEmulator.Game.Rooms
             }
         }
 
+        public Dictionary<string, string> Statusses
+        {
+            get
+            {
+                return this._statusses;
+            }
+        }
+
         public RoomUser(int userId, int RoomId, int VirtualId, Room room)
         {
             this.Freezed = false;
@@ -181,7 +189,7 @@ namespace WibboEmulator.Game.Rooms
             this.RotHead = 0;
             this.RotBody = 0;
             this.UpdateNeeded = true;
-            this.Statusses = new Dictionary<string, string>();
+            this._statusses = new Dictionary<string, string>();
             this.Room = room;
             this.AllowOverride = false;
             this.CanWalk = true;
@@ -251,7 +259,7 @@ namespace WibboEmulator.Game.Rooms
 
         public void Dispose()
         {
-            this.Statusses.Clear();
+            this._statusses.Clear();
             this.IsDispose = true;
             this.Room = null;
             this.Client = null;
@@ -358,14 +366,14 @@ namespace WibboEmulator.Game.Rooms
 
         public void SetRot(int Rotation, bool HeadOnly, bool IgnoreWalk = false)
         {
-            if (this.Statusses.ContainsKey("lay") || (this.IsWalking && !IgnoreWalk))
+            if (this.ContainStatus("lay") || (this.IsWalking && !IgnoreWalk))
             {
                 return;
             }
 
             int num = this.RotBody - Rotation;
             this.RotHead = this.RotBody;
-            if (HeadOnly || this.Statusses.ContainsKey("sit"))
+            if (HeadOnly || this.ContainStatus("sit"))
             {
                 if (this.RotBody == 2 || this.RotBody == 4)
                 {
@@ -403,26 +411,31 @@ namespace WibboEmulator.Game.Rooms
             this.UpdateNeeded = true;
         }
 
+        public bool ContainStatus(string key)
+        {
+            return this._statusses.ContainsKey(key);
+        }
+
         public void SetStatus(string Key, string Value)
         {
-            if (this.Statusses.ContainsKey(Key))
+            if (this._statusses.ContainsKey(Key))
             {
-                this.Statusses[Key] = Value;
+                this._statusses[Key] = Value;
             }
             else
             {
-                this.Statusses.Add(Key, Value);
+                this._statusses.Add(Key, Value);
             }
         }
 
         public void RemoveStatus(string Key)
         {
-            if (!this.Statusses.ContainsKey(Key))
+            if (!this._statusses.ContainsKey(Key))
             {
                 return;
             }
 
-            this.Statusses.Remove(Key);
+            this._statusses.Remove(Key);
         }
 
         public void ApplyEffect(int EffectId, bool DontSave = false)

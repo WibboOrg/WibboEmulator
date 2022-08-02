@@ -77,14 +77,14 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
                 if (FurniOptions == 1)
                 {
-                    User.RemoveStatus("flatctrl 1");
+                    User.RemoveStatus("flatctrl");
                     User.UpdateNeeded = true;
 
                     User.GetClient().SendPacket(new YouAreControllerComposer(0));
                 }
-                else if (FurniOptions == 0 && !User.Statusses.ContainsKey("flatctrl 1"))
+                else if (FurniOptions == 0 && !User.ContainStatus("flatctrl"))
                 {
-                    User.SetStatus("flatctrl 1", "");
+                    User.SetStatus("flatctrl", "1");
                     User.UpdateNeeded = true;
 
                     User.GetClient().SendPacket(new YouAreControllerComposer(1));

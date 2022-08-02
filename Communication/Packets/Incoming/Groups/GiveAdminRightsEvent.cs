@@ -39,9 +39,9 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(UserId);
                 if (User != null)
                 {
-                    if (!User.Statusses.ContainsKey("flatctrl 3"))
+                    if (!User.ContainStatus("flatctrl"))
                     {
-                        User.SetStatus("flatctrl 3", "");
+                        User.SetStatus("flatctrl", "3");
                     }
 
                     User.UpdateNeeded = true;
