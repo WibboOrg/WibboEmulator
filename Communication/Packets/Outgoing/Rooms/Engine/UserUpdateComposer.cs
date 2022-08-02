@@ -19,7 +19,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
                 this.WriteInteger(User.RotBody);
 
                 StringBuilder StatusComposer = new StringBuilder();
-                StatusComposer.Append("/");
+                StatusComposer.Append('/');
 
                 foreach (KeyValuePair<string, string> Status in User.Statusses.ToList())
                 {
@@ -27,14 +27,14 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 
                     if (!string.IsNullOrEmpty(Status.Value))
                     {
-                        StatusComposer.Append(" ");
+                        StatusComposer.Append(' ');
                         StatusComposer.Append(Status.Value);
                     }
 
-                    StatusComposer.Append("/");
+                    StatusComposer.Append('/');
                 }
 
-                StatusComposer.Append("/");
+                StatusComposer.Append('/');
                 this.WriteString(StatusComposer.ToString());
             }
         }

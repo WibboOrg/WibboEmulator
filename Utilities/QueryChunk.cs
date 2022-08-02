@@ -33,10 +33,10 @@ namespace WibboEmulator.Utilities
             switch (this.endingType)
             {
                 case EndingType.SEQUENTIAL:
-                    this.queries.Append(";");
+                    this.queries.Append(';');
                     break;
                 case EndingType.CONTINUOUS:
-                    this.queries.Append(",");
+                    this.queries.Append(',');
                     break;
             }
         }

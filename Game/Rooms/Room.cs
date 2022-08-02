@@ -399,7 +399,7 @@ namespace WibboEmulator.Game.Rooms
             }
         }
 
-        public void onRoomKick()
+        public void OnRoomKick()
         {
             List<RoomUser> list = new List<RoomUser>();
             foreach (RoomUser roomUser in this._roomUserManager.GetUserList().ToList())

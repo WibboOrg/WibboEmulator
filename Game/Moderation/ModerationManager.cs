@@ -354,7 +354,7 @@ namespace WibboEmulator.Game.Moderation
 
             if (KickUsers)
             {
-                room.onRoomKick();
+                room.OnRoomKick();
             }
 
             room.SendPacket(new GetGuestRoomResultComposer(ModSession, room.RoomData, false, false));

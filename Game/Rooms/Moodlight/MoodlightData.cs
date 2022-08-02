@@ -156,15 +156,15 @@ namespace WibboEmulator.Game.Rooms.Moodlight
 
             SB.Append(this.Enabled == true ? 2 : 1);
 
-            SB.Append(",");
+            SB.Append(',');
             SB.Append(this.CurrentPreset);
-            SB.Append(",");
+            SB.Append(',');
 
             SB.Append(Preset.BackgroundOnly == true ? 2 : 1);
 
-            SB.Append(",");
+            SB.Append(',');
             SB.Append(Preset.ColorCode);
-            SB.Append(",");
+            SB.Append(',');
             SB.Append(Preset.ColorIntensity);
             return SB.ToString();
         }

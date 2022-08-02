@@ -28,6 +28,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
             this.WriteInteger(-1);
             this.WriteInteger((Item.GetBaseItem().Modes > 1) ? 1 : 0);
             this.WriteInteger(UserId);
+            this.WriteString("");
         }
     }
 }

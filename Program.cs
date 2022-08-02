@@ -2,6 +2,7 @@
 
 namespace WibboEmulator
 {
+
     public static class Program
     {
         [STAThread]

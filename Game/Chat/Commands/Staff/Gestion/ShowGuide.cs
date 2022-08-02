@@ -37,7 +37,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     }
                 }
 
-                stringBuilder.Append("\r");
+                stringBuilder.Append('\r');
                 Session.SendHugeNotif(stringBuilder.ToString());
             }
         }

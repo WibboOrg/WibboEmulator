@@ -43,41 +43,46 @@ namespace WibboEmulator.Game.Items
             EndOpenBox(session, present, room, pageId, forceItem);
         }
 
-        private static readonly int ProbalilityLegendary = 1000 * 2;
-        private static readonly int ProbalilityEpic = 100 * 2;
-        private static readonly int ProbalilityCommun = 10 * 2;
-        private static readonly int ProbalilityBasic = 1 * 2;
+        private static readonly int ProbalilityLegendary = 10000;
+        private static readonly int ProbalilityEpic = 1000;
+        private static readonly int ProbalilityCommun = 100;
+        private static readonly int ProbalilityBasic = 10;
 
         public static void OpenExtrabox(Client session, Item present, Room room)
         {
             int pageId;
             int forceItem = 0;
 
-            if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic * 3) == ProbalilityEpic * 3) //Epic
+            if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic) == ProbalilityEpic) //Epic
             {
                 pageId = 84641;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 75 * 3) == 75 * 3) //Pièce Win-win
+            else if (WibboEnvironment.GetRandomNumber(1, 75 * 3) == 75 * 10) //Pièce Win-win
             {
                 pageId = 456465;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 50 * 3) == 50 * 3) //50 WibboPoint
+            else if (WibboEnvironment.GetRandomNumber(1, 50 * 3) == 50 * 10) //50 WibboPoint
             {
                 pageId = 15987;
                 forceItem = 10993;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 10 * 3) == 10 * 3) //10 WibboPoint
+            else if (WibboEnvironment.GetRandomNumber(1, 10 * 3) == 10 * 10) //10 WibboPoint
             {
                 pageId = 15987;
                 forceItem = 11068;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun * 3) == ProbalilityCommun * 3) //Commun
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun) == ProbalilityCommun) //Commun
             {
                 pageId = 98747;
             }
-            else
+            else if(WibboEnvironment.GetRandomNumber(1, ProbalilityBasic) == ProbalilityBasic) //Commun
             {
                 pageId = 894948; //Basique
+            }
+            else
+            {
+                pageId = 15987;
+                forceItem = 23584;
             }
 
             EndOpenBox(session, present, room, pageId, forceItem);
@@ -92,41 +97,41 @@ namespace WibboEmulator.Game.Items
             {
                 pageId = 1635463734;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 500 * 2) == 500 * 2) //500 WibboPoints
+            else if (WibboEnvironment.GetRandomNumber(1, 500 * 10) == 500 * 10) //500 WibboPoints
             {
                 pageId = 15987;
                 forceItem = 4082;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 250 * 2) == 250 * 2) //Pièce Win-win
+            else if (WibboEnvironment.GetRandomNumber(1, 250 * 10) == 250 * 10) //Pièce Win-win
             {
                 pageId = 456465;
                 forceItem = 7934;
+            }
+            else if (WibboEnvironment.GetRandomNumber(1, 200 * 10) == 200 * 10) //200 WibboPoints
+            {
+                pageId = 15987;
+                forceItem = 4083;
             }
             else if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic) == ProbalilityEpic) //Epique
             {
                 pageId = 1635463733;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 200 * 2) == 200 * 2) //200 WibboPoints
-            {
-                pageId = 15987;
-                forceItem = 4083;
-            }
-            else if (WibboEnvironment.GetRandomNumber(1, 100 * 2) == 100 * 2) //Pièce Win-win
+            else if (WibboEnvironment.GetRandomNumber(1, 100 * 10) == 100 * 10) //Pièce Win-win
             {
                 pageId = 456465;
                 forceItem = 7932;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 75 * 2) == 75 * 2) //Pièce Win-win
+            else if (WibboEnvironment.GetRandomNumber(1, 75 * 10) == 75 * 10) //Pièce Win-win
             {
                 pageId = 456465;
                 forceItem = 7931;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 50 * 2) == 50 * 2) //50 WibboPoints
+            else if (WibboEnvironment.GetRandomNumber(1, 50 * 10) == 50 * 10) //50 WibboPoints
             {
                 pageId = 15987;
                 forceItem = 10993;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 10 * 2) == 10 * 2) //10 WibboPoints
+            else if (WibboEnvironment.GetRandomNumber(1, 10 * 10) == 10 * 10) //10 WibboPoints
             {
                 pageId = 15987;
                 forceItem = 11068;
@@ -135,7 +140,7 @@ namespace WibboEmulator.Game.Items
             {
                 pageId = 1635463732;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 5 * 2) == 5 * 2) //Pièce Win-win
+            else if (WibboEnvironment.GetRandomNumber(1, 5 * 10) == 5 * 10) //Pièce Win-win
             {
                 pageId = 456465;
                 forceItem = 7928;
@@ -156,6 +161,7 @@ namespace WibboEmulator.Game.Items
         public static void OpenDeluxeBox(Client session, Item present, Room room)
         {
             int pageId = 0;
+            int forceItem = 0;
 
             if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic) == ProbalilityEpic) //Epique
             {
@@ -165,12 +171,17 @@ namespace WibboEmulator.Game.Items
             {
                 pageId = 1635463616;
             }
-            else
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityBasic) == ProbalilityBasic) //Basic
             {
                 pageId = 91700214; //Basique
             }
+            else
+            {
+                pageId = 15987;
+                forceItem = 23584;
+            }
 
-            EndOpenBox(session, present, room, pageId);
+            EndOpenBox(session, present, room, pageId, forceItem);
         }
 
         public static void OpenBadgeBox(Client session, Item present, Room room)

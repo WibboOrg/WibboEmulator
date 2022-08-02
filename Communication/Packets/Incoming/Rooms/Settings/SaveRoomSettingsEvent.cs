@@ -41,7 +41,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             {
                 if (index > 0)
                 {
-                    stringBuilder.Append(",");
+                    stringBuilder.Append(',');
                 }
 
                 string tag = Packet.PopString().ToLower();

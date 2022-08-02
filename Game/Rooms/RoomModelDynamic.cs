@@ -103,7 +103,7 @@ namespace WibboEmulator.Game.Rooms
                     }
                     else if (this.SqState[x, y] == SquareStateType.BLOCKED)
                     {
-                        thatMessage.Append("x");
+                        thatMessage.Append('x');
                     }
                     else
                     {

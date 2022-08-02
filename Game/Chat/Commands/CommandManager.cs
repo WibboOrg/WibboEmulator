@@ -190,7 +190,7 @@ namespace WibboEmulator.Game.Chat.Commands
             for (int i = Start; i < Params.Length; i++)
             {
                 if (i > Start)
-                    Merged.Append(" ");
+                    Merged.Append(' ');
 
                 Merged.Append(Params[i]);
             }
