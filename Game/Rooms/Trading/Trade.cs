@@ -45,9 +45,9 @@ namespace WibboEmulator.Game.Rooms.Trading
 
             foreach (TradeUser tradeUser in this._users)
             {
-                if (!tradeUser.GetRoomUser().ContainStatus("/trd"))
+                if (!tradeUser.GetRoomUser().ContainStatus("trd"))
                 {
-                    tradeUser.GetRoomUser().SetStatus("/trd", "");
+                    tradeUser.GetRoomUser().SetStatus("trd", "");
                     tradeUser.GetRoomUser().UpdateNeeded = true;
                 }
             }
@@ -315,7 +315,7 @@ namespace WibboEmulator.Game.Rooms.Trading
             {
                 if (tradeUser != null && tradeUser.GetRoomUser() != null)
                 {
-                    tradeUser.GetRoomUser().RemoveStatus("/trd");
+                    tradeUser.GetRoomUser().RemoveStatus("trd");
                     tradeUser.GetRoomUser().UpdateNeeded = true;
                 }
             }
@@ -330,7 +330,7 @@ namespace WibboEmulator.Game.Rooms.Trading
             {
                 if (tradeUser != null && tradeUser.GetRoomUser() != null)
                 {
-                    tradeUser.GetRoomUser().RemoveStatus("/trd");
+                    tradeUser.GetRoomUser().RemoveStatus("trd");
                     tradeUser.GetRoomUser().UpdateNeeded = true;
                 }
             }

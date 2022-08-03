@@ -144,7 +144,7 @@ namespace WibboEmulator.Game.Rooms
 
         public bool NeedsAutokick => !this.IsBot && (this.GetClient() == null || this.GetClient().GetUser() == null || this.GetClient().GetUser().Rank < 2 && this.IdleTime >= 1200);
 
-        public bool IsTrading => !this.IsBot && this.ContainStatus("/trd");
+        public bool IsTrading => !this.IsBot && this.ContainStatus("trd");
 
         public bool IsBot => this.BotData != null;
 

@@ -39,7 +39,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                         Group.TakeAdmin(UserId);
                     }
 
-
                     if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room Room))
                     {
                         return;
