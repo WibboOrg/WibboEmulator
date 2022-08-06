@@ -2147,11 +2147,11 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        int NbLot = 1;
+                        int NbLot = WibboEnvironment.GetRandomNumber(1, 2);
 
                         if (user.GetClient().GetUser().Rank > 1)
                         {
-                            NbLot = 2;
+                            NbLot = WibboEnvironment.GetRandomNumber(2, 3);
                         }
 
                         int NbLotDeluxe = WibboEnvironment.GetRandomNumber(1, 4);

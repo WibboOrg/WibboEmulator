@@ -35,10 +35,10 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            int NbLot = 1;
+            int NbLot = WibboEnvironment.GetRandomNumber(1, 2);
             if (roomUserByUserId.GetClient().GetUser().Rank > 1)
             {
-                NbLot = 2;
+                NbLot = WibboEnvironment.GetRandomNumber(2, 3);
             }
 
             int NbLotDeluxe = WibboEnvironment.GetRandomNumber(1, 4);
