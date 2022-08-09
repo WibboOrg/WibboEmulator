@@ -38,6 +38,13 @@ namespace WibboEmulator.Game.Items
                     Message.WriteString((itemData.InteractionType != InteractionType.TONER && itemData.InteractionType != InteractionType.FBGATE) ? Item.ExtraData : string.Empty);
                     break;
 
+                case InteractionType.TROPHY:
+                case InteractionType.PHOTO:
+                    Message.WriteInteger(0);
+                    Message.WriteInteger(0);
+                    Message.WriteString((itemData.InteractionType != InteractionType.TONER && itemData.InteractionType != InteractionType.FBGATE) ? Item.ExtraData : string.Empty);
+                    break;
+
                 case InteractionType.WALLPAPER:
                     Message.WriteInteger(2);
                     Message.WriteInteger(0);

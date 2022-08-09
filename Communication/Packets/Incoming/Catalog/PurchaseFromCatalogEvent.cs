@@ -76,11 +76,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (AmountPurchase > 1)
-            {
-                Session.SendPacket(new PurchaseOKComposer(Item, Item.Data));
-            }
-
             int LimitedEditionSells = 0;
             int LimitedEditionStack = 0;
 
@@ -235,6 +230,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             #endregion
 
 
+            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
             if (Item.IsLimited)
             {
                 if (Item.LimitedEditionStack <= Item.LimitedEditionSells)
@@ -245,7 +242,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 }
 
                 Interlocked.Increment(ref Item.LimitedEditionSells);
-                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                
                 CatalogItemDao.UpdateLimited(dbClient, Item.Id, Item.LimitedEditionSells);
 
                 LimitedEditionSells = Item.LimitedEditionSells;
@@ -269,7 +266,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 Session.GetUser().WibboPoints -= TotalDiamondCost;
                 Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
-                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
                 UserDao.UpdateRemovePoints(dbClient, Session.GetUser().Id, TotalDiamondCost);
             }
 
@@ -278,7 +274,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 Session.GetUser().LimitCoins -= TotalLimitCoinCost;
                 Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().LimitCoins, 0, 55));
 
-                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
                 UserDao.UpdateRemoveLimitCoins(dbClient, Session.GetUser().Id, TotalLimitCoinCost);
             }
 

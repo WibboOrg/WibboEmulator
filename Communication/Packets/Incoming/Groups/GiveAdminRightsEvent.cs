@@ -41,14 +41,14 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 {
                     if (!User.ContainStatus("flatctrl"))
                     {
-                        User.SetStatus("flatctrl", "3");
+                        User.SetStatus("flatctrl", "1");
                     }
 
                     User.UpdateNeeded = true;
 
                     if (User.GetClient() != null)
                     {
-                        User.GetClient().SendPacket(new YouAreControllerComposer(3));
+                        User.GetClient().SendPacket(new YouAreControllerComposer(1));
                     }
                 }
             }

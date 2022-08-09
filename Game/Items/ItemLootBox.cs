@@ -65,10 +65,6 @@ namespace WibboEmulator.Game.Items
                 pageId = 15987;
                 forceItem = 11068;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun * multi) == ProbalilityCommun * multi) //Commun
-            {
-                pageId = 1635463732;
-            }
             else if (WibboEnvironment.GetRandomNumber(1, 5 * multi) == 5 * multi) //Pièce Win-win
             {
                 pageId = 456465;
@@ -102,7 +98,7 @@ namespace WibboEmulator.Game.Items
 
             int multi = 5;
 
-            if (WibboEnvironment.GetRandomNumber(1, ProbalilityLegendary) == ProbalilityLegendary) //Legendaires
+            if (WibboEnvironment.GetRandomNumber(1, ProbalilityLegendary * multi) == ProbalilityLegendary * multi) //Legendaires
             {
                 pageId = 1635463734;
             }
@@ -172,18 +168,15 @@ namespace WibboEmulator.Game.Items
             int pageId = 0;
             int forceItem = 0;
 
-            if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic) == ProbalilityEpic) //Epique
+            int multi = 5;
+
+            if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic * multi) == ProbalilityEpic * multi) //Epique
             {
                 pageId = 1635463617;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun) == ProbalilityCommun) //Commun
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun * multi) == ProbalilityCommun * multi) //Commun
             {
                 pageId = 1635463616;
-            }
-            else if (WibboEnvironment.GetRandomNumber(1, 10) == 10) //1 WibboPoint
-            {
-                pageId = 15987;
-                forceItem = 23584;
             }
             else //Basic
             {
@@ -229,7 +222,7 @@ namespace WibboEmulator.Game.Items
             string lotType = "";
             int forceItem = 0;
 
-            if (WibboEnvironment.GetRandomNumber(1, ProbalilityLegendary / 20) == ProbalilityLegendary / 20) //Legendaire
+            if (WibboEnvironment.GetRandomNumber(1, ProbalilityLegendary / 5) == ProbalilityLegendary / 5) //Legendaire
             {
                 pageId = 14514;
                 lotType = "Légendaire";
@@ -246,7 +239,7 @@ namespace WibboEmulator.Game.Items
                 lotType = "Royal";
                 forceItem = 70223722;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic / 20) == ProbalilityEpic / 20) //Epique
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic / 5) == ProbalilityEpic / 5) //Epique
             {
                 pageId = 84641;
                 lotType = "épique";

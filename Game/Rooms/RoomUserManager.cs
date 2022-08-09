@@ -491,7 +491,13 @@ namespace WibboEmulator.Game.Rooms
                 }
             }
 
-            if (this._room.CheckRights(Session, true))
+            if(Session.GetUser().HasPermission("perm_owner_all_rooms"))
+            {
+                User.SetStatus("flatctrl", "5");
+                Session.SendPacket(new YouAreOwnerComposer());
+                Session.SendPacket(new YouAreControllerComposer(5));
+            }
+            else if (this._room.CheckRights(Session, true))
             {
                 User.SetStatus("flatctrl", "4");
                 Session.SendPacket(new YouAreOwnerComposer());
@@ -504,7 +510,7 @@ namespace WibboEmulator.Game.Rooms
             }
             else
             {
-
+                User.RemoveStatus("flatctrl");
                 Session.SendPacket(new YouAreNotControllerComposer());
             }
 

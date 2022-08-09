@@ -86,7 +86,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                             int Amount;
                             if (int.TryParse(Params[3], out Amount))
                             {
-                                TargetUser.GetUser().WibboPoints += Amount;
+                                TargetUser.GetUser().LimitCoins += Amount;
                                 TargetUser.SendPacket(new ActivityPointNotificationComposer(TargetUser.GetUser().LimitCoins, 0, 55));
 
                                 if (TargetUser.GetUser().Id != Session.GetUser().Id)

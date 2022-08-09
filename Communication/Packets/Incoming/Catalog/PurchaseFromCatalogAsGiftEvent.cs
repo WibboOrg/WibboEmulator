@@ -295,11 +295,11 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             if (Item.CostLimitCoins > 0)
             {
-                Session.GetUser().LimitCoins -= TotalDiamondCost;
+                Session.GetUser().LimitCoins -= TotalLimitCoinCost;
                 Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().LimitCoins, 0, 55));
 
                 using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                UserDao.UpdateRemoveLimitCoins(dbClient, Session.GetUser().Id, TotalDiamondCost);
+                UserDao.UpdateRemoveLimitCoins(dbClient, Session.GetUser().Id, TotalLimitCoinCost);
             }
 
             Session.GetUser().LastGiftPurchaseTime = DateTime.Now;
