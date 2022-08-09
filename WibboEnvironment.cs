@@ -27,7 +27,7 @@ namespace WibboEmulator
         private static LanguageManager _languageManager;
 
         private static readonly HttpClient _httpClient = new HttpClient();
-        private static Random _random = new Random((int)(DateTime.Now.Ticks & 0x7FFFFFFF));
+        private static Random _random = new Random();
         private static readonly ConcurrentDictionary<int, User> _usersCached = new ConcurrentDictionary<int, User>();
 
         public static DateTime ServerStarted { get; set; }
