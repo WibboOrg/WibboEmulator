@@ -197,15 +197,15 @@ namespace WibboEmulator.Game.Animation
             room.RoomData.State = 0;
             room.CloseFullRoom = true;
 
-            string alertMessage = "[center] [size=large]🤖[b]Animation Jack & Daisy[/b] 🤖[/size][/center]" +
-                "[br]" +
-                "[center][i]Beep beep, c'est l'heure d'une animation automatisée ![/i][/center]" +
-                "[br]" +
-                "➤ Rejoins-nous chez [b]WibboGame[/b] pour un jeu qui s'intitule :: [b]" + room.RoomData.Name + "[/b] ::" +
-                "[br][br]" +
-                "➤ Rends-toi dans l'appartement et tente de remporter un lot composé de [i]une ou plusieurs RareBox(s) et BadgeBox(s) ainsi qu'un point au TOP Gamer ! [/i] 🎁" +
-                "[br][br]" +
-                "- Jack et Daisy";
+            string alertMessage = "[center]" +
+                "[size=large]🎮[b][u]ANIMATION AUTOMATIQUE[/u][/b] 🎮[/size]" +
+                "[/center]" +
+                "[center]" +
+                "🤖 [b][i][color=696969]Une nouvelle animation automatique débute ![/color][/i][/b] 🤖" +
+                "[/center][br]" +
+                "➤ Rejoins-nous chez [color=696969][b]WibboGame[/b][/color] dans le jeu [color=696969][u][b]" + room.RoomData.Name + "[/b][/u][/color] pour une animation automatisée ![br]" +
+                "➤ Rejoins nous et tente de remporter des [b]RareBoxs[/b] et des [b]BadgeBoxs[/b] ainsi qu'un [b]point au [u]TOP Gamer[/u][/b] ![br][br]" +
+                "[center][img]https://cdn.wibbo.org/uploads/1659791208.png[/img]  - Jack et Daisy, [b][u][color=696969]Animateurs robotisés[/color][/u][/b] 🤖  -  [img]https://cdn.wibbo.org/uploads/1659791188.png[/img][/center]";
 
             WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, "WibboGame", room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
 

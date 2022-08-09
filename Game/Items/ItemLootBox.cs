@@ -43,25 +43,51 @@ namespace WibboEmulator.Game.Items
             EndOpenBox(session, present, room, pageId, forceItem);
         }
 
-        private static readonly int ProbalilityLegendary = 10000;
-        private static readonly int ProbalilityEpic = 1000;
-        private static readonly int ProbalilityCommun = 100;
-        private static readonly int ProbalilityBasic = 10;
+        private static readonly int ProbalilityLegendary = 1000;
+        private static readonly int ProbalilityEpic = 100;
+        private static readonly int ProbalilityCommun = 10;
+        private static readonly int ProbalilityBasic = 1;
 
         public static void OpenExtrabox(Client session, Item present, Room room)
         {
             int pageId;
             int forceItem = 0;
 
-            if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun) == ProbalilityCommun) //Commun
+            int multi = 5;
+
+            if (WibboEnvironment.GetRandomNumber(1, 50 * multi) == 50 * multi) //50 WibboPoints
+            {
+                pageId = 15987;
+                forceItem = 10993;
+            }
+            else if (WibboEnvironment.GetRandomNumber(1, 10 * multi) == 10 * multi) //10 WibboPoints
+            {
+                pageId = 15987;
+                forceItem = 11068;
+            }
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun * multi) == ProbalilityCommun * multi) //Commun
+            {
+                pageId = 1635463732;
+            }
+            else if (WibboEnvironment.GetRandomNumber(1, 5 * multi) == 5 * multi) //Pièce Win-win
+            {
+                pageId = 456465;
+                forceItem = 7928;
+            }
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun * multi) == ProbalilityCommun * multi) //Common
             {
                 pageId = 84641;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityBasic) == ProbalilityBasic) //Basic
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityBasic * multi) == ProbalilityBasic * multi) //Basic
             {
                 pageId = 98747;
             }
-            else if(WibboEnvironment.GetRandomNumber(1, ProbalilityBasic / 10) == ProbalilityBasic / 10) //Default
+            else if (WibboEnvironment.GetRandomNumber(1, multi) == multi) //1 WibboPoint
+            {
+                pageId = 15987;
+                forceItem = 23584;
+            }
+            else //Basic
             {
                 pageId = 894948;
             }
@@ -74,70 +100,68 @@ namespace WibboEmulator.Game.Items
             int pageId;
             int forceItem = 0;
 
+            int multi = 5;
+
             if (WibboEnvironment.GetRandomNumber(1, ProbalilityLegendary) == ProbalilityLegendary) //Legendaires
             {
                 pageId = 1635463734;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 500 * 10) == 500 * 10) //500 WibboPoints
+            else if (WibboEnvironment.GetRandomNumber(1, 500 * multi) == 500 * multi) //500 WibboPoints
             {
                 pageId = 15987;
                 forceItem = 4082;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 250 * 10) == 250 * 10) //Pièce Win-win
+            else if (WibboEnvironment.GetRandomNumber(1, 250 * multi) == 250 * multi) //Pièce Win-win
             {
                 pageId = 456465;
                 forceItem = 7934;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 200 * 10) == 200 * 10) //200 WibboPoints
+            else if (WibboEnvironment.GetRandomNumber(1, 200 * multi) == 200 * multi) //200 WibboPoints
             {
                 pageId = 15987;
                 forceItem = 4083;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic) == ProbalilityEpic) //Epique
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityEpic * multi) == ProbalilityEpic * multi) //Epique
             {
                 pageId = 1635463733;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 100 * 10) == 100 * 10) //Pièce Win-win
+            else if (WibboEnvironment.GetRandomNumber(1, 100 * multi) == 100 * multi) //Pièce Win-win
             {
                 pageId = 456465;
                 forceItem = 7932;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 75 * 10) == 75 * 10) //Pièce Win-win
+            else if (WibboEnvironment.GetRandomNumber(1, 75 * multi) == 75 * multi) //Pièce Win-win
             {
                 pageId = 456465;
                 forceItem = 7931;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 50 * 10) == 50 * 10) //50 WibboPoints
+            else if (WibboEnvironment.GetRandomNumber(1, 50 * multi) == 50 * multi) //50 WibboPoints
             {
                 pageId = 15987;
                 forceItem = 10993;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 10 * 10) == 10 * 10) //10 WibboPoints
+            else if (WibboEnvironment.GetRandomNumber(1, 10 * multi) == 10 * multi) //10 WibboPoints
             {
                 pageId = 15987;
                 forceItem = 11068;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun) == ProbalilityCommun) //Commun
+            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityCommun * multi) == ProbalilityCommun * multi) //Commun
             {
                 pageId = 1635463732;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, 5 * 10) == 5 * 10) //Pièce Win-win
+            else if (WibboEnvironment.GetRandomNumber(1, 5 * multi) == 5 * multi) //Pièce Win-win
             {
                 pageId = 456465;
                 forceItem = 7928;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityBasic) == ProbalilityBasic) //Basique
-            {
-                pageId = 1635463731;
-            }
-            else if (WibboEnvironment.GetRandomNumber(1, 10) == 10) //1 WibboPoint
+            else if (WibboEnvironment.GetRandomNumber(1, multi) == multi) //1 WibboPoint
             {
                 pageId = 15987;
                 forceItem = 23584;
             }
-            else //default
+            else //basic
             {
-
+                pageId = 1635463731;
             }
 
             EndOpenBox(session, present, room, pageId, forceItem);
@@ -156,14 +180,14 @@ namespace WibboEmulator.Game.Items
             {
                 pageId = 1635463616;
             }
-            else if (WibboEnvironment.GetRandomNumber(1, ProbalilityBasic) == ProbalilityBasic) //Basic
-            {
-                pageId = 91700214; //Basique
-            }
             else if (WibboEnvironment.GetRandomNumber(1, 10) == 10) //1 WibboPoint
             {
                 pageId = 15987;
                 forceItem = 23584;
+            }
+            else //Basic
+            {
+                pageId = 91700214;
             }
 
             EndOpenBox(session, present, room, pageId, forceItem);
@@ -174,8 +198,7 @@ namespace WibboEmulator.Game.Items
             //Présentoir et badge
             int pageId = 987987;
 
-            List<int> PageBadgeList = new List<int>(new int[] { 18183 });
-            int PageBadgeId = PageBadgeList[WibboEnvironment.GetRandomNumber(0, PageBadgeList.Count - 1)];
+            int PageBadgeId = 18183;
             WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageBadgeId, out CatalogPage PageBadge);
             if (PageBadge == null)
             {
@@ -196,7 +219,7 @@ namespace WibboEmulator.Game.Items
                 }
             }
 
-            EndOpenBox(session, present, room, pageId);
+            EndOpenBox(session, present, room, pageId, 0, BadgeCode);
         }
 
         public static void OpenLegendBox(Client session, Item present, Room room)
@@ -213,13 +236,13 @@ namespace WibboEmulator.Game.Items
             }
             else if (WibboEnvironment.GetRandomNumber(1, 75) == 75) //Royal
             {
-                pageId = 14514;
+                pageId = 14515;
                 lotType = "Royal";
                 forceItem = 37951979;
             }
             else if (WibboEnvironment.GetRandomNumber(1, 30) == 30) //Royal
             {
-                pageId = 14514;
+                pageId = 14515;
                 lotType = "Royal";
                 forceItem = 70223722;
             }
@@ -230,7 +253,7 @@ namespace WibboEmulator.Game.Items
             }
             else if (WibboEnvironment.GetRandomNumber(1, 5) == 5) //Royal
             {
-                pageId = 14514;
+                pageId = 14515;
                 lotType = "Royal";
                 forceItem = 52394359;
             }
@@ -291,7 +314,7 @@ namespace WibboEmulator.Game.Items
             EndOpenBox(session, present, room, pageId, forceItem);
         }
 
-        private static void EndOpenBox(Client session, Item present, Room room, int pageId, int forceItem = 0)
+        private static void EndOpenBox(Client session, Item present, Room room, int pageId, int forceItem = 0, string extraData = "")
         {
             WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out CatalogPage page);
             if (page == null)
@@ -330,7 +353,15 @@ namespace WibboEmulator.Game.Items
                 }
 
                 ItemDao.UpdateBaseItem(dbClient, present.Id, lotData.Id);
+
+                if(!string.IsNullOrEmpty(extraData))
+                {
+                    ItemDao.UpdateExtradata(dbClient, present.Id, extraData);
+                }
             }
+
+            if (!string.IsNullOrEmpty(extraData))
+                present.ExtraData = extraData;
 
             present.BaseItem = lotData.Id;
             present.ResetBaseItem();
