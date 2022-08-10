@@ -2154,34 +2154,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             NbLot = WibboEnvironment.GetRandomNumber(2, 3);
                         }
 
-                        int NbLotDeluxe = WibboEnvironment.GetRandomNumber(1, 4);
-                        if (user.GetClient().GetUser().Rank > 1)
-                        {
-                            NbLotDeluxe = WibboEnvironment.GetRandomNumber(3, 4);
-                        }
-
-                        int NbBadge = WibboEnvironment.GetRandomNumber(1, 2);
-                        if (user.GetClient().GetUser().Rank > 1)
-                        {
-                            NbBadge = WibboEnvironment.GetRandomNumber(2, 3);
-                        }
-
-                        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(91947063, out ItemData ItemDataBadge))
-                        {
-                            return;
-                        }
-
-                        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(618784, out ItemData ItemDataDeluxe))
-                        {
-                            return;
-                        }
-
                         List<Item> Items = ItemFactory.CreateMultipleItems(ItemData, user.GetClient().GetUser(), "", NbLot);
-                        Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataBadge, user.GetClient().GetUser(), "", NbBadge));
-                        if (NbLotDeluxe == 4)
-                        {
-                            Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataDeluxe, user.GetClient().GetUser(), "", 1));
-                        }
 
                         foreach (Item PurchasedItem in Items)
                         {
@@ -2191,8 +2164,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             }
                         }
 
-                        string DeluxeMessage = (NbLotDeluxe == 4) ? " Et une RareBox Deluxe !" : "";
-                        user.GetClient().SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", user.GetClient().Langue), NbLot, NbBadge) + DeluxeMessage);
+                        user.GetClient().SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", user.GetClient().Langue), NbLot));
 
                         using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                         {

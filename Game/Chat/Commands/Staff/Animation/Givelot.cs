@@ -9,48 +9,30 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class GiveLot : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client session, Room room, RoomUser user, string[] parts)
         {
-            if (Params.Length != 2)
+            if (parts.Length != 2)
             {
                 return;
             }
 
-            Room room = Session.GetUser().CurrentRoom;
-            if (room == null)
-            {
-                return;
-            }
-
-            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(Params[1]);
+            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(parts[1]);
             if (roomUserByUserId == null || roomUserByUserId.GetClient() == null)
             {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
                 return;
             }
-            if (roomUserByUserId.GetUsername() == Session.GetUser().Username || roomUserByUserId.GetClient().GetUser().IP == Session.GetUser().IP)
+            if (roomUserByUserId.GetUsername() == session.GetUser().Username || roomUserByUserId.GetClient().GetUser().IP == session.GetUser().IP)
             {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", Session.Langue));
-                WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + roomUserByUserId.GetUsername());
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", session.Langue));
+                WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + roomUserByUserId.GetUsername());
                 return;
             }
 
-            int NbLot = WibboEnvironment.GetRandomNumber(1, 2);
+            int lotCount = WibboEnvironment.GetRandomNumber(1, 2);
             if (roomUserByUserId.GetClient().GetUser().Rank > 1)
             {
-                NbLot = WibboEnvironment.GetRandomNumber(2, 3);
-            }
-
-            int NbLotDeluxe = WibboEnvironment.GetRandomNumber(1, 4);
-            if (roomUserByUserId.GetClient().GetUser().Rank > 1)
-            {
-                NbLotDeluxe = WibboEnvironment.GetRandomNumber(3, 4);
-            }
-
-            int NbBadge = WibboEnvironment.GetRandomNumber(1, 2);
-            if (roomUserByUserId.GetClient().GetUser().Rank > 1)
-            {
-                NbBadge = WibboEnvironment.GetRandomNumber(2, 3);
+                lotCount = WibboEnvironment.GetRandomNumber(2, 3);
             }
 
             if (!WibboEnvironment.GetGame().GetItemManager().GetItem(73917766, out ItemData ItemData))
@@ -58,22 +40,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(91947063, out ItemData ItemDataBadge))
-            {
-                return;
-            }
-
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(618784, out ItemData ItemDataDeluxe))
-            {
-                return;
-            }
-
-            List<Item> Items = ItemFactory.CreateMultipleItems(ItemData, roomUserByUserId.GetClient().GetUser(), "", NbLot);
-            Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataBadge, roomUserByUserId.GetClient().GetUser(), "", NbBadge));
-            if (NbLotDeluxe == 4)
-            {
-                Items.AddRange(ItemFactory.CreateMultipleItems(ItemDataDeluxe, roomUserByUserId.GetClient().GetUser(), "", 1));
-            }
+            List<Item> Items = ItemFactory.CreateMultipleItems(ItemData, roomUserByUserId.GetClient().GetUser(), "", lotCount);
 
             foreach (Item PurchasedItem in Items)
             {
@@ -83,9 +50,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 }
             }
 
-            string DeluxeMessage = (NbLotDeluxe == 4) ? " Et une RareBox Deluxe !" : "";
-            roomUserByUserId.GetClient().SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByUserId.GetClient().Langue), NbLot, NbBadge) + DeluxeMessage);
-            Session.SendWhisper(roomUserByUserId.GetUsername() + " à reçu " + NbLot + " RareBox et " + NbBadge + " BadgeBox!" + DeluxeMessage);
+            roomUserByUserId.GetClient().SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByUserId.GetClient().Langue), lotCount, NbBadge) + DeluxeMessage);
+            session.SendWhisper(roomUserByUserId.GetUsername() + " à reçu " + lotCount + " RareBox!");
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
