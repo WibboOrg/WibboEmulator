@@ -63,7 +63,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             user.Unidle();
 
-            if (!session.GetUser().HasPermission("perm_mod") && room.RoomMuted && !user.IsOwner() && !session.GetUser().CurrentRoom.CheckRights(session))
+            if (!session.GetUser().HasPermission("perm_mod") && !user.IsOwner() && !session.GetUser().CurrentRoom.CheckRights(session) && room.RoomMuted)
             {
                 user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("room.muted", session.Langue));
                 return;
@@ -79,7 +79,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (room.UserIsMuted(session.GetUser().Id))
+            if (!session.GetUser().HasPermission("perm_mod") && !user.IsOwner() && !session.GetUser().CurrentRoom.CheckRights(session) && room.UserIsMuted(session.GetUser().Id))
             {
                 if (!room.HasMuteExpired(session.GetUser().Id))
                 {
