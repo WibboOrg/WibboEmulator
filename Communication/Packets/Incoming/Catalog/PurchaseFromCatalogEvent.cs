@@ -242,8 +242,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 }
 
                 Interlocked.Increment(ref Item.LimitedEditionSells);
-                
-                CatalogItemDao.UpdateLimited(dbClient, Item.Id, Item.LimitedEditionSells);
+
+                CatalogItemLimitedDao.Update(dbClient, Item.Id, Item.LimitedEditionSells);
 
                 LimitedEditionSells = Item.LimitedEditionSells;
                 LimitedEditionStack = Item.LimitedEditionStack;

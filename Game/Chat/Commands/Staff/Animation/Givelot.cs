@@ -50,7 +50,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 }
             }
 
-            roomUserByUserId.GetClient().SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByUserId.GetClient().Langue), lotCount, NbBadge) + DeluxeMessage);
+            roomUserByUserId.GetClient().SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByUserId.GetClient().Langue), lotCount));
             session.SendWhisper(roomUserByUserId.GetUsername() + " à reçu " + lotCount + " RareBox!");
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
