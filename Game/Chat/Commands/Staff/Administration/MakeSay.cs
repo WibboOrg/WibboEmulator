@@ -11,11 +11,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             {
                 return;
             }
-            
-            if (UserRoom.GetClient().GetUser().SpectatorMode)
-            {
-                return;
-            }
 
             string username = Params[1];
             string message = CommandManager.MergeParams(Params, 2);
@@ -27,7 +22,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             }
 
             roomUserByUserId.OnChat(message, 0, false);
-
         }
     }
 }
