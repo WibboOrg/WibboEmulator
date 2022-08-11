@@ -1109,7 +1109,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
 
                         foreach (RoomUser RUser in this.RoomInstance.GetRoomUserManager().GetUserList().ToList())
                         {
-                            if (RUser != null && !RUser.IsBot && !RUser.GetClient().GetUser().HasPermission("perm_no_kick"))
+                            if (RUser != null && !RUser.IsBot)
                             {
                                 RUser.GetClient().SendNotification(value);
                             }
