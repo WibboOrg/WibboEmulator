@@ -312,8 +312,8 @@ namespace WibboEmulator.Game.Items
             WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out CatalogPage page);
             if (page == null)
             {
-                 session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
-                 return;
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
+                return;
             }
 
             ItemData lotData;
@@ -334,23 +334,22 @@ namespace WibboEmulator.Game.Items
 
             room.GetRoomItemHandler().RemoveFurniture(session, present.Id);
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+            if (lotData.IsRare)
+                LogLootBoxDao.Insert(dbClient, present.Data.InteractionType.ToString(), session.GetUser().Id, present.Id, lotData.Id);
+
+            if (lotData.Amount >= 0)
             {
-                if(lotData.IsRare)
-                    LogLootBoxDao.Insert(dbClient, present.Data.InteractionType.ToString(), session.GetUser().Id, present.Id, lotData.Id);
+                ItemStatDao.UpdateAdd(dbClient, lotData.Id);
+                lotData.Amount += 1;
+            }
 
-                if (lotData.Amount >= 0)
-                {
-                    ItemStatDao.UpdateAdd(dbClient, lotData.Id);
-                    lotData.Amount += 1;
-                }
+            ItemDao.UpdateBaseItem(dbClient, present.Id, lotData.Id);
 
-                ItemDao.UpdateBaseItem(dbClient, present.Id, lotData.Id);
-
-                if(!string.IsNullOrEmpty(extraData))
-                {
-                    ItemDao.UpdateExtradata(dbClient, present.Id, extraData);
-                }
+            if (!string.IsNullOrEmpty(extraData))
+            {
+                ItemDao.UpdateExtradata(dbClient, present.Id, extraData);
             }
 
             if (!string.IsNullOrEmpty(extraData))
@@ -365,20 +364,14 @@ namespace WibboEmulator.Game.Items
             {
                 if (!room.GetRoomItemHandler().SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
                 {
-                    using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    {
-                        ItemDao.UpdateResetRoomId(dbClient, present.Id);
-                    }
+                    ItemDao.UpdateResetRoomId(dbClient, present.Id);
 
                     ItemIsInRoom = false;
                 }
             }
             else
             {
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    ItemDao.UpdateResetRoomId(dbClient, present.Id);
-                }
+                ItemDao.UpdateResetRoomId(dbClient, present.Id);
 
                 ItemIsInRoom = false;
             }

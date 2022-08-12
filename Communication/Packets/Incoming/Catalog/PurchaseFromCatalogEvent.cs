@@ -1,3 +1,4 @@
+using WebSocketSharp;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
@@ -247,6 +248,12 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
                 LimitedEditionSells = Item.LimitedEditionSells;
                 LimitedEditionStack = Item.LimitedEditionStack;
+            }
+
+            if (Item.Amount >= 0)
+            {
+                ItemStatDao.UpdateAdd(dbClient, Item.Id);
+                Item.Amount += 1;
             }
 
             if (Item.CostCredits > 0)
