@@ -11,6 +11,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             if (Params.Length < 1)
             {
                 Session.SendWhisper("Entre un numéro à ta danse");
+                return;
             }
 
             int DanceId;

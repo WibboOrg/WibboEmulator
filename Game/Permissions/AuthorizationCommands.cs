@@ -1,5 +1,6 @@
 ﻿using WibboEmulator.Core;
 using WibboEmulator.Game.Clients;
+using WibboEmulator.Game.Rooms;
 
 namespace WibboEmulator.Game.Permissions
 {
@@ -22,7 +23,7 @@ namespace WibboEmulator.Game.Permissions
             this.DescriptionBr = descriptionBr;
         }
 
-        public bool UserGotAuthorization(Client session)
+        public bool UserGotAuthorization(Client session, Room room)
         {
             if (this.MinRank == 0)
             {
@@ -40,12 +41,12 @@ namespace WibboEmulator.Game.Permissions
             {
                 if (this.MinRank == -1)
                 {
-                    if (session.GetUser().CurrentRoom.CheckRights(session))
+                    if (room.CheckRights(session))
                     {
                         return true;
                     }
                 }
-                else if (this.MinRank == -2 && session.GetUser().CurrentRoom.CheckRights(session, true))
+                else if (this.MinRank == -2 && room.CheckRights(session, true))
                 {
                     return true;
                 }
@@ -64,14 +65,14 @@ namespace WibboEmulator.Game.Permissions
             return false;
         }
 
-        public int UserGotAuthorization2(Client session, Language RoomLangue)
+        public int UserGotAuthorizationType(Client session, Room room)
         {
             if (this.MinRank == 0)
             {
                 return 0;
             }
 
-            if (this.MinRank > 2 && session.GetUser().Rank < 13 && RoomLangue != session.Langue)
+            if (this.MinRank > 2 && session.GetUser().Rank < 13 && room.RoomData.Langue != session.Langue)
             {
                 return 5;
             }
@@ -91,7 +92,7 @@ namespace WibboEmulator.Game.Permissions
             {
                 if (this.MinRank == -1)
                 {
-                    if (session.GetUser().CurrentRoom.CheckRights(session))
+                    if (room.CheckRights(session))
                     {
                         return 0;
                     }
@@ -100,7 +101,7 @@ namespace WibboEmulator.Game.Permissions
                         return 3;
                     }
                 }
-                else if (this.MinRank == -2 && session.GetUser().CurrentRoom.CheckRights(session, true))
+                else if (this.MinRank == -2 && room.CheckRights(session, true))
                 {
                     return 0;
                 }

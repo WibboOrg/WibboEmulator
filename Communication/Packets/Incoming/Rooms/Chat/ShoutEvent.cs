@@ -19,19 +19,19 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room Room = session.GetUser().CurrentRoom;
-            if (Room == null)
+            Room room = session.GetUser().CurrentRoom;
+            if (room == null)
             {
                 return;
             }
 
-            RoomUser user = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            RoomUser user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
             if (user == null)
             {
                 return;
             }
 
-            if (Room.IsRoleplay)
+            if (room.IsRoleplay)
             {
                 RolePlayer Rp = user.Roleplayer;
                 if (Rp != null && Rp.Dead)
@@ -40,10 +40,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 }
             }
 
-            string Message = StringCharFilter.Escape(packet.PopString());
-            if (Message.Length > 100)
+            string message = StringCharFilter.Escape(packet.PopString());
+            if (message.Length > 100)
             {
-                Message = Message[..100];
+                message = message[..100];
             }
 
             int Colour = packet.PopInt();
@@ -55,31 +55,31 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             user.Unidle();
 
-            if (!session.GetUser().HasPermission("perm_mod") && !user.IsOwner() && !session.GetUser().CurrentRoom.CheckRights(session) && Room.RoomMuted)
+            if (!session.GetUser().HasPermission("perm_mod") && !user.IsOwner() && !session.GetUser().CurrentRoom.CheckRights(session) && room.RoomMuted)
             {
                 user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("room.muted", session.Langue));
                 return;
             }
 
-            if (Room.GetJanken().PlayerStarted(user))
+            if (room.GetJanken().PlayerStarted(user))
             {
-                if (!Room.GetJanken().PickChoice(user, Message))
+                if (!room.GetJanken().PickChoice(user, message))
                 {
                     user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.choice", session.Langue));
                 }
 
                 return;
             }
-            if (!session.GetUser().HasPermission("perm_mod") && !user.IsOwner() && !session.GetUser().CurrentRoom.CheckRights(session) && Room.UserIsMuted(session.GetUser().Id))
+            if (!session.GetUser().HasPermission("perm_mod") && !user.IsOwner() && !session.GetUser().CurrentRoom.CheckRights(session) && room.UserIsMuted(session.GetUser().Id))
             {
-                if (!Room.HasMuteExpired(session.GetUser().Id))
+                if (!room.HasMuteExpired(session.GetUser().Id))
                 {
                     user.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.muted", session.Langue));
                     return;
                 }
                 else
                 {
-                    Room.RemoveMute(session.GetUser().Id);
+                    room.RemoveMute(session.GetUser().Id);
                 }
             }
 
@@ -102,84 +102,84 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             }
             else if (timeSpan.TotalSeconds < 4.0 && user.FloodCount > 5 && !session.GetUser().HasPermission("perm_mod"))
             {
-                session.GetUser().SpamProtectionTime = (Room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium")) ? 5 : 15;
+                session.GetUser().SpamProtectionTime = (room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium")) ? 5 : 15;
                 session.GetUser().SpamEnable = true;
 
                 user.GetClient().SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
 
                 return;
             }
-            else if (Message.Length > 40 && Message == user.LastMessage && user.LastMessageCount == 1)
+            else if (message.Length > 40 && message == user.LastMessage && user.LastMessageCount == 1)
             {
                 user.LastMessageCount = 0;
                 user.LastMessage = "";
 
-                session.GetUser().SpamProtectionTime = (Room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium")) ? 5 : 15;
+                session.GetUser().SpamProtectionTime = (room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium")) ? 5 : 15;
                 session.GetUser().SpamEnable = true;
                 user.GetClient().SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
                 return;
             }
             else
             {
-                if (Message == user.LastMessage && Message.Length > 40)
+                if (message == user.LastMessage && message.Length > 40)
                 {
                     user.LastMessageCount++;
                 }
 
-                user.LastMessage = Message;
+                user.LastMessage = message;
 
                 session.GetUser().SpamFloodTime = DateTime.Now;
                 user.FloodCount++;
 
                 if (session != null)
                 {
-                    if (Message.StartsWith("@red@"))
+                    if (message.StartsWith("@red@"))
                     {
                         user.ChatTextColor = "@red@";
                     }
 
-                    if (Message.StartsWith("@cyan@"))
+                    if (message.StartsWith("@cyan@"))
                     {
                         user.ChatTextColor = "@cyan@";
                     }
 
-                    if (Message.StartsWith("@blue@"))
+                    if (message.StartsWith("@blue@"))
                     {
                         user.ChatTextColor = "@blue@";
                     }
 
-                    if (Message.StartsWith("@green@"))
+                    if (message.StartsWith("@green@"))
                     {
                         user.ChatTextColor = "@green@";
                     }
 
-                    if (Message.StartsWith("@purple@"))
+                    if (message.StartsWith("@purple@"))
                     {
                         user.ChatTextColor = "@purple@";
                     }
 
-                    if (Message.StartsWith("@black@"))
+                    if (message.StartsWith("@black@"))
                     {
                         user.ChatTextColor = "";
                     }
                 }
 
-                if (Message.StartsWith(":", StringComparison.CurrentCulture) && WibboEnvironment.GetGame().GetChatManager().GetCommands().Parse(session, user, Room, Message))
+                if (message.StartsWith(":", StringComparison.CurrentCulture) && WibboEnvironment.GetGame().GetChatManager().GetCommands().Parse(session, user, room, message))
                 {
-                    Room.GetChatMessageManager().AddMessage(session.GetUser().Id, session.GetUser().Username, Room.Id, string.Format("{0} a utilisé la commande {1}", session.GetUser().Username, Message), UnixTimestamp.GetNow());
+                    room.GetChatMessageManager().AddMessage(session.GetUser().Id, session.GetUser().Username, room.Id, string.Format("{0} a utilisé la commande {1}", session.GetUser().Username, message), UnixTimestamp.GetNow());
                     return;
                 }
 
                 if (session != null && !user.IsBot)
                 {
-                    if (session.Antipub(Message, "<TCHAT>"))
+                    if (session.Antipub(message, "<TCHAT>"))
                     {
                         return;
                     }
 
                     WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SOCIAL_CHAT, 0);
-                    session.GetUser().GetChatMessageManager().AddMessage(session.GetUser().Id, session.GetUser().Username, Room.Id, Message, UnixTimestamp.GetNow());
-                    Room.GetChatMessageManager().AddMessage(session.GetUser().Id, session.GetUser().Username, Room.Id, Message, UnixTimestamp.GetNow());
+                    session.GetUser().GetChatMessageManager().AddMessage(session.GetUser().Id, session.GetUser().Username, room.Id, message, UnixTimestamp.GetNow());
+                    room.GetChatMessageManager().AddMessage(session.GetUser().Id, session.GetUser().Username, room.Id, message, UnixTimestamp.GetNow());
 
                     if (user.TransfBot)
                     {
@@ -190,16 +190,16 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             if (!session.GetUser().HasPermission("perm_word_filter_override"))
             {
-                Message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Message);
+                message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(message);
             }
 
-            if (Room.AllowsShous(user, Message))
+            if (room.AllowsShous(user, message))
             {
-                user.SendWhisperChat(Message, true);
+                user.SendWhisperChat(message, true);
                 return;
             }
 
-            Room.OnUserSay(user, Message, true);
+            room.OnUserSay(user, message, true);
 
             if (user.IsSpectator)
             {
@@ -208,15 +208,15 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             if (!session.GetUser().IgnoreAll)
             {
-                Message = WibboEnvironment.GetGame().GetChatManager().GetMention().Parse(session, Message);
+                message = WibboEnvironment.GetGame().GetChatManager().GetMention().Parse(session, message);
             }
 
             if (!string.IsNullOrEmpty(user.ChatTextColor))
             {
-                Message = user.ChatTextColor + " " + Message;
+                message = user.ChatTextColor + " " + message;
             }
 
-            user.OnChat(Message, Colour, true);
+            user.OnChat(message, Colour, true);
 
         }
     }

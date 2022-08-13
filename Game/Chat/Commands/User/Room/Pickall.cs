@@ -8,11 +8,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Room == null || !Room.CheckRights(Session, true))
-            {
-                return;
-            }
-
             if (Room.RoomData.SellPrice > 0)
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.pickall", Session.Langue));
@@ -21,7 +16,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
             Session.GetUser().GetInventoryComponent().AddItemArray(Room.GetRoomItemHandler().RemoveAllFurniture(Session));
             Session.SendPacket(new FurniListUpdateComposer());
-
         }
     }
 }

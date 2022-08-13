@@ -25,7 +25,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            int.TryParse(Params[2], out int num);
+            int.TryParse(Params.Length >= 3 ? Params[2] : "0", out int num);
             if (num <= 600)
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("ban.toolesstime", Session.Langue));

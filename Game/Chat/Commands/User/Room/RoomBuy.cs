@@ -11,11 +11,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            if (Session == null || Session.GetUser() == null)
-            {
-                return;
-            }
-
             if (Room.RoomData.SellPrice == 0)
             {
                 return;

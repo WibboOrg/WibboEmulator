@@ -27,7 +27,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             else
             {
                 int num = 788922000;
-                if (Params.Length == 3)
+                if (Params.Length >= 3)
                 {
                     int.TryParse(Params[2], out num);
                 }

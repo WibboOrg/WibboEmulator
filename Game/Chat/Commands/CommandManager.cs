@@ -42,69 +42,64 @@ namespace WibboEmulator.Game.Chat.Commands
             RegisterGestion();
         }
 
-        public bool Parse(Client Session, RoomUser User, Room Room, string Message)
+        public bool Parse(Client session, RoomUser user, Room room, string message)
         {
-            if (Session == null || Session.GetUser() == null || Session.GetUser().CurrentRoom == null)
+            if (!message.StartsWith(_prefix))
             {
                 return false;
             }
 
-            if (!Message.StartsWith(_prefix))
+            if (message == _prefix + "commands")
             {
-                return false;
-            }
-
-            if (Message == _prefix + "commands")
-            {
-                Session.SendHugeNotif(WibboEnvironment.GetGame().GetChatManager().GetCommands().GetCommandList(Session));
+                session.SendHugeNotif(WibboEnvironment.GetGame().GetChatManager().GetCommands().GetCommandList(session, room));
                 return true;
             }
 
-            Message = Message.Substring(1);
-            string[] Split = Message.Split(' ');
+            message = message[1..];
+            string[] split = message.Split(' ');
 
-            if (Split.Length == 0)
+            if (split.Length == 0)
             {
                 return false;
             }
 
-            if (!this._commandRegisterInvokeable.TryGetValue(Split[0].ToLower(), out AuthorizationCommands CmdInfo))
+            if (!this._commandRegisterInvokeable.TryGetValue(split[0].ToLower(), out AuthorizationCommands cmdInfo))
             {
                 return false;
             }
 
-            if (!this._commands.TryGetValue(CmdInfo.CommandID, out IChatCommand Cmd))
+            if (!this._commands.TryGetValue(cmdInfo.CommandID, out IChatCommand cmd))
             {
                 return false;
             }
 
-            int AutorisationType = CmdInfo.UserGotAuthorization2(Session, Room.RoomData.Langue);
-            switch (AutorisationType)
+            int autorisationType = cmdInfo.UserGotAuthorizationType(session, room);
+            switch (autorisationType)
             {
                 case 2:
-                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.premium", Session.Langue));
+                    user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.premium", session.Langue));
                     return true;
                 case 3:
-                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.accred", Session.Langue));
+                    user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.accred", session.Langue));
                     return true;
                 case 4:
-                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.owner", Session.Langue));
+                    user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.owner", session.Langue));
                     return true;
                 case 5:
-                    User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue", Session.Langue));
+                    user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue", session.Langue));
                     return true;
             }
-            if (!CmdInfo.UserGotAuthorization(Session))
+            if (!cmdInfo.UserGotAuthorization(session, room))
             {
                 return false;
             }
 
-            if (CmdInfo.UserGotAuthorizationStaffLog())
+            if (cmdInfo.UserGotAuthorizationStaffLog())
             {
-                WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(Session.GetUser().Id, Session.GetUser().Username, Session.GetUser().CurrentRoomId, string.Empty, Split[0].ToLower(), string.Format("Tchat commande: {0}", string.Join(" ", Split)));
+                WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(session.GetUser().Id, session.GetUser().Username, room.Id, string.Empty, split[0].ToLower(), string.Format("Tchat commande: {0}", string.Join(" ", split)));
             }
 
-            Cmd.Execute(Session, Session.GetUser().CurrentRoom, User, Split);
+            cmd.Execute(session, room, user, split);
             return true;
         }
 
@@ -141,7 +136,7 @@ namespace WibboEmulator.Game.Chat.Commands
             }
         }
 
-        public string GetCommandList(Client client)
+        public string GetCommandList(Client client, Room room)
         {
             string rank = client.GetUser().Rank + client.GetUser().Langue.ToString();
             if (this._listCommande.ContainsKey(rank))
@@ -154,7 +149,7 @@ namespace WibboEmulator.Game.Chat.Commands
 
             foreach (AuthorizationCommands chatCommand in this._commandRegisterInvokeable.Values)
             {
-                if (chatCommand.UserGotAuthorization(client) && !NotDoublons.Contains(chatCommand.Input))
+                if (chatCommand.UserGotAuthorization(client, room) && !NotDoublons.Contains(chatCommand.Input))
                 {
                     if (client.Langue == Language.ANGLAIS)
                     {
