@@ -250,12 +250,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 LimitedEditionStack = Item.LimitedEditionStack;
             }
 
-            if (Item.Amount >= 0)
-            {
-                ItemStatDao.UpdateAdd(dbClient, Item.Id);
-                Item.Amount += 1;
-            }
-
             if (Item.CostCredits > 0)
             {
                 Session.GetUser().Credits -= TotalCreditsCost;
@@ -362,6 +356,12 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                         {
                             Session.SendPacket(new FurniListNotificationComposer(PurchasedItem.Id, 1));
                         }
+                    }
+
+                    if(Item.Data.Amount >= 0)
+                    {
+                        Item.Data.Amount += GeneratedGenericItems.Count;
+                        ItemStatDao.UpdateAdd(dbClient, Item.Data.Id, GeneratedGenericItems.Count);
                     }
                     break;
 
