@@ -6,372 +6,379 @@ namespace WibboEmulator.Game.Items
 {
     internal static class ItemBehaviourUtility
     {
-        public static void GenerateExtradata(Item Item, ServerPacket Message)
+        public static void GenerateExtradata(Item item, ServerPacket message)
         {
-            ItemData itemData = Item.GetBaseItem();
+            ItemData itemData = item.GetBaseItem();
+
+            message.WriteInteger(ItemBehaviourUtility.ItemCategory(item));
 
             switch (itemData.InteractionType)
             {
                 default:
-                    Message.WriteInteger(0);
-                    Message.WriteInteger(1);
+                    message.WriteInteger(item.Limited > 0 ? 256 + 1 : 1);
 
                     int totalSets = 1;
                     if (itemData.RarityLevel > 0) totalSets++;
                     if (itemData.Amount >= 0) totalSets++;
 
-                    Message.WriteInteger(totalSets);
+                    message.WriteInteger(totalSets);
 
                     if (itemData.RarityLevel > 0)
                     {
-                        Message.WriteString("rarity");
-                        Message.WriteString(itemData.RarityLevel.ToString());
+                        message.WriteString("rarity");
+                        message.WriteString(itemData.RarityLevel.ToString());
                     }
                     
                     if (itemData.Amount >= 0)
                     {
-                        Message.WriteString("amount");
-                        Message.WriteString(itemData.Amount.ToString());
+                        message.WriteString("amount");
+                        message.WriteString(itemData.Amount.ToString());
                     }
 
-                    Message.WriteString("state");
-                    Message.WriteString((itemData.InteractionType != InteractionType.TONER && itemData.InteractionType != InteractionType.FBGATE) ? Item.ExtraData : string.Empty);
+                    message.WriteString("state");
+                    message.WriteString((itemData.InteractionType != InteractionType.TONER && itemData.InteractionType != InteractionType.FBGATE) ? item.ExtraData : string.Empty);
+
+                    if (item.Limited > 0)
+                    {
+                        message.WriteInteger(item.Limited);
+                        message.WriteInteger(item.LimitedStack);
+                    }
                     break;
 
                 case InteractionType.TROPHY:
-                case InteractionType.PHOTO:
-                    Message.WriteInteger(0);
-                    Message.WriteInteger(0);
-                    Message.WriteString((itemData.InteractionType != InteractionType.TONER && itemData.InteractionType != InteractionType.FBGATE) ? Item.ExtraData : string.Empty);
+                    message.WriteInteger(0);
+                    message.WriteString((itemData.InteractionType != InteractionType.TONER && itemData.InteractionType != InteractionType.FBGATE) ? item.ExtraData : string.Empty);
                     break;
 
                 case InteractionType.WALLPAPER:
-                    Message.WriteInteger(2);
-                    Message.WriteInteger(0);
-                    Message.WriteString(Item.ExtraData);
+                    message.WriteInteger(0);
+                    message.WriteString(item.ExtraData);
 
                     break;
                 case InteractionType.FLOOR:
-                    Message.WriteInteger(3);
-                    Message.WriteInteger(0);
-                    Message.WriteString(Item.ExtraData);
+                    message.WriteInteger(0);
+                    message.WriteString(item.ExtraData);
                     break;
 
                 case InteractionType.LANDSCAPE:
-                    Message.WriteInteger(4);
-                    Message.WriteInteger(0);
-                    Message.WriteString(Item.ExtraData);
+                    message.WriteInteger(0);
+                    message.WriteString(item.ExtraData);
                     break;
 
                 case InteractionType.GUILD_ITEM:
                 case InteractionType.GUILD_GATE:
                     Group Group = null;
-                    if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(Item.GroupId, out Group))
+                    if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out Group))
                     {
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(0);
-                        Message.WriteString(Item.ExtraData);
+                        message.WriteInteger(0);
+                        message.WriteString(item.ExtraData);
                     }
                     else
                     {
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(2);
-                        Message.WriteInteger(5);
-                        Message.WriteString(Item.ExtraData.Split(new char[1] { ';' })[0]);
-                        Message.WriteString(Group.Id.ToString());
-                        Message.WriteString(Group.Badge);
-                        Message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(Group.Colour1, true));
-                        Message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(Group.Colour2, false));
+                        message.WriteInteger(2);
+                        message.WriteInteger(5);
+                        message.WriteString(item.ExtraData.Split(new char[1] { ';' })[0]);
+                        message.WriteString(Group.Id.ToString());
+                        message.WriteString(Group.Badge);
+                        message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(Group.Colour1, true));
+                        message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(Group.Colour2, false));
                     }
                     break;
 
                 case InteractionType.HIGHSCORE:
                 case InteractionType.HIGHSCOREPOINTS:
-                    Message.WriteInteger(0);
+                    message.WriteInteger(6); //Type
 
-                    Message.WriteInteger(6); //Type
-
-                    Message.WriteString(Item.ExtraData);
-                    Message.WriteInteger(2); //Type de victoire
-                    Message.WriteInteger(0); //Type de duré
+                    message.WriteString(item.ExtraData);
+                    message.WriteInteger(2); //Type de victoire
+                    message.WriteInteger(0); //Type de duré
 
 
-                    Message.WriteInteger((Item.Scores.Count > 20) ? 20 : Item.Scores.Count); //count
+                    message.WriteInteger((item.Scores.Count > 20) ? 20 : item.Scores.Count); //count
 
-                    foreach (KeyValuePair<string, int> score in Item.Scores.OrderByDescending(x => x.Value).Take(20))
+                    foreach (KeyValuePair<string, int> score in item.Scores.OrderByDescending(x => x.Value).Take(20))
                     {
-                        Message.WriteInteger(score.Value); //score
-                        Message.WriteInteger(1); //(score.Key.Count); //count
+                        message.WriteInteger(score.Value); //score
+                        message.WriteInteger(1); //(score.Key.Count); //count
                         //foreach(string UsernameScore in score.Key)
                         //Message.AppendString(UsernameScore);
-                        Message.WriteString(score.Key);
+                        message.WriteString(score.Key);
                     }
                     break;
 
                 case InteractionType.LOVELOCK:
-                    if (Item.ExtraData.Contains(Convert.ToChar(5).ToString()))
+                    if (item.ExtraData.Contains(Convert.ToChar(5).ToString()))
                     {
-                        string[] EData = Item.ExtraData.Split((char)5);
+                        string[] EData = item.ExtraData.Split((char)5);
                         int I = 0;
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(2);
-                        Message.WriteInteger(EData.Length);
+                        message.WriteInteger(2);
+                        message.WriteInteger(EData.Length);
                         while (I < EData.Length)
                         {
-                            Message.WriteString(EData[I]);
+                            message.WriteString(EData[I]);
                             I++;
                         }
                     }
                     else
                     {
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(0);
-                        Message.WriteString("0");
+                        message.WriteInteger(0);
+                        message.WriteString("0");
                     }
                     break;
 
                 case InteractionType.CRACKABLE:
-                    Message.WriteInteger(0);
+                    message.WriteInteger(7); //Type
 
-                    Message.WriteInteger(7); //Type
+                    int.TryParse(item.ExtraData, out int ClickNumber);
 
-                    int.TryParse(Item.ExtraData, out int ClickNumber);
-
-                    Message.WriteString(Item.ExtraData);
-                    Message.WriteInteger(ClickNumber);
-                    Message.WriteInteger(itemData.Modes - 1); //Type de duré
+                    message.WriteString(item.ExtraData);
+                    message.WriteInteger(ClickNumber);
+                    message.WriteInteger(itemData.Modes - 1); //Type de duré
                     break;
 
                 case InteractionType.ADS_BACKGROUND:
-                    if (!string.IsNullOrEmpty(Item.ExtraData))
+                    if (!string.IsNullOrEmpty(item.ExtraData))
                     {
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(1);
+                        message.WriteInteger(1);
 
-                        string ExtraDatabackground = "state" + Convert.ToChar(9) + "0" + Convert.ToChar(9) + Item.ExtraData;
+                        string ExtraDatabackground = "state" + Convert.ToChar(9) + "0" + Convert.ToChar(9) + item.ExtraData;
 
                         ExtraDatabackground = ExtraDatabackground.Replace('=', Convert.ToChar(9));
-                        Message.WriteInteger(ExtraDatabackground.Split(Convert.ToChar(9)).Length / 2);
+                        message.WriteInteger(ExtraDatabackground.Split(Convert.ToChar(9)).Length / 2);
 
                         for (int i = 0; i <= ExtraDatabackground.Split(Convert.ToChar(9)).Length - 1; i++)
                         {
                             string Data = ExtraDatabackground.Split(Convert.ToChar(9))[i];
-                            Message.WriteString(Data);
+                            message.WriteString(Data);
                         }
                     }
                     else
                     {
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(0);
-                        Message.WriteString("");
+                        message.WriteInteger(0);
+                        message.WriteString("");
                     }
                     break;
 
                 case InteractionType.EXTRABOX:
                     {
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(1);
-                        Message.WriteInteger(4);
-                        Message.WriteString("MESSAGE");
-                        Message.WriteString("Bravo tu as reçu une RareBox ! Ouvre-là pour y découvrir ton lot");
-                        Message.WriteString("PURCHASER_NAME");
-                        Message.WriteString("Wibbo");
-                        Message.WriteString("PRODUCT_CODE");
-                        Message.WriteString("A1 KUMIANKKA");
-                        Message.WriteString("PURCHASER_FIGURE");
-                        Message.WriteString("");
+                        message.WriteInteger(1);
+                        message.WriteInteger(4);
+                        message.WriteString("MESSAGE");
+                        message.WriteString("Bravo tu as reçu une RareBox ! Ouvre-là pour y découvrir ton lot");
+                        message.WriteString("PURCHASER_NAME");
+                        message.WriteString("Wibbo");
+                        message.WriteString("PRODUCT_CODE");
+                        message.WriteString("A1 KUMIANKKA");
+                        message.WriteString("PURCHASER_FIGURE");
+                        message.WriteString("");
                     }
                     break;
 
                 case InteractionType.DELUXEBOX:
                     {
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(1);
-                        Message.WriteInteger(4);
-                        Message.WriteString("MESSAGE");
-                        Message.WriteString("Bravo tu as reçu une RareBox Deluxe ! Ouvre-là pour y découvrir ton lot");
-                        Message.WriteString("PURCHASER_NAME");
-                        Message.WriteString("Wibbo");
-                        Message.WriteString("PRODUCT_CODE");
-                        Message.WriteString("A1 KUMIANKKA");
-                        Message.WriteString("PURCHASER_FIGURE");
-                        Message.WriteString("");
+                        message.WriteInteger(1);
+                        message.WriteInteger(4);
+                        message.WriteString("MESSAGE");
+                        message.WriteString("Bravo tu as reçu une RareBox Deluxe ! Ouvre-là pour y découvrir ton lot");
+                        message.WriteString("PURCHASER_NAME");
+                        message.WriteString("Wibbo");
+                        message.WriteString("PRODUCT_CODE");
+                        message.WriteString("A1 KUMIANKKA");
+                        message.WriteString("PURCHASER_FIGURE");
+                        message.WriteString("");
                     }
                     break;
 
                 case InteractionType.LOOTBOX2022:
                     {
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(1);
-                        Message.WriteInteger(4);
-                        Message.WriteString("MESSAGE");
-                        Message.WriteString("Bravo tu as reçu une RareBox ! Ouvre-là pour y découvrir ton lot");
-                        Message.WriteString("PURCHASER_NAME");
-                        Message.WriteString("Wibbo");
-                        Message.WriteString("PRODUCT_CODE");
-                        Message.WriteString("A1 KUMIANKKA");
-                        Message.WriteString("PURCHASER_FIGURE");
-                        Message.WriteString("");
+                        message.WriteInteger(1);
+                        message.WriteInteger(4);
+                        message.WriteString("MESSAGE");
+                        message.WriteString("Bravo tu as reçu une RareBox ! Ouvre-là pour y découvrir ton lot");
+                        message.WriteString("PURCHASER_NAME");
+                        message.WriteString("Wibbo");
+                        message.WriteString("PRODUCT_CODE");
+                        message.WriteString("A1 KUMIANKKA");
+                        message.WriteString("PURCHASER_FIGURE");
+                        message.WriteString("");
                     }
                     break;
 
                 case InteractionType.BADGEBOX:
                     {
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(1);
-                        Message.WriteInteger(4);
-                        Message.WriteString("MESSAGE");
-                        Message.WriteString("Bravo tu as reçu une BadgeBox ! Ouvre-là pour y découvrir ton lot");
-                        Message.WriteString("PURCHASER_NAME");
-                        Message.WriteString("Wibbo");
-                        Message.WriteString("PRODUCT_CODE");
-                        Message.WriteString("A1 KUMIANKKA");
-                        Message.WriteString("PURCHASER_FIGURE");
-                        Message.WriteString("");
+                        message.WriteInteger(1);
+                        message.WriteInteger(4);
+                        message.WriteString("MESSAGE");
+                        message.WriteString("Bravo tu as reçu une BadgeBox ! Ouvre-là pour y découvrir ton lot");
+                        message.WriteString("PURCHASER_NAME");
+                        message.WriteString("Wibbo");
+                        message.WriteString("PRODUCT_CODE");
+                        message.WriteString("A1 KUMIANKKA");
+                        message.WriteString("PURCHASER_FIGURE");
+                        message.WriteString("");
                     }
                     break;
 
                 case InteractionType.LEGENDBOX:
                     {
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(1);
-                        Message.WriteInteger(4);
-                        Message.WriteString("MESSAGE");
-                        Message.WriteString("Bravo tu as reçu une magnifique LegendBox ! Ouvre-là pour y décrouvrir tes lots !");
-                        Message.WriteString("PURCHASER_NAME");
-                        Message.WriteString("Wibbo");
-                        Message.WriteString("PRODUCT_CODE");
-                        Message.WriteString("A1 KUMIANKKA");
-                        Message.WriteString("PURCHASER_FIGURE");
-                        Message.WriteString("");
+                        message.WriteInteger(1);
+                        message.WriteInteger(4);
+                        message.WriteString("MESSAGE");
+                        message.WriteString("Bravo tu as reçu une magnifique LegendBox ! Ouvre-là pour y décrouvrir tes lots !");
+                        message.WriteString("PURCHASER_NAME");
+                        message.WriteString("Wibbo");
+                        message.WriteString("PRODUCT_CODE");
+                        message.WriteString("A1 KUMIANKKA");
+                        message.WriteString("PURCHASER_FIGURE");
+                        message.WriteString("");
                     }
                     break;
 
                 case InteractionType.GIFT:
                     {
-                        if (!Item.ExtraData.Contains(Convert.ToChar(5).ToString()))
+                        if (!item.ExtraData.Contains(Convert.ToChar(5).ToString()))
                         {
-                            Message.WriteInteger(0);
-                            Message.WriteInteger(0);
-                            Message.WriteString(Item.ExtraData);
+                            message.WriteInteger(0);
+                            message.WriteString(item.ExtraData);
                         }
                         else
                         {
 
-                            string[] ExtraData = Item.ExtraData.Split(Convert.ToChar(5));
-                            int Style = int.Parse(Item.ExtraData.Split(new char[1] { '\x0005' })[1]) * 1000 + int.Parse(Item.ExtraData.Split(new char[1] { '\x0005' })[2]);
+                            string[] ExtraData = item.ExtraData.Split(Convert.ToChar(5));
+                            int Style = int.Parse(item.ExtraData.Split(new char[1] { '\x0005' })[1]) * 1000 + int.Parse(item.ExtraData.Split(new char[1] { '\x0005' })[2]);
 
-                            User Purchaser = WibboEnvironment.GetUserById(int.Parse(Item.ExtraData.Split(new char[1] { ';' })[0]));
-                            Message.WriteInteger(0);
-                            Message.WriteInteger(1);
-                            Message.WriteInteger(6);
-                            Message.WriteString("EXTRA_PARAM");
-                            Message.WriteString("");
-                            Message.WriteString("MESSAGE");
-                            Message.WriteString(Item.ExtraData.Split(new char[1] { ';' })[1].Split(new char[1] { '\x0005' })[0]);
-                            Message.WriteString("PURCHASER_NAME");
-                            Message.WriteString(Purchaser == null ? "" : Purchaser.Username);
-                            Message.WriteString("PURCHASER_FIGURE");
-                            Message.WriteString(Purchaser == null ? "" : Purchaser.Look);
-                            Message.WriteString("PRODUCT_CODE");
-                            Message.WriteString("A1 KUMIANKKA");
-                            Message.WriteString("state");
-                            Message.WriteString(Style.ToString());
+                            User Purchaser = WibboEnvironment.GetUserById(int.Parse(item.ExtraData.Split(new char[1] { ';' })[0]));
+                            message.WriteInteger(1);
+                            message.WriteInteger(6);
+                            message.WriteString("EXTRA_PARAM");
+                            message.WriteString("");
+                            message.WriteString("MESSAGE");
+                            message.WriteString(item.ExtraData.Split(new char[1] { ';' })[1].Split(new char[1] { '\x0005' })[0]);
+                            message.WriteString("PURCHASER_NAME");
+                            message.WriteString(Purchaser == null ? "" : Purchaser.Username);
+                            message.WriteString("PURCHASER_FIGURE");
+                            message.WriteString(Purchaser == null ? "" : Purchaser.Look);
+                            message.WriteString("PRODUCT_CODE");
+                            message.WriteString("A1 KUMIANKKA");
+                            message.WriteString("state");
+                            message.WriteString(Style.ToString());
                         }
                     }
                     break;
 
                 case InteractionType.MANNEQUIN:
-                    Message.WriteInteger(0);
-                    Message.WriteInteger(1);
-                    Message.WriteInteger(3);
-                    if (Item.ExtraData.Contains(';'))
+                    message.WriteInteger(1);
+                    message.WriteInteger(3);
+                    if (item.ExtraData.Contains(';'))
                     {
-                        string[] Stuff = Item.ExtraData.Split(new char[1] { ';' });
-                        Message.WriteString("GENDER");
-                        Message.WriteString(Stuff[0].ToUpper() == "M" ? "M" : "F");
-                        Message.WriteString("FIGURE");
-                        Message.WriteString(Stuff[1]);
-                        Message.WriteString("OUTFIT_NAME");
-                        Message.WriteString(Stuff[2]);
+                        string[] Stuff = item.ExtraData.Split(new char[1] { ';' });
+                        message.WriteString("GENDER");
+                        message.WriteString(Stuff[0].ToUpper() == "M" ? "M" : "F");
+                        message.WriteString("FIGURE");
+                        message.WriteString(Stuff[1]);
+                        message.WriteString("OUTFIT_NAME");
+                        message.WriteString(Stuff[2]);
                     }
                     else
                     {
-                        Message.WriteString("GENDER");
-                        Message.WriteString("M");
-                        Message.WriteString("FIGURE");
-                        Message.WriteString("");
-                        Message.WriteString("OUTFIT_NAME");
-                        Message.WriteString("");
+                        message.WriteString("GENDER");
+                        message.WriteString("M");
+                        message.WriteString("FIGURE");
+                        message.WriteString("");
+                        message.WriteString("OUTFIT_NAME");
+                        message.WriteString("");
                     }
                     break;
 
                 case InteractionType.TONER:
-                    if (Item.ExtraData.Contains(','))
+                    if (item.ExtraData.Contains(','))
                     {
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(5);
-                        Message.WriteInteger(4);
-                        Message.WriteInteger(Item.ExtraData.StartsWith("on") ? 1 : 0);
-                        Message.WriteInteger(int.Parse(Item.ExtraData.Split(new char[1] { ',' })[1]));
-                        Message.WriteInteger(int.Parse(Item.ExtraData.Split(new char[1] { ',' })[2]));
-                        Message.WriteInteger(int.Parse(Item.ExtraData.Split(new char[1] { ',' })[3]));
+                        message.WriteInteger(5);
+                        message.WriteInteger(4);
+                        message.WriteInteger(item.ExtraData.StartsWith("on") ? 1 : 0);
+                        message.WriteInteger(int.Parse(item.ExtraData.Split(new char[1] { ',' })[1]));
+                        message.WriteInteger(int.Parse(item.ExtraData.Split(new char[1] { ',' })[2]));
+                        message.WriteInteger(int.Parse(item.ExtraData.Split(new char[1] { ',' })[3]));
                     }
                     else
                     {
-                        Message.WriteInteger(0);
-                        Message.WriteInteger(0);
-                        Message.WriteString(string.Empty);
+                        message.WriteInteger(0);
+                        message.WriteString(string.Empty);
                     }
                     break;
 
                 case InteractionType.BADGE_DISPLAY:
                 case InteractionType.BADGE_TROC:
-                    Message.WriteInteger(0);
-                    Message.WriteInteger(2);
-                    Message.WriteInteger(4);
+                    message.WriteInteger(2);
+                    message.WriteInteger(4);
 
-                    if (Item.ExtraData.Contains(Convert.ToChar(9).ToString()))
+                    if (item.ExtraData.Contains(Convert.ToChar(9).ToString()))
                     {
-                        string[] BadgeData = Item.ExtraData.Split(Convert.ToChar(9));
+                        string[] BadgeData = item.ExtraData.Split(Convert.ToChar(9));
 
-                        Message.WriteString("0");//No idea
-                        Message.WriteString(BadgeData[0]);//Badge name
-                        Message.WriteString(BadgeData[1]);//Owner
-                        Message.WriteString(BadgeData[2]);//Date
+                        message.WriteString("0");//No idea
+                        message.WriteString(BadgeData[0]);//Badge name
+                        message.WriteString(BadgeData[1]);//Owner
+                        message.WriteString(BadgeData[2]);//Date
                     }
                     else
                     {
-                        Message.WriteString("0");//No idea
-                        Message.WriteString(Item.ExtraData);//Badge name
-                        Message.WriteString("");//Owner
-                        Message.WriteString("");//Date
+                        message.WriteString("0");//No idea
+                        message.WriteString(item.ExtraData);//Badge name
+                        message.WriteString("");//Owner
+                        message.WriteString("");//Date
                     }
                     break;
 
                 case InteractionType.TVYOUTUBE:
-                    Message.WriteInteger(0);
-                    Message.WriteInteger(1);
-                    Message.WriteInteger(2);
-                    Message.WriteString("THUMBNAIL_URL");
-                    Message.WriteString((string.IsNullOrEmpty(Item.ExtraData)) ? "" : "https://cdn.wibbo.org/youtubethumbnail.php?videoid=" + Item.ExtraData);
-                    Message.WriteString("VideoId");
-                    Message.WriteString(Item.ExtraData);
+                    message.WriteInteger(1);
+                    message.WriteInteger(2);
+                    message.WriteString("THUMBNAIL_URL");
+                    message.WriteString((string.IsNullOrEmpty(item.ExtraData)) ? "" : "https://cdn.wibbo.org/youtubethumbnail.php?videoid=" + item.ExtraData);
+                    message.WriteString("VideoId");
+                    message.WriteString(item.ExtraData);
                     break;
             }
         }
 
-        public static void GenerateWallExtradata(Item Item, ServerPacket Message)
+        public static void GenerateWallExtradata(Item item, ServerPacket message)
         {
-            switch (Item.GetBaseItem().InteractionType)
+            switch (item.GetBaseItem().InteractionType)
             {
                 default:
-                    Message.WriteString(Item.ExtraData);
+                    message.WriteString(item.ExtraData);
                     break;
 
                 case InteractionType.POSTIT:
-                    Message.WriteString((Item.ExtraData.Contains(' ')) ? Item.ExtraData.Split(' ')[0] : "");
+                    message.WriteString((item.ExtraData.Contains(' ')) ? item.ExtraData.Split(' ')[0] : "");
                     break;
+            }
+        }
+
+        public static int ItemCategory(Item item)
+        {
+            switch (item.GetBaseItem().InteractionType)
+            {
+                case InteractionType.GIFT:
+                case InteractionType.LEGENDBOX:
+                case InteractionType.BADGEBOX:
+                case InteractionType.LOOTBOX2022:
+                case InteractionType.DELUXEBOX:
+                case InteractionType.EXTRABOX:
+                    return 9;
+                case InteractionType.GUILD_ITEM:
+                case InteractionType.GUILD_GATE:
+                    return 17;
+                case InteractionType.LANDSCAPE:
+                    return 4;
+                case InteractionType.FLOOR:
+                    return 3;
+                case InteractionType.WALLPAPER:
+                    return 2;
+                case InteractionType.TROPHY:
+                    return 11;
+                default:
+                    return 1;
             }
         }
     }

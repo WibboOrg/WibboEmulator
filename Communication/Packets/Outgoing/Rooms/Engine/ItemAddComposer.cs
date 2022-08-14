@@ -14,7 +14,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
             ItemBehaviourUtility.GenerateWallExtradata(Item, this);
 
             this.WriteInteger(-1);
-            this.WriteInteger((Item.GetBaseItem().Modes > 1) ? 1 : 0); // Type New R63 ('use bottom')
+            this.WriteInteger((Item.GetBaseItem().Modes > 1) ? 1 : 0);
             this.WriteInteger(UserID);
             this.WriteString(Username);
         }

@@ -15,18 +15,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
             this.WriteString(string.Format("{0:0.00}", item.Z));
             this.WriteString(string.Empty);
 
-            if (item.Limited > 0)
-            {
-                this.WriteInteger(1);
-                this.WriteInteger(256);
-                this.WriteString(item.ExtraData);
-                this.WriteInteger(item.Limited);
-                this.WriteInteger(item.LimitedStack);
-            }
-            else
-            {
-                ItemBehaviourUtility.GenerateExtradata(item, this);
-            }
+            ItemBehaviourUtility.GenerateExtradata(item, this);
 
             this.WriteInteger(-1); // to-do: check
             this.WriteInteger(1);

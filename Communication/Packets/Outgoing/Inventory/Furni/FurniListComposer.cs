@@ -25,18 +25,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni
             this.WriteInteger(Item.Id);
             this.WriteInteger(Item.GetBaseItem().SpriteId);
 
-            if (Item.Limited > 0)
-            {
-                this.WriteInteger(1);
-                this.WriteInteger(256);
-                this.WriteString(Item.ExtraData);
-                this.WriteInteger(Item.Limited);
-                this.WriteInteger(Item.LimitedStack);
-            }
-            else
-            {
-                ItemBehaviourUtility.GenerateExtradata(Item, this);
-            }
+            ItemBehaviourUtility.GenerateExtradata(Item, this);
 
             this.WriteBoolean(Item.GetBaseItem().AllowEcotronRecycle);
             this.WriteBoolean(Item.GetBaseItem().AllowTrade);
