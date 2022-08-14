@@ -70,12 +70,12 @@ namespace WibboEmulator.Game.Rooms
 
         public void TeleportToItem(RoomUser user, Item item)
         {
-            if (user.Room != null)
+            if (item.GetRoom() != null)
             {
-                user.Room.SendPacket(user.Room.GetRoomItemHandler().TeleportUser(user, item.Coordinate, 0, item.Z, true));
+                item.GetRoom().SendPacket(user.Room.GetRoomItemHandler().TeleportUser(user, item.Coordinate, 0, item.Z, true));
+                item.GetRoom().GetRoomUserManager().UpdateUserStatus(user, false);
             }
 
-            item.GetRoom().GetRoomUserManager().UpdateUserStatus(user, false);
         }
 
         public void UpdateUserMovement(Point oldCoord, Point newCoord, RoomUser user)

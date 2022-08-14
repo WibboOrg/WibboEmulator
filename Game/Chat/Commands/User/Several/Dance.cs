@@ -6,26 +6,27 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class Dance : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client session, Room room, RoomUser user, string[] parameters)
         {
-            if (Params.Length < 1)
+            if (parameters.Length < 2)
             {
-                Session.SendWhisper("Entre un numéro à ta danse");
+                session.SendWhisper("Entre un numéro à ta danse");
                 return;
             }
 
-            int DanceId;
-            if (int.TryParse(Params[1], out DanceId))
+            int danceId;
+            if (int.TryParse(parameters[1], out danceId))
             {
-                if (DanceId > 4 || DanceId < 0)
+                if (danceId > 4 || danceId < 0)
                 {
-                    Session.SendWhisper("Entre un numéro entre 0 et 4");
+                    session.SendWhisper("Entre un numéro entre 0 et 4");
                     return;
                 }
-                Session.GetUser().CurrentRoom.SendPacket(new DanceComposer(UserRoom.VirtualId, DanceId));
+
+                room.SendPacket(new DanceComposer(user.VirtualId, danceId));
             }
             else
-                Session.SendWhisper("Entre un numéro de danse valide");
+                session.SendWhisper("Entre un numéro de danse valide");
         }
     }
 }
