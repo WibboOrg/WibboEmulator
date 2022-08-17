@@ -101,6 +101,7 @@ namespace WibboEmulator.Game.Rooms
 
                 return;
             }
+
             if (this._userMap[coord].Contains(user))
             {
                 this._userMap[coord].Remove(user);

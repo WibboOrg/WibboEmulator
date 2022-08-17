@@ -203,6 +203,9 @@ namespace WibboEmulator.Game.Rooms.Wired
 
         public void ExecutePile(Point coordinate, RoomUser user, Item item)
         {
+            if (this._doCleanup)
+                return;
+
             if (!this._actionStacks.ContainsKey(coordinate))
             {
                 return;

@@ -70,7 +70,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                         {
                             roomItem.ExtraData = itemPosReset.ExtraData;
                             roomItem.UpdateState();
-                            roomItem.GetRoom().GetGameMap().UpdateMapForItem(roomItem);
+                            this.RoomInstance.GetGameMap().UpdateMapForItem(roomItem);
                         }
                     }
                 }

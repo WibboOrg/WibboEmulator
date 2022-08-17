@@ -26,7 +26,6 @@ namespace WibboEmulator.Game.Items.Interactors
 
             int.TryParse(Item.ExtraData, out int currentMode);
 
-
             int newMode;
             if (currentMode == 0)
             {
@@ -39,7 +38,7 @@ namespace WibboEmulator.Game.Items.Interactors
 
             Item.ExtraData = newMode.ToString();
             Item.UpdateState();
-            Item.GetRoom().GetGameMap().UpdateMapForItem(Item);
+            Item.GetRoom()?.GetGameMap().UpdateMapForItem(Item);
         }
 
         public override void OnTick(Item item)
