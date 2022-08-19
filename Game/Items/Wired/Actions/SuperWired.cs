@@ -1135,6 +1135,11 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     {
                         string[] Params = value.Split(';');
 
+                        if (Params.Length < 3)
+                        {
+                            break;
+                        }
+
                         RoomUser Bot = this.RoomInstance.GetRoomUserManager().GetBotByName(Params[0]);
                         if (Bot == null)
                         {
@@ -1265,7 +1270,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                         }
                         break;
                     }
-                case "TimeSpeed":
+                case "timespeed":
                     {
                         if (!this.RoomInstance.IsRoleplay)
                         {
@@ -1319,35 +1324,33 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        List<string> Phrases = new List<string>();
+                        List<string> phrases = new List<string>();
 
                         switch (value)
                         {
                             case "wait":
                                 {
-
-
-                                    Phrases.Add("Merci de patienter, le jeu va bientôt commencer !");
-                                    Phrases.Add("Le jeu va commencer dans quelques instants !");
-                                    Phrases.Add("Patience, le jeu débutera sous peu !");
-                                    Phrases.Add("Silence dans la salle, le jeu va débuter !");
+                                    phrases.Add("Merci de patienter, le jeu va bientôt commencer !");
+                                    phrases.Add("Le jeu va commencer dans quelques instants !");
+                                    phrases.Add("Patience, le jeu débutera sous peu !");
+                                    phrases.Add("Silence dans la salle, le jeu va débuter !");
                                     break;
                                 }
                             case "win":
                                 {
                                     if (Bot.BotData.Name == "Jack")
                                     {
-                                        Phrases.Add("Fichtre... #username# a gagné !");
-                                        Phrases.Add("Et c'est ce moussaillon de #username# qui repart avec le trésor !");
-                                        Phrases.Add("#username# vient de décrocher une très belle surprise !");
+                                        phrases.Add("Fichtre... #username# a gagné !");
+                                        phrases.Add("Et c'est ce moussaillon de #username# qui repart avec le trésor !");
+                                        phrases.Add("#username# vient de décrocher une très belle surprise !");
                                     }
                                     else
                                     {
-                                        Phrases.Add("Félicitation à #username# qui remporte la partie !");
-                                        Phrases.Add("Félicitons #username# qui remporte la partie !");
-                                        Phrases.Add("La chance était du côté de #username# aujourd'hui");
-                                        Phrases.Add("#username# est divin!");
-                                        Phrases.Add("#username# est légendaire !");
+                                        phrases.Add("Félicitation à #username# qui remporte la partie !");
+                                        phrases.Add("Félicitons #username# qui remporte la partie !");
+                                        phrases.Add("La chance était du côté de #username# aujourd'hui");
+                                        phrases.Add("#username# est divin!");
+                                        phrases.Add("#username# est légendaire !");
                                     }
                                     break;
                                 }
@@ -1355,59 +1358,59 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                 {
                                     if (Bot.BotData.Name == "Jack")
                                     {
-                                        Phrases.Add("Oulà ! #username# vient de se faire botter l'arrière train' !");
-                                        Phrases.Add("#username# rejoint l'équipe des loosers");
-                                        Phrases.Add("Une défaite en bonne et due forme de #username# !");
+                                        phrases.Add("Oulà ! #username# vient de se faire botter l'arrière train' !");
+                                        phrases.Add("#username# rejoint l'équipe des loosers");
+                                        phrases.Add("Une défaite en bonne et due forme de #username# !");
                                     }
                                     else
                                     {
-                                        Phrases.Add("La prochaine fois tu y arriveras #username#, j'en suis sûre et certain !");
-                                        Phrases.Add("Courage #username#, tu y arriveras la prochaine fois !");
-                                        Phrases.Add("Ne soit pas triste #username#, d'autres occasions se présenteront à toi !");
+                                        phrases.Add("La prochaine fois tu y arriveras #username#, j'en suis sûre et certain !");
+                                        phrases.Add("Courage #username#, tu y arriveras la prochaine fois !");
+                                        phrases.Add("Ne soit pas triste #username#, d'autres occasions se présenteront à toi !");
                                     }
                                     break;
                                 }
                             case "startgame":
                                 {
-                                    Phrases.Add("Allons y !");
-                                    Phrases.Add("C'est parti !");
-                                    Phrases.Add("A vos marques, prêts ? Partez !");
-                                    Phrases.Add("Let's go!");
-                                    Phrases.Add("Ne perdons pas plus de temps !");
-                                    Phrases.Add("Que la partie commence !");
+                                    phrases.Add("Allons y !");
+                                    phrases.Add("C'est parti !");
+                                    phrases.Add("A vos marques, prêts ? Partez !");
+                                    phrases.Add("Let's go!");
+                                    phrases.Add("Ne perdons pas plus de temps !");
+                                    phrases.Add("Que la partie commence !");
                                     break;
                                 }
                             case "endgame":
                                 {
-                                    Phrases.Add("L'animation est terminée, bravo aux gagnants !");
-                                    Phrases.Add("L'animation est enfin terminée ! Reviens nous voir à la prochaine animation !");
+                                    phrases.Add("L'animation est terminée, bravo aux gagnants !");
+                                    phrases.Add("L'animation est enfin terminée ! Reviens nous voir à la prochaine animation !");
                                     break;
                                 }
                             case "fungame":
                                 {
                                     if (Bot.BotData.Name == "Jack")
                                     {
-                                        Phrases.Add("Mhhhh, le niveau n'est pas très haut...");
-                                        Phrases.Add("On sait déjà tous qui sera le grand vaiqueur...");
-                                        Phrases.Add("Qui ne tente rien, n'a rien");
+                                        phrases.Add("Mhhhh, le niveau n'est pas très haut...");
+                                        phrases.Add("On sait déjà tous qui sera le grand vaiqueur...");
+                                        phrases.Add("Qui ne tente rien, n'a rien");
                                     }
                                     else
                                     {
-                                        Phrases.Add("La victoire approche, tenez le coup !");
-                                        Phrases.Add("C'est pour ça qu'il faut toujours avoir un trèfle à 4 feuilles sur soi");
-                                        Phrases.Add("En essayant continuellement, on finit par réussir, plus ça rate, plus on a des chances que ça marque ;)");
+                                        phrases.Add("La victoire approche, tenez le coup !");
+                                        phrases.Add("C'est pour ça qu'il faut toujours avoir un trèfle à 4 feuilles sur soi");
+                                        phrases.Add("En essayant continuellement, on finit par réussir, plus ça rate, plus on a des chances que ça marque ;)");
                                     }
                                     break;
                                 }
                         }
 
-                        string TextMessage = Phrases[WibboEnvironment.GetRandomNumber(0, Phrases.Count - 1)];
+                        string textMessage = phrases[WibboEnvironment.GetRandomNumber(0, phrases.Count - 1)];
                         if (user != null)
                         {
-                            TextMessage = TextMessage.Replace("#username#", user.GetUsername());
+                            textMessage = textMessage.Replace("#username#", user.GetUsername());
                         }
 
-                        Bot.OnChat(TextMessage, 2, true);
+                        Bot.OnChat(textMessage, 2, true);
 
                         break;
                     }
@@ -1452,9 +1455,10 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "setspeed":
                     {
-                        int.TryParse(value, out int Vitesse);
+                        if (!int.TryParse(value, out int speed))
+                            break;
 
-                        this.RoomInstance.GetRoomItemHandler().SetSpeed(Vitesse);
+                        this.RoomInstance.GetRoomItemHandler().SetSpeed(speed);
                         break;
                     }
                 case "roomdiagonal":
@@ -1491,9 +1495,10 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        int.TryParse(value, out int Count);
+                        if (!int.TryParse(value, out int count))
+                            break;
 
-                        if (Count > item.GetBaseItem().Modes - 1)
+                        if (count > item.GetBaseItem().Modes - 1)
                         {
                             break;
                         }
@@ -1503,7 +1508,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        item.ExtraData = Count.ToString();
+                        item.ExtraData = count.ToString();
                         item.UpdateState();
                         this.RoomInstance.GetGameMap().UpdateMapForItem(item);
 
@@ -1522,14 +1527,15 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        int.TryParse(value, out int Count);
+                        if (!int.TryParse(value, out int count))
+                            break;
 
                         if (!int.TryParse(item.ExtraData, out int ItemCount))
                         {
                             break;
                         }
 
-                        int newCount = (ItemCount + Count < item.GetBaseItem().Modes) ? ItemCount + Count : 0;
+                        int newCount = (ItemCount + count < item.GetBaseItem().Modes) ? ItemCount + count : 0;
 
                         item.ExtraData = newCount.ToString();
                         item.UpdateState();
@@ -1555,18 +1561,18 @@ namespace WibboEmulator.Game.Items.Wired.Actions
             }
         }
 
-        private void UserCommand(string Cmd, string Value, RoomUser user, Item TriggerItem)
+        private void UserCommand(string cmd, string value, RoomUser user, Item triggerItem)
         {
             if (user == null || user.IsBot || user.GetClient() == null)
             {
                 return;
             }
 
-            switch (Cmd)
+            switch (cmd)
             {
                 case "usermute":
                     {
-                        if(Value == "true")
+                        if(value == "true")
                             user.Room.AddMute(user.UserId, 24 * 60 * 60);
                         else
                             user.Room.RemoveMute(user.UserId);
@@ -1576,13 +1582,13 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     {
                         List<string[]> ChooseList = new List<string[]>();
 
-                        if (string.IsNullOrEmpty(Value))
+                        if (string.IsNullOrEmpty(value))
                         {
                             user.GetClient().SendPacket(new BotChooseComposer(ChooseList));
                             break;
                         }
 
-                        foreach (string RoomIdString in Value.Split(','))
+                        foreach (string RoomIdString in value.Split(','))
                         {
                             if (!int.TryParse(RoomIdString, out int RoomId))
                             {
@@ -1614,15 +1620,15 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                 case "botchoose":
                     {
                         List<string[]> ChooseList = new List<string[]>();
-                        if (string.IsNullOrEmpty(Value))
+                        if (string.IsNullOrEmpty(value))
                         {
                             user.GetClient().SendPacket(new BotChooseComposer(ChooseList));
                             break;
                         }
 
-                        if (Value.Contains(','))
+                        if (value.Contains(','))
                         {
-                            foreach (string pChoose in Value.Split(','))
+                            foreach (string pChoose in value.Split(','))
                             {
                                 List<string> list = pChoose.Split(';').ToList();
                                 if (list.Count == 3)
@@ -1643,7 +1649,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                         }
                         else
                         {
-                            List<string> list = Value.Split(';').ToList();
+                            List<string> list = value.Split(';').ToList();
                             if (list.Count == 3)
                             {
                                 RoomUser BotOrPet = user.Room.GetRoomUserManager().GetBotByName(list[0]);
@@ -1666,25 +1672,25 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "stopsounduser":
                     {
-                        user.GetClient().SendPacket(new StopSoundComposer(Value)); //Type = Trax
+                        user.GetClient().SendPacket(new StopSoundComposer(value)); //Type = Trax
 
                         break;
                     }
                 case "playsounduser":
                     {
-                        user.GetClient().SendPacket(new PlaySoundComposer(Value, 1)); //Type = furni
+                        user.GetClient().SendPacket(new PlaySoundComposer(value, 1)); //Type = furni
 
                         break;
                     }
                 case "playmusicuser":
                     {
-                        user.GetClient().SendPacket(new PlaySoundComposer(Value, 2, true)); //Type = Trax
+                        user.GetClient().SendPacket(new PlaySoundComposer(value, 2, true)); //Type = Trax
 
                         break;
                     }
                 case "moveto":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
                             user.AllowMoveTo = true;
                         }
@@ -1697,7 +1703,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "reversewalk":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
                             user.ReverseWalk = true;
                         }
@@ -1710,7 +1716,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "speedwalk":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
                             user.WalkSpeed = true;
                         }
@@ -1723,12 +1729,12 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "openpage":
                     {
-                        user.GetClient().SendPacket(new InClientLinkComposer("habbopages/" + Value));
+                        user.GetClient().SendPacket(new InClientLinkComposer("habbopages/" + value));
                         break;
                     }
                 case "rot":
                     {
-                        int.TryParse(Value, out int ValueInt);
+                        int.TryParse(value, out int ValueInt);
 
                         if (ValueInt > 7 || ValueInt < 0)
                         {
@@ -1768,7 +1774,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "allowshoot":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
                             user.AllowShoot = true;
                         }
@@ -1786,7 +1792,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        int.TryParse(Value, out int count);
+                        int.TryParse(value, out int count);
 
                         if (user.Room == null)
                         {
@@ -1798,7 +1804,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "ingame":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
                             user.InGame = true;
                         }
@@ -1811,7 +1817,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "usertimer":
                     {
-                        int.TryParse(Value, out int Points);
+                        int.TryParse(value, out int Points);
 
                         user.UserTimer = Points;
 
@@ -1819,7 +1825,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "addusertimer":
                     {
-                        int.TryParse(Value, out int Points);
+                        int.TryParse(value, out int Points);
 
                         if (Points == 0)
                         {
@@ -1833,7 +1839,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "removeusertimer":
                     {
-                        int.TryParse(Value, out int Points);
+                        int.TryParse(value, out int Points);
 
                         if (Points == 0)
                         {
@@ -1853,7 +1859,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "point":
                     {
-                        int.TryParse(Value, out int Points);
+                        int.TryParse(value, out int Points);
 
                         user.WiredPoints = Points;
 
@@ -1861,7 +1867,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "addpoint":
                     {
-                        int.TryParse(Value, out int Points);
+                        int.TryParse(value, out int Points);
 
                         if (Points == 0)
                         {
@@ -1875,7 +1881,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "removepoint":
                     {
-                        int.TryParse(Value, out int Points);
+                        int.TryParse(value, out int Points);
 
                         if (Points == 0)
                         {
@@ -1894,7 +1900,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "freeze":
                     {
-                        int.TryParse(Value, out int Seconde);
+                        int.TryParse(value, out int Seconde);
                         Seconde *= 2;
                         user.Freeze = true;
                         user.FreezeEndCounter = Seconde;
@@ -1908,7 +1914,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "breakwalk":
                     {
-                        if (Value == "true")
+                        if (value == "true")
                         {
                             user.BreakWalkEnable = true;
                         }
@@ -1921,7 +1927,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "enable":
                     {
-                        if (!int.TryParse(Value, out int NumEnable))
+                        if (!int.TryParse(value, out int NumEnable))
                         {
                             return;
                         }
@@ -1936,7 +1942,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "enablestaff":
                     {
-                        if (!int.TryParse(Value, out int NumEnable))
+                        if (!int.TryParse(value, out int NumEnable))
                         {
                             return;
                         }
@@ -1956,7 +1962,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        if (int.TryParse(Value, out int danceId))
+                        if (int.TryParse(value, out int danceId))
                         {
                             if (danceId < 0 || danceId > 4)
                             {
@@ -1976,7 +1982,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "handitem":
                     {
-                        if (int.TryParse(Value, out int carryid))
+                        if (int.TryParse(value, out int carryid))
                         {
                             user.CarryItem(carryid, true);
                         }
@@ -2023,10 +2029,10 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                 case "transf":
                     {
                         int raceId = 0;
-                        string petName = Value;
-                        if (Value.Contains(' '))
+                        string petName = value;
+                        if (value.Contains(' '))
                         {
-                            if (int.TryParse(Value.Split(' ')[1], out raceId))
+                            if (int.TryParse(value.Split(' ')[1], out raceId))
                             {
                                 if (raceId < 1 || raceId > 50)
                                 {
@@ -2034,7 +2040,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                                 }
                             }
 
-                            petName = Value.Split(' ')[0];
+                            petName = value.Split(' ')[0];
                         }
 
                         if (user.SetPetTransformation(petName, raceId))
@@ -2056,7 +2062,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "coins":
                     {
-                        if (!int.TryParse(Value, out int ValueNumber))
+                        if (!int.TryParse(value, out int ValueNumber))
                         {
                             return;
                         }
@@ -2067,20 +2073,20 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "badge":
                     {
-                        user.GetClient().GetUser().GetBadgeComponent().GiveBadge(Value, true);
-                        user.GetClient().SendPacket(new ReceiveBadgeComposer(Value));
+                        user.GetClient().GetUser().GetBadgeComponent().GiveBadge(value, true);
+                        user.GetClient().SendPacket(new ReceiveBadgeComposer(value));
                         break;
                     }
                 case "removebadge":
                     {
-                        user.GetClient().GetUser().GetBadgeComponent().RemoveBadge(Value);
+                        user.GetClient().GetUser().GetBadgeComponent().RemoveBadge(value);
                         user.GetClient().SendPacket(new BadgesComposer(user.GetClient().GetUser().GetBadgeComponent().BadgeList));
                         break;
                     }
 
                 case "send":
                     {
-                        if (int.TryParse(Value, out int RoomId))
+                        if (int.TryParse(value, out int RoomId))
                         {
                             user.GetClient().GetUser().IsTeleporting = true;
                             user.GetClient().GetUser().TeleportingRoomID = RoomId;
@@ -2090,12 +2096,12 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "alert":
                     {
-                        user.GetClient().SendNotification(Value);
+                        user.GetClient().SendNotification(value);
                         break;
                     }
                 case "achievement":
                     {
-                        WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), Value, 1);
+                        WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), value, 1);
                         break;
                     }
                 case "winmovierun":

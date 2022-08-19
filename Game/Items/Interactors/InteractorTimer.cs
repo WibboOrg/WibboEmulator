@@ -89,6 +89,9 @@ namespace WibboEmulator.Game.Items.Interactors
 
         public override void OnTick(Item item)
         {
+            if (item == null)
+                return;
+
             if (string.IsNullOrEmpty(item.ExtraData))
             {
                 return;

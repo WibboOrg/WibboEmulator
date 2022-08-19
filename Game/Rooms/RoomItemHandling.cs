@@ -767,6 +767,9 @@ namespace WibboEmulator.Game.Rooms
                             continue;
                         }
 
+                        if (item.GetRoom() == null)
+                            continue;
+
                         item.ProcessUpdates();
 
                         if (item.UpdateCounter > 0)

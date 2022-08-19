@@ -5,27 +5,24 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class Kick : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client session, Room room, RoomUser user, string[] parameters)
         {
+            if (parameters.Length < 2)
+                return;
 
-            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(parameters[1]);
 
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 return;
             }
 
-            if (Session.GetUser().Rank <= TargetUser.GetUser().Rank)
+            if (session.GetUser().Rank <= TargetUser.GetUser().Rank)
             {
                 return;
             }
 
-            if (TargetUser.GetUser().CurrentRoomId < 1U)
-            {
-                return;
-            }
-
-            Room.GetRoomUserManager().RemoveUserFromRoom(TargetUser, true, true);
+            room.GetRoomUserManager().RemoveUserFromRoom(TargetUser, true, true);
         }
     }
 }

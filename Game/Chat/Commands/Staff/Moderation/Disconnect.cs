@@ -5,23 +5,24 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class Disconnect : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client session, Room room, RoomUser roomUser, string[] parameters)
         {
-            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (parameters.Length < 2)
+                return;
+
+            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(parameters[1]);
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
             }
-            else if (TargetUser.GetUser().Rank >= Session.GetUser().Rank)
+            else if (TargetUser.GetUser().Rank >= session.GetUser().Rank)
             {
-                //Session.SendNotification(ButterflyEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
-                Session.Disconnect();
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
             }
             else
             {
                 TargetUser.Disconnect();
             }
-
         }
     }
 }

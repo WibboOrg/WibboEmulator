@@ -6,16 +6,16 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class StaffAlert : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client session, Room room, RoomUser roomUser, string[] parameters)
         {
-            if (Params.Length < 2)
+            if (parameters.Length < 2)
             {
                 return;
             }
 
-            string MessageTxt = CommandManager.MergeParams(Params, 1);
+            string messageTxt = CommandManager.MergeParams(parameters, 1);
 
-            if (string.IsNullOrEmpty(MessageTxt))
+            if (string.IsNullOrEmpty(messageTxt))
             {
                 return;
             }
@@ -44,7 +44,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
                 RoomUser User = Staff.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(Staff.GetUser().Id);
 
-                User.GetClient().SendPacket(new WhisperComposer(User.VirtualId, "[STAFF ALERT] " + MessageTxt + " - " + UserRoom.GetUsername(), 23));
+                User.GetClient().SendPacket(new WhisperComposer(User.VirtualId, "[STAFF ALERT] " + messageTxt + " - " + roomUser.GetUsername(), 23));
             }
         }
     }

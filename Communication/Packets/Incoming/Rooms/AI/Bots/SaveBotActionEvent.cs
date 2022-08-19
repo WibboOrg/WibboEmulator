@@ -90,16 +90,16 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                         }, StringSplitOptions.RemoveEmptyEntries);
 
                         string AutomaticChat = Convert.ToString(ConfigData[1]);
-                        string SpeakingInterval = Convert.ToString(ConfigData[2]);
+                        bool SpeakingIntervalIsInt = int.TryParse(ConfigData[2], out int SpeakingInterval);
                         string MixChat = Convert.ToString(ConfigData[3]);
 
-                        if (string.IsNullOrEmpty(SpeakingInterval) || Convert.ToInt32(SpeakingInterval) <= 0 || Convert.ToInt32(SpeakingInterval) < 7)
+                        if (SpeakingInterval <= 0 || SpeakingInterval < 7 || !SpeakingIntervalIsInt)
                         {
-                            SpeakingInterval = "7";
+                            SpeakingInterval = 7;
                         }
 
                         RoomBot.AutomaticChat = Convert.ToBoolean(AutomaticChat);
-                        RoomBot.SpeakingInterval = Convert.ToInt32(SpeakingInterval);
+                        RoomBot.SpeakingInterval = SpeakingInterval;
                         RoomBot.MixSentences = Convert.ToBoolean(MixChat);
 
                         string Text = "";

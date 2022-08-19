@@ -5,30 +5,32 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
     internal class StaffKick : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(Client session, Room room, RoomUser user, string[] parameters)
         {
-            Room currentRoom = Session.GetUser().CurrentRoom;
-            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            if (parameters.Length < 2)
+                return;
+
+            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(parameters[1]);
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
             }
-            else if (Session.GetUser().Rank <= TargetUser.GetUser().Rank)
+            else if (session.GetUser().Rank <= TargetUser.GetUser().Rank)
             {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
             }
             else if (TargetUser.GetUser().CurrentRoomId < 1U)
             {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("kick.error", Session.Langue));
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("kick.error", session.Langue));
             }
             else
             {
-                Room.GetRoomUserManager().RemoveUserFromRoom(TargetUser, true, false);
+                room.GetRoomUserManager().RemoveUserFromRoom(TargetUser, true, false);
 
-                if (Params.Length > 2)
+                if (parameters.Length > 2)
                 {
-                    string message = CommandManager.MergeParams(Params, 2);
-                    if (Session.Antipub(message, "<CMD>", Room.Id))
+                    string message = CommandManager.MergeParams(parameters, 2);
+                    if (session.Antipub(message, "<CMD>", room.Id))
                     {
                         return;
                     }

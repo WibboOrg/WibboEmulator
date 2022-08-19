@@ -558,7 +558,7 @@ namespace WibboEmulator.Game.Items
 
         public void UpdateState(bool inDb, bool inRoom)
         {
-            if (this._roomInstance == null)
+            if (this.GetRoom() == null)
                 return;
 
             if (inDb)
