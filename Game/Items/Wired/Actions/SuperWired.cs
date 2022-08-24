@@ -121,11 +121,10 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                 case "playmusicuser":
                 case "stopsounduser":
                 case "stopsoundroom":
+                case "forcesound":
                 case "badge":
                 case "removebadge":
                 case "roomalert":
-                case "forcesound":
-                case "coins":
                 case "rpsay":
                 case "rpsayme":
                     if (this.IsStaff)
@@ -2058,17 +2057,6 @@ namespace WibboEmulator.Game.Items.Wired.Actions
 
                         user.Room.SendPacket(new UserRemoveComposer(user.VirtualId));
                         user.Room.SendPacket(new UsersComposer(user));
-                        break;
-                    }
-                case "coins":
-                    {
-                        if (!int.TryParse(value, out int ValueNumber))
-                        {
-                            return;
-                        }
-
-                        user.GetClient().GetUser().Credits += ValueNumber;
-                        user.GetClient().SendPacket(new CreditBalanceComposer(user.GetClient().GetUser().Credits));
                         break;
                     }
                 case "badge":

@@ -18,6 +18,8 @@ namespace WibboEmulator.Game.Users.Wardrobes
 
         public void Init(IQueryAdapter dbClient)
         {
+            this._wardrobes.Clear();
+
             DataTable WardrobeData = UserWardrobeDao.GetAll(dbClient, this._userInstance.Id);
 
             foreach (DataRow Row in WardrobeData.Rows)

@@ -4,16 +4,18 @@ namespace WibboEmulator.Game.Users.Permissions
 {
     public sealed class PermissionComponent : IDisposable
     {
+        private readonly User _userInstance;
         private readonly List<string> _permissions;
         private readonly List<string> _commands;
 
-        public PermissionComponent(User u)
+        public PermissionComponent(User user)
         {
+            this._userInstance = user;
             _permissions = new List<string>();
             _commands = new List<string>();
         }
 
-        public bool Init(IQueryAdapter dbClient, User user)
+        public bool Init(IQueryAdapter dbClient)
         {
             if (_permissions.Count > 0)
                 _permissions.Clear();
