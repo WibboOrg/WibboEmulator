@@ -37,12 +37,6 @@ namespace WibboEmulator.Game.Items
 
                     message.WriteString("state");
                     message.WriteString((itemData.InteractionType != InteractionType.TONER && itemData.InteractionType != InteractionType.FBGATE) ? item.ExtraData : string.Empty);
-
-                    if (item.Limited > 0)
-                    {
-                        message.WriteInteger(item.Limited);
-                        message.WriteInteger(item.LimitedStack);
-                    }
                     break;
 
                 case InteractionType.TROPHY:
@@ -159,76 +153,32 @@ namespace WibboEmulator.Game.Items
                     }
                     break;
 
-                case InteractionType.EXTRABOX:
-                    {
-                        message.WriteInteger(1);
-                        message.WriteInteger(4);
-                        message.WriteString("MESSAGE");
-                        message.WriteString("Bravo tu as reçu une RareBox ! Ouvre-là pour y découvrir ton lot");
-                        message.WriteString("PURCHASER_NAME");
-                        message.WriteString("Wibbo");
-                        message.WriteString("PRODUCT_CODE");
-                        message.WriteString("A1 KUMIANKKA");
-                        message.WriteString("PURCHASER_FIGURE");
-                        message.WriteString("");
-                    }
-                    break;
-
+                case InteractionType.LEGENDBOX:
                 case InteractionType.DELUXEBOX:
-                    {
-                        message.WriteInteger(1);
-                        message.WriteInteger(4);
-                        message.WriteString("MESSAGE");
-                        message.WriteString("Bravo tu as reçu une RareBox Deluxe ! Ouvre-là pour y découvrir ton lot");
-                        message.WriteString("PURCHASER_NAME");
-                        message.WriteString("Wibbo");
-                        message.WriteString("PRODUCT_CODE");
-                        message.WriteString("A1 KUMIANKKA");
-                        message.WriteString("PURCHASER_FIGURE");
-                        message.WriteString("");
-                    }
-                    break;
-
+                case InteractionType.EXTRABOX:
                 case InteractionType.LOOTBOX2022:
-                    {
-                        message.WriteInteger(1);
-                        message.WriteInteger(4);
-                        message.WriteString("MESSAGE");
-                        message.WriteString("Bravo tu as reçu une RareBox ! Ouvre-là pour y découvrir ton lot");
-                        message.WriteString("PURCHASER_NAME");
-                        message.WriteString("Wibbo");
-                        message.WriteString("PRODUCT_CODE");
-                        message.WriteString("A1 KUMIANKKA");
-                        message.WriteString("PURCHASER_FIGURE");
-                        message.WriteString("");
-                    }
-                    break;
-
                 case InteractionType.BADGEBOX:
                     {
-                        message.WriteInteger(1);
-                        message.WriteInteger(4);
-                        message.WriteString("MESSAGE");
-                        message.WriteString("Bravo tu as reçu une BadgeBox ! Ouvre-là pour y découvrir ton lot");
-                        message.WriteString("PURCHASER_NAME");
-                        message.WriteString("Wibbo");
-                        message.WriteString("PRODUCT_CODE");
-                        message.WriteString("A1 KUMIANKKA");
-                        message.WriteString("PURCHASER_FIGURE");
-                        message.WriteString("");
-                    }
-                    break;
+                        string LotName = "RareBox";
+                        switch (itemData.InteractionType)
+                        {
+                            case InteractionType.LEGENDBOX:
+                                LotName = "LegendBox";
+                                break;
+                            case InteractionType.DELUXEBOX:
+                                LotName = "RareBox Deluxe";
+                                break;
+                            case InteractionType.BADGEBOX:
+                                LotName = "BadgeBox";
+                                break;
+                        }
 
-                case InteractionType.LEGENDBOX:
-                    {
-                        message.WriteInteger(1);
-                        message.WriteInteger(4);
+                    message.WriteInteger(1);
+                        message.WriteInteger(3);
                         message.WriteString("MESSAGE");
-                        message.WriteString("Bravo tu as reçu une magnifique LegendBox ! Ouvre-là pour y décrouvrir tes lots !");
+                        message.WriteString($"Bravo tu as reçu une {LotName} ! Ouvre-là pour y découvrir ton lot");
                         message.WriteString("PURCHASER_NAME");
                         message.WriteString("Wibbo");
-                        message.WriteString("PRODUCT_CODE");
-                        message.WriteString("A1 KUMIANKKA");
                         message.WriteString("PURCHASER_FIGURE");
                         message.WriteString("");
                     }
@@ -259,7 +209,7 @@ namespace WibboEmulator.Game.Items
                             message.WriteString("PURCHASER_FIGURE");
                             message.WriteString(Purchaser == null ? "" : Purchaser.Look);
                             message.WriteString("PRODUCT_CODE");
-                            message.WriteString("A1 KUMIANKKA");
+                            message.WriteString(itemData.SpriteId.ToString());
                             message.WriteString("state");
                             message.WriteString(Style.ToString());
                         }
@@ -338,6 +288,12 @@ namespace WibboEmulator.Game.Items
                     message.WriteString("VideoId");
                     message.WriteString(item.ExtraData);
                     break;
+            }
+
+            if (item.Limited > 0)
+            {
+                message.WriteInteger(item.Limited);
+                message.WriteInteger(item.LimitedStack);
             }
         }
 
