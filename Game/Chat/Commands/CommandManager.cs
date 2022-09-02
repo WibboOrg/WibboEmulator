@@ -383,6 +383,7 @@ namespace WibboEmulator.Game.Chat.Commands
             this.Register(152, new LoadRoomItems());
             this.Register(153, new RegenLTD());
             this.Register(154, new SummonAll());
+            this.Register(155, new LootboxInfo());
         }
 
         public void RegisterCommand()

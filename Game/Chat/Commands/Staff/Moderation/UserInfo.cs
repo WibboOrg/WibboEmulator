@@ -63,7 +63,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             }
 
             Session.SendNotification(stringBuilder.ToString());
-
         }
     }
 }

@@ -31,10 +31,12 @@ namespace WibboEmulator.Game.Loots
 
             int timestampStartMounth = (int)startMounth.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 
+            int basicCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX2022", timestampStartMounth, 1);
             int commmCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX2022", timestampStartMounth, 2);
             int epicCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX2022", timestampStartMounth, 3);
             int legendaryCounter = LogLootBoxDao.GetCount(dbClient, "LOOTBOX2022", timestampStartMounth, 4);
 
+            this.RarityCounter.Add(1, basicCounter);
             this.RarityCounter.Add(2, commmCounter);
             this.RarityCounter.Add(3, epicCounter);
             this.RarityCounter.Add(4, legendaryCounter);

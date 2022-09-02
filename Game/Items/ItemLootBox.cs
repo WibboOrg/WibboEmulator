@@ -76,23 +76,24 @@ namespace WibboEmulator.Game.Items
 
             int probab = WibboEnvironment.GetRandomNumber(1, 20001);
 
+            int basicCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(1);
             int communCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(2);
             int epicCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(3);
             int legendaryCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(4);
 
             if (probab <= 3 && legendaryCount <= 3)
             {
-                pageId = 1635463734; // Legendaires = 5 000wps
+                pageId = 1635463734; // Legendaires
                 WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(4);
             }
             else if (probab <= 33 && epicCount <= 30)
             {
-                pageId = 1635463733; // Epic 500wps
+                pageId = 1635463733; // Epic
                 WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(3);
             }
             else if (probab <= 333 && communCount <= 300)
             {
-                pageId = 1635463732; // Commun 50wps
+                pageId = 1635463732; // Commun
                 WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(2);
             }
             else if (probab <= 933)
@@ -102,11 +103,14 @@ namespace WibboEmulator.Game.Items
             }
             else if (probab <= 10933)
             {
-                pageId = 15987;
+                pageId = 15987; // 1wp
                 forceItem = 23584;
             }
             else
-                pageId = 1635463731; //Basique
+            {
+                pageId = 1635463731; // Basique
+                WibboEnvironment.GetGame().GetLootManager().IncrementeRarityCounter(1);
+            }
 
             EndOpenBox(session, present, room, pageId, forceItem);
         }
