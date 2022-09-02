@@ -13,10 +13,12 @@ namespace WibboEmulator.Game.Loots
     public class LootManager
     {
         private readonly Dictionary<InteractionType, List<Loot>> LootItem;
+        private readonly int LegendaryCounter;
 
         public LootManager()
         {
             this.LootItem = new Dictionary<InteractionType, List<Loot>>();
+            this.LegendaryCounter = 0;
         }
 
         public void Init(IQueryAdapter dbClient)
