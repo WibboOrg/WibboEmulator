@@ -59,7 +59,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
 
             if (isWhisper)
             {
-                user.GetClient().SendPacket(new ShoutComposer(bot.VirtualId, textMessage, 2));
+                user.GetClient().SendPacket(new WhisperComposer(bot.VirtualId, textMessage, 2));
             }
             else
             {
