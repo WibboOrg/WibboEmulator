@@ -75,7 +75,7 @@ namespace WibboEmulator.Game.Catalog
             this.Items = Items;
 
             this.ItemOffers = new Dictionary<int, CatalogItem>();
-            if (Template == "default_3x3")
+            if (Template.StartsWith("default_3x3"))
             {
                 foreach (CatalogItem item in this.Items.Values)
                 {
