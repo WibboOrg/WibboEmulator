@@ -1,3 +1,4 @@
+using MySqlX.XDevAPI.Common;
 using WibboEmulator.Game.Clients;
 using WibboEmulator.Game.Rooms;
 
@@ -8,6 +9,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             UserRoom.ConstruitEnable = false;
+
+            Session.SendWhisper("Construit désactiver!");
         }
     }
 }

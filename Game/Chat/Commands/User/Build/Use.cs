@@ -1,3 +1,4 @@
+using MySqlX.XDevAPI.Common;
 using WibboEmulator.Game.Clients;
 using WibboEmulator.Game.Rooms;
 
@@ -24,6 +25,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             }
 
             Session.GetUser().ForceUse = UseCount;
+
+            Session.SendWhisper("Use: " + UseCount);
         }
     }
 }

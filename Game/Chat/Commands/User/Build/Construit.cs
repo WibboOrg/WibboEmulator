@@ -22,6 +22,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 }
             }
 
+            Session.SendWhisper("Construit: " + Result);
         }
     }
 }

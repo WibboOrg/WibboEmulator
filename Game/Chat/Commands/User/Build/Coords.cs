@@ -21,7 +21,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             }
 
             Session.SendNotification("X: " + roomUserByUserId.X + " - Y: " + roomUserByUserId.Y + " - Z: " + roomUserByUserId.Z + " - Rot: " + roomUserByUserId.RotBody);
-
         }
     }
 }
