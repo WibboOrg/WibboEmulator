@@ -10,7 +10,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
         {
             Session.GetUser().ForceUse = -1;
 
-            Session.SendWhisper("Use désactiver!");
+            Session.SendWhisper("Use désactivé!");
         }
     }
 }

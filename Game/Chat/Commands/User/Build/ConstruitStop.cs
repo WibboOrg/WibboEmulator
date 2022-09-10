@@ -10,7 +10,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
         {
             UserRoom.ConstruitEnable = false;
 
-            Session.SendWhisper("Construit désactiver!");
+            Session.SendWhisper("Construit désactivé!");
         }
     }
 }

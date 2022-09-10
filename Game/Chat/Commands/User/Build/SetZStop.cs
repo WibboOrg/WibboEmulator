@@ -11,7 +11,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             UserRoom.ConstruitZMode = false;
             Session.SendPacket(Room.GetGameMap().Model.SerializeRelativeHeightmap());
 
-            Session.SendWhisper("Setz désactiver!");
+            Session.SendWhisper("Setz désactivé!");
         }
     }
 }

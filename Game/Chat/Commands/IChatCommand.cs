@@ -5,6 +5,6 @@ namespace WibboEmulator.Game.Chat.Commands
 {
     public interface IChatCommand
     {
-        void Execute(Client session, Room room, RoomUser user, string[] parts);
+        void Execute(Client session, Room room, RoomUser roomUser, string[] parts);
     }
 }

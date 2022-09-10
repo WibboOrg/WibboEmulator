@@ -241,7 +241,6 @@ namespace WibboEmulator.Game.Chat.Commands
             this.Register(35, new Coords());
             this.Register(36, new HandItem());
             this.Register(37, new Enable());
-            //this.Register(38, new Commands());
             this.Register(39, new About());
             this.Register(40, new ForceRot());
             this.Register(41, new EmptyItems());
