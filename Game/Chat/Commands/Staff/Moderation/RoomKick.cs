@@ -7,23 +7,16 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room currentRoom = Session.GetUser().CurrentRoom;
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-            if (room == null)
-            {
-                return;
-            }
-
             string MessageAlert = CommandManager.MergeParams(Params, 1);
             if (Session.Antipub(MessageAlert, "<CMD>"))
             {
                 return;
             }
 
-            room.SetTimeout(async () =>
+            Room.SetTimeout(async () =>
             {
                 List<RoomUser> userKick = new List<RoomUser>();
-                foreach (RoomUser user in currentRoom.GetRoomUserManager().GetUserList().ToList())
+                foreach (RoomUser user in Room.GetRoomUserManager().GetUserList().ToList())
                 {
                     if (user != null && !user.IsBot && !user.GetClient().GetUser().HasPermission("perm_mod") && user.GetClient().GetUser().Id != Session.GetUser().Id)
                     {
@@ -49,7 +42,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                         user.GetClient().SendNotification(MessageAlert);
                     }
 
-                    currentRoom.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, false);
+                    Room.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, false);
                 }
             });
         }

@@ -21,43 +21,39 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
             if (Params.Length == 3 || Params.Length == 2)
             {
-                if (Room != null)
+                int raceid = 0;
+                if (Params.Length == 3)
                 {
-                    int raceid = 0;
-                    if (Params.Length == 3)
+                    string x = Params[2];
+                    if (int.TryParse(x, out int value))
                     {
-                        string x = Params[2];
-                        if (int.TryParse(x, out int value))
+                        raceid = Convert.ToInt32(Params[2]);
+                        if (raceid < 1 || raceid > 50)
                         {
-                            raceid = Convert.ToInt32(Params[2]);
-                            if (raceid < 1 || raceid > 50)
-                            {
-                                raceid = 0;
-                            }
+                            raceid = 0;
                         }
                     }
-                    else
-                    {
-                        raceid = 0;
-                    }
-
-                    if (!UserRoom.SetPetTransformation(Params[1], raceid))
-                    {
-                        Session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", Session.Langue));
-                        return;
-                    }
-
-                    UserRoom.IsTransf = true;
-
-                    Room.SendPacket(new UserRemoveComposer(UserRoom.VirtualId));
-                    Room.SendPacket(new UsersComposer(UserRoom));
                 }
+                else
+                {
+                    raceid = 0;
+                }
+
+                if (!UserRoom.SetPetTransformation(Params[1], raceid))
+                {
+                    Session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", Session.Langue));
+                    return;
+                }
+
+                UserRoom.IsTransf = true;
+
+                Room.SendPacket(new UserRemoveComposer(UserRoom.VirtualId));
+                Room.SendPacket(new UsersComposer(UserRoom));
             }
             else
             {
                 Session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", Session.Langue));
             }
-
         }
     }
 }

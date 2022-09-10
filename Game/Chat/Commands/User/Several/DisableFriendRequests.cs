@@ -17,7 +17,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 Session.GetUser().HasFriendRequestsDisabled = true;
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.false", Session.Langue));
             }
-
         }
     }
 }

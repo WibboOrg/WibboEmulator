@@ -19,17 +19,14 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));
             }
-
             else if ((TargetUser.GetUser().HideInRoom) && !Session.GetUser().HasPermission("perm_mod"))
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.follow.notallowed", Session.Langue));
             }
-
             else if (TargetUser.GetUser().Rank >= 8)
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.follow.notallowed", Session.Langue));
             }
-
             else
             {
                 Room currentRoom = TargetUser.GetUser().CurrentRoom;
@@ -38,7 +35,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     Session.SendPacket(new GetGuestRoomResultComposer(Session, currentRoom.RoomData, false, true));
                 }
             }
-
         }
     }
 }

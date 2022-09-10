@@ -7,24 +7,12 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room room = Session.GetUser().CurrentRoom;
-            if (room == null)
-            {
-                return;
-            }
-
-            RoomUser roomuser = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (roomuser == null)
-            {
-                return;
-            }
-
             if (Params.Length != 2)
             {
                 return;
             }
 
-            RoomUser TargetUser = room.GetRoomUserManager().GetRoomUserByName(Params[1]);
+            RoomUser TargetUser = Room.GetRoomUserManager().GetRoomUserByName(Params[1]);
             if (TargetUser == null)
             {
                 return;
@@ -37,40 +25,36 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
             if (TargetUser.GetClient().GetUser().PremiumProtect && !Session.GetUser().HasPermission("perm_mod"))
             {
-                roomuser.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
+                UserRoom.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
                 return;
             }
 
-            RoomUser TUS = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (TUS == null)
-                return;
-
-            if (TUS.SetX - 1 == Room.GetGameMap().Model.DoorX)
+            if (UserRoom.SetX - 1 == Room.GetGameMap().Model.DoorX)
             {
                 return;
             }
 
-            roomuser.OnChat("*Tire " + Params[1] + "*", 0, false);
-            if (roomuser.RotBody % 2 != 0)
+            UserRoom.OnChat("*Tire " + Params[1] + "*", 0, false);
+            if (UserRoom.RotBody % 2 != 0)
             {
-                roomuser.RotBody--;
+                UserRoom.RotBody--;
             }
 
-            if (roomuser.RotBody == 0)
+            if (UserRoom.RotBody == 0)
             {
-                TargetUser.MoveTo(roomuser.X, roomuser.Y - 1);
+                TargetUser.MoveTo(UserRoom.X, UserRoom.Y - 1);
             }
-            else if (roomuser.RotBody == 2)
+            else if (UserRoom.RotBody == 2)
             {
-                TargetUser.MoveTo(roomuser.X + 1, roomuser.Y);
+                TargetUser.MoveTo(UserRoom.X + 1, UserRoom.Y);
             }
-            else if (roomuser.RotBody == 4)
+            else if (UserRoom.RotBody == 4)
             {
-                TargetUser.MoveTo(roomuser.X, roomuser.Y + 1);
+                TargetUser.MoveTo(UserRoom.X, UserRoom.Y + 1);
             }
-            else if (roomuser.RotBody == 6)
+            else if (UserRoom.RotBody == 6)
             {
-                TargetUser.MoveTo(roomuser.X - 1, roomuser.Y);
+                TargetUser.MoveTo(UserRoom.X - 1, UserRoom.Y);
             }
         }
     }

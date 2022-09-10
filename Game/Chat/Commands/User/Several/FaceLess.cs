@@ -31,21 +31,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
                 Session.GetUser().Look = look;
 
-                if (!Session.GetUser().InRoom)
-                {
-                    return;
-                }
-
-                Room currentRoom = Session.GetUser().CurrentRoom;
-                if (currentRoom == null)
-                {
-                    return;
-                }
-
-                currentRoom.SendPacket(new UserChangeComposer(UserRoom, false));
-
+                Room.SendPacket(new UserChangeComposer(UserRoom, false));
             }
-
         }
     }
 }

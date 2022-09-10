@@ -45,7 +45,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     Session.Antipub(Raison, "<CMD>");
                 }
             }
-
         }
     }
 }

@@ -39,7 +39,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             }
             string VideoId = Split.Substring(0, 11);
 
-            RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
+            RoomUser roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByName(username);
             if (roomUserByUserId == null || roomUserByUserId.GetClient() == null || roomUserByUserId.GetClient().GetUser() == null)
             {
                 return;

@@ -18,19 +18,13 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(TargetUser.GetUser().CurrentRoomId);
-            if (room == null)
-            {
-                return;
-            }
-
-            RoomUser roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(TargetUser.GetUser().Id);
+            RoomUser roomUserByUserIdTarget = Room.GetRoomUserManager().GetRoomUserByUserId(TargetUser.GetUser().Id);
             if (roomUserByUserIdTarget == null)
             {
                 return;
             }
 
-            room.SendPacket(room.GetRoomItemHandler().TeleportUser(roomUserByUserIdTarget, UserRoom.Coordinate, 0, room.GetGameMap().SqAbsoluteHeight(UserRoom.X, UserRoom.Y)));
+            Room.SendPacket(Room.GetRoomItemHandler().TeleportUser(roomUserByUserIdTarget, UserRoom.Coordinate, 0, Room.GetGameMap().SqAbsoluteHeight(UserRoom.X, UserRoom.Y)));
         }
     }
 }

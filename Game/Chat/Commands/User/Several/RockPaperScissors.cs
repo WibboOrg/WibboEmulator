@@ -31,26 +31,20 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Room room = UserRoom.Room;
-            if (room == null)
-            {
-                return;
-            }
-
-            RoomUser roomuser = room.GetRoomUserManager().GetRoomUserByName(Username);
-            if (roomuser == null)
+            RoomUser roomUserTarget = Room.GetRoomUserManager().GetRoomUserByName(Username);
+            if (roomUserTarget == null)
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
                 return;
             }
 
-            if (roomuser.UserId == UserRoom.UserId)
+            if (roomUserTarget.UserId == UserRoom.UserId)
             {
                 return;
             }
 
-            JankenManager Jankan = room.GetJanken();
-            Jankan.Start(UserRoom, roomuser);
+            JankenManager Jankan = Room.GetJanken();
+            Jankan.Start(UserRoom, roomUserTarget);
         }
     }
 }

@@ -17,7 +17,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 Session.GetUser().HideInRoom = true;
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.followme.false", Session.Langue));
             }
-
         }
     }
 }

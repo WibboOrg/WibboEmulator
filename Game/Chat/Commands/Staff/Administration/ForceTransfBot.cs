@@ -15,7 +15,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
             string username = Params[1];
 
-            RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
+            RoomUser roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByName(username);
             if (roomUserByUserId == null || roomUserByUserId.GetClient() == null)
             {
                 return;

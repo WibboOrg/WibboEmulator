@@ -7,38 +7,25 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room room = Session.GetUser().CurrentRoom;
-            if (room == null)
+            if (UserRoom.ContainStatus("sit") || UserRoom.ContainStatus("lay"))
             {
                 return;
             }
 
-            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (roomUserByUserId == null)
-            {
-                return;
-            }
-
-            if (roomUserByUserId.ContainStatus("sit") || roomUserByUserId.ContainStatus("lay"))
-            {
-                return;
-            }
-
-            if (roomUserByUserId.RotBody % 2 == 0)
+            if (UserRoom.RotBody % 2 == 0)
             {
                 if (UserRoom.IsTransf)
                 {
-                    roomUserByUserId.SetStatus("sit", "0");
+                    UserRoom.SetStatus("sit", "0");
                 }
                 else
                 {
-                    roomUserByUserId.SetStatus("sit", "0.5");
+                    UserRoom.SetStatus("sit", "0.5");
                 }
 
-                roomUserByUserId.IsSit = true;
-                roomUserByUserId.UpdateNeeded = true;
+                UserRoom.IsSit = true;
+                UserRoom.UpdateNeeded = true;
             }
-
         }
     }
 }

@@ -8,26 +8,19 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room currentRoom = Session.GetUser().CurrentRoom;
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-            if (room == null)
-            {
-                return;
-            }
-
             ServerPacketList MessageList = new ServerPacketList();
 
-            foreach (RoomUser user in room.GetRoomUserManager().GetUserList().ToList())
+            foreach (RoomUser user in Room.GetRoomUserManager().GetUserList().ToList())
             {
                 if (user == null || user.IsBot)
                 {
                     continue;
                 }
 
-                MessageList.Add(room.GetRoomItemHandler().TeleportUser(user, UserRoom.Coordinate, 0, room.GetGameMap().SqAbsoluteHeight(UserRoom.X, UserRoom.Y)));
+                MessageList.Add(Room.GetRoomItemHandler().TeleportUser(user, UserRoom.Coordinate, 0, Room.GetGameMap().SqAbsoluteHeight(UserRoom.X, UserRoom.Y)));
             }
 
-            room.SendMessage(MessageList);
+            Room.SendMessage(MessageList);
         }
     }
 }

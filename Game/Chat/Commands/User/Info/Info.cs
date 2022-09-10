@@ -11,9 +11,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             TimeSpan Uptime = DateTime.Now - WibboEnvironment.ServerStarted;
 
             int OnlineUsers = WibboEnvironment.GetGame().GetClientManager().Count;
-
             int RoomCount = WibboEnvironment.GetGame().GetRoomManager().Count;
-
 
             Session.SendPacket(new BroadcastMessageAlertComposer("<b>Butterfly Edition Wibbo</b>\n\n" +
                  "   <b>Credits</b>:\n" +
@@ -24,7 +22,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                  "   Joueurs en ligne: " + OnlineUsers + "\n" +
                  "   Appartements actifs: " + RoomCount + "\n" +
                  "   Uptime: " + Uptime.Days + " jour(s), " + Uptime.Hours + " heure(s) et " + Uptime.Minutes + " minutes.\n\n"));
-
         }
     }
 }

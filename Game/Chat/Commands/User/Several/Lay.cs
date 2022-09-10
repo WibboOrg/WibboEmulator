@@ -7,77 +7,44 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-            if (room == null)
+            if (UserRoom.ContainStatus("lay") || UserRoom.ContainStatus("sit"))
             {
                 return;
             }
 
-            RoomUser roomUserByUserId = UserRoom;
-            if (roomUserByUserId == null)
+            if (UserRoom.RotBody % 2 == 0 || UserRoom.IsTransf)
             {
-                return;
-            }
-
-            try
-            {
-
-
-
-
-
-
-
-
-                /*if (roomUserByUserId.sentadoBol)
+                if (UserRoom.RotBody == 4 || UserRoom.RotBody == 0 || UserRoom.IsTransf)
                 {
-                  roomUserByUserId.sentadoBol = false;
-                  roomUserByUserId.RemoveStatus("sit");
-                }*/
-                if (roomUserByUserId.ContainStatus("lay") || roomUserByUserId.ContainStatus("sit"))
-                {
-                    return;
-                }
-
-                if (roomUserByUserId.RotBody % 2 == 0 || roomUserByUserId.IsTransf)
-                {
-                    if (roomUserByUserId.RotBody == 4 || roomUserByUserId.RotBody == 0 || roomUserByUserId.IsTransf)
+                    if (Room.GetGameMap().CanWalk(UserRoom.X, UserRoom.Y + 1))
                     {
-                        if (room.GetGameMap().CanWalk(roomUserByUserId.X, roomUserByUserId.Y + 1))
-                        {
-                            roomUserByUserId.RotBody = 0;
-                        }
-                        else
-                        {
-                            return;
-                        }
+                        UserRoom.RotBody = 0;
                     }
                     else
                     {
-                        if (!room.GetGameMap().CanWalk(roomUserByUserId.X + 1, roomUserByUserId.Y))
-                        {
-                            return;
-                        }
+                        return;
                     }
-
-                    //roomUserByUserId.AddStatus("lay", Convert.ToString((double) room.GetGameMap().Model.SqFloorHeight[roomUserByUserId.X, roomUserByUserId.Y] + 0.85).Replace(",", "."));
-                    if (UserRoom.IsTransf)
-                    {
-                        roomUserByUserId.SetStatus("lay", "0");
-                    }
-                    else
-                    {
-                        roomUserByUserId.SetStatus("lay", "0.7");
-                    }
-
-                    roomUserByUserId.IsLay = true;
-                    roomUserByUserId.UpdateNeeded = true;
                 }
-            }
-            catch
-            {
-            }
+                else
+                {
+                    if (!Room.GetGameMap().CanWalk(UserRoom.X + 1, UserRoom.Y))
+                    {
+                        return;
+                    }
+                }
 
+                if (UserRoom.IsTransf)
+                {
+                    UserRoom.SetStatus("lay", "0");
+                }
+                else
+                {
+                    UserRoom.SetStatus("lay", "0.7");
+                }
+
+                UserRoom.IsLay = true;
+                UserRoom.UpdateNeeded = true;
+            }
         }
     }
 }

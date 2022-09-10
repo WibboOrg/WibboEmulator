@@ -24,7 +24,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     User.ApplyEffect(NumEnable);
                 }
             }
-
         }
     }
 }

@@ -42,7 +42,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     TargetUser.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("kick.nomessage", TargetUser.Langue));
                 }
             }
-
         }
     }
 }

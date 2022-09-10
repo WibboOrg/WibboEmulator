@@ -7,26 +7,16 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room currentRoom = Session.GetUser().CurrentRoom;
-            if (currentRoom == null)
-            {
-                return;
-            }
-
-            if (!currentRoom.CheckRights(Session, true))
-            {
-                return;
-            }
-
-            try
-            {
-                Session.GetUser().CurrentRoom.GetRoomItemHandler().SetSpeed(int.Parse(Params[1]));
-            }
-            catch
+            if (Params.Length < 2)
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.intonly", Session.Langue));
+                return;
             }
 
+            if (int.TryParse(Params[1], out int setSpeedCount))
+                Room.GetRoomItemHandler().SetSpeed(setSpeedCount);
+            else
+                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.intonly", Session.Langue));
         }
     }
 }

@@ -16,16 +16,11 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
             if (UserRoom.IsTransf && !UserRoom.IsSpectator && !UserRoom.InGame)
             {
-                Room RoomClient = Session.GetUser().CurrentRoom;
-                if (RoomClient != null)
-                {
-                    UserRoom.IsTransf = false;
+                UserRoom.IsTransf = false;
 
-                    RoomClient.SendPacket(new UserRemoveComposer(UserRoom.VirtualId));
-                    RoomClient.SendPacket(new UsersComposer(UserRoom));
-                }
+                Room.SendPacket(new UserRemoveComposer(UserRoom.VirtualId));
+                Room.SendPacket(new UsersComposer(UserRoom));
             }
-
         }
     }
 }

@@ -17,7 +17,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             }
 
             Session.GetUser().ViewMurmur = !Session.GetUser().ViewMurmur;
-
         }
     }
 }

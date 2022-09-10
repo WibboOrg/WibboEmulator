@@ -31,6 +31,5 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
             TargetUser.SendPacket(new GetGuestRoomResultComposer(TargetUser, currentRoom.RoomData, false, true));
         }
-
     }
 }

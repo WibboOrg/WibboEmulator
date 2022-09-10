@@ -33,7 +33,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             Session.SendPacket(new FigureUpdateComposer(Session.GetUser().Look, Session.GetUser().Gender));
             Session.SendPacket(new UserChangeComposer(UserRoom, true));
             Room.SendPacket(new UserChangeComposer(UserRoom, false));
-
         }
     }
 }

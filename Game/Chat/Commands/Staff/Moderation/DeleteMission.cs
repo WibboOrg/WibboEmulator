@@ -47,7 +47,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
                 currentRoom2.SendPacket(new UserChangeComposer(roomUserByUserId, false));
             }
-
         }
     }
 }

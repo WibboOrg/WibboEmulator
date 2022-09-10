@@ -24,7 +24,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     Client.SendNotification("Vous venez de recevoir le badge : " + Badge + " !");
                 }
             }
-
         }
     }
 }

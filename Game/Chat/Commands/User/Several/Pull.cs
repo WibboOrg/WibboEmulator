@@ -40,16 +40,10 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            RoomUser TUS = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (TUS == null)
-                return;
-
-
-            if (TUS.SetX -1 == Room.GetGameMap().Model.DoorX)
+            if (UserRoom.SetX -1 == Room.GetGameMap().Model.DoorX)
             {
                 return;
             }
-
 
             if (Math.Abs(UserRoom.X - TargetUser.X) < 3 && Math.Abs(UserRoom.Y - TargetUser.Y) < 3)
             {
@@ -81,7 +75,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 Session.SendWhisper(Params[1] + " est trop loin de vous.");
                 return;
             }
-
         }
     }
 }

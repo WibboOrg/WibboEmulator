@@ -9,9 +9,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            //if (UserRoom.team != Team.none || UserRoom.InGame)
-            //return;
-
             if (Room.IsRoleplay && !Room.CheckRights(Session))
             {
                 return;
@@ -54,26 +51,9 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            if (!Session.GetUser().InRoom)
-            {
-                return;
-            }
-
-            Room currentRoom = Session.GetUser().CurrentRoom;
-            if (currentRoom == null)
-            {
-                return;
-            }
-
-            RoomUser roomUserByUserId = UserRoom;
-            if (roomUserByUserId == null)
-            {
-                return;
-            }
-
             Session.SendPacket(new FigureUpdateComposer(Session.GetUser().Look, Session.GetUser().Gender));
-            Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
-            currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
+            Session.SendPacket(new UserChangeComposer(UserRoom, true));
+            Room.SendPacket(new UserChangeComposer(UserRoom, false));
         }
     }
 }

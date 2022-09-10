@@ -12,32 +12,24 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-            if (room == null)
+            if (UserRoom.CarryItemID <= 0 || UserRoom.CarryTimer <= 0)
             {
                 return;
             }
 
-            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (roomUserByUserId == null || roomUserByUserId.CarryItemID <= 0 || roomUserByUserId.CarryTimer <= 0)
-            {
-                return;
-            }
-
-            RoomUser roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByName(Params[1]);
+            RoomUser roomUserByUserIdTarget = Room.GetRoomUserManager().GetRoomUserByName(Params[1]);
             if (roomUserByUserIdTarget == null)
             {
                 return;
             }
 
-            if (Math.Abs(roomUserByUserId.X - roomUserByUserIdTarget.X) >= 3 || Math.Abs(roomUserByUserId.Y - roomUserByUserIdTarget.Y) >= 3)
+            if (Math.Abs(UserRoom.X - roomUserByUserIdTarget.X) >= 3 || Math.Abs(UserRoom.Y - roomUserByUserIdTarget.Y) >= 3)
             {
                 return;
             }
 
-            roomUserByUserIdTarget.CarryItem(roomUserByUserId.CarryItemID);
-            roomUserByUserId.CarryItem(0);
-
+            roomUserByUserIdTarget.CarryItem(UserRoom.CarryItemID);
+            UserRoom.CarryItem(0);
         }
     }
 }

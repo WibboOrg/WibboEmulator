@@ -24,7 +24,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     Client.SendPacket(new GetGuestRoomResultComposer(Client, Room.RoomData, false, true));
                 }
             }
-
         }
     }
 }

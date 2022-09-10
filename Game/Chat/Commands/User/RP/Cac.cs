@@ -97,7 +97,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 Rp.AggroTimer = 30;
                 RpTwo.Hit(TargetRoomUser, Dmg, Room);
             }
-
         }
     }
 }

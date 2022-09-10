@@ -7,6 +7,7 @@ using System.Data;
 using System.Text;
 using WibboEmulator.Game.Rooms;
 using WibboEmulator.Game.Permissions;
+using WibboEmulator.Game.Chat.Commands.Staff.Gestion;
 
 namespace WibboEmulator.Game.Chat.Commands
 {
@@ -266,7 +267,6 @@ namespace WibboEmulator.Game.Chat.Commands
             this.Register(61, new InfoSuperWired());
             this.Register(62, new RockPaperScissors());
             this.Register(63, new Mazo());
-            this.Register(64, new LoadVideo());
             this.Register(65, new UseStop());
             this.Register(66, new GunFire());
             this.Register(67, new Cac());

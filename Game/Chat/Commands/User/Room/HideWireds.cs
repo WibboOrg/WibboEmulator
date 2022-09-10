@@ -9,20 +9,14 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room currentRoom = Session.GetUser().CurrentRoom;
-            if (currentRoom == null)
-            {
-                return;
-            }
-
-            currentRoom.RoomData.HideWireds = !currentRoom.RoomData.HideWireds;
+            Room.RoomData.HideWireds = !Room.RoomData.HideWireds;
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                RoomDao.UpdateHideWireds(dbClient, currentRoom.Id, currentRoom.RoomData.HideWireds);
+                RoomDao.UpdateHideWireds(dbClient, Room.Id, Room.RoomData.HideWireds);
             }
 
-            if (currentRoom.RoomData.HideWireds)
+            if (Room.RoomData.HideWireds)
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.hidewireds.true", Session.Langue));
             }

@@ -14,7 +14,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             }
 
             WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
-
         }
     }
 }

@@ -20,8 +20,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
             TargetUser.Freeze = !TargetUser.Freeze;
             TargetUser.FreezeEndCounter = 0;
-
-
         }
     }
 }

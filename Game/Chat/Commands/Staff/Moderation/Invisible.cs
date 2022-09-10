@@ -8,7 +8,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-
             if (Session.GetUser().SpectatorMode)
             {
                 Session.GetUser().SpectatorMode = false;
@@ -19,6 +18,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 Session.GetUser().SpectatorMode = true;
                 Session.GetUser().HideInRoom = true;
             }
+
             Session.SendPacket(new GetGuestRoomResultComposer(Session, Room.RoomData, false, true));
         }
     }

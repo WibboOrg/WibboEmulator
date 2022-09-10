@@ -16,7 +16,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
             string username = Params[1];
 
-            RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
+            RoomUser roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByName(username);
             if (roomUserByUserId == null)
             {
                 return;
@@ -45,7 +45,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             clientByUsername.SendPacket(new FigureUpdateComposer(clientByUsername.GetUser().Look, clientByUsername.GetUser().Gender));
             clientByUsername.SendPacket(new UserChangeComposer(roomUserByUserId, true));
             currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
-
         }
     }
 }

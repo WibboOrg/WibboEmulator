@@ -17,7 +17,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 Session.GetUser().AcceptTrading = true;
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.troc.false", Session.Langue));
             }
-
         }
     }
 }

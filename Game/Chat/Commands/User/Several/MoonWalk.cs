@@ -13,15 +13,13 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Room currentRoom = Session.GetUser().CurrentRoom;
-            if (currentRoom == null || UserRoom.InGame)
+            if (UserRoom.InGame)
             {
                 return;
             }
 
-            RoomUser roomUserByUserId = UserRoom;
-            roomUserByUserId.MoonwalkEnabled = !roomUserByUserId.MoonwalkEnabled;
-            if (roomUserByUserId.MoonwalkEnabled)
+            UserRoom.MoonwalkEnabled = !UserRoom.MoonwalkEnabled;
+            if (UserRoom.MoonwalkEnabled)
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.true", Session.Langue));
             }

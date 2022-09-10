@@ -5,7 +5,7 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Game.Clients;
 using WibboEmulator.Game.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Game.Chat.Commands.Staff.Gestion
 {
     internal class RoomBuy : IChatCommand
     {

@@ -7,23 +7,16 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room room = Session.GetUser().CurrentRoom;
-            if (room == null)
-            {
-                return;
-            }
-
-            if (room.RoomMutePets)
+            if (Room.RoomMutePets)
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roommutepet.true", Session.Langue));
-                room.RoomMutePets = false;
+                Room.RoomMutePets = false;
             }
             else
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roommutepet.false", Session.Langue));
-                room.RoomMutePets = true;
+                Room.RoomMutePets = true;
             }
-
         }
     }
 }

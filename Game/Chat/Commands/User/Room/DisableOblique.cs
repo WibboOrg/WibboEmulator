@@ -7,9 +7,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room currentRoom = Session.GetUser().CurrentRoom;
-            currentRoom.GetGameMap().ObliqueDisable = !currentRoom.GetGameMap().ObliqueDisable;
-
+            Room.GetGameMap().ObliqueDisable = !Room.GetGameMap().ObliqueDisable;
         }
     }
 }

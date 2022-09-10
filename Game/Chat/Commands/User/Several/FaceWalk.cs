@@ -13,9 +13,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            RoomUser roomUserByUserId = UserRoom;
-            roomUserByUserId.FacewalkEnabled = !roomUserByUserId.FacewalkEnabled;
-            if (roomUserByUserId.FacewalkEnabled)
+            UserRoom.FacewalkEnabled = !UserRoom.FacewalkEnabled;
+            if (UserRoom.FacewalkEnabled)
             {
                 Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.true", Session.Langue));
             }

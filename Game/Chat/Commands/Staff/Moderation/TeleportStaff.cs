@@ -7,14 +7,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Room currentRoom = Session.GetUser().CurrentRoom;
-            RoomUser roomUserByUserId = currentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (roomUserByUserId == null)
-            {
-                return;
-            }
-
-            roomUserByUserId.TeleportEnabled = !roomUserByUserId.TeleportEnabled;
+            UserRoom.TeleportEnabled = !UserRoom.TeleportEnabled;
         }
     }
 }

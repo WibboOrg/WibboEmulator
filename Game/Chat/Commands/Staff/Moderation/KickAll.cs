@@ -33,7 +33,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
 
                 room.GetRoomUserManager().RemoveUserFromRoom(item_1.GetClient(), true, false);
             }
-
         }
     }
 }

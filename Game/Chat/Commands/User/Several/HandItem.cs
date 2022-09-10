@@ -26,7 +26,6 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             }
 
             UserRoom.CarryItem(handitemid);
-
         }
     }
 }
