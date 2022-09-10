@@ -208,8 +208,7 @@ namespace WibboEmulator.Game.Rooms.AI.Types
                             break;
                         default:
                             string[] strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.unknowncommand", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
-                            Random random = new Random();
-                            roomUser.OnChat(strArray[random.Next(0, strArray.Length - 1)], 0, false);
+                            roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
                             break;
                     }
                     roomUser.PetData.PetEnergy(false);
@@ -223,8 +222,8 @@ namespace WibboEmulator.Game.Rooms.AI.Types
                         if (roomUser.PetData.Energy < 10)
                         {
                             string[] strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.tired", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
-                            Random random = new Random();
-                            roomUser.OnChat(strArray[random.Next(0, strArray.Length - 1)], 0, false);
+                            
+                            roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
                             roomUser.SetStatus("lay", roomUser.Z.ToString());
                             roomUser.IsLay = true;
                             this._speechTimer = 50;
@@ -234,8 +233,8 @@ namespace WibboEmulator.Game.Rooms.AI.Types
                         else
                         {
                             string[] strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.lazy", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
-                            Random random = new Random();
-                            roomUser.OnChat(strArray[random.Next(0, strArray.Length - 1)], 0, false);
+                            
+                            roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
                             roomUser.PetData.PetEnergy(false);
                         }
                     }

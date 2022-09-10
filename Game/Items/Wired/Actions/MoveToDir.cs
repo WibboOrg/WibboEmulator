@@ -1203,7 +1203,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                 #region Random
                 case WhenMovementBlock.turnrandom:
                     {
-                        this.MoveToDirMovement = (MovementDirection)new Random().Next(1, 7);
+                        this.MoveToDirMovement = (MovementDirection)WibboEnvironment.GetRandomNumber(1, 7);
                         break;
                     }
                     #endregion

@@ -937,7 +937,7 @@ namespace WibboEmulator.Game.Rooms
 
             if (movements.Count > 0)
             {
-                return movements[new Random().Next(0, movements.Count)];
+                return movements[WibboEnvironment.GetRandomNumber(0, movements.Count - 1)];
             }
             else
             {
@@ -985,7 +985,7 @@ namespace WibboEmulator.Game.Rooms
 
             if (movements2.Count > 0)
             {
-                return movements2[new Random().Next(0, movements2.Count)];
+                return movements2[WibboEnvironment.GetRandomNumber(0, movements2.Count - 1)];
             }
 
             return MovementState.none;
@@ -1070,7 +1070,7 @@ namespace WibboEmulator.Game.Rooms
 
             if (movements.Count > 0)
             {
-                return movements[new Random().Next(0, movements.Count)];
+                return movements[WibboEnvironment.GetRandomNumber(0, movements.Count - 1)];
             }
             else
             {
@@ -1118,7 +1118,7 @@ namespace WibboEmulator.Game.Rooms
 
             if (movements2.Count > 0)
             {
-                return movements2[new Random().Next(0, movements2.Count)];
+                return movements2[WibboEnvironment.GetRandomNumber(0, movements2.Count - 1)];
             }
 
             return MovementState.none;

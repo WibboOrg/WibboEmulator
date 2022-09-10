@@ -10,7 +10,6 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Users
         {
             this.WriteInteger(UserId);
             this.WriteInteger(Relationships.Count);
-            Random rand = new Random();
             ICollection<Relationship>relations = Relationships;
 
             Dictionary<int, Relationship> RelationRandom = new Dictionary<int, Relationship>();
@@ -20,6 +19,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Users
                 RelationRandom.Add(UserRelation.UserId, UserRelation);
             }
 
+            Random rand = new Random();
             RelationRandom = RelationRandom.OrderBy(x => rand.Next()).ToDictionary(item => item.Key, item => item.Value);
 
             int Loves = RelationRandom.Count(x => x.Value.Type == 1);

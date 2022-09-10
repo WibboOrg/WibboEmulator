@@ -34,7 +34,6 @@ namespace WibboEmulator.Game.Rooms
                 return;
             }
 
-            Random random = new Random();
             foreach (Item roomItem in this._banzaiPyramids.Values.ToList())
             {
                 if (roomItem.InteractionCountHelper == 0 && roomItem.ExtraData == "1")
@@ -46,7 +45,7 @@ namespace WibboEmulator.Game.Rooms
                     roomItem.ExtraData = "0";
                 }
 
-                if (random.Next(0, 30) == 15)
+                if (WibboEnvironment.GetRandomNumber(0, 30) == 15)
                 {
                     if (roomItem.ExtraData == "0")
                     {

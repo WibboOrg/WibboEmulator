@@ -144,8 +144,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                         }
                         else
                         {
-                            Random RandomDance = new Random();
-                            Bot.DanceId = RandomDance.Next(1, 4);
+                            Bot.DanceId = WibboEnvironment.GetRandomNumber(1, 4);
                             Bot.BotData.IsDancing = true;
                         }
 
