@@ -95,12 +95,12 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             TimeSpan timeSpan = DateTime.Now - session.GetUser().SpamFloodTime;
             if (timeSpan.TotalSeconds > session.GetUser().SpamProtectionTime && session.GetUser().SpamEnable)
             {
-                user.FloodCount = 0;
+                session.GetUser().FloodCount = 0;
                 session.GetUser().SpamEnable = false;
             }
             else if (timeSpan.TotalSeconds > 4.0)
             {
-                user.FloodCount = 0;
+                session.GetUser().FloodCount = 0;
             }
 
             if (timeSpan.TotalSeconds < session.GetUser().SpamProtectionTime && session.GetUser().SpamEnable)
@@ -109,7 +109,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 user.GetClient().SendPacket(new FloodControlComposer(i));
                 return;
             }
-            else if (timeSpan.TotalSeconds < 4.0 && user.FloodCount > 5 && !session.GetUser().HasPermission("perm_mod"))
+            else if (timeSpan.TotalSeconds < 4.0 && session.GetUser().FloodCount > 5 && !session.GetUser().HasPermission("perm_mod"))
             {
                 session.GetUser().SpamProtectionTime = (room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium")) ? 5 : 15;
                 session.GetUser().SpamEnable = true;
@@ -138,7 +138,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 user.LastMessage = message;
 
                 session.GetUser().SpamFloodTime = DateTime.Now;
-                user.FloodCount++;
+                session.GetUser().FloodCount++;
 
                 if (message.StartsWith("@red@") || message.StartsWith("@rouge@"))
                 {

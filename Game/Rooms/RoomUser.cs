@@ -68,7 +68,6 @@ namespace WibboEmulator.Game.Rooms
         public bool IsAsleep;
         public Dictionary<string, string> _statusses;
         public int DanceId;
-        public int FloodCount;
         public bool IsSpectator;
 
         public int DiceCounterAmount;
