@@ -2,12 +2,12 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class RoomVisualizationSettingsComposer : ServerPacket
     {
-        public RoomVisualizationSettingsComposer(int Walls, int Floor, bool HideWalls)
+        public RoomVisualizationSettingsComposer(int walls, int floor, bool hideWalls)
             : base(ServerPacketHeader.ROOM_THICKNESS)
         {
-            this.WriteBoolean(HideWalls);
-            this.WriteInteger(Walls);
-            this.WriteInteger(Floor);
+            this.WriteBoolean(hideWalls);
+            this.WriteInteger(walls);
+            this.WriteInteger(floor);
         }
     }
 }

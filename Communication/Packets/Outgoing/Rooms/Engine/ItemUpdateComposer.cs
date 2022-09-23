@@ -4,30 +4,30 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class ItemUpdateComposer : ServerPacket
     {
-        public ItemUpdateComposer(Item Item, int UserId)
+        public ItemUpdateComposer(Item item, int userId)
             : base(ServerPacketHeader.ITEM_WALL_UPDATE)
         {
-            this.WriteWallItem(Item, UserId);
+            this.WriteWallItem(item, userId);
         }
 
-        private void WriteWallItem(Item Item, int UserId)
+        private void WriteWallItem(Item item, int userId)
         {
-            this.WriteString(Item.Id.ToString());
-            this.WriteInteger(Item.GetBaseItem().SpriteId);
-            this.WriteString(Item.WallCoord);
-            switch (Item.GetBaseItem().InteractionType)
+            this.WriteString(item.Id.ToString());
+            this.WriteInteger(item.GetBaseItem().SpriteId);
+            this.WriteString(item.WallCoord);
+            switch (item.GetBaseItem().InteractionType)
             {
                 case InteractionType.POSTIT:
-                    this.WriteString(Item.ExtraData.Split(' ')[0]);
+                    this.WriteString(item.ExtraData.Split(' ')[0]);
                     break;
 
                 default:
-                    this.WriteString(Item.ExtraData);
+                    this.WriteString(item.ExtraData);
                     break;
             }
             this.WriteInteger(-1);
-            this.WriteInteger((Item.GetBaseItem().Modes > 1) ? 1 : 0);
-            this.WriteInteger(UserId);
+            this.WriteInteger((item.GetBaseItem().Modes > 1) ? 1 : 0);
+            this.WriteInteger(userId);
             this.WriteString("");
         }
     }

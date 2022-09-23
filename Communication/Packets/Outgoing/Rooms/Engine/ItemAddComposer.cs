@@ -4,19 +4,19 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class ItemAddComposer : ServerPacket
     {
-        public ItemAddComposer(Item Item, string Username, int UserID)
+        public ItemAddComposer(Item item, string userName, int userId)
             : base(ServerPacketHeader.ITEM_WALL_ADD)
         {
-            this.WriteString(Item.Id.ToString());
-            this.WriteInteger(Item.GetBaseItem().SpriteId);
-            this.WriteString(Item.WallCoord != null ? Item.WallCoord : string.Empty);
+            this.WriteString(item.Id.ToString());
+            this.WriteInteger(item.GetBaseItem().SpriteId);
+            this.WriteString(item.WallCoord ?? string.Empty);
 
-            ItemBehaviourUtility.GenerateWallExtradata(Item, this);
+            ItemBehaviourUtility.GenerateWallExtradata(item, this);
 
             this.WriteInteger(-1);
-            this.WriteInteger((Item.GetBaseItem().Modes > 1) ? 1 : 0);
-            this.WriteInteger(UserID);
-            this.WriteString(Username);
+            this.WriteInteger((item.GetBaseItem().Modes > 1) ? 1 : 0);
+            this.WriteInteger(userId);
+            this.WriteString(userName);
         }
     }
 }

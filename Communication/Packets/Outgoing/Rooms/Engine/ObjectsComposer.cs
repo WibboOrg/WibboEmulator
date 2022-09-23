@@ -6,48 +6,47 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class ObjectsComposer : ServerPacket
     {
-        public ObjectsComposer(Item[] Objects, Room Room)
+        public ObjectsComposer(Item[] items, Room room)
             : base(ServerPacketHeader.FURNITURE_FLOOR)
         {
             this.WriteInteger(1);
 
-            this.WriteInteger(Room.RoomData.OwnerId);
-            this.WriteString(Room.RoomData.OwnerName);
+            this.WriteInteger(room.RoomData.OwnerId);
+            this.WriteString(room.RoomData.OwnerName);
 
-            this.WriteInteger(Objects.Length);
-            foreach (Item Item in Objects)
+            this.WriteInteger(items.Length);
+            foreach (Item Item in items)
             {
-                this.WriteFloorItem(Item, Convert.ToInt32(Room.RoomData.OwnerId), Room.RoomData.HideWireds);
+                this.WriteFloorItem(Item, Convert.ToInt32(room.RoomData.OwnerId), room.RoomData.HideWireds);
             }
         }
 
-        public ObjectsComposer(ItemTemp[] Objects, Room Room)
+        public ObjectsComposer(ItemTemp[] items, Room room)
             : base(ServerPacketHeader.FURNITURE_FLOOR)
         {
             this.WriteInteger(1);
 
-            this.WriteInteger(Room.RoomData.OwnerId);
-            this.WriteString(Room.RoomData.OwnerName);
+            this.WriteInteger(room.RoomData.OwnerId);
+            this.WriteString(room.RoomData.OwnerName);
 
-            this.WriteInteger(Objects.Length);
-            foreach (ItemTemp Item in Objects)
+            this.WriteInteger(items.Length);
+            foreach (ItemTemp Item in items)
             {
-                this.WriteFloorItem(Item, Convert.ToInt32(Room.RoomData.OwnerId));
+                this.WriteFloorItem(Item, Convert.ToInt32(room.RoomData.OwnerId));
             }
         }
 
-        private void WriteFloorItem(ItemTemp Item, int UserID)
+        private void WriteFloorItem(ItemTemp item, int userId)
         {
-
-            this.WriteInteger(Item.Id);
-            this.WriteInteger(Item.SpriteId);
-            this.WriteInteger(Item.X);
-            this.WriteInteger(Item.Y);
+            this.WriteInteger(item.Id);
+            this.WriteInteger(item.SpriteId);
+            this.WriteInteger(item.X);
+            this.WriteInteger(item.Y);
             this.WriteInteger(2);
-            this.WriteString(string.Format("{0:0.00}", Item.Z));
+            this.WriteString(string.Format("{0:0.00}", item.Z));
             this.WriteString(string.Empty);
 
-            if (Item.InteractionType == InteractionTypeTemp.RPITEM)
+            if (item.InteractionType == InteractionTypeTemp.RPITEM)
             {
                 this.WriteInteger(0);
                 this.WriteInteger(1);
@@ -57,7 +56,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
                 this.WriteString("state");
                 this.WriteString("0");
                 this.WriteString("imageUrl");
-                this.WriteString("https://swf.wibbo.me/items/" + Item.ExtraData + ".png");
+                this.WriteString("https://swf.wibbo.me/items/" + item.ExtraData + ".png");
                 this.WriteString("offsetX");
                 this.WriteString("-20");
                 this.WriteString("offsetY");
@@ -69,30 +68,30 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
             {
                 this.WriteInteger(1);
                 this.WriteInteger(0);
-                this.WriteString(Item.ExtraData);
+                this.WriteString(item.ExtraData);
             }
 
             this.WriteInteger(-1); // to-do: check
             this.WriteInteger(1); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
-            this.WriteInteger(UserID);
+            this.WriteInteger(userId);
         }
 
-        private void WriteFloorItem(Item Item, int UserID, bool HideWired)
+        private void WriteFloorItem(Item item, int userId, bool hideWired)
         {
 
-            this.WriteInteger(Item.Id);
-            this.WriteInteger((HideWired && WiredUtillity.TypeIsWired(Item.GetBaseItem().InteractionType) && (Item.GetBaseItem().InteractionType != InteractionType.HIGHSCORE && Item.GetBaseItem().InteractionType != InteractionType.HIGHSCOREPOINTS)) ? 31294061 : Item.GetBaseItem().SpriteId);
-            this.WriteInteger(Item.X);
-            this.WriteInteger(Item.Y);
-            this.WriteInteger(Item.Rotation);
-            this.WriteString(string.Format("{0:0.00}", Item.Z));
-            this.WriteString(Item.GetBaseItem().Height.ToString());
+            this.WriteInteger(item.Id);
+            this.WriteInteger((hideWired && WiredUtillity.TypeIsWired(item.GetBaseItem().InteractionType) && (item.GetBaseItem().InteractionType != InteractionType.HIGHSCORE && item.GetBaseItem().InteractionType != InteractionType.HIGHSCOREPOINTS)) ? 31294061 : item.GetBaseItem().SpriteId);
+            this.WriteInteger(item.X);
+            this.WriteInteger(item.Y);
+            this.WriteInteger(item.Rotation);
+            this.WriteString(string.Format("{0:0.00}", item.Z));
+            this.WriteString(item.GetBaseItem().Height.ToString());
 
-            ItemBehaviourUtility.GenerateExtradata(Item, this);
+            ItemBehaviourUtility.GenerateExtradata(item, this);
 
             this.WriteInteger(-1); // expires
             this.WriteInteger(2); //(Item.GetBaseItem().Modes > 1) ? 1 : 0
-            this.WriteInteger(UserID);
+            this.WriteInteger(userId);
         }
     }
 }

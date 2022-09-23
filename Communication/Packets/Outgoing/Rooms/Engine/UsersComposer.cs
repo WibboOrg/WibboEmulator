@@ -7,62 +7,62 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class UsersComposer : ServerPacket
     {
-        public UsersComposer(ICollection<RoomUser> Users)
+        public UsersComposer(ICollection<RoomUser> users)
             : base(ServerPacketHeader.UNIT)
         {
-            this.WriteInteger(Users.Count);
-            foreach (RoomUser User in Users.ToList())
+            this.WriteInteger(users.Count);
+            foreach (RoomUser User in users.ToList())
             {
                 this.WriteUser(User);
             }
         }
 
-        public UsersComposer(RoomUser User)
+        public UsersComposer(RoomUser user)
             : base(ServerPacketHeader.UNIT)
         {
             this.WriteInteger(1);//1 avatar
-            this.WriteUser(User);
+            this.WriteUser(user);
         }
 
-        private void WriteUser(RoomUser User)
+        private void WriteUser(RoomUser roomUser)
         {
-            if (User.IsBot)
+            if (roomUser.IsBot)
             {
-                this.WriteInteger(User.BotAI.Id);
-                this.WriteString(User.BotData.Name);
-                this.WriteString(User.BotData.Motto);
-                if (User.BotData.AiType == BotAIType.Pet || User.BotData.AiType == BotAIType.RoleplayPet)
+                this.WriteInteger(roomUser.BotAI.Id);
+                this.WriteString(roomUser.BotData.Name);
+                this.WriteString(roomUser.BotData.Motto);
+                if (roomUser.BotData.AiType == BotAIType.Pet || roomUser.BotData.AiType == BotAIType.RoleplayPet)
                 {
-                    this.WriteString(User.BotData.Look.ToLower() + ((User.PetData.Saddle > 0) ? " 3 2 " + User.PetData.PetHair + " " + User.PetData.HairDye + " 3 " + User.PetData.PetHair + " " + User.PetData.HairDye + " 4 " + User.PetData.Saddle + " 0" : " 2 2 " + User.PetData.PetHair + " " + User.PetData.HairDye + " 3 " + User.PetData.PetHair + " " + User.PetData.HairDye + ""));
+                    this.WriteString(roomUser.BotData.Look.ToLower() + ((roomUser.PetData.Saddle > 0) ? " 3 2 " + roomUser.PetData.PetHair + " " + roomUser.PetData.HairDye + " 3 " + roomUser.PetData.PetHair + " " + roomUser.PetData.HairDye + " 4 " + roomUser.PetData.Saddle + " 0" : " 2 2 " + roomUser.PetData.PetHair + " " + roomUser.PetData.HairDye + " 3 " + roomUser.PetData.PetHair + " " + roomUser.PetData.HairDye + ""));
                 }
                 else
                 {
-                    this.WriteString(User.BotData.Look);
+                    this.WriteString(roomUser.BotData.Look);
                 }
 
-                this.WriteInteger(User.VirtualId);
-                this.WriteInteger(User.X);
-                this.WriteInteger(User.Y);
-                this.WriteString(User.Z.ToString());
+                this.WriteInteger(roomUser.VirtualId);
+                this.WriteInteger(roomUser.X);
+                this.WriteInteger(roomUser.Y);
+                this.WriteString(roomUser.Z.ToString());
                 this.WriteInteger(2);
-                this.WriteInteger(User.BotData.AiType == BotAIType.Pet || User.BotData.AiType == BotAIType.RoleplayPet ? 2 : 4);
-                if (User.BotData.AiType == BotAIType.Pet || User.BotData.AiType == BotAIType.RoleplayPet)
+                this.WriteInteger(roomUser.BotData.AiType == BotAIType.Pet || roomUser.BotData.AiType == BotAIType.RoleplayPet ? 2 : 4);
+                if (roomUser.BotData.AiType == BotAIType.Pet || roomUser.BotData.AiType == BotAIType.RoleplayPet)
                 {
-                    this.WriteInteger(User.PetData.Type);
-                    this.WriteInteger(User.PetData.OwnerId);
-                    this.WriteString(User.PetData.OwnerName);
+                    this.WriteInteger(roomUser.PetData.Type);
+                    this.WriteInteger(roomUser.PetData.OwnerId);
+                    this.WriteString(roomUser.PetData.OwnerName);
                     this.WriteInteger(1);
-                    this.WriteBoolean(User.PetData.Saddle > 0);
-                    this.WriteBoolean(User.RidingHorse);
+                    this.WriteBoolean(roomUser.PetData.Saddle > 0);
+                    this.WriteBoolean(roomUser.RidingHorse);
                     this.WriteInteger(0);
                     this.WriteInteger(0);
                     this.WriteString("");
                 }
                 else
                 {
-                    this.WriteString(User.BotData.Gender);
-                    this.WriteInteger(User.BotData.OwnerId);
-                    this.WriteString(User.BotData.OwnerName);
+                    this.WriteString(roomUser.BotData.Gender);
+                    this.WriteInteger(roomUser.BotData.OwnerId);
+                    this.WriteString(roomUser.BotData.OwnerName);
 
                     //List<int> ActionIds = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 24, 25 };
                     List<int> ActionIds = new List<int>() { 1, 2, 3, 4, 5, 6 };
@@ -75,16 +75,16 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
             }
             else
             {
-                if (User.GetClient() == null || User.GetClient().GetUser() == null)
+                if (roomUser.GetClient() == null || roomUser.GetClient().GetUser() == null)
                 {
                     this.WriteInteger(0);
                     this.WriteString("");
                     this.WriteString("");
                     this.WriteString("");
-                    this.WriteInteger(User.VirtualId);
-                    this.WriteInteger(User.X);
-                    this.WriteInteger(User.Y);
-                    this.WriteString(User.Z.ToString());
+                    this.WriteInteger(roomUser.VirtualId);
+                    this.WriteInteger(roomUser.X);
+                    this.WriteInteger(roomUser.Y);
+                    this.WriteString(roomUser.Z.ToString());
                     this.WriteInteger(0);
                     this.WriteInteger(1);
                     this.WriteString("M");
@@ -98,7 +98,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
                 }
                 else
                 {
-                    User user = User.GetClient().GetUser();
+                    User user = roomUser.GetClient().GetUser();
 
                     Group Group = null;
                     if (user != null)
@@ -112,16 +112,16 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
                         }
                     }
 
-                    if (User.TransfBot)
+                    if (roomUser.TransfBot)
                     {
                         this.WriteInteger(user.Id);
                         this.WriteString(user.Username);
                         this.WriteString("Beep beep.");
                         this.WriteString(user.Look);
-                        this.WriteInteger(User.VirtualId);
-                        this.WriteInteger(User.X);
-                        this.WriteInteger(User.Y);
-                        this.WriteString(User.Z.ToString());
+                        this.WriteInteger(roomUser.VirtualId);
+                        this.WriteInteger(roomUser.X);
+                        this.WriteInteger(roomUser.Y);
+                        this.WriteString(roomUser.Z.ToString());
                         this.WriteInteger(0);
                         this.WriteInteger(4);
 
@@ -130,17 +130,17 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
                         this.WriteString(user.Username);
                         this.WriteInteger(0);
                     }
-                    else if (User.IsTransf)
+                    else if (roomUser.IsTransf)
                     {
                         this.WriteInteger(user.Id);
                         this.WriteString(user.Username);
                         this.WriteString(user.Motto);
-                        this.WriteString(User.TransfRace + " 2 2 -1 0 3 4 -1 0");
+                        this.WriteString(roomUser.TransfRace + " 2 2 -1 0 3 4 -1 0");
 
-                        this.WriteInteger(User.VirtualId);
-                        this.WriteInteger(User.X);
-                        this.WriteInteger(User.Y);
-                        this.WriteString(User.Z.ToString());
+                        this.WriteInteger(roomUser.VirtualId);
+                        this.WriteInteger(roomUser.X);
+                        this.WriteInteger(roomUser.Y);
+                        this.WriteString(roomUser.Z.ToString());
                         this.WriteInteger(4);
                         this.WriteInteger(2);
                         this.WriteInteger(0);
@@ -159,10 +159,10 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
                         this.WriteString(user.Username);
                         this.WriteString(user.Motto);
                         this.WriteString(user.Look);
-                        this.WriteInteger(User.VirtualId);
-                        this.WriteInteger(User.X);
-                        this.WriteInteger(User.Y);
-                        this.WriteString(User.Z.ToString());
+                        this.WriteInteger(roomUser.VirtualId);
+                        this.WriteInteger(roomUser.X);
+                        this.WriteInteger(roomUser.Y);
+                        this.WriteString(roomUser.Z.ToString());
                         this.WriteInteger(0);
                         this.WriteInteger(1);
                         this.WriteString(user.Gender.ToLower());

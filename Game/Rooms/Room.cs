@@ -573,7 +573,7 @@ namespace WibboEmulator.Game.Rooms
             packetList.Add(new UserUpdateComposer(this._roomUserManager.GetUserList().ToList()));
             packetList.Add(new ObjectsComposer(this.GetRoomItemHandler().GetFloor.ToArray(), this));
             packetList.Add(new ObjectsComposer(this.GetRoomItemHandler().GetTempItems.ToArray(), this));
-            packetList.Add(new ItemsComposer(this.GetRoomItemHandler().GetWall.ToArray(), this));
+            packetList.Add(new ItemWallComposer(this.GetRoomItemHandler().GetWall.ToArray(), this));
 
             Session.SendPacket(packetList);
             packetList.Clear();

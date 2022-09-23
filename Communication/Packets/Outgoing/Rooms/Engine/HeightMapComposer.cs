@@ -4,22 +4,22 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class HeightMapComposer : ServerPacket
     {
-        public HeightMapComposer(RoomModelDynamic Map, double Height = 0.0)
+        public HeightMapComposer(RoomModelDynamic map, double height = 0.0)
             : base(ServerPacketHeader.ROOM_HEIGHT_MAP)
         {
-            this.WriteInteger(Map.MapSizeX);
-            this.WriteInteger(Map.MapSizeX * Map.MapSizeY);
-            for (int i = 0; i < Map.MapSizeY; i++)
+            this.WriteInteger(map.MapSizeX);
+            this.WriteInteger(map.MapSizeX * map.MapSizeY);
+            for (int i = 0; i < map.MapSizeY; i++)
             {
-                for (int j = 0; j < Map.MapSizeX; j++)
+                for (int j = 0; j < map.MapSizeX; j++)
                 {
-                    if (Map.SqState[j, i] == SquareStateType.BLOCKED)
+                    if (map.SqState[j, i] == SquareStateType.BLOCKED)
                     {
                         this.WriteShort(-1);
                     }
                     else
                     {
-                        this.WriteShort((int)Math.Floor((Map.SqFloorHeight[j, i] + Height) * 256.0));
+                        this.WriteShort((int)Math.Floor((map.SqFloorHeight[j, i] + height) * 256.0));
                     }
                 }
             }

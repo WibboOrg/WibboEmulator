@@ -5,14 +5,14 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class UserChangeComposer : ServerPacket
     {
-        public UserChangeComposer(RoomUser User, bool Self)
+        public UserChangeComposer(RoomUser user, bool self)
             : base(ServerPacketHeader.UNIT_INFO)
         {
-            this.WriteInteger((Self) ? -1 : User.VirtualId);
-            this.WriteString(User.GetClient().GetUser().Look);
-            this.WriteString(User.GetClient().GetUser().Gender);
-            this.WriteString(User.GetClient().GetUser().Motto);
-            this.WriteInteger(User.GetClient().GetUser().AchievementPoints);
+            this.WriteInteger((self) ? -1 : user.VirtualId);
+            this.WriteString(user.GetClient().GetUser().Look);
+            this.WriteString(user.GetClient().GetUser().Gender);
+            this.WriteString(user.GetClient().GetUser().Motto);
+            this.WriteInteger(user.GetClient().GetUser().AchievementPoints);
         }
 
         public UserChangeComposer(RoomUser User) //Bot

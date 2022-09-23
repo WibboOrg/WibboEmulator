@@ -2,12 +2,12 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {
     internal class ObjectRemoveComposer : ServerPacket
     {
-        public ObjectRemoveComposer(int ItemId, int OwnerId)
+        public ObjectRemoveComposer(int itemId, int ownerId)
             : base(ServerPacketHeader.FURNITURE_FLOOR_REMOVE)
         {
-            this.WriteString(ItemId.ToString());
+            this.WriteString(itemId.ToString());
             this.WriteBoolean(false); //isExpired
-            this.WriteInteger(OwnerId);
+            this.WriteInteger(ownerId);
             this.WriteInteger(0);
         }
     }

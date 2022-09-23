@@ -10,7 +10,7 @@ namespace WibboEmulator.Game.Items
         {
             ItemData itemData = item.GetBaseItem();
 
-            message.WriteInteger(ItemBehaviourUtility.ItemCategory(item));
+            message.WriteInteger(ItemCategory(item));
 
             switch (itemData.InteractionType)
             {
@@ -40,6 +40,7 @@ namespace WibboEmulator.Game.Items
                     break;
 
                 case InteractionType.TROPHY:
+                case InteractionType.PHOTO:
                     message.WriteInteger(item.Limited > 0 ? 256 : 0);
                     message.WriteString((itemData.InteractionType != InteractionType.TONER && itemData.InteractionType != InteractionType.FBGATE) ? item.ExtraData : string.Empty);
                     break;
