@@ -29,6 +29,8 @@ namespace WibboEmulator.Communication.WebSocket
             if (isSecure)
             {
                 string patchCertificate = WibboEnvironment.PatchDir + "Configuration/certificate.pfx";
+
+                this._webSocketServer.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls13;
                 this._webSocketServer.SslConfiguration.ServerCertificate = new X509Certificate2(patchCertificate, certificatePassword);
             }
             this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => new GameWebSocket() { IgnoreExtensions = true });
