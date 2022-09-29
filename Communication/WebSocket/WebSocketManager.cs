@@ -9,6 +9,8 @@ using System.Security.Cryptography.X509Certificates;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 using System.Security.Authentication;
+using System.Collections;
+using System.Net.Sockets;
 
 namespace WibboEmulator.Communication.WebSocket
 {
@@ -160,6 +162,8 @@ namespace WibboEmulator.Communication.WebSocket
 
     public class GameWebSocket : WebSocketBehavior
     {
+        private string _ip;
+
         protected override void OnError(WebSocketSharp.ErrorEventArgs e)
         {
             ExceptionLogger.LogException(e.Message);
@@ -258,8 +262,33 @@ namespace WibboEmulator.Communication.WebSocket
 
         public string GetIp()
         {
+            if (this._ip != null) 
+                return this._ip;
+
+            this._ip = GetRealIP();
+
+            return this._ip;
+        }
+
+        private string GetRealIP()
+        {
+            if (IPAddress.TryParse(this.Headers["CF-Connecting-IP"], out IPAddress realIP))
+            {
+                string[] cloudlareIPs = { 
+                    "173.245.48.0/20", "103.21.244.0/22", "103.22.200.0/22", "103.31.4.0/22", "141.101.64.0/18", "108.162.192.0/18", "190.93.240.0/20", 
+                    "188.114.96.0/20", "197.234.240.0/22", "198.41.128.0/17", "162.158.0.0/15", "104.16.0.0/13", "104.24.0.0/14", "172.64.0.0/13",
+                    "131.0.72.0/22", "2400:cb00::/32", "2606:4700::/32", "2803:f800::/32", "2405:b500::/32", "2405:8100::/32", "2a06:98c0::/29",
+                    "2c0f:f248::/32" 
+                };
+
+                foreach (string rangeIP in cloudlareIPs)
+                {
+                    if (IPRange.IsInSubnet(this.Context.UserEndPoint.Address, rangeIP))
+                        return realIP.ToString();
+                }
+            }
+
             return this.Context.UserEndPoint.Address.ToString();
-            //return this.Headers["CF-Connecting-IP"] ?? this.Context.Host.Split(':')[0];
         }
     }
 }
