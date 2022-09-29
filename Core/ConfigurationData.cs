@@ -4,17 +4,15 @@ namespace WibboEmulator.Core
 {
     public class ConfigurationData
     {
-        private Dictionary<string, string> _data;
+        private readonly Dictionary<string, string> _data;
 
-        public ConfigurationData(string filePath, bool maynotexist = false)
+        public ConfigurationData(string filePath)
         {
             _data = new Dictionary<string, string>();
 
             if (!File.Exists(filePath))
             {
-                if (!maynotexist)
-                    throw new ArgumentException("Unable to locate configuration file at '" + filePath + "'.");
-                return;
+                throw new ArgumentException("Unable to locate configuration file at '" + filePath + "'.");
             }
 
             try

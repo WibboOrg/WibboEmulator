@@ -134,16 +134,16 @@ namespace WibboEmulator
 
             try
             {
-                _configuration = new ConfigurationData(PatchDir + "Configuration/settings.ini", false);
+                _configuration = new ConfigurationData(PatchDir + "Configuration/settings.ini");
                 _datebaseManager = new DatabaseManager((uint)GetConfig().GetDataNumber("db.pool.maxsize"), (uint)GetConfig().GetDataNumber("db.pool.minsize"), GetConfig().GetDataString("db.hostname"), (uint)GetConfig().GetDataNumber("db.port"), GetConfig().GetDataString("db.username"), GetConfig().GetDataString("db.password"), GetConfig().GetDataString("db.name"));
 
-                int TryCount = 0;
+                int tryCounter = 0;
                 while (!_datebaseManager.IsConnected())
                 {
-                    TryCount++;
+                    tryCounter++;
                     Thread.Sleep(5000);
 
-                    if (TryCount > 10)
+                    if (tryCounter > 10)
                     {
                         ExceptionLogger.WriteLine("Failed to connect to the specified MySQL server.");
                         Console.ReadKey(true);
