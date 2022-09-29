@@ -135,7 +135,7 @@ namespace WibboEmulator
             try
             {
                 _configuration = new ConfigurationData(PatchDir + "Configuration/settings.ini", false);
-                _datebaseManager = new DatabaseManager(uint.Parse(GetConfig().data["db.pool.maxsize"]), uint.Parse(GetConfig().data["db.pool.minsize"]), GetConfig().data["db.hostname"], uint.Parse(GetConfig().data["db.port"]), GetConfig().data["db.username"], GetConfig().data["db.password"], GetConfig().data["db.name"]);
+                _datebaseManager = new DatabaseManager((uint)GetConfig().GetDataNumber("db.pool.maxsize"), (uint)GetConfig().GetDataNumber("db.pool.minsize"), GetConfig().GetDataString("db.hostname"), (uint)GetConfig().GetDataNumber("db.port"), GetConfig().GetDataString("db.username"), GetConfig().GetDataString("db.password"), GetConfig().GetDataString("db.name"));
 
                 int TryCount = 0;
                 while (!_datebaseManager.IsConnected())
@@ -152,10 +152,10 @@ namespace WibboEmulator
                     }
                 }
 
-                StaticEvents = _configuration.data["static.events"] == "true";
-                CameraUploadUrl = _configuration.data["camera.upload.url"];
-                FigureDataUrl = _configuration.data["figuredata.url"];
-                CameraThubmailUploadUrl = _configuration.data["camera.thubmail.upload.url"];
+                StaticEvents = _configuration.GetDataBool("static.events");
+                CameraUploadUrl = _configuration.GetDataString("camera.upload.url");
+                FigureDataUrl = _configuration.GetDataString("figuredata.url");
+                CameraThubmailUploadUrl = _configuration.GetDataString("camera.thubmail.upload.url");
 
                 _languageManager = new LanguageManager();
                 using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -167,12 +167,12 @@ namespace WibboEmulator
                 _figureManager = new FigureDataManager();
                 _figureManager.Init();
 
-                WebSocketOrigins = GetConfig().data["game.ws.origins"].Split(',').ToList();
-                _webSocketManager = new WebSocketManager(int.Parse(GetConfig().data["game.ws.port"]), GetConfig().data["game.ssl.enable"] == "true", GetConfig().data["game.ssl.password"]);
+                WebSocketOrigins = GetConfig().GetDataString("game.ws.origins").Split(',').ToList();
+                _webSocketManager = new WebSocketManager(GetConfig().GetDataNumber("game.ws.port"), GetConfig().GetDataBool("game.ssl.enable"), GetConfig().GetDataString("game.ssl.password"));
 
-                if (_configuration.data["mus.tcp.enable"] == "true")
+                if (_configuration.GetDataBool("mus.tcp.enable"))
                 {
-                    _rcon = new RCONSocket(int.Parse(GetConfig().data["mus.tcp.port"]), GetConfig().data["mus.tcp.allowedaddr"].Split(','));
+                    _rcon = new RCONSocket(GetConfig().GetDataNumber("mus.tcp.port"), GetConfig().GetDataString("mus.tcp.allowedaddr").Split(','));
                 }
 
                 ExceptionLogger.WriteLine("EMULATOR -> READY!");

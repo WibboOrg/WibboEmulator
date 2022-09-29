@@ -544,7 +544,7 @@ namespace WibboEmulator.Game.Rooms
                 {
                     User.CurrentEffect = 552;
                 }
-                else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("WBASSO")) // ASSOCIER ?
+                else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("WBASSO")) // ASSOCIER
                 {
                     User.CurrentEffect = 576;
                 }

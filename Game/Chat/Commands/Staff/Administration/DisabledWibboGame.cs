@@ -3,7 +3,7 @@ using WibboEmulator.Game.Rooms;
 
 namespace WibboEmulator.Game.Chat.Commands.Cmd
 {
-    internal class DisabledWibboGame : IChatCommand
+    internal class DisabledAutoGame : IChatCommand
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {

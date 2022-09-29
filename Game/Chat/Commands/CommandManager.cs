@@ -332,7 +332,7 @@ namespace WibboEmulator.Game.Chat.Commands
 
         public void RegisterAdministrator()
         {
-            this.Register(109, new DisabledWibboGame());
+            this.Register(109, new DisabledAutoGame());
             this.Register(110, new RoomBadge());
             this.Register(111, new GiveBadge());
             this.Register(112, new ForceEnable());
@@ -344,7 +344,6 @@ namespace WibboEmulator.Game.Chat.Commands
             this.Register(118, new SuperBot());
             this.Register(119, new PlaySoundRoom());
             this.Register(120, new StopSoundRoom());
-            //this.Register(121, new OpenWeb());
             this.Register(122, new RoomEffect());
             this.Register(123, new ForceSit());
             this.Register(124, new Give());

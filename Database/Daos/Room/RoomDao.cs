@@ -58,9 +58,10 @@ namespace WibboEmulator.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static DataTable GetAllByOwnerWibboGame(IQueryAdapter dbClient)
+        internal static DataTable GetAllIdByOwner(IQueryAdapter dbClient, string username)
         {
-            dbClient.SetQuery("SELECT id FROM `room` WHERE owner = 'WibboGame'");
+            dbClient.SetQuery("SELECT id FROM `room` WHERE owner = @name");
+            dbClient.AddParameter("name", username);
 
             return dbClient.GetTable();
         }

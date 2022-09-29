@@ -362,11 +362,11 @@ namespace WibboEmulator.Game.Users
                 }
             }
 
-            string[] OwnerEnterNotAllowed = { "WibboGame", "LieuPublic", "WorldRunOff", "WibboParty", "MovieRunOff", "officialrooms", "ElkunRUN", "Himeros", "NightRUN" };
+            string[] OwnerEnterNotAllowed = WibboEnvironment.GetConfig().GetDataString("room.owner.enter.not.allowed").Split(',');
 
-            if (this.GetClient().GetUser().Rank < 8)
+            if (!this.GetClient().GetUser().HasPermission("perm_access_apartments_all"))
             {
-                if (!(this.GetClient().GetUser().HasPermission("perm_access_apartments") && !OwnerEnterNotAllowed.Any(x => x == room.RoomData.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID == room.Id))
+                if (!(this.GetClient().GetUser().HasPermission("perm_access_apartments") && !OwnerEnterNotAllowed.Contains(room.RoomData.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID == room.Id))
                 {
                     if (room.RoomData.State == 1 && (!override_doorbell && !room.CheckRights(this.GetClient())))
                     {
@@ -392,7 +392,7 @@ namespace WibboEmulator.Game.Users
                 }
             }
 
-            if (room.RoomData.OwnerName == "WibboGame" || room.RoomData.OwnerName == "WibboParty")
+            if (room.RoomData.OwnerName == WibboEnvironment.GetConfig().GetDataString("game.owner"))
             {
                 if (room.GetRoomUserManager().GetUserByTracker(this.IP, this.GetClient().MachineId) != null)
                 {

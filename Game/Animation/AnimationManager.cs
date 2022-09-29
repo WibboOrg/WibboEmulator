@@ -16,6 +16,7 @@ namespace WibboEmulator.Game.Animation
         private const int CLOSE_TIME = 1;
 
         private List<int> _roomId;
+        private string _gameOwner;
         private bool _started;
         private bool _skipCycle;
         private int _timer;
@@ -100,7 +101,9 @@ namespace WibboEmulator.Game.Animation
         {
             this._roomId.Clear();
 
-            DataTable table = RoomDao.GetAllByOwnerWibboGame(dbClient);
+            this._gameOwner = WibboEnvironment.GetConfig().GetDataString("game.owner");
+
+            DataTable table = RoomDao.GetAllIdByOwner(dbClient, this._gameOwner);
             if (table == null)
             {
                 return;
@@ -207,7 +210,7 @@ namespace WibboEmulator.Game.Animation
                 "➤ Rejoins nous et tente de remporter des [b]RareBoxs[/b] ainsi qu'un [b]point au [u]TOP Gamer[/u][/b] ![br][br]" +
                 "[center][img]https://cdn.wibbo.org/uploads/1659791208.png[/img]  - Jack et Daisy, [b][u][color=696969]Animateurs robotisés[/color][/u][/b] 🤖  -  [img]https://cdn.wibbo.org/uploads/1659791188.png[/img][/center]";
 
-            WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, "WibboGame", room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
+            WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, this._gameOwner, room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
 
             WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer(
                 "gameauto", // image

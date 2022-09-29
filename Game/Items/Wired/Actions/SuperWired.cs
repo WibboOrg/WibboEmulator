@@ -2122,7 +2122,7 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                             break;
                         }
 
-                        List<string> allowedOwner = new List<string>{ "LieuPublic", "MovieRunOff", "WibboGame", "WorldRunOff", "officialrooms" };
+                        string[] allowedOwner = WibboEnvironment.GetConfig().GetDataString("givelot.allowed.owner").Split(',');
 
                         if(!allowedOwner.Contains(user.Room.RoomData.OwnerName))
                         {

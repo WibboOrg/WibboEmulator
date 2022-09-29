@@ -123,9 +123,9 @@ namespace WibboEmulator.Game.Rooms
             this._chatMessageManager.LoadRoomChatlogs(this.Id);
 
             this.GetRoomItemHandler().LoadFurniture();
-            if (this.RoomData.OwnerName == "WibboGame")
+            if (this.RoomData.OwnerName == WibboEnvironment.GetConfig().GetDataString("game.owner"))
             {
-                this.GetRoomItemHandler().LoadFurniture(5400713);
+                this.GetRoomItemHandler().LoadFurniture(WibboEnvironment.GetConfig().GetDataNumber("game.deco.room.id"));
             }
 
             this.GetGameMap().GenerateMaps(true);
@@ -767,7 +767,7 @@ namespace WibboEmulator.Game.Rooms
         public void OnRoomCrash(Exception e)
         {
             ExceptionLogger.LogThreadException((e).ToString(), "Room cycle task for room " + this.Id);
-            //ButterflyEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
+            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
         }
 
         public void SendPacketOnChat(IServerPacket Message, RoomUser ThisUser = null, bool UserMutedOnly = false, bool UserNotIngameOnly = false)

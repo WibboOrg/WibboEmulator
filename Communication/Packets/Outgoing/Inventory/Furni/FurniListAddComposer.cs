@@ -17,7 +17,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni
 
             this.WriteBoolean(item.GetBaseItem().AllowEcotronRecycle);
             this.WriteBoolean(item.GetBaseItem().AllowTrade);
-            this.WriteBoolean(item.Limited == 0 ? item.GetBaseItem().AllowInventoryStack : false);
+            this.WriteBoolean(item.Limited == 0 && item.GetBaseItem().AllowInventoryStack);
             this.WriteBoolean(ItemUtility.IsRare(item));
             this.WriteInteger(-1);//Seconds to expiration.
             this.WriteBoolean(true);

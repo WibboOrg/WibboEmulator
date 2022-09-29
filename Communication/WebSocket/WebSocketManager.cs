@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using WebSocketSharp;
 using WebSocketSharp.Server;
+using System.Security.Authentication;
 
 namespace WibboEmulator.Communication.WebSocket
 {
@@ -30,7 +31,7 @@ namespace WibboEmulator.Communication.WebSocket
             {
                 string patchCertificate = WibboEnvironment.PatchDir + "Configuration/certificate.pfx";
 
-                this._webSocketServer.SslConfiguration.EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls13;
+                this._webSocketServer.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls13;
                 this._webSocketServer.SslConfiguration.ServerCertificate = new X509Certificate2(patchCertificate, certificatePassword);
             }
             this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => new GameWebSocket() { IgnoreExtensions = true });
@@ -99,7 +100,7 @@ namespace WibboEmulator.Communication.WebSocket
 
         private void AlterIpConnectionCount(string ip, int amount)
         {
-            if (ip == "127.0.0.1" || ip == "178.33.7.19")
+            if (ip == "127.0.0.1")
             {
                 return;
             }
@@ -116,7 +117,7 @@ namespace WibboEmulator.Communication.WebSocket
         {
             try
             {
-                if (ip == "127.0.0.1" || ip == "178.33.7.19")
+                if (ip == "127.0.0.1")
                 {
                     return 0;
                 }
@@ -244,7 +245,8 @@ namespace WibboEmulator.Communication.WebSocket
 
         public string GetIp()
         {
-            return this.Headers["CF-Connecting-IP"] ?? this.Context.Host.Split(':')[0];
+            return this.Context.UserEndPoint.Address.ToString();
+            //return this.Headers["CF-Connecting-IP"] ?? this.Context.Host.Split(':')[0];
         }
     }
 }

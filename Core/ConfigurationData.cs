@@ -1,12 +1,14 @@
-﻿namespace WibboEmulator.Core
+﻿using MySqlX.XDevAPI.Common;
+
+namespace WibboEmulator.Core
 {
     public class ConfigurationData
     {
-        public Dictionary<string, string> data;
+        private Dictionary<string, string> _data;
 
         public ConfigurationData(string filePath, bool maynotexist = false)
         {
-            data = new Dictionary<string, string>();
+            _data = new Dictionary<string, string>();
 
             if (!File.Exists(filePath))
             {
@@ -34,7 +36,7 @@
                         string key = line.Substring(0, delimiterIndex);
                         string val = line.Substring(delimiterIndex + 1);
 
-                        data.Add(key, val);
+                        _data.Add(key, val);
                     }
                 }
             }
@@ -43,6 +45,29 @@
             {
                 throw new ArgumentException("Could not process configuration file: " + e.Message);
             }
+        }
+
+        public bool GetDataBool(string key)
+        {
+            this._data.TryGetValue(key, out string value);
+
+            return value == "true";
+        }
+
+        public string GetDataString(string key)
+        {
+            this._data.TryGetValue(key, out string value);
+
+            return value;
+        }
+
+        public int GetDataNumber(string key)
+        {
+            this._data.TryGetValue(key, out string value);
+
+            int.TryParse(value, out int result);
+
+            return result;
         }
     }
 }

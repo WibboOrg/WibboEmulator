@@ -54,25 +54,12 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                         break;
                     }
 
-                case "wibbogame":
+                case "autogame":
                     {
                         WibboEnvironment.GetGame().GetAnimationManager().Init(dbClient);
-                        Session.SendWhisper("Wibbo Game mis à jour");
+                        Session.SendWhisper("Jeux automatique mis à jour");
                         break;
                     }
-                /*case "autogame":
-                    {
-                        if (!ButterflyEnvironment.GetGame().GetAnimationManager().ToggleForceDisabled())
-                        {
-                            Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.autogame.false", Session.Langue));
-                        }
-                        else
-                        {
-                            Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue("cmd.autogame.true", Session.Langue));
-                        }
-
-                        break;
-                    }*/
                 case "rpitems":
                     {
                         WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().Init(dbClient);
@@ -121,7 +108,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                     {
                         WibboEnvironment.GetGame().GetModerationManager().Init(dbClient);
                         Session.SendWhisper("Moderation mis à jour");
-                        WibboEnvironment.GetGame().GetClientManager().SendMessageStaff(new WhisperComposer(UserRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous sur Wibbo !", 23));
+                        WibboEnvironment.GetGame().GetClientManager().SendMessageStaff(new WhisperComposer(UserRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous!", 23));
                         break;
                     }
                 case "catalogue":
