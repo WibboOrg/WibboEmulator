@@ -31,8 +31,21 @@ namespace WibboEmulator.Communication.WebSocket
             {
                 string patchCertificate = WibboEnvironment.PatchDir + "Configuration/certificate.pfx";
 
-                this._webSocketServer.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls13;
-                this._webSocketServer.SslConfiguration.ServerCertificate = new X509Certificate2(patchCertificate, certificatePassword);
+                X509Certificate2 certificat = null;
+
+                string pemFile = WibboEnvironment.GetConfig().GetDataString("game.ssl.pem.file.path");
+                string pemKeyFile = WibboEnvironment.GetConfig().GetDataString("game.ssl.keypem.file.path");
+
+                if(pemFile != "")
+                    certificat = X509Certificate2.CreateFromPemFile(pemFile, pemKeyFile);
+                else
+                    certificat = new X509Certificate2(patchCertificate, certificatePassword);
+
+                if (certificat != null)
+                {
+                    this._webSocketServer.SslConfiguration.ServerCertificate = certificat;
+                    this._webSocketServer.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls13;
+                }
             }
             this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => new GameWebSocket() { IgnoreExtensions = true });
             this._webSocketServer.Start();
