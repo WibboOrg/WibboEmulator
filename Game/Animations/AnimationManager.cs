@@ -6,7 +6,7 @@ using WibboEmulator.Game.Rooms;
 using System.Data;
 using System.Diagnostics;
 
-namespace WibboEmulator.Game.Animation
+namespace WibboEmulator.Game.Animations
 {
     public class AnimationManager
     {
@@ -25,7 +25,7 @@ namespace WibboEmulator.Game.Animation
         private bool _isActivate;
         private bool _notif;
         private bool _forceDisabled;
-        private int _RoomIdIndex;
+        private int _roomIdIndex;
 
         public void OnUpdateUsersOnline(int usersOnline)
         {
@@ -177,14 +177,14 @@ namespace WibboEmulator.Game.Animation
 
         public void StartGame()
         {
-            if (this._RoomIdIndex >= this._roomId.Count)
+            if (this._roomIdIndex >= this._roomId.Count)
             {
-                this._RoomIdIndex = 0;
+                this._roomIdIndex = 0;
                 this._roomId = this._roomId.OrderBy(a => Guid.NewGuid()).ToList();
             }
 
-            int RoomId = this._roomId[this._RoomIdIndex]; //ButterflyEnvironment.GetRandomNumber(0, this._roomId.Count - 1)
-            this._RoomIdIndex++;
+            int RoomId = this._roomId[this._roomIdIndex]; //ButterflyEnvironment.GetRandomNumber(0, this._roomId.Count - 1)
+            this._roomIdIndex++;
 
             Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
             if (room == null)

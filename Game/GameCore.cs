@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Communication.Packets;
 using WibboEmulator.Core;
 using WibboEmulator.Game.Achievements;
-using WibboEmulator.Game.Animation;
+using WibboEmulator.Game.Animations;
 using WibboEmulator.Game.Catalog;
 using WibboEmulator.Game.Clients;
 using WibboEmulator.Game.Groups;

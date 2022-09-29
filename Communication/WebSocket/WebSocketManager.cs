@@ -29,6 +29,7 @@ namespace WibboEmulator.Communication.WebSocket
             this._bannedIp = new List<string>();
 
             this._webSocketServer = new WebSocketServer(IPAddress.Any, port, isSecure);
+            this._webSocketServer.KeepClean = false;
             if (isSecure)
             {
                 string patchCertificate = WibboEnvironment.PatchDir + "Configuration/certificate.pfx";
