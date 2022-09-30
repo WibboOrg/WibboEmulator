@@ -71,14 +71,14 @@ namespace WibboEmulator.Game.Rooms
             return roomData;
         }
 
-        public RoomData GenerateRoomData(int RoomId)
+        public RoomData GenerateRoomData(int roomId)
         {
-            if (this.TryGetRoom(RoomId, out Room Room))
+            if (this.TryGetRoom(roomId, out Room room))
             {
-                return Room.RoomData;
+                return room.RoomData;
             }
 
-            if (this.TryGetRoomData(RoomId, out RoomData roomData))
+            if (this.TryGetRoomData(roomId, out RoomData roomData))
             {
                 return roomData;
             }
@@ -86,7 +86,7 @@ namespace WibboEmulator.Game.Rooms
             DataRow Row = null;
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                Row = RoomDao.GetOne(dbClient, RoomId);
+                Row = RoomDao.GetOne(dbClient, roomId);
             }
 
             if (Row == null)
@@ -97,40 +97,40 @@ namespace WibboEmulator.Game.Rooms
             roomData = new RoomData();
             roomData.Fill(Row);
 
-            if (!this._roomsData.ContainsKey(RoomId))
+            if (!this._roomsData.ContainsKey(roomId))
             {
-                this._roomsData.TryAdd(RoomId, roomData);
+                this._roomsData.TryAdd(roomId, roomData);
             }
 
             return roomData;
         }
 
-        public Room LoadRoom(int Id)
+        public Room LoadRoom(int id)
         {
-            if (this.TryGetRoom(Id, out Room Room))
+            if (this.TryGetRoom(id, out Room room))
             {
-                return Room;
+                return room;
             }
 
-            RoomData Data = this.GenerateRoomData(Id);
-            if (Data == null)
+            RoomData data = this.GenerateRoomData(id);
+            if (data == null)
             {
                 return null;
             }
 
-            Room = new Room(Data);
+            room = new Room(data);
 
-            if (!this._rooms.ContainsKey(Room.Id))
+            if (!this._rooms.ContainsKey(room.Id))
             {
-                this._rooms.TryAdd(Room.Id, Room);
+                this._rooms.TryAdd(room.Id, room);
             }
 
-            if (this._roomsData.ContainsKey(Room.Id))
+            if (this._roomsData.ContainsKey(room.Id))
             {
-                this._roomsData.TryRemove(Room.Id, out Data);
+                this._roomsData.TryRemove(room.Id, out data);
             }
 
-            return Room;
+            return room;
         }
 
         public void RoomDataRemove(int Id)
@@ -363,7 +363,7 @@ namespace WibboEmulator.Game.Rooms
                 this.roomCycleStopwatch.Restart();
                 foreach (Room room in this._rooms.Values.ToList())
                 {
-                    if (!(room.ProcessTask == null || room.ProcessTask.IsCompleted) && !room.isCycling && !room.Disposed)
+                    if (room.ProcessTask == null || room.ProcessTask.IsCompleted)
                     {
                         room.ProcessTask = new Task(room.ProcessRoom);
                         room.ProcessTask.Start();

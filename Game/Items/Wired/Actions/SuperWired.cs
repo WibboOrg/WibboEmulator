@@ -628,14 +628,14 @@ namespace WibboEmulator.Game.Items.Wired.Actions
                     }
                 case "sendroomid":
                     {
-                        if (int.TryParse(value, out int RoomId))
+                        if (int.TryParse(value, out int roomId))
                         {
-                            Room roomTarget = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
-                            if (roomTarget != null && roomTarget.RoomData.OwnerId == this.RoomInstance.RoomData.OwnerId)
+                            RoomData roomDataTarget = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+                            if (roomDataTarget != null && roomDataTarget.OwnerId == this.RoomInstance.RoomData.OwnerId)
                             {
                                 user.GetClient().GetUser().IsTeleporting = true;
-                                user.GetClient().GetUser().TeleportingRoomID = RoomId;
-                                user.GetClient().SendPacket(new RoomForwardComposer(RoomId));
+                                user.GetClient().GetUser().TeleportingRoomID = roomId;
+                                user.GetClient().SendPacket(new RoomForwardComposer(roomId));
                             }
                         }
                         break;

@@ -31,23 +31,23 @@ namespace WibboEmulator.Communication.RCON.Commands.User
             }
 
 
-            if (!int.TryParse(parameters[2], out int RoomId))
+            if (!int.TryParse(parameters[2], out int roomId))
             {
                 return false;
             }
 
-            if (RoomId == 0)
+            if (roomId == 0)
             {
                 return false;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
-            if (room == null)
+            RoomData roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+            if (roomData == null)
             {
                 return false;
             }
 
-            Client.SendPacket(new GetGuestRoomResultComposer(Client, room.RoomData, false, true));
+            Client.SendPacket(new GetGuestRoomResultComposer(Client, roomData, false, true));
             return true;
         }
     }

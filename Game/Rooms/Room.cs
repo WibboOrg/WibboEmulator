@@ -31,9 +31,7 @@ namespace WibboEmulator.Game.Rooms
 
     public class Room
     {
-        public bool isCycling;
         public int IsLagging;
-        public bool CycleEnded;
         public int IdleTime;
         public bool Disposed;
 
@@ -74,7 +72,7 @@ namespace WibboEmulator.Game.Rooms
         public bool OldFoot;
         public bool RoomIngameChat;
 
-       
+
         private int _saveFurnitureTimer;
 
         //Question
@@ -106,7 +104,6 @@ namespace WibboEmulator.Game.Rooms
             this._bans = new Dictionary<int, double>();
             this._mutes = new Dictionary<int, double>();
             this.ActiveTrades = new List<Trade>();
-            this.CycleEnded = false;
             this.HeightMapLoaded = false;
             this.RoomData = Data;
             this.EveryoneGotRights = Data.AllowRightsOverride;
@@ -526,7 +523,7 @@ namespace WibboEmulator.Game.Rooms
         public void SendObjects(Client Session)
         {
             ServerPacketList packetList = new ServerPacketList();
-            
+
             foreach (RoomUser roomUser in this._roomUserManager.GetUserList().ToList())
             {
                 if (roomUser == null)
@@ -585,7 +582,6 @@ namespace WibboEmulator.Game.Rooms
         {
             try
             {
-                this.isCycling = true;
                 if (this.Disposed)
                 {
                     return;
@@ -612,18 +608,15 @@ namespace WibboEmulator.Game.Rooms
                         this.IdleTime = 0;
                     }
 
-                    if (!this.CycleEnded)
+                    if (this.IdleTime >= 60)
                     {
-                        if (this.IdleTime >= 60)
-                        {
-                            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
+                        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
 
-                            return;
-                        }
-                        else
-                        {
-                            this.GetRoomUserManager().SerializeStatusUpdates();
-                        }
+                        return;
+                    }
+                    else
+                    {
+                        this.GetRoomUserManager().SerializeStatusUpdates();
                     }
 
                     if (this.GetGameItemHandler() != null)
@@ -659,12 +652,7 @@ namespace WibboEmulator.Game.Rooms
             }
             catch (Exception ex)
             {
-                this.isCycling = false;
                 ExceptionLogger.LogCriticalException("Sub crash in room cycle: " + (ex).ToString());
-            }
-            finally
-            {
-                this.isCycling = false;
             }
         }
 
@@ -920,7 +908,6 @@ namespace WibboEmulator.Game.Rooms
             }
 
             this.Disposed = true;
-            this.CycleEnded = true;
 
             try
             {
