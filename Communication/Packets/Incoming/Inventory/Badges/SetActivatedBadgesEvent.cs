@@ -54,9 +54,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 Session.SendPacket(new UserBadgesComposer(Session.GetUser()));
             else 
             {
-                Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-
-                if(room != null)
+                if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
                     room.SendPacket(new UserBadgesComposer(Session.GetUser()));
             }
         }

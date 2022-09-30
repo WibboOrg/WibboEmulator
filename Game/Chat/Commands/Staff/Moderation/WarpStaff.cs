@@ -18,11 +18,8 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
                 return;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(TargetUser.GetUser().CurrentRoomId);
-            if (room == null)
-            {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(TargetUser.GetUser().CurrentRoomId, out Room room))
                 return;
-            }
 
             RoomUser roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(TargetUser.GetUser().Id);
             if (roomUserByUserIdTarget == null)

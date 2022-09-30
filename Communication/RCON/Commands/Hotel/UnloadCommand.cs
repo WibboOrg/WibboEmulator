@@ -1,4 +1,5 @@
-﻿using WibboEmulator.Game.Rooms;
+﻿using MySqlX.XDevAPI;
+using WibboEmulator.Game.Rooms;
 
 namespace WibboEmulator.Communication.RCON.Commands.Hotel
 {
@@ -12,21 +13,18 @@ namespace WibboEmulator.Communication.RCON.Commands.Hotel
             }
 
 
-            if (!int.TryParse(parameters[1], out int RoomId))
+            if (!int.TryParse(parameters[1], out int roomId))
             {
                 return false;
             }
 
-            if (RoomId == 0)
+            if (roomId == 0)
             {
                 return false;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
-            if (room == null)
-            {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room room))
                 return false;
-            }
 
             WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
             return true;

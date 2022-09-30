@@ -14,11 +14,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-            if (room == null)
-            {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
                 return;
-            }
 
             room.TryStopTrade(Session.GetUser().Id);
         }

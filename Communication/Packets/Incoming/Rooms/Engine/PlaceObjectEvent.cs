@@ -21,8 +21,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(session.GetUser().CurrentRoomId);
-            if (room == null || !room.CheckRights(session))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out Room room))
+                return;
+
+            if (!room.CheckRights(session))
             {
                 session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_set_not_owner}"));
                 return;

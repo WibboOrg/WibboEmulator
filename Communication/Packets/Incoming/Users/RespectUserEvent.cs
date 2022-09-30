@@ -17,8 +17,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-            if (room == null || Session.GetUser().DailyRespectPoints <= 0)
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
+                return;
+
+            if (Session.GetUser().DailyRespectPoints <= 0)
             {
                 return;
             }

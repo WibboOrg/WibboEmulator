@@ -21,13 +21,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             int UserId = Packet.PopInt();
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-            if (room == null)
-            {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
                 return;
-            }
 
-            if (room == null || !room.CheckRights(Session, true))
+            if (!room.CheckRights(Session, true))
             {
                 return;
             }

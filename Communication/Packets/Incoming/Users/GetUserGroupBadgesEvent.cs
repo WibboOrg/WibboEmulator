@@ -16,14 +16,11 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room Room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().LoadingRoomId);
-            if (Room == null)
-            {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().LoadingRoomId, out Room room))
                 return;
-            }
 
             Dictionary<int, string> Badges = new Dictionary<int, string>();
-            foreach (RoomUser User in Room.GetRoomUserManager().GetRoomUsers().ToList())
+            foreach (RoomUser User in room.GetRoomUserManager().GetRoomUsers().ToList())
             {
                 if (User.IsBot || User.GetClient() == null || User.GetClient().GetUser() == null)
                 {
@@ -57,7 +54,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 }
             }
 
-            Room.SendPacket(new UserGroupBadgesComposer(Badges));
+            room.SendPacket(new UserGroupBadgesComposer(Badges));
             Session.SendPacket(new UserGroupBadgesComposer(Badges));
         }
     }

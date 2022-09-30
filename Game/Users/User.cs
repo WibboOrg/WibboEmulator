@@ -145,7 +145,10 @@ namespace WibboEmulator.Game.Users
                 }
                 else
                 {
-                    return WibboEnvironment.GetGame().GetRoomManager().GetRoom(this.CurrentRoomId);
+                    if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.CurrentRoomId, out Room room))
+                        return null;
+
+                    return room;
                 }
             }
         }
@@ -305,12 +308,8 @@ namespace WibboEmulator.Game.Users
 
             if (this.GetClient().GetUser().InRoom)
             {
-                Room OldRoom = WibboEnvironment.GetGame().GetRoomManager().GetRoom(this.GetClient().GetUser().CurrentRoomId);
-
-                if (OldRoom != null)
-                {
-                    OldRoom.GetRoomUserManager().RemoveUserFromRoom(this.GetClient(), false, false);
-                }
+                if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.GetClient().GetUser().CurrentRoomId, out Room oldRoom))
+                    oldRoom.GetRoomUserManager().RemoveUserFromRoom(this.GetClient(), false, false);
             }
 
             Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(Id);

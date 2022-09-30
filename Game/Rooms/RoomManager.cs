@@ -170,18 +170,6 @@ namespace WibboEmulator.Game.Rooms
             }
         }
 
-        public Room GetRoom(int roomID)
-        {
-            if (this.TryGetRoom(roomID, out Room room))
-            {
-                return room;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         public void Init(IQueryAdapter dbClient)
         {
             this._roomModels.Clear();

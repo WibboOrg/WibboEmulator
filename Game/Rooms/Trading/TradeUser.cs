@@ -22,15 +22,10 @@ namespace WibboEmulator.Game.Rooms.Trading
 
         public RoomUser GetRoomUser()
         {
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(this._roomId);
-            if (room == null)
-            {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this._roomId, out Room room))
                 return null;
-            }
-            else
-            {
-                return room.GetRoomUserManager().GetRoomUserByUserId(this.UserId);
-            }
+
+            return room.GetRoomUserManager().GetRoomUserByUserId(this.UserId);
         }
 
         public Client GetClient()

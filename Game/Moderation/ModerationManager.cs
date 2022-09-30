@@ -197,8 +197,10 @@ namespace WibboEmulator.Game.Moderation
 
             Session.SendPacket(new IgnoreStatusComposer(1, UserReport.Username));
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-            if (room == null || (room.RoomData.BanFuse != 1 || !room.CheckRights(Session)) && !room.CheckRights(Session, true))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
+                return;
+
+            if ((room.RoomData.BanFuse != 1 || !room.CheckRights(Session)) && !room.CheckRights(Session, true))
             {
                 return;
             }
@@ -326,15 +328,12 @@ namespace WibboEmulator.Game.Moderation
             LogCommandDao.Insert(dbClient, userId, modName, roomId, target, type, description + " " + target);
         }
 
-        public static void PerformRoomAction(Client ModSession, int RoomId, bool KickUsers, bool LockRoom, bool InappropriateRoom)
+        public static void PerformRoomAction(Client modSession, int roomId, bool kickUsers, bool lockRoom, bool inappropriateRoom)
         {
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
-            if (room == null)
-            {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room room))
                 return;
-            }
 
-            if (LockRoom)
+            if (lockRoom)
             {
                 room.RoomData.State = 1;
                 room.RoomData.Name = "Cet appart ne respecte par les conditions d'utilisation";
@@ -342,7 +341,7 @@ namespace WibboEmulator.Game.Moderation
                 RoomDao.UpdateState(dbClient, room.Id);
             }
 
-            if (InappropriateRoom)
+            if (inappropriateRoom)
             {
                 room.RoomData.Name = "Inapproprié pour l'hôtel";
                 room.RoomData.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
@@ -352,12 +351,12 @@ namespace WibboEmulator.Game.Moderation
                 RoomDao.UpdateCaptionDescTags(dbClient, room.Id);
             }
 
-            if (KickUsers)
+            if (kickUsers)
             {
                 room.OnRoomKick();
             }
 
-            room.SendPacket(new GetGuestRoomResultComposer(ModSession, room.RoomData, false, false));
+            room.SendPacket(new GetGuestRoomResultComposer(modSession, room.RoomData, false, false));
         }
 
         public static void KickUser(Client ModSession, int UserId, string Message, bool Soft)
@@ -374,11 +373,8 @@ namespace WibboEmulator.Game.Moderation
             }
             else
             {
-                Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(clientByUserId.GetUser().CurrentRoomId);
-                if (room == null)
-                {
+                if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(clientByUserId.GetUser().CurrentRoomId, out Room room))
                     return;
-                }
 
                 room.GetRoomUserManager().RemoveUserFromRoom(clientByUserId, true, false);
 

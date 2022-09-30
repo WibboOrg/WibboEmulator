@@ -22,18 +22,15 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             int FloorThick = Packet.PopInt();
             int WallHeight = Packet.PopInt();
 
-            Room Room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-            if (Room == null)
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
+                return;
+
+            if (!room.CheckRights(Session, false))
             {
                 return;
             }
 
-            if (!Room.CheckRights(Session, false))
-            {
-                return;
-            }
-
-            if (Room.RoomData.SellPrice > 0)
+            if (room.RoomData.SellPrice > 0)
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.8", Session.Langue));
                 return;
@@ -132,13 +129,13 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                RoomModelCustomDao.Replace(dbClient, Room.Id, DoorX, DoorY, DoorZ, DoorDirection, Map, WallHeight);
-                RoomDao.UpdateModelWallThickFloorThick(dbClient, Room.Id, WallThick, FloorThick);
+                RoomModelCustomDao.Replace(dbClient, room.Id, DoorX, DoorY, DoorZ, DoorDirection, Map, WallHeight);
+                RoomDao.UpdateModelWallThickFloorThick(dbClient, room.Id, WallThick, FloorThick);
             }
 
-            List<RoomUser> UsersToReturn = Room.GetRoomUserManager().GetRoomUsers().ToList();
+            List<RoomUser> UsersToReturn = room.GetRoomUserManager().GetRoomUsers().ToList();
 
-            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
+            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
 
             foreach (RoomUser User in UsersToReturn)
             {
@@ -147,7 +144,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     continue;
                 }
 
-                User.GetClient().SendPacket(new RoomForwardComposer(Room.Id));
+                User.GetClient().SendPacket(new RoomForwardComposer(room.Id));
             }
         }
 

@@ -11,14 +11,17 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            int RoomId = Packet.PopInt();
+            int roomId = Packet.PopInt();
+
             if (Session == null || Session.GetUser() == null || Session.GetUser().UsersRooms == null)
             {
                 return;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
-            if (room == null || !(room.RoomData.OwnerName == Session.GetUser().Username))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room room))
+                return;
+
+            if (!(room.RoomData.OwnerName == Session.GetUser().Username))
             {
                 return;
             }
@@ -32,25 +35,25 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                RoomDao.Delete(dbClient, RoomId);
-                UserFavoriteDao.Delete(dbClient, RoomId);
-                RoomRightDao.Delete(dbClient, RoomId);
-                ItemDao.DeleteAllByRoomId(dbClient, RoomId);
+                RoomDao.Delete(dbClient, roomId);
+                UserFavoriteDao.Delete(dbClient, roomId);
+                RoomRightDao.Delete(dbClient, roomId);
+                ItemDao.DeleteAllByRoomId(dbClient, roomId);
                 UserDao.UpdateHomeRoom(dbClient, Session.GetUser().Id, 0);
-                BotUserDao.UpdateRoomBot(dbClient, RoomId);
-                BotPetDao.UpdateRoomIdByRoomId(dbClient, RoomId);
+                BotUserDao.UpdateRoomBot(dbClient, roomId);
+                BotPetDao.UpdateRoomIdByRoomId(dbClient, roomId);
             }
 
-            if (Session.GetUser().UsersRooms.Contains(RoomId))
+            if (Session.GetUser().UsersRooms.Contains(roomId))
             {
-                Session.GetUser().UsersRooms.Remove(RoomId);
+                Session.GetUser().UsersRooms.Remove(roomId);
             }
 
             if (Session.GetUser().FavoriteRooms != null)
             {
-                if (Session.GetUser().FavoriteRooms.Contains(RoomId))
+                if (Session.GetUser().FavoriteRooms.Contains(roomId))
                 {
-                    Session.GetUser().FavoriteRooms.Remove(RoomId);
+                    Session.GetUser().FavoriteRooms.Remove(roomId);
                 }
             }
         }

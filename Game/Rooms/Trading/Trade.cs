@@ -321,7 +321,9 @@ namespace WibboEmulator.Game.Rooms.Trading
             }
 
             this.SendMessageToUsers(new TradingFinishComposer());
-            this.GetRoom().ActiveTrades.Remove(this);
+
+            if(WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this._roomId, out Room room))
+                room.ActiveTrades.Remove(this);
         }
 
         public void CloseTrade(int UserId)
@@ -352,11 +354,6 @@ namespace WibboEmulator.Game.Rooms.Trading
                     tradeUser.GetClient().SendPacket(Message);
                 }
             }
-        }
-
-        private Room GetRoom()
-        {
-            return WibboEnvironment.GetGame().GetRoomManager().GetRoom(this._roomId);
         }
     }
 }

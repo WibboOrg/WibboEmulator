@@ -15,13 +15,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            int RoomId = Packet.PopInt();
+            int roomId = Packet.PopInt();
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
-            if (room == null)
-            {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room room))
                 return;
-            }
 
             if (!room.CheckRights(Session, true) && !Session.GetUser().HasPermission("perm_settings_room"))
             {

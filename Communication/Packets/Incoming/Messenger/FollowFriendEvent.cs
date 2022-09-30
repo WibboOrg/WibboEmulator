@@ -17,13 +17,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(clientByUserId.GetUser().CurrentRoomId);
-            if (room == null)
-            {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(clientByUserId.GetUser().CurrentRoomId, out Room room))
                 return;
-            }
 
-            Session.SendPacket(new RoomForwardComposer(clientByUserId.GetUser().CurrentRoomId));
+            Session.SendPacket(new RoomForwardComposer(room.Id));
         }
     }
 }

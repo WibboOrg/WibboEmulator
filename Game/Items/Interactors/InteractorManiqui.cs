@@ -29,7 +29,6 @@ namespace WibboEmulator.Game.Items.Interactors
                 return;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
             string[] lookSplit = Session.GetUser().Look.Split(new char[1] { '.' });
             string lookCode = "";
             foreach (string part in lookSplit)
@@ -48,18 +47,17 @@ namespace WibboEmulator.Game.Items.Interactors
                 UserDao.UpdateLook(dbClient, Session.GetUser().Id, look);
             }
 
-            if (room == null)
+
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
+                return;
+
+            RoomUser roomUser = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            if (roomUser == null)
             {
                 return;
             }
 
-            RoomUser Roomuser = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (Roomuser == null)
-            {
-                return;
-            }
-
-            if (Roomuser.IsTransf || Roomuser.IsSpectator)
+            if (roomUser.IsTransf || roomUser.IsSpectator)
             {
                 return;
             }
@@ -70,7 +68,7 @@ namespace WibboEmulator.Game.Items.Interactors
             }
 
             Session.SendPacket(new FigureUpdateComposer(Session.GetUser().Look, Session.GetUser().Gender));
-            room.SendPacket(new UserChangeComposer(Roomuser, false));
+            room.SendPacket(new UserChangeComposer(roomUser, false));
         }
 
         public override void OnTick(Item item)

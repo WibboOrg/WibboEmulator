@@ -24,13 +24,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room Room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().LoadingRoomId);
-            if (Room == null)
-            {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().LoadingRoomId, out Room room))
                 return;
-            }
 
-            if (Room.RoomData.State == 1)
+            if (room.RoomData.State == 1)
             {
                 if (!Session.GetUser().AllowDoorBell)
                 {
@@ -42,27 +39,27 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 }
             }
 
-            if (!Room.GetRoomUserManager().AddAvatarToRoom(Session))
+            if (!room.GetRoomUserManager().AddAvatarToRoom(Session))
             {
-                Room.GetRoomUserManager().RemoveUserFromRoom(Session, false, false);
+                room.GetRoomUserManager().RemoveUserFromRoom(Session, false, false);
                 return;
             }
 
-            Room.SendObjects(Session);
+            room.SendObjects(Session);
 
-            Session.SendPacket(new RoomEntryInfoComposer(Room.Id, Room.CheckRights(Session, true)));
-            Session.SendPacket(new RoomVisualizationSettingsComposer(Room.RoomData.WallThickness, Room.RoomData.FloorThickness, Room.RoomData.Hidewall));
+            Session.SendPacket(new RoomEntryInfoComposer(room.Id, room.CheckRights(Session, true)));
+            Session.SendPacket(new RoomVisualizationSettingsComposer(room.RoomData.WallThickness, room.RoomData.FloorThickness, room.RoomData.Hidewall));
 
-            RoomUser ThisUser = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
+            RoomUser ThisUser = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
 
             if (ThisUser != null)
             {
-                Room.SendPacket(new UserChangeComposer(ThisUser, false));
+                room.SendPacket(new UserChangeComposer(ThisUser, false));
             }
 
             if (!ThisUser.IsSpectator)
             {
-                Room.GetRoomUserManager().UserEnter(ThisUser);
+                room.GetRoomUserManager().UserEnter(ThisUser);
             }
 
             if (Session.GetUser().Nuxenable)
@@ -83,7 +80,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 }
             }
 
-            if (Room.RoomData.OwnerId != Session.GetUser().Id)
+            if (room.RoomData.OwnerId != Session.GetUser().Id)
             {
                 WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_RoomEntry", 1);
             }
@@ -91,7 +88,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             double timeStampNow = UnixTimestamp.GetNow();
 
             if (!Session.GetUser().Visits.ContainsKey(timeStampNow))
-                Session.GetUser().Visits.Add(timeStampNow, Room.Id);
+                Session.GetUser().Visits.Add(timeStampNow, room.Id);
         }
     }
 }

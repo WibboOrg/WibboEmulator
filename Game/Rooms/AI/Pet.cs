@@ -62,7 +62,9 @@ namespace WibboEmulator.Game.Pets
                 }
                 else
                 {
-                    return WibboEnvironment.GetGame().GetRoomManager().GetRoom(this.RoomId);
+                    WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room);
+
+                    return room;
                 }
             }
         }

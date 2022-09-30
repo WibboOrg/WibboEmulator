@@ -19,8 +19,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room Room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-            if (Room == null || !Room.CheckRights(Session, true))
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
+                return;
+
+            if (!room.CheckRights(Session, true))
             {
                 return;
             }
@@ -29,7 +31,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             int X = Packet.PopInt();
             int Y = Packet.PopInt();
 
-            if (!Room.GetGameMap().CanWalk(X, Y, false) || !Room.GetGameMap().ValidTile(X, Y))
+            if (!room.GetGameMap().CanWalk(X, Y, false) || !room.GetGameMap().ValidTile(X, Y))
             {
                 return;
             }
@@ -39,7 +41,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if (Room.GetRoomUserManager().BotPetCount >= 30)
+            if (room.GetRoomUserManager().BotPetCount >= 30)
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.placebot.error", Session.Langue));
                 return;
@@ -47,10 +49,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                BotUserDao.UpdatePosition(dbClient, Bot.Id, Room.Id, X, Y);
+                BotUserDao.UpdatePosition(dbClient, Bot.Id, room.Id, X, Y);
             }
 
-            RoomUser roomUser = Room.GetRoomUserManager().DeployBot(new RoomBot(Bot.Id, Bot.OwnerId, Room.Id, BotAIType.Generic, Bot.WalkingEnabled, Bot.Name, Bot.Motto, Bot.Gender, Bot.Figure, X, Y, 0, 2, Bot.ChatEnabled, Bot.ChatText, Bot.ChatSeconds, Bot.IsDancing, Bot.Enable, Bot.Handitem, Bot.Status), null);
+            RoomUser roomUser = room.GetRoomUserManager().DeployBot(new RoomBot(Bot.Id, Bot.OwnerId, room.Id, BotAIType.Generic, Bot.WalkingEnabled, Bot.Name, Bot.Motto, Bot.Gender, Bot.Figure, X, Y, 0, 2, Bot.ChatEnabled, Bot.ChatText, Bot.ChatSeconds, Bot.IsDancing, Bot.Enable, Bot.Handitem, Bot.Status), null);
 
             if (!Session.GetUser().GetInventoryComponent().TryRemoveBot(BotId, out Bot ToRemove))
             {

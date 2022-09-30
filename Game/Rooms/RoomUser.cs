@@ -151,7 +151,10 @@ namespace WibboEmulator.Game.Rooms
         {
             get
             {
-                RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this.GetRoom().RoomData.OwnerId);
+                if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room))
+                    return null;
+
+                RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(room.RoomData.OwnerId);
                 if (RPManager == null)
                 {
                     return null;
@@ -239,7 +242,10 @@ namespace WibboEmulator.Game.Rooms
             }
             else
             {
-                return this.GetUsername() == this.GetRoom().RoomData.OwnerName;
+                if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room))
+                    return false;
+
+                return this.GetUsername() == room.RoomData.OwnerName;
             }
         }
 
@@ -253,7 +259,10 @@ namespace WibboEmulator.Game.Rooms
 
             this.IsAsleep = false;
 
-            this.GetRoom().SendPacket(new SleepComposer(this.VirtualId, false));
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room))
+                return;
+
+            room.SendPacket(new SleepComposer(this.VirtualId, false));
         }
 
         public void Dispose()
@@ -283,13 +292,16 @@ namespace WibboEmulator.Game.Rooms
 
         public void OnChat(string MessageText, int Color = 0, bool Shout = false)
         {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room))
+                return;
+
             if (Shout)
             {
-                this.GetRoom().SendPacketOnChat(new ShoutComposer(this.VirtualId, MessageText, Color), this, true, (this.Team == TeamType.NONE && !this.IsBot));
+                room.SendPacketOnChat(new ShoutComposer(this.VirtualId, MessageText, Color), this, true, (this.Team == TeamType.NONE && !this.IsBot));
             }
             else
             {
-                this.GetRoom().SendPacketOnChat(new ChatComposer(this.VirtualId, MessageText, Color), this, true, (this.Team == TeamType.NONE && !this.IsBot));
+                room.SendPacketOnChat(new ChatComposer(this.VirtualId, MessageText, Color), this, true, (this.Team == TeamType.NONE && !this.IsBot));
             }
         }
 
@@ -300,7 +312,10 @@ namespace WibboEmulator.Game.Rooms
 
         public void MoveTo(int pX, int pY, bool pOverride = false)
         {
-            if (!this.GetRoom().GetGameMap().CanWalkState(pX, pY, pOverride) || this.Freeze || !this.AllowMoveTo)
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room))
+                return;
+
+            if (!room.GetGameMap().CanWalkState(pX, pY, pOverride) || this.Freeze || !this.AllowMoveTo)
             {
                 return;
             }
@@ -308,7 +323,7 @@ namespace WibboEmulator.Game.Rooms
             this.Unidle();
             if (this.TeleportEnabled)
             {
-                this.GetRoom().SendPacket(this.GetRoom().GetRoomItemHandler().TeleportUser(this, new Point(pX, pY), 0, this.GetRoom().GetGameMap().SqAbsoluteHeight(pX, pY)));
+                room.SendPacket(room.GetRoomItemHandler().TeleportUser(this, new Point(pX, pY), 0, room.GetGameMap().SqAbsoluteHeight(pX, pY)));
             }
             else
             {
@@ -331,15 +346,17 @@ namespace WibboEmulator.Game.Rooms
             this.SetZ = pZ;
             this.SetStep = true;
 
-            this.GetRoom().GetGameMap().AddTakingSquare(pX, pY);
-
             this.UpdateNeeded = false;
             this.IsWalking = false;
+
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room))
+                return;
+
+            room.GetGameMap().AddTakingSquare(pX, pY);
         }
 
         public void SetPos(int pX, int pY, double pZ)
         {
-            this.GetRoom().GetGameMap().UpdateUserMovement(this.Coordinate, new Point(pX, pY), this);
             this.X = pX;
             this.Y = pY;
             this.Z = pZ;
@@ -353,6 +370,11 @@ namespace WibboEmulator.Game.Rooms
             this.SetStep = false;
             this.IsWalking = false;
             this.UpdateNeeded = true;
+
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room))
+                return;
+
+            room.GetGameMap().UpdateUserMovement(this.Coordinate, new Point(pX, pY), this);
         }
 
         public void CarryItem(int itemId, bool notTimer = false)
@@ -360,7 +382,10 @@ namespace WibboEmulator.Game.Rooms
             this.CarryItemID = itemId;
             this.CarryTimer = itemId <= 0 || notTimer ? 0 : 240;
 
-            this.GetRoom().SendPacket(new CarryObjectComposer(this.VirtualId, itemId));
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room))
+                return;
+
+            room.SendPacket(new CarryObjectComposer(this.VirtualId, itemId));
         }
 
         public void SetRot(int Rotation, bool HeadOnly, bool IgnoreWalk = false)
@@ -491,16 +516,6 @@ namespace WibboEmulator.Game.Rooms
             }
 
             return this.Client;
-        }
-
-        private Room GetRoom()
-        {
-            if (this.Room == null)
-            {
-                this.Room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(this.RoomId);
-            }
-
-            return this.Room;
         }
     }
 }

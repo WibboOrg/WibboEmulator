@@ -31,13 +31,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Group.RoomId);
-
-            if (room != null)
-            {
-                room.RoomData.Group = null;
-            }
-
             WibboEnvironment.GetGame().GetGroupManager().DeleteGroup(Group.Id);
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
@@ -54,10 +47,13 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 }
             }
 
-            if(room != null)
-                WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
-
             Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.succes", Session.Langue));
+
+            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room room))
+            {
+                room.RoomData.Group = null;
+                WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
+            }
         }
     }
 }

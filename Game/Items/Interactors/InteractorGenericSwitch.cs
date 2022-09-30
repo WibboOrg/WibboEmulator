@@ -142,11 +142,8 @@ namespace WibboEmulator.Game.Items.Interactors
                     return;
                 }
 
-                Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-                if (room == null)
-                {
+                if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
                     return;
-                }
 
                 RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
                 if (roomUserByUserId != null)

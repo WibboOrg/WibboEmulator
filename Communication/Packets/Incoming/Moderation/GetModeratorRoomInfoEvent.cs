@@ -15,15 +15,16 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            int RoomId = Packet.PopInt();
+            int roomId = Packet.PopInt();
 
-            RoomData data = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(RoomId);
-
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(data.Id);
+            RoomData data = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(roomId);
 
             bool ownerInRoom = false;
-            if (room != null && room.GetRoomUserManager().GetRoomUserByName(data.OwnerName) != null)
-                ownerInRoom = true;
+            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(data.Id, out Room room))
+            {
+                if(room.GetRoomUserManager().GetRoomUserByName(data.OwnerName) != null)
+                    ownerInRoom = true;
+            }
 
             Session.SendPacket(new ModeratorRoomInfoComposer(data, ownerInRoom));
         }

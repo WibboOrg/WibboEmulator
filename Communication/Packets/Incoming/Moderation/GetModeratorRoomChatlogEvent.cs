@@ -17,13 +17,10 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             }
 
             Packet.PopInt(); //useless
-            int roomID = Packet.PopInt();
+            int roomId = Packet.PopInt();
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(roomID);
-            if (room == null)
-            {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room room))
                 return;
-            }
 
             List<ChatlogEntry> listReverse = new List<ChatlogEntry>();
             listReverse.AddRange(room.GetChatMessageManager().ListOfMessages);

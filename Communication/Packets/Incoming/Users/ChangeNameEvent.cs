@@ -20,11 +20,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Session.GetUser().CurrentRoomId);
-            if (room == null)
-            {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
                 return;
-            }
 
             RoomUser roomUser = room.GetRoomUserManager().GetRoomUserByName(Session.GetUser().Username);
             if (roomUser == null)
@@ -69,15 +66,14 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             Session.SendPacket(new UpdateUsernameComposer(newUsername));
             Session.SendPacket(new UserObjectComposer(Session.GetUser()));
 
-            foreach (int RoomId in Session.GetUser().UsersRooms)
+            foreach (int roomId in Session.GetUser().UsersRooms)
             {
-                Room roomowner = WibboEnvironment.GetGame().GetRoomManager().GetRoom(RoomId);
-                if (roomowner != null)
-                {
-                    roomowner.RoomData.OwnerName = newUsername;
-                }
+                if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room roomOwner))
+                    continue;
 
-                WibboEnvironment.GetGame().GetRoomManager().RoomDataRemove(RoomId);
+                roomOwner.RoomData.OwnerName = newUsername;
+
+                WibboEnvironment.GetGame().GetRoomManager().RoomDataRemove(roomId);
             }
 
             room.SendPacket(new UserNameChangeComposer(newUsername, roomUser.VirtualId));
