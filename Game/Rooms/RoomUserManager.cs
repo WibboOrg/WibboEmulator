@@ -1299,7 +1299,7 @@ namespace WibboEmulator.Game.Rooms
 
             List<RoomUser> ToRemove = new List<RoomUser>();
 
-            foreach (RoomUser User in this.GetUserList().OrderBy(a => Guid.NewGuid()).ToList())
+            foreach (RoomUser User in this.GetUserList().ToList())
             {
                 if (!this.IsValid(User))
                 {
@@ -1526,13 +1526,9 @@ namespace WibboEmulator.Game.Rooms
                     roomUserByVirtualId.UpdateNeeded = true;
                 }
 
-                if (User.IsSit)
+                if (User.IsSit || User.IsLay)
                 {
                     User.IsSit = false;
-                }
-
-                if (User.IsLay)
-                {
                     User.IsLay = false;
                 }
 
@@ -1587,7 +1583,6 @@ namespace WibboEmulator.Game.Rooms
 
             List<Item> coordinatedItems = this._room.GetGameMap().GetCoordinatedItems(new Point(User.X, User.Y)).ToList();
 
-            
             User.X = User.SetX;
             User.Y = User.SetY;
             User.Z = User.SetZ;
