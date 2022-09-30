@@ -9,9 +9,12 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
     {
         public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            WibboEnvironment.GetGame().GetAnimationManager().StartGame();
+            int roomId = 0;
+            if (Params.Length > 1)
+                int.TryParse(Params[1], out roomId);
+
+            WibboEnvironment.GetGame().GetAnimationManager().StartGame(roomId);
             Session.SendWhisper("Lancement de l'animation de Jack & Daisy !");
-            WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifTopComposer("Petite animation à l'improviste ! (Jack & Daisy)"));
         }
     }
 }

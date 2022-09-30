@@ -175,7 +175,7 @@ namespace WibboEmulator.Game.Animations
             }
         }
 
-        public void StartGame()
+        public void StartGame(int forceRoomId = 0)
         {
             if (this._roomIdIndex >= this._roomId.Count)
             {
@@ -183,10 +183,14 @@ namespace WibboEmulator.Game.Animations
                 this._roomId = this._roomId.OrderBy(a => Guid.NewGuid()).ToList();
             }
 
-            int RoomId = this._roomId[this._roomIdIndex]; //ButterflyEnvironment.GetRandomNumber(0, this._roomId.Count - 1)
-            this._roomIdIndex++;
+            int roomId = this._roomId[this._roomIdIndex];
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(RoomId);
+            if (forceRoomId != 0)
+                roomId = forceRoomId;
+            else
+                this._roomIdIndex++;
+
+            Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(roomId);
             if (room == null)
             {
                 return;
@@ -195,7 +199,7 @@ namespace WibboEmulator.Game.Animations
             this._timer = 0;
             this._started = true;
             this._notif = false;
-            this._roomIdGame = RoomId;
+            this._roomIdGame = roomId;
 
             room.RoomData.State = 0;
             room.CloseFullRoom = true;
