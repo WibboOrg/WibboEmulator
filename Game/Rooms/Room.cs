@@ -37,6 +37,8 @@ namespace WibboEmulator.Game.Rooms
         public int IdleTime;
         public bool Disposed;
 
+        public Task ProcessTask;
+
         public bool IsRoleplay { get { return this.Roleplay != null; } }
         public RoomRoleplay Roleplay;
         public List<int> UsersWithRights;
@@ -579,7 +581,7 @@ namespace WibboEmulator.Game.Rooms
             packetList.Clear();
         }
 
-        public void ProcessRoom(object pCallback)
+        public void ProcessRoom()
         {
             try
             {
@@ -910,13 +912,7 @@ namespace WibboEmulator.Game.Rooms
             }
         }
 
-        public void Destroy()
-        {
-            this.SendPacket(new CloseConnectionComposer());
-            this.Dispose();
-        }
-
-        private void Dispose()
+        public void Dispose()
         {
             if (this.Disposed)
             {
@@ -925,6 +921,15 @@ namespace WibboEmulator.Game.Rooms
 
             this.Disposed = true;
             this.CycleEnded = true;
+
+            try
+            {
+                if (ProcessTask != null && ProcessTask.IsCompleted)
+                    ProcessTask.Dispose();
+            }
+            catch { }
+
+            this.SendPacket(new CloseConnectionComposer());
 
             foreach (CancellationTokenSource tokenSource in this._cancellationTokenSources)
             {

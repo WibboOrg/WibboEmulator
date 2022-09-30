@@ -151,10 +151,10 @@ namespace WibboEmulator.Game.Animations
             {
                 if (this._timer >= this.ToSeconds(CLOSE_TIME))
                 {
-                    Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(this._roomIdGame);
 
                     this._started = false;
 
+                    Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(this._roomIdGame);
                     if (room != null)
                     {
                         room.RoomData.State = 1;

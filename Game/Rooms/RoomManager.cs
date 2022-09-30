@@ -146,6 +146,11 @@ namespace WibboEmulator.Game.Rooms
             return this._rooms.TryGetValue(RoomId, out Room);
         }
 
+        public bool TryGetRoomModels(string model, out RoomModel roomModel)
+        {
+            return this._roomModels.TryGetValue(model, out roomModel);
+        }
+
         public bool TryGetRoomData(int RoomId, out RoomData RoomData)
         {
             return this._roomsData.TryGetValue(RoomId, out RoomData);
@@ -153,8 +158,7 @@ namespace WibboEmulator.Game.Rooms
 
         public RoomData FetchRoomData(int roomID, DataRow dRow)
         {
-            Room room = this.GetRoom(roomID);
-            if (room != null)
+            if(this.TryGetRoom(roomID, out Room room))
             {
                 return room.RoomData;
             }
@@ -178,52 +182,17 @@ namespace WibboEmulator.Game.Rooms
             }
         }
 
-        public RoomData CreateRoom(Client Session, string Name, string Desc, string Model, int Category, int MaxVisitors, int TradeSettings)
-        {
-            if (!this._roomModels.ContainsKey(Model))
-            {
-                return null;
-            }
-            else if (Name.Length < 3)
-            {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", Session.Langue));
-                return null;
-            }
-            else if (Name.Length > 200)
-            {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", Session.Langue));
-                return null;
-            }
-            else if (Desc.Length > 200)
-            {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("room.namelengthshort", Session.Langue));
-                return null;
-            }
-            else
-            {
-                int RoomId = 0;
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    RoomId = RoomDao.Insert(dbClient, Name, Desc, Session.GetUser().Username, Model, Category, MaxVisitors, TradeSettings);
-                }
-                Session.GetUser().UsersRooms.Add(RoomId);
-
-                RoomData roomData = this.GenerateRoomData(RoomId);
-
-                return roomData;
-            }
-        }
-
         public void Init(IQueryAdapter dbClient)
         {
             this._roomModels.Clear();
-            DataTable table = RoomModelDao.GetAll(dbClient);
-            if (table == null)
+
+            DataTable roomMoodelData = RoomModelDao.GetAll(dbClient);
+            if (roomMoodelData == null)
             {
                 return;
             }
 
-            foreach (DataRow dataRow in table.Rows)
+            foreach (DataRow dataRow in roomMoodelData.Rows)
             {
                 string str = (string)dataRow["id"];
                 this._roomModels.Add(str, new RoomModel(str, Convert.ToInt32(dataRow["door_x"]), Convert.ToInt32(dataRow["door_y"]), (double)dataRow["door_z"], Convert.ToInt32(dataRow["door_dir"]), (string)dataRow["heightmap"], 0));
@@ -404,19 +373,21 @@ namespace WibboEmulator.Game.Rooms
             if (this.roomCycleStopwatch.ElapsedMilliseconds >= 500)
             {
                 this.roomCycleStopwatch.Restart();
-                foreach (Room Room in this._rooms.Values.ToList())
+                foreach (Room room in this._rooms.Values.ToList())
                 {
-                    if (!Room.isCycling && !Room.Disposed)
+                    if (!(room.ProcessTask == null || room.ProcessTask.IsCompleted) && !room.isCycling && !room.Disposed)
                     {
-                        ThreadPool.QueueUserWorkItem(new WaitCallback(Room.ProcessRoom), null); //QueueUserWorkItem
-                        Room.IsLagging = 0;
+                        room.ProcessTask = new Task(room.ProcessRoom);
+                        room.ProcessTask.Start();
+
+                        room.IsLagging = 0;
                     }
                     else
                     {
-                        Room.IsLagging++;
-                        if (Room.IsLagging > 20)
+                        room.IsLagging++;
+                        if (room.IsLagging > 20)
                         {
-                            this.UnloadRoom(Room);
+                            this.UnloadRoom(room);
                         }
                     }
                 }
@@ -453,7 +424,7 @@ namespace WibboEmulator.Game.Rooms
 
             if (this._rooms.TryRemove(Room.Id, out Room room))
             {
-                Room.Destroy();
+                Room.Dispose();
             }
         }
     }

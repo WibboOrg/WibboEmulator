@@ -10,7 +10,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
         public void Parse(Client Session, ClientPacket Packet)
         {
-            Room Room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(Packet.PopInt());
+            Room Room = WibboEnvironment.GetGame().GetRoomManager().GetRoom(Packet.PopInt());
             if (Room == null)
             {
                 return;
