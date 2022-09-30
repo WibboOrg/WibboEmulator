@@ -2,17 +2,17 @@
 {
     public class AchievementData
     {
-        public readonly int Id;
-        public readonly string GroupName;
-        public readonly string Category;
-        public readonly Dictionary<int, AchievementLevel> Levels;
+        public int Id { get; }
+        public string GroupName { get; }
+        public string Category { get; }
+        public Dictionary<int, AchievementLevel> Levels { get; }
 
-        public AchievementData(int Id, string GroupName, string Category)
+        public AchievementData(int id, string groupName, string category)
         {
-            this.Id = Id;
-            this.GroupName = GroupName;
-            this.Category = Category;
-            this.Levels = new Dictionary<int, AchievementLevel>();
+            Id = id;
+            GroupName = groupName;
+            Category = category;
+            Levels = new Dictionary<int, AchievementLevel>();
         }
 
         public void AddLevel(AchievementLevel Level)

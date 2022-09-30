@@ -1299,7 +1299,7 @@ namespace WibboEmulator.Game.Rooms
 
             List<RoomUser> ToRemove = new List<RoomUser>();
 
-            foreach (RoomUser User in this.GetUserList().ToList())
+            foreach (RoomUser User in this.GetUserList().OrderBy(a => Guid.NewGuid()).ToList())
             {
                 if (!this.IsValid(User))
                 {
