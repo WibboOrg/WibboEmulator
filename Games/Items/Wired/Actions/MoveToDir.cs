@@ -69,14 +69,11 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
             switch (whenMoveIsBlocked)
             {
-                #region None
                 case WhenMovementBlock.none:
                     {
                         //this.movetodirMovement = MovementDirection.none;
                         break;
                     }
-                #endregion
-                #region Right45
                 case WhenMovementBlock.right45:
                     {
                         if (this.MoveToDirMovement == MovementDirection.right)
@@ -427,8 +424,6 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
                         break;
                     }
-                #endregion
-                #region Right90
                 case WhenMovementBlock.right90:
                     {
                         if (this.MoveToDirMovement == MovementDirection.right)
@@ -619,8 +614,6 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
                         break;
                     }
-                #endregion
-                #region Left45
                 case WhenMovementBlock.left45:
                     {
                         if (this.MoveToDirMovement == MovementDirection.right)
@@ -970,8 +963,6 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
                         break;
                     }
-                #endregion
-                #region Left90
                 case WhenMovementBlock.left90:
                     {
                         if (this.MoveToDirMovement == MovementDirection.right)
@@ -1161,8 +1152,6 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
                         break;
                     }
-                #endregion
-                #region Turn Back
                 case WhenMovementBlock.turnback:
                     {
                         if (this.MoveToDirMovement == MovementDirection.right)
@@ -1199,14 +1188,11 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                         }
                         break;
                     }
-                #endregion
-                #region Random
                 case WhenMovementBlock.turnrandom:
                     {
                         this.MoveToDirMovement = (MovementDirection)WibboEnvironment.GetRandomNumber(1, 7);
                         break;
                     }
-                    #endregion
             }
 
             newPoint = MovementUtility.HandleMovementDir(item.X, item.Y, this.MoveToDirMovement);

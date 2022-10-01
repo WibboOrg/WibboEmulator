@@ -601,10 +601,7 @@ namespace WibboEmulator.Games.GameClients
             return this._badgeComponent;
         }
 
-        public InventoryComponent GetInventoryComponent()
-        {
-            return this._inventoryComponent;
-        }
+        public InventoryComponent GetInventoryComponent() => this._inventoryComponent;
 
         public ChatlogManager GetChatMessageManager()
         {

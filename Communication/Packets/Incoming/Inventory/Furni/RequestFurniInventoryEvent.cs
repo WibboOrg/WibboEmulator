@@ -8,22 +8,22 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 5000;
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
-            if (Session.GetUser() == null)
+            if (session.GetUser() == null)
             {
                 return;
             }
 
-            if (Session.GetUser().GetInventoryComponent() == null)
+            if (session.GetUser().GetInventoryComponent() == null)
             {
                 return;
             }
 
-            Session.GetUser().GetInventoryComponent().LoadInventory();
+            session.GetUser().GetInventoryComponent().LoadInventory();
 
-            IEnumerable<Item> Items = Session.GetUser().GetInventoryComponent().GetWallAndFloor;
-            Session.SendPacket(new FurniListComposer(Items.ToList(), 1, 0));
+            IEnumerable<Item> Items = session.GetUser().GetInventoryComponent().GetWallAndFloor;
+            session.SendPacket(new FurniListComposer(Items.ToList(), 1, 0));
         }
     }
 }

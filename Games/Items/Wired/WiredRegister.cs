@@ -16,7 +16,6 @@ namespace WibboEmulator.Games.Items.Wired
             IWired handler = null;
             switch (item.GetBaseItem().InteractionType)
             {
-                #region Trigger
                 case InteractionType.TRIGGER_ONCE:
                     handler = new TimerTrigger(item, room);
                     break;
@@ -65,8 +64,7 @@ namespace WibboEmulator.Games.Items.Wired
                 case InteractionType.TRIGGER_WALK_OFF_FURNI:
                     handler = new WalksOffFurni(item, room);
                     break;
-                #endregion
-                #region Action
+
                 case InteractionType.ACTION_GIVE_SCORE:
                     handler = new GiveScore(item, room);
                     break;
@@ -154,8 +152,7 @@ namespace WibboEmulator.Games.Items.Wired
                 case InteractionType.HIGHSCOREPOINTS:
                     handler = new HighScorePoints(item, room);
                     break;
-                #endregion
-                #region Condition
+
                 case InteractionType.CONDITION_SUPER_WIRED:
                     handler = new SuperWiredCondition(item, room);
                     break;
@@ -216,7 +213,6 @@ namespace WibboEmulator.Games.Items.Wired
                 case InteractionType.CONDITION_NOT_IN_TEAM:
                     handler = new ActorNotInTeam(item, room);
                     break;
-                    #endregion
             }
 
             return handler;

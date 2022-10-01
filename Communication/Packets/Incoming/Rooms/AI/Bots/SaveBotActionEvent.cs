@@ -59,7 +59,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             switch (ActionId)
             {
-                #region Copy Looks (1)
                 case 1:
                     {
                         //Change the defaults
@@ -72,9 +71,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                         BotUserDao.UpdateLookGender(dbClient, Bot.BotData.Id, Session.GetUser().Gender, Session.GetUser().Look);
                         break;
                     }
-                #endregion
 
-                #region Setup Speech (2)
                 case 2:
                     {
 
@@ -122,9 +119,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
                         break;
                     }
-                #endregion
 
-                #region Relax (3)
                 case 3:
                     {
                         Bot.BotData.WalkingEnabled = !Bot.BotData.WalkingEnabled;
@@ -132,9 +127,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                         BotUserDao.UpdateWalkEnabled(dbClient, Bot.BotData.Id, Bot.BotData.WalkingEnabled);
                         break;
                     }
-                #endregion
 
-                #region Dance (4)
                 case 4:
                     {
                         if (Bot.DanceId > 0)
@@ -155,9 +148,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
                         break;
                     }
-                #endregion
 
-                #region Change Name (5)
                 case 5:
                     {
                         if (DataString.Length == 0)
@@ -182,7 +173,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                         Room.SendPacket(new UserNameChangeComposer(Bot.BotData.Name, Bot.VirtualId));
                         break;
                     }
-                    #endregion
             }
         }
     }

@@ -80,7 +80,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             int LimitedEditionSells = 0;
             int LimitedEditionStack = 0;
 
-            #region Create the extradata
             switch (Item.Data.InteractionType)
             {
                 case InteractionType.NONE:
@@ -108,8 +107,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
                     ExtraData = "0;" + Group.Id;
                     break;
-
-                #region Pet handling
 
                 case InteractionType.PET:
                     string[] Bits = ExtraData.Split('\n');
@@ -140,8 +137,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_PetLover", 1);
 
                     break;
-
-                #endregion
 
                 case InteractionType.FLOOR:
                 case InteractionType.WALLPAPER:
@@ -228,7 +223,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     ExtraData = "";
                     break;
             }
-            #endregion
 
 
             using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();

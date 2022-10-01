@@ -21,7 +21,6 @@ namespace WibboEmulator.Games.Navigator
 
                 case NavigatorCategoryType.QUERY:
                     {
-                        #region Query
                         if (SearchData.ToLower().StartsWith("owner:"))
                         {
                             if (SearchData.Length > 0)
@@ -112,7 +111,6 @@ namespace WibboEmulator.Games.Navigator
                                 }
                             }
                         }
-                        #endregion
 
                         break;
                     }
@@ -123,7 +121,6 @@ namespace WibboEmulator.Games.Navigator
                 case NavigatorCategoryType.FEATURED_HELP_SECURITY:
                 case NavigatorCategoryType.FEATURED_RUN:
                 case NavigatorCategoryType.FEATURED_CASINO:
-                    #region Featured
                     List<RoomData> Rooms = new List<RoomData>();
                     ICollection<FeaturedRoom> Featured = WibboEnvironment.GetGame().GetNavigator().GetFeaturedRooms(Session.Langue);
                     foreach (FeaturedRoom FeaturedItem in Featured.ToList())
@@ -155,7 +152,6 @@ namespace WibboEmulator.Games.Navigator
                     {
                         RoomAppender.WriteRoom(Message, Data);
                     }
-                    #endregion
                     break;
 
                 case NavigatorCategoryType.POPULAR:

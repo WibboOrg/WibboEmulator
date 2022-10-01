@@ -128,8 +128,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
                         break;
 
-                    #region Pet handling
-
                     case InteractionType.PET:
 
                         try
@@ -164,8 +162,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                         }
 
                         break;
-
-                    #endregion
 
                     case InteractionType.FLOOR:
                     case InteractionType.WALLPAPER:

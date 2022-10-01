@@ -116,8 +116,6 @@ public class GameCore
         this._moduleWatch = new Stopwatch();
     }
 
-    #region Return values
-
     public LootManager GetLootManager()
     {
         return this._lootManager;
@@ -212,7 +210,6 @@ public class GameCore
     {
         return this._landingViewManager;
     }
-    #endregion
 
     public void StartGameLoop()
     {

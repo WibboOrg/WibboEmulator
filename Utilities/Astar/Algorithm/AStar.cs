@@ -3,14 +3,11 @@ using System.Drawing;
 
 namespace Astar.Algorithm
 {
-
-
     /// <summary>
     /// Uses about 50 MB for a 1024x1024 grid.
     /// </summary>
     public class AStarSolver<TPathNode> where TPathNode : IPathNode
     {
-        #region declares
         private delegate double CalculateHeuristicDelegate(PathNode inStart, PathNode inEnd);
         private CalculateHeuristicDelegate CalculationMethod;
         private static readonly double SQRT_2 = Math.Sqrt(2);
@@ -28,9 +25,6 @@ namespace Astar.Algorithm
         public TPathNode SearchSpace { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
-        #endregion
-
-        #region constructor
 
         /// <summary>
         /// Creates a new AstarSolver
@@ -40,12 +34,12 @@ namespace Astar.Algorithm
         /// <param name="calculator">The Calculator method</param>
         public AStarSolver(bool allowDiagonal, AStarHeuristicType calculator, TPathNode inGrid, int width, int height)
         {
-            this.setHeuristictype(calculator);
+            this.SetHeuristictype(calculator);
             this.AllowDiagonal = allowDiagonal;
-            this.prepareMap(inGrid, width, height);
+            this.PrepareMap(inGrid, width, height);
         }
-        #endregion
-        private void prepareMap(TPathNode inGrid, int width, int height)
+
+        private void PrepareMap(TPathNode inGrid, int width, int height)
         {
             this.SearchSpace = inGrid;
             this.Width = width;//inGrid.GetLength(1);
@@ -56,7 +50,7 @@ namespace Astar.Algorithm
 
         }
 
-        private void resetSearchSpace()
+        private void ResetSearchSpace()
         {
             for (int y = 0; y < this.Height; y++)
             {
@@ -67,12 +61,11 @@ namespace Astar.Algorithm
             }
         }
 
-        #region calculation types setting
         /// <summary>
         /// Sets the calculation type
         /// </summary>
         /// <param name="calculator"></param>
-        private void setHeuristictype(AStarHeuristicType calculator)
+        private void SetHeuristictype(AStarHeuristicType calculator)
         {
             switch (calculator)
             {
@@ -114,9 +107,6 @@ namespace Astar.Algorithm
             return Math.Sqrt((inStart.X - inEnd.X) * (inStart.X - inEnd.X) + (inStart.Y - inEnd.Y) * (inStart.Y - inEnd.Y));
         }
 
-        #endregion
-
-        #region neighbour calculation
         /// <summary>
         /// Calculates the neighbour distance
         /// </summary>
@@ -136,9 +126,7 @@ namespace Astar.Algorithm
                     throw new ApplicationException();
             }
         }
-        #endregion
 
-        #region search algo
         /// <summary>
         /// Returns null, if no path is found. Start- and End-Node are included in returned path. The user context
         /// is passed to IsWalkable().
@@ -150,7 +138,7 @@ namespace Astar.Algorithm
             //    return null;
             //if (width < inEndNode.X || height < inEndNode.Y)
             //    return null;
-            this.resetSearchSpace();
+            this.ResetSearchSpace();
             this.mOrderedOpenSet = new PriorityQueue<PathNode, double>(PathNode.Comparer, this.Width + this.Height);
 
             this.mClosedSet = new bool[this.Height, this.Width];
@@ -280,9 +268,7 @@ namespace Astar.Algorithm
 
             return null;
         }
-        #endregion
 
-        #region neighbour storing
         private void StoreNeighborNodesDiagonal(PathNode inAround, PathNode[] inNeighbors)
         {
             int x = inAround.X;
@@ -402,9 +388,7 @@ namespace Astar.Algorithm
                 inNeighbors[3] = null;
             }
         }
-        #endregion
 
-        #region reconstructPath
         private LinkedList<PathNode> ReconstructPath(PathNode current_node)
         {
             LinkedList<PathNode> result = new LinkedList<PathNode>();
@@ -423,9 +407,6 @@ namespace Astar.Algorithm
             }
         }
 
-        #endregion
-
-        #region openmap
         //private class OpenCloseMap
         //{
         //    private PathNode[,] m_Map;
@@ -488,9 +469,7 @@ namespace Astar.Algorithm
         //        m_Map[inValue.X, inValue.Y] = null;
         //    }
         //}
-        #endregion
 
-        #region path node class
         public class PathNode : IPathNode, IComparer<PathNode>, IWeightAddable<double>
         {
             public static readonly PathNode Comparer = new PathNode(0, 0, default(TPathNode));
@@ -506,7 +485,6 @@ namespace Astar.Algorithm
             {
                 return this.UserItem.IsBlocked(X, Y, lastTile);
             }
-
 
             public int X { get; internal set; }
             public int Y { get; internal set; }
@@ -541,7 +519,5 @@ namespace Astar.Algorithm
 
             public bool BeenThere;
         }
-        #endregion
-
     }
 }

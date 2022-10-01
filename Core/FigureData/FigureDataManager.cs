@@ -102,7 +102,6 @@ namespace WibboEmulator.Core.FigureData
 
                 string rebuildFigure = string.Empty;
 
-                #region Check clothing, colors & Club
                 string[] figureParts = figure.Split('.');
                 foreach (string part in figureParts.ToList())
                 {
@@ -127,7 +126,6 @@ namespace WibboEmulator.Core.FigureData
 
                         if (figureSet.Sets.TryGetValue(partId, out Set set))
                         {
-                            #region Gender Check
                             if (set.Gender != gender && set.Gender != "U")
                             {
                                 if (figureSet.Sets.Count(x => x.Value.Gender == gender || x.Value.Gender == "U") > 0)
@@ -144,9 +142,7 @@ namespace WibboEmulator.Core.FigureData
                                     //No replacable?
                                 }
                             }
-                            #endregion
 
-                            #region Colors
                             if (set.Colorable)
                             {
                                 //Couldn't think of a better way to split the colors, if I looped the parts I still have to remove Type-PartId, then loop color 1 & color 2. Meh
@@ -154,7 +150,6 @@ namespace WibboEmulator.Core.FigureData
                                 int splitterCounter = part.Count(x => x == '-');
                                 if (splitterCounter == 2 || splitterCounter == 3)
                                 {
-                                    #region First Color
                                     if (!string.IsNullOrEmpty(part.Split('-')[2]))
                                     {
                                         if (int.TryParse(part.Split('-')[2], out colorId))
@@ -183,12 +178,10 @@ namespace WibboEmulator.Core.FigureData
                                     {
                                         colorId = 0;
                                     }
-                                    #endregion
                                 }
 
                                 if (splitterCounter == 3)
                                 {
-                                    #region Second Color
                                     if (!string.IsNullOrEmpty(part.Split('-')[3]))
                                     {
                                         if (int.TryParse(part.Split('-')[3], out secondColorId))
@@ -217,7 +210,6 @@ namespace WibboEmulator.Core.FigureData
                                     {
                                         secondColorId = 0;
                                     }
-                                    #endregion
                                 }
                             }
                             else
@@ -236,7 +228,6 @@ namespace WibboEmulator.Core.FigureData
                                     }
                                 }
                             }
-                            #endregion
 
                             if (set.ClubLevel > 0 && !hasClub)
                             {
@@ -258,9 +249,7 @@ namespace WibboEmulator.Core.FigureData
                         }
                     }
                 }
-                #endregion
 
-                #region Check Required Clothing
                 foreach (string requirement in this._requirements)
                 {
                     if (!rebuildFigure.Contains(requirement))
@@ -283,7 +272,6 @@ namespace WibboEmulator.Core.FigureData
                         }
                     }
                 }
-                #endregion
 
                 return rebuildFigure.Remove(rebuildFigure.Length - 1);
             }
