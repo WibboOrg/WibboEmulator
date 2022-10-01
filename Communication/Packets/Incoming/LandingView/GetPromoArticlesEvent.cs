@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.LandingView;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.LandingView;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.LandingView;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

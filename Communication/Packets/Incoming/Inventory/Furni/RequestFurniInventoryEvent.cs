@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Items;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

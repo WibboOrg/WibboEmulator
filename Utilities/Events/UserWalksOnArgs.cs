@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Game.Rooms;
+﻿using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Utilities.Events
 {

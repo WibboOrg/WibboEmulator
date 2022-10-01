@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Game.Users;
+﻿using WibboEmulator.Games.Users;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Groups
 {

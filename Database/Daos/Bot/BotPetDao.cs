@@ -1,7 +1,7 @@
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Pets;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Rooms.AI;
+using WibboEmulator.Games.Pets;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Utilities;
 using System.Data;
 

@@ -10,13 +10,13 @@ using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Catalog;
-using WibboEmulator.Game.Catalog.Utilities;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Groups;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Pets;
-using WibboEmulator.Game.Users.Inventory.Bots;
+using WibboEmulator.Games.Catalog;
+using WibboEmulator.Games.Catalog.Utilities;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Pets;
+using WibboEmulator.Games.Users.Inventory.Bots;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

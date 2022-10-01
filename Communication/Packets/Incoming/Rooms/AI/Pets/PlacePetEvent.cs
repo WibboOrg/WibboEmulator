@@ -1,10 +1,10 @@
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Pets;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Rooms.AI;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Pets;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.AI;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

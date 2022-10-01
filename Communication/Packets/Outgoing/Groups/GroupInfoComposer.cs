@@ -1,5 +1,5 @@
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Groups;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Groups;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Groups
 {

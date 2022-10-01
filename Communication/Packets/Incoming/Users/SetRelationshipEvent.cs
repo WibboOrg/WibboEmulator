@@ -1,7 +1,7 @@
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Users.Relationships;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Users.Relationships;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

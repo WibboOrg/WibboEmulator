@@ -1,5 +1,5 @@
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Quests;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Quests;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Quests
 {

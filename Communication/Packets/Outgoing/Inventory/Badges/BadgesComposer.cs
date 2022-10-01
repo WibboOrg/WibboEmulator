@@ -1,4 +1,4 @@
-using WibboEmulator.Game.Users.Badges;
+using WibboEmulator.Games.Users.Badges;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges
 {

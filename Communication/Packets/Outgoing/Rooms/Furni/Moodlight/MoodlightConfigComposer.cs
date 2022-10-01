@@ -1,4 +1,4 @@
-using WibboEmulator.Game.Rooms.Moodlight;
+using WibboEmulator.Games.Rooms.Moodlight;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Moodlight
 {

@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.Help;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Help;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Help;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Guide
 {

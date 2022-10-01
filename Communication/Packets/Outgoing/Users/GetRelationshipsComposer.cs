@@ -1,5 +1,5 @@
-using WibboEmulator.Game.Users;
-using WibboEmulator.Game.Users.Relationships;
+using WibboEmulator.Games.Users;
+using WibboEmulator.Games.Users.Relationships;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Users
 {

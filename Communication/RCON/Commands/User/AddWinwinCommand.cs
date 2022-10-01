@@ -1,6 +1,6 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Clients;
 
 namespace WibboEmulator.Communication.RCON.Commands.User
 {

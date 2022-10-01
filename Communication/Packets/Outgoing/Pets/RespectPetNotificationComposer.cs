@@ -1,6 +1,6 @@
-using WibboEmulator.Game.Pets;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Users;
+using WibboEmulator.Games.Pets;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Pets
 {
