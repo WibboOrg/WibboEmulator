@@ -9,7 +9,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.Quests;
@@ -395,7 +395,7 @@ namespace WibboEmulator.Games.Rooms
             return Enumerable.FirstOrDefault<RoomUser>(this._room.GetGameMap().GetRoomUsers(new Point(x, y)).Where(u => u.IsBot == false));
         }
 
-        public bool AddAvatarToRoom(Client Session)
+        public bool AddAvatarToRoom(GameClient Session)
         {
             if (this._room == null)
             {
@@ -614,7 +614,7 @@ namespace WibboEmulator.Games.Rooms
             return true;
         }
 
-        public void RemoveUserFromRoom(Client Session, bool NotifyClient, bool NotifyKick)
+        public void RemoveUserFromRoom(GameClient Session, bool NotifyClient, bool NotifyKick)
         {
             try
             {
@@ -1457,7 +1457,7 @@ namespace WibboEmulator.Games.Rooms
 
             foreach (RoomUser user in ToRemove)
             {
-                Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(user.UserId);
+                GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(user.UserId);
                 if (clientByUserId != null)
                 {
                     this.RemoveUserFromRoom(clientByUserId, true, false);

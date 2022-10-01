@@ -1,11 +1,11 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Quests
 {
     internal class QuestCompletedComposer : ServerPacket
     {
-        public QuestCompletedComposer(Client Session, Quest Quest)
+        public QuestCompletedComposer(GameClient Session, Quest Quest)
             : base(ServerPacketHeader.QUEST_COMPLETED)
         {
             int questsInCategory = WibboEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(Quest.Category);

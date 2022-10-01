@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using Enclosure;
 using System.Collections;
@@ -226,7 +226,7 @@ namespace WibboEmulator.Games.Rooms.Games
             }
         }
 
-        public void MovePuck(Item item, Client mover, int newX, int newY, TeamType team)
+        public void MovePuck(Item item, GameClient mover, int newX, int newY, TeamType team)
         {
             if (item == null || mover == null || !this._roomInstance.GetGameMap().CanStackItem(newX, newY))
             {

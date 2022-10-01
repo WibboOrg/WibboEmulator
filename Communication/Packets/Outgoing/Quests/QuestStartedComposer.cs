@@ -1,11 +1,11 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Quests
 {
     internal class QuestStartedComposer : ServerPacket
     {
-        public QuestStartedComposer(Client Session, Quest Quest)
+        public QuestStartedComposer(GameClient Session, Quest Quest)
             : base(ServerPacketHeader.QUEST)
         {
             int questsInCategory = WibboEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(Quest.Category);

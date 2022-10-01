@@ -1,4 +1,4 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
@@ -6,7 +6,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class HidePyramide : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             foreach (Item Item in Room.GetRoomItemHandler().GetFloor.ToList())
             {

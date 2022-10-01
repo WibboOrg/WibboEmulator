@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Games.Clients;
+﻿using WibboEmulator.Games.GameClients;
 using WibboEmulator.Communication.Packets.Outgoing.Camera;
 using WibboEmulator.Games.Rooms;
 
@@ -8,7 +8,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
     {
         public double Delay => 5000;
 
-        public async void Parse(Client session, ClientPacket packet)
+        public async void Parse(GameClient session, ClientPacket packet)
         {
             int photoLength = packet.PopInt();
 

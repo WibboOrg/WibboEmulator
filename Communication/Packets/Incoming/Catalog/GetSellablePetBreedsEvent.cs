@@ -1,5 +1,5 @@
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
@@ -8,7 +8,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 0;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             string Type = Packet.PopString();
 

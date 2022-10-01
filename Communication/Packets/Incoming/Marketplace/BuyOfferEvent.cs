@@ -5,7 +5,7 @@ using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalog.Marketplace;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using System.Data;
 
@@ -15,7 +15,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
     {
         public double Delay => 1000;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             int OfferId = Packet.PopInt();
 
@@ -115,7 +115,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
             this.ReloadOffers(Session);
         }
 
-        private void ReloadOffers(Client Session)
+        private void ReloadOffers(GameClient Session)
         {
             int MinCost = -1;
             int MaxCost = -1;

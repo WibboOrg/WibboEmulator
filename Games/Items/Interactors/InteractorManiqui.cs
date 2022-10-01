@@ -2,22 +2,22 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Items.Interactors
 {
     public class InteractorManiqui : FurniInteractor
     {
-        public override void OnPlace(Client Session, Item Item)
+        public override void OnPlace(GameClient Session, Item Item)
         {
         }
 
-        public override void OnRemove(Client Session, Item Item)
+        public override void OnRemove(GameClient Session, Item Item)
         {
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (Session == null || Session.GetUser() == null || Item == null)
             {

@@ -1,5 +1,5 @@
-using WibboEmulator.Games.Clients;
-using WibboEmulator.Games.Users;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.GameClients;
 using System.Text;
 using WibboEmulator.Games.Rooms;
 
@@ -7,7 +7,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class UserInfo : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (Params.Length != 2)
             {
@@ -21,7 +21,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.userparammissing", Session.Langue));
                 return;
             }
-            Client clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
+            GameClient clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
             if (clientByUsername == null || clientByUsername.GetUser() == null)
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));

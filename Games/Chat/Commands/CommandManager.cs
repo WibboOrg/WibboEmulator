@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Chat.Commands.Cmd;
 using System.Data;
 using System.Text;
@@ -43,7 +43,7 @@ namespace WibboEmulator.Games.Chat.Commands
             RegisterGestion();
         }
 
-        public bool Parse(Client session, RoomUser user, Room room, string message)
+        public bool Parse(GameClient session, RoomUser user, Room room, string message)
         {
             if (!message.StartsWith(_prefix))
             {
@@ -137,7 +137,7 @@ namespace WibboEmulator.Games.Chat.Commands
             }
         }
 
-        public string GetCommandList(Client client, Room room)
+        public string GetCommandList(GameClient client, Room room)
         {
             string rank = client.GetUser().Rank + client.GetUser().Langue.ToString();
             if (this._listCommande.ContainsKey(rank))

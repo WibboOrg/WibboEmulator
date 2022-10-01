@@ -4,15 +4,15 @@ using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Users.Messenger;
+using WibboEmulator.Games.GameClients.Messenger;
 using System.Collections.Concurrent;
 using System.Text;
 
-namespace WibboEmulator.Games.Clients
+namespace WibboEmulator.Games.GameClients
 {
     public class ClientManager
     {
-        public ConcurrentDictionary<string, Client> _clients;
+        public ConcurrentDictionary<string, GameClient> _clients;
         public ConcurrentDictionary<string, string> _usernameRegister;
         public ConcurrentDictionary<int, string> _userIDRegister;
 
@@ -26,19 +26,19 @@ namespace WibboEmulator.Games.Clients
 
         public ClientManager()
         {
-            this._clients = new ConcurrentDictionary<string, Client>();
+            this._clients = new ConcurrentDictionary<string, GameClient>();
             this._usernameRegister = new ConcurrentDictionary<string, string>();
             this._userIDRegister = new ConcurrentDictionary<int, string>();
             this._userStaff = new List<int>();
         }
 
-        public List<Client> GetStaffUsers()
+        public List<GameClient> GetStaffUsers()
         {
-            List<Client> Users = new List<Client>();
+            List<GameClient> Users = new List<GameClient>();
 
             foreach (int UserId in this._userStaff)
             {
-                Client Client = this.GetClientByUserID(UserId);
+                GameClient Client = this.GetClientByUserID(UserId);
                 if (Client == null || Client.GetUser() == null)
                 {
                     continue;
@@ -50,18 +50,18 @@ namespace WibboEmulator.Games.Clients
             return Users;
         }
 
-        public Client GetClientById(string clientID)
+        public GameClient GetClientById(string clientID)
         {
-            this.TryGetClient(clientID, out Client client);
+            this.TryGetClient(clientID, out GameClient client);
 
             return client;
         }
 
-        public Client GetClientByUserID(int userID)
+        public GameClient GetClientByUserID(int userID)
         {
             if (this._userIDRegister.ContainsKey(userID))
             {
-                if (!this.TryGetClient(this._userIDRegister[userID], out Client Client))
+                if (!this.TryGetClient(this._userIDRegister[userID], out GameClient Client))
                 {
                     return null;
                 }
@@ -74,11 +74,11 @@ namespace WibboEmulator.Games.Clients
             }
         }
 
-        public Client GetClientByUsername(string username)
+        public GameClient GetClientByUsername(string username)
         {
             if (this._usernameRegister.ContainsKey(username.ToLower()))
             {
-                if (!this.TryGetClient(this._usernameRegister[username.ToLower()], out Client Client))
+                if (!this.TryGetClient(this._usernameRegister[username.ToLower()], out GameClient Client))
                 {
                     return null;
                 }
@@ -100,14 +100,14 @@ namespace WibboEmulator.Games.Clients
             return true;
         }
 
-        public bool TryGetClient(string ClientId, out Client Client)
+        public bool TryGetClient(string ClientId, out GameClient Client)
         {
             return this._clients.TryGetValue(ClientId, out Client);
         }
 
         public string GetNameById(int Id)
         {
-            Client clientByUserId = this.GetClientByUserID(Id);
+            GameClient clientByUserId = this.GetClientByUserID(Id);
 
             if (clientByUserId != null)
             {
@@ -123,12 +123,12 @@ namespace WibboEmulator.Games.Clients
             return username;
         }
 
-        public List<Client> GetClientsById(Dictionary<int, MessengerBuddy>.KeyCollection users)
+        public List<GameClient> GetClientsById(Dictionary<int, MessengerBuddy>.KeyCollection users)
         {
-            List<Client> ClientOnline = new List<Client>();
+            List<GameClient> ClientOnline = new List<GameClient>();
             foreach (int userID in users)
             {
-                Client client = this.GetClientByUserID(userID);
+                GameClient client = this.GetClientByUserID(userID);
                 if (client != null)
                 {
                     ClientOnline.Add(client);
@@ -142,7 +142,7 @@ namespace WibboEmulator.Games.Clients
         {
             foreach (int UserId in this._userStaff)
             {
-                Client Client = this.GetClientByUserID(UserId);
+                GameClient Client = this.GetClientByUserID(UserId);
                 if (Client == null || Client.GetUser() == null)
                 {
                     continue;
@@ -154,7 +154,7 @@ namespace WibboEmulator.Games.Clients
 
         public void SendMessage(IServerPacket Packet)
         {
-            foreach (Client Client in this._clients.Values.ToList())
+            foreach (GameClient Client in this._clients.Values.ToList())
             {
                 if (Client == null || Client.GetUser() == null)
                 {
@@ -167,14 +167,14 @@ namespace WibboEmulator.Games.Clients
 
         public void CreateAndStartClient(string clientID, GameWebSocket connection)
         {
-            Client Client = new Client(clientID, connection);
+            GameClient Client = new GameClient(clientID, connection);
             if (!this._clients.TryAdd(clientID, Client))
                 connection.Dispose();
         }
 
         public void DisposeConnection(string clientID)
         {
-            if (!this.TryGetClient(clientID, out Client Client))
+            if (!this.TryGetClient(clientID, out GameClient Client))
             {
                 return;
             }
@@ -189,7 +189,7 @@ namespace WibboEmulator.Games.Clients
 
         public void LogClonesOut(int UserID)
         {
-            Client clientByUserId = this.GetClientByUserID(UserID);
+            GameClient clientByUserId = this.GetClientByUserID(UserID);
             if (clientByUserId == null)
             {
                 return;
@@ -198,7 +198,7 @@ namespace WibboEmulator.Games.Clients
             clientByUserId.Disconnect();
         }
 
-        public void RegisterClient(Client client, int userID, string username)
+        public void RegisterClient(GameClient client, int userID, string username)
         {
             if (this._usernameRegister.ContainsKey(username.ToLower()))
             {
@@ -245,7 +245,7 @@ namespace WibboEmulator.Games.Clients
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            foreach (Client client in this.GetClients.ToList())
+            foreach (GameClient client in this.GetClients.ToList())
             {
                 if (client == null)
                 {
@@ -284,7 +284,7 @@ namespace WibboEmulator.Games.Clients
             Console.WriteLine("Closing server connections...");
             try
             {
-                foreach (Client client in this.GetClients.ToList())
+                foreach (GameClient client in this.GetClients.ToList())
                 {
 
                     if (client == null || client.GetConnection() == null)
@@ -309,7 +309,7 @@ namespace WibboEmulator.Games.Clients
             Console.WriteLine("Connections closed!");
         }
 
-        public void BanUser(Client Client, string Moderator, double LengthSeconds, string Reason, bool IpBan, bool MachineBan)
+        public void BanUser(GameClient Client, string Moderator, double LengthSeconds, string Reason, bool IpBan, bool MachineBan)
         {
             if (string.IsNullOrEmpty(Reason))
             {
@@ -366,6 +366,6 @@ namespace WibboEmulator.Games.Clients
             this.SendMessage(new RoomNotificationComposer(Title, Notice, Picture, LinkTitle, Link));
         }
 
-        public ICollection<Client> GetClients => this._clients.Values;
+        public ICollection<GameClient> GetClients => this._clients.Values;
     }
 }

@@ -6,10 +6,10 @@ using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalog;
 using WibboEmulator.Games.Catalog.Utilities;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Users;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
@@ -18,7 +18,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 1000;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             int PageId = Packet.PopInt();
             int ItemId = Packet.PopInt();
@@ -251,7 +251,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             Item GiveItem = ItemFactory.CreateSingleItem(PresentData, user, ED, NewItemId);
             if (GiveItem != null)
             {
-                Client Receiver = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(user.Id);
+                GameClient Receiver = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(user.Id);
                 if (Receiver != null)
                 {
                     Receiver.GetUser().GetInventoryComponent().TryAddItem(GiveItem);

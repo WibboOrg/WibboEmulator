@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Quests;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using System.Data;
 
 namespace WibboEmulator.Games.Quests
@@ -69,7 +69,7 @@ namespace WibboEmulator.Games.Quests
             return num;
         }
 
-        public void ProgressUserQuest(Client Session, QuestType QuestType, int EventData = 0)
+        public void ProgressUserQuest(GameClient Session, QuestType QuestType, int EventData = 0)
         {
             if (Session == null || Session.GetUser() == null || Session.GetUser().CurrentQuestId <= 0)
             {
@@ -137,7 +137,7 @@ namespace WibboEmulator.Games.Quests
             return null;
         }
 
-        public void SendQuestList(Client Session, bool send = true)
+        public void SendQuestList(GameClient Session, bool send = true)
         {
             Dictionary<string, int> dictionary1 = new Dictionary<string, int>();
             Dictionary<string, Quest> dictionary2 = new Dictionary<string, Quest>();
@@ -174,7 +174,7 @@ namespace WibboEmulator.Games.Quests
             Session.SendPacket(new QuestListComposer(dictionary2, Session, send));
         }
 
-        public void ActivateQuest(Client Session, ClientPacket Message)
+        public void ActivateQuest(GameClient Session, ClientPacket Message)
         {
             Quest quest = this.GetQuest(Message.PopInt());
             if (quest == null)
@@ -192,7 +192,7 @@ namespace WibboEmulator.Games.Quests
             Session.SendPacket(new QuestStartedComposer(Session, quest));
         }
 
-        public void GetCurrentQuest(Client Session)
+        public void GetCurrentQuest(GameClient Session)
         {
             if (!Session.GetUser().InRoom)
             {
@@ -216,7 +216,7 @@ namespace WibboEmulator.Games.Quests
             Session.SendPacket(new QuestStartedComposer(Session, nextQuestInSeries));
         }
 
-        public void CancelQuest(Client Session)
+        public void CancelQuest(GameClient Session)
         {
             Quest quest = this.GetQuest(Session.GetUser().CurrentQuestId);
             if (quest == null)

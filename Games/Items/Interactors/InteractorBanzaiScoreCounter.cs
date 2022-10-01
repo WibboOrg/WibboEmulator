@@ -1,11 +1,11 @@
-﻿using WibboEmulator.Games.Clients;
+﻿using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.Games;
 
 namespace WibboEmulator.Games.Items.Interactors
 {
     public class InteractorBanzaiScoreCounter : FurniInteractor
     {
-        public override void OnPlace(Client Session, Item Item)
+        public override void OnPlace(GameClient Session, Item Item)
         {
             if (Item.Team == TeamType.NONE)
             {
@@ -16,11 +16,11 @@ namespace WibboEmulator.Games.Items.Interactors
             Item.UpdateState(false, true);
         }
 
-        public override void OnRemove(Client Session, Item Item)
+        public override void OnRemove(GameClient Session, Item Item)
         {
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (!UserHasRights)
             {

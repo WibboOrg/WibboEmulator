@@ -1,20 +1,20 @@
 ﻿using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class AllIgnore : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (Params.Length < 2)
             {
                 return;
             }
 
-            Client targetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            GameClient targetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
             if (targetUser == null || targetUser.GetUser() == null)
             {
                 return;

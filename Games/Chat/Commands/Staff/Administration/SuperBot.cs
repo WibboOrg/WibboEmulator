@@ -1,4 +1,4 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.AI;
 using System.Drawing;
 using WibboEmulator.Games.Rooms;
@@ -7,7 +7,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class SuperBot : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
 
             if (Params.Length > 1)
@@ -53,14 +53,14 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
             }
             else
             {
-                ICollection<Client> Users = WibboEnvironment.GetGame().GetClientManager().GetClients;
+                ICollection<GameClient> Users = WibboEnvironment.GetGame().GetClientManager().GetClients;
 
                 if (Users == null)
                 {
                     return;
                 }
 
-                foreach (Client GameClient in Users)
+                foreach (GameClient GameClient in Users)
                 {
                     if (GameClient.GetUser() == null)
                     {

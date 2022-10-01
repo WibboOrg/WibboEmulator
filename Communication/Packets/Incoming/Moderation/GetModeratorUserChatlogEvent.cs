@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Chat.Logs;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
@@ -8,7 +8,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 0;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             if (!Session.GetUser().HasPermission("perm_chatlog"))
             {
@@ -17,7 +17,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             int userId = Packet.PopInt();
 
-            Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
             if (clientByUserId == null || clientByUserId.GetUser() == null)
             {
                 List<ChatlogEntry> sortedMessages = new List<ChatlogEntry>();

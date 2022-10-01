@@ -6,9 +6,9 @@ using WibboEmulator.Database;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games;
-using WibboEmulator.Games.Clients;
-using WibboEmulator.Games.Users;
-using WibboEmulator.Games.Users.Authenticator;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.GameClients.Authenticator;
 using WibboEmulator.Net;
 using System.Collections.Concurrent;
 using System.Diagnostics;
@@ -282,7 +282,7 @@ namespace WibboEmulator
         {
             string Name = "Unknown User";
 
-            Client Client = GetGame().GetClientManager().GetClientByUserID(UserId);
+            GameClient Client = GetGame().GetClientManager().GetClientByUserID(UserId);
             if (Client != null && Client.GetUser() != null)
             {
                 return Client.GetUser().Username;
@@ -320,7 +320,7 @@ namespace WibboEmulator
         {
             try
             {
-                Client Client = GetGame().GetClientManager().GetClientByUserID(UserId);
+                GameClient Client = GetGame().GetClientManager().GetClientByUserID(UserId);
                 if (Client != null)
                 {
                     User User = Client.GetUser();

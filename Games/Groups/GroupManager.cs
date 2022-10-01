@@ -1,6 +1,6 @@
 ﻿using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Users;
+using WibboEmulator.Games.GameClients;
 using System.Collections.Concurrent;
 using System.Data;
 

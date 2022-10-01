@@ -1,6 +1,6 @@
 ﻿
 using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.WibboTool
 {
@@ -8,7 +8,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.WibboTool
     {
         public double Delay => 1000;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             if (Session == null || Session.GetUser() == null)
             {

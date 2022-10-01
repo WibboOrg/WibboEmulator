@@ -1,6 +1,6 @@
 ﻿using WibboEmulator.Communication.Packets.Incoming;
 using WibboEmulator.Core;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 using System.Collections.Concurrent;
 using System.Net;
@@ -191,7 +191,7 @@ namespace WibboEmulator.Communication.WebSocket
                     return;
                 }
 
-                Client client = WibboEnvironment.GetGame().GetClientManager().GetClientById(this.ID);
+                GameClient client = WibboEnvironment.GetGame().GetClientManager().GetClientById(this.ID);
 
                 if (client == null)
                     return;

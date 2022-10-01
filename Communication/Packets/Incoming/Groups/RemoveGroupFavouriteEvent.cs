@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
@@ -9,7 +9,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 250;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             Session.GetUser().FavouriteGroupId = 0;
 

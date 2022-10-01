@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalog.Utilities;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
@@ -11,7 +11,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
     {
         public double Delay => 1000;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             int SellingPrice = Packet.PopInt();
             int ComissionPrice = Packet.PopInt();

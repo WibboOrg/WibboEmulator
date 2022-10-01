@@ -1,5 +1,5 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Campaign;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Campaign
 {
@@ -7,7 +7,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Campaign
     {
         public double Delay => 0;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             string campaignName = Packet.PopString();
             int campaingnId = Packet.PopInt();

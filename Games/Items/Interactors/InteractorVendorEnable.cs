@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Games.Clients;
+﻿using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.PathFinding;
 
@@ -6,7 +6,7 @@ namespace WibboEmulator.Games.Items.Interactors
 {
     public class InteractorVendorEnable : FurniInteractor
     {
-        public override void OnPlace(Client Session, Item Item)
+        public override void OnPlace(GameClient Session, Item Item)
         {
             Item.ExtraData = "0";
             if (Item.InteractingUser <= 0)
@@ -17,7 +17,7 @@ namespace WibboEmulator.Games.Items.Interactors
             Item.InteractingUser = 0;
         }
 
-        public override void OnRemove(Client Session, Item Item)
+        public override void OnRemove(GameClient Session, Item Item)
         {
             Item.ExtraData = "0";
             if (Item.InteractingUser <= 0)
@@ -28,7 +28,7 @@ namespace WibboEmulator.Games.Items.Interactors
             Item.InteractingUser = 0;
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (!(Item.ExtraData != "1") || Item.GetBaseItem().VendingIds.Count < 1 || (Item.InteractingUser != 0 || Session == null))
             {

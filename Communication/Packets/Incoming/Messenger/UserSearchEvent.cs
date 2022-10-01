@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.Messenger;
-using WibboEmulator.Games.Clients;
-using WibboEmulator.Games.Users.Messenger;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.GameClients.Messenger;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
@@ -9,7 +9,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 1000;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             if (Session.GetUser().GetMessenger() == null)
             {

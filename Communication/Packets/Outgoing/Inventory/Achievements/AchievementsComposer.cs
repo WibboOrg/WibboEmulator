@@ -1,12 +1,12 @@
 using WibboEmulator.Games.Achievements;
-using WibboEmulator.Games.Users.Achievements;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients.Achievements;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements
 {
     internal class AchievementsComposer : ServerPacket
     {
-        public AchievementsComposer(Client Session, List<AchievementData> Achievements)
+        public AchievementsComposer(GameClient Session, List<AchievementData> Achievements)
             : base(ServerPacketHeader.ACHIEVEMENT_LIST)
         {
             this.WriteInteger(Achievements.Count);

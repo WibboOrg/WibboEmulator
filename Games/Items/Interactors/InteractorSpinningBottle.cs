@@ -1,21 +1,21 @@
-﻿using WibboEmulator.Games.Clients;
+﻿using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Games.Items.Interactors
 {
     public class InteractorSpinningBottle : FurniInteractor
     {
-        public override void OnPlace(Client Session, Item Item)
+        public override void OnPlace(GameClient Session, Item Item)
         {
             Item.ExtraData = "0";
             Item.UpdateState(true, false);
         }
 
-        public override void OnRemove(Client Session, Item Item)
+        public override void OnRemove(GameClient Session, Item Item)
         {
             Item.ExtraData = "0";
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (!(Item.ExtraData != "-1"))
             {

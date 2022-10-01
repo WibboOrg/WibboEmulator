@@ -2,14 +2,14 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion
 {
     internal class RoomBuy : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (Room.RoomData.SellPrice == 0)
             {
@@ -24,7 +24,7 @@ namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion
             Session.GetUser().WibboPoints -= Room.RoomData.SellPrice;
             Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
-            Client ClientOwner = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Room.RoomData.OwnerId);
+            GameClient ClientOwner = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Room.RoomData.OwnerId);
             if (ClientOwner != null && ClientOwner.GetUser() != null)
             {
                 ClientOwner.GetUser().WibboPoints += Room.RoomData.SellPrice;

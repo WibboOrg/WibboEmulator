@@ -1,11 +1,11 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class KickAll : IChatCommand
     {
-        public void Execute(Client session, Room room, RoomUser userRoom, string[] parameters)
+        public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
         {
             List<RoomUser> roomUserList = new List<RoomUser>();
             foreach (RoomUser user in room.GetRoomUserManager().GetUserList().ToList())

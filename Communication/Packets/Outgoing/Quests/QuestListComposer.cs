@@ -1,11 +1,11 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Quests
 {
     internal class QuestListComposer : ServerPacket
     {
-        public QuestListComposer(Dictionary<string, Quest> quests, Client session, bool send)
+        public QuestListComposer(Dictionary<string, Quest> quests, GameClient session, bool send)
             : base(ServerPacketHeader.QUESTS)
         {
             WriteInteger(quests.Count);
@@ -28,7 +28,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Quests
             WriteBoolean(send);
         }
 
-        private void SerializeQuest(Client Session, Quest Quest, string Category)
+        private void SerializeQuest(GameClient Session, Quest Quest, string Category)
         {
             int questsInCategory = WibboEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(Category);
             int i = Quest == null ? questsInCategory : Quest.Number - 1;

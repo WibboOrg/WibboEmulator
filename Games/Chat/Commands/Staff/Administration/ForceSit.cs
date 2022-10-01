@@ -1,11 +1,11 @@
 ﻿using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class ForceSit : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (Params.Length == 1)
                 return;

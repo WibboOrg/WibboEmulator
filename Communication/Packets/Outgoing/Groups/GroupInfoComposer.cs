@@ -1,11 +1,11 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Groups
 {
     internal class GroupInfoComposer : ServerPacket
     {
-        public GroupInfoComposer(Group Group, Client Session, bool NewWindow = false)
+        public GroupInfoComposer(Group Group, GameClient Session, bool NewWindow = false)
             : base(ServerPacketHeader.GROUP_INFO)
         {
             DateTime Origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(Group.CreateTime);

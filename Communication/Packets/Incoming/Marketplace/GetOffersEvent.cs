@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalog.Marketplace;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using System.Data;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
@@ -11,7 +11,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
     {
         public double Delay => 0;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             int MinCost = Packet.PopInt();
             int MaxCost = Packet.PopInt();

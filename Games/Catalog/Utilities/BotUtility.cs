@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.AI;
-using WibboEmulator.Games.Users.Inventory.Bots;
+using WibboEmulator.Games.GameClients.Inventory.Bots;
 using System.Data;
 
 namespace WibboEmulator.Games.Catalog.Utilities

@@ -6,7 +6,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalog;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Loots;
 using WibboEmulator.Games.Rooms;
 
@@ -14,7 +14,7 @@ namespace WibboEmulator.Games.Items
 {
     internal static class ItemLootBox
     {
-        public static void OpenLootBox(Client session, Item present, Room room)
+        public static void OpenLootBox(GameClient session, Item present, Room room)
         {
             List<Loot> loots = WibboEnvironment.GetGame().GetLootManager().GetLoots(present.GetBaseItem().InteractionType);
 
@@ -48,7 +48,7 @@ namespace WibboEmulator.Games.Items
         private static readonly int ProbalilityCommun = 50;
         private static readonly int ProbalilityBasic = 5;
 
-        public static void OpenExtrabox(Client session, Item present, Room room)
+        public static void OpenExtrabox(GameClient session, Item present, Room room)
         {
             int pageId;
             int forceItem = 0;
@@ -69,7 +69,7 @@ namespace WibboEmulator.Games.Items
             EndOpenBox(session, present, room, pageId, forceItem);
         }
 
-        public static void OpenLootBox2022(Client session, Item present, Room room)
+        public static void OpenLootBox2022(GameClient session, Item present, Room room)
         {
             int pageId;
             int forceItem = 0;
@@ -115,7 +115,7 @@ namespace WibboEmulator.Games.Items
             EndOpenBox(session, present, room, pageId, forceItem);
         }
 
-        public static void OpenDeluxeBox(Client session, Item present, Room room)
+        public static void OpenDeluxeBox(GameClient session, Item present, Room room)
         {
             int pageId = 0;
             int forceItem = 0;
@@ -136,7 +136,7 @@ namespace WibboEmulator.Games.Items
             EndOpenBox(session, present, room, pageId, forceItem);
         }
 
-        public static void OpenBadgeBox(Client session, Item present, Room room)
+        public static void OpenBadgeBox(GameClient session, Item present, Room room)
         {
             //Présentoir et badge
             int pageId = 987987;
@@ -165,7 +165,7 @@ namespace WibboEmulator.Games.Items
             EndOpenBox(session, present, room, pageId, 0, BadgeCode);
         }
 
-        public static void OpenLegendBox(Client session, Item present, Room room)
+        public static void OpenLegendBox(GameClient session, Item present, Room room)
         {
             int pageId = 0;
             string badgeCode = "";
@@ -257,7 +257,7 @@ namespace WibboEmulator.Games.Items
             EndOpenBox(session, present, room, pageId, forceItem);
         }
 
-        private static void EndOpenBox(Client session, Item present, Room room, int pageId, int forceItem = 0, string extraData = "")
+        private static void EndOpenBox(GameClient session, Item present, Room room, int pageId, int forceItem = 0, string extraData = "")
         {
             WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out CatalogPage page);
             if (page == null)

@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.Roleplay;
 using WibboEmulator.Games.Roleplay.Player;
@@ -41,7 +41,7 @@ namespace WibboEmulator.Games.Rooms
 
         public bool AllowMoveToRoller;
 
-        private Client Client;
+        private GameClient Client;
 
         public RoomBot BotData;
         public Pet PetData;
@@ -503,7 +503,7 @@ namespace WibboEmulator.Games.Rooms
             }
         }
 
-        public Client GetClient()
+        public GameClient GetClient()
         {
             if (this.IsBot)
             {

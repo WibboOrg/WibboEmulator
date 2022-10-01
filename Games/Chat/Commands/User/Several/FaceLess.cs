@@ -1,12 +1,12 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class FaceLess : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (UserRoom.IsTransf || UserRoom.IsSpectator)
             {

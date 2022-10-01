@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Games.Clients;
+﻿using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 using WibboEmulator.Games.Rooms;
 
@@ -19,7 +19,7 @@ namespace WibboEmulator.Games.Items.Interactors
             this.Modes = 0;
         }
 
-        public override void OnPlace(Client Session, Item Item)
+        public override void OnPlace(GameClient Session, Item Item)
         {
             if (string.IsNullOrEmpty(Item.ExtraData) && this.Modes > 0)
             {
@@ -27,7 +27,7 @@ namespace WibboEmulator.Games.Items.Interactors
             }
         }
 
-        public override void OnRemove(Client Session, Item Item)
+        public override void OnRemove(GameClient Session, Item Item)
         {
             if (string.IsNullOrEmpty(Item.ExtraData) && this.Modes > 0)
             {
@@ -35,7 +35,7 @@ namespace WibboEmulator.Games.Items.Interactors
             }
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (Session != null)
             {

@@ -1,9 +1,9 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Users;
+using WibboEmulator.Games.GameClients;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
@@ -163,7 +163,7 @@ namespace WibboEmulator.Games.Moderation
             }
         }
 
-        public void SendNewTicket(Client Session, int Category, int ReportedUser, string Message)
+        public void SendNewTicket(GameClient Session, int Category, int ReportedUser, string Message)
         {
             RoomData roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(Session.GetUser().CurrentRoomId);
             int Id = 0;
@@ -180,7 +180,7 @@ namespace WibboEmulator.Games.Moderation
             SendTicketToModerators(Ticket);
         }
 
-        public void ApplySanction(Client Session, int ReportedUser)
+        public void ApplySanction(GameClient Session, int ReportedUser)
         {
             if (ReportedUser == 0)
             {
@@ -233,7 +233,7 @@ namespace WibboEmulator.Games.Moderation
 
         public List<string> RoomMessagePresets() => this._roomMessagePresets;
 
-        public void PickTicket(Client Session, int TicketId)
+        public void PickTicket(GameClient Session, int TicketId)
         {
             ModerationTicket ticket = this.GetTicket(TicketId);
             if (ticket == null || ticket.Status != TicketStatusType.OPEN)
@@ -245,7 +245,7 @@ namespace WibboEmulator.Games.Moderation
             SendTicketToModerators(ticket);
         }
 
-        public void ReleaseTicket(Client Session, int TicketId)
+        public void ReleaseTicket(GameClient Session, int TicketId)
         {
             ModerationTicket ticket = this.GetTicket(TicketId);
             if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != Session.GetUser().Id)
@@ -257,7 +257,7 @@ namespace WibboEmulator.Games.Moderation
             SendTicketToModerators(ticket);
         }
 
-        public void CloseTicket(Client Session, int TicketId, int Result)
+        public void CloseTicket(GameClient Session, int TicketId, int Result)
         {
             ModerationTicket ticket = this.GetTicket(TicketId);
             if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != Session.GetUser().Id)
@@ -265,7 +265,7 @@ namespace WibboEmulator.Games.Moderation
                 return;
             }
 
-            Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(ticket.SenderId);
+            GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(ticket.SenderId);
 
             TicketStatusType NewStatus;
             string MessageAlert;
@@ -328,7 +328,7 @@ namespace WibboEmulator.Games.Moderation
             LogCommandDao.Insert(dbClient, userId, modName, roomId, target, type, description + " " + target);
         }
 
-        public static void PerformRoomAction(Client modSession, int roomId, bool kickUsers, bool lockRoom, bool inappropriateRoom)
+        public static void PerformRoomAction(GameClient modSession, int roomId, bool kickUsers, bool lockRoom, bool inappropriateRoom)
         {
             if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room room))
                 return;
@@ -359,9 +359,9 @@ namespace WibboEmulator.Games.Moderation
             room.SendPacket(new GetGuestRoomResultComposer(modSession, room.RoomData, false, false));
         }
 
-        public static void KickUser(Client ModSession, int UserId, string Message, bool Soft)
+        public static void KickUser(GameClient ModSession, int UserId, string Message, bool Soft)
         {
-            Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+            GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
             if (clientByUserId == null || clientByUserId.GetUser().CurrentRoomId < 1 || clientByUserId.GetUser().Id == ModSession.GetUser().Id)
             {
                 return;
@@ -394,9 +394,9 @@ namespace WibboEmulator.Games.Moderation
             }
         }
 
-        public static void BanUser(Client ModSession, int UserId, int Length, string Message)
+        public static void BanUser(GameClient ModSession, int UserId, int Length, string Message)
         {
-            Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+            GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
             if (clientByUserId == null || clientByUserId.GetUser().Id == ModSession.GetUser().Id)
             {
                 return;

@@ -19,13 +19,13 @@ using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Help;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Users;
-using WibboEmulator.Games.Users.Authenticator;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.GameClients.Authenticator;
 using WibboEmulator.Utilities;
 
-namespace WibboEmulator.Games.Clients
+namespace WibboEmulator.Games.GameClients
 {
-    public class Client
+    public class GameClient
     {
         private GameWebSocket _connection;
         private User _user;
@@ -40,7 +40,7 @@ namespace WibboEmulator.Games.Clients
         public string ConnectionID;
         public bool ShowGameAlert;
 
-        public Client(string ClientId, GameWebSocket connection)
+        public GameClient(string ClientId, GameWebSocket connection)
         {
             this.ConnectionID = ClientId;
             this.Langue = Language.FRANCAIS;
@@ -229,7 +229,7 @@ namespace WibboEmulator.Games.Clients
                         LogChatPubDao.Insert(dbClient, this.GetUser().Id, "A vérifié: " + type + Message, this.GetUser().Username);
                     }
 
-                    foreach (Client Client in WibboEnvironment.GetGame().GetClientManager().GetStaffUsers())
+                    foreach (GameClient Client in WibboEnvironment.GetGame().GetClientManager().GetStaffUsers())
                     {
                         if (Client == null || Client.GetUser() == null)
                         {
@@ -268,7 +268,7 @@ namespace WibboEmulator.Games.Clients
                 WibboEnvironment.GetGame().GetClientManager().BanUser(this, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.GetUser().Username, true, false);
             }
 
-            foreach (Client Client in WibboEnvironment.GetGame().GetClientManager().GetStaffUsers())
+            foreach (GameClient Client in WibboEnvironment.GetGame().GetClientManager().GetStaffUsers())
             {
                 if (Client == null || Client.GetUser() == null)
                 {

@@ -2,18 +2,18 @@
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalog;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using System.Data;
 using WibboEmulator.Games.Rooms;
 using System.Text;
-using WibboEmulator.Games.Users;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class LootboxInfo : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             int basicCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(1);
             int communCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(2);

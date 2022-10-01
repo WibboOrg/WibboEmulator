@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
@@ -9,7 +9,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 250;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             if (Session.GetUser() == null)
             {
@@ -27,7 +27,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             string username = Packet.PopString();
             bool allowUserToEnter = Packet.PopBoolean();
 
-            Client clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
+            GameClient clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
             if (clientByUsername == null || clientByUsername.GetUser() == null)
             {
                 return;

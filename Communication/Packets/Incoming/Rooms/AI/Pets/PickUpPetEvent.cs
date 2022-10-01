@@ -2,7 +2,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.Rooms;
 using System.Drawing;
@@ -13,7 +13,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 250;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             if (!Session.GetUser().InRoom)
             {
@@ -98,7 +98,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             if (pet.OwnerId != Session.GetUser().Id)
             {
-                Client Target = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(pet.OwnerId);
+                GameClient Target = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(pet.OwnerId);
                 if (Target != null)
                 {
                     Target.GetUser().GetInventoryComponent().TryAddPet(Pet.PetData);

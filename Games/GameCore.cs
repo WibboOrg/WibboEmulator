@@ -3,7 +3,7 @@ using WibboEmulator.Core;
 using WibboEmulator.Games.Achievements;
 using WibboEmulator.Games.Animations;
 using WibboEmulator.Games.Catalog;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Help;
 using WibboEmulator.Games.Items;

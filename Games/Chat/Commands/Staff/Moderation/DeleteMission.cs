@@ -1,14 +1,14 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class DeleteMission : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (Params.Length != 2)
             {
@@ -16,7 +16,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
             }
 
             string username = Params[1];
-            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
+            GameClient TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
             if (TargetUser == null)
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));

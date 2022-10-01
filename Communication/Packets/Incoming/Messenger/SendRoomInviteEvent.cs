@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Communication.Packets.Outgoing.Messenger;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
@@ -9,7 +9,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 1000;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             TimeSpan timeSpan = DateTime.Now - Session.GetUser().FloodTime;
             if (timeSpan.Seconds > 4)
@@ -64,7 +64,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             {
                 if (Session.GetUser().GetMessenger().FriendshipExists(UserId))
                 {
-                    Client clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+                    GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
                     if (clientByUserId == null || clientByUserId.GetUser().IgnoreRoomInvites)
                     {
                         break;

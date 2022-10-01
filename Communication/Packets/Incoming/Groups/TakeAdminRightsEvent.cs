@@ -1,10 +1,10 @@
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
-using WibboEmulator.Games.Clients;using WibboEmulator.Games.Groups;using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Users;namespace WibboEmulator.Communication.Packets.Incoming.Structure{    internal class TakeAdminRightsEvent : IPacketEvent    {
+using WibboEmulator.Games.GameClients;using WibboEmulator.Games.Groups;using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.GameClients;namespace WibboEmulator.Communication.Packets.Incoming.Structure{    internal class TakeAdminRightsEvent : IPacketEvent    {
         public double Delay => 100;
 
-        public void Parse(Client Session, ClientPacket Packet)        {            int GroupId = Packet.PopInt();
+        public void Parse(GameClient Session, ClientPacket Packet)        {            int GroupId = Packet.PopInt();
             int UserId = Packet.PopInt();
 
             if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))

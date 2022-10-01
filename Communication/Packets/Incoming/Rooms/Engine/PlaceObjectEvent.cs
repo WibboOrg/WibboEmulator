@@ -2,7 +2,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Quests;
@@ -14,7 +14,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 200;
 
-        public void Parse(Client session, ClientPacket Packet)
+        public void Parse(GameClient session, ClientPacket Packet)
         {
             if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
             {

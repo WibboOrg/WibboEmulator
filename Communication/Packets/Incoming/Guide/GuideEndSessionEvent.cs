@@ -1,5 +1,5 @@
 using WibboEmulator.Communication.Packets.Outgoing.Help;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Guide
 {
@@ -7,9 +7,9 @@ namespace WibboEmulator.Communication.Packets.Incoming.Guide
     {
         public double Delay => 0;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
-            Client requester = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
+            GameClient requester = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
 
             Session.SendPacket(new OnGuideSessionEndedComposer(1));
 

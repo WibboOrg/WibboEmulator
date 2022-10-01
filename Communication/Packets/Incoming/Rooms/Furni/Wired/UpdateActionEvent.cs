@@ -1,5 +1,5 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Rooms;
@@ -10,7 +10,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 250;
 
-        public void Parse(Client session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             Room room = session.GetUser().CurrentRoom;
             if (room == null)

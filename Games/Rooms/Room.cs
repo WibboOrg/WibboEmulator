@@ -5,7 +5,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.Roleplay;
@@ -445,7 +445,7 @@ namespace WibboEmulator.Games.Rooms
             }
         }
 
-        public int GetRightsLevel(Client Session)
+        public int GetRightsLevel(GameClient Session)
         {
             if (Session == null || Session.GetUser() == null)
             {
@@ -475,7 +475,7 @@ namespace WibboEmulator.Games.Rooms
             return 0;
         }
 
-        public bool CheckRights(Client Session, bool RequireOwnership = false)
+        public bool CheckRights(GameClient Session, bool RequireOwnership = false)
         {
             if (Session == null || Session.GetUser() == null)
             {
@@ -520,7 +520,7 @@ namespace WibboEmulator.Games.Rooms
             return false;
         }
 
-        public void SendObjects(Client Session)
+        public void SendObjects(GameClient Session)
         {
             ServerPacketList packetList = new ServerPacketList();
 

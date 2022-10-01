@@ -1,12 +1,12 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
-using WibboEmulator.Games.Users;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Users
 {
     internal class ProfileInformationComposer : ServerPacket
     {
-        public ProfileInformationComposer(User habbo, Client session, List<Group> groups, int friendCount)
+        public ProfileInformationComposer(User habbo, GameClient session, List<Group> groups, int friendCount)
             : base(ServerPacketHeader.USER_PROFILE)
         {
             DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0).AddSeconds(habbo.AccountCreated);

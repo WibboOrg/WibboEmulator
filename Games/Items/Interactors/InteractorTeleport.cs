@@ -1,12 +1,12 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Items.Interactors
 {
     public class InteractorTeleport : FurniInteractor
     {
-        public override void OnPlace(Client Session, Item Item)
+        public override void OnPlace(GameClient Session, Item Item)
         {
             Item.ExtraData = "0";
 
@@ -36,7 +36,7 @@ namespace WibboEmulator.Games.Items.Interactors
             Item.InteractingUser2 = 0;
         }
 
-        public override void OnRemove(Client Session, Item Item)
+        public override void OnRemove(GameClient Session, Item Item)
         {
             Item.ExtraData = "0";
 
@@ -65,7 +65,7 @@ namespace WibboEmulator.Games.Items.Interactors
             Item.InteractingUser2 = 0;
         }
 
-        public override void OnTrigger(Client Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
             if (Item == null || Item.GetRoom() == null || (Session == null || Session.GetUser() == null))
             {

@@ -1,5 +1,5 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Camera;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Camera
@@ -8,7 +8,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
     {
         public double Delay => 200;
 
-        public void Parse(Client session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             string photoId = packet.PopString();
 

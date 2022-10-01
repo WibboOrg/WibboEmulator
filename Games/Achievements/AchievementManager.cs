@@ -3,10 +3,10 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using System.Data;
-using WibboEmulator.Games.Users.Achievements;
+using WibboEmulator.Games.GameClients.Achievements;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 
 namespace WibboEmulator.Games.Achievements
@@ -50,12 +50,12 @@ namespace WibboEmulator.Games.Achievements
             }
         }
 
-        public void GetList(Client Session)
+        public void GetList(GameClient Session)
         {
             Session.SendPacket(new AchievementsComposer(Session, this._achievements.Values.ToList()));
         }
 
-        public bool ProgressAchievement(Client Session, string AchievementGroup, int ProgressAmount)
+        public bool ProgressAchievement(GameClient Session, string AchievementGroup, int ProgressAmount)
         {
             if (!this._achievements.ContainsKey(AchievementGroup))
             {

@@ -1,4 +1,4 @@
-using WibboEmulator.Games.Users.Inventory.Bots;
+using WibboEmulator.Games.GameClients.Inventory.Bots;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots
 {

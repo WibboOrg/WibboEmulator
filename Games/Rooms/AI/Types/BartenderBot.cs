@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Games.Clients;
+﻿using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.AI.Responses;
 using System.Drawing;
 
@@ -27,7 +27,7 @@ namespace WibboEmulator.Games.Rooms.AI.Types
         {
         }
 
-        public override void OnUserLeaveRoom(Client Client)
+        public override void OnUserLeaveRoom(GameClient Client)
         {
         }
 

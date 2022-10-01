@@ -3,7 +3,7 @@ using WibboEmulator.Database.Interfaces;
 using System.Collections;
 using System.Data;
 
-namespace WibboEmulator.Games.Users.Badges
+namespace WibboEmulator.Games.GameClients.Badges
 {
     public class BadgeComponent : IDisposable
     {

@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Games.Clients;
+﻿using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Camera
 {
@@ -6,7 +6,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
     {
         public double Delay => 5000;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
 
         }

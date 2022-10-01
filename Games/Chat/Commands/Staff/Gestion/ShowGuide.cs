@@ -1,4 +1,4 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Help;
 using System.Text;
 using WibboEmulator.Games.Rooms;
@@ -7,7 +7,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class ShowGuide : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             HelpManager guideManager = WibboEnvironment.GetGame().GetHelpManager();
             if (guideManager.GuidesCount <= 0)
@@ -21,7 +21,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 stringBuilder.Append("Guide en service (" + guideManager.GuidesCount + "):\r\r");
                 foreach (KeyValuePair<int, bool> entry in guideManager.GuidesOnDuty)
                 {
-                    Client guide = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(entry.Key);
+                    GameClient guide = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(entry.Key);
                     if (guide == null)
                     {
                         continue;

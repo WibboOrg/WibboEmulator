@@ -1,15 +1,15 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Pets;
-using WibboEmulator.Games.Users.Inventory.Bots;
+using WibboEmulator.Games.GameClients.Inventory.Bots;
 using System.Collections.Concurrent;
 using System.Data;
 using WibboEmulator.Utilities;
 
-namespace WibboEmulator.Games.Users.Inventory
+namespace WibboEmulator.Games.GameClients.Inventory
 {
     public class InventoryComponent : IDisposable
     {
@@ -287,7 +287,7 @@ namespace WibboEmulator.Games.Users.Inventory
 
         public IEnumerable<Item> GetWallAndFloor => this._userItems.Values;
 
-        private Client GetClient()
+        private GameClient GetClient()
         {
             return WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
         }

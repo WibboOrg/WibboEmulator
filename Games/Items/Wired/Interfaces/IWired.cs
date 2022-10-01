@@ -1,5 +1,5 @@
 ﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using System.Data;
 
 namespace WibboEmulator.Games.Items.Wired.Interfaces
@@ -12,7 +12,7 @@ namespace WibboEmulator.Games.Items.Wired.Interfaces
 
         void LoadFromDatabase(DataRow row);
 
-        void OnTrigger(Client Session);
+        void OnTrigger(GameClient Session);
 
         void Init(List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod);
 

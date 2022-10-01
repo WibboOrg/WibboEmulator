@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Games.Clients;
+﻿using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Items.Wired
@@ -61,7 +61,7 @@ namespace WibboEmulator.Games.Items.Wired
             this.IsGod = isGod;
         }
 
-        public virtual void OnTrigger(Client Session)
+        public virtual void OnTrigger(GameClient Session)
         {
             
         }

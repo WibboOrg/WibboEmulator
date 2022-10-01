@@ -1,7 +1,7 @@
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
-using WibboEmulator.Games.Users;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {

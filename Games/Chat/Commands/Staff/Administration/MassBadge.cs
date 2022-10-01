@@ -1,12 +1,12 @@
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class MassBadge : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             string Badge = Params[1];
 
@@ -15,7 +15,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            foreach (Client Client in WibboEnvironment.GetGame().GetClientManager().GetClients.ToList())
+            foreach (GameClient Client in WibboEnvironment.GetGame().GetClientManager().GetClients.ToList())
             {
                 if (Client.GetUser() != null)
                 {

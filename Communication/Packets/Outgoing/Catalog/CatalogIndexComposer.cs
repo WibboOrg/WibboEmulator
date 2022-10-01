@@ -1,12 +1,12 @@
 using WibboEmulator.Core;
 using WibboEmulator.Games.Catalog;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Catalog
 {
     internal class CatalogIndexComposer : ServerPacket
     {
-        public CatalogIndexComposer(Client Session, ICollection<CatalogPage> Pages, int Sub = 0)
+        public CatalogIndexComposer(GameClient Session, ICollection<CatalogPage> Pages, int Sub = 0)
              : base(ServerPacketHeader.CATALOG_PAGE_LIST)
         {
             this.WriteRootIndex(Session, Pages);
@@ -76,7 +76,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Catalog
             this.WriteString("NORMAL");
         }
 
-        public void WriteRootIndex(Client session, ICollection<CatalogPage> pages)
+        public void WriteRootIndex(GameClient session, ICollection<CatalogPage> pages)
         {
             this.WriteBoolean(true);
             this.WriteInteger(0);
@@ -116,7 +116,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Catalog
             this.WriteInteger(treeSize);
         }
 
-        public int CalcTreeSize(Client Session, ICollection<CatalogPage> Pages, int ParentId)
+        public int CalcTreeSize(GameClient Session, ICollection<CatalogPage> Pages, int ParentId)
         {
             int i = 0;
             foreach (CatalogPage Page in Pages)

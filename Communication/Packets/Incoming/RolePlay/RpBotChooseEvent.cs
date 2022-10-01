@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Games.Clients;
+﻿using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.Packets.Incoming.RolePlay
@@ -7,7 +7,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.RolePlay
     {
         public double Delay => 250;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             string Message = Packet.PopString();
 

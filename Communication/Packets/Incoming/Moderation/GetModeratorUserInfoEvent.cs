@@ -1,7 +1,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using System.Data;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
@@ -10,7 +10,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 0;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             if (!Session.GetUser().HasPermission("perm_mod"))
             {
@@ -20,7 +20,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             int userId = Packet.PopInt();
             if (WibboEnvironment.GetGame().GetClientManager().GetNameById(userId) != "")
             {
-                Client client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+                GameClient client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
                 DataRow user = null;
                 DataRow info = null;
 

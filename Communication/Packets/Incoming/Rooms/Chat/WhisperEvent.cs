@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Chat.Styles;
 using WibboEmulator.Utilities;
@@ -11,7 +11,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 100;
 
-        public void Parse(Client session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             if (session == null || session.GetUser() == null)
             {

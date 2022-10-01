@@ -1,13 +1,13 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class AllFriends : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            foreach (Client User in WibboEnvironment.GetGame().GetClientManager().GetClients)
+            foreach (GameClient User in WibboEnvironment.GetGame().GetClientManager().GetClients)
             {
                 if (User == null)
                 {

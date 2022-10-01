@@ -1,5 +1,5 @@
 ﻿using WibboEmulator.Core;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Permissions
@@ -23,7 +23,7 @@ namespace WibboEmulator.Games.Permissions
             this.DescriptionBr = descriptionBr;
         }
 
-        public bool UserGotAuthorization(Client session, Room room)
+        public bool UserGotAuthorization(GameClient session, Room room)
         {
             if (this.MinRank == 0)
             {
@@ -65,7 +65,7 @@ namespace WibboEmulator.Games.Permissions
             return false;
         }
 
-        public int UserGotAuthorizationType(Client session, Room room)
+        public int UserGotAuthorizationType(GameClient session, Room room)
         {
             if (this.MinRank == 0)
             {

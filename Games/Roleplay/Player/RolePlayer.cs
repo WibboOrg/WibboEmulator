@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Roleplay.Weapon;
 using WibboEmulator.Games.Rooms;
@@ -195,7 +195,7 @@ namespace WibboEmulator.Games.Roleplay.Player
 
         public void SendPacket(IServerPacket Message)
         {
-            Client session = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._id);
+            GameClient session = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._id);
             if (session != null)
             {
                 session.SendPacket(Message);

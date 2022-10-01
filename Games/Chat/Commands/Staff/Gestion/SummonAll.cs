@@ -1,14 +1,14 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Navigator;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class SummonAll : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            foreach (Client Client in WibboEnvironment.GetGame().GetClientManager().GetClients.ToList())
+            foreach (GameClient Client in WibboEnvironment.GetGame().GetClientManager().GetClients.ToList())
             {
                 if (Client.GetUser() != null)
                 {

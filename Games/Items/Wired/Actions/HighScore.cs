@@ -1,6 +1,6 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using System.Data;
@@ -99,7 +99,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             }
         }
 
-        public override void OnTrigger(Client Session)
+        public override void OnTrigger(GameClient Session)
         {
             int.TryParse(this.ItemInstance.ExtraData, out int NumMode);
 

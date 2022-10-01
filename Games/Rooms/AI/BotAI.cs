@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Games.Clients;
+﻿using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Games.Rooms.AI
 {
@@ -47,7 +47,7 @@ namespace WibboEmulator.Games.Rooms.AI
 
         public abstract void OnUserEnterRoom(RoomUser User);
 
-        public abstract void OnUserLeaveRoom(Client Client);
+        public abstract void OnUserLeaveRoom(GameClient Client);
 
         public abstract void OnUserSay(RoomUser User, string Message);
 

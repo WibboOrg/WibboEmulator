@@ -1,11 +1,11 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
 {
     internal class GetGuestRoomResultComposer : ServerPacket
     {
-        public GetGuestRoomResultComposer(Client Session, RoomData Data, bool isLoading, bool checkEntry)
+        public GetGuestRoomResultComposer(GameClient Session, RoomData Data, bool isLoading, bool checkEntry)
             : base(ServerPacketHeader.ROOM_INFO)
         {
             this.WriteBoolean(isLoading);

@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Rooms.Map.Movement;
@@ -60,7 +60,7 @@ namespace WibboEmulator.Games.Rooms
             this._roomItemUpdateQueue.Enqueue(item);
         }
 
-        public List<Item> RemoveAllFurniture(Client Session)
+        public List<Item> RemoveAllFurniture(GameClient Session)
         {
             ServerPacketList listMessage = new ServerPacketList();
             List<Item> items = new List<Item>();
@@ -263,7 +263,7 @@ namespace WibboEmulator.Games.Rooms
 
         public IEnumerable<Item> GetWallAndFloor => this._floorItems.Values.Concat(this._wallItems.Values);
 
-        public void RemoveFurniture(Client Session, int pId)
+        public void RemoveFurniture(GameClient Session, int pId)
         {
             Item roomItem = this.GetItem(pId);
             if (roomItem == null)
@@ -503,7 +503,7 @@ namespace WibboEmulator.Games.Rooms
             return Item;
         }
 
-        public bool SetFloorItem(Client Session, Item Item, int newX, int newY, int newRot, bool newItem, bool OnRoller, bool sendMessage)
+        public bool SetFloorItem(GameClient Session, Item Item, int newX, int newY, int newRot, bool newItem, bool OnRoller, bool sendMessage)
         {
             bool NeedsReAdd = false;
             if (!newItem)
@@ -712,7 +712,7 @@ namespace WibboEmulator.Games.Rooms
             return true;
         }
 
-        public bool SetWallItem(Client Session, Item Item)
+        public bool SetWallItem(GameClient Session, Item Item)
         {
             if (!Item.IsWallItem || this._wallItems.ContainsKey(Item.Id))
             {

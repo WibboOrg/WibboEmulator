@@ -1,11 +1,11 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Navigator;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Navigator.New
 {
     internal class NavigatorSearchResultSetComposer : ServerPacket
     {
-        public NavigatorSearchResultSetComposer(string Category, string Data, ICollection<SearchResultList> SearchResultLists, Client Session, int GoBack = 1, int FetchLimit = 12)
+        public NavigatorSearchResultSetComposer(string Category, string Data, ICollection<SearchResultList> SearchResultLists, GameClient Session, int GoBack = 1, int FetchLimit = 12)
             : base(ServerPacketHeader.NAVIGATOR_SEARCH)
         {
             this.WriteString(Category);//Search code.

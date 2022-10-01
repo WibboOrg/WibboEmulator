@@ -1,13 +1,13 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Communication.Packets.Outgoing.Avatar;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class Mimic : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (Room.IsRoleplay && !Room.CheckRights(Session))
             {
@@ -21,7 +21,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
 
             string Username = Params[1];
 
-            Client TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Username);
+            GameClient TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Username);
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 RoomUser Bot = Room.GetRoomUserManager().GetBotByName(Username);

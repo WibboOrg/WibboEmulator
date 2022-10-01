@@ -1,12 +1,12 @@
 ﻿using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class Dance : IChatCommand
     {
-        public void Execute(Client session, Room room, RoomUser user, string[] parameters)
+        public void Execute(GameClient session, Room room, RoomUser user, string[] parameters)
         {
             if (parameters.Length < 2)
             {

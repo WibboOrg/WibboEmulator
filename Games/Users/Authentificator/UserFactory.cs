@@ -3,7 +3,7 @@ using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Games.Users.Authenticator
+namespace WibboEmulator.Games.GameClients.Authenticator
 {
     public class UserFactory
     {

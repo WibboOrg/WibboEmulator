@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
 using System.Data;
@@ -10,7 +10,7 @@ namespace WibboEmulator.Games.Navigator
 {
     internal static class NavigatorHandler
     {
-        public static void Search(ServerPacket Message, SearchResultList SearchResult, string SearchData, Client Session, int FetchLimit)
+        public static void Search(ServerPacket Message, SearchResultList SearchResult, string SearchData, GameClient Session, int FetchLimit)
         {
             //Switching by categorys.
             switch (SearchResult.CategoryType)

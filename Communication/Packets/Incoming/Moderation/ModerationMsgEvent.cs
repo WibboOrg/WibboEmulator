@@ -1,4 +1,4 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
@@ -6,7 +6,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 0;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             if (!Session.GetUser().HasPermission("perm_alert"))
             {
@@ -16,7 +16,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             int userId = Packet.PopInt();
             string message = Packet.PopString();
 
-            Client clientTarget = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            GameClient clientTarget = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
             if (clientTarget == null)
                 return;
 

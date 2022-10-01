@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Games.Clients;
+﻿using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
 namespace WibboEmulator.Games.Rooms.Trading
@@ -28,7 +28,7 @@ namespace WibboEmulator.Games.Rooms.Trading
             return room.GetRoomUserManager().GetRoomUserByUserId(this.UserId);
         }
 
-        public Client GetClient()
+        public GameClient GetClient()
         {
             return WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
         }

@@ -1,7 +1,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
@@ -9,7 +9,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class GiveLot : IChatCommand
     {
-        public void Execute(Client session, Room room, RoomUser user, string[] parts)
+        public void Execute(GameClient session, Room room, RoomUser user, string[] parts)
         {
             if (parts.Length != 2)
             {

@@ -1,4 +1,4 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
@@ -25,7 +25,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
             this.WriteInteger(0);
         }
 
-        public UserChangeComposer(Client Client)
+        public UserChangeComposer(GameClient Client)
             : base(ServerPacketHeader.UNIT_INFO)
         {
             this.WriteInteger(-1);

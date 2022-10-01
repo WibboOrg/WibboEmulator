@@ -1,4 +1,4 @@
-using WibboEmulator.Games.Users.Wardrobes;
+using WibboEmulator.Games.GameClients.Wardrobes;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Avatar
 {

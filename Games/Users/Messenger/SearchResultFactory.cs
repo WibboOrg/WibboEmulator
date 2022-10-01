@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Games.Users.Messenger
+namespace WibboEmulator.Games.GameClients.Messenger
 {
     public class SearchResultFactory
     {

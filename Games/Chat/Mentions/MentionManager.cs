@@ -2,7 +2,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 
 
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using System.Text.RegularExpressions;
 
 namespace WibboEmulator.Games.Chat.Mentions
@@ -14,7 +14,7 @@ namespace WibboEmulator.Games.Chat.Mentions
         public string StylePrefix = "[tag]";
         public string StyleSuffix = "[/tag]";
 
-        public string Parse(Client Session, string Message)
+        public string Parse(GameClient Session, string Message)
         {
             string StyledMessage = Message;
 
@@ -60,9 +60,9 @@ namespace WibboEmulator.Games.Chat.Mentions
             return StyledMessage;
         }
 
-        public bool SendNotif(Client Session, string TargetUsername, string Message)
+        public bool SendNotif(GameClient Session, string TargetUsername, string Message)
         {
-            Client TargetClient = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(TargetUsername);
+            GameClient TargetClient = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(TargetUsername);
 
             if (TargetClient == null)
             {
@@ -90,7 +90,7 @@ namespace WibboEmulator.Games.Chat.Mentions
             return true;
         }
 
-        public bool EveryoneFriend(Client Session, string Message)
+        public bool EveryoneFriend(GameClient Session, string Message)
         {
             if (Session.GetUser().Rank < 2)
             {
@@ -107,14 +107,14 @@ namespace WibboEmulator.Games.Chat.Mentions
 
             Session.GetUser().EveryoneTimer = DateTime.Now;
 
-            List<Client> onlineUsers = WibboEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetUser().GetMessenger().Friends.Keys);
+            List<GameClient> onlineUsers = WibboEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetUser().GetMessenger().Friends.Keys);
 
             if (onlineUsers == null)
             {
                 return false;
             }
 
-            foreach (Client TargetClient in onlineUsers)
+            foreach (GameClient TargetClient in onlineUsers)
             {
                 if (TargetClient != null && TargetClient.GetUser() != null && TargetClient.GetUser().GetMessenger() != null)
                 {

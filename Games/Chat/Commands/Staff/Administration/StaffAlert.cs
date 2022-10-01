@@ -1,12 +1,12 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class StaffAlert : IChatCommand
     {
-        public void Execute(Client session, Room room, RoomUser roomUser, string[] parameters)
+        public void Execute(GameClient session, Room room, RoomUser roomUser, string[] parameters)
         {
             if (parameters.Length < 2)
             {
@@ -20,7 +20,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            foreach (Client Staff in WibboEnvironment.GetGame().GetClientManager().GetClients)
+            foreach (GameClient Staff in WibboEnvironment.GetGame().GetClientManager().GetClients)
             {
                 if (Staff == null)
                 {

@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Games.Clients;
+﻿using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Roleplay.Player;
 using WibboEmulator.Games.Rooms;
 
@@ -8,7 +8,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.RolePlay.Troc
     {
         public double Delay => 100;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             int ItemId = Packet.PopInt();
 

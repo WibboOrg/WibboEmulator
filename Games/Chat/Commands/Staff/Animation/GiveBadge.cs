@@ -1,14 +1,14 @@
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class GiveBadge : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            Client clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            GameClient clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
             if (clientByUsername != null)
             {
                 /*if (Session.Langue != clientByUsername.Langue)

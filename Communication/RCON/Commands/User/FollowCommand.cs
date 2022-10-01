@@ -1,6 +1,6 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.RCON.Commands.User
@@ -24,7 +24,7 @@ namespace WibboEmulator.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            GameClient Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
             if (Client == null)
             {
                 return false;
@@ -41,7 +41,7 @@ namespace WibboEmulator.Communication.RCON.Commands.User
                 return false;
             }
 
-            Client Client2 = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid2);
+            GameClient Client2 = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid2);
             if (Client2 == null)
             {
                 return false;

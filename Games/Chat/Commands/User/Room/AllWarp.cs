@@ -1,4 +1,4 @@
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
 
@@ -6,7 +6,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class AllWarp : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             ServerPacketList MessageList = new ServerPacketList();
 

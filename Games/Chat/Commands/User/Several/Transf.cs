@@ -1,13 +1,13 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.Games;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class Transf : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
             {

@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using System.Drawing;
 
@@ -9,7 +9,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class AutoFloor : IChatCommand
     {
-        public void Execute(Client Session, Room Room, RoomUser UserRoom, string[] Params)
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
             string Map = "";
             for (int y = 0; y < Room.GetGameMap().Model.MapSizeY; y++)

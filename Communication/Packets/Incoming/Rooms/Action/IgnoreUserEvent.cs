@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
-using WibboEmulator.Games.Clients;
-using WibboEmulator.Games.Users;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
@@ -8,7 +8,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 250;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             if (Session.GetUser() == null)
             {
@@ -22,7 +22,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             string UserName = Packet.PopString();
 
-            Client gameclient = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(UserName);
+            GameClient gameclient = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(UserName);
             if (gameclient == null)
             {
                 return;

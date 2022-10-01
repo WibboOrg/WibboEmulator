@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Incoming.Camera;
 using WibboEmulator.Communication.Packets.Incoming.Campaign;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Communication.Packets.Incoming.WibboTool;
 using WibboEmulator.Communication.Packets.Incoming.Televisions;
 using WibboEmulator.Communication.Packets.Incoming.RolePlay;
@@ -60,7 +60,7 @@ namespace WibboEmulator.Communication.Packets
             Console.WriteLine("Logged " + this._incomingPackets.Count + " packet handler(s)!");
         }
 
-        public void TryExecutePacket(Client session, ClientPacket packet)
+        public void TryExecutePacket(GameClient session, ClientPacket packet)
         {
             if (!this._incomingPackets.TryGetValue(packet.Id, out IPacketEvent pak))
             {

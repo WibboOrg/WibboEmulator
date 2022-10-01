@@ -12,11 +12,11 @@ using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalog;
 using WibboEmulator.Games.Catalog.Utilities;
-using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Pets;
-using WibboEmulator.Games.Users.Inventory.Bots;
+using WibboEmulator.Games.GameClients.Inventory.Bots;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
@@ -24,7 +24,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 1000;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             int PageId = Packet.PopInt();
             int ItemId = Packet.PopInt();

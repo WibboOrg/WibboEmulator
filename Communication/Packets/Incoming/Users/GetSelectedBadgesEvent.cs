@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Games.Clients;
-using WibboEmulator.Games.Users;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
@@ -8,7 +8,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 0;
 
-        public void Parse(Client Session, ClientPacket Packet)
+        public void Parse(GameClient Session, ClientPacket Packet)
         {
             int UserId = Packet.PopInt();
 
