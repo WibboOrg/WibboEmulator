@@ -1,6 +1,6 @@
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
@@ -11,22 +11,36 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
         public void Parse(Client Session, ClientPacket Packet)
         {
             if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
-                return;            if (!room.CheckRights(Session, true) || room.MoodlightData == null)
+                return;
+
+            if (!room.CheckRights(Session, true) || room.MoodlightData == null)
             {
                 return;
             }
 
-            Item roomItem = room.GetRoomItemHandler().GetItem(room.MoodlightData.ItemId);            if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
+            Item roomItem = room.GetRoomItemHandler().GetItem(room.MoodlightData.ItemId);
+            if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
             {
                 return;
             }
 
-            int Preset = Packet.PopInt();            int num = Packet.PopInt();            string Color = Packet.PopString();            int Intensity = Packet.PopInt();            bool BgOnly = false;            if (num >= 2)
+            int Preset = Packet.PopInt();
+            int num = Packet.PopInt();
+            string Color = Packet.PopString();
+            int Intensity = Packet.PopInt();
+
+            bool BgOnly = false;
+
+            if (num >= 2)
             {
                 BgOnly = true;
             }
 
-            room.MoodlightData.Enabled = true;            room.MoodlightData.CurrentPreset = Preset;            room.MoodlightData.UpdatePreset(Preset, Color, Intensity, BgOnly);            roomItem.ExtraData = room.MoodlightData.GenerateExtraData();            roomItem.UpdateState();
+            room.MoodlightData.Enabled = true;
+            room.MoodlightData.CurrentPreset = Preset;
+            room.MoodlightData.UpdatePreset(Preset, Color, Intensity, BgOnly);
+            roomItem.ExtraData = room.MoodlightData.GenerateExtraData();
+            roomItem.UpdateState();
         }
     }
 }

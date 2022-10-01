@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Game.Items;
+﻿using WibboEmulator.Games.Items;
 
-namespace WibboEmulator.Game.Catalog.Utilities
+namespace WibboEmulator.Games.Catalog.Utilities
 {
     public static class ItemUtility
     {

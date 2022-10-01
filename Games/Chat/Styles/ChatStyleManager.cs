@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Chat.Styles
+namespace WibboEmulator.Games.Chat.Styles
 {
     public sealed class ChatStyleManager
     {

@@ -1,9 +1,9 @@
 ﻿using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Rooms;
 using System.Data;
 
-namespace WibboEmulator.Game.Items
+namespace WibboEmulator.Games.Items
 {
     public static class ItemTeleporterFinder
     {

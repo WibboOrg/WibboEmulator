@@ -1,4 +1,4 @@
-using WibboEmulator.Game.Users.Messenger;
+using WibboEmulator.Games.Users.Messenger;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Messenger
 {

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Chat.Styles
+﻿namespace WibboEmulator.Games.Chat.Styles
 {
     public sealed class ChatStyle
     {

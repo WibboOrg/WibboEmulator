@@ -1,4 +1,4 @@
-using WibboEmulator.Game.Achievements;
+using WibboEmulator.Games.Achievements;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements
 {

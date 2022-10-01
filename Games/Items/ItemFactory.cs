@@ -1,9 +1,9 @@
 ﻿using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Items.Interactors;
-using WibboEmulator.Game.Users;
+using WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.Users;
 
-namespace WibboEmulator.Game.Items
+namespace WibboEmulator.Games.Items
 {
     public class ItemFactory
     {

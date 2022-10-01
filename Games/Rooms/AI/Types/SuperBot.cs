@@ -1,10 +1,10 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Clients;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms.AI.Types
+namespace WibboEmulator.Games.Rooms.AI.Types
 {
     public class SuperBot : BotAI
     {

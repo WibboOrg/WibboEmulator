@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Rooms
+﻿namespace WibboEmulator.Games.Rooms
 {
     public static class RoomAccessUtility
     {

@@ -1,9 +1,9 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Items.Interactors
+namespace WibboEmulator.Games.Items.Interactors
 {
     public class InteractorPuzzleBox : FurniInteractor
     {

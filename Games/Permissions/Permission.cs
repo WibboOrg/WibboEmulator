@@ -1,4 +1,4 @@
-namespace WibboEmulator.Game.Permissions
+namespace WibboEmulator.Games.Permissions
 {
     class Permission
     {

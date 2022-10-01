@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Users.Messenger
+﻿namespace WibboEmulator.Games.Users.Messenger
 {
     public enum MessengerMessageErrors
     {

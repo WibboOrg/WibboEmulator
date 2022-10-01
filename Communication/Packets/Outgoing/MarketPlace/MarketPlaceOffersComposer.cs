@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Game.Catalog.Marketplace;
+﻿using WibboEmulator.Games.Catalog.Marketplace;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace
 {

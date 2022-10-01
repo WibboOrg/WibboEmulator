@@ -1,5 +1,5 @@
-﻿using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Rooms;
+﻿using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Utilities.Events
 {

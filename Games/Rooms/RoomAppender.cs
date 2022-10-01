@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing;
-using WibboEmulator.Game.Navigator;
+using WibboEmulator.Games.Navigator;
 
-namespace WibboEmulator.Game.Rooms
+namespace WibboEmulator.Games.Rooms
 {
     internal static class RoomAppender
     {

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Roleplay.Troc
+﻿namespace WibboEmulator.Games.Roleplay.Troc
 {
     public class RPTrocUser
     {

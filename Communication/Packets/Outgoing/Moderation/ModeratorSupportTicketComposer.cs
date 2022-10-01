@@ -1,5 +1,5 @@
-using WibboEmulator.Game.Moderation;
-using WibboEmulator.Game.Users;
+using WibboEmulator.Games.Moderation;
+using WibboEmulator.Games.Users;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
 {

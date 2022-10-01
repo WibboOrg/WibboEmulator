@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+﻿using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands
+namespace WibboEmulator.Games.Chat.Commands
 {
     public interface IChatCommand
     {

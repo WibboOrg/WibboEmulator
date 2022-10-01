@@ -1,5 +1,5 @@
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Users;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation

@@ -1,5 +1,5 @@
 ﻿using WibboEmulator.Communication.Packets.Incoming;
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Clients;
 
 namespace WibboEmulator.Communication.Packets
 {

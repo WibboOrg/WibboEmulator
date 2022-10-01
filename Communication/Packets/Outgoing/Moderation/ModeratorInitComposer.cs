@@ -1,4 +1,4 @@
-using WibboEmulator.Game.Moderation;
+using WibboEmulator.Games.Moderation;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
 {

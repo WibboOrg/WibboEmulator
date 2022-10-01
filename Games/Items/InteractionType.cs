@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Items
+﻿namespace WibboEmulator.Games.Items
 {
     public enum InteractionType
     {

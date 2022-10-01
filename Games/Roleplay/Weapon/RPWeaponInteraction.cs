@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Roleplay.Weapon
+﻿namespace WibboEmulator.Games.Roleplay.Weapon
 {
     public enum RPWeaponInteraction
     {

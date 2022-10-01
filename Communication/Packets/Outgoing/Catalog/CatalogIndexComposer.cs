@@ -1,6 +1,6 @@
 using WibboEmulator.Core;
-using WibboEmulator.Game.Catalog;
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Catalog;
+using WibboEmulator.Games.Clients;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Catalog
 {

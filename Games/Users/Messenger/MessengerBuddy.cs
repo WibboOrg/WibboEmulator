@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Game.Clients;
+﻿using WibboEmulator.Games.Clients;
 
-namespace WibboEmulator.Game.Users.Messenger
+namespace WibboEmulator.Games.Users.Messenger
 {
     public class MessengerBuddy
     {

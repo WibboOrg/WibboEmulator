@@ -17,13 +17,13 @@ using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Help;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Users;
-using WibboEmulator.Game.Users.Authenticator;
+using WibboEmulator.Games.Help;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
+using WibboEmulator.Games.Users.Authenticator;
 using WibboEmulator.Utilities;
 
-namespace WibboEmulator.Game.Clients
+namespace WibboEmulator.Games.Clients
 {
     public class Client
     {

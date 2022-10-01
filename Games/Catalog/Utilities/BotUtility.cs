@@ -1,11 +1,11 @@
 ﻿using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Rooms.AI;
-using WibboEmulator.Game.Users.Inventory.Bots;
+using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms.AI;
+using WibboEmulator.Games.Users.Inventory.Bots;
 using System.Data;
 
-namespace WibboEmulator.Game.Catalog.Utilities
+namespace WibboEmulator.Games.Catalog.Utilities
 {
     public static class BotUtility
     {

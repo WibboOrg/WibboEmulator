@@ -2,8 +2,8 @@ using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Catalog.Vouchers;
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Catalog.Vouchers;
+using WibboEmulator.Games.Clients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

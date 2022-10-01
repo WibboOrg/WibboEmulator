@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Game.Clients;
+﻿using WibboEmulator.Games.Clients;
 using System.Text.RegularExpressions;
 
 namespace WibboEmulator.Communication.RCON.Commands.User

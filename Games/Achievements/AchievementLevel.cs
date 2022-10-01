@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Achievements
+﻿namespace WibboEmulator.Games.Achievements
 {
     public struct AchievementLevel
     {

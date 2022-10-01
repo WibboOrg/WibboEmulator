@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Catalog
+﻿namespace WibboEmulator.Games.Catalog
 {
     public class CatalogBot
     {

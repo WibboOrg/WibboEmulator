@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms.PathFinding
+namespace WibboEmulator.Games.Rooms.PathFinding
 {
     public struct Coord : IEquatable<Coord>
     {

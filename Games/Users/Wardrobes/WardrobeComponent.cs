@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Users.Wardrobes
+namespace WibboEmulator.Games.Users.Wardrobes
 {
     public class WardrobeComponent : IDisposable
     {

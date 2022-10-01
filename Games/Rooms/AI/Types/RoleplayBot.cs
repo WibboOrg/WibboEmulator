@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Game.Clients;
+﻿using WibboEmulator.Games.Clients;
 
-namespace WibboEmulator.Game.Rooms.AI.Types
+namespace WibboEmulator.Games.Rooms.AI.Types
 {
     public class RoleplayBot : BotAI
     {

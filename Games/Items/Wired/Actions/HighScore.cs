@@ -1,11 +1,11 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Items.Wired.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Items.Wired.Actions
+namespace WibboEmulator.Games.Items.Wired.Actions
 {
     public class HighScore : WiredActionBase, IWired, IWiredEffect
     {

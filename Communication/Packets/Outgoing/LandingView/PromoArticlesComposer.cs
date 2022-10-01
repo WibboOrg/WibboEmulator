@@ -1,4 +1,4 @@
-using WibboEmulator.Game.LandingView.Promotions;
+using WibboEmulator.Games.LandingView.Promotions;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.LandingView
 {

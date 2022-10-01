@@ -4,7 +4,7 @@ using WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Incoming.Camera;
 using WibboEmulator.Communication.Packets.Incoming.Campaign;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Clients;
 using WibboEmulator.Communication.Packets.Incoming.WibboTool;
 using WibboEmulator.Communication.Packets.Incoming.Televisions;
 using WibboEmulator.Communication.Packets.Incoming.RolePlay;

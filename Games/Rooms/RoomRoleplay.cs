@@ -1,4 +1,4 @@
-namespace WibboEmulator.Game.Rooms
+namespace WibboEmulator.Games.Rooms
 {
     public class RoomRoleplay
     {
@@ -58,23 +58,23 @@ namespace WibboEmulator.Game.Rooms
                 return false;
             }
 
-            if (this.Hour >= 8 && this.Hour < 20) //Journée
+            if (this.Hour >= 8 && this.Hour < 20) //Journï¿½e
             {
                 this.Intensity = 255;
             }
-            else if (this.Hour >= 20 && this.Hour < 21)  //Crépuscule
+            else if (this.Hour >= 20 && this.Hour < 21)  //Crï¿½puscule
             {
                 this.Intensity = 200;
             }
-            else if (this.Hour >= 21 && this.Hour < 22)  //Crépuscule
+            else if (this.Hour >= 21 && this.Hour < 22)  //Crï¿½puscule
             {
                 this.Intensity = 150;
             }
-            else if (this.Hour >= 22 && this.Hour < 23)  //Crépuscule
+            else if (this.Hour >= 22 && this.Hour < 23)  //Crï¿½puscule
             {
                 this.Intensity = 100;
             }
-            else if (this.Hour >= 23 && this.Hour < 24)  //Crépuscule
+            else if (this.Hour >= 23 && this.Hour < 24)  //Crï¿½puscule
             {
                 this.Intensity = 75;
             }

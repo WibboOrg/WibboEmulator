@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Permissions
+namespace WibboEmulator.Games.Permissions
 {
     public class PermissionManager
     {

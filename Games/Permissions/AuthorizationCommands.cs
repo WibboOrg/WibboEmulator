@@ -1,8 +1,8 @@
 ﻿using WibboEmulator.Core;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Game.Permissions
+namespace WibboEmulator.Games.Permissions
 {
     public struct AuthorizationCommands
     {

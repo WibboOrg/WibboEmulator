@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Chat.Pets.Commands
+namespace WibboEmulator.Games.Chat.Pets.Commands
 {
     public class PetCommandManager
     {

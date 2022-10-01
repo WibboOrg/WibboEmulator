@@ -5,12 +5,12 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Catalog;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Loots;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Catalog;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Loots;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Game.Items
+namespace WibboEmulator.Games.Items
 {
     internal static class ItemLootBox
     {

@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Users.Achievements
+namespace WibboEmulator.Games.Users.Achievements
 {
     public class AchievementComponent : IDisposable
     {

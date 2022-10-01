@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Game.Catalog.Utilities;
+﻿using WibboEmulator.Games.Catalog.Utilities;
 
-namespace WibboEmulator.Game.Rooms.AI.Responses
+namespace WibboEmulator.Games.Rooms.AI.Responses
 {
     public class BotResponse
     {

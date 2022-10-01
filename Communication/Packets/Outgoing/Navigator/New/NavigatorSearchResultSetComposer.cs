@@ -1,5 +1,5 @@
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Navigator;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Navigator;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Navigator.New
 {

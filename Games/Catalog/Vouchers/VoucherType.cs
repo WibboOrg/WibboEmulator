@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Catalog.Vouchers
+﻿namespace WibboEmulator.Games.Catalog.Vouchers
 {
     public enum VoucherType
     {

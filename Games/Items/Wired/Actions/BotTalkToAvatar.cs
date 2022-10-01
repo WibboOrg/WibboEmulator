@@ -1,13 +1,13 @@
 ﻿
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Rooms.AI;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.AI;
+using WibboEmulator.Games.Items.Wired.Interfaces;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 
-namespace WibboEmulator.Game.Items.Wired.Actions
+namespace WibboEmulator.Games.Items.Wired.Actions
 {
     public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
     {

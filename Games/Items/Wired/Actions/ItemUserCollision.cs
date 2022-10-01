@@ -1,10 +1,10 @@
 ﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Items.Wired.Interfaces;
 using System.Data;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Items.Wired.Actions
+namespace WibboEmulator.Games.Items.Wired.Actions
 {
     public class ItemUserCollision : WiredActionBase, IWiredEffect, IWired
     {

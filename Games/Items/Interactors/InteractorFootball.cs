@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Rooms.Map.Movement;
+﻿using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map.Movement;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Items.Interactors
+namespace WibboEmulator.Games.Items.Interactors
 {
     public class InteractorFootball : FurniInteractor
     {

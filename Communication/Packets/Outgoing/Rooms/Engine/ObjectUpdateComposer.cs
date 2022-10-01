@@ -1,5 +1,5 @@
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Items.Wired;
+using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Items.Wired;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
 {

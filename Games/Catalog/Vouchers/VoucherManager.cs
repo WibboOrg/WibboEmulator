@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Catalog.Vouchers
+namespace WibboEmulator.Games.Catalog.Vouchers
 {
     public class VoucherManager
     {

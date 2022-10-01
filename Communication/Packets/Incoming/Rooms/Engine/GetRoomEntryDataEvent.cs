@@ -2,8 +2,8 @@
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure

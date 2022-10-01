@@ -1,7 +1,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Navigator.New;
 
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Navigator;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Navigator;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure

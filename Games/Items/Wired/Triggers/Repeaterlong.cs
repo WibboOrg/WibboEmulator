@@ -1,10 +1,10 @@
 ﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Items.Wired.Interfaces;
 using System.Data;
-using WibboEmulator.Game.Rooms.Wired;
+using WibboEmulator.Games.Rooms.Wired;
 
-namespace WibboEmulator.Game.Items.Wired
+namespace WibboEmulator.Games.Items.Wired
 {
     public class Repeaterlong : WiredTriggerBase, IWired, IWiredCycleable
     {

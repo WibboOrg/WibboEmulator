@@ -1,12 +1,12 @@
 ﻿using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Clients;
 using System.Collections.Concurrent;
 using System.Data;
 using System.Diagnostics;
 
-namespace WibboEmulator.Game.Rooms
+namespace WibboEmulator.Games.Rooms
 {
     public class RoomManager
     {

@@ -3,7 +3,7 @@ using WibboEmulator.Database.Interfaces;
 using System.Data;
 
 
-namespace WibboEmulator.Game.Items
+namespace WibboEmulator.Games.Items
 {
     public class ItemDataManager
     {

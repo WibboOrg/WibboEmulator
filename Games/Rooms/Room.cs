@@ -5,24 +5,24 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Pets;
-using WibboEmulator.Game.Roleplay;
-using WibboEmulator.Game.Rooms.AI;
-using WibboEmulator.Game.Chat.Logs;
-using WibboEmulator.Game.Rooms.Games;
-using WibboEmulator.Game.Rooms.Jankens;
-using WibboEmulator.Game.Rooms.Moodlight;
-using WibboEmulator.Game.Rooms.Projectile;
-using WibboEmulator.Game.Rooms.Wired;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Pets;
+using WibboEmulator.Games.Roleplay;
+using WibboEmulator.Games.Rooms.AI;
+using WibboEmulator.Games.Chat.Logs;
+using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Jankens;
+using WibboEmulator.Games.Rooms.Moodlight;
+using WibboEmulator.Games.Rooms.Projectile;
+using WibboEmulator.Games.Rooms.Wired;
 using System.Data;
 using WibboEmulator.Utilities.Events;
 using WibboEmulator.Utilities;
-using WibboEmulator.Game.Rooms.Trading;
+using WibboEmulator.Games.Rooms.Trading;
 using WibboEmulator.Communication.Interfaces;
 
-namespace WibboEmulator.Game.Rooms
+namespace WibboEmulator.Games.Rooms
 {
     public delegate void RoomEventDelegate(object sender, EventArgs e);
     public delegate void RoomUserSaysDelegate(object sender, UserSaysArgs e, ref bool messageHandled);

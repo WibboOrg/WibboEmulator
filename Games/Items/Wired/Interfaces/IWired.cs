@@ -1,8 +1,8 @@
 ﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Clients;
 using System.Data;
 
-namespace WibboEmulator.Game.Items.Wired.Interfaces
+namespace WibboEmulator.Games.Items.Wired.Interfaces
 {
     public interface IWired
     {

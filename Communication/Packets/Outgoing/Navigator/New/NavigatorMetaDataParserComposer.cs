@@ -1,4 +1,4 @@
-using WibboEmulator.Game.Navigator;
+using WibboEmulator.Games.Navigator;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Navigator.New
 {

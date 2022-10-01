@@ -2,9 +2,9 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Pets;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Pets;
+using WibboEmulator.Games.Rooms;
 using System.Drawing;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure

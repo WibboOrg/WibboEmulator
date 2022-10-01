@@ -1,10 +1,10 @@
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Users;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Users;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class Mazo : IChatCommand
     {

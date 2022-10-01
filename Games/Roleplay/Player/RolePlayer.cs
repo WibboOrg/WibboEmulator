@@ -3,14 +3,14 @@ using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Roleplay.Weapon;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Roleplay.Weapon;
+using WibboEmulator.Games.Rooms;
 using System.Collections.Concurrent;
 using System.Data;
 
-namespace WibboEmulator.Game.Roleplay.Player
+namespace WibboEmulator.Games.Roleplay.Player
 {
     public class RolePlayer
     {

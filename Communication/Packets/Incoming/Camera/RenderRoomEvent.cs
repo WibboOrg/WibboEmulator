@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Game.Clients;
+﻿using WibboEmulator.Games.Clients;
 using WibboEmulator.Communication.Packets.Outgoing.Camera;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 

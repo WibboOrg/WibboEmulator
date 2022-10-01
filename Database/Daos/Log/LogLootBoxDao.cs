@@ -1,5 +1,5 @@
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Users;
+using WibboEmulator.Games.Users;
 
 namespace WibboEmulator.Database.Daos
 {

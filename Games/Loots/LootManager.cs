@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Items;
+using WibboEmulator.Games.Items;
 
-namespace WibboEmulator.Game.Loots
+namespace WibboEmulator.Games.Loots
 {
     public class LootManager
     {

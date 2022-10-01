@@ -1,14 +1,14 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Users;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 
-namespace WibboEmulator.Game.Moderation
+namespace WibboEmulator.Games.Moderation
 {
     public class ModerationManager
     {

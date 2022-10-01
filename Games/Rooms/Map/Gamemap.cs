@@ -1,12 +1,12 @@
-﻿using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Items.Wired;
-using WibboEmulator.Game.Rooms.Games;
-using WibboEmulator.Game.Rooms.Map.Movement;
-using WibboEmulator.Game.Rooms.PathFinding;
+﻿using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Items.Wired;
+using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Map.Movement;
+using WibboEmulator.Games.Rooms.PathFinding;
 using System.Collections.Concurrent;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms
+namespace WibboEmulator.Games.Rooms
 {
     public class Gamemap
     {

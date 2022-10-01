@@ -1,5 +1,5 @@
 ﻿using MySqlX.XDevAPI;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.RCON.Commands.Hotel
 {

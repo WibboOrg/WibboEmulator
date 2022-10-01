@@ -1,7 +1,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Clients;
 using System.Data;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure

@@ -4,12 +4,12 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Catalog;
-using WibboEmulator.Game.Catalog.Utilities;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Groups;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Users;
+using WibboEmulator.Games.Catalog;
+using WibboEmulator.Games.Catalog.Utilities;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Users;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure

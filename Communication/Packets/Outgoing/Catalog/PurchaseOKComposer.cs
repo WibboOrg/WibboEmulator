@@ -1,5 +1,5 @@
-using WibboEmulator.Game.Catalog;
-using WibboEmulator.Game.Items;
+using WibboEmulator.Games.Catalog;
+using WibboEmulator.Games.Items;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Catalog
 {

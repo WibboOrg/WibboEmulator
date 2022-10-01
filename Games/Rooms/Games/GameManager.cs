@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Game.Items;
+﻿using WibboEmulator.Games.Items;
 using WibboEmulator.Utilities.Events;
 
-namespace WibboEmulator.Game.Rooms.Games
+namespace WibboEmulator.Games.Rooms.Games
 {
     public class GameManager
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WibboEmulator.Game.Loots
+namespace WibboEmulator.Games.Loots
 {
     public class Loot
     {

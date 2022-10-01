@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Groups
+namespace WibboEmulator.Games.Groups
 {
     public class Group
     {

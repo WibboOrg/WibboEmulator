@@ -2,10 +2,10 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 
 
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Clients;
 using System.Text.RegularExpressions;
 
-namespace WibboEmulator.Game.Chat.Mentions
+namespace WibboEmulator.Games.Chat.Mentions
 {
     public class MentionManager
     {

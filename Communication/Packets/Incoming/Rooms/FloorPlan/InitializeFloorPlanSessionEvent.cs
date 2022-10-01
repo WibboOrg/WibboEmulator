@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.FloorPlan;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

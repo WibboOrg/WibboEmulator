@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Clients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
 {

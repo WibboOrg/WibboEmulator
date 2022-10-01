@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Users.Inventory.Bots
+﻿namespace WibboEmulator.Games.Users.Inventory.Bots
 {
     public class Bot
     {

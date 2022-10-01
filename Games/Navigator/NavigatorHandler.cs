@@ -1,12 +1,12 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Groups;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Rooms;
 using System.Data;
 
-namespace WibboEmulator.Game.Navigator
+namespace WibboEmulator.Games.Navigator
 {
     internal static class NavigatorHandler
     {

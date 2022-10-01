@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Navigator
+﻿namespace WibboEmulator.Games.Navigator
 {
     public static class NavigatorViewModeUtility
     {

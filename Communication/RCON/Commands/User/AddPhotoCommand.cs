@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Items;
 
 namespace WibboEmulator.Communication.RCON.Commands.User
 {

@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Game.Catalog.Vouchers
+namespace WibboEmulator.Games.Catalog.Vouchers
 {
     public class Voucher
     {

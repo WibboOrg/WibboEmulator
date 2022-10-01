@@ -2,11 +2,11 @@
 using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Rooms;
 using System.Data;
 using System.Diagnostics;
 
-namespace WibboEmulator.Game.Animations
+namespace WibboEmulator.Games.Animations
 {
     public class AnimationManager
     {

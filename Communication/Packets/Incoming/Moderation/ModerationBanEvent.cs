@@ -1,5 +1,5 @@
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Moderation;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Moderation;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

@@ -3,7 +3,7 @@ using WibboEmulator.Database.Interfaces;
 using System.Data;
 using System.Text;
 
-namespace WibboEmulator.Game.Rooms.Moodlight
+namespace WibboEmulator.Games.Rooms.Moodlight
 {
     public class MoodlightData
     {

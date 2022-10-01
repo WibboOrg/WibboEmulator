@@ -1,10 +1,10 @@
 ﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Items.Wired.Interfaces;
 using System.Data;
 using WibboEmulator.Utilities.Events;
 
-namespace WibboEmulator.Game.Items.Wired.Triggers
+namespace WibboEmulator.Games.Items.Wired.Triggers
 {
     public class ScoreAchieved : WiredTriggerBase, IWired
     {

@@ -1,5 +1,5 @@
 ﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Items;
+using WibboEmulator.Games.Items;
 using WibboEmulator.Utilities;
 using System.Collections.Concurrent;
 using System.Data;

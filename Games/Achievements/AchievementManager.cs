@@ -3,13 +3,13 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
 using System.Data;
-using WibboEmulator.Game.Users.Achievements;
+using WibboEmulator.Games.Users.Achievements;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 
-namespace WibboEmulator.Game.Achievements
+namespace WibboEmulator.Games.Achievements
 {
     public class AchievementManager
     {

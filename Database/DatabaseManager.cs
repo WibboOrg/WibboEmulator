@@ -37,7 +37,6 @@ namespace WibboEmulator.Database
                 MySqlCommand CMD = Con.CreateCommand();
                 CMD.CommandText = "SELECT 1+1";
                 CMD.ExecuteNonQuery();
-
                 CMD.Dispose();
                 Con.Close();
             }

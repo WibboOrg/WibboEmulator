@@ -1,7 +1,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Users;
-using WibboEmulator.Game.Users.Relationships;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Users;
+using WibboEmulator.Games.Users.Relationships;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Rooms.PathFinding
+﻿namespace WibboEmulator.Games.Rooms.PathFinding
 {
     public struct SquarePoint
     {

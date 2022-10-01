@@ -2,9 +2,9 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Rooms.AI;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.AI;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

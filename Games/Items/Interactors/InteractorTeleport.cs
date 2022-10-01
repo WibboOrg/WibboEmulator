@@ -1,8 +1,8 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Game.Items.Interactors
+namespace WibboEmulator.Games.Items.Interactors
 {
     public class InteractorTeleport : FurniInteractor
     {

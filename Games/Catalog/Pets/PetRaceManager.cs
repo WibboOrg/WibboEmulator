@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Catalog.Pets
+﻿namespace WibboEmulator.Games.Catalog.Pets
 {
     public class PetRaceManager
     {

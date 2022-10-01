@@ -4,9 +4,9 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Items;
+using WibboEmulator.Games.Items;
 
-namespace WibboEmulator.Game.Rooms.Trading
+namespace WibboEmulator.Games.Rooms.Trading
 {
     public class Trade
     {

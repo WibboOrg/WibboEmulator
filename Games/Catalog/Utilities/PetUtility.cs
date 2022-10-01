@@ -1,8 +1,8 @@
 ﻿using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Pets;
+using WibboEmulator.Games.Pets;
 
-namespace WibboEmulator.Game.Catalog.Utilities
+namespace WibboEmulator.Games.Catalog.Utilities
 {
     public static class PetUtility
     {

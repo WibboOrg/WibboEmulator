@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Communication.Packets.Outgoing.Messenger;
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Clients;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure

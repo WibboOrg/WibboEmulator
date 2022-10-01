@@ -1,6 +1,6 @@
 ﻿using WibboEmulator.Communication.Packets.Incoming;
 using WibboEmulator.Core;
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Clients;
 using WibboEmulator.Utilities;
 using System.Collections.Concurrent;
 using System.Net;

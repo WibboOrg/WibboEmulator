@@ -6,20 +6,20 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Chat.Logs;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Roleplay;
-using WibboEmulator.Game.Roleplay.Player;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Users.Achievements;
-using WibboEmulator.Game.Users.Badges;
-using WibboEmulator.Game.Users.Inventory;
-using WibboEmulator.Game.Users.Messenger;
-using WibboEmulator.Game.Users.Permissions;
-using WibboEmulator.Game.Users.Wardrobes;
+using WibboEmulator.Games.Chat.Logs;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Roleplay;
+using WibboEmulator.Games.Roleplay.Player;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users.Achievements;
+using WibboEmulator.Games.Users.Badges;
+using WibboEmulator.Games.Users.Inventory;
+using WibboEmulator.Games.Users.Messenger;
+using WibboEmulator.Games.Users.Permissions;
+using WibboEmulator.Games.Users.Wardrobes;
 using System.Data;
 
-namespace WibboEmulator.Game.Users
+namespace WibboEmulator.Games.Users
 {
     public class User
     {

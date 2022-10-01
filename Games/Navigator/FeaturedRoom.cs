@@ -1,6 +1,6 @@
 ﻿using WibboEmulator.Core;
 
-namespace WibboEmulator.Game.Navigator
+namespace WibboEmulator.Games.Navigator
 {
     public class FeaturedRoom
     {

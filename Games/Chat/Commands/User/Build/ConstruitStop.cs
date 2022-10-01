@@ -1,8 +1,8 @@
 using MySqlX.XDevAPI.Common;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class ConstruitStop : IChatCommand
     {
@@ -10,7 +10,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
         {
             UserRoom.ConstruitEnable = false;
 
-            Session.SendWhisper("Construit désactivé!");
+            Session.SendWhisper("Construit dï¿½sactivï¿½!");
         }
     }
 }

@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Effects
+namespace WibboEmulator.Games.Effects
 {
     public class EffectManager
     {

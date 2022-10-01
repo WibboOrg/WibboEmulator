@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Items.Wired
+﻿namespace WibboEmulator.Games.Items.Wired
 {
     public enum WiredConditionType
     {

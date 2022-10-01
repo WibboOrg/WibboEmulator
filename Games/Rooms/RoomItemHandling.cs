@@ -4,18 +4,18 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Items.Wired;
-using WibboEmulator.Game.Rooms.Map.Movement;
-using WibboEmulator.Game.Rooms.Moodlight;
-using WibboEmulator.Game.Rooms.PathFinding;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Items.Wired;
+using WibboEmulator.Games.Rooms.Map.Movement;
+using WibboEmulator.Games.Rooms.Moodlight;
+using WibboEmulator.Games.Rooms.PathFinding;
 using WibboEmulator.Utilities;
 using System.Collections.Concurrent;
 using System.Data;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms
+namespace WibboEmulator.Games.Rooms
 {
     public class RoomItemHandling
     {

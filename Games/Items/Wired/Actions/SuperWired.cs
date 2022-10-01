@@ -7,20 +7,20 @@ using WibboEmulator.Communication.Packets.Outgoing.Users;
 
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Roleplay;
-using WibboEmulator.Game.Roleplay.Enemy;
-using WibboEmulator.Game.Roleplay.Player;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Roleplay;
+using WibboEmulator.Games.Roleplay.Enemy;
+using WibboEmulator.Games.Roleplay.Player;
+using WibboEmulator.Games.Items.Wired.Interfaces;
 using System.Data;
-using WibboEmulator.Game.Rooms.Games;
-using WibboEmulator.Game.Rooms.AI;
+using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Sound.SoundCustom;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 
-namespace WibboEmulator.Game.Items.Wired.Actions
+namespace WibboEmulator.Games.Items.Wired.Actions
 {
     public class SuperWired : WiredActionBase, IWired, IWiredEffect
     {

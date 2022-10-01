@@ -1,4 +1,4 @@
-using WibboEmulator.Game.Catalog.Utilities;
+using WibboEmulator.Games.Catalog.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Catalog
 {

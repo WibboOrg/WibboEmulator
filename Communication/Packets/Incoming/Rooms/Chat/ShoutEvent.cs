@@ -1,9 +1,9 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Quests;
-using WibboEmulator.Game.Roleplay.Player;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Chat.Styles;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Quests;
+using WibboEmulator.Games.Roleplay.Player;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Chat.Styles;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure

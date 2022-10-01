@@ -3,10 +3,10 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Quests;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Clients;
 using System.Data;
 
-namespace WibboEmulator.Game.Quests
+namespace WibboEmulator.Games.Quests
 {
     public class QuestManager
     {

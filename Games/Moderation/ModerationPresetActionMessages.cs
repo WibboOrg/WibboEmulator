@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Moderation
+﻿namespace WibboEmulator.Games.Moderation
 {
     public class ModerationPresetActionMessages
     {

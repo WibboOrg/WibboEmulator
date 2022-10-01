@@ -1,6 +1,6 @@
 ﻿using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Game.Calendars
+namespace WibboEmulator.Games.Calendars
 {
     public class CalendarManager
     {

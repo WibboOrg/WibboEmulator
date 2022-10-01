@@ -4,11 +4,11 @@ using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Users.Messenger;
+using WibboEmulator.Games.Users.Messenger;
 using System.Collections.Concurrent;
 using System.Text;
 
-namespace WibboEmulator.Game.Clients
+namespace WibboEmulator.Games.Clients
 {
     public class ClientManager
     {

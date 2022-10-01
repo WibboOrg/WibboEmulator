@@ -1,8 +1,8 @@
 using WibboEmulator.Communication.Packets.Outgoing.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Quests;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Quests;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

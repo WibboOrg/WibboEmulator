@@ -3,7 +3,7 @@ using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Navigator
+namespace WibboEmulator.Games.Navigator
 {
     public sealed class NavigatorManager
     {

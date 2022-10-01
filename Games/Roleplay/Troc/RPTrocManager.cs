@@ -1,10 +1,10 @@
 ﻿using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc;
-using WibboEmulator.Game.Roleplay.Item;
-using WibboEmulator.Game.Roleplay.Player;
+using WibboEmulator.Games.Roleplay.Item;
+using WibboEmulator.Games.Roleplay.Player;
 using System.Collections.Concurrent;
 
-namespace WibboEmulator.Game.Roleplay.Troc
+namespace WibboEmulator.Games.Roleplay.Troc
 {
     public class RPTrocManager
     {

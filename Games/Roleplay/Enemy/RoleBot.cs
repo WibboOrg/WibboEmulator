@@ -1,12 +1,12 @@
-﻿using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Roleplay.Player;
-using WibboEmulator.Game.Roleplay.Weapon;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Rooms.Map.Movement;
-using WibboEmulator.Game.Rooms.PathFinding;
+﻿using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Roleplay.Player;
+using WibboEmulator.Games.Roleplay.Weapon;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map.Movement;
+using WibboEmulator.Games.Rooms.PathFinding;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Roleplay.Enemy
+namespace WibboEmulator.Games.Roleplay.Enemy
 {
     public class RoleBot
     {

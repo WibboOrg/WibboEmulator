@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Groups
+﻿namespace WibboEmulator.Games.Groups
 {
     public static class BadgePartUtility
     {

@@ -1,4 +1,4 @@
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Rooms;
 using System.Text;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine

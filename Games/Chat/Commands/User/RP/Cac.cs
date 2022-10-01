@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Roleplay.Player;
-using WibboEmulator.Game.Rooms;
+﻿using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Roleplay.Player;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class Cac : IChatCommand
     {

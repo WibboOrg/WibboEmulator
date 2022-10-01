@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Roleplay.Enemy
+﻿namespace WibboEmulator.Games.Roleplay.Enemy
 {
     public class RPEnemy
     {

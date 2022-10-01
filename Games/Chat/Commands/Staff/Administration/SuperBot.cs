@@ -1,9 +1,9 @@
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms.AI;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms.AI;
 using System.Drawing;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class SuperBot : IChatCommand
     {

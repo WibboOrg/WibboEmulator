@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Game.Items.Wired
+namespace WibboEmulator.Games.Items.Wired
 {
     public class WiredUtillity
     {

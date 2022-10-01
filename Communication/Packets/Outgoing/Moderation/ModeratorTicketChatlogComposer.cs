@@ -1,6 +1,6 @@
-using WibboEmulator.Game.Chat.Logs;
-using WibboEmulator.Game.Moderation;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Chat.Logs;
+using WibboEmulator.Games.Moderation;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Moderation

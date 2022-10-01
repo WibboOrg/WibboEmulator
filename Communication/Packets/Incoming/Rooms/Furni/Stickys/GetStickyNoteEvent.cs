@@ -1,7 +1,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Stickys;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

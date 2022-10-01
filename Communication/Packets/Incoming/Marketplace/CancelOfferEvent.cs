@@ -2,8 +2,8 @@
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Items;
 using System.Data;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace

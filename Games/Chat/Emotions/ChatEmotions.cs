@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Chat.Emotions
+﻿namespace WibboEmulator.Games.Chat.Emotions
 {
     internal enum ChatEmotions
     {

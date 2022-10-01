@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Roleplay.Enemy
+namespace WibboEmulator.Games.Roleplay.Enemy
 {
     public class RPEnemyManager
     {

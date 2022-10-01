@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Roleplay.Weapon
+namespace WibboEmulator.Games.Roleplay.Weapon
 {
     public class RPWeaponManager
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WibboEmulator.Game.Calendars
+namespace WibboEmulator.Games.Calendars
 {
     public class CalendarItem
     {

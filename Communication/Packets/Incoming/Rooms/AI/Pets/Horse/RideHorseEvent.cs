@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
 using System.Drawing;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure

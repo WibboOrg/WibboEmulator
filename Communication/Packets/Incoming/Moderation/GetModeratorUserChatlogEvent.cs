@@ -1,6 +1,6 @@
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
-using WibboEmulator.Game.Chat.Logs;
-using WibboEmulator.Game.Clients;
+using WibboEmulator.Games.Chat.Logs;
+using WibboEmulator.Games.Clients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

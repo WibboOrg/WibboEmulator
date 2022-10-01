@@ -1,4 +1,4 @@
-namespace WibboEmulator.Game.Rooms.Games
+namespace WibboEmulator.Games.Rooms.Games
 {
     public enum TeamType
     {

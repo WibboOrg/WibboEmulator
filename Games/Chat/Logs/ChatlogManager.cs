@@ -2,7 +2,7 @@
 using WibboEmulator.Database.Interfaces;
 using System.Data;
 
-namespace WibboEmulator.Game.Chat.Logs
+namespace WibboEmulator.Games.Chat.Logs
 {
     public class ChatlogManager
     {

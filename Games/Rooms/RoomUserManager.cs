@@ -9,21 +9,21 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
-using WibboEmulator.Game.Pets;
-using WibboEmulator.Game.Quests;
-using WibboEmulator.Game.Roleplay;
-using WibboEmulator.Game.Roleplay.Enemy;
-using WibboEmulator.Game.Roleplay.Player;
-using WibboEmulator.Game.Rooms.AI;
-using WibboEmulator.Game.Rooms.Games;
-using WibboEmulator.Game.Rooms.Map.Movement;
-using WibboEmulator.Game.Rooms.PathFinding;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Pets;
+using WibboEmulator.Games.Quests;
+using WibboEmulator.Games.Roleplay;
+using WibboEmulator.Games.Roleplay.Enemy;
+using WibboEmulator.Games.Roleplay.Player;
+using WibboEmulator.Games.Rooms.AI;
+using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Map.Movement;
+using WibboEmulator.Games.Rooms.PathFinding;
 using System.Collections.Concurrent;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms
+namespace WibboEmulator.Games.Rooms
 {
     public delegate void UserAndItemDelegate(RoomUser user, Item item);
 

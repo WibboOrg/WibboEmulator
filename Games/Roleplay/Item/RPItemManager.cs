@@ -1,9 +1,9 @@
 ﻿using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Roleplay.Item;
+using WibboEmulator.Games.Roleplay.Item;
 using System.Data;
 
-namespace WibboEmulator.Game.Roleplay
+namespace WibboEmulator.Games.Roleplay
 {
     public class RPItemManager
     {

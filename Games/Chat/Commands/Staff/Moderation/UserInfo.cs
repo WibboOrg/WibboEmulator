@@ -1,9 +1,9 @@
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Users;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Users;
 using System.Text;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class UserInfo : IChatCommand
     {

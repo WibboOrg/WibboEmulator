@@ -1,4 +1,4 @@
-﻿using WibboEmulator.Game.Roleplay;
+﻿using WibboEmulator.Games.Roleplay;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc
 {

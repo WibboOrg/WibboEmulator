@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Users.Achievements
+﻿namespace WibboEmulator.Games.Users.Achievements
 {
     public class UserAchievement
     {

@@ -1,15 +1,15 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Core;
-using WibboEmulator.Game.Items.Interactors;
-using WibboEmulator.Game.Rooms;
-using WibboEmulator.Game.Rooms.Games;
-using WibboEmulator.Game.Rooms.Map.Movement;
-using WibboEmulator.Game.Rooms.PathFinding;
-using WibboEmulator.Game.Items.Wired.Interfaces;
+using WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Map.Movement;
+using WibboEmulator.Games.Rooms.PathFinding;
+using WibboEmulator.Games.Items.Wired.Interfaces;
 using System.Drawing;
 using WibboEmulator.Utilities.Events;
 
-namespace WibboEmulator.Game.Items
+namespace WibboEmulator.Games.Items
 {
     public delegate void OnItemTrigger(object sender, ItemTriggeredArgs e);
 

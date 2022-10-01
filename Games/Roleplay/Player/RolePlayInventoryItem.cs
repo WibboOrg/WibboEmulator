@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Game.Roleplay.Player
+﻿namespace WibboEmulator.Games.Roleplay.Player
 {
     public class RolePlayInventoryItem
     {

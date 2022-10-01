@@ -1,15 +1,15 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Catalog;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Items;
+using WibboEmulator.Games.Catalog;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Items;
 using System.Data;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Rooms;
 using System.Text;
-using WibboEmulator.Game.Users;
+using WibboEmulator.Games.Users;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class LootboxInfo : IChatCommand
     {

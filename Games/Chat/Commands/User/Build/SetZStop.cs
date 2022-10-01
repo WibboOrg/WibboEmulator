@@ -1,8 +1,8 @@
 using MySqlX.XDevAPI.Common;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Rooms;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Game.Chat.Commands.Cmd
+namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class SetZStop : IChatCommand
     {
@@ -11,7 +11,7 @@ namespace WibboEmulator.Game.Chat.Commands.Cmd
             UserRoom.ConstruitZMode = false;
             Session.SendPacket(Room.GetGameMap().Model.SerializeRelativeHeightmap());
 
-            Session.SendWhisper("Setz désactivé!");
+            Session.SendWhisper("Setz dï¿½sactivï¿½!");
         }
     }
 }

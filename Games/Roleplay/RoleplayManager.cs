@@ -1,12 +1,12 @@
 ﻿using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Game.Roleplay.Enemy;
-using WibboEmulator.Game.Roleplay.Troc;
-using WibboEmulator.Game.Roleplay.Weapon;
+using WibboEmulator.Games.Roleplay.Enemy;
+using WibboEmulator.Games.Roleplay.Troc;
+using WibboEmulator.Games.Roleplay.Weapon;
 using System.Collections.Concurrent;
 using System.Data;
 
-namespace WibboEmulator.Game.Roleplay
+namespace WibboEmulator.Games.Roleplay
 {
     public class RoleplayManager
     {

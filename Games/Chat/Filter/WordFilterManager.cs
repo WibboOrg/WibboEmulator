@@ -3,7 +3,7 @@ using WibboEmulator.Database.Interfaces;
 using System.Data;
 using System.Text.RegularExpressions;
 
-namespace WibboEmulator.Game.Chat.Filter
+namespace WibboEmulator.Games.Chat.Filter
 {
     public sealed class WordFilterManager
     {

@@ -1,16 +1,16 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
-using WibboEmulator.Game.Clients;
-using WibboEmulator.Game.Pets;
-using WibboEmulator.Game.Roleplay;
-using WibboEmulator.Game.Roleplay.Player;
-using WibboEmulator.Game.Rooms.AI;
-using WibboEmulator.Game.Rooms.Games;
-using WibboEmulator.Game.Rooms.Utils;
+using WibboEmulator.Games.Clients;
+using WibboEmulator.Games.Pets;
+using WibboEmulator.Games.Roleplay;
+using WibboEmulator.Games.Roleplay.Player;
+using WibboEmulator.Games.Rooms.AI;
+using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Utils;
 using System.Drawing;
 
-namespace WibboEmulator.Game.Rooms
+namespace WibboEmulator.Games.Rooms
 {
     public class RoomUser : IEquatable<RoomUser>
     {

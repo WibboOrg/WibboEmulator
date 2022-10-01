@@ -1,5 +1,5 @@
-﻿using WibboEmulator.Game.Catalog.Utilities;
-using WibboEmulator.Game.Items;
+﻿using WibboEmulator.Games.Catalog.Utilities;
+using WibboEmulator.Games.Items;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni
 {
