@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
-    internal class Test : IChatCommand
+    internal class UnloadEmptyRooms : IChatCommand
     {
         public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
