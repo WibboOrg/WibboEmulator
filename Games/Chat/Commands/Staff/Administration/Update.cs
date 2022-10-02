@@ -149,6 +149,12 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                         Session.SendWhisper("Mutant/Figure mises à jour");
                         break;
                     }
+                case "setting":
+                    {
+                        WibboEnvironment.GetSettings().Init(dbClient);
+                        Session.SendWhisper("Paramètre mises à jour");
+                        break;
+                    }
                 default:
                     {
                         Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.notfound", Session.Langue));

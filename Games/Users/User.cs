@@ -421,7 +421,7 @@ namespace WibboEmulator.Games.GameClients
                 }
             }
 
-            if (room.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("game.owner"))
+            if (room.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
             {
                 if (room.GetRoomUserManager().GetUserByTracker(this.IP, this.GetClient().MachineId) != null)
                 {

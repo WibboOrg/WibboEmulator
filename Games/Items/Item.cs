@@ -196,22 +196,23 @@ namespace WibboEmulator.Games.Items
         public ItemData Data;
         public FurniInteractor Interactor;
 
-        public Item(int mId, int RoomId, int mBaseItem, string ExtraData, int limitedNumber, int limitedStack, int X, int Y, double Z, int Rot, string wallCoord, Room room)
+        public Item(int id, int roomId, int baseItem, string extraData, int limitedNumber, int limitedStack, int x, int y, double z, int rot, 
+            string wallCoord, Room room)
         {
-            if (WibboEnvironment.GetGame().GetItemManager().GetItem(mBaseItem, out ItemData Data))
+            if (WibboEnvironment.GetGame().GetItemManager().GetItem(baseItem, out ItemData Data))
             {
-                this.Id = mId;
-                this.RoomId = RoomId;
-                this.BaseItem = mBaseItem;
-                this.ExtraData = ExtraData;
-                this.X = X;
-                this.Y = Y;
-                if (!double.IsInfinity(Z))
+                this.Id = id;
+                this.RoomId = roomId;
+                this.BaseItem = baseItem;
+                this.ExtraData = extraData;
+                this.X = x;
+                this.Y = y;
+                if (!double.IsInfinity(z))
                 {
-                    this.Z = Z;
+                    this.Z = z;
                 }
 
-                this.Rotation = Rot;
+                this.Rotation = rot;
                 this.UpdateCounter = 0;
                 this.InteractingUser = 0;
                 this.InteractingUser2 = 0;
@@ -229,7 +230,7 @@ namespace WibboEmulator.Games.Items
                 this._roomInstance = room;
                 if (this.GetBaseItem() == null)
                 {
-                    ExceptionLogger.LogException("Unknown baseID: " + mBaseItem);
+                    ExceptionLogger.LogException("Unknown baseID: " + baseItem);
                 }
 
                 switch (this.GetBaseItem().InteractionType)
@@ -267,9 +268,9 @@ namespace WibboEmulator.Games.Items
                         break;
                     case InteractionType.GUILD_ITEM:
                     case InteractionType.GUILD_GATE:
-                        if (!string.IsNullOrEmpty(ExtraData))
+                        if (!string.IsNullOrEmpty(extraData))
                         {
-                            if (ExtraData.Contains(';'))
+                            if (extraData.Contains(';'))
                             {
                                 int.TryParse(this.ExtraData.Split(new char[1] { ';' })[1], out this.GroupId);
                             }
@@ -279,7 +280,7 @@ namespace WibboEmulator.Games.Items
                 this.IsWallItem = this.GetBaseItem().Type.ToString().ToLower() == "i";
                 this.IsFloorItem = this.GetBaseItem().Type.ToString().ToLower() == "s";
 
-                this.GetAffectedTiles = Gamemap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.X, this.Y, Rot);
+                this.GetAffectedTiles = Gamemap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.X, this.Y, rot);
 
                 this.Interactor = ItemFactory.CreateInteractor(this);
             }

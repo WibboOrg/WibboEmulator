@@ -161,7 +161,7 @@ public static class WibboEnvironment
             _figureManager.Init();
 
             WebSocketOrigins = _settingsManager.GetData<string>("game.ws.origins").Split(',').ToList();
-            _webSocketManager = new WebSocketManager(_settingsManager.GetData<int>("game.ws.port"), _settingsManager.GetData<bool>("game.ssl.enable"), _settingsManager.GetData<string>("game.ssl.password"));
+            _webSocketManager = new WebSocketManager(_settingsManager.GetData<int>("game.ws.port"), _settingsManager.GetData<bool>("game.ssl.enable"));
 
             if (_settingsManager.GetData<bool>("mus.tcp.enable"))
             {

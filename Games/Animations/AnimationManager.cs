@@ -5,21 +5,19 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Rooms;
 using System.Data;
 using System.Diagnostics;
+using MySqlX.XDevAPI;
 
 namespace WibboEmulator.Games.Animations
 {
     public class AnimationManager
     {
-        private const int MIN_USERS = 70;
-        private const int START_TIME = 20;
-        private const int NOTIF_TIME = 2;
-        private const int CLOSE_TIME = 1;
+        private readonly TimeSpan _startTime = TimeSpan.FromMinutes(20);
+        private readonly TimeSpan _notifTime = TimeSpan.FromMinutes(2);
+        private readonly TimeSpan _closeTime = TimeSpan.FromMinutes(1);
 
+        private DateTime _animationTime;
         private List<int> _roomId;
-        private string _gameOwner;
         private bool _started;
-        private bool _skipCycle;
-        private int _timer;
         private int _roomIdGame;
 
         private bool _isActivate;
@@ -29,12 +27,15 @@ namespace WibboEmulator.Games.Animations
 
         public void OnUpdateUsersOnline(int usersOnline)
         {
-            if (this._isActivate && usersOnline < MIN_USERS)
+            int minUsers = WibboEnvironment.GetSettings().GetData<int>("autogame.min.users");
+
+            if (this._isActivate && usersOnline < minUsers)
             {
                 this._isActivate = false;
             }
-            else if (!this._isActivate && usersOnline >= MIN_USERS)
+            else if (!this._isActivate && usersOnline >= minUsers)
             {
+                this._animationTime = DateTime.Now;
                 this._isActivate = true;
             }
         }
@@ -43,24 +44,32 @@ namespace WibboEmulator.Games.Animations
         {
             this._forceDisabled = !this._forceDisabled;
 
+            if(!this._forceDisabled)
+                this._animationTime = DateTime.Now;
+
             return this._forceDisabled;
         }
 
-        public void ForceDisabled(bool Flag)
+        public void ForceDisabled(bool flag)
         {
-            this._forceDisabled = Flag;
+            this._forceDisabled = flag;
+
+            if (!this._forceDisabled)
+                this._animationTime = DateTime.Now;
         }
 
         public AnimationManager()
         {
             this._roomId = new List<int>();
             this._started = false;
-            this._timer = 0;
             this._roomIdGame = 0;
             this._isActivate = true;
             this._notif = false;
-            this._skipCycle = false;
             this._forceDisabled = false;
+            this._animationTime = DateTime.Now;
+
+            this.animationCycleStopwatch = new();
+            animationCycleStopwatch.Start();
         }
 
         public bool IsActivate()
@@ -80,19 +89,19 @@ namespace WibboEmulator.Games.Animations
                 return false;
             }
 
-            if (this._timer >= this.ToSeconds(START_TIME - NOTIF_TIME))
+            TimeSpan time = DateTime.Now - _animationTime;
+
+            if (time >= _startTime - _notifTime)
             {
                 return false;
             }
-
-            this._timer = 0;
 
             return true;
         }
 
         public string GetTime()
         {
-            TimeSpan time = TimeSpan.FromSeconds(this.ToSeconds(START_TIME) - this._timer);
+            TimeSpan time = _animationTime - DateTime.Now + _startTime;
 
             return time.Minutes + " minutes et " + time.Seconds + " secondes";
         }
@@ -101,9 +110,8 @@ namespace WibboEmulator.Games.Animations
         {
             this._roomId.Clear();
 
-            this._gameOwner = WibboEnvironment.GetSettings().GetData<string>("game.owner");
-
-            DataTable table = RoomDao.GetAllIdByOwner(dbClient, this._gameOwner);
+            string gameOwner = WibboEnvironment.GetSettings().GetData<string>("autogame.owner");
+            DataTable table = RoomDao.GetAllIdByOwner(dbClient, gameOwner);
             if (table == null)
             {
                 return;
@@ -125,53 +133,50 @@ namespace WibboEmulator.Games.Animations
             }
         }
 
-        private void Cycle()
+        private readonly Stopwatch animationCycleStopwatch;
+        private void AnimationCycle()
         {
-            if (!this._isActivate && !this._started)
+            if (this.animationCycleStopwatch.ElapsedMilliseconds >= 1000)
             {
-                return;
-            }
+                this.animationCycleStopwatch.Restart();
 
-            if (this._forceDisabled && !this._started)
-            {
-                return;
-            }
-
-            if (this._skipCycle)
-            {
-                this._timer++;
-                this._skipCycle = false;
-            }
-            else
-            {
-                this._skipCycle = true;
-            }
-
-            if (this._started)
-            {
-                if (this._timer >= this.ToSeconds(CLOSE_TIME))
+                if (!this._isActivate && !this._started)
                 {
-
-                    this._started = false;
-
-                    RoomData roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(this._roomIdGame);
-                    if (roomData != null)
-                    {
-                        roomData.State = 1;
-                    }
+                    return;
                 }
-                return;
-            }
 
-            if (this._timer >= this.ToSeconds(START_TIME - NOTIF_TIME) && !this._notif)
-            {
-                this._notif = true;
-                WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifTopComposer("Notre prochaine animation aura lieu dans deux minutes ! (Jack & Daisy)"));
-            }
+                if (this._forceDisabled && !this._started)
+                {
+                    return;
+                }
 
-            if (this._timer >= this.ToSeconds(START_TIME))
-            {
-                this.StartGame();
+                TimeSpan time = DateTime.Now - _animationTime;
+
+                if (this._started)
+                {
+                    if (time >= _closeTime)
+                    {
+                        this._started = false;
+
+                        RoomData roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(this._roomIdGame);
+                        if (roomData != null)
+                        {
+                            roomData.State = 1;
+                        }
+                    }
+                    return;
+                }
+
+                if (time >= _startTime - _notifTime && !this._notif)
+                {
+                    this._notif = true;
+                    WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifTopComposer("Notre prochaine animation aura lieu dans deux minutes ! (Jack & Daisy)"));
+                }
+
+                if (time >= _startTime)
+                {
+                    this.StartGame();
+                }
             }
         }
 
@@ -196,7 +201,7 @@ namespace WibboEmulator.Games.Animations
                 return;
             }
 
-            this._timer = 0;
+            this._animationTime = DateTime.Now;
             this._started = true;
             this._notif = false;
             this._roomIdGame = roomId;
@@ -213,8 +218,9 @@ namespace WibboEmulator.Games.Animations
                 "➤ Rejoins-nous chez [color=696969][b]WibboGame[/b][/color] dans le jeu [color=696969][u][b]" + room.RoomData.Name + "[/b][/u][/color] pour une animation automatisée ![br]" +
                 "➤ Rejoins nous et tente de remporter des [b]RareBoxs[/b] ainsi qu'un [b]point au [u]TOP Gamer[/u][/b] ![br][br]" +
                 "[center][img]https://cdn.wibbo.org/uploads/1659791208.png[/img]  - Jack et Daisy, [b][u][color=696969]Animateurs robotisés[/color][/u][/b] 🤖  -  [img]https://cdn.wibbo.org/uploads/1659791188.png[/img][/center]";
+            string gameOwner = WibboEnvironment.GetSettings().GetData<string>("autogame.owner");
 
-            WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, this._gameOwner, room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
+            WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, gameOwner, room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
 
             WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer(
                 "gameauto", // image
@@ -228,13 +234,8 @@ namespace WibboEmulator.Games.Animations
 
         public void OnCycle(Stopwatch moduleWatch)
         {
-            this.Cycle();
+            this.AnimationCycle();
             this.HandleFunctionReset(moduleWatch, "AnimationCycle");
-        }
-
-        private int ToSeconds(int minutes)
-        {
-            return (minutes * 60);
         }
 
         private void HandleFunctionReset(Stopwatch watch, string methodName)

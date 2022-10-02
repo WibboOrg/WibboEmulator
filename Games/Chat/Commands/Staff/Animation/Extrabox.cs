@@ -17,7 +17,8 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(73917766, out ItemData ItemData))
+            int lootboxId = WibboEnvironment.GetSettings().GetData<int>("givelot.lootbox.id");
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(lootboxId, out ItemData ItemData))
             {
                 return;
             }

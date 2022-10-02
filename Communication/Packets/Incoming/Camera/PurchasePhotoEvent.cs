@@ -28,12 +28,14 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
                 return;
             }
 
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(4581, out ItemData ItemData))
+            int photoItemId = WibboEnvironment.GetSettings().GetData<int>("photo.item.id");
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(photoItemId, out ItemData ItemData))
             {
                 return;
             }
 
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(4597, out ItemData ItemDataSmall))
+            int photoSmallItemId = WibboEnvironment.GetSettings().GetData<int>("photo.small.item.id");
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(photoSmallItemId, out ItemData ItemDataSmall))
             {
                 return;
             }

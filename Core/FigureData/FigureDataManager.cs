@@ -23,7 +23,7 @@ namespace WibboEmulator.Core.FigureData
             };
         }
 
-        public async void Init()
+        public void Init()
         {
             if (this._palettes.Count > 0)
             {
@@ -35,7 +35,7 @@ namespace WibboEmulator.Core.FigureData
                 this._setTypes.Clear();
             }
 
-            HttpResponseMessage response = await WibboEnvironment.GetHttpClient().GetAsync(WibboEnvironment.GetSettings().GetData<string>("figuredata.url") + "?cache=" + WibboEnvironment.GetUnixTimestamp());
+            HttpResponseMessage response = WibboEnvironment.GetHttpClient().GetAsync(WibboEnvironment.GetSettings().GetData<string>("figuredata.url") + "?cache=" + WibboEnvironment.GetUnixTimestamp()).GetAwaiter().GetResult();
 
             if(!response.IsSuccessStatusCode)
             {
@@ -43,7 +43,7 @@ namespace WibboEmulator.Core.FigureData
                 return;
             }
 
-            string jsonString = await response.Content.ReadAsStringAsync();
+            string jsonString = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
             JsonSerializerOptions options = new JsonSerializerOptions
             {

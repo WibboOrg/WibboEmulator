@@ -32,7 +32,8 @@ namespace WibboEmulator.Communication.RCON.Commands.User
 
             string PhotoId = parameters[2];
 
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(4581, out ItemData ItemData))
+            int photoItemId = WibboEnvironment.GetSettings().GetData<int>("photo.item.id");
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(photoItemId, out ItemData ItemData))
             {
                 return false;
             }

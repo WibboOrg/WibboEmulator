@@ -8,7 +8,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
     {
         public double Delay => 5000;
 
-        public async void Parse(GameClient session, ClientPacket packet)
+        public void Parse(GameClient session, ClientPacket packet)
         {
             int photoLength = packet.PopInt();
 
@@ -29,12 +29,12 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
             MultipartFormDataContent content = new MultipartFormDataContent("Upload");
             content.Add(new StreamContent(new MemoryStream(photoBinary)), "photo", pictureName);
 
-            HttpResponseMessage response = await WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.GetSettings().GetData<string>("camera.thubmail.upload.url"), content);
+            HttpResponseMessage response = WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.GetSettings().GetData<string>("camera.thubmail.upload.url"), content).GetAwaiter().GetResult();
 
             if (!response.IsSuccessStatusCode)
                 return;
 
-            string photoId = await response.Content.ReadAsStringAsync();
+            string photoId = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
             if (string.IsNullOrEmpty(photoId) || pictureName != photoId)
             {

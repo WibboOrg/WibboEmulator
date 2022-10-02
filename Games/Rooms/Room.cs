@@ -120,9 +120,9 @@ namespace WibboEmulator.Games.Rooms
             this._chatMessageManager.LoadRoomChatlogs(this.Id);
 
             this.GetRoomItemHandler().LoadFurniture();
-            if (this.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("game.owner"))
+            if (this.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
             {
-                this.GetRoomItemHandler().LoadFurniture(WibboEnvironment.GetSettings().GetData<int>("game.deco.room.id"));
+                this.GetRoomItemHandler().LoadFurniture(WibboEnvironment.GetSettings().GetData<int>("autogame.deco.room.id"));
             }
 
             this.GetGameMap().GenerateMaps(true);

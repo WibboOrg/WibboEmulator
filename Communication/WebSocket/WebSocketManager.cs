@@ -1,32 +1,31 @@
-﻿using WibboEmulator.Communication.Packets.Incoming;
+﻿using NetCoreServer;
+using System.Collections.Concurrent;
+using System.Net;
+using System.Net.Sockets;
+using System.Security.Authentication;
+using System.Security.Cryptography.X509Certificates;
+using WibboEmulator.Communication.Packets.Incoming;
 using WibboEmulator.Core;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
-using System.Collections.Concurrent;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using WebSocketSharp;
-using WebSocketSharp.Server;
-using System.Security.Authentication;
+using Buffer = System.Buffer;
 
 namespace WibboEmulator.Communication.WebSocket
 {
     public class WebSocketManager
     {
-        private WebSocketServer _webSocketServer;
+        private GameServer _webSocketServer;
 
         private readonly ConcurrentDictionary<string, int> _ipConnectionsCount;
         private readonly ConcurrentDictionary<string, int> _lastTimeConnection;
         private readonly List<string> _bannedIp;
 
-        public WebSocketManager(int port, bool isSecure, string certificatePassword)
+        public WebSocketManager(int port, bool isSecure)
         {
             this._ipConnectionsCount = new ConcurrentDictionary<string, int>();
             this._lastTimeConnection = new ConcurrentDictionary<string, int>();
             this._bannedIp = new List<string>();
 
-            this._webSocketServer = new WebSocketServer(IPAddress.Any, port, isSecure);
-            this._webSocketServer.KeepClean = false;
             if (isSecure)
             {
                 string pemFile = WibboEnvironment.GetSettings().GetData<string>("game.ssl.pem.file.path");
@@ -36,16 +35,12 @@ namespace WibboEmulator.Communication.WebSocket
 
                 if (certificat != null)
                 {
-                    this._webSocketServer.SslConfiguration.ServerCertificate = certificat;
-                    this._webSocketServer.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls13;
+                    var context = new SslContext(SslProtocols.Tls12, certificat);
+
+                    this._webSocketServer = new GameServer(context, IPAddress.Any, 403);
                 }
             }
-            this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => new GameWebSocket() { IgnoreExtensions = true });
             this._webSocketServer.Start();
-
-            #if DEBUG
-            this._webSocketServer.Log.Level = LogLevel.Trace;
-            #endif
         }
 
         public void DisposeClient(GameWebSocket connection)
@@ -54,7 +49,7 @@ namespace WibboEmulator.Communication.WebSocket
 
             this.AlterIpConnectionCount(ip, (this.GetAmountOfConnectionFromIp(ip) - 1));
 
-            WibboEnvironment.GetGame().GetGameClientManager().DisposeConnection(connection.ID);
+            WibboEnvironment.GetGame().GetGameClientManager().DisposeConnection(connection.Id.ToString());
         }
 
         public void CreatedClient(GameWebSocket connection)
@@ -72,7 +67,7 @@ namespace WibboEmulator.Communication.WebSocket
             int ConnectionCount = this.GetAmountOfConnectionFromIp(ip);
             if (ConnectionCount <= 10)
             {
-                WibboEnvironment.GetGame().GetGameClientManager().CreateAndStartClient(connection.ID, connection);
+                WibboEnvironment.GetGame().GetGameClientManager().CreateAndStartClient(connection.Id.ToString(), connection);
             }
             else
             {
@@ -151,37 +146,51 @@ namespace WibboEmulator.Communication.WebSocket
         }
     }
 
-    public class GameWebSocket : WebSocketBehavior
+    class GameServer : WssServer
+    {
+        public GameServer(SslContext context, IPAddress address, int port) : base(context, address, port) { }
+
+        protected override WssSession CreateSession() => new GameWebSocket(this);
+
+        protected override void OnError(SocketError error)
+        {
+            Console.WriteLine($"Chat WebSocket server caught an error with code {error}");
+        }
+    }
+
+    public class GameWebSocket : WssSession
     {
         private string _ip;
+        private Dictionary<string, string> _headerList = new();
 
-        protected override void OnError(WebSocketSharp.ErrorEventArgs e)
+        public GameWebSocket(WssServer server) : base(server) { }
+
+
+        protected override void OnError(SocketError error)
         {
-            ExceptionLogger.LogException(e.Message);
+            ExceptionLogger.LogException(error.ToString());
         }
 
-        protected override void OnClose(CloseEventArgs e)
+        public override void OnWsDisconnected()
         {
             WibboEnvironment.GetWebSocketManager().DisposeClient(this);
         }
 
-        protected override void OnMessage(MessageEventArgs e)
+        public override void OnWsReceived(byte[] buffer, long offset, long size)
         {
             try
             {
-                if (this.ConnectionState != WebSocketState.Open)
+                if (!this.IsConnected)
                     return;
 
-                if (!e.IsBinary) return;
-
-                byte[] dataDecoded = e.RawData;
+                byte[] dataDecoded = buffer;
 
                 if (dataDecoded.Length < 4)
                 {
                     return;
                 }
 
-                GameClient client = WibboEnvironment.GetGame().GetGameClientManager().GetClientById(this.ID);
+                GameClient client = WibboEnvironment.GetGame().GetGameClientManager().GetClientById(this.Id.ToString());
 
                 if (client == null)
                     return;
@@ -223,32 +232,33 @@ namespace WibboEmulator.Communication.WebSocket
             }
         }
 
-        protected override void OnOpen()
+        public override void OnWsConnected(HttpRequest request)
         {
+            base.OnWsConnected(request);
+
+            for (int i = 0; i < request.Headers; i++)
+            {
+                var header = request.Header(i);
+
+                this._headerList.Add(header.Item1, header.Item2);
+            }
+
             WibboEnvironment.GetWebSocketManager().CreatedClient(this);
         }
 
         public void SendData(byte[] bytes)
         {
-            if (this.ConnectionState != WebSocketState.Open)
-                return;
-
-            this.Send(bytes);
-        }
-
-        public void Dispose()
-        {
-            this.Close();
+            this.SendBinary(bytes);
         }
 
         public string GetUserAgent()
         {
-            return this.Headers["User-Agent"] ?? "";
+            return this._headerList["User-Agent"] ?? "";
         }
 
         public string GetOrigin()
         {
-            return this.Headers["Origin"] ?? "";
+            return this._headerList["Origin"] ?? "";
         }
 
         public string GetIp()
@@ -263,7 +273,12 @@ namespace WibboEmulator.Communication.WebSocket
 
         private string GetRealIP()
         {
-            if (IPAddress.TryParse(this.Headers["CF-Connecting-IP"], out IPAddress realIP))
+            var RemoteIP = this.Socket.RemoteEndPoint.ToString().Split(':')[0];
+
+            if (!this._headerList.ContainsKey("CF-Connecting-IP"))
+                return RemoteIP;
+
+            if (IPAddress.TryParse(this._headerList["CF-Connecting-IP"], out IPAddress realIP))
             {
                 string[] cloudlareIPs = { 
                     "173.245.48.0/20", "103.21.244.0/22", "103.22.200.0/22", "103.31.4.0/22", "141.101.64.0/18", "108.162.192.0/18", "190.93.240.0/20", 
@@ -274,12 +289,12 @@ namespace WibboEmulator.Communication.WebSocket
 
                 foreach (string rangeIP in cloudlareIPs)
                 {
-                    if (IPRange.IsInSubnet(this.Context.UserEndPoint.Address, rangeIP))
+                    if (IPRange.IsInSubnet(IPAddress.Parse(this.Socket.RemoteEndPoint.ToString()), rangeIP))
                         return realIP.ToString();
                 }
             }
 
-            return this.Context.UserEndPoint.Address.ToString();
+            return RemoteIP;
         }
     }
 }
