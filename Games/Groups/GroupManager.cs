@@ -8,6 +8,8 @@ namespace WibboEmulator.Games.Groups
 {
     public class GroupManager
     {
+        private readonly object _groupLoadingSync;
+
         private readonly ConcurrentDictionary<int, Group> _groups;
 
         private readonly List<GroupBadgeParts> _bases;
@@ -18,6 +20,8 @@ namespace WibboEmulator.Games.Groups
 
         public GroupManager()
         {
+            _groupLoadingSync = new object();
+
             this._groups = new ConcurrentDictionary<int, Group>();
 
             this._bases = new List<GroupBadgeParts>();
@@ -73,23 +77,26 @@ namespace WibboEmulator.Games.Groups
                 return this._groups.TryGetValue(id, out Group);
             }
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            lock (_groupLoadingSync)
             {
-                DataRow Row = GuildDao.GetOne(dbClient, id);
-
-                if (Row == null)
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    return false;
+                    DataRow Row = GuildDao.GetOne(dbClient, id);
+
+                    if (Row == null)
+                    {
+                        return false;
+                    }
+
+                    Group = new Group(
+                            Convert.ToInt32(Row["id"]), Convert.ToString(Row["name"]), Convert.ToString(Row["desc"]), Convert.ToString(Row["badge"]), Convert.ToInt32(Row["room_id"]), Convert.ToInt32(Row["owner_id"]),
+                            Convert.ToInt32(Row["created"]), Convert.ToInt32(Row["state"]), Convert.ToInt32(Row["colour1"]), Convert.ToInt32(Row["colour2"]), Convert.ToInt32(Row["admindeco"]), Convert.ToInt32(Row["has_forum"]) == 1);
+
+                    this._groups.TryAdd(Group.Id, Group);
                 }
 
-                Group = new Group(
-                        Convert.ToInt32(Row["id"]), Convert.ToString(Row["name"]), Convert.ToString(Row["desc"]), Convert.ToString(Row["badge"]), Convert.ToInt32(Row["room_id"]), Convert.ToInt32(Row["owner_id"]),
-                        Convert.ToInt32(Row["created"]), Convert.ToInt32(Row["state"]), Convert.ToInt32(Row["colour1"]), Convert.ToInt32(Row["colour2"]), Convert.ToInt32(Row["admindeco"]), Convert.ToInt32(Row["has_forum"]) == 1);
-
-                this._groups.TryAdd(Group.Id, Group);
+                return true;
             }
-
-            return true;
         }
 
         public bool TryCreateGroup(User Player, string Name, string Description, int RoomId, string Badge, int Colour1, int Colour2, out Group Group)
