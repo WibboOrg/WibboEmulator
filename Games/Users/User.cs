@@ -17,6 +17,7 @@ using WibboEmulator.Games.GameClients.Messenger;
 using WibboEmulator.Games.GameClients.Permissions;
 using WibboEmulator.Games.GameClients.Wardrobes;
 using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 
 namespace WibboEmulator.Games.GameClients
 {
@@ -85,6 +86,10 @@ namespace WibboEmulator.Games.GameClients
         public DateTime SpamFloodTime;
         public DateTime EveryoneTimer;
         public DateTime LastGiftPurchaseTime;
+
+        public bool loadRoomBlocked;
+        public int loadRoomCount = 0;
+        public DateTime LastLoadedRoomTime;
 
         public int CurrentQuestId;
         public int LastCompleted;
@@ -321,7 +326,33 @@ namespace WibboEmulator.Games.GameClients
                 return;
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(Id);
+            Room room = null;
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Id, out room))
+            {
+                TimeSpan timeSpan = DateTime.Now - this.LastLoadedRoomTime;
+                if (timeSpan.TotalSeconds < 2)
+                    this.loadRoomCount++;
+
+                if (timeSpan.TotalSeconds > 60)
+                {
+                    this.loadRoomCount = 0;
+                    this.loadRoomBlocked = false;
+                }
+                else if (this.loadRoomCount > 5)
+                {
+                    if (!this.loadRoomBlocked) 
+                    {
+                        WibboEnvironment.GetGame().GetClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", $"Attention {this.Username} charge trop vite les apparts!"));
+                        this.loadRoomBlocked = true;
+                    } 
+                    this.GetClient().SendPacket(new CloseConnectionComposer());
+                    return;
+                }
+
+                this.LastLoadedRoomTime = DateTime.Now;
+            }
+
+            room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(Id);
             if (room == null)
             {
                 this.GetClient().SendPacket(new CloseConnectionComposer());

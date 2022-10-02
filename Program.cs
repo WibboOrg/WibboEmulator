@@ -5,12 +5,11 @@ namespace WibboEmulator
 
     public static class Program
     {
-        [STAThread]
-        public static void Main()
+        public static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.White;
-            AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += MyHandler;
+            Console.CursorVisible = false;
+            AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
             WibboEnvironment.Initialize();
 
@@ -31,7 +30,7 @@ namespace WibboEmulator
             }
         }
 
-        private static void MyHandler(object sender, UnhandledExceptionEventArgs args)
+        private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
             ExceptionLogger.DisablePrimaryWriting(true);
             ExceptionLogger.LogCriticalException("SYSTEM CRITICAL EXCEPTION: " + ((Exception)args.ExceptionObject).ToString());

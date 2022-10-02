@@ -68,7 +68,7 @@ namespace WibboEmulator.Communication.Packets
             Console.WriteLine("Logged " + this._incomingPackets.Count + " packet handler(s)!");
         }
 
-        public async void TryExecutePacket(GameClient session, ClientPacket packet)
+        public void TryExecutePacket(GameClient session, ClientPacket packet)
         {
             if (!this._incomingPackets.TryGetValue(packet.Id, out IPacketEvent pak))
             {

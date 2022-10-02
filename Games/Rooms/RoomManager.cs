@@ -383,6 +383,22 @@ namespace WibboEmulator.Games.Rooms
             Console.WriteLine("Done disposing rooms!");
         }
 
+        public void UnloadEmptyRooms()
+        {
+            foreach (Room room in this._rooms.Values.ToList())
+            {
+                if (room == null)
+                {
+                    continue;
+                }
+
+                if (room.UserCount > 0)
+                    continue;
+
+                this.UnloadRoom(room);
+            }
+        }
+
         public void UnloadRoom(Room Room)
         {
             if (Room == null)

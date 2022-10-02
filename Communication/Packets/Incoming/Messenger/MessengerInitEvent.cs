@@ -9,6 +9,9 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
         public void Parse(GameClient Session, ClientPacket Packet)
         {
+            if (Session.GetUser() == null || Session.GetUser().GetMessenger() == null)
+                return;
+
             Session.GetUser().GetMessenger().OnStatusChanged();
 
             Session.SendPacket(new MessengerInitComposer());

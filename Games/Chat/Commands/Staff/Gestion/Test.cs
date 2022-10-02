@@ -9,22 +9,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
     {
         public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-
-            DataTable table = RoomDao.GetAllId(dbClient);
-            if (table == null)
-            {
-                return;
-            }
-
-            foreach (DataRow dataRow in table.Rows)
-            {
-                int roomId = Convert.ToInt32(dataRow["id"]);
-
-                WibboEnvironment.GetGame().GetRoomManager().LoadRoom(roomId);
-            }
-
-            return;
+            WibboEnvironment.GetGame().GetRoomManager().UnloadEmptyRooms();
         }
     }
 }

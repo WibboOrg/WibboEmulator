@@ -50,7 +50,7 @@ namespace WibboEmulator.Core.FigureData
                 PropertyNameCaseInsensitive = true,
             };
 
-            FigureDataRoot? figureData = JsonSerializer.Deserialize<FigureDataRoot>(jsonString, options);
+            FigureDataRoot figureData = JsonSerializer.Deserialize<FigureDataRoot>(jsonString, options);
 
             foreach (FigureDataPalette palette in figureData.Palettes)
             {
