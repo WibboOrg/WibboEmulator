@@ -9,6 +9,8 @@ namespace WibboEmulator.Games.Rooms
 {
     public class RoomManager
     {
+        private readonly object _roomLoadingSync;
+
         private readonly ConcurrentDictionary<int, Room> _rooms;
         private readonly Dictionary<string, RoomModel> _roomModels;
         private readonly ConcurrentDictionary<int, RoomData> _roomsData;
@@ -17,12 +19,14 @@ namespace WibboEmulator.Games.Rooms
 
         public RoomManager()
         {
-            this._rooms = new ConcurrentDictionary<int, Room>();
-            this._roomModels = new Dictionary<string, RoomModel>();
-            this._roomsData = new ConcurrentDictionary<int, RoomData>();
+            _roomLoadingSync = new object();
 
-            this.roomCycleStopwatch = new Stopwatch();
-            this.roomCycleStopwatch.Start();
+            _rooms = new ConcurrentDictionary<int, Room>();
+            _roomModels = new Dictionary<string, RoomModel>();
+            _roomsData = new ConcurrentDictionary<int, RoomData>();
+
+            roomCycleStopwatch = new Stopwatch();
+            roomCycleStopwatch.Start();
         }
 
         private static RoomModel GetCustomData(int roomID)
@@ -111,25 +115,28 @@ namespace WibboEmulator.Games.Rooms
                 return room;
             }
 
-            RoomData data = this.GenerateRoomData(id);
-            if (data == null)
+            lock (_roomLoadingSync)
             {
-                return null;
+                RoomData data = this.GenerateRoomData(id);
+                if (data == null)
+                {
+                    return null;
+                }
+
+                room = new Room(data);
+
+                if (!this._rooms.ContainsKey(room.Id))
+                {
+                    this._rooms.TryAdd(room.Id, room);
+                }
+
+                if (this._roomsData.ContainsKey(room.Id))
+                {
+                    this._roomsData.TryRemove(room.Id, out data);
+                }
+
+                return room;
             }
-
-            room = new Room(data);
-
-            if (!this._rooms.ContainsKey(room.Id))
-            {
-                this._rooms.TryAdd(room.Id, room);
-            }
-
-            if (this._roomsData.ContainsKey(room.Id))
-            {
-                this._roomsData.TryRemove(room.Id, out data);
-            }
-
-            return room;
         }
 
         public void RoomDataRemove(int Id)
