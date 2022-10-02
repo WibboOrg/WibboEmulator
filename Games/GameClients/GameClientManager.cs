@@ -10,7 +10,7 @@ using System.Text;
 
 namespace WibboEmulator.Games.GameClients
 {
-    public class ClientManager
+    public class GameClientManager
     {
         public ConcurrentDictionary<string, GameClient> _clients;
         public ConcurrentDictionary<string, string> _usernameRegister;
@@ -24,7 +24,7 @@ namespace WibboEmulator.Games.GameClients
 
         public int Count => this._userIDRegister.Count;
 
-        public ClientManager()
+        public GameClientManager()
         {
             this._clients = new ConcurrentDictionary<string, GameClient>();
             this._usernameRegister = new ConcurrentDictionary<string, string>();
