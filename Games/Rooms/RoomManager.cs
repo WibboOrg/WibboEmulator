@@ -356,6 +356,8 @@ namespace WibboEmulator.Games.Rooms
                             ExceptionLogger.LogThreadException("Room lagging", "Room cycle task for room " + room.Id);
 
                             this.UnloadRoom(room);
+
+                            WibboEnvironment.GetGame().GetRoomManager().UnloadEmptyRooms();
                         }
                     }
                 }
