@@ -16,7 +16,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
             }
 
             string username = Params[1];
-            GameClient TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
+            GameClient TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
             if (TargetUser == null)
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));

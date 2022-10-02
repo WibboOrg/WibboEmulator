@@ -92,7 +92,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
 
         public void Dispose()
         {
-            List<GameClient> onlineUsers = WibboEnvironment.GetGame().GetClientManager().GetClientsById(this.Friends.Keys);
+            List<GameClient> onlineUsers = WibboEnvironment.GetGame().GetGameClientManager().GetClientsById(this.Friends.Keys);
 
             foreach (GameClient gameClient in onlineUsers)
             {
@@ -119,7 +119,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
                 return;
             }
 
-            List<GameClient> onlineUsers = WibboEnvironment.GetGame().GetClientManager().GetClientsById(this.Friends.Keys);
+            List<GameClient> onlineUsers = WibboEnvironment.GetGame().GetGameClientManager().GetClientsById(this.Friends.Keys);
 
             if (onlineUsers == null)
             {
@@ -193,7 +193,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
             }
 
             this.OnNewFriendship(friendID);
-            GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
+            GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(friendID);
             if (clientByUserId == null || clientByUserId.GetUser().GetMessenger() == null)
             {
                 return;
@@ -215,7 +215,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
             }
 
             this.OnDestroyFriendship(friendID);
-            GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
+            GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(friendID);
             if (clientByUserId == null || clientByUserId.GetUser().GetMessenger() == null)
             {
                 return;
@@ -226,7 +226,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
 
         public void OnNewFriendship(int friendID)
         {
-            GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(friendID);
+            GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(friendID);
             MessengerBuddy friend;
             if (clientByUserId == null || clientByUserId.GetUser() == null)
             {
@@ -283,7 +283,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
 
         public bool RequestBuddy(string UserQuery)
         {
-            GameClient clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(UserQuery);
+            GameClient clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(UserQuery);
             int sender;
             bool flag;
             if (clientByUsername == null)
@@ -332,13 +332,13 @@ namespace WibboEmulator.Games.GameClients.Messenger
                     MessengerRequestDao.Replace(dbClient, this._userInstance.Id, sender);
                 }
 
-                GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(sender);
+                GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(sender);
                 if (clientByUserId == null || clientByUserId.GetUser() == null)
                 {
                     return false;
                 }
 
-                MessengerRequest request = new MessengerRequest(sender, this._userInstance.Id, WibboEnvironment.GetGame().GetClientManager().GetNameById(this._userInstance.Id));
+                MessengerRequest request = new MessengerRequest(sender, this._userInstance.Id, WibboEnvironment.GetGame().GetGameClientManager().GetNameById(this._userInstance.Id));
                 clientByUserId.GetUser().GetMessenger().OnNewRequest(this._userInstance.Id);
 
                 clientByUserId.SendPacket(new NewBuddyRequestComposer(request));
@@ -359,7 +359,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
                 return;
             }
 
-            this.Requests.Add(friendID, new MessengerRequest(this._userInstance.Id, friendID, WibboEnvironment.GetGame().GetClientManager().GetNameById(friendID)));
+            this.Requests.Add(friendID, new MessengerRequest(this._userInstance.Id, friendID, WibboEnvironment.GetGame().GetGameClientManager().GetNameById(friendID)));
         }
 
         public void SendInstantMessage(int ToId, string Message)
@@ -370,7 +370,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
                 return;
             }
 
-            GameClient Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(ToId);
+            GameClient Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(ToId);
             if (Client == null || Client.GetUser() == null || Client.GetUser().GetMessenger() == null)
             {
                 using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
@@ -401,7 +401,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
 
             if (GetMessages != null)
             {
-                GameClient Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
+                GameClient Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._userInstance.Id);
                 if (Client == null)
                 {
                     return;
@@ -427,7 +427,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
 
         private GameClient GetClient()
         {
-            return WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
+            return WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._userInstance.Id);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            GameClient targetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            GameClient targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
             if (targetUser == null || targetUser.GetUser() == null)
             {
                 return;

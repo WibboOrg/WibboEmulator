@@ -103,7 +103,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                     {
                         WibboEnvironment.GetGame().GetModerationManager().Init(dbClient);
                         Session.SendWhisper("Moderation mis à jour");
-                        WibboEnvironment.GetGame().GetClientManager().SendMessageStaff(new WhisperComposer(UserRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous!", 23));
+                        WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(new WhisperComposer(UserRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous!", 23));
                         break;
                     }
                 case "catalogue":
@@ -111,7 +111,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                     {
                         WibboEnvironment.GetGame().GetItemManager().Init(dbClient);
                         WibboEnvironment.GetGame().GetCatalog().Init(dbClient, WibboEnvironment.GetGame().GetItemManager());
-                        WibboEnvironment.GetGame().GetClientManager().SendMessage(new CatalogUpdatedComposer());
+                        WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new CatalogUpdatedComposer());
                         Session.SendWhisper("Catalogue mis à jour");
                         break;
                     }

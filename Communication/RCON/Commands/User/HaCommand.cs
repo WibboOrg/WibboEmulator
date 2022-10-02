@@ -22,7 +22,7 @@ namespace WibboEmulator.Communication.RCON.Commands.User
                 return false;
             }
 
-            GameClient Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            GameClient Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid);
             if (Client == null)
             {
                 return false;
@@ -38,7 +38,7 @@ namespace WibboEmulator.Communication.RCON.Commands.User
 
             WibboEnvironment
                 .GetGame()
-                .GetClientManager()
+                .GetGameClientManager()
                 .SendMessage(new BroadcastMessageAlertComposer(WibboEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", Client.Langue) + "\r\n" + Message + "\r\n- " + Client.GetUser().Username));
             return true;
         }

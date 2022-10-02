@@ -54,7 +54,7 @@ namespace WibboEmulator.Communication.WebSocket
 
             this.AlterIpConnectionCount(ip, (this.GetAmountOfConnectionFromIp(ip) - 1));
 
-            WibboEnvironment.GetGame().GetClientManager().DisposeConnection(connection.ID);
+            WibboEnvironment.GetGame().GetGameClientManager().DisposeConnection(connection.ID);
         }
 
         public void CreatedClient(GameWebSocket connection)
@@ -72,7 +72,7 @@ namespace WibboEmulator.Communication.WebSocket
             int ConnectionCount = this.GetAmountOfConnectionFromIp(ip);
             if (ConnectionCount <= 10)
             {
-                WibboEnvironment.GetGame().GetClientManager().CreateAndStartClient(connection.ID, connection);
+                WibboEnvironment.GetGame().GetGameClientManager().CreateAndStartClient(connection.ID, connection);
             }
             else
             {
@@ -181,7 +181,7 @@ namespace WibboEmulator.Communication.WebSocket
                     return;
                 }
 
-                GameClient client = WibboEnvironment.GetGame().GetClientManager().GetClientById(this.ID);
+                GameClient client = WibboEnvironment.GetGame().GetGameClientManager().GetClientById(this.ID);
 
                 if (client == null)
                     return;

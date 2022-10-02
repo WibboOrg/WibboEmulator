@@ -68,23 +68,23 @@ namespace WibboEmulator.Games.GameClients
                 }
                 else
                 {
-                    WibboEnvironment.GetGame().GetClientManager().LogClonesOut(user.Id);
+                    WibboEnvironment.GetGame().GetGameClientManager().LogClonesOut(user.Id);
                     this._user = user;
                     this.Langue = user.Langue;
 
-                    WibboEnvironment.GetGame().GetClientManager().RegisterClient(this, user.Id, user.Username);
+                    WibboEnvironment.GetGame().GetGameClientManager().RegisterClient(this, user.Id, user.Username);
 
                     if (this.Langue == Language.FRANCAIS)
                     {
-                        WibboEnvironment.GetGame().GetClientManager().OnlineUsersFr++;
+                        WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersFr++;
                     }
                     else if (this.Langue == Language.ANGLAIS)
                     {
-                        WibboEnvironment.GetGame().GetClientManager().OnlineUsersEn++;
+                        WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersEn++;
                     }
                     else if (this.Langue == Language.PORTUGAIS)
                     {
-                        WibboEnvironment.GetGame().GetClientManager().OnlineUsersBr++;
+                        WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersBr++;
                     }
 
                     if (this._user.MachineId != this.MachineId && this.MachineId != null)
@@ -131,7 +131,7 @@ namespace WibboEmulator.Games.GameClients
 
                     if (this._user.HasPermission("perm_mod"))
                     {
-                        WibboEnvironment.GetGame().GetClientManager().AddUserStaff(this._user.Id);
+                        WibboEnvironment.GetGame().GetGameClientManager().AddUserStaff(this._user.Id);
                         packetList.Add(new ModeratorInitComposer(
                             WibboEnvironment.GetGame().GetModerationManager().UserMessagePresets(),
                             WibboEnvironment.GetGame().GetModerationManager().RoomMessagePresets(),
@@ -228,7 +228,7 @@ namespace WibboEmulator.Games.GameClients
                         LogChatPubDao.Insert(dbClient, this.GetUser().Id, "A vérifié: " + type + Message, this.GetUser().Username);
                     }
 
-                    foreach (GameClient Client in WibboEnvironment.GetGame().GetClientManager().GetStaffUsers())
+                    foreach (GameClient Client in WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers())
                     {
                         if (Client == null || Client.GetUser() == null)
                         {
@@ -264,10 +264,10 @@ namespace WibboEmulator.Games.GameClients
             }
             else if (PubCount == 4)
             {
-                WibboEnvironment.GetGame().GetClientManager().BanUser(this, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.GetUser().Username, true, false);
+                WibboEnvironment.GetGame().GetGameClientManager().BanUser(this, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.GetUser().Username, true, false);
             }
 
-            foreach (GameClient Client in WibboEnvironment.GetGame().GetClientManager().GetStaffUsers())
+            foreach (GameClient Client in WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers())
             {
                 if (Client == null || Client.GetUser() == null)
                 {
@@ -338,15 +338,15 @@ namespace WibboEmulator.Games.GameClients
         {
             if (this.Langue == Language.FRANCAIS)
             {
-                WibboEnvironment.GetGame().GetClientManager().OnlineUsersFr--;
+                WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersFr--;
             }
             else if (this.Langue == Language.ANGLAIS)
             {
-                WibboEnvironment.GetGame().GetClientManager().OnlineUsersEn--;
+                WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersEn--;
             }
             else if (this.Langue == Language.PORTUGAIS)
             {
-                WibboEnvironment.GetGame().GetClientManager().OnlineUsersBr--;
+                WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersBr--;
             }
 
             if (this.GetUser() != null)

@@ -24,7 +24,7 @@ namespace WibboEmulator.Communication.RCON.Commands.User
                 return false;
             }
 
-            GameClient Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            GameClient Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid);
             if (Client == null)
             {
                 return false;
@@ -41,7 +41,7 @@ namespace WibboEmulator.Communication.RCON.Commands.User
                 return false;
             }
 
-            GameClient Client2 = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid2);
+            GameClient Client2 = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid2);
             if (Client2 == null)
             {
                 return false;

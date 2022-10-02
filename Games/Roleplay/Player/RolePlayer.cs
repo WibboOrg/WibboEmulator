@@ -195,7 +195,7 @@ namespace WibboEmulator.Games.Roleplay.Player
 
         public void SendPacket(IServerPacket Message)
         {
-            GameClient session = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._id);
+            GameClient session = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._id);
             if (session != null)
             {
                 session.SendPacket(Message);

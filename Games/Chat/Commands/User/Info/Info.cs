@@ -10,7 +10,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
         {
             TimeSpan Uptime = DateTime.Now - WibboEnvironment.ServerStarted;
 
-            int OnlineUsers = WibboEnvironment.GetGame().GetClientManager().Count;
+            int OnlineUsers = WibboEnvironment.GetGame().GetGameClientManager().Count;
             int RoomCount = WibboEnvironment.GetGame().GetRoomManager().Count;
 
             Session.SendPacket(new BroadcastMessageAlertComposer("<b>Butterfly Edition Wibbo</b>\n\n" +

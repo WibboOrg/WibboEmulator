@@ -11,7 +11,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Guide
         {
             bool state = Packet.PopBoolean();
 
-            GameClient requester = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
+            GameClient requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
 
             if (!state)
             {

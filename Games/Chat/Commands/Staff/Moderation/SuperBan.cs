@@ -12,7 +12,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            GameClient TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            GameClient TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
@@ -22,7 +22,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
             if (TargetUser.GetUser().Rank >= Session.GetUser().Rank)
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
-                WibboEnvironment.GetGame().GetClientManager().BanUser(Session, "Robot", 788922000, "Votre compte a été banni par sécurité !", false, false);
+                WibboEnvironment.GetGame().GetGameClientManager().BanUser(Session, "Robot", 788922000, "Votre compte a été banni par sécurité !", false, false);
             }
             else
             {
@@ -41,7 +41,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                     string Raison = CommandManager.MergeParams(Params, 3);
                     Session.SendWhisper("Tu as SuperBan " + TargetUser.GetUser().Username + " pour" + Raison + "!");
 
-                    WibboEnvironment.GetGame().GetClientManager().BanUser(TargetUser, Session.GetUser().Username, num, Raison, false, false);
+                    WibboEnvironment.GetGame().GetGameClientManager().BanUser(TargetUser, Session.GetUser().Username, num, Raison, false, false);
                     Session.Antipub(Raison, "<CMD>");
                 }
             }

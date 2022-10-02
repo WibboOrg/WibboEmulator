@@ -18,9 +18,9 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             }
 
             int userId = Packet.PopInt();
-            if (WibboEnvironment.GetGame().GetClientManager().GetNameById(userId) != "")
+            if (WibboEnvironment.GetGame().GetGameClientManager().GetNameById(userId) != "")
             {
-                GameClient client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+                GameClient client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
                 DataRow user = null;
                 DataRow info = null;
 

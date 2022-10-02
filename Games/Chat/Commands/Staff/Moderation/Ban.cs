@@ -12,7 +12,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            GameClient TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            GameClient TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
@@ -35,7 +35,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 string Raison = CommandManager.MergeParams(Params, 3);
                 Session.SendWhisper("Tu as bannit " + TargetUser.GetUser().Username + " pour " + Raison + "!");
 
-                WibboEnvironment.GetGame().GetClientManager().BanUser(TargetUser, Session.GetUser().Username, num, Raison, false, false);
+                WibboEnvironment.GetGame().GetGameClientManager().BanUser(TargetUser, Session.GetUser().Username, num, Raison, false, false);
                 Session.Antipub(Raison, "<CMD>", Room.Id);
             }
         }

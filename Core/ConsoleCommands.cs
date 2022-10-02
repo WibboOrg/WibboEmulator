@@ -37,7 +37,7 @@ namespace WibboEmulator.Core
                         {
                             string notice = inputData.Substring(6);
 
-                            WibboEnvironment.GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer(notice));
+                            WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer(notice));
 
                             Console.WriteLine("Alert successfully sent.");
                             break;

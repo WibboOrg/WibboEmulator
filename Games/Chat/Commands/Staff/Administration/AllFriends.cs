@@ -7,7 +7,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
     {
         public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            foreach (GameClient User in WibboEnvironment.GetGame().GetClientManager().GetClients)
+            foreach (GameClient User in WibboEnvironment.GetGame().GetGameClientManager().GetClients)
             {
                 if (User == null)
                 {

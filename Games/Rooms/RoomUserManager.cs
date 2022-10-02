@@ -1453,7 +1453,7 @@ namespace WibboEmulator.Games.Rooms
 
             foreach (RoomUser user in ToRemove)
             {
-                GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(user.UserId);
+                GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(user.UserId);
                 if (clientByUserId != null)
                 {
                     this.RemoveUserFromRoom(clientByUserId, true, false);

@@ -287,7 +287,7 @@ namespace WibboEmulator.Games.GameClients.Inventory
 
         private GameClient GetClient()
         {
-            return WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userInstance.Id);
+            return WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._userInstance.Id);
         }
 
         public void AddItemArray(List<Item> RoomItemList)

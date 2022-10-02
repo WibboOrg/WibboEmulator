@@ -26,7 +26,7 @@ namespace WibboEmulator.Games;
 
 public class Game
 {
-    private readonly GameClientManager _clientManager;
+    private readonly GameClientManager _gameClientManager;
     private readonly PermissionManager _permissionManager;
     private readonly CatalogManager _catalogManager;
     private readonly NavigatorManager _navigatorManager;
@@ -57,7 +57,7 @@ public class Game
     {
         using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
-        this._clientManager = new GameClientManager();
+        this._gameClientManager = new GameClientManager();
 
         this._permissionManager = new PermissionManager();
         this._permissionManager.Init(dbClient);
@@ -134,7 +134,7 @@ public class Game
 
     public RoleplayManager GetRoleplayManager() => this._roleplayManager;
 
-    public GameClientManager GetClientManager() => this._clientManager;
+    public GameClientManager GetGameClientManager() => this._gameClientManager;
 
     public PermissionManager GetPermissionManager() => this._permissionManager;
 

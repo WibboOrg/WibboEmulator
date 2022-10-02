@@ -34,7 +34,7 @@ namespace WibboEmulator.Games.Rooms.AI
 
         public bool IsPet => this.AiType == BotAIType.Pet || this.AiType == BotAIType.RoleplayPet;
 
-        public string OwnerName => WibboEnvironment.GetGame().GetClientManager().GetNameById(this.OwnerId);
+        public string OwnerName => WibboEnvironment.GetGame().GetGameClientManager().GetNameById(this.OwnerId);
 
         public RoomBot(int BotId, int OwnerId, int RoomId, BotAIType AiType, bool WalkingEnabled, string Name, string Motto, string Gender, string Look, int X, int Y, double Z, int Rot, bool ChatEnabled, string ChatText, int ChatSeconds, bool IsDancing, int pEffectEnable, int pHanditemId, int pStatus)
         {

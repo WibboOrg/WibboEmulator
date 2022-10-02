@@ -16,7 +16,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             int userId = Packet.PopInt();
 
-            GameClient clientTarget = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            GameClient clientTarget = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
 
             if (clientTarget == null)
             {

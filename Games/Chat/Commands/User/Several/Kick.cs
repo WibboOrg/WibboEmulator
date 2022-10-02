@@ -10,7 +10,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
             if (parameters.Length < 2)
                 return;
 
-            GameClient TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(parameters[1]);
+            GameClient TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
 
             if (TargetUser == null || TargetUser.GetUser() == null)
             {

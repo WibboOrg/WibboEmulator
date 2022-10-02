@@ -13,7 +13,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
             {
                 return;
             }
-            WibboEnvironment.GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer(Message + "\r\n" + "- " + Session.GetUser().Username));
+            WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer(Message + "\r\n" + "- " + Session.GetUser().Username));
         }
     }
 }

@@ -21,7 +21,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             string UserName = Packet.PopString();
 
-            GameClient gameclient = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(UserName);
+            GameClient gameclient = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(UserName);
             if (gameclient == null)
             {
                 return;

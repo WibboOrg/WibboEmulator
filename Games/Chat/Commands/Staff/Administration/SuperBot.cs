@@ -53,7 +53,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
             }
             else
             {
-                ICollection<GameClient> Users = WibboEnvironment.GetGame().GetClientManager().GetClients;
+                ICollection<GameClient> Users = WibboEnvironment.GetGame().GetGameClientManager().GetClients;
 
                 if (Users == null)
                 {

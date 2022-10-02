@@ -64,7 +64,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             {
                 if (Session.GetUser().GetMessenger().FriendshipExists(UserId))
                 {
-                    GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+                    GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(UserId);
                     if (clientByUserId == null || clientByUserId.GetUser().IgnoreRoomInvites)
                     {
                         break;

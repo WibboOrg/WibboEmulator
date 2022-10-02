@@ -508,7 +508,7 @@ namespace WibboEmulator.Games.Rooms
 
             if (this.Client == null)
             {
-                this.Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
+                this.Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this.UserId);
             }
 
             return this.Client;

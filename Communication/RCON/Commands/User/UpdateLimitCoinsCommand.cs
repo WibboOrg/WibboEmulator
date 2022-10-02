@@ -22,7 +22,7 @@ namespace WibboEmulator.Communication.RCON.Commands.User
                 return false;
             }
 
-            GameClient Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            GameClient Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
             if (Client == null)
             {
                 return false;

@@ -20,7 +20,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.userparammissing", Session.Langue));
                 return;
             }
-            GameClient clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
+            GameClient clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
             if (clientByUsername == null || clientByUsername.GetUser() == null)
             {
                 Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.useroffline", Session.Langue));

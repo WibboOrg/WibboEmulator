@@ -45,7 +45,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.WibboTool
                     return;
                 }
 
-                WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer("annonce", "Message de communication", Message, "Allez voir !", 0, Url));
+                WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer("annonce", "Message de communication", Message, "Allez voir !", 0, Url));
                 return;
             }
 
@@ -68,7 +68,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.WibboTool
                     return;
                 }
 
-                WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", Message, "Je veux y jouer !", Session.GetUser().CurrentRoom.Id, ""));
+                WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer("game_promo_small", "Message d'animation", Message, "Je veux y jouer !", Session.GetUser().CurrentRoom.Id, ""));
 
                 Session.GetUser().CurrentRoom.CloseFullRoom = true;
             }
@@ -80,7 +80,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.WibboTool
                     return;
                 }
 
-                WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer("staff", "Message de l'Équipe", Message, "Compris !", 0, ""));
+                WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer("staff", "Message de l'Équipe", Message, "Compris !", 0, ""));
             }
 
         }

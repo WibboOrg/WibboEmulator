@@ -8,7 +8,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
     {
         public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
         {
-            GameClient clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Params[1]);
+            GameClient clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
             if (clientByUsername != null)
             {
                 if (int.TryParse(Params[2], out int result))

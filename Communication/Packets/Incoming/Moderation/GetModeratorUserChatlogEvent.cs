@@ -17,7 +17,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             int userId = Packet.PopInt();
 
-            GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
             if (clientByUserId == null || clientByUserId.GetUser() == null)
             {
                 List<ChatlogEntry> sortedMessages = new List<ChatlogEntry>();

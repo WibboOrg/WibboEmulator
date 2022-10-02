@@ -21,7 +21,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 stringBuilder.Append("Guide en service (" + guideManager.GuidesCount + "):\r\r");
                 foreach (KeyValuePair<int, bool> entry in guideManager.GuidesOnDuty)
                 {
-                    GameClient guide = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(entry.Key);
+                    GameClient guide = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(entry.Key);
                     if (guide == null)
                     {
                         continue;

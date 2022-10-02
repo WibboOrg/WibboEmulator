@@ -111,7 +111,7 @@ namespace WibboEmulator.Games.Pets
 
         public string Look => this.Type + " " + this.Race + " " + this.Color;
 
-        public string OwnerName => WibboEnvironment.GetGame().GetClientManager().GetNameById(this.OwnerId);
+        public string OwnerName => WibboEnvironment.GetGame().GetGameClientManager().GetNameById(this.OwnerId);
 
         public Pet(int PetId, int OwnerId, int RoomId, string Name, int Type, string Race, string Color, int Expirience, int Energy, int Nutrition, int Respect, double CreationStamp, int X, int Y, double Z, int havesaddle, int hairdye, int PetHair, bool CanMountAllPeople)
         {

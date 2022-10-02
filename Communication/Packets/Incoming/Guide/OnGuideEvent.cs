@@ -32,7 +32,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Guide
                 return;
             }
 
-            GameClient guide = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(guideId);
+            GameClient guide = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(guideId);
 
             Session.SendPacket(new OnGuideSessionAttachedComposer(false, userId, message, 30));
             guide.SendPacket(new OnGuideSessionAttachedComposer(true, userId, message, 15));

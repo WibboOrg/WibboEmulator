@@ -22,7 +22,7 @@ namespace WibboEmulator.Communication.RCON.Commands.User
                 return false;
             }
 
-            GameClient Client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Userid);
+            GameClient Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid);
             if (Client == null || Client.GetUser().CurrentRoom == null)
             {
                 return false;
@@ -48,7 +48,7 @@ namespace WibboEmulator.Communication.RCON.Commands.User
             Message = new Regex(@"\[u\](.*?)\[\/u\]").Replace(Message, "<u>$1</u>");
 
             string AlertMessage = Message + "\r\n- " + Client.GetUser().Username;
-            WibboEnvironment.GetGame().GetClientManager().SendSuperNotif("Message des Staffs", AlertMessage, "game_promo_small", "event:navigator/goto/" + Client.GetUser().CurrentRoom.Id, "Je veux y accéder!", true, true);
+            WibboEnvironment.GetGame().GetGameClientManager().SendSuperNotif("Message des Staffs", AlertMessage, "game_promo_small", "event:navigator/goto/" + Client.GetUser().CurrentRoom.Id, "Je veux y accéder!", true, true);
             Client.GetUser().CurrentRoom.CloseFullRoom = true;
 
             return true;

@@ -24,7 +24,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             WibboEnvironment.GetGame().GetModerationManager().SendNewTicket(Session, TicketType, ReporterId, Message);
             WibboEnvironment.GetGame().GetModerationManager().ApplySanction(Session, ReporterId);
-            WibboEnvironment.GetGame().GetClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", "Un nouveau ticket vient d'arriver sur le support"));
+            WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", "Un nouveau ticket vient d'arriver sur le support"));
         }
     }
 }

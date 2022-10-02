@@ -21,7 +21,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             string str = Packet.PopString();
 
-            User user = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(str).GetUser();
+            User user = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(str).GetUser();
             if (user == null || !Session.GetUser().MutedUsers.Contains(user.Id))
             {
                 return;

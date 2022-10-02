@@ -58,7 +58,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 LogFlagmeDao.Insert(dbClient, Session.GetUser().Id, Session.GetUser().Username, newUsername);
             }
 
-            WibboEnvironment.GetGame().GetClientManager().UpdateClientUsername(Session.ConnectionID, Session.GetUser().Username, newUsername);
+            WibboEnvironment.GetGame().GetGameClientManager().UpdateClientUsername(Session.ConnectionID, Session.GetUser().Username, newUsername);
             room.GetRoomUserManager().UpdateClientUsername(roomUser, Session.GetUser().Username, newUsername);
             Session.GetUser().Username = newUsername;
             Session.GetUser().CanChangeName = false;

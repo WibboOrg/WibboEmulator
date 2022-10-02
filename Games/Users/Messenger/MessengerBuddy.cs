@@ -24,7 +24,7 @@
 
         public void UpdateUser()
         {
-            GameClient client = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this._userId);
+            GameClient client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._userId);
             if (client != null && client.GetUser() != null && client.GetUser().GetMessenger() != null && !client.GetUser().GetMessenger().AppearOffline)
             {
                 this._isOnline = true;

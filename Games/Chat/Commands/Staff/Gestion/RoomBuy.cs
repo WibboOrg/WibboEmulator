@@ -24,7 +24,7 @@ namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion
             Session.GetUser().WibboPoints -= Room.RoomData.SellPrice;
             Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().WibboPoints, 0, 105));
 
-            GameClient ClientOwner = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Room.RoomData.OwnerId);
+            GameClient ClientOwner = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Room.RoomData.OwnerId);
             if (ClientOwner != null && ClientOwner.GetUser() != null)
             {
                 ClientOwner.GetUser().WibboPoints += Room.RoomData.SellPrice;

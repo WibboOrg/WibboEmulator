@@ -11,7 +11,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
         public void Parse(GameClient Session, ClientPacket Packet)
         {
             int userId = Packet.PopInt();
-            GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId);
+            GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
             if (clientByUserId == null || clientByUserId.GetUser() == null || !clientByUserId.GetUser().InRoom || (clientByUserId.GetUser().HideInRoom && !Session.GetUser().HasPermission("perm_mod")))
             {
                 return;

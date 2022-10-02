@@ -21,7 +21,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
 
             string Username = Params[1];
 
-            GameClient TargetUser = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(Username);
+            GameClient TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Username);
             if (TargetUser == null || TargetUser.GetUser() == null)
             {
                 RoomUser Bot = Room.GetRoomUserManager().GetBotByName(Username);

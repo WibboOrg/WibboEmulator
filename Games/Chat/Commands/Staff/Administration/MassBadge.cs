@@ -15,7 +15,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            foreach (GameClient Client in WibboEnvironment.GetGame().GetClientManager().GetClients.ToList())
+            foreach (GameClient Client in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
             {
                 if (Client.GetUser() != null)
                 {

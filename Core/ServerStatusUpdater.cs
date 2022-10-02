@@ -29,7 +29,7 @@ namespace WibboEmulator.Core
                 lowPriorityProcessWatch.Restart();
                 try
                 {
-                    int UsersOnline = WibboEnvironment.GetGame().GetClientManager().Count;
+                    int UsersOnline = WibboEnvironment.GetGame().GetGameClientManager().Count;
 
                     WibboEnvironment.GetGame().GetAnimationManager().OnUpdateUsersOnline(UsersOnline);
 

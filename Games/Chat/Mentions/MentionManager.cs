@@ -62,7 +62,7 @@ namespace WibboEmulator.Games.Chat.Mentions
 
         public bool SendNotif(GameClient Session, string TargetUsername, string Message)
         {
-            GameClient TargetClient = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(TargetUsername);
+            GameClient TargetClient = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(TargetUsername);
 
             if (TargetClient == null)
             {
@@ -107,7 +107,7 @@ namespace WibboEmulator.Games.Chat.Mentions
 
             Session.GetUser().EveryoneTimer = DateTime.Now;
 
-            List<GameClient> onlineUsers = WibboEnvironment.GetGame().GetClientManager().GetClientsById(Session.GetUser().GetMessenger().Friends.Keys);
+            List<GameClient> onlineUsers = WibboEnvironment.GetGame().GetGameClientManager().GetClientsById(Session.GetUser().GetMessenger().Friends.Keys);
 
             if (onlineUsers == null)
             {

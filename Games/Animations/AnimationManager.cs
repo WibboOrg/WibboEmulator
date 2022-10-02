@@ -166,7 +166,7 @@ namespace WibboEmulator.Games.Animations
             if (this._timer >= this.ToSeconds(START_TIME - NOTIF_TIME) && !this._notif)
             {
                 this._notif = true;
-                WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifTopComposer("Notre prochaine animation aura lieu dans deux minutes ! (Jack & Daisy)"));
+                WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifTopComposer("Notre prochaine animation aura lieu dans deux minutes ! (Jack & Daisy)"));
             }
 
             if (this._timer >= this.ToSeconds(START_TIME))
@@ -216,7 +216,7 @@ namespace WibboEmulator.Games.Animations
 
             WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, this._gameOwner, room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
 
-            WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifAlertComposer(
+            WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer(
                 "gameauto", // image
                 "Message d'animation", // title
                 alertMessage, // string_>alert

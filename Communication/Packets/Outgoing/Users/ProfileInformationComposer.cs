@@ -19,7 +19,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Users
             WriteInteger(friendCount); // Friend Count
             this.WriteBoolean(habbo.Id != session.GetUser().Id && session.GetUser().GetMessenger().FriendshipExists(habbo.Id)); //  Is friend
             this.WriteBoolean(habbo.Id != session.GetUser().Id && !session.GetUser().GetMessenger().FriendshipExists(habbo.Id) && session.GetUser().GetMessenger().RequestExists(habbo.Id)); // Sent friend request
-            WriteBoolean((WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(habbo.Id)) != null);
+            WriteBoolean((WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(habbo.Id)) != null);
 
             WriteInteger(groups.Count);
             foreach (Group group in groups)

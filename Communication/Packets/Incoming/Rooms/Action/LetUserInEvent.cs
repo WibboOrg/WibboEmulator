@@ -27,7 +27,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             string username = Packet.PopString();
             bool allowUserToEnter = Packet.PopBoolean();
 
-            GameClient clientByUsername = WibboEnvironment.GetGame().GetClientManager().GetClientByUsername(username);
+            GameClient clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
             if (clientByUsername == null || clientByUsername.GetUser() == null)
             {
                 return;

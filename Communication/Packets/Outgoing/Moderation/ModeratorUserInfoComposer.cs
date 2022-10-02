@@ -14,7 +14,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
             WriteString(User != null ? Convert.ToString(User["look"]) : "Unknown");
             WriteInteger(User != null ? Convert.ToInt32(Math.Ceiling((WibboEnvironment.GetUnixTimestamp() - Convert.ToDouble(User["account_created"])) / 60)) : 0);
             WriteInteger(User != null ? Convert.ToInt32(Math.Ceiling((WibboEnvironment.GetUnixTimestamp() - Convert.ToDouble(User["last_online"])) / 60)) : 0);
-            WriteBoolean(User != null ? WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Convert.ToInt32(User["id"])) != null : false);
+            WriteBoolean(User != null ? WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Convert.ToInt32(User["id"])) != null : false);
             WriteInteger(Info != null ? Convert.ToInt32(Info["cfhs"]) : 0);
             WriteInteger(Info != null ? Convert.ToInt32(Info["cfhs_abusive"]) : 0);
             WriteInteger(Info != null ? Convert.ToInt32(Info["cautions"]) : 0);

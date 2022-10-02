@@ -98,7 +98,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             if (pet.OwnerId != Session.GetUser().Id)
             {
-                GameClient Target = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(pet.OwnerId);
+                GameClient Target = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(pet.OwnerId);
                 if (Target != null)
                 {
                     Target.GetUser().GetInventoryComponent().TryAddPet(Pet.PetData);

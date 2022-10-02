@@ -9,7 +9,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
         {
             string Output = "Les staffs en ligne: \n\n";
 
-            List<GameClient> Staffs = WibboEnvironment.GetGame().GetClientManager().GetStaffUsers();
+            List<GameClient> Staffs = WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers();
 
             if (Staffs.Count > 0)
             {

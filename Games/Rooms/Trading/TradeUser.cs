@@ -30,7 +30,7 @@ namespace WibboEmulator.Games.Rooms.Trading
 
         public GameClient GetClient()
         {
-            return WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this.UserId);
+            return WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this.UserId);
         }
     }
 }

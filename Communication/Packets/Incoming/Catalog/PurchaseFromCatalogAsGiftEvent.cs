@@ -246,7 +246,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             Item GiveItem = ItemFactory.CreateSingleItem(PresentData, user, ED, NewItemId);
             if (GiveItem != null)
             {
-                GameClient Receiver = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(user.Id);
+                GameClient Receiver = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(user.Id);
                 if (Receiver != null)
                 {
                     Receiver.GetUser().GetInventoryComponent().TryAddItem(GiveItem);

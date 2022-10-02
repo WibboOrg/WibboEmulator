@@ -342,7 +342,7 @@ namespace WibboEmulator.Games.GameClients
                 {
                     if (!this.loadRoomBlocked) 
                     {
-                        WibboEnvironment.GetGame().GetClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", $"Attention {this.Username} charge trop vite les apparts!"));
+                        WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", $"Attention {this.Username} charge trop vite les apparts!"));
                         this.loadRoomBlocked = true;
                     } 
                     this.GetClient().SendPacket(new CloseConnectionComposer());
@@ -505,11 +505,11 @@ namespace WibboEmulator.Games.GameClients
 
             this.Disconnected = true;
 
-            WibboEnvironment.GetGame().GetClientManager().UnregisterClient(this.Id, this.Username);
+            WibboEnvironment.GetGame().GetGameClientManager().UnregisterClient(this.Id, this.Username);
 
             if (this.HasPermission("perm_mod"))
             {
-                WibboEnvironment.GetGame().GetClientManager().RemoveUserStaff(this.Id);
+                WibboEnvironment.GetGame().GetGameClientManager().RemoveUserStaff(this.Id);
             }
 
             ExceptionLogger.WriteLine(this.Username + " has logged out.");
@@ -545,7 +545,7 @@ namespace WibboEmulator.Games.GameClients
 
             if (this.GuideOtherUserId != 0)
             {
-                GameClient requester = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(this.GuideOtherUserId);
+                GameClient requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this.GuideOtherUserId);
                 if (requester != null)
                 {
                     requester.SendPacket(new OnGuideSessionEndedComposer(1));

@@ -12,9 +12,9 @@ namespace WibboEmulator.Games.GameClients
 {
     public class GameClientManager
     {
-        public ConcurrentDictionary<string, GameClient> _clients;
-        public ConcurrentDictionary<string, string> _usernameRegister;
-        public ConcurrentDictionary<int, string> _userIDRegister;
+        private ConcurrentDictionary<string, GameClient> _clients;
+        private ConcurrentDictionary<string, string> _usernameRegister;
+        private ConcurrentDictionary<int, string> _userIDRegister;
 
         public int OnlineUsersFr;
         public int OnlineUsersEn;

@@ -15,7 +15,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            WibboEnvironment.GetGame().GetClientManager().SendMessage(new NotifTopComposer(Message));
+            WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifTopComposer(Message));
         }
     }
 }

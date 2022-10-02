@@ -10,7 +10,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Guide
 
         public void Parse(GameClient Session, ClientPacket Packet)
         {
-            GameClient requester = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
+            GameClient requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
             if (requester == null)
             {
                 return;

@@ -39,9 +39,9 @@ namespace WibboEmulator.Games.GameClients.Authenticator
 
                     userId = Convert.ToInt32(dUserInfo["id"]);
                     string username = (string)dUserInfo["username"];
-                    if (WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId) != null)
+                    if (WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId) != null)
                     {
-                        WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId).Disconnect();
+                        WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId).Disconnect();
                         return null;
                     }
 
@@ -92,7 +92,7 @@ namespace WibboEmulator.Games.GameClients.Authenticator
             DataRow dUserInfo;
             DataRow dUserStats;
 
-            if (WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(userId) != null)
+            if (WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId) != null)
             {
                 return null;
             }

@@ -264,7 +264,7 @@ namespace WibboEmulator.Games.Moderation
                 return;
             }
 
-            GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(ticket.SenderId);
+            GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(ticket.SenderId);
 
             TicketStatusType NewStatus;
             string MessageAlert;
@@ -318,7 +318,7 @@ namespace WibboEmulator.Games.Moderation
 
         public static void SendTicketToModerators(ModerationTicket Ticket)
         {
-            WibboEnvironment.GetGame().GetClientManager().SendMessageStaff(new ModeratorSupportTicketComposer(Ticket));
+            WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(new ModeratorSupportTicketComposer(Ticket));
         }
 
         public void LogStaffEntry(int userId, string modName, int roomId, string target, string type, string description)
@@ -360,7 +360,7 @@ namespace WibboEmulator.Games.Moderation
 
         public static void KickUser(GameClient ModSession, int UserId, string Message, bool Soft)
         {
-            GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+            GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(UserId);
             if (clientByUserId == null || clientByUserId.GetUser().CurrentRoomId < 1 || clientByUserId.GetUser().Id == ModSession.GetUser().Id)
             {
                 return;
@@ -395,7 +395,7 @@ namespace WibboEmulator.Games.Moderation
 
         public static void BanUser(GameClient ModSession, int UserId, int Length, string Message)
         {
-            GameClient clientByUserId = WibboEnvironment.GetGame().GetClientManager().GetClientByUserID(UserId);
+            GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(UserId);
             if (clientByUserId == null || clientByUserId.GetUser().Id == ModSession.GetUser().Id)
             {
                 return;
@@ -408,7 +408,7 @@ namespace WibboEmulator.Games.Moderation
             else
             {
                 double LengthSeconds = Length;
-                WibboEnvironment.GetGame().GetClientManager().BanUser(clientByUserId, ModSession.GetUser().Username, LengthSeconds, Message, false, false);
+                WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUserId, ModSession.GetUser().Username, LengthSeconds, Message, false, false);
             }
         }
     }
