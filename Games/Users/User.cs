@@ -360,7 +360,7 @@ namespace WibboEmulator.Games.GameClients
                 }
             }
 
-            string[] OwnerEnterNotAllowed = WibboEnvironment.GetConfig().GetDataString("room.owner.enter.not.allowed").Split(',');
+            string[] OwnerEnterNotAllowed = WibboEnvironment.GetSettings().GetData<string>("room.owner.enter.not.allowed").Split(',');
 
             if (!this.GetClient().GetUser().HasPermission("perm_access_apartments_all"))
             {
@@ -390,7 +390,7 @@ namespace WibboEmulator.Games.GameClients
                 }
             }
 
-            if (room.RoomData.OwnerName == WibboEnvironment.GetConfig().GetDataString("game.owner"))
+            if (room.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("game.owner"))
             {
                 if (room.GetRoomUserManager().GetUserByTracker(this.IP, this.GetClient().MachineId) != null)
                 {

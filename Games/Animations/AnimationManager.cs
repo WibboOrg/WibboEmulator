@@ -101,7 +101,7 @@ namespace WibboEmulator.Games.Animations
         {
             this._roomId.Clear();
 
-            this._gameOwner = WibboEnvironment.GetConfig().GetDataString("game.owner");
+            this._gameOwner = WibboEnvironment.GetSettings().GetData<string>("game.owner");
 
             DataTable table = RoomDao.GetAllIdByOwner(dbClient, this._gameOwner);
             if (table == null)

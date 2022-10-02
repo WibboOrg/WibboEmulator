@@ -35,7 +35,7 @@ namespace WibboEmulator.Core.FigureData
                 this._setTypes.Clear();
             }
 
-            HttpResponseMessage response = await WibboEnvironment.GetHttpClient().GetAsync(WibboEnvironment.FigureDataUrl + "?cache=" + WibboEnvironment.GetUnixTimestamp());
+            HttpResponseMessage response = await WibboEnvironment.GetHttpClient().GetAsync(WibboEnvironment.GetSettings().GetData<string>("figuredata.url") + "?cache=" + WibboEnvironment.GetUnixTimestamp());
 
             if(!response.IsSuccessStatusCode)
             {

@@ -32,7 +32,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
             MultipartFormDataContent content = new MultipartFormDataContent("Upload");
             content.Add(new StreamContent(new MemoryStream(photoBinary)), "photo", pictureName);
 
-            HttpResponseMessage response = await WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.CameraUploadUrl, content);
+            HttpResponseMessage response = await WibboEnvironment.GetHttpClient().PostAsync(WibboEnvironment.GetSettings().GetData<string>("camera.upload.url"), content);
 
             if (!response.IsSuccessStatusCode)
             {

@@ -12,400 +12,378 @@ using WibboEmulator.Net;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text.Json;
+using Google.Protobuf.WellKnownTypes;
+using WibboEmulator.Core.FigureData.JsonObject;
+using Plus.Database;
 
-namespace WibboEmulator
+namespace WibboEmulator;
+
+public static class WibboEnvironment
 {
-    public static class WibboEnvironment
+    private static WebSocketManager _webSocketManager;
+    private static Game _game;
+    private static DatabaseManager _datebaseManager;
+    private static RCONSocket _rcon;
+    private static FigureDataManager _figureManager;
+    private static LanguageManager _languageManager;
+    private static SettingsManager _settingsManager;
+
+    private static readonly HttpClient _httpClient = new HttpClient();
+    private static Random _random = new Random();
+    private static readonly ConcurrentDictionary<int, User> _usersCached = new ConcurrentDictionary<int, User>();
+
+    public static DateTime ServerStarted { get; set; }
+    public static List<string> WebSocketOrigins { get; set; }
+    public static string PatchDir { get; set; }
+
+    private static readonly List<char> Allowedchars = new List<char>(new[]
+        {
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+            'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+            '-', '.', '=', '?', '!', ':'
+        });
+
+    public static void Initialize()
     {
-        private static ConfigurationData _configuration;
-        private static WebSocketManager _webSocketManager;
-        private static Game _game;
-        private static DatabaseManager _datebaseManager;
-        private static RCONSocket _rcon;
-        private static FigureDataManager _figureManager;
-        private static LanguageManager _languageManager;
+        ServerStarted = DateTime.Now;
+        Console.ForegroundColor = ConsoleColor.Gray;
 
-        private static readonly HttpClient _httpClient = new HttpClient();
-        private static Random _random = new Random();
-        private static readonly ConcurrentDictionary<int, User> _usersCached = new ConcurrentDictionary<int, User>();
+        PatchDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/";
 
-        public static DateTime ServerStarted { get; set; }
-        public static List<string> WebSocketOrigins { get; set; }
-        public static string PatchDir { get; set; }
-        public static string CameraUploadUrl { get; set; }
-        public static string FigureDataUrl { get; set; }
-        public static string CameraThubmailUploadUrl { get; set; }
+        Console.Title = "Wibbo Emulator";
 
-        private static readonly List<char> Allowedchars = new List<char>(new[]
-            {
-                'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
-                'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
-                'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-                '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-                '-', '.', '=', '?', '!', ':'
-            });
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.Write(@" __        __  ");
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.Write(@"_   ");
+        Console.ForegroundColor = ConsoleColor.DarkBlue;
+        Console.Write(@"_       ");
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        Console.Write(@"_             ");
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.Write(@"");
 
-        public static void Initialize()
+        Console.WriteLine(@"");
+
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.Write(@" \ \      / / ");
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.Write(@"(_) ");
+        Console.ForegroundColor = ConsoleColor.DarkBlue;
+        Console.Write(@"| |__   ");
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        Console.Write(@"| |__     ");
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.Write(@"___  ");
+
+        Console.WriteLine(@"");
+
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.Write(@"  \ \ /\ / /  ");
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.Write(@"| | ");
+        Console.ForegroundColor = ConsoleColor.DarkBlue;
+        Console.Write(@"| '_ \  ");
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        Console.Write(@"| '_ \   ");
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.Write(@"/ _ \ ");
+
+        Console.WriteLine("");
+
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.Write(@"   \ V  V /   ");
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.Write(@"| | ");
+        Console.ForegroundColor = ConsoleColor.DarkBlue;
+        Console.Write(@"| |_) | ");
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        Console.Write(@"| |_) | ");
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.Write(@"| (_) |");
+
+        Console.WriteLine(@"");
+
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.Write(@"    \_/\_/    ");
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.Write("|_| ");
+        Console.ForegroundColor = ConsoleColor.DarkBlue;
+        Console.Write("|_.__/  ");
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        Console.Write("|_.__/   ");
+        Console.ForegroundColor = ConsoleColor.DarkGray;
+        Console.Write(@"\___/ ");
+
+        Console.WriteLine("");
+        Console.WriteLine("");
+
+        Console.ForegroundColor = ConsoleColor.Blue;
+
+        Console.WriteLine("https://wibbo.org/");
+        Console.WriteLine("Credits : Butterfly and Plus Emulator.");
+        Console.WriteLine("-Wibbo Dev");
+        Console.WriteLine("");
+
+        Console.ForegroundColor = ConsoleColor.White;
+
+        try
         {
-            ServerStarted = DateTime.Now;
-            Console.ForegroundColor = ConsoleColor.Gray;
+            var jsonDatabase = File.ReadAllText(PatchDir + "Configuration/database.json");
 
-            PatchDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/";
+            DatabaseConfiguration? databaseConfiguration = JsonSerializer.Deserialize<DatabaseConfiguration>(jsonDatabase);
+            _datebaseManager = new DatabaseManager(databaseConfiguration);
 
-            Console.Title = "Wibbo Emulator";
-
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write(@" __        __  ");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write(@"_   ");
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            Console.Write(@"_       ");
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write(@"_             ");
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write(@"");
-
-            Console.WriteLine(@"");
-
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write(@" \ \      / / ");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write(@"(_) ");
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            Console.Write(@"| |__   ");
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write(@"| |__     ");
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write(@"___  ");
-
-            Console.WriteLine(@"");
-
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write(@"  \ \ /\ / /  ");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write(@"| | ");
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            Console.Write(@"| '_ \  ");
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write(@"| '_ \   ");
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write(@"/ _ \ ");
-
-            Console.WriteLine("");
-
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write(@"   \ V  V /   ");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write(@"| | ");
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            Console.Write(@"| |_) | ");
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write(@"| |_) | ");
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write(@"| (_) |");
-
-            Console.WriteLine(@"");
-
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write(@"    \_/\_/    ");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write("|_| ");
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            Console.Write("|_.__/  ");
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write("|_.__/   ");
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write(@"\___/ ");
-
-            Console.WriteLine("");
-            Console.WriteLine("");
-
-            Console.ForegroundColor = ConsoleColor.Blue;
-
-            Console.WriteLine("https://wibbo.org/");
-            Console.WriteLine("Credits : Butterfly and Plus Emulator.");
-            Console.WriteLine("-Wibbo Dev");
-            Console.WriteLine("");
-
-            Console.ForegroundColor = ConsoleColor.White;
-
-            try
+            if (!_datebaseManager.IsConnected())
             {
-                _configuration = new ConfigurationData(PatchDir + "Configuration/settings.ini");
-                _datebaseManager = new DatabaseManager((uint)GetConfig().GetDataNumber("db.pool.maxsize"), (uint)GetConfig().GetDataNumber("db.pool.minsize"), GetConfig().GetDataString("db.hostname"), (uint)GetConfig().GetDataNumber("db.port"), GetConfig().GetDataString("db.username"), GetConfig().GetDataString("db.password"), GetConfig().GetDataString("db.name"));
-
-                if (!_datebaseManager.IsConnected())
-                {
-                    ExceptionLogger.WriteLine("Failed to connect to the specified MySQL server.");
-                    Console.ReadKey(true);
-                    Environment.Exit(1);
-                    return;
-                }
-
-                CameraUploadUrl = _configuration.GetDataString("camera.upload.url");
-                FigureDataUrl = _configuration.GetDataString("figuredata.url");
-                CameraThubmailUploadUrl = _configuration.GetDataString("camera.thubmail.upload.url");
-
-                _languageManager = new LanguageManager();
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    _languageManager.Init(dbClient);
-
-                _game = new Game();
-                _game.StartGameLoop();
-
-                _figureManager = new FigureDataManager();
-                _figureManager.Init();
-
-                WebSocketOrigins = GetConfig().GetDataString("game.ws.origins").Split(',').ToList();
-                _webSocketManager = new WebSocketManager(GetConfig().GetDataNumber("game.ws.port"), GetConfig().GetDataBool("game.ssl.enable"), GetConfig().GetDataString("game.ssl.password"));
-
-                if (_configuration.GetDataBool("mus.tcp.enable"))
-                {
-                    _rcon = new RCONSocket(GetConfig().GetDataNumber("mus.tcp.port"), GetConfig().GetDataString("mus.tcp.allowedaddr").Split(','));
-                }
-
-                ExceptionLogger.WriteLine("EMULATOR -> READY!");
-
-                if (Debugger.IsAttached)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    ExceptionLogger.WriteLine("Server is debugging: Console writing enabled");
-                    Console.ForegroundColor = ConsoleColor.Red;
-                }
-                else
-                {
-                    ExceptionLogger.WriteLine("Server is not debugging: Console writing disabled");
-                    ExceptionLogger.DisablePrimaryWriting(false);
-                }
-            }
-            catch (KeyNotFoundException ex)
-            {
-                ExceptionLogger.WriteLine("Please check your configuration file - some values appear to be missing.");
-                ExceptionLogger.WriteLine("Press any key to shut down ...");
-                ExceptionLogger.WriteLine((ex).ToString());
+                ExceptionLogger.WriteLine("Failed to connect to the specified MySQL server.");
                 Console.ReadKey(true);
-            }
-            catch (InvalidOperationException ex)
-            {
-                ExceptionLogger.WriteLine("Failed to initialize ButterflyEmulator: " + ex.Message);
-                ExceptionLogger.WriteLine("Press any key to shut down ...");
-                Console.ReadKey(true);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Fatal error during startup: " + (ex).ToString());
-                Console.WriteLine("Press a key to exit");
-                Console.ReadKey();
-                Environment.Exit(1000);
-            }
-        }
-
-        public static void RegenRandom()
-        {
-            _random = new Random();
-        }
-
-        public static bool EnumToBool(string Enum)
-        {
-            return Enum == "1";
-        }
-
-        public static string BoolToEnum(bool Bool)
-        {
-            return Bool ? "1" : "0";
-        }
-
-        public static int GetRandomNumber(int Min, int Max)
-        {
-            lock (_random) // synchronize
-            {
-                return _random.Next(Min, Max + 1);
-            }
-        }
-
-        public static int GetUnixTimestamp()
-        {
-            return (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
-        }
-
-        public static FigureDataManager GetFigureManager()
-        {
-            return _figureManager;
-        }
-
-        private static bool IsValid(char character)
-        {
-            return Allowedchars.Contains(character);
-        }
-
-        public static bool IsValidAlphaNumeric(string inputStr)
-        {
-            if (string.IsNullOrEmpty(inputStr))
-            {
-                return false;
+                Environment.Exit(1);
+                return;
             }
 
-            for (int index = 0; index < inputStr.Length; ++index)
-            {
-                if (!IsValid(inputStr[index]))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public static bool UsernameExists(string username)
-        {
             using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            int integer = UserDao.GetIdByName(dbClient, username);
-            if (integer <= 0)
+
+            _settingsManager = new SettingsManager();
+            _settingsManager.Init(dbClient);
+
+            _languageManager = new LanguageManager();
+            _languageManager.Init(dbClient);
+
+            _game = new Game();
+            _game.StartGameLoop();
+
+            _figureManager = new FigureDataManager();
+            _figureManager.Init();
+
+            WebSocketOrigins = _settingsManager.GetData<string>("game.ws.origins").Split(',').ToList();
+            _webSocketManager = new WebSocketManager(_settingsManager.GetData<int>("game.ws.port"), _settingsManager.GetData<bool>("game.ssl.enable"), _settingsManager.GetData<string>("game.ssl.password"));
+
+            if (_settingsManager.GetData<bool>("mus.tcp.enable"))
+            {
+                _rcon = new RCONSocket(_settingsManager.GetData<int>("mus.tcp.port"), _settingsManager.GetData<string>("mus.tcp.allowedaddr").Split(','));
+            }
+
+            ExceptionLogger.WriteLine("EMULATOR -> READY!");
+
+            if (Debugger.IsAttached)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                ExceptionLogger.WriteLine("Server is debugging: Console writing enabled");
+                Console.ForegroundColor = ConsoleColor.Red;
+            }
+            else
+            {
+                ExceptionLogger.WriteLine("Server is not debugging: Console writing disabled");
+                ExceptionLogger.DisablePrimaryWriting(false);
+            }
+        }
+        catch (KeyNotFoundException ex)
+        {
+            ExceptionLogger.WriteLine("Please check your configuration file - some values appear to be missing.");
+            ExceptionLogger.WriteLine("Press any key to shut down ...");
+            ExceptionLogger.WriteLine((ex).ToString());
+            Console.ReadKey(true);
+        }
+        catch (InvalidOperationException ex)
+        {
+            ExceptionLogger.WriteLine("Failed to initialize ButterflyEmulator: " + ex.Message);
+            ExceptionLogger.WriteLine("Press any key to shut down ...");
+            Console.ReadKey(true);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Fatal error during startup: " + (ex).ToString());
+            Console.WriteLine("Press a key to exit");
+            Console.ReadKey();
+            Environment.Exit(1000);
+        }
+    }
+
+    public static void RegenRandom()
+    {
+        _random = new Random();
+    }
+
+    public static bool EnumToBool(string Enum)
+    {
+        return Enum == "1";
+    }
+
+    public static string BoolToEnum(bool Bool)
+    {
+        return Bool ? "1" : "0";
+    }
+
+    public static int GetRandomNumber(int Min, int Max)
+    {
+        lock (_random) // synchronize
+        {
+            return _random.Next(Min, Max + 1);
+        }
+    }
+
+    public static int GetUnixTimestamp()
+    {
+        return (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
+    }
+
+    private static bool IsValid(char character)
+    {
+        return Allowedchars.Contains(character);
+    }
+
+    public static bool IsValidAlphaNumeric(string inputStr)
+    {
+        if (string.IsNullOrEmpty(inputStr))
+        {
+            return false;
+        }
+
+        for (int index = 0; index < inputStr.Length; ++index)
+        {
+            if (!IsValid(inputStr[index]))
             {
                 return false;
             }
+        }
+        return true;
+    }
 
-            return true;
+    public static bool UsernameExists(string username)
+    {
+        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        int integer = UserDao.GetIdByName(dbClient, username);
+        if (integer <= 0)
+        {
+            return false;
         }
 
-        public static string GetUsernameById(int UserId)
-        {
-            string Name = "Unknown User";
+        return true;
+    }
 
+    public static string GetUsernameById(int UserId)
+    {
+        string Name = "Unknown User";
+
+        GameClient Client = GetGame().GetClientManager().GetClientByUserID(UserId);
+        if (Client != null && Client.GetUser() != null)
+        {
+            return Client.GetUser().Username;
+        }
+
+        if (_usersCached.ContainsKey(UserId))
+        {
+            return _usersCached[UserId].Username;
+        }
+
+        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            Name = UserDao.GetNameById(dbClient, UserId);
+
+        if (string.IsNullOrEmpty(Name))
+        {
+            Name = "Unknown User";
+        }
+
+        return Name;
+    }
+
+    public static User GetUserByUsername(string UserName)
+    {
+        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        int id = UserDao.GetIdByName(dbClient, UserName);
+        if (id > 0)
+        {
+            return GetUserById(Convert.ToInt32(id));
+        }
+
+        return null;
+    }
+
+    public static User GetUserById(int UserId)
+    {
+        try
+        {
             GameClient Client = GetGame().GetClientManager().GetClientByUserID(UserId);
-            if (Client != null && Client.GetUser() != null)
+            if (Client != null)
             {
-                return Client.GetUser().Username;
-            }
+                User User = Client.GetUser();
+                if (User != null && User.Id > 0)
+                {
+                    if (_usersCached.ContainsKey(UserId))
+                    {
+                        _usersCached.TryRemove(UserId, out User);
+                    }
 
-            if (_usersCached.ContainsKey(UserId))
+                    return User;
+                }
+            }
+            else
             {
-                return _usersCached[UserId].Username;
+                try
+                {
+                    if (_usersCached.ContainsKey(UserId))
+                    {
+                        return _usersCached[UserId];
+                    }
+                    else
+                    {
+                        User user = UserFactory.GetUserData(UserId);
+                        if (user != null)
+                        {
+                            _usersCached.TryAdd(UserId, user);
+                            return user;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                    return null; 
+                }
             }
-
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                Name = UserDao.GetNameById(dbClient, UserId);
-
-            if (string.IsNullOrEmpty(Name))
-            {
-                Name = "Unknown User";
-            }
-
-            return Name;
-        }
-
-        public static User GetUserByUsername(string UserName)
-        {
-            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            int id = UserDao.GetIdByName(dbClient, UserName);
-            if (id > 0)
-            {
-                return GetUserById(Convert.ToInt32(id));
-            }
-
             return null;
         }
-
-        public static User GetUserById(int UserId)
+        catch
         {
-            try
-            {
-                GameClient Client = GetGame().GetClientManager().GetClientByUserID(UserId);
-                if (Client != null)
-                {
-                    User User = Client.GetUser();
-                    if (User != null && User.Id > 0)
-                    {
-                        if (_usersCached.ContainsKey(UserId))
-                        {
-                            _usersCached.TryRemove(UserId, out User);
-                        }
-
-                        return User;
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        if (_usersCached.ContainsKey(UserId))
-                        {
-                            return _usersCached[UserId];
-                        }
-                        else
-                        {
-                            User user = UserFactory.GetUserData(UserId);
-                            if (user != null)
-                            {
-                                _usersCached.TryAdd(UserId, user);
-                                return user;
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex);
-                        return null; 
-                    }
-                }
-                return null;
-            }
-            catch
-            {
-                return null;
-            }
+            return null;
         }
+    }
 
-        public static LanguageManager GetLanguageManager()
-        {
-            return _languageManager;
-        }
+    public static FigureDataManager GetFigureManager() =>  _figureManager;
 
-        public static ConfigurationData GetConfig()
-        {
-            return _configuration;
-        }
+    public static LanguageManager GetLanguageManager() => _languageManager;
+    
+    public static SettingsManager GetSettings() => _settingsManager;
 
-        public static WebSocketManager GetWebSocketManager()
-        {
-            return _webSocketManager;
-        }
+    public static WebSocketManager GetWebSocketManager() => _webSocketManager;
 
-        public static RCONSocket GetRCONSocket()
-        {
-            return _rcon;
-        }
+    public static RCONSocket GetRCONSocket() => _rcon;
 
-        public static Game GetGame()
-        {
-            return _game;
-        }
+    public static Game GetGame() => _game;
 
-        public static DatabaseManager GetDatabaseManager()
-        {
-            return _datebaseManager;
-        }
+    public static DatabaseManager GetDatabaseManager() => _datebaseManager;
 
-        public static HttpClient GetHttpClient()
-        {
-            return _httpClient;
-        }
+    public static HttpClient GetHttpClient() => _httpClient;
 
-        public static void PreformShutDown()
-        {
-            Console.Clear();
-            Console.WriteLine("Extinction du serveur...");
+    public static void PreformShutDown()
+    {
+        Console.Clear();
+        Console.WriteLine("Extinction du serveur...");
 
-            GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
-            Thread.Sleep(20 * 1000); // 20 secondes
-            GetGame().StopGameLoop();
-            GetWebSocketManager().Destroy(); // Eteindre le websocket server
-            GetGame().GetPacketManager().UnregisterAll(); // Dé-enregistrer les packets
-            GetGame().GetClientManager().CloseAll(); // Fermeture et enregistrement de toutes les utilisteurs
-            GetGame().GetRoomManager().RemoveAllRooms(); // Fermerture et enregistrer des apparts
+        GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
+        Thread.Sleep(20 * 1000); // 20 secondes
+        GetGame().StopGameLoop();
+        GetWebSocketManager().Destroy(); // Eteindre le websocket server
+        GetGame().GetPacketManager().UnregisterAll(); // Dé-enregistrer les packets
+        GetGame().GetClientManager().CloseAll(); // Fermeture et enregistrement de toutes les utilisteurs
+        GetGame().GetRoomManager().RemoveAllRooms(); // Fermerture et enregistrer des apparts
 
-            Console.WriteLine("Wibbo Emulateur s'est parfaitement éteint...");
-            Environment.Exit(0);
-        }
+        Console.WriteLine("Wibbo Emulateur s'est parfaitement éteint...");
+        Environment.Exit(0);
     }
 }

@@ -59,10 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Configuration\certificate.pfx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Configuration\settings.ini">
+    <None Update="Configuration\database.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

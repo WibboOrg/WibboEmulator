@@ -29,17 +29,10 @@ namespace WibboEmulator.Communication.WebSocket
             this._webSocketServer.KeepClean = false;
             if (isSecure)
             {
-                string patchCertificate = WibboEnvironment.PatchDir + "Configuration/certificate.pfx";
+                string pemFile = WibboEnvironment.GetSettings().GetData<string>("game.ssl.pem.file.path");
+                string pemKeyFile = WibboEnvironment.GetSettings().GetData<string>("game.ssl.keypem.file.path");
 
-                X509Certificate2 certificat = null;
-
-                string pemFile = WibboEnvironment.GetConfig().GetDataString("game.ssl.pem.file.path");
-                string pemKeyFile = WibboEnvironment.GetConfig().GetDataString("game.ssl.keypem.file.path");
-
-                if(pemFile != "")
-                    certificat = X509Certificate2.CreateFromPemFile(pemFile, pemKeyFile);
-                else
-                    certificat = new X509Certificate2(patchCertificate, certificatePassword);
+                var certificat = X509Certificate2.CreateFromPemFile(pemFile, pemKeyFile);
 
                 if (certificat != null)
                 {

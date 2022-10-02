@@ -2121,7 +2121,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                             break;
                         }
 
-                        string[] allowedOwner = WibboEnvironment.GetConfig().GetDataString("givelot.allowed.owner").Split(',');
+                        string[] allowedOwner = WibboEnvironment.GetSettings().GetData<string>("givelot.allowed.owner").Split(',');
 
                         if(!allowedOwner.Contains(user.Room.RoomData.OwnerName))
                         {

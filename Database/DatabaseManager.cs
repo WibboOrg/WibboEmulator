@@ -1,5 +1,6 @@
 ﻿using WibboEmulator.Database.Interfaces;
 using MySql.Data.MySqlClient;
+using Plus.Database;
 
 namespace WibboEmulator.Database
 {
@@ -7,21 +8,21 @@ namespace WibboEmulator.Database
     {
         private readonly string _connectionStr;
 
-        public DatabaseManager(uint DbPoolMax, uint DbPoolMin, string DbHostname, uint DbPort, string DbUsername, string DbPassword, string DbName)
+        public DatabaseManager(DatabaseConfiguration databaseConfiguration)
         {
             MySqlConnectionStringBuilder connectionString = new MySqlConnectionStringBuilder
             {
                 ConnectionTimeout = 10,
-                Database = DbName,
+                Database = databaseConfiguration.Name,
                 DefaultCommandTimeout = 30,
                 Logging = false,
-                MaximumPoolSize = DbPoolMax,
-                MinimumPoolSize = DbPoolMin,
-                Password = DbPassword,
+                MaximumPoolSize = databaseConfiguration.MaximumPoolSize,
+                MinimumPoolSize = databaseConfiguration.MinimumPoolSize,
+                Password = databaseConfiguration.Password,
                 Pooling = true,
-                Port = DbPort,
-                Server = DbHostname,
-                UserID = DbUsername,
+                Port = databaseConfiguration.Port,
+                Server = databaseConfiguration.Hostname,
+                UserID = databaseConfiguration.Username,
                 AllowZeroDateTime = true
             };
 
