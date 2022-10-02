@@ -1,4 +1,3 @@
-using WebSocketSharp;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;

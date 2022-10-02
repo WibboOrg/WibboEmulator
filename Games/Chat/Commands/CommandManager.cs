@@ -13,7 +13,6 @@ namespace WibboEmulator.Games.Chat.Commands
 {
     public class CommandManager
     {
-
         private readonly Dictionary<string, AuthorizationCommands> _commandRegisterInvokeable;
         private readonly Dictionary<string, string> _listCommande;
         private readonly Dictionary<int, IChatCommand> _commands;
@@ -382,6 +381,7 @@ namespace WibboEmulator.Games.Chat.Commands
             this.Register(153, new RegenLTD());
             this.Register(154, new SummonAll());
             this.Register(155, new LootboxInfo());
+            this.Register(156, new Test());
         }
 
         public void RegisterCommand()

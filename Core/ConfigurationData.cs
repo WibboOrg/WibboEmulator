@@ -1,6 +1,4 @@
-﻿using MySqlX.XDevAPI.Common;
-
-namespace WibboEmulator.Core
+﻿namespace WibboEmulator.Core
 {
     public class ConfigurationData
     {

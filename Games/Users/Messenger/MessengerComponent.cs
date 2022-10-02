@@ -1,7 +1,6 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Messenger;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.GameClients.Relationships;
 using WibboEmulator.Utilities;
 using System.Data;

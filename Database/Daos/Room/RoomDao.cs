@@ -66,6 +66,14 @@ namespace WibboEmulator.Database.Daos
             return dbClient.GetTable();
         }
 
+        internal static DataTable GetAllId(IQueryAdapter dbClient)
+        {
+            dbClient.SetQuery("SELECT id FROM `room`");
+
+            return dbClient.GetTable();
+        }
+
+
         internal static void UpdateResetUsersNow(IQueryAdapter dbClient)
         {
             dbClient.RunQuery("UPDATE `room` SET users_now = '0' WHERE users_now > '0'");

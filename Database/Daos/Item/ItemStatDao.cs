@@ -1,5 +1,4 @@
-﻿using System.Data;
-using WibboEmulator.Database.Interfaces;
+﻿using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Database.Daos

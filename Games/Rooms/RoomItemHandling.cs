@@ -415,7 +415,9 @@ namespace WibboEmulator.Games.Rooms
 
                         foreach (RoomUser userForSquare in usersForSquare)
                         {
-                            if (userForSquare != null && (!userForSquare.SetStep && (userForSquare.AllowMoveToRoller || this._rollerSpeed == 0) && (!userForSquare.IsWalking || userForSquare.Freeze)) && nextRollerClear && (this._room.GetGameMap().CanWalk(nextCoord.X, nextCoord.Y) && this._room.GetGameMap().SquareTakingOpen(nextCoord.X, nextCoord.Y) && !this._rollerUsersMoved.Contains(userForSquare.UserId)))
+                            if (userForSquare != null && (!userForSquare.SetStep && (userForSquare.AllowMoveToRoller || this._rollerSpeed == 0) && 
+                                (!userForSquare.IsWalking || userForSquare.Freeze)) && nextRollerClear &&  (this._room.GetGameMap().CanWalk(nextCoord.X, nextCoord.Y) && 
+                                this._room.GetGameMap().SquareTakingOpen(nextCoord.X, nextCoord.Y) && !this._rollerUsersMoved.Contains(userForSquare.UserId)))
                             {
                                 this._rollerMessages.Add(new SlideObjectBundleComposer(userForSquare.X, userForSquare.Y, userForSquare.Z, nextCoord.X, nextCoord.Y, nextZ, userForSquare.VirtualId, roller.Id, false));
                                 this._rollerUsersMoved.Add(userForSquare.UserId);
@@ -453,7 +455,6 @@ namespace WibboEmulator.Games.Rooms
 
         public ServerPacket TeleportUser(RoomUser user, Point nextCoord, int rollerID, double nextZ, bool noAnimation = false)
         {
-
             int x = noAnimation ? nextCoord.X : user.X;
             int y = noAnimation ? nextCoord.Y : user.Y;
             double z = noAnimation ? nextZ : user.Z;
@@ -463,7 +464,7 @@ namespace WibboEmulator.Games.Rooms
             return new SlideObjectBundleComposer(x, y, z, nextCoord.X, nextCoord.Y, nextZ, user.VirtualId, rollerID, false);
         }
 
-        public void SaveFurniture(IQueryAdapter dbClient)
+        public void SaveFurniture()
         {
             try
             {
@@ -471,6 +472,8 @@ namespace WibboEmulator.Games.Rooms
                 {
                     return;
                 }
+
+                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
                 if (this._updateItems.Count > 0)
                 {

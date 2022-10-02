@@ -3,7 +3,6 @@ using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.GameClients;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;

@@ -1,6 +1,5 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd

@@ -58,23 +58,23 @@ namespace WibboEmulator.Games.Rooms
                 return false;
             }
 
-            if (this.Hour >= 8 && this.Hour < 20) //Journ�e
+            if (this.Hour >= 8 && this.Hour < 20) //Journée
             {
                 this.Intensity = 255;
             }
-            else if (this.Hour >= 20 && this.Hour < 21)  //Cr�puscule
+            else if (this.Hour >= 20 && this.Hour < 21)  //Crépuscule
             {
                 this.Intensity = 200;
             }
-            else if (this.Hour >= 21 && this.Hour < 22)  //Cr�puscule
+            else if (this.Hour >= 21 && this.Hour < 22)  //Crépuscule
             {
                 this.Intensity = 150;
             }
-            else if (this.Hour >= 22 && this.Hour < 23)  //Cr�puscule
+            else if (this.Hour >= 22 && this.Hour < 23)  //Crépuscule
             {
                 this.Intensity = 100;
             }
-            else if (this.Hour >= 23 && this.Hour < 24)  //Cr�puscule
+            else if (this.Hour >= 23 && this.Hour < 24)  //Crépuscule
             {
                 this.Intensity = 75;
             }

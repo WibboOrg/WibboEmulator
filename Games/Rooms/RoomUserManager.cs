@@ -741,9 +741,7 @@ namespace WibboEmulator.Games.Rooms
             }
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                RoomDao.UpdateUsersNow(dbClient, this._room.Id, count);
-            }
+            RoomDao.UpdateUsersNow(dbClient, this._room.Id, count);
 
             this._room.RoomData.UsersNow = count;
         }
@@ -1270,11 +1268,9 @@ namespace WibboEmulator.Games.Rooms
 
                         User.UpdateNeeded = true;
                     }
-
                 }
                 else if (User.IsLay)
                 {
-
                     if (!User.ContainStatus("lay"))
                     {
                         if (User.IsTransf)
@@ -1299,7 +1295,7 @@ namespace WibboEmulator.Games.Rooms
 
             List<RoomUser> ToRemove = new List<RoomUser>();
 
-            foreach (RoomUser User in this.GetUserList().ToList())
+            foreach (RoomUser User in this.GetUserList().OrderBy(a => Guid.NewGuid()).ToList())
             {
                 if (!this.IsValid(User))
                 {

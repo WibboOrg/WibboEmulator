@@ -1,11 +1,6 @@
 ﻿using WibboEmulator.Core.FigureData.Types;
 using WibboEmulator.Core.FigureData.JsonObject;
-using System.Xml;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using System.Xml.Linq;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace WibboEmulator.Core.FigureData
 {

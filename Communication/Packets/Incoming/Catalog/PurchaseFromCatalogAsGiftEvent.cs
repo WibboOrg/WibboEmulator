@@ -9,7 +9,6 @@ using WibboEmulator.Games.Catalog.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure

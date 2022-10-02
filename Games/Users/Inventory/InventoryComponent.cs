@@ -1,13 +1,11 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.GameClients.Inventory.Bots;
 using System.Collections.Concurrent;
 using System.Data;
-using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Games.GameClients.Inventory
 {

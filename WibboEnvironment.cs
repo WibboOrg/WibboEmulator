@@ -7,7 +7,6 @@ using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.GameClients.Authenticator;
 using WibboEmulator.Net;
 using System.Collections.Concurrent;
@@ -20,7 +19,7 @@ namespace WibboEmulator
     {
         private static ConfigurationData _configuration;
         private static WebSocketManager _webSocketManager;
-        private static GameCore _game;
+        private static Game _game;
         private static DatabaseManager _datebaseManager;
         private static RCONSocket _rcon;
         private static FigureDataManager _figureManager;
@@ -31,7 +30,6 @@ namespace WibboEmulator
         private static readonly ConcurrentDictionary<int, User> _usersCached = new ConcurrentDictionary<int, User>();
 
         public static DateTime ServerStarted { get; set; }
-        public static bool StaticEvents { get; set; }
         public static List<string> WebSocketOrigins { get; set; }
         public static string PatchDir { get; set; }
         public static string CameraUploadUrl { get; set; }
@@ -137,22 +135,14 @@ namespace WibboEmulator
                 _configuration = new ConfigurationData(PatchDir + "Configuration/settings.ini");
                 _datebaseManager = new DatabaseManager((uint)GetConfig().GetDataNumber("db.pool.maxsize"), (uint)GetConfig().GetDataNumber("db.pool.minsize"), GetConfig().GetDataString("db.hostname"), (uint)GetConfig().GetDataNumber("db.port"), GetConfig().GetDataString("db.username"), GetConfig().GetDataString("db.password"), GetConfig().GetDataString("db.name"));
 
-                int tryCounter = 0;
-                while (!_datebaseManager.IsConnected())
+                if (!_datebaseManager.IsConnected())
                 {
-                    tryCounter++;
-                    Thread.Sleep(5000);
-
-                    if (tryCounter > 10)
-                    {
-                        ExceptionLogger.WriteLine("Failed to connect to the specified MySQL server.");
-                        Console.ReadKey(true);
-                        Environment.Exit(1);
-                        return;
-                    }
+                    ExceptionLogger.WriteLine("Failed to connect to the specified MySQL server.");
+                    Console.ReadKey(true);
+                    Environment.Exit(1);
+                    return;
                 }
 
-                StaticEvents = _configuration.GetDataBool("static.events");
                 CameraUploadUrl = _configuration.GetDataString("camera.upload.url");
                 FigureDataUrl = _configuration.GetDataString("figuredata.url");
                 CameraThubmailUploadUrl = _configuration.GetDataString("camera.thubmail.upload.url");
@@ -161,7 +151,7 @@ namespace WibboEmulator
                 using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     _languageManager.Init(dbClient);
 
-                _game = new GameCore();
+                _game = new Game();
                 _game.StartGameLoop();
 
                 _figureManager = new FigureDataManager();
@@ -386,7 +376,7 @@ namespace WibboEmulator
             return _rcon;
         }
 
-        public static GameCore GetGame()
+        public static Game GetGame()
         {
             return _game;
         }
@@ -407,16 +397,14 @@ namespace WibboEmulator
             Console.WriteLine("Extinction du serveur...");
 
             GetGame().GetClientManager().SendMessage(new BroadcastMessageAlertComposer("<b><font color=\"#ba3733\">Hôtel en cours de redémarrage</font></b><br><br>L'hôtel redémarrera dans 20 secondes. Nous nous excusons pour la gêne occasionnée.<br>Merci de ta visite, nous serons de retour dans environ 5 minutes."));
-            Thread.Sleep(20000); // 20 secondes
-            GetGame().Destroy();
+            Thread.Sleep(20 * 1000); // 20 secondes
+            GetGame().StopGameLoop();
             GetWebSocketManager().Destroy(); // Eteindre le websocket server
             GetGame().GetPacketManager().UnregisterAll(); // Dé-enregistrer les packets
             GetGame().GetClientManager().CloseAll(); // Fermeture et enregistrement de toutes les utilisteurs
             GetGame().GetRoomManager().RemoveAllRooms(); // Fermerture et enregistrer des apparts
 
             Console.WriteLine("Wibbo Emulateur s'est parfaitement éteint...");
-
-            Thread.Sleep(1000);
             Environment.Exit(0);
         }
     }

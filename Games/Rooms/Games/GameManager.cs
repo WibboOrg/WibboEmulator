@@ -369,10 +369,7 @@ namespace WibboEmulator.Games.Rooms.Games
             this._roomInstance.GetBanzai().BanzaiStart();
             this._roomInstance.GetFreeze().StartGame();
 
-            if (this.OnGameStart != null)
-            {
-                this.OnGameStart(null, null);
-            }
+            this.OnGameStart?.Invoke(null, null);
 
             this._roomInstance.lastTimerReset = DateTime.Now;
         }

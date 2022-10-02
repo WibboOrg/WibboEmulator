@@ -10,6 +10,9 @@ using WibboEmulator.Communication.Packets.Incoming.Televisions;
 using WibboEmulator.Communication.Packets.Incoming.RolePlay;
 using WibboEmulator.Communication.Packets.Incoming.RolePlay.Troc;
 using WibboEmulator.Communication.Packets.Incoming.Guide;
+using System.Threading;
+using System.Diagnostics;
+using WibboEmulator.Core;
 
 namespace WibboEmulator.Communication.Packets
 {
@@ -17,8 +20,13 @@ namespace WibboEmulator.Communication.Packets
     {
         private readonly Dictionary<int, IPacketEvent> _incomingPackets;
 
+        private readonly TimeSpan _maximumRunTimeInSec; // 5 minutes in debug. 30 seconds in release.
+        private readonly CancellationTokenSource _cancellationTokenSource = new();
+
         public PacketManager()
         {
+            _maximumRunTimeInSec = Debugger.IsAttached ? TimeSpan.FromMinutes(30) : TimeSpan.FromSeconds(5);
+
             this._incomingPackets = new Dictionary<int, IPacketEvent>();
         }
 
@@ -60,11 +68,11 @@ namespace WibboEmulator.Communication.Packets
             Console.WriteLine("Logged " + this._incomingPackets.Count + " packet handler(s)!");
         }
 
-        public void TryExecutePacket(GameClient session, ClientPacket packet)
+        public async void TryExecutePacket(GameClient session, ClientPacket packet)
         {
             if (!this._incomingPackets.TryGetValue(packet.Id, out IPacketEvent pak))
             {
-                if (WibboEnvironment.StaticEvents)
+                if (Debugger.IsAttached)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine(packet.ToString());
@@ -73,7 +81,7 @@ namespace WibboEmulator.Communication.Packets
                 return;
             }
 
-            if (WibboEnvironment.StaticEvents)
+            if (Debugger.IsAttached)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(packet.ToString());
@@ -82,7 +90,7 @@ namespace WibboEmulator.Communication.Packets
             
             if(session.PacketTimeout(packet.Id, pak.Delay))
             {
-                if (WibboEnvironment.StaticEvents)
+                if (Debugger.IsAttached)
                 {
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine("[" + packet.Id + "] Spam detected");
@@ -92,6 +100,29 @@ namespace WibboEmulator.Communication.Packets
             }
 
             pak.Parse(session, packet);
+
+            //await ExecutePacketAsync(session, packet, pak);
+        }
+
+        private async Task ExecutePacketAsync(GameClient session, ClientPacket packet, IPacketEvent pak)
+        {
+            if (_cancellationTokenSource.IsCancellationRequested)
+                return;
+
+            var task = new Task(() => pak.Parse(session, packet));
+            task.Start();
+
+            await task.WaitAsync(_maximumRunTimeInSec, _cancellationTokenSource.Token).ContinueWith(t =>
+            {
+                if (t.IsFaulted && t.Exception != null)
+                {
+                    foreach (var e in t.Exception.Flatten().InnerExceptions)
+                    {
+                        string messageError = string.Format("Error handling packet {0} for session {1} @ User Name {2}: {3}", packet.Id, session.ConnectionID, session.GetUser()?.Username ?? string.Empty, e.Message);
+                        ExceptionLogger.LogPacketException(packet.Id.ToString(), messageError);
+                    }
+                }
+            });
         }
 
         public void UnregisterAll()

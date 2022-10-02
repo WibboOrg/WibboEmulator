@@ -3,7 +3,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

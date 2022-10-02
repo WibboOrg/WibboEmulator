@@ -18,7 +18,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                Room.GetRoomItemHandler().SaveFurniture(dbClient);
+                Room.GetRoomItemHandler().SaveFurniture();
 
                 RoomId = RoomDao.InsertDuplicate(dbClient, OldRoomId, Session.GetUser().Username);
 

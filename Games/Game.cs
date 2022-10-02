@@ -24,7 +24,7 @@ using WibboEmulator.Games.Loots;
 
 namespace WibboEmulator.Games;
 
-public class GameCore
+public class Game
 {
     private readonly ClientManager _clientManager;
     private readonly PermissionManager _permissionManager;
@@ -46,12 +46,14 @@ public class GameCore
     private readonly AnimationManager _animationManager;
     private readonly LootManager _lootManager;
 
-    private Thread _gameLoop;
-    public bool GameLoopActive;
+    private Task _gameLoop;
+    private readonly int _cycleSleepTime = 25;
+    private bool _cycleEnded;
+    private bool _gameLoopActive;
 
     private readonly Stopwatch _moduleWatch;
 
-    public GameCore()
+    public Game()
     {
         using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
@@ -116,117 +118,58 @@ public class GameCore
         this._moduleWatch = new Stopwatch();
     }
 
-    public LootManager GetLootManager()
-    {
-        return this._lootManager;
-    }
+    public LootManager GetLootManager() => this._lootManager;
 
-    public AnimationManager GetAnimationManager()
-    {
-        return this._animationManager;
-    }
+    public AnimationManager GetAnimationManager() => this._animationManager;
 
-    public BadgeManager GetBadgeManager()
-    {
-        return this._badgeManager;
-    }
+    public BadgeManager GetBadgeManager() => this._badgeManager;
 
-    public EffectManager GetEffectManager()
-    {
-        return this._effectManager;
-    }
+    public EffectManager GetEffectManager() => this._effectManager;
 
-    public ChatManager GetChatManager()
-    {
-        return this._chatManager;
-    }
+    public ChatManager GetChatManager() => this._chatManager;
 
-    public PacketManager GetPacketManager()
-    {
-        return this._packetManager;
-    }
+    public PacketManager GetPacketManager() => this._packetManager;
 
-    public HelpManager GetHelpManager()
-    {
-        return this._helpManager;
-    }
+    public HelpManager GetHelpManager() => this._helpManager;
 
-    public RoleplayManager GetRoleplayManager()
-    {
-        return this._roleplayManager;
-    }
+    public RoleplayManager GetRoleplayManager() => this._roleplayManager;
 
-    public ClientManager GetClientManager()
-    {
-        return this._clientManager;
-    }
+    public ClientManager GetClientManager() => this._clientManager;
 
-    public PermissionManager GetPermissionManager()
-    {
-        return this._permissionManager;
-    }
+    public PermissionManager GetPermissionManager() => this._permissionManager;
 
-    public CatalogManager GetCatalog()
-    {
-        return this._catalogManager;
-    }
+    public CatalogManager GetCatalog() => this._catalogManager;
 
-    public NavigatorManager GetNavigator()
-    {
-        return this._navigatorManager;
-    }
+    public NavigatorManager GetNavigator() => this._navigatorManager;
 
-    public ItemDataManager GetItemManager()
-    {
-        return this._itemDataManager;
-    }
+    public ItemDataManager GetItemManager() => this._itemDataManager;
 
-    public RoomManager GetRoomManager()
-    {
-        return this._roomManager;
-    }
+    public RoomManager GetRoomManager() => this._roomManager;
 
-    public AchievementManager GetAchievementManager()
-    {
-        return this._achievementManager;
-    }
+    public AchievementManager GetAchievementManager() => this._achievementManager;
 
-    public ModerationManager GetModerationManager()
-    {
-        return this._moderationManager;
-    }
+    public ModerationManager GetModerationManager() => this._moderationManager;
 
-    public QuestManager GetQuestManager()
-    {
-        return this._questManager;
-    }
+    public QuestManager GetQuestManager() => this._questManager;
 
-    public GroupManager GetGroupManager()
-    {
-        return this._groupManager;
-    }
+    public GroupManager GetGroupManager() => this._groupManager;
 
-    public LandingViewManager GetHotelView()
-    {
-        return this._landingViewManager;
-    }
+    public LandingViewManager GetHotelView() => this._landingViewManager;
 
     public void StartGameLoop()
     {
-        this.GameLoopActive = true;
+        this._gameLoopActive = true;
 
-        this._gameLoop = new Thread(new ThreadStart(this.MainGameLoop))
-        {
-            Priority = ThreadPriority.Highest
-        };
-
+        this._gameLoop = new Task(this.MainGameLoop, TaskCreationOptions.LongRunning);
         this._gameLoop.Start();
     }
 
     private void MainGameLoop()
     {
-        while (this.GameLoopActive)
+        while (this._gameLoopActive)
         {
+            _cycleEnded = false;
+
             try
             {
                 this._moduleWatch.Restart();
@@ -263,7 +206,9 @@ public class GameCore
                 Console.WriteLine("Canceled operation {0}", e);
             }
 
-            Thread.Sleep(500);
+            _cycleEnded = true;
+
+            Thread.Sleep(_cycleSleepTime);
         }
 
         Console.WriteLine("MainGameLoop end");
@@ -280,9 +225,9 @@ public class GameCore
         }
     }
 
-    public void Destroy()
+    public void StopGameLoop()
     {
-        this.GameLoopActive = false;
-        Console.WriteLine("Destroyed Hotel.");
+        this._gameLoopActive = false;
+        while (!_cycleEnded) Thread.Sleep(_cycleSleepTime);
     }
 }

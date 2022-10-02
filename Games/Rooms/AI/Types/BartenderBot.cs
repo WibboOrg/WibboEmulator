@@ -1,5 +1,4 @@
 ﻿using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms.AI.Responses;
 using System.Drawing;
 
 namespace WibboEmulator.Games.Rooms.AI.Types

@@ -13,7 +13,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            Room.SetTimeout(async () =>
+            Room.RunTask(async () =>
             {
                 List<RoomUser> userKick = new List<RoomUser>();
                 foreach (RoomUser user in Room.GetRoomUserManager().GetUserList().ToList())

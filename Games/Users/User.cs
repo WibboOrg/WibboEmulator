@@ -7,7 +7,6 @@ using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Chat.Logs;
-using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Roleplay;
 using WibboEmulator.Games.Roleplay.Player;
 using WibboEmulator.Games.Rooms;
@@ -312,13 +311,6 @@ namespace WibboEmulator.Games.GameClients
                     oldRoom.GetRoomUserManager().RemoveUserFromRoom(this.GetClient(), false, false);
             }
 
-            Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(Id);
-            if (room == null)
-            {
-                this.GetClient().SendPacket(new CloseConnectionComposer());
-                return;
-            }
-
             if (this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID != Id)
             {
                 this.GetClient().GetUser().TeleportingRoomID = 0;
@@ -326,6 +318,13 @@ namespace WibboEmulator.Games.GameClients
                 this.GetClient().GetUser().TeleporterId = 0;
                 this.GetClient().SendPacket(new CloseConnectionComposer());
 
+                return;
+            }
+
+            Room room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(Id);
+            if (room == null)
+            {
+                this.GetClient().SendPacket(new CloseConnectionComposer());
                 return;
             }
 

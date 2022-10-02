@@ -72,20 +72,18 @@ namespace WibboEmulator.Games.Rooms
         public bool OldFoot;
         public bool RoomIngameChat;
 
-
         private int _saveFurnitureTimer;
 
         //Question
         public int VotedYesCount { get; set; }
         public int VotedNoCount { get; set; }
 
-        private readonly List<CancellationTokenSource> _cancellationTokenSources;
+        private readonly CancellationTokenSource _cancellationTokenSource = new();
 
         public int UserCount => this._roomUserManager.GetRoomUserCount();
 
         public int Id => this.RoomData.Id;
 
-        public event TriggerUserDelegate OnTriggerUser;
         public event RoomUserSaysDelegate OnUserSays;
         public event RoomEventDelegate OnTrigger;
         public event RoomEventDelegate OnTriggerSelf;
@@ -132,7 +130,6 @@ namespace WibboEmulator.Games.Rooms
             this.LoadBots();
             this.InitPets();
             this.lastTimerReset = DateTime.Now;
-            this._cancellationTokenSources = new List<CancellationTokenSource>();
         }
 
         public Gamemap GetGameMap()
@@ -578,13 +575,13 @@ namespace WibboEmulator.Games.Rooms
             packetList.Clear();
         }
 
-        public void ProcessRoom()
+        public Task ProcessRoom()
         {
             try
             {
                 if (this.Disposed)
                 {
-                    return;
+                    return Task.CompletedTask;
                 }
 
                 try
@@ -612,7 +609,7 @@ namespace WibboEmulator.Games.Rooms
                     {
                         WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
 
-                        return;
+                        return Task.CompletedTask;
                     }
                     else
                     {
@@ -634,15 +631,14 @@ namespace WibboEmulator.Games.Rooms
                         this.GetJanken().OnCycle();
                     }
 
-                    if (this._saveFurnitureTimer < ((2 * 60) * 2))
+                    if (this._saveFurnitureTimer < 240)
                     {
                         this._saveFurnitureTimer++;
                     }
                     else
                     {
                         this._saveFurnitureTimer = 0;
-                        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                        this.GetRoomItemHandler().SaveFurniture(dbClient);
+                        this.GetRoomItemHandler().SaveFurniture();
                     }
                 }
                 catch (Exception ex)
@@ -654,6 +650,8 @@ namespace WibboEmulator.Games.Rooms
             {
                 ExceptionLogger.LogCriticalException("Sub crash in room cycle: " + (ex).ToString());
             }
+
+            return Task.CompletedTask;
         }
 
         private void RpCycleHour()
@@ -909,41 +907,34 @@ namespace WibboEmulator.Games.Rooms
 
             this.Disposed = true;
 
+            this.SendPacket(new CloseConnectionComposer());
+
             try
             {
                 if (ProcessTask != null && ProcessTask.IsCompleted)
+                {
                     ProcessTask.Dispose();
+                }
             }
             catch { }
 
-            this.SendPacket(new CloseConnectionComposer());
+            this._cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(1));
 
-            foreach (CancellationTokenSource tokenSource in this._cancellationTokenSources)
-            {
-                tokenSource.Cancel();
-            }
-            this._cancellationTokenSources.Clear();
+            this.GetRoomItemHandler().SaveFurniture();
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                this.GetRoomItemHandler().SaveFurniture(dbClient);
-            }
             this.RoomData.Tags.Clear();
-
             this.UsersWithRights.Clear();
             this._bans.Clear();
+
             foreach (Item roomItem in this.GetRoomItemHandler().GetWallAndFloor)
             {
                 roomItem.Destroy();
             }
 
             this.GetRoomItemHandler().Destroy();
-
             this.ActiveTrades.Clear();
-
             this.GetRoomUserManager().UpdateUserCount(0);
             this.GetRoomUserManager().Destroy();
-
             this._gameMap.Destroy();
         }
 
@@ -1073,50 +1064,22 @@ namespace WibboEmulator.Games.Rooms
         public void SetMaxUsers(int MaxUsers)
         {
             this.RoomData.UsersMax = MaxUsers;
+
             using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             RoomDao.UpdateUsersMax(dbClient, this.Id, MaxUsers);
         }
 
-        public void SetTimeout(int delay, Action callBack)
+        public Task RunTask(Func<Task> callBack)
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            CancellationToken cancellationToken = cancellationTokenSource.Token;
-
-            Task.Delay(delay).ContinueWith((t) =>
+            var task = Task.Run(async () =>
             {
-                if (this._cancellationTokenSources.Contains(cancellationTokenSource))
-                    this._cancellationTokenSources.Remove(cancellationTokenSource);
-
-                if (this.Disposed) return;
-
-                callBack();
-
-            }, cancellationToken);
-
-
-            if (!this._cancellationTokenSources.Contains(cancellationTokenSource))
-                this._cancellationTokenSources.Add(cancellationTokenSource);
-        }
-
-        public void SetTimeout(Func<Task> callBack)
-        {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-            CancellationToken cancellationToken = cancellationTokenSource.Token;
-
-            Task.Run(async () =>
-            {
-                if (this._cancellationTokenSources.Contains(cancellationTokenSource))
-                    this._cancellationTokenSources.Remove(cancellationTokenSource);
-
                 if (this.Disposed) return;
 
                 await callBack();
 
-            }, cancellationToken);
+            }, this._cancellationTokenSource.Token);
 
-
-            if (!this._cancellationTokenSources.Contains(cancellationTokenSource))
-                this._cancellationTokenSources.Add(cancellationTokenSource);
+            return task;
         }
     }
 }

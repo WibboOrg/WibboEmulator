@@ -25,11 +25,6 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
             using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             switch (cmd.ToLower())
             {
-                case "staticevents":
-                    {
-                        WibboEnvironment.StaticEvents = !WibboEnvironment.StaticEvents;
-                        break;
-                    }
                 case "random":
                     {
                         WibboEnvironment.RegenRandom();

@@ -1,5 +1,4 @@
-﻿using WibboEmulator.Core;
-using WibboEmulator.Games.GameClients;
+﻿using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Permissions

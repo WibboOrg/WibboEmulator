@@ -1,7 +1,6 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Misc;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

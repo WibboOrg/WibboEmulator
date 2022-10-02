@@ -1,5 +1,4 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;

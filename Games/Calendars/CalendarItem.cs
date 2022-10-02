@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WibboEmulator.Games.Calendars
+﻿namespace WibboEmulator.Games.Calendars
 {
     public class CalendarItem
     {

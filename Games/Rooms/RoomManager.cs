@@ -1,7 +1,6 @@
 ﻿using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.GameClients;
 using System.Collections.Concurrent;
 using System.Data;
 using System.Diagnostics;
@@ -242,7 +241,7 @@ namespace WibboEmulator.Games.Rooms
             IEnumerable<RoomData> rooms =
                 (from RoomInstance in this._rooms.ToList()
                  where RoomInstance.Value != null && RoomInstance.Value.RoomData != null &&
-                 RoomInstance.Value.RoomData.UsersNow > 0 &&
+                 RoomInstance.Value.RoomData.UsersNow >= 0 &&
                  (category == -1 || RoomInstance.Value.RoomData.Category == category) &&
                  RoomInstance.Value.RoomData.State != 3 && RoomInstance.Value.RoomData.Langue == Langue
                  orderby RoomInstance.Value.RoomData.Score descending
@@ -335,26 +334,6 @@ namespace WibboEmulator.Games.Rooms
             return rooms.ToList();
         }
 
-        public Room TryGetRandomLoadedRoom()
-        {
-            IEnumerable<Room> room =
-                (from RoomInstance in this._rooms.ToList()
-                 where (RoomInstance.Value.RoomData.UsersNow > 0 &&
-                 RoomInstance.Value.RoomData.State == 0 &&
-                 RoomInstance.Value.RoomData.UsersNow < RoomInstance.Value.RoomData.UsersMax)
-                 orderby RoomInstance.Value.RoomData.UsersNow descending
-                 select RoomInstance.Value).Take(1);
-
-            if (room.Count() > 0)
-            {
-                return room.First();
-            }
-            else
-            {
-                return null;
-            }
-        }
-
         private readonly Stopwatch roomCycleStopwatch;
         public void RoomCycleTask()
         {
@@ -365,16 +344,17 @@ namespace WibboEmulator.Games.Rooms
                 {
                     if (room.ProcessTask == null || room.ProcessTask.IsCompleted)
                     {
-                        room.ProcessTask = new Task(room.ProcessRoom);
-                        room.ProcessTask.Start();
+                        room.ProcessTask = room.RunTask(() => room.ProcessRoom());
 
                         room.IsLagging = 0;
                     }
                     else
                     {
                         room.IsLagging++;
-                        if (room.IsLagging > 20)
+                        if (room.IsLagging > 5)
                         {
+                            ExceptionLogger.LogThreadException("Room lagging", "Room cycle task for room " + room.Id);
+
                             this.UnloadRoom(room);
                         }
                     }

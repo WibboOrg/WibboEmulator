@@ -19,7 +19,6 @@ using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Help;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.GameClients.Authenticator;
 using WibboEmulator.Utilities;
 

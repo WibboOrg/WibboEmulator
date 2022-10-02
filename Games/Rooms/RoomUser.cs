@@ -349,14 +349,15 @@ namespace WibboEmulator.Games.Rooms
             this.UpdateNeeded = false;
             this.IsWalking = false;
 
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room))
-                return;
-
-            room.GetGameMap().AddTakingSquare(pX, pY);
+            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room))
+                room.GetGameMap().AddTakingSquare(pX, pY);
         }
 
         public void SetPos(int pX, int pY, double pZ)
         {
+            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room))
+                room.GetGameMap().UpdateUserMovement(this.Coordinate, new Point(pX, pY), this);
+
             this.X = pX;
             this.Y = pY;
             this.Z = pZ;
@@ -370,11 +371,6 @@ namespace WibboEmulator.Games.Rooms
             this.SetStep = false;
             this.IsWalking = false;
             this.UpdateNeeded = true;
-
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out Room room))
-                return;
-
-            room.GetGameMap().UpdateUserMovement(this.Coordinate, new Point(pX, pY), this);
         }
 
         public void CarryItem(int itemId, bool notTimer = false)

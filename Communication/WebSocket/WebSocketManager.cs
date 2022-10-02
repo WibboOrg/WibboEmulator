@@ -4,13 +4,10 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 using System.Collections.Concurrent;
 using System.Net;
-using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 using System.Security.Authentication;
-using System.Collections;
-using System.Net.Sockets;
 
 namespace WibboEmulator.Communication.WebSocket
 {

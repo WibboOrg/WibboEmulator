@@ -1,4 +1,3 @@
-using MySqlX.XDevAPI.Common;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
