@@ -169,7 +169,7 @@ namespace WibboEmulator.Games.GameClients
         {
             GameClient Client = new GameClient(clientID, connection);
             if (!this._clients.TryAdd(clientID, Client))
-                connection.Dispose();
+                connection.Disconnect();
         }
 
         public void DisposeConnection(string clientID)
@@ -294,7 +294,7 @@ namespace WibboEmulator.Games.GameClients
 
                     try
                     {
-                        client.GetConnection().Dispose();
+                        client.GetConnection().Disconnect();
                     }
                     catch
                     {

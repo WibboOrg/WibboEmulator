@@ -16,6 +16,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
         public void Parse(GameClient session, ClientPacket packet)
         {
+            Thread.Sleep(5000);
             if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
             {
                 return;

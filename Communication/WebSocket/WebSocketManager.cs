@@ -37,7 +37,7 @@ namespace WibboEmulator.Communication.WebSocket
                 {
                     var context = new SslContext(SslProtocols.Tls12, certificat);
 
-                    this._webSocketServer = new GameServer(context, IPAddress.Any, 403);
+                    this._webSocketServer = new GameServer(context, IPAddress.Any, port);
                 }
             }
             this._webSocketServer.Start();
@@ -161,7 +161,7 @@ namespace WibboEmulator.Communication.WebSocket
     public class GameWebSocket : WssSession
     {
         private string _ip;
-        private Dictionary<string, string> _headerList = new();
+        private readonly Dictionary<string, string> _headerList = new();
 
         public GameWebSocket(WssServer server) : base(server) { }
 

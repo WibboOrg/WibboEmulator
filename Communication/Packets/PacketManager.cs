@@ -99,7 +99,14 @@ namespace WibboEmulator.Communication.Packets
                 return;
             }
 
+            var timeStarted = DateTime.Now;
             pak.Parse(session, packet);
+            var timeEnded = DateTime.Now;
+
+            var timeExecution = timeStarted - timeEnded;
+            if (timeExecution > _maximumRunTimeInSec)
+                ExceptionLogger.LogPacketException(packet.ToString(), String.Format("High latency in {0}: {1}ms", session.GetUser()?.Username ?? session.GetConnection().GetIp(), timeExecution.Milliseconds));
+            
 
             //await ExecutePacketAsync(session, packet, pak);
         }
