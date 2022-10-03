@@ -347,8 +347,13 @@ namespace WibboEmulator.Games.Rooms
             if (this.roomCycleStopwatch.ElapsedMilliseconds >= 500)
             {
                 this.roomCycleStopwatch.Restart();
+
+                int emptyRoomsCount = 0;
                 foreach (Room room in this._rooms.Values.ToList())
                 {
+                    if (room.UserCount == 0)
+                        emptyRoomsCount++;
+
                     if (room.ProcessTask == null || room.ProcessTask.IsCompleted)
                     {
                         room.ProcessTask = room.RunTask(() => room.ProcessRoom());
@@ -363,11 +368,12 @@ namespace WibboEmulator.Games.Rooms
                             ExceptionLogger.LogThreadException("Room lagging", "Room cycle task for room " + room.Id);
 
                             this.UnloadRoom(room);
-
-                            WibboEnvironment.GetGame().GetRoomManager().UnloadEmptyRooms();
                         }
                     }
                 }
+
+                if(emptyRoomsCount >= 10)
+                    WibboEnvironment.GetGame().GetRoomManager().UnloadEmptyRooms();
             }
         }
 

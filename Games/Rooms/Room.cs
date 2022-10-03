@@ -21,6 +21,8 @@ using WibboEmulator.Utilities.Events;
 using WibboEmulator.Utilities;
 using WibboEmulator.Games.Rooms.Trading;
 using WibboEmulator.Communication.Interfaces;
+using MySqlX.XDevAPI;
+using Org.BouncyCastle.Bcpg;
 
 namespace WibboEmulator.Games.Rooms
 {
@@ -46,6 +48,8 @@ namespace WibboEmulator.Games.Rooms
         public MoodlightData MoodlightData;
         public List<Trade> ActiveTrades;
         public RoomData RoomData { get; set; }
+
+        private readonly TimeSpan _maximumRunTimeInSec = TimeSpan.FromSeconds(5);
 
         private TeamManager _teamManager;
         private GameManager _gameManager;
@@ -579,6 +583,8 @@ namespace WibboEmulator.Games.Rooms
         {
             try
             {
+                var timeStarted = DateTime.Now;
+
                 if (this.Disposed)
                 {
                     return Task.CompletedTask;
@@ -640,6 +646,12 @@ namespace WibboEmulator.Games.Rooms
                         this._saveFurnitureTimer = 0;
                         this.GetRoomItemHandler().SaveFurniture();
                     }
+
+                    var timeEnded = DateTime.Now;
+
+                    var timeExecution = timeEnded - timeStarted;
+                    if (timeExecution > _maximumRunTimeInSec)
+                        ExceptionLogger.LogThreadException(String.Format("High latency in {0}: {1}ms", this.Id, timeExecution.TotalMilliseconds), "ProcessRoom");
                 }
                 catch (Exception ex)
                 {
@@ -650,7 +662,6 @@ namespace WibboEmulator.Games.Rooms
             {
                 ExceptionLogger.LogCriticalException("Sub crash in room cycle: " + (ex).ToString());
             }
-
             return Task.CompletedTask;
         }
 

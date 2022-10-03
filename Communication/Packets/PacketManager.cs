@@ -20,13 +20,11 @@ namespace WibboEmulator.Communication.Packets
     {
         private readonly Dictionary<int, IPacketEvent> _incomingPackets;
 
-        private readonly TimeSpan _maximumRunTimeInSec; // 5 minutes in debug. 30 seconds in release.
+        private readonly TimeSpan _maximumRunTimeInSec = TimeSpan.FromSeconds(5);
         private readonly CancellationTokenSource _cancellationTokenSource = new();
 
         public PacketManager()
         {
-            _maximumRunTimeInSec = Debugger.IsAttached ? TimeSpan.FromMinutes(30) : TimeSpan.FromSeconds(5);
-
             this._incomingPackets = new Dictionary<int, IPacketEvent>();
         }
 
@@ -103,11 +101,10 @@ namespace WibboEmulator.Communication.Packets
             pak.Parse(session, packet);
             var timeEnded = DateTime.Now;
 
-            var timeExecution = timeStarted - timeEnded;
+            var timeExecution = timeEnded - timeStarted;
             if (timeExecution > _maximumRunTimeInSec)
-                ExceptionLogger.LogPacketException(packet.ToString(), String.Format("High latency in {0}: {1}ms", session.GetUser()?.Username ?? session.GetConnection().GetIp(), timeExecution.Milliseconds));
+                ExceptionLogger.LogPacketException(packet.ToString(), String.Format("High latency in {0}: {1}ms", session.GetUser()?.Username ?? session.GetConnection().GetIp(), timeExecution.TotalMilliseconds));
             
-
             //await ExecutePacketAsync(session, packet, pak);
         }
 
