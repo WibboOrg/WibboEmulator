@@ -368,7 +368,7 @@ namespace WibboEmulator.Games.GameClients
         {
             if (this._connection != null)
             {
-                this._connection.Dispose();
+                this._connection.Disconnect();
             }
         }
 

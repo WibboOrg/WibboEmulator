@@ -38,6 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="better-websocket-sharp" Version="1.0.2.1" />
     <PackageReference Include="MySql.Data" Version="8.0.30" />
     <PackageReference Include="NetCoreServer" Version="6.6.0" />
     <PackageReference Include="System.Net.WebSockets" Version="4.3.0" />
