@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -38,10 +38,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="better-websocket-sharp" Version="1.0.2.1" />
     <PackageReference Include="MySql.Data" Version="8.0.30" />
-    <PackageReference Include="NetCoreServer" Version="6.6.0" />
     <PackageReference Include="System.Net.WebSockets" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="websocket-sharp">
+      <HintPath>..\websocket-sharp\websocket-sharp\bin\Release\net6.0\websocket-sharp.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

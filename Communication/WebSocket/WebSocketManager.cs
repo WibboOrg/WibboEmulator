@@ -8,6 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using WebSocketSharp;
 using WebSocketSharp.Server;
 using System.Security.Authentication;
+using System.Diagnostics;
 
 namespace WibboEmulator.Communication.WebSocket
 {
@@ -26,6 +27,7 @@ namespace WibboEmulator.Communication.WebSocket
             this._bannedIp = new List<string>();
 
             this._webSocketServer = new WebSocketServer(IPAddress.Any, port, isSecure);
+            this._webSocketServer.WaitTime = TimeSpan.FromSeconds(5);
             //this._webSocketServer.KeepClean = false;
             if (isSecure)
             {
@@ -43,9 +45,8 @@ namespace WibboEmulator.Communication.WebSocket
             this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => new GameWebSocket() { IgnoreExtensions = true });
             this._webSocketServer.Start();
 
-            #if DEBUG
-            this._webSocketServer.Log.Level = LogLevel.Trace;
-            #endif
+            if(Debugger.IsAttached)
+                this._webSocketServer.Log.Level = LogLevel.Trace;
         }
 
         public void DisposeClient(GameWebSocket connection)

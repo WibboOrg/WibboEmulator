@@ -12,7 +12,7 @@ using Buffer = System.Buffer;
 
 namespace WibboEmulator.Communication.WebSocket
 {
-    public class WebSocketManager
+    public class WebSocketNetCoreManager
     {
         private GameServer _webSocketServer;
 
@@ -185,7 +185,7 @@ namespace WibboEmulator.Communication.WebSocket
             WibboEnvironment.GetWebSocketManager().CreatedClient(this);
         }
 
-        public override void OnWsDisconnected()
+        public override void OnDisconnected()
         {
             WibboEnvironment.GetWebSocketManager().DisposeClient(this);
         }
@@ -248,7 +248,9 @@ namespace WibboEmulator.Communication.WebSocket
 
         public void SendData(byte[] bytes)
         {
-            this.SendBinary(bytes);
+            if (!Socket.Connected) return;
+
+            this.SendBinaryAsync(bytes, 0, bytes.Length);
         }
 
         public string GetUserAgent()
