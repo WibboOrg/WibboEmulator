@@ -35,7 +35,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             RoomUser UserOne = Room.GetRoomUserManager().GetRoomUserByUserId(UserOneId);
             RoomUser UserTwo = Room.GetRoomUserManager().GetRoomUserByUserId(UserTwoId);
 
-            if (UserOne == null && UserTwo == null)
+            if (UserOne == null || UserTwo == null)
             {
                 Item.InteractingUser = 0;
                 Item.InteractingUser2 = 0;

@@ -104,14 +104,16 @@ namespace WibboEmulator.Games.Moderation
             DataTable table = ModerationPresetDao.GetAll(dbClient);
             foreach (DataRow dataRow in table.Rows)
             {
-                string str = (string)dataRow["message"];
-                switch (dataRow["type"].ToString().ToLower())
+                string message = (string)dataRow["message"].ToString();
+                string type = dataRow["type"].ToString();
+
+                switch (type?.ToLower())
                 {
                     case "message":
-                        this._userMessagePresets.Add(str);
+                        this._userMessagePresets.Add(message);
                         continue;
                     case "roommessage":
-                        this._roomMessagePresets.Add(str);
+                        this._roomMessagePresets.Add(message);
                         continue;
                     default:
                         continue;
@@ -153,7 +155,9 @@ namespace WibboEmulator.Games.Moderation
             foreach (DataRow dataRow in table.Rows)
             {
                 ModerationTicket ModerationTicket = new ModerationTicket(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["score"]), Convert.ToInt32(dataRow["type"]), Convert.ToInt32(dataRow["sender_id"]), Convert.ToInt32(dataRow["reported_id"]), (string)dataRow["message"], Convert.ToInt32(dataRow["room_id"]), (string)dataRow["room_name"], (double)dataRow["timestamp"]);
-                if (dataRow["status"].ToString().ToLower() == "picked")
+
+                string status = dataRow["status"].ToString();
+                if (status?.ToLower() == "picked")
                 {
                     ModerationTicket.Pick(Convert.ToInt32(dataRow["moderator_id"]), false);
                 }
@@ -166,15 +170,15 @@ namespace WibboEmulator.Games.Moderation
         {
             RoomData roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(Session.GetUser().CurrentRoomId);
             int Id = 0;
-            string roomname = (roomData == null) ? roomData.Name : "Aucun appart";
-            int roomid = (roomData == null) ? roomData.Id : 0;
+            string roomname = (roomData != null) ? roomData.Name : "Aucun appart";
+            int roomId = (roomData != null) ? roomData.Id : 0;
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                Id = ModerationTicketDao.Insert(dbClient, Message, roomname, Category, Session.GetUser().Id, ReportedUser, roomData.Id);
+                Id = ModerationTicketDao.Insert(dbClient, Message, roomname, Category, Session.GetUser().Id, ReportedUser, roomId);
             }
 
-            ModerationTicket Ticket = new ModerationTicket(Id, 1, Category, Session.GetUser().Id, ReportedUser, Message, roomid, roomname, WibboEnvironment.GetUnixTimestamp());
+            ModerationTicket Ticket = new ModerationTicket(Id, 1, Category, Session.GetUser().Id, ReportedUser, Message, roomId, roomname, WibboEnvironment.GetUnixTimestamp());
             this._tickets.Add(Ticket);
             SendTicketToModerators(Ticket);
         }

@@ -41,7 +41,7 @@ namespace WibboEmulator.Games.Loots
             foreach (DataRow dRow in dTable.Rows)
             {
                 InteractionType interactionType = InteractionTypes.GetTypeFromString(dRow["interaction_type"].ToString());
-                Loot loot = new Loot(int.Parse(dRow["probability"].ToString()), int.Parse(dRow["page_id"].ToString()), int.Parse(dRow["item_id"].ToString()), dRow["category"].ToString(), int.Parse(dRow["amount"].ToString()));
+                Loot loot = new Loot(Convert.ToInt32(dRow["probability"].ToString()), Convert.ToInt32(dRow["page_id"].ToString()), Convert.ToInt32(dRow["item_id"].ToString()), dRow["category"].ToString(), Convert.ToInt32(dRow["amount"].ToString()));
 
                 if (!this.LootItem.ContainsKey(interactionType))
                 {

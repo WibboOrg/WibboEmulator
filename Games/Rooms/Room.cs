@@ -769,7 +769,7 @@ namespace WibboEmulator.Games.Rooms
             WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
         }
 
-        public void SendPacketOnChat(IServerPacket Message, RoomUser ThisUser = null, bool UserMutedOnly = false, bool UserNotIngameOnly = false)
+        public void SendPacketOnChat(IServerPacket Message, RoomUser thisUser = null, bool UserMutedOnly = false, bool UserNotIngameOnly = false)
         {
             try
             {
@@ -801,17 +801,17 @@ namespace WibboEmulator.Games.Rooms
                         continue;
                     }
 
-                    if (UserMutedOnly && ThisUser != null && User.GetClient().GetUser().MutedUsers.Contains(ThisUser.UserId))
+                    if (UserMutedOnly && thisUser != null && User.GetClient().GetUser().MutedUsers.Contains(thisUser.UserId))
                     {
                         continue;
                     }
 
-                    if (ThisUser != null && ThisUser.GetClient() != null && ThisUser.GetClient().GetUser() != null && ThisUser.GetClient().GetUser().IgnoreAll && ThisUser != User)
+                    if (thisUser != null && thisUser.GetClient() != null && thisUser.GetClient().GetUser() != null && thisUser.GetClient().GetUser().IgnoreAll && thisUser != User)
                     {
                         continue;
                     }
 
-                    if (!UserMutedOnly && ThisUser == User)
+                    if (!UserMutedOnly && thisUser == User)
                     {
                         continue;
                     }
@@ -821,7 +821,7 @@ namespace WibboEmulator.Games.Rooms
                         continue;
                     }
 
-                    if (this.RoomData.ChatMaxDistance > 0 && (Math.Abs(ThisUser.X - User.X) > this.RoomData.ChatMaxDistance || Math.Abs(ThisUser.Y - User.Y) > this.RoomData.ChatMaxDistance))
+                    if (thisUser != null && this.RoomData.ChatMaxDistance > 0 && (Math.Abs(thisUser.X - User.X) > this.RoomData.ChatMaxDistance || Math.Abs(thisUser.Y - User.Y) > this.RoomData.ChatMaxDistance))
                     {
                         continue;
                     }

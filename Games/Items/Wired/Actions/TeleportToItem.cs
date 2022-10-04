@@ -75,10 +75,8 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
             string triggerItems = row["triggers_item"].ToString();
 
-            if (triggerItems == "")
-            {
+            if (triggerItems == null || triggerItems == "")
                 return;
-            }
 
             foreach (string itemId in triggerItems.Split(';'))
             {

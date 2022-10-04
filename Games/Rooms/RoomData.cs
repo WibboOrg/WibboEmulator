@@ -125,7 +125,9 @@ namespace WibboEmulator.Games.Rooms
                 }
             }
 
-            switch (Row["state"].ToString().ToLower())
+            string state = Row["state"].ToString();
+
+            switch (state?.ToLower())
             {
                 case "open":
                     this.State = 0;
@@ -172,18 +174,19 @@ namespace WibboEmulator.Games.Rooms
             WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(this.GroupId, out Group Group);
             this.Group = Group;
             this.HideWireds = WibboEnvironment.EnumToBool(Row["allow_hidewireds"].ToString());
-
             this.TrocStatus = Convert.ToInt32((string)Row["troc_status"]);
 
-            string str3 = Row["tags"].ToString();
-            char[] chArray1 = new char[1] { ',' };
-            foreach (string str1 in str3.Split(chArray1))
+            string tags = Row["tags"].ToString();
+
+            if (tags != null)
             {
-                this.Tags.Add(str1);
+                foreach (string tag in tags.Split(','))
+                {
+                    this.Tags.Add(tag);
+                }
             }
 
             this.SellPrice = Convert.ToInt32(Row["price"]);
-
             this.mModel = WibboEnvironment.GetGame().GetRoomManager().GetModel(this.ModelName, this.Id);
         }
     }

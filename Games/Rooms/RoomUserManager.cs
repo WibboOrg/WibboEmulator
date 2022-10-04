@@ -409,19 +409,19 @@ namespace WibboEmulator.Games.Rooms
 
             int PersonalID = this._primaryPrivateUserID++;
 
-            RoomUser User = new RoomUser(Session.GetUser().Id, this._room.Id, PersonalID, this._room)
+            RoomUser user = new RoomUser(Session.GetUser().Id, this._room.Id, PersonalID, this._room)
             {
                 IsSpectator = Session.GetUser().SpectatorMode
             };
 
-            if (!this._users.TryAdd(PersonalID, User))
+            if (!this._users.TryAdd(PersonalID, user))
             {
                 return false;
             }
 
-            if (Session.GetUser().Rank > 5 && !this._usersRank.Contains(User.UserId))
+            if (Session.GetUser().Rank > 5 && !this._usersRank.Contains(user.UserId))
             {
-                this._usersRank.Add(User.UserId);
+                this._usersRank.Add(user.UserId);
             }
 
             Session.GetUser().CurrentRoomId = this._room.Id;
@@ -432,51 +432,51 @@ namespace WibboEmulator.Games.Rooms
 
             if (this._usersByUsername.ContainsKey(Username.ToLower()))
             {
-                this._usersByUsername.TryRemove(Username.ToLower(), out User);
+                this._usersByUsername.TryRemove(Username.ToLower(), out RoomUser userRemoved);
             }
 
             if (this._usersByUserID.ContainsKey(UserId))
             {
-                this._usersByUserID.TryRemove(UserId, out User);
+                this._usersByUserID.TryRemove(UserId, out RoomUser userRemoved);
             }
 
-            this._usersByUsername.TryAdd(Username.ToLower(), User);
-            this._usersByUserID.TryAdd(UserId, User);
+            this._usersByUsername.TryAdd(Username.ToLower(), user);
+            this._usersByUserID.TryAdd(UserId, user);
 
-            RoomModelDynamic Model = this._room.GetGameMap().Model;
-            if (Model == null)
+            RoomModelDynamic roomModel = this._room.GetGameMap().Model;
+            if (roomModel == null)
             {
                 return false;
             }
 
-            User.SetPos(Model.DoorX, Model.DoorY, Model.DoorZ);
-            User.SetRot(Model.DoorOrientation, false);
+            user.SetPos(roomModel.DoorX, roomModel.DoorY, roomModel.DoorZ);
+            user.SetRot(roomModel.DoorOrientation, false);
 
             if (Session.GetUser().IsTeleporting)
             {
-                Item roomItem = this._room.GetRoomItemHandler().GetItem(User.GetClient().GetUser().TeleporterId);
+                Item roomItem = this._room.GetRoomItemHandler().GetItem(user.GetClient().GetUser().TeleporterId);
                 if (roomItem != null)
                 {
-                    roomItem.GetRoom().GetGameMap().TeleportToItem(User, roomItem);
+                    roomItem.GetRoom().GetGameMap().TeleportToItem(user, roomItem);
 
                     roomItem.InteractingUser2 = Session.GetUser().Id;
                     roomItem.ReqUpdate(1);
                 }
             }
 
-            if (User.GetClient() != null && User.GetClient().GetUser() != null)
+            if (user.GetClient() != null && user.GetClient().GetUser() != null)
             {
-                User.GetClient().GetUser().IsTeleporting = false;
-                User.GetClient().GetUser().TeleporterId = 0;
-                User.GetClient().GetUser().TeleportingRoomID = 0;
+                user.GetClient().GetUser().IsTeleporting = false;
+                user.GetClient().GetUser().TeleporterId = 0;
+                user.GetClient().GetUser().TeleportingRoomID = 0;
             }
 
-            if (!User.IsSpectator)
+            if (!user.IsSpectator)
             {
-                this._room.SendPacket(new UsersComposer(User));
+                this._room.SendPacket(new UsersComposer(user));
             }
 
-            if (User.IsSpectator)
+            if (user.IsSpectator)
             {
                 List<RoomUser> roomUserByRank = this._room.GetRoomUserManager().GetStaffRoomUser();
                 if (roomUserByRank.Count > 0)
@@ -485,7 +485,7 @@ namespace WibboEmulator.Games.Rooms
                     {
                         if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetUser() != null && StaffUser.GetClient().GetUser().HasPermission("perm_show_invisible")))
                         {
-                            StaffUser.SendWhisperChat(User.GetUsername() + " est entré dans l'appart en mode invisible !", true);
+                            StaffUser.SendWhisperChat(user.GetUsername() + " est entré dans l'appart en mode invisible !", true);
                         }
                     }
                 }
@@ -493,73 +493,73 @@ namespace WibboEmulator.Games.Rooms
 
             if(Session.GetUser().HasPermission("perm_owner_all_rooms"))
             {
-                User.SetStatus("flatctrl", "5");
+                user.SetStatus("flatctrl", "5");
                 Session.SendPacket(new YouAreOwnerComposer());
                 Session.SendPacket(new YouAreControllerComposer(5));
             }
             else if (this._room.CheckRights(Session, true))
             {
-                User.SetStatus("flatctrl", "4");
+                user.SetStatus("flatctrl", "4");
                 Session.SendPacket(new YouAreOwnerComposer());
                 Session.SendPacket(new YouAreControllerComposer(4));
             }
             else if (this._room.CheckRights(Session))
             {
-                User.SetStatus("flatctrl", "1");
+                user.SetStatus("flatctrl", "1");
                 Session.SendPacket(new YouAreControllerComposer(1));
             }
             else
             {
-                User.RemoveStatus("flatctrl");
+                user.RemoveStatus("flatctrl");
                 Session.SendPacket(new YouAreNotControllerComposer());
             }
 
-            if (!User.IsBot)
+            if (!user.IsBot)
             {
                 if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("ADM")) // STAFF
                 {
-                    User.CurrentEffect = 540;
+                    user.CurrentEffect = 540;
                 }
                 else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("PRWRD1")) // PROWIRED
                 {
-                    User.CurrentEffect = 580;
+                    user.CurrentEffect = 580;
                 }
                 else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("GPHWIB")) // GRAPHISTE
                 {
-                    User.CurrentEffect = 557;
+                    user.CurrentEffect = 557;
                 }
                 else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("wibbo.helpeur")) // HELPEUR
                 {
-                    User.CurrentEffect = 544;
+                    user.CurrentEffect = 544;
                 }
                 else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("WIBARC")) // ARCHI
                 {
-                    User.CurrentEffect = 546;
+                    user.CurrentEffect = 546;
                 }
                 else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("CRPOFFI")) // CROUPIER
                 {
-                    User.CurrentEffect = 570;
+                    user.CurrentEffect = 570;
                 }
                 else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("ZEERSWS")) // WIBBOSTATIONORIGINERADIO
                 {
-                    User.CurrentEffect = 552;
+                    user.CurrentEffect = 552;
                 }
                 else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("WBASSO")) // ASSOCIER
                 {
-                    User.CurrentEffect = 576;
+                    user.CurrentEffect = 576;
                 }
                 else if (Session.GetUser().GetBadgeComponent().HasBadgeSlot("WIBBOCOM")) // AGENT DE COMMUNICATION
                 {
-                    User.CurrentEffect = 581;
+                    user.CurrentEffect = 581;
                 }
 
-                if (User.CurrentEffect > 0)
+                if (user.CurrentEffect > 0)
                 {
-                    this._room.SendPacket(new AvatarEffectComposer(User.VirtualId, User.CurrentEffect));
+                    this._room.SendPacket(new AvatarEffectComposer(user.VirtualId, user.CurrentEffect));
                 }
             }
 
-            User.UpdateNeeded = true;
+            user.UpdateNeeded = true;
 
             foreach (RoomUser Bot in this._bots.Values.ToList())
             {
@@ -568,15 +568,15 @@ namespace WibboEmulator.Games.Rooms
                     continue;
                 }
 
-                Bot.BotAI.OnUserEnterRoom(User);
+                Bot.BotAI.OnUserEnterRoom(user);
             }
 
-            if (!User.IsBot && this._room.RoomData.OwnerName != User.GetClient().GetUser().Username)
+            if (!user.IsBot && this._room.RoomData.OwnerName != user.GetClient().GetUser().Username)
             {
-                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(User.GetClient(), QuestType.SOCIAL_VISIT, 0);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.GetClient(), QuestType.SOCIAL_VISIT, 0);
             }
 
-            if (!User.IsBot)
+            if (!user.IsBot)
             {
                 if (Session.GetUser().RolePlayId > 0 && this._room.RoomData.OwnerId != Session.GetUser().RolePlayId)
                 {
@@ -609,7 +609,7 @@ namespace WibboEmulator.Games.Rooms
             }
 
 
-            User.InGame = this._room.IsRoleplay;
+            user.InGame = this._room.IsRoleplay;
 
             return true;
         }
@@ -637,20 +637,20 @@ namespace WibboEmulator.Games.Rooms
                     Session.SendPacket(new CloseConnectionComposer());
                 }
 
-                RoomUser User = this.GetRoomUserByUserId(Session.GetUser().Id);
-                if (User == null)
+                RoomUser user = this.GetRoomUserByUserId(Session.GetUser().Id);
+                if (user == null)
                 {
                     return;
                 }
 
-                if (this._usersRank.Contains(User.UserId))
+                if (this._usersRank.Contains(user.UserId))
                 {
-                    this._usersRank.Remove(User.UserId);
+                    this._usersRank.Remove(user.UserId);
                 }
 
-                if (User.Team != TeamType.NONE)
+                if (user.Team != TeamType.NONE)
                 {
-                    this._room.GetTeamManager().OnUserLeave(User);
+                    this._room.GetTeamManager().OnUserLeave(user);
                     this._room.GetGameManager().UpdateGatesTeamCounts();
 
                     Session.SendPacket(new IsPlayingComposer(false));
@@ -658,13 +658,13 @@ namespace WibboEmulator.Games.Rooms
 
                 if (this._room.GotJanken())
                 {
-                    this._room.GetJanken().RemovePlayer(User);
+                    this._room.GetJanken().RemovePlayer(user);
                 }
 
-                if (User.RidingHorse)
+                if (user.RidingHorse)
                 {
-                    User.RidingHorse = false;
-                    RoomUser roomUserByVirtualId = this.GetRoomUserByVirtualId(User.HorseID);
+                    user.RidingHorse = false;
+                    RoomUser roomUserByVirtualId = this.GetRoomUserByVirtualId(user.HorseID);
                     if (roomUserByVirtualId != null)
                     {
                         roomUserByVirtualId.RidingHorse = false;
@@ -672,10 +672,10 @@ namespace WibboEmulator.Games.Rooms
                     }
                 }
 
-                if (User.IsSit || User.IsLay)
+                if (user.IsSit || user.IsLay)
                 {
-                    User.IsSit = false;
-                    User.IsLay = false;
+                    user.IsSit = false;
+                    user.IsLay = false;
                 }
 
                 if (this._room.HasActiveTrade(Session.GetUser().Id))
@@ -683,12 +683,12 @@ namespace WibboEmulator.Games.Rooms
                     this._room.TryStopTrade(Session.GetUser().Id);
                 }
 
-                if (User.Roleplayer != null)
+                if (user.Roleplayer != null)
                 {
-                    WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().RemoveTrade(User.Roleplayer.TradeId);
+                    WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().RemoveTrade(user.Roleplayer.TradeId);
                 }
 
-                if (User.IsSpectator)
+                if (user.IsSpectator)
                 {
                     List<RoomUser> roomUserByRank = this._room.GetRoomUserManager().GetStaffRoomUser();
                     if (roomUserByRank.Count > 0)
@@ -697,7 +697,7 @@ namespace WibboEmulator.Games.Rooms
                         {
                             if (StaffUser != null && StaffUser.GetClient() != null && (StaffUser.GetClient().GetUser() != null && StaffUser.GetClient().GetUser().HasPermission("perm_show_invisible")))
                             {
-                                StaffUser.SendWhisperChat(User.GetUsername() + " était en mode invisible. Il vient de partir de l'appartement.", true);
+                                StaffUser.SendWhisperChat(user.GetUsername() + " était en mode invisible. Il vient de partir de l'appartement.", true);
                             }
                         }
                     }
@@ -708,14 +708,14 @@ namespace WibboEmulator.Games.Rooms
 
                 Session.GetUser().ForceUse = -1;
 
-                this._usersByUserID.TryRemove(User.UserId, out User);
-                this._usersByUsername.TryRemove(Session.GetUser().Username.ToLower(), out User);
+                this.RemoveRoomUser(user);
 
-                this.RemoveRoomUser(User);
+                user.Freeze = true;
+                user.FreezeEndCounter = 0;
+                user.Dispose();
 
-                User.Freeze = true;
-                User.FreezeEndCounter = 0;
-                User.Dispose();
+                this._usersByUserID.TryRemove(user.UserId, out user);
+                this._usersByUsername.TryRemove(Session.GetUser().Username.ToLower(), out user);
             }
             catch (Exception ex)
             {
@@ -962,79 +962,80 @@ namespace WibboEmulator.Games.Rooms
             return this._bots.TryGetValue(BotId, out Bot);
         }
 
-        public void UpdateUserStatus(RoomUser User, bool cyclegameitems)
+        public void UpdateUserStatus(RoomUser user, bool cyclegameitems)
         {
-            if (User == null)
-            {
+            if (user == null)
                 return;
+
+            if (user.ContainStatus("lay") || user.ContainStatus("sit") || user.ContainStatus("sign"))
+            {
+                if (user.ContainStatus("lay"))
+                {
+                    user.RemoveStatus("lay");
+                }
+
+                if (user.ContainStatus("sit"))
+                {
+                    user.RemoveStatus("sit");
+                }
+
+                if (user.ContainStatus("sign"))
+                {
+                    user.RemoveStatus("sign");
+                }
+
+                user.UpdateNeeded = true;
             }
 
-            if (User.ContainStatus("lay") || User.ContainStatus("sit") || User.ContainStatus("sign"))
+            List<Item> roomItemForSquare = this._room.GetGameMap().GetCoordinatedItems(new Point(user.X, user.Y)).OrderBy(p => p.Z).ToList();
+
+            double newZ = !user.RidingHorse || user.IsPet ? this._room.GetGameMap().SqAbsoluteHeight(user.X, user.Y, roomItemForSquare) : this._room.GetGameMap().SqAbsoluteHeight(user.X, user.Y, roomItemForSquare) + 1.0;
+            if (newZ != user.Z)
             {
-                if (User.ContainStatus("lay"))
-                {
-                    User.RemoveStatus("lay");
-                }
-
-                if (User.ContainStatus("sit"))
-                {
-                    User.RemoveStatus("sit");
-                }
-
-                if (User.ContainStatus("sign"))
-                {
-                    User.RemoveStatus("sign");
-                }
-
-                User.UpdateNeeded = true;
-            }
-
-            List<Item> roomItemForSquare = this._room.GetGameMap().GetCoordinatedItems(new Point(User.X, User.Y)).OrderBy(p => p.Z).ToList();
-
-            double newZ = !User.RidingHorse || User.IsPet ? this._room.GetGameMap().SqAbsoluteHeight(User.X, User.Y, roomItemForSquare) : this._room.GetGameMap().SqAbsoluteHeight(User.X, User.Y, roomItemForSquare) + 1.0;
-            if (newZ != User.Z)
-            {
-                User.Z = newZ;
-                User.UpdateNeeded = true;
+                user.Z = newZ;
+                user.UpdateNeeded = true;
             }
 
             foreach (Item roomItem in roomItemForSquare)
             {
+                if (user == null)
+                    continue;
+
                 if (cyclegameitems)
                 {
-                    roomItem.UserWalksOnFurni(User, roomItem);
-
-                    if (roomItem.EffectId != 0 && !User.IsBot)
+                    if (roomItem.EffectId != 0 && !user.IsBot)
                     {
-                        User.ApplyEffect(roomItem.EffectId);
+                        user.ApplyEffect(roomItem.EffectId);
                     }
+
+                    roomItem.UserWalksOnFurni(user, roomItem);
                 }
 
                 if (roomItem.GetBaseItem().IsSeat)
                 {
-                    if (!User.ContainStatus("sit"))
+                    if (!user.ContainStatus("sit"))
                     {
-                        User.SetStatus("sit", roomItem.Height.ToString());
-                        User.IsSit = true;
+                        user.SetStatus("sit", roomItem.Height.ToString());
+                        user.IsSit = true;
                     }
-                    User.Z = roomItem.Z;
-                    User.RotHead = roomItem.Rotation;
-                    User.RotBody = roomItem.Rotation;
-                    User.UpdateNeeded = true;
+                    user.Z = roomItem.Z;
+                    user.RotHead = roomItem.Rotation;
+                    user.RotBody = roomItem.Rotation;
+                    user.UpdateNeeded = true;
                 }
 
                 switch (roomItem.GetBaseItem().InteractionType)
                 {
                     case InteractionType.BED:
-                        if (!User.ContainStatus("lay"))
+                        if (!user.ContainStatus("lay"))
                         {
-                            User.SetStatus("lay", roomItem.Height.ToString() + " null");
-                            User.IsLay = true;
+                            user.SetStatus("lay", roomItem.Height.ToString() + " null");
+                            user.IsLay = true;
                         }
-                        User.Z = roomItem.Z;
-                        User.RotHead = roomItem.Rotation;
-                        User.RotBody = roomItem.Rotation;
-                        User.UpdateNeeded = true;
+                        user.Z = roomItem.Z;
+                        user.RotHead = roomItem.Rotation;
+                        user.RotBody = roomItem.Rotation;
+                        user.UpdateNeeded = true;
                         break;
                     case InteractionType.PRESSUREPAD:
                     case InteractionType.TRAMPOLINE:
@@ -1048,7 +1049,7 @@ namespace WibboEmulator.Games.Rooms
                         roomItem.UpdateState(false, true);
                         break;
                     case InteractionType.ARROW:
-                        if (!cyclegameitems || User.IsBot)
+                        if (!cyclegameitems || user.IsBot)
                         {
                             break;
                         }
@@ -1058,74 +1059,74 @@ namespace WibboEmulator.Games.Rooms
                             break;
                         }
 
-                        User.CanWalk = true;
-                        roomItem.InteractingUser = User.GetClient().GetUser().Id;
+                        user.CanWalk = true;
+                        roomItem.InteractingUser = user.GetClient().GetUser().Id;
                         roomItem.ReqUpdate(2);
                         break;
                     case InteractionType.BANZAIGATEBLUE:
                     case InteractionType.BANZAIGATERED:
                     case InteractionType.BANZAIGATEYELLOW:
                     case InteractionType.BANZAIGATEGREEN:
-                        if (cyclegameitems && !User.IsBot)
+                        if (cyclegameitems && !user.IsBot)
                         {
                             int EffectId = ((int)roomItem.Team + 32);
                             TeamManager managerForBanzai = this._room.GetTeamManager();
-                            if (User.Team != roomItem.Team)
+                            if (user.Team != roomItem.Team)
                             {
-                                if (User.Team != TeamType.NONE)
+                                if (user.Team != TeamType.NONE)
                                 {
-                                    managerForBanzai.OnUserLeave(User);
+                                    managerForBanzai.OnUserLeave(user);
                                 }
 
-                                User.Team = roomItem.Team;
-                                managerForBanzai.AddUser(User);
+                                user.Team = roomItem.Team;
+                                managerForBanzai.AddUser(user);
 
                                 this._room.GetGameManager().UpdateGatesTeamCounts();
-                                if (User.CurrentEffect != EffectId)
+                                if (user.CurrentEffect != EffectId)
                                 {
-                                    User.ApplyEffect(EffectId);
+                                    user.ApplyEffect(EffectId);
                                 }
 
-                                if (User.GetClient() != null)
+                                if (user.GetClient() != null)
                                 {
-                                    User.GetClient().SendPacket(new IsPlayingComposer(true));
+                                    user.GetClient().SendPacket(new IsPlayingComposer(true));
                                 }
                             }
                             else
                             {
-                                managerForBanzai.OnUserLeave(User);
+                                managerForBanzai.OnUserLeave(user);
                                 this._room.GetGameManager().UpdateGatesTeamCounts();
-                                if (User.CurrentEffect == EffectId)
+                                if (user.CurrentEffect == EffectId)
                                 {
-                                    User.ApplyEffect(0);
+                                    user.ApplyEffect(0);
                                 }
 
-                                if (User.GetClient() != null)
+                                if (user.GetClient() != null)
                                 {
-                                    User.GetClient().SendPacket(new IsPlayingComposer(false));
+                                    user.GetClient().SendPacket(new IsPlayingComposer(false));
                                 }
 
-                                User.Team = TeamType.NONE;
+                                user.Team = TeamType.NONE;
                                 continue;
                             }
                         }
                         break;
                     case InteractionType.BANZAIBLO:
-                        if (cyclegameitems && User.Team != TeamType.NONE && !User.IsBot)
+                        if (cyclegameitems && user.Team != TeamType.NONE && !user.IsBot)
                         {
-                            this._room.GetGameItemHandler().OnWalkableBanzaiBlo(User, roomItem);
+                            this._room.GetGameItemHandler().OnWalkableBanzaiBlo(user, roomItem);
                         }
                         break;
                     case InteractionType.BANZAIBLOB:
-                        if (cyclegameitems && User.Team != TeamType.NONE && !User.IsBot)
+                        if (cyclegameitems && user.Team != TeamType.NONE && !user.IsBot)
                         {
-                            this._room.GetGameItemHandler().OnWalkableBanzaiBlob(User, roomItem);
+                            this._room.GetGameItemHandler().OnWalkableBanzaiBlob(user, roomItem);
                         }
                         break;
                     case InteractionType.BANZAITELE:
                         if (cyclegameitems)
                         {
-                            this._room.GetGameItemHandler().OnTeleportRoomUserEnter(User, roomItem);
+                            this._room.GetGameItemHandler().OnTeleportRoomUserEnter(user, roomItem);
                         }
 
                         break;
@@ -1133,63 +1134,63 @@ namespace WibboEmulator.Games.Rooms
                     case InteractionType.FREEZEREDGATE:
                     case InteractionType.FREEZEGREENGATE:
                     case InteractionType.FREEZEBLUEGATE:
-                        if (cyclegameitems && !User.IsBot)
+                        if (cyclegameitems && !user.IsBot)
                         {
                             int EffectId = ((int)roomItem.Team + 39);
                             TeamManager managerForFreeze = this._room.GetTeamManager();
-                            if (User.Team != roomItem.Team)
+                            if (user.Team != roomItem.Team)
                             {
-                                if (User.Team != TeamType.NONE)
+                                if (user.Team != TeamType.NONE)
                                 {
-                                    managerForFreeze.OnUserLeave(User);
+                                    managerForFreeze.OnUserLeave(user);
                                 }
 
-                                User.Team = roomItem.Team;
-                                managerForFreeze.AddUser(User);
+                                user.Team = roomItem.Team;
+                                managerForFreeze.AddUser(user);
                                 this._room.GetGameManager().UpdateGatesTeamCounts();
-                                if (User.CurrentEffect != EffectId)
+                                if (user.CurrentEffect != EffectId)
                                 {
-                                    User.ApplyEffect(EffectId);
+                                    user.ApplyEffect(EffectId);
                                 }
 
-                                if (User.GetClient() != null)
+                                if (user.GetClient() != null)
                                 {
-                                    User.GetClient().SendPacket(new IsPlayingComposer(true));
+                                    user.GetClient().SendPacket(new IsPlayingComposer(true));
                                 }
                             }
                             else
                             {
-                                managerForFreeze.OnUserLeave(User);
+                                managerForFreeze.OnUserLeave(user);
                                 this._room.GetGameManager().UpdateGatesTeamCounts();
-                                if (User.CurrentEffect == EffectId)
+                                if (user.CurrentEffect == EffectId)
                                 {
-                                    User.ApplyEffect(0);
+                                    user.ApplyEffect(0);
                                 }
 
-                                if (User.GetClient() != null)
+                                if (user.GetClient() != null)
                                 {
-                                    User.GetClient().SendPacket(new IsPlayingComposer(false));
+                                    user.GetClient().SendPacket(new IsPlayingComposer(false));
                                 }
 
-                                User.Team = TeamType.NONE;
+                                user.Team = TeamType.NONE;
                             }
                         }
                         break;
                     case InteractionType.FBGATE:
-                        if (cyclegameitems || string.IsNullOrEmpty(roomItem.ExtraData) || !roomItem.ExtraData.Contains(',') || User == null || User.IsBot || User.IsTransf || User.IsSpectator)
+                        if (cyclegameitems || string.IsNullOrEmpty(roomItem.ExtraData) || !roomItem.ExtraData.Contains(',') || user == null || user.IsBot || user.IsTransf || user.IsSpectator)
                         {
                             break;
                         }
 
-                        if (User.GetClient().GetUser().LastMovFGate && User.GetClient().GetUser().BackupGender == User.GetClient().GetUser().Gender)
+                        if (user.GetClient().GetUser().LastMovFGate && user.GetClient().GetUser().BackupGender == user.GetClient().GetUser().Gender)
                         {
-                            User.GetClient().GetUser().LastMovFGate = false;
-                            User.GetClient().GetUser().Look = User.GetClient().GetUser().BackupLook;
+                            user.GetClient().GetUser().LastMovFGate = false;
+                            user.GetClient().GetUser().Look = user.GetClient().GetUser().BackupLook;
                         }
                         else
                         {
                             // mini Fix
-                            string _gateLook = ((User.GetClient().GetUser().Gender.ToUpper() == "M") ? roomItem.ExtraData.Split(',')[0] : roomItem.ExtraData.Split(',')[1]);
+                            string _gateLook = ((user.GetClient().GetUser().Gender.ToUpper() == "M") ? roomItem.ExtraData.Split(',')[0] : roomItem.ExtraData.Split(',')[1]);
                             if (_gateLook == "")
                             {
                                 break;
@@ -1208,7 +1209,7 @@ namespace WibboEmulator.Games.Rooms
                             gateLook = gateLook.Substring(0, gateLook.Length - 1);
 
                             // Generating New Look.
-                            string[] Parts = User.GetClient().GetUser().Look.Split('.');
+                            string[] Parts = user.GetClient().GetUser().Look.Split('.');
                             string NewLook = "";
                             foreach (string Part in Parts)
                             {
@@ -1221,17 +1222,17 @@ namespace WibboEmulator.Games.Rooms
                             }
                             NewLook += gateLook;
 
-                            User.GetClient().GetUser().BackupLook = User.GetClient().GetUser().Look;
-                            User.GetClient().GetUser().BackupGender = User.GetClient().GetUser().Gender;
-                            User.GetClient().GetUser().Look = NewLook;
-                            User.GetClient().GetUser().LastMovFGate = true;
+                            user.GetClient().GetUser().BackupLook = user.GetClient().GetUser().Look;
+                            user.GetClient().GetUser().BackupGender = user.GetClient().GetUser().Gender;
+                            user.GetClient().GetUser().Look = NewLook;
+                            user.GetClient().GetUser().LastMovFGate = true;
                         }
 
-                        User.GetClient().SendPacket(new UserChangeComposer(User, true));
+                        user.GetClient().SendPacket(new UserChangeComposer(user, true));
 
-                        if (User.GetClient().GetUser().InRoom)
+                        if (user.GetClient().GetUser().InRoom)
                         {
-                            this._room.SendPacket(new UserChangeComposer(User, false));
+                            this._room.SendPacket(new UserChangeComposer(user, false));
                         }
                         break;
                     case InteractionType.FREEZETILEBLOCK:
@@ -1240,7 +1241,7 @@ namespace WibboEmulator.Games.Rooms
                             break;
                         }
 
-                        this._room.GetFreeze().OnWalkFreezeBlock(roomItem, User);
+                        this._room.GetFreeze().OnWalkFreezeBlock(roomItem, user);
                         break;
                     default:
                         break;
@@ -1248,41 +1249,41 @@ namespace WibboEmulator.Games.Rooms
             }
             if (cyclegameitems)
             {
-                this._room.GetBanzai().HandleBanzaiTiles(User.Coordinate, User.Team, User);
+                this._room.GetBanzai().HandleBanzaiTiles(user.Coordinate, user.Team, user);
             }
 
-            if (User.IsSit || User.IsLay)
+            if (user.IsSit || user.IsLay)
             {
-                if (User.IsSit)
+                if (user.IsSit)
                 {
-                    if (!User.ContainStatus("sit"))
+                    if (!user.ContainStatus("sit"))
                     {
-                        if (User.IsTransf)
+                        if (user.IsTransf)
                         {
-                            User.SetStatus("sit", "0");
+                            user.SetStatus("sit", "0");
                         }
                         else
                         {
-                            User.SetStatus("sit", "0.5");
+                            user.SetStatus("sit", "0.5");
                         }
 
-                        User.UpdateNeeded = true;
+                        user.UpdateNeeded = true;
                     }
                 }
-                else if (User.IsLay)
+                else if (user.IsLay)
                 {
-                    if (!User.ContainStatus("lay"))
+                    if (!user.ContainStatus("lay"))
                     {
-                        if (User.IsTransf)
+                        if (user.IsTransf)
                         {
-                            User.SetStatus("lay", "0");
+                            user.SetStatus("lay", "0");
                         }
                         else
                         {
-                            User.SetStatus("lay", "0.7");
+                            user.SetStatus("lay", "0.7");
                         }
 
-                        User.UpdateNeeded = true;
+                        user.UpdateNeeded = true;
                     }
 
                 }

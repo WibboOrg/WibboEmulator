@@ -52,6 +52,12 @@ namespace WibboEmulator.Core.FigureData
 
             FigureDataRoot figureData = JsonSerializer.Deserialize<FigureDataRoot>(jsonString, options);
 
+            if (figureData == null)
+            {
+                Console.WriteLine("Error parse figuredata");
+                return;
+            }
+
             foreach (FigureDataPalette palette in figureData.Palettes)
             {
                 this._palettes.Add(palette.Id, new Palette(palette.Id));
@@ -137,6 +143,9 @@ namespace WibboEmulator.Core.FigureData
                                     //No replacable?
                                 }
                             }
+
+                            if (set == null)
+                                continue;
 
                             if (set.Colorable)
                             {

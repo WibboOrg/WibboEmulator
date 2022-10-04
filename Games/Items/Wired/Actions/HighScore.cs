@@ -67,7 +67,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                 
             string triggerData = row["trigger_data"].ToString();
 
-            if (triggerData == "")
+            if (triggerData == null || triggerData == "")
             {
                 return;
             }

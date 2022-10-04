@@ -74,10 +74,11 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
             string Data = row["trigger_data"].ToString();
 
-            if (!Data.Contains('\t'))
-            {
+            if (Data == null)
                 return;
-            }
+
+            if (!Data.Contains('\t'))
+                return;
 
             this.StringParam = Data;
         }

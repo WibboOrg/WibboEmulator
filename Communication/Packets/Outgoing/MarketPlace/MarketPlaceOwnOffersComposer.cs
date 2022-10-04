@@ -21,7 +21,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace
                 foreach (DataRow row in table.Rows)
                 {
                     int num2 = Convert.ToInt32(Math.Floor((double)(((((double)row["timestamp"]) + 172800.0) - WibboEnvironment.GetUnixTimestamp()) / 60.0)));
-                    int num3 = int.Parse(row["state"].ToString());
+                    int num3 = Convert.ToInt32(row["state"].ToString());
                     if ((num2 <= 0) && (num3 != 2))
                     {
                         num3 = 3;

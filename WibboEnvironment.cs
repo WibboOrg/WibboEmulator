@@ -35,7 +35,7 @@ public static class WibboEnvironment
 
     public static DateTime ServerStarted { get; set; }
     public static List<string> WebSocketOrigins { get; set; }
-    public static string PatchDir { get; set; }
+    public static string PatchDir { get; private set; }
 
     private static readonly List<char> Allowedchars = new List<char>(new[]
         {
@@ -52,7 +52,7 @@ public static class WibboEnvironment
         ServerStarted = DateTime.Now;
         Console.ForegroundColor = ConsoleColor.Gray;
 
-        PatchDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/";
+        PatchDir = Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) + "/";
 
         Console.Title = "Wibbo Emulator";
 
@@ -135,7 +135,7 @@ public static class WibboEnvironment
         {
             var jsonDatabase = File.ReadAllText(PatchDir + "Configuration/database.json");
 
-            DatabaseConfiguration? databaseConfiguration = JsonSerializer.Deserialize<DatabaseConfiguration>(jsonDatabase);
+            DatabaseConfiguration databaseConfiguration = JsonSerializer.Deserialize<DatabaseConfiguration>(jsonDatabase);
             _datebaseManager = new DatabaseManager(databaseConfiguration);
 
             if (!_datebaseManager.IsConnected())

@@ -25,7 +25,10 @@ namespace WibboEmulator.Games.Items.Wired.Triggers
 
             bool isOwnerOnly = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
 
-            if (user != null && (!isOwnerOnly && this.CanBeTriggered(message) && !string.IsNullOrEmpty(message)) || (isOwnerOnly && user.IsOwner() && this.CanBeTriggered(message) && !string.IsNullOrEmpty(message)))
+            if (user == null)
+                return;
+
+            if ((!isOwnerOnly && this.CanBeTriggered(message) && !string.IsNullOrEmpty(message)) || (isOwnerOnly && user.IsOwner() && this.CanBeTriggered(message) && !string.IsNullOrEmpty(message)))
             {
                 this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, null);
                 messageHandled = true;

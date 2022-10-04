@@ -131,37 +131,34 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 session.GetUser().SpamFloodTime = DateTime.Now;
                 session.GetUser().FloodCount++;
 
-                if (session != null)
+                if (message.StartsWith("@red@"))
                 {
-                    if (message.StartsWith("@red@"))
-                    {
-                        user.ChatTextColor = "@red@";
-                    }
+                    user.ChatTextColor = "@red@";
+                }
 
-                    if (message.StartsWith("@cyan@"))
-                    {
-                        user.ChatTextColor = "@cyan@";
-                    }
+                if (message.StartsWith("@cyan@"))
+                {
+                    user.ChatTextColor = "@cyan@";
+                }
 
-                    if (message.StartsWith("@blue@"))
-                    {
-                        user.ChatTextColor = "@blue@";
-                    }
+                if (message.StartsWith("@blue@"))
+                {
+                    user.ChatTextColor = "@blue@";
+                }
 
-                    if (message.StartsWith("@green@"))
-                    {
-                        user.ChatTextColor = "@green@";
-                    }
+                if (message.StartsWith("@green@"))
+                {
+                    user.ChatTextColor = "@green@";
+                }
 
-                    if (message.StartsWith("@purple@"))
-                    {
-                        user.ChatTextColor = "@purple@";
-                    }
+                if (message.StartsWith("@purple@"))
+                {
+                    user.ChatTextColor = "@purple@";
+                }
 
-                    if (message.StartsWith("@black@"))
-                    {
-                        user.ChatTextColor = "";
-                    }
+                if (message.StartsWith("@black@"))
+                {
+                    user.ChatTextColor = "";
                 }
 
                 if (message.StartsWith(":", StringComparison.CurrentCulture) && WibboEnvironment.GetGame().GetChatManager().GetCommands().Parse(session, user, room, message))
@@ -170,7 +167,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     return;
                 }
 
-                if (session != null && !user.IsBot)
+                if (!user.IsBot)
                 {
                     if (session.Antipub(message, "<TCHAT>"))
                     {
@@ -217,7 +214,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             }
 
             user.OnChat(message, Colour, true);
-
         }
     }
 }

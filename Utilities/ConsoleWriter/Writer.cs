@@ -140,7 +140,10 @@ namespace ConsoleWriter
         {
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(WibboEnvironment.PatchDir + path));
+                var fullPath = Path.GetDirectoryName(WibboEnvironment.PatchDir + path);
+
+                if(!string.IsNullOrEmpty(fullPath))
+                    Directory.CreateDirectory(fullPath);
 
                 FileStream fileStream = new FileStream(WibboEnvironment.PatchDir + path, FileMode.Append, FileAccess.Write);
                 byte[] bytes = Encoding.ASCII.GetBytes(Environment.NewLine + content);

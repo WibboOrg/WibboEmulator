@@ -74,7 +74,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                 this.Delay = delay;
 
             string triggerData2 = row["trigger_data_2"].ToString();
-            if (triggerData2.Contains(';'))
+            if (triggerData2 != null && triggerData2.Contains(';'))
             {
                 if(int.TryParse(triggerData2.Split(';')[1], out int movement))
                     this.IntParams.Add(movement);
@@ -83,7 +83,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             }
 
             string triggerItems = row["triggers_item"].ToString();
-            if (triggerItems == "")
+            if (triggerItems == null || triggerItems == "")
             {
                 return;
             }

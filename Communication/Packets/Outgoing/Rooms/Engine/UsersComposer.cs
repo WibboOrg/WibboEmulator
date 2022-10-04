@@ -101,14 +101,11 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
                     User user = roomUser.GetClient().GetUser();
 
                     Group Group = null;
-                    if (user != null)
+                    if (user.FavouriteGroupId > 0)
                     {
-                        if (user.FavouriteGroupId > 0)
+                        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out Group))
                         {
-                            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out Group))
-                            {
-                                Group = null;
-                            }
+                            Group = null;
                         }
                     }
 

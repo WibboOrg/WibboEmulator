@@ -303,22 +303,22 @@ namespace WibboEmulator.Games.Rooms
 
             if (item.IsWallItem)
             {
-                this._wallItems.TryRemove(item.Id, out item);
+                this._wallItems.TryRemove(item.Id, out Item itemRemoved);
             }
             else
             {
-                this._floorItems.TryRemove(item.Id, out item);
+                this._floorItems.TryRemove(item.Id, out Item itemRemoved);
                 this._room.GetGameMap().RemoveFromMap(item);
             }
 
             if (this._updateItems.ContainsKey(item.Id))
             {
-                this._updateItems.TryRemove(item.Id, out item);
+                this._updateItems.TryRemove(item.Id, out Item itemRemoved);
             }
 
             if (this._rollers.ContainsKey(item.Id))
             {
-                this._rollers.TryRemove(item.Id, out item);
+                this._rollers.TryRemove(item.Id, out Item itemRemoved);
             }
 
             if (item.WiredHandler != null)

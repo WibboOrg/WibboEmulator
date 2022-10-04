@@ -199,7 +199,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
         {
             if (data.Length < 3 || !data[0].StartsWith(":w=") || !data[1].StartsWith("l=") || (data[2] != "r" && data[2] != "l"))
             {
-                position = null;
+                position = "";
                 return false;
             }
 
@@ -208,7 +208,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             if (!wBit.Contains(',') || !lBit.Contains(','))
             {
-                position = null;
+                position = "";
                 return false;
             }
 
@@ -222,7 +222,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             position = WallPositionCheck(WallPos);
 
-            return (position != null);
+            return (position != "");
         }
 
         private static string WallPositionCheck(string wallPosition)
@@ -232,18 +232,18 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             {
                 if (wallPosition.Contains(Convert.ToChar(13)))
                 {
-                    return null;
+                    return "";
                 }
 
                 if (wallPosition.Contains(Convert.ToChar(9)))
                 {
-                    return null;
+                    return "";
                 }
 
                 string[] posD = wallPosition.Split(' ');
                 if (posD[2] != "l" && posD[2] != "r")
                 {
-                    return null;
+                    return "";
                 }
 
                 string[] widD = posD[0].Substring(3).Split(',');

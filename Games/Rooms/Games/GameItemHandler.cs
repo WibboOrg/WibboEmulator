@@ -199,7 +199,7 @@ namespace WibboEmulator.Games.Rooms
             this._banzaiTeleports.Remove(itemID);
         }
 
-        public bool CheckGroupGate(RoomUser User, Point Coordinate)
+        public bool CheckGroupGate(RoomUser user, Point Coordinate)
         {
             if (this._groupGate == null)
             {
@@ -216,44 +216,47 @@ namespace WibboEmulator.Games.Rooms
                 return false;
             }
 
-            Item item = Enumerable.FirstOrDefault<Item>(this._groupGate[Coordinate]);
+            Item item = Enumerable.FirstOrDefault(this._groupGate[Coordinate]);
+
+            if (item == null)
+                return false;
 
             if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out Group Group))
             {
                 return true;
             }
 
-            if (User == null)
+            if (user == null)
             {
                 return false;
             }
 
-            if (User.IsBot)
+            if (user.IsBot)
             {
                 return false;
             }
 
-            if (User.GetClient() == null)
+            if (user.GetClient() == null)
             {
                 return false;
             }
 
-            if (User.GetClient().GetUser() == null)
+            if (user.GetClient().GetUser() == null)
             {
                 return false;
             }
 
-            if (User.GetClient().GetUser().Rank > 5)
+            if (user.GetClient().GetUser().Rank > 5)
             {
                 return false;
             }
 
-            if (User.GetClient().GetUser().MyGroups == null)
+            if (user.GetClient().GetUser().MyGroups == null)
             {
                 return true;
             }
 
-            if (User.GetClient().GetUser().MyGroups.Contains(Group.Id))
+            if (user.GetClient().GetUser().MyGroups.Contains(Group.Id))
             {
                 return false;
             }

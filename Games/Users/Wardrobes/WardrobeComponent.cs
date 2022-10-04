@@ -32,7 +32,7 @@ namespace WibboEmulator.Games.GameClients.Wardrobes
                 if (slotId < 1 || slotId > MAX_SLOT)
                     continue;
 
-                Wardrobe wardrobe = new Wardrobe(slotId, Row["look"].ToString(), Row["gender"].ToString().ToUpper());
+                Wardrobe wardrobe = new Wardrobe(slotId, Row["look"].ToString(), Row["gender"].ToString()!.ToUpper());
                 this._wardrobes.Add(slotId, wardrobe);
             }
         }

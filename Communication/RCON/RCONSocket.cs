@@ -40,8 +40,12 @@ namespace WibboEmulator.Net
         {
             try
             {
+                if (iAr == null || iAr.AsyncState == null)
+                    return;
+
                 Socket _socket = ((Socket)iAr.AsyncState).EndAccept(iAr);
-                string str = _socket.RemoteEndPoint.ToString().Split(new char[1] { ':' })[0];
+
+                string str = _socket.RemoteEndPoint?.ToString()?.Split(':')[0];
                 if (this._allowedIps.Contains(str) || str == "127.0.0.1")
                 {
                     new RCONConnection(_socket);

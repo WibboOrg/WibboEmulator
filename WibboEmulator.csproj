@@ -5,7 +5,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
-    <Nullable>annotations</Nullable>
+    <Nullable>warnings</Nullable>
     <SignAssembly>False</SignAssembly>
     <ErrorReport>prompt</ErrorReport>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>

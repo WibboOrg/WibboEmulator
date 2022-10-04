@@ -14,7 +14,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             if (User == null)
                 return;
 
-            if (User == null || User.GetMessenger() == null)
+            if (User.GetMessenger() == null)
             {
                 Session.SendPacket(new GetRelationshipsComposer(User.Id, new List<Relationship>()));
                 return;

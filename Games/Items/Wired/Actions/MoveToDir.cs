@@ -1234,7 +1234,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             if (int.TryParse(row["trigger_data"].ToString(), out int whenMoveIsBlocked))
                 this.IntParams.Add(whenMoveIsBlocked);
 
-            if (triggerItems == "")
+            if (triggerItems == null || triggerItems == "")
             {
                 return;
             }

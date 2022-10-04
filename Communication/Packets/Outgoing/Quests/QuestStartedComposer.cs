@@ -16,7 +16,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Quests
                 i++;
             }
 
-            WriteString(Quest.Category);
+            WriteString(Quest?.Category ?? string.Empty);
             WriteInteger(i);
             WriteInteger(questsInCategory);
             WriteInteger(0);
@@ -28,7 +28,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Quests
             WriteString(Quest == null ? string.Empty : Quest.Name);
             WriteInteger(num);
             WriteInteger(Quest == null ? 0 : Quest.GoalData);
-            WriteInteger(QuestTypeUtillity.GetIntValue(Quest.Category));
+            WriteInteger(QuestTypeUtillity.GetIntValue(Quest?.Category ?? ""));
             WriteString("set_kuurna");
             WriteString("MAIN_CHAIN");
             WriteBoolean(true);

@@ -55,11 +55,11 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             if (ThisUser != null)
             {
                 room.SendPacket(new UserChangeComposer(ThisUser, false));
-            }
 
-            if (!ThisUser.IsSpectator)
-            {
-                room.GetRoomUserManager().UserEnter(ThisUser);
+                if (!ThisUser.IsSpectator)
+                {
+                    room.GetRoomUserManager().UserEnter(ThisUser);
+                }
             }
 
             if (Session.GetUser().Nuxenable)

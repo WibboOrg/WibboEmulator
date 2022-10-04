@@ -64,22 +64,22 @@ namespace WibboEmulator.Games.Achievements
 
             AchievementData AchievementData = this._achievements[AchievementGroup];
 
-            UserAchievement UserData = Session.GetUser().GetAchievementComponent().GetAchievementData(AchievementGroup);
+            UserAchievement userData = Session.GetUser().GetAchievementComponent().GetAchievementData(AchievementGroup);
 
-            if (UserData == null)
+            if (userData == null)
             {
-                UserData = new UserAchievement(AchievementGroup, 0, 0);
-                Session.GetUser().GetAchievementComponent().AddAchievement(UserData);
+                userData = new UserAchievement(AchievementGroup, 0, 0);
+                Session.GetUser().GetAchievementComponent().AddAchievement(userData);
             }
 
             int TotalLevels = AchievementData.Levels.Count;
 
-            if (UserData != null && UserData.Level == TotalLevels)
+            if (userData != null && userData.Level == TotalLevels)
             {
                 return false;
             }
 
-            int TargetLevel = (UserData != null ? UserData.Level + 1 : 1);
+            int TargetLevel = (userData != null ? userData.Level + 1 : 1);
 
             if (TargetLevel > TotalLevels)
             {
@@ -88,8 +88,8 @@ namespace WibboEmulator.Games.Achievements
 
             AchievementLevel TargetLevelData = AchievementData.Levels[TargetLevel];
 
-            int NewProgress = (UserData != null ? UserData.Progress + ProgressAmount : ProgressAmount);
-            int NewLevel = (UserData != null ? UserData.Level : 0);
+            int NewProgress = (userData != null ? userData.Progress + ProgressAmount : ProgressAmount);
+            int NewLevel = (userData != null ? userData.Level : 0);
             int NewTarget = NewLevel + 1;
 
             if (NewTarget > TotalLevels)
@@ -124,9 +124,11 @@ namespace WibboEmulator.Games.Achievements
                     UserStatsDao.UpdateAchievementScore(dbClient, Session.GetUser().Id, TargetLevelData.RewardPoints);
                 }
 
-
-                UserData.Level = NewLevel;
-                UserData.Progress = NewProgress;
+                if (userData != null)
+                {
+                    userData.Level = NewLevel;
+                    userData.Progress = NewProgress;
+                }
 
                 Session.GetUser().AchievementPoints += TargetLevelData.RewardPoints;
                 Session.GetUser().Duckets += TargetLevelData.RewardPixels;
@@ -152,12 +154,14 @@ namespace WibboEmulator.Games.Achievements
             }
             else
             {
-                UserData.Level = NewLevel;
-                UserData.Progress = NewProgress;
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+                if (userData != null)
                 {
-                    UserAchievementDao.Replace(dbClient, Session.GetUser().Id, NewLevel, NewProgress, AchievementGroup);
+                    userData.Level = NewLevel;
+                    userData.Progress = NewProgress;
                 }
+
+                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+                    UserAchievementDao.Replace(dbClient, Session.GetUser().Id, NewLevel, NewProgress, AchievementGroup);
 
                 Session.SendPacket(new AchievementProgressedComposer(AchievementData, TargetLevel, TargetLevelData,
                 TotalLevels, Session.GetUser().GetAchievementComponent().GetAchievementData(AchievementGroup)));

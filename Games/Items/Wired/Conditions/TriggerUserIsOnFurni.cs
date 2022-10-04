@@ -45,7 +45,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
         {
             string triggerItems = row["triggers_item"].ToString();
 
-            if (triggerItems == "")
+            if (triggerItems == null || triggerItems == "")
             {
                 return;
             }

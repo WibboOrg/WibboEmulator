@@ -127,7 +127,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
             string triggerData2 = row["trigger_data_2"].ToString();
 
-            if (triggerData2.Length == 5)
+            if (triggerData2 != null && triggerData2.Length == 5)
             {
                 string[] dataSplit = triggerData2.Split(';');
 
@@ -141,10 +141,8 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
             string triggerItems = row["triggers_item"].ToString();
 
-            if (triggerItems == "")
-            {
+            if (triggerItems == null || triggerItems == "")
                 return;
-            }
 
             foreach (string item in triggerItems.Split(';'))
             {

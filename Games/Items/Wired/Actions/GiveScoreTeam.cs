@@ -71,7 +71,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             string triggerData = row["trigger_data"].ToString();
             string triggerData2 = row["trigger_data_2"].ToString();
 
-            if (!triggerData.Contains(':'))
+            if (triggerData == null || !triggerData.Contains(':'))
                 return;
 
             string[] dataSplit = triggerData.Split(':');
