@@ -39,7 +39,7 @@ namespace WibboEmulator.Communication.WebSocket
                 if (certificat != null)
                 {
                     this._webSocketServer.SslConfiguration.ServerCertificate = certificat;
-                    this._webSocketServer.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls13;
+                    this._webSocketServer.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls12;
                 }
             }
             this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => new GameWebSocket() { IgnoreExtensions = true });

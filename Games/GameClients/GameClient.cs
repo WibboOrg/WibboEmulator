@@ -95,7 +95,6 @@ namespace WibboEmulator.Games.GameClients
 
                     this._user.Init(this);
 
-
                     this.SendPacket(new AuthenticationOKComposer());
 
                     ServerPacketList packetList = new ServerPacketList();

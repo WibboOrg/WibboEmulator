@@ -14,8 +14,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             string SSOTicket = Packet.PopString();            int Timer = Packet.PopInt();
 
-            //if (Timer <= 0) return;
-
             Session.TryAuthenticate(SSOTicket);
         }
     }
