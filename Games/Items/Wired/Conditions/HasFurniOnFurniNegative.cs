@@ -20,7 +20,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
             if (this.Items.Count == 0)
                 return true;
 
-            foreach (Item roomItem in this.Items)
+            foreach (Item roomItem in this.Items.ToList())
             {
                 foreach (Coord coord in roomItem.GetAffectedTiles.Values)
                 {

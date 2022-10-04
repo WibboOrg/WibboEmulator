@@ -22,7 +22,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
 
             Point coord;
 
-            foreach (Item roomItem in this.Items)
+            foreach (Item roomItem in this.Items.ToList())
             {
                 foreach (Coord coor in roomItem.GetAffectedTiles.Values)
                 {

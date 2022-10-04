@@ -18,7 +18,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
                 return false;
             }
 
-            foreach (Item roomItem in this.Items)
+            foreach (Item roomItem in this.Items.ToList())
             {
                 if (roomItem.BaseItem == TriggerItem.BaseItem && roomItem.ExtraData == TriggerItem.ExtraData)
                 {

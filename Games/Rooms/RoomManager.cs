@@ -248,7 +248,7 @@ namespace WibboEmulator.Games.Rooms
             IEnumerable<RoomData> rooms =
                 (from RoomInstance in this._rooms.ToList()
                  where RoomInstance.Value != null && RoomInstance.Value.RoomData != null &&
-                 RoomInstance.Value.RoomData.UsersNow >= 0 &&
+                 RoomInstance.Value.RoomData.UsersNow > 0 &&
                  (category == -1 || RoomInstance.Value.RoomData.Category == category) &&
                  RoomInstance.Value.RoomData.State != 3 && RoomInstance.Value.RoomData.Langue == Langue
                  orderby RoomInstance.Value.RoomData.Score descending

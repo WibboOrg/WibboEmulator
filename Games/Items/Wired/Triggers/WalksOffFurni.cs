@@ -45,7 +45,7 @@ namespace WibboEmulator.Games.Items.Wired.Triggers
 
             if (this.Items != null)
             {
-                foreach (Item roomItem in this.Items)
+                foreach (Item roomItem in this.Items.ToList())
                 {
                     roomItem.OnUserWalksOffFurni += this.delegateFunction;
                 }
@@ -56,7 +56,7 @@ namespace WibboEmulator.Games.Items.Wired.Triggers
         {
             if (this.Items != null)
             {
-                foreach (Item roomItem in this.Items)
+                foreach (Item roomItem in this.Items.ToList())
                 {
                     roomItem.OnUserWalksOffFurni -= this.delegateFunction;
                 }

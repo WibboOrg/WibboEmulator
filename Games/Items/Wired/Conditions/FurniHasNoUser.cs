@@ -14,7 +14,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
         {
-            foreach (Item item in this.Items)
+            foreach (Item item in this.Items.ToList())
             {
                 foreach (Point coord in item.GetCoords)
                 {

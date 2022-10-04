@@ -50,7 +50,7 @@ namespace WibboEmulator.Games.Items.Wired
 
             if (this.Items != null)
             {
-                foreach (Item roomItem in this.Items)
+                foreach (Item roomItem in this.Items.ToList())
                 {
                     roomItem.ItemTriggerEventHandler += this.delegateFunction;
                 }
@@ -61,7 +61,7 @@ namespace WibboEmulator.Games.Items.Wired
         {
             if (this.Items != null)
             {
-                foreach (Item roomItem in this.Items)
+                foreach (Item roomItem in this.Items.ToList())
                 {
                     roomItem.ItemTriggerEventHandler -= this.delegateFunction;
                 }

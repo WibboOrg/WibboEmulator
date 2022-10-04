@@ -1714,7 +1714,6 @@ namespace WibboEmulator.Games.Rooms
 
         public void Destroy()
         {
-            this._room = null;
             this._usersByUsername.Clear();
             this._usersByUserID.Clear();
             this.OnUserEnter = null;

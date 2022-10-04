@@ -25,7 +25,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
             bool direction = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0) == 1;
             bool position = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0) == 1;
 
-            foreach (Item roomItem in this.Items)
+            foreach (Item roomItem in this.Items.ToList())
             {
                 if(!this.ItemsData.TryGetValue(roomItem.Id, out ItemsPosReset itemPosReset))
                     continue;
@@ -74,7 +74,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
 
             this.ItemsData.Clear();
 
-            foreach (Item roomItem in this.Items)
+            foreach (Item roomItem in this.Items.ToList())
             {
                 if (!this.ItemsData.ContainsKey(roomItem.Id))
                 {

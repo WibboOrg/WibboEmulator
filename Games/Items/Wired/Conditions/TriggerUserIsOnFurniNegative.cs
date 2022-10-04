@@ -19,7 +19,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
                 return false;
             }
 
-            foreach (Item roomItem in this.Items)
+            foreach (Item roomItem in this.Items.ToList())
             {
                 foreach (Point coord in roomItem.GetCoords)
                 {

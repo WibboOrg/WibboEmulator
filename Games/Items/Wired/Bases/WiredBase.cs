@@ -105,7 +105,7 @@ namespace WibboEmulator.Games.Items.Wired
             this.Items = this.GetItems();
 
             this.StuffIds.Clear();
-            foreach (Item item in this.Items)
+            foreach (Item item in this.Items.ToList())
             {
                 this.StuffIds.Add(item.Id);
             }

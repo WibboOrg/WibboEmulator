@@ -18,7 +18,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
         public override bool OnCycle(RoomUser user, Item item)
         {
-            foreach (Item roomItem in this.Items)
+            foreach (Item roomItem in this.Items.ToList())
             {
                 this.HandleMovement(roomItem);
             }

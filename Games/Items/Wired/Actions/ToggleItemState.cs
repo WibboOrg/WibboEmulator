@@ -16,7 +16,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
         {
             bool isReverse = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
 
-            foreach (Item roomItem in this.Items)
+            foreach (Item roomItem in this.Items.ToList())
             {
                 if (roomItem != null)
                 {
