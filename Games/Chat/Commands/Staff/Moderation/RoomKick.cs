@@ -23,7 +23,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                         userKick.Add(user);
                     }
                 }
-                
+
                 foreach (RoomUser user in userKick)
                 {
                     user.AllowMoveTo = false;
@@ -34,7 +34,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 }
 
                 await Task.Delay(3000);
-                
+
                 foreach (RoomUser user in userKick)
                 {
                     if (MessageAlert.Length > 0)

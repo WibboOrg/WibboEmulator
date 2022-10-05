@@ -17,10 +17,7 @@
             this._relation = Relation;
         }
 
-        public void UpdateRelation(int Type)
-        {
-            this._relation = Type;
-        }
+        public void UpdateRelation(int Type) => this._relation = Type;
 
         public void UpdateUser()
         {
@@ -41,7 +38,7 @@
 
         public int UserId => this._userId;
         public string Username => this._username;
-        public string Look => this. _look;
+        public string Look => this._look;
         public int Relation => this._relation;
         public bool IsOnline => this._isOnline;
         public bool HideInRoom => this._hideInRoom;

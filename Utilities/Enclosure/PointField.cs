@@ -23,10 +23,7 @@ namespace Enclosure
             this.forValue = forValue;
         }
 
-        public List<Point> getPoints()
-        {
-            return this.PointList;
-        }
+        public List<Point> getPoints() => this.PointList;
 
         public void add(Point p)
         {

@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Roleplay.Item;
-using System.Data;
 
 namespace WibboEmulator.Games.Roleplay
 {

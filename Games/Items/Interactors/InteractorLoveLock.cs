@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Furni;
+﻿using System.Drawing;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Furni;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
-using System.Drawing;
 
 namespace WibboEmulator.Games.Items.Interactors
 {

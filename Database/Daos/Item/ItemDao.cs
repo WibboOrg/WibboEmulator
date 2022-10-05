@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Database.Interfaces;
+﻿using System.Collections.Concurrent;
+using System.Data;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Utilities;
-using System.Collections.Concurrent;
-using System.Data;
 
 namespace WibboEmulator.Database.Daos
 {
@@ -63,30 +63,15 @@ namespace WibboEmulator.Database.Daos
             return Convert.ToInt32(dbClient.InsertQuery());
         }
 
-        internal static void InsertDuplicate(IQueryAdapter dbClient, int userId, int roomId)
-        {
-            dbClient.RunQuery("INSERT INTO `item` (user_id, room_id, base_item, extra_data, x, y, z, rot) SELECT '" + userId + "', '" + roomId + "', base_item, extra_data, x, y, z, rot FROM `item` WHERE room_id = '5328079'");
-        }
+        internal static void InsertDuplicate(IQueryAdapter dbClient, int userId, int roomId) => dbClient.RunQuery("INSERT INTO `item` (user_id, room_id, base_item, extra_data, x, y, z, rot) SELECT '" + userId + "', '" + roomId + "', base_item, extra_data, x, y, z, rot FROM `item` WHERE room_id = '5328079'");
 
-        internal static void Delete(IQueryAdapter dbClient, int itemId)
-        {
-            dbClient.RunQuery("DELETE `item`, `item_limited` FROM `item` LEFT JOIN `item_limited` ON(`item_limited`.item_id = `item`.id) WHERE id = '" + itemId + "'");
-        }
+        internal static void Delete(IQueryAdapter dbClient, int itemId) => dbClient.RunQuery("DELETE `item`, `item_limited` FROM `item` LEFT JOIN `item_limited` ON(`item_limited`.item_id = `item`.id) WHERE id = '" + itemId + "'");
 
-        internal static void DeleteAllByRoomId(IQueryAdapter dbClient, int roomId)
-        {
-            dbClient.RunQuery("DELETE `item`, `item_limited` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE room_id = '" + roomId + "'");
-        }
+        internal static void DeleteAllByRoomId(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("DELETE `item`, `item_limited` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE room_id = '" + roomId + "'");
 
-        internal static void DeleteAll(IQueryAdapter dbClient, int userId)
-        {
-            dbClient.RunQuery("DELETE `item`, `item_limited`, `item_present`, `item_moodlight`, `item_teleport`, `item_wired` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE room_id = '0' AND user_id = '" + userId + "'");
-        }
+        internal static void DeleteAll(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("DELETE `item`, `item_limited`, `item_present`, `item_moodlight`, `item_teleport`, `item_wired` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE room_id = '0' AND user_id = '" + userId + "'");
 
-        internal static void DeleteAllWithoutRare(IQueryAdapter dbClient, int userId)
-        {
-            dbClient.RunQuery("DELETE `item`, `item_limited`, `item_present`, `item_moodlight`, `item_teleport`, `item_wired` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE room_id = '0' AND user_id = '" + userId + "' AND base_item NOT IN (SELECT id FROM `item_base` WHERE is_rare = '1')");
-        }
+        internal static void DeleteAllWithoutRare(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("DELETE `item`, `item_limited`, `item_present`, `item_moodlight`, `item_teleport`, `item_wired` FROM `item` LEFT JOIN `item_limited` ON (`item_limited`.item_id = `item`.id) LEFT JOIN `item_present` ON (`item_present`.item_id = `item`.id) LEFT JOIN `item_moodlight` ON (`item_moodlight`.item_id = `item`.id) LEFT JOIN `item_teleport` ON (tele_one_id = `item`.id) LEFT JOIN `item_wired` ON (trigger_id = `item`.id) WHERE room_id = '0' AND user_id = '" + userId + "' AND base_item NOT IN (SELECT id FROM `item_base` WHERE is_rare = '1')");
 
         internal static void UpdateExtradata(IQueryAdapter dbClient, int itemId, string extraData)
         {
@@ -111,15 +96,9 @@ namespace WibboEmulator.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void UpdateRoomIdAndUserId(IQueryAdapter dbClient, int itemId, int roomId, int userId)
-        {
-            dbClient.RunQuery("UPDATE `item` SET room_id = '" + roomId + "', user_id = '" + userId + "' WHERE id = '" + itemId + "'");
-        }
+        internal static void UpdateRoomIdAndUserId(IQueryAdapter dbClient, int itemId, int roomId, int userId) => dbClient.RunQuery("UPDATE `item` SET room_id = '" + roomId + "', user_id = '" + userId + "' WHERE id = '" + itemId + "'");
 
-        internal static void UpdateRoomIdAndUserId(IQueryAdapter dbClient, int userId, int roomId)
-        {
-            dbClient.RunQuery("UPDATE `item` SET room_id = '0', user_id = '" + userId + "' WHERE room_id = '" + roomId + "'");
-        }
+        internal static void UpdateRoomIdAndUserId(IQueryAdapter dbClient, int userId, int roomId) => dbClient.RunQuery("UPDATE `item` SET room_id = '0', user_id = '" + userId + "' WHERE room_id = '" + roomId + "'");
 
         internal static void UpdateResetRoomId(IQueryAdapter dbClient, int itemId)
         {

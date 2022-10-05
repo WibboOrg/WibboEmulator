@@ -1,11 +1,11 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
+﻿using Enclosure;
+using System.Collections;
+using System.Drawing;
+using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
-using Enclosure;
-using System.Collections;
-using System.Drawing;
 
 namespace WibboEmulator.Games.Rooms.Games
 {
@@ -38,10 +38,7 @@ namespace WibboEmulator.Games.Rooms.Games
             this.BanzaiTiles.Add(itemID, item);
         }
 
-        public void RemoveTile(int itemID)
-        {
-            this.BanzaiTiles.Remove(itemID);
-        }
+        public void RemoveTile(int itemID) => this.BanzaiTiles.Remove(itemID);
 
         public void OnUserWalk(RoomUser User)
         {
@@ -181,7 +178,7 @@ namespace WibboEmulator.Games.Rooms.Games
 
             this._banzaiStarted = false;
 
-            this._field.destroy();
+            this._field.Destroy();
 
             if (this.BanzaiTiles.Count == 0)
             {
@@ -261,8 +258,8 @@ namespace WibboEmulator.Games.Rooms.Games
                     if (item.Value == 3)
                     {
                         this._roomInstance.GetGameManager().AddPointToTeam(item.Team, user);
-                        this._field.updateLocation(item.X, item.Y, (byte)team);
-                        foreach (PointField pointField in this._field.doUpdate(false))
+                        this._field.UpdateLocation(item.X, item.Y, (byte)team);
+                        foreach (PointField pointField in this._field.DoUpdate(false))
                         {
                             TeamType team1 = (TeamType)pointField.forValue;
                             foreach (Point point in pointField.getPoints())
@@ -370,7 +367,7 @@ namespace WibboEmulator.Games.Rooms.Games
         {
             this.BanzaiTiles.Clear();
             Array.Clear(this._floorMap, 0, this._floorMap.Length);
-            this._field.destroy();
+            this._field.Destroy();
             this._roomInstance = null;
             this.BanzaiTiles = null;
             this._floorMap = null;

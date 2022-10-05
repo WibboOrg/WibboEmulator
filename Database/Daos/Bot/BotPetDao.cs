@@ -1,9 +1,9 @@
+using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Utilities;
-using System.Data;
 
 namespace WibboEmulator.Database.Daos
 {
@@ -39,20 +39,11 @@ namespace WibboEmulator.Database.Daos
             queryChunk.Dispose();
         }
 
-        internal static void UpdateHaveSaddle(IQueryAdapter dbClient, int petId, int statut)
-        {
-            dbClient.RunQuery("UPDATE `bot_pet` SET have_saddle = '" + statut + "' WHERE id = '" + petId + "' LIMIT 1");
-        }
+        internal static void UpdateHaveSaddle(IQueryAdapter dbClient, int petId, int statut) => dbClient.RunQuery("UPDATE `bot_pet` SET have_saddle = '" + statut + "' WHERE id = '" + petId + "' LIMIT 1");
 
-        internal static void UpdatePethair(IQueryAdapter dbClient, int petId, int petHair)
-        {
-            dbClient.RunQuery("UPDATE `bot_pet` SET pethair = '" + petHair + "' WHERE id = '" + petId + "' LIMIT 1");
-        }
+        internal static void UpdatePethair(IQueryAdapter dbClient, int petId, int petHair) => dbClient.RunQuery("UPDATE `bot_pet` SET pethair = '" + petHair + "' WHERE id = '" + petId + "' LIMIT 1");
 
-        internal static void UpdateHairdye(IQueryAdapter dbClient, int petId, int hairDye)
-        {
-            dbClient.RunQuery("UPDATE `bot_pet` SET hairdye = '" + hairDye + "' WHERE id = '" + petId + "' LIMIT 1");
-        }
+        internal static void UpdateHairdye(IQueryAdapter dbClient, int petId, int hairDye) => dbClient.RunQuery("UPDATE `bot_pet` SET hairdye = '" + hairDye + "' WHERE id = '" + petId + "' LIMIT 1");
 
         internal static void UpdateRace(IQueryAdapter dbClient, int petId, string race)
         {
@@ -61,20 +52,11 @@ namespace WibboEmulator.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void UpdateAnyoneRide(IQueryAdapter dbClient, int petId, bool anyoneCanRide)
-        {
-            dbClient.RunQuery("UPDATE `bot_pet` SET anyone_ride = '" + WibboEnvironment.BoolToEnum(anyoneCanRide) + "' WHERE id = '" + petId + "' LIMIT 1");
-        }
+        internal static void UpdateAnyoneRide(IQueryAdapter dbClient, int petId, bool anyoneCanRide) => dbClient.RunQuery("UPDATE `bot_pet` SET anyone_ride = '" + WibboEnvironment.BoolToEnum(anyoneCanRide) + "' WHERE id = '" + petId + "' LIMIT 1");
 
-        internal static void UpdateRoomId(IQueryAdapter dbClient, int petId, int roomId)
-        {
-            dbClient.RunQuery("UPDATE `bot_pet` SET room_id = '" + roomId + "' WHERE id = '" + petId + "' LIMIT 1");
-        }
+        internal static void UpdateRoomId(IQueryAdapter dbClient, int petId, int roomId) => dbClient.RunQuery("UPDATE `bot_pet` SET room_id = '" + roomId + "' WHERE id = '" + petId + "' LIMIT 1");
 
-        internal static void UpdateRoomIdByRoomId(IQueryAdapter dbClient, int roomId)
-        {
-            dbClient.RunQuery("UPDATE `bot_pet` SET room_id = '0' WHERE room_id = '" + roomId + "'");
-        }
+        internal static void UpdateRoomIdByRoomId(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("UPDATE `bot_pet` SET room_id = '0' WHERE room_id = '" + roomId + "'");
 
         internal static int InsertGetId(IQueryAdapter dbClient, int petId, string petName, string petRace, string petColor, int ownerId, int petType, double petCreationStamp)
         {
@@ -92,10 +74,7 @@ namespace WibboEmulator.Database.Daos
         }
 
 
-        internal static void Delete(IQueryAdapter dbClient, int userId)
-        {
-            dbClient.RunQuery("DELETE FROM `bot_pet` WHERE room_id = '0' AND user_id = '" + userId + "'");
-        }
+        internal static void Delete(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("DELETE FROM `bot_pet` WHERE room_id = '0' AND user_id = '" + userId + "'");
 
         internal static DataTable GetAllByUserId(IQueryAdapter dbClient, int userId)
         {

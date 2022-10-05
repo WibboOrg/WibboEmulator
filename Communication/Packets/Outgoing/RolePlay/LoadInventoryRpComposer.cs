@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Games.Roleplay;
+﻿using System.Collections.Concurrent;
+using WibboEmulator.Games.Roleplay;
 using WibboEmulator.Games.Roleplay.Player;
-using System.Collections.Concurrent;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay
 {

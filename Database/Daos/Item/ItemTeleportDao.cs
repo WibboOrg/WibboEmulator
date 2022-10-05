@@ -1,5 +1,5 @@
-using WibboEmulator.Database.Interfaces;
 using System.Data;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Daos
 {
@@ -11,9 +11,6 @@ namespace WibboEmulator.Database.Daos
             return dbClient.GetRow();
         }
 
-        internal static void Insert(IQueryAdapter dbClient, int newId, int newIdTwo)
-        {
-            dbClient.RunQuery("INSERT INTO `item_teleport` (tele_one_id, tele_two_id) VALUES ('" + newId + "', '" + newIdTwo + "')");
-        }
+        internal static void Insert(IQueryAdapter dbClient, int newId, int newIdTwo) => dbClient.RunQuery("INSERT INTO `item_teleport` (tele_one_id, tele_two_id) VALUES ('" + newId + "', '" + newIdTwo + "')");
     }
 }

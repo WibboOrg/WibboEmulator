@@ -15,10 +15,7 @@ namespace Astar.Algorithm
             this.InnerList = new List<T>(size);
         }
 
-        protected virtual int OnCompare(int i, int j)
-        {
-            return this.mComparer.Compare(this.InnerList[i], this.InnerList[j]);
-        }
+        protected virtual int OnCompare(int i, int j) => this.mComparer.Compare(this.InnerList[i], this.InnerList[j]);
 
 
         private int BinarySearch(T value)

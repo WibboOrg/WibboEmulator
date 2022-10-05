@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Roleplay.Player;
-using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map.Movement;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
@@ -14,7 +14,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            if(!Room.Roleplay.Pvp)
+            if (!Room.Roleplay.Pvp)
             {
                 return;
             }

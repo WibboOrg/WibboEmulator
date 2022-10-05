@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using System.Data;
 
 namespace WibboEmulator.Games.Groups
 {
@@ -129,20 +129,11 @@ namespace WibboEmulator.Games.Groups
 
         public int RequestCount => this._requests.Count;
 
-        public bool IsMember(int Id)
-        {
-            return this._members.Contains(Id) || this._administrators.Contains(Id);
-        }
+        public bool IsMember(int Id) => this._members.Contains(Id) || this._administrators.Contains(Id);
 
-        public bool IsAdmin(int Id)
-        {
-            return this._administrators.Contains(Id);
-        }
+        public bool IsAdmin(int Id) => this._administrators.Contains(Id);
 
-        public bool HasRequest(int Id)
-        {
-            return this._requests.Contains(Id);
-        }
+        public bool HasRequest(int Id) => this._requests.Contains(Id);
 
         public void MakeAdmin(int userId)
         {
@@ -255,10 +246,7 @@ namespace WibboEmulator.Games.Groups
             }
         }
 
-        public void ClearRequests()
-        {
-            this._requests.Clear();
-        }
+        public void ClearRequests() => this._requests.Clear();
 
         public void Dispose()
         {

@@ -1,28 +1,25 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Reflection;
+using System.Text.Json;
+using WibboEmulator.Database;
+using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Core;
 using WibboEmulator.Core.FigureData;
-using WibboEmulator.Database;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.GameClients.Authenticator;
 using WibboEmulator.Net;
-using System.Collections.Concurrent;
-using System.Diagnostics;
-using System.Reflection;
-using System.Text.Json;
-using Google.Protobuf.WellKnownTypes;
-using WibboEmulator.Core.FigureData.JsonObject;
-using Plus.Database;
 
 namespace WibboEmulator;
 
 public static class WibboEnvironment
 {
-    private static WebSocketManager _webSocketManager;
     private static Game _game;
+    private static WebSocketManager _webSocketManager;
     private static DatabaseManager _datebaseManager;
     private static RCONSocket _rcon;
     private static FigureDataManager _figureManager;
@@ -33,19 +30,18 @@ public static class WibboEnvironment
     private static Random _random = new Random();
     private static readonly ConcurrentDictionary<int, User> _usersCached = new ConcurrentDictionary<int, User>();
 
-    public static DateTime ServerStarted { get; set; }
-    public static List<string> WebSocketOrigins { get; set; }
-    public static string PatchDir { get; private set; }
-
-    private static readonly List<char> Allowedchars = new List<char>(new[]
+    private static readonly List<char> _allowedchars = new List<char>(new[]
         {
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
             'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
             '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
             '-', '.', '=', '?', '!', ':'
         });
+
+    public static DateTime ServerStarted { get; private set; }
+    public static string PatchDir { get; private set; } = "";
 
     public static void Initialize()
     {
@@ -136,6 +132,15 @@ public static class WibboEnvironment
             var jsonDatabase = File.ReadAllText(PatchDir + "Configuration/database.json");
 
             DatabaseConfiguration databaseConfiguration = JsonSerializer.Deserialize<DatabaseConfiguration>(jsonDatabase);
+
+            if (databaseConfiguration == null)
+            {
+                ExceptionLogger.WriteLine("Failed to load Json MySQL.");
+                Console.ReadKey(true);
+                Environment.Exit(1);
+                return;
+            }
+
             _datebaseManager = new DatabaseManager(databaseConfiguration);
 
             if (!_datebaseManager.IsConnected())
@@ -160,8 +165,8 @@ public static class WibboEnvironment
             _figureManager = new FigureDataManager();
             _figureManager.Init();
 
-            WebSocketOrigins = _settingsManager.GetData<string>("game.ws.origins").Split(',').ToList();
-            _webSocketManager = new WebSocketManager(_settingsManager.GetData<int>("game.ws.port"), _settingsManager.GetData<bool>("game.ssl.enable"));
+            var webSocketOrigins = _settingsManager.GetData<string>("game.ws.origins").Split(',').ToList();
+            _webSocketManager = new WebSocketManager(_settingsManager.GetData<int>("game.ws.port"), _settingsManager.GetData<bool>("game.ssl.enable"), webSocketOrigins);
 
             if (_settingsManager.GetData<bool>("mus.tcp.enable"))
             {
@@ -204,20 +209,11 @@ public static class WibboEnvironment
         }
     }
 
-    public static void RegenRandom()
-    {
-        _random = new Random();
-    }
+    public static void RegenRandom() => _random = new Random();
 
-    public static bool EnumToBool(string Enum)
-    {
-        return Enum == "1";
-    }
+    public static bool EnumToBool(string Enum) => Enum == "1";
 
-    public static string BoolToEnum(bool Bool)
-    {
-        return Bool ? "1" : "0";
-    }
+    public static string BoolToEnum(bool Bool) => Bool ? "1" : "0";
 
     public static int GetRandomNumber(int Min, int Max)
     {
@@ -227,15 +223,9 @@ public static class WibboEnvironment
         }
     }
 
-    public static int GetUnixTimestamp()
-    {
-        return (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
-    }
+    public static int GetUnixTimestamp() => (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
 
-    private static bool IsValid(char character)
-    {
-        return Allowedchars.Contains(character);
-    }
+    private static bool IsValid(char character) => _allowedchars.Contains(character);
 
     public static bool IsValidAlphaNumeric(string inputStr)
     {
@@ -343,7 +333,7 @@ public static class WibboEnvironment
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
-                    return null; 
+                    return null;
                 }
             }
             return null;
@@ -354,10 +344,10 @@ public static class WibboEnvironment
         }
     }
 
-    public static FigureDataManager GetFigureManager() =>  _figureManager;
+    public static FigureDataManager GetFigureManager() => _figureManager;
 
     public static LanguageManager GetLanguageManager() => _languageManager;
-    
+
     public static SettingsManager GetSettings() => _settingsManager;
 
     public static WebSocketManager GetWebSocketManager() => _webSocketManager;

@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.GameClients.Inventory.Bots;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.AI;
-using WibboEmulator.Games.GameClients.Inventory.Bots;
-using System.Data;
 
 namespace WibboEmulator.Games.Catalog.Utilities
 {

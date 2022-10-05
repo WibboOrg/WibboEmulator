@@ -5,17 +5,16 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalog;
 using WibboEmulator.Games.Catalog.Utilities;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.GameClients.Inventory.Bots;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Pets;
-using WibboEmulator.Games.GameClients.Inventory.Bots;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {
@@ -68,8 +67,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             int TotalDiamondCost = Amount > 1 ? ((Item.CostWibboPoints * Amount) - ((int)Math.Floor((double)Amount / 6) * Item.CostWibboPoints)) : Item.CostWibboPoints;
             int TotalLimitCoinCost = Amount > 1 ? ((Item.CostLimitCoins * Amount) - ((int)Math.Floor((double)Amount / 6) * Item.CostLimitCoins)) : Item.CostLimitCoins;
 
-            if (Session.GetUser().Credits < TotalCreditsCost || 
-                Session.GetUser().Duckets < TotalPixelCost || 
+            if (Session.GetUser().Credits < TotalCreditsCost ||
+                Session.GetUser().Duckets < TotalPixelCost ||
                 Session.GetUser().WibboPoints < TotalDiamondCost ||
                 Session.GetUser().LimitCoins < TotalLimitCoinCost)
             {
@@ -351,7 +350,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                         }
                     }
 
-                    if(Item.Data.Amount >= 0)
+                    if (Item.Data.Amount >= 0)
                     {
                         Item.Data.Amount += GeneratedGenericItems.Count;
                         ItemStatDao.UpdateAdd(dbClient, Item.Data.Id, GeneratedGenericItems.Count);

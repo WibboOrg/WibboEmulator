@@ -36,15 +36,9 @@
             return false;
         }
 
-        public override int GetHashCode()
-        {
-            return (X + " " + Y).GetHashCode();
-        }
+        public override int GetHashCode() => (X + " " + Y).GetHashCode();
 
-        public override string ToString()
-        {
-            return X + ", " + Y;
-        }
+        public override string ToString() => X + ", " + Y;
 
         public static Vector2D operator +(Vector2D One, Vector2D Two)
         {

@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Games.Groups;
+﻿using System.Drawing;
+using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
-using System.Drawing;
 
 namespace WibboEmulator.Games.Rooms
 {
@@ -22,10 +22,7 @@ namespace WibboEmulator.Games.Rooms
             this._banzaiBlobs = new Dictionary<int, Item>();
         }
 
-        public void OnCycle()
-        {
-            this.CyclePyramids();
-        }
+        public void OnCycle() => this.CyclePyramids();
 
         private void CyclePyramids()
         {
@@ -76,25 +73,13 @@ namespace WibboEmulator.Games.Rooms
             }
         }
 
-        public void RemovePyramid(int itemID)
-        {
-            this._banzaiPyramids.Remove(itemID);
-        }
+        public void RemovePyramid(int itemID) => this._banzaiPyramids.Remove(itemID);
 
-        public void RemoveBlob(int itemID)
-        {
-            this._banzaiBlobs.Remove(itemID);
-        }
+        public void RemoveBlob(int itemID) => this._banzaiBlobs.Remove(itemID);
 
-        public Item GetExitTeleport()
-        {
-            return this._exitTeleport;
-        }
+        public Item GetExitTeleport() => this._exitTeleport;
 
-        public void AddExitTeleport(Item item)
-        {
-            this._exitTeleport = item;
-        }
+        public void AddExitTeleport(Item item) => this._exitTeleport = item;
 
         public void RemoveExitTeleport(Item item)
         {
@@ -194,10 +179,7 @@ namespace WibboEmulator.Games.Rooms
             }
         }
 
-        public void RemoveTeleport(int itemID)
-        {
-            this._banzaiTeleports.Remove(itemID);
-        }
+        public void RemoveTeleport(int itemID) => this._banzaiTeleports.Remove(itemID);
 
         public bool CheckGroupGate(RoomUser user, Point Coordinate)
         {

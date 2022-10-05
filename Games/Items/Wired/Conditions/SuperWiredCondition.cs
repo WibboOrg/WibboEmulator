@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Roleplay.Player;
-using WibboEmulator.Games.Rooms.Games;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+using WibboEmulator.Games.Roleplay.Player;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Games;
 
 namespace WibboEmulator.Games.Items.Wired.Conditions
 {
@@ -17,7 +17,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
         {
             base.LoadItems(inDatabase);
 
-            if(inDatabase) return;
+            if (inDatabase) return;
 
             this.CheckPermission();
         }
@@ -1149,14 +1149,8 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
             return Result;
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient)
-        {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);
-        }
+        public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);
 
-        public void LoadFromDatabase(DataRow row)
-        {
-            this.StringParam = row["trigger_data"].ToString();
-        }
+        public void LoadFromDatabase(DataRow row) => this.StringParam = row["trigger_data"].ToString();
     }
 }

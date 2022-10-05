@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Adapter;
-using WibboEmulator.Database.Interfaces;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System.Data;
+using WibboEmulator.Database.Adapter;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database
 {
@@ -27,30 +27,15 @@ namespace WibboEmulator.Database
             GC.SuppressFinalize(this);
         }
 
-        public void connect()
-        {
-            this.Open();
-        }
+        public void connect() => this.Open();
 
-        public void disconnect()
-        {
-            this.Close();
-        }
+        public void disconnect() => this.Close();
 
-        public IQueryAdapter getQueryreactor()
-        {
-            return this._adapter;
-        }
+        public IQueryAdapter getQueryreactor() => this._adapter;
 
-        public void reportDone()
-        {
-            this.Dispose();
-        }
+        public void reportDone() => this.Dispose();
 
-        public MySqlCommand createNewCommand()
-        {
-            return this._con.CreateCommand();
-        }
+        public MySqlCommand createNewCommand() => this._con.CreateCommand();
 
         public void Open()
         {

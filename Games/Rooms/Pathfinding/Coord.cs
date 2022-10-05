@@ -56,10 +56,7 @@ namespace WibboEmulator.Games.Rooms.PathFinding
             }
         }
 
-        public override int GetHashCode()
-        {
-            return this.X ^ this.Y ^ this.Z;
-        }
+        public override int GetHashCode() => this.X ^ this.Y ^ this.Z;
 
         public override bool Equals(object obj)
         {

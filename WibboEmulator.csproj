@@ -9,6 +9,7 @@
     <SignAssembly>False</SignAssembly>
     <ErrorReport>prompt</ErrorReport>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <StartupObject>WibboEmulator.Program</StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

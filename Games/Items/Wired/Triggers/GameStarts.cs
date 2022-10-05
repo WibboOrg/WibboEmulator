@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Items.Wired.Triggers
 {
@@ -15,15 +15,12 @@ namespace WibboEmulator.Games.Items.Wired.Triggers
             this.RoomInstance.GetGameManager().OnGameStart += this.gameStartsDeletgate;
         }
 
-        private void gameManager_OnGameStart(object sender, EventArgs e)
-        {
-            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, null, null);
-        }
+        private void gameManager_OnGameStart(object sender, EventArgs e) => this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, null, null);
 
         public override void Dispose()
         {
             base.Dispose();
-            
+
             this.RoomInstance.GetWiredHandler().GetRoom().GetGameManager().OnGameStart -= this.gameStartsDeletgate;
         }
 

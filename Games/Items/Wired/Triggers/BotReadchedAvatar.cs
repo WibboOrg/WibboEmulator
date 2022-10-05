@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Items.Wired.Triggers
 {
@@ -38,14 +38,8 @@ namespace WibboEmulator.Games.Items.Wired.Triggers
             this.RoomInstance.GetWiredHandler().TrgBotCollision -= this.delegateFunction;
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient)
-        {
-            WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, false, null);
-        }
+        public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, false, null);
 
-        public void LoadFromDatabase(DataRow row)
-        {
-            this.StringParam = row["trigger_data"].ToString();
-        }
+        public void LoadFromDatabase(DataRow row) => this.StringParam = row["trigger_data"].ToString();
     }
 }

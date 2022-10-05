@@ -22,7 +22,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 targetY = 0;
             }
 
-            if(Session == null || Session.GetUser() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }

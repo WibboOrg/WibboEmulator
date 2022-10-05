@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using System.Data;
 
 namespace WibboEmulator.Games.GameClients.Wardrobes
 {
@@ -59,10 +59,7 @@ namespace WibboEmulator.Games.GameClients.Wardrobes
             UserWardrobeDao.Insert(dbClient, this._userInstance.Id, slotId, look, gender.ToUpper());
         }
 
-        public Dictionary<int, Wardrobe> GetWardrobes()
-        {
-            return this._wardrobes;
-        }
+        public Dictionary<int, Wardrobe> GetWardrobes() => this._wardrobes;
 
         public void Dispose()
         {

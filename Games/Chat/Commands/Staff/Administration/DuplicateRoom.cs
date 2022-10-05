@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Navigator;
+﻿using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
-using System.Data;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
@@ -113,7 +113,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
 
                     string OldItem = (string)wiredRow["triggers_item"];
 
-                    if (OldItem.Length <= 0) 
+                    if (OldItem.Length <= 0)
                         continue;
 
                     if (OldItem.Contains(':'))
@@ -168,7 +168,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 BotPetDao.InsertDuplicate(dbClient, Session.GetUser().Id, RoomId, OldRoomId);
             }
 
-            if(!Session.GetUser().UsersRooms.Contains(RoomId))
+            if (!Session.GetUser().UsersRooms.Contains(RoomId))
                 Session.GetUser().UsersRooms.Add(RoomId);
 
             Session.SendNotification("Copie de l'appartement " + OldRoomId + " en cours de chargement...");

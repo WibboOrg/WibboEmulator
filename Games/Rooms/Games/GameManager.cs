@@ -73,10 +73,7 @@ namespace WibboEmulator.Games.Rooms.Games
             return (TeamType)NbTeam;
         }
 
-        public void AddPointToTeam(TeamType team, RoomUser user)
-        {
-            this.AddPointToTeam(team, 1, user);
-        }
+        public void AddPointToTeam(TeamType team, RoomUser user) => this.AddPointToTeam(team, 1, user);
 
         public void AddPointToTeam(TeamType team, int points, RoomUser user)
         {
@@ -116,10 +113,7 @@ namespace WibboEmulator.Games.Rooms.Games
             this.AddPointToTeam(TeamType.YELLOW, this.GetScoreForTeam(TeamType.YELLOW) * -1, null);
         }
 
-        private int GetScoreForTeam(TeamType team)
-        {
-            return this.TeamPoints[(int)team];
-        }
+        private int GetScoreForTeam(TeamType team) => this.TeamPoints[(int)team];
 
         private Dictionary<int, Item> GetFurniItems(TeamType team)
         {
@@ -374,10 +368,7 @@ namespace WibboEmulator.Games.Rooms.Games
             this._roomInstance.lastTimerReset = DateTime.Now;
         }
 
-        public Room GetRoom()
-        {
-            return this._roomInstance;
-        }
+        public Room GetRoom() => this._roomInstance;
 
         public void Destroy()
         {

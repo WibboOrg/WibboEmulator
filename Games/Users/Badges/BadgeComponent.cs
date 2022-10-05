@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using System.Collections;
+﻿using System.Collections;
 using System.Data;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Games.GameClients.Badges
 {
@@ -65,10 +65,7 @@ namespace WibboEmulator.Games.GameClients.Badges
             }
         }
 
-        public ICollection<Badge> GetBadges()
-        {
-            return this._badges.Values;
-        }
+        public ICollection<Badge> GetBadges() => this._badges.Values;
 
         public Badge GetBadge(string Badge)
         {
@@ -92,10 +89,7 @@ namespace WibboEmulator.Games.GameClients.Badges
             return this._badges.ContainsKey(Badge);
         }
 
-        public void GiveBadge(string Badge, bool InDatabase)
-        {
-            this.GiveBadge(Badge, 0, InDatabase);
-        }
+        public void GiveBadge(string Badge, bool InDatabase) => this.GiveBadge(Badge, 0, InDatabase);
 
         public void GiveBadge(string Badge, int Slot, bool InDatabase)
         {

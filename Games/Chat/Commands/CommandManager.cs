@@ -1,13 +1,13 @@
-﻿using WibboEmulator.Core;
+﻿using System.Data;
+using System.Text;
+using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Chat.Commands.Cmd;
-using System.Data;
-using System.Text;
-using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Permissions;
 using WibboEmulator.Games.Chat.Commands.Staff.Gestion;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Permissions;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands
 {
@@ -173,10 +173,7 @@ namespace WibboEmulator.Games.Chat.Commands
             return (stringBuilder).ToString();
         }
 
-        public void Register(int CommandId, IChatCommand Command)
-        {
-            this._commands.Add(CommandId, Command);
-        }
+        public void Register(int CommandId, IChatCommand Command) => this._commands.Add(CommandId, Command);
 
 
         public static string MergeParams(string[] Params, int Start)
@@ -384,9 +381,6 @@ namespace WibboEmulator.Games.Chat.Commands
             this.Register(156, new UnloadEmptyRooms());
         }
 
-        public void RegisterCommand()
-        {
-            this._commands.Clear();
-        }
+        public void RegisterCommand() => this._commands.Clear();
     }
 }

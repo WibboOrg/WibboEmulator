@@ -1,5 +1,5 @@
-using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings
 {

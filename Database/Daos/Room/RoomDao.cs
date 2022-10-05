@@ -1,14 +1,11 @@
-using WibboEmulator.Database.Interfaces;
 using System.Data;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Daos
 {
     class RoomDao
     {
-        internal static void UpdateResetGroupId(IQueryAdapter dbClient, int id)
-        {
-            dbClient.RunQuery("UPDATE `room` SET group_id = '0' WHERE id = '" + id + "' LIMIT 1");
-        }
+        internal static void UpdateResetGroupId(IQueryAdapter dbClient, int id) => dbClient.RunQuery("UPDATE `room` SET group_id = '0' WHERE id = '" + id + "' LIMIT 1");
 
         internal static void UpdateGroupId(IQueryAdapter dbClient, int groupId, int roomId)
         {
@@ -18,10 +15,7 @@ namespace WibboEmulator.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void UpdateScore(IQueryAdapter dbClient, int roomId, int score)
-        {
-            dbClient.RunQuery("UPDATE `room` SET score = '" + score + "' WHERE id = '" + roomId + "'");
-        }
+        internal static void UpdateScore(IQueryAdapter dbClient, int roomId, int score) => dbClient.RunQuery("UPDATE `room` SET score = '" + score + "' WHERE id = '" + roomId + "'");
 
         internal static void UpdateDecoration(IQueryAdapter dbClient, int roomId, string decorationKey, string extraData)
         {
@@ -30,15 +24,9 @@ namespace WibboEmulator.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void UpdateModelWallThickFloorThick(IQueryAdapter dbClient, int roomId, int wallThick, int floorThick)
-        {
-            dbClient.RunQuery("UPDATE `room` SET model_name = 'model_custom', wallthick = '" + wallThick + "', floorthick = '" + floorThick + "' WHERE id = " + roomId + " LIMIT 1");
-        }
+        internal static void UpdateModelWallThickFloorThick(IQueryAdapter dbClient, int roomId, int wallThick, int floorThick) => dbClient.RunQuery("UPDATE `room` SET model_name = 'model_custom', wallthick = '" + wallThick + "', floorthick = '" + floorThick + "' WHERE id = " + roomId + " LIMIT 1");
 
-        internal static void Delete(IQueryAdapter dbClient, int roomId)
-        {
-            dbClient.RunQuery("DELETE FROM `room` WHERE id = '" + roomId + "'");
-        }
+        internal static void Delete(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("DELETE FROM `room` WHERE id = '" + roomId + "'");
 
         internal static void UpdateAll(IQueryAdapter dbClient, int roomId, string name, string description, string password, string tags, int categoryId, string state, int maxUsers, bool allowPets, bool allowPetsEat, bool allowWalkthrough, bool hidewall, int floorThickness, int wallThickness, int mutefuse, int kickfuse, int banfuse, int chatType, int chatBalloon, int chatSpeed, int chatMaxDistance, int chatFloodProtection, int trocStatus)
         {
@@ -74,10 +62,7 @@ namespace WibboEmulator.Database.Daos
         }
 
 
-        internal static void UpdateResetUsersNow(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("UPDATE `room` SET users_now = '0' WHERE users_now > '0'");
-        }
+        internal static void UpdateResetUsersNow(IQueryAdapter dbClient) => dbClient.RunQuery("UPDATE `room` SET users_now = '0' WHERE users_now > '0'");
 
         internal static int InsertDuplicate(IQueryAdapter dbClient, string username, string desc)
         {
@@ -110,15 +95,9 @@ namespace WibboEmulator.Database.Daos
             return Convert.ToInt32(dbClient.InsertQuery());
         }
 
-        internal static void UpdateModel(IQueryAdapter dbClient, int roomId)
-        {
-            dbClient.RunQuery("UPDATE `room` SET model_name = 'model_custom' WHERE id = '" + roomId + "' LIMIT 1");
-        }
+        internal static void UpdateModel(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("UPDATE `room` SET model_name = 'model_custom' WHERE id = '" + roomId + "' LIMIT 1");
 
-        internal static void UpdateHideWireds(IQueryAdapter dbClient, int roomId, bool hideWireds)
-        {
-            dbClient.RunQuery("UPDATE `room` SET allow_hidewireds = '" + (hideWireds ? 1 : 0) + "' WHERE id = '" + roomId + "'");
-        }
+        internal static void UpdateHideWireds(IQueryAdapter dbClient, int roomId, bool hideWireds) => dbClient.RunQuery("UPDATE `room` SET allow_hidewireds = '" + (hideWireds ? 1 : 0) + "' WHERE id = '" + roomId + "'");
 
         internal static void UpdateOwner(IQueryAdapter dbClient, int roomId, string username)
         {
@@ -135,10 +114,7 @@ namespace WibboEmulator.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void UpdateUsersMax(IQueryAdapter dbClient, int roomId, int maxUsers)
-        {
-            dbClient.RunQuery("UPDATE `room` SET users_max = '" + maxUsers + "' WHERE id = '" + roomId + "'");
-        }
+        internal static void UpdateUsersMax(IQueryAdapter dbClient, int roomId, int maxUsers) => dbClient.RunQuery("UPDATE `room` SET users_max = '" + maxUsers + "' WHERE id = '" + roomId + "'");
 
         internal static DataRow GetOne(IQueryAdapter dbClient, int roomId)
         {
@@ -158,20 +134,11 @@ namespace WibboEmulator.Database.Daos
             return Convert.ToInt32(dbClient.InsertQuery());
         }
 
-        internal static void UpdateUsersNow(IQueryAdapter dbClient, int roomId, int count)
-        {
-            dbClient.RunQuery("UPDATE `room` SET users_now = '" + count + "' WHERE id = '" + roomId + "'");
-        }
+        internal static void UpdateUsersNow(IQueryAdapter dbClient, int roomId, int count) => dbClient.RunQuery("UPDATE `room` SET users_now = '" + count + "' WHERE id = '" + roomId + "'");
 
-        internal static void UpdateState(IQueryAdapter dbClient, int roomId)
-        {
-            dbClient.RunQuery("UPDATE `room` SET state = 'locked' WHERE id = '" + roomId + "'");
-        }
+        internal static void UpdateState(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("UPDATE `room` SET state = 'locked' WHERE id = '" + roomId + "'");
 
-        internal static void UpdateCaptionDescTags(IQueryAdapter dbClient, int roomId)
-        {
-            dbClient.RunQuery("UPDATE `room` SET caption = 'Cet appart ne respect par les conditions dutilisation', description = 'Cet appart ne respect par les conditions dutilisation', tags = '' WHERE id = '" + roomId + "'");
-        }
+        internal static void UpdateCaptionDescTags(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("UPDATE `room` SET caption = 'Cet appart ne respect par les conditions dutilisation', description = 'Cet appart ne respect par les conditions dutilisation', tags = '' WHERE id = '" + roomId + "'");
 
         internal static DataTable GetAllByOwner(IQueryAdapter dbClient, string username)
         {

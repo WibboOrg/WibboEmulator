@@ -31,9 +31,6 @@ namespace WibboEmulator.Games.Badges
             return false;
         }
 
-        public List<string> GetNotAllowed()
-        {
-            return this._notAllowed;
-        }
+        public List<string> GetNotAllowed() => this._notAllowed;
     }
 }

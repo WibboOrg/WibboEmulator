@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Messenger;
+﻿using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Messenger;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients.Relationships;
 using WibboEmulator.Utilities;
-using System.Data;
 
 namespace WibboEmulator.Games.GameClients.Messenger
 {
@@ -73,10 +73,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
             this.AppearOffline = appearOffline;
         }
 
-        public void ClearRequests()
-        {
-            this.Requests.Clear();
-        }
+        public void ClearRequests() => this.Requests.Clear();
 
         public MessengerRequest GetRequest(int senderID)
         {
@@ -107,10 +104,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
             this.Friends.Clear();
         }
 
-        public void RelationChanged(int Id, int Type)
-        {
-            this.Friends[Id].UpdateRelation(Type);
-        }
+        public void RelationChanged(int Id, int Type) => this.Friends[Id].UpdateRelation(Type);
 
         public void OnStatusChanged()
         {
@@ -268,10 +262,7 @@ namespace WibboEmulator.Games.GameClients.Messenger
             return MessengerFriendshipDao.haveFriend(dbClient, this._userInstance.Id, requestID);
         }
 
-        public bool FriendshipExists(int friendID)
-        {
-            return this.Friends.ContainsKey(friendID);
-        }
+        public bool FriendshipExists(int friendID) => this.Friends.ContainsKey(friendID);
 
         public void OnDestroyFriendship(int friendId)
         {
@@ -420,14 +411,8 @@ namespace WibboEmulator.Games.GameClients.Messenger
             }
         }
 
-        public List<Relationship> GetRelationships()
-        {
-            return Friends.Values.Select(c => new Relationship(c.UserId, c.Relation)).ToList();
-        }
+        public List<Relationship> GetRelationships() => Friends.Values.Select(c => new Relationship(c.UserId, c.Relation)).ToList();
 
-        private GameClient GetClient()
-        {
-            return WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._userInstance.Id);
-        }
+        private GameClient GetClient() => WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._userInstance.Id);
     }
 }

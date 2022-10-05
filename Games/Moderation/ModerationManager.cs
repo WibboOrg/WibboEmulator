@@ -1,11 +1,11 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Navigator;
+﻿using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Communication.Packets.Outgoing.Navigator;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
-using System.Data;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
-using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 
 namespace WibboEmulator.Games.Moderation
 {
@@ -320,10 +320,7 @@ namespace WibboEmulator.Games.Moderation
             }
         }
 
-        public static void SendTicketToModerators(ModerationTicket Ticket)
-        {
-            WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(new ModeratorSupportTicketComposer(Ticket));
-        }
+        public static void SendTicketToModerators(ModerationTicket Ticket) => WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(new ModeratorSupportTicketComposer(Ticket));
 
         public void LogStaffEntry(int userId, string modName, int roomId, string target, string type, string description)
         {

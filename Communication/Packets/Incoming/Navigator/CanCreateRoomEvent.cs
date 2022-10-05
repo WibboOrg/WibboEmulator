@@ -8,9 +8,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet)
-        {
-            Session.SendPacket(new CanCreateRoomComposer(false, 200));
-        }
+        public void Parse(GameClient Session, ClientPacket Packet) => Session.SendPacket(new CanCreateRoomComposer(false, 200));
     }
 }

@@ -1,10 +1,10 @@
+using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
-using System.Data;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

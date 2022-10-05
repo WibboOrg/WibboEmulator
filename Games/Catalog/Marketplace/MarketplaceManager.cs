@@ -49,10 +49,7 @@ namespace WibboEmulator.Games.Catalog.Marketplace
             return 0;
         }
 
-        public double FormatTimestamp()
-        {
-            return (WibboEnvironment.GetUnixTimestamp() - 172800);
-        }
+        public double FormatTimestamp() => (WibboEnvironment.GetUnixTimestamp() - 172800);
 
         public int OfferCountForSprite(int SpriteID)
         {
@@ -85,9 +82,6 @@ namespace WibboEmulator.Games.Catalog.Marketplace
             return 0;
         }
 
-        public int CalculateComissionPrice(float SellingPrice)
-        {
-            return Convert.ToInt32(Math.Ceiling(SellingPrice / 100 * 1));
-        }
+        public int CalculateComissionPrice(float SellingPrice) => Convert.ToInt32(Math.Ceiling(SellingPrice / 100 * 1));
     }
 }

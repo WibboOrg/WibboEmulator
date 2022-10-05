@@ -1,23 +1,23 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Handshake;
+﻿using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Chat.Logs;
-using WibboEmulator.Games.Roleplay;
-using WibboEmulator.Games.Roleplay.Player;
-using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.GameClients.Achievements;
 using WibboEmulator.Games.GameClients.Badges;
 using WibboEmulator.Games.GameClients.Inventory;
 using WibboEmulator.Games.GameClients.Messenger;
 using WibboEmulator.Games.GameClients.Permissions;
 using WibboEmulator.Games.GameClients.Wardrobes;
-using System.Data;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
+using WibboEmulator.Games.Roleplay;
+using WibboEmulator.Games.Roleplay.Player;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.GameClients
 {
@@ -157,42 +157,42 @@ namespace WibboEmulator.Games.GameClients
             }
         }
 
-        public User(int Id, string Username, int Rank, string Motto, string Look, string Gender, int Credits,
-            int WPoint, int LimitCoins, int ActivityPoints, int HomeRoom, int Respect, int DailyRespectPoints,
-            int DailyPetRespectPoints, bool HasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
-            int LastOnline, int FavoriteGroup, int accountCreated, bool accepttrading, string ip, bool HideInroom,
-            bool HideOnline, int MazoHighScore, int Mazo, string clientVolume, bool nuxenable, string MachineId,
-            bool ChangeName, Language Langue, double ignoreAllExpire, bool IgnoreRoomInvite, bool CameraFollowDisabled)
+        public User(int id, string username, int rank, string motto, string look, string gender, int credits,
+            int wpoint, int limitCoins, int activityPoints, int homeRoom, int respect, int dailyRespectPoints,
+            int dailyPetRespectPoints, bool hasFriendRequestsDisabled, int currentQuestID, int achievementPoints,
+            int lastOnline, int favoriteGroup, int accountCreated, bool accepttrading, string ip, bool hideInroom,
+            bool hideOnline, int mazoHighScore, int mazo, string clientVolume, bool nuxenable, string machineId,
+            bool changeName, Language langue, double ignoreAllExpire, bool ignoreRoomInvite, bool cameraFollowDisabled)
         {
-            this.Id = Id;
-            this.Username = Username;
-            this.Rank = Rank;
-            this.Motto = Motto;
-            this.MachineId = MachineId;
-            this.Look = WibboEnvironment.GetFigureManager().ProcessFigure(Look, Gender, true);
-            this.Gender = Gender.ToLower();
-            this.Credits = Credits;
-            this.WibboPoints = WPoint;
-            this.LimitCoins = LimitCoins;
-            this.Duckets = ActivityPoints;
+            this.Id = id;
+            this.Username = username;
+            this.Rank = rank;
+            this.Motto = motto;
+            this.MachineId = machineId;
+            this.Look = WibboEnvironment.GetFigureManager().ProcessFigure(look, gender, true);
+            this.Gender = gender.ToLower();
+            this.Credits = credits;
+            this.WibboPoints = wpoint;
+            this.LimitCoins = limitCoins;
+            this.Duckets = activityPoints;
             this.AchievementPoints = achievementPoints;
             this.CurrentRoomId = 0;
             this.LoadingRoomId = 0;
-            this.HomeRoom = HomeRoom;
+            this.HomeRoom = homeRoom;
             this.FavoriteRooms = new List<int>();
             this.RoomRightsList = new List<int>();
             this.UsersRooms = new List<int>();
             this.MutedUsers = new List<int>();
             this.RatedRooms = new List<int>();
-            this.Respect = Respect;
-            this.DailyRespectPoints = DailyRespectPoints;
-            this.DailyPetRespectPoints = DailyPetRespectPoints;
+            this.Respect = respect;
+            this.DailyRespectPoints = dailyRespectPoints;
+            this.DailyPetRespectPoints = dailyPetRespectPoints;
             this.IsTeleporting = false;
             this.TeleporterId = 0;
-            this.HasFriendRequestsDisabled = HasFriendRequestsDisabled;
+            this.HasFriendRequestsDisabled = hasFriendRequestsDisabled;
             this.ClientVolume = new List<int>(3);
-            this.CanChangeName = ChangeName;
-            this.Langue = Langue;
+            this.CanChangeName = changeName;
+            this.Langue = langue;
             this.IgnoreAllExpireTime = ignoreAllExpire;
 
             if (clientVolume.Contains(','))
@@ -216,10 +216,10 @@ namespace WibboEmulator.Games.GameClients
                 this.ClientVolume.Add(100);
             }
 
-            this.LastOnline = LastOnline;
+            this.LastOnline = lastOnline;
             this.MyGroups = new List<int>();
             this.Quests = new Dictionary<int, int>();
-            this.FavouriteGroupId = FavoriteGroup;
+            this.FavouriteGroupId = favoriteGroup;
 
             this.AccountCreated = accountCreated;
 
@@ -233,10 +233,10 @@ namespace WibboEmulator.Games.GameClients
             this.IP = ip;
             this.SpectatorMode = false;
             this.Disconnected = false;
-            this.HideInRoom = HideInroom;
-            this.HideOnline = HideOnline;
-            this.MazoHighScore = MazoHighScore;
-            this.Mazo = Mazo;
+            this.HideInRoom = hideInroom;
+            this.HideOnline = hideOnline;
+            this.MazoHighScore = mazoHighScore;
+            this.Mazo = mazo;
 
             this.LastGiftPurchaseTime = DateTime.Now;
 
@@ -244,8 +244,8 @@ namespace WibboEmulator.Games.GameClients
             this.NewUser = nuxenable;
             this.Visits = new Dictionary<double, int>();
 
-            this.IgnoreRoomInvites = IgnoreRoomInvite;
-            this.CameraFollowDisabled = CameraFollowDisabled;
+            this.IgnoreRoomInvites = ignoreRoomInvite;
+            this.CameraFollowDisabled = cameraFollowDisabled;
             this.OldChat = false;
         }
 
@@ -340,11 +340,11 @@ namespace WibboEmulator.Games.GameClients
                 }
                 else if (this.loadRoomCount > 5)
                 {
-                    if (!this.loadRoomBlocked) 
+                    if (!this.loadRoomBlocked)
                     {
                         WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", $"Attention {this.Username} charge trop vite les apparts!"));
                         this.loadRoomBlocked = true;
-                    } 
+                    }
                     this.GetClient().SendPacket(new CloseConnectionComposer());
                     return;
                 }
@@ -606,42 +606,21 @@ namespace WibboEmulator.Games.GameClients
             this._clientInstance = null;
         }
 
-        public GameClient GetClient()
-        {
-            return this._clientInstance;
-        }
-        
-        public MessengerComponent GetMessenger()
-        {
-            return this._messengerComponent;
-        }
+        public GameClient GetClient() => this._clientInstance;
 
-        public WardrobeComponent GetWardrobeComponent()
-        {
-            return this._wardrobeComponent;
-        }
+        public MessengerComponent GetMessenger() => this._messengerComponent;
 
-        public AchievementComponent GetAchievementComponent()
-        {
-            return this._achievementComponent;
-        }
+        public WardrobeComponent GetWardrobeComponent() => this._wardrobeComponent;
 
-        public BadgeComponent GetBadgeComponent()
-        {
-            return this._badgeComponent;
-        }
+        public AchievementComponent GetAchievementComponent() => this._achievementComponent;
+
+        public BadgeComponent GetBadgeComponent() => this._badgeComponent;
 
         public InventoryComponent GetInventoryComponent() => this._inventoryComponent;
 
-        public ChatlogManager GetChatMessageManager()
-        {
-            return this._chatMessageManager;
-        }
+        public ChatlogManager GetChatMessageManager() => this._chatMessageManager;
 
-        public PermissionComponent GetPermissions()
-        {
-            return this._permissions;
-        }
+        public PermissionComponent GetPermissions() => this._permissions;
 
         public int GetQuestProgress(int p)
         {

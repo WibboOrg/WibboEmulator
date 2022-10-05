@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Map.Movement;
-using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+﻿using System.Data;
 using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Items.Wired.Interfaces;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map.Movement;
 
 namespace WibboEmulator.Games.Items.Wired.Actions
 {
@@ -32,7 +32,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             {
                 return;
             }
-            
+
             int movement = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
             int rotation = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
 
@@ -68,7 +68,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
             int delay;
             if (int.TryParse(row["delay"].ToString(), out delay))
-	            this.Delay = delay;
+                this.Delay = delay;
 
             if (int.TryParse(row["trigger_data"].ToString(), out delay))
                 this.Delay = delay;
@@ -76,9 +76,9 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             string triggerData2 = row["trigger_data_2"].ToString();
             if (triggerData2 != null && triggerData2.Contains(';'))
             {
-                if(int.TryParse(triggerData2.Split(';')[1], out int movement))
+                if (int.TryParse(triggerData2.Split(';')[1], out int movement))
                     this.IntParams.Add(movement);
-                if(int.TryParse(triggerData2.Split(';')[0], out int rotationint))
+                if (int.TryParse(triggerData2.Split(';')[0], out int rotationint))
                     this.IntParams.Add(rotationint);
             }
 
@@ -93,7 +93,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                 if (!int.TryParse(itemId, out int id))
                     continue;
 
-                if(!this.StuffIds.Contains(id))
+                if (!this.StuffIds.Contains(id))
                     this.StuffIds.Add(id);
             }
         }

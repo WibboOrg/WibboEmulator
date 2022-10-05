@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Items.Wired.Actions
 {
@@ -48,7 +48,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
             int delay;
             if (int.TryParse(row["delay"].ToString(), out delay))
-	            this.Delay = delay;
+                this.Delay = delay;
 
             if (int.TryParse(row["trigger_data"].ToString(), out delay))
                 this.Delay = delay;
@@ -66,7 +66,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                 if (!int.TryParse(itemId, out int id))
                     continue;
 
-                if(!this.StuffIds.Contains(id))
+                if (!this.StuffIds.Contains(id))
                     this.StuffIds.Add(id);
             }
         }

@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing;
+﻿using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
-using System.Data;
 
 namespace WibboEmulator.Games.Navigator
 {

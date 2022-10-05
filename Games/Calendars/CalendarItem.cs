@@ -11,14 +11,8 @@
             this._campaignImage = campaignImage;
         }
 
-        public string CampaignName()
-        {
-            return this._campaignName;
-        }
+        public string CampaignName() => this._campaignName;
 
-        public string CampaignImage()
-        {
-            return this._campaignImage;
-        }
+        public string CampaignImage() => this._campaignImage;
     }
 }

@@ -1,4 +1,6 @@
-﻿using WibboEmulator.Communication.Interfaces;
+﻿using System.Collections.Concurrent;
+using System.Data;
+using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Database.Daos;
@@ -7,8 +9,6 @@ using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Roleplay.Weapon;
 using WibboEmulator.Games.Rooms;
-using System.Collections.Concurrent;
-using System.Data;
 
 namespace WibboEmulator.Games.Roleplay.Player
 {
@@ -420,10 +420,7 @@ namespace WibboEmulator.Games.Roleplay.Player
             }
         }
 
-        public void SendItemsList(List<RPItem> ItemsList)
-        {
-            this.SendPacket(new BuyItemsListComposer(ItemsList));
-        }
+        public void SendItemsList(List<RPItem> ItemsList) => this.SendPacket(new BuyItemsListComposer(ItemsList));
 
         public void OnCycle(RoomUser User, RolePlayerManager RPManager)
         {

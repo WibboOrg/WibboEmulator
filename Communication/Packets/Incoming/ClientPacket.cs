@@ -59,10 +59,7 @@ namespace WibboEmulator.Communication.Packets.Incoming
             return this.ReadBytes(len);
         }
 
-        public string PopString()
-        {
-            return this.Encoding.GetString(this.ReadFixedValue());
-        }
+        public string PopString() => this.Encoding.GetString(this.ReadFixedValue());
 
         public bool PopBoolean()
         {
@@ -88,10 +85,7 @@ namespace WibboEmulator.Communication.Packets.Incoming
             return i;
         }
 
-        public override string ToString()
-        {
-            return "[" + this.Header + "] BODY: " + (this.Encoding.GetString(this.Body).Replace(Convert.ToChar(0).ToString(), "[0]"));
-        }
+        public override string ToString() => "[" + this.Header + "] BODY: " + (this.Encoding.GetString(this.Body).Replace(Convert.ToChar(0).ToString(), "[0]"));
 
         public int DecodeInt32(byte[] v)
         {

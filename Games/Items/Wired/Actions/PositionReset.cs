@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Items.Wired.Actions
 {
@@ -23,7 +23,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
         {
             base.LoadItems();
 
-            if(inDatabase)
+            if (inDatabase)
                 return;
 
             this.ItemsData.Clear();
@@ -56,10 +56,10 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
             foreach (Item roomItem in this.Items.ToList())
             {
-                if(roomItem == null)
+                if (roomItem == null)
                     continue;
-                    
-                if(!this.ItemsData.TryGetValue(roomItem.Id, out ItemsPosReset itemPosReset))
+
+                if (!this.ItemsData.TryGetValue(roomItem.Id, out ItemsPosReset itemPosReset))
                     continue;
 
                 if (state)
@@ -155,7 +155,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                 if (!int.TryParse(itemData[0], out int id))
                     continue;
 
-                if(!this.StuffIds.Contains(id))
+                if (!this.StuffIds.Contains(id))
                     this.StuffIds.Add(id);
 
                 this.ItemsData.Add(Convert.ToInt32(itemData[0]), new ItemsPosReset(Convert.ToInt32(itemData[0]), Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]), Convert.ToDouble(itemData[3]), Convert.ToInt32(itemData[4]), itemData[5]));

@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using System.Data;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace
 {

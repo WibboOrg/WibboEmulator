@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Core;
+﻿using System.Drawing;
+using WibboEmulator.Core;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.Rooms.PathFinding;
-using System.Drawing;
 
 namespace WibboEmulator.Games.Rooms.AI.Types
 {
@@ -222,7 +222,7 @@ namespace WibboEmulator.Games.Rooms.AI.Types
                         if (roomUser.PetData.Energy < 10)
                         {
                             string[] strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.tired", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
-                            
+
                             roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
                             roomUser.SetStatus("lay", roomUser.Z.ToString());
                             roomUser.IsLay = true;
@@ -233,7 +233,7 @@ namespace WibboEmulator.Games.Rooms.AI.Types
                         else
                         {
                             string[] strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.lazy", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
-                            
+
                             roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
                             roomUser.PetData.PetEnergy(false);
                         }

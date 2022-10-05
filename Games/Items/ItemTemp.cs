@@ -33,10 +33,7 @@ namespace WibboEmulator.Games.Items
             this.InteractionType = pInteraction;
         }
 
-        public bool Equals(ItemTemp comparedItem)
-        {
-            return comparedItem.Id == this.Id;
-        }
+        public bool Equals(ItemTemp comparedItem) => comparedItem.Id == this.Id;
     }
 
     public enum InteractionTypeTemp

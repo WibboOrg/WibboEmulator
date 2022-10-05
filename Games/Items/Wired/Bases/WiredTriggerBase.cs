@@ -8,7 +8,7 @@ namespace WibboEmulator.Games.Items.Wired
     {
         internal WiredTriggerBase(Item item, Room room, int type) : base(item, room, type)
         {
-            
+
         }
 
         public override void OnTrigger(GameClient Session)

@@ -22,10 +22,7 @@ namespace WibboEmulator.Games.Items.Wired
             }
         }
 
-        public virtual bool OnCycle(RoomUser user, Item item)
-        {
-            return false;
-        }
+        public virtual bool OnCycle(RoomUser user, Item item) => false;
 
         internal WiredActionBase(Item item, Room room, int type) : base(item, room, type)
         {

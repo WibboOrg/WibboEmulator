@@ -78,8 +78,8 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     RoomUser roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
                     if (roomUserByUserId != null)
                     {
-                         Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
-                         Room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
+                        Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+                        Room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
                     }
                 }
             }

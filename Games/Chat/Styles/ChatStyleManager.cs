@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using System.Data;
 
 namespace WibboEmulator.Games.Chat.Styles
 {
@@ -34,9 +34,6 @@ namespace WibboEmulator.Games.Chat.Styles
             }
         }
 
-        public bool TryGetStyle(int Id, out ChatStyle Style)
-        {
-            return this._styles.TryGetValue(Id, out Style);
-        }
+        public bool TryGetStyle(int Id, out ChatStyle Style) => this._styles.TryGetValue(Id, out Style);
     }
 }

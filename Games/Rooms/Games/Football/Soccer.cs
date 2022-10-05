@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Games.Items;
+﻿using System.Drawing;
+using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms.PathFinding;
-using System.Drawing;
 
 namespace WibboEmulator.Games.Rooms.Games
 {
@@ -201,9 +201,6 @@ namespace WibboEmulator.Games.Rooms.Games
             this.HandleFootballGameItems(new Point(newX, newY));
         }
 
-        public void Destroy()
-        {
-            this._roomInstance = null;
-        }
+        public void Destroy() => this._roomInstance = null;
     }
 }

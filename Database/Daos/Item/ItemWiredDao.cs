@@ -1,5 +1,5 @@
-using WibboEmulator.Database.Interfaces;
 using System.Data;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Daos
 {
@@ -26,10 +26,7 @@ namespace WibboEmulator.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void Delete(IQueryAdapter dbClient, int triggerId)
-        {
-            dbClient.RunQuery("DELETE FROM `item_wired` WHERE trigger_id = '" + triggerId + "'");
-        }
+        internal static void Delete(IQueryAdapter dbClient, int triggerId) => dbClient.RunQuery("DELETE FROM `item_wired` WHERE trigger_id = '" + triggerId + "'");
 
         internal static void Insert(IQueryAdapter dbClient, int triggerId, string triggerData, string triggerData2, bool allUsertriggerable, string triggersitem, int delay)
         {

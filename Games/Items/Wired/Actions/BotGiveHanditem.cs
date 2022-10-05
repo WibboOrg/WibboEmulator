@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Items.Wired.Actions
 {
@@ -12,10 +12,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             this.IntParams.Add(0);
         }
 
-        public override bool OnCycle(RoomUser user, Item item)
-        {
-            return false;
-        }
+        public override bool OnCycle(RoomUser user, Item item) => false;
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
@@ -29,8 +26,8 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             this.IntParams.Clear();
 
             if (int.TryParse(row["delay"].ToString(), out int delay))
-	            this.Delay = delay;
-                
+                this.Delay = delay;
+
             this.StringParam = row["trigger_data"].ToString();
 
             if (int.TryParse(row["trigger_data_2"].ToString(), out int handItemId))

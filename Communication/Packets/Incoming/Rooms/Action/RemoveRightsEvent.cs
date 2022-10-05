@@ -36,7 +36,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     room.UsersWithRights.Remove(UserId);
                 }
 
-                if(!userIds.Contains(UserId))
+                if (!userIds.Contains(UserId))
                     userIds.Add(UserId);
 
                 RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(UserId);

@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Games.Rooms;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {

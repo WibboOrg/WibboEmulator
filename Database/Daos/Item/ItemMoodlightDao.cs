@@ -1,5 +1,5 @@
-using WibboEmulator.Database.Interfaces;
 using System.Data;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Daos
 {
@@ -11,10 +11,7 @@ namespace WibboEmulator.Database.Daos
             return dbClient.GetRow();
         }
 
-        internal static void UpdateEnable(IQueryAdapter dbClient, int itemId, int enabled)
-        {
-            dbClient.RunQuery("UPDATE `item_moodlight` SET enabled = '" + enabled + "' WHERE item_id = '" + itemId + "' LIMIT 1");
-        }
+        internal static void UpdateEnable(IQueryAdapter dbClient, int itemId, int enabled) => dbClient.RunQuery("UPDATE `item_moodlight` SET enabled = '" + enabled + "' WHERE item_id = '" + itemId + "' LIMIT 1");
 
         internal static void Update(IQueryAdapter dbClient, int itemId, string color, string pr, int intensity, bool bgOnly)
         {

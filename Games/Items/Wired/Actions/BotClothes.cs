@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+﻿using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
-using System.Data;
 
 namespace WibboEmulator.Games.Items.Wired.Actions
 {
@@ -41,15 +41,12 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             return false;
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient)
-        {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null, this.Delay);
-        }
+        public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null, this.Delay);
 
         public void LoadFromDatabase(DataRow row)
         {
             if (int.TryParse(row["delay"].ToString(), out int delay))
-	            this.Delay = delay;
+                this.Delay = delay;
 
             string triggerData = row["trigger_data"].ToString();
 

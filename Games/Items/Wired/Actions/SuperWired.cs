@@ -1,23 +1,22 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
+﻿using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
+using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Communication.Packets.Outgoing.Sound.SoundCustom;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Roleplay;
 using WibboEmulator.Games.Roleplay.Enemy;
 using WibboEmulator.Games.Roleplay.Player;
-using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
-using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
-using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
-using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
-using WibboEmulator.Communication.Packets.Outgoing.Sound.SoundCustom;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Games.Rooms.Games;
 
 namespace WibboEmulator.Games.Items.Wired.Actions
 {
@@ -31,7 +30,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
         {
             base.LoadItems();
 
-            if(inDatabase)
+            if (inDatabase)
                 return;
 
             this.CheckPermission();
@@ -131,7 +130,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                         return;
                     }
                     break;
-                
+
                 case "achievement":
                 case "givelot":
                 case "winmovierun":
@@ -1304,7 +1303,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
                         break;
                     }
-                
+
                 case "jackanddaisy":
                     {
                         RoomUser Bot;
@@ -1570,7 +1569,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             {
                 case "usermute":
                     {
-                        if(value == "true")
+                        if (value == "true")
                             user.Room.AddMute(user.UserId, 24 * 60 * 60);
                         else
                             user.Room.RemoveMute(user.UserId);
@@ -1830,7 +1829,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                             break;
                         }
 
-                        if(user.UserTimer + Points <= int.MaxValue)
+                        if (user.UserTimer + Points <= int.MaxValue)
                             user.UserTimer += Points;
 
                         break;
@@ -1872,7 +1871,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                             break;
                         }
 
-                        if(user.WiredPoints + Points <= int.MaxValue)
+                        if (user.WiredPoints + Points <= int.MaxValue)
                             user.WiredPoints += Points;
 
                         break;
@@ -2116,14 +2115,14 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                             break;
                         }
 
-                        if(user.GetUsername() == user.Room.RoomData.OwnerName)
+                        if (user.GetUsername() == user.Room.RoomData.OwnerName)
                         {
                             break;
                         }
 
                         string[] allowedOwner = WibboEnvironment.GetSettings().GetData<string>("givelot.allowed.owner").Split(',');
 
-                        if(!allowedOwner.Contains(user.Room.RoomData.OwnerName))
+                        if (!allowedOwner.Contains(user.Room.RoomData.OwnerName))
                         {
                             break;
                         }
@@ -2174,16 +2173,13 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             }
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient)
-        {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null, this.Delay);
-        }
+        public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null, this.Delay);
 
         public void LoadFromDatabase(DataRow row)
         {
             int delay;
             if (int.TryParse(row["delay"].ToString(), out delay))
-	            this.Delay = delay;
+                this.Delay = delay;
 
             if (int.TryParse(row["trigger_data_2"].ToString(), out delay))
                 this.Delay = delay;

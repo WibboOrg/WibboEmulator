@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Data;
 using System.Diagnostics;
+using WibboEmulator.Core;
+using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Games.Rooms
 {
@@ -147,24 +147,15 @@ namespace WibboEmulator.Games.Rooms
             }
         }
 
-        public bool TryGetRoom(int RoomId, out Room Room)
-        {
-            return this._rooms.TryGetValue(RoomId, out Room);
-        }
+        public bool TryGetRoom(int RoomId, out Room Room) => this._rooms.TryGetValue(RoomId, out Room);
 
-        public bool TryGetRoomModels(string model, out RoomModel roomModel)
-        {
-            return this._roomModels.TryGetValue(model, out roomModel);
-        }
+        public bool TryGetRoomModels(string model, out RoomModel roomModel) => this._roomModels.TryGetValue(model, out roomModel);
 
-        public bool TryGetRoomData(int RoomId, out RoomData RoomData)
-        {
-            return this._roomsData.TryGetValue(RoomId, out RoomData);
-        }
+        public bool TryGetRoomData(int RoomId, out RoomData RoomData) => this._roomsData.TryGetValue(RoomId, out RoomData);
 
         public RoomData FetchRoomData(int roomID, DataRow dRow)
         {
-            if(this.TryGetRoom(roomID, out Room room))
+            if (this.TryGetRoom(roomID, out Room room))
             {
                 return room.RoomData;
             }
@@ -372,7 +363,7 @@ namespace WibboEmulator.Games.Rooms
                     }
                 }
 
-                if(emptyRoomsCount >= 10)
+                if (emptyRoomsCount >= 10)
                     WibboEnvironment.GetGame().GetRoomManager().UnloadEmptyRooms();
             }
         }

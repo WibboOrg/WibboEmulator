@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+﻿using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
-using System.Data;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
 {

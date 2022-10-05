@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Diagnostics;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using System.Diagnostics;
 
 namespace WibboEmulator.Core
 {

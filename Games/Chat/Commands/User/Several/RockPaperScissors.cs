@@ -1,7 +1,7 @@
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Rooms.Jankens;
-using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {

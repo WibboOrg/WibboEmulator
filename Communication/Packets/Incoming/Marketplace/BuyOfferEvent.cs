@@ -1,4 +1,5 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Catalog;
+﻿using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
@@ -7,7 +8,6 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalog.Marketplace;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
-using System.Data;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
 {

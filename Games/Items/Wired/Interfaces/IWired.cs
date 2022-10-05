@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Database.Interfaces;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
-using System.Data;
 
 namespace WibboEmulator.Games.Items.Wired.Interfaces
 {

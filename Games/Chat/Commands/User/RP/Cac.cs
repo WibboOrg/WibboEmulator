@@ -18,7 +18,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            if(!Room.Roleplay.Pvp)
+            if (!Room.Roleplay.Pvp)
             {
                 return;
             }

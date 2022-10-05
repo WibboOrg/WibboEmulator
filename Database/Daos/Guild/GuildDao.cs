@@ -1,5 +1,5 @@
-using WibboEmulator.Database.Interfaces;
 using System.Data;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Daos
 {
@@ -40,10 +40,7 @@ namespace WibboEmulator.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void Delete(IQueryAdapter dbClient, int groupId)
-        {
-            dbClient.RunQuery("DELETE FROM `guild` WHERE `id` = '" + groupId + "'");
-        }
+        internal static void Delete(IQueryAdapter dbClient, int groupId) => dbClient.RunQuery("DELETE FROM `guild` WHERE `id` = '" + groupId + "'");
 
         internal static DataRow GetOne(IQueryAdapter dbClient, int groupId)
         {

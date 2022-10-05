@@ -22,7 +22,7 @@ namespace WibboEmulator.Games.Items.Interactors
             int num = 0;
             if (!string.IsNullOrEmpty(Item.ExtraData))
             {
-                
+
                 int.TryParse(Item.ExtraData, out num);
             }
 

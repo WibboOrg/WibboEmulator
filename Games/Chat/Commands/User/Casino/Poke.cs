@@ -32,23 +32,23 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            if(DiceCount > 5 || DiceCount < 1)
+            if (DiceCount > 5 || DiceCount < 1)
             {
                 return;
             }
 
-            if(WpCount > Session.GetUser().WibboPoints)
+            if (WpCount > Session.GetUser().WibboPoints)
             {
                 return;
             }
 
             RoomUser TargetUser = Room.GetRoomUserManager().GetRoomUserByName(Username);
-            if(TargetUser == null || TargetUser.GetClient() == null || TargetUser.GetClient().GetUser() == null)
+            if (TargetUser == null || TargetUser.GetClient() == null || TargetUser.GetClient().GetUser() == null)
             {
                 return;
             }
 
-            if(WpCount > TargetUser.GetClient().GetUser().WibboPoints)
+            if (WpCount > TargetUser.GetClient().GetUser().WibboPoints)
             {
                 return;
             }

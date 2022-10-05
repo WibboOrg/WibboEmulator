@@ -1,12 +1,12 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+﻿using System.Drawing;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Core;
 using WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms.PathFinding;
-using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Drawing;
 using WibboEmulator.Utilities.Events;
 
 namespace WibboEmulator.Games.Items
@@ -196,7 +196,7 @@ namespace WibboEmulator.Games.Items
         public ItemData Data;
         public FurniInteractor Interactor;
 
-        public Item(int id, int roomId, int baseItem, string extraData, int limitedNumber, int limitedStack, int x, int y, double z, int rot, 
+        public Item(int id, int roomId, int baseItem, string extraData, int limitedNumber, int limitedStack, int x, int y, double z, int rot,
             string wallCoord, Room room)
         {
             if (WibboEnvironment.GetGame().GetItemManager().GetItem(baseItem, out ItemData Data))
@@ -325,10 +325,7 @@ namespace WibboEmulator.Games.Items
             this.OnUserWalksOnFurni = null;
         }
 
-        public bool Equals(Item comparedItem)
-        {
-            return comparedItem.Id == this.Id;
-        }
+        public bool Equals(Item comparedItem) => comparedItem.Id == this.Id;
 
         public Point GetMoveCoord(int X, int Y, int i)
         {
@@ -552,10 +549,7 @@ namespace WibboEmulator.Games.Items
             this.GetRoom().GetRoomItemHandler().QueueRoomItemUpdate(this);
         }
 
-        public void UpdateState()
-        {
-            this.UpdateState(true, true);
-        }
+        public void UpdateState() => this.UpdateState(true, true);
 
         public void UpdateState(bool inDb, bool inRoom)
         {
@@ -648,10 +642,7 @@ namespace WibboEmulator.Games.Items
             return this.Data;
         }
 
-        public Room GetRoom()
-        {
-            return this._roomInstance;
-        }
+        public Room GetRoom() => this._roomInstance;
 
         public void UserWalksOnFurni(RoomUser user, Item item)
         {

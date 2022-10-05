@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing;
+﻿using System.Text;
+using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using System.Text;
 
 namespace WibboEmulator.Games.Rooms
 {
@@ -171,10 +171,7 @@ namespace WibboEmulator.Games.Rooms
             return text.ToString();
         }
 
-        public ServerPacket SetHeightMap(double Height)
-        {
-            return new HeightMapComposer(this, Height);
-        }
+        public ServerPacket SetHeightMap(double Height) => new HeightMapComposer(this, Height);
 
         public void SetMapsize(int x, int y)
         {

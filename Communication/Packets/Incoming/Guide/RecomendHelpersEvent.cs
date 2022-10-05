@@ -7,9 +7,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Guide
     {
         public double Delay => 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet)
-        {
-            Session.SendPacket(new OnGuideSessionDetachedComposer());
-        }
+        public void Parse(GameClient Session, ClientPacket Packet) => Session.SendPacket(new OnGuideSessionDetachedComposer());
     }
 }

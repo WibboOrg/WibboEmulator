@@ -62,10 +62,7 @@ namespace WibboEmulator.Games.Loots
             return count;
         }
 
-        public void IncrementeRarityCounter(int rarityLevel)
-        {
-            this.RarityCounter[rarityLevel] += 1;
-        }
+        public void IncrementeRarityCounter(int rarityLevel) => this.RarityCounter[rarityLevel] += 1;
 
         public List<Loot> GetLoots(InteractionType interactionType)
         {

@@ -61,34 +61,16 @@ namespace WibboEmulator.Games.Chat
             this._filter.Init(dbClient);
         }
 
-        public ChatEmotionsManager GetEmotions()
-        {
-            return this._emotions;
-        }
+        public ChatEmotionsManager GetEmotions() => this._emotions;
 
-        public WordFilterManager GetFilter()
-        {
-            return this._filter;
-        }
+        public WordFilterManager GetFilter() => this._filter;
 
-        public CommandManager GetCommands()
-        {
-            return this._commands;
-        }
+        public CommandManager GetCommands() => this._commands;
 
-        public PetCommandManager GetPetCommands()
-        {
-            return this._petCommands;
-        }
+        public PetCommandManager GetPetCommands() => this._petCommands;
 
-        public ChatStyleManager GetChatStyles()
-        {
-            return this._chatStyles;
-        }
+        public ChatStyleManager GetChatStyles() => this._chatStyles;
 
-        public MentionManager GetMention()
-        {
-            return this._mention;
-        }
+        public MentionManager GetMention() => this._mention;
     }
 }

@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities.Events;
 
 namespace WibboEmulator.Games.Items.Wired.Triggers
@@ -64,9 +64,9 @@ namespace WibboEmulator.Games.Items.Wired.Triggers
             this.IntParams.Clear();
 
             this.StringParam = row["trigger_data"].ToString();
-            
+
             if (bool.TryParse(row["all_user_triggerable"].ToString(), out bool isOwnerOnly))
-	            this.IntParams.Add(isOwnerOnly ? 1 : 0);
+                this.IntParams.Add(isOwnerOnly ? 1 : 0);
         }
     }
 }

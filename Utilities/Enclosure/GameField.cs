@@ -21,12 +21,9 @@ namespace Enclosure
             this.astarSolver = new AStarSolver<GameField>(diagonalAllowed, AStarHeuristicType.EXPERIMENTAL_SEARCH, this, theArray.GetUpperBound(1) + 1, theArray.GetUpperBound(0) + 1);
         }
 
-        public void updateLocation(int x, int y, byte value)
-        {
-            this.newEntries.Enqueue(new GametileUpdate(x, y, value));
-        }
+        public void UpdateLocation(int x, int y, byte value) => this.newEntries.Enqueue(new GametileUpdate(x, y, value));
 
-        public List<PointField> doUpdate(bool oneloop = false)
+        public List<PointField> DoUpdate(bool oneloop = false)
         {
             List<PointField> list = new List<PointField>();
             while (this.newEntries.Count > 0)
@@ -35,14 +32,14 @@ namespace Enclosure
 
                 this.currentField[this.currentlyChecking.y, this.currentlyChecking.x] = this.currentlyChecking.value;
 
-                List<Point> connectedItems = this.getConnectedItems(this.currentlyChecking);
+                List<Point> connectedItems = this.GetConnectedItems(this.currentlyChecking);
                 if (connectedItems.Count > 1)
                 {
-                    foreach (LinkedList<AStarSolver<GameField>.PathNode> nodeList in this.handleListOfConnectedPoints(connectedItems, this.currentlyChecking))
+                    foreach (LinkedList<AStarSolver<GameField>.PathNode> nodeList in this.HandleListOfConnectedPoints(connectedItems, this.currentlyChecking))
                     {
                         if (nodeList.Count >= 4)
                         {
-                            PointField closed = this.findClosed(nodeList, this.currentlyChecking.value);
+                            PointField closed = this.FindClosed(nodeList, this.currentlyChecking.value);
                             if (closed != null)
                             {
                                 list.Add(closed);
@@ -54,7 +51,7 @@ namespace Enclosure
             return list;
         }
 
-        private PointField findClosed(LinkedList<AStarSolver<GameField>.PathNode> nodeList, byte Team)
+        private PointField FindClosed(LinkedList<AStarSolver<GameField>.PathNode> nodeList, byte Team)
         {
             PointField pointField = new PointField(this.currentlyChecking.value);
             int num1 = int.MaxValue;
@@ -149,7 +146,7 @@ namespace Enclosure
                         list1.Add(point);
                     }
                 }
-                if (this.getValue(p) != Team)
+                if (this.GetValue(p) != Team)
                 {
                     pointField.add(p);
                 }
@@ -160,7 +157,7 @@ namespace Enclosure
             return pointField;
         }
 
-        private List<LinkedList<AStarSolver<GameField>.PathNode>> handleListOfConnectedPoints(List<Point> pointList, GametileUpdate update)
+        private List<LinkedList<AStarSolver<GameField>.PathNode>> HandleListOfConnectedPoints(List<Point> pointList, GametileUpdate update)
         {
             List<LinkedList<AStarSolver<GameField>.PathNode>> list = new List<LinkedList<AStarSolver<GameField>.PathNode>>();
             int num = 0;
@@ -187,7 +184,7 @@ namespace Enclosure
             return list;
         }
 
-        private List<Point> getConnectedItems(GametileUpdate update)
+        private List<Point> GetConnectedItems(GametileUpdate update)
         {
             List<Point> list = new List<Point>();
             int x = update.x;
@@ -237,17 +234,7 @@ namespace Enclosure
             return list;
         }
 
-        private void setValue(int x, int y, byte value)
-        {
-            if (!this[y, x])
-            {
-                return;
-            }
-
-            this.currentField[y, x] = value;
-        }
-
-        public byte getValue(int x, int y)
+        public byte GetValue(int x, int y)
         {
             if (this[y, x])
             {
@@ -259,7 +246,7 @@ namespace Enclosure
             }
         }
 
-        public byte getValue(Point p)
+        public byte GetValue(Point p)
         {
             if (this[p.Y, p.X])
             {
@@ -279,13 +266,10 @@ namespace Enclosure
             }
             else
             {
-                return this.getValue(x, y) != this.currentlyChecking.value;
+                return this.GetValue(x, y) != this.currentlyChecking.value;
             }
         }
 
-        public void destroy()
-        {
-            this.currentField = null;
-        }
+        public void Destroy() => this.currentField = null;
     }
 }

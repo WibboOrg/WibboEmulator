@@ -35,7 +35,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 }
 
                 WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUsername, Session.GetUser().Username, 788922000, Raison, true, true);
-                Session.SendWhisper("Tu viens de bannir " + clientByUsername.GetUser().Username + " pour la raison : " + Raison +" !");
+                Session.SendWhisper("Tu viens de bannir " + clientByUsername.GetUser().Username + " pour la raison : " + Raison + " !");
                 Session.Antipub(Raison, "<CMD>");
                 return;
             }

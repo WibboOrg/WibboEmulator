@@ -1,6 +1,6 @@
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets
 {

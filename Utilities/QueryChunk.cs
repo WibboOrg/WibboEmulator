@@ -1,5 +1,5 @@
-﻿using WibboEmulator.Database.Interfaces;
-using System.Text;
+﻿using System.Text;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Utilities
 {
@@ -41,10 +41,7 @@ namespace WibboEmulator.Utilities
             }
         }
 
-        public void AddParameter(string parameterName, string value)
-        {
-            this.parameters.Add(parameterName, value);
-        }
+        public void AddParameter(string parameterName, string value) => this.parameters.Add(parameterName, value);
 
         public void Execute(IQueryAdapter dbClient)
         {

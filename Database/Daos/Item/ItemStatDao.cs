@@ -25,9 +25,6 @@ namespace WibboEmulator.Database.Daos
             standardQueries.Dispose();
         }
 
-        internal static void UpdateAdd(IQueryAdapter dbClient, int baseId, int amount = 1)
-        {
-            dbClient.RunQuery("UPDATE `item_stat` SET amount = amount + '" + amount + "' WHERE base_id = '" + baseId + "'");
-        }
+        internal static void UpdateAdd(IQueryAdapter dbClient, int baseId, int amount = 1) => dbClient.RunQuery("UPDATE `item_stat` SET amount = amount + '" + amount + "' WHERE base_id = '" + baseId + "'");
     }
 }

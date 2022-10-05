@@ -133,7 +133,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     }
 
                     User user = WibboEnvironment.GetUserById(UserId);
-                    if(user != null)
+                    if (user != null)
                         user.MyGroups.Remove(Group.Id);
 
                     int StartIndex = (1 - 1) * 14 + 14;

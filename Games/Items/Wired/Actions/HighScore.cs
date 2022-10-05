@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+﻿using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Items.Wired.Actions
 {
@@ -63,8 +63,8 @@ namespace WibboEmulator.Games.Items.Wired.Actions
         public void LoadFromDatabase(DataRow row)
         {
             if (int.TryParse(row["delay"].ToString(), out int delay))
-	            this.Delay = delay;
-                
+                this.Delay = delay;
+
             string triggerData = row["trigger_data"].ToString();
 
             if (triggerData == null || triggerData == "")

@@ -1,11 +1,12 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
+﻿using System.Collections.Concurrent;
+using System.Drawing;
+using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
-
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
@@ -20,8 +21,6 @@ using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms.PathFinding;
-using System.Collections.Concurrent;
-using System.Drawing;
 
 namespace WibboEmulator.Games.Rooms
 {
@@ -64,10 +63,7 @@ namespace WibboEmulator.Games.Rooms
             }
         }
 
-        public int GetRoomUserCount()
-        {
-            return this._room.RoomData.UsersNow;
-        }
+        public int GetRoomUserCount() => this._room.RoomData.UsersNow;
 
         public RoomUser DeploySuperBot(RoomBot Bot)
         {
@@ -380,20 +376,11 @@ namespace WibboEmulator.Games.Rooms
             }
         }
 
-        public List<RoomUser> GetUsersForSquare(int x, int y)
-        {
-            return this._room.GetGameMap().GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot == true).ToList();
-        }
+        public List<RoomUser> GetUsersForSquare(int x, int y) => this._room.GetGameMap().GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot == true).ToList();
 
-        public RoomUser GetUserForSquare(int x, int y)
-        {
-            return Enumerable.FirstOrDefault<RoomUser>(this._room.GetGameMap().GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot == true));
-        }
+        public RoomUser GetUserForSquare(int x, int y) => Enumerable.FirstOrDefault<RoomUser>(this._room.GetGameMap().GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot == true));
 
-        public RoomUser GetUserForSquareNotBot(int x, int y)
-        {
-            return Enumerable.FirstOrDefault<RoomUser>(this._room.GetGameMap().GetRoomUsers(new Point(x, y)).Where(u => u.IsBot == false));
-        }
+        public RoomUser GetUserForSquareNotBot(int x, int y) => Enumerable.FirstOrDefault<RoomUser>(this._room.GetGameMap().GetRoomUsers(new Point(x, y)).Where(u => u.IsBot == false));
 
         public bool AddAvatarToRoom(GameClient Session)
         {
@@ -491,7 +478,7 @@ namespace WibboEmulator.Games.Rooms
                 }
             }
 
-            if(Session.GetUser().HasPermission("perm_owner_all_rooms"))
+            if (Session.GetUser().HasPermission("perm_owner_all_rooms"))
             {
                 user.SetStatus("flatctrl", "5");
                 Session.SendPacket(new YouAreOwnerComposer());
@@ -741,7 +728,7 @@ namespace WibboEmulator.Games.Rooms
             }
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            RoomDao.UpdateUsersNow(dbClient, this._room.Id, count);
+                RoomDao.UpdateUsersNow(dbClient, this._room.Id, count);
 
             this._room.RoomData.UsersNow = count;
         }
@@ -817,20 +804,11 @@ namespace WibboEmulator.Games.Rooms
             return List;
         }
 
-        public ICollection<RoomUser> GetUserList()
-        {
-            return this._users.Values;
-        }
+        public ICollection<RoomUser> GetUserList() => this._users.Values;
 
-        public RoomUser GetBotByName(string name)
-        {
-            return this._bots.Values.Where(b => b.IsBot && b.BotData.Name == name).FirstOrDefault();
-        }
+        public RoomUser GetBotByName(string name) => this._bots.Values.Where(b => b.IsBot && b.BotData.Name == name).FirstOrDefault();
 
-        public RoomUser GetBotOrPetByName(string name)
-        {
-            return this._bots.Values.Concat(this._pets.Values).Where(b => (b.IsBot && b.BotData.Name == name) || (b.IsPet && b.BotData.Name == name)).FirstOrDefault();
-        }
+        public RoomUser GetBotOrPetByName(string name) => this._bots.Values.Concat(this._pets.Values).Where(b => (b.IsBot && b.BotData.Name == name) || (b.IsPet && b.BotData.Name == name)).FirstOrDefault();
 
         public List<RoomUser> GetStaffRoomUser()
         {
@@ -947,20 +925,11 @@ namespace WibboEmulator.Games.Rooms
             }
         }
 
-        private bool IsValid(RoomUser user)
-        {
-            return user.IsBot || user.GetClient() != null && user.GetClient().GetUser() != null && user.GetClient().GetUser().CurrentRoomId == this._room.Id;
-        }
+        private bool IsValid(RoomUser user) => user.IsBot || user.GetClient() != null && user.GetClient().GetUser() != null && user.GetClient().GetUser().CurrentRoomId == this._room.Id;
 
-        public bool TryGetPet(int PetId, out RoomUser Pet)
-        {
-            return this._pets.TryGetValue(PetId, out Pet);
-        }
+        public bool TryGetPet(int petId, out RoomUser pet) => this._pets.TryGetValue(petId, out pet);
 
-        public bool TryGetBot(int BotId, out RoomUser Bot)
-        {
-            return this._bots.TryGetValue(BotId, out Bot);
-        }
+        public bool TryGetBot(int botId, out RoomUser bot) => this._bots.TryGetValue(botId, out bot);
 
         public void UpdateUserStatus(RoomUser user, bool cyclegameitems)
         {

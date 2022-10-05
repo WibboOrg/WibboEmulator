@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Communication.RCON.Commands;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
+using WibboEmulator.Communication.RCON.Commands;
 
 namespace WibboEmulator.Net
 {
@@ -62,9 +62,6 @@ namespace WibboEmulator.Net
             this._socket.BeginAccept(new AsyncCallback(this.OnNewConnection), this._socket);
         }
 
-        public CommandManager GetCommands()
-        {
-            return this._commands;
-        }
+        public CommandManager GetCommands() => this._commands;
     }
 }

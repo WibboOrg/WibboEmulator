@@ -1,14 +1,11 @@
-using WibboEmulator.Database.Interfaces;
 using System.Data;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Daos
 {
     class GuildRequestDao
     {
-        internal static void Delete(IQueryAdapter dbClient, int groupId)
-        {
-            dbClient.RunQuery("DELETE FROM `guild_request` WHERE group_id = '" + groupId + "'");
-        }
+        internal static void Delete(IQueryAdapter dbClient, int groupId) => dbClient.RunQuery("DELETE FROM `guild_request` WHERE group_id = '" + groupId + "'");
 
         internal static DataTable GetAll(IQueryAdapter dbClient, int groupId)
         {

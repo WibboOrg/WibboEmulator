@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Items.Wired.Actions
 {
@@ -67,8 +67,8 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             this.IntParams.Clear();
 
             if (int.TryParse(row["delay"].ToString(), out int delay))
-	            this.Delay = delay;
-                
+                this.Delay = delay;
+
             if (bool.TryParse(row["all_user_triggerable"].ToString(), out bool isShout))
                 this.IntParams.Add(isShout ? 1 : 0);
 

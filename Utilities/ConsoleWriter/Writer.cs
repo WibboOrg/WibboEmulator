@@ -1,6 +1,6 @@
-﻿using WibboEmulator;
-using System.Collections;
+﻿using System.Collections;
 using System.Text;
+using WibboEmulator;
 
 namespace ConsoleWriter
 {
@@ -48,10 +48,7 @@ namespace ConsoleWriter
             WriteLine("Critical error saved");
         }
 
-        public static void LogMessage(string logText)
-        {
-            Console.WriteLine(logText);
-        }
+        public static void LogMessage(string logText) => Console.WriteLine(logText);
 
         public static void LogDDOSS(string logText)
         {
@@ -131,10 +128,7 @@ namespace ConsoleWriter
             Console.Clear();
         }
 
-        public static void LogShutdown(StringBuilder builder)
-        {
-            WriteToFile("logs/shutdownlog.txt", builder.ToString());
-        }
+        public static void LogShutdown(StringBuilder builder) => WriteToFile("logs/shutdownlog.txt", builder.ToString());
 
         private static void WriteToFile(string path, string content)
         {
@@ -142,7 +136,7 @@ namespace ConsoleWriter
             {
                 var fullPath = Path.GetDirectoryName(WibboEnvironment.PatchDir + path);
 
-                if(!string.IsNullOrEmpty(fullPath))
+                if (!string.IsNullOrEmpty(fullPath))
                     Directory.CreateDirectory(fullPath);
 
                 FileStream fileStream = new FileStream(WibboEnvironment.PatchDir + path, FileMode.Append, FileAccess.Write);

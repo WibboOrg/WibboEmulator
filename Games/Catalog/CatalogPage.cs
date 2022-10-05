@@ -32,8 +32,8 @@ namespace WibboEmulator.Games.Catalog
         private readonly List<string> PageStrings2En;
         private readonly List<string> PageStrings2Br;
 
-        public CatalogPage(int Id, int ParentId, string Enabled, string Caption, string PageLink, int Icon, int MinRank, 
-            string Template, string PageStrings1, string PageStrings2, string CaptionEn, string CaptionBr, string PageStrings2En, 
+        public CatalogPage(int Id, int ParentId, string Enabled, string Caption, string PageLink, int Icon, int MinRank,
+            string Template, string PageStrings1, string PageStrings2, string CaptionEn, string CaptionBr, string PageStrings2En,
             string PageStrings2Br, Dictionary<int, CatalogItem> Items)
         {
             this.Id = Id;

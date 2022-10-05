@@ -2,7 +2,7 @@
 {
     internal class WiredFurniActionComposer : ServerPacket
     {
-        public WiredFurniActionComposer(bool stuffTypeSelectionEnabled, int furniLimit, List<int> stuffIds, int stuffTypeId, int id, string stringParam, 
+        public WiredFurniActionComposer(bool stuffTypeSelectionEnabled, int furniLimit, List<int> stuffIds, int stuffTypeId, int id, string stringParam,
             List<int> intParams, int stuffTypeSelectionCode, int type, int delayInPulses, List<int> conflictingTriggers)
             : base(ServerPacketHeader.WIRED_ACTION)
         {
@@ -10,7 +10,7 @@
             WriteInteger(furniLimit);
 
             WriteInteger(stuffIds.Count);
-            foreach(int stuffId in stuffIds)
+            foreach (int stuffId in stuffIds)
                 WriteInteger(stuffId);
 
             WriteInteger(stuffTypeId);

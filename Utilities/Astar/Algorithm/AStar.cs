@@ -76,11 +76,7 @@ namespace Astar.Algorithm
             }
         }
 
-        protected virtual double CalculateHeuristicExperimental(PathNode inStart, PathNode inEnd)
-        {
-            return this.CalculateHeuristicFast(inStart, inEnd);
-
-        }
+        protected virtual double CalculateHeuristicExperimental(PathNode inStart, PathNode inEnd) => this.CalculateHeuristicFast(inStart, inEnd);
 
         protected virtual double CalculateHeuristicFast(PathNode inStart, PathNode inEnd)
         {
@@ -102,10 +98,7 @@ namespace Astar.Algorithm
             return Math.Ceiling(Math.Abs(inStart.X - inEnd.X) + (double)Math.Abs(inStart.Y - inEnd.Y)) + cross;
         }
 
-        protected virtual double CalculateHeuristicShortestRoute(PathNode inStart, PathNode inEnd)
-        {
-            return Math.Sqrt((inStart.X - inEnd.X) * (inStart.X - inEnd.X) + (inStart.Y - inEnd.Y) * (inStart.Y - inEnd.Y));
-        }
+        protected virtual double CalculateHeuristicShortestRoute(PathNode inStart, PathNode inEnd) => Math.Sqrt((inStart.X - inEnd.X) * (inStart.X - inEnd.X) + (inStart.Y - inEnd.Y) * (inStart.Y - inEnd.Y));
 
         /// <summary>
         /// Calculates the neighbour distance
@@ -481,10 +474,7 @@ namespace Astar.Algorithm
 
             public PathNode parent;
 
-            public bool IsBlocked(int X, int Y, bool lastTile)
-            {
-                return this.UserItem.IsBlocked(X, Y, lastTile);
-            }
+            public bool IsBlocked(int X, int Y, bool lastTile) => this.UserItem.IsBlocked(X, Y, lastTile);
 
             public int X { get; internal set; }
             public int Y { get; internal set; }

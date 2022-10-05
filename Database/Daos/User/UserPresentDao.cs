@@ -1,5 +1,5 @@
-using WibboEmulator.Database.Interfaces;
 using System.Data;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Daos
 {
@@ -21,9 +21,6 @@ namespace WibboEmulator.Database.Daos
             return dbClient.GetRow();
         }
 
-        internal static void Delete(IQueryAdapter dbClient, int itemId)
-        {
-            dbClient.RunQuery("DELETE FROM `item_present` WHERE `item_id` = '" + itemId + "' LIMIT 1");
-        }
+        internal static void Delete(IQueryAdapter dbClient, int itemId) => dbClient.RunQuery("DELETE FROM `item_present` WHERE `item_id` = '" + itemId + "' LIMIT 1");
     }
 }

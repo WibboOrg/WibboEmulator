@@ -11,10 +11,7 @@ namespace WibboEmulator.Games.Items.Interactors
         {
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
-        {
-            Item.ExtraData = "0";
-        }
+        public override void OnRemove(GameClient Session, Item Item) => Item.ExtraData = "0";
 
         public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
         {
@@ -26,7 +23,7 @@ namespace WibboEmulator.Games.Items.Interactors
             int time = 0;
             if (!string.IsNullOrEmpty(Item.ExtraData))
             {
-                 int.TryParse(Item.ExtraData, out time);
+                int.TryParse(Item.ExtraData, out time);
             }
 
             if (Request == 2)

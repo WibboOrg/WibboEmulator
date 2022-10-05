@@ -67,7 +67,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             Pet.RoomId = Room.Id;
 
             Room.GetRoomUserManager().DeployBot(new RoomBot(Pet.PetId, Pet.OwnerId, Pet.RoomId, BotAIType.Pet, true, Pet.Name, "", "", Pet.Look, X, Y, 0, 0, false, "", 0, false, 0, 0, 0), Pet);
-            
+
             Pet.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 
             using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())

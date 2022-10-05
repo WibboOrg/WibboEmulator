@@ -1,5 +1,5 @@
-using WibboEmulator.Database.Interfaces;
 using System.Data;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Daos
 {
@@ -19,24 +19,12 @@ namespace WibboEmulator.Database.Daos
             return Convert.ToInt32(dbClient.InsertQuery());
         }
 
-        internal static void UpdateStatusPicked(IQueryAdapter dbClient, int moderatorId, int id)
-        {
-            dbClient.RunQuery("UPDATE `moderation_ticket` SET status = 'picked', moderator_id = '" + moderatorId + "', timestamp = '" + WibboEnvironment.GetUnixTimestamp() + "' WHERE id = '" + id + "'");
-        }
+        internal static void UpdateStatusPicked(IQueryAdapter dbClient, int moderatorId, int id) => dbClient.RunQuery("UPDATE `moderation_ticket` SET status = 'picked', moderator_id = '" + moderatorId + "', timestamp = '" + WibboEnvironment.GetUnixTimestamp() + "' WHERE id = '" + id + "'");
 
-        internal static void UpdateStatus(IQueryAdapter dbClient, string str, int id)
-        {
-            dbClient.RunQuery("UPDATE `moderation_ticket` SET status = '" + str + "' WHERE id = '" + id + "'");
-        }
+        internal static void UpdateStatus(IQueryAdapter dbClient, string str, int id) => dbClient.RunQuery("UPDATE `moderation_ticket` SET status = '" + str + "' WHERE id = '" + id + "'");
 
-        internal static void UpdateStatusOpen(IQueryAdapter dbClient, int id)
-        {
-            dbClient.RunQuery("UPDATE `moderation_ticket` SET status = 'open' WHERE id = '" + id + "'");
-        }
+        internal static void UpdateStatusOpen(IQueryAdapter dbClient, int id) => dbClient.RunQuery("UPDATE `moderation_ticket` SET status = 'open' WHERE id = '" + id + "'");
 
-        internal static void UpdateStatusDeleted(IQueryAdapter dbClient, int id)
-        {
-            dbClient.RunQuery("UPDATE `moderation_ticket` SET status = 'deleted' WHERE id = '" + id + "'");
-        }
+        internal static void UpdateStatusDeleted(IQueryAdapter dbClient, int id) => dbClient.RunQuery("UPDATE `moderation_ticket` SET status = 'deleted' WHERE id = '" + id + "'");
     }
 }

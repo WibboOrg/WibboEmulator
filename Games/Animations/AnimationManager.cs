@@ -1,11 +1,10 @@
 ﻿
+using System.Data;
+using System.Diagnostics;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Rooms;
-using System.Data;
-using System.Diagnostics;
-using MySqlX.XDevAPI;
 
 namespace WibboEmulator.Games.Animations
 {
@@ -44,7 +43,7 @@ namespace WibboEmulator.Games.Animations
         {
             this._forceDisabled = !this._forceDisabled;
 
-            if(!this._forceDisabled)
+            if (!this._forceDisabled)
                 this._animationTime = DateTime.Now;
 
             return this._forceDisabled;
@@ -72,10 +71,7 @@ namespace WibboEmulator.Games.Animations
             animationCycleStopwatch.Start();
         }
 
-        public bool IsActivate()
-        {
-            return !this._forceDisabled && this._isActivate;
-        }
+        public bool IsActivate() => !this._forceDisabled && this._isActivate;
 
         public bool AllowAnimation()
         {

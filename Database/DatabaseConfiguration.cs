@@ -1,4 +1,4 @@
-﻿namespace Plus.Database
+﻿namespace WibboEmulator.Database
 {
     public class DatabaseConfiguration
     {

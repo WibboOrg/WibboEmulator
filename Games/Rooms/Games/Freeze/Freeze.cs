@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
+﻿using System.Collections;
+using System.Drawing;
+using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Freeze;
 using WibboEmulator.Games.Items;
-using System.Collections;
-using System.Drawing;
 
 namespace WibboEmulator.Games.Rooms.Games
 {
@@ -368,10 +368,7 @@ namespace WibboEmulator.Games.Rooms.Games
             this._freezeBlocks.Add(item.Id, item);
         }
 
-        public void RemoveFreezeBlock(int itemID)
-        {
-            this._freezeBlocks.Remove(itemID);
-        }
+        public void RemoveFreezeBlock(int itemID) => this._freezeBlocks.Remove(itemID);
 
         private void HandleUserFreeze(Point point)
         {
@@ -615,10 +612,7 @@ namespace WibboEmulator.Games.Rooms.Games
             return list;
         }
 
-        private List<Item> GetItemsForSquare(Point point)
-        {
-            return this._roomInstance.GetGameMap().GetCoordinatedItems(point);
-        }
+        private List<Item> GetItemsForSquare(Point point) => this._roomInstance.GetGameMap().GetCoordinatedItems(point);
 
         private static bool SquareGotFreezeTile(List<Item> items)
         {

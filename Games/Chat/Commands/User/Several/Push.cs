@@ -1,6 +1,6 @@
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Games;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
@@ -42,7 +42,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                 return;
             }
 
-            if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2) || (Math.Abs(TargetRoomUser.Y - UserRoom.Y) >=2))
+            if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2) || (Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2))
             {
                 if (TargetRoomUser.SetX - 1 == Room.GetGameMap().Model.DoorX)
                     return;

@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Map.Movement;
-using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+﻿using System.Data;
 using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Items.Wired.Interfaces;
+using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map.Movement;
 
 namespace WibboEmulator.Games.Items.Wired.Actions
 {
@@ -29,7 +29,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
             return false;
         }
-        
+
         public override void LoadItems(bool inDatabase = false)
         {
             base.LoadItems();
@@ -1224,8 +1224,8 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             this.IntParams.Clear();
 
             if (int.TryParse(row["delay"].ToString(), out int delay))
-	            this.Delay = delay;
-                
+                this.Delay = delay;
+
             string triggerItems = row["triggers_item"].ToString();
 
             if (int.TryParse(row["trigger_data_2"].ToString(), out int startDirection))
@@ -1244,7 +1244,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                 if (!int.TryParse(itemId, out int id))
                     continue;
 
-                if(!this.StuffIds.Contains(id))
+                if (!this.StuffIds.Contains(id))
                     this.StuffIds.Add(id);
             }
         }

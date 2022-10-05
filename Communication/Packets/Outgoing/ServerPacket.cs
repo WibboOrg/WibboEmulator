@@ -1,5 +1,5 @@
-﻿using WibboEmulator.Communication.Interfaces;
-using System.Text;
+﻿using System.Text;
+using WibboEmulator.Communication.Interfaces;
 
 namespace WibboEmulator.Communication.Packets.Outgoing
 {
@@ -14,25 +14,13 @@ namespace WibboEmulator.Communication.Packets.Outgoing
             this.WriteShort(Header);
         }
 
-        public void WriteByte(byte b)
-        {
-            this.WriteByte(new byte[] { b }, false);
-        }
+        public void WriteByte(byte b) => this.WriteByte(new byte[] { b }, false);
 
-        public void WriteShort(int i)
-        {
-            this.WriteByte(BitConverter.GetBytes((short)i), true);
-        }
+        public void WriteShort(int i) => this.WriteByte(BitConverter.GetBytes((short)i), true);
 
-        public void WriteInteger(int i)
-        {
-            this.WriteByte(BitConverter.GetBytes(i), true);
-        }
+        public void WriteInteger(int i) => this.WriteByte(BitConverter.GetBytes(i), true);
 
-        public void WriteBoolean(bool b)
-        {
-            this.WriteByte(new byte[1] { b ? (byte)1 : (byte)0 }, false);
-        }
+        public void WriteBoolean(bool b) => this.WriteByte(new byte[1] { b ? (byte)1 : (byte)0 }, false);
 
         public void WriteString(string s)
         {

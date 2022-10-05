@@ -11,11 +11,11 @@
             this.WriteInteger(campaignDays);
 
             this.WriteInteger(openedDays.Count);
-            foreach(int openedDay in openedDays)
+            foreach (int openedDay in openedDays)
                 this.WriteInteger(openedDay);
 
             this.WriteInteger(missedDays.Count);
-            foreach(int missedDay in missedDays)
+            foreach (int missedDay in missedDays)
                 this.WriteInteger(missedDay);
         }
     }

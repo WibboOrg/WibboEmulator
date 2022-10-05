@@ -1,8 +1,7 @@
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
-
+using WibboEmulator.Games.Chat.Styles;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Chat.Styles;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
@@ -208,7 +207,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                     }
 
                     WhisperComposer MessageWhipser = new WhisperComposer(user.VirtualId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + ToUser + ": " + Message, Color);
-               
+
                     foreach (RoomUser roomUser in roomUserByRank)
                     {
                         if (roomUser != null && roomUser.UserId != user.UserId && roomUser.GetClient() != null && roomUser.GetClient().GetUser().ViewMurmur && !user.WhiperGroupUsers.Contains(roomUser.GetUsername()))

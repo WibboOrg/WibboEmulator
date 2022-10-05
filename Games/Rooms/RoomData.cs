@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Core;
+﻿using System.Data;
+using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Groups;
-using System.Data;
 
 namespace WibboEmulator.Games.Rooms
 {

@@ -22,7 +22,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             bool ownerInRoom = false;
             if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(data.Id, out Room room))
             {
-                if(room.GetRoomUserManager().GetRoomUserByName(data.OwnerName) != null)
+                if (room.GetRoomUserManager().GetRoomUserByName(data.OwnerName) != null)
                     ownerInRoom = true;
             }
 

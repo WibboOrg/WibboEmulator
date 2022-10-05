@@ -1,11 +1,11 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
+﻿using System.Collections.Concurrent;
+using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.GameClients.Inventory.Bots;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Pets;
-using WibboEmulator.Games.GameClients.Inventory.Bots;
-using System.Collections.Concurrent;
-using System.Data;
 
 namespace WibboEmulator.Games.GameClients.Inventory
 {
@@ -107,10 +107,7 @@ namespace WibboEmulator.Games.GameClients.Inventory
             this._botItems.Clear();
         }
 
-        public ICollection<Pet> GetPets()
-        {
-            return this._petsItems.Values;
-        }
+        public ICollection<Pet> GetPets() => this._petsItems.Values;
 
         public bool TryAddPet(Pet Pet)
         {
@@ -172,15 +169,9 @@ namespace WibboEmulator.Games.GameClients.Inventory
             }
         }
 
-        public bool TryAddBot(Bot Bot)
-        {
-            return this._botItems.TryAdd(Bot.Id, Bot);
-        }
+        public bool TryAddBot(Bot Bot) => this._botItems.TryAdd(Bot.Id, Bot);
 
-        public ICollection<Bot> GetBots()
-        {
-            return this._botItems.Values;
-        }
+        public ICollection<Bot> GetBots() => this._botItems.Values;
 
         public bool TryAddItem(Item item)
         {
@@ -268,10 +259,7 @@ namespace WibboEmulator.Games.GameClients.Inventory
             return userItem;
         }
 
-        private bool UserHoldsItem(int itemID)
-        {
-            return this._userItems.ContainsKey(itemID);
-        }
+        private bool UserHoldsItem(int itemID) => this._userItems.ContainsKey(itemID);
 
         public void RemoveItem(int Id)
         {
@@ -285,10 +273,7 @@ namespace WibboEmulator.Games.GameClients.Inventory
 
         public IEnumerable<Item> GetWallAndFloor => this._userItems.Values;
 
-        private GameClient GetClient()
-        {
-            return WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._userInstance.Id);
-        }
+        private GameClient GetClient() => WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._userInstance.Id);
 
         public void AddItemArray(List<Item> RoomItemList)
         {

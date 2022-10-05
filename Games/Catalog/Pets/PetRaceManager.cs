@@ -9,9 +9,6 @@
 
         }
 
-        public List<PetRace> GetRacesForRaceId(int RaceId)
-        {
-            return this._races.Where(Race => Race.RaceId == RaceId).ToList();
-        }
+        public List<PetRace> GetRacesForRaceId(int RaceId) => this._races.Where(Race => Race.RaceId == RaceId).ToList();
     }
 }

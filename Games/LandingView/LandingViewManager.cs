@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.LandingView.Promotions;
-using System.Data;
 
 
 namespace WibboEmulator.Games.LandingView
@@ -27,10 +27,7 @@ namespace WibboEmulator.Games.LandingView
             }
         }
 
-        public int Count()
-        {
-            return this.HotelViewPromosIndexers.Count;
-        }
+        public int Count() => this.HotelViewPromosIndexers.Count;
 
     }
 }

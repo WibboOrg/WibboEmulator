@@ -19,19 +19,10 @@ namespace WibboEmulator.Games.Calendars
             this._campaignDays = 0;
         }
 
-        public Dictionary<int, CalendarItem> CalendarItem()
-        {
-            return this._calendarItem;
-        }
+        public Dictionary<int, CalendarItem> CalendarItem() => this._calendarItem;
 
-        public int CurrentDay()
-        {
-            return this._currentDay;
-        }
+        public int CurrentDay() => this._currentDay;
 
-        public int CampaignDays()
-        {
-            return this._campaignDays;
-        }
+        public int CampaignDays() => this._campaignDays;
     }
 }

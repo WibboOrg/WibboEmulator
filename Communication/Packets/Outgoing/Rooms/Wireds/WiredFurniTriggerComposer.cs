@@ -2,7 +2,7 @@
 {
     internal class WiredFurniTriggerComposer : ServerPacket
     {
-        public WiredFurniTriggerComposer(bool stuffTypeSelectionEnabled, int furniLimit, List<int> stuffIds, int stuffTypeId, int id, string stringParam, 
+        public WiredFurniTriggerComposer(bool stuffTypeSelectionEnabled, int furniLimit, List<int> stuffIds, int stuffTypeId, int id, string stringParam,
             List<int> intParams, int stuffTypeSelectionCode, int type, List<int> conflictingActions)
             : base(ServerPacketHeader.WIRED_TRIGGER)
         {
@@ -10,7 +10,7 @@
             WriteInteger(furniLimit);
 
             WriteInteger(stuffIds.Count);
-            foreach(int stuffId in stuffIds)
+            foreach (int stuffId in stuffIds)
                 WriteInteger(stuffId);
 
             WriteInteger(stuffTypeId);

@@ -1,18 +1,17 @@
-﻿using WibboEmulator.Communication.Packets.Incoming;
-using WibboEmulator.Communication.Packets.Incoming.Marketplace;
-using WibboEmulator.Communication.Packets.Incoming.Structure;
+﻿using System.Diagnostics;
+using WibboEmulator.Communication.Packets.Incoming;
 using WibboEmulator.Communication.Packets.Incoming.Camera;
 using WibboEmulator.Communication.Packets.Incoming.Campaign;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.GameClients;
-using WibboEmulator.Communication.Packets.Incoming.WibboTool;
-using WibboEmulator.Communication.Packets.Incoming.Televisions;
+using WibboEmulator.Communication.Packets.Incoming.Guide;
+using WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using WibboEmulator.Communication.Packets.Incoming.RolePlay;
 using WibboEmulator.Communication.Packets.Incoming.RolePlay.Troc;
-using WibboEmulator.Communication.Packets.Incoming.Guide;
-using System.Threading;
-using System.Diagnostics;
+using WibboEmulator.Communication.Packets.Incoming.Structure;
+using WibboEmulator.Communication.Packets.Incoming.Televisions;
+using WibboEmulator.Communication.Packets.Incoming.WibboTool;
 using WibboEmulator.Core;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.GameClients;
 
 namespace WibboEmulator.Communication.Packets
 {
@@ -85,8 +84,8 @@ namespace WibboEmulator.Communication.Packets
                 Console.WriteLine(packet.ToString());
                 Console.ResetColor();
             }
-            
-            if(session.PacketTimeout(packet.Id, pak.Delay))
+
+            if (session.PacketTimeout(packet.Id, pak.Delay))
             {
                 if (Debugger.IsAttached)
                 {
@@ -104,7 +103,7 @@ namespace WibboEmulator.Communication.Packets
             var timeExecution = timeEnded - timeStarted;
             if (timeExecution > _maximumRunTimeInSec)
                 ExceptionLogger.LogPacketException(packet.ToString(), String.Format("High latency in {0}: {1}ms", session.GetUser()?.Username ?? session.GetConnection().GetIp(), timeExecution.TotalMilliseconds));
-            
+
             //await ExecutePacketAsync(session, packet, pak);
         }
 
@@ -129,10 +128,7 @@ namespace WibboEmulator.Communication.Packets
             });
         }
 
-        public void UnregisterAll()
-        {
-            this._incomingPackets.Clear();
-        }
+        public void UnregisterAll() => this._incomingPackets.Clear();
 
         private void RegisterCustom()
         {
@@ -171,10 +167,7 @@ namespace WibboEmulator.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.DESKTOP_NEWS, new GetPromoArticlesEvent());
         }
 
-        private void RegisterNux()
-        {
-            this._incomingPackets.Add(ClientPacketHeader.UserNuxEvent, new RoomNuxAlertEvent());
-        }
+        private void RegisterNux() => this._incomingPackets.Add(ClientPacketHeader.UserNuxEvent, new RoomNuxAlertEvent());
 
         private void RegisterCatalog()
         {
@@ -321,10 +314,7 @@ namespace WibboEmulator.Communication.Packets
             this._incomingPackets.Add(ClientPacketHeader.USER_EFFECT_ENABLE, new AvatarEffectSelectedEvent());
         }
 
-        private void RegisterPurse()
-        {
-            this._incomingPackets.Add(ClientPacketHeader.USER_CURRENCY, new GetCreditsInfoEvent());
-        }
+        private void RegisterPurse() => this._incomingPackets.Add(ClientPacketHeader.USER_CURRENCY, new GetCreditsInfoEvent());
 
         private void RegisterMessenger()
         {

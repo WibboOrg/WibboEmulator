@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Games.Items;
+﻿using System.Collections.Concurrent;
+using System.Drawing;
+using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Collections.Concurrent;
-using System.Drawing;
 
 namespace WibboEmulator.Games.Rooms.Wired
 {
@@ -105,8 +105,7 @@ namespace WibboEmulator.Games.Rooms.Wired
                 this._conditionStacks[itemCoord].Remove(item);
                 if (this._conditionStacks[itemCoord].Count == 0)
                 {
-                    List<Item> newList = new List<Item>();
-                    this._conditionStacks.TryRemove(itemCoord, out newList);
+                    this._conditionStacks.TryRemove(itemCoord, out List<Item> newList);
                 }
             }
             else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
@@ -196,10 +195,7 @@ namespace WibboEmulator.Games.Rooms.Wired
             this._doCleanup = false;
         }
 
-        public void OnPickall()
-        {
-            this._doCleanup = true;
-        }
+        public void OnPickall() => this._doCleanup = true;
 
         public void ExecutePile(Point coordinate, RoomUser user, Item item)
         {
@@ -214,20 +210,23 @@ namespace WibboEmulator.Games.Rooms.Wired
             if (user != null && user.IsSpectator)
                 return;
 
-            if (this._wiredUsed.ContainsKey(coordinate))
+            if (user != null)
             {
-                if (this._wiredUsed[coordinate].Contains(user))
+                if (this._wiredUsed.ContainsKey(coordinate))
                 {
-                    return;
+                    if (this._wiredUsed[coordinate].Contains(user))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        this._wiredUsed[coordinate].Add(user);
+                    }
                 }
                 else
                 {
-                    this._wiredUsed[coordinate].Add(user);
+                    this._wiredUsed.TryAdd(coordinate, new List<RoomUser>() { user });
                 }
-            }
-            else
-            {
-                this._wiredUsed.TryAdd(coordinate, new List<RoomUser>() { user });
             }
 
             if (this._conditionStacks.ContainsKey(coordinate))
@@ -303,15 +302,9 @@ namespace WibboEmulator.Games.Rooms.Wired
             }
         }
 
-        public void RequestCycle(WiredCycle handler)
-        {
-            this._requestingUpdates.Enqueue(handler);
-        }
+        public void RequestCycle(WiredCycle handler) => this._requestingUpdates.Enqueue(handler);
 
-        public Room GetRoom()
-        {
-            return this._room;
-        }
+        public Room GetRoom() => this._room;
 
         public void Destroy()
         {

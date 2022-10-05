@@ -7,9 +7,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet)
-        {
-            Session.SendPacket(new WardrobeComposer(Session.GetUser().GetWardrobeComponent().GetWardrobes()));
-        }
+        public void Parse(GameClient Session, ClientPacket Packet) => Session.SendPacket(new WardrobeComposer(Session.GetUser().GetWardrobeComponent().GetWardrobes()));
     }
 }

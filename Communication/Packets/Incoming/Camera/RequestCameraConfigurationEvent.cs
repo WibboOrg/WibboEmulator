@@ -7,9 +7,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
     {
         public double Delay => 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet)
-        {
-            Session.SendPacket(new CameraPriceComposer(0, 0, 0));
-        }
+        public void Parse(GameClient Session, ClientPacket Packet) => Session.SendPacket(new CameraPriceComposer(0, 0, 0));
     }
 }

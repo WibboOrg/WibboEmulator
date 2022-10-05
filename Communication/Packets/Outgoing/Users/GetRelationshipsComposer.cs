@@ -10,7 +10,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Users
         {
             this.WriteInteger(UserId);
             this.WriteInteger(Relationships.Count);
-            ICollection<Relationship>relations = Relationships;
+            ICollection<Relationship> relations = Relationships;
 
             Dictionary<int, Relationship> RelationRandom = new Dictionary<int, Relationship>();
 

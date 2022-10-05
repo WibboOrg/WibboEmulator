@@ -1,28 +1,26 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+﻿using System.Data;
+using WibboEmulator.Communication.Interfaces;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Chat.Logs;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.Roleplay;
 using WibboEmulator.Games.Rooms.AI;
-using WibboEmulator.Games.Chat.Logs;
 using WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Rooms.Jankens;
 using WibboEmulator.Games.Rooms.Moodlight;
 using WibboEmulator.Games.Rooms.Projectile;
-using WibboEmulator.Games.Rooms.Wired;
-using System.Data;
-using WibboEmulator.Utilities.Events;
-using WibboEmulator.Utilities;
 using WibboEmulator.Games.Rooms.Trading;
-using WibboEmulator.Communication.Interfaces;
-using MySqlX.XDevAPI;
-using Org.BouncyCastle.Bcpg;
+using WibboEmulator.Games.Rooms.Wired;
+using WibboEmulator.Utilities;
+using WibboEmulator.Utilities.Events;
 
 namespace WibboEmulator.Games.Rooms
 {
@@ -136,20 +134,11 @@ namespace WibboEmulator.Games.Rooms
             this.lastTimerReset = DateTime.Now;
         }
 
-        public Gamemap GetGameMap()
-        {
-            return this._gameMap;
-        }
+        public Gamemap GetGameMap() => this._gameMap;
 
-        public RoomItemHandling GetRoomItemHandler()
-        {
-            return this._roomItemHandling;
-        }
+        public RoomItemHandling GetRoomItemHandler() => this._roomItemHandling;
 
-        public RoomUserManager GetRoomUserManager()
-        {
-            return this._roomUserManager;
-        }
+        public RoomUserManager GetRoomUserManager() => this._roomUserManager;
 
         public Soccer GetSoccer()
         {
@@ -221,45 +210,21 @@ namespace WibboEmulator.Games.Rooms
             return this._gameItemHandler;
         }
 
-        public WiredHandler GetWiredHandler()
-        {
-            return this._wiredHandler;
-        }
+        public WiredHandler GetWiredHandler() => this._wiredHandler;
 
-        public ProjectileManager GetProjectileManager()
-        {
-            return this._projectileManager;
-        }
+        public ProjectileManager GetProjectileManager() => this._projectileManager;
 
-        public bool GotSoccer()
-        {
-            return this._soccer != null;
-        }
+        public bool GotSoccer() => this._soccer != null;
 
-        public bool GotBanzai()
-        {
-            return this._banzai != null;
-        }
+        public bool GotBanzai() => this._banzai != null;
 
-        public bool GotFreeze()
-        {
-            return this._freeze != null;
-        }
+        public bool GotFreeze() => this._freeze != null;
 
-        public bool GotJanken()
-        {
-            return this._jankan != null;
-        }
+        public bool GotJanken() => this._jankan != null;
 
-        public bool GotWired()
-        {
-            return this._wiredHandler != null;
-        }
+        public bool GotWired() => this._wiredHandler != null;
 
-        public ChatlogManager GetChatMessageManager()
-        {
-            return this._chatMessageManager;
-        }
+        public ChatlogManager GetChatMessageManager() => this._chatMessageManager;
 
         public bool AllowsShous(RoomUser user, string message)
         {
@@ -351,15 +316,9 @@ namespace WibboEmulator.Games.Rooms
             }
         }
 
-        public void ClearTags()
-        {
-            this.RoomData.Tags.Clear();
-        }
+        public void ClearTags() => this.RoomData.Tags.Clear();
 
-        public void AddTagRange(List<string> tags)
-        {
-            this.RoomData.Tags.AddRange(tags);
-        }
+        public void AddTagRange(List<string> tags) => this.RoomData.Tags.AddRange(tags);
 
         private void LoadBots()
         {
@@ -949,20 +908,11 @@ namespace WibboEmulator.Games.Rooms
             this._gameMap.Destroy();
         }
 
-        public Dictionary<int, double> GetBans()
-        {
-            return this._bans;
-        }
+        public Dictionary<int, double> GetBans() => this._bans;
 
-        public bool UserIsBanned(int pId)
-        {
-            return this._bans.ContainsKey(pId);
-        }
+        public bool UserIsBanned(int pId) => this._bans.ContainsKey(pId);
 
-        public void RemoveBan(int pId)
-        {
-            this._bans.Remove(pId);
-        }
+        public void RemoveBan(int pId) => this._bans.Remove(pId);
 
         public void AddBan(int pId, int Time)
         {
@@ -974,25 +924,13 @@ namespace WibboEmulator.Games.Rooms
             this._bans.Add(pId, WibboEnvironment.GetUnixTimestamp() + Time);
         }
 
-        public bool HasBanExpired(int pId)
-        {
-            return !this.UserIsBanned(pId) || this._bans[pId] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
-        }
+        public bool HasBanExpired(int pId) => !this.UserIsBanned(pId) || this._bans[pId] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
 
-        public Dictionary<int, double> GetMute()
-        {
-            return this._mutes;
-        }
+        public Dictionary<int, double> GetMute() => this._mutes;
 
-        public bool UserIsMuted(int pId)
-        {
-            return this._mutes.ContainsKey(pId);
-        }
+        public bool UserIsMuted(int pId) => this._mutes.ContainsKey(pId);
 
-        public void RemoveMute(int pId)
-        {
-            this._mutes.Remove(pId);
-        }
+        public void RemoveMute(int pId) => this._mutes.Remove(pId);
 
         public void AddMute(int pId, int Time)
         {
@@ -1004,10 +942,7 @@ namespace WibboEmulator.Games.Rooms
             this._mutes.Add(pId, WibboEnvironment.GetUnixTimestamp() + Time);
         }
 
-        public bool HasMuteExpired(int pId)
-        {
-            return !this.UserIsMuted(pId) || this._mutes[pId] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
-        }
+        public bool HasMuteExpired(int pId) => !this.UserIsMuted(pId) || this._mutes[pId] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
 
         public bool HasActiveTrade(RoomUser User)
         {

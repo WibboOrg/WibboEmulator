@@ -1,7 +1,7 @@
 ﻿using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Items.Interactors;
 
 namespace WibboEmulator.Games.Items
 {

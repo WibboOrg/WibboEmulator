@@ -1,3 +1,4 @@
+using System.Text;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
@@ -5,7 +6,6 @@ using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
-using System.Text;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

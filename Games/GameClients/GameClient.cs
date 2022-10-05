@@ -17,9 +17,9 @@ using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.GameClients.Authenticator;
 using WibboEmulator.Games.Help;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.GameClients.Authenticator;
 using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Games.GameClients
@@ -186,15 +186,9 @@ namespace WibboEmulator.Games.GameClients
             return true;
         }
 
-        public GameWebSocket GetConnection()
-        {
-            return this._connection;
-        }
+        public GameWebSocket GetConnection() => this._connection;
 
-        public User GetUser()
-        {
-            return this._user;
-        }
+        public User GetUser() => this._user;
 
         public bool Antipub(string Message, string type, int RoomId = 0)
         {
@@ -290,15 +284,9 @@ namespace WibboEmulator.Games.GameClients
 
             SendPacket(new WhisperComposer(user.VirtualId, message, (Info) ? 34 : 0));
         }
-        public void SendNotification(string Message)
-        {
-            SendPacket(new BroadcastMessageAlertComposer(Message));
-        }
+        public void SendNotification(string Message) => SendPacket(new BroadcastMessageAlertComposer(Message));
 
-        public void SendHugeNotif(string Message)
-        {
-            SendPacket(new MOTDNotificationComposer(Message));
-        }
+        public void SendHugeNotif(string Message) => SendPacket(new MOTDNotificationComposer(Message));
 
         public bool PacketTimeout(int packetId, double delay)
         {

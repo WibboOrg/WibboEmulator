@@ -1,6 +1,8 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing;
+﻿using System.Collections.Concurrent;
+using System.Data;
+using System.Drawing;
+using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
@@ -11,9 +13,6 @@ using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms.Moodlight;
 using WibboEmulator.Games.Rooms.PathFinding;
 using WibboEmulator.Utilities;
-using System.Collections.Concurrent;
-using System.Data;
-using System.Drawing;
 
 namespace WibboEmulator.Games.Rooms
 {
@@ -55,10 +54,7 @@ namespace WibboEmulator.Games.Rooms
             this._rollerMessages = new ServerPacketList();
         }
 
-        public void QueueRoomItemUpdate(Item item)
-        {
-            this._roomItemUpdateQueue.Enqueue(item);
-        }
+        public void QueueRoomItemUpdate(Item item) => this._roomItemUpdateQueue.Enqueue(item);
 
         public List<Item> RemoveAllFurniture(GameClient Session)
         {
@@ -104,10 +100,7 @@ namespace WibboEmulator.Games.Rooms
             return items;
         }
 
-        public void SetSpeed(int p)
-        {
-            this._rollerSpeed = p;
-        }
+        public void SetSpeed(int p) => this._rollerSpeed = p;
 
         public void LoadFurniture(int RoomId = 0)
         {
@@ -415,8 +408,8 @@ namespace WibboEmulator.Games.Rooms
 
                         foreach (RoomUser userForSquare in usersForSquare)
                         {
-                            if (userForSquare != null && (!userForSquare.SetStep && (userForSquare.AllowMoveToRoller || this._rollerSpeed == 0) && 
-                                (!userForSquare.IsWalking || userForSquare.Freeze)) && nextRollerClear &&  (this._room.GetGameMap().CanWalk(nextCoord.X, nextCoord.Y) && 
+                            if (userForSquare != null && (!userForSquare.SetStep && (userForSquare.AllowMoveToRoller || this._rollerSpeed == 0) &&
+                                (!userForSquare.IsWalking || userForSquare.Freeze)) && nextRollerClear && (this._room.GetGameMap().CanWalk(nextCoord.X, nextCoord.Y) &&
                                 this._room.GetGameMap().SquareTakingOpen(nextCoord.X, nextCoord.Y) && !this._rollerUsersMoved.Contains(userForSquare.UserId)))
                             {
                                 this._rollerMessages.Add(new SlideObjectBundleComposer(userForSquare.X, userForSquare.Y, userForSquare.Z, nextCoord.X, nextCoord.Y, nextZ, userForSquare.VirtualId, roller.Id, false));
@@ -696,15 +689,9 @@ namespace WibboEmulator.Games.Rooms
             return true;
         }
 
-        public void TryAddRoller(int ItemId, Item Roller)
-        {
-            this._rollers.TryAdd(ItemId, Roller);
-        }
+        public void TryAddRoller(int ItemId, Item Roller) => this._rollers.TryAdd(ItemId, Roller);
 
-        public ICollection<Item> GetRollers()
-        {
-            return this._rollers.Values;
-        }
+        public ICollection<Item> GetRollers() => this._rollers.Values;
 
         public bool SetFloorItem(Item Item, int newX, int newY, double newZ)
         {
@@ -765,7 +752,7 @@ namespace WibboEmulator.Games.Rooms
                 {
                     if (this._roomItemUpdateQueue.TryDequeue(out Item item))
                     {
-                        if(this._room.Disposed)
+                        if (this._room.Disposed)
                         {
                             continue;
                         }

@@ -65,7 +65,7 @@ namespace WibboEmulator.Games.Items.Interactors
 
             int.TryParse(Item.ExtraData, out int state);
 
-            if(Reverse)
+            if (Reverse)
                 Item.ExtraData = (state > 0 ? state - 1 : this.Modes).ToString();
             else
                 Item.ExtraData = (state < this.Modes ? state + 1 : 0).ToString();

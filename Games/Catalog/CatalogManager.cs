@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalog.Marketplace;
 using WibboEmulator.Games.Catalog.Pets;
 using WibboEmulator.Games.Catalog.Vouchers;
 using WibboEmulator.Games.Items;
-using System.Data;
 
 namespace WibboEmulator.Games.Catalog
 {
@@ -167,15 +167,9 @@ namespace WibboEmulator.Games.Catalog
             Console.WriteLine("Catalog Manager -> LOADED");
         }
 
-        public List<PetRace> GetRacesForRaceId(int RaceId)
-        {
-            return this._races.Where(Race => Race.RaceId == RaceId).ToList();
-        }
+        public List<PetRace> GetRacesForRaceId(int RaceId) => this._races.Where(Race => Race.RaceId == RaceId).ToList();
 
-        public bool HasBadge(string Code)
-        {
-            return this._badges.Contains(Code);
-        }
+        public bool HasBadge(string Code) => this._badges.Contains(Code);
 
         public CatalogItem FindItem(int ItemId, int Rank)
         {
@@ -204,34 +198,16 @@ namespace WibboEmulator.Games.Catalog
             return null;
         }
 
-        public bool TryGetBot(int ItemId, out CatalogBot Bot)
-        {
-            return this._botPresets.TryGetValue(ItemId, out Bot);
-        }
+        public bool TryGetBot(int ItemId, out CatalogBot Bot) => this._botPresets.TryGetValue(ItemId, out Bot);
 
-        public bool TryGetPage(int pageId, out CatalogPage page)
-        {
-            return this._pages.TryGetValue(pageId, out page);
-        }
+        public bool TryGetPage(int pageId, out CatalogPage page) => this._pages.TryGetValue(pageId, out page);
 
-        public ICollection<CatalogPage> GetPages()
-        {
-            return this._pages.Values;
-        }
+        public ICollection<CatalogPage> GetPages() => this._pages.Values;
 
-        public ICollection<CatalogPromotion> GetPromotions()
-        {
-            return this._promotions.Values;
-        }
+        public ICollection<CatalogPromotion> GetPromotions() => this._promotions.Values;
 
-        public MarketplaceManager GetMarketplace()
-        {
-            return this._marketplace;
-        }
+        public MarketplaceManager GetMarketplace() => this._marketplace;
 
-        public VoucherManager GetVoucherManager()
-        {
-            return this._voucherManager;
-        }
+        public VoucherManager GetVoucherManager() => this._voucherManager;
     }
 }

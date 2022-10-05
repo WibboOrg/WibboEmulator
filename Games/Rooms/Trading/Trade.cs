@@ -20,7 +20,7 @@ namespace WibboEmulator.Games.Rooms.Trading
         {
             get
             {
-                foreach(TradeUser tradeUser in this._users)
+                foreach (TradeUser tradeUser in this._users)
                 {
                     if (tradeUser != null && !tradeUser.HasAccepted)
                     {
@@ -311,7 +311,7 @@ namespace WibboEmulator.Games.Rooms.Trading
 
         public void CloseTradeClean()
         {
-            foreach(TradeUser tradeUser in this._users)
+            foreach (TradeUser tradeUser in this._users)
             {
                 if (tradeUser != null && tradeUser.GetRoomUser() != null)
                 {
@@ -322,7 +322,7 @@ namespace WibboEmulator.Games.Rooms.Trading
 
             this.SendMessageToUsers(new TradingFinishComposer());
 
-            if(WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this._roomId, out Room room))
+            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this._roomId, out Room room))
                 room.ActiveTrades.Remove(this);
         }
 

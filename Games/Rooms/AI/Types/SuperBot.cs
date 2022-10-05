@@ -1,8 +1,7 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+﻿using System.Drawing;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
-
 using WibboEmulator.Games.GameClients;
-using System.Drawing;
 
 namespace WibboEmulator.Games.Rooms.AI.Types
 {
@@ -17,10 +16,7 @@ namespace WibboEmulator.Games.Rooms.AI.Types
             this._actionTimer = WibboEnvironment.GetRandomNumber(0, 60);
         }
 
-        public override void OnSelfEnterRoom()
-        {
-            this.GetRoomUser().MoveTo(this.GetRoomUser().X + WibboEnvironment.GetRandomNumber(-10, 10), this.GetRoomUser().Y + WibboEnvironment.GetRandomNumber(-10, 10), true);
-        }
+        public override void OnSelfEnterRoom() => this.GetRoomUser().MoveTo(this.GetRoomUser().X + WibboEnvironment.GetRandomNumber(-10, 10), this.GetRoomUser().Y + WibboEnvironment.GetRandomNumber(-10, 10), true);
 
         public override void OnSelfLeaveRoom(bool Kicked)
         {

@@ -91,10 +91,7 @@ namespace WibboEmulator.Games.Rooms.AI
             }
         }
 
-        public string GetRandomSpeech()
-        {
-            return this.RandomSpeech[WibboEnvironment.GetRandomNumber(0, this.RandomSpeech.Count - 1)];
-        }
+        public string GetRandomSpeech() => this.RandomSpeech[WibboEnvironment.GetRandomNumber(0, this.RandomSpeech.Count - 1)];
 
         public BotAI GenerateBotAI(int VirtualId)
         {

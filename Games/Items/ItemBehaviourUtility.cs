@@ -1,6 +1,6 @@
 ﻿using WibboEmulator.Communication.Packets.Outgoing;
-using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
 
 namespace WibboEmulator.Games.Items
 {
@@ -28,7 +28,7 @@ namespace WibboEmulator.Games.Items
                         message.WriteString("rarity");
                         message.WriteString(itemData.RarityLevel.ToString());
                     }
-                    
+
                     if (itemData.Amount >= 0)
                     {
                         message.WriteString("amount");
@@ -174,7 +174,7 @@ namespace WibboEmulator.Games.Items
                                 break;
                         }
 
-                    message.WriteInteger(1);
+                        message.WriteInteger(1);
                         message.WriteInteger(3);
                         message.WriteString("MESSAGE");
                         message.WriteString($"Bravo tu as reçu une {LotName} ! Ouvre-là pour y découvrir ton lot");

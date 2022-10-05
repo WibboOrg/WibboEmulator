@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Wired;
 
 namespace WibboEmulator.Games.Items.Wired.Triggers
@@ -19,10 +19,7 @@ namespace WibboEmulator.Games.Items.Wired.Triggers
             this.IntParams.Add(0);
         }
 
-        public void ResetTimer(object sender, EventArgs e)
-        {
-            this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, null, null));
-        }
+        public void ResetTimer(object sender, EventArgs e) => this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, null, null));
 
         public bool OnCycle(RoomUser user, Item item)
         {
@@ -33,14 +30,11 @@ namespace WibboEmulator.Games.Items.Wired.Triggers
         public override void Dispose()
         {
             this.RoomInstance.GetWiredHandler().TrgTimer -= this.delegateFunction;
-            
+
             base.Dispose();
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient)
-        {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, null);
-        }
+        public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.DelayCycle.ToString(), false, null);
 
         public void LoadFromDatabase(DataRow row)
         {

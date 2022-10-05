@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Communication.Interfaces;
+﻿using System.Collections.Concurrent;
+using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc;
 using WibboEmulator.Games.Roleplay.Item;
 using WibboEmulator.Games.Roleplay.Player;
-using System.Collections.Concurrent;
 
 namespace WibboEmulator.Games.Roleplay.Troc
 {

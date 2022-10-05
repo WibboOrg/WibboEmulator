@@ -60,9 +60,6 @@ namespace WibboEmulator.Communication.RCON.Commands
             this.Register("autogame", new AutoGameCommand());
         }
 
-        public void Register(string commandText, IRCONCommand command)
-        {
-            this._commands.Add(commandText, command);
-        }
+        public void Register(string commandText, IRCONCommand command) => this._commands.Add(commandText, command);
     }
 }

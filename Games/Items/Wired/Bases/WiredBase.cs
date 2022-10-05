@@ -63,7 +63,7 @@ namespace WibboEmulator.Games.Items.Wired
 
         public virtual void OnTrigger(GameClient Session)
         {
-            
+
         }
 
         public virtual void Dispose()
@@ -76,7 +76,7 @@ namespace WibboEmulator.Games.Items.Wired
                 this.Items = null;
             }
 
-            if(this.StuffIds != null)
+            if (this.StuffIds != null)
             {
                 this.StuffIds.Clear();
                 this.StuffIds = null;
@@ -95,10 +95,7 @@ namespace WibboEmulator.Games.Items.Wired
             }
         }
 
-        public bool Disposed()
-        {
-            return this.IsDisposed;
-        }
+        public bool Disposed() => this.IsDisposed;
 
         public virtual void LoadItems(bool inDatabase = false)
         {

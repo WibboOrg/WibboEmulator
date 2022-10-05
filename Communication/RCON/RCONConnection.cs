@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Core;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Text;
+using WibboEmulator.Core;
 
 namespace WibboEmulator.Net
 {

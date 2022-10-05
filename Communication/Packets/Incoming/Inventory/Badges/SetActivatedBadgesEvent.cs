@@ -52,7 +52,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
 
             if (!Session.GetUser().InRoom)
                 Session.SendPacket(new UserBadgesComposer(Session.GetUser()));
-            else 
+            else
             {
                 if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
                     room.SendPacket(new UserBadgesComposer(Session.GetUser()));

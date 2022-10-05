@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Database.Interfaces;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.PathFinding;
-using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
 
 namespace WibboEmulator.Games.Items.Wired.Conditions
 {
@@ -17,7 +17,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
         {
             bool requireAll = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
 
-            if (this.Items.Count == 0) 
+            if (this.Items.Count == 0)
                 return false;
 
             foreach (Item roomItem in this.Items.ToList())
@@ -65,7 +65,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
                 if (!int.TryParse(itemId, out int id))
                     continue;
 
-                if(!this.StuffIds.Contains(id))
+                if (!this.StuffIds.Contains(id))
                     this.StuffIds.Add(id);
             }
         }

@@ -1,20 +1,14 @@
-using WibboEmulator.Database.Interfaces;
 using System.Data;
 using System.Text;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Daos
 {
     class RoomRightDao
     {
-        internal static void Insert(IQueryAdapter dbClient, int roomId, int userId)
-        {
-            dbClient.RunQuery("INSERT INTO `room_right` (room_id, user_id) VALUES ('" + roomId + "', '" + userId + "')");
-        }
+        internal static void Insert(IQueryAdapter dbClient, int roomId, int userId) => dbClient.RunQuery("INSERT INTO `room_right` (room_id, user_id) VALUES ('" + roomId + "', '" + userId + "')");
 
-        internal static void Delete(IQueryAdapter dbClient, int roomId)
-        {
-            dbClient.RunQuery("DELETE FROM `room_right` WHERE room_id = '" + roomId + "'");
-        }
+        internal static void Delete(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("DELETE FROM `room_right` WHERE room_id = '" + roomId + "'");
 
         internal static void Delete(IQueryAdapter dbClient, int roomId, int userId)
         {
@@ -41,7 +35,7 @@ namespace WibboEmulator.Database.Daos
             StringBuilder deleteParams = new StringBuilder();
 
             int index = 0;
-            foreach(int userId in userIds)
+            foreach (int userId in userIds)
             {
                 if (index > 0)
                 {

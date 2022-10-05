@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Communication.Packets.Incoming;
+﻿using System.Data;
+using WibboEmulator.Communication.Packets.Incoming;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Quests;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
-using System.Data;
 
 namespace WibboEmulator.Games.Quests
 {

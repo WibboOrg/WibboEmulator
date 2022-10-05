@@ -1,6 +1,6 @@
 ﻿using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map.Movement;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {

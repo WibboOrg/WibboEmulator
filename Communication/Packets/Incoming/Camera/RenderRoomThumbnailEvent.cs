@@ -1,5 +1,5 @@
-﻿using WibboEmulator.Games.GameClients;
-using WibboEmulator.Communication.Packets.Outgoing.Camera;
+﻿using WibboEmulator.Communication.Packets.Outgoing.Camera;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Camera

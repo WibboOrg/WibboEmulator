@@ -59,9 +59,9 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             int TotalDiamondCost = Item.CostWibboPoints;
             int TotalLimitCoinCost = Item.CostLimitCoins;
 
-            if (Session.GetUser().Credits < TotalCreditsCost || 
-                Session.GetUser().Duckets < TotalPixelCost || 
-                Session.GetUser().WibboPoints < TotalDiamondCost || 
+            if (Session.GetUser().Credits < TotalCreditsCost ||
+                Session.GetUser().Duckets < TotalPixelCost ||
+                Session.GetUser().WibboPoints < TotalDiamondCost ||
                 Session.GetUser().LimitCoins < TotalLimitCoinCost)
             {
                 return;
@@ -99,7 +99,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
             {
                 NewItemId = ItemDao.Insert(dbClient, PresentData.Id, user.Id, ED);
 
-                string ItemExtraData = null;
+                string ItemExtraData = "";
                 switch (Item.Data.InteractionType)
                 {
                     case InteractionType.NONE:

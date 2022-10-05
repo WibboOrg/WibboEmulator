@@ -16,7 +16,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Camera
             {
                 photoId = session.GetUser().LastPhotoId;
             }
-            else if(!WibboEnvironment.IsValidAlphaNumeric(photoId) || photoId.Length != 32)
+            else if (!WibboEnvironment.IsValidAlphaNumeric(photoId) || photoId.Length != 32)
             {
                 session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
                 return;

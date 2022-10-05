@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using System.Data;
 
 namespace WibboEmulator.Games.Effects
 {
@@ -9,10 +9,7 @@ namespace WibboEmulator.Games.Effects
         private readonly List<int> _effects;
         private readonly List<int> _effectsStaff;
 
-        public List<int> GetEffects()
-        {
-            return this._effects;
-        }
+        public List<int> GetEffects() => this._effects;
 
         public EffectManager()
         {

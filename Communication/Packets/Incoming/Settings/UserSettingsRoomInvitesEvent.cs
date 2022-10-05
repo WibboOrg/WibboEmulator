@@ -12,7 +12,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
         {
             bool flag = Packet.PopBoolean();
 
-            if(Session == null || Session.GetUser() == null)
+            if (Session == null || Session.GetUser() == null)
             {
                 return;
             }

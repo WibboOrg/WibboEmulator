@@ -1,10 +1,10 @@
+using WibboEmulator.Communication.Packets.Outgoing.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Communication.Packets.Outgoing.Avatar;
+using WibboEmulator.Games.Rooms.Games;
 
 namespace WibboEmulator.Games.Chat.Commands.Cmd
 {

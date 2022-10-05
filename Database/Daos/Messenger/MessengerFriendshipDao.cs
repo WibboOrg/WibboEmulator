@@ -19,15 +19,9 @@ namespace WibboEmulator.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void Replace(IQueryAdapter dbClient, int userId, int friendId)
-        {
-            dbClient.RunQuery("REPLACE INTO `messenger_friendship` (user_one_id,user_two_id) VALUES ('" + userId + "','" + friendId + "')");
-        }
+        internal static void Replace(IQueryAdapter dbClient, int userId, int friendId) => dbClient.RunQuery("REPLACE INTO `messenger_friendship` (user_one_id,user_two_id) VALUES ('" + userId + "','" + friendId + "')");
 
-        internal static void Delete(IQueryAdapter dbClient, int userId, int friendId)
-        {
-            dbClient.RunQuery("DELETE FROM `messenger_friendship` WHERE (user_one_id = '" + userId + "' AND user_two_id = '" + friendId + "') OR (user_two_id = '" + userId + "' AND user_one_id = '" + friendId + "')");
-        }
+        internal static void Delete(IQueryAdapter dbClient, int userId, int friendId) => dbClient.RunQuery("DELETE FROM `messenger_friendship` WHERE (user_one_id = '" + userId + "' AND user_two_id = '" + friendId + "') OR (user_two_id = '" + userId + "' AND user_one_id = '" + friendId + "')");
 
         internal static bool haveFriend(IQueryAdapter dbClient, int userId, int requestID)
         {

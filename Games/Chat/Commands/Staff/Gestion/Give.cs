@@ -71,7 +71,7 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
                                 break;
                             }
                         }
-                    } 
+                    }
 
                 case "limitcoins":
                 case "ltc":

@@ -51,9 +51,6 @@
             this.z = z;
         }
 
-        public Vector2D ToVector2D()
-        {
-            return new Vector2D(x, y);
-        }
+        public Vector2D ToVector2D() => new Vector2D(x, y);
     }
 }

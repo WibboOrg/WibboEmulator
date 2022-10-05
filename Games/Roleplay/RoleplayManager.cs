@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Collections.Concurrent;
+using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Roleplay.Enemy;
 using WibboEmulator.Games.Roleplay.Troc;
 using WibboEmulator.Games.Roleplay.Weapon;
-using System.Collections.Concurrent;
-using System.Data;
 
 namespace WibboEmulator.Games.Roleplay
 {
@@ -37,25 +37,13 @@ namespace WibboEmulator.Games.Roleplay
             return RP;
         }
 
-        public RPTrocManager GetTrocManager()
-        {
-            return this._roleplayTrocManager;
-        }
+        public RPTrocManager GetTrocManager() => this._roleplayTrocManager;
 
-        public RPWeaponManager GetWeaponManager()
-        {
-            return this._roleplayWeaponManager;
-        }
+        public RPWeaponManager GetWeaponManager() => this._roleplayWeaponManager;
 
-        public RPItemManager GetItemManager()
-        {
-            return this._roleplayItemManager;
-        }
+        public RPItemManager GetItemManager() => this._roleplayItemManager;
 
-        public RPEnemyManager GetEnemyManager()
-        {
-            return this._roleplayEnemyManager;
-        }
+        public RPEnemyManager GetEnemyManager() => this._roleplayEnemyManager;
 
         public void Init(IQueryAdapter dbClient)
         {

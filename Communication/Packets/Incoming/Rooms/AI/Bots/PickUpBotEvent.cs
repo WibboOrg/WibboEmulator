@@ -3,8 +3,8 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.GameClients.Inventory.Bots;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

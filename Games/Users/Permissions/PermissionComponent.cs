@@ -26,15 +26,9 @@ namespace WibboEmulator.Games.GameClients.Permissions
             return true;
         }
 
-        public bool HasRight(string Right)
-        {
-            return _permissions.Contains(Right);
-        }
+        public bool HasRight(string Right) => _permissions.Contains(Right);
 
-        public bool HasCommand(string Command)
-        {
-            return _commands.Contains(Command);
-        }
+        public bool HasCommand(string Command) => _commands.Contains(Command);
 
         public void Dispose()
         {

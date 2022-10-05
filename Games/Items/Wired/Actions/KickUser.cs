@@ -1,12 +1,12 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Items.Wired.Actions
 {
     public class KickUser : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
-    {   
+    {
         public KickUser(Item item, Room room) : base(item, room, (int)WiredActionType.KICK_FROM_ROOM)
         {
         }
@@ -26,7 +26,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
 
         public override void Handle(RoomUser user, Item item)
         {
-            if(this.BeforeCycle(user, item))
+            if (this.BeforeCycle(user, item))
                 base.Handle(user, item);
         }
 
@@ -37,7 +37,7 @@ namespace WibboEmulator.Games.Items.Wired.Actions
                 if (user.GetClient().GetUser().HasPermission("perm_mod") || this.RoomInstance.RoomData.OwnerId == user.UserId)
                 {
                     user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("wired.kick.exception", user.GetClient().Langue));
-                    
+
                     return false;
                 }
 
@@ -53,16 +53,13 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             return true;
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient)
-        {
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null, this.Delay);
-        }
+        public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null, this.Delay);
 
         public void LoadFromDatabase(DataRow row)
         {
             if (int.TryParse(row["delay"].ToString(), out int delay))
-	            this.Delay = delay;
-                
+                this.Delay = delay;
+
             this.StringParam = row["trigger_data"].ToString();
         }
     }

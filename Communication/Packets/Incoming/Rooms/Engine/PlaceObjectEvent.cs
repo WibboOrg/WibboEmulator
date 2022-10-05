@@ -55,7 +55,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
                 return;
             }
 
-            if(userItem.Data.IsRare && !room.CheckRights(session, true))
+            if (userItem.Data.IsRare && !room.CheckRights(session, true))
             {
                 session.SendPacket(new RoomNotificationComposer("furni_placement_error", "message", "${room.error.cant_trade_stuff}"));
                 return;

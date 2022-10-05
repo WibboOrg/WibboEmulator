@@ -1,6 +1,6 @@
-using WibboEmulator.Database.Interfaces;
 using System.Data;
 using System.Text;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Daos
 {
@@ -13,10 +13,7 @@ namespace WibboEmulator.Database.Daos
             return dbClient.GetRow();
         }
 
-        internal static void UpdateState(IQueryAdapter dbClient, int offerId)
-        {
-            dbClient.RunQuery("UPDATE `catalog_marketplace_offer` SET state = '2' WHERE offer_id = '" + offerId + "' LIMIT 1");
-        }
+        internal static void UpdateState(IQueryAdapter dbClient, int offerId) => dbClient.RunQuery("UPDATE `catalog_marketplace_offer` SET state = '2' WHERE offer_id = '" + offerId + "' LIMIT 1");
 
         internal static DataTable GetAll(IQueryAdapter dbClient, string searchQuery, int minCost, int maxCost, int filterMode)
         {
@@ -82,10 +79,7 @@ namespace WibboEmulator.Database.Daos
             return dbClient.GetTable();
         }
 
-        internal static void Delete(IQueryAdapter dbClient, int userId)
-        {
-            dbClient.RunQuery("DELETE FROM `catalog_marketplace_offer` WHERE user_id = '" + userId + "' AND state = '2'");
-        }
+        internal static void Delete(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("DELETE FROM `catalog_marketplace_offer` WHERE user_id = '" + userId + "' AND state = '2'");
 
         internal static DataTable GetOneByUserId(IQueryAdapter dbClient, int userId)
         {

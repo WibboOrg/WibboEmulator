@@ -15,9 +15,6 @@
             Levels = new Dictionary<int, AchievementLevel>();
         }
 
-        public void AddLevel(AchievementLevel Level)
-        {
-            this.Levels.Add(Level.Level, Level);
-        }
+        public void AddLevel(AchievementLevel Level) => this.Levels.Add(Level.Level, Level);
     }
 }

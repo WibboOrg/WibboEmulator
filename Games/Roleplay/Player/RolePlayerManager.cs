@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Collections.Concurrent;
+using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Roleplay.Player;
-using System.Collections.Concurrent;
-using System.Data;
 
 namespace WibboEmulator.Games.Roleplay
 {

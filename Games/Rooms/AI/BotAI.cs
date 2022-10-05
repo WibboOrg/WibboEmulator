@@ -19,15 +19,9 @@ namespace WibboEmulator.Games.Rooms.AI
             this.room = room;
         }
 
-        public Room GetRoom()
-        {
-            return this.room;
-        }
+        public Room GetRoom() => this.room;
 
-        public RoomUser GetRoomUser()
-        {
-            return this.roomUser;
-        }
+        public RoomUser GetRoomUser() => this.roomUser;
 
         public RoomBot GetBotData()
         {

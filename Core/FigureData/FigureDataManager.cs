@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Core.FigureData.Types;
+﻿using System.Text.Json;
 using WibboEmulator.Core.FigureData.JsonObject;
-using System.Text.Json;
+using WibboEmulator.Core.FigureData.Types;
 
 namespace WibboEmulator.Core.FigureData
 {
@@ -37,7 +37,7 @@ namespace WibboEmulator.Core.FigureData
 
             HttpResponseMessage response = WibboEnvironment.GetHttpClient().GetAsync(WibboEnvironment.GetSettings().GetData<string>("figuredata.url") + "?cache=" + WibboEnvironment.GetUnixTimestamp()).GetAwaiter().GetResult();
 
-            if(!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
                 Console.WriteLine("Error load figuredata");
                 return;
@@ -283,19 +283,10 @@ namespace WibboEmulator.Core.FigureData
             return "hd-180-1.lg-270-1408";
         }
 
-        public Palette GetPalette(int colorId)
-        {
-            return this._palettes.FirstOrDefault(x => x.Value.Colors.ContainsKey(colorId)).Value;
-        }
+        public Palette GetPalette(int colorId) => this._palettes.FirstOrDefault(x => x.Value.Colors.ContainsKey(colorId)).Value;
 
-        public bool TryGetPalette(int palletId, out Palette palette)
-        {
-            return this._palettes.TryGetValue(palletId, out palette);
-        }
+        public bool TryGetPalette(int palletId, out Palette palette) => this._palettes.TryGetValue(palletId, out palette);
 
-        public int GetRandomColor(int palletId)
-        {
-            return this._palettes[palletId].Colors.FirstOrDefault().Value.Id;
-        }
+        public int GetRandomColor(int palletId) => this._palettes[palletId].Colors.FirstOrDefault().Value.Id;
     }
 }

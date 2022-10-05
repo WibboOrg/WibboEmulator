@@ -1,14 +1,11 @@
-using WibboEmulator.Database.Interfaces;
 using System.Data;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Daos
 {
     class UserBadgeDao
     {
-        internal static void UpdateResetSlot(IQueryAdapter dbClient, int userId)
-        {
-            dbClient.RunQuery("UPDATE `user_badge` SET badge_slot = '0' WHERE user_id = '" + userId + "' AND badge_slot != '0'");
-        }
+        internal static void UpdateResetSlot(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("UPDATE `user_badge` SET badge_slot = '0' WHERE user_id = '" + userId + "' AND badge_slot != '0'");
 
         internal static void UpdateSlot(IQueryAdapter dbClient, int userId, int slot, string badge)
         {

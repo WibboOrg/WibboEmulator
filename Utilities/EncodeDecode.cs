@@ -77,7 +77,7 @@
             IEnumerable<byte> keys = bytes.Skip(indexFirstMask).Take(4);
             int indexFirstDataByte = indexFirstMask + 4;
 
-            if(bytes.Length - indexFirstDataByte < 0)
+            if (bytes.Length - indexFirstDataByte < 0)
                 return new byte[0];
 
             byte[] decoded = new byte[bytes.Length - indexFirstDataByte];

@@ -5,9 +5,6 @@ namespace WibboEmulator.Games.Chat.Commands.Cmd
 {
     internal class TeleportStaff : IChatCommand
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
-        {
-            UserRoom.TeleportEnabled = !UserRoom.TeleportEnabled;
-        }
+        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params) => UserRoom.TeleportEnabled = !UserRoom.TeleportEnabled;
     }
 }

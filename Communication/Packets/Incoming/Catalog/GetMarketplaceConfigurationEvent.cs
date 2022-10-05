@@ -7,9 +7,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Structure
     {
         public double Delay => 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet)
-        {
-            Session.SendPacket(new MarketplaceConfigurationComposer());
-        }
+        public void Parse(GameClient Session, ClientPacket Packet) => Session.SendPacket(new MarketplaceConfigurationComposer());
     }
 }

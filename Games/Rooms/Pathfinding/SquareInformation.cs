@@ -29,9 +29,6 @@
 
         public SquarePoint Point => this._point;
 
-        public SquarePoint Pos(int val)
-        {
-            return this._pos[val];
-        }
+        public SquarePoint Pos(int val) => this._pos[val];
     }
 }

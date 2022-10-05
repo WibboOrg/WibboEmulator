@@ -19,7 +19,7 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni
             this.WriteInteger(1);
             this.WriteInteger(Type);
             this.WriteInteger(items.Count);
-            foreach(Item item in items)
+            foreach (Item item in items)
                 this.WriteInteger(item.Id);
         }
     }

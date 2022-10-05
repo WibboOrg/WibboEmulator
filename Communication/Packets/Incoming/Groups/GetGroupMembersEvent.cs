@@ -1,9 +1,9 @@
+using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
-using System.Data;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

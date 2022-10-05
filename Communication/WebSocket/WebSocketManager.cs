@@ -1,14 +1,14 @@
-﻿using WibboEmulator.Communication.Packets.Incoming;
-using WibboEmulator.Core;
-using WibboEmulator.Games.GameClients;
-using WibboEmulator.Utilities;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Net;
+using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using WebSocketSharp;
 using WebSocketSharp.Server;
-using System.Security.Authentication;
-using System.Diagnostics;
+using WibboEmulator.Communication.Packets.Incoming;
+using WibboEmulator.Core;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Utilities;
 
 namespace WibboEmulator.Communication.WebSocket
 {
@@ -19,12 +19,14 @@ namespace WibboEmulator.Communication.WebSocket
         private readonly ConcurrentDictionary<string, int> _ipConnectionsCount;
         private readonly ConcurrentDictionary<string, int> _lastTimeConnection;
         private readonly List<string> _bannedIp;
+        private readonly List<string> _webSocketOrigins;
 
-        public WebSocketManager(int port, bool isSecure)
+        public WebSocketManager(int port, bool isSecure, List<string> webSocketOrigins)
         {
             this._ipConnectionsCount = new ConcurrentDictionary<string, int>();
             this._lastTimeConnection = new ConcurrentDictionary<string, int>();
             this._bannedIp = new List<string>();
+            this._webSocketOrigins = webSocketOrigins;
 
             this._webSocketServer = new WebSocketServer(IPAddress.Any, port, isSecure);
             this._webSocketServer.WaitTime = TimeSpan.FromSeconds(5);
@@ -45,7 +47,7 @@ namespace WibboEmulator.Communication.WebSocket
             this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => new GameWebSocket() { IgnoreExtensions = true });
             this._webSocketServer.Start();
 
-            if(Debugger.IsAttached)
+            if (Debugger.IsAttached)
                 this._webSocketServer.Log.Level = LogLevel.Trace;
         }
 
@@ -62,7 +64,7 @@ namespace WibboEmulator.Communication.WebSocket
         {
             string ip = connection.GetIp();
 
-            if (ip.Contains(',') || this._bannedIp.Contains(ip) || !WibboEnvironment.WebSocketOrigins.Contains(connection.GetOrigin()) || connection.GetUserAgent() == "")
+            if (ip.Contains(',') || this._bannedIp.Contains(ip) || !_webSocketOrigins.Contains(connection.GetOrigin()) || connection.GetUserAgent() == "")
             {
                 ExceptionLogger.LogDenial("[IP: " + ip + "] [Origin: " + connection.GetOrigin() + "] [User-Agent: " + connection.GetUserAgent() + "]");
                 return;
@@ -100,10 +102,7 @@ namespace WibboEmulator.Communication.WebSocket
             }
         }
 
-        private static int GetUnixTimestamp()
-        {
-            return (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
-        }
+        private static int GetUnixTimestamp() => (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
 
         private void AlterIpConnectionCount(string ip, int amount)
         {
@@ -156,15 +155,9 @@ namespace WibboEmulator.Communication.WebSocket
     {
         private string _ip;
 
-        protected override void OnError(WebSocketSharp.ErrorEventArgs e)
-        {
-            ExceptionLogger.LogException(e.Message);
-        }
+        protected override void OnError(WebSocketSharp.ErrorEventArgs e) => ExceptionLogger.LogException(e.Message);
 
-        protected override void OnClose(CloseEventArgs e)
-        {
-            WibboEnvironment.GetWebSocketManager().DisposeClient(this);
-        }
+        protected override void OnClose(CloseEventArgs e) => WibboEnvironment.GetWebSocketManager().DisposeClient(this);
 
         protected override void OnMessage(MessageEventArgs e)
         {
@@ -224,10 +217,7 @@ namespace WibboEmulator.Communication.WebSocket
             }
         }
 
-        protected override void OnOpen()
-        {
-            WibboEnvironment.GetWebSocketManager().CreatedClient(this);
-        }
+        protected override void OnOpen() => WibboEnvironment.GetWebSocketManager().CreatedClient(this);
 
         public void SendData(byte[] bytes)
         {
@@ -237,20 +227,11 @@ namespace WibboEmulator.Communication.WebSocket
             this.Send(bytes);
         }
 
-        public void Disconnect()
-        {
-            this.Close();
-        }
+        public void Disconnect() => this.Close();
 
-        public string GetUserAgent()
-        {
-            return this.Headers["User-Agent"] ?? "";
-        }
+        public string GetUserAgent() => this.Headers["User-Agent"] ?? "";
 
-        public string GetOrigin()
-        {
-            return this.Headers["Origin"] ?? "";
-        }
+        public string GetOrigin() => this.Headers["Origin"] ?? "";
 
         public string GetIp()
         {

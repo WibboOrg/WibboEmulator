@@ -1,10 +1,10 @@
-﻿using WibboEmulator.Games.Items;
+﻿using System.Collections.Concurrent;
+using System.Drawing;
+using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms.PathFinding;
-using System.Collections.Concurrent;
-using System.Drawing;
 
 namespace WibboEmulator.Games.Rooms
 {
@@ -708,10 +708,7 @@ namespace WibboEmulator.Games.Rooms
             }
         }
 
-        public static bool CanWalkState(byte pState, bool pOverride)
-        {
-            return pOverride || pState == 3 || pState == 1;
-        }
+        public static bool CanWalkState(byte pState, bool pOverride) => pOverride || pState == 3 || pState == 1;
 
         public bool ValidTile(int X, int Y)
         {
@@ -1201,15 +1198,9 @@ namespace WibboEmulator.Games.Rooms
             return true;
         }
 
-        public static bool TilesTouching(int X1, int Y1, int X2, int Y2)
-        {
-            return Math.Abs(X1 - X2) <= 1 && Math.Abs(Y1 - Y2) <= 1 || X1 == X2 && Y1 == Y2;
-        }
+        public static bool TilesTouching(int X1, int Y1, int X2, int Y2) => Math.Abs(X1 - X2) <= 1 && Math.Abs(Y1 - Y2) <= 1 || X1 == X2 && Y1 == Y2;
 
-        public static int TileDistance(int X1, int Y1, int X2, int Y2)
-        {
-            return Math.Abs(X1 - X2) + Math.Abs(Y1 - Y2);
-        }
+        public static int TileDistance(int X1, int Y1, int X2, int Y2) => Math.Abs(X1 - X2) + Math.Abs(Y1 - Y2);
 
         public void Destroy()
         {

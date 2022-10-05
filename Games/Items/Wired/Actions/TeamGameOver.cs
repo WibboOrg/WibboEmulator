@@ -1,9 +1,9 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
+﻿using System.Data;
+using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games;
-using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
 
 namespace WibboEmulator.Games.Items.Wired.Actions
 {
@@ -80,8 +80,8 @@ namespace WibboEmulator.Games.Items.Wired.Actions
             this.IntParams.Clear();
 
             if (int.TryParse(row["delay"].ToString(), out int delay))
-	            this.Delay = delay;
-                
+                this.Delay = delay;
+
             if (int.TryParse(row["trigger_data"].ToString(), out int number))
                 this.IntParams.Add(number);
         }

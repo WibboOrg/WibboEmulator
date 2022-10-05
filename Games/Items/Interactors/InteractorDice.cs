@@ -78,6 +78,6 @@ namespace WibboEmulator.Games.Items.Interactors
                     user.OnChat($"Dée {user.DiceCounter}: +{numberDice} = {user.DiceCounterAmount} ({user.GetUsername()})", 34);
                 }
             }
-         }
+        }
     }
 }

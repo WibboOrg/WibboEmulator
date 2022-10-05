@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Core;
+﻿using System.Data;
+using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using System.Data;
 
 namespace WibboEmulator.Games.GameClients.Authenticator
 {
@@ -82,7 +82,7 @@ namespace WibboEmulator.Games.GameClients.Authenticator
             }
             catch (Exception ex)
             {
-                ExceptionLogger.HandleException(ex, "UserDataFactory.GetUserData");            
+                ExceptionLogger.HandleException(ex, "UserDataFactory.GetUserData");
                 return null;
             }
         }

@@ -1,12 +1,11 @@
+using System.Text.RegularExpressions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
-
+using WibboEmulator.Games.Chat.Styles;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 using WibboEmulator.Games.Roleplay.Player;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Chat.Styles;
 using WibboEmulator.Utilities;
-using System.Text.RegularExpressions;
 
 namespace WibboEmulator.Communication.Packets.Incoming.Structure
 {

@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Core;
+﻿using System.Data;
+using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using System.Data;
 
 namespace WibboEmulator.Games.Navigator
 {
@@ -110,34 +110,16 @@ namespace WibboEmulator.Games.Navigator
             return Categorys.ToList();
         }
 
-        public ICollection<TopLevelItem> GetTopLevelItems()
-        {
-            return this._topLevelItems.Values;
-        }
+        public ICollection<TopLevelItem> GetTopLevelItems() => this._topLevelItems.Values;
 
-        public ICollection<SearchResultList> GetSearchResultLists()
-        {
-            return this._searchResultLists.Values;
-        }
+        public ICollection<SearchResultList> GetSearchResultLists() => this._searchResultLists.Values;
 
-        public bool TryGetTopLevelItem(int Id, out TopLevelItem TopLevelItem)
-        {
-            return this._topLevelItems.TryGetValue(Id, out TopLevelItem);
-        }
+        public bool TryGetTopLevelItem(int Id, out TopLevelItem TopLevelItem) => this._topLevelItems.TryGetValue(Id, out TopLevelItem);
 
-        public bool TryGetSearchResultList(int Id, out SearchResultList SearchResultList)
-        {
-            return this._searchResultLists.TryGetValue(Id, out SearchResultList);
-        }
+        public bool TryGetSearchResultList(int Id, out SearchResultList SearchResultList) => this._searchResultLists.TryGetValue(Id, out SearchResultList);
 
-        public bool TryGetFeaturedRoom(int RoomId, out FeaturedRoom PublicRoom)
-        {
-            return this._featuredRooms.TryGetValue(RoomId, out PublicRoom);
-        }
+        public bool TryGetFeaturedRoom(int RoomId, out FeaturedRoom PublicRoom) => this._featuredRooms.TryGetValue(RoomId, out PublicRoom);
 
-        public ICollection<FeaturedRoom> GetFeaturedRooms(Language Langue)
-        {
-            return this._featuredRooms.Values.Where(F => F.Langue == Langue).ToList();
-        }
+        public ICollection<FeaturedRoom> GetFeaturedRooms(Language Langue) => this._featuredRooms.Values.Where(F => F.Langue == Langue).ToList();
     }
 }

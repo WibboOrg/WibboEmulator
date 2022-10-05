@@ -1,14 +1,11 @@
-﻿using WibboEmulator.Database.Interfaces;
-using System.Data;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Daos
 {
     class UserDao
     {
-        internal static string BuildUpdateQuery(int userId, int duckets, int credits)
-        {
-            return "UPDATE `user` SET `user`.online = '0', `user`.last_online = '" + WibboEnvironment.GetUnixTimestamp() + "', activity_points = '" + duckets + "', credits = '" + credits + "' WHERE id = '" + userId + "';";
-        }
+        internal static string BuildUpdateQuery(int userId, int duckets, int credits) => "UPDATE `user` SET `user`.online = '0', `user`.last_online = '" + WibboEnvironment.GetUnixTimestamp() + "', activity_points = '" + duckets + "', credits = '" + credits + "' WHERE id = '" + userId + "';";
 
         internal static int GetIdByName(IQueryAdapter dbClient, string name)
         {
@@ -100,30 +97,15 @@ namespace WibboEmulator.Database.Daos
             return dbClient.GetRow();
         }
 
-        internal static void UpdateRemoveLimitCoins(IQueryAdapter dbClient, int userId, int points)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `limit_coins` = `limit_coins` - '" + points + "' WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateRemoveLimitCoins(IQueryAdapter dbClient, int userId, int points) => dbClient.RunQuery("UPDATE `user` SET `limit_coins` = `limit_coins` - '" + points + "' WHERE `id` = '" + userId + "'");
 
-        internal static void UpdateRemovePoints(IQueryAdapter dbClient, int userId, int points)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `vip_points` = `vip_points` - '" + points + "' WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateRemovePoints(IQueryAdapter dbClient, int userId, int points) => dbClient.RunQuery("UPDATE `user` SET `vip_points` = `vip_points` - '" + points + "' WHERE `id` = '" + userId + "'");
 
-        internal static void UpdateAddPoints(IQueryAdapter dbClient, int userId, int points)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `vip_points` = `vip_points` + '" + points + "' WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateAddPoints(IQueryAdapter dbClient, int userId, int points) => dbClient.RunQuery("UPDATE `user` SET `vip_points` = `vip_points` + '" + points + "' WHERE `id` = '" + userId + "'");
 
-        internal static void UpdateHomeRoom(IQueryAdapter dbClient, int userId, int roomId)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `home_room` = '" + roomId + "' WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateHomeRoom(IQueryAdapter dbClient, int userId, int roomId) => dbClient.RunQuery("UPDATE `user` SET `home_room` = '" + roomId + "' WHERE `id` = '" + userId + "'");
 
-        internal static void UpdateNuxEnable(IQueryAdapter dbClient, int userId, int roomId)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `nux_enable` = '0', `home_room` = '" + roomId + "' WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateNuxEnable(IQueryAdapter dbClient, int userId, int roomId) => dbClient.RunQuery("UPDATE `user` SET `nux_enable` = '0', `home_room` = '" + roomId + "' WHERE `id` = '" + userId + "'");
 
         internal static void UpdateMotto(IQueryAdapter dbClient, int userId, string motto)
         {
@@ -132,20 +114,11 @@ namespace WibboEmulator.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void UpdateIgnoreRoomInvites(IQueryAdapter dbClient, int userId, bool flag)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `ignore_room_invite` = '" + WibboEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
-        }
+        internal static void UpdateIgnoreRoomInvites(IQueryAdapter dbClient, int userId, bool flag) => dbClient.RunQuery("UPDATE `user` SET `ignore_room_invite` = '" + WibboEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
 
-        internal static void UpdateCameraFollowDisabled(IQueryAdapter dbClient, int userId, bool flag)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `camera_follow_disabled` = '" + WibboEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
-        }
+        internal static void UpdateCameraFollowDisabled(IQueryAdapter dbClient, int userId, bool flag) => dbClient.RunQuery("UPDATE `user` SET `camera_follow_disabled` = '" + WibboEnvironment.BoolToEnum(flag) + "' WHERE `id` = '" + userId + "' LIMIT 1");
 
-        internal static void UpdateVolume(IQueryAdapter dbClient, int userId, int volume1, int volume2, int volume3)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `volume` = '" + volume1 + "," + volume2 + "," + volume3 + "' WHERE `id` = '" + userId + "' LIMIT 1");
-        }
+        internal static void UpdateVolume(IQueryAdapter dbClient, int userId, int volume1, int volume2, int volume3) => dbClient.RunQuery("UPDATE `user` SET `volume` = '" + volume1 + "," + volume2 + "," + volume3 + "' WHERE `id` = '" + userId + "' LIMIT 1");
 
         internal static void UpdateName(IQueryAdapter dbClient, int userId, string username)
         {
@@ -170,15 +143,9 @@ namespace WibboEmulator.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void UpdateAllOnline(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `online` = '0' WHERE `online` = '1'");
-        }
+        internal static void UpdateAllOnline(IQueryAdapter dbClient) => dbClient.RunQuery("UPDATE `user` SET `online` = '0' WHERE `online` = '1'");
 
-        internal static void UpdateAllTicket(IQueryAdapter dbClient)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `auth_ticket` = '' WHERE `auth_ticket` != ''");
-        }
+        internal static void UpdateAllTicket(IQueryAdapter dbClient) => dbClient.RunQuery("UPDATE `user` SET `auth_ticket` = '' WHERE `auth_ticket` != ''");
 
         internal static void UpdateMachineId(IQueryAdapter dbClient, int userId, string machineId)
         {
@@ -187,44 +154,20 @@ namespace WibboEmulator.Database.Daos
             dbClient.RunQuery();
         }
 
-        internal static void UpdateAddGamePoints(IQueryAdapter dbClient, int userId)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `game_points` = `game_points` + 1, `game_points_month` = `game_points_month` + 1 WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateAddGamePoints(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("UPDATE `user` SET `game_points` = `game_points` + 1, `game_points_month` = `game_points_month` + 1 WHERE `id` = '" + userId + "'");
 
-        internal static void UpdateMazoScore(IQueryAdapter dbClient, int userId, int score)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `mazoscore` = '" + score + "' WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateMazoScore(IQueryAdapter dbClient, int userId, int score) => dbClient.RunQuery("UPDATE `user` SET `mazoscore` = '" + score + "' WHERE `id` = '" + userId + "'");
 
-        internal static void UpdateMazo(IQueryAdapter dbClient, int userId, int score)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `mazo` = '" + score + "' WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateMazo(IQueryAdapter dbClient, int userId, int score) => dbClient.RunQuery("UPDATE `user` SET `mazo` = '" + score + "' WHERE `id` = '" + userId + "'");
 
-        internal static void UpdateAddRunPoints(IQueryAdapter dbClient, int userId)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `run_points` = `run_points` + 1, `run_points_month` = `run_points_month` + 1 WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateAddRunPoints(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("UPDATE `user` SET `run_points` = `run_points` + 1, `run_points_month` = `run_points_month` + 1 WHERE `id` = '" + userId + "'");
 
-        internal static void UpdateOffline(IQueryAdapter dbClient, int userId, int duckets, int credits)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `online` = '0', `last_online` = '" + WibboEnvironment.GetUnixTimestamp() + "', `activity_points` = '" + duckets + "', `credits` = '" + credits + "' WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateOffline(IQueryAdapter dbClient, int userId, int duckets, int credits) => dbClient.RunQuery("UPDATE `user` SET `online` = '0', `last_online` = '" + WibboEnvironment.GetUnixTimestamp() + "', `activity_points` = '" + duckets + "', `credits` = '" + credits + "' WHERE `id` = '" + userId + "'");
 
-        internal static void UpdateLastDailyCredits(IQueryAdapter dbClient, int userId, string lastDailyCredits)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `lastdailycredits` = '" + lastDailyCredits + "' WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateLastDailyCredits(IQueryAdapter dbClient, int userId, string lastDailyCredits) => dbClient.RunQuery("UPDATE `user` SET `lastdailycredits` = '" + lastDailyCredits + "' WHERE `id` = '" + userId + "'");
 
-        internal static void UpdateOnline(IQueryAdapter dbClient, int userId)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `online` = '1', `auth_ticket` = ''  WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateOnline(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("UPDATE `user` SET `online` = '1', `auth_ticket` = ''  WHERE `id` = '" + userId + "'");
 
-        internal static void UpdateIsBanned(IQueryAdapter dbClient, int userId)
-        {
-            dbClient.RunQuery("UPDATE `user` SET `is_banned` = '1' WHERE `id` = '" + userId + "'");
-        }
+        internal static void UpdateIsBanned(IQueryAdapter dbClient, int userId) => dbClient.RunQuery("UPDATE `user` SET `is_banned` = '1' WHERE `id` = '" + userId + "'");
     }
 }

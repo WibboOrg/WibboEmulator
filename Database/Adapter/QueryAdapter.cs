@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Core;
-using WibboEmulator.Database.Interfaces;
-using MySql.Data.MySqlClient;
+﻿using MySql.Data.MySqlClient;
 using System.Data;
+using WibboEmulator.Core;
+using WibboEmulator.Database.Interfaces;
 
 namespace WibboEmulator.Database.Adapter
 {
@@ -17,15 +17,9 @@ namespace WibboEmulator.Database.Adapter
             this.client = Client;
         }
 
-        public void AddParameter(string parameterName, string val)
-        {
-            this.command.Parameters.AddWithValue(parameterName, val);
-        }
+        public void AddParameter(string parameterName, string val) => this.command.Parameters.AddWithValue(parameterName, val);
 
-        public void AddParameter(string parameterName, int val)
-        {
-            this.command.Parameters.AddWithValue(parameterName, val.ToString());
-        }
+        public void AddParameter(string parameterName, int val) => this.command.Parameters.AddWithValue(parameterName, val.ToString());
 
         public bool FindsResult()
         {

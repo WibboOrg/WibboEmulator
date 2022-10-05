@@ -1,4 +1,5 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
+﻿using System.Drawing;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
@@ -8,7 +9,6 @@ using WibboEmulator.Games.Roleplay.Player;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Rooms.Utils;
-using System.Drawing;
 
 namespace WibboEmulator.Games.Rooms
 {
@@ -273,10 +273,7 @@ namespace WibboEmulator.Games.Rooms
             this.Client = null;
         }
 
-        public void SendWhisperChat(string message, bool Info = true)
-        {
-            this.GetClient().SendPacket(new WhisperComposer(this.VirtualId, message, (Info) ? 34 : 0));
-        }
+        public void SendWhisperChat(string message, bool Info = true) => this.GetClient().SendPacket(new WhisperComposer(this.VirtualId, message, (Info) ? 34 : 0));
 
         public void OnChatMe(string MessageText, int Color = 0, bool Shout = false)
         {
@@ -305,10 +302,7 @@ namespace WibboEmulator.Games.Rooms
             }
         }
 
-        public void MoveTo(Point c, bool Override = false)
-        {
-            this.MoveTo(c.X, c.Y, Override);
-        }
+        public void MoveTo(Point c, bool Override = false) => this.MoveTo(c.X, c.Y, Override);
 
         public void MoveTo(int pX, int pY, bool pOverride = false)
         {
@@ -431,10 +425,7 @@ namespace WibboEmulator.Games.Rooms
             this.UpdateNeeded = true;
         }
 
-        public bool ContainStatus(string key)
-        {
-            return this._statusses.ContainsKey(key);
-        }
+        public bool ContainStatus(string key) => this._statusses.ContainsKey(key);
 
         public void SetStatus(string Key, string Value)
         {

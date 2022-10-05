@@ -1,8 +1,8 @@
-﻿using WibboEmulator.Database.Interfaces;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games;
-using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
 
 namespace WibboEmulator.Games.Items.Wired.Conditions
 {

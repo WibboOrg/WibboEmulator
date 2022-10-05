@@ -1,12 +1,12 @@
-﻿using WibboEmulator.Communication.Interfaces;
+﻿using System.Collections.Concurrent;
+using System.Text;
+using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients.Messenger;
-using System.Collections.Concurrent;
-using System.Text;
 
 namespace WibboEmulator.Games.GameClients
 {
@@ -100,10 +100,7 @@ namespace WibboEmulator.Games.GameClients
             return true;
         }
 
-        public bool TryGetClient(string ClientId, out GameClient Client)
-        {
-            return this._clients.TryGetValue(ClientId, out Client);
-        }
+        public bool TryGetClient(string ClientId, out GameClient Client) => this._clients.TryGetValue(ClientId, out Client);
 
         public string GetNameById(int Id)
         {
@@ -361,10 +358,7 @@ namespace WibboEmulator.Games.GameClients
             }
         }
 
-        public void SendSuperNotif(string Title, string Notice, string Picture, string Link, string LinkTitle, bool Broadcast, bool Event)
-        {
-            this.SendMessage(new RoomNotificationComposer(Title, Notice, Picture, LinkTitle, Link));
-        }
+        public void SendSuperNotif(string Title, string Notice, string Picture, string Link, string LinkTitle, bool Broadcast, bool Event) => this.SendMessage(new RoomNotificationComposer(Title, Notice, Picture, LinkTitle, Link));
 
         public ICollection<GameClient> GetClients => this._clients.Values;
     }

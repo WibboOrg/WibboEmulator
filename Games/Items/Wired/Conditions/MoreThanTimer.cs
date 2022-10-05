@@ -1,7 +1,7 @@
-﻿using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Rooms;
+﻿using System.Data;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using System.Data;
+using WibboEmulator.Games.Rooms;
 
 namespace WibboEmulator.Games.Items.Wired.Conditions
 {
@@ -14,7 +14,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
 
         public bool AllowsExecution(RoomUser user, Item TriggerItem)
         {
-             int timeout = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+            int timeout = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
             DateTime dateTime = this.RoomInstance.lastTimerReset;
             return (DateTime.Now - this.RoomInstance.lastTimerReset).TotalSeconds > timeout / 2;
@@ -22,7 +22,7 @@ namespace WibboEmulator.Games.Items.Wired.Conditions
 
         public void SaveToDatabase(IQueryAdapter dbClient)
         {
-             int timeout = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+            int timeout = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
             WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, timeout.ToString(), false, null);
         }

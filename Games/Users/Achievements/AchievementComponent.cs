@@ -1,6 +1,6 @@
-﻿using WibboEmulator.Database.Daos;
+﻿using System.Data;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
-using System.Data;
 
 namespace WibboEmulator.Games.GameClients.Achievements
 {
@@ -36,14 +36,11 @@ namespace WibboEmulator.Games.GameClients.Achievements
 
         public void AddAchievement(UserAchievement userAchivement)
         {
-            if(!this._achievements.ContainsKey(userAchivement.Group))
+            if (!this._achievements.ContainsKey(userAchivement.Group))
                 this._achievements.Add(userAchivement.Group, userAchivement);
         }
 
-        public Dictionary<string, UserAchievement> GetAchievements()
-        {
-            return this._achievements;
-        }
+        public Dictionary<string, UserAchievement> GetAchievements() => this._achievements;
 
         public UserAchievement GetAchievementData(string p)
         {

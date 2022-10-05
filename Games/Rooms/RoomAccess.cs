@@ -3,8 +3,8 @@
     public enum RoomAccess
     {
         Open,
-        Doorbell, 
-        Password, 
+        Doorbell,
+        Password,
         Invisible
     }
 }
