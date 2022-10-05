@@ -1,27 +1,24 @@
-using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
+namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Games.Users;
 using WibboEmulator.Utilities;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
+internal class ModeratorUserRoomVisitsComposer : ServerPacket
 {
-    internal class ModeratorUserRoomVisitsComposer : ServerPacket
+    public ModeratorUserRoomVisitsComposer(User user, Dictionary<double, int> visits)
+        : base(ServerPacketHeader.MODTOOL_VISITED_ROOMS_USER)
     {
-        public ModeratorUserRoomVisitsComposer(User Data, Dictionary<double, int> Visits)
-            : base(ServerPacketHeader.MODTOOL_VISITED_ROOMS_USER)
+        this.WriteInteger(user.Id);
+        this.WriteString(user.Username);
+        this.WriteInteger(visits.Count);
+
+        foreach (var visit in visits)
         {
-            WriteInteger(Data.Id);
-            WriteString(Data.Username);
-            WriteInteger(Visits.Count);
+            var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(visit.Value);
 
-            foreach (KeyValuePair<double, int> Visit in Visits)
-            {
-                RoomData roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(Visit.Value);
-
-                WriteInteger(roomData.Id);
-                WriteString(roomData.Name);
-                WriteInteger(UnixTimestamp.FromUnixTimestamp(Visit.Key).Hour);
-                WriteInteger(UnixTimestamp.FromUnixTimestamp(Visit.Key).Minute);
-            }
+            this.WriteInteger(roomData.Id);
+            this.WriteString(roomData.Name);
+            this.WriteInteger(UnixTimestamp.FromUnixTimestamp(visit.Key).Hour);
+            this.WriteInteger(UnixTimestamp.FromUnixTimestamp(visit.Key).Minute);
         }
     }
 }

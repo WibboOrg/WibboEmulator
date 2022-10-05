@@ -1,17 +1,15 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class EmptyPets : IChatCommand
 {
-    internal class EmptyPets : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
-        {
-            Session.GetUser().GetInventoryComponent().ClearPets();
-            Session.SendPacket(new PetInventoryComposer(Session.GetUser().GetInventoryComponent().GetPets()));
-            Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", Session.Langue));
+        session.GetUser().GetInventoryComponent().ClearPets();
+        session.SendPacket(new PetInventoryComposer(session.GetUser().GetInventoryComponent().GetPets()));
+        session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", session.Langue));
 
-        }
     }
 }

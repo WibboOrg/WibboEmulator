@@ -1,18 +1,17 @@
-﻿namespace Enclosure.Algorithm
+namespace Enclosure.Algorithm;
+
+public class GametileUpdate
 {
-    public class GametileUpdate
+    public byte Value { get; private set; }
+
+    public int Y { get; private set; }
+
+    public int X { get; private set; }
+
+    public GametileUpdate(int x, int y, byte value)
     {
-        public byte value { get; private set; }
-
-        public int y { get; private set; }
-
-        public int x { get; private set; }
-
-        public GametileUpdate(int x, int y, byte value)
-        {
-            this.x = x;
-            this.y = y;
-            this.value = value;
-        }
+        this.X = x;
+        this.Y = y;
+        this.Value = value;
     }
 }

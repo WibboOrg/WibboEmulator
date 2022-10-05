@@ -1,29 +1,27 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class DeclineBuddyEvent : IPacketEvent
 {
-    internal class DeclineBuddyEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser().GetMessenger() == null)
         {
-            if (Session.GetUser().GetMessenger() == null)
-            {
-                return;
-            }
+            return;
+        }
 
-            bool DeleteAllFriend = Packet.PopBoolean();
-            int RequestCount = Packet.PopInt();
+        var DeleteAllFriend = Packet.PopBoolean();
+        var RequestCount = Packet.PopInt();
 
-            if (!DeleteAllFriend && RequestCount == 1)
-            {
-                Session.GetUser().GetMessenger().HandleRequest(Packet.PopInt());
-            }
-            else
-            {
-                Session.GetUser().GetMessenger().HandleAllRequests();
-            }
+        if (!DeleteAllFriend && RequestCount == 1)
+        {
+            session.GetUser().GetMessenger().HandleRequest(Packet.PopInt());
+        }
+        else
+        {
+            session.GetUser().GetMessenger().HandleAllRequests();
         }
     }
 }

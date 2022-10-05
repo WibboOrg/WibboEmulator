@@ -1,44 +1,42 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator.New;
 
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Navigator;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class NavigatorSearchEvent : IPacketEvent
 {
-    internal class NavigatorSearchEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var Category = Packet.PopString();
+        var Search = Packet.PopString();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        ICollection<SearchResultList> Categories = new List<SearchResultList>();
+
+        if (!string.IsNullOrEmpty(Search))
         {
-            string Category = Packet.PopString();
-            string Search = Packet.PopString();
-
-            ICollection<SearchResultList> Categories = new List<SearchResultList>();
-
-            if (!string.IsNullOrEmpty(Search))
+            if (WibboEnvironment.GetGame().GetNavigator().TryGetSearchResultList(0, out var QueryResult))
             {
-                if (WibboEnvironment.GetGame().GetNavigator().TryGetSearchResultList(0, out SearchResultList QueryResult))
-                {
-                    Categories.Add(QueryResult);
-                }
+                Categories.Add(QueryResult);
             }
-            else
-            {
-                Categories = WibboEnvironment.GetGame().GetNavigator().GetCategorysForSearch(Category);
-                if (Categories.Count == 0)
-                {
-                    //Are we going in deep?!
-                    Categories = WibboEnvironment.GetGame().GetNavigator().GetResultByIdentifier(Category);
-                    if (Categories.Count > 0)
-                    {
-                        Session.SendPacket(new NavigatorSearchResultSetComposer(Category, Search, Categories, Session, 2, 50));
-                        return;
-                    }
-                }
-            }
-
-            Session.SendPacket(new NavigatorSearchResultSetComposer(Category, Search, Categories, Session));
         }
+        else
+        {
+            Categories = WibboEnvironment.GetGame().GetNavigator().GetCategorysForSearch(Category);
+            if (Categories.Count == 0)
+            {
+                //Are we going in deep?!
+                Categories = WibboEnvironment.GetGame().GetNavigator().GetResultByIdentifier(Category);
+                if (Categories.Count > 0)
+                {
+                    session.SendPacket(new NavigatorSearchResultSetComposer(Category, Search, Categories, session, 2, 50));
+                    return;
+                }
+            }
+        }
+
+        session.SendPacket(new NavigatorSearchResultSetComposer(Category, Search, Categories, session));
     }
 }

@@ -1,13 +1,12 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+
+internal class FloorHeightMapComposer : ServerPacket
 {
-    internal class FloorHeightMapComposer : ServerPacket
+    public FloorHeightMapComposer(int wallHeight, string mapFloor)
+        : base(ServerPacketHeader.ROOM_MODEL)
     {
-        public FloorHeightMapComposer(int wallHeight, string mapFloor)
-            : base(ServerPacketHeader.ROOM_MODEL)
-        {
-            this.WriteBoolean(wallHeight > 0);
-            this.WriteInteger((wallHeight > 0) ? wallHeight : -1);
-            this.WriteString(mapFloor);
-        }
+        this.WriteBoolean(wallHeight > 0);
+        this.WriteInteger((wallHeight > 0) ? wallHeight : -1);
+        this.WriteString(mapFloor);
     }
 }

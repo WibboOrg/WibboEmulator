@@ -1,23 +1,21 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.BuildersClub;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetCatalogIndexEvent : IPacketEvent
 {
-    internal class GetCatalogIndexEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var packetList = new ServerPacketList();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
-        {
-            ServerPacketList packetList = new ServerPacketList();
+        packetList.Add(new CatalogIndexComposer(session, WibboEnvironment.GetGame().GetCatalog().GetPages()));//, Sub));
+        packetList.Add(new CatalogItemDiscountComposer());
+        packetList.Add(new BCBorrowedItemsComposer());
 
-            packetList.Add(new CatalogIndexComposer(Session, WibboEnvironment.GetGame().GetCatalog().GetPages()));//, Sub));
-            packetList.Add(new CatalogItemDiscountComposer());
-            packetList.Add(new BCBorrowedItemsComposer());
-
-            Session.SendPacket(packetList);
-        }
+        session.SendPacket(packetList);
     }
 }

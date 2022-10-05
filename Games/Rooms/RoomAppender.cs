@@ -1,55 +1,52 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing;
-using WibboEmulator.Games.Navigator;
+namespace WibboEmulator.Games.Rooms;
+using WibboEmulator.Communication.Packets.Outgoing;
 
-namespace WibboEmulator.Games.Rooms
+internal static class RoomAppender
 {
-    internal static class RoomAppender
+    public static void WriteRoom(ServerPacket packet, RoomData data)
     {
-        public static void WriteRoom(ServerPacket Packet, RoomData Data)
+        packet.WriteInteger(data.Id);
+        packet.WriteString(data.Name);
+        packet.WriteInteger(data.OwnerId);
+        packet.WriteString(data.OwnerName);
+        packet.WriteInteger(data.State);
+        packet.WriteInteger(data.UsersNow);
+        packet.WriteInteger(data.UsersMax);
+        packet.WriteString(data.Description);
+        packet.WriteInteger(data.TrocStatus);
+        packet.WriteInteger(data.Score);
+        packet.WriteInteger(1);//Top rated room rank.
+        packet.WriteInteger(data.Category);
+
+        packet.WriteInteger(data.Tags.Count);
+        foreach (var tag in data.Tags)
         {
-            Packet.WriteInteger(Data.Id);
-            Packet.WriteString(Data.Name);
-            Packet.WriteInteger(Data.OwnerId);
-            Packet.WriteString(Data.OwnerName);
-            Packet.WriteInteger(Data.State);
-            Packet.WriteInteger(Data.UsersNow);
-            Packet.WriteInteger(Data.UsersMax);
-            Packet.WriteString(Data.Description);
-            Packet.WriteInteger(Data.TrocStatus);
-            Packet.WriteInteger(Data.Score);
-            Packet.WriteInteger(1);//Top rated room rank.
-            Packet.WriteInteger(Data.Category);
+            packet.WriteString(tag);
+        }
 
-            Packet.WriteInteger(Data.Tags.Count);
-            foreach (string tag in Data.Tags)
-            {
-                Packet.WriteString(tag);
-            }
+        var roomType = 8;
+        if (data.Group != null)
+        {
+            roomType += 2;
+        }
 
-            int RoomType = 8;
-            if (Data.Group != null)
-            {
-                RoomType += 2;
-            }
+        if (WibboEnvironment.GetGame().GetNavigator().TryGetFeaturedRoom(data.Id, out var item))
+        {
+            roomType += 1;
+        }
 
-            if (WibboEnvironment.GetGame().GetNavigator().TryGetFeaturedRoom(Data.Id, out FeaturedRoom Item))
-            {
-                RoomType += 1;
-            }
+        packet.WriteInteger(roomType);
 
-            Packet.WriteInteger(RoomType);
+        if (item != null)
+        {
+            packet.WriteString(item.Image);
+        }
 
-            if (Item != null)
-            {
-                Packet.WriteString(Item.Image);
-            }
-
-            if (Data.Group != null)
-            {
-                Packet.WriteInteger(Data.Group == null ? 0 : Data.Group.Id);
-                Packet.WriteString(Data.Group == null ? "" : Data.Group.Name);
-                Packet.WriteString(Data.Group == null ? "" : Data.Group.Badge);
-            }
+        if (data.Group != null)
+        {
+            packet.WriteInteger(data.Group == null ? 0 : data.Group.Id);
+            packet.WriteString(data.Group == null ? "" : data.Group.Name);
+            packet.WriteString(data.Group == null ? "" : data.Group.Badge);
         }
     }
 }

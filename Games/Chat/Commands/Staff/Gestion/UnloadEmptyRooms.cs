@@ -1,10 +1,8 @@
-﻿using WibboEmulator.Games.GameClients;
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class UnloadEmptyRooms : IChatCommand
 {
-    internal class UnloadEmptyRooms : IChatCommand
-    {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params) => WibboEnvironment.GetGame().GetRoomManager().UnloadEmptyRooms();
-    }
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters) => WibboEnvironment.GetGame().GetRoomManager().UnloadEmptyRooms();
 }

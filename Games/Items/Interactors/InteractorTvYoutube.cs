@@ -1,31 +1,29 @@
-﻿
+﻿namespace WibboEmulator.Games.Items.Interactors;
+
 using WibboEmulator.Communication.Packets.Outgoing.Televisions;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorTvYoutube : FurniInteractor
 {
-    public class InteractorTvYoutube : FurniInteractor
+    public override void OnPlace(GameClient session, Item item)
     {
-        public override void OnPlace(GameClient Session, Item Item)
+    }
+
+    public override void OnRemove(GameClient session, Item item)
+    {
+    }
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (session == null || session.GetUser() == null)
         {
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
-        {
-        }
+        session.SendPacket(new YoutubeTvComposer(userHasRights ? item.Id : 0, item.ExtraData));
+    }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
-        {
-            if (Session == null || Session.GetUser() == null)
-            {
-                return;
-            }
-
-            Session.SendPacket(new YoutubeTvComposer((UserHasRights) ? Item.Id : 0, Item.ExtraData));
-        }
-
-        public override void OnTick(Item item)
-        {
-        }
+    public override void OnTick(Item item)
+    {
     }
 }

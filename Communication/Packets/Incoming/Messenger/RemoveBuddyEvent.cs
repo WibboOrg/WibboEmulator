@@ -1,28 +1,29 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class RemoveBuddyEvent : IPacketEvent
 {
-    internal class RemoveBuddyEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser().GetMessenger() == null)
         {
-            if (Session.GetUser().GetMessenger() == null)
-            {
-                return;
-            }
+            return;
+        }
 
-            int count = Packet.PopInt();
+        var count = Packet.PopInt();
 
-            if (count > 200) count = 200;
+        if (count > 200)
+        {
+            count = 200;
+        }
 
-            int friendId;
-            for (int index = 0; index < count; index++)
-            {
-                friendId = Packet.PopInt();
-                Session.GetUser().GetMessenger().DestroyFriendship(friendId);
-            }
+        int friendId;
+        for (var index = 0; index < count; index++)
+        {
+            friendId = Packet.PopInt();
+            session.GetUser().GetMessenger().DestroyFriendship(friendId);
         }
     }
 }

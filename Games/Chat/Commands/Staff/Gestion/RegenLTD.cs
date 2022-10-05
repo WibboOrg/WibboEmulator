@@ -1,55 +1,50 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Catalog;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class RegenLTD : IChatCommand
 {
-    internal class RegenLTD : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(984897, out var Page))
         {
-            if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(984897, out CatalogPage Page))
-            {
-                return;
-            }
+            return;
+        }
 
-            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            foreach (CatalogItem Item in Page.Items.Values)
-            {
-                int LimitedStack = Item.LimitedEditionStack;
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        foreach (var Item in Page.Items.Values)
+        {
+            var LimitedStack = Item.LimitedEditionStack;
 
-                for (int LimitedNumber = 1; LimitedNumber < LimitedStack + 1; LimitedNumber++)
+            for (var LimitedNumber = 1; LimitedNumber < LimitedStack + 1; LimitedNumber++)
+            {
+                var Row = ItemDao.GetOneLimitedId(dbClient, LimitedNumber, Item.ItemId);
+
+                if (Row != null)
                 {
-                    DataRow Row = ItemDao.GetOneLimitedId(dbClient, LimitedNumber, Item.ItemId);
+                    continue;
+                }
 
-                    if (Row != null)
-                    {
-                        continue;
-                    }
+                var RowMarketPlace = CatalogMarketplaceOfferDao.GetOneLTD(dbClient, Item.ItemId, LimitedNumber);
 
-                    DataRow RowMarketPlace = CatalogMarketplaceOfferDao.GetOneLTD(dbClient, Item.ItemId, LimitedNumber);
+                if (RowMarketPlace != null)
+                {
+                    continue;
+                }
 
-                    if (RowMarketPlace != null)
-                    {
-                        continue;
-                    }
+                var NewItem = ItemFactory.CreateSingleItemNullable(Item.Data, session.GetUser(), "", LimitedNumber, LimitedStack);
 
-                    Item NewItem = ItemFactory.CreateSingleItemNullable(Item.Data, Session.GetUser(), "", LimitedNumber, LimitedStack);
+                if (NewItem == null)
+                {
+                    continue;
+                }
 
-                    if (NewItem == null)
-                    {
-                        continue;
-                    }
-
-                    if (Session.GetUser().GetInventoryComponent().TryAddItem(NewItem))
-                    {
-                        Session.SendPacket(new FurniListNotificationComposer(NewItem.Id, 1));
-                    }
+                if (session.GetUser().GetInventoryComponent().TryAddItem(NewItem))
+                {
+                    session.SendPacket(new FurniListNotificationComposer(NewItem.Id, 1));
                 }
             }
         }

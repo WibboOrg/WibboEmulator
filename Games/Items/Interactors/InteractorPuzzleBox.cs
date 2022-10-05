@@ -1,90 +1,87 @@
-﻿using System.Drawing;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorPuzzleBox : FurniInteractor
 {
-    public class InteractorPuzzleBox : FurniInteractor
+    public override void OnPlace(GameClient session, Item item)
     {
-        public override void OnPlace(GameClient Session, Item Item)
+    }
+
+    public override void OnRemove(GameClient session, Item item)
+    {
+    }
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (session == null)
         {
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var point1 = new Point(item.Coordinate.X + 1, item.Coordinate.Y);
+        var point2 = new Point(item.Coordinate.X - 1, item.Coordinate.Y);
+        var point3 = new Point(item.Coordinate.X, item.Coordinate.Y + 1);
+        var point4 = new Point(item.Coordinate.X, item.Coordinate.Y - 1);
+
+        if (roomUserByUserId == null)
         {
+            return;
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        if (roomUserByUserId.Coordinate != point1 && roomUserByUserId.Coordinate != point2 && roomUserByUserId.Coordinate != point3 && roomUserByUserId.Coordinate != point4)
         {
-            if (Session == null)
+            if (!roomUserByUserId.CanWalk)
             {
                 return;
             }
 
-            RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            Point point1 = new Point(Item.Coordinate.X + 1, Item.Coordinate.Y);
-            Point point2 = new Point(Item.Coordinate.X - 1, Item.Coordinate.Y);
-            Point point3 = new Point(Item.Coordinate.X, Item.Coordinate.Y + 1);
-            Point point4 = new Point(Item.Coordinate.X, Item.Coordinate.Y - 1);
+            roomUserByUserId.MoveTo(item.SquareInFront);
+        }
+        else
+        {
+            var newX = item.Coordinate.X;
+            var newY = item.Coordinate.Y;
+            if (roomUserByUserId.Coordinate == point1)
+            {
+                newX = item.Coordinate.X - 1;
+                newY = item.Coordinate.Y;
+            }
+            else if (roomUserByUserId.Coordinate == point2)
+            {
+                newX = item.Coordinate.X + 1;
+                newY = item.Coordinate.Y;
+            }
+            else if (roomUserByUserId.Coordinate == point3)
+            {
+                newX = item.Coordinate.X;
+                newY = item.Coordinate.Y - 1;
+            }
+            else if (roomUserByUserId.Coordinate == point4)
+            {
+                newX = item.Coordinate.X;
+                newY = item.Coordinate.Y + 1;
+            }
 
-            if (roomUserByUserId == null)
+            if (!item.GetRoom().GetGameMap().CanStackItem(newX, newY))
             {
                 return;
             }
 
-            if (roomUserByUserId.Coordinate != point1 && roomUserByUserId.Coordinate != point2 && (roomUserByUserId.Coordinate != point3 && roomUserByUserId.Coordinate != point4))
+            var oldX = item.X;
+            var oldY = item.Y;
+            var oldZ = item.Z;
+            var newZ = item.GetRoom().GetGameMap().SqAbsoluteHeight(newX, newY);
+            if (item.GetRoom().GetRoomItemHandler().SetFloorItem(roomUserByUserId.GetClient(), item, newX, newY, item.Rotation, false, false, false))
             {
-                if (!roomUserByUserId.CanWalk)
-                {
-                    return;
-                }
-
-                roomUserByUserId.MoveTo(Item.SquareInFront);
-            }
-            else
-            {
-                int newX = Item.Coordinate.X;
-                int newY = Item.Coordinate.Y;
-                if (roomUserByUserId.Coordinate == point1)
-                {
-                    newX = Item.Coordinate.X - 1;
-                    newY = Item.Coordinate.Y;
-                }
-                else if (roomUserByUserId.Coordinate == point2)
-                {
-                    newX = Item.Coordinate.X + 1;
-                    newY = Item.Coordinate.Y;
-                }
-                else if (roomUserByUserId.Coordinate == point3)
-                {
-                    newX = Item.Coordinate.X;
-                    newY = Item.Coordinate.Y - 1;
-                }
-                else if (roomUserByUserId.Coordinate == point4)
-                {
-                    newX = Item.Coordinate.X;
-                    newY = Item.Coordinate.Y + 1;
-                }
-
-                if (!Item.GetRoom().GetGameMap().CanStackItem(newX, newY))
-                {
-                    return;
-                }
-
-                int oldX = Item.X;
-                int oldY = Item.Y;
-                double oldZ = Item.Z;
-                double newZ = Item.GetRoom().GetGameMap().SqAbsoluteHeight(newX, newY);
-                if (Item.GetRoom().GetRoomItemHandler().SetFloorItem(roomUserByUserId.GetClient(), Item, newX, newY, Item.Rotation, false, false, false))
-                {
-                    Item.GetRoom().SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newX, newY, newZ, Item.Id));
-                }
+                item.GetRoom().SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newX, newY, newZ, item.Id));
             }
         }
+    }
 
-        public override void OnTick(Item item)
-        {
-        }
+    public override void OnTick(Item item)
+    {
     }
 }

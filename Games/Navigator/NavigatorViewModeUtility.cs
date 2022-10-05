@@ -1,17 +1,16 @@
-﻿namespace WibboEmulator.Games.Navigator
+﻿namespace WibboEmulator.Games.Navigator;
+
+public static class NavigatorViewModeUtility
 {
-    public static class NavigatorViewModeUtility
+    public static NavigatorViewMode GetViewModeByString(string ViewMode)
     {
-        public static NavigatorViewMode GetViewModeByString(string ViewMode)
+        switch (ViewMode.ToUpper())
         {
-            switch (ViewMode.ToUpper())
-            {
-                default:
-                case "REGULAR":
-                    return NavigatorViewMode.REGULAR;
-                case "THUMBNAIL":
-                    return NavigatorViewMode.THUMBNAIL;
-            }
+            default:
+            case "REGULAR":
+                return NavigatorViewMode.REGULAR;
+            case "THUMBNAIL":
+                return NavigatorViewMode.THUMBNAIL;
         }
     }
 }

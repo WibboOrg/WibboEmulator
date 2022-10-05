@@ -1,11 +1,7 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Catalog
+namespace WibboEmulator.Communication.Packets.Outgoing.Catalog;
+
+internal class CatalogUpdatedComposer : ServerPacket
 {
-    internal class CatalogUpdatedComposer : ServerPacket
-    {
-        public CatalogUpdatedComposer()
-            : base(ServerPacketHeader.CATALOG_PUBLISHED)
-        {
-            this.WriteBoolean(false);
-        }
-    }
+    public CatalogUpdatedComposer()
+        : base(ServerPacketHeader.CATALOG_PUBLISHED) => this.WriteBoolean(false);
 }

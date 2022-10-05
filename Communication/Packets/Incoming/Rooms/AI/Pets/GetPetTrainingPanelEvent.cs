@@ -1,34 +1,31 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetPetTrainingPanelEvent : IPacketEvent
 {
-    internal class GetPetTrainingPanelEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
         {
-            if (Session == null || Session.GetUser() == null || !Session.GetUser().InRoom)
-            {
-                return;
-            }
-
-            int PetId = Packet.PopInt();
-
-            if (!Session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(PetId, out RoomUser Pet))
-            {
-                return;
-            }
-
-            //Continue as a regular pet..
-            if (Pet.RoomId != Session.GetUser().CurrentRoomId || Pet.PetData == null)
-            {
-                return;
-            }
-
-            Session.SendPacket(new PetTrainingPanelComposer(Pet.PetData));
+            return;
         }
+
+        var PetId = Packet.PopInt();
+
+        if (!session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(PetId, out var Pet))
+        {
+            return;
+        }
+
+        //Continue as a regular pet..
+        if (Pet.RoomId != session.GetUser().CurrentRoomId || Pet.PetData == null)
+        {
+            return;
+        }
+
+        session.SendPacket(new PetTrainingPanelComposer(Pet.PetData));
     }
 }

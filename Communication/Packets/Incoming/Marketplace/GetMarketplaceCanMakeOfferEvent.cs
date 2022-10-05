@@ -1,17 +1,15 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
+using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
+internal class GetMarketplaceCanMakeOfferEvent : IPacketEvent
 {
-    internal class GetMarketplaceCanMakeOfferEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var ErrorCode = 1;
 
-        public void Parse(GameClient Session, ClientPacket Packet)
-        {
-            int ErrorCode = 1;
-
-            Session.SendPacket(new MarketplaceCanMakeOfferResultComposer(ErrorCode));
-        }
+        session.SendPacket(new MarketplaceCanMakeOfferResultComposer(ErrorCode));
     }
 }

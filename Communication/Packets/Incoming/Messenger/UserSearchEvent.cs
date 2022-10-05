@@ -1,47 +1,45 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Messenger;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.GameClients.Messenger;
+using WibboEmulator.Games.Users.Messenger;
 using WibboEmulator.Utilities;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class UserSearchEvent : IPacketEvent
 {
-    internal class UserSearchEvent : IPacketEvent
+    public double Delay => 1000;
+
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        public double Delay => 1000;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser().GetMessenger() == null)
         {
-            if (Session.GetUser().GetMessenger() == null)
-            {
-                return;
-            }
+            return;
+        }
 
-            string SearchPseudo = StringCharFilter.Escape(Packet.PopString());
-            if (SearchPseudo.Length < 1 || SearchPseudo.Length > 100)
-            {
-                return;
-            }
+        var searchPseudo = StringCharFilter.Escape(packet.PopString());
+        if (searchPseudo.Length is < 1 or > 100)
+        {
+            return;
+        }
 
-            List<SearchResult> searchResult = SearchResultFactory.GetSearchResult(SearchPseudo);
-            List<SearchResult> friend = new List<SearchResult>();
-            List<SearchResult> other = new List<SearchResult>();
+        var searchResult = SearchResultFactory.GetSearchResult(searchPseudo);
+        var friend = new List<SearchResult>();
+        var other = new List<SearchResult>();
 
-            foreach (SearchResult searchResult2 in searchResult)
+        foreach (var searchResult2 in searchResult)
+        {
+            if (searchResult2.UserId != session.GetUser().Id)
             {
-                if (searchResult2.UserId != Session.GetUser().Id)
+                if (session.GetUser().GetMessenger().FriendshipExists(searchResult2.UserId))
                 {
-                    if (Session.GetUser().GetMessenger().FriendshipExists(searchResult2.UserId))
-                    {
-                        friend.Add(searchResult2);
-                    }
-                    else
-                    {
-                        other.Add(searchResult2);
-                    }
+                    friend.Add(searchResult2);
+                }
+                else
+                {
+                    other.Add(searchResult2);
                 }
             }
-
-            Session.SendPacket(new UserSearchResultComposer(friend, other));
         }
+
+        session.SendPacket(new UserSearchResultComposer(friend, other));
     }
 }

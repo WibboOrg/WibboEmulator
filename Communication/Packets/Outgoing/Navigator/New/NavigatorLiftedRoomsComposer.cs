@@ -1,17 +1,16 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Navigator.New
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator.New;
+
+internal class NavigatorLiftedRoomsComposer : ServerPacket
 {
-    internal class NavigatorLiftedRoomsComposer : ServerPacket
+    public NavigatorLiftedRoomsComposer()
+        : base(ServerPacketHeader.NAVIGATOR_LIFTED)
     {
-        public NavigatorLiftedRoomsComposer()
-            : base(ServerPacketHeader.NAVIGATOR_LIFTED)
+        this.WriteInteger(0);//Count
         {
-            this.WriteInteger(0);//Count
-            {
-                this.WriteInteger(1);//Flat Id
-                this.WriteInteger(0);//Unknown
-                this.WriteString("");//Image
-                this.WriteString("Caption");//Caption.
-            }
+            this.WriteInteger(1);//Flat Id
+            this.WriteInteger(0);//Unknown
+            this.WriteString("");//Image
+            this.WriteString("Caption");//Caption.
         }
     }
 }

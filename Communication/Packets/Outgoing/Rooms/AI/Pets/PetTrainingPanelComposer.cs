@@ -1,31 +1,29 @@
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Games.Pets;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets
+internal class PetTrainingPanelComposer : ServerPacket
 {
-    internal class PetTrainingPanelComposer : ServerPacket
+    public PetTrainingPanelComposer(Pet petData)
+        : base(ServerPacketHeader.PET_TRAINING_PANEL_MESSAGE_COMPOSER)
     {
-        public PetTrainingPanelComposer(Pet petData)
-            : base(ServerPacketHeader.PetTrainingPanelMessageComposer)
+        this.WriteInteger(petData.PetId);
+
+        var AvailableCommands = new List<short>();
+
+        this.WriteInteger(petData.PetCommands.Count);
+        foreach (var Sh in petData.PetCommands.Keys)
         {
-            this.WriteInteger(petData.PetId);
-
-            List<short> AvailableCommands = new List<short>();
-
-            this.WriteInteger(petData.PetCommands.Count);
-            foreach (short Sh in petData.PetCommands.Keys)
+            this.WriteInteger(Sh);
+            if (petData.PetCommands[Sh])
             {
-                this.WriteInteger(Sh);
-                if (petData.PetCommands[Sh] == true)
-                {
-                    AvailableCommands.Add(Sh);
-                }
+                AvailableCommands.Add(Sh);
             }
+        }
 
-            this.WriteInteger(AvailableCommands.Count);
-            foreach (short Sh in AvailableCommands)
-            {
-                this.WriteInteger(Sh);
-            }
+        this.WriteInteger(AvailableCommands.Count);
+        foreach (var Sh in AvailableCommands)
+        {
+            this.WriteInteger(Sh);
         }
     }
 }

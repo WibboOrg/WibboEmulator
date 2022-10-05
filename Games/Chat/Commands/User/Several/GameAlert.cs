@@ -1,15 +1,13 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class GameAlert : IChatCommand
 {
-    internal class GameAlert : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
-        {
-            Session.ShowGameAlert = !Session.ShowGameAlert;
+        session.ShowGameAlert = !session.ShowGameAlert;
 
-            Session.SendWhisper(Session.ShowGameAlert ? "Alerte d'animation activée" : "Alerte d'animation désactivée", true);
-        }
+        session.SendWhisper(session.ShowGameAlert ? "Alerte d'animation activée" : "Alerte d'animation désactivée", true);
     }
 }

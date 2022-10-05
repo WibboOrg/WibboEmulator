@@ -1,39 +1,37 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Rooms.AI.Types;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Games.Rooms.AI.Types
+public class RoleplayBot : BotAI
 {
-    public class RoleplayBot : BotAI
+    public RoleplayBot(int VirtualId)
     {
-        public RoleplayBot(int VirtualId)
-        {
-        }
+    }
 
-        public override void OnSelfEnterRoom()
-        {
-        }
+    public override void OnSelfEnterRoom()
+    {
+    }
 
-        public override void OnSelfLeaveRoom(bool Kicked)
-        {
-        }
+    public override void OnSelfLeaveRoom(bool kicked)
+    {
+    }
 
-        public override void OnUserEnterRoom(RoomUser User)
-        {
-        }
+    public override void OnUserEnterRoom(RoomUser user)
+    {
+    }
 
-        public override void OnUserLeaveRoom(GameClient Client)
-        {
-        }
+    public override void OnUserLeaveRoom(GameClient client)
+    {
+    }
 
-        public override void OnUserSay(RoomUser User, string Message)
-        {
-        }
+    public override void OnUserSay(RoomUser user, string message)
+    {
+    }
 
-        public override void OnUserShout(RoomUser User, string Message)
-        {
-        }
+    public override void OnUserShout(RoomUser user, string message)
+    {
+    }
 
-        public override void OnTimerTick()
-        {
-        }
+    public override void OnTimerTick()
+    {
     }
 }

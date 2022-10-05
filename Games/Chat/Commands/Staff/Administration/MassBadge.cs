@@ -1,28 +1,26 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class MassBadge : IChatCommand
 {
-    internal class MassBadge : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        var Badge = Params[1];
+
+        if (string.IsNullOrEmpty(Badge))
         {
-            string Badge = Params[1];
+            return;
+        }
 
-            if (string.IsNullOrEmpty(Badge))
+        foreach (var Client in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
+        {
+            if (Client.GetUser() != null)
             {
-                return;
-            }
-
-            foreach (GameClient Client in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
-            {
-                if (Client.GetUser() != null)
-                {
-                    Client.GetUser().GetBadgeComponent().GiveBadge(Badge, true);
-                    Client.SendPacket(new ReceiveBadgeComposer(Badge));
-                    Client.SendNotification("Vous venez de recevoir le badge : " + Badge + " !");
-                }
+                Client.GetUser().GetBadgeComponent().GiveBadge(Badge, true);
+                Client.SendPacket(new ReceiveBadgeComposer(Badge));
+                Client.SendNotification("Vous venez de recevoir le badge : " + Badge + " !");
             }
         }
     }

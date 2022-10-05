@@ -1,59 +1,55 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class SetGroupFavouriteEvent : IPacketEvent
 {
-    internal class SetGroupFavouriteEvent : IPacketEvent
+    public double Delay => 100;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 100;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session == null)
         {
-            if (Session == null)
-            {
-                return;
-            }
+            return;
+        }
 
-            int GroupId = Packet.PopInt();
-            if (GroupId == 0)
-            {
-                return;
-            }
+        var GroupId = Packet.PopInt();
+        if (GroupId == 0)
+        {
+            return;
+        }
 
-            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
-            {
-                return;
-            }
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
+        {
+            return;
+        }
 
-            Session.GetUser().FavouriteGroupId = Group.Id;
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                UserStatsDao.UpdateGroupId(dbClient, Session.GetUser().FavouriteGroupId, Session.GetUser().Id);
-            }
+        session.GetUser().FavouriteGroupId = Group.Id;
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        {
+            UserStatsDao.UpdateGroupId(dbClient, session.GetUser().FavouriteGroupId, session.GetUser().Id);
+        }
 
-            if (Session.GetUser().InRoom && Session.GetUser().CurrentRoom != null)
+        if (session.GetUser().InRoom && session.GetUser().CurrentRoom != null)
+        {
+            session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
+            if (Group != null)
             {
-                Session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(Session.GetUser().Id));
-                if (Group != null)
+                session.GetUser().CurrentRoom.SendPacket(new UserGroupBadgesComposer(Group));
+
+                var User = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+                if (User != null)
                 {
-                    Session.GetUser().CurrentRoom.SendPacket(new UserGroupBadgesComposer(Group));
-
-                    RoomUser User = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-                    if (User != null)
-                    {
-                        Session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(Group, User.VirtualId));
-                    }
+                    session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(Group, User.VirtualId));
                 }
             }
-            else
-            {
-                Session.SendPacket(new RefreshFavouriteGroupComposer(Session.GetUser().Id));
-            }
+        }
+        else
+        {
+            session.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
         }
     }
 }

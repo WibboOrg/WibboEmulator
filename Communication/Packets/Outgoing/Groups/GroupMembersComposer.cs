@@ -1,36 +1,34 @@
-using WibboEmulator.Games.GameClients;
+namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Users;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Groups
+internal class GroupMembersComposer : ServerPacket
 {
-    internal class GroupMembersComposer : ServerPacket
+    public GroupMembersComposer(Group group, ICollection<User> members, int membersCount, int page, bool admin, int reqType, string searchVal)
+        : base(ServerPacketHeader.GROUP_MEMBERS)
     {
-        public GroupMembersComposer(Group Group, ICollection<User> Members, int MembersCount, int Page, bool Admin, int ReqType, string SearchVal)
-            : base(ServerPacketHeader.GROUP_MEMBERS)
-        {
-            this.WriteInteger(Group.Id);
-            this.WriteString(Group.Name);
-            this.WriteInteger(Group.RoomId);
-            this.WriteString(Group.Badge);
-            this.WriteInteger(MembersCount);
+        this.WriteInteger(group.Id);
+        this.WriteString(group.Name);
+        this.WriteInteger(group.RoomId);
+        this.WriteString(group.Badge);
+        this.WriteInteger(membersCount);
 
-            this.WriteInteger(Members.Count);
-            if (MembersCount > 0)
+        this.WriteInteger(members.Count);
+        if (membersCount > 0)
+        {
+            foreach (var Data in members)
             {
-                foreach (User Data in Members)
-                {
-                    this.WriteInteger(Group.CreatorId == Data.Id ? 0 : Group.IsAdmin(Data.Id) ? 1 : Group.IsMember(Data.Id) ? 2 : 3);
-                    this.WriteInteger(Data.Id);
-                    this.WriteString(Data.Username);
-                    this.WriteString(Data.Look);
-                    this.WriteString(string.Empty);
-                }
+                this.WriteInteger(group.CreatorId == Data.Id ? 0 : group.IsAdmin(Data.Id) ? 1 : group.IsMember(Data.Id) ? 2 : 3);
+                this.WriteInteger(Data.Id);
+                this.WriteString(Data.Username);
+                this.WriteString(Data.Look);
+                this.WriteString(string.Empty);
             }
-            this.WriteBoolean(Admin);
-            this.WriteInteger(14);
-            this.WriteInteger(Page);
-            this.WriteInteger(ReqType);
-            this.WriteString(SearchVal);
         }
+        this.WriteBoolean(admin);
+        this.WriteInteger(14);
+        this.WriteInteger(page);
+        this.WriteInteger(reqType);
+        this.WriteString(searchVal);
     }
 }

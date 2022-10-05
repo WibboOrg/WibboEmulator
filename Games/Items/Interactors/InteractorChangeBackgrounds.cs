@@ -1,38 +1,36 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorChangeBackgrounds : FurniInteractor
 {
-    public class InteractorChangeBackgrounds : FurniInteractor
+    public override void OnPlace(GameClient session, Item item)
     {
-        public override void OnPlace(GameClient Session, Item Item)
+    }
+
+    public override void OnRemove(GameClient session, Item item)
+    {
+    }
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (session == null || session.GetUser() == null || item == null || !userHasRights || request != 0)
         {
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        if (item.ExtraData.StartsWith("on"))
         {
+            item.ExtraData = item.ExtraData.Replace("on", "off");
+        }
+        else if (item.ExtraData.StartsWith("off"))
+        {
+            item.ExtraData = item.ExtraData.Replace("off", "on");
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
-        {
-            if (Session == null || Session.GetUser() == null || (Item == null || !UserHasRights) || Request != 0)
-            {
-                return;
-            }
+        item.UpdateState();
+    }
 
-            if (Item.ExtraData.StartsWith("on"))
-            {
-                Item.ExtraData = Item.ExtraData.Replace("on", "off");
-            }
-            else if (Item.ExtraData.StartsWith("off"))
-            {
-                Item.ExtraData = Item.ExtraData.Replace("off", "on");
-            }
-
-            Item.UpdateState();
-        }
-
-        public override void OnTick(Item item)
-        {
-        }
+    public override void OnTick(Item item)
+    {
     }
 }

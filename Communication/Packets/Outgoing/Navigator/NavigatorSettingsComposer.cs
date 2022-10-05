@@ -1,16 +1,15 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
+
+internal class NavigatorSettingsComposer : ServerPacket
 {
-    internal class NavigatorSettingsComposer : ServerPacket
+    public NavigatorSettingsComposer(int windowX, int windowY, int windowWidth, int windowHeight, bool leftPanelHidden, int resultsMode)
+        : base(ServerPacketHeader.NAVIGATOR_SETTINGS)
     {
-        public NavigatorSettingsComposer(int windowX, int windowY, int windowWidth, int windowHeight, bool leftPanelHidden, int resultsMode)
-            : base(ServerPacketHeader.NAVIGATOR_SETTINGS)
-        {
-            WriteInteger(windowX);
-            WriteInteger(windowY);
-            WriteInteger(windowWidth);
-            WriteInteger(windowHeight);
-            WriteBoolean(leftPanelHidden);
-            WriteInteger(resultsMode);
-        }
+        this.WriteInteger(windowX);
+        this.WriteInteger(windowY);
+        this.WriteInteger(windowWidth);
+        this.WriteInteger(windowHeight);
+        this.WriteBoolean(leftPanelHidden);
+        this.WriteInteger(resultsMode);
     }
 }

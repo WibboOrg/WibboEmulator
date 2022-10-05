@@ -1,33 +1,31 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Guide;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Guide
+internal class GuideEndSessionEvent : IPacketEvent
 {
-    internal class GuideEndSessionEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.GetUser().GuideOtherUserId);
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        session.SendPacket(new OnGuideSessionEndedComposer(1));
+
+        session.GetUser().GuideOtherUserId = 0;
+        if (session.GetUser().OnDuty)
         {
-            GameClient requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
+            WibboEnvironment.GetGame().GetHelpManager().EndService(session.GetUser().Id);
+        }
 
-            Session.SendPacket(new OnGuideSessionEndedComposer(1));
+        if (requester != null)
+        {
+            requester.SendPacket(new OnGuideSessionEndedComposer(1));
+            requester.GetUser().GuideOtherUserId = 0;
 
-            Session.GetUser().GuideOtherUserId = 0;
-            if (Session.GetUser().OnDuty)
+            if (requester.GetUser().OnDuty)
             {
-                WibboEnvironment.GetGame().GetHelpManager().EndService(Session.GetUser().Id);
-            }
-
-            if (requester != null)
-            {
-                requester.SendPacket(new OnGuideSessionEndedComposer(1));
-                requester.GetUser().GuideOtherUserId = 0;
-
-                if (requester.GetUser().OnDuty)
-                {
-                    WibboEnvironment.GetGame().GetHelpManager().EndService(requester.GetUser().Id);
-                }
+                WibboEnvironment.GetGame().GetHelpManager().EndService(requester.GetUser().Id);
             }
         }
     }

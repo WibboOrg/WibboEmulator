@@ -1,14 +1,13 @@
-﻿namespace WibboEmulator.Games.GameClients.Relationships
-{
-    public class Relationship
-    {
-        public int UserId { get; private set; }
-        public int Type { get; set; }
+namespace WibboEmulator.Games.Users.Relationships;
 
-        public Relationship(int User, int Type)
-        {
-            this.UserId = User;
-            this.Type = Type;
-        }
+public class Relationship
+{
+    public int UserId { get; private set; }
+    public int Type { get; set; }
+
+    public Relationship(int user, int type)
+    {
+        this.UserId = user;
+        this.Type = type;
     }
 }

@@ -1,12 +1,11 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
+
+internal class MarketplaceCanMakeOfferResultComposer : ServerPacket
 {
-    internal class MarketplaceCanMakeOfferResultComposer : ServerPacket
+    public MarketplaceCanMakeOfferResultComposer(int Result)
+        : base(ServerPacketHeader.MARKETPLACE_SELL_ITEM)
     {
-        public MarketplaceCanMakeOfferResultComposer(int Result)
-            : base(ServerPacketHeader.MARKETPLACE_SELL_ITEM)
-        {
-            this.WriteInteger(Result);
-            this.WriteInteger(0);
-        }
+        this.WriteInteger(Result);
+        this.WriteInteger(0);
     }
 }

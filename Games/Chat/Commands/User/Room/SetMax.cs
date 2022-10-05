@@ -1,25 +1,25 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class SetMax : IChatCommand
 {
-    internal class SetMax : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (Params.Length < 1)
         {
-            if (Params.Length < 1)
-                return;
+            return;
+        }
 
-            int.TryParse(Params[1], out int MaxUsers);
+        int.TryParse(Params[1], out var MaxUsers);
 
-            if ((MaxUsers > 75 || MaxUsers <= 0) && !Session.GetUser().HasPermission("perm_mod"))
-            {
-                Room.SetMaxUsers(75);
-            }
-            else
-            {
-                Room.SetMaxUsers(MaxUsers);
-            }
+        if ((MaxUsers > 75 || MaxUsers <= 0) && !session.GetUser().HasPermission("perm_mod"))
+        {
+            Room.SetMaxUsers(75);
+        }
+        else
+        {
+            Room.SetMaxUsers(MaxUsers);
         }
     }
 }

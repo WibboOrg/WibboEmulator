@@ -1,7 +1,6 @@
-﻿namespace WibboEmulator.Database.Interfaces
+﻿namespace WibboEmulator.Database.Interfaces;
+
+public interface IQueryAdapter : IRegularQueryAdapter, IDisposable
 {
-    public interface IQueryAdapter : IRegularQueryAdapter, IDisposable
-    {
-        long InsertQuery();
-    }
+    long InsertQuery();
 }

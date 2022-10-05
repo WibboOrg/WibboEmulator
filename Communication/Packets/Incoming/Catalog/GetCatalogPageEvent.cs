@@ -1,26 +1,23 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
-using WibboEmulator.Games.Catalog;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetCatalogPageEvent : IPacketEvent
 {
-    internal class GetCatalogPageEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var PageId = Packet.PopInt();
+        var Something = Packet.PopInt();
+        var CataMode = Packet.PopString();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out var Page);
+        if (Page == null || Page.MinimumRank > session.GetUser().Rank)
         {
-            int PageId = Packet.PopInt();
-            int Something = Packet.PopInt();
-            string CataMode = Packet.PopString();
-
-            WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out CatalogPage Page);
-            if (Page == null || Page.MinimumRank > Session.GetUser().Rank)
-            {
-                return;
-            }
-
-            Session.SendPacket(new CatalogPageComposer(Page, CataMode, Session.Langue));
+            return;
         }
+
+        session.SendPacket(new CatalogPageComposer(Page, CataMode, session.Langue));
     }
 }

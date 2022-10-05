@@ -1,28 +1,26 @@
+namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
+internal class ModeratorRoomInfoComposer : ServerPacket
 {
-    internal class ModeratorRoomInfoComposer : ServerPacket
+    public ModeratorRoomInfoComposer(RoomData data, bool ownerInRoom)
+        : base(ServerPacketHeader.MODTOOL_ROOM_INFO)
     {
-        public ModeratorRoomInfoComposer(RoomData data, bool ownerInRoom)
-            : base(ServerPacketHeader.MODTOOL_ROOM_INFO)
+        this.WriteInteger(data.Id);
+        this.WriteInteger(data.UsersNow);
+
+        this.WriteBoolean(ownerInRoom);
+
+        this.WriteInteger(data.OwnerId);
+        this.WriteString(data.OwnerName);
+        this.WriteBoolean(true);
+
+        this.WriteString(data.Name);
+        this.WriteString(data.Description);
+        this.WriteInteger(data.TagCount);
+        foreach (var s in data.Tags)
         {
-            WriteInteger(data.Id);
-            WriteInteger(data.UsersNow);
-
-            WriteBoolean(ownerInRoom);
-
-            WriteInteger(data.OwnerId);
-            WriteString(data.OwnerName);
-            WriteBoolean(true);
-
-            WriteString(data.Name);
-            WriteString(data.Description);
-            WriteInteger(data.TagCount);
-            foreach (string s in data.Tags)
-            {
-                WriteString(s);
-            }
+            this.WriteString(s);
         }
     }
 }

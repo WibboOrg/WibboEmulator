@@ -1,55 +1,56 @@
-﻿using System.Data;
-using System.Drawing;
+﻿namespace WibboEmulator.Games.Items.Wired.Conditions;
+using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Wired.Conditions
+public class TriggerUserIsOnFurniNegative : WiredConditionBase, IWiredCondition, IWired
 {
-    public class TriggerUserIsOnFurniNegative : WiredConditionBase, IWiredCondition, IWired
+    public TriggerUserIsOnFurniNegative(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_ACTOR_ON_FURNI)
     {
-        public TriggerUserIsOnFurniNegative(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_ACTOR_ON_FURNI)
+    }
+
+    public bool AllowsExecution(RoomUser user, Item item)
+    {
+        if (user == null)
         {
+            return false;
         }
 
-        public bool AllowsExecution(RoomUser user, Item TriggerItem)
+        foreach (var roomItem in this.Items.ToList())
         {
-            if (user == null)
+            foreach (var coord in roomItem.GetCoords)
             {
-                return false;
-            }
-
-            foreach (Item roomItem in this.Items.ToList())
-            {
-                foreach (Point coord in roomItem.GetCoords)
+                if (coord == user.Coordinate)
                 {
-                    if (coord == user.Coordinate)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
-            return true;
+        }
+        return true;
+    }
+
+    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items);
+
+    public void LoadFromDatabase(DataRow row)
+    {
+        var triggerItems = row["triggers_item"].ToString();
+
+        if (triggerItems is null or "")
+        {
+            return;
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items);
-
-        public void LoadFromDatabase(DataRow row)
+        foreach (var itemId in triggerItems.Split(';'))
         {
-            string triggerItems = row["triggers_item"].ToString();
-
-            if (triggerItems == null || triggerItems == "")
+            if (!int.TryParse(itemId, out var id))
             {
-                return;
+                continue;
             }
 
-            foreach (string itemId in triggerItems.Split(';'))
+            if (!this.StuffIds.Contains(id))
             {
-                if (!int.TryParse(itemId, out int id))
-                    continue;
-
-                if (!this.StuffIds.Contains(id))
-                    this.StuffIds.Add(id);
+                this.StuffIds.Add(id);
             }
         }
     }

@@ -1,23 +1,21 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GoToFlatEvent : IPacketEvent
 {
-    internal class GoToFlatEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!session.GetUser().InRoom)
         {
-            if (!Session.GetUser().InRoom)
-            {
-                return;
-            }
+            return;
+        }
 
-            if (!Session.GetUser().EnterRoom(Session.GetUser().CurrentRoom))
-            {
-                Session.SendPacket(new CloseConnectionComposer());
-            }
+        if (!session.GetUser().EnterRoom(session.GetUser().CurrentRoom))
+        {
+            session.SendPacket(new CloseConnectionComposer());
         }
     }
 }

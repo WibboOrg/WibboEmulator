@@ -1,12 +1,11 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Televisions
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Televisions;
+
+internal class YoutubeTvComposer : ServerPacket
 {
-    internal class YoutubeTvComposer : ServerPacket
+    public YoutubeTvComposer(int ItemId, string VideoId)
+        : base(ServerPacketHeader.YOUTUBE_TV)
     {
-        public YoutubeTvComposer(int ItemId, string VideoId)
-            : base(ServerPacketHeader.YOUTUBE_TV)
-        {
-            this.WriteInteger(ItemId);
-            this.WriteString(VideoId);
-        }
+        this.WriteInteger(ItemId);
+        this.WriteString(VideoId);
     }
 }

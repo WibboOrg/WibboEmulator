@@ -1,89 +1,92 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Games.Items.Wired.Triggers;
+using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Wired;
 
-namespace WibboEmulator.Games.Items.Wired.Triggers
+public class WalksOnFurni : WiredTriggerBase, IWired, IWiredCycleable
 {
-    public class WalksOnFurni : WiredTriggerBase, IWired, IWiredCycleable
+    public int DelayCycle { get => this.Delay; }
+
+    private readonly UserAndItemDelegate delegateFunction;
+
+    public WalksOnFurni(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_WALKS_ON_FURNI) => this.delegateFunction = new UserAndItemDelegate(this.OnUserWalksOnFurni);
+
+    public bool OnCycle(RoomUser user, Item item)
     {
-        public int DelayCycle { get => this.Delay; }
-
-        private readonly UserAndItemDelegate delegateFunction;
-
-        public WalksOnFurni(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_WALKS_ON_FURNI)
+        if (user != null)
         {
-            this.delegateFunction = new UserAndItemDelegate(this.OnUserWalksOnFurni);
+            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, item);
         }
 
-        public bool OnCycle(RoomUser User, Item Item)
-        {
-            if (User != null)
-            {
-                this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, User, Item);
-            }
+        return false;
+    }
 
-            return false;
+    private void OnUserWalksOnFurni(RoomUser user, Item item)
+    {
+        if (this.DelayCycle > 0)
+        {
+            this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, item));
         }
-
-        private void OnUserWalksOnFurni(RoomUser user, Item item)
+        else
         {
-            if (this.DelayCycle > 0)
-            {
-                this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, item));
-            }
-            else
-            {
-                this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, item);
-            }
+            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, item);
         }
+    }
 
-        public override void LoadItems(bool inDatabase = false)
+    public override void LoadItems(bool inDatabase = false)
+    {
+        base.LoadItems();
+
+        if (this.Items != null)
         {
-            base.LoadItems();
-
-            if (this.Items != null)
+            foreach (var roomItem in this.Items.ToList())
             {
-                foreach (Item roomItem in this.Items.ToList())
-                {
-                    roomItem.OnUserWalksOnFurni += this.delegateFunction;
-                }
+                roomItem.OnUserWalksOnFurni += this.delegateFunction;
             }
         }
+    }
 
-        public override void Dispose()
+    public override void Dispose()
+    {
+        if (this.Items != null)
         {
-            if (this.Items != null)
+            foreach (var roomItem in this.Items.ToList())
             {
-                foreach (Item roomItem in this.Items.ToList())
-                {
-                    roomItem.OnUserWalksOnFurni -= this.delegateFunction;
-                }
+                roomItem.OnUserWalksOnFurni -= this.delegateFunction;
             }
-
-            base.Dispose();
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.DelayCycle.ToString(), false, this.Items);
+        base.Dispose();
+    }
 
-        public void LoadFromDatabase(DataRow row)
+    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.DelayCycle.ToString(), false, this.Items);
+
+    public void LoadFromDatabase(DataRow row)
+    {
+        if (int.TryParse(row["trigger_data"].ToString(), out var delay))
         {
-            if (int.TryParse(row["trigger_data"].ToString(), out int delay))
-                this.Delay = delay;
+            this.Delay = delay;
+        }
 
-            string triggerItems = row["triggers_item"].ToString();
+        var triggerItems = row["triggers_item"].ToString();
 
-            if (triggerItems == null || triggerItems == "")
-                return;
+        if (triggerItems is null or "")
+        {
+            return;
+        }
 
-            foreach (string itemId in triggerItems.Split(';'))
+        foreach (var itemId in triggerItems.Split(';'))
+        {
+            if (!int.TryParse(itemId, out var id))
             {
-                if (!int.TryParse(itemId, out int id))
-                    continue;
+                continue;
+            }
 
-                if (!this.StuffIds.Contains(id))
-                    this.StuffIds.Add(id);
+            if (!this.StuffIds.Contains(id))
+            {
+                this.StuffIds.Add(id);
             }
         }
     }

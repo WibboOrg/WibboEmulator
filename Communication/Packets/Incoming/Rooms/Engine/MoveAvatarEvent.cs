@@ -1,36 +1,33 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class MoveAvatarEvent : IPacketEvent
 {
-    internal class MoveAvatarEvent : IPacketEvent
+    public double Delay => 100;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 100;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        var currentRoom = session.GetUser().CurrentRoom;
+        if (currentRoom == null)
         {
-            Room currentRoom = Session.GetUser().CurrentRoom;
-            if (currentRoom == null)
-            {
-                return;
-            }
-
-            RoomUser User = currentRoom.GetRoomUserManager().GetRoomUserByUserId((Session.GetUser().ControlUserId == 0) ? Session.GetUser().Id : Session.GetUser().ControlUserId);
-            if (User == null || (!User.CanWalk && !User.TeleportEnabled))
-            {
-                return;
-            }
-
-            int targetX = Packet.PopInt();
-            int targetY = Packet.PopInt();
-
-            if (User.ReverseWalk)
-            {
-                targetX = User.SetX + (User.SetX - targetX);
-                targetY = User.SetY + (User.SetY - targetY);
-            }
-
-            User.MoveTo(targetX, targetY, (User.AllowOverride || User.TeleportEnabled || User.ReverseWalk));
+            return;
         }
+
+        var User = currentRoom.GetRoomUserManager().GetRoomUserByUserId((session.GetUser().ControlUserId == 0) ? session.GetUser().Id : session.GetUser().ControlUserId);
+        if (User == null || (!User.CanWalk && !User.TeleportEnabled))
+        {
+            return;
+        }
+
+        var targetX = Packet.PopInt();
+        var targetY = Packet.PopInt();
+
+        if (User.ReverseWalk)
+        {
+            targetX = User.SetX + (User.SetX - targetX);
+            targetY = User.SetY + (User.SetY - targetY);
+        }
+
+        User.MoveTo(targetX, targetY, User.AllowOverride || User.TeleportEnabled || User.ReverseWalk);
     }
 }

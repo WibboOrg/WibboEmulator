@@ -1,23 +1,21 @@
-﻿using WibboEmulator.Games.GameClients;
+namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorBanzaiPuck : FurniInteractor
 {
-    public class InteractorBanzaiPuck : FurniInteractor
+    public override void OnPlace(GameClient session, Item item)
     {
-        public override void OnPlace(GameClient Session, Item Item)
-        {
-        }
+    }
 
-        public override void OnRemove(GameClient Session, Item Item)
-        {
-        }
+    public override void OnRemove(GameClient session, Item item)
+    {
+    }
 
-        public override void OnTrigger(GameClient Session, Item Ball, int Request, bool UserHasRights, bool Reverse)
-        {
-        }
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+    }
 
-        public override void OnTick(Item item)
-        {
-        }
+    public override void OnTick(Item item)
+    {
     }
 }

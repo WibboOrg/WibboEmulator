@@ -1,45 +1,43 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class AcceptGroupMembershipEvent : IPacketEvent
 {
-    internal class AcceptGroupMembershipEvent : IPacketEvent
+    public double Delay => 100;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 100;
+        var GroupId = Packet.PopInt();
+        var UserId = Packet.PopInt();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
         {
-            int GroupId = Packet.PopInt();
-            int UserId = Packet.PopInt();
-
-            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
-            {
-                return;
-            }
-
-            if ((Session.GetUser().Id != Group.CreatorId && !Group.IsAdmin(Session.GetUser().Id)) && !Session.GetUser().HasPermission("perm_delete_group_limit"))
-            {
-                return;
-            }
-
-            if (!Group.HasRequest(UserId))
-            {
-                return;
-            }
-
-            User user = WibboEnvironment.GetUserById(UserId);
-            if (user == null)
-            {
-                return;
-            }
-
-            Group.HandleRequest(UserId, true);
-
-            user.MyGroups.Add(Group.Id);
-
-            Session.SendPacket(new GroupMemberUpdatedComposer(GroupId, user, 4));
+            return;
         }
+
+        if (session.GetUser().Id != Group.CreatorId && !Group.IsAdmin(session.GetUser().Id) && !session.GetUser().HasPermission("perm_delete_group_limit"))
+        {
+            return;
+        }
+
+        if (!Group.HasRequest(UserId))
+        {
+            return;
+        }
+
+        var user = WibboEnvironment.GetUserById(UserId);
+        if (user == null)
+        {
+            return;
+        }
+
+        Group.HandleRequest(UserId, true);
+
+        user.MyGroups.Add(Group.Id);
+
+        session.SendPacket(new GroupMemberUpdatedComposer(GroupId, user, 4));
     }
 }

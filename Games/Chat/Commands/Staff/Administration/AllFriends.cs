@@ -1,38 +1,36 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class AllFriends : IChatCommand
 {
-    internal class AllFriends : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        foreach (var User in WibboEnvironment.GetGame().GetGameClientManager().GetClients)
         {
-            foreach (GameClient User in WibboEnvironment.GetGame().GetGameClientManager().GetClients)
+            if (User == null)
             {
-                if (User == null)
-                {
-                    continue;
-                }
+                continue;
+            }
 
-                if (User.GetUser() == null)
-                {
-                    continue;
-                }
+            if (User.GetUser() == null)
+            {
+                continue;
+            }
 
-                if (User.GetUser().GetMessenger() == null)
-                {
-                    continue;
-                }
+            if (User.GetUser().GetMessenger() == null)
+            {
+                continue;
+            }
 
-                if (!User.GetUser().GetMessenger().FriendshipExists(UserRoom.UserId))
-                {
-                    User.GetUser().GetMessenger().OnNewFriendship(UserRoom.UserId);
-                }
+            if (!User.GetUser().GetMessenger().FriendshipExists(UserRoom.UserId))
+            {
+                User.GetUser().GetMessenger().OnNewFriendship(UserRoom.UserId);
+            }
 
-                if (!Session.GetUser().GetMessenger().FriendshipExists(User.GetUser().Id))
-                {
-                    Session.GetUser().GetMessenger().OnNewFriendship(User.GetUser().Id);
-                }
+            if (!session.GetUser().GetMessenger().FriendshipExists(User.GetUser().Id))
+            {
+                session.GetUser().GetMessenger().OnNewFriendship(User.GetUser().Id);
             }
         }
     }

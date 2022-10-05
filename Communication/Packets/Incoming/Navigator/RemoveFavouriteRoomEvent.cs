@@ -1,36 +1,32 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class RemoveFavouriteRoomEvent : IPacketEvent
 {
-    internal class RemoveFavouriteRoomEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser() == null)
         {
-            if (Session.GetUser() == null)
-            {
-                return;
-            }
-
-            int roomId = Packet.PopInt();
-
-            RoomData roomdata = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
-            if (roomdata == null)
-            {
-                return;
-            }
-
-            Session.GetUser().FavoriteRooms.Remove(roomId);
-
-            Session.SendPacket(new UpdateFavouriteRoomComposer(roomId, false));
-
-            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserFavoriteDao.Delete(dbClient, Session.GetUser().Id, roomId);
+            return;
         }
+
+        var roomId = Packet.PopInt();
+
+        var roomdata = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+        if (roomdata == null)
+        {
+            return;
+        }
+
+        session.GetUser().FavoriteRooms.Remove(roomId);
+
+        session.SendPacket(new UpdateFavouriteRoomComposer(roomId, false));
+
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        UserFavoriteDao.Delete(dbClient, session.GetUser().Id, roomId);
     }
 }

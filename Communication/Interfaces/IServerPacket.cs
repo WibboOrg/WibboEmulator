@@ -1,7 +1,6 @@
-﻿namespace WibboEmulator.Communication.Interfaces
+﻿namespace WibboEmulator.Communication.Interfaces;
+
+public interface IServerPacket
 {
-    public interface IServerPacket
-    {
-        byte[] GetBytes();
-    }
+    byte[] GetBytes();
 }

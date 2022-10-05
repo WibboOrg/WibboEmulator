@@ -1,31 +1,28 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class HandItem : IChatCommand
 {
-    internal class HandItem : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (Params.Length != 2)
         {
-            if (Params.Length != 2)
-            {
-                return;
-            }
-
-            if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
-            {
-                return;
-            }
-
-            int handitemid;
-            int.TryParse(Params[1], out handitemid);
-            if (handitemid < 0)
-            {
-                return;
-            }
-
-            UserRoom.CarryItem(handitemid);
+            return;
         }
+
+        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
+        {
+            return;
+        }
+
+        int.TryParse(Params[1], out var handitemid);
+        if (handitemid < 0)
+        {
+            return;
+        }
+
+        UserRoom.CarryItem(handitemid);
     }
 }

@@ -1,15 +1,13 @@
+namespace WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Daos
+internal class LogChatPubDao
 {
-    class LogChatPubDao
+    internal static void Insert(IQueryAdapter dbClient, int userId, string message, string username)
     {
-        internal static void Insert(IQueryAdapter dbClient, int userId, string message, string username)
-        {
-            dbClient.SetQuery("INSERT INTO `log_chat_pub` (user_id, user_name, timestamp, message) VALUES ('" + userId + "', @username, UNIX_TIMESTAMP(), @message)");
-            dbClient.AddParameter("message", message);
-            dbClient.AddParameter("username", username);
-            dbClient.RunQuery();
-        }
+        dbClient.SetQuery("INSERT INTO `log_chat_pub` (user_id, user_name, timestamp, message) VALUES ('" + userId + "', @username, UNIX_TIMESTAMP(), @message)");
+        dbClient.AddParameter("message", message);
+        dbClient.AddParameter("username", username);
+        dbClient.RunQuery();
     }
 }

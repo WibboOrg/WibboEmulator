@@ -1,16 +1,15 @@
-﻿namespace WibboEmulator.Games.Roleplay.Player
-{
-    public class RolePlayInventoryItem
-    {
-        public int Id;
-        public int ItemId;
-        public int Count;
+namespace WibboEmulator.Games.Roleplay.Player;
 
-        public RolePlayInventoryItem(int Id, int ItemId, int Count)
-        {
-            this.Id = Id;
-            this.ItemId = ItemId;
-            this.Count = Count;
-        }
+public class RolePlayInventoryItem
+{
+    public int Id { get; set; }
+    public int ItemId { get; set; }
+    public int Count { get; set; }
+
+    public RolePlayInventoryItem(int id, int itemId, int count)
+    {
+        this.Id = id;
+        this.ItemId = itemId;
+        this.Count = count;
     }
 }

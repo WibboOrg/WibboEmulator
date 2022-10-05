@@ -1,58 +1,56 @@
-﻿using System.Text;
+namespace WibboEmulator.Communication.Packets.Outgoing;
+using System.Text;
 using WibboEmulator.Communication.Interfaces;
 
-namespace WibboEmulator.Communication.Packets.Outgoing
+public class ServerPacket : IServerPacket
 {
-    public class ServerPacket : IServerPacket
+    private readonly Encoding _encoding = Encoding.UTF8;
+    private readonly List<byte> _body = new();
+
+    public ServerPacket(int header)
     {
-        private readonly Encoding Encoding = Encoding.UTF8;
-        private readonly List<byte> Body = new List<byte>();
+        this._body = new List<byte>();
+        this.WriteShort(header);
+    }
 
-        public ServerPacket(int Header)
+    public void WriteByte(byte b) => this.WriteByte(new byte[] { b }, false);
+
+    public void WriteShort(int i) => this.WriteByte(BitConverter.GetBytes((short)i), true);
+
+    public void WriteInteger(int i) => this.WriteByte(BitConverter.GetBytes(i), true);
+
+    public void WriteBoolean(bool b) => this.WriteByte(new byte[1] { b ? (byte)1 : (byte)0 }, false);
+
+    public void WriteString(string s)
+    {
+        var Message = this._encoding.GetBytes(s);
+        this.WriteShort(Message.Length);
+        this.WriteByte(Message, false);
+    }
+
+    public void WriteByte(byte[] b, bool IsInt)
+    {
+        if (IsInt)
         {
-            this.Body = new List<byte>();
-            this.WriteShort(Header);
-        }
-
-        public void WriteByte(byte b) => this.WriteByte(new byte[] { b }, false);
-
-        public void WriteShort(int i) => this.WriteByte(BitConverter.GetBytes((short)i), true);
-
-        public void WriteInteger(int i) => this.WriteByte(BitConverter.GetBytes(i), true);
-
-        public void WriteBoolean(bool b) => this.WriteByte(new byte[1] { b ? (byte)1 : (byte)0 }, false);
-
-        public void WriteString(string s)
-        {
-            byte[] Message = this.Encoding.GetBytes(s);
-            this.WriteShort(Message.Length);
-            this.WriteByte(Message, false);
-        }
-
-        public void WriteByte(byte[] b, bool IsInt)
-        {
-            if (IsInt)
+            for (var i = b.Length - 1; i > -1; --i)
             {
-                for (int i = b.Length - 1; i > -1; --i)
-                {
-                    this.Body.Add(b[i]);
-                }
-            }
-            else
-            {
-                this.Body.AddRange(b);
+                this._body.Add(b[i]);
             }
         }
-
-        public int Id { get; }
-
-        public byte[] GetBytes()
+        else
         {
-            List<byte> Final = new List<byte>();
-            Final.AddRange(BitConverter.GetBytes(this.Body.Count));
-            Final.Reverse();
-            Final.AddRange(this.Body);
-            return Final.ToArray();
+            this._body.AddRange(b);
         }
+    }
+
+    public int Id { get; }
+
+    public byte[] GetBytes()
+    {
+        var final = new List<byte>();
+        final.AddRange(BitConverter.GetBytes(this._body.Count));
+        final.Reverse();
+        final.AddRange(this._body);
+        return final.ToArray();
     }
 }

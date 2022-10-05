@@ -1,18 +1,16 @@
-﻿using WibboEmulator.Games.Roleplay;
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
+using WibboEmulator.Games.Roleplay;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay
+internal class AddInventoryItemRpComposer : ServerPacket
 {
-    internal class AddInventoryItemRpComposer : ServerPacket
+    public AddInventoryItemRpComposer(RPItem Item, int pCount)
+      : base(ServerPacketHeader.ADD_INVENTORY_ITEM_RP)
     {
-        public AddInventoryItemRpComposer(RPItem Item, int pCount)
-          : base(ServerPacketHeader.ADD_INVENTORY_ITEM_RP)
-        {
-            this.WriteInteger(Item.Id);
-            this.WriteString(Item.Name);
-            this.WriteString(Item.Desc);
-            this.WriteInteger((int)Item.Category);
-            this.WriteInteger(pCount);
-            this.WriteInteger(Item.UseType);
-        }
+        this.WriteInteger(Item.Id);
+        this.WriteString(Item.Name);
+        this.WriteString(Item.Desc);
+        this.WriteInteger((int)Item.Category);
+        this.WriteInteger(pCount);
+        this.WriteInteger(Item.UseType);
     }
 }

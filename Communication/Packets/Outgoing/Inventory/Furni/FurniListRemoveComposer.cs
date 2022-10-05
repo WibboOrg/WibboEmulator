@@ -1,11 +1,7 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
+
+internal class FurniListRemoveComposer : ServerPacket
 {
-    internal class FurniListRemoveComposer : ServerPacket
-    {
-        public FurniListRemoveComposer(int Id)
-            : base(ServerPacketHeader.USER_FURNITURE_REMOVE)
-        {
-            this.WriteInteger(Id);
-        }
-    }
+    public FurniListRemoveComposer(int Id)
+        : base(ServerPacketHeader.USER_FURNITURE_REMOVE) => this.WriteInteger(Id);
 }

@@ -1,176 +1,171 @@
-﻿using MySql.Data.MySqlClient;
+namespace WibboEmulator.Database.Adapter;
 using System.Data;
+using MySql.Data.MySqlClient;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Adapter
+public class QueryAdapter : IRegularQueryAdapter
 {
-    public class QueryAdapter : IRegularQueryAdapter
+    protected IDatabaseClient Client;
+    protected MySqlCommand Command;
+
+    private readonly bool _dbEnabled = true;
+
+    public QueryAdapter(IDatabaseClient client) => this.Client = client;
+
+    public void AddParameter(string name, string query) => this.Command.Parameters.AddWithValue(name, query);
+
+    public void AddParameter(string name, int query) => this.Command.Parameters.AddWithValue(name, query.ToString());
+
+    public bool FindsResult()
     {
-        protected IDatabaseClient client;
-        protected MySqlCommand command;
-
-        public bool dbEnabled = true;
-
-        public QueryAdapter(IDatabaseClient Client)
+        var hasRows = false;
+        try
         {
-            this.client = Client;
+            using var reader = this.Command.ExecuteReader();
+            hasRows = reader.HasRows;
+        }
+        catch (Exception exception)
+        {
+            ExceptionLogger.LogQueryError(exception, this.Command.CommandText);
         }
 
-        public void AddParameter(string parameterName, string val) => this.command.Parameters.AddWithValue(parameterName, val);
+        return hasRows;
+    }
 
-        public void AddParameter(string parameterName, int val) => this.command.Parameters.AddWithValue(parameterName, val.ToString());
-
-        public bool FindsResult()
+    public int GetInteger()
+    {
+        var result = 0;
+        try
         {
-            bool hasRows = false;
-            try
+            var obj2 = this.Command.ExecuteScalar();
+            if (obj2 != null)
             {
-                using MySqlDataReader reader = this.command.ExecuteReader();
-                hasRows = reader.HasRows;
+                int.TryParse(obj2.ToString(), out result);
             }
-            catch (Exception exception)
-            {
-                ExceptionLogger.LogQueryError(exception, this.command.CommandText);
-            }
-
-            return hasRows;
+        }
+        catch (Exception exception)
+        {
+            ExceptionLogger.LogQueryError(exception, this.Command.CommandText);
         }
 
-        public int GetInteger()
-        {
-            int result = 0;
-            try
-            {
-                object obj2 = this.command.ExecuteScalar();
-                if (obj2 != null)
-                {
-                    int.TryParse(obj2.ToString(), out result);
-                }
-            }
-            catch (Exception exception)
-            {
-                ExceptionLogger.LogQueryError(exception, this.command.CommandText);
-            }
+        return result;
+    }
 
-            return result;
+    public DataRow GetRow()
+    {
+        DataRow row = null;
+        try
+        {
+            var dataSet = new DataSet();
+            using (var adapter = new MySqlDataAdapter(this.Command))
+            {
+                adapter.Fill(dataSet);
+            }
+            if ((dataSet.Tables.Count > 0) && (dataSet.Tables[0].Rows.Count == 1))
+            {
+                row = dataSet.Tables[0].Rows[0];
+            }
+        }
+        catch (Exception exception)
+        {
+            ExceptionLogger.LogQueryError(exception, this.Command.CommandText);
         }
 
-        public DataRow GetRow()
-        {
-            DataRow row = null;
-            try
-            {
-                DataSet dataSet = new DataSet();
-                using (MySqlDataAdapter adapter = new MySqlDataAdapter(this.command))
-                {
-                    adapter.Fill(dataSet);
-                }
-                if ((dataSet.Tables.Count > 0) && (dataSet.Tables[0].Rows.Count == 1))
-                {
-                    row = dataSet.Tables[0].Rows[0];
-                }
-            }
-            catch (Exception exception)
-            {
-                ExceptionLogger.LogQueryError(exception, this.command.CommandText);
-            }
+        return row;
+    }
 
-            return row;
+    public string GetString()
+    {
+        var str = string.Empty;
+        try
+        {
+            var obj2 = this.Command.ExecuteScalar();
+            if (obj2 != null)
+            {
+                str = obj2.ToString();
+            }
+        }
+        catch (Exception exception)
+        {
+            ExceptionLogger.LogQueryError(exception, this.Command.CommandText);
         }
 
-        public string GetString()
+        return str;
+    }
+
+    public DataTable GetTable()
+    {
+        var dataTable = new DataTable();
+        if (!this._dbEnabled)
         {
-            string str = string.Empty;
-            try
-            {
-                object obj2 = this.command.ExecuteScalar();
-                if (obj2 != null)
-                {
-                    str = obj2.ToString();
-                }
-            }
-            catch (Exception exception)
-            {
-                ExceptionLogger.LogQueryError(exception, this.command.CommandText);
-            }
-
-            return str;
-        }
-
-        public DataTable GetTable()
-        {
-            DataTable dataTable = new DataTable();
-            if (!this.dbEnabled)
-            {
-                return dataTable;
-            }
-
-            try
-            {
-                using MySqlDataAdapter adapter = new MySqlDataAdapter(this.command);
-                adapter.Fill(dataTable);
-            }
-            catch (Exception exception)
-            {
-                ExceptionLogger.LogQueryError(exception, this.command.CommandText);
-            }
-
             return dataTable;
         }
 
-        public void RunQuery(string query)
+        try
         {
-            if (!this.dbEnabled)
-            {
-                return;
-            }
-
-            this.SetQuery(query);
-            this.RunQuery();
+            using var adapter = new MySqlDataAdapter(this.Command);
+            adapter.Fill(dataTable);
+        }
+        catch (Exception exception)
+        {
+            ExceptionLogger.LogQueryError(exception, this.Command.CommandText);
         }
 
-        public void SetQuery(string query)
+        return dataTable;
+    }
+
+    public void RunQuery(string query)
+    {
+        if (!this._dbEnabled)
         {
-            this.command.Parameters.Clear();
-            this.command.CommandText = query;
+            return;
         }
 
-        public long InsertQuery()
-        {
-            if (!this.dbEnabled)
-            {
-                return 0;
-            }
+        this.SetQuery(query);
+        this.RunQuery();
+    }
 
-            long lastInsertedId = 0L;
-            try
-            {
-                this.command.ExecuteScalar();
-                lastInsertedId = this.command.LastInsertedId;
-            }
-            catch (Exception exception)
-            {
-                ExceptionLogger.LogQueryError(exception, this.command.CommandText);
-            }
-            return lastInsertedId;
+    public void SetQuery(string query)
+    {
+        this.Command.Parameters.Clear();
+        this.Command.CommandText = query;
+    }
+
+    public long InsertQuery()
+    {
+        if (!this._dbEnabled)
+        {
+            return 0;
         }
 
-        public void RunQuery()
+        var lastInsertedId = 0L;
+        try
         {
-            if (!this.dbEnabled)
-            {
-                return;
-            }
+            this.Command.ExecuteScalar();
+            lastInsertedId = this.Command.LastInsertedId;
+        }
+        catch (Exception exception)
+        {
+            ExceptionLogger.LogQueryError(exception, this.Command.CommandText);
+        }
+        return lastInsertedId;
+    }
 
-            try
-            {
-                this.command.ExecuteNonQuery();
-            }
-            catch (Exception exception)
-            {
-                ExceptionLogger.LogQueryError(exception, this.command.CommandText);
-            }
+    public void RunQuery()
+    {
+        if (!this._dbEnabled)
+        {
+            return;
+        }
+
+        try
+        {
+            this.Command.ExecuteNonQuery();
+        }
+        catch (Exception exception)
+        {
+            ExceptionLogger.LogQueryError(exception, this.Command.CommandText);
         }
     }
 }

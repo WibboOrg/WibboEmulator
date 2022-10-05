@@ -1,57 +1,55 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.Games;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorScoreCounter : FurniInteractor
 {
-    public class InteractorScoreCounter : FurniInteractor
+    public override void OnPlace(GameClient session, Item item)
     {
-        public override void OnPlace(GameClient Session, Item Item)
+        if (item.Team == TeamType.NONE)
         {
-            if (Item.Team == TeamType.NONE)
-            {
-                return;
-            }
-
-            Item.ExtraData = Item.GetRoom().GetGameManager().Points[(int)Item.Team].ToString();
-            Item.UpdateState(false, true);
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        item.ExtraData = item.GetRoom().GetGameManager().Points[(int)item.Team].ToString();
+        item.UpdateState(false, true);
+    }
+
+    public override void OnRemove(GameClient session, Item item)
+    {
+    }
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (!userHasRights)
         {
+            return;
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        var num = 0;
+        if (!string.IsNullOrEmpty(item.ExtraData))
         {
-            if (!UserHasRights)
-            {
-                return;
-            }
-
-            int num = 0;
-            if (!string.IsNullOrEmpty(Item.ExtraData))
-            {
-                int.TryParse(Item.ExtraData, out num);
-            }
-
-            if (Request == 1)
-            {
-                num++;
-            }
-            else if (Request == 2)
-            {
-                num--;
-            }
-            else if (Request == 3)
-            {
-                num = 0;
-            }
-
-            Item.ExtraData = num.ToString();
-            Item.UpdateState(false, true);
+            int.TryParse(item.ExtraData, out num);
         }
 
-        public override void OnTick(Item item)
+        if (request == 1)
         {
+            num++;
         }
+        else if (request == 2)
+        {
+            num--;
+        }
+        else if (request == 3)
+        {
+            num = 0;
+        }
+
+        item.ExtraData = num.ToString();
+        item.UpdateState(false, true);
+    }
+
+    public override void OnTick(Item item)
+    {
     }
 }

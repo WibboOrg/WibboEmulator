@@ -1,20 +1,19 @@
-﻿using System.Collections.Concurrent;
+namespace WibboEmulator;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text.Json;
-using WibboEmulator.Database;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Core;
 using WibboEmulator.Core.FigureData;
+using WibboEmulator.Database;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.GameClients.Authenticator;
+using WibboEmulator.Games.Users;
+using WibboEmulator.Games.Users.Authentificator;
 using WibboEmulator.Net;
-
-namespace WibboEmulator;
 
 public static class WibboEnvironment
 {
@@ -26,11 +25,11 @@ public static class WibboEnvironment
     private static LanguageManager _languageManager;
     private static SettingsManager _settingsManager;
 
-    private static readonly HttpClient _httpClient = new HttpClient();
-    private static Random _random = new Random();
-    private static readonly ConcurrentDictionary<int, User> _usersCached = new ConcurrentDictionary<int, User>();
+    private static HttpClient _httpClient = new();
+    private static Random _random = new();
+    private static ConcurrentDictionary<int, User> _usersCached = new();
 
-    private static readonly List<char> _allowedchars = new List<char>(new[]
+    private static List<char> _allowedchars = new(new[]
         {
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -41,7 +40,7 @@ public static class WibboEnvironment
         });
 
     public static DateTime ServerStarted { get; private set; }
-    public static string PatchDir { get; private set; } = "";
+    public static string PatchDir { get; private set; }
 
     public static void Initialize()
     {
@@ -131,7 +130,7 @@ public static class WibboEnvironment
         {
             var jsonDatabase = File.ReadAllText(PatchDir + "Configuration/database.json");
 
-            DatabaseConfiguration databaseConfiguration = JsonSerializer.Deserialize<DatabaseConfiguration>(jsonDatabase);
+            var databaseConfiguration = JsonSerializer.Deserialize<DatabaseConfiguration>(jsonDatabase);
 
             if (databaseConfiguration == null)
             {
@@ -151,7 +150,7 @@ public static class WibboEnvironment
                 return;
             }
 
-            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            using var dbClient = GetDatabaseManager().GetQueryReactor();
 
             _settingsManager = new SettingsManager();
             _settingsManager.Init(dbClient);
@@ -191,7 +190,7 @@ public static class WibboEnvironment
         {
             ExceptionLogger.WriteLine("Please check your configuration file - some values appear to be missing.");
             ExceptionLogger.WriteLine("Press any key to shut down ...");
-            ExceptionLogger.WriteLine((ex).ToString());
+            ExceptionLogger.WriteLine(ex.ToString());
             Console.ReadKey(true);
         }
         catch (InvalidOperationException ex)
@@ -202,7 +201,7 @@ public static class WibboEnvironment
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Fatal error during startup: " + (ex).ToString());
+            Console.WriteLine("Fatal error during startup: " + ex.ToString());
             Console.WriteLine("Press a key to exit");
             Console.ReadKey();
             Environment.Exit(1000);
@@ -211,15 +210,15 @@ public static class WibboEnvironment
 
     public static void RegenRandom() => _random = new Random();
 
-    public static bool EnumToBool(string Enum) => Enum == "1";
+    public static bool EnumToBool(string value) => value == "1";
 
-    public static string BoolToEnum(bool Bool) => Bool ? "1" : "0";
+    public static string BoolToEnum(bool value) => value ? "1" : "0";
 
-    public static int GetRandomNumber(int Min, int Max)
+    public static int GetRandomNumber(int min, int max)
     {
         lock (_random) // synchronize
         {
-            return _random.Next(Min, Max + 1);
+            return _random.Next(min, max + 1);
         }
     }
 
@@ -234,7 +233,7 @@ public static class WibboEnvironment
             return false;
         }
 
-        for (int index = 0; index < inputStr.Length; ++index)
+        for (var index = 0; index < inputStr.Length; ++index)
         {
             if (!IsValid(inputStr[index]))
             {
@@ -246,8 +245,8 @@ public static class WibboEnvironment
 
     public static bool UsernameExists(string username)
     {
-        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        int integer = UserDao.GetIdByName(dbClient, username);
+        using var dbClient = GetDatabaseManager().GetQueryReactor();
+        var integer = UserDao.GetIdByName(dbClient, username);
         if (integer <= 0)
         {
             return false;
@@ -256,36 +255,34 @@ public static class WibboEnvironment
         return true;
     }
 
-    public static string GetUsernameById(int UserId)
+    public static string GetUsernameById(int userId)
     {
-        string Name = "Unknown User";
-
-        GameClient Client = GetGame().GetGameClientManager().GetClientByUserID(UserId);
-        if (Client != null && Client.GetUser() != null)
+        var client = GetGame().GetGameClientManager().GetClientByUserID(userId);
+        if (client != null && client.GetUser() != null)
         {
-            return Client.GetUser().Username;
+            return client.GetUser().Username;
         }
 
-        if (_usersCached.ContainsKey(UserId))
+        if (_usersCached.ContainsKey(userId))
         {
-            return _usersCached[UserId].Username;
+            return _usersCached[userId].Username;
         }
 
-        using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            Name = UserDao.GetNameById(dbClient, UserId);
+        using var dbClient = GetDatabaseManager().GetQueryReactor();
 
-        if (string.IsNullOrEmpty(Name))
+        var name = UserDao.GetNameById(dbClient, userId);
+        if (string.IsNullOrEmpty(name))
         {
-            Name = "Unknown User";
+            name = "Unknown User";
         }
 
-        return Name;
+        return name;
     }
 
-    public static User GetUserByUsername(string UserName)
+    public static User GetUserByUsername(string username)
     {
-        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        int id = UserDao.GetIdByName(dbClient, UserName);
+        using var dbClient = GetDatabaseManager().GetQueryReactor();
+        var id = UserDao.GetIdByName(dbClient, username);
         if (id > 0)
         {
             return GetUserById(Convert.ToInt32(id));
@@ -294,38 +291,38 @@ public static class WibboEnvironment
         return null;
     }
 
-    public static User GetUserById(int UserId)
+    public static User GetUserById(int userId)
     {
         try
         {
-            GameClient Client = GetGame().GetGameClientManager().GetClientByUserID(UserId);
-            if (Client != null)
+            var client = GetGame().GetGameClientManager().GetClientByUserID(userId);
+            if (client != null)
             {
-                User User = Client.GetUser();
-                if (User != null && User.Id > 0)
+                var user = client.GetUser();
+                if (user != null && user.Id > 0)
                 {
-                    if (_usersCached.ContainsKey(UserId))
+                    if (_usersCached.ContainsKey(userId))
                     {
-                        _usersCached.TryRemove(UserId, out User);
+                        _usersCached.TryRemove(userId, out user);
                     }
 
-                    return User;
+                    return user;
                 }
             }
             else
             {
                 try
                 {
-                    if (_usersCached.ContainsKey(UserId))
+                    if (_usersCached.ContainsKey(userId))
                     {
-                        return _usersCached[UserId];
+                        return _usersCached[userId];
                     }
                     else
                     {
-                        User user = UserFactory.GetUserData(UserId);
+                        var user = UserFactory.GetUserData(userId);
                         if (user != null)
                         {
-                            _usersCached.TryAdd(UserId, user);
+                            _usersCached.TryAdd(userId, user);
                             return user;
                         }
                     }
@@ -372,6 +369,8 @@ public static class WibboEnvironment
         GetGame().GetPacketManager().UnregisterAll(); // Dé-enregistrer les packets
         GetGame().GetGameClientManager().CloseAll(); // Fermeture et enregistrement de toutes les utilisteurs
         GetGame().GetRoomManager().RemoveAllRooms(); // Fermerture et enregistrer des apparts
+
+        GetGame().Dispose();
 
         Console.WriteLine("Wibbo Emulateur s'est parfaitement éteint...");
         Environment.Exit(0);

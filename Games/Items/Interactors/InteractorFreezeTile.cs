@@ -1,53 +1,50 @@
-﻿using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorFreezeTile : FurniInteractor
 {
-    public class InteractorFreezeTile : FurniInteractor
+    public override void OnPlace(GameClient session, Item item)
     {
-        public override void OnPlace(GameClient Session, Item Item)
+    }
+
+    public override void OnRemove(GameClient session, Item item)
+    {
+    }
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (session == null || session.GetUser() == null || item.InteractingUser > 0)
         {
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        var pName = session.GetUser().Username;
+        var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByName(pName);
+        if (roomUserByUserId == null || roomUserByUserId.CountFreezeBall == 0 || roomUserByUserId.Freezed)
         {
+            return;
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        item.GetRoom().GetFreeze().ThrowBall(item, roomUserByUserId);
+    }
+
+    public override void OnTick(Item item)
+    {
+        if (item.InteractingUser <= 0)
         {
-            if (Session == null || Session.GetUser() == null || Item.InteractingUser > 0)
-            {
-                return;
-            }
-
-            string pName = Session.GetUser().Username;
-            RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByName(pName);
-            if (roomUserByUserId == null || roomUserByUserId.CountFreezeBall == 0 || roomUserByUserId.Freezed)
-            {
-                return;
-            }
-
-            Item.GetRoom().GetFreeze().throwBall(Item, roomUserByUserId);
+            return;
         }
 
-        public override void OnTick(Item item)
+        var roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+        if (roomUserTarget != null)
         {
-            if (item.InteractingUser <= 0)
-            {
-                return;
-            }
-
-            RoomUser roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
-            if (roomUserTarget != null)
-            {
-                roomUserTarget.CountFreezeBall = 1;
-            }
-
-            item.ExtraData = "11000";
-            item.UpdateState(false, true);
-            item.GetRoom().GetFreeze().onFreezeTiles(item, item.FreezePowerUp, item.InteractingUser);
-            item.InteractingUser = 0;
-            item.InteractionCountHelper = 0;
+            roomUserTarget.CountFreezeBall = 1;
         }
+
+        item.ExtraData = "11000";
+        item.UpdateState(false, true);
+        item.GetRoom().GetFreeze().OnFreezeTiles(item, item.FreezePowerUp, item.InteractingUser);
+        item.InteractingUser = 0;
+        item.InteractionCountHelper = 0;
     }
 }

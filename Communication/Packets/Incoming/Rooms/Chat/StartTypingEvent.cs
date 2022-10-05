@@ -1,25 +1,24 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class StartTypingEvent : IPacketEvent
 {
-    internal class StartTypingEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
-                return;
-
-            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (roomUserByUserId == null)
-            {
-                return;
-            }
-
-            room.SendPacket(new UserTypingComposer(roomUserByUserId.VirtualId, true));
+            return;
         }
+
+        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (roomUserByUserId == null)
+        {
+            return;
+        }
+
+        room.SendPacket(new UserTypingComposer(roomUserByUserId.VirtualId, true));
     }
 }

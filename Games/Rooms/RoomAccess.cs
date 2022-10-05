@@ -1,10 +1,9 @@
-﻿namespace WibboEmulator.Games.Rooms
+﻿namespace WibboEmulator.Games.Rooms;
+
+public enum RoomAccess
 {
-    public enum RoomAccess
-    {
-        Open,
-        Doorbell,
-        Password,
-        Invisible
-    }
+    Open,
+    Doorbell,
+    Password,
+    Invisible
 }

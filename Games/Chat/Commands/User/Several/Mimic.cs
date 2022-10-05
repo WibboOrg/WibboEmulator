@@ -1,59 +1,57 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class Mimic : IChatCommand
 {
-    internal class Mimic : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (Room.IsRoleplay && !Room.CheckRights(session))
         {
-            if (Room.IsRoleplay && !Room.CheckRights(Session))
-            {
-                return;
-            }
-
-            if (Params.Length != 2)
-            {
-                return;
-            }
-
-            string Username = Params[1];
-
-            GameClient TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Username);
-            if (TargetUser == null || TargetUser.GetUser() == null)
-            {
-                RoomUser Bot = Room.GetRoomUserManager().GetBotByName(Username);
-                if (Bot == null || Bot.BotData == null)
-                {
-                    return;
-                }
-
-                Session.GetUser().Gender = Bot.BotData.Gender;
-                Session.GetUser().Look = Bot.BotData.Look;
-            }
-            else
-            {
-
-                if (TargetUser.GetUser().PremiumProtect && !Session.GetUser().HasPermission("perm_mod"))
-                {
-                    Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", Session.Langue));
-                    return;
-                }
-
-                Session.GetUser().Gender = TargetUser.GetUser().Gender;
-                Session.GetUser().Look = TargetUser.GetUser().Look;
-            }
-
-            if (UserRoom.IsTransf || UserRoom.IsSpectator)
-            {
-                return;
-            }
-
-            Session.SendPacket(new FigureUpdateComposer(Session.GetUser().Look, Session.GetUser().Gender));
-            Session.SendPacket(new UserChangeComposer(UserRoom, true));
-            Room.SendPacket(new UserChangeComposer(UserRoom, false));
+            return;
         }
+
+        if (Params.Length != 2)
+        {
+            return;
+        }
+
+        var Username = Params[1];
+
+        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Username);
+        if (TargetUser == null || TargetUser.GetUser() == null)
+        {
+            var Bot = Room.GetRoomUserManager().GetBotByName(Username);
+            if (Bot == null || Bot.BotData == null)
+            {
+                return;
+            }
+
+            session.GetUser().Gender = Bot.BotData.Gender;
+            session.GetUser().Look = Bot.BotData.Look;
+        }
+        else
+        {
+
+            if (TargetUser.GetUser().PremiumProtect && !session.GetUser().HasPermission("perm_mod"))
+            {
+                session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
+                return;
+            }
+
+            session.GetUser().Gender = TargetUser.GetUser().Gender;
+            session.GetUser().Look = TargetUser.GetUser().Look;
+        }
+
+        if (UserRoom.IsTransf || UserRoom.IsSpectator)
+        {
+            return;
+        }
+
+        session.SendPacket(new FigureUpdateComposer(session.GetUser().Look, session.GetUser().Gender));
+        session.SendPacket(new UserChangeComposer(UserRoom, true));
+        Room.SendPacket(new UserChangeComposer(UserRoom, false));
     }
 }

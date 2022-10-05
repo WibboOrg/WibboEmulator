@@ -1,38 +1,35 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.GameClients.Messenger;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class AcceptBuddyEvent : IPacketEvent
 {
-    internal class AcceptBuddyEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser().GetMessenger() == null)
         {
-            if (Session.GetUser().GetMessenger() == null)
-            {
-                return;
-            }
+            return;
+        }
 
-            int Count = Packet.PopInt();
-            for (int index = 0; index < Count; ++index)
+        var Count = Packet.PopInt();
+        for (var index = 0; index < Count; ++index)
+        {
+            var num2 = Packet.PopInt();
+            var request = session.GetUser().GetMessenger().GetRequest(num2);
+            if (request != null)
             {
-                int num2 = Packet.PopInt();
-                MessengerRequest request = Session.GetUser().GetMessenger().GetRequest(num2);
-                if (request != null)
+                if (request.To != session.GetUser().Id)
                 {
-                    if (request.To != Session.GetUser().Id)
-                    {
-                        break;
-                    }
-
-                    if (!Session.GetUser().GetMessenger().FriendshipExists(request.To))
-                    {
-                        Session.GetUser().GetMessenger().CreateFriendship(request.From);
-                    }
-
-                    Session.GetUser().GetMessenger().HandleRequest(num2);
+                    break;
                 }
+
+                if (!session.GetUser().GetMessenger().FriendshipExists(request.To))
+                {
+                    session.GetUser().GetMessenger().CreateFriendship(request.From);
+                }
+
+                session.GetUser().GetMessenger().HandleRequest(num2);
             }
         }
     }

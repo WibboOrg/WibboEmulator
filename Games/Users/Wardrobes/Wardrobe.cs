@@ -1,16 +1,15 @@
-﻿namespace WibboEmulator.Games.GameClients.Wardrobes
-{
-    public class Wardrobe
-    {
-        public int SlotId { get; private set; }
-        public string Look { get; private set; }
-        public string Gender { get; private set; }
+namespace WibboEmulator.Games.Users.Wardrobes;
 
-        public Wardrobe(int slotId, string look, string gender)
-        {
-            this.SlotId = slotId;
-            this.Look = look;
-            this.Gender = gender;
-        }
+public class Wardrobe
+{
+    public int SlotId { get; private set; }
+    public string Look { get; private set; }
+    public string Gender { get; private set; }
+
+    public Wardrobe(int slotId, string look, string gender)
+    {
+        this.SlotId = slotId;
+        this.Look = look;
+        this.Gender = gender;
     }
 }

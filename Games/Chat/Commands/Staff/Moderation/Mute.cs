@@ -1,35 +1,33 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class Mute : IChatCommand
 {
-    internal class Mute : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (Params.Length != 2)
         {
-            if (Params.Length != 2)
-            {
-                return;
-            }
+            return;
+        }
 
-            GameClient TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
-            if (TargetUser == null || TargetUser.GetUser() == null)
-            {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
-            }
-            else if (TargetUser.GetUser().Rank >= Session.GetUser().Rank)
-            {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", Session.Langue));
-            }
-            else
-            {
-                User user = TargetUser.GetUser();
+        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
+        if (TargetUser == null || TargetUser.GetUser() == null)
+        {
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+        }
+        else if (TargetUser.GetUser().Rank >= session.GetUser().Rank)
+        {
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
+        }
+        else
+        {
+            var user = TargetUser.GetUser();
 
-                user.SpamProtectionTime = 300;
-                user.SpamEnable = true;
-                TargetUser.SendPacket(new FloodControlComposer(user.SpamProtectionTime));
-            }
+            user.SpamProtectionTime = 300;
+            user.SpamEnable = true;
+            TargetUser.SendPacket(new FloodControlComposer(user.SpamProtectionTime));
         }
     }
 }

@@ -1,43 +1,41 @@
-﻿using System.Data;
+namespace WibboEmulator.Games.Items.Wired.Triggers;
+using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Wired.Triggers
+public class UserTriggerSelf : WiredTriggerBase, IWired
 {
-    public class UserTriggerSelf : WiredTriggerBase, IWired
+    private readonly RoomEventDelegate _delegateFunction;
+
+    public UserTriggerSelf(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION)
     {
-        private readonly RoomEventDelegate delegateFunction;
+        this._delegateFunction = new RoomEventDelegate(this.RoomUserManager_OnUserSays);
+        room.OnTriggerSelf += this._delegateFunction;
+    }
 
-        public UserTriggerSelf(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION)
+    private void RoomUserManager_OnUserSays(object sender, EventArgs e)
+    {
+        var user = (RoomUser)sender;
+        if (user == null || user.IsBot)
         {
-            this.delegateFunction = new RoomEventDelegate(this.roomUserManager_OnUserSays);
-            room.OnTriggerSelf += this.delegateFunction;
+            return;
         }
 
-        private void roomUserManager_OnUserSays(object sender, EventArgs e)
-        {
-            RoomUser user = (RoomUser)sender;
-            if (user == null || user.IsBot)
-            {
-                return;
-            }
+        this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, null);
+    }
 
-            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, null);
-        }
+    public override void Dispose()
+    {
+        base.Dispose();
 
-        public override void Dispose()
-        {
-            base.Dispose();
+        this.RoomInstance.GetWiredHandler().GetRoom().OnTriggerSelf -= this._delegateFunction;
+    }
 
-            this.RoomInstance.GetWiredHandler().GetRoom().OnTriggerSelf -= this.delegateFunction;
-        }
+    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, null);
 
-        public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, null);
+    public void LoadFromDatabase(DataRow row)
+    {
 
-        public void LoadFromDatabase(DataRow row)
-        {
-
-        }
     }
 }

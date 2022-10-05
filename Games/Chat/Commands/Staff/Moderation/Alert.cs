@@ -1,32 +1,30 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class Alert : IChatCommand
 {
-    internal class Alert : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (Params.Length < 3)
         {
-            if (Params.Length < 3)
+            return;
+        }
+
+        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
+        if (TargetUser == null)
+        {
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+        }
+        else
+        {
+            var message = CommandManager.MergeParams(Params, 2);
+            if (session.Antipub(message, "<CMD>"))
             {
                 return;
             }
 
-            GameClient TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
-            if (TargetUser == null)
-            {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
-            }
-            else
-            {
-                string message = CommandManager.MergeParams(Params, 2);
-                if (Session.Antipub(message, "<CMD>"))
-                {
-                    return;
-                }
-
-                TargetUser.SendNotification(message);
-            }
+            TargetUser.SendNotification(message);
         }
     }
 }

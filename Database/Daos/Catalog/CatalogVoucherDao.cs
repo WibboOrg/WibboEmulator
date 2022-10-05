@@ -1,21 +1,19 @@
+namespace WibboEmulator.Database.Daos;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Daos
+internal class CatalogVoucherDao
 {
-    class CatalogVoucherDao
+    internal static void Update(IQueryAdapter dbClient, string code)
     {
-        internal static void Update(IQueryAdapter dbClient, string code)
-        {
-            dbClient.SetQuery("UPDATE `catalog_voucher` SET `current_uses` = `current_uses` + '1' WHERE `voucher` = @code LIMIT 1");
-            dbClient.AddParameter("code", code);
-            dbClient.RunQuery();
-        }
+        dbClient.SetQuery("UPDATE `catalog_voucher` SET `current_uses` = `current_uses` + '1' WHERE `voucher` = @code LIMIT 1");
+        dbClient.AddParameter("code", code);
+        dbClient.RunQuery();
+    }
 
-        internal static DataTable GetAll(IQueryAdapter dbClient)
-        {
-            dbClient.SetQuery("SELECT `voucher`, `type`, `value`, `current_uses`, `max_uses` FROM `catalog_voucher` WHERE `enabled` = '1'");
-            return dbClient.GetTable();
-        }
+    internal static DataTable GetAll(IQueryAdapter dbClient)
+    {
+        dbClient.SetQuery("SELECT `voucher`, `type`, `value`, `current_uses`, `max_uses` FROM `catalog_voucher` WHERE `enabled` = '1'");
+        return dbClient.GetTable();
     }
 }

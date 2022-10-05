@@ -1,21 +1,19 @@
-using WibboEmulator.Games.GameClients.Inventory.Bots;
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
+using WibboEmulator.Games.Users.Inventory.Bots;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots
+internal class BotInventoryComposer : ServerPacket
 {
-    internal class BotInventoryComposer : ServerPacket
+    public BotInventoryComposer(ICollection<Bot> bots)
+       : base(ServerPacketHeader.USER_BOTS)
     {
-        public BotInventoryComposer(ICollection<Bot> Bots)
-           : base(ServerPacketHeader.USER_BOTS)
+        this.WriteInteger(bots.Count);
+        foreach (var bot in bots.ToList())
         {
-            this.WriteInteger(Bots.Count);
-            foreach (Bot Bot in Bots.ToList())
-            {
-                this.WriteInteger(Bot.Id);
-                this.WriteString(Bot.Name);
-                this.WriteString(Bot.Motto);
-                this.WriteString(Bot.Gender);
-                this.WriteString(Bot.Figure);
-            }
+            this.WriteInteger(bot.Id);
+            this.WriteString(bot.Name);
+            this.WriteString(bot.Motto);
+            this.WriteString(bot.Gender);
+            this.WriteString(bot.Figure);
         }
     }
 }

@@ -1,53 +1,51 @@
-﻿namespace WibboEmulator.Games.Rooms.PathFinding
+namespace WibboEmulator.Games.Rooms.PathFinding;
+
+public class Vector2D
 {
-    public class Vector2D
+    public static Vector2D Zero = new(0, 0);
+
+    public Vector2D()
     {
-        public static Vector2D Zero = new Vector2D(0, 0);
+    }
 
-        public Vector2D()
+    public Vector2D(int x, int y)
+    {
+        this.X = x;
+        this.Y = y;
+    }
+
+    public int X { get; set; }
+
+    public int Y { get; set; }
+
+    public int GetDistanceSquared(Vector2D Point)
+    {
+        var dx = this.X - Point.X;
+        var dy = this.Y - Point.Y;
+        return (dx * dx) + (dy * dy);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is Vector2D v2d)
         {
+            return v2d.X == this.X && v2d.Y == this.Y;
         }
 
-        public Vector2D(int x, int y)
-        {
-            X = x;
-            Y = y;
-        }
+        return false;
+    }
 
-        public int X { get; set; }
+    public override int GetHashCode() => (this.X + " " + this.Y).GetHashCode();
 
-        public int Y { get; set; }
+    public override string ToString() => this.X + ", " + this.Y;
 
-        public int GetDistanceSquared(Vector2D Point)
-        {
-            int dx = X - Point.X;
-            int dy = Y - Point.Y;
-            return (dx * dx) + (dy * dy);
-        }
+    public static Vector2D operator +(Vector2D One, Vector2D Two)
+    {
+        return new Vector2D(One.X + Two.X, One.Y + Two.Y);
+    }
 
-        public override bool Equals(object obj)
-        {
-            if (obj is Vector2D)
-            {
-                var v2d = (Vector2D)obj;
-                return v2d.X == X && v2d.Y == Y;
-            }
-
-            return false;
-        }
-
-        public override int GetHashCode() => (X + " " + Y).GetHashCode();
-
-        public override string ToString() => X + ", " + Y;
-
-        public static Vector2D operator +(Vector2D One, Vector2D Two)
-        {
-            return new Vector2D(One.X + Two.X, One.Y + Two.Y);
-        }
-
-        public static Vector2D operator -(Vector2D One, Vector2D Two)
-        {
-            return new Vector2D(One.X - Two.X, One.Y - Two.Y);
-        }
+    public static Vector2D operator -(Vector2D One, Vector2D Two)
+    {
+        return new Vector2D(One.X - Two.X, One.Y - Two.Y);
     }
 }

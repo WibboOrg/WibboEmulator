@@ -1,30 +1,28 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class GiveBadge : IChatCommand
 {
-    internal class GiveBadge : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
+        if (clientByUsername != null)
         {
-            GameClient clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
-            if (clientByUsername != null)
+            /*if (session.Langue != clientByUsername.Langue)
             {
-                /*if (Session.Langue != clientByUsername.Langue)
-                {
-                    Session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", clientByUsername.Langue), Session.Langue));
-                    return;
-                }*/
+                session.SendWhisper(ButterflyEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", clientByUsername.Langue), session.Langue));
+                return;
+            }*/
 
-                string BadgeCode = Params[2];
-                clientByUsername.GetUser().GetBadgeComponent().GiveBadge(BadgeCode, true);
-                clientByUsername.SendPacket(new ReceiveBadgeComposer(BadgeCode));
-            }
-            else
-            {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
-            }
+            var BadgeCode = Params[2];
+            clientByUsername.GetUser().GetBadgeComponent().GiveBadge(BadgeCode, true);
+            clientByUsername.SendPacket(new ReceiveBadgeComposer(BadgeCode));
+        }
+        else
+        {
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
     }
 }

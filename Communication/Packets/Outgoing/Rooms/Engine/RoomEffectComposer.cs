@@ -1,11 +1,7 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+
+internal class RoomEffectComposer : ServerPacket
 {
-    internal class RoomEffectComposer : ServerPacket
-    {
-        public RoomEffectComposer(int type)
-            : base(ServerPacketHeader.ROOM_EFFECT)
-        {
-            this.WriteInteger(type);
-        }
-    }
+    public RoomEffectComposer(int type)
+        : base(ServerPacketHeader.ROOM_EFFECT) => this.WriteInteger(type);
 }

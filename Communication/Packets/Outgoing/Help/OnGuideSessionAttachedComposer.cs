@@ -1,14 +1,13 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Help
+namespace WibboEmulator.Communication.Packets.Outgoing.Help;
+
+internal class OnGuideSessionAttachedComposer : ServerPacket
 {
-    internal class OnGuideSessionAttachedComposer : ServerPacket
+    public OnGuideSessionAttachedComposer(bool enable, int userId, string mesage, int time)
+        : base(ServerPacketHeader.GUIDE_SESSION_ATTACHED)
     {
-        public OnGuideSessionAttachedComposer(bool enable, int userId, string mesage, int time)
-            : base(ServerPacketHeader.GUIDE_SESSION_ATTACHED)
-        {
-            WriteBoolean(enable);
-            WriteInteger(userId);
-            WriteString(mesage);
-            WriteInteger(time);
-        }
+        this.WriteBoolean(enable);
+        this.WriteInteger(userId);
+        this.WriteString(mesage);
+        this.WriteInteger(time);
     }
 }

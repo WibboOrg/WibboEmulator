@@ -1,356 +1,340 @@
-﻿using System.Collections.Concurrent;
+namespace WibboEmulator.Games.Rooms.Wired;
+using System.Collections.Concurrent;
 using System.Drawing;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 
-namespace WibboEmulator.Games.Rooms.Wired
+public class WiredHandler
 {
-    public class WiredHandler
+    private readonly ConcurrentDictionary<Point, List<Item>> _actionStacks;
+    private readonly ConcurrentDictionary<Point, List<Item>> _conditionStacks;
+
+    private readonly ConcurrentDictionary<Point, List<RoomUser>> _wiredUsed;
+
+    private readonly List<Point> _specialRandom;
+    private readonly Dictionary<Point, int> _specialUnseen;
+
+    private ConcurrentQueue<WiredCycle> _requestingUpdates;
+
+    private readonly Room _room;
+    private bool _doCleanup = false;
+
+    public event BotCollisionDelegate TrgBotCollision;
+    public event UserAndItemDelegate TrgCollision;
+    public event RoomEventDelegate TrgTimer;
+
+    public WiredHandler(Room room)
     {
-        private readonly ConcurrentDictionary<Point, List<Item>> _actionStacks;
-        private readonly ConcurrentDictionary<Point, List<Item>> _conditionStacks;
+        this._actionStacks = new ConcurrentDictionary<Point, List<Item>>();
+        this._conditionStacks = new ConcurrentDictionary<Point, List<Item>>();
+        this._requestingUpdates = new ConcurrentQueue<WiredCycle>();
+        this._wiredUsed = new ConcurrentDictionary<Point, List<RoomUser>>();
 
-        private readonly ConcurrentDictionary<Point, List<RoomUser>> _wiredUsed;
 
-        private readonly List<Point> _specialRandom;
-        private readonly Dictionary<Point, int> _specialUnseen;
+        this._specialRandom = new List<Point>();
+        this._specialUnseen = new Dictionary<Point, int>();
 
-        private ConcurrentQueue<WiredCycle> _requestingUpdates;
+        this._room = room;
+    }
 
-        private readonly Room _room;
-        private bool _doCleanup = false;
-
-        public event BotCollisionDelegate TrgBotCollision;
-        public event UserAndItemDelegate TrgCollision;
-        public event RoomEventDelegate TrgTimer;
-
-        public WiredHandler(Room room)
+    public void AddFurniture(Item item)
+    {
+        var itemCoord = item.Coordinate;
+        if (WiredUtillity.TypeIsWiredAction(item.GetBaseItem().InteractionType))
         {
-            this._actionStacks = new ConcurrentDictionary<Point, List<Item>>();
-            this._conditionStacks = new ConcurrentDictionary<Point, List<Item>>();
-            this._requestingUpdates = new ConcurrentQueue<WiredCycle>();
-            this._wiredUsed = new ConcurrentDictionary<Point, List<RoomUser>>();
-
-
-            this._specialRandom = new List<Point>();
-            this._specialUnseen = new Dictionary<Point, int>();
-
-            this._room = room;
-        }
-
-        public void AddFurniture(Item item)
-        {
-            Point itemCoord = item.Coordinate;
-            if (WiredUtillity.TypeIsWiredAction(item.GetBaseItem().InteractionType))
+            if (this._actionStacks.ContainsKey(itemCoord))
             {
-                if (this._actionStacks.ContainsKey(itemCoord))
-                {
-                    this._actionStacks[itemCoord].Add(item);
-                }
-                else
-                {
-                    this._actionStacks.TryAdd(itemCoord, new List<Item>() { item });
-                }
-            }
-            else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
-            {
-                if (this._conditionStacks.ContainsKey(itemCoord))
-                {
-                    this._conditionStacks[itemCoord].Add(item);
-                }
-                else
-                {
-                    this._conditionStacks.TryAdd(itemCoord, new List<Item>() { item });
-                }
-            }
-            else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
-            {
-                if (!this._specialRandom.Contains(itemCoord))
-                {
-                    this._specialRandom.Add(itemCoord);
-                }
-            }
-            else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALUNSEEN)
-            {
-                if (!this._specialUnseen.ContainsKey(itemCoord))
-                {
-                    this._specialUnseen.Add(itemCoord, 0);
-                }
-            }
-        }
-
-        public void RemoveFurniture(Item item)
-        {
-            Point itemCoord = item.Coordinate;
-            if (WiredUtillity.TypeIsWiredAction(item.GetBaseItem().InteractionType))
-            {
-                Point coordinate = item.Coordinate;
-                if (!this._actionStacks.ContainsKey(coordinate))
-                {
-                    return;
-                }
-                this._actionStacks[coordinate].Remove(item);
-                if (this._actionStacks[coordinate].Count == 0)
-                {
-                    this._actionStacks.TryRemove(coordinate, out List<Item> NewList);
-                }
-            }
-            else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
-            {
-                if (!this._conditionStacks.ContainsKey(itemCoord))
-                {
-                    return;
-                }
-                this._conditionStacks[itemCoord].Remove(item);
-                if (this._conditionStacks[itemCoord].Count == 0)
-                {
-                    this._conditionStacks.TryRemove(itemCoord, out List<Item> newList);
-                }
-            }
-            else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
-            {
-                if (this._specialRandom.Contains(itemCoord))
-                {
-                    this._specialRandom.Remove(itemCoord);
-                }
-            }
-            else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALUNSEEN)
-            {
-                if (this._specialUnseen.ContainsKey(itemCoord))
-                {
-                    this._specialUnseen.Remove(itemCoord);
-                }
-            }
-        }
-
-        public void OnCycle()
-        {
-            if (this._doCleanup)
-            {
-                this.ClearWired();
+                this._actionStacks[itemCoord].Add(item);
             }
             else
             {
-                if (this._requestingUpdates.Count > 0)
-                {
-                    List<WiredCycle> toAdd = new List<WiredCycle>();
-                    while (this._requestingUpdates.Count > 0)
-                    {
-                        if (!this._requestingUpdates.TryDequeue(out WiredCycle handler))
-                        {
-                            continue;
-                        }
-
-                        if (handler.WiredCycleable.Disposed())
-                        {
-                            continue;
-                        }
-
-                        if (handler.OnCycle())
-                        {
-                            toAdd.Add(handler);
-                        }
-                    }
-
-                    foreach (WiredCycle cycle in toAdd)
-                    {
-                        this._requestingUpdates.Enqueue(cycle);
-                    }
-                }
-
-                this._wiredUsed.Clear();
+                this._actionStacks.TryAdd(itemCoord, new List<Item>() { item });
             }
         }
-
-        private void ClearWired()
+        else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
         {
-            foreach (List<Item> list in this._actionStacks.Values)
+            if (this._conditionStacks.ContainsKey(itemCoord))
             {
-                foreach (Item roomItem in list)
-                {
-                    if (roomItem.WiredHandler != null)
-                    {
-                        roomItem.WiredHandler.Dispose();
-                        roomItem.WiredHandler = null;
-                    }
-                }
+                this._conditionStacks[itemCoord].Add(item);
             }
-
-            foreach (List<Item> list in this._conditionStacks.Values)
+            else
             {
-                foreach (Item roomItem in list)
-                {
-                    if (roomItem.WiredHandler != null)
-                    {
-                        roomItem.WiredHandler.Dispose();
-                        roomItem.WiredHandler = null;
-                    }
-                }
+                this._conditionStacks.TryAdd(itemCoord, new List<Item>() { item });
             }
-
-            this._conditionStacks.Clear();
-            this._actionStacks.Clear();
-            this._wiredUsed.Clear();
-            this._doCleanup = false;
         }
-
-        public void OnPickall() => this._doCleanup = true;
-
-        public void ExecutePile(Point coordinate, RoomUser user, Item item)
+        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
         {
-            if (this._doCleanup)
-                return;
+            if (!this._specialRandom.Contains(itemCoord))
+            {
+                this._specialRandom.Add(itemCoord);
+            }
+        }
+        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALUNSEEN)
+        {
+            if (!this._specialUnseen.ContainsKey(itemCoord))
+            {
+                this._specialUnseen.Add(itemCoord, 0);
+            }
+        }
+    }
 
+    public void RemoveFurniture(Item item)
+    {
+        var itemCoord = item.Coordinate;
+        if (WiredUtillity.TypeIsWiredAction(item.GetBaseItem().InteractionType))
+        {
+            var coordinate = item.Coordinate;
             if (!this._actionStacks.ContainsKey(coordinate))
             {
                 return;
             }
-
-            if (user != null && user.IsSpectator)
-                return;
-
-            if (user != null)
+            this._actionStacks[coordinate].Remove(item);
+            if (this._actionStacks[coordinate].Count == 0)
             {
-                if (this._wiredUsed.ContainsKey(coordinate))
-                {
-                    if (this._wiredUsed[coordinate].Contains(user))
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        this._wiredUsed[coordinate].Add(user);
-                    }
-                }
-                else
-                {
-                    this._wiredUsed.TryAdd(coordinate, new List<RoomUser>() { user });
-                }
+                this._actionStacks.TryRemove(coordinate, out var newList);
             }
-
-            if (this._conditionStacks.ContainsKey(coordinate))
+        }
+        else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
+        {
+            if (!this._conditionStacks.ContainsKey(itemCoord))
             {
-                List<Item> ConditionStack = this._conditionStacks[coordinate];
-                int CycleCountCdt = 0;
-                foreach (Item roomItem in ConditionStack.ToArray())
-                {
-                    CycleCountCdt++;
-                    if (CycleCountCdt > 20)
-                    {
-                        break;
-                    }
+                return;
+            }
+            this._conditionStacks[itemCoord].Remove(item);
+            if (this._conditionStacks[itemCoord].Count == 0)
+            {
+                this._conditionStacks.TryRemove(itemCoord, out var newList);
+            }
+        }
+        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
+        {
+            if (this._specialRandom.Contains(itemCoord))
+            {
+                this._specialRandom.Remove(itemCoord);
+            }
+        }
+        else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALUNSEEN)
+        {
+            if (this._specialUnseen.ContainsKey(itemCoord))
+            {
+                this._specialUnseen.Remove(itemCoord);
+            }
+        }
+    }
 
-                    if (roomItem == null || roomItem.WiredHandler == null)
+    public void OnCycle()
+    {
+        if (this._doCleanup)
+        {
+            this.ClearWired();
+        }
+        else
+        {
+            if (!this._requestingUpdates.IsEmpty)
+            {
+                var toAdd = new List<WiredCycle>();
+                while (!this._requestingUpdates.IsEmpty)
+                {
+                    if (!this._requestingUpdates.TryDequeue(out var handler))
                     {
                         continue;
                     }
 
-                    if (!((IWiredCondition)roomItem.WiredHandler).AllowsExecution(user, item))
+                    if (handler.WiredCycleable.Disposed())
                     {
-                        return;
+                        continue;
+                    }
+
+                    if (handler.OnCycle())
+                    {
+                        toAdd.Add(handler);
                     }
                 }
-            }
 
-            List<Item> ActionStack = this._actionStacks[coordinate].OrderBy(p => p.Z).ToList();
-
-            if (this._specialRandom.Contains(coordinate))
-            {
-                int CountAct = ActionStack.Count - 1;
-
-                int RdnWired = WibboEnvironment.GetRandomNumber(0, CountAct);
-                Item ActRand = ActionStack[RdnWired];
-                ((IWiredEffect)ActRand.WiredHandler).Handle(user, item);
-            }
-            else if (this._specialUnseen.ContainsKey(coordinate))
-            {
-                int CountAct = ActionStack.Count - 1;
-
-                int NextWired = this._specialUnseen[coordinate];
-                if (NextWired > CountAct)
+                foreach (var cycle in toAdd)
                 {
-                    NextWired = 0;
-                    this._specialUnseen[coordinate] = 0;
+                    this._requestingUpdates.Enqueue(cycle);
                 }
+            }
 
-                this._specialUnseen[coordinate]++;
+            this._wiredUsed.Clear();
+        }
+    }
 
-                Item ActNext = ActionStack[NextWired];
-                if (ActNext != null && ActNext.WiredHandler != null)
+    private void ClearWired()
+    {
+        foreach (var list in this._actionStacks.Values)
+        {
+            foreach (var roomItem in list)
+            {
+                if (roomItem.WiredHandler != null)
                 {
-                    ((IWiredEffect)ActNext.WiredHandler).Handle(user, item);
+                    roomItem.WiredHandler.Dispose();
+                    roomItem.WiredHandler = null;
+                }
+            }
+        }
+
+        foreach (var list in this._conditionStacks.Values)
+        {
+            foreach (var roomItem in list)
+            {
+                if (roomItem.WiredHandler != null)
+                {
+                    roomItem.WiredHandler.Dispose();
+                    roomItem.WiredHandler = null;
+                }
+            }
+        }
+
+        this._conditionStacks.Clear();
+        this._actionStacks.Clear();
+        this._wiredUsed.Clear();
+        this._doCleanup = false;
+    }
+
+    public void OnPickall() => this._doCleanup = true;
+
+    public void ExecutePile(Point coordinate, RoomUser user, Item item)
+    {
+        if (this._doCleanup)
+        {
+            return;
+        }
+
+        if (!this._actionStacks.ContainsKey(coordinate))
+        {
+            return;
+        }
+
+        if (user != null && user.IsSpectator)
+        {
+            return;
+        }
+
+        if (user != null)
+        {
+            if (this._wiredUsed.ContainsKey(coordinate))
+            {
+                if (this._wiredUsed[coordinate].Contains(user))
+                {
+                    return;
+                }
+                else
+                {
+                    this._wiredUsed[coordinate].Add(user);
                 }
             }
             else
             {
-                int CycleCount = 0;
-                foreach (Item roomItem in ActionStack.ToArray())
+                this._wiredUsed.TryAdd(coordinate, new List<RoomUser>() { user });
+            }
+        }
+
+        if (this._conditionStacks.ContainsKey(coordinate))
+        {
+            var conditionStack = this._conditionStacks[coordinate];
+            var cycleCountCdt = 0;
+            foreach (var roomItem in conditionStack.ToArray())
+            {
+                cycleCountCdt++;
+                if (cycleCountCdt > 20)
                 {
-                    CycleCount++;
+                    break;
+                }
 
-                    if (CycleCount > 20)
-                    {
-                        break;
-                    }
+                if (roomItem == null || roomItem.WiredHandler == null)
+                {
+                    continue;
+                }
 
-                    if (roomItem != null && roomItem.WiredHandler != null)
-                    {
-                        ((IWiredEffect)roomItem.WiredHandler).Handle(user, item);
-                    }
+                if (!((IWiredCondition)roomItem.WiredHandler).AllowsExecution(user, item))
+                {
+                    return;
                 }
             }
         }
 
-        public void RequestCycle(WiredCycle handler) => this._requestingUpdates.Enqueue(handler);
+        var actionStack = this._actionStacks[coordinate].OrderBy(p => p.Z).ToList();
 
-        public Room GetRoom() => this._room;
-
-        public void Destroy()
+        if (this._specialRandom.Contains(coordinate))
         {
-            if (this._actionStacks != null)
-            {
-                this._actionStacks.Clear();
-            }
+            var countAct = actionStack.Count - 1;
 
-            if (this._conditionStacks != null)
-            {
-                this._conditionStacks.Clear();
-            }
-
-            if (this._requestingUpdates != null)
-            {
-                this._requestingUpdates = null;
-            }
-
-            this.TrgCollision = null;
-            this.TrgBotCollision = null;
-            this.TrgTimer = null;
-            this._wiredUsed.Clear();
+            var rdnWired = WibboEnvironment.GetRandomNumber(0, countAct);
+            var actRand = actionStack[rdnWired];
+            ((IWiredEffect)actRand.WiredHandler).Handle(user, item);
         }
-
-        public void TriggerCollision(RoomUser roomUser, Item Item)
+        else if (this._specialUnseen.ContainsKey(coordinate))
         {
-            if (this.TrgCollision != null)
+            var countAct = actionStack.Count - 1;
+
+            var nextWired = this._specialUnseen[coordinate];
+            if (nextWired > countAct)
             {
-                this.TrgCollision(roomUser, Item);
+                nextWired = 0;
+                this._specialUnseen[coordinate] = 0;
+            }
+
+            this._specialUnseen[coordinate]++;
+
+            var actNext = actionStack[nextWired];
+            if (actNext != null && actNext.WiredHandler != null)
+            {
+                ((IWiredEffect)actNext.WiredHandler).Handle(user, item);
             }
         }
-
-        public void TriggerBotCollision(RoomUser roomUser, string BotName)
+        else
         {
-            if (this.TrgBotCollision != null)
+            var cycleCount = 0;
+            foreach (var roomItem in actionStack.ToArray())
             {
-                this.TrgBotCollision(roomUser, BotName);
-            }
-        }
+                cycleCount++;
 
-        public void TriggerTimer()
-        {
-            if (this.TrgTimer != null)
-            {
-                this.TrgTimer(null, null);
+                if (cycleCount > 20)
+                {
+                    break;
+                }
+
+                if (roomItem != null && roomItem.WiredHandler != null)
+                {
+                    ((IWiredEffect)roomItem.WiredHandler).Handle(user, item);
+                }
             }
         }
     }
+
+    public void RequestCycle(WiredCycle handler) => this._requestingUpdates.Enqueue(handler);
+
+    public Room GetRoom() => this._room;
+
+    public void Destroy()
+    {
+        if (this._actionStacks != null)
+        {
+            this._actionStacks.Clear();
+        }
+
+        if (this._conditionStacks != null)
+        {
+            this._conditionStacks.Clear();
+        }
+
+        if (this._requestingUpdates != null)
+        {
+            this._requestingUpdates = null;
+        }
+
+        this.TrgCollision = null;
+        this.TrgBotCollision = null;
+        this.TrgTimer = null;
+        this._wiredUsed.Clear();
+    }
+
+    public void TriggerCollision(RoomUser roomUser, Item item) => this.TrgCollision?.Invoke(roomUser, item);
+
+    public void TriggerBotCollision(RoomUser roomUser, string botName) => this.TrgBotCollision?.Invoke(roomUser, botName);
+
+    public void TriggerTimer() => this.TrgTimer?.Invoke(null, null);
 }

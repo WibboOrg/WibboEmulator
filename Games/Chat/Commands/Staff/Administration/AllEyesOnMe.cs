@@ -1,25 +1,27 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.PathFinding;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class AllEyesOnMe : IChatCommand
 {
-    internal class AllEyesOnMe : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        var ThisUser = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (ThisUser == null)
         {
-            RoomUser ThisUser = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (ThisUser == null)
-                return;
+            return;
+        }
 
-            List<RoomUser> Users = Room.GetRoomUserManager().GetRoomUsers();
-            foreach (RoomUser U in Users.ToList())
+        var Users = Room.GetRoomUserManager().GetRoomUsers();
+        foreach (var U in Users.ToList())
+        {
+            if (U == null || session.GetUser().Id == U.UserId)
             {
-                if (U == null || Session.GetUser().Id == U.UserId)
-                    continue;
-
-                U.SetRot(Rotation.Calculate(U.X, U.Y, ThisUser.X, ThisUser.Y), false);
+                continue;
             }
+
+            U.SetRot(Rotation.Calculate(U.X, U.Y, ThisUser.X, ThisUser.Y), false);
         }
     }
 }

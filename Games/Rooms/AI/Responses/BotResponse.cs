@@ -1,55 +1,45 @@
-﻿using WibboEmulator.Games.Catalog.Utilities;
+namespace WibboEmulator.Games.Rooms.AI.Responses;
+using WibboEmulator.Games.Catalog.Utilities;
 
-namespace WibboEmulator.Games.Rooms.AI.Responses
+public class BotResponse
 {
-    public class BotResponse
+    public BotAIType AiType { get; set; }
+    public List<string> Keywords { get; set; }
+    public string ResponseText { get; set; }
+    public string ResponseType { get; set; }
+    public List<int> BeverageIds { get; private set; }
+
+    public BotResponse(string botAi, string keywords, string responseText, string responseMode, string responseBeverages)
     {
-        public BotAIType AiType { get; set; }
-        public List<string> Keywords { get; set; }
-        public string ResponseText { get; set; }
-        public string ResponseType { get; set; }
-        public List<int> BeverageIds { get; private set; }
+        this.AiType = BotUtility.GetAIFromString(botAi);
 
-        public BotResponse(string BotAi, string Keywords, string ResponseText, string ResponseMode, string ResponseBeverages)
+        this.Keywords = new List<string>();
+        foreach (var keyword in keywords.Split(','))
         {
-            AiType = BotUtility.GetAIFromString(BotAi);
-
-            this.Keywords = new List<string>();
-            foreach (string Keyword in Keywords.Split(','))
-            {
-                this.Keywords.Add(Keyword.ToLower());
-            }
-
-            this.ResponseText = ResponseText;
-            ResponseType = ResponseMode;
-
-            BeverageIds = new List<int>();
-            if (ResponseBeverages.Contains(','))
-            {
-                foreach (string VendingId in ResponseBeverages.Split(','))
-                {
-                    try
-                    {
-                        BeverageIds.Add(int.Parse(VendingId));
-                    }
-                    catch
-                    {
-                        continue;
-                    }
-                }
-            }
-            else if (!String.IsNullOrEmpty(ResponseBeverages) && (int.Parse(ResponseBeverages)) > 0)
-                BeverageIds.Add(int.Parse(ResponseBeverages));
+            this.Keywords.Add(keyword.ToLower());
         }
 
-        public bool KeywordMatched(string Message)
+        this.ResponseText = responseText;
+        this.ResponseType = responseMode;
+
+        this.BeverageIds = new List<int>();
+        if (responseBeverages.Contains(','))
         {
-            foreach (string Keyword in Keywords)
+            foreach (var vendingId in responseBeverages.Split(','))
             {
-                if (Message.ToLower().Contains(Keyword.ToLower()))
-                    return true;
+                try
+                {
+                    this.BeverageIds.Add(int.Parse(vendingId));
+                }
+                catch
+                {
+                    continue;
+                }
             }
-            return false;
+        }
+        else if (!string.IsNullOrEmpty(responseBeverages) && int.Parse(responseBeverages) > 0)
+        {
+            this.BeverageIds.Add(int.Parse(responseBeverages));
         }
     }
 }

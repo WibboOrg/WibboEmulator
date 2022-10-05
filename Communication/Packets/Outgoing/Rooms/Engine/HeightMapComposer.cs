@@ -1,26 +1,24 @@
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
+internal class HeightMapComposer : ServerPacket
 {
-    internal class HeightMapComposer : ServerPacket
+    public HeightMapComposer(RoomModelDynamic map, double height = 0.0)
+        : base(ServerPacketHeader.ROOM_HEIGHT_MAP)
     {
-        public HeightMapComposer(RoomModelDynamic map, double height = 0.0)
-            : base(ServerPacketHeader.ROOM_HEIGHT_MAP)
+        this.WriteInteger(map.MapSizeX);
+        this.WriteInteger(map.MapSizeX * map.MapSizeY);
+        for (var i = 0; i < map.MapSizeY; i++)
         {
-            this.WriteInteger(map.MapSizeX);
-            this.WriteInteger(map.MapSizeX * map.MapSizeY);
-            for (int i = 0; i < map.MapSizeY; i++)
+            for (var j = 0; j < map.MapSizeX; j++)
             {
-                for (int j = 0; j < map.MapSizeX; j++)
+                if (map.SqState[j, i] == SquareStateType.BLOCKED)
                 {
-                    if (map.SqState[j, i] == SquareStateType.BLOCKED)
-                    {
-                        this.WriteShort(-1);
-                    }
-                    else
-                    {
-                        this.WriteShort((int)Math.Floor((map.SqFloorHeight[j, i] + height) * 256.0));
-                    }
+                    this.WriteShort(-1);
+                }
+                else
+                {
+                    this.WriteShort((int)Math.Floor((map.SqFloorHeight[j, i] + height) * 256.0));
                 }
             }
         }

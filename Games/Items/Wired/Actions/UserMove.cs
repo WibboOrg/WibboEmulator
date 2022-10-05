@@ -1,64 +1,69 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Wired.Actions
+public class UserMove : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
 {
-    public class UserMove : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
+    public UserMove(Item item, Room room) : base(item, room, (int)WiredActionType.TELEPORT)
     {
-        public UserMove(Item item, Room room) : base(item, room, (int)WiredActionType.TELEPORT)
+    }
+
+    public override bool OnCycle(RoomUser user, Item item)
+    {
+        if (this.Items.Count == 0 || user == null)
         {
-        }
-
-        public override bool OnCycle(RoomUser user, Item item)
-        {
-            if (this.Items.Count == 0 || user == null)
-            {
-                return false;
-            }
-
-            Item roomItem = this.Items[0];
-            if (roomItem == null)
-            {
-                return false;
-            }
-
-            if (roomItem.Coordinate != user.Coordinate)
-            {
-                user.IsWalking = true;
-                user.GoalX = roomItem.X;
-                user.GoalY = roomItem.Y;
-            }
-
             return false;
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
-
-        public void LoadFromDatabase(DataRow row)
+        var roomItem = this.Items[0];
+        if (roomItem == null)
         {
-            int delay;
-            if (int.TryParse(row["delay"].ToString(), out delay))
-                this.Delay = delay;
+            return false;
+        }
 
-            if (int.TryParse(row["trigger_data"].ToString(), out delay))
-                this.Delay = delay;
+        if (roomItem.Coordinate != user.Coordinate)
+        {
+            user.IsWalking = true;
+            user.GoalX = roomItem.X;
+            user.GoalY = roomItem.Y;
+        }
 
-            string triggerItems = row["triggers_item"].ToString();
+        return false;
+    }
 
-            if (triggerItems == null || triggerItems == "")
+    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
+
+    public void LoadFromDatabase(DataRow row)
+    {
+        if (int.TryParse(row["delay"].ToString(), out var delay))
+        {
+            this.Delay = delay;
+        }
+
+        if (int.TryParse(row["trigger_data"].ToString(), out delay))
+        {
+            this.Delay = delay;
+        }
+
+        var triggerItems = row["triggers_item"].ToString();
+
+        if (triggerItems is null or "")
+        {
+            return;
+        }
+
+        foreach (var itemId in triggerItems.Split(';'))
+        {
+            if (!int.TryParse(itemId, out var id))
             {
-                return;
+                continue;
             }
 
-            foreach (string itemId in triggerItems.Split(';'))
+            if (!this.StuffIds.Contains(id))
             {
-                if (!int.TryParse(itemId, out int id))
-                    continue;
-
-                if (!this.StuffIds.Contains(id))
-                    this.StuffIds.Add(id);
+                this.StuffIds.Add(id);
             }
         }
     }

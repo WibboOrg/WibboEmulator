@@ -1,44 +1,43 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class WhiperGroupEvent : IPacketEvent
 {
-    internal class WhiperGroupEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
-                return;
+            return;
+        }
 
-            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (roomUserByUserId == null)
+        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (roomUserByUserId == null)
+        {
+            return;
+        }
+
+        var name = Packet.PopString();
+
+        var roomUserByUserTarget = room.GetRoomUserManager().GetRoomUserByName(name);
+        if (roomUserByUserTarget == null)
+        {
+            return;
+        }
+
+        if (!roomUserByUserId.WhiperGroupUsers.Contains(roomUserByUserTarget.GetUsername()))
+        {
+            if (roomUserByUserId.WhiperGroupUsers.Count >= 5)
             {
                 return;
             }
 
-            string name = Packet.PopString();
-
-            RoomUser roomUserByUserTarget = room.GetRoomUserManager().GetRoomUserByName(name);
-            if (roomUserByUserTarget == null)
-            {
-                return;
-            }
-
-            if (!roomUserByUserId.WhiperGroupUsers.Contains(roomUserByUserTarget.GetUsername()))
-            {
-                if (roomUserByUserId.WhiperGroupUsers.Count >= 5)
-                {
-                    return;
-                }
-
-                roomUserByUserId.WhiperGroupUsers.Add(roomUserByUserTarget.GetUsername());
-            }
-            else
-            {
-                roomUserByUserId.WhiperGroupUsers.Remove(roomUserByUserTarget.GetUsername());
-            }
+            roomUserByUserId.WhiperGroupUsers.Add(roomUserByUserTarget.GetUsername());
+        }
+        else
+        {
+            roomUserByUserId.WhiperGroupUsers.Remove(roomUserByUserTarget.GetUsername());
         }
     }
 }

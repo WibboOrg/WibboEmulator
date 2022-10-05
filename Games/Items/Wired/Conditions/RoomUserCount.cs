@@ -1,62 +1,64 @@
-﻿using System.Data;
+namespace WibboEmulator.Games.Items.Wired.Conditions;
+using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Wired.Conditions
+public class RoomUserCount : WiredConditionBase, IWiredCondition, IWired
 {
-    public class RoomUserCount : WiredConditionBase, IWiredCondition, IWired
+    public RoomUserCount(Item item, Room room) : base(item, room, (int)WiredConditionType.USER_COUNT_IN)
     {
-        public RoomUserCount(Item item, Room room) : base(item, room, (int)WiredConditionType.USER_COUNT_IN)
+        this.IntParams.Add(0);
+        this.IntParams.Add(0);
+    }
+
+    public bool AllowsExecution(RoomUser user, Item item)
+    {
+        var minUsers = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+        var maxUsers = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+
+        if (this.RoomInstance.UserCount < minUsers)
         {
-            this.IntParams.Add(0);
-            this.IntParams.Add(0);
+            return false;
         }
 
-        public bool AllowsExecution(RoomUser user, Item TriggerItem)
+        if (this.RoomInstance.UserCount > maxUsers)
         {
-            int minUsers = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
-            int maxUsers = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
-
-            if (this.RoomInstance.UserCount < minUsers)
-            {
-                return false;
-            }
-
-            if (this.RoomInstance.UserCount > maxUsers)
-            {
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient)
-        {
-            int minUsers = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
-            int maxUsers = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
+        return true;
+    }
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, minUsers + ":" + maxUsers, false, null);
+    public void SaveToDatabase(IQueryAdapter dbClient)
+    {
+        var minUsers = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+        var maxUsers = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+
+        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, minUsers + ":" + maxUsers, false, null);
+    }
+
+    public void LoadFromDatabase(DataRow row)
+    {
+        this.IntParams.Clear();
+
+        var triggerData = row["trigger_data"].ToString();
+        if (triggerData == null || !triggerData.Contains(':'))
+        {
+            return;
         }
 
-        public void LoadFromDatabase(DataRow row)
+        var countMin = triggerData.Split(':')[0];
+        var countMax = triggerData.Split(':')[1];
+
+        if (int.TryParse(countMin, out var minUsers))
         {
-            this.IntParams.Clear();
+            this.IntParams.Add(minUsers);
+        }
 
-            string triggerData = row["trigger_data"].ToString();
-            if (triggerData == null || !triggerData.Contains(':'))
-            {
-                return;
-            }
-
-            string countMin = triggerData.Split(':')[0];
-            string countMax = triggerData.Split(':')[1];
-
-            if (int.TryParse(countMin, out int minUsers))
-                this.IntParams.Add(minUsers);
-
-            if (int.TryParse(countMax, out int maxUsers))
-                this.IntParams.Add(maxUsers);
+        if (int.TryParse(countMax, out var maxUsers))
+        {
+            this.IntParams.Add(maxUsers);
         }
     }
 }

@@ -1,22 +1,20 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class DisableFollow : IChatCommand
 {
-    internal class DisableFollow : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (session.GetUser().HideInRoom)
         {
-            if (Session.GetUser().HideInRoom)
-            {
-                Session.GetUser().HideInRoom = false;
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.followme.true", Session.Langue));
-            }
-            else
-            {
-                Session.GetUser().HideInRoom = true;
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.followme.false", Session.Langue));
-            }
+            session.GetUser().HideInRoom = false;
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.followme.true", session.Langue));
+        }
+        else
+        {
+            session.GetUser().HideInRoom = true;
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.followme.false", session.Langue));
         }
     }
 }

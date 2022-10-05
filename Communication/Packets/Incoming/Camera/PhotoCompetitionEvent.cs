@@ -1,14 +1,12 @@
-﻿using WibboEmulator.Games.GameClients;
+namespace WibboEmulator.Communication.Packets.Incoming.Camera;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Camera
+internal class PhotoCompetitionEvent : IPacketEvent
 {
-    internal class PhotoCompetitionEvent : IPacketEvent
+    public double Delay => 5000;
+
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        public double Delay => 5000;
 
-        public void Parse(GameClient Session, ClientPacket Packet)
-        {
-
-        }
     }
 }

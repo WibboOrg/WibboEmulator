@@ -1,30 +1,28 @@
-﻿using WibboEmulator.Database.Interfaces;
+﻿namespace WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Utilities;
 
-namespace WibboEmulator.Database.Daos
+internal class ItemStatDao
 {
-    class ItemStatDao
+    internal static int GetOne(IQueryAdapter dbClient, int baseId)
     {
-        internal static int GetOne(IQueryAdapter dbClient, int baseId)
-        {
-            dbClient.SetQuery("SELECT amount FROM `item_stat` WHERE base_id = '" + baseId + "' LIMIT 1");
+        dbClient.SetQuery("SELECT amount FROM `item_stat` WHERE base_id = '" + baseId + "' LIMIT 1");
 
-            return dbClient.GetInteger();
-        }
-
-        internal static void UpdateRemove(IQueryAdapter dbClient, Dictionary<int, int> rareAmounts)
-        {
-            QueryChunk standardQueries = new QueryChunk();
-
-            foreach (KeyValuePair<int, int> rare in rareAmounts)
-            {
-                standardQueries.AddQuery("UPDATE `item_stat` SET amount = amount - '" + rare.Value + "' WHERE base_id = '" + rare.Key + "'");
-            }
-
-            standardQueries.Execute(dbClient);
-            standardQueries.Dispose();
-        }
-
-        internal static void UpdateAdd(IQueryAdapter dbClient, int baseId, int amount = 1) => dbClient.RunQuery("UPDATE `item_stat` SET amount = amount + '" + amount + "' WHERE base_id = '" + baseId + "'");
+        return dbClient.GetInteger();
     }
+
+    internal static void UpdateRemove(IQueryAdapter dbClient, Dictionary<int, int> rareAmounts)
+    {
+        var standardQueries = new QueryChunk();
+
+        foreach (var rare in rareAmounts)
+        {
+            standardQueries.AddQuery("UPDATE `item_stat` SET amount = amount - '" + rare.Value + "' WHERE base_id = '" + rare.Key + "'");
+        }
+
+        standardQueries.Execute(dbClient);
+        standardQueries.Dispose();
+    }
+
+    internal static void UpdateAdd(IQueryAdapter dbClient, int baseId, int amount = 1) => dbClient.RunQuery("UPDATE `item_stat` SET amount = amount + '" + amount + "' WHERE base_id = '" + baseId + "'");
 }

@@ -1,33 +1,31 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class ForceControlUser : IChatCommand
 {
-    internal class ForceControlUser : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (Params.Length != 2)
         {
-            if (Params.Length != 2)
-            {
-                return;
-            }
-
-            string username = Params[1];
-
-            RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
-            if (roomUserByUserId == null || roomUserByUserId.GetClient() == null)
-            {
-                return;
-            }
-
-            if (Session.Langue != roomUserByUserId.GetClient().Langue)
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", roomUserByUserId.GetClient().Langue), Session.Langue));
-                return;
-            }
-
-            Session.GetUser().ControlUserId = roomUserByUserId.GetClient().GetUser().Id;
-
+            return;
         }
+
+        var username = Params[1];
+
+        var roomUserByUserId = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
+        if (roomUserByUserId == null || roomUserByUserId.GetClient() == null)
+        {
+            return;
+        }
+
+        if (session.Langue != roomUserByUserId.GetClient().Langue)
+        {
+            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue.user", roomUserByUserId.GetClient().Langue), session.Langue));
+            return;
+        }
+
+        session.GetUser().ControlUserId = roomUserByUserId.GetClient().GetUser().Id;
+
     }
 }

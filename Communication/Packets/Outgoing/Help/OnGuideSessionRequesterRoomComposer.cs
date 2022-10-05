@@ -1,11 +1,7 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Help
+namespace WibboEmulator.Communication.Packets.Outgoing.Help;
+
+internal class OnGuideSessionRequesterRoomComposer : ServerPacket
 {
-    internal class OnGuideSessionRequesterRoomComposer : ServerPacket
-    {
-        public OnGuideSessionRequesterRoomComposer(int roomId)
-            : base(ServerPacketHeader.GUIDE_SESSION_REQUESTER_ROOM)
-        {
-            WriteInteger(roomId);
-        }
-    }
+    public OnGuideSessionRequesterRoomComposer(int roomId)
+        : base(ServerPacketHeader.GUIDE_SESSION_REQUESTER_ROOM) => this.WriteInteger(roomId);
 }

@@ -1,13 +1,11 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class CanCreateRoomEvent : IPacketEvent
 {
-    internal class CanCreateRoomEvent : IPacketEvent
-    {
-        public double Delay => 0;
+    public double Delay => 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet) => Session.SendPacket(new CanCreateRoomComposer(false, 200));
-    }
+    public void Parse(GameClient session, ClientPacket Packet) => session.SendPacket(new CanCreateRoomComposer(false, 200));
 }

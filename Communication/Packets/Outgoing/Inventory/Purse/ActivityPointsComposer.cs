@@ -1,18 +1,17 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse
-{
-    internal class ActivityPointsComposer : ServerPacket
-    {
-        public ActivityPointsComposer(int WibboPoints, int LimitCoins = 0)
-            : base(ServerPacketHeader.USER_CURRENCY)
-        {
-            this.WriteInteger(2);//Count
-            {
-                this.WriteInteger(105);//Icon
-                this.WriteInteger(WibboPoints);
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 
-                this.WriteInteger(55);//Icon
-                this.WriteInteger(LimitCoins);
-            }
+internal class ActivityPointsComposer : ServerPacket
+{
+    public ActivityPointsComposer(int WibboPoints, int LimitCoins = 0)
+        : base(ServerPacketHeader.USER_CURRENCY)
+    {
+        this.WriteInteger(2);//Count
+        {
+            this.WriteInteger(105);//Icon
+            this.WriteInteger(WibboPoints);
+
+            this.WriteInteger(55);//Icon
+            this.WriteInteger(LimitCoins);
         }
     }
 }

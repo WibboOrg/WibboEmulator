@@ -1,14 +1,12 @@
+namespace WibboEmulator.Database.Daos;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Daos
+internal class RoleplayItemDao
 {
-    class RoleplayItemDao
+    internal static DataTable GetAll(IQueryAdapter dbClient)
     {
-        internal static DataTable GetAll(IQueryAdapter dbClient)
-        {
-            dbClient.SetQuery("SELECT `id`, `name`, `desc`, `price`, `type`, `value`, `allowstack`, `category` FROM `roleplay_item`");
-            return dbClient.GetTable();
-        }
+        dbClient.SetQuery("SELECT `id`, `name`, `desc`, `price`, `type`, `value`, `allowstack`, `category` FROM `roleplay_item`");
+        return dbClient.GetTable();
     }
 }

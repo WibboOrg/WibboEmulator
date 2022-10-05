@@ -1,77 +1,73 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
-using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class ChangeMottoEvent : IPacketEvent
 {
-    internal class ChangeMottoEvent : IPacketEvent
+    public double Delay => 500;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 500;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        var newMotto = StringCharFilter.Escape(Packet.PopString());
+        if (newMotto == session.GetUser().Motto)
         {
-            string newMotto = StringCharFilter.Escape(Packet.PopString());
-            if (newMotto == Session.GetUser().Motto)
-            {
-                return;
-            }
-
-            if (newMotto.Length > 38)
-            {
-                newMotto = newMotto.Substring(0, 38);
-            }
-
-            if (Session.Antipub(newMotto, "<MOTTO>"))
-            {
-                return;
-            }
-
-            if (!Session.GetUser().HasPermission("perm_word_filter_override"))
-            {
-                newMotto = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(newMotto);
-            }
-
-            if (Session.GetUser().IgnoreAll)
-            {
-                return;
-            }
-
-            Session.GetUser().Motto = newMotto;
-
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                UserDao.UpdateMotto(dbClient, Session.GetUser().Id, newMotto);
-            }
-
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.PROFILE_CHANGE_MOTTO, 0);
-
-            if (Session.GetUser().InRoom)
-            {
-                Room currentRoom = Session.GetUser().CurrentRoom;
-                if (currentRoom == null)
-                {
-                    return;
-                }
-
-                RoomUser roomUserByUserId = currentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-                if (roomUserByUserId == null)
-                {
-                    return;
-                }
-
-                if (roomUserByUserId.IsTransf || roomUserByUserId.IsSpectator)
-                {
-                    return;
-                }
-
-                currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
-            }
-
-            WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(Session, "ACH_Motto", 1);
+            return;
         }
+
+        if (newMotto.Length > 38)
+        {
+            newMotto = newMotto[..38];
+        }
+
+        if (session.Antipub(newMotto, "<MOTTO>"))
+        {
+            return;
+        }
+
+        if (!session.GetUser().HasPermission("perm_word_filter_override"))
+        {
+            newMotto = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(newMotto);
+        }
+
+        if (session.GetUser().IgnoreAll)
+        {
+            return;
+        }
+
+        session.GetUser().Motto = newMotto;
+
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        {
+            UserDao.UpdateMotto(dbClient, session.GetUser().Id, newMotto);
+        }
+
+        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.PROFILE_CHANGE_MOTTO, 0);
+
+        if (session.GetUser().InRoom)
+        {
+            var currentRoom = session.GetUser().CurrentRoom;
+            if (currentRoom == null)
+            {
+                return;
+            }
+
+            var roomUserByUserId = currentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            if (roomUserByUserId == null)
+            {
+                return;
+            }
+
+            if (roomUserByUserId.IsTransf || roomUserByUserId.IsSpectator)
+            {
+                return;
+            }
+
+            currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
+        }
+
+        WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_Motto", 1);
     }
 }

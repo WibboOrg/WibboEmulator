@@ -1,14 +1,13 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Help
+namespace WibboEmulator.Communication.Packets.Outgoing.Help;
+
+internal class HelperToolComposer : ServerPacket
 {
-    internal class HelperToolComposer : ServerPacket
+    public HelperToolComposer(bool onDuty, int count)
+        : base(ServerPacketHeader.GUIDE_ON_DUTY_STATUS)
     {
-        public HelperToolComposer(bool onDuty, int count)
-            : base(ServerPacketHeader.GUIDE_ON_DUTY_STATUS)
-        {
-            WriteBoolean(onDuty);
-            WriteInteger(count);
-            WriteInteger(0);
-            WriteInteger(0);
-        }
+        this.WriteBoolean(onDuty);
+        this.WriteInteger(count);
+        this.WriteInteger(0);
+        this.WriteInteger(0);
     }
 }

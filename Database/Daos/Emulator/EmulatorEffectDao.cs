@@ -1,14 +1,12 @@
+namespace WibboEmulator.Database.Daos;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Daos
+internal class EmulatorEffectDao
 {
-    class EmulatorEffectDao
+    internal static DataTable GetAll(IQueryAdapter dbClient)
     {
-        internal static DataTable GetAll(IQueryAdapter dbClient)
-        {
-            dbClient.SetQuery("SELECT `id`, `only_staff` FROM `emulator_effect` ORDER BY `id` ASC");
-            return dbClient.GetTable();
-        }
+        dbClient.SetQuery("SELECT `id`, `only_staff` FROM `emulator_effect` ORDER BY `id` ASC");
+        return dbClient.GetTable();
     }
 }

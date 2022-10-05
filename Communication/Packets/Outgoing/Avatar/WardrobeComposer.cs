@@ -1,21 +1,19 @@
-using WibboEmulator.Games.GameClients.Wardrobes;
+namespace WibboEmulator.Communication.Packets.Outgoing.Avatar;
+using WibboEmulator.Games.Users.Wardrobes;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Avatar
+internal class WardrobeComposer : ServerPacket
 {
-    internal class WardrobeComposer : ServerPacket
+    public WardrobeComposer(Dictionary<int, Wardrobe> wardrobes)
+        : base(ServerPacketHeader.USER_OUTFITS)
     {
-        public WardrobeComposer(Dictionary<int, Wardrobe> wardrobes)
-            : base(ServerPacketHeader.USER_OUTFITS)
-        {
-            this.WriteInteger(1);
+        this.WriteInteger(1);
 
-            this.WriteInteger(wardrobes.Count);
-            foreach (Wardrobe wardrobe in wardrobes.Values)
-            {
-                this.WriteInteger(wardrobe.SlotId);
-                this.WriteString(wardrobe.Look);
-                this.WriteString(wardrobe.Gender);
-            }
+        this.WriteInteger(wardrobes.Count);
+        foreach (var wardrobe in wardrobes.Values)
+        {
+            this.WriteInteger(wardrobe.SlotId);
+            this.WriteString(wardrobe.Look);
+            this.WriteString(wardrobe.Gender);
         }
     }
 }

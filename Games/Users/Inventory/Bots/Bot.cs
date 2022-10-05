@@ -1,38 +1,37 @@
-﻿namespace WibboEmulator.Games.GameClients.Inventory.Bots
-{
-    public class Bot
-    {
-        public int Id;
-        public int OwnerId;
-        public string Name;
-        public string Motto;
-        public string Figure;
-        public string Gender;
-        public bool WalkingEnabled;
-        public bool ChatEnabled;
-        public string ChatText;
-        public int ChatSeconds;
-        public bool IsDancing;
-        public int Enable;
-        public int Handitem;
-        public int Status;
+namespace WibboEmulator.Games.Users.Inventory.Bots;
 
-        public Bot(int Id, int OwnerId, string Name, string Motto, string Figure, string Gender, bool WalkingEnabled, bool ChatEnabled, string ChatText, int ChatSeconds, bool IsDancing, int pEnable, int pHanditem, int pStatus)
-        {
-            this.Id = Id;
-            this.OwnerId = OwnerId;
-            this.Name = Name;
-            this.Motto = Motto;
-            this.Figure = Figure;
-            this.Gender = Gender;
-            this.WalkingEnabled = WalkingEnabled;
-            this.ChatEnabled = ChatEnabled;
-            this.ChatText = ChatText;
-            this.ChatSeconds = ChatSeconds;
-            this.IsDancing = IsDancing;
-            this.Enable = pEnable;
-            this.Handitem = pHanditem;
-            this.Status = pStatus;
-        }
+public class Bot
+{
+    public int Id { get; set; }
+    public int OwnerId { get; set; }
+    public string Name { get; set; }
+    public string Motto { get; set; }
+    public string Figure { get; set; }
+    public string Gender { get; set; }
+    public bool WalkingEnabled { get; set; }
+    public bool ChatEnabled { get; set; }
+    public string ChatText { get; set; }
+    public int ChatSeconds { get; set; }
+    public bool IsDancing { get; set; }
+    public int Enable { get; set; }
+    public int Handitem { get; set; }
+    public int Status { get; set; }
+
+    public Bot(int id, int ownerId, string name, string motto, string figure, string gender, bool walkingEnabled, bool chatEnabled, string chatText, int chatSeconds, bool isDancing, int enable, int handitem, int status)
+    {
+        this.Id = id;
+        this.OwnerId = ownerId;
+        this.Name = name;
+        this.Motto = motto;
+        this.Figure = figure;
+        this.Gender = gender;
+        this.WalkingEnabled = walkingEnabled;
+        this.ChatEnabled = chatEnabled;
+        this.ChatText = chatText;
+        this.ChatSeconds = chatSeconds;
+        this.IsDancing = isDancing;
+        this.Enable = enable;
+        this.Handitem = handitem;
+        this.Status = status;
     }
 }

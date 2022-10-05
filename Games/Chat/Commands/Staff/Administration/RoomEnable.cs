@@ -1,28 +1,26 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class RoomEnable : IChatCommand
 {
-    internal class RoomEnable : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (!int.TryParse(Params[1], out var NumEnable))
         {
-            if (!int.TryParse(Params[1], out int NumEnable))
-            {
-                return;
-            }
+            return;
+        }
 
-            if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, Session.GetUser().HasPermission("perm_god")))
-            {
-                return;
-            }
+        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, session.GetUser().HasPermission("perm_god")))
+        {
+            return;
+        }
 
-            foreach (RoomUser User in Room.GetRoomUserManager().GetUserList().ToList())
+        foreach (var User in Room.GetRoomUserManager().GetUserList().ToList())
+        {
+            if (!User.IsBot)
             {
-                if (!User.IsBot)
-                {
-                    User.ApplyEffect(NumEnable);
-                }
+                User.ApplyEffect(NumEnable);
             }
         }
     }

@@ -1,26 +1,23 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Items;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetSellablePetBreedsEvent : IPacketEvent
 {
-    internal class GetSellablePetBreedsEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        public double Delay => 0;
+        var type = packet.PopString();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        var item = WibboEnvironment.GetGame().GetItemManager().GetItemByName(type);
+        if (item == null)
         {
-            string Type = Packet.PopString();
-
-            ItemData Item = WibboEnvironment.GetGame().GetItemManager().GetItemByName(Type);
-            if (Item == null)
-            {
-                return;
-            }
-
-            int PetId = Item.SpriteId;
-
-            Session.SendPacket(new SellablePetBreedsComposer(Type, PetId, WibboEnvironment.GetGame().GetCatalog().GetRacesForRaceId(PetId)));
+            return;
         }
+
+        var petId = item.SpriteId;
+
+        session.SendPacket(new SellablePetBreedsComposer(type, petId, WibboEnvironment.GetGame().GetCatalog().GetRacesForRaceId(petId)));
     }
 }

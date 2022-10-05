@@ -1,12 +1,13 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
+
+internal class FlatAccessDeniedComposer : ServerPacket
 {
-    internal class FlatAccessDeniedComposer : ServerPacket
+    public FlatAccessDeniedComposer(string username)
+        : base(ServerPacketHeader.ROOM_DOORBELL_REJECTED)
     {
-        public FlatAccessDeniedComposer(string username)
-            : base(ServerPacketHeader.ROOM_DOORBELL_REJECTED)
+        if (username != null)
         {
-            if (username != null)
-                WriteString(username);
+            this.WriteString(username);
         }
     }
 }

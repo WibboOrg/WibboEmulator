@@ -1,82 +1,80 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorDice : FurniInteractor
 {
-    public class InteractorDice : FurniInteractor
+    public override void OnPlace(GameClient session, Item item)
     {
-        public override void OnPlace(GameClient Session, Item Item)
+    }
+
+    public override void OnRemove(GameClient session, Item item)
+    {
+    }
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (session == null)
         {
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        var roomUser = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+
+        if (roomUser == null)
         {
+            return;
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        if (Gamemap.TilesTouching(item.X, item.Y, roomUser.X, roomUser.Y))
         {
-            if (Session == null)
+            if (!(item.ExtraData != "-1"))
             {
                 return;
             }
 
-            RoomUser roomUser = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-
-            if (roomUser == null)
+            if (request == -1)
             {
-                return;
-            }
+                item.ExtraData = "0";
+                item.UpdateState();
 
-            if (Gamemap.TilesTouching(Item.X, Item.Y, roomUser.X, roomUser.Y))
-            {
-                if (!(Item.ExtraData != "-1"))
+                if (roomUser.DiceCounterAmount > 0 && !roomUser.InGame)
                 {
-                    return;
-                }
-
-                if (Request == -1)
-                {
-                    Item.ExtraData = "0";
-                    Item.UpdateState();
-
-                    if (roomUser.DiceCounterAmount > 0 && !roomUser.InGame)
-                    {
-                        roomUser.DiceCounterAmount = 0;
-                        roomUser.DiceCounter = 0;
-                        roomUser.OnChat($"Dée: remise à 0 ({roomUser.GetUsername()})", 34); // déplacer
-                    }
-                }
-                else
-                {
-                    Item.ExtraData = "-1";
-                    Item.UpdateState(false, true);
-                    Item.ReqUpdate(4);
-
-                    Item.InteractingUser = roomUser.UserId;
+                    roomUser.DiceCounterAmount = 0;
+                    roomUser.DiceCounter = 0;
+                    roomUser.OnChat($"Dée: remise à 0 ({roomUser.GetUsername()})", 34); // déplacer
                 }
             }
             else
             {
-                roomUser.MoveTo(Item.SquareInFront);
+                item.ExtraData = "-1";
+                item.UpdateState(false, true);
+                item.ReqUpdate(4);
+
+                item.InteractingUser = roomUser.UserId;
             }
         }
-
-        public override void OnTick(Item item)
+        else
         {
-            int numberDice = WibboEnvironment.GetRandomNumber(1, 6);
+            roomUser.MoveTo(item.SquareInFront);
+        }
+    }
 
-            item.ExtraData = numberDice.ToString();
-            item.UpdateState();
+    public override void OnTick(Item item)
+    {
+        var numberDice = WibboEnvironment.GetRandomNumber(1, 6);
 
-            RoomUser user = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
-            if (user != null)
+        item.ExtraData = numberDice.ToString();
+        item.UpdateState();
+
+        var user = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+        if (user != null)
+        {
+            if (!user.InGame)
             {
-                if (!user.InGame)
-                {
-                    user.DiceCounterAmount += numberDice;
-                    user.DiceCounter++;
-                    user.OnChat($"Dée {user.DiceCounter}: +{numberDice} = {user.DiceCounterAmount} ({user.GetUsername()})", 34);
-                }
+                user.DiceCounterAmount += numberDice;
+                user.DiceCounter++;
+                user.OnChat($"Dée {user.DiceCounter}: +{numberDice} = {user.DiceCounterAmount} ({user.GetUsername()})", 34);
             }
         }
     }

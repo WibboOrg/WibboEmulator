@@ -1,136 +1,138 @@
-﻿using System.Collections;
+namespace WibboEmulator.Games.Users.Badges;
+using System.Collections;
 using System.Data;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Users;
 
-namespace WibboEmulator.Games.GameClients.Badges
+public class BadgeComponent : IDisposable
 {
-    public class BadgeComponent : IDisposable
+    private readonly User _userInstance;
+
+    public BadgeComponent(User user)
     {
-        private readonly User _userInstance;
-        private readonly Dictionary<string, Badge> _badges;
+        this._userInstance = user;
+        this.BadgeList = new Dictionary<string, Badge>();
+    }
 
-        public BadgeComponent(User user)
+    public void Init(IQueryAdapter dbClient)
+    {
+        var table = UserBadgeDao.GetAll(dbClient, this._userInstance.Id);
+
+        foreach (DataRow dataRow in table.Rows)
         {
-            this._userInstance = user;
-            this._badges = new Dictionary<string, Badge>();
-        }
+            var Code = (string)dataRow["badge_id"];
+            var Slot = Convert.ToInt32(dataRow["badge_slot"]);
 
-        public void Init(IQueryAdapter dbClient)
-        {
-            DataTable table = UserBadgeDao.GetAll(dbClient, this._userInstance.Id);
-
-            foreach (DataRow dataRow in table.Rows)
+            if (!this.BadgeList.ContainsKey(Code))
             {
-                string Code = (string)dataRow["badge_id"];
-                int Slot = Convert.ToInt32(dataRow["badge_slot"]);
-
-                if (!this._badges.ContainsKey(Code))
-                    this._badges.Add(Code, new Badge(Code, Slot));
+                this.BadgeList.Add(Code, new Badge(Code, Slot));
             }
         }
+    }
 
-        public int Count => this._badges.Count;
+    public int Count => this.BadgeList.Count;
 
-        public int EquippedCount
+    public int EquippedCount
+    {
+        get
         {
-            get
+            var num = 0;
+            foreach (Badge badge in (IEnumerable)this.BadgeList.Values)
             {
-                int num = 0;
-                foreach (Badge badge in (IEnumerable)this._badges.Values)
+                if (badge.Slot == 0)
                 {
-                    if (badge.Slot == 0)
-                    {
-                        continue;
-                    }
-
-                    num++;
+                    continue;
                 }
 
-                return (num > 5) ? 5 : num;
+                num++;
             }
+
+            return (num > 5) ? 5 : num;
         }
+    }
 
-        public Dictionary<string, Badge> BadgeList => this._badges;
+    public Dictionary<string, Badge> BadgeList { get; }
 
-        public bool HasBadgeSlot(string Badge)
+    public bool HasBadgeSlot(string Badge)
+    {
+        if (this.BadgeList.ContainsKey(Badge))
         {
-            if (this._badges.ContainsKey(Badge))
-            {
-                return this._badges[Badge].Slot > 0;
-            }
-            else
-            {
-                return false;
-            }
+            return this.BadgeList[Badge].Slot > 0;
         }
-
-        public ICollection<Badge> GetBadges() => this._badges.Values;
-
-        public Badge GetBadge(string Badge)
+        else
         {
-            if (this._badges.ContainsKey(Badge))
-            {
-                return this._badges[Badge];
-            }
-            else
-            {
-                return null;
-            }
+            return false;
         }
+    }
 
-        public bool HasBadge(string Badge)
+    public ICollection<Badge> GetBadges() => this.BadgeList.Values;
+
+    public Badge GetBadge(string Badge)
+    {
+        if (this.BadgeList.ContainsKey(Badge))
         {
-            if (string.IsNullOrEmpty(Badge))
-            {
-                return true;
-            }
-
-            return this._badges.ContainsKey(Badge);
+            return this.BadgeList[Badge];
         }
-
-        public void GiveBadge(string Badge, bool InDatabase) => this.GiveBadge(Badge, 0, InDatabase);
-
-        public void GiveBadge(string Badge, int Slot, bool InDatabase)
+        else
         {
-            if (this.HasBadge(Badge))
-            {
-                return;
-            }
-
-            if (InDatabase)
-            {
-                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                UserBadgeDao.Insert(dbClient, this._userInstance.Id, Slot, Badge);
-            }
-            this._badges.Add(Badge, new Badge(Badge, Slot));
+            return null;
         }
+    }
 
-        public void ResetSlots()
+    public bool HasBadge(string Badge)
+    {
+        if (string.IsNullOrEmpty(Badge))
         {
-            foreach (Badge badge in (IEnumerable)this._badges.Values)
-            {
-                badge.Slot = 0;
-            }
+            return true;
         }
 
-        public void RemoveBadge(string Badge)
+        return this.BadgeList.ContainsKey(Badge);
+    }
+
+    public void GiveBadge(string Badge, bool InDatabase) => this.GiveBadge(Badge, 0, InDatabase);
+
+    public void GiveBadge(string Badge, int Slot, bool InDatabase)
+    {
+        if (this.HasBadge(Badge))
         {
-            if (!this.HasBadge(Badge))
-            {
-                return;
-            }
-
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                UserBadgeDao.Delete(dbClient, this._userInstance.Id, Badge);
-
-            this._badges.Remove(this.GetBadge(Badge).Code);
+            return;
         }
 
-        public void Dispose()
+        if (InDatabase)
         {
-            this._badges.Clear();
-            GC.SuppressFinalize(this);
+            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            UserBadgeDao.Insert(dbClient, this._userInstance.Id, Slot, Badge);
         }
+        this.BadgeList.Add(Badge, new Badge(Badge, Slot));
+    }
+
+    public void ResetSlots()
+    {
+        foreach (Badge badge in (IEnumerable)this.BadgeList.Values)
+        {
+            badge.Slot = 0;
+        }
+    }
+
+    public void RemoveBadge(string Badge)
+    {
+        if (!this.HasBadge(Badge))
+        {
+            return;
+        }
+
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        {
+            UserBadgeDao.Delete(dbClient, this._userInstance.Id, Badge);
+        }
+
+        this.BadgeList.Remove(this.GetBadge(Badge).Code);
+    }
+
+    public void Dispose()
+    {
+        this.BadgeList.Clear();
+        GC.SuppressFinalize(this);
     }
 }

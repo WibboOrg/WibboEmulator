@@ -1,14 +1,12 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Database.Daos;
+using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Daos
+internal class CatalogBotPresetDao
 {
-    class CatalogBotPresetDao
+    internal static DataTable GetAll(IQueryAdapter dbClient)
     {
-        internal static DataTable GetAll(IQueryAdapter dbClient)
-        {
-            dbClient.SetQuery("SELECT `id`, `name`, `figure`, `motto`, `gender`, `ai_type` FROM `catalog_bot_preset`");
-            return dbClient.GetTable();
-        }
+        dbClient.SetQuery("SELECT `id`, `name`, `figure`, `motto`, `gender`, `ai_type` FROM `catalog_bot_preset`");
+        return dbClient.GetTable();
     }
 }

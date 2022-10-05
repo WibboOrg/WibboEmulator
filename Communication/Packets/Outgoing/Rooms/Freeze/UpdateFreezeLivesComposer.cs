@@ -1,12 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Freeze
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Freeze;
+
+internal class UpdateFreezeLivesComposer : ServerPacket
 {
-    internal class UpdateFreezeLivesComposer : ServerPacket
+    public UpdateFreezeLivesComposer(int VirtualId, int FreezeLives)
+        : base(ServerPacketHeader.UNIT_NUMBER)
     {
-        public UpdateFreezeLivesComposer(int VirtualId, int FreezeLives)
-            : base(ServerPacketHeader.UNIT_NUMBER)
-        {
-            this.WriteInteger(VirtualId);
-            this.WriteInteger(FreezeLives);
-        }
+        this.WriteInteger(VirtualId);
+        this.WriteInteger(FreezeLives);
     }
 }

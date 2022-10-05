@@ -1,50 +1,48 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class RoomKick : IChatCommand
 {
-    internal class RoomKick : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        var MessageAlert = CommandManager.MergeParams(Params, 1);
+        if (session.Antipub(MessageAlert, "<CMD>"))
         {
-            string MessageAlert = CommandManager.MergeParams(Params, 1);
-            if (Session.Antipub(MessageAlert, "<CMD>"))
+            return;
+        }
+
+        Room.RunTask(async () =>
+        {
+            var userKick = new List<RoomUser>();
+            foreach (var user in Room.GetRoomUserManager().GetUserList().ToList())
             {
-                return;
+                if (user != null && !user.IsBot && !user.GetClient().GetUser().HasPermission("perm_mod") && user.GetClient().GetUser().Id != session.GetUser().Id)
+                {
+                    userKick.Add(user);
+                }
             }
 
-            Room.RunTask(async () =>
+            foreach (var user in userKick)
             {
-                List<RoomUser> userKick = new List<RoomUser>();
-                foreach (RoomUser user in Room.GetRoomUserManager().GetUserList().ToList())
+                user.AllowMoveTo = false;
+                user.IsWalking = true;
+                user.AllowOverride = true;
+                user.GoalX = Room.GetGameMap().Model.DoorX;
+                user.GoalY = Room.GetGameMap().Model.DoorY;
+            }
+
+            await Task.Delay(3000);
+
+            foreach (var user in userKick)
+            {
+                if (MessageAlert.Length > 0)
                 {
-                    if (user != null && !user.IsBot && !user.GetClient().GetUser().HasPermission("perm_mod") && user.GetClient().GetUser().Id != Session.GetUser().Id)
-                    {
-                        userKick.Add(user);
-                    }
+                    user.GetClient().SendNotification(MessageAlert);
                 }
 
-                foreach (RoomUser user in userKick)
-                {
-                    user.AllowMoveTo = false;
-                    user.IsWalking = true;
-                    user.AllowOverride = true;
-                    user.GoalX = Room.GetGameMap().Model.DoorX;
-                    user.GoalY = Room.GetGameMap().Model.DoorY;
-                }
-
-                await Task.Delay(3000);
-
-                foreach (RoomUser user in userKick)
-                {
-                    if (MessageAlert.Length > 0)
-                    {
-                        user.GetClient().SendNotification(MessageAlert);
-                    }
-
-                    Room.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, false);
-                }
-            });
-        }
+                Room.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, false);
+            }
+        });
     }
 }

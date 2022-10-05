@@ -1,14 +1,12 @@
+namespace WibboEmulator.Database.Daos;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Daos
+internal class ModerationTopicDao
 {
-    class ModerationTopicDao
+    internal static DataTable GetAll(IQueryAdapter dbClient)
     {
-        internal static DataTable GetAll(IQueryAdapter dbClient)
-        {
-            dbClient.SetQuery("SELECT `id`, `caption` FROM `moderation_topic`");
-            return dbClient.GetTable();
-        }
+        dbClient.SetQuery("SELECT `id`, `caption` FROM `moderation_topic`");
+        return dbClient.GetTable();
     }
 }

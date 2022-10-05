@@ -1,24 +1,22 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class UnMute : IChatCommand
 {
-    internal class UnMute : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
+        if (TargetUser == null || TargetUser.GetUser() == null)
         {
-            GameClient TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
-            if (TargetUser == null || TargetUser.GetUser() == null)
-            {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
-            }
-            else
-            {
-                User user = TargetUser.GetUser();
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
+        }
+        else
+        {
+            var user = TargetUser.GetUser();
 
-                user.SpamProtectionTime = 10;
-                user.SpamEnable = true;
-            }
+            user.SpamProtectionTime = 10;
+            user.SpamEnable = true;
         }
     }
 }

@@ -1,43 +1,42 @@
-﻿namespace WibboEmulator.Games.Roleplay.Troc
+namespace WibboEmulator.Games.Roleplay.Troc;
+
+public class RPTroc
 {
-    public class RPTroc
+    public RPTrocUser UserOne { get; set; }
+    public RPTrocUser UserTwo { get; set; }
+
+    public int Id { get; set; }
+    public int RPId { get; set; }
+
+    public RPTroc(int id, int rpId, int userOne, int userTwo)
     {
-        public RPTrocUser UserOne;
-        public RPTrocUser UserTwo;
-
-        public int Id;
-        public int RPId;
-
-        public RPTroc(int pId, int pRPId, int pUserOne, int pUserTwo)
-        {
-            this.Id = pId;
-            this.RPId = pRPId;
-            this.UserOne = new RPTrocUser(pUserOne);
-            this.UserTwo = new RPTrocUser(pUserTwo);
-        }
-
-        public RPTrocUser GetUser(int UserId)
-        {
-            if (this.UserOne.UserId == UserId)
-            {
-                return this.UserOne;
-            }
-            else if (this.UserTwo.UserId == UserId)
-            {
-                return this.UserTwo;
-            }
-
-            return null;
-        }
-
-        public void ResetConfirmed()
-        {
-            this.UserOne.Confirmed = false;
-            this.UserTwo.Confirmed = false;
-        }
-
-        public bool AllAccepted => this.UserOne.Accepted == true && this.UserTwo.Accepted == true;
-
-        public bool AllConfirmed => this.UserOne.Confirmed == true && this.UserTwo.Confirmed == true;
+        this.Id = id;
+        this.RPId = rpId;
+        this.UserOne = new RPTrocUser(userOne);
+        this.UserTwo = new RPTrocUser(userTwo);
     }
+
+    public RPTrocUser GetUser(int userId)
+    {
+        if (this.UserOne.UserId == userId)
+        {
+            return this.UserOne;
+        }
+        else if (this.UserTwo.UserId == userId)
+        {
+            return this.UserTwo;
+        }
+
+        return null;
+    }
+
+    public void ResetConfirmed()
+    {
+        this.UserOne.Confirmed = false;
+        this.UserTwo.Confirmed = false;
+    }
+
+    public bool AllAccepted => this.UserOne.Accepted && this.UserTwo.Accepted;
+
+    public bool AllConfirmed => this.UserOne.Confirmed && this.UserTwo.Confirmed;
 }

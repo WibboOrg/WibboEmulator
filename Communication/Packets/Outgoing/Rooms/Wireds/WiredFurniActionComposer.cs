@@ -1,33 +1,38 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds;
+
+internal class WiredFurniActionComposer : ServerPacket
 {
-    internal class WiredFurniActionComposer : ServerPacket
+    public WiredFurniActionComposer(bool stuffTypeSelectionEnabled, int furniLimit, List<int> stuffIds, int stuffTypeId, int id, string stringParam,
+        List<int> intParams, int stuffTypeSelectionCode, int type, int delayInPulses, List<int> conflictingTriggers)
+        : base(ServerPacketHeader.WIRED_ACTION)
     {
-        public WiredFurniActionComposer(bool stuffTypeSelectionEnabled, int furniLimit, List<int> stuffIds, int stuffTypeId, int id, string stringParam,
-            List<int> intParams, int stuffTypeSelectionCode, int type, int delayInPulses, List<int> conflictingTriggers)
-            : base(ServerPacketHeader.WIRED_ACTION)
+        this.WriteBoolean(stuffTypeSelectionEnabled);
+        this.WriteInteger(furniLimit);
+
+        this.WriteInteger(stuffIds.Count);
+        foreach (var stuffId in stuffIds)
         {
-            WriteBoolean(stuffTypeSelectionEnabled);
-            WriteInteger(furniLimit);
+            this.WriteInteger(stuffId);
+        }
 
-            WriteInteger(stuffIds.Count);
-            foreach (int stuffId in stuffIds)
-                WriteInteger(stuffId);
+        this.WriteInteger(stuffTypeId);
+        this.WriteInteger(id);
+        this.WriteString(stringParam);
 
-            WriteInteger(stuffTypeId);
-            WriteInteger(id);
-            WriteString(stringParam);
+        this.WriteInteger(intParams.Count);
+        foreach (var intParam in intParams)
+        {
+            this.WriteInteger(intParam);
+        }
 
-            WriteInteger(intParams.Count);
-            foreach (int intParam in intParams)
-                WriteInteger(intParam);
+        this.WriteInteger(stuffTypeSelectionCode);
+        this.WriteInteger(type);
+        this.WriteInteger(delayInPulses);
 
-            WriteInteger(stuffTypeSelectionCode);
-            WriteInteger(type);
-            WriteInteger(delayInPulses);
-
-            WriteInteger(conflictingTriggers.Count);
-            foreach (int conflictingTrigger in conflictingTriggers)
-                WriteInteger(conflictingTrigger);
+        this.WriteInteger(conflictingTriggers.Count);
+        foreach (var conflictingTrigger in conflictingTriggers)
+        {
+            this.WriteInteger(conflictingTrigger);
         }
     }
 }

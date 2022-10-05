@@ -1,40 +1,37 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class UserSettingsSoundEvent : IPacketEvent
 {
-    internal class UserSettingsSoundEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser() == null)
         {
-            if (Session.GetUser() == null)
-            {
-                return;
-            }
-
-            int Volume1 = Packet.PopInt();
-            int Volume2 = Packet.PopInt();
-            int Volume3 = Packet.PopInt();
-
-
-            if (Session.GetUser().ClientVolume[0] == Volume1 && Session.GetUser().ClientVolume[1] == Volume2 && Session.GetUser().ClientVolume[2] == Volume3)
-            {
-                return;
-            }
-
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                UserDao.UpdateVolume(dbClient, Session.GetUser().Id, Volume1, +Volume2, +Volume3);
-            }
-
-            Session.GetUser().ClientVolume.Clear();
-            Session.GetUser().ClientVolume.Add(Volume1);
-            Session.GetUser().ClientVolume.Add(Volume2);
-            Session.GetUser().ClientVolume.Add(Volume3);
+            return;
         }
+
+        var Volume1 = Packet.PopInt();
+        var Volume2 = Packet.PopInt();
+        var Volume3 = Packet.PopInt();
+
+
+        if (session.GetUser().ClientVolume[0] == Volume1 && session.GetUser().ClientVolume[1] == Volume2 && session.GetUser().ClientVolume[2] == Volume3)
+        {
+            return;
+        }
+
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        {
+            UserDao.UpdateVolume(dbClient, session.GetUser().Id, Volume1, +Volume2, +Volume3);
+        }
+
+        session.GetUser().ClientVolume.Clear();
+        session.GetUser().ClientVolume.Add(Volume1);
+        session.GetUser().ClientVolume.Add(Volume2);
+        session.GetUser().ClientVolume.Add(Volume3);
     }
 }

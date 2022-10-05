@@ -1,12 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Users
+namespace WibboEmulator.Communication.Packets.Outgoing.Users;
+
+internal class RespectNotificationComposer : ServerPacket
 {
-    internal class RespectNotificationComposer : ServerPacket
+    public RespectNotificationComposer(int Id, int Respect)
+        : base(ServerPacketHeader.USER_RESPECT)
     {
-        public RespectNotificationComposer(int Id, int Respect)
-            : base(ServerPacketHeader.USER_RESPECT)
-        {
-            this.WriteInteger(Id);
-            this.WriteInteger(Respect);
-        }
+        this.WriteInteger(Id);
+        this.WriteInteger(Respect);
     }
 }

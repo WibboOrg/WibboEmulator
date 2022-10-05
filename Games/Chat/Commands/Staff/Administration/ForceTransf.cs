@@ -1,73 +1,71 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class ForceTransf : IChatCommand
 {
-    internal class ForceTransf : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        var username = Params[1];
+
+        var roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByName(username);
+        if (roomUserByUserId == null)
         {
-            string username = Params[1];
+            return;
+        }
 
-            RoomUser roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByName(username);
-            if (roomUserByUserId == null)
-            {
-                return;
-            }
+        var clientByUsername = roomUserByUserId.GetClient();
+        if (clientByUsername == null)
+        {
+            return;
+        }
 
-            GameClient clientByUsername = roomUserByUserId.GetClient();
-            if (clientByUsername == null)
-            {
-                return;
-            }
+        if (clientByUsername.GetUser().SpectatorMode)
+        {
+            return;
+        }
 
-            if (clientByUsername.GetUser().SpectatorMode)
-            {
-                return;
-            }
+        if (Params.Length is not 4 and not 3)
+        {
+            return;
+        }
 
-            if (Params.Length != 4 && Params.Length != 3)
-            {
-                return;
-            }
+        var RoomClient = roomUserByUserId.GetClient().GetUser().CurrentRoom;
+        if (RoomClient == null)
+        {
+            return;
+        }
 
-            Room RoomClient = roomUserByUserId.GetClient().GetUser().CurrentRoom;
-            if (RoomClient == null)
+        var raceid = 0;
+        if (Params.Length == 4)
+        {
+            var x = Params[3];
+            if (int.TryParse(x, out var value))
             {
-                return;
-            }
-
-            int raceid = 0;
-            if (Params.Length == 4)
-            {
-                string x = Params[3];
-                if (int.TryParse(x, out int value))
+                int.TryParse(Params[2], out raceid);
+                if (raceid is < 1 or > 50)
                 {
-                    int.TryParse(Params[2], out raceid);
-                    if (raceid < 1 || raceid > 50)
-                    {
-                        raceid = 0;
-                    }
+                    raceid = 0;
                 }
             }
-            else
-            {
-                raceid = 0;
-            }
-
-            if (!roomUserByUserId.SetPetTransformation(Params[2], raceid))
-            {
-                Session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", Session.Langue));
-                return;
-            }
-
-            roomUserByUserId.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.transf.helpstop", Session.Langue));
-
-            roomUserByUserId.IsTransf = true;
-
-            RoomClient.SendPacket(new UserRemoveComposer(roomUserByUserId.VirtualId));
-            RoomClient.SendPacket(new UsersComposer(roomUserByUserId));
         }
+        else
+        {
+            raceid = 0;
+        }
+
+        if (!roomUserByUserId.SetPetTransformation(Params[2], raceid))
+        {
+            session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", session.Langue));
+            return;
+        }
+
+        roomUserByUserId.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.transf.helpstop", session.Langue));
+
+        roomUserByUserId.IsTransf = true;
+
+        RoomClient.SendPacket(new UserRemoveComposer(roomUserByUserId.VirtualId));
+        RoomClient.SendPacket(new UsersComposer(roomUserByUserId));
     }
 }

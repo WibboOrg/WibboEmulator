@@ -1,22 +1,20 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class FastWalk : IChatCommand
 {
-    internal class FastWalk : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
-        {
-            UserRoom.WalkSpeed = !UserRoom.WalkSpeed;
+        UserRoom.WalkSpeed = !UserRoom.WalkSpeed;
 
-            if (UserRoom.WalkSpeed)
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.walkppeed.true", Session.Langue));
-            }
-            else
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.walkppeed.false", Session.Langue));
-            }
+        if (UserRoom.WalkSpeed)
+        {
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.walkppeed.true", session.Langue));
+        }
+        else
+        {
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.walkppeed.false", session.Langue));
         }
     }
 }

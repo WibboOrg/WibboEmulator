@@ -1,25 +1,23 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Trading;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class TradingAcceptEvent : IPacketEvent
 {
-    internal class TradingAcceptEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
-                return;
-
-            Trade userTrade = room.GetUserTrade(Session.GetUser().Id);
-            if (userTrade == null)
-            {
-                return;
-            }
-
-            userTrade.Accept(Session.GetUser().Id);
+            return;
         }
+
+        var userTrade = room.GetUserTrade(session.GetUser().Id);
+        if (userTrade == null)
+        {
+            return;
+        }
+
+        userTrade.Accept(session.GetUser().Id);
     }
 }

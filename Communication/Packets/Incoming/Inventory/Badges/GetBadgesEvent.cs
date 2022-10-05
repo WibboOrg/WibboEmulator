@@ -1,20 +1,18 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetBadgesEvent : IPacketEvent
 {
-    internal class GetBadgesEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session == null || session.GetUser() == null)
         {
-            if (Session == null || Session.GetUser() == null)
-            {
-                return;
-            }
-
-            Session.SendPacket(new BadgesComposer(Session.GetUser().GetBadgeComponent().BadgeList));
+            return;
         }
+
+        session.SendPacket(new BadgesComposer(session.GetUser().GetBadgeComponent().BadgeList));
     }
 }

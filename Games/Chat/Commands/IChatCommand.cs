@@ -1,10 +1,8 @@
-﻿using WibboEmulator.Games.GameClients;
+namespace WibboEmulator.Games.Chat.Commands;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands
+public interface IChatCommand
 {
-    public interface IChatCommand
-    {
-        void Execute(GameClient session, Room room, RoomUser roomUser, string[] parts);
-    }
+    void Execute(GameClient session, Room room, RoomUser roomUser, string[] parameters);
 }

@@ -1,23 +1,22 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
+using WibboEmulator.Core;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class UniqueIDEvent : IPacketEvent
 {
-    internal class UniqueIDEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var CookieId = Packet.PopString();
+        var McId = Packet.PopString();
+        var Junk = Packet.PopString();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
-        {
-            string CookieId = Packet.PopString();
-            string McId = Packet.PopString();
-            string Junk = Packet.PopString();
+        var Head = (string.IsNullOrWhiteSpace(CookieId) || CookieId.Length != 13) ? IDGenerator.Instance.Next : CookieId;
 
-            string Head = (string.IsNullOrWhiteSpace(CookieId) || CookieId.Length != 13) ? IDGenerator.Instance.Next : CookieId;
+        session.MachineId = Head + McId + Junk;
 
-            Session.MachineId = Head + McId + Junk;
-
-            Session.SendPacket(new SetUniqueIdComposer(Head));
-        }
+        session.SendPacket(new SetUniqueIdComposer(Head));
     }
 }

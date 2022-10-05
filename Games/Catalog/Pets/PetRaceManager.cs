@@ -1,14 +1,13 @@
-﻿namespace WibboEmulator.Games.Catalog.Pets
+﻿namespace WibboEmulator.Games.Catalog.Pets;
+
+public class PetRaceManager
 {
-    public class PetRaceManager
+    private readonly List<PetRace> _races = new();
+
+    public void Init()
     {
-        private readonly List<PetRace> _races = new List<PetRace>();
 
-        public void Init()
-        {
-
-        }
-
-        public List<PetRace> GetRacesForRaceId(int RaceId) => this._races.Where(Race => Race.RaceId == RaceId).ToList();
     }
+
+    public List<PetRace> GetRacesForRaceId(int RaceId) => this._races.Where(Race => Race.RaceId == RaceId).ToList();
 }

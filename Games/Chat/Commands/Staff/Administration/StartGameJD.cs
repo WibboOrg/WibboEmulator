@@ -1,18 +1,18 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class StartGameJD : IChatCommand
 {
-    internal class StartGameJD : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        var roomId = 0;
+        if (Params.Length > 1)
         {
-            int roomId = 0;
-            if (Params.Length > 1)
-                int.TryParse(Params[1], out roomId);
-
-            WibboEnvironment.GetGame().GetAnimationManager().StartGame(roomId);
-            Session.SendWhisper("Lancement de l'animation de Jack & Daisy !");
+            int.TryParse(Params[1], out roomId);
         }
+
+        WibboEnvironment.GetGame().GetAnimationManager().StartGame(roomId);
+        session.SendWhisper("Lancement de l'animation de Jack & Daisy !");
     }
 }

@@ -1,11 +1,10 @@
-namespace WibboEmulator.Games.Rooms.Games
+namespace WibboEmulator.Games.Rooms.Games;
+
+public enum TeamType
 {
-    public enum TeamType
-    {
-        NONE = 0,
-        RED = 1,
-        GREEN = 2,
-        BLUE = 3,
-        YELLOW = 4,
-    }
+    NONE = 0,
+    RED = 1,
+    GREEN = 2,
+    BLUE = 3,
+    YELLOW = 4,
 }

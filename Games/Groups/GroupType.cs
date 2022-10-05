@@ -1,9 +1,8 @@
-﻿namespace WibboEmulator.Games.Groups
+﻿namespace WibboEmulator.Games.Groups;
+
+public enum GroupType
 {
-    public enum GroupType
-    {
-        OPEN,
-        LOCKED,
-        PRIVATE
-    }
+    OPEN,
+    LOCKED,
+    PRIVATE
 }

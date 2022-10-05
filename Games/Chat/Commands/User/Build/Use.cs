@@ -1,31 +1,29 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class Use : IChatCommand
 {
-    internal class Use : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (Params.Length != 2)
         {
-            if (Params.Length != 2)
-            {
-                return;
-            }
-
-            string Count = Params[1];
-            if (!int.TryParse(Count, out int UseCount))
-            {
-                return;
-            }
-
-            if (UseCount < 0 || UseCount > 100)
-            {
-                return;
-            }
-
-            Session.GetUser().ForceUse = UseCount;
-
-            Session.SendWhisper("Use: " + UseCount);
+            return;
         }
+
+        var Count = Params[1];
+        if (!int.TryParse(Count, out var UseCount))
+        {
+            return;
+        }
+
+        if (UseCount is < 0 or > 100)
+        {
+            return;
+        }
+
+        session.GetUser().ForceUse = UseCount;
+
+        session.SendWhisper("Use: " + UseCount);
     }
 }

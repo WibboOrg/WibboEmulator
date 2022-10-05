@@ -1,48 +1,46 @@
-using WibboEmulator.Games.GameClients.Messenger;
+namespace WibboEmulator.Communication.Packets.Outgoing.Messenger;
+using WibboEmulator.Games.Users.Messenger;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Messenger
+internal class FriendListUpdateComposer : ServerPacket
 {
-    internal class FriendListUpdateComposer : ServerPacket
+    public FriendListUpdateComposer(MessengerBuddy friend, int friendId = 0)
+        : base(ServerPacketHeader.MESSENGER_UPDATE)
     {
-        public FriendListUpdateComposer(MessengerBuddy friend, int friendId = 0)
-            : base(ServerPacketHeader.MESSENGER_UPDATE)
+        this.WriteInteger(0);
+        this.WriteInteger(1);
+        this.WriteInteger(friend != null ? 0 : -1);
+
+        if (friend != null)
         {
-            WriteInteger(0);
-            WriteInteger(1);
-            WriteInteger(friend != null ? 0 : -1);
+            this.WriteInteger(friend.UserId);
+            this.WriteString(friend.Username);
+            this.WriteInteger(1);
+            var isOnline = friend.IsOnline;
+            this.WriteBoolean(isOnline);
 
-            if (friend != null)
+            if (isOnline)
             {
-                WriteInteger(friend.UserId);
-                WriteString(friend.Username);
-                WriteInteger(1);
-                bool isOnline = friend.IsOnline;
-                WriteBoolean(isOnline);
-
-                if (isOnline)
-                {
-                    WriteBoolean(!friend.HideInRoom);
-                }
-                else
-                {
-                    WriteBoolean(false);
-                }
-
-                WriteString(isOnline ? friend.Look : "");
-                WriteInteger(0);
-                WriteString(""); //Motto ?
-                WriteString(string.Empty);
-                WriteString(string.Empty);
-                WriteBoolean(true); // Allows offline messaging
-                WriteBoolean(false);
-                WriteBoolean(false);
-                WriteShort(friend.Relation);
-                WriteBoolean(false);
+                this.WriteBoolean(!friend.HideInRoom);
             }
             else
             {
-                WriteInteger(friendId);
+                this.WriteBoolean(false);
             }
+
+            this.WriteString(isOnline ? friend.Look : "");
+            this.WriteInteger(0);
+            this.WriteString(""); //Motto ?
+            this.WriteString(string.Empty);
+            this.WriteString(string.Empty);
+            this.WriteBoolean(true); // Allows offline messaging
+            this.WriteBoolean(false);
+            this.WriteBoolean(false);
+            this.WriteShort(friend.Relation);
+            this.WriteBoolean(false);
+        }
+        else
+        {
+            this.WriteInteger(friendId);
         }
     }
 }

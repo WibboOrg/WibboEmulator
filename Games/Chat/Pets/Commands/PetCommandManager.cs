@@ -1,48 +1,43 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Games.Chat.Pets.Commands;
+using System.Data;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Games.Chat.Pets.Commands
+public class PetCommandManager
 {
-    public class PetCommandManager
+    private readonly Dictionary<string, PetCommand> _petCommands;
+
+    public PetCommandManager() => this._petCommands = new Dictionary<string, PetCommand>();
+
+    public void Init(IQueryAdapter dbClient)
     {
-        private readonly Dictionary<string, PetCommand> _petCommands;
+        this._petCommands.Clear();
 
-        public PetCommandManager()
+        var table = EmulatorCommandPetDao.GetAll(dbClient);
+
+        if (table == null)
         {
-            this._petCommands = new Dictionary<string, PetCommand>();
+            return;
         }
 
-        public void Init(IQueryAdapter dbClient)
+        foreach (DataRow dataRow in table.Rows)
         {
-            this._petCommands.Clear();
+            var key = Convert.ToInt32(dataRow["id"]);
+            var str1 = (string)dataRow["command"];
 
-            DataTable table = EmulatorCommandPetDao.GetAll(dbClient);
-
-            if (table == null)
-            {
-                return;
-            }
-
-            foreach (DataRow dataRow in table.Rows)
-            {
-                int key = Convert.ToInt32(dataRow["id"]);
-                string str1 = (string)dataRow["command"];
-
-                this._petCommands.Add(str1, new PetCommand(key, str1));
-            }
+            this._petCommands.Add(str1, new PetCommand(key, str1));
         }
+    }
 
-        public int TryInvoke(string input)
+    public int TryInvoke(string input)
+    {
+        if (this._petCommands.TryGetValue(input, out var petCommand))
         {
-            if (this._petCommands.TryGetValue(input, out PetCommand petCommand))
-            {
-                return petCommand.CommandID;
-            }
-            else
-            {
-                return 99;
-            }
+            return petCommand.CommandID;
+        }
+        else
+        {
+            return 99;
         }
     }
 }

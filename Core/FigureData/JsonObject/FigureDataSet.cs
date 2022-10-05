@@ -1,15 +1,14 @@
-﻿namespace WibboEmulator.Core.FigureData.JsonObject
+﻿namespace WibboEmulator.Core.FigureData.JsonObject;
+
+public class FigureDataSet
 {
-    public class FigureDataSet
-    {
-        public int Id { get; set; }
-        public string Gender { get; set; }
-        public int Club { get; set; }
-        public bool Colorable { get; set; }
-        public bool Selectable { get; set; }
-        public bool Preselectable { get; set; }
-        public bool Sellable { get; set; }
-        public List<FigureDataPart> Parts { get; set; }
-        public List<FigureDataHiddenLayer> HiddenLayers { get; set; }
-    }
+    public int Id { get; set; }
+    public string Gender { get; set; }
+    public int Club { get; set; }
+    public bool Colorable { get; set; }
+    public bool Selectable { get; set; }
+    public bool Preselectable { get; set; }
+    public bool Sellable { get; set; }
+    public List<FigureDataPart> Parts { get; set; }
+    public List<FigureDataHiddenLayer> HiddenLayers { get; set; }
 }

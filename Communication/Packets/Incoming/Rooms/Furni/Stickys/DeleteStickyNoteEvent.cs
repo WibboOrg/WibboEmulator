@@ -1,35 +1,33 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class DeleteStickyNoteEvent : IPacketEvent
 {
-    internal class DeleteStickyNoteEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
-                return;
-
-            if (!room.CheckRights(Session, true))
-            {
-                return;
-            }
-
-            int ItemId = Packet.PopInt();
-            Item roomItem = room.GetRoomItemHandler().GetItem(ItemId);
-            if (roomItem == null || (roomItem.GetBaseItem().InteractionType != InteractionType.POSTIT && roomItem.GetBaseItem().InteractionType != InteractionType.PHOTO))
-            {
-                return;
-            }
-
-            room.GetRoomItemHandler().RemoveFurniture(Session, roomItem.Id);
-            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            ItemDao.Delete(dbClient, roomItem.Id);
+            return;
         }
+
+        if (!room.CheckRights(session, true))
+        {
+            return;
+        }
+
+        var ItemId = Packet.PopInt();
+        var roomItem = room.GetRoomItemHandler().GetItem(ItemId);
+        if (roomItem == null || (roomItem.GetBaseItem().InteractionType != InteractionType.POSTIT && roomItem.GetBaseItem().InteractionType != InteractionType.PHOTO))
+        {
+            return;
+        }
+
+        room.GetRoomItemHandler().RemoveFurniture(session, roomItem.Id);
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        ItemDao.Delete(dbClient, roomItem.Id);
     }
 }

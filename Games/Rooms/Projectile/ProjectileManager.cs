@@ -1,286 +1,277 @@
-﻿using System.Collections.Concurrent;
+namespace WibboEmulator.Games.Rooms.Projectile;
+using System.Collections.Concurrent;
 using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Roleplay.Player;
 using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Utilities;
 
-namespace WibboEmulator.Games.Rooms.Projectile
+public class ProjectileManager
 {
-    public class ProjectileManager
+    private readonly List<ItemTemp> _projectile;
+    private readonly ConcurrentQueue<ItemTemp> _queueProjectile;
+    private readonly Room _room;
+
+    private readonly ServerPacketList _messages;
+
+    public ProjectileManager(Room room)
     {
-        private readonly List<ItemTemp> _projectile;
-        private readonly ConcurrentQueue<ItemTemp> _queueProjectile;
-        private readonly Room _room;
+        this._projectile = new List<ItemTemp>();
+        this._queueProjectile = new ConcurrentQueue<ItemTemp>();
+        this._room = room;
+        this._messages = new ServerPacketList();
+    }
 
-        private readonly ServerPacketList _messages;
-
-        public ProjectileManager(Room room)
+    public void OnCycle()
+    {
+        if (this._projectile.Count == 0 && this._queueProjectile.IsEmpty)
         {
-            this._projectile = new List<ItemTemp>();
-            this._queueProjectile = new ConcurrentQueue<ItemTemp>();
-            this._room = room;
-            this._messages = new ServerPacketList();
+            return;
         }
 
-        public void OnCycle()
+        foreach (var item in this._projectile.ToArray())
         {
-            if (this._projectile.Count == 0 && this._queueProjectile.Count == 0)
+            if (item == null)
             {
-                return;
+                continue;
             }
 
-            foreach (ItemTemp Item in this._projectile.ToArray())
+            var endProjectile = false;
+            var usersTouch = new List<RoomUser>();
+            var newPoint = new Point(item.X, item.Y);
+            var newX = item.X;
+            var newY = item.Y;
+            var newZ = item.Z;
+
+            if (item.InteractionType == InteractionTypeTemp.GRENADE)
             {
-                if (Item == null)
+                newPoint = MovementUtility.GetMoveCoord(item.X, item.Y, 1, item.Movement);
+                newX = newPoint.X;
+                newY = newPoint.Y;
+
+                if (item.Distance > 2)
                 {
-                    continue;
-                }
-
-                bool EndProjectile = false;
-                List<RoomUser> UsersTouch = new List<RoomUser>();
-                Point newPoint = new Point(Item.X, Item.Y);
-                int newX = Item.X;
-                int newY = Item.Y;
-                double newZ = Item.Z;
-
-                if (Item.InteractionType == InteractionTypeTemp.GRENADE)
-                {
-                    newPoint = MovementUtility.GetMoveCoord(Item.X, Item.Y, 1, Item.Movement);
-                    newX = newPoint.X;
-                    newY = newPoint.Y;
-
-                    if (Item.Distance > 2)
-                    {
-                        newZ += 1;
-                    }
-                    else
-                    {
-                        newZ -= 1;
-                    }
-
-                    if (Item.Distance <= 0)
-                    {
-                        UsersTouch = this._room.GetGameMap().GetNearUsers(new Point(newPoint.X, newPoint.Y), 2);
-
-                        EndProjectile = true;
-                    }
-
-                    Item.Distance--;
+                    newZ += 1;
                 }
                 else
                 {
-                    for (int i = 1; i <= 3; i++)
-                    {
-                        newPoint = MovementUtility.GetMoveCoord(Item.X, Item.Y, i, Item.Movement);
-
-                        UsersTouch = this._room.GetGameMap().GetRoomUsers(newPoint);
-
-                        foreach (RoomUser UserTouch in UsersTouch)
-                        {
-                            if (this.CheckUserTouch(UserTouch, Item))
-                            {
-                                EndProjectile = true;
-                            }
-                        }
-
-                        if ((this._room.GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true) && (this._room.GetGameMap().SqAbsoluteHeight(newPoint.X, newPoint.Y) <= Item.Z + 0.5)))
-                        {
-                            newX = newPoint.X;
-                            newY = newPoint.Y;
-                        }
-                        else
-                        {
-                            EndProjectile = true;
-                        }
-
-                        if (EndProjectile)
-                        {
-                            break;
-                        }
-
-                        Item.Distance--;
-                        if (Item.Distance <= 0)
-                        {
-                            EndProjectile = true;
-                            break;
-                        }
-                    }
+                    newZ -= 1;
                 }
 
-                this._messages.Add(new SlideObjectBundleComposer(Item.X, Item.Y, Item.Z, newX, newY, newZ, Item.Id));
-
-                Item.X = newX;
-                Item.Y = newY;
-                Item.Z = newZ;
-
-                if (EndProjectile)
+                if (item.Distance <= 0)
                 {
-                    foreach (RoomUser UserTouch in UsersTouch)
-                    {
-                        this.CheckUserHit(UserTouch, Item);
-                    }
+                    usersTouch = this._room.GetGameMap().GetNearUsers(new Point(newPoint.X, newPoint.Y), 2);
 
-                    this.RemoveProjectile(Item);
+                    endProjectile = true;
                 }
+
+                item.Distance--;
             }
-
-            Dictionary<int, int> BulletUser = new Dictionary<int, int>();
-
-            if (this._queueProjectile.Count > 0)
+            else
             {
-                List<ItemTemp> toAdd = new List<ItemTemp>();
-                while (this._queueProjectile.Count > 0)
+                for (var i = 1; i <= 3; i++)
                 {
-                    if (this._queueProjectile.TryDequeue(out ItemTemp Item))
-                    {
-                        if (!BulletUser.ContainsKey(Item.VirtualUserId))
-                        {
-                            BulletUser.Add(Item.VirtualUserId, 1);
-                            this._projectile.Add(Item);
-                        }
-                        else
-                        {
-                            BulletUser[Item.VirtualUserId]++;
+                    newPoint = MovementUtility.GetMoveCoord(item.X, item.Y, i, item.Movement);
 
-                            toAdd.Add(Item);
+                    usersTouch = this._room.GetGameMap().GetRoomUsers(newPoint);
+
+                    foreach (var userTouch in usersTouch)
+                    {
+                        if (this.CheckUserTouch(userTouch, item))
+                        {
+                            endProjectile = true;
                         }
                     }
 
-                }
-                foreach (ItemTemp Item in toAdd)
-                {
-                    this._queueProjectile.Enqueue(Item);
-                }
+                    if (this._room.GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true) && (this._room.GetGameMap().SqAbsoluteHeight(newPoint.X, newPoint.Y) <= item.Z + 0.5))
+                    {
+                        newX = newPoint.X;
+                        newY = newPoint.Y;
+                    }
+                    else
+                    {
+                        endProjectile = true;
+                    }
 
-                toAdd.Clear();
+                    if (endProjectile)
+                    {
+                        break;
+                    }
+
+                    item.Distance--;
+                    if (item.Distance <= 0)
+                    {
+                        endProjectile = true;
+                        break;
+                    }
+                }
             }
 
-            BulletUser.Clear();
+            this._messages.Add(new SlideObjectBundleComposer(item.X, item.Y, item.Z, newX, newY, newZ, item.Id));
 
-            this._room.SendMessage(this._messages);
-            this._messages.Clear();
+            item.X = newX;
+            item.Y = newY;
+            item.Z = newZ;
+
+            if (endProjectile)
+            {
+                foreach (var userTouch in usersTouch)
+                {
+                    this.CheckUserHit(userTouch, item);
+                }
+
+                this.RemoveProjectile(item);
+            }
         }
 
-        private void CheckUserHit(RoomUser UserTouch, ItemTemp Item)
+        var bulletUser = new Dictionary<int, int>();
+
+        if (!this._queueProjectile.IsEmpty)
         {
-            if (UserTouch == null)
+            var toAdd = new List<ItemTemp>();
+            while (!this._queueProjectile.IsEmpty)
+            {
+                if (this._queueProjectile.TryDequeue(out var item))
+                {
+                    if (!bulletUser.ContainsKey(item.VirtualUserId))
+                    {
+                        bulletUser.Add(item.VirtualUserId, 1);
+                        this._projectile.Add(item);
+                    }
+                    else
+                    {
+                        bulletUser[item.VirtualUserId]++;
+
+                        toAdd.Add(item);
+                    }
+                }
+
+            }
+            foreach (var Item in toAdd)
+            {
+                this._queueProjectile.Enqueue(Item);
+            }
+
+            toAdd.Clear();
+        }
+
+        bulletUser.Clear();
+
+        this._room.SendMessage(this._messages);
+        this._messages.Clear();
+    }
+
+    private void CheckUserHit(RoomUser userTouch, ItemTemp item)
+    {
+        if (userTouch == null)
+        {
+            return;
+        }
+
+        if (this._room.IsRoleplay)
+        {
+            if (userTouch.VirtualId == item.VirtualUserId)
             {
                 return;
             }
 
-            if (this._room.IsRoleplay)
+            if (userTouch.IsBot)
             {
-                if (UserTouch.VirtualId == Item.VirtualUserId)
+                if (userTouch.BotData.RoleBot == null)
                 {
                     return;
                 }
 
-                if (UserTouch.IsBot)
-                {
-                    if (UserTouch.BotData.RoleBot == null)
-                    {
-                        return;
-                    }
-
-                    UserTouch.BotData.RoleBot.Hit(UserTouch, Item.Value, this._room, Item.VirtualUserId, Item.TeamId);
-                }
-                else
-                {
-                    RolePlayer Rp = UserTouch.Roleplayer;
-
-                    if (Rp == null)
-                    {
-                        return;
-                    }
-
-                    if (!Rp.PvpEnable && Rp.AggroTimer == 0)
-                    {
-                        return;
-                    }
-
-                    Rp.Hit(UserTouch, Item.Value, this._room, true, (Item.InteractionType == InteractionTypeTemp.PROJECTILE_BOT));
-                }
+                userTouch.BotData.RoleBot.Hit(userTouch, item.Value, this._room, item.VirtualUserId, item.TeamId);
             }
             else
             {
-                this._room.GetWiredHandler().TriggerCollision(UserTouch, null);
-            }
-        }
-
-        private bool CheckUserTouch(RoomUser UserTouch, ItemTemp Item)
-        {
-            if (UserTouch == null)
-            {
-                return false;
-            }
-
-            if (!this._room.IsRoleplay)
-            {
-                return true;
-            }
-
-            if (UserTouch.VirtualId == Item.VirtualUserId)
-            {
-                return false;
-            }
-
-            if (UserTouch.IsBot)
-            {
-                if (UserTouch.BotData.RoleBot == null)
-                {
-                    return false;
-                }
-
-                if (UserTouch.BotData.RoleBot.Dead)
-                {
-                    return false;
-                }
-
-                return true;
-            }
-            else
-            {
-                RolePlayer Rp = UserTouch.Roleplayer;
+                var Rp = userTouch.Roleplayer;
 
                 if (Rp == null)
                 {
-                    return false;
+                    return;
                 }
 
-                if ((!Rp.PvpEnable && Rp.AggroTimer == 0) || Rp.Dead || Rp.SendPrison)
+                if (!Rp.PvpEnable && Rp.AggroTimer == 0)
                 {
-                    return false;
+                    return;
                 }
 
-                return true;
+                Rp.Hit(userTouch, item.Value, this._room, true, item.InteractionType == InteractionTypeTemp.PROJECTILE_BOT);
             }
         }
-
-
-        private void RemoveProjectile(ItemTemp item)
+        else
         {
-            if (!this._projectile.Contains(item))
+            this._room.GetWiredHandler().TriggerCollision(userTouch, null);
+        }
+    }
+
+    private bool CheckUserTouch(RoomUser userTouch, ItemTemp item)
+    {
+        if (userTouch == null)
+        {
+            return false;
+        }
+
+        if (!this._room.IsRoleplay)
+        {
+            return true;
+        }
+
+        if (userTouch.VirtualId == item.VirtualUserId)
+        {
+            return false;
+        }
+
+        if (userTouch.IsBot)
+        {
+            if (userTouch.BotData.RoleBot == null)
             {
-                return;
+                return false;
             }
 
-            this._projectile.Remove(item);
+            if (userTouch.BotData.RoleBot.Dead)
+            {
+                return false;
+            }
 
-            this._room.GetRoomItemHandler().RemoveTempItem(item.Id);
+            return true;
         }
-
-        public void AddProjectile(int id, int x, int y, double z, MovementDirection movement, int dmg = 0, int distance = 10, int teamId = -1, bool isBot = false)
+        else
         {
-            ItemTemp Item = this._room.GetRoomItemHandler().AddTempItem(id, 77151726, x, y, z, "1", dmg, (isBot) ? InteractionTypeTemp.PROJECTILE_BOT : InteractionTypeTemp.PROJECTILE, movement, distance, teamId);
-            this._queueProjectile.Enqueue(Item);
+            var Rp = userTouch.Roleplayer;
+
+            if (Rp == null)
+            {
+                return false;
+            }
+
+            if ((!Rp.PvpEnable && Rp.AggroTimer == 0) || Rp.Dead || Rp.SendPrison)
+            {
+                return false;
+            }
+
+            return true;
+        }
+    }
+
+
+    private void RemoveProjectile(ItemTemp item)
+    {
+        if (!this._projectile.Contains(item))
+        {
+            return;
         }
 
-        public void AddGrenade(int id, int x, int y, double z, MovementDirection movement, int dmg = 0, int distance = 10, int teamId = -1)
-        {
-            ItemTemp Item = this._room.GetRoomItemHandler().AddTempItem(id, 48741061, x, y, z, "1", dmg, InteractionTypeTemp.GRENADE, movement, 4, teamId);
-            this._queueProjectile.Enqueue(Item);
-        }
+        this._projectile.Remove(item);
+
+        this._room.GetRoomItemHandler().RemoveTempItem(item.Id);
+    }
+
+    public void AddProjectile(int id, int x, int y, double z, MovementDirection movement, int dmg = 0, int distance = 10, int teamId = -1, bool isBot = false)
+    {
+        var item = this._room.GetRoomItemHandler().AddTempItem(id, 77151726, x, y, z, "1", dmg, isBot ? InteractionTypeTemp.PROJECTILE_BOT : InteractionTypeTemp.PROJECTILE, movement, distance, teamId);
+        this._queueProjectile.Enqueue(item);
     }
 }

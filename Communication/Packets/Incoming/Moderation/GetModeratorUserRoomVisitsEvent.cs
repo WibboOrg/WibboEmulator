@@ -1,29 +1,27 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetModeratorUserRoomVisitsEvent : IPacketEvent
 {
-    internal class GetModeratorUserRoomVisitsEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!session.GetUser().HasPermission("perm_mod"))
         {
-            if (!Session.GetUser().HasPermission("perm_mod"))
-            {
-                return;
-            }
-
-            int userId = Packet.PopInt();
-
-            GameClient clientTarget = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-
-            if (clientTarget == null)
-            {
-                return;
-            }
-
-            Session.SendPacket(new ModeratorUserRoomVisitsComposer(clientTarget.GetUser(), clientTarget.GetUser().Visits));
+            return;
         }
+
+        var userId = Packet.PopInt();
+
+        var clientTarget = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+
+        if (clientTarget == null)
+        {
+            return;
+        }
+
+        session.SendPacket(new ModeratorUserRoomVisitsComposer(clientTarget.GetUser(), clientTarget.GetUser().Visits));
     }
 }

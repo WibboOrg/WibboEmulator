@@ -1,31 +1,29 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class HidePyramide : IChatCommand
 {
-    internal class HidePyramide : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        foreach (var Item in Room.GetRoomItemHandler().GetFloor.ToList())
         {
-            foreach (Item Item in Room.GetRoomItemHandler().GetFloor.ToList())
+            if (Item == null || Item.GetBaseItem() == null)
             {
-                if (Item == null || Item.GetBaseItem() == null)
-                {
-                    continue;
-                }
-
-                if (Item.GetBaseItem().ItemName != "wf_pyramid")
-                {
-                    continue;
-                }
-
-                Item.ExtraData = (Item.ExtraData == "0") ? "1" : "0";
-                Item.UpdateState();
-                Item.GetRoom().GetGameMap().UpdateMapForItem(Item);
+                continue;
             }
 
-            Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.pyramide", Session.Langue));
+            if (Item.GetBaseItem().ItemName != "wf_pyramid")
+            {
+                continue;
+            }
+
+            Item.ExtraData = (Item.ExtraData == "0") ? "1" : "0";
+            Item.UpdateState();
+            Item.GetRoom().GetGameMap().UpdateMapForItem(Item);
         }
+
+        session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.pyramide", session.Langue));
     }
 }

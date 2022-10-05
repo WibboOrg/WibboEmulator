@@ -1,12 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
+
+internal class DanceComposer : ServerPacket
 {
-    internal class DanceComposer : ServerPacket
+    public DanceComposer(int virtualId, int dance)
+        : base(ServerPacketHeader.UNIT_DANCE)
     {
-        public DanceComposer(int virtualId, int dance)
-            : base(ServerPacketHeader.UNIT_DANCE)
-        {
-            this.WriteInteger(virtualId);
-            this.WriteInteger(dance);
-        }
+        this.WriteInteger(virtualId);
+        this.WriteInteger(dance);
     }
 }

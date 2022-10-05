@@ -1,12 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
+
+internal class RoomRatingComposer : ServerPacket
 {
-    internal class RoomRatingComposer : ServerPacket
+    public RoomRatingComposer(int Score, bool CanVote)
+        : base(ServerPacketHeader.ROOM_SCORE)
     {
-        public RoomRatingComposer(int Score, bool CanVote)
-            : base(ServerPacketHeader.ROOM_SCORE)
-        {
-            this.WriteInteger(Score);
-            this.WriteBoolean(CanVote);
-        }
+        this.WriteInteger(Score);
+        this.WriteBoolean(CanVote);
     }
 }

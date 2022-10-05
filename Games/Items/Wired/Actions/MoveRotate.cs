@@ -1,100 +1,109 @@
-﻿using System.Data;
-using System.Drawing;
+﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map.Movement;
 
-namespace WibboEmulator.Games.Items.Wired.Actions
+public class MoveRotate : WiredActionBase, IWiredEffect, IWired
 {
-    public class MoveRotate : WiredActionBase, IWiredEffect, IWired
+    public MoveRotate(Item item, Room room) : base(item, room, (int)WiredActionType.MOVE_FURNI)
     {
-        public MoveRotate(Item item, Room room) : base(item, room, (int)WiredActionType.MOVE_FURNI)
+        this.IntParams.Add(0);
+        this.IntParams.Add(0);
+    }
+
+    public override bool OnCycle(RoomUser user, Item item)
+    {
+        foreach (var roomItem in this.Items.ToList())
         {
-            this.IntParams.Add(0);
-            this.IntParams.Add(0);
+            this.HandleMovement(roomItem);
         }
 
-        public override bool OnCycle(RoomUser user, Item item)
+        return false;
+    }
+
+    private void HandleMovement(Item item)
+    {
+        if (this.RoomInstance.GetRoomItemHandler().GetItem(item.Id) == null)
         {
-            foreach (Item roomItem in this.Items.ToList())
-            {
-                this.HandleMovement(roomItem);
-            }
-
-            return false;
-        }
-
-        private void HandleMovement(Item item)
-        {
-            if (this.RoomInstance.GetRoomItemHandler().GetItem(item.Id) == null)
-            {
-                return;
-            }
-
-            int movement = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
-            int rotation = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
-
-            Point newPoint = MovementUtility.HandleMovement(item.Coordinate, (MovementState)movement);
-            int newRot = MovementUtility.HandleRotation(item.Rotation, (RotationState)rotation);
-
-            if (newPoint != item.Coordinate || newRot != item.Rotation)
-            {
-                int oldX = item.X;
-                int oldY = item.Y;
-                double oldZ = item.Z;
-                if (this.RoomInstance.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, newRot, false, false, (newRot != item.Rotation)))
-                {
-                    this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newPoint.X, newPoint.Y, item.Z, item.Id));
-                }
-            }
-
             return;
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient)
-        {
-            int movement = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
-            int rotation = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
+        var movement = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+        var rotation = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
 
-            string rotAndMove = (int)rotation + ";" + (int)movement;
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, rotAndMove, string.Empty, false, this.Items, this.Delay);
+        var newPoint = MovementUtility.HandleMovement(item.Coordinate, (MovementState)movement);
+        var newRot = MovementUtility.HandleRotation(item.Rotation, (RotationState)rotation);
+
+        if (newPoint != item.Coordinate || newRot != item.Rotation)
+        {
+            var oldX = item.X;
+            var oldY = item.Y;
+            var oldZ = item.Z;
+            if (this.RoomInstance.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, newRot, false, false, newRot != item.Rotation))
+            {
+                this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newPoint.X, newPoint.Y, item.Z, item.Id));
+            }
         }
 
-        public void LoadFromDatabase(DataRow row)
+        return;
+    }
+
+    public void SaveToDatabase(IQueryAdapter dbClient)
+    {
+        var movement = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+        var rotation = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+
+        var rotAndMove = rotation + ";" + movement;
+        WiredUtillity.SaveTriggerItem(dbClient, this.Id, rotAndMove, string.Empty, false, this.Items, this.Delay);
+    }
+
+    public void LoadFromDatabase(DataRow row)
+    {
+        this.IntParams.Clear();
+
+        if (int.TryParse(row["delay"].ToString(), out var delay))
         {
-            this.IntParams.Clear();
+            this.Delay = delay;
+        }
 
-            int delay;
-            if (int.TryParse(row["delay"].ToString(), out delay))
-                this.Delay = delay;
+        if (int.TryParse(row["trigger_data"].ToString(), out delay))
+        {
+            this.Delay = delay;
+        }
 
-            if (int.TryParse(row["trigger_data"].ToString(), out delay))
-                this.Delay = delay;
-
-            string triggerData2 = row["trigger_data_2"].ToString();
-            if (triggerData2 != null && triggerData2.Contains(';'))
+        var triggerData2 = row["trigger_data_2"].ToString();
+        if (triggerData2 != null && triggerData2.Contains(';'))
+        {
+            if (int.TryParse(triggerData2.Split(';')[1], out var movement))
             {
-                if (int.TryParse(triggerData2.Split(';')[1], out int movement))
-                    this.IntParams.Add(movement);
-                if (int.TryParse(triggerData2.Split(';')[0], out int rotationint))
-                    this.IntParams.Add(rotationint);
+                this.IntParams.Add(movement);
             }
 
-            string triggerItems = row["triggers_item"].ToString();
-            if (triggerItems == null || triggerItems == "")
+            if (int.TryParse(triggerData2.Split(';')[0], out var rotationint))
             {
-                return;
+                this.IntParams.Add(rotationint);
+            }
+        }
+
+        var triggerItems = row["triggers_item"].ToString();
+        if (triggerItems is null or "")
+        {
+            return;
+        }
+
+        foreach (var itemId in triggerItems.Split(';'))
+        {
+            if (!int.TryParse(itemId, out var id))
+            {
+                continue;
             }
 
-            foreach (string itemId in triggerItems.Split(';'))
+            if (!this.StuffIds.Contains(id))
             {
-                if (!int.TryParse(itemId, out int id))
-                    continue;
-
-                if (!this.StuffIds.Contains(id))
-                    this.StuffIds.Add(id);
+                this.StuffIds.Add(id);
             }
         }
     }

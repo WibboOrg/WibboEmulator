@@ -1,56 +1,54 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class SendMsgEvent : IPacketEvent
 {
-    internal class SendMsgEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session == null || session.GetUser() == null || session.GetUser().GetMessenger() == null)
         {
-            if (Session == null || Session.GetUser() == null || Session.GetUser().GetMessenger() == null)
-            {
-                return;
-            }
-
-            int userId = Packet.PopInt();
-
-            if (userId == Session.GetUser().Id)
-            {
-                return;
-            }
-
-            string Message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
-            if (string.IsNullOrWhiteSpace(Message))
-            {
-                return;
-            }
-
-            TimeSpan timeSpan = DateTime.Now - Session.GetUser().FloodTime;
-            if (timeSpan.Seconds > 4)
-            {
-                Session.GetUser().FloodCount = 0;
-            }
-
-            if (timeSpan.Seconds < 4 && Session.GetUser().FloodCount > 5 && Session.GetUser().Rank < 5)
-            {
-                return;
-            }
-
-            Session.GetUser().FloodTime = DateTime.Now;
-            Session.GetUser().FloodCount++;
-
-            if (Session.Antipub("<" + userId + "> " + Message, "<MP>"))
-            {
-                return;
-            }
-
-            if (Session.GetUser().IgnoreAll)
-            {
-                return;
-            }
-
-            Session.GetUser().GetMessenger().SendInstantMessage(userId, Message);
+            return;
         }
+
+        var userId = Packet.PopInt();
+
+        if (userId == session.GetUser().Id)
+        {
+            return;
+        }
+
+        var Message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
+        if (string.IsNullOrWhiteSpace(Message))
+        {
+            return;
+        }
+
+        var timeSpan = DateTime.Now - session.GetUser().FloodTime;
+        if (timeSpan.Seconds > 4)
+        {
+            session.GetUser().FloodCount = 0;
+        }
+
+        if (timeSpan.Seconds < 4 && session.GetUser().FloodCount > 5 && session.GetUser().Rank < 5)
+        {
+            return;
+        }
+
+        session.GetUser().FloodTime = DateTime.Now;
+        session.GetUser().FloodCount++;
+
+        if (session.Antipub("<" + userId + "> " + Message, "<MP>"))
+        {
+            return;
+        }
+
+        if (session.GetUser().IgnoreAll)
+        {
+            return;
+        }
+
+        session.GetUser().GetMessenger().SendInstantMessage(userId, Message);
     }
 }

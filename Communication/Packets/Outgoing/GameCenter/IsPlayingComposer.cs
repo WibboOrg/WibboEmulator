@@ -1,11 +1,7 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.GameCenter
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.GameCenter;
+
+internal class IsPlayingComposer : ServerPacket
 {
-    internal class IsPlayingComposer : ServerPacket
-    {
-        public IsPlayingComposer(bool isPlaying)
-            : base(ServerPacketHeader.PLAYING_GAME)
-        {
-            this.WriteBoolean(isPlaying);
-        }
-    }
+    public IsPlayingComposer(bool isPlaying)
+        : base(ServerPacketHeader.PLAYING_GAME) => this.WriteBoolean(isPlaying);
 }

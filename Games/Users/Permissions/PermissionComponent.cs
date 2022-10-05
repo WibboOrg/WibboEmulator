@@ -1,39 +1,41 @@
-﻿using WibboEmulator.Database.Interfaces;
+namespace WibboEmulator.Games.Users.Permissions;
+using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Games.GameClients.Permissions
+public sealed class PermissionComponent : IDisposable
 {
-    public sealed class PermissionComponent : IDisposable
+    private readonly User _userInstance;
+    private readonly List<string> _permissions;
+    private readonly List<string> _commands;
+
+    public PermissionComponent(User user)
     {
-        private readonly User _userInstance;
-        private readonly List<string> _permissions;
-        private readonly List<string> _commands;
+        this._userInstance = user;
+        this._permissions = new List<string>();
+        this._commands = new List<string>();
+    }
 
-        public PermissionComponent(User user)
+    public bool Init(IQueryAdapter dbClient)
+    {
+        if (this._permissions.Count > 0)
         {
-            this._userInstance = user;
-            _permissions = new List<string>();
-            _commands = new List<string>();
+            this._permissions.Clear();
         }
 
-        public bool Init(IQueryAdapter dbClient)
+        if (this._commands.Count > 0)
         {
-            if (_permissions.Count > 0)
-                _permissions.Clear();
-
-            if (_commands.Count > 0)
-                _commands.Clear();
-
-            return true;
+            this._commands.Clear();
         }
 
-        public bool HasRight(string Right) => _permissions.Contains(Right);
+        return true;
+    }
 
-        public bool HasCommand(string Command) => _commands.Contains(Command);
+    public bool HasRight(string right) => this._permissions.Contains(right);
 
-        public void Dispose()
-        {
-            _permissions.Clear();
-            GC.SuppressFinalize(this);
-        }
+    public bool HasCommand(string command) => this._commands.Contains(command);
+
+    public void Dispose()
+    {
+        this._permissions.Clear();
+        GC.SuppressFinalize(this);
     }
 }

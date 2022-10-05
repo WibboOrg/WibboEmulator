@@ -1,11 +1,7 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
+
+internal class FloodControlComposer : ServerPacket
 {
-    internal class FloodControlComposer : ServerPacket
-    {
-        public FloodControlComposer(int FloodTime)
-            : base(ServerPacketHeader.FLOOD_CONTROL)
-        {
-            this.WriteInteger(FloodTime);
-        }
-    }
+    public FloodControlComposer(int FloodTime)
+        : base(ServerPacketHeader.FLOOD_CONTROL) => this.WriteInteger(FloodTime);
 }

@@ -1,26 +1,24 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class TransfStop : IChatCommand
 {
-    internal class TransfStop : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
         {
-            if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
-            {
-                return;
-            }
+            return;
+        }
 
-            if (UserRoom.IsTransf && !UserRoom.IsSpectator && !UserRoom.InGame)
-            {
-                UserRoom.IsTransf = false;
+        if (UserRoom.IsTransf && !UserRoom.IsSpectator && !UserRoom.InGame)
+        {
+            UserRoom.IsTransf = false;
 
-                Room.SendPacket(new UserRemoveComposer(UserRoom.VirtualId));
-                Room.SendPacket(new UsersComposer(UserRoom));
-            }
+            Room.SendPacket(new UserRemoveComposer(UserRoom.VirtualId));
+            Room.SendPacket(new UsersComposer(UserRoom));
         }
     }
 }

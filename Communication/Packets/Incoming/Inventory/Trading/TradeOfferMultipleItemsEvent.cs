@@ -1,39 +1,36 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Trading;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class TradeOfferMultipleItemsEvent : IPacketEvent
 {
-    internal class TradeOfferMultipleItemsEvent : IPacketEvent
+    public double Delay => 500;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 500;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
-                return;
-
-            Trade userTrade = room.GetUserTrade(Session.GetUser().Id);
-            if (userTrade == null)
-            {
-                return;
-            }
-
-            int ItemCount = Packet.PopInt();
-            for (int i = 0; i < ItemCount; i++)
-            {
-                int ItemId = Packet.PopInt();
-                Item userItem = Session.GetUser().GetInventoryComponent().GetItem(ItemId);
-                if (userItem == null)
-                {
-                    continue;
-                }
-
-                userTrade.OfferItem(Session.GetUser().Id, userItem, false);
-            }
-
-            userTrade.UpdateTradeWindow();
+            return;
         }
+
+        var userTrade = room.GetUserTrade(session.GetUser().Id);
+        if (userTrade == null)
+        {
+            return;
+        }
+
+        var ItemCount = Packet.PopInt();
+        for (var i = 0; i < ItemCount; i++)
+        {
+            var ItemId = Packet.PopInt();
+            var userItem = session.GetUser().GetInventoryComponent().GetItem(ItemId);
+            if (userItem == null)
+            {
+                continue;
+            }
+
+            userTrade.OfferItem(session.GetUser().Id, userItem, false);
+        }
+
+        userTrade.UpdateTradeWindow();
     }
 }

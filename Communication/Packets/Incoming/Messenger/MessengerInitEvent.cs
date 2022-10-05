@@ -1,22 +1,22 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Messenger;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+using WibboEmulator.Communication.Packets.Outgoing.Messenger;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class MessengerInitEvent : IPacketEvent
 {
-    internal class MessengerInitEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser() == null || session.GetUser().GetMessenger() == null)
         {
-            if (Session.GetUser() == null || Session.GetUser().GetMessenger() == null)
-                return;
-
-            Session.GetUser().GetMessenger().OnStatusChanged();
-
-            Session.SendPacket(new MessengerInitComposer());
-            Session.SendPacket(new BuddyListComposer(Session.GetUser().GetMessenger().Friends));
-            Session.GetUser().GetMessenger().ProcessOfflineMessages();
+            return;
         }
+
+        session.GetUser().GetMessenger().OnStatusChanged();
+
+        session.SendPacket(new MessengerInitComposer());
+        session.SendPacket(new BuddyListComposer(session.GetUser().GetMessenger().Friends));
+        session.GetUser().GetMessenger().ProcessOfflineMessages();
     }
 }

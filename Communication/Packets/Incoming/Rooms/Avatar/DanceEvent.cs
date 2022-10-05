@@ -1,40 +1,39 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class DanceEvent : IPacketEvent
 {
-    internal class DanceEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
-                return;
-
-            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (roomUserByUserId == null)
-            {
-                return;
-            }
-
-            roomUserByUserId.Unidle();
-            int danceId = Packet.PopInt();
-            if (danceId < 0 || danceId > 4 || !true && danceId > 1)
-            {
-                danceId = 0;
-            }
-
-            if (danceId > 0 && roomUserByUserId.CarryItemID > 0)
-            {
-                roomUserByUserId.CarryItem(0);
-            }
-
-            roomUserByUserId.DanceId = danceId;
-            room.SendPacket(new DanceComposer(roomUserByUserId.VirtualId, danceId));
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.SOCIAL_DANCE, 0);
+            return;
         }
+
+        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (roomUserByUserId == null)
+        {
+            return;
+        }
+
+        roomUserByUserId.Unidle();
+        var danceId = Packet.PopInt();
+        if (danceId is < 0 or > 4)
+        {
+            danceId = 0;
+        }
+
+        if (danceId > 0 && roomUserByUserId.CarryItemID > 0)
+        {
+            roomUserByUserId.CarryItem(0);
+        }
+
+        roomUserByUserId.DanceId = danceId;
+        room.SendPacket(new DanceComposer(roomUserByUserId.VirtualId, danceId));
+        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SOCIAL_DANCE, 0);
     }
 }

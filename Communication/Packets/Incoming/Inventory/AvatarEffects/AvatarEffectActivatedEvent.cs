@@ -1,54 +1,52 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class AvatarEffectActivatedEvent : IPacketEvent
 {
-    internal class AvatarEffectActivatedEvent : IPacketEvent
+    public double Delay => 500;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 500;
+        var NumEnable = Packet.PopInt();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (NumEnable < 0)
         {
-            int NumEnable = Packet.PopInt();
-
-            if (NumEnable < 0)
-            {
-                return;
-            }
-
-            if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, Session.GetUser().HasPermission("perm_god")))
-            {
-                return;
-            }
-
-            Room Room = Session.GetUser().CurrentRoom;
-            if (Room == null)
-            {
-                return;
-            }
-
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (User == null)
-            {
-                return;
-            }
-
-            int CurrentEnable = User.CurrentEffect;
-            if (CurrentEnable == 28 || CurrentEnable == 29 || CurrentEnable == 30 || CurrentEnable == 37 || CurrentEnable == 184 || CurrentEnable == 77 || CurrentEnable == 103
-                || CurrentEnable == 40 || CurrentEnable == 41 || CurrentEnable == 42 || CurrentEnable == 43
-                || CurrentEnable == 49 || CurrentEnable == 50 || CurrentEnable == 51 || CurrentEnable == 52
-                || CurrentEnable == 33 || CurrentEnable == 34 || CurrentEnable == 35 || CurrentEnable == 36)
-            {
-                return;
-            }
-
-            if (User.Team != TeamType.NONE || User.InGame)
-            {
-                return;
-            }
-
-            User.ApplyEffect(NumEnable);
+            return;
         }
+
+        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, session.GetUser().HasPermission("perm_god")))
+        {
+            return;
+        }
+
+        var Room = session.GetUser().CurrentRoom;
+        if (Room == null)
+        {
+            return;
+        }
+
+        var User = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (User == null)
+        {
+            return;
+        }
+
+        var CurrentEnable = User.CurrentEffect;
+        if (CurrentEnable is 28 or 29 or 30 or 37 or 184 or 77 or 103
+            or 40 or 41 or 42 or 43
+            or 49 or 50 or 51 or 52
+            or 33 or 34 or 35 or 36)
+        {
+            return;
+        }
+
+        if (User.Team != TeamType.NONE || User.InGame)
+        {
+            return;
+        }
+
+        User.ApplyEffect(NumEnable);
     }
 }

@@ -1,21 +1,19 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Guide;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Guide
+internal class VisitRoomGuidesEvent : IPacketEvent
 {
-    internal class VisitRoomGuidesEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.GetUser().GuideOtherUserId);
+        if (requester == null)
         {
-            GameClient requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
-            if (requester == null)
-            {
-                return;
-            }
-
-            Session.SendPacket(new OnGuideSessionRequesterRoomComposer(requester.GetUser().CurrentRoomId));
+            return;
         }
+
+        session.SendPacket(new OnGuideSessionRequesterRoomComposer(requester.GetUser().CurrentRoomId));
     }
 }

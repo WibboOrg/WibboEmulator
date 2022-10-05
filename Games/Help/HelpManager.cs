@@ -1,69 +1,68 @@
-﻿namespace WibboEmulator.Games.Help
+﻿namespace WibboEmulator.Games.Help;
+
+public class HelpManager
 {
-    public class HelpManager
+    public Dictionary<int, bool> GuidesOnDuty = new();
+
+    public int GuidesCount => this.GuidesOnDuty.Count;
+
+    public int GetRandomGuide()
     {
-        public Dictionary<int, bool> GuidesOnDuty = new Dictionary<int, bool>();
-
-        public int GuidesCount => this.GuidesOnDuty.Count;
-
-        public int GetRandomGuide()
+        if (this.GuidesCount == 0)
         {
-            if (this.GuidesCount == 0)
-            {
-                return 0;
-            }
-
-            List<int> List = new List<int>();
-
-            foreach (KeyValuePair<int, bool> entry in this.GuidesOnDuty)
-            {
-                if (entry.Value)
-                {
-                    continue;
-                }
-
-                List.Add(entry.Key);
-            }
-
-            if (List.Count == 0)
-            {
-                return 0;
-            }
-
-            int RandomId = List[WibboEnvironment.GetRandomNumber(0, List.Count - 1)];
-            this.GuidesOnDuty[RandomId] = true;
-
-            return RandomId;
+            return 0;
         }
 
-        public void EndService(int Id)
+        var List = new List<int>();
+
+        foreach (var entry in this.GuidesOnDuty)
         {
-            if (!this.GuidesOnDuty.ContainsKey(Id))
+            if (entry.Value)
             {
-                return;
+                continue;
             }
 
-            this.GuidesOnDuty[Id] = false;
+            List.Add(entry.Key);
         }
 
-        public void AddGuide(int guide)
+        if (List.Count == 0)
         {
-            if (this.GuidesOnDuty.ContainsKey(guide))
-            {
-                return;
-            }
-
-            this.GuidesOnDuty.Add(guide, false);
+            return 0;
         }
 
-        public void RemoveGuide(int guide)
+        var RandomId = List[WibboEnvironment.GetRandomNumber(0, List.Count - 1)];
+        this.GuidesOnDuty[RandomId] = true;
+
+        return RandomId;
+    }
+
+    public void EndService(int Id)
+    {
+        if (!this.GuidesOnDuty.ContainsKey(Id))
         {
-            if (!this.GuidesOnDuty.ContainsKey(guide))
-            {
-                return;
-            }
-
-            this.GuidesOnDuty.Remove(guide);
+            return;
         }
+
+        this.GuidesOnDuty[Id] = false;
+    }
+
+    public void AddGuide(int guide)
+    {
+        if (this.GuidesOnDuty.ContainsKey(guide))
+        {
+            return;
+        }
+
+        this.GuidesOnDuty.Add(guide, false);
+    }
+
+    public void RemoveGuide(int guide)
+    {
+        if (!this.GuidesOnDuty.ContainsKey(guide))
+        {
+            return;
+        }
+
+        this.GuidesOnDuty.Remove(guide);
     }
 }

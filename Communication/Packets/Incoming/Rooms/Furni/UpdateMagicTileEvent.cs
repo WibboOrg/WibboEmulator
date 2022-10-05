@@ -1,47 +1,46 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class UpdateMagicTileEvent : IPacketEvent
 {
-    internal class UpdateMagicTileEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session != null && session.GetUser() != null)
         {
-            if (Session != null && Session.GetUser() != null)
+            var ItemId = Packet.PopInt();
+            var HeightToSet = Packet.PopInt();
+
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
             {
-                int ItemId = Packet.PopInt();
-                int HeightToSet = Packet.PopInt();
+                return;
+            }
 
-                if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
-                    return;
+            if (!room.CheckRights(session))
+            {
+                return;
+            }
 
-                if (!room.CheckRights(Session))
+            var item = room.GetRoomItemHandler().GetItem(ItemId);
+            if (item == null ? false : item.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
+            {
+                if (HeightToSet > 5000)
                 {
-                    return;
+                    HeightToSet = 5000;
+                }
+                if (HeightToSet < 0)
+                {
+                    HeightToSet = 0;
                 }
 
-                Item item = room.GetRoomItemHandler().GetItem(ItemId);
-                if ((item == null ? false : item.GetBaseItem().InteractionType == InteractionType.PILEMAGIC))
-                {
-                    if (HeightToSet > 5000)
-                    {
-                        HeightToSet = 5000;
-                    }
-                    if (HeightToSet < 0)
-                    {
-                        HeightToSet = 0;
-                    }
+                var TotalZ = (double)(HeightToSet / 100.00);
 
-                    double TotalZ = (double)(HeightToSet / 100.00);
+                item.SetState(item.X, item.Y, TotalZ, item.GetAffectedTiles);
 
-                    item.SetState(item.X, item.Y, TotalZ, item.GetAffectedTiles);
-
-                    room.SendPacket(new ObjectUpdateComposer(item, room.RoomData.OwnerId));
-                }
+                room.SendPacket(new ObjectUpdateComposer(item, room.RoomData.OwnerId));
             }
         }
     }

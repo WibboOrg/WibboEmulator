@@ -1,15 +1,13 @@
+namespace WibboEmulator.Database.Daos;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Daos
+internal class EmulatorQuestDao
 {
-    class EmulatorQuestDao
+    internal static DataTable GetAll(IQueryAdapter dbClient)
     {
-        internal static DataTable GetAll(IQueryAdapter dbClient)
-        {
-            dbClient.SetQuery("SELECT `id`, `category`, `series_number`, `goal_type`, `goal_data`, `name`, `reward`, `data_bit` FROM `emulator_quest`");
+        dbClient.SetQuery("SELECT `id`, `category`, `series_number`, `goal_type`, `goal_data`, `name`, `reward`, `data_bit` FROM `emulator_quest`");
 
-            return dbClient.GetTable();
-        }
+        return dbClient.GetTable();
     }
 }

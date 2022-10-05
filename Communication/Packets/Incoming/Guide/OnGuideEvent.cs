@@ -1,44 +1,41 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Guide;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Help;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Guide
+internal class OnGuideEvent : IPacketEvent
 {
-    internal class OnGuideEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var userId = Packet.PopInt();
+        var message = Packet.PopString();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        var guideManager = WibboEnvironment.GetGame().GetHelpManager();
+        if (guideManager.GuidesCount <= 0)
         {
-            int userId = Packet.PopInt();
-            string message = Packet.PopString();
-
-            HelpManager guideManager = WibboEnvironment.GetGame().GetHelpManager();
-            if (guideManager.GuidesCount <= 0)
-            {
-                Session.SendPacket(new OnGuideSessionErrorComposer(2));
-                return;
-            }
-
-            if (Session.GetUser().OnDuty == true)
-            {
-                guideManager.RemoveGuide(Session.GetUser().Id);
-            }
-
-            int guideId = guideManager.GetRandomGuide();
-            if (guideId == 0)
-            {
-                Session.SendPacket(new OnGuideSessionErrorComposer(2));
-                return;
-            }
-
-            GameClient guide = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(guideId);
-
-            Session.SendPacket(new OnGuideSessionAttachedComposer(false, userId, message, 30));
-            guide.SendPacket(new OnGuideSessionAttachedComposer(true, userId, message, 15));
-
-            guide.GetUser().GuideOtherUserId = Session.GetUser().Id;
-            Session.GetUser().GuideOtherUserId = guide.GetUser().Id;
+            session.SendPacket(new OnGuideSessionErrorComposer(2));
+            return;
         }
+
+        if (session.GetUser().OnDuty)
+        {
+            guideManager.RemoveGuide(session.GetUser().Id);
+        }
+
+        var guideId = guideManager.GetRandomGuide();
+        if (guideId == 0)
+        {
+            session.SendPacket(new OnGuideSessionErrorComposer(2));
+            return;
+        }
+
+        var guide = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(guideId);
+
+        session.SendPacket(new OnGuideSessionAttachedComposer(false, userId, message, 30));
+        guide.SendPacket(new OnGuideSessionAttachedComposer(true, userId, message, 15));
+
+        guide.GetUser().GuideOtherUserId = session.GetUser().Id;
+        session.GetUser().GuideOtherUserId = guide.GetUser().Id;
     }
 }

@@ -1,22 +1,20 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class ForceOpenGift : IChatCommand
 {
-    internal class ForceOpenGift : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
-        {
-            Session.GetUser().ForceOpenGift = !Session.GetUser().ForceOpenGift;
+        session.GetUser().ForceOpenGift = !session.GetUser().ForceOpenGift;
 
-            if (Session.GetUser().ForceOpenGift)
-            {
-                Session.SendWhisper("ForceOpenGift activé");
-            }
-            else
-            {
-                Session.SendWhisper("ForceOpenGift désactivé");
-            }
+        if (session.GetUser().ForceOpenGift)
+        {
+            session.SendWhisper("ForceOpenGift activé");
+        }
+        else
+        {
+            session.SendWhisper("ForceOpenGift désactivé");
         }
     }
 }

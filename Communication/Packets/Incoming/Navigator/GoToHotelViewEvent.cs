@@ -1,27 +1,26 @@
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GoToHotelViewEvent : IPacketEvent
 {
-    internal class GoToHotelViewEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        session.SendPacket(new CloseConnectionComposer());
+        session.GetUser().LoadingRoomId = 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser() == null || !session.GetUser().InRoom)
         {
-            Session.SendPacket(new CloseConnectionComposer());
-            Session.GetUser().LoadingRoomId = 0;
-
-            if (Session.GetUser() == null || !Session.GetUser().InRoom)
-            {
-                return;
-            }
-
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
-                return;
-
-            room.GetRoomUserManager().RemoveUserFromRoom(Session, false, false);
+            return;
         }
+
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        {
+            return;
+        }
+
+        room.GetRoomUserManager().RemoveUserFromRoom(session, false, false);
     }
 }

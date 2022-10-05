@@ -1,52 +1,50 @@
-﻿using WibboEmulator.Games.GameClients;
+namespace WibboEmulator.Games.Rooms.AI;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Games.Rooms.AI
+public abstract class BotAI
 {
-    public abstract class BotAI
+    public int Id { get; set; }
+    private RoomUser _roomUser;
+    private Room _room;
+
+    public BotAI()
     {
-        public int Id { get; set; }
-        private RoomUser roomUser;
-        private Room room;
-
-        public BotAI()
-        {
-        }
-
-        public void Init(int baseId, RoomUser user, Room room)
-        {
-            this.Id = baseId;
-            this.roomUser = user;
-            this.room = room;
-        }
-
-        public Room GetRoom() => this.room;
-
-        public RoomUser GetRoomUser() => this.roomUser;
-
-        public RoomBot GetBotData()
-        {
-            if (this.GetRoomUser() == null)
-            {
-                return null;
-            }
-            else
-            {
-                return this.GetRoomUser().BotData;
-            }
-        }
-
-        public abstract void OnSelfEnterRoom();
-
-        public abstract void OnSelfLeaveRoom(bool Kicked);
-
-        public abstract void OnUserEnterRoom(RoomUser User);
-
-        public abstract void OnUserLeaveRoom(GameClient Client);
-
-        public abstract void OnUserSay(RoomUser User, string Message);
-
-        public abstract void OnUserShout(RoomUser User, string Message);
-
-        public abstract void OnTimerTick();
     }
+
+    public void Init(int baseId, RoomUser user, Room room)
+    {
+        this.Id = baseId;
+        this._roomUser = user;
+        this._room = room;
+    }
+
+    public Room GetRoom() => this._room;
+
+    public RoomUser GetRoomUser() => this._roomUser;
+
+    public RoomBot GetBotData()
+    {
+        if (this.GetRoomUser() == null)
+        {
+            return null;
+        }
+        else
+        {
+            return this.GetRoomUser().BotData;
+        }
+    }
+
+    public abstract void OnSelfEnterRoom();
+
+    public abstract void OnSelfLeaveRoom(bool kicked);
+
+    public abstract void OnUserEnterRoom(RoomUser user);
+
+    public abstract void OnUserLeaveRoom(GameClient client);
+
+    public abstract void OnUserSay(RoomUser user, string message);
+
+    public abstract void OnUserShout(RoomUser user, string message);
+
+    public abstract void OnTimerTick();
 }

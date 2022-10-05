@@ -1,38 +1,35 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Guide;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Help;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Guide
+internal class GetHelperToolConfigurationEvent : IPacketEvent
 {
-    internal class GetHelperToolConfigurationEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!session.GetUser().HasPermission("perm_helptool"))
         {
-            if (!Session.GetUser().HasPermission("perm_helptool"))
-            {
-                return;
-            }
-
-            HelpManager guideManager = WibboEnvironment.GetGame().GetHelpManager();
-            bool onDuty = Packet.PopBoolean();
-            Packet.PopBoolean();
-            Packet.PopBoolean();
-            Packet.PopBoolean();
-
-            if (onDuty && !Session.GetUser().OnDuty)
-            {
-                guideManager.AddGuide(Session.GetUser().Id);
-                Session.GetUser().OnDuty = true;
-            }
-            else
-            {
-                guideManager.RemoveGuide(Session.GetUser().Id);
-                Session.GetUser().OnDuty = false;
-            }
-
-            Session.SendPacket(new HelperToolComposer(Session.GetUser().OnDuty, guideManager.GuidesCount));
+            return;
         }
+
+        var guideManager = WibboEnvironment.GetGame().GetHelpManager();
+        var onDuty = Packet.PopBoolean();
+        Packet.PopBoolean();
+        Packet.PopBoolean();
+        Packet.PopBoolean();
+
+        if (onDuty && !session.GetUser().OnDuty)
+        {
+            guideManager.AddGuide(session.GetUser().Id);
+            session.GetUser().OnDuty = true;
+        }
+        else
+        {
+            guideManager.RemoveGuide(session.GetUser().Id);
+            session.GetUser().OnDuty = false;
+        }
+
+        session.SendPacket(new HelperToolComposer(session.GetUser().OnDuty, guideManager.GuidesCount));
     }
 }

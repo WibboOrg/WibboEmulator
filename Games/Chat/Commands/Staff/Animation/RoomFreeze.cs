@@ -1,22 +1,20 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class RoomFreeze : IChatCommand
 {
-    internal class RoomFreeze : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
-        {
-            Room.FreezeRoom = !Room.FreezeRoom;
+        Room.FreezeRoom = !Room.FreezeRoom;
 
-            if (Room.FreezeRoom)
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roomfreeze.true", Session.Langue));
-            }
-            else
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roomfreeze.false", Session.Langue));
-            }
+        if (Room.FreezeRoom)
+        {
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roomfreeze.true", session.Langue));
+        }
+        else
+        {
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roomfreeze.false", session.Langue));
         }
     }
 }

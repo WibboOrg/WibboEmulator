@@ -1,28 +1,21 @@
-﻿namespace WibboEmulator.Core.FigureData.Types
+﻿namespace WibboEmulator.Core.FigureData.Types;
+
+internal class Set
 {
-    internal class Set
+    public int Id;
+    public string Gender;
+    public int ClubLevel;
+    public bool Colorable;
+
+    public Set(int id, string gender, int clubLevel, bool colorable)
     {
-        public int Id;
-        public string Gender;
-        public int ClubLevel;
-        public bool Colorable;
+        this.Id = id;
+        this.Gender = gender;
+        this.ClubLevel = clubLevel;
+        this.Colorable = colorable;
 
-        private Dictionary<string, Part> _parts;
-
-        public Set(int id, string gender, int clubLevel, bool colorable)
-        {
-            this.Id = id;
-            this.Gender = gender;
-            this.ClubLevel = clubLevel;
-            this.Colorable = colorable;
-
-            this._parts = new Dictionary<string, Part>();
-        }
-
-        public Dictionary<string, Part> Parts
-        {
-            get => this._parts;
-            set => this._parts = value;
-        }
+        this.Parts = new Dictionary<string, Part>();
     }
+
+    public Dictionary<string, Part> Parts { get; set; }
 }

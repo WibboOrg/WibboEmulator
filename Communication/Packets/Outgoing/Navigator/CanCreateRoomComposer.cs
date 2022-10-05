@@ -1,12 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
+
+internal class CanCreateRoomComposer : ServerPacket
 {
-    internal class CanCreateRoomComposer : ServerPacket
+    public CanCreateRoomComposer(bool Error, int MaxRoomsPerUser)
+        : base(ServerPacketHeader.CAN_CREATE_ROOM_MESSAGE_COMPOSER)
     {
-        public CanCreateRoomComposer(bool Error, int MaxRoomsPerUser)
-            : base(ServerPacketHeader.CanCreateRoomMessageComposer)
-        {
-            this.WriteInteger(Error ? 1 : 0);
-            this.WriteInteger(MaxRoomsPerUser);
-        }
+        this.WriteInteger(Error ? 1 : 0);
+        this.WriteInteger(MaxRoomsPerUser);
     }
 }

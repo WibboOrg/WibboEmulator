@@ -1,32 +1,31 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Chat.Logs;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetModeratorRoomChatlogEvent : IPacketEvent
 {
-    internal class GetModeratorRoomChatlogEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!session.GetUser().HasPermission("perm_mod"))
         {
-            if (!Session.GetUser().HasPermission("perm_mod"))
-            {
-                return;
-            }
-
-            Packet.PopInt(); //useless
-            int roomId = Packet.PopInt();
-
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room room))
-                return;
-
-            List<ChatlogEntry> listReverse = new List<ChatlogEntry>();
-            listReverse.AddRange(room.GetChatMessageManager().ListOfMessages);
-            listReverse.Reverse();
-
-            Session.SendPacket(new ModeratorRoomChatlogComposer(room, listReverse));
+            return;
         }
+
+        Packet.PopInt(); //useless
+        var roomId = Packet.PopInt();
+
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out var room))
+        {
+            return;
+        }
+
+        var listReverse = new List<ChatlogEntry>();
+        listReverse.AddRange(room.GetChatMessageManager().ListOfMessages);
+        listReverse.Reverse();
+
+        session.SendPacket(new ModeratorRoomChatlogComposer(room, listReverse));
     }
 }

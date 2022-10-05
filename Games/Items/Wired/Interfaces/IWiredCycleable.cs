@@ -1,13 +1,11 @@
-﻿using WibboEmulator.Games.Rooms;
+namespace WibboEmulator.Games.Items.Wired.Interfaces;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Wired.Interfaces
+public interface IWiredCycleable
 {
-    public interface IWiredCycleable
-    {
-        bool OnCycle(RoomUser User, Item item);
+    bool OnCycle(RoomUser user, Item item);
 
-        bool Disposed();
+    bool Disposed();
 
-        int DelayCycle { get; }
-    }
+    int DelayCycle { get; }
 }

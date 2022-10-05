@@ -1,9 +1,7 @@
-﻿using WibboEmulator.Games.Rooms;
+﻿namespace WibboEmulator.Games.Items.Wired.Interfaces;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Wired.Interfaces
+public interface IWiredEffect
 {
-    public interface IWiredEffect
-    {
-        void Handle(RoomUser user, Item item);
-    }
+    void Handle(RoomUser user, Item item);
 }

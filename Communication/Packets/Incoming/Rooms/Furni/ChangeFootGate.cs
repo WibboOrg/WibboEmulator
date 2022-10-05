@@ -1,65 +1,62 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class ChangeFootGate : IPacketEvent
 {
-    internal class ChangeFootGate : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
+        var Id = Packet.PopInt();
+        var gender = Packet.PopString();
+        var look = Packet.PopString();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        var room = session.GetUser().CurrentRoom;
+        if (room == null || !room.CheckRights(session, true))
         {
-            int Id = Packet.PopInt();
-            string gender = Packet.PopString();
-            string look = Packet.PopString();
+            return;
+        }
 
-            Room room = Session.GetUser().CurrentRoom;
-            if (room == null || !room.CheckRights(Session, true))
+        var item = room.GetRoomItemHandler().GetItem(Id);
+        if (item == null || item.GetBaseItem().InteractionType != InteractionType.FBGATE)
+        {
+            return;
+        }
+
+        if (gender.ToUpper() == "M")
+        {
+            var Figures = item.ExtraData.Split(',');
+            var newFigures = new string[2];
+
+            newFigures[0] = look;
+            if (Figures.Length > 1)
             {
-                return;
+                newFigures[1] = Figures[1];
+            }
+            else
+            {
+                newFigures[1] = "hd-99999-99999.ch-630-62.lg-695-62";
             }
 
-            Item item = room.GetRoomItemHandler().GetItem(Id);
-            if (item == null || item.GetBaseItem().InteractionType != InteractionType.FBGATE)
+            item.ExtraData = string.Join(",", newFigures);
+        }
+        else if (gender.ToUpper() == "F")
+        {
+            var Figures = item.ExtraData.Split(',');
+            var newFigures = new string[2];
+
+            if (!string.IsNullOrWhiteSpace(Figures[0]))
             {
-                return;
+                newFigures[0] = Figures[0];
             }
-
-            if (gender.ToUpper() == "M")
+            else
             {
-                string[] Figures = item.ExtraData.Split(',');
-                string[] newFigures = new string[2];
-
-                newFigures[0] = look;
-                if (Figures.Length > 1)
-                {
-                    newFigures[1] = Figures[1];
-                }
-                else
-                {
-                    newFigures[1] = "hd-99999-99999.ch-630-62.lg-695-62";
-                }
-
-                item.ExtraData = string.Join(",", newFigures);
+                newFigures[0] = "hd-99999-99999.lg-270-62";
             }
-            else if (gender.ToUpper() == "F")
-            {
-                string[] Figures = item.ExtraData.Split(',');
-                string[] newFigures = new string[2];
+            newFigures[1] = look;
 
-                if (!string.IsNullOrWhiteSpace(Figures[0]))
-                {
-                    newFigures[0] = Figures[0];
-                }
-                else
-                {
-                    newFigures[0] = "hd-99999-99999.lg-270-62";
-                }
-                newFigures[1] = look;
-
-                item.ExtraData = string.Join(",", newFigures);
-            }
+            item.ExtraData = string.Join(",", newFigures);
         }
     }
 }

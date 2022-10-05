@@ -1,12 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
+
+internal class CarryObjectComposer : ServerPacket
 {
-    internal class CarryObjectComposer : ServerPacket
+    public CarryObjectComposer(int virtualID, int itemID)
+        : base(ServerPacketHeader.UNIT_HAND_ITEM)
     {
-        public CarryObjectComposer(int virtualID, int itemID)
-            : base(ServerPacketHeader.UNIT_HAND_ITEM)
-        {
-            this.WriteInteger(virtualID);
-            this.WriteInteger(itemID);
-        }
+        this.WriteInteger(virtualID);
+        this.WriteInteger(itemID);
     }
 }

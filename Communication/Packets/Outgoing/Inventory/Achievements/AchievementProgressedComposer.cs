@@ -1,26 +1,24 @@
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Games.Achievements;
-using WibboEmulator.Games.GameClients.Achievements;
+using WibboEmulator.Games.Users.Achievements;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements
+internal class AchievementProgressedComposer : ServerPacket
 {
-    internal class AchievementProgressedComposer : ServerPacket
+    public AchievementProgressedComposer(AchievementData Achievement, int TargetLevel, AchievementLevel TargetLevelData, int TotalLevels, UserAchievement UserData)
+        : base(ServerPacketHeader.ACHIEVEMENT_PROGRESSED)
     {
-        public AchievementProgressedComposer(AchievementData Achievement, int TargetLevel, AchievementLevel TargetLevelData, int TotalLevels, UserAchievement UserData)
-            : base(ServerPacketHeader.ACHIEVEMENT_PROGRESSED)
-        {
-            this.WriteInteger(Achievement.Id);
-            this.WriteInteger(TargetLevel);
-            this.WriteString(Achievement.GroupName + TargetLevel);
-            this.WriteInteger(0);
-            this.WriteInteger(TargetLevelData.Requirement);
-            this.WriteInteger(TargetLevelData.RewardPixels);
-            this.WriteInteger(0);
-            this.WriteInteger(UserData != null ? UserData.Progress : 0);
-            this.WriteBoolean(UserData != null && UserData.Level >= TotalLevels);
-            this.WriteString(Achievement.Category);
-            this.WriteString(string.Empty);
-            this.WriteInteger(TotalLevels);
-            this.WriteInteger(0);
-        }
+        this.WriteInteger(Achievement.Id);
+        this.WriteInteger(TargetLevel);
+        this.WriteString(Achievement.GroupName + TargetLevel);
+        this.WriteInteger(0);
+        this.WriteInteger(TargetLevelData.Requirement);
+        this.WriteInteger(TargetLevelData.RewardPixels);
+        this.WriteInteger(0);
+        this.WriteInteger(UserData != null ? UserData.Progress : 0);
+        this.WriteBoolean(UserData != null && UserData.Level >= TotalLevels);
+        this.WriteString(Achievement.Category);
+        this.WriteString(string.Empty);
+        this.WriteInteger(TotalLevels);
+        this.WriteInteger(0);
     }
 }

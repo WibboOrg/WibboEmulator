@@ -1,11 +1,10 @@
-﻿namespace WibboEmulator.Games.Chat.Emotions
+﻿namespace WibboEmulator.Games.Chat.Emotions;
+
+internal enum ChatEmotions
 {
-    internal enum ChatEmotions
-    {
-        SMILE,
-        ANGRY,
-        SAD,
-        SHOCKED,
-        NONE
-    }
+    SMILE,
+    ANGRY,
+    SAD,
+    SHOCKED,
+    NONE
 }

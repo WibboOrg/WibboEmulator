@@ -1,30 +1,27 @@
-using WibboEmulator.Games.GameClients;
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings
+internal class GetRoomBannedUsersComposer : ServerPacket
 {
-    internal class GetRoomBannedUsersComposer : ServerPacket
+    public GetRoomBannedUsersComposer(Room instance)
+        : base(ServerPacketHeader.ROOM_BAN_LIST)
     {
-        public GetRoomBannedUsersComposer(Room instance)
-            : base(ServerPacketHeader.ROOM_BAN_LIST)
+        this.WriteInteger(instance.Id);
+
+        this.WriteInteger(instance.GetBans().Count);//Count
+        foreach (var Id in instance.GetBans().Keys)
         {
-            this.WriteInteger(instance.Id);
+            var Data = WibboEnvironment.GetUserById(Id);
 
-            this.WriteInteger(instance.GetBans().Count);//Count
-            foreach (int Id in instance.GetBans().Keys)
+            if (Data == null)
             {
-                User Data = WibboEnvironment.GetUserById(Id);
-
-                if (Data == null)
-                {
-                    this.WriteInteger(0);
-                    this.WriteString("Unknown Error");
-                }
-                else
-                {
-                    this.WriteInteger(Data.Id);
-                    this.WriteString(Data.Username);
-                }
+                this.WriteInteger(0);
+                this.WriteString("Unknown Error");
+            }
+            else
+            {
+                this.WriteInteger(Data.Id);
+                this.WriteString(Data.Username);
             }
         }
     }

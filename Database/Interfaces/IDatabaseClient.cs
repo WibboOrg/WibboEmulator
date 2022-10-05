@@ -1,13 +1,11 @@
-﻿using MySql.Data.MySqlClient;
+namespace WibboEmulator.Database.Interfaces;
+using MySql.Data.MySqlClient;
 
-namespace WibboEmulator.Database.Interfaces
+public interface IDatabaseClient : IDisposable
 {
-    public interface IDatabaseClient : IDisposable
-    {
-        void connect();
-        void disconnect();
-        IQueryAdapter getQueryreactor();
-        MySqlCommand createNewCommand();
-        void reportDone();
-    }
+    void Connect();
+    void Disconnect();
+    IQueryAdapter GetQueryreactor();
+    MySqlCommand CreateNewCommand();
+    void ReportDone();
 }

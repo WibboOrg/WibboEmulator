@@ -1,12 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Groups
+namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
+
+internal class NewGroupInfoComposer : ServerPacket
 {
-    internal class NewGroupInfoComposer : ServerPacket
+    public NewGroupInfoComposer(int RoomId, int GroupId)
+        : base(ServerPacketHeader.GROUP_PURCHASED)
     {
-        public NewGroupInfoComposer(int RoomId, int GroupId)
-            : base(ServerPacketHeader.GROUP_PURCHASED)
-        {
-            this.WriteInteger(RoomId);
-            this.WriteInteger(GroupId);
-        }
+        this.WriteInteger(RoomId);
+        this.WriteInteger(GroupId);
     }
 }

@@ -1,32 +1,29 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class RemoveGroupFavouriteEvent : IPacketEvent
 {
-    internal class RemoveGroupFavouriteEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
+        session.GetUser().FavouriteGroupId = 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser().InRoom)
         {
-            Session.GetUser().FavouriteGroupId = 0;
-
-            if (Session.GetUser().InRoom)
+            var User = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            if (User != null)
             {
-                RoomUser User = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-                if (User != null)
-                {
-                    Session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(null, User.VirtualId));
-                }
+                session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(null, User.VirtualId));
+            }
 
-                Session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(Session.GetUser().Id));
-            }
-            else
-            {
-                Session.SendPacket(new RefreshFavouriteGroupComposer(Session.GetUser().Id));
-            }
+            session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
+        }
+        else
+        {
+            session.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
         }
     }
 }

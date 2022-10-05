@@ -1,50 +1,45 @@
-﻿using System.Data;
+namespace WibboEmulator.Games.Roleplay;
+using System.Data;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Roleplay.Item;
 
-namespace WibboEmulator.Games.Roleplay
+public class RPItemManager
 {
-    public class RPItemManager
+    private readonly Dictionary<int, RPItem> _items;
+
+    public RPItemManager() => this._items = new Dictionary<int, RPItem>();
+
+    public RPItem GetItem(int id)
     {
-        private readonly Dictionary<int, RPItem> _items;
-
-        public RPItemManager()
+        if (!this._items.ContainsKey(id))
         {
-            this._items = new Dictionary<int, RPItem>();
+            return null;
         }
 
-        public RPItem GetItem(int Id)
-        {
-            if (!this._items.ContainsKey(Id))
-            {
-                return null;
-            }
+        this._items.TryGetValue(id, out var item);
+        return item;
+    }
 
-            this._items.TryGetValue(Id, out RPItem item);
-            return item;
-        }
-
-        public void Init(IQueryAdapter dbClient)
+    public void Init(IQueryAdapter dbClient)
+    {
+        this._items.Clear();
+        var table = RoleplayItemDao.GetAll(dbClient);
+        if (table != null)
         {
-            this._items.Clear();
-            DataTable table = RoleplayItemDao.GetAll(dbClient);
-            if (table != null)
+            foreach (DataRow dataRow in table.Rows)
             {
-                foreach (DataRow dataRow in table.Rows)
+                if (!this._items.ContainsKey(Convert.ToInt32(dataRow["id"])))
                 {
-                    if (!this._items.ContainsKey(Convert.ToInt32(dataRow["id"])))
-                    {
-                        this._items.Add(Convert.ToInt32(dataRow["id"]),
-                            new RPItem(Convert.ToInt32(dataRow["id"]),
-                            (string)dataRow["name"],
-                            (string)dataRow["desc"],
-                            Convert.ToInt32(dataRow["price"]),
-                            (string)dataRow["type"],
-                            Convert.ToInt32(dataRow["value"]),
-                            ((string)dataRow["allowstack"]) == "1",
-                            RPItemCategorys.GetTypeFromString((string)dataRow["category"])));
-                    }
+                    this._items.Add(Convert.ToInt32(dataRow["id"]),
+                        new RPItem(Convert.ToInt32(dataRow["id"]),
+                        (string)dataRow["name"],
+                        (string)dataRow["desc"],
+                        Convert.ToInt32(dataRow["price"]),
+                        (string)dataRow["type"],
+                        Convert.ToInt32(dataRow["value"]),
+                        ((string)dataRow["allowstack"]) == "1",
+                        RPItemCategorys.GetTypeFromString((string)dataRow["category"])));
                 }
             }
         }

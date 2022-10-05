@@ -1,8 +1,7 @@
-﻿namespace WibboEmulator.Games.Rooms
+﻿namespace WibboEmulator.Games.Rooms;
+
+public enum SquareStateType
 {
-    public enum SquareStateType
-    {
-        OPEN,
-        BLOCKED,
-    }
+    OPEN,
+    BLOCKED,
 }

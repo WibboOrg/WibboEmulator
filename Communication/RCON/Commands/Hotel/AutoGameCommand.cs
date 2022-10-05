@@ -1,11 +1,10 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.Hotel
+﻿namespace WibboEmulator.Communication.RCON.Commands.Hotel;
+
+internal class AutoGameCommand : IRCONCommand
 {
-    internal class AutoGameCommand : IRCONCommand
+    public bool TryExecute(string[] parameters)
     {
-        public bool TryExecute(string[] parameters)
-        {
-            WibboEnvironment.GetGame().GetAnimationManager().ForceDisabled((parameters[0] == "1"));
-            return true;
-        }
+        WibboEnvironment.GetGame().GetAnimationManager().ForceDisabled(parameters[0] == "1");
+        return true;
     }
 }

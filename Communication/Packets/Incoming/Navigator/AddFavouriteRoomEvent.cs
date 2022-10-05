@@ -1,38 +1,34 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class AddFavouriteRoomEvent : IPacketEvent
 {
-    internal class AddFavouriteRoomEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser() == null)
         {
-            if (Session.GetUser() == null)
-            {
-                return;
-            }
+            return;
+        }
 
-            int roomId = Packet.PopInt();
+        var roomId = Packet.PopInt();
 
-            RoomData roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
-            if (roomData == null || Session.GetUser().FavoriteRooms.Count >= 30 || (Session.GetUser().FavoriteRooms.Contains(roomId)))
-            {
-                return;
-            }
-            else
-            {
-                Session.SendPacket(new UpdateFavouriteRoomComposer(roomId, true));
+        var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+        if (roomData == null || session.GetUser().FavoriteRooms.Count >= 30 || session.GetUser().FavoriteRooms.Contains(roomId))
+        {
+            return;
+        }
+        else
+        {
+            session.SendPacket(new UpdateFavouriteRoomComposer(roomId, true));
 
-                Session.GetUser().FavoriteRooms.Add(roomId);
+            session.GetUser().FavoriteRooms.Add(roomId);
 
-                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                UserFavoriteDao.Insert(dbClient, Session.GetUser().Id, roomId);
-            }
+            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            UserFavoriteDao.Insert(dbClient, session.GetUser().Id, roomId);
         }
     }
 }

@@ -1,20 +1,18 @@
+namespace WibboEmulator.Database.Daos;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Daos
+internal class UserFavoriteDao
 {
-    class UserFavoriteDao
+    internal static void Insert(IQueryAdapter dbClient, int userId, int roomId) => dbClient.RunQuery("INSERT INTO `user_favorite` (`user_id`, `room_id`) VALUES ('" + userId + "','" + roomId + "')");
+
+    internal static void Delete(IQueryAdapter dbClient, int userId, int roomId) => dbClient.RunQuery("DELETE FROM `user_favorite` WHERE `user_id` = '" + userId + "' AND `room_id` = '" + roomId + "'");
+
+    internal static void Delete(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("DELETE FROM `user_favorite` WHERE `room_id` = '" + roomId + "'");
+
+    internal static DataTable GetAll(IQueryAdapter dbClient, int userId)
     {
-        internal static void Insert(IQueryAdapter dbClient, int userId, int roomId) => dbClient.RunQuery("INSERT INTO `user_favorite` (`user_id`, `room_id`) VALUES ('" + userId + "','" + roomId + "')");
-
-        internal static void Delete(IQueryAdapter dbClient, int userId, int roomId) => dbClient.RunQuery("DELETE FROM `user_favorite` WHERE `user_id` = '" + userId + "' AND `room_id` = '" + roomId + "'");
-
-        internal static void Delete(IQueryAdapter dbClient, int roomId) => dbClient.RunQuery("DELETE FROM `user_favorite` WHERE `room_id` = '" + roomId + "'");
-
-        internal static DataTable GetAll(IQueryAdapter dbClient, int userId)
-        {
-            dbClient.SetQuery("SELECT `room_id` FROM `user_favorite` WHERE `user_id` = '" + userId + "'");
-            return dbClient.GetTable();
-        }
+        dbClient.SetQuery("SELECT `room_id` FROM `user_favorite` WHERE `user_id` = '" + userId + "'");
+        return dbClient.GetTable();
     }
 }

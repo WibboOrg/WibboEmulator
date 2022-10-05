@@ -1,12 +1,11 @@
-﻿namespace WibboEmulator.Games.Moderation
+﻿namespace WibboEmulator.Games.Moderation;
+
+public enum TicketStatusType
 {
-    public enum TicketStatusType
-    {
-        OPEN,
-        PICKED,
-        RESOLVED,
-        ABUSIVE,
-        INVALID,
-        DELETED,
-    }
+    OPEN,
+    PICKED,
+    RESOLVED,
+    ABUSIVE,
+    INVALID,
+    DELETED,
 }

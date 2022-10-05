@@ -1,85 +1,82 @@
-﻿using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Roleplay.Player;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class GiveMoney : IChatCommand
 {
-    internal class GiveMoney : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (Params.Length != 3)
         {
-            if (Params.Length != 3)
-            {
-                return;
-            }
+            return;
+        }
 
-            if (!Room.IsRoleplay)
-            {
-                return;
-            }
+        if (!Room.IsRoleplay)
+        {
+            return;
+        }
 
-            RolePlayer Rp = UserRoom.Roleplayer;
-            if (Rp == null)
-            {
-                return;
-            }
+        var Rp = UserRoom.Roleplayer;
+        if (Rp == null)
+        {
+            return;
+        }
 
-            if (Rp.Dead || Rp.SendPrison)
-            {
-                return;
-            }
+        if (Rp.Dead || Rp.SendPrison)
+        {
+            return;
+        }
 
-            RoomUser TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(Params[1].ToString());
+        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(Params[1].ToString());
 
-            if (TargetRoomUser == null || TargetRoomUser.GetClient() == null || TargetRoomUser.GetClient().GetUser() == null)
-            {
-                return;
-            }
+        if (TargetRoomUser == null || TargetRoomUser.GetClient() == null || TargetRoomUser.GetClient().GetUser() == null)
+        {
+            return;
+        }
 
-            if (!int.TryParse(Params[2].ToString(), out int NumberMoney))
-            {
-                return;
-            }
+        if (!int.TryParse(Params[2].ToString(), out var NumberMoney))
+        {
+            return;
+        }
 
-            if (NumberMoney <= 0)
-            {
-                return;
-            }
+        if (NumberMoney <= 0)
+        {
+            return;
+        }
 
-            RolePlayer RpTwo = TargetRoomUser.Roleplayer;
-            if (RpTwo == null)
-            {
-                return;
-            }
+        var RpTwo = TargetRoomUser.Roleplayer;
+        if (RpTwo == null)
+        {
+            return;
+        }
 
-            if (TargetRoomUser.GetClient().GetUser().Id == Session.GetUser().Id)
-            {
-                return;
-            }
+        if (TargetRoomUser.GetClient().GetUser().Id == session.GetUser().Id)
+        {
+            return;
+        }
 
-            if (RpTwo.Dead || RpTwo.SendPrison)
-            {
-                return;
-            }
+        if (RpTwo.Dead || RpTwo.SendPrison)
+        {
+            return;
+        }
 
-            if (Rp.Money < NumberMoney)
-            {
-                return;
-            }
+        if (Rp.Money < NumberMoney)
+        {
+            return;
+        }
 
-            if (!((Math.Abs((TargetRoomUser.X - UserRoom.X)) >= 2) || (Math.Abs((TargetRoomUser.Y - UserRoom.Y)) >= 2)))
-            {
-                Rp.Money -= NumberMoney;
-                RpTwo.Money += NumberMoney;
+        if (!((Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2) || (Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2)))
+        {
+            Rp.Money -= NumberMoney;
+            RpTwo.Money += NumberMoney;
 
-                Rp.SendUpdate();
-                RpTwo.SendUpdate();
+            Rp.SendUpdate();
+            RpTwo.SendUpdate();
 
-                TargetRoomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.givemoney.receive", TargetRoomUser.GetClient().Langue), NumberMoney, UserRoom.GetUsername()));
+            TargetRoomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.givemoney.receive", TargetRoomUser.GetClient().Langue), NumberMoney, UserRoom.GetUsername()));
 
-                Session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.givemoney.send", Session.Langue), NumberMoney, TargetRoomUser.GetUsername()));
-                UserRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.givemoney.send.chat", Session.Langue), TargetRoomUser.GetUsername()), 0, true);
-            }
+            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.givemoney.send", session.Langue), NumberMoney, TargetRoomUser.GetUsername()));
+            UserRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.givemoney.send.chat", session.Langue), TargetRoomUser.GetUsername()), 0, true);
         }
     }
 }

@@ -1,39 +1,37 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.Games;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorBanzaiScoreCounter : FurniInteractor
 {
-    public class InteractorBanzaiScoreCounter : FurniInteractor
+    public override void OnPlace(GameClient session, Item item)
     {
-        public override void OnPlace(GameClient Session, Item Item)
+        if (item.Team == TeamType.NONE)
         {
-            if (Item.Team == TeamType.NONE)
-            {
-                return;
-            }
-
-            Item.ExtraData = Item.GetRoom().GetGameManager().Points[(int)Item.Team].ToString();
-            Item.UpdateState(false, true);
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        item.ExtraData = item.GetRoom().GetGameManager().Points[(int)item.Team].ToString();
+        item.UpdateState(false, true);
+    }
+
+    public override void OnRemove(GameClient session, Item item)
+    {
+    }
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (!userHasRights)
         {
+            return;
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
-        {
-            if (!UserHasRights)
-            {
-                return;
-            }
+        item.GetRoom().GetGameManager().Points[(int)item.Team] = 0;
+        item.ExtraData = "0";
+        item.UpdateState();
+    }
 
-            Item.GetRoom().GetGameManager().Points[(int)Item.Team] = 0;
-            Item.ExtraData = "0";
-            Item.UpdateState();
-        }
-
-        public override void OnTick(Item item)
-        {
-        }
+    public override void OnTick(Item item)
+    {
     }
 }

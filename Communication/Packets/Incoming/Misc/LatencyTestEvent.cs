@@ -1,12 +1,10 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Misc;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class LatencyTestEvent : IPacketEvent
 {
-    internal class LatencyTestEvent : IPacketEvent
-    {
-        public double Delay => 0;
+    public double Delay => 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet) => Session.SendPacket(new LatencyResponseComposer(Packet.PopInt()));
-    }
+    public void Parse(GameClient session, ClientPacket Packet) => session.SendPacket(new LatencyResponseComposer(Packet.PopInt()));
 }

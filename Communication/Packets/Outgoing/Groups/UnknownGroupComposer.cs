@@ -1,12 +1,11 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Groups
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Groups;
+
+internal class UnknownGroupComposer : ServerPacket
 {
-    internal class UnknownGroupComposer : ServerPacket
+    public UnknownGroupComposer(int groupId, int userId)
+        : base(ServerPacketHeader.GROUP_MEMBERS_REFRESH)
     {
-        public UnknownGroupComposer(int groupId, int userId)
-            : base(ServerPacketHeader.GROUP_MEMBERS_REFRESH)
-        {
-            this.WriteInteger(groupId);
-            this.WriteInteger(userId);
-        }
+        this.WriteInteger(groupId);
+        this.WriteInteger(userId);
     }
 }

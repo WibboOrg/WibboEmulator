@@ -1,43 +1,41 @@
-﻿using WibboEmulator.Games.Items;
+namespace WibboEmulator.Games.Catalog;
+using WibboEmulator.Games.Items;
 
-namespace WibboEmulator.Games.Catalog
+public class CatalogItem
 {
-    public class CatalogItem
-    {
-        public int Id;
-        public int ItemId;
-        public ItemData Data;
-        public int Amount;
-        public int CostCredits;
-        public bool HaveOffer;
-        public bool IsLimited;
-        public string Name;
-        public int PageID;
-        public int CostDuckets;
-        public int LimitedEditionStack;
-        public int LimitedEditionSells;
-        public int CostWibboPoints;
-        public int CostLimitCoins;
-        public string Badge;
+    public int Id { get; private set; }
+    public int ItemId { get; private set; }
+    public ItemData Data { get; private set; }
+    public int Amount { get; private set; }
+    public int CostCredits { get; private set; }
+    public bool HaveOffer { get; private set; }
+    public bool IsLimited { get; private set; }
+    public string Name { get; private set; }
+    public int PageID { get; private set; }
+    public int CostDuckets { get; private set; }
+    public int LimitedEditionStack { get; private set; }
+    public int LimitedEditionSells;
+    public int CostWibboPoints { get; private set; }
+    public int CostLimitCoins { get; private set; }
+    public string Badge { get; private set; }
 
-        public CatalogItem(int Id, int ItemId, ItemData Data, string CatalogName, int PageId, int CostCredits, int CostPixels,
-            int CostWibboPoints, int CostLimitCoins, int Amount, int LimitedEditionSells, int LimitedEditionStack, bool HaveOffer, string Badge)
-        {
-            this.Id = Id;
-            this.Name = CatalogName;
-            this.ItemId = ItemId;
-            this.Data = Data;
-            this.PageID = PageId;
-            this.CostCredits = CostCredits;
-            this.CostDuckets = CostPixels;
-            this.CostWibboPoints = CostWibboPoints;
-            this.CostLimitCoins = CostLimitCoins;
-            this.Amount = Amount;
-            this.LimitedEditionSells = LimitedEditionSells;
-            this.LimitedEditionStack = LimitedEditionStack;
-            this.IsLimited = (LimitedEditionStack > 0);
-            this.HaveOffer = HaveOffer;
-            this.Badge = Badge;
-        }
+    public CatalogItem(int id, int itemId, ItemData data, string catalogName, int pageId, int costCredits, int costPixels,
+        int costWibboPoints, int costLimitCoins, int amount, int limitedEditionSells, int limitedEditionStack, bool haveOffer, string badge)
+    {
+        this.Id = id;
+        this.Name = catalogName;
+        this.ItemId = itemId;
+        this.Data = data;
+        this.PageID = pageId;
+        this.CostCredits = costCredits;
+        this.CostDuckets = costPixels;
+        this.CostWibboPoints = costWibboPoints;
+        this.CostLimitCoins = costLimitCoins;
+        this.Amount = amount;
+        this.LimitedEditionSells = limitedEditionSells;
+        this.LimitedEditionStack = limitedEditionStack;
+        this.IsLimited = limitedEditionStack > 0;
+        this.HaveOffer = haveOffer;
+        this.Badge = badge;
     }
 }

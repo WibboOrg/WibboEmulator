@@ -1,46 +1,42 @@
-﻿using System.Data;
+namespace WibboEmulator.Games.Catalog.Utilities;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.GameClients.Inventory.Bots;
+using WibboEmulator.Games.Users.Inventory.Bots;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.AI;
 
-namespace WibboEmulator.Games.Catalog.Utilities
+public static class BotUtility
 {
-    public static class BotUtility
+    public static Bot CreateBot(ItemData data, int ownerId)
     {
-        public static Bot CreateBot(ItemData Data, int OwnerId)
+        if (!WibboEnvironment.GetGame().GetCatalog().TryGetBot(data.Id, out var cataBot))
         {
-            if (!WibboEnvironment.GetGame().GetCatalog().TryGetBot(Data.Id, out CatalogBot CataBot))
-            {
-                return null;
-            }
-
-            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            int Id = BotUserDao.InsertAndGetId(dbClient, OwnerId, CataBot.Name, CataBot.Motto, CataBot.Figure, CataBot.Gender);
-
-            DataRow BotData = BotUserDao.GetOne(dbClient, OwnerId, Id);
-
-            return new Bot(Convert.ToInt32(BotData["id"]), Convert.ToInt32(BotData["user_id"]), Convert.ToString(BotData["name"]), Convert.ToString(BotData["motto"]), Convert.ToString(BotData["look"]), Convert.ToString(BotData["gender"]), false, true, "", 0, false, 0, 0, 0);
+            return null;
         }
 
-        public static BotAIType GetAIFromString(string type)
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        var Id = BotUserDao.InsertAndGetId(dbClient, ownerId, cataBot.Name, cataBot.Motto, cataBot.Figure, cataBot.Gender);
+
+        var BotData = BotUserDao.GetOne(dbClient, ownerId, Id);
+
+        return new Bot(Convert.ToInt32(BotData["id"]), Convert.ToInt32(BotData["user_id"]), Convert.ToString(BotData["name"]), Convert.ToString(BotData["motto"]), Convert.ToString(BotData["look"]), Convert.ToString(BotData["gender"]), false, true, "", 0, false, 0, 0, 0);
+    }
+
+    public static BotAIType GetAIFromString(string type)
+    {
+        switch (type)
         {
-            switch (type)
-            {
-                case "pet":
-                    return BotAIType.Pet;
-                case "generic":
-                    return BotAIType.Generic;
-                case "copybot":
-                    return BotAIType.CopyBot;
-                case "roleplaybot":
-                    return BotAIType.RoleplayBot;
-                case "roleplaypet":
-                    return BotAIType.RoleplayPet;
-                default:
-                    return BotAIType.Generic;
-            }
+            case "pet":
+                return BotAIType.Pet;
+            case "generic":
+                return BotAIType.Generic;
+            case "copybot":
+                return BotAIType.CopyBot;
+            case "roleplaybot":
+                return BotAIType.RoleplayBot;
+            case "roleplaypet":
+                return BotAIType.RoleplayPet;
+            default:
+                return BotAIType.Generic;
         }
     }
 }

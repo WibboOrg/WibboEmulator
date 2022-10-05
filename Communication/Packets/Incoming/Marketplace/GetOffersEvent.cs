@@ -1,91 +1,88 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
+using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalog.Marketplace;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
+internal class GetOffersEvent : IPacketEvent
 {
-    internal class GetOffersEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var MinCost = Packet.PopInt();
+        var MaxCost = Packet.PopInt();
+        var SearchQuery = Packet.PopString();
+        var FilterMode = Packet.PopInt();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        DataTable table = null;
+
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            int MinCost = Packet.PopInt();
-            int MaxCost = Packet.PopInt();
-            string SearchQuery = Packet.PopString();
-            int FilterMode = Packet.PopInt();
+            table = CatalogMarketplaceOfferDao.GetAll(dbClient, SearchQuery, MinCost, MaxCost, FilterMode);
+        }
 
-            DataTable table = null;
-
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();
+        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Clear();
+        if (table != null)
+        {
+            foreach (DataRow row in table.Rows)
             {
-                table = CatalogMarketplaceOfferDao.GetAll(dbClient, SearchQuery, MinCost, MaxCost, FilterMode);
-            }
-
-            WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();
-            WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Clear();
-            if (table != null)
-            {
-                foreach (DataRow row in table.Rows)
+                if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Contains(Convert.ToInt32(row["offer_id"])))
                 {
-                    if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Contains(Convert.ToInt32(row["offer_id"])))
-                    {
-                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Add(Convert.ToInt32(row["offer_id"]));
-                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Add(new MarketOffer(Convert.ToInt32(row["offer_id"]), Convert.ToInt32(row["sprite_id"]), Convert.ToInt32(row["total_price"]), Convert.ToInt32(row["item_type"].ToString()), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"])));
-                    }
+                    WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItemKeys.Add(Convert.ToInt32(row["offer_id"]));
+                    WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Add(new MarketOffer(Convert.ToInt32(row["offer_id"]), Convert.ToInt32(row["sprite_id"]), Convert.ToInt32(row["total_price"]), Convert.ToInt32(row["item_type"].ToString()), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"])));
                 }
             }
+        }
 
-            Dictionary<int, MarketOffer> dictionary = new Dictionary<int, MarketOffer>();
-            Dictionary<int, int> dictionary2 = new Dictionary<int, int>();
+        var dictionary = new Dictionary<int, MarketOffer>();
+        var dictionary2 = new Dictionary<int, int>();
 
-            foreach (MarketOffer item in WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems)
+        foreach (var item in WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems)
+        {
+            if (dictionary.ContainsKey(item.SpriteId))
             {
-                if (dictionary.ContainsKey(item.SpriteId))
+                if (item.LimitedNumber > 0)
                 {
-                    if (item.LimitedNumber > 0)
+                    if (!dictionary.ContainsKey(item.OfferID))
                     {
-                        if (!dictionary.ContainsKey(item.OfferID))
-                        {
-                            dictionary.Add(item.OfferID, item);
-                        }
-
-                        if (!dictionary2.ContainsKey(item.OfferID))
-                        {
-                            dictionary2.Add(item.OfferID, 1);
-                        }
+                        dictionary.Add(item.OfferID, item);
                     }
-                    else
-                    {
-                        if (dictionary[item.SpriteId].TotalPrice > item.TotalPrice)
-                        {
-                            dictionary.Remove(item.SpriteId);
-                            dictionary.Add(item.SpriteId, item);
-                        }
 
-                        int num = dictionary2[item.SpriteId];
-                        dictionary2.Remove(item.SpriteId);
-                        dictionary2.Add(item.SpriteId, num + 1);
+                    if (!dictionary2.ContainsKey(item.OfferID))
+                    {
+                        dictionary2.Add(item.OfferID, 1);
                     }
                 }
                 else
                 {
-                    if (!dictionary.ContainsKey(item.SpriteId))
+                    if (dictionary[item.SpriteId].TotalPrice > item.TotalPrice)
                     {
+                        dictionary.Remove(item.SpriteId);
                         dictionary.Add(item.SpriteId, item);
                     }
 
-                    if (!dictionary2.ContainsKey(item.SpriteId))
-                    {
-                        dictionary2.Add(item.SpriteId, 1);
-                    }
+                    var num = dictionary2[item.SpriteId];
+                    dictionary2.Remove(item.SpriteId);
+                    dictionary2.Add(item.SpriteId, num + 1);
                 }
             }
+            else
+            {
+                if (!dictionary.ContainsKey(item.SpriteId))
+                {
+                    dictionary.Add(item.SpriteId, item);
+                }
 
-            Session.SendPacket(new MarketPlaceOffersComposer(MinCost, MaxCost, dictionary, dictionary2));
+                if (!dictionary2.ContainsKey(item.SpriteId))
+                {
+                    dictionary2.Add(item.SpriteId, 1);
+                }
+            }
         }
+
+        session.SendPacket(new MarketPlaceOffersComposer(MinCost, MaxCost, dictionary, dictionary2));
     }
 }

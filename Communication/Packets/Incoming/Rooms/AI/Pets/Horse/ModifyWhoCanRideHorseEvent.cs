@@ -1,74 +1,71 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class ModifyWhoCanRideHorseEvent : IPacketEvent
 {
-    internal class ModifyWhoCanRideHorseEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!session.GetUser().InRoom)
         {
-            if (!Session.GetUser().InRoom)
-            {
-                return;
-            }
+            return;
+        }
 
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
-            {
-                return;
-            }
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var Room))
+        {
+            return;
+        }
 
-            int PetId = Packet.PopInt();
+        var PetId = Packet.PopInt();
 
-            if (!Room.GetRoomUserManager().TryGetPet(PetId, out RoomUser Pet))
-            {
-                return;
-            }
+        if (!Room.GetRoomUserManager().TryGetPet(PetId, out var Pet))
+        {
+            return;
+        }
 
-            if (Pet.PetData == null || Pet.PetData.OwnerId != Session.GetUser().Id || Pet.PetData.Type != 13)
-            {
-                return;
-            }
+        if (Pet.PetData == null || Pet.PetData.OwnerId != session.GetUser().Id || Pet.PetData.Type != 13)
+        {
+            return;
+        }
 
-            if (Pet.PetData.AnyoneCanRide)
-            {
-                Pet.PetData.AnyoneCanRide = false;
-            }
-            else
-            {
-                Pet.PetData.AnyoneCanRide = true;
-            }
+        if (Pet.PetData.AnyoneCanRide)
+        {
+            Pet.PetData.AnyoneCanRide = false;
+        }
+        else
+        {
+            Pet.PetData.AnyoneCanRide = true;
+        }
 
-            if (!Pet.PetData.AnyoneCanRide)
+        if (!Pet.PetData.AnyoneCanRide)
+        {
+            if (Pet.RidingHorse)
             {
-                if (Pet.RidingHorse)
+                Pet.RidingHorse = false;
+                var User = Room.GetRoomUserManager().GetRoomUserByVirtualId(Pet.HorseID);
+                if (User != null)
                 {
-                    Pet.RidingHorse = false;
-                    RoomUser User = Room.GetRoomUserManager().GetRoomUserByVirtualId(Pet.HorseID);
-                    if (User != null)
+                    if (Room.CheckRights(User.GetClient(), true))
                     {
-                        if (Room.CheckRights(User.GetClient(), true))
-                        {
-                            User.RidingHorse = false;
-                            User.HorseID = 0;
-                            User.ApplyEffect(-1);
-                            User.MoveTo(User.X + 1, User.Y + 1);
-                        }
+                        User.RidingHorse = false;
+                        User.HorseID = 0;
+                        User.ApplyEffect(-1);
+                        User.MoveTo(User.X + 1, User.Y + 1);
                     }
                 }
             }
-
-
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                BotPetDao.UpdateAnyoneRide(dbClient, PetId, Pet.PetData.AnyoneCanRide);
-            }
-
-            Room.SendPacket(new PetInformationComposer(Pet.PetData, Pet.RidingHorse));
         }
+
+
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        {
+            BotPetDao.UpdateAnyoneRide(dbClient, PetId, Pet.PetData.AnyoneCanRide);
+        }
+
+        Room.SendPacket(new PetInformationComposer(Pet.PetData, Pet.RidingHorse));
     }
 }

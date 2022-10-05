@@ -1,22 +1,20 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class OpenFlatConnectionEvent : IPacketEvent
 {
-    internal class OpenFlatConnectionEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session == null || session.GetUser() == null)
         {
-            if (Session == null || Session.GetUser() == null)
-            {
-                return;
-            }
-
-            int RoomId = Packet.PopInt();
-            string Password = Packet.PopString();
-
-            Session.GetUser().PrepareRoom(RoomId, Password);
+            return;
         }
+
+        var RoomId = Packet.PopInt();
+        var Password = Packet.PopString();
+
+        session.GetUser().PrepareRoom(RoomId, Password);
     }
 }

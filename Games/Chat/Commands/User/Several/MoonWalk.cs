@@ -1,32 +1,30 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class MoonWalk : IChatCommand
 {
-    internal class MoonWalk : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
         {
-            if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
-            {
-                return;
-            }
+            return;
+        }
 
-            if (UserRoom.InGame)
-            {
-                return;
-            }
+        if (UserRoom.InGame)
+        {
+            return;
+        }
 
-            UserRoom.MoonwalkEnabled = !UserRoom.MoonwalkEnabled;
-            if (UserRoom.MoonwalkEnabled)
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.true", Session.Langue));
-            }
-            else
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.false", Session.Langue));
-            }
+        UserRoom.MoonwalkEnabled = !UserRoom.MoonwalkEnabled;
+        if (UserRoom.MoonwalkEnabled)
+        {
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.true", session.Langue));
+        }
+        else
+        {
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.false", session.Langue));
         }
     }
 }

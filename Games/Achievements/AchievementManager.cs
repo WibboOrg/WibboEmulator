@@ -1,4 +1,5 @@
-﻿using System.Data;
+namespace WibboEmulator.Games.Achievements;
+using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
@@ -6,175 +7,170 @@ using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.GameClients.Achievements;
-using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Users.Achievements;
 
-namespace WibboEmulator.Games.Achievements
+public class AchievementManager
 {
-    public class AchievementManager
+    private readonly Dictionary<string, AchievementData> _achievements;
+
+    public AchievementManager() => this._achievements = new Dictionary<string, AchievementData>();
+
+    public void Init(IQueryAdapter dbClient)
     {
-        private readonly Dictionary<string, AchievementData> _achievements;
+        this._achievements.Clear();
 
-        public AchievementManager()
+        var table = EmulatorAchievementDao.GetAll(dbClient);
+        foreach (DataRow dataRow in table.Rows)
         {
-            this._achievements = new Dictionary<string, AchievementData>();
-        }
+            var Id = Convert.ToInt32(dataRow["id"]);
+            var Category = (string)dataRow["category"];
+            var GroupName = (string)dataRow["group_name"];
 
-        public void Init(IQueryAdapter dbClient)
-        {
-            this._achievements.Clear();
-
-            DataTable table = EmulatorAchievementDao.GetAll(dbClient);
-            foreach (DataRow dataRow in table.Rows)
+            if (!GroupName.StartsWith("ACH_"))
             {
-                int Id = Convert.ToInt32(dataRow["id"]);
-                string Category = (string)dataRow["category"];
-                string GroupName = (string)dataRow["group_name"];
+                GroupName = "ACH_" + GroupName;
+            }
 
-                if (!GroupName.StartsWith("ACH_"))
-                {
-                    GroupName = "ACH_" + GroupName;
-                }
-
-                AchievementLevel Level = new AchievementLevel(Convert.ToInt32(dataRow["level"]), Convert.ToInt32(dataRow["reward_pixels"]), Convert.ToInt32(dataRow["reward_points"]), Convert.ToInt32(dataRow["progress_needed"]));
-                if (!this._achievements.ContainsKey(GroupName))
-                {
-                    AchievementData achievement = new AchievementData(Id, GroupName, Category);
-                    achievement.AddLevel(Level);
-                    this._achievements.Add(GroupName, achievement);
-                }
-                else
-                {
-                    this._achievements[GroupName].AddLevel(Level);
-                }
+            var Level = new AchievementLevel(Convert.ToInt32(dataRow["level"]), Convert.ToInt32(dataRow["reward_pixels"]), Convert.ToInt32(dataRow["reward_points"]), Convert.ToInt32(dataRow["progress_needed"]));
+            if (!this._achievements.ContainsKey(GroupName))
+            {
+                var achievement = new AchievementData(Id, GroupName, Category);
+                achievement.AddLevel(Level);
+                this._achievements.Add(GroupName, achievement);
+            }
+            else
+            {
+                this._achievements[GroupName].AddLevel(Level);
             }
         }
+    }
 
-        public void GetList(GameClient Session) => Session.SendPacket(new AchievementsComposer(Session, this._achievements.Values.ToList()));
+    public void GetList(GameClient session) => session.SendPacket(new AchievementsComposer(session, this._achievements.Values.ToList()));
 
-        public bool ProgressAchievement(GameClient Session, string AchievementGroup, int ProgressAmount)
+    public bool ProgressAchievement(GameClient session, string AchievementGroup, int ProgressAmount)
+    {
+        if (!this._achievements.ContainsKey(AchievementGroup))
         {
-            if (!this._achievements.ContainsKey(AchievementGroup))
-            {
-                return false;
-            }
+            return false;
+        }
 
-            AchievementData AchievementData = this._achievements[AchievementGroup];
+        var AchievementData = this._achievements[AchievementGroup];
 
-            UserAchievement userData = Session.GetUser().GetAchievementComponent().GetAchievementData(AchievementGroup);
+        var userData = session.GetUser().GetAchievementComponent().GetAchievementData(AchievementGroup);
 
-            if (userData == null)
-            {
-                userData = new UserAchievement(AchievementGroup, 0, 0);
-                Session.GetUser().GetAchievementComponent().AddAchievement(userData);
-            }
+        if (userData == null)
+        {
+            userData = new UserAchievement(AchievementGroup, 0, 0);
+            session.GetUser().GetAchievementComponent().AddAchievement(userData);
+        }
 
-            int TotalLevels = AchievementData.Levels.Count;
+        var TotalLevels = AchievementData.Levels.Count;
 
-            if (userData != null && userData.Level == TotalLevels)
-            {
-                return false;
-            }
+        if (userData != null && userData.Level == TotalLevels)
+        {
+            return false;
+        }
 
-            int TargetLevel = (userData != null ? userData.Level + 1 : 1);
+        var TargetLevel = userData != null ? userData.Level + 1 : 1;
 
-            if (TargetLevel > TotalLevels)
-            {
-                TargetLevel = TotalLevels;
-            }
+        if (TargetLevel > TotalLevels)
+        {
+            TargetLevel = TotalLevels;
+        }
 
-            AchievementLevel TargetLevelData = AchievementData.Levels[TargetLevel];
+        var TargetLevelData = AchievementData.Levels[TargetLevel];
 
-            int NewProgress = (userData != null ? userData.Progress + ProgressAmount : ProgressAmount);
-            int NewLevel = (userData != null ? userData.Level : 0);
-            int NewTarget = NewLevel + 1;
+        var NewProgress = userData != null ? userData.Progress + ProgressAmount : ProgressAmount;
+        var NewLevel = userData != null ? userData.Level : 0;
+        var NewTarget = NewLevel + 1;
+
+        if (NewTarget > TotalLevels)
+        {
+            NewTarget = TotalLevels;
+        }
+
+        if (NewProgress >= TargetLevelData.Requirement)
+        {
+            NewLevel++;
+            NewTarget++;
+
+            var ProgressRemainder = NewProgress - TargetLevelData.Requirement;
+            NewProgress = 0;
+
+            session.GetUser().GetBadgeComponent().GiveBadge(AchievementGroup + TargetLevel, true);
+            session.SendPacket(new ReceiveBadgeComposer(AchievementGroup + TargetLevel));
 
             if (NewTarget > TotalLevels)
             {
                 NewTarget = TotalLevels;
             }
 
-            if (NewProgress >= TargetLevelData.Requirement)
+            session.GetUser().Duckets += TargetLevelData.RewardPixels;
+            session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().Duckets, 1));
+
+            session.SendPacket(new AchievementUnlockedComposer(AchievementData, TargetLevel, TargetLevelData.RewardPoints, TargetLevelData.RewardPixels));
+
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                NewLevel++;
-                NewTarget++;
-
-                int ProgressRemainder = NewProgress - TargetLevelData.Requirement;
-                NewProgress = 0;
-
-                Session.GetUser().GetBadgeComponent().GiveBadge(AchievementGroup + TargetLevel, true);
-                Session.SendPacket(new ReceiveBadgeComposer(AchievementGroup + TargetLevel));
-
-                if (NewTarget > TotalLevels)
-                {
-                    NewTarget = TotalLevels;
-                }
-
-                Session.GetUser().Duckets += TargetLevelData.RewardPixels;
-                Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().Duckets, 1));
-
-                Session.SendPacket(new AchievementUnlockedComposer(AchievementData, TargetLevel, TargetLevelData.RewardPoints, TargetLevelData.RewardPixels));
-
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    UserAchievementDao.Replace(dbClient, Session.GetUser().Id, NewLevel, NewProgress, AchievementGroup);
-                    UserStatsDao.UpdateAchievementScore(dbClient, Session.GetUser().Id, TargetLevelData.RewardPoints);
-                }
-
-                if (userData != null)
-                {
-                    userData.Level = NewLevel;
-                    userData.Progress = NewProgress;
-                }
-
-                Session.GetUser().AchievementPoints += TargetLevelData.RewardPoints;
-                Session.GetUser().Duckets += TargetLevelData.RewardPixels;
-                Session.SendPacket(new ActivityPointNotificationComposer(Session.GetUser().Duckets, 1));
-                Session.SendPacket(new AchievementScoreComposer(Session.GetUser().AchievementPoints));
-
-
-                if (Session.GetUser().CurrentRoom != null)
-                {
-                    RoomUser roomUserByUserId = Session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-                    if (roomUserByUserId != null)
-                    {
-                        Session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
-                        Session.GetUser().CurrentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
-                    }
-                }
-
-
-                AchievementLevel NewLevelData = AchievementData.Levels[NewTarget];
-                Session.SendPacket(new AchievementProgressedComposer(AchievementData, NewTarget, NewLevelData, TotalLevels, Session.GetUser().GetAchievementComponent().GetAchievementData(AchievementGroup)));
-
-                return true;
-            }
-            else
-            {
-                if (userData != null)
-                {
-                    userData.Level = NewLevel;
-                    userData.Progress = NewProgress;
-                }
-
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                    UserAchievementDao.Replace(dbClient, Session.GetUser().Id, NewLevel, NewProgress, AchievementGroup);
-
-                Session.SendPacket(new AchievementProgressedComposer(AchievementData, TargetLevel, TargetLevelData,
-                TotalLevels, Session.GetUser().GetAchievementComponent().GetAchievementData(AchievementGroup)));
+                UserAchievementDao.Replace(dbClient, session.GetUser().Id, NewLevel, NewProgress, AchievementGroup);
+                UserStatsDao.UpdateAchievementScore(dbClient, session.GetUser().Id, TargetLevelData.RewardPoints);
             }
 
-            return false;
+            if (userData != null)
+            {
+                userData.Level = NewLevel;
+                userData.Progress = NewProgress;
+            }
+
+            session.GetUser().AchievementPoints += TargetLevelData.RewardPoints;
+            session.GetUser().Duckets += TargetLevelData.RewardPixels;
+            session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().Duckets, 1));
+            session.SendPacket(new AchievementScoreComposer(session.GetUser().AchievementPoints));
+
+
+            if (session.GetUser().CurrentRoom != null)
+            {
+                var roomUserByUserId = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+                if (roomUserByUserId != null)
+                {
+                    session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
+                    session.GetUser().CurrentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
+                }
+            }
+
+
+            var NewLevelData = AchievementData.Levels[NewTarget];
+            session.SendPacket(new AchievementProgressedComposer(AchievementData, NewTarget, NewLevelData, TotalLevels, session.GetUser().GetAchievementComponent().GetAchievementData(AchievementGroup)));
+
+            return true;
         }
-
-        public AchievementData GetAchievement(string AchievementGroup)
+        else
         {
-            if (this._achievements.ContainsKey(AchievementGroup))
+            if (userData != null)
             {
-                return this._achievements[AchievementGroup];
+                userData.Level = NewLevel;
+                userData.Progress = NewProgress;
             }
 
-            return null;
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            {
+                UserAchievementDao.Replace(dbClient, session.GetUser().Id, NewLevel, NewProgress, AchievementGroup);
+            }
+
+            session.SendPacket(new AchievementProgressedComposer(AchievementData, TargetLevel, TargetLevelData,
+            TotalLevels, session.GetUser().GetAchievementComponent().GetAchievementData(AchievementGroup)));
         }
+
+        return false;
+    }
+
+    public AchievementData GetAchievement(string AchievementGroup)
+    {
+        if (this._achievements.ContainsKey(AchievementGroup))
+        {
+            return this._achievements[AchievementGroup];
+        }
+
+        return null;
     }
 }

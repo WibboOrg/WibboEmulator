@@ -1,31 +1,29 @@
-using WibboEmulator.Games.GameClients.Badges;
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
+using WibboEmulator.Games.Users.Badges;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges
+internal class BadgesComposer : ServerPacket
 {
-    internal class BadgesComposer : ServerPacket
+    public BadgesComposer(Dictionary<string, Badge> badges)
+        : base(ServerPacketHeader.USER_BADGES)
     {
-        public BadgesComposer(Dictionary<string, Badge> badges)
-            : base(ServerPacketHeader.USER_BADGES)
+        var list = new List<Badge>();
+
+        this.WriteInteger(badges.Count);
+        foreach (var badge in badges.Values)
         {
-            List<Badge> list = new List<Badge>();
-
-            WriteInteger(badges.Count);
-            foreach (Badge badge in badges.Values)
+            this.WriteInteger(0);
+            this.WriteString(badge.Code);
+            if (badge.Slot > 0)
             {
-                WriteInteger(0);
-                WriteString(badge.Code);
-                if (badge.Slot > 0)
-                {
-                    list.Add(badge);
-                }
+                list.Add(badge);
             }
+        }
 
-            WriteInteger(list.Count);
-            foreach (Badge badge in list)
-            {
-                WriteInteger(badge.Slot);
-                WriteString(badge.Code);
-            }
+        this.WriteInteger(list.Count);
+        foreach (var badge in list)
+        {
+            this.WriteInteger(badge.Slot);
+            this.WriteString(badge.Code);
         }
     }
 }

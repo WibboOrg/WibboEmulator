@@ -1,21 +1,19 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class DisabledAutoGame : IChatCommand
 {
-    internal class DisabledAutoGame : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (!WibboEnvironment.GetGame().GetAnimationManager().ToggleForceDisabled())
         {
-            if (!WibboEnvironment.GetGame().GetAnimationManager().ToggleForceDisabled())
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.autogame.false", Session.Langue));
-            }
-            else
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.autogame.true", Session.Langue));
-            }
-            return;
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.autogame.false", session.Langue));
         }
+        else
+        {
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.autogame.true", session.Langue));
+        }
+        return;
     }
 }

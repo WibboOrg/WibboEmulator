@@ -1,15 +1,13 @@
-﻿using WibboEmulator.Games.GameClients;
+namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Games.Items.Interactors
+public abstract class FurniInteractor
 {
-    public abstract class FurniInteractor
-    {
-        public abstract void OnPlace(GameClient Session, Item Item);
+    public abstract void OnPlace(GameClient session, Item item);
 
-        public abstract void OnRemove(GameClient Session, Item Item);
+    public abstract void OnRemove(GameClient session, Item item);
 
-        public abstract void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse);
+    public abstract void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse);
 
-        public abstract void OnTick(Item item);
-    }
+    public abstract void OnTick(Item item);
 }

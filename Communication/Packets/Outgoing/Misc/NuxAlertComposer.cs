@@ -1,11 +1,7 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Misc
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Misc;
+
+internal class NuxAlertComposer : ServerPacket
 {
-    internal class NuxAlertComposer : ServerPacket
-    {
-        public NuxAlertComposer(int type)
-            : base(ServerPacketHeader.NuxAlertComposer)
-        {
-            this.WriteInteger(type);
-        }
-    }
+    public NuxAlertComposer(int type)
+        : base(ServerPacketHeader.NUX_ALERT_COMPOSER) => this.WriteInteger(type);
 }

@@ -1,56 +1,54 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Bots;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class OpenBotActionEvent : IPacketEvent
 {
-    internal class OpenBotActionEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!session.GetUser().InRoom)
         {
-            if (!Session.GetUser().InRoom)
-            {
-                return;
-            }
+            return;
+        }
 
-            int BotId = Packet.PopInt();
-            int ActionId = Packet.PopInt();
+        var BotId = Packet.PopInt();
+        var ActionId = Packet.PopInt();
 
-            if (BotId <= 0)
-            {
-                return;
-            }
+        if (BotId <= 0)
+        {
+            return;
+        }
 
-            Room Room = Session.GetUser().CurrentRoom;
-            if (Room == null || !Room.CheckRights(Session))
-            {
-                return;
-            }
+        var Room = session.GetUser().CurrentRoom;
+        if (Room == null || !Room.CheckRights(session))
+        {
+            return;
+        }
 
-            if (!Room.GetRoomUserManager().TryGetBot(BotId, out RoomUser BotUser))
-            {
-                return;
-            }
+        if (!Room.GetRoomUserManager().TryGetBot(BotId, out var BotUser))
+        {
+            return;
+        }
 
-            string BotSpeech = "";
-            foreach (string Speech in BotUser.BotData.RandomSpeech.ToList())
-            {
-                BotSpeech += (Speech + "\n");
-            }
+        var BotSpeech = "";
+        foreach (var Speech in BotUser.BotData.RandomSpeech.ToList())
+        {
+            BotSpeech += Speech + "\n";
+        }
 
-            BotSpeech += ";#;";
-            BotSpeech += BotUser.BotData.AutomaticChat;
-            BotSpeech += ";#;";
-            BotSpeech += BotUser.BotData.SpeakingInterval;
-            BotSpeech += ";#;";
-            BotSpeech += BotUser.BotData.MixSentences;
+        BotSpeech += ";#;";
+        BotSpeech += BotUser.BotData.AutomaticChat;
+        BotSpeech += ";#;";
+        BotSpeech += BotUser.BotData.SpeakingInterval;
+        BotSpeech += ";#;";
+        BotSpeech += BotUser.BotData.MixSentences;
 
-            if (ActionId == 2 || ActionId == 5)
-            {
-                Session.SendPacket(new OpenBotActionComposer(BotUser, ActionId, BotSpeech));
-            }
+        if (ActionId is 2 or 5)
+        {
+            session.SendPacket(new OpenBotActionComposer(BotUser, ActionId, BotSpeech));
         }
     }
 }

@@ -1,30 +1,27 @@
-using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.GameClients.Badges;
+namespace WibboEmulator.Communication.Packets.Outgoing.Users;
+using WibboEmulator.Games.Users;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Users
+internal class UserBadgesComposer : ServerPacket
 {
-    internal class UserBadgesComposer : ServerPacket
+    public UserBadgesComposer(User user)
+        : base(ServerPacketHeader.USER_BADGES_CURRENT)
     {
-        public UserBadgesComposer(User User)
-            : base(ServerPacketHeader.USER_BADGES_CURRENT)
+        this.WriteInteger(user.Id);
+        this.WriteInteger(user.GetBadgeComponent().EquippedCount);
+
+        var badgeCount = 0;
+        foreach (var badge in user.GetBadgeComponent().GetBadges().ToList())
         {
-            this.WriteInteger(User.Id);
-            this.WriteInteger(User.GetBadgeComponent().EquippedCount);
-
-            int BadgeCount = 0;
-            foreach (Badge badge in User.GetBadgeComponent().GetBadges().ToList())
+            if (badge.Slot > 0)
             {
-                if (badge.Slot > 0)
+                badgeCount++;
+                if (badgeCount > 5)
                 {
-                    BadgeCount++;
-                    if (BadgeCount > 5)
-                    {
-                        break;
-                    }
-
-                    this.WriteInteger(badge.Slot);
-                    this.WriteString(badge.Code);
+                    break;
                 }
+
+                this.WriteInteger(badge.Slot);
+                this.WriteString(badge.Code);
             }
         }
     }

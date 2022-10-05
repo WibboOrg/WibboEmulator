@@ -1,18 +1,16 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Campaign;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Campaign;
+using WibboEmulator.Communication.Packets.Outgoing.Campaign;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Campaign
+internal class OpenCampaignCalendarDoorEvent : IPacketEvent
 {
-    internal class OpenCampaignCalendarDoorEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var campaignName = Packet.PopString();
+        var campaingnId = Packet.PopInt();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
-        {
-            string campaignName = Packet.PopString();
-            int campaingnId = Packet.PopInt();
-
-            Session.SendPacket(new CampaignCalendarDoorOpenedComposer(true, "", "/album1584/LOL.gif", ""));
-        }
+        session.SendPacket(new CampaignCalendarDoorOpenedComposer(true, "", "/album1584/LOL.gif", ""));
     }
 }

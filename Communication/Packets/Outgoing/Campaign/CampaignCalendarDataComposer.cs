@@ -1,22 +1,25 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Campaign
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Campaign;
+
+internal class CampaignCalendarDataComposer : ServerPacket
 {
-    internal class CampaignCalendarDataComposer : ServerPacket
+    public CampaignCalendarDataComposer(string campaignName, string campaignImage, int currentDay, int campaignDays, List<int> openedDays, List<int> missedDays)
+        : base(ServerPacketHeader.CAMPAIGN_CALENDAR_DATA)
     {
-        public CampaignCalendarDataComposer(string campaignName, string campaignImage, int currentDay, int campaignDays, List<int> openedDays, List<int> missedDays)
-            : base(ServerPacketHeader.CAMPAIGN_CALENDAR_DATA)
+        this.WriteString(campaignName);
+        this.WriteString(campaignImage);
+        this.WriteInteger(currentDay);
+        this.WriteInteger(campaignDays);
+
+        this.WriteInteger(openedDays.Count);
+        foreach (var openedDay in openedDays)
         {
-            this.WriteString(campaignName);
-            this.WriteString(campaignImage);
-            this.WriteInteger(currentDay);
-            this.WriteInteger(campaignDays);
+            this.WriteInteger(openedDay);
+        }
 
-            this.WriteInteger(openedDays.Count);
-            foreach (int openedDay in openedDays)
-                this.WriteInteger(openedDay);
-
-            this.WriteInteger(missedDays.Count);
-            foreach (int missedDay in missedDays)
-                this.WriteInteger(missedDay);
+        this.WriteInteger(missedDays.Count);
+        foreach (var missedDay in missedDays)
+        {
+            this.WriteInteger(missedDay);
         }
     }
 }

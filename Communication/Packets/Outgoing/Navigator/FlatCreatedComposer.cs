@@ -1,12 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
+
+internal class FlatCreatedComposer : ServerPacket
 {
-    internal class FlatCreatedComposer : ServerPacket
+    public FlatCreatedComposer(int roomID, string roomName)
+        : base(ServerPacketHeader.ROOM_CREATED)
     {
-        public FlatCreatedComposer(int roomID, string roomName)
-            : base(ServerPacketHeader.ROOM_CREATED)
-        {
-            this.WriteInteger(roomID);
-            this.WriteString(roomName);
-        }
+        this.WriteInteger(roomID);
+        this.WriteString(roomName);
     }
 }

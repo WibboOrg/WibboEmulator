@@ -1,12 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading
+namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading;
+
+internal class TradingAcceptComposer : ServerPacket
 {
-    internal class TradingAcceptComposer : ServerPacket
+    public TradingAcceptComposer(int userId, int statut)
+        : base(ServerPacketHeader.TRADE_ACCEPTED)
     {
-        public TradingAcceptComposer(int userId, int statut)
-            : base(ServerPacketHeader.TRADE_ACCEPTED)
-        {
-            this.WriteInteger(userId);
-            this.WriteInteger(statut);
-        }
+        this.WriteInteger(userId);
+        this.WriteInteger(statut);
     }
 }

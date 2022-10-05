@@ -1,26 +1,24 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class AllWarp : IChatCommand
 {
-    internal class AllWarp : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        var MessageList = new ServerPacketList();
+
+        foreach (var user in Room.GetRoomUserManager().GetUserList().ToList())
         {
-            ServerPacketList MessageList = new ServerPacketList();
-
-            foreach (RoomUser user in Room.GetRoomUserManager().GetUserList().ToList())
+            if (user == null || user.IsBot)
             {
-                if (user == null || user.IsBot)
-                {
-                    continue;
-                }
-
-                MessageList.Add(Room.GetRoomItemHandler().TeleportUser(user, UserRoom.Coordinate, 0, Room.GetGameMap().SqAbsoluteHeight(UserRoom.X, UserRoom.Y)));
+                continue;
             }
 
-            Room.SendMessage(MessageList);
+            MessageList.Add(Room.GetRoomItemHandler().TeleportUser(user, UserRoom.Coordinate, 0, Room.GetGameMap().SqAbsoluteHeight(UserRoom.X, UserRoom.Y)));
         }
+
+        Room.SendMessage(MessageList);
     }
 }

@@ -1,32 +1,37 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds;
+
+internal class WiredFurniTriggerComposer : ServerPacket
 {
-    internal class WiredFurniTriggerComposer : ServerPacket
+    public WiredFurniTriggerComposer(bool stuffTypeSelectionEnabled, int furniLimit, List<int> stuffIds, int stuffTypeId, int id, string stringParam,
+        List<int> intParams, int stuffTypeSelectionCode, int type, List<int> conflictingActions)
+        : base(ServerPacketHeader.WIRED_TRIGGER)
     {
-        public WiredFurniTriggerComposer(bool stuffTypeSelectionEnabled, int furniLimit, List<int> stuffIds, int stuffTypeId, int id, string stringParam,
-            List<int> intParams, int stuffTypeSelectionCode, int type, List<int> conflictingActions)
-            : base(ServerPacketHeader.WIRED_TRIGGER)
+        this.WriteBoolean(stuffTypeSelectionEnabled);
+        this.WriteInteger(furniLimit);
+
+        this.WriteInteger(stuffIds.Count);
+        foreach (var stuffId in stuffIds)
         {
-            WriteBoolean(stuffTypeSelectionEnabled);
-            WriteInteger(furniLimit);
+            this.WriteInteger(stuffId);
+        }
 
-            WriteInteger(stuffIds.Count);
-            foreach (int stuffId in stuffIds)
-                WriteInteger(stuffId);
+        this.WriteInteger(stuffTypeId);
+        this.WriteInteger(id);
+        this.WriteString(stringParam);
 
-            WriteInteger(stuffTypeId);
-            WriteInteger(id);
-            WriteString(stringParam);
+        this.WriteInteger(intParams.Count);
+        foreach (var intParam in intParams)
+        {
+            this.WriteInteger(intParam);
+        }
 
-            WriteInteger(intParams.Count);
-            foreach (int intParam in intParams)
-                WriteInteger(intParam);
+        this.WriteInteger(stuffTypeSelectionCode);
+        this.WriteInteger(type);
 
-            WriteInteger(stuffTypeSelectionCode);
-            WriteInteger(type);
-
-            WriteInteger(conflictingActions.Count);
-            foreach (int conflictingAction in conflictingActions)
-                WriteInteger(conflictingAction);
+        this.WriteInteger(conflictingActions.Count);
+        foreach (var conflictingAction in conflictingActions)
+        {
+            this.WriteInteger(conflictingAction);
         }
     }
 }

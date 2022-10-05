@@ -1,22 +1,20 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class DisableWhispers : IChatCommand
 {
-    internal class DisableWhispers : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (session.GetUser().ViewMurmur)
         {
-            if (Session.GetUser().ViewMurmur)
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.murmur.true", Session.Langue));
-            }
-            else
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.murmur.false", Session.Langue));
-            }
-
-            Session.GetUser().ViewMurmur = !Session.GetUser().ViewMurmur;
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.murmur.true", session.Langue));
         }
+        else
+        {
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.murmur.false", session.Langue));
+        }
+
+        session.GetUser().ViewMurmur = !session.GetUser().ViewMurmur;
     }
 }

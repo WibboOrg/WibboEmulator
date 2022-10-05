@@ -1,20 +1,20 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class RoomAlert : IChatCommand
 {
-    internal class RoomAlert : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        var Message = CommandManager.MergeParams(Params, 1);
+        foreach (var RoomUser in Room.GetRoomUserManager().GetRoomUsers())
         {
-            string Message = CommandManager.MergeParams(Params, 1);
-            foreach (RoomUser RoomUser in Room.GetRoomUserManager().GetRoomUsers())
+            if (RoomUser == null || RoomUser.GetClient() == null || session.GetUser().Id == RoomUser.UserId)
             {
-                if (RoomUser == null || RoomUser.GetClient() == null || Session.GetUser().Id == RoomUser.UserId)
-                    continue;
-
-                RoomUser.GetClient().SendNotification(Message);
+                continue;
             }
+
+            RoomUser.GetClient().SendNotification(Message);
         }
     }
 }

@@ -1,26 +1,24 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorBlob : FurniInteractor
 {
-    public class InteractorBlob : FurniInteractor
+    public override void OnPlace(GameClient session, Item item) => item.ExtraData = "1";
+
+    public override void OnRemove(GameClient session, Item item) => item.ExtraData = "1";
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        public override void OnPlace(GameClient Session, Item Item) => Item.ExtraData = "1";
-
-        public override void OnRemove(GameClient Session, Item Item) => Item.ExtraData = "1";
-
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        if (!userHasRights || item.ExtraData == "0")
         {
-            if (!UserHasRights || Item.ExtraData == "0")
-            {
-                return;
-            }
-
-            Item.ExtraData = "0";
-            Item.UpdateState();
+            return;
         }
 
-        public override void OnTick(Item item)
-        {
-        }
+        item.ExtraData = "0";
+        item.UpdateState();
+    }
+
+    public override void OnTick(Item item)
+    {
     }
 }

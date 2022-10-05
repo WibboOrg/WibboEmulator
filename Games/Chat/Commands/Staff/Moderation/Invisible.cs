@@ -1,25 +1,23 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class Invisible : IChatCommand
 {
-    internal class Invisible : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (session.GetUser().SpectatorMode)
         {
-            if (Session.GetUser().SpectatorMode)
-            {
-                Session.GetUser().SpectatorMode = false;
-                Session.GetUser().HideInRoom = false;
-            }
-            else
-            {
-                Session.GetUser().SpectatorMode = true;
-                Session.GetUser().HideInRoom = true;
-            }
-
-            Session.SendPacket(new GetGuestRoomResultComposer(Session, Room.RoomData, false, true));
+            session.GetUser().SpectatorMode = false;
+            session.GetUser().HideInRoom = false;
         }
+        else
+        {
+            session.GetUser().SpectatorMode = true;
+            session.GetUser().HideInRoom = true;
+        }
+
+        session.SendPacket(new GetGuestRoomResultComposer(session, Room.RoomData, false, true));
     }
 }

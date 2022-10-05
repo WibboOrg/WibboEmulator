@@ -1,21 +1,13 @@
-﻿namespace WibboEmulator.Core.FigureData.Types
+namespace WibboEmulator.Core.FigureData.Types;
+
+public class Palette
 {
-    public class Palette
+    public int Id { get; set; }
+    public Dictionary<int, Color> Colors { get; set; }
+
+    public Palette(int id)
     {
-        public int Id;
-
-        private Dictionary<int, Color> _colors;
-
-        public Palette(int id)
-        {
-            this.Id = id;
-            this._colors = new Dictionary<int, Color>();
-        }
-
-        public Dictionary<int, Color> Colors
-        {
-            get => this._colors;
-            set => this._colors = value;
-        }
+        this.Id = id;
+        this.Colors = new Dictionary<int, Color>();
     }
 }

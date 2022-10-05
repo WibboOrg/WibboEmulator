@@ -1,7 +1,6 @@
-﻿namespace WibboEmulator.Core.FigureData.JsonObject
+﻿namespace WibboEmulator.Core.FigureData.JsonObject;
+
+public class FigureDataHiddenLayer
 {
-    public class FigureDataHiddenLayer
-    {
-        public string PartType { get; set; }
-    }
+    public string PartType { get; set; }
 }

@@ -1,9 +1,8 @@
-﻿namespace WibboEmulator.Games.Moderation
+﻿namespace WibboEmulator.Games.Moderation;
+
+public enum ModerationBanType
 {
-    public enum ModerationBanType
-    {
-        IP,
-        MACHINE,
-        USER
-    }
+    IP,
+    MACHINE,
+    USER
 }

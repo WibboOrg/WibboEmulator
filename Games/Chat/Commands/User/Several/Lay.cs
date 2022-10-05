@@ -1,50 +1,48 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class Lay : IChatCommand
 {
-    internal class Lay : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (UserRoom.ContainStatus("lay") || UserRoom.ContainStatus("sit"))
         {
-            if (UserRoom.ContainStatus("lay") || UserRoom.ContainStatus("sit"))
-            {
-                return;
-            }
+            return;
+        }
 
-            if (UserRoom.RotBody % 2 == 0 || UserRoom.IsTransf)
+        if (UserRoom.RotBody % 2 == 0 || UserRoom.IsTransf)
+        {
+            if (UserRoom.RotBody == 4 || UserRoom.RotBody == 0 || UserRoom.IsTransf)
             {
-                if (UserRoom.RotBody == 4 || UserRoom.RotBody == 0 || UserRoom.IsTransf)
+                if (Room.GetGameMap().CanWalk(UserRoom.X, UserRoom.Y + 1))
                 {
-                    if (Room.GetGameMap().CanWalk(UserRoom.X, UserRoom.Y + 1))
-                    {
-                        UserRoom.RotBody = 0;
-                    }
-                    else
-                    {
-                        return;
-                    }
+                    UserRoom.RotBody = 0;
                 }
                 else
                 {
-                    if (!Room.GetGameMap().CanWalk(UserRoom.X + 1, UserRoom.Y))
-                    {
-                        return;
-                    }
+                    return;
                 }
-
-                if (UserRoom.IsTransf)
-                {
-                    UserRoom.SetStatus("lay", "0");
-                }
-                else
-                {
-                    UserRoom.SetStatus("lay", "0.7");
-                }
-
-                UserRoom.IsLay = true;
-                UserRoom.UpdateNeeded = true;
             }
+            else
+            {
+                if (!Room.GetGameMap().CanWalk(UserRoom.X + 1, UserRoom.Y))
+                {
+                    return;
+                }
+            }
+
+            if (UserRoom.IsTransf)
+            {
+                UserRoom.SetStatus("lay", "0");
+            }
+            else
+            {
+                UserRoom.SetStatus("lay", "0.7");
+            }
+
+            UserRoom.IsLay = true;
+            UserRoom.UpdateNeeded = true;
         }
     }
 }

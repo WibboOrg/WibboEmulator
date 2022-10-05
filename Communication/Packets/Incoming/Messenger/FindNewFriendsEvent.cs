@@ -1,12 +1,10 @@
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class FindNewFriendsEvent : IPacketEvent
 {
-    internal class FindNewFriendsEvent : IPacketEvent
-    {
-        public double Delay => 0;
+    public double Delay => 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet) => Session.SendPacket(new RoomForwardComposer(447654));
-    }
+    public void Parse(GameClient session, ClientPacket Packet) => session.SendPacket(new RoomForwardComposer(447654));
 }

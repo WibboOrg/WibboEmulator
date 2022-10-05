@@ -1,28 +1,26 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class ManageGroupEvent : IPacketEvent
 {
-    internal class ManageGroupEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var GroupId = Packet.PopInt();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
         {
-            int GroupId = Packet.PopInt();
-
-            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
-            {
-                return;
-            }
-
-            if (Group.CreatorId != Session.GetUser().Id && !Session.GetUser().HasPermission("perm_owner_all_rooms"))
-            {
-                return;
-            }
-
-            Session.SendPacket(new ManageGroupComposer(Group, Group.Badge.Replace("b", "").Split('s')));
+            return;
         }
+
+        if (Group.CreatorId != session.GetUser().Id && !session.GetUser().HasPermission("perm_owner_all_rooms"))
+        {
+            return;
+        }
+
+        session.SendPacket(new ManageGroupComposer(Group, Group.Badge.Replace("b", "").Split('s')));
     }
 }

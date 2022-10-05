@@ -1,9 +1,8 @@
-﻿namespace WibboEmulator.Utilities
+﻿namespace WibboEmulator.Utilities;
+
+public enum EndingType
 {
-    public enum EndingType
-    {
-        NONE,
-        SEQUENTIAL,
-        CONTINUOUS,
-    }
+    NONE,
+    SEQUENTIAL,
+    CONTINUOUS,
 }

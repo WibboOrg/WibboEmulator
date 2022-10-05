@@ -1,9 +1,7 @@
+namespace WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Daos
+internal class ItemLimitedDao
 {
-    class ItemLimitedDao
-    {
-        internal static void Insert(IQueryAdapter dbClient, int itemId, int limitedNumber, int limitedStack) => dbClient.RunQuery("INSERT INTO `item_limited` VALUES (" + itemId + "," + limitedNumber + "," + limitedStack + ")");
-    }
+    internal static void Insert(IQueryAdapter dbClient, int itemId, int limitedNumber, int limitedStack) => dbClient.RunQuery("INSERT INTO `item_limited` VALUES (" + itemId + "," + limitedNumber + "," + limitedStack + ")");
 }

@@ -1,14 +1,12 @@
+namespace WibboEmulator.Database.Daos;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Daos
+internal class RoomSwearwordFilterDao
 {
-    class RoomSwearwordFilterDao
+    internal static DataTable GetAll(IQueryAdapter dbClient)
     {
-        internal static DataTable GetAll(IQueryAdapter dbClient)
-        {
-            dbClient.SetQuery("SELECT word FROM `room_swearword_filter`");
-            return dbClient.GetTable();
-        }
+        dbClient.SetQuery("SELECT word FROM `room_swearword_filter`");
+        return dbClient.GetTable();
     }
 }

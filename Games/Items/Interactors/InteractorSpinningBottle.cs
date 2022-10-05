@@ -1,33 +1,31 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorSpinningBottle : FurniInteractor
 {
-    public class InteractorSpinningBottle : FurniInteractor
+    public override void OnPlace(GameClient session, Item item)
     {
-        public override void OnPlace(GameClient Session, Item Item)
+        item.ExtraData = "0";
+        item.UpdateState(true, false);
+    }
+
+    public override void OnRemove(GameClient session, Item item) => item.ExtraData = "0";
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (!(item.ExtraData != "-1"))
         {
-            Item.ExtraData = "0";
-            Item.UpdateState(true, false);
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item) => Item.ExtraData = "0";
+        item.ExtraData = "-1";
+        item.UpdateState(false, true);
+        item.ReqUpdate(3);
+    }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
-        {
-            if (!(Item.ExtraData != "-1"))
-            {
-                return;
-            }
-
-            Item.ExtraData = "-1";
-            Item.UpdateState(false, true);
-            Item.ReqUpdate(3);
-        }
-
-        public override void OnTick(Item item)
-        {
-            item.ExtraData = WibboEnvironment.GetRandomNumber(0, 7).ToString();
-            item.UpdateState();
-        }
+    public override void OnTick(Item item)
+    {
+        item.ExtraData = WibboEnvironment.GetRandomNumber(0, 7).ToString();
+        item.UpdateState();
     }
 }

@@ -1,12 +1,11 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Users
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Users;
+
+internal class ReceiveBadgeComposer : ServerPacket
 {
-    internal class ReceiveBadgeComposer : ServerPacket
+    public ReceiveBadgeComposer(string BadgeCode)
+        : base(ServerPacketHeader.USER_BADGES_ADD)
     {
-        public ReceiveBadgeComposer(string BadgeCode)
-            : base(ServerPacketHeader.USER_BADGES_ADD)
-        {
-            this.WriteInteger(1);
-            this.WriteString(BadgeCode);
-        }
+        this.WriteInteger(1);
+        this.WriteString(BadgeCode);
     }
 }

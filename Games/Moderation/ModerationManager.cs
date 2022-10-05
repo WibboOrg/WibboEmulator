@@ -1,416 +1,419 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Games.Moderation;
+using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Moderation
+public class ModerationManager
 {
-    public class ModerationManager
+    private readonly List<ModerationTicket> _tickets;
+    private readonly List<string> _userMessagePresets;
+    private readonly List<string> _roomMessagePresets;
+
+    private readonly List<ModerationPresetActionMessages> _ticketResolution1;
+    private readonly List<ModerationPresetActionMessages> _ticketResolution2;
+
+    private readonly Dictionary<int, string> _moderationCFHTopics;
+
+    private readonly Dictionary<int, List<ModerationPresetActions>> _moderationCFHTopicActions;
+
+    public ModerationManager()
     {
-        private readonly List<ModerationTicket> _tickets;
-        private readonly List<string> _userMessagePresets;
-        private readonly List<string> _roomMessagePresets;
+        this._tickets = new List<ModerationTicket>();
+        this._userMessagePresets = new List<string>();
+        this._roomMessagePresets = new List<string>();
+        this._ticketResolution1 = new List<ModerationPresetActionMessages>();
+        this._ticketResolution2 = new List<ModerationPresetActionMessages>();
+        this._moderationCFHTopics = new Dictionary<int, string>();
+        this._moderationCFHTopicActions = new Dictionary<int, List<ModerationPresetActions>>();
+    }
 
-        private readonly List<ModerationPresetActionMessages> _ticketResolution1;
-        private readonly List<ModerationPresetActionMessages> _ticketResolution2;
+    public void Init(IQueryAdapter dbClient)
+    {
+        this.LoadMessageTopics(dbClient);
+        this.LoadMessagePresets(dbClient);
+        this.LoadPendingTickets(dbClient);
+        this.LoadTicketResolution(dbClient);
+    }
 
-        private readonly Dictionary<int, string> _moderationCFHTopics;
-
-        private readonly Dictionary<int, List<ModerationPresetActions>> _moderationCFHTopicActions;
-
-        public ModerationManager()
+    public Dictionary<string, List<ModerationPresetActions>> UserActionPresets
+    {
+        get
         {
-            this._tickets = new List<ModerationTicket>();
-            this._userMessagePresets = new List<string>();
-            this._roomMessagePresets = new List<string>();
-            this._ticketResolution1 = new List<ModerationPresetActionMessages>();
-            this._ticketResolution2 = new List<ModerationPresetActionMessages>();
-            this._moderationCFHTopics = new Dictionary<int, string>();
-            this._moderationCFHTopicActions = new Dictionary<int, List<ModerationPresetActions>>();
-        }
-
-        public void Init(IQueryAdapter dbClient)
-        {
-            this.LoadMessageTopics(dbClient);
-            this.LoadMessagePresets(dbClient);
-            this.LoadPendingTickets(dbClient);
-            this.LoadTicketResolution(dbClient);
-        }
-
-        public Dictionary<string, List<ModerationPresetActions>> UserActionPresets
-        {
-            get
+            var Result = new Dictionary<string, List<ModerationPresetActions>>();
+            foreach (var Category in this._moderationCFHTopics.ToList())
             {
-                Dictionary<string, List<ModerationPresetActions>> Result = new Dictionary<string, List<ModerationPresetActions>>();
-                foreach (KeyValuePair<int, string> Category in this._moderationCFHTopics.ToList())
+                Result.Add(Category.Value, new List<ModerationPresetActions>());
+
+                if (this._moderationCFHTopicActions.ContainsKey(Category.Key))
                 {
-                    Result.Add(Category.Value, new List<ModerationPresetActions>());
-
-                    if (this._moderationCFHTopicActions.ContainsKey(Category.Key))
+                    foreach (var Data in this._moderationCFHTopicActions[Category.Key])
                     {
-                        foreach (ModerationPresetActions Data in this._moderationCFHTopicActions[Category.Key])
-                        {
-                            Result[Category.Value].Add(Data);
-                        }
-                    }
-                }
-                return Result;
-            }
-        }
-
-        public void LoadMessageTopics(IQueryAdapter dbClient)
-        {
-            DataTable moderationTopics = ModerationTopicDao.GetAll(dbClient);
-
-            if (moderationTopics != null)
-            {
-                foreach (DataRow Row in moderationTopics.Rows)
-                {
-                    if (!this._moderationCFHTopics.ContainsKey(Convert.ToInt32(Row["id"])))
-                    {
-                        this._moderationCFHTopics.Add(Convert.ToInt32(Row["id"]), Convert.ToString(Row["caption"]));
+                        Result[Category.Value].Add(Data);
                     }
                 }
             }
+            return Result;
+        }
+    }
 
-            DataTable ModerationTopicsActions = ModerationTopicActionDao.GetAll(dbClient);
+    public void LoadMessageTopics(IQueryAdapter dbClient)
+    {
+        var moderationTopics = ModerationTopicDao.GetAll(dbClient);
 
-            if (ModerationTopicsActions != null)
+        if (moderationTopics != null)
+        {
+            foreach (DataRow Row in moderationTopics.Rows)
             {
-                foreach (DataRow Row in ModerationTopicsActions.Rows)
+                if (!this._moderationCFHTopics.ContainsKey(Convert.ToInt32(Row["id"])))
                 {
-                    int ParentId = Convert.ToInt32(Row["parent_id"]);
-
-                    if (!this._moderationCFHTopicActions.ContainsKey(ParentId))
-                    {
-                        this._moderationCFHTopicActions.Add(ParentId, new List<ModerationPresetActions>());
-                    }
-
-                    this._moderationCFHTopicActions[ParentId].Add(new ModerationPresetActions(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["parent_id"]), Convert.ToString(Row["type"]), Convert.ToString(Row["caption"]), Convert.ToString(Row["message_text"]),
-                        Convert.ToInt32(Row["mute_time"]), Convert.ToInt32(Row["ban_time"]), Convert.ToInt32(Row["ip_time"]), Convert.ToInt32(Row["trade_lock_time"]), Convert.ToString(Row["default_sanction"])));
+                    this._moderationCFHTopics.Add(Convert.ToInt32(Row["id"]), Convert.ToString(Row["caption"]));
                 }
             }
         }
 
-        public void LoadMessagePresets(IQueryAdapter dbClient)
+        var ModerationTopicsActions = ModerationTopicActionDao.GetAll(dbClient);
+
+        if (ModerationTopicsActions != null)
         {
-            this._userMessagePresets.Clear();
-            this._roomMessagePresets.Clear();
-
-            DataTable table = ModerationPresetDao.GetAll(dbClient);
-            foreach (DataRow dataRow in table.Rows)
+            foreach (DataRow Row in ModerationTopicsActions.Rows)
             {
-                string message = (string)dataRow["message"].ToString();
-                string type = dataRow["type"].ToString();
+                var ParentId = Convert.ToInt32(Row["parent_id"]);
 
-                switch (type?.ToLower())
+                if (!this._moderationCFHTopicActions.ContainsKey(ParentId))
                 {
-                    case "message":
-                        this._userMessagePresets.Add(message);
-                        continue;
-                    case "roommessage":
-                        this._roomMessagePresets.Add(message);
-                        continue;
-                    default:
-                        continue;
-                }
-            }
-        }
-
-        public void LoadTicketResolution(IQueryAdapter dbClient)
-        {
-            this._ticketResolution1.Clear();
-            this._ticketResolution2.Clear();
-
-            DataTable table = ModerationResolutionDao.GetAll(dbClient);
-            foreach (DataRow dataRow in table.Rows)
-            {
-                ModerationPresetActionMessages str = new ModerationPresetActionMessages((string)dataRow["title"], (string)dataRow["subtitle"], Convert.ToInt32(dataRow["ban_hours"]), Convert.ToInt32(dataRow["enable_mute"]), Convert.ToInt32(dataRow["mute_hours"]), Convert.ToInt32(dataRow["reminder"]), (string)dataRow["message"]);
-                switch (dataRow["type"].ToString())
-                {
-                    case "Sexual":
-                        this._ticketResolution1.Add(str);
-                        continue;
-                    case "PII":
-                        this._ticketResolution2.Add(str);
-                        continue;
-                    default:
-                        continue;
-                }
-            }
-        }
-
-        public void LoadPendingTickets(IQueryAdapter dbClient)
-        {
-            DataTable table = ModerationTicketDao.GetAll(dbClient);
-            if (table == null)
-            {
-                return;
-            }
-
-            foreach (DataRow dataRow in table.Rows)
-            {
-                ModerationTicket ModerationTicket = new ModerationTicket(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["score"]), Convert.ToInt32(dataRow["type"]), Convert.ToInt32(dataRow["sender_id"]), Convert.ToInt32(dataRow["reported_id"]), (string)dataRow["message"], Convert.ToInt32(dataRow["room_id"]), (string)dataRow["room_name"], (double)dataRow["timestamp"]);
-
-                string status = dataRow["status"].ToString();
-                if (status?.ToLower() == "picked")
-                {
-                    ModerationTicket.Pick(Convert.ToInt32(dataRow["moderator_id"]), false);
+                    this._moderationCFHTopicActions.Add(ParentId, new List<ModerationPresetActions>());
                 }
 
-                this._tickets.Add(ModerationTicket);
+                this._moderationCFHTopicActions[ParentId].Add(new ModerationPresetActions(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["parent_id"]), Convert.ToString(Row["type"]), Convert.ToString(Row["caption"]), Convert.ToString(Row["message_text"]),
+                    Convert.ToInt32(Row["mute_time"]), Convert.ToInt32(Row["ban_time"]), Convert.ToInt32(Row["ip_time"]), Convert.ToInt32(Row["trade_lock_time"]), Convert.ToString(Row["default_sanction"])));
             }
         }
+    }
 
-        public void SendNewTicket(GameClient Session, int Category, int ReportedUser, string Message)
+    public void LoadMessagePresets(IQueryAdapter dbClient)
+    {
+        this._userMessagePresets.Clear();
+        this._roomMessagePresets.Clear();
+
+        var table = ModerationPresetDao.GetAll(dbClient);
+        foreach (DataRow dataRow in table.Rows)
         {
-            RoomData roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(Session.GetUser().CurrentRoomId);
-            int Id = 0;
-            string roomname = (roomData != null) ? roomData.Name : "Aucun appart";
-            int roomId = (roomData != null) ? roomData.Id : 0;
+            var message = dataRow["message"].ToString();
+            var type = dataRow["type"].ToString();
 
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            switch (type?.ToLower())
             {
-                Id = ModerationTicketDao.Insert(dbClient, Message, roomname, Category, Session.GetUser().Id, ReportedUser, roomId);
-            }
-
-            ModerationTicket Ticket = new ModerationTicket(Id, 1, Category, Session.GetUser().Id, ReportedUser, Message, roomId, roomname, WibboEnvironment.GetUnixTimestamp());
-            this._tickets.Add(Ticket);
-            SendTicketToModerators(Ticket);
-        }
-
-        public void ApplySanction(GameClient Session, int ReportedUser)
-        {
-            if (ReportedUser == 0)
-            {
-                return;
-            }
-
-            User UserReport = WibboEnvironment.GetUserById(ReportedUser);
-            if (UserReport == null)
-            {
-                return;
-            }
-
-            Session.GetUser().GetMessenger().DestroyFriendship(UserReport.Id);
-
-            Session.SendPacket(new IgnoreStatusComposer(1, UserReport.Username));
-
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
-                return;
-
-            if ((room.RoomData.BanFuse != 1 || !room.CheckRights(Session)) && !room.CheckRights(Session, true))
-            {
-                return;
-            }
-
-            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(UserReport.Id);
-            if (roomUserByUserId == null || roomUserByUserId.IsBot || (room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_mod") || roomUserByUserId.GetClient().GetUser().HasPermission("perm_no_kick")))
-            {
-                return;
-            }
-
-            room.AddBan(UserReport.Id, 429496729);
-            room.GetRoomUserManager().RemoveUserFromRoom(roomUserByUserId.GetClient(), true, true);
-        }
-
-        public ModerationTicket GetTicket(int TicketId)
-        {
-            foreach (ModerationTicket ModerationTicket in this._tickets)
-            {
-                if (ModerationTicket.TicketId == TicketId)
-                {
-                    return ModerationTicket;
-                }
-            }
-            return null;
-        }
-
-        public List<string> UserMessagePresets() => this._userMessagePresets;
-
-        public List<ModerationTicket> Tickets() => this._tickets;
-
-        public List<string> RoomMessagePresets() => this._roomMessagePresets;
-
-        public void PickTicket(GameClient Session, int TicketId)
-        {
-            ModerationTicket ticket = this.GetTicket(TicketId);
-            if (ticket == null || ticket.Status != TicketStatusType.OPEN)
-            {
-                return;
-            }
-
-            ticket.Pick(Session.GetUser().Id, true);
-            SendTicketToModerators(ticket);
-        }
-
-        public void ReleaseTicket(GameClient Session, int TicketId)
-        {
-            ModerationTicket ticket = this.GetTicket(TicketId);
-            if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != Session.GetUser().Id)
-            {
-                return;
-            }
-
-            ticket.Release(true);
-            SendTicketToModerators(ticket);
-        }
-
-        public void CloseTicket(GameClient Session, int TicketId, int Result)
-        {
-            ModerationTicket ticket = this.GetTicket(TicketId);
-            if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != Session.GetUser().Id)
-            {
-                return;
-            }
-
-            GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(ticket.SenderId);
-
-            TicketStatusType NewStatus;
-            string MessageAlert;
-            switch (Result)
-            {
-                case 1:
-                    NewStatus = TicketStatusType.INVALID;
-                    MessageAlert = "Es-tu certain d'avoir bien utilisé cet outil ? Nous voulons donner le meilleur des services mais nous devons aussi aider d'autres personnes dans l'urgence...";
-                    break;
-                case 2:
-                    NewStatus = TicketStatusType.ABUSIVE;
-                    MessageAlert = "Merci de ne pas utiliser l'outil d'appel à l'aide pour rien. Tu risques l'exclusion.";
-                    break;
+                case "message":
+                    this._userMessagePresets.Add(message);
+                    continue;
+                case "roommessage":
+                    this._roomMessagePresets.Add(message);
+                    continue;
                 default:
-                    NewStatus = TicketStatusType.RESOLVED;
-                    MessageAlert = "Merci, ton souci est résolu ou en cours de résolution. N'hésite pas à Ignorer la personne  ou à la supprimer de ta console s'il s'agit d'insultes.";
-                    break;
+                    continue;
             }
-            if (clientByUserId != null)
+        }
+    }
+
+    public void LoadTicketResolution(IQueryAdapter dbClient)
+    {
+        this._ticketResolution1.Clear();
+        this._ticketResolution2.Clear();
+
+        var table = ModerationResolutionDao.GetAll(dbClient);
+        foreach (DataRow dataRow in table.Rows)
+        {
+            var str = new ModerationPresetActionMessages((string)dataRow["title"], (string)dataRow["subtitle"], Convert.ToInt32(dataRow["ban_hours"]), Convert.ToInt32(dataRow["enable_mute"]), Convert.ToInt32(dataRow["mute_hours"]), Convert.ToInt32(dataRow["reminder"]), (string)dataRow["message"]);
+            switch (dataRow["type"].ToString())
             {
-                clientByUserId.SendPacket(new ModeratorSupportTicketResponseComposer(MessageAlert));
+                case "Sexual":
+                    this._ticketResolution1.Add(str);
+                    continue;
+                case "PII":
+                    this._ticketResolution2.Add(str);
+                    continue;
+                default:
+                    continue;
             }
-            ticket.Close(NewStatus, true);
-            SendTicketToModerators(ticket);
+        }
+    }
+
+    public void LoadPendingTickets(IQueryAdapter dbClient)
+    {
+        var table = ModerationTicketDao.GetAll(dbClient);
+        if (table == null)
+        {
+            return;
         }
 
-        public bool UsersHasPendingTicket(int Id)
+        foreach (DataRow dataRow in table.Rows)
         {
-            foreach (ModerationTicket ModerationTicket in this._tickets)
+            var ModerationTicket = new ModerationTicket(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["score"]), Convert.ToInt32(dataRow["type"]), Convert.ToInt32(dataRow["sender_id"]), Convert.ToInt32(dataRow["reported_id"]), (string)dataRow["message"], Convert.ToInt32(dataRow["room_id"]), (string)dataRow["room_name"], (double)dataRow["timestamp"]);
+
+            var status = dataRow["status"].ToString();
+            if (status?.ToLower() == "picked")
             {
-                if (ModerationTicket.SenderId == Id && ModerationTicket.Status == TicketStatusType.OPEN)
-                {
-                    return true;
-                }
+                ModerationTicket.Pick(Convert.ToInt32(dataRow["moderator_id"]), false);
             }
-            return false;
+
+            this._tickets.Add(ModerationTicket);
+        }
+    }
+
+    public void SendNewTicket(GameClient session, int Category, int ReportedUser, string Message)
+    {
+        var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(session.GetUser().CurrentRoomId);
+        var Id = 0;
+        var roomname = (roomData != null) ? roomData.Name : "Aucun appart";
+        var roomId = (roomData != null) ? roomData.Id : 0;
+
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        {
+            Id = ModerationTicketDao.Insert(dbClient, Message, roomname, Category, session.GetUser().Id, ReportedUser, roomId);
         }
 
-        public void DeletePendingTicketForUser(int Id)
+        var Ticket = new ModerationTicket(Id, 1, Category, session.GetUser().Id, ReportedUser, Message, roomId, roomname, WibboEnvironment.GetUnixTimestamp());
+        this._tickets.Add(Ticket);
+        SendTicketToModerators(Ticket);
+    }
+
+    public void ApplySanction(GameClient session, int ReportedUser)
+    {
+        if (ReportedUser == 0)
         {
-            foreach (ModerationTicket Ticket in this._tickets)
+            return;
+        }
+
+        var UserReport = WibboEnvironment.GetUserById(ReportedUser);
+        if (UserReport == null)
+        {
+            return;
+        }
+
+        session.GetUser().GetMessenger().DestroyFriendship(UserReport.Id);
+
+        session.SendPacket(new IgnoreStatusComposer(1, UserReport.Username));
+
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        {
+            return;
+        }
+
+        if ((room.RoomData.BanFuse != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true))
+        {
+            return;
+        }
+
+        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(UserReport.Id);
+        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_mod") || roomUserByUserId.GetClient().GetUser().HasPermission("perm_no_kick"))
+        {
+            return;
+        }
+
+        room.AddBan(UserReport.Id, 429496729);
+        room.GetRoomUserManager().RemoveUserFromRoom(roomUserByUserId.GetClient(), true, true);
+    }
+
+    public ModerationTicket GetTicket(int TicketId)
+    {
+        foreach (var ModerationTicket in this._tickets)
+        {
+            if (ModerationTicket.TicketId == TicketId)
             {
-                if (Ticket.SenderId == Id)
-                {
-                    Ticket.Delete(true);
-                    SendTicketToModerators(Ticket);
-                    break;
-                }
+                return ModerationTicket;
             }
         }
+        return null;
+    }
 
-        public static void SendTicketToModerators(ModerationTicket Ticket) => WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(new ModeratorSupportTicketComposer(Ticket));
+    public List<string> UserMessagePresets() => this._userMessagePresets;
 
-        public void LogStaffEntry(int userId, string modName, int roomId, string target, string type, string description)
+    public List<ModerationTicket> Tickets() => this._tickets;
+
+    public List<string> RoomMessagePresets() => this._roomMessagePresets;
+
+    public void PickTicket(GameClient session, int TicketId)
+    {
+        var ticket = this.GetTicket(TicketId);
+        if (ticket == null || ticket.Status != TicketStatusType.OPEN)
         {
-            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            LogCommandDao.Insert(dbClient, userId, modName, roomId, target, type, description + " " + target);
+            return;
         }
 
-        public static void PerformRoomAction(GameClient modSession, int roomId, bool kickUsers, bool lockRoom, bool inappropriateRoom)
+        ticket.Pick(session.GetUser().Id, true);
+        SendTicketToModerators(ticket);
+    }
+
+    public void ReleaseTicket(GameClient session, int TicketId)
+    {
+        var ticket = this.GetTicket(TicketId);
+        if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != session.GetUser().Id)
         {
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out Room room))
+            return;
+        }
+
+        ticket.Release(true);
+        SendTicketToModerators(ticket);
+    }
+
+    public void CloseTicket(GameClient session, int TicketId, int Result)
+    {
+        var ticket = this.GetTicket(TicketId);
+        if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != session.GetUser().Id)
+        {
+            return;
+        }
+
+        var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(ticket.SenderId);
+
+        TicketStatusType NewStatus;
+        string MessageAlert;
+        switch (Result)
+        {
+            case 1:
+                NewStatus = TicketStatusType.INVALID;
+                MessageAlert = "Es-tu certain d'avoir bien utilisé cet outil ? Nous voulons donner le meilleur des services mais nous devons aussi aider d'autres personnes dans l'urgence...";
+                break;
+            case 2:
+                NewStatus = TicketStatusType.ABUSIVE;
+                MessageAlert = "Merci de ne pas utiliser l'outil d'appel à l'aide pour rien. Tu risques l'exclusion.";
+                break;
+            default:
+                NewStatus = TicketStatusType.RESOLVED;
+                MessageAlert = "Merci, ton souci est résolu ou en cours de résolution. N'hésite pas à Ignorer la personne  ou à la supprimer de ta console s'il s'agit d'insultes.";
+                break;
+        }
+        if (clientByUserId != null)
+        {
+            clientByUserId.SendPacket(new ModeratorSupportTicketResponseComposer(MessageAlert));
+        }
+        ticket.Close(NewStatus, true);
+        SendTicketToModerators(ticket);
+    }
+
+    public bool UsersHasPendingTicket(int Id)
+    {
+        foreach (var ModerationTicket in this._tickets)
+        {
+            if (ModerationTicket.SenderId == Id && ModerationTicket.Status == TicketStatusType.OPEN)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void DeletePendingTicketForUser(int Id)
+    {
+        foreach (var Ticket in this._tickets)
+        {
+            if (Ticket.SenderId == Id)
+            {
+                Ticket.Delete(true);
+                SendTicketToModerators(Ticket);
+                break;
+            }
+        }
+    }
+
+    public static void SendTicketToModerators(ModerationTicket Ticket) => WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(new ModeratorSupportTicketComposer(Ticket));
+
+    public void LogStaffEntry(int userId, string modName, int roomId, string target, string type, string description)
+    {
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        LogCommandDao.Insert(dbClient, userId, modName, roomId, target, type, description + " " + target);
+    }
+
+    public static void PerformRoomAction(GameClient modSession, int roomId, bool kickUsers, bool lockRoom, bool inappropriateRoom)
+    {
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out var room))
+        {
+            return;
+        }
+
+        if (lockRoom)
+        {
+            room.RoomData.State = 1;
+            room.RoomData.Name = "Cet appart ne respecte par les conditions d'utilisation";
+            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            RoomDao.UpdateState(dbClient, room.Id);
+        }
+
+        if (inappropriateRoom)
+        {
+            room.RoomData.Name = "Inapproprié pour l'hôtel";
+            room.RoomData.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
+            room.ClearTags();
+            room.RoomData.Tags.Clear();
+            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            RoomDao.UpdateCaptionDescTags(dbClient, room.Id);
+        }
+
+        if (kickUsers)
+        {
+            room.OnRoomKick();
+        }
+
+        room.SendPacket(new GetGuestRoomResultComposer(modSession, room.RoomData, false, false));
+    }
+
+    public static void KickUser(GameClient ModSession, int UserId, string Message, bool Soft)
+    {
+        var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(UserId);
+        if (clientByUserId == null || clientByUserId.GetUser().CurrentRoomId < 1 || clientByUserId.GetUser().Id == ModSession.GetUser().Id)
+        {
+            return;
+        }
+
+        if (clientByUserId.GetUser().Rank >= ModSession.GetUser().Rank)
+        {
+            ModSession.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("moderation.kick.missingrank", ModSession.Langue));
+        }
+        else
+        {
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(clientByUserId.GetUser().CurrentRoomId, out var room))
+            {
                 return;
-
-            if (lockRoom)
-            {
-                room.RoomData.State = 1;
-                room.RoomData.Name = "Cet appart ne respecte par les conditions d'utilisation";
-                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                RoomDao.UpdateState(dbClient, room.Id);
             }
 
-            if (inappropriateRoom)
-            {
-                room.RoomData.Name = "Inapproprié pour l'hôtel";
-                room.RoomData.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
-                room.ClearTags();
-                room.RoomData.Tags.Clear();
-                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                RoomDao.UpdateCaptionDescTags(dbClient, room.Id);
-            }
+            room.GetRoomUserManager().RemoveUserFromRoom(clientByUserId, true, false);
 
-            if (kickUsers)
-            {
-                room.OnRoomKick();
-            }
-
-            room.SendPacket(new GetGuestRoomResultComposer(modSession, room.RoomData, false, false));
-        }
-
-        public static void KickUser(GameClient ModSession, int UserId, string Message, bool Soft)
-        {
-            GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(UserId);
-            if (clientByUserId == null || clientByUserId.GetUser().CurrentRoomId < 1 || clientByUserId.GetUser().Id == ModSession.GetUser().Id)
+            if (Soft)
             {
                 return;
             }
 
-            if (clientByUserId.GetUser().Rank >= ModSession.GetUser().Rank)
-            {
-                ModSession.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("moderation.kick.missingrank", ModSession.Langue));
-            }
-            else
-            {
-                if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(clientByUserId.GetUser().CurrentRoomId, out Room room))
-                    return;
-
-                room.GetRoomUserManager().RemoveUserFromRoom(clientByUserId, true, false);
-
-                if (Soft)
-                {
-                    return;
-                }
-
-                if (ModSession.Antipub(Message, "<MT>"))
-                {
-                    return;
-                }
-
-                WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(ModSession.GetUser().Id, ModSession.GetUser().Username, 0, string.Empty, "Modtool", string.Format("Modtool kickalert: {0}", Message));
-
-                clientByUserId.SendNotification(Message);
-            }
-        }
-
-        public static void BanUser(GameClient ModSession, int UserId, int Length, string Message)
-        {
-            GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(UserId);
-            if (clientByUserId == null || clientByUserId.GetUser().Id == ModSession.GetUser().Id)
+            if (ModSession.Antipub(Message, "<MT>"))
             {
                 return;
             }
 
-            if (clientByUserId.GetUser().Rank >= ModSession.GetUser().Rank)
-            {
-                ModSession.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("moderation.ban.missingrank", ModSession.Langue));
-            }
-            else
-            {
-                double LengthSeconds = Length;
-                WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUserId, ModSession.GetUser().Username, LengthSeconds, Message, false, false);
-            }
+            WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(ModSession.GetUser().Id, ModSession.GetUser().Username, 0, string.Empty, "Modtool", string.Format("Modtool kickalert: {0}", Message));
+
+            clientByUserId.SendNotification(Message);
+        }
+    }
+
+    public static void BanUser(GameClient ModSession, int UserId, int Length, string Message)
+    {
+        var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(UserId);
+        if (clientByUserId == null || clientByUserId.GetUser().Id == ModSession.GetUser().Id)
+        {
+            return;
+        }
+
+        if (clientByUserId.GetUser().Rank >= ModSession.GetUser().Rank)
+        {
+            ModSession.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("moderation.ban.missingrank", ModSession.Langue));
+        }
+        else
+        {
+            double LengthSeconds = Length;
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUserId, ModSession.GetUser().Username, LengthSeconds, Message, false, false);
         }
     }
 }

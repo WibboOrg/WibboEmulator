@@ -1,42 +1,39 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Groups;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetGroupFurniSettingsEvent : IPacketEvent
 {
-    internal class GetGroupFurniSettingsEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
         {
-            if (Session == null || Session.GetUser() == null || !Session.GetUser().InRoom)
-            {
-                return;
-            }
-
-            int ItemId = Packet.PopInt();
-            int GroupId = Packet.PopInt();
-
-            Item Item = Session.GetUser().CurrentRoom.GetRoomItemHandler().GetItem(ItemId);
-            if (Item == null)
-            {
-                return;
-            }
-
-            if (Item.Data.InteractionType != InteractionType.GUILD_GATE)
-            {
-                return;
-            }
-
-            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
-            {
-                return;
-            }
-
-            Session.SendPacket(new GroupFurniSettingsComposer(Group, ItemId, Session.GetUser().Id));
-            Session.SendPacket(new GroupInfoComposer(Group, Session, false));
+            return;
         }
+
+        var ItemId = Packet.PopInt();
+        var GroupId = Packet.PopInt();
+
+        var Item = session.GetUser().CurrentRoom.GetRoomItemHandler().GetItem(ItemId);
+        if (Item == null)
+        {
+            return;
+        }
+
+        if (Item.Data.InteractionType != InteractionType.GUILD_GATE)
+        {
+            return;
+        }
+
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
+        {
+            return;
+        }
+
+        session.SendPacket(new GroupFurniSettingsComposer(Group, ItemId, session.GetUser().Id));
+        session.SendPacket(new GroupInfoComposer(Group, session, false));
     }
 }

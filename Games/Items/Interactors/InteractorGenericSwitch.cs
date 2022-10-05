@@ -1,160 +1,163 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorGenericSwitch : FurniInteractor
 {
-    public class InteractorGenericSwitch : FurniInteractor
+    private readonly int Modes;
+
+    public InteractorGenericSwitch(int Modes)
     {
-        private readonly int Modes;
-
-        public InteractorGenericSwitch(int Modes)
+        this.Modes = Modes - 1;
+        if (this.Modes >= 0)
         {
-            this.Modes = Modes - 1;
-            if (this.Modes >= 0)
+            return;
+        }
+
+        this.Modes = 0;
+    }
+
+    public override void OnPlace(GameClient session, Item item)
+    {
+        if (item.InteractingUser != 0)
+        {
+            var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+            if (roomUserByUserId != null)
+            {
+                roomUserByUserId.CanWalk = true;
+            }
+
+            item.InteractingUser = 0;
+        }
+        if (item.InteractingUser2 != 0)
+        {
+            var roomUserByUserIdTwo = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser2);
+            if (roomUserByUserIdTwo != null)
+            {
+                roomUserByUserIdTwo.CanWalk = true;
+            }
+
+            item.InteractingUser2 = 0;
+        }
+
+        if (string.IsNullOrEmpty(item.ExtraData) && this.Modes > 0)
+        {
+            if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
+            {
+                item.ExtraData = "0;" + item.GroupId;
+            }
+            else
+            {
+                item.ExtraData = "0";
+            }
+        }
+    }
+
+    public override void OnRemove(GameClient session, Item item)
+    {
+        if (item.InteractingUser != 0)
+        {
+            var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+            if (roomUserByUserId != null)
+            {
+                roomUserByUserId.CanWalk = true;
+            }
+
+            item.InteractingUser = 0;
+        }
+        if (item.InteractingUser2 != 0)
+        {
+            var roomUserByUserIdTwo = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser2);
+            if (roomUserByUserIdTwo != null)
+            {
+                roomUserByUserIdTwo.CanWalk = true;
+            }
+
+            item.InteractingUser2 = 0;
+        }
+        if (string.IsNullOrEmpty(item.ExtraData) && this.Modes > 0)
+        {
+            if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
+            {
+                item.ExtraData = "0;" + item.GroupId;
+            }
+            else
+            {
+                item.ExtraData = "0";
+            }
+        }
+    }
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (session != null)
+        {
+            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_SWITCH, 0);
+        }
+
+        if (!userHasRights || this.Modes == 0)
+        {
+            return;
+        }
+
+        int state;
+        if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
+        {
+            int.TryParse(item.ExtraData.Split(';')[0], out state);
+        }
+        else
+        {
+            int.TryParse(item.ExtraData, out state);
+        }
+
+        int newState;
+
+        if (reverse)
+        {
+            newState = state > 0 ? state - 1 : this.Modes;
+        }
+        else
+        {
+            newState = state < this.Modes ? state + 1 : 0;
+        }
+
+        if (session != null && session.GetUser() != null && session.GetUser().ForceUse > -1)
+        {
+            newState = (session.GetUser().ForceUse <= this.Modes) ? session.GetUser().ForceUse : 0;
+        }
+
+        if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
+        {
+            item.ExtraData = newState.ToString() + ";" + item.GroupId;
+        }
+        else
+        {
+            item.ExtraData = newState.ToString();
+        }
+
+        item.UpdateState();
+
+        if (item.GetBaseItem().AdjustableHeights.Count > 1)
+        {
+            if (session == null)
             {
                 return;
             }
 
-            this.Modes = 0;
-        }
-
-        public override void OnPlace(GameClient Session, Item Item)
-        {
-            if (Item.InteractingUser != 0)
-            {
-                RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Item.InteractingUser);
-                if (roomUserByUserId != null)
-                {
-                    roomUserByUserId.CanWalk = true;
-                }
-
-                Item.InteractingUser = 0;
-            }
-            if (Item.InteractingUser2 != 0)
-            {
-                RoomUser roomUserByUserIdTwo = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Item.InteractingUser2);
-                if (roomUserByUserIdTwo != null)
-                {
-                    roomUserByUserIdTwo.CanWalk = true;
-                }
-
-                Item.InteractingUser2 = 0;
-            }
-
-            if (string.IsNullOrEmpty(Item.ExtraData) && this.Modes > 0)
-            {
-                if (Item.GetBaseItem().InteractionType == InteractionType.GUILD_ITEM || Item.GetBaseItem().InteractionType == InteractionType.GUILD_GATE)
-                {
-                    Item.ExtraData = "0;" + Item.GroupId;
-                }
-                else
-                {
-                    Item.ExtraData = "0";
-                }
-            }
-        }
-
-        public override void OnRemove(GameClient Session, Item Item)
-        {
-            if (Item.InteractingUser != 0)
-            {
-                RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Item.InteractingUser);
-                if (roomUserByUserId != null)
-                {
-                    roomUserByUserId.CanWalk = true;
-                }
-
-                Item.InteractingUser = 0;
-            }
-            if (Item.InteractingUser2 != 0)
-            {
-                RoomUser roomUserByUserIdTwo = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Item.InteractingUser2);
-                if (roomUserByUserIdTwo != null)
-                {
-                    roomUserByUserIdTwo.CanWalk = true;
-                }
-
-                Item.InteractingUser2 = 0;
-            }
-            if (string.IsNullOrEmpty(Item.ExtraData) && this.Modes > 0)
-            {
-                if (Item.GetBaseItem().InteractionType == InteractionType.GUILD_ITEM || Item.GetBaseItem().InteractionType == InteractionType.GUILD_GATE)
-                {
-                    Item.ExtraData = "0;" + Item.GroupId;
-                }
-                else
-                {
-                    Item.ExtraData = "0";
-                }
-            }
-        }
-
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
-        {
-            if (Session != null)
-            {
-                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(Session, QuestType.FURNI_SWITCH, 0);
-            }
-
-            if (!UserHasRights || this.Modes == 0)
+            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
             {
                 return;
             }
 
-            int state;
-            if (Item.GetBaseItem().InteractionType == InteractionType.GUILD_ITEM || Item.GetBaseItem().InteractionType == InteractionType.GUILD_GATE)
+            var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            if (roomUserByUserId != null)
             {
-                int.TryParse(Item.ExtraData.Split(';')[0], out state);
-            }
-            else
-            {
-                int.TryParse(Item.ExtraData, out state);
-            }
-
-            int newState;
-
-            if (Reverse)
-                newState = (state > 0 ? state - 1 : this.Modes);
-            else
-                newState = (state < this.Modes ? state + 1 : 0);
-
-            if (Session != null && Session.GetUser() != null && Session.GetUser().ForceUse > -1)
-            {
-                newState = (Session.GetUser().ForceUse <= this.Modes) ? Session.GetUser().ForceUse : 0;
-            }
-
-            if (Item.GetBaseItem().InteractionType == InteractionType.GUILD_ITEM || Item.GetBaseItem().InteractionType == InteractionType.GUILD_GATE)
-            {
-                Item.ExtraData = newState.ToString() + ";" + Item.GroupId;
-            }
-            else
-            {
-                Item.ExtraData = newState.ToString();
-            }
-
-            Item.UpdateState();
-
-            if (Item.GetBaseItem().AdjustableHeights.Count > 1)
-            {
-                if (Session == null)
-                {
-                    return;
-                }
-
-                if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
-                    return;
-
-                RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-                if (roomUserByUserId != null)
-                {
-                    Item.GetRoom().GetRoomUserManager().UpdateUserStatus(roomUserByUserId, false);
-                }
+                item.GetRoom().GetRoomUserManager().UpdateUserStatus(roomUserByUserId, false);
             }
         }
+    }
 
-        public override void OnTick(Item item)
-        {
-        }
+    public override void OnTick(Item item)
+    {
     }
 }

@@ -1,27 +1,25 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class FaceWalk : IChatCommand
 {
-    internal class FaceWalk : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
         {
-            if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
-            {
-                return;
-            }
+            return;
+        }
 
-            UserRoom.FacewalkEnabled = !UserRoom.FacewalkEnabled;
-            if (UserRoom.FacewalkEnabled)
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.true", Session.Langue));
-            }
-            else
-            {
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.false", Session.Langue));
-            }
+        UserRoom.FacewalkEnabled = !UserRoom.FacewalkEnabled;
+        if (UserRoom.FacewalkEnabled)
+        {
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.true", session.Langue));
+        }
+        else
+        {
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.false", session.Langue));
         }
     }
 }

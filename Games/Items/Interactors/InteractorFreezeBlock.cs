@@ -1,37 +1,34 @@
-﻿using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorFreezeBlock : FurniInteractor
 {
-    public class InteractorFreezeBlock : FurniInteractor
+    public override void OnPlace(GameClient session, Item item)
     {
-        public override void OnPlace(GameClient Session, Item Item)
+    }
+
+    public override void OnRemove(GameClient session, Item item)
+    {
+    }
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (session == null || session.GetUser() == null || item.InteractingUser > 0)
         {
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        var name = session.GetUser().Username;
+        var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByName(name);
+        if (roomUserByUserId == null || roomUserByUserId.CountFreezeBall == 0 || roomUserByUserId.Freezed)
         {
+            return;
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
-        {
-            if (Session == null || Session.GetUser() == null || Item.InteractingUser > 0)
-            {
-                return;
-            }
+        item.GetRoom().GetFreeze().ThrowBall(item, roomUserByUserId);
+    }
 
-            string name = Session.GetUser().Username;
-            RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByName(name);
-            if (roomUserByUserId == null || roomUserByUserId.CountFreezeBall == 0 || roomUserByUserId.Freezed)
-            {
-                return;
-            }
-
-            Item.GetRoom().GetFreeze().throwBall(Item, roomUserByUserId);
-        }
-
-        public override void OnTick(Item item)
-        {
-        }
+    public override void OnTick(Item item)
+    {
     }
 }

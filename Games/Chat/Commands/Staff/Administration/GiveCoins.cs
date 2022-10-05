@@ -1,32 +1,30 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class GiveCoins : IChatCommand
 {
-    internal class GiveCoins : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
+        if (clientByUsername != null)
         {
-            GameClient clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
-            if (clientByUsername != null)
+            if (int.TryParse(Params[2], out var result))
             {
-                if (int.TryParse(Params[2], out int result))
-                {
-                    clientByUsername.GetUser().Credits = clientByUsername.GetUser().Credits + result;
-                    clientByUsername.SendPacket(new CreditBalanceComposer(clientByUsername.GetUser().Credits));
-                    clientByUsername.SendNotification(Session.GetUser().Username + WibboEnvironment.GetLanguageManager().TryGetValue("coins.awardmessage1", Session.Langue) + result.ToString() + WibboEnvironment.GetLanguageManager().TryGetValue("coins.awardmessage2", Session.Langue));
-                    Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("coins.updateok", Session.Langue));
-                }
-                else
-                {
-                    Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.intonly", Session.Langue));
-                }
+                clientByUsername.GetUser().Credits = clientByUsername.GetUser().Credits + result;
+                clientByUsername.SendPacket(new CreditBalanceComposer(clientByUsername.GetUser().Credits));
+                clientByUsername.SendNotification(session.GetUser().Username + WibboEnvironment.GetLanguageManager().TryGetValue("coins.awardmessage1", session.Langue) + result.ToString() + WibboEnvironment.GetLanguageManager().TryGetValue("coins.awardmessage2", session.Langue));
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("coins.updateok", session.Langue));
             }
             else
             {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", Session.Langue));
+                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.intonly", session.Langue));
             }
+        }
+        else
+        {
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
     }
 }

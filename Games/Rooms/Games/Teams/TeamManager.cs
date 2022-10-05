@@ -1,95 +1,94 @@
-﻿namespace WibboEmulator.Games.Rooms.Games
+namespace WibboEmulator.Games.Rooms.Games;
+
+public class TeamManager
 {
-    public class TeamManager
+    public List<RoomUser> BlueTeam { get; set; }
+    public List<RoomUser> RedTeam { get; set; }
+    public List<RoomUser> YellowTeam { get; set; }
+    public List<RoomUser> GreenTeam { get; set; }
+
+    public TeamManager()
     {
-        public List<RoomUser> BlueTeam { get; set; }
-        public List<RoomUser> RedTeam { get; set; }
-        public List<RoomUser> YellowTeam { get; set; }
-        public List<RoomUser> GreenTeam { get; set; }
+        this.BlueTeam = new List<RoomUser>();
+        this.RedTeam = new List<RoomUser>();
+        this.GreenTeam = new List<RoomUser>();
+        this.YellowTeam = new List<RoomUser>();
+    }
 
-        public TeamManager()
+    public List<RoomUser> GetAllPlayer()
+    {
+        var players = new List<RoomUser>();
+
+        players.AddRange(this.BlueTeam);
+        players.AddRange(this.RedTeam);
+        players.AddRange(this.GreenTeam);
+        players.AddRange(this.YellowTeam);
+
+        return players;
+    }
+
+    public bool CanEnterOnTeam(TeamType t)
+    {
+        if (t.Equals(TeamType.BLUE))
         {
-            this.BlueTeam = new List<RoomUser>();
-            this.RedTeam = new List<RoomUser>();
-            this.GreenTeam = new List<RoomUser>();
-            this.YellowTeam = new List<RoomUser>();
+            return this.BlueTeam.Count < 5;
         }
 
-        public List<RoomUser> GetAllPlayer()
+        if (t.Equals(TeamType.RED))
         {
-            List<RoomUser> Players = new List<RoomUser>();
-
-            Players.AddRange(this.BlueTeam);
-            Players.AddRange(this.RedTeam);
-            Players.AddRange(this.GreenTeam);
-            Players.AddRange(this.YellowTeam);
-
-            return Players;
+            return this.RedTeam.Count < 5;
         }
 
-        public bool CanEnterOnTeam(TeamType t)
+        if (t.Equals(TeamType.YELLOW))
         {
-            if (t.Equals(TeamType.BLUE))
-            {
-                return this.BlueTeam.Count < 5;
-            }
-
-            if (t.Equals(TeamType.RED))
-            {
-                return this.RedTeam.Count < 5;
-            }
-
-            if (t.Equals(TeamType.YELLOW))
-            {
-                return this.YellowTeam.Count < 5;
-            }
-
-            if (t.Equals(TeamType.GREEN))
-            {
-                return this.GreenTeam.Count < 5;
-            }
-
-            return false;
+            return this.YellowTeam.Count < 5;
         }
 
-        public void AddUser(RoomUser user)
+        if (t.Equals(TeamType.GREEN))
         {
-            if (user.Team.Equals(TeamType.BLUE))
-            {
-                this.BlueTeam.Add(user);
-            }
-            else if (user.Team.Equals(TeamType.RED))
-            {
-                this.RedTeam.Add(user);
-            }
-            else if (user.Team.Equals(TeamType.YELLOW))
-            {
-                this.YellowTeam.Add(user);
-            }
-            else if (user.Team.Equals(TeamType.GREEN))
-            {
-                this.GreenTeam.Add(user);
-            }
+            return this.GreenTeam.Count < 5;
         }
 
-        public void OnUserLeave(RoomUser user)
+        return false;
+    }
+
+    public void AddUser(RoomUser user)
+    {
+        if (user.Team.Equals(TeamType.BLUE))
         {
-            if (user.Team.Equals(TeamType.BLUE))
-            {
-                this.BlueTeam.Remove(user);
-            }
-            else if (user.Team.Equals(TeamType.RED))
-            {
-                this.RedTeam.Remove(user);
-            }
-            else if (user.Team.Equals(TeamType.YELLOW))
-            {
-                this.YellowTeam.Remove(user);
-            }
-            else if (user.Team.Equals(TeamType.GREEN))
-            {
-                this.GreenTeam.Remove(user);
-            }
+            this.BlueTeam.Add(user);
+        }
+        else if (user.Team.Equals(TeamType.RED))
+        {
+            this.RedTeam.Add(user);
+        }
+        else if (user.Team.Equals(TeamType.YELLOW))
+        {
+            this.YellowTeam.Add(user);
+        }
+        else if (user.Team.Equals(TeamType.GREEN))
+        {
+            this.GreenTeam.Add(user);
+        }
+    }
+
+    public void OnUserLeave(RoomUser user)
+    {
+        if (user.Team.Equals(TeamType.BLUE))
+        {
+            this.BlueTeam.Remove(user);
+        }
+        else if (user.Team.Equals(TeamType.RED))
+        {
+            this.RedTeam.Remove(user);
+        }
+        else if (user.Team.Equals(TeamType.YELLOW))
+        {
+            this.YellowTeam.Remove(user);
+        }
+        else if (user.Team.Equals(TeamType.GREEN))
+        {
+            this.GreenTeam.Remove(user);
         }
     }
 }

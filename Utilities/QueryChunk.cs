@@ -1,71 +1,69 @@
-﻿using System.Text;
+namespace WibboEmulator.Utilities;
+using System.Text;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Utilities
+public class QueryChunk
 {
-    public class QueryChunk
+    private Dictionary<string, string> _parameters;
+    private StringBuilder _queries;
+    private int _queryCount;
+    private readonly EndingType _endingType;
+
+    public QueryChunk()
     {
-        private Dictionary<string, string> parameters;
-        private StringBuilder queries;
-        private int queryCount;
-        private readonly EndingType endingType;
+        this._parameters = new Dictionary<string, string>();
+        this._queries = new StringBuilder();
+        this._queryCount = 0;
+        this._endingType = EndingType.SEQUENTIAL;
+    }
 
-        public QueryChunk()
+    public QueryChunk(string startQuery)
+    {
+        this._parameters = new Dictionary<string, string>();
+        this._queries = new StringBuilder(startQuery);
+        this._endingType = EndingType.CONTINUOUS;
+        this._queryCount = 0;
+    }
+
+    public void AddQuery(string query)
+    {
+        ++this._queryCount;
+        this._queries.Append(query);
+        switch (this._endingType)
         {
-            this.parameters = new Dictionary<string, string>();
-            this.queries = new StringBuilder();
-            this.queryCount = 0;
-            this.endingType = EndingType.SEQUENTIAL;
+            case EndingType.SEQUENTIAL:
+                this._queries.Append(';');
+                break;
+            case EndingType.CONTINUOUS:
+                this._queries.Append(',');
+                break;
+        }
+    }
+
+    public void AddParameter(string parameterName, string value) => this._parameters.Add(parameterName, value);
+
+    public void Execute(IQueryAdapter dbClient)
+    {
+        if (this._queryCount == 0)
+        {
+            return;
         }
 
-        public QueryChunk(string startQuery)
+        this._queries = this._queries.Remove(this._queries.Length - 1, 1);
+        dbClient.SetQuery(this._queries.ToString());
+        foreach (var keyValuePair in this._parameters)
         {
-            this.parameters = new Dictionary<string, string>();
-            this.queries = new StringBuilder(startQuery);
-            this.endingType = EndingType.CONTINUOUS;
-            this.queryCount = 0;
+            dbClient.AddParameter(keyValuePair.Key, keyValuePair.Value);
         }
 
-        public void AddQuery(string query)
-        {
-            ++this.queryCount;
-            this.queries.Append(query);
-            switch (this.endingType)
-            {
-                case EndingType.SEQUENTIAL:
-                    this.queries.Append(';');
-                    break;
-                case EndingType.CONTINUOUS:
-                    this.queries.Append(',');
-                    break;
-            }
-        }
+        dbClient.RunQuery();
+    }
 
-        public void AddParameter(string parameterName, string value) => this.parameters.Add(parameterName, value);
-
-        public void Execute(IQueryAdapter dbClient)
-        {
-            if (this.queryCount == 0)
-            {
-                return;
-            }
-
-            this.queries = this.queries.Remove(this.queries.Length - 1, 1);
-            dbClient.SetQuery((this.queries).ToString());
-            foreach (KeyValuePair<string, string> keyValuePair in this.parameters)
-            {
-                dbClient.AddParameter(keyValuePair.Key, keyValuePair.Value);
-            }
-
-            dbClient.RunQuery();
-        }
-
-        public void Dispose()
-        {
-            this.parameters.Clear();
-            this.queries.Clear();
-            this.parameters = null;
-            this.queries = null;
-        }
+    public void Dispose()
+    {
+        this._parameters.Clear();
+        this._queries.Clear();
+        this._parameters = null;
+        this._queries = null;
     }
 }

@@ -1,16 +1,14 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetCreditsInfoEvent : IPacketEvent
 {
-    internal class GetCreditsInfoEvent : IPacketEvent
-    {
-        public double Delay => 0;
+    public double Delay => 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet)
-        {
-            Session.SendPacket(new CreditBalanceComposer(Session.GetUser().Credits));
-            Session.SendPacket(new ActivityPointsComposer(Session.GetUser().WibboPoints, Session.GetUser().LimitCoins));
-        }
+    public void Parse(GameClient session, ClientPacket Packet)
+    {
+        session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
+        session.SendPacket(new ActivityPointsComposer(session.GetUser().WibboPoints, session.GetUser().LimitCoins));
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace AStar.Algorithm
+﻿namespace AStar.Algorithm;
+
+public interface IWeightAddable<T>
 {
-    public interface IWeightAddable<T>
-    {
-        T WeightChange { get; set; }
-    }
+    T WeightChange { get; set; }
 }

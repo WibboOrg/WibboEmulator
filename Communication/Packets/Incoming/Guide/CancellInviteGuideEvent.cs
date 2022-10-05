@@ -1,22 +1,20 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Guide;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Guide
+internal class CancellInviteGuideEvent : IPacketEvent
 {
-    internal class CancellInviteGuideEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.GetUser().GuideOtherUserId);
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        session.SendPacket(new OnGuideSessionDetachedComposer());
+
+        if (requester != null)
         {
-            GameClient requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
-
-            Session.SendPacket(new OnGuideSessionDetachedComposer());
-
-            if (requester != null)
-            {
-                requester.SendPacket(new OnGuideSessionDetachedComposer());
-            }
+            requester.SendPacket(new OnGuideSessionDetachedComposer());
         }
     }
 }

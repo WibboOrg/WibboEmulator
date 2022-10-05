@@ -1,11 +1,7 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+
+internal class UserRemoveComposer : ServerPacket
 {
-    internal class UserRemoveComposer : ServerPacket
-    {
-        public UserRemoveComposer(int userId)
-            : base(ServerPacketHeader.UNIT_REMOVE)
-        {
-            this.WriteString(userId.ToString());
-        }
-    }
+    public UserRemoveComposer(int userId)
+        : base(ServerPacketHeader.UNIT_REMOVE) => this.WriteString(userId.ToString());
 }

@@ -1,34 +1,17 @@
-﻿namespace WibboEmulator.Games.Chat.Styles
+﻿namespace WibboEmulator.Games.Chat.Styles;
+
+public sealed class ChatStyle
 {
-    public sealed class ChatStyle
+    public ChatStyle(int Id, string Name, string RequiredRight)
     {
-        private int _id;
-        private string _name;
-        private string _requiredRight;
-
-        public ChatStyle(int Id, string Name, string RequiredRight)
-        {
-            this._id = Id;
-            this._name = Name;
-            this._requiredRight = RequiredRight;
-        }
-
-        public int Id
-        {
-            get => this._id;
-            set => this._id = value;
-        }
-
-        public string Name
-        {
-            get => this._name;
-            set => this._name = value;
-        }
-
-        public string RequiredRight
-        {
-            get => this._requiredRight;
-            set => this._requiredRight = value;
-        }
+        this.Id = Id;
+        this.Name = Name;
+        this.RequiredRight = RequiredRight;
     }
+
+    public int Id { get; set; }
+
+    public string Name { get; set; }
+
+    public string RequiredRight { get; set; }
 }

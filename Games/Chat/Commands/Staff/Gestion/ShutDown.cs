@@ -1,14 +1,12 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class ShutDown : IChatCommand
 {
-    internal class ShutDown : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
-        {
-            Task ShutdownTask = new Task(WibboEnvironment.PreformShutDown);
-            ShutdownTask.Start();
-        }
+        var ShutdownTask = new Task(WibboEnvironment.PreformShutDown);
+        ShutdownTask.Start();
     }
 }

@@ -1,11 +1,7 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Session
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
+
+internal class FlatAccessibleComposer : ServerPacket
 {
-    internal class FlatAccessibleComposer : ServerPacket
-    {
-        public FlatAccessibleComposer(string username)
-            : base(ServerPacketHeader.ROOM_DOORBELL_ACCEPTED)
-        {
-            WriteString(username);
-        }
-    }
+    public FlatAccessibleComposer(string username)
+        : base(ServerPacketHeader.ROOM_DOORBELL_ACCEPTED) => this.WriteString(username);
 }

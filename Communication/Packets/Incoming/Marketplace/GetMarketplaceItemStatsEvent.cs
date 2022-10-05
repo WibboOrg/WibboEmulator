@@ -1,24 +1,23 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
+using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Marketplace
+internal class GetMarketplaceItemStatsEvent : IPacketEvent
 {
-    internal class GetMarketplaceItemStatsEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var ItemId = Packet.PopInt();
+        var SpriteId = Packet.PopInt();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        var avgprice = 0;
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            int ItemId = Packet.PopInt();
-            int SpriteId = Packet.PopInt();
-
-            int avgprice = 0;
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                avgprice = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, SpriteId);
-
-            Session.SendPacket(new MarketplaceItemStatsComposer(ItemId, SpriteId, avgprice));
+            avgprice = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, SpriteId);
         }
+
+        session.SendPacket(new MarketplaceItemStatsComposer(ItemId, SpriteId, avgprice));
     }
 }

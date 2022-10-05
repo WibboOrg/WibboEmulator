@@ -1,32 +1,30 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Navigator;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class LoadRoomItems : IChatCommand
 {
-    internal class LoadRoomItems : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (Params.Length != 2)
         {
-            if (Params.Length != 2)
-            {
-                return;
-            }
-
-            if (!int.TryParse(Params[1], out int RoomId))
-            {
-                return;
-            }
-
-            if (Room.Id == RoomId)
-            {
-                return;
-            }
-
-            Room.GetRoomItemHandler().LoadFurniture(RoomId);
-            Room.GetGameMap().GenerateMaps(true);
-            Session.SendWhisper("Mobi de l'appart n° " + RoomId + " chargé!");
-            Session.SendPacket(new GetGuestRoomResultComposer(Session, Room.RoomData, false, true));
+            return;
         }
+
+        if (!int.TryParse(Params[1], out var RoomId))
+        {
+            return;
+        }
+
+        if (Room.Id == RoomId)
+        {
+            return;
+        }
+
+        Room.GetRoomItemHandler().LoadFurniture(RoomId);
+        Room.GetGameMap().GenerateMaps(true);
+        session.SendWhisper("Mobi de l'appart n° " + RoomId + " chargé!");
+        session.SendPacket(new GetGuestRoomResultComposer(session, Room.RoomData, false, true));
     }
 }

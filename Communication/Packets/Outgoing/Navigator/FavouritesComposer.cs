@@ -1,17 +1,16 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
-{
-    internal class FavouritesComposer : ServerPacket
-    {
-        public FavouritesComposer(List<int> favouriteIDs)
-            : base(ServerPacketHeader.USER_FAVORITE_ROOM_COUNT)
-        {
-            this.WriteInteger(30);
-            this.WriteInteger(favouriteIDs.Count);
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
-            foreach (int RoomId in favouriteIDs)
-            {
-                this.WriteInteger(RoomId);
-            }
+internal class FavouritesComposer : ServerPacket
+{
+    public FavouritesComposer(List<int> favouriteIDs)
+        : base(ServerPacketHeader.USER_FAVORITE_ROOM_COUNT)
+    {
+        this.WriteInteger(30);
+        this.WriteInteger(favouriteIDs.Count);
+
+        foreach (var RoomId in favouriteIDs)
+        {
+            this.WriteInteger(RoomId);
         }
     }
 }

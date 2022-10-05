@@ -1,38 +1,37 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class RandomLook : IChatCommand
 {
-    internal class RandomLook : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
         {
-            if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
-            {
-                return;
-            }
-
-            if (Session.GetUser() == null)
-            {
-                return;
-            }
-
-            if (UserRoom.IsTransf || UserRoom.IsSpectator)
-            {
-                return;
-            }
-
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                Session.GetUser().Look = UserWardrobeDao.GetOneRandomLook(dbClient);
-
-            Session.SendPacket(new FigureUpdateComposer(Session.GetUser().Look, Session.GetUser().Gender));
-            Session.SendPacket(new UserChangeComposer(UserRoom, true));
-            Room.SendPacket(new UserChangeComposer(UserRoom, false));
+            return;
         }
+
+        if (session.GetUser() == null)
+        {
+            return;
+        }
+
+        if (UserRoom.IsTransf || UserRoom.IsSpectator)
+        {
+            return;
+        }
+
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        {
+            session.GetUser().Look = UserWardrobeDao.GetOneRandomLook(dbClient);
+        }
+
+        session.SendPacket(new FigureUpdateComposer(session.GetUser().Look, session.GetUser().Gender));
+        session.SendPacket(new UserChangeComposer(UserRoom, true));
+        Room.SendPacket(new UserChangeComposer(UserRoom, false));
     }
 }

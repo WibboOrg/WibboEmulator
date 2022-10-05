@@ -1,13 +1,12 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Handshake
+namespace WibboEmulator.Communication.Packets.Outgoing.Handshake;
+
+internal class AvailabilityStatusComposer : ServerPacket
 {
-    internal class AvailabilityStatusComposer : ServerPacket
+    public AvailabilityStatusComposer()
+        : base(ServerPacketHeader.AVAILABILITY_STATUS)
     {
-        public AvailabilityStatusComposer()
-            : base(ServerPacketHeader.AVAILABILITY_STATUS)
-        {
-            this.WriteBoolean(true);
-            this.WriteBoolean(false);
-            this.WriteBoolean(true);
-        }
+        this.WriteBoolean(true);
+        this.WriteBoolean(false);
+        this.WriteBoolean(true);
     }
 }

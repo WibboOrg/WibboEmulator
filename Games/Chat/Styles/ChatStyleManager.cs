@@ -1,39 +1,34 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Games.Chat.Styles;
+using System.Data;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Games.Chat.Styles
+public sealed class ChatStyleManager
 {
-    public sealed class ChatStyleManager
-    {
-        private readonly Dictionary<int, ChatStyle> _styles;
+    private readonly Dictionary<int, ChatStyle> _styles;
 
-        public ChatStyleManager()
+    public ChatStyleManager() => this._styles = new Dictionary<int, ChatStyle>();
+
+    public void Init(IQueryAdapter dbClient)
+    {
+        if (this._styles.Count > 0)
         {
-            this._styles = new Dictionary<int, ChatStyle>();
+            this._styles.Clear();
         }
 
-        public void Init(IQueryAdapter dbClient)
+        var Table = EmulatorChatStyleDao.GetAll(dbClient);
+
+        if (Table != null)
         {
-            if (this._styles.Count > 0)
+            foreach (DataRow Row in Table.Rows)
             {
-                this._styles.Clear();
-            }
-
-            DataTable Table = EmulatorChatStyleDao.GetAll(dbClient);
-
-            if (Table != null)
-            {
-                foreach (DataRow Row in Table.Rows)
+                if (!this._styles.ContainsKey(Convert.ToInt32(Row["id"])))
                 {
-                    if (!this._styles.ContainsKey(Convert.ToInt32(Row["id"])))
-                    {
-                        this._styles.Add(Convert.ToInt32(Row["id"]), new ChatStyle(Convert.ToInt32(Row["id"]), Convert.ToString(Row["name"]), Convert.ToString(Row["required_right"])));
-                    }
+                    this._styles.Add(Convert.ToInt32(Row["id"]), new ChatStyle(Convert.ToInt32(Row["id"]), Convert.ToString(Row["name"]), Convert.ToString(Row["required_right"])));
                 }
             }
         }
-
-        public bool TryGetStyle(int Id, out ChatStyle Style) => this._styles.TryGetValue(Id, out Style);
     }
+
+    public bool TryGetStyle(int Id, out ChatStyle Style) => this._styles.TryGetValue(Id, out Style);
 }

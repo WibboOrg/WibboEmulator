@@ -1,34 +1,32 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.RolePlay;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.RolePlay
+internal class RpBotChooseEvent : IPacketEvent
 {
-    internal class RpBotChooseEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
+        var Message = Packet.PopString();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session == null || session.GetUser() == null)
         {
-            string Message = Packet.PopString();
-
-            if (Session == null || Session.GetUser() == null)
-            {
-                return;
-            }
-
-            Room Room = Session.GetUser().CurrentRoom;
-            if (Room == null)
-            {
-                return;
-            }
-
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (User == null)
-            {
-                return;
-            }
-
-            Room.AllowsShous(User, Message);
+            return;
         }
+
+        var Room = session.GetUser().CurrentRoom;
+        if (Room == null)
+        {
+            return;
+        }
+
+        var User = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (User == null)
+        {
+            return;
+        }
+
+        Room.AllowsShous(User, Message);
     }
 }

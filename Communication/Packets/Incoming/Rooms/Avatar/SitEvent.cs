@@ -1,30 +1,27 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class SitEvent : IPacketEvent
 {
-    internal class SitEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        var room = session.GetUser().CurrentRoom;        if (room == null)
         {
-            Room room = Session.GetUser().CurrentRoom;            if (room == null)
-            {
-                return;
-            }
-
-            RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);            if (roomUserByUserId == null)
-            {
-                return;
-            }
-
-            if (roomUserByUserId.ContainStatus("sit") || roomUserByUserId.ContainStatus("lay"))
-            {
-                return;
-            }
-
-            if (roomUserByUserId.RotBody % 2 == 0)            {                roomUserByUserId.SetStatus("sit", "0.5");                roomUserByUserId.IsSit = true;                roomUserByUserId.UpdateNeeded = true;            }
+            return;
         }
+
+        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);        if (roomUserByUserId == null)
+        {
+            return;
+        }
+
+        if (roomUserByUserId.ContainStatus("sit") || roomUserByUserId.ContainStatus("lay"))
+        {
+            return;
+        }
+
+        if (roomUserByUserId.RotBody % 2 == 0)        {            roomUserByUserId.SetStatus("sit", "0.5");            roomUserByUserId.IsSit = true;            roomUserByUserId.UpdateNeeded = true;        }
     }
 }

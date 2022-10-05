@@ -1,32 +1,31 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class Dance : IChatCommand
 {
-    internal class Dance : IChatCommand
+    public void Execute(GameClient session, Room room, RoomUser user, string[] parameters)
     {
-        public void Execute(GameClient session, Room room, RoomUser user, string[] parameters)
+        if (parameters.Length < 2)
         {
-            if (parameters.Length < 2)
+            session.SendWhisper("Entre un numéro à ta danse");
+            return;
+        }
+
+        if (int.TryParse(parameters[1], out var danceId))
+        {
+            if (danceId is > 4 or < 0)
             {
-                session.SendWhisper("Entre un numéro à ta danse");
+                session.SendWhisper("Entre un numéro entre 0 et 4");
                 return;
             }
 
-            int danceId;
-            if (int.TryParse(parameters[1], out danceId))
-            {
-                if (danceId > 4 || danceId < 0)
-                {
-                    session.SendWhisper("Entre un numéro entre 0 et 4");
-                    return;
-                }
-
-                room.SendPacket(new DanceComposer(user.VirtualId, danceId));
-            }
-            else
-                session.SendWhisper("Entre un numéro de danse valide");
+            room.SendPacket(new DanceComposer(user.VirtualId, danceId));
+        }
+        else
+        {
+            session.SendWhisper("Entre un numéro de danse valide");
         }
     }
 }

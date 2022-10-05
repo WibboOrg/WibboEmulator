@@ -1,18 +1,16 @@
-using WibboEmulator.Games.GameClients;
+namespace WibboEmulator.Communication.Packets.Outgoing.Help;
+using WibboEmulator.Games.Users;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Help
+internal class OnGuideSessionStartedComposer : ServerPacket
 {
-    internal class OnGuideSessionStartedComposer : ServerPacket
+    public OnGuideSessionStartedComposer(User session, User requester)
+        : base(ServerPacketHeader.GUIDE_SESSION_STARTED)
     {
-        public OnGuideSessionStartedComposer(User session, User requester)
-            : base(ServerPacketHeader.GUIDE_SESSION_STARTED)
-        {
-            WriteInteger(requester.Id);
-            WriteString(requester.Username);
-            WriteString(requester.Look);
-            WriteInteger(session.Id);
-            WriteString(session.Username);
-            WriteString(session.Look);
-        }
+        this.WriteInteger(requester.Id);
+        this.WriteString(requester.Username);
+        this.WriteString(requester.Look);
+        this.WriteInteger(session.Id);
+        this.WriteString(session.Username);
+        this.WriteString(session.Look);
     }
 }

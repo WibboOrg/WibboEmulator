@@ -1,34 +1,34 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetGroupCreationWindowEvent : IPacketEvent
 {
-    internal class GetGroupCreationWindowEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session == null || session.GetUser() == null)
         {
-            if (Session == null || Session.GetUser() == null)
-            {
-                return;
-            }
-
-            List<RoomData> ValidRooms = new List<RoomData>();
-            foreach (int RoomId in Session.GetUser().UsersRooms)
-            {
-                RoomData Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
-                if (Data == null)
-                    continue;
-
-                if (Data.Group == null)
-                {
-                    ValidRooms.Add(Data);
-                }
-            }
-
-            Session.SendPacket(new GroupCreationWindowComposer(ValidRooms));
+            return;
         }
+
+        var ValidRooms = new List<RoomData>();
+        foreach (var RoomId in session.GetUser().UsersRooms)
+        {
+            var Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+            if (Data == null)
+            {
+                continue;
+            }
+
+            if (Data.Group == null)
+            {
+                ValidRooms.Add(Data);
+            }
+        }
+
+        session.SendPacket(new GroupCreationWindowComposer(ValidRooms));
     }
 }

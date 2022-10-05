@@ -1,12 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Action
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
+
+internal class IgnoreStatusComposer : ServerPacket
 {
-    internal class IgnoreStatusComposer : ServerPacket
+    public IgnoreStatusComposer(int Statue, string Name)
+        : base(ServerPacketHeader.USER_IGNORED_RESULT)
     {
-        public IgnoreStatusComposer(int Statue, string Name)
-            : base(ServerPacketHeader.USER_IGNORED_RESULT)
-        {
-            this.WriteInteger(Statue);
-            this.WriteString(Name);
-        }
+        this.WriteInteger(Statue);
+        this.WriteString(Name);
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands
+﻿namespace WibboEmulator.Communication.RCON.Commands;
+
+public interface IRCONCommand
 {
-    public interface IRCONCommand
-    {
-        bool TryExecute(string[] parameters);
-    }
+    bool TryExecute(string[] parameters);
 }

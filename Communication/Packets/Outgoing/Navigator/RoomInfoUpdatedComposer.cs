@@ -1,11 +1,7 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
+
+internal class RoomInfoUpdatedComposer : ServerPacket
 {
-    internal class RoomInfoUpdatedComposer : ServerPacket
-    {
-        public RoomInfoUpdatedComposer(int RoomId)
-            : base(ServerPacketHeader.ROOM_SETTINGS_UPDATED)
-        {
-            this.WriteInteger(RoomId);
-        }
-    }
+    public RoomInfoUpdatedComposer(int RoomId)
+        : base(ServerPacketHeader.ROOM_SETTINGS_UPDATED) => this.WriteInteger(RoomId);
 }

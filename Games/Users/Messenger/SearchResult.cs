@@ -1,20 +1,19 @@
-﻿namespace WibboEmulator.Games.GameClients.Messenger
-{
-    public struct SearchResult
-    {
-        public int UserId;
-        public string Username;
-        public string Motto;
-        public int LastOnline;
-        public string Look;
+namespace WibboEmulator.Games.Users.Messenger;
 
-        public SearchResult(int UserId, string Username, string Motto, int LastOnline, string Look)
-        {
-            this.UserId = UserId;
-            this.Username = Username;
-            this.Motto = Motto;
-            this.LastOnline = LastOnline;
-            this.Look = Look;
-        }
+public struct SearchResult
+{
+    public int UserId { get; private set; }
+    public string Username { get; private set; }
+    public string Motto { get; private set; }
+    public int LastOnline { get; private set; }
+    public string Look { get; private set; }
+
+    public SearchResult(int userId, string username, string motto, int lastOnline, string look)
+    {
+        this.UserId = userId;
+        this.Username = username;
+        this.Motto = motto;
+        this.LastOnline = lastOnline;
+        this.Look = look;
     }
 }

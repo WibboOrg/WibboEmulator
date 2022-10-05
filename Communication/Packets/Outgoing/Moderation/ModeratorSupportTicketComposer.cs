@@ -1,57 +1,54 @@
-using WibboEmulator.Games.GameClients;
+namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Moderation;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
+internal class ModeratorSupportTicketComposer : ServerPacket
 {
-    internal class ModeratorSupportTicketComposer : ServerPacket
+    public ModeratorSupportTicketComposer(ModerationTicket ticket)
+        : base(ServerPacketHeader.ISSUE_INFO)
     {
-        public ModeratorSupportTicketComposer(ModerationTicket ticket)
-            : base(ServerPacketHeader.ISSUE_INFO)
+        var userReported = WibboEnvironment.GetUserById(ticket.ReportedId);
+        var userSender = WibboEnvironment.GetUserById(ticket.SenderId);
+        var userModerator = WibboEnvironment.GetUserById(ticket.ModeratorId);
+
+        this.WriteInteger(ticket.Id);
+        this.WriteInteger(ticket.TabId);
+        this.WriteInteger(3);
+        this.WriteInteger(ticket.Type);
+        this.WriteInteger((int)(WibboEnvironment.GetUnixTimestamp() - ticket.Timestamp) * 1000);
+        this.WriteInteger(ticket.Score);
+        this.WriteInteger(ticket.SenderId);
+        this.WriteInteger(ticket.SenderId);
+        if (userSender != null)
         {
-            User userReported = WibboEnvironment.GetUserById(ticket.ReportedId);
-            User userSender = WibboEnvironment.GetUserById(ticket.SenderId);
-            User userModerator = WibboEnvironment.GetUserById(ticket.ModeratorId);
-
-            WriteInteger(ticket.Id);
-            WriteInteger(ticket.TabId);
-            WriteInteger(3);
-            WriteInteger(ticket.Type);
-            WriteInteger((int)(WibboEnvironment.GetUnixTimestamp() - ticket.Timestamp) * 1000);
-            WriteInteger(ticket.Score);
-            WriteInteger(ticket.SenderId);
-            WriteInteger(ticket.SenderId);
-            if (userSender != null)
-            {
-                WriteString(ticket.SenderName.Equals("") ? userSender.Username : ticket.SenderName);
-            }
-            else
-            {
-                WriteString(ticket.SenderName);
-            }
-
-            WriteInteger(ticket.ReportedId);
-            if (userReported != null)
-            {
-                WriteString(ticket.ReportedName.Equals("") ? userReported.Username : ticket.ReportedName);
-            }
-            else
-            {
-                WriteString(ticket.ReportedName);
-            }
-
-            WriteInteger(ticket.Status == TicketStatusType.PICKED ? ticket.ModeratorId : 0);
-            if (userModerator != null)
-            {
-                WriteString(ticket.Status == TicketStatusType.PICKED ? (ticket.ModName.Equals("") ? userModerator.Username : ticket.ModName) : "");
-            }
-            else
-            {
-                WriteString(ticket.ModName);
-            }
-
-            WriteString(ticket.Message);
-            WriteInteger(0);
-            WriteInteger(0);
+            this.WriteString(ticket.SenderName.Equals("") ? userSender.Username : ticket.SenderName);
         }
+        else
+        {
+            this.WriteString(ticket.SenderName);
+        }
+
+        this.WriteInteger(ticket.ReportedId);
+        if (userReported != null)
+        {
+            this.WriteString(ticket.ReportedName.Equals("") ? userReported.Username : ticket.ReportedName);
+        }
+        else
+        {
+            this.WriteString(ticket.ReportedName);
+        }
+
+        this.WriteInteger(ticket.Status == TicketStatusType.PICKED ? ticket.ModeratorId : 0);
+        if (userModerator != null)
+        {
+            this.WriteString(ticket.Status == TicketStatusType.PICKED ? (ticket.ModName.Equals("") ? userModerator.Username : ticket.ModName) : "");
+        }
+        else
+        {
+            this.WriteString(ticket.ModName);
+        }
+
+        this.WriteString(ticket.Message);
+        this.WriteInteger(0);
+        this.WriteInteger(0);
     }
 }

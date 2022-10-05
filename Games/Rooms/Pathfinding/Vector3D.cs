@@ -1,56 +1,21 @@
-﻿namespace WibboEmulator.Games.Rooms.PathFinding
+﻿namespace WibboEmulator.Games.Rooms.PathFinding;
+
+internal sealed class Vector3D
 {
-    sealed class Vector3D
+    public int X { get; set; }
+
+    public int Y { get; set; }
+
+    public double Z { get; set; }
+
+    public Vector3D() { }
+
+    public Vector3D(int x, int y, double z)
     {
-        private int x;
-        private int y;
-        private double z;
-
-        public int X
-        {
-            get
-            {
-                return x;
-            }
-            set
-            {
-                x = value;
-            }
-        }
-
-        public int Y
-        {
-            get
-            {
-                return y;
-            }
-            set
-            {
-                y = value;
-            }
-        }
-
-        public double Z
-        {
-            get
-            {
-                return z;
-            }
-            set
-            {
-                z = value;
-            }
-        }
-
-        public Vector3D() { }
-
-        public Vector3D(int x, int y, double z)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public Vector2D ToVector2D() => new Vector2D(x, y);
+        this.X = x;
+        this.Y = y;
+        this.Z = z;
     }
+
+    public Vector2D ToVector2D() => new(this.X, this.Y);
 }

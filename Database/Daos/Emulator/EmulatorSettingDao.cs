@@ -1,14 +1,12 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Database.Daos;
+using System.Data;
 using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Daos
+internal class EmulatorSettingDao
 {
-    class EmulatorSettingDao
+    internal static DataTable GetAll(IQueryAdapter dbClient)
     {
-        internal static DataTable GetAll(IQueryAdapter dbClient)
-        {
-            dbClient.SetQuery("SELECT `key`, `value` FROM `emulator_setting`");
-            return dbClient.GetTable();
-        }
+        dbClient.SetQuery("SELECT `key`, `value` FROM `emulator_setting`");
+        return dbClient.GetTable();
     }
 }

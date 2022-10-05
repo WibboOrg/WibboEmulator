@@ -1,22 +1,20 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class CheckValidNameEvent : IPacketEvent
 {
-    internal class CheckValidNameEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser() == null || session == null)
         {
-            if (Session.GetUser() == null || Session == null)
-            {
-                return;
-            }
-
-            string Name = Packet.PopString();
-
-            Session.SendPacket(new NameChangeUpdateComposer(Name));
+            return;
         }
+
+        var Name = Packet.PopString();
+
+        session.SendPacket(new NameChangeUpdateComposer(Name));
     }
 }

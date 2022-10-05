@@ -1,34 +1,32 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Chat.Logs;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetModeratorUserChatlogEvent : IPacketEvent
 {
-    internal class GetModeratorUserChatlogEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!session.GetUser().HasPermission("perm_chatlog"))
         {
-            if (!Session.GetUser().HasPermission("perm_chatlog"))
-            {
-                return;
-            }
+            return;
+        }
 
-            int userId = Packet.PopInt();
+        var userId = Packet.PopInt();
 
-            GameClient clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-            if (clientByUserId == null || clientByUserId.GetUser() == null)
-            {
-                List<ChatlogEntry> sortedMessages = new List<ChatlogEntry>();
-                Session.SendPacket(new ModeratorUserChatlogComposer(userId, "User not online", Session.GetUser().CurrentRoomId, sortedMessages));
-            }
-            else
-            {
-                List<ChatlogEntry> sortedMessages = clientByUserId.GetUser().GetChatMessageManager().GetSortedMessages(0);
+        var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        if (clientByUserId == null || clientByUserId.GetUser() == null)
+        {
+            var sortedMessages = new List<ChatlogEntry>();
+            session.SendPacket(new ModeratorUserChatlogComposer(userId, "User not online", session.GetUser().CurrentRoomId, sortedMessages));
+        }
+        else
+        {
+            var sortedMessages = clientByUserId.GetUser().GetChatMessageManager().GetSortedMessages(0);
 
-                Session.SendPacket(new ModeratorUserChatlogComposer(userId, clientByUserId.GetUser().Username, Session.GetUser().CurrentRoomId, sortedMessages));
-            }
+            session.SendPacket(new ModeratorUserChatlogComposer(userId, clientByUserId.GetUser().Username, session.GetUser().CurrentRoomId, sortedMessages));
         }
     }
 }

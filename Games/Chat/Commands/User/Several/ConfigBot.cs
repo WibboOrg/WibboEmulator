@@ -1,162 +1,159 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class ConfigBot : IChatCommand
 {
-    internal class ConfigBot : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (Params.Length < 3)
         {
-            if (Params.Length < 3)
+            return;
+        }
+
+        var Bot = Room.GetRoomUserManager().GetBotByName(Params[1]);
+        if (Bot == null)
+        {
+            return;
+        }
+
+        switch (Params[2])
+        {
+            case "enable":
             {
-                return;
+                if (Params.Length < 4)
+                {
+                    break;
+                }
+
+                int.TryParse(Params[3], out var IntValue);
+
+                if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
+                {
+                    return;
+                }
+
+                if (Bot.CurrentEffect != IntValue)
+                {
+                    Bot.ApplyEffect(IntValue);
+                }
+
+                if (Bot.BotData.Enable != IntValue)
+                {
+                    Bot.BotData.Enable = IntValue;
+
+                    using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    BotUserDao.UpdateEnable(dbClient, Bot.BotData.Id, IntValue);
+                }
+                break;
             }
-
-            RoomUser Bot = Room.GetRoomUserManager().GetBotByName(Params[1]);
-            if (Bot == null)
+            case "handitem":
             {
-                return;
+                if (Params.Length < 4)
+                {
+                    break;
+                }
+
+                int.TryParse(Params[3], out var IntValue);
+
+                if (Bot.CarryItemID != IntValue)
+                {
+                    Bot.CarryItem(IntValue, true);
+                }
+
+                if (Bot.BotData.Handitem != IntValue)
+                {
+                    Bot.BotData.Handitem = IntValue;
+
+                    using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    BotUserDao.UpdateHanditem(dbClient, Bot.BotData.Id, IntValue);
+                }
+                break;
             }
-
-            switch (Params[2])
+            case "rot":
             {
-                case "enable":
+                if (Params.Length < 4)
+                {
+                    break;
+                }
+
+                int.TryParse(Params[3], out var IntValue);
+                IntValue = (IntValue is > 7 or < 0) ? 0 : IntValue;
+
+                if (Bot.RotBody != IntValue)
+                {
+                    Bot.RotBody = IntValue;
+                    Bot.RotHead = IntValue;
+                    Bot.UpdateNeeded = true;
+                }
+
+                if (Bot.BotData.Rot != IntValue)
+                {
+                    Bot.BotData.Rot = IntValue;
+
+                    using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    BotUserDao.UpdateRotation(dbClient, Bot.BotData.Id, Bot.RotBody);
+                }
+                break;
+            }
+            case "sit":
+            {
+                if (Bot.BotData.Status == 1)
+                {
+                    Bot.BotData.Status = 0;
+
+                    Bot.RemoveStatus("sit");
+                    Bot.IsSit = false;
+                    Bot.UpdateNeeded = true;
+
+                    using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    BotUserDao.UpdateStatus0(dbClient, Bot.BotData.Id);
+                }
+                else
+                {
+                    if (!Bot.IsSit)
                     {
-                        if (Params.Length < 4)
-                        {
-                            break;
-                        }
-
-                        int.TryParse(Params[3], out int IntValue);
-
-                        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
-                        {
-                            return;
-                        }
-
-                        if (Bot.CurrentEffect != IntValue)
-                        {
-                            Bot.ApplyEffect(IntValue);
-                        }
-
-                        if (Bot.BotData.Enable != IntValue)
-                        {
-                            Bot.BotData.Enable = IntValue;
-
-                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                            BotUserDao.UpdateEnable(dbClient, Bot.BotData.Id, IntValue);
-                        }
-                        break;
+                        Bot.SetStatus("sit", Bot.IsPet ? "" : "0.5");
+                        Bot.IsSit = true;
+                        Bot.UpdateNeeded = true;
                     }
-                case "handitem":
+
+                    Bot.BotData.Status = 1;
+
+                    using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    BotUserDao.UpdateStatus1(dbClient, Bot.BotData.Id);
+                }
+                break;
+            }
+            case "lay":
+            {
+                if (Bot.BotData.Status == 2)
+                {
+                    Bot.BotData.Status = 0;
+
+                    Bot.RemoveStatus("lay");
+                    Bot.IsSit = false;
+                    Bot.UpdateNeeded = true;
+
+                    using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    BotUserDao.UpdateStatus0(dbClient, Bot.BotData.Id);
+                }
+                else
+                {
+                    if (!Bot.IsLay)
                     {
-                        if (Params.Length < 4)
-                        {
-                            break;
-                        }
-
-                        int.TryParse(Params[3], out int IntValue);
-
-                        if (Bot.CarryItemID != IntValue)
-                        {
-                            Bot.CarryItem(IntValue, true);
-                        }
-
-                        if (Bot.BotData.Handitem != IntValue)
-                        {
-                            Bot.BotData.Handitem = IntValue;
-
-                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                            BotUserDao.UpdateHanditem(dbClient, Bot.BotData.Id, IntValue);
-                        }
-                        break;
+                        Bot.SetStatus("lay", Bot.IsPet ? "" : "0.7");
+                        Bot.IsLay = true;
+                        Bot.UpdateNeeded = true;
                     }
-                case "rot":
-                    {
-                        if (Params.Length < 4)
-                        {
-                            break;
-                        }
 
-                        int.TryParse(Params[3], out int IntValue);
-                        IntValue = (IntValue > 7 || IntValue < 0) ? 0 : IntValue;
+                    Bot.BotData.Status = 2;
 
-                        if (Bot.RotBody != IntValue)
-                        {
-                            Bot.RotBody = IntValue;
-                            Bot.RotHead = IntValue;
-                            Bot.UpdateNeeded = true;
-                        }
-
-                        if (Bot.BotData.Rot != IntValue)
-                        {
-                            Bot.BotData.Rot = IntValue;
-
-                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                            BotUserDao.UpdateRotation(dbClient, Bot.BotData.Id, Bot.RotBody);
-                        }
-                        break;
-                    }
-                case "sit":
-                    {
-                        if (Bot.BotData.Status == 1)
-                        {
-                            Bot.BotData.Status = 0;
-
-                            Bot.RemoveStatus("sit");
-                            Bot.IsSit = false;
-                            Bot.UpdateNeeded = true;
-
-                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                            BotUserDao.UpdateStatus0(dbClient, Bot.BotData.Id);
-                        }
-                        else
-                        {
-                            if (!Bot.IsSit)
-                            {
-                                Bot.SetStatus("sit", (Bot.IsPet) ? "" : "0.5");
-                                Bot.IsSit = true;
-                                Bot.UpdateNeeded = true;
-                            }
-
-                            Bot.BotData.Status = 1;
-
-                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                            BotUserDao.UpdateStatus1(dbClient, Bot.BotData.Id);
-                        }
-                        break;
-                    }
-                case "lay":
-                    {
-                        if (Bot.BotData.Status == 2)
-                        {
-                            Bot.BotData.Status = 0;
-
-                            Bot.RemoveStatus("lay");
-                            Bot.IsSit = false;
-                            Bot.UpdateNeeded = true;
-
-                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                            BotUserDao.UpdateStatus0(dbClient, Bot.BotData.Id);
-                        }
-                        else
-                        {
-                            if (!Bot.IsLay)
-                            {
-                                Bot.SetStatus("lay", (Bot.IsPet) ? "" : "0.7");
-                                Bot.IsLay = true;
-                                Bot.UpdateNeeded = true;
-                            }
-
-                            Bot.BotData.Status = 2;
-
-                            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                            BotUserDao.UpdateStatus2(dbClient, Bot.BotData.Id);
-                        }
-                        break;
-                    }
+                    using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+                    BotUserDao.UpdateStatus2(dbClient, Bot.BotData.Id);
+                }
+                break;
             }
         }
     }

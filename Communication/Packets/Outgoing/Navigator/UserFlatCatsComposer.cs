@@ -1,23 +1,21 @@
+namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Games.Navigator;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Navigator
+internal class UserFlatCatsComposer : ServerPacket
 {
-    internal class UserFlatCatsComposer : ServerPacket
+    public UserFlatCatsComposer(ICollection<SearchResultList> Categories, int Rank)
+        : base(ServerPacketHeader.NAVIGATOR_CATEGORIES)
     {
-        public UserFlatCatsComposer(ICollection<SearchResultList> Categories, int Rank)
-            : base(ServerPacketHeader.NAVIGATOR_CATEGORIES)
+        this.WriteInteger(Categories.Count);
+        foreach (var Cat in Categories)
         {
-            this.WriteInteger(Categories.Count);
-            foreach (SearchResultList Cat in Categories)
-            {
-                this.WriteInteger(Cat.Id);
-                this.WriteString(Cat.PublicName);
-                this.WriteBoolean(Cat.RequiredRank <= Rank);
-                this.WriteBoolean(false);
-                this.WriteString("");
-                this.WriteString("");
-                this.WriteBoolean(false);
-            }
+            this.WriteInteger(Cat.Id);
+            this.WriteString(Cat.PublicName);
+            this.WriteBoolean(Cat.RequiredRank <= Rank);
+            this.WriteBoolean(false);
+            this.WriteString("");
+            this.WriteString("");
+            this.WriteBoolean(false);
         }
     }
 }

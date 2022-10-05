@@ -1,77 +1,75 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.PathFinding;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorVendorEnable : FurniInteractor
 {
-    public class InteractorVendorEnable : FurniInteractor
+    public override void OnPlace(GameClient session, Item item)
     {
-        public override void OnPlace(GameClient Session, Item Item)
+        item.ExtraData = "0";
+        if (item.InteractingUser <= 0)
         {
-            Item.ExtraData = "0";
-            if (Item.InteractingUser <= 0)
-            {
-                return;
-            }
-
-            Item.InteractingUser = 0;
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
-        {
-            Item.ExtraData = "0";
-            if (Item.InteractingUser <= 0)
-            {
-                return;
-            }
+        item.InteractingUser = 0;
+    }
 
-            Item.InteractingUser = 0;
+    public override void OnRemove(GameClient session, Item item)
+    {
+        item.ExtraData = "0";
+        if (item.InteractingUser <= 0)
+        {
+            return;
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        item.InteractingUser = 0;
+    }
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (!(item.ExtraData != "1") || item.GetBaseItem().VendingIds.Count < 1 || item.InteractingUser != 0 || session == null)
         {
-            if (!(Item.ExtraData != "1") || Item.GetBaseItem().VendingIds.Count < 1 || (Item.InteractingUser != 0 || Session == null))
-            {
-                return;
-            }
-
-            RoomUser roomUserByUserId = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (roomUserByUserId == null)
-            {
-                return;
-            }
-
-            if (!Gamemap.TilesTouching(roomUserByUserId.X, roomUserByUserId.Y, Item.X, Item.Y))
-            {
-                roomUserByUserId.MoveTo(Item.SquareInFront);
-            }
-            else
-            {
-                Item.InteractingUser = Session.GetUser().Id;
-                roomUserByUserId.SetRot(Rotation.Calculate(roomUserByUserId.X, roomUserByUserId.Y, Item.X, Item.Y), false);
-                Item.ReqUpdate(2);
-                Item.ExtraData = "1";
-                Item.UpdateState(false, true);
-            }
+            return;
         }
 
-        public override void OnTick(Item item)
+        var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (roomUserByUserId == null)
         {
-            if (!(item.ExtraData == "1"))
-            {
-                return;
-            }
+            return;
+        }
 
-            RoomUser roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
-            if (roomUserByUserId != null)
-            {
-                int vendingId = item.GetBaseItem().VendingIds[WibboEnvironment.GetRandomNumber(0, item.GetBaseItem().VendingIds.Count - 1)];
-                roomUserByUserId.ApplyEffect(vendingId);
-            }
-
-            item.InteractingUser = 0;
-            item.ExtraData = "0";
+        if (!Gamemap.TilesTouching(roomUserByUserId.X, roomUserByUserId.Y, item.X, item.Y))
+        {
+            roomUserByUserId.MoveTo(item.SquareInFront);
+        }
+        else
+        {
+            item.InteractingUser = session.GetUser().Id;
+            roomUserByUserId.SetRot(Rotation.Calculate(roomUserByUserId.X, roomUserByUserId.Y, item.X, item.Y), false);
+            item.ReqUpdate(2);
+            item.ExtraData = "1";
             item.UpdateState(false, true);
         }
+    }
+
+    public override void OnTick(Item item)
+    {
+        if (!(item.ExtraData == "1"))
+        {
+            return;
+        }
+
+        var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+        if (roomUserByUserId != null)
+        {
+            var vendingId = item.GetBaseItem().VendingIds[WibboEnvironment.GetRandomNumber(0, item.GetBaseItem().VendingIds.Count - 1)];
+            roomUserByUserId.ApplyEffect(vendingId);
+        }
+
+        item.InteractingUser = 0;
+        item.ExtraData = "0";
+        item.UpdateState(false, true);
     }
 }

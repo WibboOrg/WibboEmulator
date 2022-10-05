@@ -1,32 +1,29 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetRoomRightsEvent : IPacketEvent
 {
-    internal class GetRoomRightsEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!session.GetUser().InRoom)
         {
-            if (!Session.GetUser().InRoom)
-            {
-                return;
-            }
-
-            Room Instance = Session.GetUser().CurrentRoom;
-            if (Instance == null)
-            {
-                return;
-            }
-
-            if (!Instance.CheckRights(Session))
-            {
-                return;
-            }
-
-            Session.SendPacket(new RoomRightsListComposer(Instance));
+            return;
         }
+
+        var Instance = session.GetUser().CurrentRoom;
+        if (Instance == null)
+        {
+            return;
+        }
+
+        if (!Instance.CheckRights(session))
+        {
+            return;
+        }
+
+        session.SendPacket(new RoomRightsListComposer(Instance));
     }
 }

@@ -1,121 +1,121 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Wired.Actions
+public class HighScorePoints : WiredActionBase, IWired, IWiredEffect
 {
-    public class HighScorePoints : WiredActionBase, IWired, IWiredEffect
+    public HighScorePoints(Item item, Room room) : base(item, room, -1)
     {
-        public HighScorePoints(Item item, Room room) : base(item, room, -1)
+    }
+
+    public override bool OnCycle(RoomUser user, Item item)
+    {
+        if (user == null || user.IsBot || user.GetClient() == null)
         {
-        }
-
-        public override bool OnCycle(RoomUser user, Item item)
-        {
-            if (user == null || user.IsBot || user.GetClient() == null)
-            {
-                return false;
-            }
-
-            Dictionary<string, int> Scores = this.ItemInstance.Scores;
-
-            List<string> ListUsernameScore = new List<string>() { user.GetUsername() };
-
-            if (Scores.ContainsKey(ListUsernameScore[0]))
-            {
-                if (user.WiredPoints > Scores[ListUsernameScore[0]])
-                {
-                    Scores[ListUsernameScore[0]] = user.WiredPoints;
-                }
-            }
-            else
-            {
-                Scores.Add(ListUsernameScore[0], user.WiredPoints);
-            }
-
-            this.RoomInstance.SendPacket(new ObjectUpdateComposer(this.ItemInstance, this.RoomInstance.RoomData.OwnerId));
-
             return false;
         }
 
-        public override void Dispose()
-        {
-            base.Dispose();
+        var Scores = this.ItemInstance.Scores;
 
-            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            this.SaveToDatabase(dbClient);
+        var ListUsernameScore = new List<string>() { user.GetUsername() };
+
+        if (Scores.ContainsKey(ListUsernameScore[0]))
+        {
+            if (user.WiredPoints > Scores[ListUsernameScore[0]])
+            {
+                Scores[ListUsernameScore[0]] = user.WiredPoints;
+            }
+        }
+        else
+        {
+            Scores.Add(ListUsernameScore[0], user.WiredPoints);
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient)
+        this.RoomInstance.SendPacket(new ObjectUpdateComposer(this.ItemInstance, this.RoomInstance.RoomData.OwnerId));
+
+        return false;
+    }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        this.SaveToDatabase(dbClient);
+    }
+
+    public void SaveToDatabase(IQueryAdapter dbClient)
+    {
+        var triggerItems = "";
+
+        foreach (var score in this.ItemInstance.Scores.OrderByDescending(x => x.Value))
         {
-            string triggerItems = "";
-
-            foreach (KeyValuePair<string, int> score in this.ItemInstance.Scores.OrderByDescending(x => x.Value))
-            {
-                triggerItems += score.Key + ":" + score.Value + ";";
-            }
-
-            triggerItems = triggerItems.TrimEnd(';');
-
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, triggerItems, false, null, this.Delay);
+            triggerItems += score.Key + ":" + score.Value + ";";
         }
 
-        public void LoadFromDatabase(DataRow row)
+        triggerItems = triggerItems.TrimEnd(';');
+
+        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, triggerItems, false, null, this.Delay);
+    }
+
+    public void LoadFromDatabase(DataRow row)
+    {
+        if (int.TryParse(row["delay"].ToString(), out var delay))
         {
-            if (int.TryParse(row["delay"].ToString(), out int delay))
-                this.Delay = delay;
+            this.Delay = delay;
+        }
 
-            string triggerData = row["trigger_data"].ToString();
+        var triggerData = row["trigger_data"].ToString();
 
-            if (triggerData == null || triggerData == "")
+        if (triggerData is null or "")
+        {
+            return;
+        }
+
+        foreach (var data in triggerData.Split(';'))
+        {
+            var userData = data.Split(':');
+
+            int.TryParse(userData[userData.Length - 1], out var score);
+
+            var username = "";
+            for (var i = 0; i < userData.Length - 1; i++)
             {
-                return;
-            }
-
-            foreach (string data in triggerData.Split(';'))
-            {
-                string[] userData = data.Split(':');
-
-                int.TryParse(userData[userData.Count() - 1], out int score);
-
-                string username = "";
-                for (int i = 0; i < userData.Count() - 1; i++)
+                if (i == 0)
                 {
-                    if (i == 0)
-                    {
-                        username = userData[i];
-                    }
-                    else
-                    {
-                        username += ':' + userData[i];
-                    }
+                    username = userData[i];
                 }
-
-                if (!this.ItemInstance.Scores.ContainsKey(username))
+                else
                 {
-                    this.ItemInstance.Scores.Add(username, score);
+                    username += ':' + userData[i];
                 }
             }
-        }
 
-        public override void OnTrigger(GameClient Session)
+            if (!this.ItemInstance.Scores.ContainsKey(username))
+            {
+                this.ItemInstance.Scores.Add(username, score);
+            }
+        }
+    }
+
+    public override void OnTrigger(GameClient session)
+    {
+        int.TryParse(this.ItemInstance.ExtraData, out var NumMode);
+
+        if (NumMode != 1)
         {
-            int.TryParse(this.ItemInstance.ExtraData, out int NumMode);
-
-            if (NumMode != 1)
-            {
-                NumMode = 1;
-            }
-            else
-            {
-                NumMode = 0;
-            }
-
-            this.ItemInstance.ExtraData = NumMode.ToString();
-            this.ItemInstance.UpdateState(false, true);
+            NumMode = 1;
         }
+        else
+        {
+            NumMode = 0;
+        }
+
+        this.ItemInstance.ExtraData = NumMode.ToString();
+        this.ItemInstance.UpdateState(false, true);
     }
 }

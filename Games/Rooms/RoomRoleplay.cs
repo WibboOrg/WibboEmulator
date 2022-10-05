@@ -1,105 +1,104 @@
-namespace WibboEmulator.Games.Rooms
+namespace WibboEmulator.Games.Rooms;
+
+public class RoomRoleplay
 {
-    public class RoomRoleplay
+    public bool Pvp { get; set; }
+    public int Hour { get; set; }
+    public int Minute { get; set; }
+    public int Intensity { get; set; }
+    public bool CycleHourEffect { get; set; }
+    public bool TimeSpeed { get; set; }
+
+    public RoomRoleplay()
     {
-        public bool Pvp { get; set; }
-        public int Hour { get; set; }
-        public int Minute { get; set; }
-        public int Intensity { get; set; }
-        public bool CycleHourEffect { get; set; }
-        public bool TimeSpeed { get; set; }
+        this.Pvp = true;
+        this.CycleHourEffect = true;
+        this.TimeSpeed = false;
+        this.Hour = -1;
+        this.Minute = -1;
+        this.Intensity = -1;
+    }
 
-        public RoomRoleplay()
+    internal bool Cycle()
+    {
+        var now = DateTime.Now;
+
+        var hourNow = (int)Math.Floor((double)(((now.Minute * 60) + now.Second) / 150)); //150sec = 2m30s = 1heure dans le rp
+
+        var minuteNow = (int)Math.Floor(((now.Minute * 60) + now.Second - (hourNow * 150)) / 2.5);
+
+        if (hourNow >= 16)
         {
-            this.Pvp = true;
-            this.CycleHourEffect = true;
-            this.TimeSpeed = false;
-            this.Hour = -1;
-            this.Minute = -1;
-            this.Intensity = -1;
+            hourNow = hourNow + 8 - 24;
+        }
+        else
+        {
+            hourNow += 8;
         }
 
-        internal bool Cycle()
+        if (this.TimeSpeed)
         {
-            DateTime Now = DateTime.Now;
-
-            int HourNow = (int)Math.Floor((double)(((Now.Minute * 60) + Now.Second) / 150)); //150sec = 2m30s = 1heure dans le rp
-
-            int MinuteNow = (int)Math.Floor((((Now.Minute * 60) + Now.Second) - (HourNow * 150)) / 2.5);
-
-            if (HourNow >= 16)
-            {
-                HourNow = (HourNow + 8) - 24;
-            }
-            else
-            {
-                HourNow += 8;
-            }
-
-            if (this.TimeSpeed)
-            {
-                HourNow = (int)Math.Floor((double)(Now.Second / 2.5));
-            }
-
-            if (this.Minute != MinuteNow)
-            {
-                this.Minute = MinuteNow;
-            }
-
-            if (this.Hour == HourNow)
-            {
-                return false;
-            }
-
-            this.Hour = HourNow;
-
-            if (!this.CycleHourEffect)
-            {
-                return false;
-            }
-
-            if (this.Hour >= 8 && this.Hour < 20) //Journée
-            {
-                this.Intensity = 255;
-            }
-            else if (this.Hour >= 20 && this.Hour < 21)  //Crépuscule
-            {
-                this.Intensity = 200;
-            }
-            else if (this.Hour >= 21 && this.Hour < 22)  //Crépuscule
-            {
-                this.Intensity = 150;
-            }
-            else if (this.Hour >= 22 && this.Hour < 23)  //Crépuscule
-            {
-                this.Intensity = 100;
-            }
-            else if (this.Hour >= 23 && this.Hour < 24)  //Crépuscule
-            {
-                this.Intensity = 75;
-            }
-            else if (this.Hour >= 0 && this.Hour < 4)  //Nuit
-            {
-                this.Intensity = 50;
-            }
-            else if (this.Hour >= 4 && this.Hour < 5)  //Aube
-            {
-                this.Intensity = 75;
-            }
-            else if (this.Hour >= 5 && this.Hour < 6)  //Aube
-            {
-                this.Intensity = 100;
-            }
-            else if (this.Hour >= 6 && this.Hour < 7)  //Aube
-            {
-                this.Intensity = 150;
-            }
-            else if (this.Hour >= 7 && this.Hour < 8)  //Aube
-            {
-                this.Intensity = 200;
-            }
-
-            return true;
+            hourNow = (int)Math.Floor((double)(now.Second / 2.5));
         }
+
+        if (this.Minute != minuteNow)
+        {
+            this.Minute = minuteNow;
+        }
+
+        if (this.Hour == hourNow)
+        {
+            return false;
+        }
+
+        this.Hour = hourNow;
+
+        if (!this.CycleHourEffect)
+        {
+            return false;
+        }
+
+        if (this.Hour is >= 8 and < 20) //Journée
+        {
+            this.Intensity = 255;
+        }
+        else if (this.Hour is >= 20 and < 21)  //Crépuscule
+        {
+            this.Intensity = 200;
+        }
+        else if (this.Hour is >= 21 and < 22)  //Crépuscule
+        {
+            this.Intensity = 150;
+        }
+        else if (this.Hour is >= 22 and < 23)  //Crépuscule
+        {
+            this.Intensity = 100;
+        }
+        else if (this.Hour is >= 23 and < 24)  //Crépuscule
+        {
+            this.Intensity = 75;
+        }
+        else if (this.Hour is >= 0 and < 4)  //Nuit
+        {
+            this.Intensity = 50;
+        }
+        else if (this.Hour is >= 4 and < 5)  //Aube
+        {
+            this.Intensity = 75;
+        }
+        else if (this.Hour is >= 5 and < 6)  //Aube
+        {
+            this.Intensity = 100;
+        }
+        else if (this.Hour is >= 6 and < 7)  //Aube
+        {
+            this.Intensity = 150;
+        }
+        else if (this.Hour is >= 7 and < 8)  //Aube
+        {
+            this.Intensity = 200;
+        }
+
+        return true;
     }
 }

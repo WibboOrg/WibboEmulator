@@ -1,23 +1,21 @@
+namespace WibboEmulator.Communication.Packets.Outgoing.LandingView;
 using WibboEmulator.Games.LandingView.Promotions;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.LandingView
+internal class PromoArticlesComposer : ServerPacket
 {
-    internal class PromoArticlesComposer : ServerPacket
+    public PromoArticlesComposer(List<Promotion> hotelViewPromosIndexers)
+        : base(ServerPacketHeader.DESKTOP_NEWS)
     {
-        public PromoArticlesComposer(List<Promotion> hotelViewPromosIndexers)
-            : base(ServerPacketHeader.DESKTOP_NEWS)
+        this.WriteInteger(hotelViewPromosIndexers.Count);
+        foreach (var promo in hotelViewPromosIndexers)
         {
-            this.WriteInteger(hotelViewPromosIndexers.Count);
-            foreach (Promotion promo in hotelViewPromosIndexers)
-            {
-                this.WriteInteger(promo.Index);
-                this.WriteString(promo.Header);
-                this.WriteString(promo.Body);
-                this.WriteString(promo.Button);
-                this.WriteInteger(promo.InGamePromo);
-                this.WriteString(promo.SpecialAction);
-                this.WriteString(promo.Image);
-            }
+            this.WriteInteger(promo.Index);
+            this.WriteString(promo.Header);
+            this.WriteString(promo.Body);
+            this.WriteString(promo.Button);
+            this.WriteInteger(promo.InGamePromo);
+            this.WriteString(promo.SpecialAction);
+            this.WriteString(promo.Image);
         }
     }
 }

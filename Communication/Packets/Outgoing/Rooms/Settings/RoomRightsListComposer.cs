@@ -1,29 +1,26 @@
-using WibboEmulator.Games.GameClients;
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings
+internal class RoomRightsListComposer : ServerPacket
 {
-    internal class RoomRightsListComposer : ServerPacket
+    public RoomRightsListComposer(Room Instance)
+        : base(ServerPacketHeader.ROOM_RIGHTS_LIST)
     {
-        public RoomRightsListComposer(Room Instance)
-            : base(ServerPacketHeader.ROOM_RIGHTS_LIST)
-        {
-            this.WriteInteger(Instance.Id);
+        this.WriteInteger(Instance.Id);
 
-            this.WriteInteger(Instance.UsersWithRights.Count);
-            foreach (int Id in Instance.UsersWithRights.ToList())
+        this.WriteInteger(Instance.UsersWithRights.Count);
+        foreach (var Id in Instance.UsersWithRights.ToList())
+        {
+            var Data = WibboEnvironment.GetUserById(Id);
+            if (Data == null)
             {
-                User Data = WibboEnvironment.GetUserById(Id);
-                if (Data == null)
-                {
-                    this.WriteInteger(0);
-                    this.WriteString("Unknown Error");
-                }
-                else
-                {
-                    this.WriteInteger(Data.Id);
-                    this.WriteString(Data.Username);
-                }
+                this.WriteInteger(0);
+                this.WriteString("Unknown Error");
+            }
+            else
+            {
+                this.WriteInteger(Data.Id);
+                this.WriteString(Data.Username);
             }
         }
     }

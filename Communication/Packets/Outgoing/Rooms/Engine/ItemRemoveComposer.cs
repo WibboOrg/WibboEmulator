@@ -1,12 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+
+internal class ItemRemoveComposer : ServerPacket
 {
-    internal class ItemRemoveComposer : ServerPacket
+    public ItemRemoveComposer(int itemId, int ownerId)
+        : base(ServerPacketHeader.ITEM_WALL_REMOVE)
     {
-        public ItemRemoveComposer(int itemId, int ownerId)
-            : base(ServerPacketHeader.ITEM_WALL_REMOVE)
-        {
-            this.WriteString(itemId.ToString());
-            this.WriteInteger(ownerId);
-        }
+        this.WriteString(itemId.ToString());
+        this.WriteInteger(ownerId);
     }
 }

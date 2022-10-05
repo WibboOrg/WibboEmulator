@@ -1,25 +1,22 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.LandingView;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.LandingView;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetPromoArticlesEvent : IPacketEvent
 {
-    internal class GetPromoArticlesEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        var currentView = WibboEnvironment.GetGame().GetHotelView();        if (session == null || session.GetUser() == null)
         {
-            LandingViewManager currentView = WibboEnvironment.GetGame().GetHotelView();            if (Session == null || Session.GetUser() == null)
-            {
-                return;
-            }
-
-            if (!(currentView.Count() > 0))
-            {
-                return;
-            }
-            Session.SendPacket(new PromoArticlesComposer(currentView.HotelViewPromosIndexers));
+            return;
         }
+
+        if (!(currentView.Count() > 0))
+        {
+            return;
+        }
+        session.SendPacket(new PromoArticlesComposer(currentView.HotelViewPromosIndexers));
     }
 }

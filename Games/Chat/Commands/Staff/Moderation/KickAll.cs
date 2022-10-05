@@ -1,31 +1,29 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class KickAll : IChatCommand
 {
-    internal class KickAll : IChatCommand
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
+        var roomUserList = new List<RoomUser>();
+        foreach (var user in room.GetRoomUserManager().GetUserList().ToList())
         {
-            List<RoomUser> roomUserList = new List<RoomUser>();
-            foreach (RoomUser user in room.GetRoomUserManager().GetUserList().ToList())
+            if (!user.IsBot && !user.GetClient().GetUser().HasPermission("perm_no_kick") && session.GetUser().Id != user.GetClient().GetUser().Id)
             {
-                if (!user.IsBot && !user.GetClient().GetUser().HasPermission("perm_no_kick") && session.GetUser().Id != user.GetClient().GetUser().Id)
-                {
-                    user.GetClient().SendNotification("Tu as été exclu de cet appart.");
+                user.GetClient().SendNotification("Tu as été exclu de cet appart.");
 
-                    roomUserList.Add(user);
-                }
+                roomUserList.Add(user);
             }
-            foreach (RoomUser user in roomUserList)
+        }
+        foreach (var user in roomUserList)
+        {
+            if (user == null || user.GetClient() == null)
             {
-                if (user == null || user.GetClient() == null)
-                {
-                    continue;
-                }
-
-                room.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, false);
+                continue;
             }
+
+            room.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, false);
         }
     }
 }

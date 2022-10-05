@@ -1,45 +1,42 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class UpdateGroupBadgeEvent : IPacketEvent
 {
-    internal class UpdateGroupBadgeEvent : IPacketEvent
+    public double Delay => 500;
+
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        public double Delay => 500;
+        var groupId = packet.PopInt();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
         {
-            int GroupId = Packet.PopInt();
-
-            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
-            {
-                return;
-            }
-
-            if (Group.CreatorId != Session.GetUser().Id)
-            {
-                return;
-            }
-
-            int Count = Packet.PopInt();
-
-            string Badge = "";
-            for (int i = 0; i < Count; i++)
-            {
-                Badge += BadgePartUtility.WorkBadgeParts(i == 0, Packet.PopInt().ToString(), Packet.PopInt().ToString(), Packet.PopInt().ToString());
-            }
-
-            Group.Badge = (string.IsNullOrWhiteSpace(Badge) ? "b05114s06114" : Badge);
-
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                GuildDao.UpdateBadge(dbClient, Group.Id, Group.Badge);
-            }
-
-            Session.SendPacket(new GroupInfoComposer(Group, Session));
+            return;
         }
+
+        if (group.CreatorId != session.GetUser().Id)
+        {
+            return;
+        }
+
+        var count = packet.PopInt();
+
+        var badge = "";
+        for (var i = 0; i < count; i++)
+        {
+            badge += BadgePartUtility.WorkBadgeParts(i == 0, packet.PopInt().ToString(), packet.PopInt().ToString(), packet.PopInt().ToString());
+        }
+
+        group.Badge = string.IsNullOrWhiteSpace(badge) ? "b05114s06114" : badge;
+
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        {
+            GuildDao.UpdateBadge(dbClient, group.Id, group.Badge);
+        }
+
+        session.SendPacket(new GroupInfoComposer(group, session));
     }
 }

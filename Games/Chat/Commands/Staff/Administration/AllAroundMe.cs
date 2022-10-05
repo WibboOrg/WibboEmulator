@@ -1,24 +1,26 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class AllAroundMe : IChatCommand
 {
-    internal class AllAroundMe : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        var User = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (User == null)
         {
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            if (User == null)
-                return;
+            return;
+        }
 
-            List<RoomUser> Users = Room.GetRoomUserManager().GetRoomUsers();
-            foreach (RoomUser U in Users.ToList())
+        var Users = Room.GetRoomUserManager().GetRoomUsers();
+        foreach (var U in Users.ToList())
+        {
+            if (U == null || session.GetUser().Id == U.UserId)
             {
-                if (U == null || Session.GetUser().Id == U.UserId)
-                    continue;
-
-                U.MoveTo(User.X, User.Y, true);
+                continue;
             }
+
+            U.MoveTo(User.X, User.Y, true);
         }
     }
 }

@@ -1,35 +1,33 @@
-﻿using System.Data;
+namespace WibboEmulator.Games.Items.Wired.Triggers;
+using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Wired.Triggers
+public class GameStarts : WiredTriggerBase, IWired
 {
-    public class GameStarts : WiredTriggerBase, IWired
+    private readonly RoomEventDelegate _gameStartsDeletgate;
+
+    public GameStarts(Item item, Room room) : base(item, room, (int)WiredTriggerType.GAME_STARTS)
     {
-        private readonly RoomEventDelegate gameStartsDeletgate;
+        this._gameStartsDeletgate = new RoomEventDelegate(this.GameManager_OnGameStart);
+        this.RoomInstance.GetGameManager().OnGameStart += this._gameStartsDeletgate;
+    }
 
-        public GameStarts(Item item, Room room) : base(item, room, (int)WiredTriggerType.GAME_STARTS)
-        {
-            this.gameStartsDeletgate = new RoomEventDelegate(this.gameManager_OnGameStart);
-            this.RoomInstance.GetGameManager().OnGameStart += this.gameStartsDeletgate;
-        }
+    private void GameManager_OnGameStart(object sender, EventArgs e) => this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, null, null);
 
-        private void gameManager_OnGameStart(object sender, EventArgs e) => this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, null, null);
+    public override void Dispose()
+    {
+        base.Dispose();
 
-        public override void Dispose()
-        {
-            base.Dispose();
+        this.RoomInstance.GetWiredHandler().GetRoom().GetGameManager().OnGameStart -= this._gameStartsDeletgate;
+    }
 
-            this.RoomInstance.GetWiredHandler().GetRoom().GetGameManager().OnGameStart -= this.gameStartsDeletgate;
-        }
+    public void SaveToDatabase(IQueryAdapter dbClient)
+    {
+    }
 
-        public void SaveToDatabase(IQueryAdapter dbClient)
-        {
-        }
-
-        public void LoadFromDatabase(DataRow row)
-        {
-        }
+    public void LoadFromDatabase(DataRow row)
+    {
     }
 }

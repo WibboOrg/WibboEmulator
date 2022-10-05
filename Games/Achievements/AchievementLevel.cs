@@ -1,18 +1,17 @@
-﻿namespace WibboEmulator.Games.Achievements
-{
-    public struct AchievementLevel
-    {
-        public readonly int Level { get; }
-        public readonly int RewardPixels { get; }
-        public readonly int RewardPoints { get; }
-        public readonly int Requirement { get; }
+﻿namespace WibboEmulator.Games.Achievements;
 
-        public AchievementLevel(int level, int rewardPixels, int rewardPoints, int requirement)
-        {
-            Level = level;
-            RewardPixels = rewardPixels;
-            RewardPoints = rewardPoints;
-            Requirement = requirement;
-        }
+public struct AchievementLevel
+{
+    public readonly int Level { get; }
+    public readonly int RewardPixels { get; }
+    public readonly int RewardPoints { get; }
+    public readonly int Requirement { get; }
+
+    public AchievementLevel(int level, int rewardPixels, int rewardPoints, int requirement)
+    {
+        this.Level = level;
+        this.RewardPixels = rewardPixels;
+        this.RewardPoints = rewardPoints;
+        this.Requirement = requirement;
     }
 }

@@ -1,35 +1,32 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class UnbanUserFromRoomEvent : IPacketEvent
 {
-    internal class UnbanUserFromRoomEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient session, ClientPacket packet)
+        if (!session.GetUser().InRoom)
         {
-            if (!session.GetUser().InRoom)
-            {
-                return;
-            }
+            return;
+        }
 
-            Room Instance = session.GetUser().CurrentRoom;
-            if (Instance == null || !Instance.CheckRights(session, true))
-            {
-                return;
-            }
+        var Instance = session.GetUser().CurrentRoom;
+        if (Instance == null || !Instance.CheckRights(session, true))
+        {
+            return;
+        }
 
-            int UserId = packet.PopInt();
-            int RoomId = packet.PopInt();
+        var UserId = packet.PopInt();
+        var RoomId = packet.PopInt();
 
-            if (!Instance.HasBanExpired(UserId))
-            {
-                Instance.RemoveBan(UserId);
+        if (!Instance.HasBanExpired(UserId))
+        {
+            Instance.RemoveBan(UserId);
 
-                session.SendPacket(new UnbanUserFromRoomComposer(RoomId, UserId));
-            }
+            session.SendPacket(new UnbanUserFromRoomComposer(RoomId, UserId));
         }
     }
 }

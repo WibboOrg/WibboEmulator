@@ -1,46 +1,43 @@
-﻿using WibboEmulator.Communication.Interfaces;
+namespace WibboEmulator.Utilities;
+using WibboEmulator.Communication.Interfaces;
 
-namespace WibboEmulator.Utilities
+public class ServerPacketList
 {
-    public class ServerPacketList
+    private byte[] _totalBytes;
+    private int _current;
+
+    public ServerPacketList()
     {
-        private byte[] totalBytes;
-        private int current;
-        private int count;
-
-        public ServerPacketList()
-        {
-            this.totalBytes = new byte[0];
-            this.current = 0;
-            this.count = 0;
-        }
-
-        public void Add(IServerPacket packet)
-        {
-            byte[] toAdd = packet.GetBytes();
-
-            int newLen = this.totalBytes.Length + toAdd.Length;
-
-            Array.Resize(ref this.totalBytes, newLen);
-
-            for (int i = 0; i < toAdd.Length; i++)
-            {
-                this.totalBytes[this.current] = toAdd[i];
-                this.current++;
-            }
-
-            this.count++;
-        }
-
-        public void Clear()
-        {
-            this.totalBytes = new byte[0];
-            this.current = 0;
-            this.count = 0;
-        }
-
-        public int Count => this.count;
-
-        public byte[] GetBytes => this.totalBytes;
+        this._totalBytes = Array.Empty<byte>();
+        this._current = 0;
+        this.Count = 0;
     }
+
+    public void Add(IServerPacket packet)
+    {
+        var toAdd = packet.GetBytes();
+
+        var newLen = this._totalBytes.Length + toAdd.Length;
+
+        Array.Resize(ref this._totalBytes, newLen);
+
+        for (var i = 0; i < toAdd.Length; i++)
+        {
+            this._totalBytes[this._current] = toAdd[i];
+            this._current++;
+        }
+
+        this.Count++;
+    }
+
+    public void Clear()
+    {
+        this._totalBytes = Array.Empty<byte>();
+        this._current = 0;
+        this.Count = 0;
+    }
+
+    public int Count { get; private set; }
+
+    public byte[] GetBytes => this._totalBytes;
 }

@@ -1,17 +1,15 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class SetFriendBarStateEvent : IPacketEvent
 {
-    internal class SetFriendBarStateEvent : IPacketEvent
-    {
-        public double Delay => 0;
+    public double Delay => 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket Packet)
+    {
+        if (session == null || session.GetUser() == null)
         {
-            if (Session == null || Session.GetUser() == null)
-            {
-                return;
-            }
+            return;
         }
     }
 }

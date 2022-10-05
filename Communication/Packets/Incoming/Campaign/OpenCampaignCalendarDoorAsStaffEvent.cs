@@ -1,18 +1,16 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Campaign;
+namespace WibboEmulator.Communication.Packets.Incoming.Campaign;
+using WibboEmulator.Communication.Packets.Outgoing.Campaign;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Campaign
+internal class OpenCampaignCalendarDoorAsStaffEvent : IPacketEvent
 {
-    internal class OpenCampaignCalendarDoorAsStaffEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        public double Delay => 0;
+        var campaignName = packet.PopString();
+        var campaingnId = packet.PopInt();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
-        {
-            string campaignName = Packet.PopString();
-            int campaingnId = Packet.PopInt();
-
-            Session.SendPacket(new CampaignCalendarDoorOpenedComposer(true, "", "", ""));
-        }
+        session.SendPacket(new CampaignCalendarDoorOpenedComposer(true, "", "", ""));
     }
 }

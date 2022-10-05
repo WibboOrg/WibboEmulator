@@ -1,87 +1,91 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Wired.Actions
+public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
 {
-    public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
+    public TeleportToItem(Item item, Room room) : base(item, room, (int)WiredActionType.TELEPORT) => this.Delay = 1;
+
+    public override bool OnCycle(RoomUser user, Item item)
     {
-        public TeleportToItem(Item item, Room room) : base(item, room, (int)WiredActionType.TELEPORT)
+        if (user == null)
         {
-            this.Delay = 1;
+            return false;
         }
 
-        public override bool OnCycle(RoomUser user, Item item)
+        if (this.Items.Count > 1)
         {
-            if (user == null)
+            var roomItem = this.Items[WibboEnvironment.GetRandomNumber(0, this.Items.Count - 1)];
+            if (roomItem == null)
             {
                 return false;
             }
 
-            if (this.Items.Count > 1)
+            if (roomItem.Coordinate != user.Coordinate)
             {
-                Item roomItem = this.Items[WibboEnvironment.GetRandomNumber(0, this.Items.Count - 1)];
-                if (roomItem == null)
-                {
-                    return false;
-                }
-
-                if (roomItem.Coordinate != user.Coordinate)
-                {
-                    this.RoomInstance.GetGameMap().TeleportToItem(user, roomItem);
-                }
+                this.RoomInstance.GetGameMap().TeleportToItem(user, roomItem);
             }
-            else if (this.Items.Count == 1)
-            {
-                this.RoomInstance.GetGameMap().TeleportToItem(user, Enumerable.First<Item>(this.Items));
-            }
-
-            user.ApplyEffect(user.CurrentEffect, true);
-            if (user.FreezeEndCounter <= 0)
-            {
-                user.Freeze = false;
-            }
-
-            return false;
+        }
+        else if (this.Items.Count == 1)
+        {
+            this.RoomInstance.GetGameMap().TeleportToItem(user, Enumerable.First<Item>(this.Items));
         }
 
-        public override void Handle(RoomUser user, Item item)
+        user.ApplyEffect(user.CurrentEffect, true);
+        if (user.FreezeEndCounter <= 0)
         {
-            if (this.Items.Count == 0 || user == null)
-            {
-                return;
-            }
-
-            user.ApplyEffect(4, true);
-            user.Freeze = true;
-
-            base.Handle(user, item);
+            user.Freeze = false;
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
+        return false;
+    }
 
-        public void LoadFromDatabase(DataRow row)
+    public override void Handle(RoomUser user, Item item)
+    {
+        if (this.Items.Count == 0 || user == null)
         {
-            int delay;
-            if (int.TryParse(row["delay"].ToString(), out delay))
-                this.Delay = delay;
+            return;
+        }
 
-            if (int.TryParse(row["trigger_data"].ToString(), out delay))
-                this.Delay = delay + 1;
+        user.ApplyEffect(4, true);
+        user.Freeze = true;
 
-            string triggerItems = row["triggers_item"].ToString();
+        base.Handle(user, item);
+    }
 
-            if (triggerItems == null || triggerItems == "")
-                return;
+    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
 
-            foreach (string itemId in triggerItems.Split(';'))
+    public void LoadFromDatabase(DataRow row)
+    {
+        if (int.TryParse(row["delay"].ToString(), out var delay))
+        {
+            this.Delay = delay;
+        }
+
+        if (int.TryParse(row["trigger_data"].ToString(), out delay))
+        {
+            this.Delay = delay + 1;
+        }
+
+        var triggerItems = row["triggers_item"].ToString();
+
+        if (triggerItems is null or "")
+        {
+            return;
+        }
+
+        foreach (var itemId in triggerItems.Split(';'))
+        {
+            if (!int.TryParse(itemId, out var id))
             {
-                if (!int.TryParse(itemId, out int id))
-                    continue;
+                continue;
+            }
 
-                if (!this.StuffIds.Contains(id))
-                    this.StuffIds.Add(id);
+            if (!this.StuffIds.Contains(id))
+            {
+                this.StuffIds.Add(id);
             }
         }
     }

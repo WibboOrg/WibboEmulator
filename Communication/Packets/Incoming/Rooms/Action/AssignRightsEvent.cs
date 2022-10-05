@@ -1,66 +1,64 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class AssignRightsEvent : IPacketEvent
 {
-    internal class AssignRightsEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser() == null)
         {
-            if (Session.GetUser() == null)
+            return;
+        }
+
+        var UserId = Packet.PopInt();
+
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
+        {
+            return;
+        }
+
+        if (!room.CheckRights(session, true))
+        {
+            return;
+        }
+
+        if (room.UsersWithRights.Contains(UserId))
+        {
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.giverights.error", session.Langue));
+        }
+        else
+        {
+            var Userright = WibboEnvironment.GetUserById(UserId);
+            if (Userright == null)
             {
                 return;
             }
 
-            int UserId = Packet.PopInt();
+            room.UsersWithRights.Add(UserId);
 
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room room))
-                return;
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+            {
+                RoomRightDao.Insert(dbClient, room.Id, UserId);
+            }
 
-            if (!room.CheckRights(Session, true))
+            session.SendPacket(new FlatControllerAddedComposer(room.Id, UserId, Userright.Username));
+
+            var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(UserId);
+            if (roomUserByUserId == null || roomUserByUserId.IsBot)
             {
                 return;
             }
 
-            if (room.UsersWithRights.Contains(UserId))
-            {
-                Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.giverights.error", Session.Langue));
-            }
-            else
-            {
-                User Userright = WibboEnvironment.GetUserById(UserId);
-                if (Userright == null)
-                {
-                    return;
-                }
+            roomUserByUserId.RemoveStatus("flatctrl");
+            roomUserByUserId.SetStatus("flatctrl", "1");
+            roomUserByUserId.UpdateNeeded = true;
 
-                room.UsersWithRights.Add(UserId);
-
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    RoomRightDao.Insert(dbClient, room.Id, UserId);
-                }
-
-                Session.SendPacket(new FlatControllerAddedComposer(room.Id, UserId, Userright.Username));
-
-                RoomUser roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(UserId);
-                if (roomUserByUserId == null || roomUserByUserId.IsBot)
-                {
-                    return;
-                }
-
-                roomUserByUserId.RemoveStatus("flatctrl");
-                roomUserByUserId.SetStatus("flatctrl", "1");
-                roomUserByUserId.UpdateNeeded = true;
-
-                roomUserByUserId.GetClient().SendPacket(new YouAreControllerComposer(1));
-            }
+            roomUserByUserId.GetClient().SendPacket(new YouAreControllerComposer(1));
         }
     }
 }

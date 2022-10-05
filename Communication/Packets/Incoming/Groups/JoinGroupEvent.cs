@@ -1,57 +1,55 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class JoinGroupEvent : IPacketEvent
 {
-    internal class JoinGroupEvent : IPacketEvent
+    public double Delay => 500;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 500;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session == null || session.GetUser() == null)
         {
-            if (Session == null || Session.GetUser() == null)
-            {
-                return;
-            }
+            return;
+        }
 
-            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(Packet.PopInt(), out Group Group))
-            {
-                return;
-            }
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(Packet.PopInt(), out var Group))
+        {
+            return;
+        }
 
-            if (Group.IsMember(Session.GetUser().Id) || Group.IsAdmin(Session.GetUser().Id) || (Group.HasRequest(Session.GetUser().Id) && Group.GroupType == GroupType.LOCKED) || Group.GroupType == GroupType.PRIVATE)
-            {
-                return;
-            }
+        if (Group.IsMember(session.GetUser().Id) || Group.IsAdmin(session.GetUser().Id) || (Group.HasRequest(session.GetUser().Id) && Group.GroupType == GroupType.LOCKED) || Group.GroupType == GroupType.PRIVATE)
+        {
+            return;
+        }
 
-            if (Session.GetUser().MyGroups.Count >= 50)
-            {
-                Session.SendNotification("Oups, il semble que vous avez atteint la limite d'adhésion au groupe! Vous pouvez seulement rejoindre jusqu'à 50 groupes.");
-                return;
-            }
+        if (session.GetUser().MyGroups.Count >= 50)
+        {
+            session.SendNotification("Oups, il semble que vous avez atteint la limite d'adhésion au groupe! Vous pouvez seulement rejoindre jusqu'à 50 groupes.");
+            return;
+        }
 
-            Group.AddMember(Session.GetUser().Id);
+        Group.AddMember(session.GetUser().Id);
 
-            if (Group.GroupType == GroupType.LOCKED)
+        if (Group.GroupType == GroupType.LOCKED)
+        {
+            session.SendPacket(new GroupInfoComposer(Group, session));
+        }
+        else
+        {
+            session.GetUser().MyGroups.Add(Group.Id);
+            session.SendPacket(new GroupFurniConfigComposer(WibboEnvironment.GetGame().GetGroupManager().GetGroupsForUser(session.GetUser().MyGroups)));
+            session.SendPacket(new GroupInfoComposer(Group, session));
+
+            if (session.GetUser().CurrentRoom != null)
             {
-                Session.SendPacket(new GroupInfoComposer(Group, Session));
+                session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
             }
             else
             {
-                Session.GetUser().MyGroups.Add(Group.Id);
-                Session.SendPacket(new GroupFurniConfigComposer(WibboEnvironment.GetGame().GetGroupManager().GetGroupsForUser(Session.GetUser().MyGroups)));
-                Session.SendPacket(new GroupInfoComposer(Group, Session));
-
-                if (Session.GetUser().CurrentRoom != null)
-                {
-                    Session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(Session.GetUser().Id));
-                }
-                else
-                {
-                    Session.SendPacket(new RefreshFavouriteGroupComposer(Session.GetUser().Id));
-                }
+                session.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
             }
         }
     }

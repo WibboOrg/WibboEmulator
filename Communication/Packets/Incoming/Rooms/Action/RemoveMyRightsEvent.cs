@@ -1,57 +1,54 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class RemoveMyRightsEvent : IPacketEvent
 {
-    internal class RemoveMyRightsEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser() == null)
         {
-            if (Session.GetUser() == null)
+            return;
+        }
+
+        if (!session.GetUser().InRoom)
+        {
+            return;
+        }
+
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var Room))
+        {
+            return;
+        }
+
+        if (!Room.CheckRights(session))
+        {
+            return;
+        }
+
+        if (Room.UsersWithRights.Contains(session.GetUser().Id))
+        {
+            var User = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            if (User != null && !User.IsBot)
             {
-                return;
+                User.RemoveStatus("flatctrl");
+                User.UpdateNeeded = true;
+
+                User.GetClient().SendPacket(new YouAreNotControllerComposer());
             }
 
-            if (!Session.GetUser().InRoom)
+            using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                return;
+                RoomRightDao.Delete(dbClient, Room.Id, session.GetUser().Id);
             }
 
-            if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Session.GetUser().CurrentRoomId, out Room Room))
+            if (Room.UsersWithRights.Contains(session.GetUser().Id))
             {
-                return;
-            }
-
-            if (!Room.CheckRights(Session))
-            {
-                return;
-            }
-
-            if (Room.UsersWithRights.Contains(Session.GetUser().Id))
-            {
-                RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-                if (User != null && !User.IsBot)
-                {
-                    User.RemoveStatus("flatctrl");
-                    User.UpdateNeeded = true;
-
-                    User.GetClient().SendPacket(new YouAreNotControllerComposer());
-                }
-
-                using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-                {
-                    RoomRightDao.Delete(dbClient, Room.Id, Session.GetUser().Id);
-                }
-
-                if (Room.UsersWithRights.Contains(Session.GetUser().Id))
-                {
-                    Room.UsersWithRights.Remove(Session.GetUser().Id);
-                }
+                Room.UsersWithRights.Remove(session.GetUser().Id);
             }
         }
     }

@@ -1,11 +1,7 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Furni
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Furni;
+
+internal class LoveLockDialogueSetLockedComposer : ServerPacket
 {
-    internal class LoveLockDialogueSetLockedComposer : ServerPacket
-    {
-        public LoveLockDialogueSetLockedComposer(int ItemId)
-            : base(ServerPacketHeader.LOVELOCK_FURNI_FRIEND_COMFIRMED)
-        {
-            this.WriteInteger(ItemId);
-        }
-    }
+    public LoveLockDialogueSetLockedComposer(int ItemId)
+        : base(ServerPacketHeader.LOVELOCK_FURNI_FRIEND_COMFIRMED) => this.WriteInteger(ItemId);
 }

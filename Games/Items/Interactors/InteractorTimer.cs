@@ -1,134 +1,133 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorTimer : FurniInteractor
 {
-    public class InteractorTimer : FurniInteractor
-    {
-        private bool _pendingReset = false;
-        private bool _chronoStarter = false;
+    private bool _pendingReset = false;
+    private bool _chronoStarter = false;
 
-        public override void OnPlace(GameClient Session, Item Item)
+    public override void OnPlace(GameClient session, Item item)
+    {
+    }
+
+    public override void OnRemove(GameClient session, Item item) => item.ExtraData = "0";
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (!userHasRights)
         {
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item) => Item.ExtraData = "0";
-
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        var time = 0;
+        if (!string.IsNullOrEmpty(item.ExtraData))
         {
-            if (!UserHasRights)
-            {
-                return;
-            }
+            int.TryParse(item.ExtraData, out time);
+        }
 
-            int time = 0;
-            if (!string.IsNullOrEmpty(Item.ExtraData))
+        if (request == 2)
+        {
+            if (this._pendingReset && time > 0)
             {
-                int.TryParse(Item.ExtraData, out time);
+                this._chronoStarter = false;
+                this._pendingReset = false;
             }
-
-            if (Request == 2)
+            else
             {
-                if (this._pendingReset && time > 0)
+                if (time is 0 or 30 or 60 or 120 or 180 or 300 or 600)
                 {
-                    this._chronoStarter = false;
-                    this._pendingReset = false;
-                }
-                else
-                {
-                    if (time == 0 || time == 30 || time == 60 || time == 120 || time == 180 || time == 300 || time == 600)
+                    if (time == 0)
                     {
-                        if (time == 0)
-                        {
-                            time = 30;
-                        }
-                        else if (time == 30)
-                        {
-                            time = 60;
-                        }
-                        else if (time == 60)
-                        {
-                            time = 120;
-                        }
-                        else if (time == 120)
-                        {
-                            time = 180;
-                        }
-                        else if (time == 180)
-                        {
-                            time = 300;
-                        }
-                        else if (time == 300)
-                        {
-                            time = 600;
-                        }
-                        else if (time == 600)
-                        {
-                            time = 0;
-                        }
+                        time = 30;
                     }
-                    else
+                    else if (time == 30)
+                    {
+                        time = 60;
+                    }
+                    else if (time == 60)
+                    {
+                        time = 120;
+                    }
+                    else if (time == 120)
+                    {
+                        time = 180;
+                    }
+                    else if (time == 180)
+                    {
+                        time = 300;
+                    }
+                    else if (time == 300)
+                    {
+                        time = 600;
+                    }
+                    else if (time == 600)
                     {
                         time = 0;
                     }
                 }
-            }
-            else if ((Request == 0 || Request == 1) && time != 0 && !this._chronoStarter)
-            {
-                Item.ReqUpdate(1);
-                Item.GetRoom().GetGameManager().StartGame();
-                this._chronoStarter = true;
-                this._pendingReset = true;
-            }
-
-            Item.ExtraData = time.ToString();
-            Item.UpdateState();
-        }
-
-        public override void OnTick(Item item)
-        {
-            if (item == null)
-                return;
-
-            if (string.IsNullOrEmpty(item.ExtraData))
-            {
-                return;
-            }
-
-            int time;
-            if (!int.TryParse(item.ExtraData, out time))
-            {
-                return;
-            }
-
-            if (!this._chronoStarter)
-            {
-                return;
-            }
-
-            if (time > 0)
-            {
-                if (item.InteractionCountHelper == 1)
-                {
-                    time--;
-
-                    item.InteractionCountHelper = 0;
-                    item.ExtraData = time.ToString();
-                    item.UpdateState();
-                }
                 else
                 {
-                    item.InteractionCountHelper++;
+                    time = 0;
                 }
+            }
+        }
+        else if ((request == 0 || request == 1) && time != 0 && !this._chronoStarter)
+        {
+            item.ReqUpdate(1);
+            item.GetRoom().GetGameManager().StartGame();
+            this._chronoStarter = true;
+            this._pendingReset = true;
+        }
 
-                item.UpdateCounter = 1;
-                return;
+        item.ExtraData = time.ToString();
+        item.UpdateState();
+    }
+
+    public override void OnTick(Item item)
+    {
+        if (item == null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(item.ExtraData))
+        {
+            return;
+        }
+
+        if (!int.TryParse(item.ExtraData, out var time))
+        {
+            return;
+        }
+
+        if (!this._chronoStarter)
+        {
+            return;
+        }
+
+        if (time > 0)
+        {
+            if (item.InteractionCountHelper == 1)
+            {
+                time--;
+
+                item.InteractionCountHelper = 0;
+                item.ExtraData = time.ToString();
+                item.UpdateState();
             }
             else
             {
-                this._chronoStarter = false;
-                item.GetRoom().GetGameManager().StopGame();
-                return;
+                item.InteractionCountHelper++;
             }
+
+            item.UpdateCounter = 1;
+            return;
+        }
+        else
+        {
+            this._chronoStarter = false;
+            item.GetRoom().GetGameManager().StopGame();
+            return;
         }
     }
 }

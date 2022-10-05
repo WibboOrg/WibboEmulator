@@ -1,43 +1,41 @@
+namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Chat.Logs;
 using WibboEmulator.Games.Moderation;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
+internal class ModeratorTicketChatlogComposer : ServerPacket
 {
-    internal class ModeratorTicketChatlogComposer : ServerPacket
+    public ModeratorTicketChatlogComposer(ModerationTicket ticket, RoomData roomData, List<ChatlogEntry> chatlogs)
+        : base(ServerPacketHeader.CFH_CHATLOG)
     {
-        public ModeratorTicketChatlogComposer(ModerationTicket ticket, RoomData roomData, List<ChatlogEntry> chatlogs)
-            : base(ServerPacketHeader.CFH_CHATLOG)
+        this.WriteInteger(ticket.TicketId);
+        this.WriteInteger(ticket.SenderId);
+        this.WriteInteger(ticket.ReportedId);
+        this.WriteInteger(roomData.Id);
+
+        this.WriteBoolean(false);
+        this.WriteInteger(roomData.Id);
+        this.WriteString(roomData.Name);
+
+        this.WriteShort(chatlogs.Count);
+        foreach (var chat in chatlogs)
         {
-            WriteInteger(ticket.TicketId);
-            WriteInteger(ticket.SenderId);
-            WriteInteger(ticket.ReportedId);
-            WriteInteger(roomData.Id);
-
-            WriteBoolean(false);
-            WriteInteger(roomData.Id);
-            WriteString(roomData.Name);
-
-            WriteShort(chatlogs.Count);
-            foreach (ChatlogEntry chat in chatlogs)
+            if (chat != null)
             {
-                if (chat != null)
-                {
-                    WriteString(UnixTimestamp.FromUnixTimestamp(chat.timestamp).ToShortTimeString()); //this.timeSpoken.Minute
-                    WriteInteger(chat.userID); //this.timeSpoken.Minute
-                    WriteString(chat.username);
-                    WriteString(chat.message);
-                    WriteBoolean(false); // Text is bold
-                }
-                else
-                {
-                    WriteString("0"); //this.timeSpoken.Minute
-                    WriteInteger(0); //this.timeSpoken.Minute
-                    WriteString("");
-                    WriteString("");
-                    WriteBoolean(false); // Text is bold
-                }
+                this.WriteString(UnixTimestamp.FromUnixTimestamp(chat.timestamp).ToShortTimeString()); //this.timeSpoken.Minute
+                this.WriteInteger(chat.userID); //this.timeSpoken.Minute
+                this.WriteString(chat.username);
+                this.WriteString(chat.message);
+                this.WriteBoolean(false); // Text is bold
+            }
+            else
+            {
+                this.WriteString("0"); //this.timeSpoken.Minute
+                this.WriteInteger(0); //this.timeSpoken.Minute
+                this.WriteString("");
+                this.WriteString("");
+                this.WriteBoolean(false); // Text is bold
             }
         }
     }

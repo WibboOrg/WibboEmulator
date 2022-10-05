@@ -1,12 +1,11 @@
-﻿namespace WibboEmulator.Games.GameClients.Messenger
+namespace WibboEmulator.Games.Users.Messenger;
+
+public enum MessengerMessageErrors
 {
-    public enum MessengerMessageErrors
-    {
-        FriendMuted,
-        YourMuted,
-        FriendOffline,
-        NotFriends,
-        FriendBusy,
-        OfflineFailed
-    }
+    FriendMuted,
+    YourMuted,
+    FriendOffline,
+    NotFriends,
+    FriendBusy,
+    OfflineFailed
 }

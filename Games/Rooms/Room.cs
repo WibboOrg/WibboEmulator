@@ -1,17 +1,16 @@
-﻿using System.Data;
+namespace WibboEmulator.Games.Rooms;
+using System.Data;
 using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Chat.Logs;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Pets;
-using WibboEmulator.Games.Roleplay;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Rooms.Jankens;
@@ -22,837 +21,792 @@ using WibboEmulator.Games.Rooms.Wired;
 using WibboEmulator.Utilities;
 using WibboEmulator.Utilities.Events;
 
-namespace WibboEmulator.Games.Rooms
+public delegate void RoomEventDelegate(object sender, EventArgs e);
+public delegate void RoomUserSaysDelegate(object sender, UserSaysArgs e, ref bool messageHandled);
+public delegate void TriggerUserDelegate(RoomUser user, string ActionType);
+public delegate void BotCollisionDelegate(RoomUser user, string BotName);
+
+public class Room
 {
-    public delegate void RoomEventDelegate(object sender, EventArgs e);
-    public delegate void RoomUserSaysDelegate(object sender, UserSaysArgs e, ref bool messageHandled);
-    public delegate void TriggerUserDelegate(RoomUser user, string ActionType);
-    public delegate void BotCollisionDelegate(RoomUser user, string BotName);
+    public int IsLagging;
+    public int IdleTime;
+    public bool Disposed;
 
-    public class Room
+    public Task ProcessTask;
+
+    public bool IsRoleplay { get { return this.Roleplay != null; } }
+    public RoomRoleplay Roleplay;
+    public List<int> UsersWithRights;
+    public bool EveryoneGotRights;
+    public bool HeightMapLoaded;
+    public DateTime lastTimerReset;
+    public MoodlightData MoodlightData;
+    public List<Trade> ActiveTrades;
+    public RoomData RoomData { get; set; }
+
+    private readonly TimeSpan _maximumRunTimeInSec = TimeSpan.FromSeconds(5);
+
+    private TeamManager _teamManager;
+    private GameManager _gameManager;
+    private readonly Gamemap _gameMap;
+    private readonly RoomItemHandling _roomItemHandling;
+    private readonly RoomUserManager _roomUserManager;
+    private Soccer _soccer;
+    private BattleBanzai _banzai;
+    private Freeze _freeze;
+    private JankenManager _jankan;
+    private GameItemHandler _gameItemHandler;
+    private readonly WiredHandler _wiredHandler;
+    private readonly ProjectileManager _projectileManager;
+    private readonly ChatlogManager _chatMessageManager;
+
+    private readonly Dictionary<int, double> _bans;
+    private readonly Dictionary<int, double> _mutes;
+
+    public bool RoomMuted;
+    public bool RoomMutePets;
+    public bool FreezeRoom;
+    public bool PushPullAllowed;
+    public bool CloseFullRoom;
+    public bool OldFoot;
+    public bool RoomIngameChat;
+
+    private int _saveFurnitureTimer;
+
+    //Question
+    public int VotedYesCount { get; set; }
+    public int VotedNoCount { get; set; }
+
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
+
+    public int UserCount => this._roomUserManager.GetRoomUserCount();
+
+    public int Id => this.RoomData.Id;
+
+    public event RoomUserSaysDelegate OnUserSays;
+    public event RoomEventDelegate OnTrigger;
+    public event RoomEventDelegate OnTriggerSelf;
+    public event RoomEventDelegate OnUserCls;
+
+    public Room(RoomData Data)
     {
-        public int IsLagging;
-        public int IdleTime;
-        public bool Disposed;
-
-        public Task ProcessTask;
-
-        public bool IsRoleplay { get { return this.Roleplay != null; } }
-        public RoomRoleplay Roleplay;
-        public List<int> UsersWithRights;
-        public bool EveryoneGotRights;
-        public bool HeightMapLoaded;
-        public DateTime lastTimerReset;
-        public MoodlightData MoodlightData;
-        public List<Trade> ActiveTrades;
-        public RoomData RoomData { get; set; }
-
-        private readonly TimeSpan _maximumRunTimeInSec = TimeSpan.FromSeconds(5);
-
-        private TeamManager _teamManager;
-        private GameManager _gameManager;
-        private readonly Gamemap _gameMap;
-        private readonly RoomItemHandling _roomItemHandling;
-        private readonly RoomUserManager _roomUserManager;
-        private Soccer _soccer;
-        private BattleBanzai _banzai;
-        private Freeze _freeze;
-        private JankenManager _jankan;
-        private GameItemHandler _gameItemHandler;
-        private readonly WiredHandler _wiredHandler;
-        private readonly ProjectileManager _projectileManager;
-        private readonly ChatlogManager _chatMessageManager;
-
-        private readonly Dictionary<int, double> _bans;
-        private readonly Dictionary<int, double> _mutes;
-
-        public bool RoomMuted;
-        public bool RoomMutePets;
-        public bool FreezeRoom;
-        public bool PushPullAllowed;
-        public bool CloseFullRoom;
-        public bool OldFoot;
-        public bool RoomIngameChat;
-
-        private int _saveFurnitureTimer;
-
-        //Question
-        public int VotedYesCount { get; set; }
-        public int VotedNoCount { get; set; }
-
-        private readonly CancellationTokenSource _cancellationTokenSource = new();
-
-        public int UserCount => this._roomUserManager.GetRoomUserCount();
-
-        public int Id => this.RoomData.Id;
-
-        public event RoomUserSaysDelegate OnUserSays;
-        public event RoomEventDelegate OnTrigger;
-        public event RoomEventDelegate OnTriggerSelf;
-        public event RoomEventDelegate OnUserCls;
-
-        public Room(RoomData Data)
+        var RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Data.OwnerId);
+        if (RPManager != null)
         {
-            RolePlayerManager RPManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Data.OwnerId);
-            if (RPManager != null)
-            {
-                this.Roleplay = new RoomRoleplay();
-            }
-
-            this._saveFurnitureTimer = 0;
-            this.Disposed = false;
-            this._bans = new Dictionary<int, double>();
-            this._mutes = new Dictionary<int, double>();
-            this.ActiveTrades = new List<Trade>();
-            this.HeightMapLoaded = false;
-            this.RoomData = Data;
-            this.EveryoneGotRights = Data.AllowRightsOverride;
-            this.IdleTime = 0;
-            this.RoomMuted = false;
-            this.PushPullAllowed = true;
-            this.RoomIngameChat = false;
-
-            this._gameMap = new Gamemap(this);
-            this._roomItemHandling = new RoomItemHandling(this);
-            this._roomUserManager = new RoomUserManager(this);
-            this._wiredHandler = new WiredHandler(this);
-            this._projectileManager = new ProjectileManager(this);
-            this._chatMessageManager = new ChatlogManager();
-
-            this._chatMessageManager.LoadRoomChatlogs(this.Id);
-
-            this.GetRoomItemHandler().LoadFurniture();
-            if (this.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
-            {
-                this.GetRoomItemHandler().LoadFurniture(WibboEnvironment.GetSettings().GetData<int>("autogame.deco.room.id"));
-            }
-
-            this.GetGameMap().GenerateMaps(true);
-            this.LoadRights();
-            this.LoadBots();
-            this.InitPets();
-            this.lastTimerReset = DateTime.Now;
+            this.Roleplay = new RoomRoleplay();
         }
 
-        public Gamemap GetGameMap() => this._gameMap;
+        this._saveFurnitureTimer = 0;
+        this.Disposed = false;
+        this._bans = new Dictionary<int, double>();
+        this._mutes = new Dictionary<int, double>();
+        this.ActiveTrades = new List<Trade>();
+        this.HeightMapLoaded = false;
+        this.RoomData = Data;
+        this.EveryoneGotRights = Data.AllowRightsOverride;
+        this.IdleTime = 0;
+        this.RoomMuted = false;
+        this.PushPullAllowed = true;
+        this.RoomIngameChat = false;
 
-        public RoomItemHandling GetRoomItemHandler() => this._roomItemHandling;
+        this._gameMap = new Gamemap(this);
+        this._roomItemHandling = new RoomItemHandling(this);
+        this._roomUserManager = new RoomUserManager(this);
+        this._wiredHandler = new WiredHandler(this);
+        this._projectileManager = new ProjectileManager(this);
+        this._chatMessageManager = new ChatlogManager();
 
-        public RoomUserManager GetRoomUserManager() => this._roomUserManager;
+        this._chatMessageManager.LoadRoomChatlogs(this.Id);
 
-        public Soccer GetSoccer()
+        this.GetRoomItemHandler().LoadFurniture();
+        if (this.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
         {
-            if (this._soccer == null)
-            {
-                this._soccer = new Soccer(this);
-            }
-
-            return this._soccer;
+            this.GetRoomItemHandler().LoadFurniture(WibboEnvironment.GetSettings().GetData<int>("autogame.deco.room.id"));
         }
 
-        public TeamManager GetTeamManager()
-        {
-            if (this._teamManager == null)
-            {
-                this._teamManager = new TeamManager();
-            }
+        this.GetGameMap().GenerateMaps(true);
+        this.LoadRights();
+        this.LoadBots();
+        this.InitPets();
+        this.lastTimerReset = DateTime.Now;
+    }
 
-            return this._teamManager;
+    public Gamemap GetGameMap() => this._gameMap;
+
+    public RoomItemHandling GetRoomItemHandler() => this._roomItemHandling;
+
+    public RoomUserManager GetRoomUserManager() => this._roomUserManager;
+
+    public Soccer GetSoccer()
+    {
+        if (this._soccer == null)
+        {
+            this._soccer = new Soccer(this);
         }
 
-        public BattleBanzai GetBanzai()
-        {
-            if (this._banzai == null)
-            {
-                this._banzai = new BattleBanzai(this);
-            }
+        return this._soccer;
+    }
 
-            return this._banzai;
+    public TeamManager GetTeamManager()
+    {
+        if (this._teamManager == null)
+        {
+            this._teamManager = new TeamManager();
         }
 
-        public Freeze GetFreeze()
-        {
-            if (this._freeze == null)
-            {
-                this._freeze = new Freeze(this);
-            }
+        return this._teamManager;
+    }
 
-            return this._freeze;
+    public BattleBanzai GetBanzai()
+    {
+        if (this._banzai == null)
+        {
+            this._banzai = new BattleBanzai(this);
         }
 
-        public JankenManager GetJanken()
-        {
-            if (this._jankan == null)
-            {
-                this._jankan = new JankenManager(this);
-            }
+        return this._banzai;
+    }
 
-            return this._jankan;
+    public Freeze GetFreeze()
+    {
+        if (this._freeze == null)
+        {
+            this._freeze = new Freeze(this);
         }
 
-        public GameManager GetGameManager()
-        {
-            if (this._gameManager == null)
-            {
-                this._gameManager = new GameManager(this);
-            }
+        return this._freeze;
+    }
 
-            return this._gameManager;
+    public JankenManager GetJanken()
+    {
+        if (this._jankan == null)
+        {
+            this._jankan = new JankenManager(this);
         }
 
-        public GameItemHandler GetGameItemHandler()
-        {
-            if (this._gameItemHandler == null)
-            {
-                this._gameItemHandler = new GameItemHandler(this);
-            }
+        return this._jankan;
+    }
 
-            return this._gameItemHandler;
+    public GameManager GetGameManager()
+    {
+        if (this._gameManager == null)
+        {
+            this._gameManager = new GameManager(this);
         }
 
-        public WiredHandler GetWiredHandler() => this._wiredHandler;
+        return this._gameManager;
+    }
 
-        public ProjectileManager GetProjectileManager() => this._projectileManager;
-
-        public bool GotSoccer() => this._soccer != null;
-
-        public bool GotBanzai() => this._banzai != null;
-
-        public bool GotFreeze() => this._freeze != null;
-
-        public bool GotJanken() => this._jankan != null;
-
-        public bool GotWired() => this._wiredHandler != null;
-
-        public ChatlogManager GetChatMessageManager() => this._chatMessageManager;
-
-        public bool AllowsShous(RoomUser user, string message)
+    public GameItemHandler GetGameItemHandler()
+    {
+        if (this._gameItemHandler == null)
         {
-            bool messageHandled = false;
-            if (this.OnUserSays != null)
-            {
-                this.OnUserSays(null, new UserSaysArgs(user, message), ref messageHandled);
-            }
-
-            return messageHandled;
+            this._gameItemHandler = new GameItemHandler(this);
         }
 
-        public void CollisionUser(RoomUser User)
+        return this._gameItemHandler;
+    }
+
+    public WiredHandler GetWiredHandler() => this._wiredHandler;
+
+    public ProjectileManager GetProjectileManager() => this._projectileManager;
+
+    public bool GotSoccer() => this._soccer != null;
+
+    public bool GotBanzai() => this._banzai != null;
+
+    public bool GotFreeze() => this._freeze != null;
+
+    public bool GotJanken() => this._jankan != null;
+
+    public bool GotWired() => this._wiredHandler != null;
+
+    public ChatlogManager GetChatMessageManager() => this._chatMessageManager;
+
+    public bool AllowsShous(RoomUser user, string message)
+    {
+        var messageHandled = false;
+        this.OnUserSays?.Invoke(null, new UserSaysArgs(user, message), ref messageHandled);
+
+        return messageHandled;
+    }
+
+    public void CollisionUser(RoomUser user)
+    {
+        if (this.OnUserCls == null)
         {
-            if (this.OnUserCls == null)
-            {
-                return;
-            }
-
-            int Lenght = 1;
-            int GoalX = User.X;
-            int GoalY = User.Y;
-
-            switch (User.RotBody)
-            {
-                case 0:
-                    GoalX = User.X;
-                    GoalY = User.Y - Lenght;
-                    break;
-                case 1:
-                    GoalX = User.X + Lenght;
-                    GoalY = User.Y - Lenght;
-                    break;
-                case 2:
-                    GoalX = User.X + Lenght;
-                    GoalY = User.Y;
-                    break;
-                case 3:
-                    GoalX = User.X + Lenght;
-                    GoalY = User.Y + Lenght;
-                    break;
-                case 4:
-                    GoalX = User.X;
-                    GoalY = User.Y + Lenght;
-                    break;
-                case 5:
-                    GoalX = User.X - Lenght;
-                    GoalY = User.Y + Lenght;
-                    break;
-                case 6:
-                    GoalX = User.X - Lenght;
-                    GoalY = User.Y;
-                    break;
-                case 7:
-                    GoalX = User.X - Lenght;
-                    GoalY = User.Y - Lenght;
-                    break;
-            }
-
-            RoomUser UserGoal = this.GetRoomUserManager().GetUserForSquare(GoalX, GoalY);
-            if (UserGoal == null)
-            {
-                return;
-            }
-
-            if (UserGoal.Team == User.Team && User.Team != TeamType.NONE)
-            {
-                return;
-            }
-
-            this.OnUserCls(UserGoal, null);
+            return;
         }
 
-        public void onTriggerUser(RoomUser roomUser, bool isTarget)
+        var lenght = 1;
+        var goalX = user.X;
+        var goalY = user.Y;
+
+        switch (user.RotBody)
         {
-            if (isTarget)
+            case 0:
+                goalX = user.X;
+                goalY = user.Y - lenght;
+                break;
+            case 1:
+                goalX = user.X + lenght;
+                goalY = user.Y - lenght;
+                break;
+            case 2:
+                goalX = user.X + lenght;
+                goalY = user.Y;
+                break;
+            case 3:
+                goalX = user.X + lenght;
+                goalY = user.Y + lenght;
+                break;
+            case 4:
+                goalX = user.X;
+                goalY = user.Y + lenght;
+                break;
+            case 5:
+                goalX = user.X - lenght;
+                goalY = user.Y + lenght;
+                break;
+            case 6:
+                goalX = user.X - lenght;
+                goalY = user.Y;
+                break;
+            case 7:
+                goalX = user.X - lenght;
+                goalY = user.Y - lenght;
+                break;
+            default:
+                break;
+        }
+
+        var userGoal = this.GetRoomUserManager().GetUserForSquare(goalX, goalY);
+        if (userGoal == null)
+        {
+            return;
+        }
+
+        if (userGoal.Team == user.Team && user.Team != TeamType.NONE)
+        {
+            return;
+        }
+
+        this.OnUserCls(userGoal, null);
+    }
+
+    public void OnTriggerUser(RoomUser roomUser, bool isTarget)
+    {
+        if (isTarget)
+        {
+            this.OnTrigger?.Invoke(roomUser, null);
+        }
+        else
+        {
+            this.OnTriggerSelf?.Invoke(roomUser, null);
+        }
+    }
+
+    public void ClearTags() => this.RoomData.Tags.Clear();
+
+    public void AddTagRange(List<string> tags) => this.RoomData.Tags.AddRange(tags);
+
+    private void LoadBots()
+    {
+        DataTable table;
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        table = BotUserDao.GetOneByRoomId(dbClient, this.Id);
+        if (table == null)
+        {
+            return;
+        }
+
+        foreach (DataRow Row in table.Rows)
+        {
+            var roomBot = new RoomBot(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), this.IsRoleplay ? BotAIType.RoleplayBot : BotAIType.Generic, (string)Row["walk_enabled"] == "1", (string)Row["name"], (string)Row["motto"], (string)Row["gender"], (string)Row["look"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), Convert.ToInt32(Row["z"]), Convert.ToInt32(Row["rotation"]), (string)Row["chat_enabled"] == "1", (string)Row["chat_text"], Convert.ToInt32(Row["chat_seconds"]), (string)Row["is_dancing"] == "1", Convert.ToInt32(Row["enable"]), Convert.ToInt32(Row["handitem"]), Convert.ToInt32((string)Row["status"]));
+            var roomUser = this.GetRoomUserManager().DeployBot(roomBot, null);
+            if (roomBot.IsDancing)
             {
-                if (this.OnTrigger != null)
-                {
-                    this.OnTrigger(roomUser, null);
-                }
+                roomUser.DanceId = 3;
+            }
+        }
+    }
+
+    public void InitPets()
+    {
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        var table = BotPetDao.GetAllByRoomId(dbClient, this.Id);
+        if (table == null)
+        {
+            return;
+        }
+
+        foreach (DataRow Row in table.Rows)
+        {
+            var PetData = new Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)Row["anyone_ride"] == "1");
+            var list = new List<string>();
+            this._roomUserManager.DeployBot(new RoomBot(PetData.PetId, PetData.OwnerId, this.Id, BotAIType.Pet, true, PetData.Name, "", "", PetData.Look, PetData.X, PetData.Y, PetData.Z, 0, false, "", 0, false, 0, 0, 0), PetData);
+        }
+    }
+
+    public void OnRoomKick()
+    {
+        var list = new List<RoomUser>();
+        foreach (var roomUser in this._roomUserManager.GetUserList().ToList())
+        {
+            if (!roomUser.IsBot && !roomUser.GetClient().GetUser().HasPermission("perm_no_kick"))
+            {
+                this.GetRoomUserManager().RemoveUserFromRoom(roomUser.GetClient(), true, true);
+            }
+        }
+    }
+
+    public void OnUserSay(RoomUser user, string message, bool shout)
+    {
+        foreach (var roomUser in this._roomUserManager.GetPets().ToList())
+        {
+            if (shout)
+            {
+                roomUser.BotAI.OnUserShout(user, message);
             }
             else
             {
-                if (this.OnTriggerSelf != null)
-                {
-                    this.OnTriggerSelf(roomUser, null);
-                }
+                roomUser.BotAI.OnUserSay(user, message);
             }
         }
+    }
 
-        public void ClearTags() => this.RoomData.Tags.Clear();
-
-        public void AddTagRange(List<string> tags) => this.RoomData.Tags.AddRange(tags);
-
-        private void LoadBots()
+    public void LoadRights()
+    {
+        this.UsersWithRights = new List<int>();
+        var dataTable = new DataTable();
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            DataTable table;
-            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            table = BotUserDao.GetOneByRoomId(dbClient, this.Id);
-            if (table == null)
-            {
-                return;
-            }
-
-            foreach (DataRow Row in table.Rows)
-            {
-                RoomBot roomBot = new RoomBot(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (this.IsRoleplay) ? BotAIType.RoleplayBot : BotAIType.Generic, (string)Row["walk_enabled"] == "1", (string)Row["name"], (string)Row["motto"], (string)Row["gender"], (string)Row["look"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), Convert.ToInt32(Row["z"]), Convert.ToInt32(Row["rotation"]), (string)Row["chat_enabled"] == "1", (string)Row["chat_text"], Convert.ToInt32(Row["chat_seconds"]), (string)Row["is_dancing"] == "1", Convert.ToInt32(Row["enable"]), Convert.ToInt32(Row["handitem"]), Convert.ToInt32((string)Row["status"]));
-                RoomUser roomUser = this.GetRoomUserManager().DeployBot(roomBot, null);
-                if (roomBot.IsDancing)
-                {
-                    roomUser.DanceId = 3;
-                }
-            }
+            dataTable = RoomRightDao.GetAllByRoomId(dbClient, this.RoomData.Id);
         }
 
-        public void InitPets()
+        if (dataTable == null)
         {
-            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            DataTable table = BotPetDao.GetAllByRoomId(dbClient, this.Id);
-            if (table == null)
-            {
-                return;
-            }
-
-            foreach (DataRow Row in table.Rows)
-            {
-                Pet PetData = new Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)(Row["anyone_ride"]) == "1");
-                List<string> list = new List<string>();
-                this._roomUserManager.DeployBot(new RoomBot(PetData.PetId, PetData.OwnerId, this.Id, BotAIType.Pet, true, PetData.Name, "", "", PetData.Look, PetData.X, PetData.Y, PetData.Z, 0, false, "", 0, false, 0, 0, 0), PetData);
-            }
+            return;
         }
 
-        public void OnRoomKick()
+        foreach (DataRow dataRow in dataTable.Rows)
         {
-            List<RoomUser> list = new List<RoomUser>();
-            foreach (RoomUser roomUser in this._roomUserManager.GetUserList().ToList())
-            {
-                if (!roomUser.IsBot && !roomUser.GetClient().GetUser().HasPermission("perm_no_kick"))
-                {
-                    this.GetRoomUserManager().RemoveUserFromRoom(roomUser.GetClient(), true, true);
-                }
-            }
+            this.UsersWithRights.Add(Convert.ToInt32(dataRow["user_id"]));
         }
+    }
 
-        public void OnUserSay(RoomUser User, string Message, bool Shout)
+    public int GetRightsLevel(GameClient session)
+    {
+        if (session == null || session.GetUser() == null)
         {
-            foreach (RoomUser roomUser in this._roomUserManager.GetPets().ToList())
-            {
-                if (Shout)
-                {
-                    roomUser.BotAI.OnUserShout(User, Message);
-                }
-                else
-                {
-                    roomUser.BotAI.OnUserSay(User, Message);
-                }
-            }
-        }
-
-        public void LoadRights()
-        {
-            this.UsersWithRights = new List<int>();
-            DataTable dataTable = new DataTable();
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                dataTable = RoomRightDao.GetAllByRoomId(dbClient, this.RoomData.Id);
-            }
-
-            if (dataTable == null)
-            {
-                return;
-            }
-
-            foreach (DataRow dataRow in dataTable.Rows)
-            {
-                this.UsersWithRights.Add(Convert.ToInt32(dataRow["user_id"]));
-            }
-        }
-
-        public int GetRightsLevel(GameClient Session)
-        {
-            if (Session == null || Session.GetUser() == null)
-            {
-                return 0;
-            }
-
-            if (Session.GetUser().Username == this.RoomData.OwnerName || Session.GetUser().HasPermission("perm_owner_all_rooms"))
-            {
-                return 4;
-            }
-
-            if (Session.GetUser().HasPermission("perm_room_rights"))
-            {
-                return 3;
-            }
-
-            if (this.UsersWithRights.Contains(Session.GetUser().Id))
-            {
-                return 1;
-            }
-
-            if (this.EveryoneGotRights)
-            {
-                return 1;
-            }
-
             return 0;
         }
 
-        public bool CheckRights(GameClient Session, bool RequireOwnership = false)
+        if (session.GetUser().Username == this.RoomData.OwnerName || session.GetUser().HasPermission("perm_owner_all_rooms"))
         {
-            if (Session == null || Session.GetUser() == null)
-            {
-                return false;
-            }
+            return 4;
+        }
 
-            if (Session.GetUser().Username == this.RoomData.OwnerName || Session.GetUser().HasPermission("perm_owner_all_rooms"))
+        if (session.GetUser().HasPermission("perm_room_rights"))
+        {
+            return 3;
+        }
+
+        if (this.UsersWithRights.Contains(session.GetUser().Id))
+        {
+            return 1;
+        }
+
+        if (this.EveryoneGotRights)
+        {
+            return 1;
+        }
+
+        return 0;
+    }
+
+    public bool CheckRights(GameClient session, bool requireOwnership = false)
+    {
+        if (session == null || session.GetUser() == null)
+        {
+            return false;
+        }
+
+        if (session.GetUser().Username == this.RoomData.OwnerName || session.GetUser().HasPermission("perm_owner_all_rooms"))
+        {
+            return true;
+        }
+
+        if (!requireOwnership)
+        {
+            if (session.GetUser().HasPermission("perm_room_rights") || this.UsersWithRights.Contains(session.GetUser().Id))
             {
                 return true;
             }
 
-            if (!RequireOwnership)
+            if (this.EveryoneGotRights)
             {
-                if (Session.GetUser().HasPermission("perm_room_rights") || this.UsersWithRights.Contains(Session.GetUser().Id))
-                {
-                    return true;
-                }
-
-                if (this.EveryoneGotRights)
-                {
-                    return true;
-                }
-
-                if (this.RoomData.Group == null)
-                {
-                    return false;
-                }
-
-                if (this.RoomData.Group.IsAdmin(Session.GetUser().Id))
-                {
-                    return true;
-                }
-
-                if (this.RoomData.Group.AdminOnlyDeco == 0)
-                {
-                    if (this.RoomData.Group.IsMember(Session.GetUser().Id))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        public void SendObjects(GameClient Session)
-        {
-            ServerPacketList packetList = new ServerPacketList();
-
-            foreach (RoomUser roomUser in this._roomUserManager.GetUserList().ToList())
-            {
-                if (roomUser == null)
-                {
-                    continue;
-                }
-
-                if (roomUser.IsSpectator)
-                {
-                    continue;
-                }
-
-                if (!roomUser.IsBot && roomUser.GetClient() == null)
-                {
-                    continue;
-                }
-
-                if (!roomUser.IsBot && roomUser.GetClient().GetUser() == null)
-                {
-                    continue;
-                }
-
-                packetList.Add(new UsersComposer(roomUser));
-
-                if (roomUser.IsDancing)
-                {
-                    packetList.Add(new DanceComposer(roomUser.VirtualId, roomUser.DanceId));
-                }
-
-                if (roomUser.IsAsleep)
-                {
-                    packetList.Add(new SleepComposer(roomUser.VirtualId, true));
-                }
-
-                if (roomUser.CarryItemID > 0 && roomUser.CarryTimer > 0)
-                {
-                    packetList.Add(new CarryObjectComposer(roomUser.VirtualId, roomUser.CarryItemID));
-                }
-
-                if (roomUser.CurrentEffect > 0)
-                {
-                    packetList.Add(new AvatarEffectComposer(roomUser.VirtualId, roomUser.CurrentEffect));
-                }
+                return true;
             }
 
-            packetList.Add(new UserUpdateComposer(this._roomUserManager.GetUserList().ToList()));
-            packetList.Add(new ObjectsComposer(this.GetRoomItemHandler().GetFloor.ToArray(), this));
-            packetList.Add(new ObjectsComposer(this.GetRoomItemHandler().GetTempItems.ToArray(), this));
-            packetList.Add(new ItemWallComposer(this.GetRoomItemHandler().GetWall.ToArray(), this));
+            if (this.RoomData.Group == null)
+            {
+                return false;
+            }
 
-            Session.SendPacket(packetList);
-            packetList.Clear();
+            if (this.RoomData.Group.IsAdmin(session.GetUser().Id))
+            {
+                return true;
+            }
+
+            if (this.RoomData.Group.AdminOnlyDeco == 0)
+            {
+                if (this.RoomData.Group.IsMember(session.GetUser().Id))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void SendObjects(GameClient session)
+    {
+        var packetList = new ServerPacketList();
+
+        foreach (var roomUser in this._roomUserManager.GetUserList().ToList())
+        {
+            if (roomUser == null)
+            {
+                continue;
+            }
+
+            if (roomUser.IsSpectator)
+            {
+                continue;
+            }
+
+            if (!roomUser.IsBot && roomUser.GetClient() == null)
+            {
+                continue;
+            }
+
+            if (!roomUser.IsBot && roomUser.GetClient().GetUser() == null)
+            {
+                continue;
+            }
+
+            packetList.Add(new UsersComposer(roomUser));
+
+            if (roomUser.IsDancing)
+            {
+                packetList.Add(new DanceComposer(roomUser.VirtualId, roomUser.DanceId));
+            }
+
+            if (roomUser.IsAsleep)
+            {
+                packetList.Add(new SleepComposer(roomUser.VirtualId, true));
+            }
+
+            if (roomUser.CarryItemID > 0 && roomUser.CarryTimer > 0)
+            {
+                packetList.Add(new CarryObjectComposer(roomUser.VirtualId, roomUser.CarryItemID));
+            }
+
+            if (roomUser.CurrentEffect > 0)
+            {
+                packetList.Add(new AvatarEffectComposer(roomUser.VirtualId, roomUser.CurrentEffect));
+            }
         }
 
-        public Task ProcessRoom()
+        packetList.Add(new UserUpdateComposer(this._roomUserManager.GetUserList().ToList()));
+        packetList.Add(new ObjectsComposer(this.GetRoomItemHandler().GetFloor.ToArray(), this));
+        packetList.Add(new ObjectsComposer(this.GetRoomItemHandler().GetTempItems.ToArray(), this));
+        packetList.Add(new ItemWallComposer(this.GetRoomItemHandler().GetWall.ToArray(), this));
+
+        session.SendPacket(packetList);
+        packetList.Clear();
+    }
+
+    public Task ProcessRoom()
+    {
+        try
         {
+            var timeStarted = DateTime.Now;
+
+            if (this.Disposed)
+            {
+                return Task.CompletedTask;
+            }
+
             try
             {
-                var timeStarted = DateTime.Now;
+                var idleCount = 0;
 
-                if (this.Disposed)
+                this.GetRoomUserManager().OnCycle(ref idleCount);
+
+                this.GetRoomItemHandler().OnCycle();
+
+                this.RpCycleHour();
+
+                this.GetProjectileManager().OnCycle();
+
+                if (idleCount > 0)
                 {
+                    this.IdleTime++;
+                }
+                else
+                {
+                    this.IdleTime = 0;
+                }
+
+                if (this.IdleTime >= 60)
+                {
+                    WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
+
                     return Task.CompletedTask;
                 }
-
-                try
+                else
                 {
-                    int idleCount = 0;
-
-                    this.GetRoomUserManager().OnCycle(ref idleCount);
-
-                    this.GetRoomItemHandler().OnCycle();
-
-                    this.RpCycleHour();
-
-                    this.GetProjectileManager().OnCycle();
-
-                    if (idleCount > 0)
-                    {
-                        this.IdleTime++;
-                    }
-                    else
-                    {
-                        this.IdleTime = 0;
-                    }
-
-                    if (this.IdleTime >= 60)
-                    {
-                        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
-
-                        return Task.CompletedTask;
-                    }
-                    else
-                    {
-                        this.GetRoomUserManager().SerializeStatusUpdates();
-                    }
-
-                    if (this.GetGameItemHandler() != null)
-                    {
-                        this.GetGameItemHandler().OnCycle();
-                    }
-
-                    if (this.GetWiredHandler() != null)
-                    {
-                        this.GetWiredHandler().OnCycle();
-                    }
-
-                    if (this.GotJanken())
-                    {
-                        this.GetJanken().OnCycle();
-                    }
-
-                    if (this._saveFurnitureTimer < 240)
-                    {
-                        this._saveFurnitureTimer++;
-                    }
-                    else
-                    {
-                        this._saveFurnitureTimer = 0;
-                        this.GetRoomItemHandler().SaveFurniture();
-                    }
-
-                    var timeEnded = DateTime.Now;
-
-                    var timeExecution = timeEnded - timeStarted;
-                    if (timeExecution > _maximumRunTimeInSec)
-                        ExceptionLogger.LogThreadException(String.Format("High latency in {0}: {1}ms", this.Id, timeExecution.TotalMilliseconds), "ProcessRoom");
+                    this.GetRoomUserManager().SerializeStatusUpdates();
                 }
-                catch (Exception ex)
+
+                if (this.GetGameItemHandler() != null)
                 {
-                    this.OnRoomCrash(ex);
+                    this.GetGameItemHandler().OnCycle();
+                }
+
+                if (this.GetWiredHandler() != null)
+                {
+                    this.GetWiredHandler().OnCycle();
+                }
+
+                if (this.GotJanken())
+                {
+                    this.GetJanken().OnCycle();
+                }
+
+                if (this._saveFurnitureTimer < 240)
+                {
+                    this._saveFurnitureTimer++;
+                }
+                else
+                {
+                    this._saveFurnitureTimer = 0;
+                    this.GetRoomItemHandler().SaveFurniture();
+                }
+
+                var timeEnded = DateTime.Now;
+
+                var timeExecution = timeEnded - timeStarted;
+                if (timeExecution > this._maximumRunTimeInSec)
+                {
+                    ExceptionLogger.LogThreadException(String.Format("High latency in {0}: {1}ms", this.Id, timeExecution.TotalMilliseconds), "ProcessRoom");
                 }
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogCriticalException("Sub crash in room cycle: " + (ex).ToString());
+                this.OnRoomCrash(ex);
             }
-            return Task.CompletedTask;
+        }
+        catch (Exception ex)
+        {
+            ExceptionLogger.LogCriticalException("Sub crash in room cycle: " + ex.ToString());
+        }
+        return Task.CompletedTask;
+    }
+
+    private void RpCycleHour()
+    {
+        if (!this.IsRoleplay)
+        {
+            return;
         }
 
-        private void RpCycleHour()
+        if (this.RoomData.OwnerName == "WibboParty")
         {
-            if (!this.IsRoleplay)
+            return;
+        }
+
+        if (!this.Roleplay.Cycle())
+        {
+            return;
+        }
+
+        this.UpdateRpMoodLight();
+        this.UpdateRpToner();
+        this.UpdateRpBlock();
+    }
+
+    private void UpdateRpBlock()
+    {
+        var roomItems = this.GetRoomItemHandler().GetFloor.Where(i => i.GetBaseItem().Id == 99138022).ToList();
+        if (roomItems == null)
+        {
+            return;
+        }
+
+        var UseNum = 0;
+        if (this.Roleplay.Intensity == 50)
+        {
+            UseNum = 0;
+        }
+        else if (this.Roleplay.Intensity == 75)
+        {
+            UseNum = 1;
+        }
+        else if (this.Roleplay.Intensity == 100)
+        {
+            UseNum = 2;
+        }
+        else if (this.Roleplay.Intensity == 150)
+        {
+            UseNum = 3;
+        }
+        else if (this.Roleplay.Intensity == 200)
+        {
+            UseNum = 4;
+        }
+        else if (this.Roleplay.Intensity == 255)
+        {
+            UseNum = 5;
+        }
+
+        foreach (var RoomItem in roomItems)
+        {
+            RoomItem.ExtraData = UseNum.ToString();
+            RoomItem.UpdateState();
+        }
+    }
+
+    private void UpdateRpMoodLight()
+    {
+        if (this.MoodlightData == null)
+        {
+            return;
+        }
+
+        var roomItem = this.GetRoomItemHandler().GetItem(this.MoodlightData.ItemId);
+        if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
+        {
+            return;
+        }
+
+        this.MoodlightData.Enabled = true;
+        this.MoodlightData.CurrentPreset = 1;
+        this.MoodlightData.UpdatePreset(1, "#000000", this.Roleplay.Intensity, false);
+        roomItem.ExtraData = this.MoodlightData.GenerateExtraData();
+        roomItem.UpdateState();
+    }
+
+    private void UpdateRpToner()
+    {
+        var roomItem = Enumerable.FirstOrDefault(this.GetRoomItemHandler().GetFloor.Where(i => i.GetBaseItem().InteractionType == InteractionType.TONER));
+        if (roomItem == null)
+        {
+            return;
+        }
+
+        var teinte = 135;
+        var saturation = 180;
+        var luminosite = (int)Math.Floor((double)this.Roleplay.Intensity / 2);
+        roomItem.ExtraData = "on," + teinte + "," + saturation + "," + luminosite;
+        roomItem.UpdateState(true, true);
+    }
+
+    public void OnRoomCrash(Exception e)
+    {
+        ExceptionLogger.LogThreadException(e.ToString(), "Room cycle task for room " + this.Id);
+        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
+    }
+
+    public void SendPacketOnChat(IServerPacket Message, RoomUser thisUser = null, bool UserMutedOnly = false, bool UserNotIngameOnly = false)
+    {
+        try
+        {
+            if (Message == null)
             {
                 return;
             }
 
-            if (this.RoomData.OwnerName == "WibboParty")
+            if (this == null || this._roomUserManager == null)
             {
                 return;
             }
 
-            if (!this.Roleplay.Cycle())
+            var Users = this._roomUserManager.GetUserList().ToList();
+            if (Users == null)
             {
                 return;
             }
 
-            this.UpdateRpMoodLight();
-            this.UpdateRpToner();
-            this.UpdateRpBlock();
-        }
+            foreach (var User in Users)
+            {
+                if (User == null || User.IsBot)
+                {
+                    continue;
+                }
 
-        private void UpdateRpBlock()
+                if (User.GetClient() == null || User.GetClient().GetConnection() == null || User.GetClient().GetUser() == null)
+                {
+                    continue;
+                }
+
+                if (UserMutedOnly && thisUser != null && User.GetClient().GetUser().MutedUsers.Contains(thisUser.UserId))
+                {
+                    continue;
+                }
+
+                if (thisUser != null && thisUser.GetClient() != null && thisUser.GetClient().GetUser() != null && thisUser.GetClient().GetUser().IgnoreAll && thisUser != User)
+                {
+                    continue;
+                }
+
+                if (!UserMutedOnly && thisUser == User)
+                {
+                    continue;
+                }
+
+                if (this.RoomIngameChat && UserNotIngameOnly && User.Team != TeamType.NONE)
+                {
+                    continue;
+                }
+
+                if (thisUser != null && this.RoomData.ChatMaxDistance > 0 && (Math.Abs(thisUser.X - User.X) > this.RoomData.ChatMaxDistance || Math.Abs(thisUser.Y - User.Y) > this.RoomData.ChatMaxDistance))
+                {
+                    continue;
+                }
+
+                User.GetClient().SendPacket(Message);
+            }
+        }
+        catch (Exception ex)
         {
-            List<Item> roomItems = this.GetRoomItemHandler().GetFloor.Where(i => i.GetBaseItem().Id == 99138022).ToList();
-            if (roomItems == null)
+            ExceptionLogger.HandleException(ex, "Room.SendMessage (" + this.Id + ")");
+        }
+    }
+
+    public void SendPacket(IServerPacket Message, bool UsersWithRightsOnly = false)
+    {
+        try
+        {
+            if (Message == null)
             {
                 return;
             }
 
-            int UseNum = 0;
-            if (this.Roleplay.Intensity == 50)
-            {
-                UseNum = 0;
-            }
-            else if (this.Roleplay.Intensity == 75)
-            {
-                UseNum = 1;
-            }
-            else if (this.Roleplay.Intensity == 100)
-            {
-                UseNum = 2;
-            }
-            else if (this.Roleplay.Intensity == 150)
-            {
-                UseNum = 3;
-            }
-            else if (this.Roleplay.Intensity == 200)
-            {
-                UseNum = 4;
-            }
-            else if (this.Roleplay.Intensity == 255)
-            {
-                UseNum = 5;
-            }
-
-            foreach (Item RoomItem in roomItems)
-            {
-                RoomItem.ExtraData = UseNum.ToString();
-                RoomItem.UpdateState();
-            }
-        }
-
-        private void UpdateRpMoodLight()
-        {
-            if (this.MoodlightData == null)
+            if (this == null || this._roomUserManager == null)
             {
                 return;
             }
 
-            Item roomItem = this.GetRoomItemHandler().GetItem(this.MoodlightData.ItemId);
-            if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
+            var Users = this._roomUserManager.GetUserList().ToList();
+            if (Users == null)
             {
                 return;
             }
 
-            this.MoodlightData.Enabled = true;
-            this.MoodlightData.CurrentPreset = 1;
-            this.MoodlightData.UpdatePreset(1, "#000000", this.Roleplay.Intensity, false);
-            roomItem.ExtraData = this.MoodlightData.GenerateExtraData();
-            roomItem.UpdateState();
-        }
-
-        private void UpdateRpToner()
-        {
-            Item roomItem = Enumerable.FirstOrDefault<Item>(this.GetRoomItemHandler().GetFloor.Where(i => i.GetBaseItem().InteractionType == InteractionType.TONER));
-            if (roomItem == null)
-            {
-                return;
-            }
-
-            int Teinte = 135;
-            int Saturation = 180;
-            int Luminosite = (int)Math.Floor((double)this.Roleplay.Intensity / 2);
-            roomItem.ExtraData = "on," + Teinte + "," + Saturation + "," + Luminosite;
-            roomItem.UpdateState(true, true);
-        }
-
-        public void OnRoomCrash(Exception e)
-        {
-            ExceptionLogger.LogThreadException((e).ToString(), "Room cycle task for room " + this.Id);
-            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
-        }
-
-        public void SendPacketOnChat(IServerPacket Message, RoomUser thisUser = null, bool UserMutedOnly = false, bool UserNotIngameOnly = false)
-        {
-            try
-            {
-                if (Message == null)
-                {
-                    return;
-                }
-
-                if (this == null || this._roomUserManager == null)
-                {
-                    return;
-                }
-
-                List<RoomUser> Users = this._roomUserManager.GetUserList().ToList();
-                if (Users == null)
-                {
-                    return;
-                }
-
-                foreach (RoomUser User in Users)
-                {
-                    if (User == null || User.IsBot)
-                    {
-                        continue;
-                    }
-
-                    if (User.GetClient() == null || User.GetClient().GetConnection() == null || User.GetClient().GetUser() == null)
-                    {
-                        continue;
-                    }
-
-                    if (UserMutedOnly && thisUser != null && User.GetClient().GetUser().MutedUsers.Contains(thisUser.UserId))
-                    {
-                        continue;
-                    }
-
-                    if (thisUser != null && thisUser.GetClient() != null && thisUser.GetClient().GetUser() != null && thisUser.GetClient().GetUser().IgnoreAll && thisUser != User)
-                    {
-                        continue;
-                    }
-
-                    if (!UserMutedOnly && thisUser == User)
-                    {
-                        continue;
-                    }
-
-                    if (this.RoomIngameChat && (UserNotIngameOnly && User.Team != TeamType.NONE))
-                    {
-                        continue;
-                    }
-
-                    if (thisUser != null && this.RoomData.ChatMaxDistance > 0 && (Math.Abs(thisUser.X - User.X) > this.RoomData.ChatMaxDistance || Math.Abs(thisUser.Y - User.Y) > this.RoomData.ChatMaxDistance))
-                    {
-                        continue;
-                    }
-
-                    User.GetClient().SendPacket(Message);
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.HandleException(ex, "Room.SendMessage (" + this.Id + ")");
-            }
-        }
-
-        public void SendPacket(IServerPacket Message, bool UsersWithRightsOnly = false)
-        {
-            try
-            {
-                if (Message == null)
-                {
-                    return;
-                }
-
-                if (this == null || this._roomUserManager == null)
-                {
-                    return;
-                }
-
-                List<RoomUser> Users = this._roomUserManager.GetUserList().ToList();
-                if (Users == null)
-                {
-                    return;
-                }
-
-                foreach (RoomUser User in Users)
-                {
-                    if (User == null || User.IsBot)
-                    {
-                        continue;
-                    }
-
-                    if (User.GetClient() == null || User.GetClient().GetConnection() == null)
-                    {
-                        continue;
-                    }
-
-                    if (UsersWithRightsOnly && !this.CheckRights(User.GetClient()))
-                    {
-                        continue;
-                    }
-
-                    User.GetClient().SendPacket(Message);
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.HandleException(ex, "Room.SendMessage (" + this.Id + ")");
-            }
-        }
-
-        public void SendMessage(ServerPacketList Messages)
-        {
-            if (Messages.Count == 0)
-            {
-                return;
-            }
-
-            this.BroadcastPacket(Messages.GetBytes);
-        }
-
-        public void BroadcastPacket(byte[] Packet)
-        {
-            foreach (RoomUser User in this._roomUserManager.GetUserList().ToList())
+            foreach (var User in Users)
             {
                 if (User == null || User.IsBot)
                 {
@@ -864,168 +818,208 @@ namespace WibboEmulator.Games.Rooms
                     continue;
                 }
 
-                User.GetClient().GetConnection().SendData(Packet);
+                if (UsersWithRightsOnly && !this.CheckRights(User.GetClient()))
+                {
+                    continue;
+                }
+
+                User.GetClient().SendPacket(Message);
             }
         }
+        catch (Exception ex)
+        {
+            ExceptionLogger.HandleException(ex, "Room.SendMessage (" + this.Id + ")");
+        }
+    }
 
-        public void Dispose()
+    public void SendMessage(ServerPacketList Messages)
+    {
+        if (Messages.Count == 0)
+        {
+            return;
+        }
+
+        this.BroadcastPacket(Messages.GetBytes);
+    }
+
+    public void BroadcastPacket(byte[] packet)
+    {
+        foreach (var user in this._roomUserManager.GetUserList().ToList())
+        {
+            if (user == null || user.IsBot)
+            {
+                continue;
+            }
+
+            if (user.GetClient() == null || user.GetClient().GetConnection() == null)
+            {
+                continue;
+            }
+
+            user.GetClient().GetConnection().SendData(packet);
+        }
+    }
+
+    public void Dispose()
+    {
+        if (this.Disposed)
+        {
+            return;
+        }
+
+        this.Disposed = true;
+
+        this.SendPacket(new CloseConnectionComposer());
+
+        try
+        {
+            if (this.ProcessTask != null && this.ProcessTask.IsCompleted)
+            {
+                this.ProcessTask.Dispose();
+            }
+        }
+        catch { }
+
+        this._cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(1));
+
+        this.GetRoomItemHandler().SaveFurniture();
+
+        this.RoomData.Tags.Clear();
+        this.UsersWithRights.Clear();
+        this._bans.Clear();
+
+        foreach (var roomItem in this.GetRoomItemHandler().GetWallAndFloor)
+        {
+            roomItem.Destroy();
+        }
+
+        this.GetRoomItemHandler().Destroy();
+        this.ActiveTrades.Clear();
+        this.GetRoomUserManager().UpdateUserCount(0);
+        this.GetRoomUserManager().Destroy();
+        this._gameMap.Destroy();
+    }
+
+    public Dictionary<int, double> GetBans() => this._bans;
+
+    public bool UserIsBanned(int pId) => this._bans.ContainsKey(pId);
+
+    public void RemoveBan(int pId) => this._bans.Remove(pId);
+
+    public void AddBan(int pId, int Time)
+    {
+        if (this._bans.ContainsKey(pId))
+        {
+            return;
+        }
+
+        this._bans.Add(pId, WibboEnvironment.GetUnixTimestamp() + Time);
+    }
+
+    public bool HasBanExpired(int pId) => !this.UserIsBanned(pId) || this._bans[pId] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
+
+    public Dictionary<int, double> GetMute() => this._mutes;
+
+    public bool UserIsMuted(int pId) => this._mutes.ContainsKey(pId);
+
+    public void RemoveMute(int pId) => this._mutes.Remove(pId);
+
+    public void AddMute(int pId, int time)
+    {
+        if (this._mutes.ContainsKey(pId))
+        {
+            return;
+        }
+
+        this._mutes.Add(pId, WibboEnvironment.GetUnixTimestamp() + time);
+    }
+
+    public bool HasMuteExpired(int pId) => !this.UserIsMuted(pId) || this._mutes[pId] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
+
+    public bool HasActiveTrade(RoomUser User)
+    {
+        if (User.IsBot)
+        {
+            return false;
+        }
+        else
+        {
+            return this.HasActiveTrade(User.GetClient().GetUser().Id);
+        }
+    }
+
+    public bool HasActiveTrade(int UserId)
+    {
+        foreach (var trade in this.ActiveTrades)
+        {
+            if (trade.ContainsUser(UserId))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Trade GetUserTrade(int UserId)
+    {
+        foreach (var trade in this.ActiveTrades)
+        {
+            if (trade.ContainsUser(UserId))
+            {
+                return trade;
+            }
+        }
+        return null;
+    }
+
+    public void TryStartTrade(RoomUser UserOne, RoomUser UserTwo)
+    {
+        if (UserOne == null || UserTwo == null)
+        {
+            return;
+        }
+
+        if (UserOne.IsBot || UserTwo.IsBot || UserOne.IsTrading || UserTwo.IsTrading || this.HasActiveTrade(UserOne) || this.HasActiveTrade(UserTwo))
+        {
+            return;
+        }
+
+        this.ActiveTrades.Add(new Trade(UserOne.GetClient().GetUser().Id, UserTwo.GetClient().GetUser().Id, this.Id));
+    }
+
+    public void TryStopTrade(int UserId)
+    {
+        var userTrade = this.GetUserTrade(UserId);
+        if (userTrade == null)
+        {
+            return;
+        }
+
+        userTrade.CloseTrade(UserId);
+        this.ActiveTrades.Remove(userTrade);
+    }
+
+    public void SetMaxUsers(int MaxUsers)
+    {
+        this.RoomData.UsersMax = MaxUsers;
+
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        RoomDao.UpdateUsersMax(dbClient, this.Id, MaxUsers);
+    }
+
+    public Task RunTask(Func<Task> callBack)
+    {
+        var task = Task.Run(async () =>
         {
             if (this.Disposed)
             {
                 return;
             }
 
-            this.Disposed = true;
+            await callBack();
 
-            this.SendPacket(new CloseConnectionComposer());
+        }, this._cancellationTokenSource.Token);
 
-            try
-            {
-                if (ProcessTask != null && ProcessTask.IsCompleted)
-                {
-                    ProcessTask.Dispose();
-                }
-            }
-            catch { }
-
-            this._cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(1));
-
-            this.GetRoomItemHandler().SaveFurniture();
-
-            this.RoomData.Tags.Clear();
-            this.UsersWithRights.Clear();
-            this._bans.Clear();
-
-            foreach (Item roomItem in this.GetRoomItemHandler().GetWallAndFloor)
-            {
-                roomItem.Destroy();
-            }
-
-            this.GetRoomItemHandler().Destroy();
-            this.ActiveTrades.Clear();
-            this.GetRoomUserManager().UpdateUserCount(0);
-            this.GetRoomUserManager().Destroy();
-            this._gameMap.Destroy();
-        }
-
-        public Dictionary<int, double> GetBans() => this._bans;
-
-        public bool UserIsBanned(int pId) => this._bans.ContainsKey(pId);
-
-        public void RemoveBan(int pId) => this._bans.Remove(pId);
-
-        public void AddBan(int pId, int Time)
-        {
-            if (this._bans.ContainsKey(pId))
-            {
-                return;
-            }
-
-            this._bans.Add(pId, WibboEnvironment.GetUnixTimestamp() + Time);
-        }
-
-        public bool HasBanExpired(int pId) => !this.UserIsBanned(pId) || this._bans[pId] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
-
-        public Dictionary<int, double> GetMute() => this._mutes;
-
-        public bool UserIsMuted(int pId) => this._mutes.ContainsKey(pId);
-
-        public void RemoveMute(int pId) => this._mutes.Remove(pId);
-
-        public void AddMute(int pId, int Time)
-        {
-            if (this._mutes.ContainsKey(pId))
-            {
-                return;
-            }
-
-            this._mutes.Add(pId, WibboEnvironment.GetUnixTimestamp() + Time);
-        }
-
-        public bool HasMuteExpired(int pId) => !this.UserIsMuted(pId) || this._mutes[pId] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
-
-        public bool HasActiveTrade(RoomUser User)
-        {
-            if (User.IsBot)
-            {
-                return false;
-            }
-            else
-            {
-                return this.HasActiveTrade(User.GetClient().GetUser().Id);
-            }
-        }
-
-        public bool HasActiveTrade(int UserId)
-        {
-            foreach (Trade trade in this.ActiveTrades)
-            {
-                if (trade.ContainsUser(UserId))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public Trade GetUserTrade(int UserId)
-        {
-            foreach (Trade trade in this.ActiveTrades)
-            {
-                if (trade.ContainsUser(UserId))
-                {
-                    return trade;
-                }
-            }
-            return null;
-        }
-
-        public void TryStartTrade(RoomUser UserOne, RoomUser UserTwo)
-        {
-            if (UserOne == null || UserTwo == null)
-            {
-                return;
-            }
-
-            if ((UserOne.IsBot || UserTwo.IsBot) || (UserOne.IsTrading || UserTwo.IsTrading || (this.HasActiveTrade(UserOne) || this.HasActiveTrade(UserTwo))))
-            {
-                return;
-            }
-
-            this.ActiveTrades.Add(new Trade(UserOne.GetClient().GetUser().Id, UserTwo.GetClient().GetUser().Id, this.Id));
-        }
-
-        public void TryStopTrade(int UserId)
-        {
-            Trade userTrade = this.GetUserTrade(UserId);
-            if (userTrade == null)
-            {
-                return;
-            }
-
-            userTrade.CloseTrade(UserId);
-            this.ActiveTrades.Remove(userTrade);
-        }
-
-        public void SetMaxUsers(int MaxUsers)
-        {
-            this.RoomData.UsersMax = MaxUsers;
-
-            using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            RoomDao.UpdateUsersMax(dbClient, this.Id, MaxUsers);
-        }
-
-        public Task RunTask(Func<Task> callBack)
-        {
-            var task = Task.Run(async () =>
-            {
-                if (this.Disposed) return;
-
-                await callBack();
-
-            }, this._cancellationTokenSource.Token);
-
-            return task;
-        }
+        return task;
     }
 }

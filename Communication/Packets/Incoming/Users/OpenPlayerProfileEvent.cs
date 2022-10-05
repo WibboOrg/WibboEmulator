@@ -1,41 +1,37 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class OpenPlayerProfileEvent : IPacketEvent
 {
-    internal class OpenPlayerProfileEvent : IPacketEvent
+    public double Delay => 500;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 500;
+        var userId = Packet.PopInt();
+        var IsMe = Packet.PopBoolean();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        var targetData = WibboEnvironment.GetUserById(userId);
+        if (targetData == null)
         {
-            int userId = Packet.PopInt();
-            bool IsMe = Packet.PopBoolean();
-
-            User targetData = WibboEnvironment.GetUserById(userId);
-            if (targetData == null)
-            {
-                return;
-            }
-
-            List<Group> Groups = WibboEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.MyGroups);
-
-            int friendCount = 0;
-
-            if (targetData.GetMessenger() != null)
-            {
-                friendCount = targetData.GetMessenger().Count;
-            }
-            else
-            {
-                using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                friendCount = MessengerFriendshipDao.GetCount(dbClient, userId);
-            }
-
-            Session.SendPacket(new ProfileInformationComposer(targetData, Session, Groups, friendCount));
+            return;
         }
+
+        var Groups = WibboEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.MyGroups);
+
+        var friendCount = 0;
+
+        if (targetData.GetMessenger() != null)
+        {
+            friendCount = targetData.GetMessenger().Count;
+        }
+        else
+        {
+            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            friendCount = MessengerFriendshipDao.GetCount(dbClient, userId);
+        }
+
+        session.SendPacket(new ProfileInformationComposer(targetData, session, Groups, friendCount));
     }
 }

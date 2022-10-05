@@ -1,17 +1,15 @@
-﻿using WibboEmulator.Games.Items;
+namespace WibboEmulator.Utilities.Events;
+using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Utilities.Events
+public class ItemTriggeredArgs : EventArgs
 {
-    public class ItemTriggeredArgs : EventArgs
-    {
-        public readonly RoomUser User;
-        public readonly Item Item;
+    public RoomUser User { get; private set; }
+    public Item Item { get; private set; }
 
-        public ItemTriggeredArgs(RoomUser user, Item item)
-        {
-            this.User = user;
-            this.Item = item;
-        }
+    public ItemTriggeredArgs(RoomUser user, Item item)
+    {
+        this.User = user;
+        this.Item = item;
     }
 }

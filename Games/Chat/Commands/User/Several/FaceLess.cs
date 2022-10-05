@@ -1,38 +1,36 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class FaceLess : IChatCommand
 {
-    internal class FaceLess : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (UserRoom.IsTransf || UserRoom.IsSpectator)
         {
-            if (UserRoom.IsTransf || UserRoom.IsSpectator)
+            return;
+        }
+
+        var look = session.GetUser().Look;
+
+        if (look.Contains("hd-"))
+        {
+            var hdlook = look.Split(new string[] { "hd-" }, StringSplitOptions.None)[1];
+            var hdcode = "hd-" + hdlook.Split(new char[] { '.' })[0]; //ex : hd-180-22
+            var hdcodecolor = "";
+            if (hdcode.Split('-').Length == 3)
             {
-                return;
+                hdcodecolor = hdcode.Split('-')[2];
             }
 
-            string look = Session.GetUser().Look;
+            var hdcodenoface = "hd-99999-" + hdcodecolor; //hd-9999-22
 
-            if (look.Contains("hd-"))
-            {
-                string hdlook = look.Split(new string[] { "hd-" }, StringSplitOptions.None)[1];
-                string hdcode = "hd-" + hdlook.Split(new char[] { '.' })[0]; //ex : hd-180-22
-                string hdcodecolor = "";
-                if (hdcode.Split('-').Length == 3)
-                {
-                    hdcodecolor = hdcode.Split('-')[2];
-                }
+            look = look.Replace(hdcode, hdcodenoface);
 
-                string hdcodenoface = "hd-99999-" + hdcodecolor; //hd-9999-22
+            session.GetUser().Look = look;
 
-                look = look.Replace(hdcode, hdcodenoface);
-
-                Session.GetUser().Look = look;
-
-                Room.SendPacket(new UserChangeComposer(UserRoom, false));
-            }
+            Room.SendPacket(new UserChangeComposer(UserRoom, false));
         }
     }
 }

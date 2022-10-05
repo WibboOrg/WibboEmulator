@@ -1,16 +1,14 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class EmptyItems : IChatCommand
 {
-    internal class EmptyItems : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
-        {
-            bool EmptyAll = (Params.Length > 1 && Params[1] == "all");
+        var EmptyAll = Params.Length > 1 && Params[1] == "all";
 
-            Session.GetUser().GetInventoryComponent().ClearItems(EmptyAll);
-            Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", Session.Langue));
-        }
+        session.GetUser().GetInventoryComponent().ClearItems(EmptyAll);
+        session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", session.Langue));
     }
 }

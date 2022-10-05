@@ -1,19 +1,17 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class HotelAlert : IChatCommand
 {
-    internal class HotelAlert : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        var Message = CommandManager.MergeParams(Params, 1);
+        if (session.Antipub(Message, "<CMD>", Room.Id))
         {
-            string Message = CommandManager.MergeParams(Params, 1);
-            if (Session.Antipub(Message, "<CMD>", Room.Id))
-            {
-                return;
-            }
-            WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer(Message + "\r\n" + "- " + Session.GetUser().Username));
+            return;
         }
+        WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new BroadcastMessageAlertComposer(Message + "\r\n" + "- " + session.GetUser().Username));
     }
 }

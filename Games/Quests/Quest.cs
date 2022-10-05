@@ -1,40 +1,39 @@
-﻿namespace WibboEmulator.Games.Quests
+namespace WibboEmulator.Games.Quests;
+
+public class Quest
 {
-    public class Quest
+    public int Id { get; private set; }
+    public string Category { get; private set; }
+    public int Number { get; private set; }
+    public QuestType GoalType { get; private set; }
+    public int GoalData { get; private set; }
+    public string Name { get; private set; }
+    public int Reward { get; private set; }
+    public string DataBit { get; private set; }
+
+    public string ActionName => QuestTypeUtillity.GetString(this.GoalType);
+
+    public Quest(int id, string category, int number, QuestType goalType, int goalData, string name, int reward, string dataBit)
     {
-        public readonly int Id;
-        public readonly string Category;
-        public readonly int Number;
-        public readonly QuestType GoalType;
-        public readonly int GoalData;
-        public readonly string Name;
-        public readonly int Reward;
-        public readonly string DataBit;
+        this.Id = id;
+        this.Category = category;
+        this.Number = number;
+        this.GoalType = goalType;
+        this.GoalData = goalData;
+        this.Name = name;
+        this.Reward = reward;
+        this.DataBit = dataBit;
+    }
 
-        public string ActionName => QuestTypeUtillity.GetString(this.GoalType);
-
-        public Quest(int Id, string Category, int Number, QuestType GoalType, int GoalData, string Name, int Reward, string DataBit)
+    public bool IsCompleted(int userProgress)
+    {
+        if (this.GoalType != QuestType.EXPLORE_FIND_ITEM)
         {
-            this.Id = Id;
-            this.Category = Category;
-            this.Number = Number;
-            this.GoalType = GoalType;
-            this.GoalData = GoalData;
-            this.Name = Name;
-            this.Reward = Reward;
-            this.DataBit = DataBit;
+            return userProgress >= (long)this.GoalData;
         }
-
-        public bool IsCompleted(int UserProgress)
+        else
         {
-            if (this.GoalType != QuestType.EXPLORE_FIND_ITEM)
-            {
-                return UserProgress >= (long)this.GoalData;
-            }
-            else
-            {
-                return UserProgress >= 1;
-            }
+            return userProgress >= 1;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+namespace WibboEmulator.Games;
+using System.Diagnostics;
 using WibboEmulator.Communication.Packets;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
@@ -22,9 +23,7 @@ using WibboEmulator.Games.Quests;
 using WibboEmulator.Games.Roleplay;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games;
-
-public class Game
+public class Game : IDisposable
 {
     private readonly GameClientManager _gameClientManager;
     private readonly PermissionManager _permissionManager;
@@ -55,7 +54,7 @@ public class Game
 
     public Game()
     {
-        using IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
         this._gameClientManager = new GameClientManager();
 
@@ -168,7 +167,7 @@ public class Game
     {
         while (this._gameLoopActive)
         {
-            _cycleEnded = false;
+            this._cycleEnded = false;
 
             try
             {
@@ -206,9 +205,9 @@ public class Game
                 Console.WriteLine("Canceled operation {0}", e);
             }
 
-            _cycleEnded = true;
+            this._cycleEnded = true;
 
-            Thread.Sleep(_cycleSleepTime);
+            Thread.Sleep(this._cycleSleepTime);
         }
 
         Console.WriteLine("MainGameLoop end");
@@ -228,6 +227,19 @@ public class Game
     public void StopGameLoop()
     {
         this._gameLoopActive = false;
-        while (!_cycleEnded) Thread.Sleep(_cycleSleepTime);
+        while (!this._cycleEnded)
+        {
+            Thread.Sleep(this._cycleSleepTime);
+        }
+
+        this._gameLoop.Dispose();
+    }
+
+    public void Dispose()
+    {
+        this._gameLoop.Dispose();
+        this._gameLoop = null;
+
+        GC.SuppressFinalize(this);
     }
 }

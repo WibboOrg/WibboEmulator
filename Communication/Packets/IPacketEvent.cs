@@ -1,12 +1,10 @@
-﻿using WibboEmulator.Communication.Packets.Incoming;
+namespace WibboEmulator.Communication.Packets;
+using WibboEmulator.Communication.Packets.Incoming;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets
+public interface IPacketEvent
 {
-    public interface IPacketEvent
-    {
-        void Parse(GameClient session, ClientPacket packet);
+    void Parse(GameClient session, ClientPacket packet);
 
-        double Delay { get; }
-    }
+    double Delay { get; }
 }

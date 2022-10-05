@@ -1,39 +1,36 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class AddPhoto : IChatCommand
 {
-    internal class AddPhoto : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (Params.Length < 2)
         {
-            if (Params.Length < 2)
-            {
-                return;
-            }
-
-            string PhotoId = Params[1];
-            int ItemPhotoId = 4581;
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(ItemPhotoId, out ItemData ItemData))
-            {
-                return;
-            }
-
-            int Time = WibboEnvironment.GetUnixTimestamp();
-            string ExtraData = "{\"w\":\"" + "/photos/" + PhotoId + ".png" + "\", \"n\":\"" + Session.GetUser().Username + "\", \"s\":\"" + Session.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
-
-            Item Item = ItemFactory.CreateSingleItemNullable(ItemData, Session.GetUser(), ExtraData);
-            Session.GetUser().GetInventoryComponent().TryAddItem(Item);
-
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                UserPhotoDao.Insert(dbClient, Session.GetUser().Id, PhotoId, Time);
-            }
-
-            Session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.valide", Session.Langue));
+            return;
         }
+
+        var PhotoId = Params[1];
+        var ItemPhotoId = 4581;
+        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(ItemPhotoId, out var ItemData))
+        {
+            return;
+        }
+
+        var Time = WibboEnvironment.GetUnixTimestamp();
+        var ExtraData = "{\"w\":\"" + "/photos/" + PhotoId + ".png" + "\", \"n\":\"" + session.GetUser().Username + "\", \"s\":\"" + session.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
+
+        var Item = ItemFactory.CreateSingleItemNullable(ItemData, session.GetUser(), ExtraData);
+        session.GetUser().GetInventoryComponent().TryAddItem(Item);
+
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        {
+            UserPhotoDao.Insert(dbClient, session.GetUser().Id, PhotoId, Time);
+        }
+
+        session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.valide", session.Langue));
     }
 }

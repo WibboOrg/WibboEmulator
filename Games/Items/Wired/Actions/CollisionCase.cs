@@ -1,60 +1,66 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Wired.Actions
+public class CollisionCase : WiredActionBase, IWiredEffect, IWired
 {
-    public class CollisionCase : WiredActionBase, IWiredEffect, IWired
+    public CollisionCase(Item item, Room room) : base(item, room, (int)WiredActionType.CHASE)
     {
-        public CollisionCase(Item item, Room room) : base(item, room, (int)WiredActionType.CHASE)
+    }
+
+    public override bool OnCycle(RoomUser user, Item item)
+    {
+        foreach (var roomItem in this.Items.ToList())
         {
+            this.HandleMovement(roomItem);
         }
 
-        public override bool OnCycle(RoomUser user, Item item)
-        {
-            foreach (Item roomItem in this.Items.ToList())
-            {
-                this.HandleMovement(roomItem);
-            }
+        return false;
+    }
 
-            return false;
+    private void HandleMovement(Item item)
+    {
+        if (this.RoomInstance.GetRoomItemHandler().GetItem(item.Id) == null)
+        {
+            return;
         }
 
-        private void HandleMovement(Item item)
+        var roomUser = this.RoomInstance.GetRoomUserManager().GetUserForSquare(item.X, item.Y);
+        if (roomUser != null)
         {
-            if (this.RoomInstance.GetRoomItemHandler().GetItem(item.Id) == null)
-            {
-                return;
-            }
+            this.RoomInstance.GetWiredHandler().TriggerCollision(roomUser, item);
+            return;
+        }
+    }
 
-            RoomUser roomUser = this.RoomInstance.GetRoomUserManager().GetUserForSquare(item.X, item.Y);
-            if (roomUser != null)
-            {
-                this.RoomInstance.GetWiredHandler().TriggerCollision(roomUser, item);
-                return;
-            }
+    public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
+
+    public void LoadFromDatabase(DataRow row)
+    {
+        if (int.TryParse(row["delay"].ToString(), out var delay))
+        {
+            this.Delay = delay;
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, this.Items, this.Delay);
+        var triggerItems = row["triggers_item"].ToString();
 
-        public void LoadFromDatabase(DataRow row)
+        if (triggerItems is null or "")
         {
-            if (int.TryParse(row["delay"].ToString(), out int delay))
-                this.Delay = delay;
+            return;
+        }
 
-            string triggerItems = row["triggers_item"].ToString();
-
-            if (triggerItems == null || triggerItems == "")
-                return;
-
-            foreach (string itemId in triggerItems.Split(';'))
+        foreach (var itemId in triggerItems.Split(';'))
+        {
+            if (!int.TryParse(itemId, out var id))
             {
-                if (!int.TryParse(itemId, out int id))
-                    continue;
+                continue;
+            }
 
-                if (!this.StuffIds.Contains(id))
-                    this.StuffIds.Add(id);
+            if (!this.StuffIds.Contains(id))
+            {
+                this.StuffIds.Add(id);
             }
         }
     }

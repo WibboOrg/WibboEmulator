@@ -1,28 +1,25 @@
-﻿using WibboEmulator.Database.Daos;
-using WibboEmulator.Database.Interfaces;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+using WibboEmulator.Database.Daos;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class UserSettingsCameraFollowEvent : IPacketEvent
 {
-    internal class UserSettingsCameraFollowEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
+        var flag = Packet.PopBoolean();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session == null || session.GetUser() == null)
         {
-            bool flag = Packet.PopBoolean();
-
-            if (Session == null || Session.GetUser() == null)
-            {
-                return;
-            }
-
-            using (IQueryAdapter dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
-            {
-                UserDao.UpdateCameraFollowDisabled(dbClient, Session.GetUser().Id, flag);
-            }
-
-            Session.GetUser().CameraFollowDisabled = flag;
+            return;
         }
+
+        using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
+        {
+            UserDao.UpdateCameraFollowDisabled(dbClient, session.GetUser().Id, flag);
+        }
+
+        session.GetUser().CameraFollowDisabled = flag;
     }
 }

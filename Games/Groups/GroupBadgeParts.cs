@@ -1,16 +1,15 @@
-﻿namespace WibboEmulator.Games.Groups
-{
-    public class GroupBadgeParts
-    {
-        public int Id { get; private set; }
-        public string AssetOne { get; private set; }
-        public string AssetTwo { get; private set; }
+﻿namespace WibboEmulator.Games.Groups;
 
-        public GroupBadgeParts(int id, string assetOne, string assetTwo)
-        {
-            this.Id = id;
-            this.AssetOne = assetOne;
-            this.AssetTwo = assetTwo;
-        }
+public class GroupBadgeParts
+{
+    public int Id { get; private set; }
+    public string AssetOne { get; private set; }
+    public string AssetTwo { get; private set; }
+
+    public GroupBadgeParts(int id, string assetOne, string assetTwo)
+    {
+        this.Id = id;
+        this.AssetOne = assetOne;
+        this.AssetTwo = assetTwo;
     }
 }

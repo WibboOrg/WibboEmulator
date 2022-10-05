@@ -1,12 +1,11 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.Hotel
-{
-    internal class ShutdownCommand : IRCONCommand
-    {
-        public bool TryExecute(string[] parameters)
-        {
-            WibboEnvironment.PreformShutDown();
+﻿namespace WibboEmulator.Communication.RCON.Commands.Hotel;
 
-            return true;
-        }
+internal class ShutdownCommand : IRCONCommand
+{
+    public bool TryExecute(string[] parameters)
+    {
+        WibboEnvironment.PreformShutDown();
+
+        return true;
     }
 }

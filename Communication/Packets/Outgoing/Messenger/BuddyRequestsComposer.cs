@@ -1,21 +1,19 @@
-using WibboEmulator.Games.GameClients.Messenger;
+namespace WibboEmulator.Communication.Packets.Outgoing.Messenger;
+using WibboEmulator.Games.Users.Messenger;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Messenger
+internal class BuddyRequestsComposer : ServerPacket
 {
-    internal class BuddyRequestsComposer : ServerPacket
+    public BuddyRequestsComposer(Dictionary<int, MessengerRequest> requests)
+        : base(ServerPacketHeader.MESSENGER_REQUESTS)
     {
-        public BuddyRequestsComposer(Dictionary<int, MessengerRequest> requests)
-            : base(ServerPacketHeader.MESSENGER_REQUESTS)
-        {
-            WriteInteger(requests.Count);
-            WriteInteger(requests.Count);
+        this.WriteInteger(requests.Count);
+        this.WriteInteger(requests.Count);
 
-            foreach (MessengerRequest request in requests.Values)
-            {
-                WriteInteger(request.From);
-                WriteString(request.Username);
-                WriteString("");
-            }
+        foreach (var request in requests.Values)
+        {
+            this.WriteInteger(request.From);
+            this.WriteString(request.Username);
+            this.WriteString("");
         }
     }
 }

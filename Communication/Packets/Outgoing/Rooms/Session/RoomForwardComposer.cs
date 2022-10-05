@@ -1,11 +1,7 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Session
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
+
+internal class RoomForwardComposer : ServerPacket
 {
-    internal class RoomForwardComposer : ServerPacket
-    {
-        public RoomForwardComposer(int roomId)
-            : base(ServerPacketHeader.ROOM_FORWARD)
-        {
-            this.WriteInteger(roomId);
-        }
-    }
+    public RoomForwardComposer(int roomId)
+        : base(ServerPacketHeader.ROOM_FORWARD) => this.WriteInteger(roomId);
 }

@@ -1,8 +1,7 @@
-﻿namespace WibboEmulator.Games.Navigator
+﻿namespace WibboEmulator.Games.Navigator;
+
+public enum NavigatorViewMode
 {
-    public enum NavigatorViewMode
-    {
-        REGULAR,
-        THUMBNAIL
-    }
+    REGULAR,
+    THUMBNAIL
 }

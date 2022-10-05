@@ -1,52 +1,50 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorCrackable : FurniInteractor
 {
-    public class InteractorCrackable : FurniInteractor
+    private readonly int Modes;
+
+    public InteractorCrackable(int Modes)
     {
-        private readonly int Modes;
-
-        public InteractorCrackable(int Modes)
+        this.Modes = Modes - 1;
+        if (this.Modes >= 0)
         {
-            this.Modes = Modes - 1;
-            if (this.Modes >= 0)
-            {
-                return;
-            }
-
-            this.Modes = 0;
+            return;
         }
 
-        public override void OnPlace(GameClient Session, Item Item)
+        this.Modes = 0;
+    }
+
+    public override void OnPlace(GameClient session, Item item)
+    {
+    }
+
+    public override void OnRemove(GameClient session, Item item)
+    {
+    }
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        if (!userHasRights || this.Modes == 0)
         {
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        int.TryParse(item.ExtraData, out var NumMode);
+
+        NumMode++;
+
+        if (NumMode > this.Modes)
         {
+            NumMode = 0;
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
-        {
-            if (!UserHasRights || this.Modes == 0)
-            {
-                return;
-            }
+        item.ExtraData = NumMode.ToString();
+        item.UpdateState();
+    }
 
-            int.TryParse(Item.ExtraData, out int NumMode);
-
-            NumMode++;
-
-            if (NumMode > this.Modes)
-            {
-                NumMode = 0;
-            }
-
-            Item.ExtraData = NumMode.ToString();
-            Item.UpdateState();
-        }
-
-        public override void OnTick(Item item)
-        {
-        }
+    public override void OnTick(Item item)
+    {
     }
 }

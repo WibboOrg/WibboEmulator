@@ -1,26 +1,25 @@
-﻿namespace WibboEmulator.Games.Rooms.Jankens
+﻿namespace WibboEmulator.Games.Rooms.Jankens;
+
+public class Janken
 {
-    public class Janken
+    public int UserOne { get; set; }
+    public int UserTwo { get; set; }
+
+    public JankenType ChoiceOne { get; set; }
+    public JankenType ChoiceTwo { get; set; }
+
+    public bool Started { get; set; }
+    public int Timer { get; set; }
+
+    public Janken(int userid, int dueluserid)
     {
-        public int UserOne { get; set; }
-        public int UserTwo { get; set; }
+        this.UserOne = userid;
+        this.UserTwo = dueluserid;
 
-        public JankenType ChoiceOne { get; set; }
-        public JankenType ChoiceTwo { get; set; }
+        this.ChoiceOne = JankenType.NONE;
+        this.ChoiceTwo = JankenType.NONE;
 
-        public bool Started { get; set; }
-        public int Timer { get; set; }
-
-        public Janken(int userid, int dueluserid)
-        {
-            this.UserOne = userid;
-            this.UserTwo = dueluserid;
-
-            this.ChoiceOne = JankenType.NONE;
-            this.ChoiceTwo = JankenType.NONE;
-
-            this.Started = false;
-            this.Timer = 0;
-        }
+        this.Started = false;
+        this.Timer = 0;
     }
 }

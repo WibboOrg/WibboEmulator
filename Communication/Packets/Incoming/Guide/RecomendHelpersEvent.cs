@@ -1,12 +1,10 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Guide;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Guide
+internal class RecomendHelpersEvent : IPacketEvent
 {
-    internal class RecomendHelpersEvent : IPacketEvent
-    {
-        public double Delay => 0;
+    public double Delay => 0;
 
-        public void Parse(GameClient Session, ClientPacket Packet) => Session.SendPacket(new OnGuideSessionDetachedComposer());
-    }
+    public void Parse(GameClient session, ClientPacket Packet) => session.SendPacket(new OnGuideSessionDetachedComposer());
 }

@@ -1,10 +1,9 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Camera
+namespace WibboEmulator.Communication.Packets.Outgoing.Camera;
+
+internal class CameraPurchaseSuccesfullComposer : ServerPacket
 {
-    internal class CameraPurchaseSuccesfullComposer : ServerPacket
+    public CameraPurchaseSuccesfullComposer()
+        : base(ServerPacketHeader.CAMERA_PURCHASE_OK)
     {
-        public CameraPurchaseSuccesfullComposer()
-            : base(ServerPacketHeader.CAMERA_PURCHASE_OK)
-        {
-        }
     }
 }

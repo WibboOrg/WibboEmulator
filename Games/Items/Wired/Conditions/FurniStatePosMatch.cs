@@ -1,157 +1,173 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Games.Items.Wired.Conditions;
+using System.Data;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Wired.Conditions
+public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
 {
-    public class FurniStatePosMatch : WiredConditionBase, IWiredCondition, IWired
+    private readonly Dictionary<int, ItemsPosReset> ItemsData;
+
+    public FurniStatePosMatch(Item item, Room room) : base(item, room, (int)WiredConditionType.STATES_MATCH)
     {
-        private readonly Dictionary<int, ItemsPosReset> ItemsData;
+        this.ItemsData = new Dictionary<int, ItemsPosReset>();
 
-        public FurniStatePosMatch(Item item, Room room) : base(item, room, (int)WiredConditionType.STATES_MATCH)
+        this.IntParams.Add(0);
+        this.IntParams.Add(0);
+        this.IntParams.Add(0);
+    }
+    public bool AllowsExecution(RoomUser user, Item item)
+    {
+        var state = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
+        var direction = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0) == 1;
+        var position = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0) == 1;
+
+        foreach (var roomItem in this.Items.ToList())
         {
-            this.ItemsData = new Dictionary<int, ItemsPosReset>();
-
-            this.IntParams.Add(0);
-            this.IntParams.Add(0);
-            this.IntParams.Add(0);
-        }
-        public bool AllowsExecution(RoomUser user, Item TriggerItem)
-        {
-            bool state = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
-            bool direction = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0) == 1;
-            bool position = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0) == 1;
-
-            foreach (Item roomItem in this.Items.ToList())
+            if (!this.ItemsData.TryGetValue(roomItem.Id, out var itemPosReset))
             {
-                if (!this.ItemsData.TryGetValue(roomItem.Id, out ItemsPosReset itemPosReset))
-                    continue;
+                continue;
+            }
 
-                if (state)
+            if (state)
+            {
+                if (itemPosReset.ExtraData != "Null")
                 {
-                    if (itemPosReset.ExtraData != "Null")
+                    if (!(roomItem.ExtraData == "" && itemPosReset.ExtraData == "0") && !(roomItem.ExtraData == "0" && itemPosReset.ExtraData == ""))
                     {
-                        if (!(roomItem.ExtraData == "" && itemPosReset.ExtraData == "0") && !(roomItem.ExtraData == "0" && itemPosReset.ExtraData == ""))
-                        {
 
-                            if (roomItem.ExtraData != itemPosReset.ExtraData)
-                            {
-                                return false;
-                            }
+                        if (roomItem.ExtraData != itemPosReset.ExtraData)
+                        {
+                            return false;
                         }
                     }
                 }
+            }
 
-                if (direction)
+            if (direction)
+            {
+                if (itemPosReset.Rot != roomItem.Rotation)
                 {
-                    if (itemPosReset.Rot != roomItem.Rotation)
-                    {
-                        return false;
-                    }
-                }
-
-                if (position)
-                {
-                    if (itemPosReset.X != roomItem.X || itemPosReset.Y != roomItem.Y)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
 
-            return true;
-        }
-
-        public override void LoadItems(bool inDatabase = false)
-        {
-            base.LoadItems();
-
-            if (inDatabase)
-                return;
-
-            this.ItemsData.Clear();
-
-            foreach (Item roomItem in this.Items.ToList())
+            if (position)
             {
-                if (!this.ItemsData.ContainsKey(roomItem.Id))
+                if (itemPosReset.X != roomItem.X || itemPosReset.Y != roomItem.Y)
                 {
-                    this.ItemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.X, roomItem.Y, roomItem.Z, roomItem.Rotation, roomItem.ExtraData));
-                }
-                else
-                {
-                    this.ItemsData.Remove(roomItem.Id);
-                    this.ItemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.X, roomItem.Y, roomItem.Z, roomItem.Rotation, roomItem.ExtraData));
+                    return false;
                 }
             }
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient)
+        return true;
+    }
+
+    public override void LoadItems(bool inDatabase = false)
+    {
+        base.LoadItems();
+
+        if (inDatabase)
         {
-            string triggerItems = "";
-
-            foreach (ItemsPosReset roomItem in this.ItemsData.Values)
-            {
-                triggerItems += roomItem.Id + ":" + roomItem.X + ":" + roomItem.Y + ":" + roomItem.Z + ":" + roomItem.Rot + ":" + roomItem.ExtraData + ";";
-            }
-
-            triggerItems = triggerItems.TrimEnd(';');
-
-            int state = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
-            int direction = ((this.IntParams.Count > 1) ? this.IntParams[1] : 0);
-            int position = ((this.IntParams.Count > 2) ? this.IntParams[2] : 0);
-
-            string triggerData2 = state + ";" + direction + ";" + position;
-
-            ItemWiredDao.Delete(dbClient, this.ItemInstance.Id);
-            ItemWiredDao.Insert(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems, this.Delay);
+            return;
         }
 
-        public void LoadFromDatabase(DataRow row)
+        this.ItemsData.Clear();
+
+        foreach (var roomItem in this.Items.ToList())
         {
-            this.IntParams.Clear();
-
-            if (int.TryParse(row["trigger_data"].ToString(), out int delay))
-                this.Delay = delay;
-
-            string triggerData2 = row["trigger_data_2"].ToString();
-
-            if (triggerData2 != null && triggerData2.Length == 5)
+            if (!this.ItemsData.ContainsKey(roomItem.Id))
             {
-                string[] dataSplit = triggerData2.Split(';');
+                this.ItemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.X, roomItem.Y, roomItem.Z, roomItem.Rotation, roomItem.ExtraData));
+            }
+            else
+            {
+                this.ItemsData.Remove(roomItem.Id);
+                this.ItemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.X, roomItem.Y, roomItem.Z, roomItem.Rotation, roomItem.ExtraData));
+            }
+        }
+    }
 
-                if (int.TryParse(dataSplit[0], out int state))
-                    this.IntParams.Add(state);
-                if (int.TryParse(dataSplit[1], out int direction))
-                    this.IntParams.Add(direction);
-                if (int.TryParse(dataSplit[2], out int position))
-                    this.IntParams.Add(position);
+    public void SaveToDatabase(IQueryAdapter dbClient)
+    {
+        var triggerItems = "";
+
+        foreach (var roomItem in this.ItemsData.Values)
+        {
+            triggerItems += roomItem.Id + ":" + roomItem.X + ":" + roomItem.Y + ":" + roomItem.Z + ":" + roomItem.Rot + ":" + roomItem.ExtraData + ";";
+        }
+
+        triggerItems = triggerItems.TrimEnd(';');
+
+        var state = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+        var direction = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
+        var position = (this.IntParams.Count > 2) ? this.IntParams[2] : 0;
+
+        var triggerData2 = state + ";" + direction + ";" + position;
+
+        ItemWiredDao.Delete(dbClient, this.ItemInstance.Id);
+        ItemWiredDao.Insert(dbClient, this.ItemInstance.Id, "", triggerData2, false, triggerItems, this.Delay);
+    }
+
+    public void LoadFromDatabase(DataRow row)
+    {
+        this.IntParams.Clear();
+
+        if (int.TryParse(row["trigger_data"].ToString(), out var delay))
+        {
+            this.Delay = delay;
+        }
+
+        var triggerData2 = row["trigger_data_2"].ToString();
+
+        if (triggerData2 != null && triggerData2.Length == 5)
+        {
+            var dataSplit = triggerData2.Split(';');
+
+            if (int.TryParse(dataSplit[0], out var state))
+            {
+                this.IntParams.Add(state);
             }
 
-            string triggerItems = row["triggers_item"].ToString();
-
-            if (triggerItems == null || triggerItems == "")
+            if (int.TryParse(dataSplit[1], out var direction))
             {
-                return;
+                this.IntParams.Add(direction);
             }
 
-            foreach (string item in triggerItems.Split(';'))
+            if (int.TryParse(dataSplit[2], out var position))
             {
-                string[] itemData = item.Split(':');
-                if (itemData.Length != 6)
-                {
-                    continue;
-                }
-
-                if (!int.TryParse(itemData[0], out int id))
-                    continue;
-
-                if (!this.StuffIds.Contains(id))
-                    this.StuffIds.Add(id);
-
-                this.ItemsData.Add(Convert.ToInt32(itemData[0]), new ItemsPosReset(Convert.ToInt32(itemData[0]), Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]), Convert.ToDouble(itemData[3]), Convert.ToInt32(itemData[4]), itemData[5]));
+                this.IntParams.Add(position);
             }
+        }
+
+        var triggerItems = row["triggers_item"].ToString();
+
+        if (triggerItems is null or "")
+        {
+            return;
+        }
+
+        foreach (var item in triggerItems.Split(';'))
+        {
+            var itemData = item.Split(':');
+            if (itemData.Length != 6)
+            {
+                continue;
+            }
+
+            if (!int.TryParse(itemData[0], out var id))
+            {
+                continue;
+            }
+
+            if (!this.StuffIds.Contains(id))
+            {
+                this.StuffIds.Add(id);
+            }
+
+            this.ItemsData.Add(Convert.ToInt32(itemData[0]), new ItemsPosReset(Convert.ToInt32(itemData[0]), Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]), Convert.ToDouble(itemData[3]), Convert.ToInt32(itemData[4]), itemData[5]));
         }
     }
 }

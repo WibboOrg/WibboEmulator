@@ -1,22 +1,20 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class DisableFriendRequests : IChatCommand
 {
-    internal class DisableFriendRequests : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (session.GetUser().HasFriendRequestsDisabled)
         {
-            if (Session.GetUser().HasFriendRequestsDisabled)
-            {
-                Session.GetUser().HasFriendRequestsDisabled = false;
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.true", Session.Langue));
-            }
-            else
-            {
-                Session.GetUser().HasFriendRequestsDisabled = true;
-                Session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.false", Session.Langue));
-            }
+            session.GetUser().HasFriendRequestsDisabled = false;
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.true", session.Langue));
+        }
+        else
+        {
+            session.GetUser().HasFriendRequestsDisabled = true;
+            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.textamigo.false", session.Langue));
         }
     }
 }

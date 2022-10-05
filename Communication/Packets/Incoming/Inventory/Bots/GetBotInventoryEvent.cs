@@ -1,20 +1,18 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GetBotInventoryEvent : IPacketEvent
 {
-    internal class GetBotInventoryEvent : IPacketEvent
+    public double Delay => 0;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 0;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser() == null)
         {
-            if (Session.GetUser() == null)
-            {
-                return;
-            }
-
-            Session.SendPacket(new BotInventoryComposer(Session.GetUser().GetInventoryComponent().GetBots()));
+            return;
         }
+
+        session.SendPacket(new BotInventoryComposer(session.GetUser().GetInventoryComponent().GetBots()));
     }
 }

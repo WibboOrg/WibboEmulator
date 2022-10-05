@@ -1,20 +1,15 @@
-﻿using WibboEmulator.Database.Interfaces;
+﻿namespace WibboEmulator.Database.Adapter;
+using WibboEmulator.Database.Interfaces;
 
-namespace WibboEmulator.Database.Adapter
+public class NormaldbClient : QueryAdapter, IQueryAdapter, IRegularQueryAdapter, IDisposable
 {
-    public class NormaldbClient : QueryAdapter, IQueryAdapter, IRegularQueryAdapter, IDisposable
-    {
-        public NormaldbClient(IDatabaseClient Client)
-            : base(Client)
-        {
-            command = Client.createNewCommand();
-        }
+    public NormaldbClient(IDatabaseClient Client)
+        : base(Client) => this.Command = Client.CreateNewCommand();
 
-        public void Dispose()
-        {
-            command.Dispose();
-            client.reportDone();
-            GC.SuppressFinalize(this);
-        }
+    public void Dispose()
+    {
+        this.Command.Dispose();
+        this.Client.ReportDone();
+        GC.SuppressFinalize(this);
     }
 }

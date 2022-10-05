@@ -1,116 +1,114 @@
-﻿using WibboEmulator.Games.Roleplay.Enemy;
+namespace WibboEmulator.Games.Rooms.AI;
+using WibboEmulator.Games.Roleplay.Enemy;
 using WibboEmulator.Games.Rooms.AI.Types;
 
-namespace WibboEmulator.Games.Rooms.AI
+public class RoomBot
 {
-    public class RoomBot
+    public int Id { get; set; }
+    public int OwnerId { get; set; }
+    public string Name { get; set; }
+    public string Motto { get; set; }
+    public string Gender { get; set; }
+    public string Look { get; set; }
+    public int RoomId { get; set; }
+    public bool WalkingEnabled { get; set; }
+    public int FollowUser { get; set; }
+    public int X { get; set; }
+    public int Y { get; set; }
+    public double Z { get; set; }
+    public int Rot { get; set; }
+    public bool AutomaticChat { get; set; }
+    public string ChatText { get; set; }
+    public List<string> RandomSpeech { get; set; }
+    public int SpeakingInterval { get; set; }
+    public bool MixSentences { get; set; }
+
+    public int Enable { get; set; }
+    public int Handitem { get; set; }
+    public int Status { get; set; }
+
+    public bool IsDancing { get; set; }
+    public BotAIType AiType { get; set; }
+    public RoleBot RoleBot { get; set; }
+
+    public bool IsPet => this.AiType is BotAIType.Pet or BotAIType.RoleplayPet;
+
+    public string OwnerName => WibboEnvironment.GetGame().GetGameClientManager().GetNameById(this.OwnerId);
+
+    public RoomBot(int botId, int ownerId, int roomId, BotAIType aiType, bool walkingEnabled, string name, string motto, string gender, string look, int x, int y, double z, int rot, bool chatEnabled, string chatText, int chatSeconds, bool isDancing, int effectEnable, int handitemId, int status)
     {
-        public int Id;
-        public int OwnerId;
-        public string Name;
-        public string Motto;
-        public string Gender;
-        public string Look;
-        public int RoomId;
-        public bool WalkingEnabled;
-        public int FollowUser;
-        public int X;
-        public int Y;
-        public double Z;
-        public int Rot;
-        public bool AutomaticChat;
-        public string ChatText;
-        public List<string> RandomSpeech;
-        public int SpeakingInterval;
-        public bool MixSentences;
+        this.Id = botId;
+        this.OwnerId = ownerId;
+        this.RoomId = roomId;
 
-        public int Enable;
-        public int Handitem;
-        public int Status;
+        this.AiType = aiType;
+        this.RoleBot = null;
 
-        public bool IsDancing;
-        public BotAIType AiType;
-        public RoleBot RoleBot;
+        this.Name = name;
+        this.Motto = motto;
+        this.Gender = gender;
+        this.Look = look;
 
-        public bool IsPet => this.AiType == BotAIType.Pet || this.AiType == BotAIType.RoleplayPet;
+        this.X = x;
+        this.Y = y;
+        this.Z = z;
+        this.Rot = rot;
 
-        public string OwnerName => WibboEnvironment.GetGame().GetGameClientManager().GetNameById(this.OwnerId);
+        this.WalkingEnabled = walkingEnabled;
+        this.AutomaticChat = chatEnabled;
+        this.ChatText = chatText;
+        this.SpeakingInterval = chatSeconds;
+        this.IsDancing = isDancing;
+        this.MixSentences = false;
+        this.Enable = effectEnable;
+        this.Handitem = handitemId;
+        this.Status = status;
 
-        public RoomBot(int BotId, int OwnerId, int RoomId, BotAIType AiType, bool WalkingEnabled, string Name, string Motto, string Gender, string Look, int X, int Y, double Z, int Rot, bool ChatEnabled, string ChatText, int ChatSeconds, bool IsDancing, int pEffectEnable, int pHanditemId, int pStatus)
+        this.RandomSpeech = new List<string>();
+
+        this.LoadRandomSpeech(this.ChatText);
+    }
+
+    public void LoadRandomSpeech(string text)
+    {
+        if (!text.Contains('\r'))
         {
-            this.Id = BotId;
-            this.OwnerId = OwnerId;
-            this.RoomId = RoomId;
-
-            this.AiType = AiType;
-            this.RoleBot = null;
-
-            this.Name = Name;
-            this.Motto = Motto;
-            this.Gender = Gender;
-            this.Look = Look;
-
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
-            this.Rot = Rot;
-
-            this.WalkingEnabled = WalkingEnabled;
-            this.AutomaticChat = ChatEnabled;
-            this.ChatText = ChatText;
-            this.SpeakingInterval = ChatSeconds;
-            this.IsDancing = IsDancing;
-            this.MixSentences = false;
-            this.Enable = pEffectEnable;
-            this.Handitem = pHanditemId;
-            this.Status = pStatus;
-
-            this.RandomSpeech = new List<string>();
-
-            this.LoadRandomSpeech(this.ChatText);
+            return;
         }
 
-        public void LoadRandomSpeech(string Text)
+        if (this.RandomSpeech.Count > 0)
         {
-            if (!Text.Contains('\r'))
-            {
-                return;
-            }
-
-            if (this.RandomSpeech.Count > 0)
-            {
-                this.RandomSpeech.Clear();
-            }
-
-            foreach (string Message in Text.Split(new char[] { '\r' }))
-            {
-                if (!string.IsNullOrWhiteSpace(Message))
-                {
-                    this.RandomSpeech.Add((Message.Length > 150) ? Message.Substring(0, 150) : Message);
-                }
-            }
+            this.RandomSpeech.Clear();
         }
 
-        public string GetRandomSpeech() => this.RandomSpeech[WibboEnvironment.GetRandomNumber(0, this.RandomSpeech.Count - 1)];
-
-        public BotAI GenerateBotAI(int VirtualId)
+        foreach (var message in text.Split('\r'))
         {
-            switch (this.AiType)
+            if (!string.IsNullOrWhiteSpace(message))
             {
-                case BotAIType.RoleplayBot:
-                case BotAIType.RoleplayPet:
-                    return new RoleplayBot(VirtualId);
-                case BotAIType.SuperBot:
-                    return new SuperBot(VirtualId);
-                case BotAIType.Pet:
-                    return new PetBot(VirtualId);
-                case BotAIType.Generic:
-                    break;
-                case BotAIType.CopyBot:
-                    break;
+                this.RandomSpeech.Add((message.Length > 150) ? message[..150] : message);
             }
-
-            return new GenericBot(VirtualId);
         }
+    }
+
+    public string GetRandomSpeech() => this.RandomSpeech[WibboEnvironment.GetRandomNumber(0, this.RandomSpeech.Count - 1)];
+
+    public BotAI GenerateBotAI(int virtualId)
+    {
+        switch (this.AiType)
+        {
+            case BotAIType.RoleplayBot:
+            case BotAIType.RoleplayPet:
+                return new RoleplayBot(virtualId);
+            case BotAIType.SuperBot:
+                return new SuperBot(virtualId);
+            case BotAIType.Pet:
+                return new PetBot(virtualId);
+            case BotAIType.Generic:
+                break;
+            case BotAIType.CopyBot:
+                break;
+        }
+
+        return new GenericBot(virtualId);
     }
 }

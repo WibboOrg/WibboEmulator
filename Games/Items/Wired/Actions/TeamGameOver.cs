@@ -1,89 +1,88 @@
-﻿using System.Data;
+﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games;
 
-namespace WibboEmulator.Games.Items.Wired.Actions
+public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
 {
-    public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
+    public TeamGameOver(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.IntParams.Add((int)TeamType.RED);
+
+    public override bool OnCycle(RoomUser user, Item item)
     {
-        public TeamGameOver(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM)
+        var managerForBanzai = this.RoomInstance.GetTeamManager();
+
+        var ListTeam = new List<RoomUser>();
+
+        var team = (TeamType)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+
+        if (team == TeamType.BLUE)
         {
-            this.IntParams.Add((int)TeamType.RED);
+            ListTeam.AddRange(managerForBanzai.BlueTeam);
         }
-
-        public override bool OnCycle(RoomUser user, Item item)
+        else if (team == TeamType.GREEN)
         {
-            TeamManager managerForBanzai = this.RoomInstance.GetTeamManager();
-
-            List<RoomUser> ListTeam = new List<RoomUser>();
-
-            TeamType team = (TeamType)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
-
-            if (team == TeamType.BLUE)
-            {
-                ListTeam.AddRange(managerForBanzai.BlueTeam);
-            }
-            else if (team == TeamType.GREEN)
-            {
-                ListTeam.AddRange(managerForBanzai.GreenTeam);
-            }
-            else if (team == TeamType.RED)
-            {
-                ListTeam.AddRange(managerForBanzai.RedTeam);
-            }
-            else if (team == TeamType.YELLOW)
-            {
-                ListTeam.AddRange(managerForBanzai.YellowTeam);
-            }
-            else
-            {
-                return false;
-            }
-
-            Item ExitTeleport = this.RoomInstance.GetGameItemHandler().GetExitTeleport();
-
-            foreach (RoomUser teamuser in ListTeam)
-            {
-                if (teamuser == null)
-                {
-                    continue;
-                }
-
-                managerForBanzai.OnUserLeave(teamuser);
-                this.RoomInstance.GetGameManager().UpdateGatesTeamCounts();
-                teamuser.ApplyEffect(0);
-                teamuser.Team = TeamType.NONE;
-
-                teamuser.GetClient().SendPacket(new IsPlayingComposer(false));
-
-                if (ExitTeleport != null)
-                {
-                    this.RoomInstance.GetGameMap().TeleportToItem(teamuser, ExitTeleport);
-                }
-            }
-
+            ListTeam.AddRange(managerForBanzai.GreenTeam);
+        }
+        else if (team == TeamType.RED)
+        {
+            ListTeam.AddRange(managerForBanzai.RedTeam);
+        }
+        else if (team == TeamType.YELLOW)
+        {
+            ListTeam.AddRange(managerForBanzai.YellowTeam);
+        }
+        else
+        {
             return false;
         }
 
-        public void SaveToDatabase(IQueryAdapter dbClient)
-        {
-            int team = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
+        var ExitTeleport = this.RoomInstance.GetGameItemHandler().GetExitTeleport();
 
-            WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, team.ToString(), false, null, this.Delay);
+        foreach (var teamuser in ListTeam)
+        {
+            if (teamuser == null)
+            {
+                continue;
+            }
+
+            managerForBanzai.OnUserLeave(teamuser);
+            this.RoomInstance.GetGameManager().UpdateGatesTeamCounts();
+            teamuser.ApplyEffect(0);
+            teamuser.Team = TeamType.NONE;
+
+            teamuser.GetClient().SendPacket(new IsPlayingComposer(false));
+
+            if (ExitTeleport != null)
+            {
+                this.RoomInstance.GetGameMap().TeleportToItem(teamuser, ExitTeleport);
+            }
         }
 
-        public void LoadFromDatabase(DataRow row)
+        return false;
+    }
+
+    public void SaveToDatabase(IQueryAdapter dbClient)
+    {
+        var team = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
+
+        WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, team.ToString(), false, null, this.Delay);
+    }
+
+    public void LoadFromDatabase(DataRow row)
+    {
+        this.IntParams.Clear();
+
+        if (int.TryParse(row["delay"].ToString(), out var delay))
         {
-            this.IntParams.Clear();
+            this.Delay = delay;
+        }
 
-            if (int.TryParse(row["delay"].ToString(), out int delay))
-                this.Delay = delay;
-
-            if (int.TryParse(row["trigger_data"].ToString(), out int number))
-                this.IntParams.Add(number);
+        if (int.TryParse(row["trigger_data"].ToString(), out var number))
+        {
+            this.IntParams.Add(number);
         }
     }
 }

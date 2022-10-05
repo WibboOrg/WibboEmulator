@@ -1,9 +1,7 @@
-﻿using WibboEmulator.Games.Rooms;
+﻿namespace WibboEmulator.Games.Items.Wired.Interfaces;
+using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Wired.Interfaces
+public interface IWiredCondition : IWired
 {
-    public interface IWiredCondition : IWired
-    {
-        bool AllowsExecution(RoomUser user, Item item);
-    }
+    bool AllowsExecution(RoomUser user, Item item);
 }

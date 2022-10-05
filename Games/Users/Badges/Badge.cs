@@ -1,14 +1,13 @@
-﻿namespace WibboEmulator.Games.GameClients.Badges
-{
-    public class Badge
-    {
-        public string Code { get; private set; }
-        public int Slot { get; set; }
+namespace WibboEmulator.Games.Users.Badges;
 
-        public Badge(string Code, int Slot)
-        {
-            this.Code = Code;
-            this.Slot = Slot;
-        }
+public class Badge
+{
+    public string Code { get; private set; }
+    public int Slot { get; set; }
+
+    public Badge(string code, int slot)
+    {
+        this.Code = code;
+        this.Slot = slot;
     }
 }

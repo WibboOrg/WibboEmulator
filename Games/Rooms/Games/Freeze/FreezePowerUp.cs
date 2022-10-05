@@ -1,13 +1,12 @@
-namespace WibboEmulator.Games.Rooms.Games
+namespace WibboEmulator.Games.Rooms.Games;
+
+public enum FreezePowerUp
 {
-    public enum FreezePowerUp
-    {
-        None,
-        BlueArrow,
-        GreenArrow,
-        Shield,
-        Heart,
-        OrangeSnowball,
-        Snowballs,
-    }
+    None,
+    BlueArrow,
+    GreenArrow,
+    Shield,
+    Heart,
+    OrangeSnowball,
+    Snowballs,
 }

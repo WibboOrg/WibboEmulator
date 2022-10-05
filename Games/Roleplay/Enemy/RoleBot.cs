@@ -1,39 +1,176 @@
-﻿using System.Drawing;
+namespace WibboEmulator.Games.Roleplay.Enemy;
+using System.Drawing;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Roleplay.Player;
 using WibboEmulator.Games.Roleplay.Weapon;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms.PathFinding;
 
-namespace WibboEmulator.Games.Roleplay.Enemy
+public class RoleBot
 {
-    public class RoleBot
+    public int Health { get; set; }
+    public RPWeapon WeaponGun { get; set; }
+    public RPWeapon WeaponCac { get; set; }
+    public bool Dead { get; set; }
+    public int DeadTimer { get; set; }
+    public int AggroVirtuelId { get; set; }
+    public bool ResetBot { get; set; }
+    public int ResetBotTimer { get; set; }
+    public int SlowTimer { get; set; }
+    public bool Dodge { get; set; }
+    public int DodgeTimer { get; set; }
+    public int GunCharger { get; set; }
+    public int GunLoadTimer { get; set; }
+    public int HitCount { get; set; }
+    public int ActionTimer { get; set; }
+    public int AggroTimer { get; set; }
+    public int DodgeStartCount { get; set; }
+    public RPEnemy Config { get; set; }
+
+    public RoleBot(RPEnemy enemyConfig)
     {
-        public int Health;
-        public RPWeapon WeaponGun;
-        public RPWeapon WeaponCac;
-        public bool Dead;
-        public int DeadTimer;
-        public int AggroVirtuelId;
-        public bool ResetBot;
-        public int ResetBotTimer;
-        public int SlowTimer;
-        public bool Dodge;
-        public int DodgeTimer;
-        public int GunCharger;
-        public int GunLoadTimer;
-        public int HitCount;
-        public int ActionTimer;
-        public int AggroTimer;
-        public int DodgeStartCount;
-        public RPEnemy Config;
+        this.SetConfig(enemyConfig);
 
-        public RoleBot(RPEnemy EnemyConfig)
+        this.Dead = false;
+        this.AggroVirtuelId = 0;
+        this.AggroTimer = 0;
+        this.ResetBot = false;
+        this.ResetBotTimer = 0;
+        this.HitCount = 0;
+        this.Dodge = false;
+        this.DodgeTimer = 0;
+        this.GunCharger = 6;
+        this.GunLoadTimer = 0;
+        this.DodgeStartCount = WibboEnvironment.GetRandomNumber(2, 4);
+        this.ActionTimer = WibboEnvironment.GetRandomNumber(10, 30);
+    }
+
+    public void SetConfig(RPEnemy enemyConfig)
+    {
+        this.Config = enemyConfig;
+
+        this.Health = this.Config.Health;
+        this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(this.Config.WeaponGunId);
+        this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(this.Config.WeaponCacId);
+    }
+
+    private bool IsAllowZone(RoomUser bot)
+    {
+        var botX = bot.SetStep ? bot.SetX : bot.X;
+        var botY = bot.SetStep ? bot.SetY : bot.Y;
+
+        if (Math.Abs(botX - bot.BotData.X) > this.Config.ZoneDistance || Math.Abs(botY - bot.BotData.Y) > this.Config.ZoneDistance)
         {
-            this.SetConfig(EnemyConfig);
+            return false;
+        }
 
-            this.Dead = false;
+        return true;
+    }
+
+    private void ReloadGunCycle(RoomUser bot)
+    {
+        if (this.GunLoadTimer > 0)
+        {
+            this.GunLoadTimer--;
+            if (this.GunLoadTimer == 0)
+            {
+                this.GunCharger = 6;
+            }
+        }
+        else
+        {
+            if (this.GunCharger == 0)
+            {
+                this.GunLoadTimer = 6;
+                bot.OnChat("*Recharge mon arme*");
+            }
+        }
+    }
+
+    public void OnCycle(RoomUser bot, Room room)
+    {
+        if (this.SlowTimer > 0 || this.Config.ZombieMode)
+        {
+            if (this.SlowTimer > 0)
+            {
+                this.SlowTimer--;
+            }
+
+            if (!bot.BreakWalkEnable)
+            {
+                bot.BreakWalkEnable = true;
+            }
+        }
+        else
+        {
+            if (bot.BreakWalkEnable)
+            {
+                bot.BreakWalkEnable = false;
+            }
+        }
+
+        this.ReloadGunCycle(bot);
+
+        if (this.AggroVirtuelId > 0)
+        {
+            this.AggroCycle(bot, room);
+        }
+
+        if (this.Config.AggroDistance > 0 && !this.Dead) // && this.AggroVirtuelId == 0
+        {
+            this.AggroSearch(bot, room);
+        }
+
+        if (!this.ResetBot && !this.Dead && this.AggroVirtuelId == 0 && !bot.Freeze)
+        {
+            this.FreeTimeCycle(bot);
+        }
+
+        if (this.ResetBot && !this.Dead && this.AggroVirtuelId == 0)
+        {
+            this.CheckResetBot(bot, room);
+        }
+
+        if (this.Dead)
+        {
+            this.DeadTimer--;
+            if (this.DeadTimer <= 0)
+            {
+                this.Dead = false;
+                this.Health = this.Config.Health;
+
+
+                bot.RemoveStatus("lay");
+                bot.Freeze = false;
+                bot.FreezeEndCounter = 0;
+                bot.IsLay = false;
+                bot.UpdateNeeded = true;
+            }
+        }
+    }
+
+    public void Hit(RoomUser bot, int dmg, Room room, int aggroVId, int teamId)
+    {
+        if (this.Dead)
+        {
+            return;
+        }
+
+        if (this.Health <= dmg)
+        {
+            var user = room.GetRoomUserManager().GetRoomUserByVirtualId(this.AggroVirtuelId);
+            if (user != null && !user.IsBot)
+            {
+                var rp = user.Roleplayer;
+                if (rp != null)
+                {
+                    rp.AddExp(this.Config.Health);
+                }
+            }
+
+            this.Health = 0;
+            this.Dead = true;
+            this.DeadTimer = this.Config.DeadTimer;
             this.AggroVirtuelId = 0;
             this.AggroTimer = 0;
             this.ResetBot = false;
@@ -41,770 +178,630 @@ namespace WibboEmulator.Games.Roleplay.Enemy
             this.HitCount = 0;
             this.Dodge = false;
             this.DodgeTimer = 0;
-            this.GunCharger = 6;
-            this.GunLoadTimer = 0;
-            this.DodgeStartCount = WibboEnvironment.GetRandomNumber(2, 4);
-            this.ActionTimer = WibboEnvironment.GetRandomNumber(10, 30);
+
+            bot.SetStatus("lay", bot.IsPet ? "" : "0.7");
+            bot.Freeze = true;
+            bot.FreezeEndCounter = 0;
+            bot.IsLay = true;
+            bot.UpdateNeeded = true;
+
+            if (this.Config.MoneyDrop > 0)
+            {
+                room.GetRoomItemHandler().AddTempItem(bot.VirtualId, this.Config.DropScriptId, bot.SetX, bot.SetY, bot.Z, "1", this.Config.MoneyDrop, InteractionTypeTemp.MONEY);
+            }
+
+            if (this.Config.LootItemId > 0)
+            {
+                var item = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(this.Config.LootItemId);
+                if (item != null)
+                {
+                    room.GetRoomItemHandler().AddTempItem(bot.VirtualId, 3996, bot.SetX, bot.SetY, bot.Z, item.Name, this.Config.LootItemId, InteractionTypeTemp.RPITEM);
+                }
+            }
+
+            bot.OnChat("A été mis K.O. ! [" + this.Health + "/" + this.Config.Health + "]", bot.IsPet ? 0 : 2, true);
+        }
+        else
+        {
+            this.Health -= dmg;
+            this.SlowTimer = 6;
+
+            this.ResetBot = false;
+            this.ResetBotTimer = 60;
+
+            this.AggroTimer = 0;
+
+            if (teamId == -1 || teamId != this.Config.TeamId)
+            {
+                this.AggroVirtuelId = aggroVId;
+            }
+
+            if (!this.Dodge)
+            {
+                this.HitCount += 1;
+                if (this.HitCount % this.DodgeStartCount == 0)
+                {
+                    this.Dodge = true;
+                    this.DodgeTimer = 3;
+                    this.DodgeStartCount = WibboEnvironment.GetRandomNumber(2, 4);
+                }
+            }
+
+            bot.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", room.RoomData.Langue), this.Health, this.Config.Health, dmg), bot.IsPet ? 0 : 2, true);
+        }
+    }
+
+    private void Pan(RoomUser bot, Room room)
+    {
+        var movement = MovementUtility.GetMovementByDirection(bot.RotBody);
+
+        var weaponEanble = this.WeaponGun.Enable;
+
+        bot.ApplyEffect(weaponEanble, true);
+        bot.TimerResetEffect = this.WeaponGun.FreezeTime + 1;
+
+        if (bot.FreezeEndCounter <= this.WeaponGun.FreezeTime)
+        {
+            bot.Freeze = true;
+            bot.FreezeEndCounter = this.WeaponGun.FreezeTime;
         }
 
-        public void SetConfig(RPEnemy EnemyConfig)
+        for (var i = 0; i < this.WeaponGun.FreezeTime; i++)
         {
-            this.Config = EnemyConfig;
-
-            this.Health = this.Config.Health;
-            this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(this.Config.WeaponGunId);
-            this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(this.Config.WeaponCacId);
-        }
-
-        private bool IsAllowZone(RoomUser Bot)
-        {
-            int BotX = (Bot.SetStep) ? Bot.SetX : Bot.X;
-            int BotY = (Bot.SetStep) ? Bot.SetY : Bot.Y;
-
-            if (Math.Abs(BotX - Bot.BotData.X) > this.Config.ZoneDistance || Math.Abs(BotY - Bot.BotData.Y) > this.Config.ZoneDistance)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private void ReloadGunCycle(RoomUser Bot)
-        {
-            if (this.GunLoadTimer > 0)
-            {
-                this.GunLoadTimer--;
-                if (this.GunLoadTimer == 0)
-                {
-                    this.GunCharger = 6;
-                }
-            }
-            else
-            {
-                if (this.GunCharger == 0)
-                {
-                    this.GunLoadTimer = 6;
-                    Bot.OnChat("*Recharge mon arme*");
-                }
-            }
-        }
-
-        public void OnCycle(RoomUser Bot, Room Room)
-        {
-            if (this.SlowTimer > 0 || this.Config.ZombieMode)
-            {
-                if (this.SlowTimer > 0)
-                {
-                    this.SlowTimer--;
-                }
-
-                if (!Bot.BreakWalkEnable)
-                {
-                    Bot.BreakWalkEnable = true;
-                }
-            }
-            else
-            {
-                if (Bot.BreakWalkEnable)
-                {
-                    Bot.BreakWalkEnable = false;
-                }
-            }
-
-            this.ReloadGunCycle(Bot);
-
-            if (this.AggroVirtuelId > 0)
-            {
-                this.AggroCycle(Bot, Room);
-            }
-
-            if (this.Config.AggroDistance > 0 && !this.Dead) // && this.AggroVirtuelId == 0
-            {
-                this.AggroSearch(Bot, Room);
-            }
-
-            if (!this.ResetBot && !this.Dead && this.AggroVirtuelId == 0 && !Bot.Freeze)
-            {
-                this.FreeTimeCycle(Bot);
-            }
-
-            if (this.ResetBot && !this.Dead && this.AggroVirtuelId == 0)
-            {
-                this.CheckResetBot(Bot, Room);
-            }
-
-            if (this.Dead)
-            {
-                this.DeadTimer--;
-                if (this.DeadTimer <= 0)
-                {
-                    this.Dead = false;
-                    this.Health = this.Config.Health;
-
-
-                    Bot.RemoveStatus("lay");
-                    Bot.Freeze = false;
-                    Bot.FreezeEndCounter = 0;
-                    Bot.IsLay = false;
-                    Bot.UpdateNeeded = true;
-                }
-            }
-        }
-
-        public void Hit(RoomUser Bot, int Dmg, Room Room, int pAggroVId, int pTeamId)
-        {
-            if (this.Dead)
+            if (this.GunCharger <= 0)
             {
                 return;
             }
 
-            if (this.Health <= Dmg)
-            {
-                RoomUser User = Room.GetRoomUserManager().GetRoomUserByVirtualId(this.AggroVirtuelId);
-                if (User != null && !User.IsBot)
-                {
-                    RolePlayer Rp = User.Roleplayer;
-                    if (Rp != null)
-                    {
-                        Rp.AddExp(this.Config.Health);
-                    }
-                }
+            this.GunCharger--;
+            var dmg = WibboEnvironment.GetRandomNumber(this.WeaponGun.DmgMin, this.WeaponGun.DmgMax);
 
-                this.Health = 0;
-                this.Dead = true;
-                this.DeadTimer = this.Config.DeadTimer;
-                this.AggroVirtuelId = 0;
-                this.AggroTimer = 0;
-                this.ResetBot = false;
-                this.ResetBotTimer = 0;
-                this.HitCount = 0;
+            room.GetProjectileManager().AddProjectile(bot.VirtualId, bot.SetX, bot.SetY, bot.SetZ, movement, dmg, this.WeaponGun.Distance, this.Config.TeamId, true);
+        }
+    }
+
+    private void Cac(RoomUser bot, Room room, RoomUser user)
+    {
+        var dmg = WibboEnvironment.GetRandomNumber(this.WeaponCac.DmgMin, this.WeaponCac.DmgMax);
+
+        if (!user.IsBot)
+        {
+            var rp = user.Roleplayer;
+            if (rp != null)
+            {
+                rp.Hit(user, dmg, room, false, true);
+            }
+        }
+        else
+        {
+            if (user.BotData.RoleBot != null)
+            {
+                user.BotData.RoleBot.Hit(user, dmg, room, bot.VirtualId, user.BotData.RoleBot.Config.TeamId);
+            }
+        }
+
+        var weaponEanble = this.WeaponCac.Enable;
+
+        bot.ApplyEffect(weaponEanble, true);
+        bot.TimerResetEffect = this.WeaponCac.FreezeTime + 1;
+
+        if (bot.FreezeEndCounter <= this.WeaponCac.FreezeTime + 1)
+        {
+            bot.Freeze = true;
+            bot.FreezeEndCounter = this.WeaponCac.FreezeTime + 1;
+        }
+    }
+
+    public void ResetAggro()
+    {
+        this.AggroVirtuelId = 0;
+        this.AggroTimer = 0;
+    }
+
+    private void AggroCycle(RoomUser bot, Room room)
+    {
+        var user = room.GetRoomUserManager().GetRoomUserByVirtualId(this.AggroVirtuelId);
+        if (user == null || this.Dead)
+        {
+            this.ResetAggro();
+            return;
+        }
+
+        if (this.AggroTimer > 120)
+        {
+            this.ResetAggro();
+            return;
+        }
+        else
+        {
+            this.AggroTimer++;
+        }
+
+        if (!user.IsBot)
+        {
+            var rp = user.Roleplayer;
+            if (rp == null)
+            {
+                this.ResetAggro();
+                return;
+            }
+
+            if (rp.Dead || (!rp.PvpEnable && rp.AggroTimer <= 0) || rp.SendPrison || !rp.PvpEnable)
+            {
+                this.ResetAggro();
+                return;
+            }
+        }
+        else
+        {
+            if (user.BotData.RoleBot == null || user.BotData.RoleBot.Dead)
+            {
+                this.ResetAggro();
+                return;
+            }
+        }
+
+        var botX = bot.SetStep ? bot.SetX : bot.X;
+        var botY = bot.SetStep ? bot.SetY : bot.Y;
+
+        var userX = user.SetStep ? user.SetX : user.X;
+        var userY = user.SetStep ? user.SetY : user.Y;
+
+        var distanceX = Math.Abs(userX - botX);
+        var distanceY = Math.Abs(userY - botY);
+
+        if (distanceX > this.Config.LostAggroDistance || distanceY > this.Config.LostAggroDistance)
+        {
+            this.ResetAggro();
+            return;
+        }
+
+        if (distanceX > this.Config.LostAggroDistance || distanceY > this.Config.LostAggroDistance)
+        {
+            this.ResetAggro();
+            return;
+        }
+
+        if (distanceX > this.Config.LostAggroDistance || distanceY > this.Config.LostAggroDistance)
+        {
+            this.ResetAggro();
+            return;
+        }
+
+        if (Math.Abs(botX - bot.BotData.X) > this.Config.ZoneDistance + 10 || Math.Abs(botY - bot.BotData.Y) > this.Config.ZoneDistance + 10)
+        {
+            this.ResetAggro();
+            return;
+        }
+
+        if (bot.Freeze)
+        {
+            return;
+        }
+
+        if (!this.BotPathFind(bot, room, user))
+        {
+            return;
+        }
+
+        var rot = Rotation.Calculate(botX, botY, userX, userY);
+
+        bot.RotHead = rot;
+        bot.RotBody = rot;
+        bot.UpdateNeeded = true;
+
+        this.AggroTimer = 0;
+
+        if (this.WeaponCac.Id != 0 && distanceX < 2 && distanceY < 2)
+        {
+            this.Cac(bot, room, user);
+        }
+        else if (this.WeaponGun.Id != 0)
+        {
+            this.Pan(bot, room);
+        }
+    }
+
+    private bool BotPathFind(RoomUser bot, Room room, RoomUser user)
+    {
+        var botX = bot.SetStep ? bot.SetX : bot.X;
+        var botY = bot.SetStep ? bot.SetY : bot.Y;
+
+        var userX = user.SetStep ? user.SetX : user.X;
+        var userY = user.SetStep ? user.SetY : user.Y;
+
+        var distanceX = Math.Abs(userX - botX);
+        var distanceY = Math.Abs(userY - botY);
+
+        if (this.Dodge)
+        {
+            this.DodgeTimer--;
+            if (this.DodgeTimer <= 0)
+            {
                 this.Dodge = false;
-                this.DodgeTimer = 0;
+                this.HitCount = 0;
+            }
 
-                Bot.SetStatus("lay", (Bot.IsPet) ? "" : "0.7");
-                Bot.Freeze = true;
-                Bot.FreezeEndCounter = 0;
-                Bot.IsLay = true;
-                Bot.UpdateNeeded = true;
-
-                if (this.Config.MoneyDrop > 0)
+            if (!bot.IsWalking)
+            {
+                if (distanceX < distanceY)
                 {
-                    Room.GetRoomItemHandler().AddTempItem(Bot.VirtualId, this.Config.DropScriptId, Bot.SetX, Bot.SetY, Bot.Z, "1", this.Config.MoneyDrop, InteractionTypeTemp.MONEY);
-                }
-
-                if (this.Config.LootItemId > 0)
-                {
-                    RPItem Item = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(this.Config.LootItemId);
-                    if (Item != null)
-                    {
-                        Room.GetRoomItemHandler().AddTempItem(Bot.VirtualId, 3996, Bot.SetX, Bot.SetY, Bot.Z, Item.Name, this.Config.LootItemId, InteractionTypeTemp.RPITEM);
-                    }
-                }
-
-                Bot.OnChat("A été mis K.O. ! [" + this.Health + "/" + this.Config.Health + "]", (Bot.IsPet) ? 0 : 2, true);
-            }
-            else
-            {
-                this.Health -= Dmg;
-                this.SlowTimer = 6;
-
-                this.ResetBot = false;
-                this.ResetBotTimer = 60;
-
-                this.AggroTimer = 0;
-
-                if (pTeamId == -1 || pTeamId != this.Config.TeamId)
-                {
-                    this.AggroVirtuelId = pAggroVId;
-                }
-
-                if (!this.Dodge)
-                {
-                    this.HitCount += 1;
-                    if (this.HitCount % this.DodgeStartCount == 0)
-                    {
-                        this.Dodge = true;
-                        this.DodgeTimer = 3;
-                        this.DodgeStartCount = WibboEnvironment.GetRandomNumber(2, 4);
-                    }
-                }
-
-                Bot.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", Room.RoomData.Langue), this.Health, this.Config.Health, Dmg), (Bot.IsPet) ? 0 : 2, true);
-            }
-        }
-
-        private void Pan(RoomUser Bot, Room Room)
-        {
-            MovementDirection movement = MovementUtility.GetMovementByDirection(Bot.RotBody);
-
-            int WeaponEanble = this.WeaponGun.Enable;
-
-            Bot.ApplyEffect(WeaponEanble, true);
-            Bot.TimerResetEffect = this.WeaponGun.FreezeTime + 1;
-
-            if (Bot.FreezeEndCounter <= this.WeaponGun.FreezeTime)
-            {
-                Bot.Freeze = true;
-                Bot.FreezeEndCounter = this.WeaponGun.FreezeTime;
-            }
-
-            for (int i = 0; i < this.WeaponGun.FreezeTime; i++)
-            {
-                if (this.GunCharger <= 0)
-                {
-                    return;
-                }
-
-                this.GunCharger--;
-                int Dmg = WibboEnvironment.GetRandomNumber(this.WeaponGun.DmgMin, this.WeaponGun.DmgMax);
-
-                Room.GetProjectileManager().AddProjectile(Bot.VirtualId, Bot.SetX, Bot.SetY, Bot.SetZ, movement, Dmg, this.WeaponGun.Distance, this.Config.TeamId, true);
-            }
-        }
-
-        private void Cac(RoomUser Bot, Room Room, RoomUser User)
-        {
-            int Dmg = WibboEnvironment.GetRandomNumber(this.WeaponCac.DmgMin, this.WeaponCac.DmgMax);
-
-            if (!User.IsBot)
-            {
-                RolePlayer Rp = User.Roleplayer;
-                if (Rp != null)
-                {
-                    Rp.Hit(User, Dmg, Room, false, true);
-                }
-            }
-            else
-            {
-                if (User.BotData.RoleBot != null)
-                {
-                    User.BotData.RoleBot.Hit(User, Dmg, Room, Bot.VirtualId, User.BotData.RoleBot.Config.TeamId);
-                }
-            }
-
-            int WeaponEanble = this.WeaponCac.Enable;
-
-            Bot.ApplyEffect(WeaponEanble, true);
-            Bot.TimerResetEffect = this.WeaponCac.FreezeTime + 1;
-
-            if (Bot.FreezeEndCounter <= this.WeaponCac.FreezeTime + 1)
-            {
-                Bot.Freeze = true;
-                Bot.FreezeEndCounter = this.WeaponCac.FreezeTime + 1;
-            }
-        }
-
-        public void ResetAggro()
-        {
-            this.AggroVirtuelId = 0;
-            this.AggroTimer = 0;
-        }
-
-        private void AggroCycle(RoomUser Bot, Room Room)
-        {
-            RoomUser User = Room.GetRoomUserManager().GetRoomUserByVirtualId(this.AggroVirtuelId);
-            if (User == null || this.Dead)
-            {
-                this.ResetAggro();
-                return;
-            }
-
-            if (this.AggroTimer > 120)
-            {
-                this.ResetAggro();
-                return;
-            }
-            else
-            {
-                this.AggroTimer++;
-            }
-
-            if (!User.IsBot)
-            {
-                RolePlayer Rp = User.Roleplayer;
-                if (Rp == null)
-                {
-                    this.ResetAggro();
-                    return;
-                }
-
-                if (Rp.Dead || (!Rp.PvpEnable && Rp.AggroTimer <= 0) || Rp.SendPrison || !Rp.PvpEnable)
-                {
-                    this.ResetAggro();
-                    return;
-                }
-            }
-            else
-            {
-                if (User.BotData.RoleBot == null || User.BotData.RoleBot.Dead)
-                {
-                    this.ResetAggro();
-                    return;
-                }
-            }
-
-            int BotX = (Bot.SetStep) ? Bot.SetX : Bot.X;
-            int BotY = (Bot.SetStep) ? Bot.SetY : Bot.Y;
-
-            int UserX = (User.SetStep) ? User.SetX : User.X;
-            int UserY = (User.SetStep) ? User.SetY : User.Y;
-
-            int DistanceX = Math.Abs(UserX - BotX);
-            int DistanceY = Math.Abs(UserY - BotY);
-
-            if (DistanceX > this.Config.LostAggroDistance || DistanceY > this.Config.LostAggroDistance)
-            {
-                this.ResetAggro();
-                return;
-            }
-
-            if (DistanceX > this.Config.LostAggroDistance || DistanceY > this.Config.LostAggroDistance)
-            {
-                this.ResetAggro();
-                return;
-            }
-
-            if (DistanceX > this.Config.LostAggroDistance || DistanceY > this.Config.LostAggroDistance)
-            {
-                this.ResetAggro();
-                return;
-            }
-
-            if (Math.Abs(BotX - Bot.BotData.X) > this.Config.ZoneDistance + 10 || Math.Abs(BotY - Bot.BotData.Y) > this.Config.ZoneDistance + 10)
-            {
-                this.ResetAggro();
-                return;
-            }
-
-            if (Bot.Freeze)
-            {
-                return;
-            }
-
-            if (!this.BotPathFind(Bot, Room, User))
-            {
-                return;
-            }
-
-            int Rot = Rotation.Calculate(BotX, BotY, UserX, UserY);
-
-            Bot.RotHead = Rot;
-            Bot.RotBody = Rot;
-            Bot.UpdateNeeded = true;
-
-            this.AggroTimer = 0;
-
-            if (this.WeaponCac.Id != 0 && (DistanceX < 2 && DistanceY < 2))
-            {
-                this.Cac(Bot, Room, User);
-            }
-            else if (this.WeaponGun.Id != 0)
-            {
-                this.Pan(Bot, Room);
-            }
-        }
-
-        private bool BotPathFind(RoomUser Bot, Room Room, RoomUser User)
-        {
-            int BotX = (Bot.SetStep) ? Bot.SetX : Bot.X;
-            int BotY = (Bot.SetStep) ? Bot.SetY : Bot.Y;
-
-            int UserX = (User.SetStep) ? User.SetX : User.X;
-            int UserY = (User.SetStep) ? User.SetY : User.Y;
-
-            int DistanceX = Math.Abs(UserX - BotX);
-            int DistanceY = Math.Abs(UserY - BotY);
-
-            if (this.Dodge)
-            {
-                this.DodgeTimer--;
-                if (this.DodgeTimer <= 0)
-                {
-                    this.Dodge = false;
-                    this.HitCount = 0;
-                }
-
-                if (!Bot.IsWalking)
-                {
-                    if (DistanceX < DistanceY)
-                    {
-                        Bot.MoveTo(UserX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? 1 : -1), BotY, true);
-                    }
-                    else
-                    {
-                        Bot.MoveTo(BotX, UserY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? 1 : -1), true);
-                    }
-                }
-                return false;
-            }
-
-            if (this.WeaponCac.Id == 0 && (this.WeaponGun.Id == 0 || this.GunCharger == 0)) //Fuite
-            {
-                if (Bot.IsWalking)
-                {
-                    return false;
-                }
-
-                if (DistanceX > DistanceY)
-                {
-                    if (User.X > BotX)
-                    {
-                        Bot.MoveTo(BotX, BotY + WibboEnvironment.GetRandomNumber(1, 3), true);
-                    }
-                    else
-                    {
-                        Bot.MoveTo(BotX, BotY - WibboEnvironment.GetRandomNumber(1, 3), true);
-                    }
+                    bot.MoveTo(userX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? 1 : -1), botY, true);
                 }
                 else
                 {
-                    if (User.Y > BotY)
-                    {
-                        Bot.MoveTo(BotX - WibboEnvironment.GetRandomNumber(1, 3), BotY, true);
-                    }
-                    else
-                    {
-                        Bot.MoveTo(BotX + WibboEnvironment.GetRandomNumber(1, 3), BotY, true);
-                    }
-                }
-                return false;
-            }
-
-            if ((DistanceX >= 2 || DistanceY >= 2) || this.WeaponCac.Id == 0) //Distance
-            {
-                if ((this.WeaponGun.Id == 0 || this.GunCharger == 0) && this.WeaponCac.Id != 0) //Déplace le bot au cac si il est uniquement cac
-                {
-                    Bot.MoveTo(UserX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), UserY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), true);
-                }
-                else if (this.WeaponGun.Id != 0 && this.GunCharger != 0) //Si le bot a une arme distance
-                {
-                    if ((this.WeaponCac.Id == 0 || this.GunCharger == 0) && ((BotX == User.X && BotY == User.Y) || (BotX == UserX && BotY == UserY))) //Eloigné le bot si l'utilisateur est sur sa case et que le bot n'a pas d'arme cac
-                    {
-                        Bot.MoveTo(UserX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -5 : 5), UserY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -5 : 5), true);
-                        return false;
-                    }
-
-                    if ((BotX + BotY) == (UserX + UserY) ||
-                        (BotX - BotY) == (UserX - UserY) ||
-                        (BotX + BotY) == (UserX + UserY) ||
-                        (BotX - BotY) == (UserX - UserY) ||
-                        (UserX == BotX || UserY == BotY) ||
-                        (UserX == BotX || UserY == BotY)) //Bot en position de tirer
-                    {
-                        int Rot = Rotation.Calculate(BotX, BotY, UserX, UserY);
-
-                        if (this.CheckCollisionDir(Bot, Room, Rot, DistanceX, DistanceY)) //Check si la balle peut passer
-                        {
-                            Bot.MoveTo(UserX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), UserY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), true);
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        if (DistanceX < 3 && DistanceY < 3)
-                        {
-                            Bot.MoveTo(UserX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), UserY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), true);
-                        }
-                        else
-                        {
-                            if (Bot.IsWalking)
-                            {
-                                return false;
-                            }
-
-                            if (DistanceX < DistanceY)
-                            {
-                                Bot.MoveTo(UserX, (DistanceY > 5) ? BotY - WibboEnvironment.GetRandomNumber(1, 2) : BotY + WibboEnvironment.GetRandomNumber(1, 2), true);
-                            }
-                            else
-                            {
-                                Bot.MoveTo((DistanceX > 5) ? BotX - WibboEnvironment.GetRandomNumber(1, 2) : BotX + WibboEnvironment.GetRandomNumber(1, 2), UserY, true);
-                            }
-                        }
-                        return false;
-                    }
+                    bot.MoveTo(botX, userY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? 1 : -1), true);
                 }
             }
-
-            return true;
-        }
-
-        private bool CheckCollisionDir(RoomUser Bot, Room Room, int Rot, int DistanceX, int DistanceY)
-        {
-            int BotX = (Bot.SetStep) ? Bot.SetX : Bot.X;
-            int BotY = (Bot.SetStep) ? Bot.SetY : Bot.Y;
-            double BotZ = (Bot.SetStep) ? Bot.SetZ : Bot.Z;
-
-            if (this.WeaponGun.Distance < DistanceX || this.WeaponGun.Distance < DistanceY)
-            {
-                return true;
-            }
-
-            if (Rot == 2)
-            {
-                for (int i = 1; i < DistanceX; i++)
-                {
-                    if (!Room.GetGameMap().CanStackItem(BotX + i, BotY, true) || Room.GetGameMap().SqAbsoluteHeight(BotX + i, BotY) > (BotZ + 0.5))
-                    {
-                        return true;
-                    }
-                }
-            }
-            else if (Rot == 6)
-            {
-                for (int i = 1; i < DistanceX; i++)
-                {
-                    if (!Room.GetGameMap().CanStackItem(BotX - i, BotY, true) || Room.GetGameMap().SqAbsoluteHeight(BotX - i, BotY) > (BotZ + 0.5))
-                    {
-                        return true;
-                    }
-                }
-            }
-            else if (Rot == 4)
-            {
-                for (int i = 1; i < DistanceY; i++)
-                {
-                    if (!Room.GetGameMap().CanStackItem(BotX, BotY + i, true) || Room.GetGameMap().SqAbsoluteHeight(BotX, BotY + i) > (BotZ + 0.5))
-                    {
-                        return true;
-                    }
-                }
-            }
-            else if (Rot == 0)
-            {
-                for (int i = 1; i < DistanceY; i++)
-                {
-                    if (!Room.GetGameMap().CanStackItem(BotX, BotY - i, true) || Room.GetGameMap().SqAbsoluteHeight(BotX, BotY - i) > (BotZ + 0.5))
-                    {
-                        return true;
-                    }
-                }
-            }
-            //diago
-            else if (Rot == 7)
-            {
-                for (int i = 1; i < DistanceX; i++)
-                {
-                    if (!Room.GetGameMap().CanStackItem(BotX - i, BotY - i, true) || Room.GetGameMap().SqAbsoluteHeight(BotX - i, BotY - i) > (BotZ + 0.5))
-                    {
-                        return true;
-                    }
-                }
-            }
-            else if (Rot == 1)
-            {
-                for (int i = 1; i < DistanceX; i++)
-                {
-                    if (!Room.GetGameMap().CanStackItem(BotX + i, BotY - i, true) || Room.GetGameMap().SqAbsoluteHeight(BotX + i, BotY - i) > (BotZ + 0.5))
-                    {
-                        return true;
-                    }
-                }
-            }
-            else if (Rot == 3)
-            {
-                for (int i = 1; i < DistanceX; i++)
-                {
-                    if (!Room.GetGameMap().CanStackItem(BotX + i, BotY + i, true) || Room.GetGameMap().SqAbsoluteHeight(BotX + i, BotY + i) > (BotZ + 0.5))
-                    {
-                        return true;
-                    }
-                }
-            }
-            else if (Rot == 5)
-            {
-                for (int i = 1; i < DistanceX; i++)
-                {
-                    if (!Room.GetGameMap().CanStackItem(BotX - i, BotY + i, true) || Room.GetGameMap().SqAbsoluteHeight(BotX - i, BotY + i) > (BotZ + 0.5))
-                    {
-                        return true;
-                    }
-                }
-            }
-
             return false;
         }
 
-        private void CheckResetBot(RoomUser Bot, Room Room)
+        if (this.WeaponCac.Id == 0 && (this.WeaponGun.Id == 0 || this.GunCharger == 0)) //Fuite
         {
-            if ((this.Config.ResetPosition && (this.IsAllowZone(Bot) || !Bot.IsWalking) && this.Health == this.Config.Health) || (!this.Config.ResetPosition && this.Health == this.Config.Health))
+            if (bot.IsWalking)
             {
-                this.ResetBotTimer = 0;
+                return false;
+            }
+
+            if (distanceX > distanceY)
+            {
+                if (user.X > botX)
+                {
+                    bot.MoveTo(botX, botY + WibboEnvironment.GetRandomNumber(1, 3), true);
+                }
+                else
+                {
+                    bot.MoveTo(botX, botY - WibboEnvironment.GetRandomNumber(1, 3), true);
+                }
             }
             else
             {
-                this.ResetBotTimer--;
-            }
-
-            this.Health = (this.Health + 25 >= this.Config.Health) ? this.Config.Health : this.Health + 25;
-
-            if (this.ResetBotTimer <= 0)
-            {
-                this.ResetBot = false;
-                this.ResetBotTimer = 0;
-
-                this.Health = this.Config.Health;
-
-                if (this.Config.ResetPosition && !this.IsAllowZone(Bot))
+                if (user.Y > botY)
                 {
-                    Bot.RotHead = Bot.BotData.Rot;
-                    Bot.RotBody = Bot.BotData.Rot;
-                    Room.SendPacket(Room.GetRoomItemHandler().TeleportUser(Bot, new Point(Bot.BotData.X, Bot.BotData.Y), 0, Room.GetGameMap().SqAbsoluteHeight(Bot.BotData.X, Bot.BotData.Y)));
+                    bot.MoveTo(botX - WibboEnvironment.GetRandomNumber(1, 3), botY, true);
+                }
+                else
+                {
+                    bot.MoveTo(botX + WibboEnvironment.GetRandomNumber(1, 3), botY, true);
                 }
             }
+            return false;
         }
 
-        private void FreeTimeCycle(RoomUser Bot)
+        if (distanceX >= 2 || distanceY >= 2 || this.WeaponCac.Id == 0) //Distance
         {
-            if (!this.IsAllowZone(Bot) || this.Health != this.Config.Health)
+            if ((this.WeaponGun.Id == 0 || this.GunCharger == 0) && this.WeaponCac.Id != 0) //Déplace le bot au cac si il est uniquement cac
             {
-                this.ResetBot = true;
-                this.ResetBotTimer = 60;
-
-                if (this.Config.ResetPosition && !this.IsAllowZone(Bot))
+                bot.MoveTo(userX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), userY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), true);
+            }
+            else if (this.WeaponGun.Id != 0 && this.GunCharger != 0) //Si le bot a une arme distance
+            {
+                if ((this.WeaponCac.Id == 0 || this.GunCharger == 0) && ((botX == user.X && botY == user.Y) || (botX == userX && botY == userY))) //Eloigné le bot si l'utilisateur est sur sa case et que le bot n'a pas d'arme cac
                 {
-                    Bot.MoveTo(Bot.BotData.X, Bot.BotData.Y);
+                    bot.MoveTo(userX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -5 : 5), userY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -5 : 5), true);
+                    return false;
                 }
 
-                if (this.Health != this.Config.Health)
+                if ((botX + botY) == (userX + userY) ||
+                    (botX - botY) == (userX - userY) ||
+                    (botX + botY) == (userX + userY) ||
+                    (botX - botY) == (userX - userY) ||
+                    userX == botX || userY == botY ||
+                    userX == botX || userY == botY) //Bot en position de tirer
                 {
-                    Bot.ApplyEffect(4, true);
-                    Bot.TimerResetEffect = 4;
-                }
+                    var rot = Rotation.Calculate(botX, botY, userX, userY);
 
-                return;
-            }
-
-            //Action bot
-            if (this.ActionTimer > 0)
-            {
-                this.ActionTimer--;
-                return;
-            }
-
-            if (Bot.IsWalking)
-            {
-                return;
-            }
-
-            this.ActionTimer = WibboEnvironment.GetRandomNumber(15, 30);
-            if (this.ActionTimer >= 25 && !this.Config.ZombieMode)
-            {
-                if (this.ActionTimer == 30)
-                {
-                    if (Bot.RotBody != Bot.BotData.Rot)
+                    if (this.CheckCollisionDir(bot, room, rot, distanceX, distanceY)) //Check si la balle peut passer
                     {
-                        Bot.RotHead = Bot.BotData.Rot;
-                        Bot.RotBody = Bot.BotData.Rot;
-                        Bot.UpdateNeeded = true;
+                        bot.MoveTo(userX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), userY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), true);
+                        return false;
                     }
                 }
                 else
                 {
-                    if (Bot.IsSit)
+                    if (distanceX < 3 && distanceY < 3)
                     {
-                        Bot.RemoveStatus("sit");
-                        Bot.IsSit = false;
-                        Bot.UpdateNeeded = true;
+                        bot.MoveTo(userX + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), userY + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -1 : 1), true);
                     }
                     else
                     {
-                        if (Bot.RotBody % 2 == 0)
+                        if (bot.IsWalking)
                         {
-                            if (Bot.IsPet)
-                            {
-                                Bot.SetStatus("sit", "0");
-                            }
-                            else
-                            {
-                                Bot.SetStatus("sit", "0.5");
-                            }
+                            return false;
+                        }
 
-                            Bot.IsSit = true;
-                            Bot.UpdateNeeded = true;
+                        if (distanceX < distanceY)
+                        {
+                            bot.MoveTo(userX, (distanceY > 5) ? botY - WibboEnvironment.GetRandomNumber(1, 2) : botY + WibboEnvironment.GetRandomNumber(1, 2), true);
+                        }
+                        else
+                        {
+                            bot.MoveTo((distanceX > 5) ? botX - WibboEnvironment.GetRandomNumber(1, 2) : botX + WibboEnvironment.GetRandomNumber(1, 2), userY, true);
                         }
                     }
-                }
-            }
-            else
-            {
-                if (this.Config.ZoneDistance > 0)
-                {
-                    //Bouge le bot aléatoirement dans sa zone
-                    int LenghtX = WibboEnvironment.GetRandomNumber(0, this.Config.ZoneDistance);
-                    int LenghtY = WibboEnvironment.GetRandomNumber(0, this.Config.ZoneDistance);
-                    Bot.MoveTo(Bot.BotData.X + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -LenghtX : LenghtX), Bot.BotData.Y + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -LenghtY : LenghtY), true);
+                    return false;
                 }
             }
         }
 
-        private void AggroSearch(RoomUser Bot, Room Room)
+        return true;
+    }
+
+    private bool CheckCollisionDir(RoomUser bot, Room room, int rot, int distanceX, int distanceY)
+    {
+        var botX = bot.SetStep ? bot.SetX : bot.X;
+        var botY = bot.SetStep ? bot.SetY : bot.Y;
+        var botZ = bot.SetStep ? bot.SetZ : bot.Z;
+
+        if (this.WeaponGun.Distance < distanceX || this.WeaponGun.Distance < distanceY)
         {
-            List<RoomUser> Users = Room.GetGameMap().GetNearUsers(new Point(Bot.X, Bot.Y), this.Config.AggroDistance);
-            if (Users == null)
+            return true;
+        }
+
+        if (rot == 2)
+        {
+            for (var i = 1; i < distanceX; i++)
             {
-                return;
+                if (!room.GetGameMap().CanStackItem(botX + i, botY, true) || room.GetGameMap().SqAbsoluteHeight(botX + i, botY) > (botZ + 0.5))
+                {
+                    return true;
+                }
+            }
+        }
+        else if (rot == 6)
+        {
+            for (var i = 1; i < distanceX; i++)
+            {
+                if (!room.GetGameMap().CanStackItem(botX - i, botY, true) || room.GetGameMap().SqAbsoluteHeight(botX - i, botY) > (botZ + 0.5))
+                {
+                    return true;
+                }
+            }
+        }
+        else if (rot == 4)
+        {
+            for (var i = 1; i < distanceY; i++)
+            {
+                if (!room.GetGameMap().CanStackItem(botX, botY + i, true) || room.GetGameMap().SqAbsoluteHeight(botX, botY + i) > (botZ + 0.5))
+                {
+                    return true;
+                }
+            }
+        }
+        else if (rot == 0)
+        {
+            for (var i = 1; i < distanceY; i++)
+            {
+                if (!room.GetGameMap().CanStackItem(botX, botY - i, true) || room.GetGameMap().SqAbsoluteHeight(botX, botY - i) > (botZ + 0.5))
+                {
+                    return true;
+                }
+            }
+        }
+        //diago
+        else if (rot == 7)
+        {
+            for (var i = 1; i < distanceX; i++)
+            {
+                if (!room.GetGameMap().CanStackItem(botX - i, botY - i, true) || room.GetGameMap().SqAbsoluteHeight(botX - i, botY - i) > (botZ + 0.5))
+                {
+                    return true;
+                }
+            }
+        }
+        else if (rot == 1)
+        {
+            for (var i = 1; i < distanceX; i++)
+            {
+                if (!room.GetGameMap().CanStackItem(botX + i, botY - i, true) || room.GetGameMap().SqAbsoluteHeight(botX + i, botY - i) > (botZ + 0.5))
+                {
+                    return true;
+                }
+            }
+        }
+        else if (rot == 3)
+        {
+            for (var i = 1; i < distanceX; i++)
+            {
+                if (!room.GetGameMap().CanStackItem(botX + i, botY + i, true) || room.GetGameMap().SqAbsoluteHeight(botX + i, botY + i) > (botZ + 0.5))
+                {
+                    return true;
+                }
+            }
+        }
+        else if (rot == 5)
+        {
+            for (var i = 1; i < distanceX; i++)
+            {
+                if (!room.GetGameMap().CanStackItem(botX - i, botY + i, true) || room.GetGameMap().SqAbsoluteHeight(botX - i, botY + i) > (botZ + 0.5))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private void CheckResetBot(RoomUser bot, Room room)
+    {
+        if ((this.Config.ResetPosition && (this.IsAllowZone(bot) || !bot.IsWalking) && this.Health == this.Config.Health) || (!this.Config.ResetPosition && this.Health == this.Config.Health))
+        {
+            this.ResetBotTimer = 0;
+        }
+        else
+        {
+            this.ResetBotTimer--;
+        }
+
+        this.Health = (this.Health + 25 >= this.Config.Health) ? this.Config.Health : this.Health + 25;
+
+        if (this.ResetBotTimer <= 0)
+        {
+            this.ResetBot = false;
+            this.ResetBotTimer = 0;
+
+            this.Health = this.Config.Health;
+
+            if (this.Config.ResetPosition && !this.IsAllowZone(bot))
+            {
+                bot.RotHead = bot.BotData.Rot;
+                bot.RotBody = bot.BotData.Rot;
+                room.SendPacket(room.GetRoomItemHandler().TeleportUser(bot, new Point(bot.BotData.X, bot.BotData.Y), 0, room.GetGameMap().SqAbsoluteHeight(bot.BotData.X, bot.BotData.Y)));
+            }
+        }
+    }
+
+    private void FreeTimeCycle(RoomUser bot)
+    {
+        if (!this.IsAllowZone(bot) || this.Health != this.Config.Health)
+        {
+            this.ResetBot = true;
+            this.ResetBotTimer = 60;
+
+            if (this.Config.ResetPosition && !this.IsAllowZone(bot))
+            {
+                bot.MoveTo(bot.BotData.X, bot.BotData.Y);
             }
 
-            int BotX = (Bot.SetStep) ? Bot.SetX : Bot.X;
-            int BotY = (Bot.SetStep) ? Bot.SetY : Bot.Y;
-
-            int DistanceUserNow = 99;
-
-            foreach (RoomUser User in Users)
+            if (this.Health != this.Config.Health)
             {
-                if (User == Bot)
+                bot.ApplyEffect(4, true);
+                bot.TimerResetEffect = 4;
+            }
+
+            return;
+        }
+
+        //Action bot
+        if (this.ActionTimer > 0)
+        {
+            this.ActionTimer--;
+            return;
+        }
+
+        if (bot.IsWalking)
+        {
+            return;
+        }
+
+        this.ActionTimer = WibboEnvironment.GetRandomNumber(15, 30);
+        if (this.ActionTimer >= 25 && !this.Config.ZombieMode)
+        {
+            if (this.ActionTimer == 30)
+            {
+                if (bot.RotBody != bot.BotData.Rot)
                 {
-                    continue;
+                    bot.RotHead = bot.BotData.Rot;
+                    bot.RotBody = bot.BotData.Rot;
+                    bot.UpdateNeeded = true;
                 }
-
-                int RotationDistance = Math.Abs(Rotation.Calculate(BotX, BotY, User.X, User.Y) - Bot.RotBody);
-                if (RotationDistance >= 2 && !(User.X == BotX && User.Y == BotY))
+            }
+            else
+            {
+                if (bot.IsSit)
                 {
-                    continue;
-                }
-
-                if (!User.IsBot)
-                {
-                    RolePlayer Rp = User.Roleplayer;
-                    if (Rp == null)
-                    {
-                        continue;
-                    }
-
-                    if (Rp.Dead || (!Rp.PvpEnable && Rp.AggroTimer <= 0) || Rp.SendPrison)
-                    {
-                        continue;
-                    }
+                    bot.RemoveStatus("sit");
+                    bot.IsSit = false;
+                    bot.UpdateNeeded = true;
                 }
                 else
                 {
-                    if (User.BotData.RoleBot == null || (User.BotData.RoleBot.Dead || this.Config.TeamId == User.BotData.RoleBot.Config.TeamId))
+                    if (bot.RotBody % 2 == 0)
                     {
-                        continue;
+                        if (bot.IsPet)
+                        {
+                            bot.SetStatus("sit", "0");
+                        }
+                        else
+                        {
+                            bot.SetStatus("sit", "0.5");
+                        }
+
+                        bot.IsSit = true;
+                        bot.UpdateNeeded = true;
                     }
                 }
+            }
+        }
+        else
+        {
+            if (this.Config.ZoneDistance > 0)
+            {
+                //Bouge le bot aléatoirement dans sa zone
+                var lenghtX = WibboEnvironment.GetRandomNumber(0, this.Config.ZoneDistance);
+                var lenghtY = WibboEnvironment.GetRandomNumber(0, this.Config.ZoneDistance);
+                bot.MoveTo(bot.BotData.X + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -lenghtX : lenghtX), bot.BotData.Y + ((WibboEnvironment.GetRandomNumber(1, 2) == 2) ? -lenghtY : lenghtY), true);
+            }
+        }
+    }
 
-                int UserX = (User.SetStep) ? User.SetX : User.X;
-                int UserY = (User.SetStep) ? User.SetY : User.Y;
+    private void AggroSearch(RoomUser bot, Room room)
+    {
+        var users = room.GetGameMap().GetNearUsers(new Point(bot.X, bot.Y), this.Config.AggroDistance);
+        if (users == null)
+        {
+            return;
+        }
 
-                int DistanceX = Math.Abs(UserX - BotX);
-                int DistanceY = Math.Abs(UserY - BotY);
+        var botX = bot.SetStep ? bot.SetX : bot.X;
+        var botY = bot.SetStep ? bot.SetY : bot.Y;
 
-                int DistanceUser = DistanceX + DistanceY;
+        var distanceUserNow = 99;
 
-                if (DistanceUser >= DistanceUserNow)
+        foreach (var user in users)
+        {
+            if (user == bot)
+            {
+                continue;
+            }
+
+            var rotationDistance = Math.Abs(Rotation.Calculate(botX, botY, user.X, user.Y) - bot.RotBody);
+            if (rotationDistance >= 2 && !(user.X == botX && user.Y == botY))
+            {
+                continue;
+            }
+
+            if (!user.IsBot)
+            {
+                var rp = user.Roleplayer;
+                if (rp == null)
                 {
                     continue;
                 }
 
-                DistanceUserNow = DistanceUser;
-
-                this.ResetBot = false;
-                this.ResetBotTimer = 60;
-                this.AggroVirtuelId = User.VirtualId;
-                this.AggroTimer = 0;
+                if (rp.Dead || (!rp.PvpEnable && rp.AggroTimer <= 0) || rp.SendPrison)
+                {
+                    continue;
+                }
             }
+            else
+            {
+                if (user.BotData.RoleBot == null || user.BotData.RoleBot.Dead || this.Config.TeamId == user.BotData.RoleBot.Config.TeamId)
+                {
+                    continue;
+                }
+            }
+
+            var userX = user.SetStep ? user.SetX : user.X;
+            var userY = user.SetStep ? user.SetY : user.Y;
+
+            var distanceX = Math.Abs(userX - botX);
+            var distanceY = Math.Abs(userY - botY);
+
+            var distanceUser = distanceX + distanceY;
+
+            if (distanceUser >= distanceUserNow)
+            {
+                continue;
+            }
+
+            distanceUserNow = distanceUser;
+
+            this.ResetBot = false;
+            this.ResetBotTimer = 60;
+            this.AggroVirtuelId = user.VirtualId;
+            this.AggroTimer = 0;
         }
     }
 }

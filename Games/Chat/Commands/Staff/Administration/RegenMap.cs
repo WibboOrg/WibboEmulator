@@ -1,14 +1,12 @@
-﻿using WibboEmulator.Games.GameClients;
+﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class RegenMap : IChatCommand
 {
-    internal class RegenMap : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
-        {
-            Room.GetGameMap().GenerateMaps();
-            Session.SendWhisper("Rafraichissement de la map d'appartement");
-        }
+        Room.GetGameMap().GenerateMaps();
+        session.SendWhisper("Rafraichissement de la map d'appartement");
     }
 }

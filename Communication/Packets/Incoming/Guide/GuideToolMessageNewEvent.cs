@@ -1,29 +1,27 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Guide;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Guide
+internal class GuideToolMessageNewEvent : IPacketEvent
 {
-    internal class GuideToolMessageNewEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
+        var message = Packet.PopString();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.GetUser().GuideOtherUserId);
+        if (requester == null)
         {
-            string message = Packet.PopString();
-
-            GameClient requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Session.GetUser().GuideOtherUserId);
-            if (requester == null)
-            {
-                return;
-            }
-
-            if (Session.Antipub(message, "<GUIDEMESSAGE>"))
-            {
-                return;
-            }
-
-            requester.SendPacket(new OnGuideSessionMsgComposer(message, Session.GetUser().Id));
-            Session.SendPacket(new OnGuideSessionMsgComposer(message, Session.GetUser().Id));
+            return;
         }
+
+        if (session.Antipub(message, "<GUIDEMESSAGE>"))
+        {
+            return;
+        }
+
+        requester.SendPacket(new OnGuideSessionMsgComposer(message, session.GetUser().Id));
+        session.SendPacket(new OnGuideSessionMsgComposer(message, session.GetUser().Id));
     }
 }

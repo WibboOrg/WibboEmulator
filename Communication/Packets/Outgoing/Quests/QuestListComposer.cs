@@ -1,60 +1,58 @@
+namespace WibboEmulator.Communication.Packets.Outgoing.Quests;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
-namespace WibboEmulator.Communication.Packets.Outgoing.Quests
+internal class QuestListComposer : ServerPacket
 {
-    internal class QuestListComposer : ServerPacket
+    public QuestListComposer(Dictionary<string, Quest> quests, GameClient session, bool send)
+        : base(ServerPacketHeader.QUESTS)
     {
-        public QuestListComposer(Dictionary<string, Quest> quests, GameClient session, bool send)
-            : base(ServerPacketHeader.QUESTS)
+        this.WriteInteger(quests.Count);
+        foreach (var keyValuePair in quests)
         {
-            WriteInteger(quests.Count);
-            foreach (KeyValuePair<string, Quest> keyValuePair in quests)
+            if (keyValuePair.Value != null)
             {
-                if (keyValuePair.Value != null)
-                {
-                    SerializeQuest(session, keyValuePair.Value, keyValuePair.Key);
-                }
+                this.SerializeQuest(session, keyValuePair.Value, keyValuePair.Key);
             }
-
-            foreach (KeyValuePair<string, Quest> keyValuePair in quests)
-            {
-                if (keyValuePair.Value == null)
-                {
-                    SerializeQuest(session, keyValuePair.Value, keyValuePair.Key);
-                }
-            }
-
-            WriteBoolean(send);
         }
 
-        private void SerializeQuest(GameClient Session, Quest Quest, string Category)
+        foreach (var keyValuePair in quests)
         {
-            int questsInCategory = WibboEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(Category);
-            int i = Quest == null ? questsInCategory : Quest.Number - 1;
-            int num = Quest == null ? 0 : Session.GetUser().GetQuestProgress(Quest.Id);
-            if (Quest != null && Quest.IsCompleted(num))
+            if (keyValuePair.Value == null)
             {
-                i++;
+                this.SerializeQuest(session, keyValuePair.Value, keyValuePair.Key);
             }
-
-            WriteString(Category);
-            WriteInteger(i);
-            WriteInteger(questsInCategory);
-            WriteInteger(0);
-            WriteInteger(Quest == null ? 0 : Quest.Id);
-            WriteBoolean(Quest != null && Session.GetUser().CurrentQuestId == Quest.Id);
-            WriteString(Quest == null ? string.Empty : Quest.ActionName);
-            WriteString(Quest == null ? string.Empty : Quest.DataBit);
-            WriteInteger(Quest == null ? 0 : Quest.Reward);
-            WriteString(Quest == null ? string.Empty : Quest.Name);
-            WriteInteger(num);
-            WriteInteger(Quest == null ? 0 : Quest.GoalData);
-            WriteInteger(QuestTypeUtillity.GetIntValue(Category));
-            WriteString("set_kuurna");
-            WriteString("MAIN_CHAIN");
-            WriteBoolean(true);
         }
 
+        this.WriteBoolean(send);
     }
+
+    private void SerializeQuest(GameClient session, Quest Quest, string Category)
+    {
+        var questsInCategory = WibboEnvironment.GetGame().GetQuestManager().GetAmountOfQuestsInCategory(Category);
+        var i = Quest == null ? questsInCategory : Quest.Number - 1;
+        var num = Quest == null ? 0 : session.GetUser().GetQuestProgress(Quest.Id);
+        if (Quest != null && Quest.IsCompleted(num))
+        {
+            i++;
+        }
+
+        this.WriteString(Category);
+        this.WriteInteger(i);
+        this.WriteInteger(questsInCategory);
+        this.WriteInteger(0);
+        this.WriteInteger(Quest == null ? 0 : Quest.Id);
+        this.WriteBoolean(Quest != null && session.GetUser().CurrentQuestId == Quest.Id);
+        this.WriteString(Quest == null ? string.Empty : Quest.ActionName);
+        this.WriteString(Quest == null ? string.Empty : Quest.DataBit);
+        this.WriteInteger(Quest == null ? 0 : Quest.Reward);
+        this.WriteString(Quest == null ? string.Empty : Quest.Name);
+        this.WriteInteger(num);
+        this.WriteInteger(Quest == null ? 0 : Quest.GoalData);
+        this.WriteInteger(QuestTypeUtillity.GetIntValue(Category));
+        this.WriteString("set_kuurna");
+        this.WriteString("MAIN_CHAIN");
+        this.WriteBoolean(true);
+    }
+
 }

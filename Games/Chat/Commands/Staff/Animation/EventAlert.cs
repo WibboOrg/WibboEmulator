@@ -1,20 +1,18 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class EventAlert : IChatCommand
 {
-    internal class EventAlert : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+        if (!WibboEnvironment.GetGame().GetAnimationManager().AllowAnimation())
         {
-            if (!WibboEnvironment.GetGame().GetAnimationManager().AllowAnimation())
-            {
-                return;
-            }
-
-            string str = CommandManager.MergeParams(Params, 1);
-            str = "<b>[ANIMATION]</b>\r\n" + str + "\r\n- " + Session.GetUser().Username;
-            WibboEnvironment.GetGame().GetGameClientManager().SendSuperNotif("Animation des Staffs", str, "game_promo_small", "event:navigator/goto/" + UserRoom.RoomId, "Rejoindre!", true, true);
+            return;
         }
+
+        var str = CommandManager.MergeParams(Params, 1);
+        str = "<b>[ANIMATION]</b>\r\n" + str + "\r\n- " + session.GetUser().Username;
+        WibboEnvironment.GetGame().GetGameClientManager().SendSuperNotif("Animation des Staffs", str, "game_promo_small", "event:navigator/goto/" + UserRoom.RoomId, "Rejoindre!", true, true);
     }
 }

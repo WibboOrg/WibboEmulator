@@ -1,55 +1,53 @@
-﻿using WibboEmulator.Communication.Packets.Outgoing.Camera;
+namespace WibboEmulator.Communication.Packets.Incoming.Camera;
+using WibboEmulator.Communication.Packets.Outgoing.Camera;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Camera
+internal class PurchasePhotoEvent : IPacketEvent
 {
-    internal class PurchasePhotoEvent : IPacketEvent
+    public double Delay => 200;
+
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        public double Delay => 200;
+        var photoId = packet.PopString();
 
-        public void Parse(GameClient session, ClientPacket packet)
+        if (string.IsNullOrEmpty(photoId))
         {
-            string photoId = packet.PopString();
-
-            if (string.IsNullOrEmpty(photoId))
-            {
-                photoId = session.GetUser().LastPhotoId;
-            }
-            else if (!WibboEnvironment.IsValidAlphaNumeric(photoId) || photoId.Length != 32)
-            {
-                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(photoId))
-            {
-                session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
-                return;
-            }
-
-            int photoItemId = WibboEnvironment.GetSettings().GetData<int>("photo.item.id");
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(photoItemId, out ItemData ItemData))
-            {
-                return;
-            }
-
-            int photoSmallItemId = WibboEnvironment.GetSettings().GetData<int>("photo.small.item.id");
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(photoSmallItemId, out ItemData ItemDataSmall))
-            {
-                return;
-            }
-
-            int Time = WibboEnvironment.GetUnixTimestamp();
-            string ExtraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.GetUser().Username + "\", \"s\":\"" + session.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
-
-            Item ItemSmall = ItemFactory.CreateSingleItemNullable(ItemDataSmall, session.GetUser(), ExtraData);
-            session.GetUser().GetInventoryComponent().TryAddItem(ItemSmall);
-
-            Item Item = ItemFactory.CreateSingleItemNullable(ItemData, session.GetUser(), ExtraData);
-            session.GetUser().GetInventoryComponent().TryAddItem(Item);
-
-            session.SendPacket(new CameraPurchaseSuccesfullComposer());
+            photoId = session.GetUser().LastPhotoId;
         }
+        else if (!WibboEnvironment.IsValidAlphaNumeric(photoId) || photoId.Length != 32)
+        {
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(photoId))
+        {
+            session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.error", session.Langue) + " ( " + photoId + " ) ");
+            return;
+        }
+
+        var photoItemId = WibboEnvironment.GetSettings().GetData<int>("photo.item.id");
+        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(photoItemId, out var itemData))
+        {
+            return;
+        }
+
+        var photoSmallItemId = WibboEnvironment.GetSettings().GetData<int>("photo.small.item.id");
+        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(photoSmallItemId, out var itemDataSmall))
+        {
+            return;
+        }
+
+        var time = WibboEnvironment.GetUnixTimestamp();
+        var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.GetUser().Username + "\", \"s\":\"" + session.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
+
+        var itemSmall = ItemFactory.CreateSingleItemNullable(itemDataSmall, session.GetUser(), extraData);
+        session.GetUser().GetInventoryComponent().TryAddItem(itemSmall);
+
+        var item = ItemFactory.CreateSingleItemNullable(itemData, session.GetUser(), extraData);
+        session.GetUser().GetInventoryComponent().TryAddItem(item);
+
+        session.SendPacket(new CameraPurchaseSuccesfullComposer());
     }
 }

@@ -1,11 +1,7 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Moderation
+namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
+
+internal class ModeratorSupportTicketResponseComposer : ServerPacket
 {
-    internal class ModeratorSupportTicketResponseComposer : ServerPacket
-    {
-        public ModeratorSupportTicketResponseComposer(string messageAlert)
-            : base(ServerPacketHeader.CFH_REPLY)
-        {
-            WriteString(messageAlert);
-        }
-    }
+    public ModeratorSupportTicketResponseComposer(string messageAlert)
+        : base(ServerPacketHeader.CFH_REPLY) => this.WriteString(messageAlert);
 }

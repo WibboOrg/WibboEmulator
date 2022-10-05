@@ -1,99 +1,97 @@
-﻿using System.Drawing;
+namespace WibboEmulator.Games.Items.Interactors;
+using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Furni;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Items.Interactors
+public class InteractorLoveLock : FurniInteractor
 {
-    public class InteractorLoveLock : FurniInteractor
+    public override void OnPlace(GameClient session, Item item)
     {
-        public override void OnPlace(GameClient Session, Item Item)
+        item.InteractingUser = 0;
+        item.InteractingUser2 = 0;
+    }
+
+    public override void OnRemove(GameClient session, Item item)
+    {
+        item.InteractingUser = 0;
+        item.InteractingUser2 = 0;
+    }
+
+    public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
+    {
+        RoomUser User = null;
+
+        if (!userHasRights)
         {
-            Item.InteractingUser = 0;
-            Item.InteractingUser2 = 0;
+            return;
         }
 
-        public override void OnRemove(GameClient Session, Item Item)
+        if (session != null)
         {
-            Item.InteractingUser = 0;
-            Item.InteractingUser2 = 0;
+            User = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
         }
 
-        public override void OnTrigger(GameClient Session, Item Item, int Request, bool UserHasRights, bool Reverse)
+        if (User == null)
         {
-            RoomUser User = null;
+            return;
+        }
 
-            if (!UserHasRights)
+        if (Gamemap.TilesTouching(item.X, item.Y, User.X, User.Y))
+        {
+            if (item.ExtraData == null || item.ExtraData.Length <= 1 || !item.ExtraData.Contains(Convert.ToChar(5).ToString()))
             {
-                return;
-            }
+                Point pointOne;
+                Point pointTwo;
 
-            if (Session != null)
-            {
-                User = Item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(Session.GetUser().Id);
-            }
-
-            if (User == null)
-            {
-                return;
-            }
-
-            if (Gamemap.TilesTouching(Item.X, Item.Y, User.X, User.Y))
-            {
-                if (Item.ExtraData == null || Item.ExtraData.Length <= 1 || !Item.ExtraData.Contains(Convert.ToChar(5).ToString()))
+                switch (item.Rotation)
                 {
-                    Point pointOne;
-                    Point pointTwo;
+                    case 0:
+                    case 2:
+                        pointOne = new Point(item.X, item.Y + 1);
+                        pointTwo = new Point(item.X, item.Y - 1);
+                        break;
 
-                    switch (Item.Rotation)
-                    {
-                        case 0:
-                        case 2:
-                            pointOne = new Point(Item.X, Item.Y + 1);
-                            pointTwo = new Point(Item.X, Item.Y - 1);
-                            break;
+                    case 4:
+                    case 6:
+                        pointOne = new Point(item.X - 1, item.Y);
+                        pointTwo = new Point(item.X + 1, item.Y);
+                        break;
 
-                        case 4:
-                        case 6:
-                            pointOne = new Point(Item.X - 1, Item.Y);
-                            pointTwo = new Point(Item.X + 1, Item.Y);
-                            break;
-
-                        default:
-                            return;
-                    }
-
-                    RoomUser UserOne = Item.GetRoom().GetRoomUserManager().GetUserForSquare(pointOne.X, pointOne.Y);
-                    RoomUser UserTwo = Item.GetRoom().GetRoomUserManager().GetUserForSquare(pointTwo.X, pointTwo.Y);
-
-                    if (UserOne == null || UserTwo == null)
-                    {
+                    default:
                         return;
-                    }
-
-                    if (UserOne.GetClient() == null || UserTwo.GetClient() == null)
-                    {
-                        return;
-                    }
-
-                    UserOne.CanWalk = false;
-                    UserTwo.CanWalk = false;
-
-                    Item.InteractingUser = UserOne.GetClient().GetUser().Id;
-                    Item.InteractingUser2 = UserTwo.GetClient().GetUser().Id;
-
-                    UserOne.GetClient().SendPacket(new LoveLockDialogueComposer(Item.Id));
-                    UserTwo.GetClient().SendPacket(new LoveLockDialogueComposer(Item.Id));
                 }
-            }
-            else
-            {
-                User.MoveTo(Item.SquareInFront);
-            }
-        }
 
-        public override void OnTick(Item item)
-        {
+                var UserOne = item.GetRoom().GetRoomUserManager().GetUserForSquare(pointOne.X, pointOne.Y);
+                var UserTwo = item.GetRoom().GetRoomUserManager().GetUserForSquare(pointTwo.X, pointTwo.Y);
+
+                if (UserOne == null || UserTwo == null)
+                {
+                    return;
+                }
+
+                if (UserOne.GetClient() == null || UserTwo.GetClient() == null)
+                {
+                    return;
+                }
+
+                UserOne.CanWalk = false;
+                UserTwo.CanWalk = false;
+
+                item.InteractingUser = UserOne.GetClient().GetUser().Id;
+                item.InteractingUser2 = UserTwo.GetClient().GetUser().Id;
+
+                UserOne.GetClient().SendPacket(new LoveLockDialogueComposer(item.Id));
+                UserTwo.GetClient().SendPacket(new LoveLockDialogueComposer(item.Id));
+            }
         }
+        else
+        {
+            User.MoveTo(item.SquareInFront);
+        }
+    }
+
+    public override void OnTick(Item item)
+    {
     }
 }

@@ -1,46 +1,38 @@
-﻿namespace WibboEmulator.Games.GameClients.Messenger
+namespace WibboEmulator.Games.Users.Messenger;
+
+public class MessengerBuddy
 {
-    public class MessengerBuddy
+    public int UserId { get; }
+    public string Username { get; }
+    public string Look { get; private set; }
+    public int Relation { get; private set; }
+    public bool IsOnline { get; private set; }
+    public bool HideInRoom { get; private set; }
+
+    public MessengerBuddy(int userId, string username, string look, int relation)
     {
-        private readonly int _userId;
-        private readonly string _username;
-        private string _look;
-        private int _relation;
-        private bool _isOnline;
-        private bool _hideInRoom;
+        this.UserId = userId;
+        this.Username = username;
+        this.Look = look;
+        this.Relation = relation;
+    }
 
-        public MessengerBuddy(int UserId, string Username, string Look, int Relation)
+    public void UpdateRelation(int type) => this.Relation = type;
+
+    public void UpdateUser()
+    {
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this.UserId);
+        if (client != null && client.GetUser() != null && client.GetUser().GetMessenger() != null && !client.GetUser().GetMessenger().AppearOffline)
         {
-            this._userId = UserId;
-            this._username = Username;
-            this._look = Look;
-            this._relation = Relation;
+            this.IsOnline = true;
+            this.Look = client.GetUser().Look;
+            this.HideInRoom = client.GetUser().HideInRoom;
         }
-
-        public void UpdateRelation(int Type) => this._relation = Type;
-
-        public void UpdateUser()
+        else
         {
-            GameClient client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._userId);
-            if (client != null && client.GetUser() != null && client.GetUser().GetMessenger() != null && !client.GetUser().GetMessenger().AppearOffline)
-            {
-                this._isOnline = true;
-                this._look = client.GetUser().Look;
-                this._hideInRoom = client.GetUser().HideInRoom;
-            }
-            else
-            {
-                this._isOnline = false;
-                this._look = "";
-                this._hideInRoom = true;
-            }
+            this.IsOnline = false;
+            this.Look = "";
+            this.HideInRoom = true;
         }
-
-        public int UserId => this._userId;
-        public string Username => this._username;
-        public string Look => this._look;
-        public int Relation => this._relation;
-        public bool IsOnline => this._isOnline;
-        public bool HideInRoom => this._hideInRoom;
     }
 }

@@ -1,35 +1,33 @@
+namespace WibboEmulator.Games.Chat.Commands.Cmd;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Games.Chat.Commands.Cmd
+internal class ExtraBox : IChatCommand
 {
-    internal class ExtraBox : IChatCommand
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
     {
-        public void Execute(GameClient Session, Room Room, RoomUser UserRoom, string[] Params)
+
+        int.TryParse(Params[1], out var NbLot);
+
+        if (NbLot is < 0 or > 10)
         {
+            return;
+        }
 
-            int.TryParse(Params[1], out int NbLot);
+        var lootboxId = WibboEnvironment.GetSettings().GetData<int>("givelot.lootbox.id");
+        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(lootboxId, out var ItemData))
+        {
+            return;
+        }
 
-            if (NbLot < 0 || NbLot > 10)
+        var Items = ItemFactory.CreateMultipleItems(ItemData, session.GetUser(), "", NbLot);
+        foreach (var PurchasedItem in Items)
+        {
+            if (session.GetUser().GetInventoryComponent().TryAddItem(PurchasedItem))
             {
-                return;
-            }
-
-            int lootboxId = WibboEnvironment.GetSettings().GetData<int>("givelot.lootbox.id");
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(lootboxId, out ItemData ItemData))
-            {
-                return;
-            }
-
-            List<Item> Items = ItemFactory.CreateMultipleItems(ItemData, Session.GetUser(), "", NbLot);
-            foreach (Item PurchasedItem in Items)
-            {
-                if (Session.GetUser().GetInventoryComponent().TryAddItem(PurchasedItem))
-                {
-                    Session.SendPacket(new FurniListNotificationComposer(PurchasedItem.Id, 1));
-                }
+                session.SendPacket(new FurniListNotificationComposer(PurchasedItem.Id, 1));
             }
         }
     }

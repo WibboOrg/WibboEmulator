@@ -1,58 +1,56 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class GiveAdminRightsEvent : IPacketEvent
 {
-    internal class GiveAdminRightsEvent : IPacketEvent
+    public double Delay => 100;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 100;
+        var GroupId = Packet.PopInt();
+        var UserId = Packet.PopInt();
 
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
         {
-            int GroupId = Packet.PopInt();
-            int UserId = Packet.PopInt();
+            return;
+        }
 
-            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out Group Group))
+        if (session.GetUser().Id != Group.CreatorId || !Group.IsMember(UserId))
+        {
+            return;
+        }
+
+        var user = WibboEnvironment.GetUserById(UserId);
+        if (user == null)
+        {
+            return;
+        }
+
+        Group.MakeAdmin(UserId);
+
+        if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out var Room))
+        {
+            var User = Room.GetRoomUserManager().GetRoomUserByUserId(UserId);
+            if (User != null)
             {
-                return;
-            }
-
-            if (Session.GetUser().Id != Group.CreatorId || !Group.IsMember(UserId))
-            {
-                return;
-            }
-
-            User user = WibboEnvironment.GetUserById(UserId);
-            if (user == null)
-            {
-                return;
-            }
-
-            Group.MakeAdmin(UserId);
-
-            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out Room Room))
-            {
-                RoomUser User = Room.GetRoomUserManager().GetRoomUserByUserId(UserId);
-                if (User != null)
+                if (!User.ContainStatus("flatctrl"))
                 {
-                    if (!User.ContainStatus("flatctrl"))
-                    {
-                        User.SetStatus("flatctrl", "1");
-                    }
+                    User.SetStatus("flatctrl", "1");
+                }
 
-                    User.UpdateNeeded = true;
+                User.UpdateNeeded = true;
 
-                    if (User.GetClient() != null)
-                    {
-                        User.GetClient().SendPacket(new YouAreControllerComposer(1));
-                    }
+                if (User.GetClient() != null)
+                {
+                    User.GetClient().SendPacket(new YouAreControllerComposer(1));
                 }
             }
-
-            Session.SendPacket(new GroupMemberUpdatedComposer(GroupId, user, 1));
         }
+
+        session.SendPacket(new GroupMemberUpdatedComposer(GroupId, user, 1));
     }
 }

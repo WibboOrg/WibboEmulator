@@ -1,27 +1,26 @@
-﻿namespace WibboEmulator.Utilities
+namespace WibboEmulator.Utilities;
+
+public class IntEncoding
 {
-    public class IntEncoding
+    public static int DecodeInt32(byte[] v)
     {
-        public static int DecodeInt32(byte[] v)
+        if ((v[0] | v[1] | v[2] | v[3]) < 0)
         {
-            if ((v[0] | v[1] | v[2] | v[3]) < 0)
-            {
-                return 0;
-            }
-
-            return (v[0] << 24) + (v[1] << 16) + (v[2] << 8) + (v[3]);
-
+            return 0;
         }
 
-        public static short DecodeInt16(byte[] v)
-        {
-            if ((v[0] | v[1]) < 0)
-            {
-                return 0;
-            }
+        return (v[0] << 24) + (v[1] << 16) + (v[2] << 8) + v[3];
 
-            int result = (v[0] << 8) + (v[1]);
-            return (short)result;
+    }
+
+    public static short DecodeInt16(byte[] v)
+    {
+        if ((v[0] | v[1]) < 0)
+        {
+            return 0;
         }
+
+        var result = (v[0] << 8) + v[1];
+        return (short)result;
     }
 }

@@ -1,12 +1,11 @@
-﻿namespace WibboEmulator.Games.Rooms.AI
+﻿namespace WibboEmulator.Games.Rooms.AI;
+
+public enum BotAIType
 {
-    public enum BotAIType
-    {
-        Pet,
-        Generic,
-        CopyBot,
-        SuperBot,
-        RoleplayBot,
-        RoleplayPet,
-    }
+    Pet,
+    Generic,
+    CopyBot,
+    SuperBot,
+    RoleplayBot,
+    RoleplayPet,
 }

@@ -1,41 +1,39 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class IgnoreUserEvent : IPacketEvent
 {
-    internal class IgnoreUserEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser() == null)
         {
-            if (Session.GetUser() == null)
-            {
-                return;
-            }
-
-            if (Session.GetUser().CurrentRoom == null)
-            {
-                return;
-            }
-
-            string UserName = Packet.PopString();
-
-            GameClient gameclient = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(UserName);
-            if (gameclient == null)
-            {
-                return;
-            }
-
-            User user = gameclient.GetUser();
-            if (user == null || Session.GetUser().MutedUsers.Contains(user.Id))
-            {
-                return;
-            }
-
-            Session.GetUser().MutedUsers.Add(user.Id);
-
-            Session.SendPacket(new IgnoreStatusComposer(1, UserName));
+            return;
         }
+
+        if (session.GetUser().CurrentRoom == null)
+        {
+            return;
+        }
+
+        var UserName = Packet.PopString();
+
+        var gameclient = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(UserName);
+        if (gameclient == null)
+        {
+            return;
+        }
+
+        var user = gameclient.GetUser();
+        if (user == null || session.GetUser().MutedUsers.Contains(user.Id))
+        {
+            return;
+        }
+
+        session.GetUser().MutedUsers.Add(user.Id);
+
+        session.SendPacket(new IgnoreStatusComposer(1, UserName));
     }
 }

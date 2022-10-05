@@ -1,12 +1,11 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc;
+
+internal class RpTrocStartComposer : ServerPacket
 {
-    internal class RpTrocStartComposer : ServerPacket
+    public RpTrocStartComposer(int UserId, string Username)
+      : base(ServerPacketHeader.RP_TROC_START)
     {
-        public RpTrocStartComposer(int UserId, string Username)
-          : base(ServerPacketHeader.RP_TROC_START)
-        {
-            this.WriteInteger(UserId);
-            this.WriteString(Username);
-        }
+        this.WriteInteger(UserId);
+        this.WriteString(Username);
     }
 }

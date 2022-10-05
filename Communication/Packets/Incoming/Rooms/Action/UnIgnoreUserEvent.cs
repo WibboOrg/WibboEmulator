@@ -1,35 +1,33 @@
+namespace WibboEmulator.Communication.Packets.Incoming.Structure;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Action;
 using WibboEmulator.Games.GameClients;
 
-namespace WibboEmulator.Communication.Packets.Incoming.Structure
+internal class UnIgnoreUserEvent : IPacketEvent
 {
-    internal class UnIgnoreUserEvent : IPacketEvent
+    public double Delay => 250;
+
+    public void Parse(GameClient session, ClientPacket Packet)
     {
-        public double Delay => 250;
-
-        public void Parse(GameClient Session, ClientPacket Packet)
+        if (session.GetUser() == null)
         {
-            if (Session.GetUser() == null)
-            {
-                return;
-            }
-
-            if (Session.GetUser().CurrentRoom == null)
-            {
-                return;
-            }
-
-            string str = Packet.PopString();
-
-            User user = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(str).GetUser();
-            if (user == null || !Session.GetUser().MutedUsers.Contains(user.Id))
-            {
-                return;
-            }
-
-            Session.GetUser().MutedUsers.Remove(user.Id);
-
-            Session.SendPacket(new IgnoreStatusComposer(3, str));
+            return;
         }
+
+        if (session.GetUser().CurrentRoom == null)
+        {
+            return;
+        }
+
+        var str = Packet.PopString();
+
+        var user = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(str).GetUser();
+        if (user == null || !session.GetUser().MutedUsers.Contains(user.Id))
+        {
+            return;
+        }
+
+        session.GetUser().MutedUsers.Remove(user.Id);
+
+        session.SendPacket(new IgnoreStatusComposer(3, str));
     }
 }

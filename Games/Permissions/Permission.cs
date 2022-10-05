@@ -1,16 +1,15 @@
-namespace WibboEmulator.Games.Permissions
-{
-    class Permission
-    {
-        public int Id { get; set; }
-        public int Rank { get; set; }
-        public string Permissions { get; set; }
+namespace WibboEmulator.Games.Permissions;
 
-        public Permission(int id, int rank, string permission)
-        {
-            Id = id;
-            Rank = rank;
-            Permissions = permission;
-        }
+internal class Permission
+{
+    public int Id { get; set; }
+    public int Rank { get; set; }
+    public string Permissions { get; set; }
+
+    public Permission(int id, int rank, string permission)
+    {
+        this.Id = id;
+        this.Rank = rank;
+        this.Permissions = permission;
     }
 }
