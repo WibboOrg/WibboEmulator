@@ -1,7 +1,7 @@
 namespace WibboEmulator.Games.Navigator;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;

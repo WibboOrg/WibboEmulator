@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Messenger;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
 using WibboEmulator.Games.GameClients;
 
@@ -10,7 +10,7 @@ internal class FollowFriendEvent : IPacketEvent
     {
         var userId = Packet.PopInt();
         var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (clientByUserId == null || clientByUserId.GetUser() == null || !clientByUserId.GetUser().InRoom || (clientByUserId.GetUser().HideInRoom && !session.GetUser().HasPermission("perm_mod")))
+        if (clientByUserId == null || clientByUserId.GetUser() == null || !clientByUserId.GetUser().InRoom || clientByUserId.GetUser().HideInRoom && !session.GetUser().HasPermission("perm_mod"))
         {
             return;
         }

@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.GameClients;
 

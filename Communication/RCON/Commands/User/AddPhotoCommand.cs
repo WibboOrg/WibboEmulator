@@ -1,5 +1,5 @@
 ﻿namespace WibboEmulator.Communication.RCON.Commands.User;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Items;
 
 internal class AddPhotoCommand : IRCONCommand

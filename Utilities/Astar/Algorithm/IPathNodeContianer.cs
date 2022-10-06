@@ -1,5 +1,4 @@
-namespace Astar.Algorithm;
-
+namespace WibboEmulator.Utilities.Astar.Algorithm;
 public interface IPathNodeContianer
 {
     IPathNode GetPathNode(int y, int x);

@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Stickys;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Stickys;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;

@@ -1,4 +1,4 @@
-namespace AStar.Algorithm;
+namespace WibboEmulator.Utilities.Astar.Algorithm;
 
 public interface IWeightAlterable<T>
 {

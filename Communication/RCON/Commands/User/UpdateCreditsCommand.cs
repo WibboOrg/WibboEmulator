@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.User;
 
 internal class UpdateCreditsCommand : IRCONCommand
 {

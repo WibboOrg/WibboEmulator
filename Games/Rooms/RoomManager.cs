@@ -3,7 +3,8 @@ using System.Collections.Concurrent;
 using System.Data;
 using System.Diagnostics;
 using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Interfaces;
 
 public class RoomManager

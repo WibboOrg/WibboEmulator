@@ -1,8 +1,8 @@
 namespace WibboEmulator.Games.Catalog.Utilities;
-using WibboEmulator.Database.Daos;
 using WibboEmulator.Games.Users.Inventory.Bots;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.AI;
+using WibboEmulator.Database.Daos.Bot;
 
 public static class BotUtility
 {

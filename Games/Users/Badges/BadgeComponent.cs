@@ -1,7 +1,7 @@
 namespace WibboEmulator.Games.Users.Badges;
 using System.Collections;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Users;
 

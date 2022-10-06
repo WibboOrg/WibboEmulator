@@ -1,7 +1,7 @@
 ﻿namespace WibboEmulator.Games.Navigator;
 using System.Data;
-using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database.Daos.Moderation;
 using WibboEmulator.Database.Interfaces;
 
 public sealed class NavigatorManager

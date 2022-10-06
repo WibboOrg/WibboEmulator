@@ -1,17 +1,17 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class Trigger : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(Params[1]));
+        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
 
         if (TargetRoomUser == null || TargetRoomUser.GetClient() == null || TargetRoomUser.GetClient().GetUser() == null)
         {
@@ -23,7 +23,7 @@ internal class Trigger : IChatCommand
             return;
         }
 
-        if (!((Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2) || (Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2)))
+        if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2 || Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2))
         {
             Room.OnTriggerUser(TargetRoomUser, true);
             Room.OnTriggerUser(UserRoom, false);

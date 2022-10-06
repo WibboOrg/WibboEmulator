@@ -1,4 +1,4 @@
-namespace Enclosure;
+namespace WibboEmulator.Utilities.Enclosure;
 using System.Drawing;
 
 public class PointField

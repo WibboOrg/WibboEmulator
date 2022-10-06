@@ -1,6 +1,6 @@
 namespace WibboEmulator.Core;
 using System.Diagnostics;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
 
 public class ServerStatusUpdater

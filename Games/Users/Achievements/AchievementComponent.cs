@@ -1,6 +1,6 @@
 namespace WibboEmulator.Games.Users.Achievements;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
 
 public class AchievementComponent : IDisposable

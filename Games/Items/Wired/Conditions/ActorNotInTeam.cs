@@ -1,9 +1,10 @@
 namespace WibboEmulator.Games.Items.Wired.Conditions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class ActorNotInTeam : WiredConditionBase, IWiredCondition, IWired
 {

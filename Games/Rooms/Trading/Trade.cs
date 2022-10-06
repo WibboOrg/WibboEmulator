@@ -3,7 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Trading;
 using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Games.Items;
 
 public class Trade

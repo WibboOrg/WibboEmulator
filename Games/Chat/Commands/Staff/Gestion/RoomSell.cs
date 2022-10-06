@@ -1,19 +1,19 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
-using WibboEmulator.Database.Daos;
+﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class RoomSell : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.1", session.Langue));
             return;
         }
 
-        if (!int.TryParse(Params[1], out var Prix))
+        if (!int.TryParse(parameters[1], out var Prix))
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.2", session.Langue));
             return;

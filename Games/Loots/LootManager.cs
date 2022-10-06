@@ -1,7 +1,7 @@
 ﻿namespace WibboEmulator.Games.Loots;
 using System.Data;
-using WibboEmulator.Database.Daos;
 using WibboEmulator.Database.Daos.Emulator;
+using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items;
 

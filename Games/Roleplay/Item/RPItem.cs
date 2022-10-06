@@ -1,6 +1,4 @@
-namespace WibboEmulator.Games.Roleplay;
-using WibboEmulator.Games.Roleplay.Item;
-
+namespace WibboEmulator.Games.Roleplay.Item;
 public class RPItem
 {
     public int Id;

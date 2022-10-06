@@ -1,18 +1,18 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class LoadRoomItems : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        if (!int.TryParse(Params[1], out var RoomId))
+        if (!int.TryParse(parameters[1], out var RoomId))
         {
             return;
         }

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Rooms;
+﻿namespace WibboEmulator.Games.Rooms.Games;
 using System.Drawing;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
@@ -197,7 +197,7 @@ public class GameItemHandler
             return false;
         }
 
-        var item = Enumerable.FirstOrDefault(this._groupGate[Coordinate]);
+        var item = this._groupGate[Coordinate].FirstOrDefault();
 
         if (item == null)
         {
@@ -259,7 +259,7 @@ public class GameItemHandler
         }
 
         var countID = WibboEnvironment.GetRandomNumber(0, count - 1);
-        var BanzaiItem2 = Enumerable.ElementAt<Item>(banzaiTeleports2, countID);
+        var BanzaiItem2 = banzaiTeleports2.ElementAt(countID);
 
         if (BanzaiItem2 == null)
         {

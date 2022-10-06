@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Rooms.FloorPlan;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.FloorPlan;
 using WibboEmulator.Games.GameClients;
 

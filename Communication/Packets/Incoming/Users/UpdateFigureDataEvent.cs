@@ -1,8 +1,8 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 

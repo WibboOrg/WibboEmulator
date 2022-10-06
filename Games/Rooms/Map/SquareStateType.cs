@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Rooms;
+﻿namespace WibboEmulator.Games.Rooms.Map;
 
 public enum SquareStateType
 {

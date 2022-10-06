@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Camera;
 using WibboEmulator.Communication.Packets.Outgoing.Camera;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
 internal class RenderRoomEvent : IPacketEvent

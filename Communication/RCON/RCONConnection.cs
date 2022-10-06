@@ -1,4 +1,4 @@
-namespace WibboEmulator.Net;
+namespace WibboEmulator.Communication.RCON;
 using System.Net.Sockets;
 using System.Text;
 using WibboEmulator.Core;

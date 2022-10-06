@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Games.Items;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
 
 public class ItemDataManager

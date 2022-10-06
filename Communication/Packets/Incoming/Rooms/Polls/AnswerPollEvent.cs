@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Polls;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Polls;
 using WibboEmulator.Games.GameClients;
 
@@ -30,7 +30,7 @@ internal class AnswerPollEvent : IPacketEvent
             Value = Packet.PopString();
         }
 
-        Value = (Value is not "0" and not "1") ? "0" : Value;
+        Value = Value is not "0" and not "1" ? "0" : Value;
 
         if (Value == "0")
         {
@@ -43,7 +43,7 @@ internal class AnswerPollEvent : IPacketEvent
 
         room.SendPacket(new QuestionAnsweredComposer(session.GetUser().Id, Value, room.VotedNoCount, room.VotedYesCount));
 
-        var WiredCode = (Value == "0") ? "QUESTION_NO" : "QUESTION_YES";
+        var WiredCode = Value == "0" ? "QUESTION_NO" : "QUESTION_YES";
         if (room.AllowsShous(User, WiredCode))
         {
             User.SendWhisperChat(WiredCode, false);

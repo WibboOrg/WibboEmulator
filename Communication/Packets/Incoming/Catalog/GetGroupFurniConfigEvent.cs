@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Games.GameClients;
 

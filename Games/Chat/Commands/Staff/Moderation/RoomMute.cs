@@ -1,10 +1,10 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Moderation;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class RoomMute : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
         Room.RoomMuted = !Room.RoomMuted;
 

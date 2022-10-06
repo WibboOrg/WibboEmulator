@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Games.Catalog.Utilities;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Games.Pets;
+using WibboEmulator.Database.Daos.Bot;
+using WibboEmulator.Games.Rooms.AI;
 
 public static class PetUtility
 {

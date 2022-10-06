@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Connection;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
 using WibboEmulator.Games.GameClients;
 

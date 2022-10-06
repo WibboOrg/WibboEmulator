@@ -1,17 +1,17 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class MachineBan : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length < 2)
+        if (parameters.Length < 2)
         {
             return;
         }
 
-        var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
+        var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
         if (clientByUsername == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
@@ -28,9 +28,9 @@ internal class MachineBan : IChatCommand
         else
         {
             var Raison = "";
-            if (Params.Length > 2)
+            if (parameters.Length > 2)
             {
-                Raison = CommandManager.MergeParams(Params, 2);
+                Raison = CommandManager.MergeParams(parameters, 2);
             }
 
             WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUsername, session.GetUser().Username, 788922000, Raison, true, true);

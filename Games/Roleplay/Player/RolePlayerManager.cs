@@ -1,7 +1,6 @@
-namespace WibboEmulator.Games.Roleplay;
+namespace WibboEmulator.Games.Roleplay.Player;
 using System.Collections.Concurrent;
-using WibboEmulator.Database.Daos;
-using WibboEmulator.Games.Roleplay.Player;
+using WibboEmulator.Database.Daos.User;
 
 public class RolePlayerManager
 {

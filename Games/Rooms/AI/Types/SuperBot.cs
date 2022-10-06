@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.Rooms.AI.Types;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms.Map;
 
 public class SuperBot : BotAI
 {

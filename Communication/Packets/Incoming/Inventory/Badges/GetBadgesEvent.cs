@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Games.GameClients;
 

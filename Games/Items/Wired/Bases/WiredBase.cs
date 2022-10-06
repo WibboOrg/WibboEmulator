@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Items.Wired;
+namespace WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -52,7 +52,7 @@ public class WiredBase
     public void Init(List<int> intParams, string stringParam, List<int> stuffIds, int selectionCode, int delay, bool isStaff, bool isGod)
     {
         this.IntParams = intParams;
-        this.StringParam = (stringParam.Length <= 255) ? stringParam : stringParam[..255];
+        this.StringParam = stringParam.Length <= 255 ? stringParam : stringParam[..255];
         this.StuffIds = stuffIds;
         this.StuffTypeSelectionCode = selectionCode;
         this.Delay = delay;

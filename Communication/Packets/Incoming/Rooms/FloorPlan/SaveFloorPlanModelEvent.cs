@@ -1,8 +1,8 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.FloorPlan;
 using System.Text.RegularExpressions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 
 internal class SaveFloorPlanModelEvent : IPacketEvent

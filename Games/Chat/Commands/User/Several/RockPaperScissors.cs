@@ -1,13 +1,13 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class RockPaperScissors : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
@@ -22,7 +22,7 @@ internal class RockPaperScissors : IChatCommand
             return;
         }
 
-        var Username = Params[1];
+        var Username = parameters[1];
 
         if (string.IsNullOrWhiteSpace(Username))
         {

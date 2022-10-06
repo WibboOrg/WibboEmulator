@@ -1,11 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets;
 using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.AI;
 
 internal class PickUpPetEvent : IPacketEvent
 {
@@ -34,7 +34,7 @@ internal class PickUpPetEvent : IPacketEvent
         if (!Room.GetRoomUserManager().TryGetPet(PetId, out var Pet))
         {
             //Check kick rights, just because it seems most appropriate.
-            if ((!Room.CheckRights(session) && Room.RoomData.WhoCanKick != 2 && Room.RoomData.Group == null) || (Room.RoomData.Group != null && !Room.CheckRights(session)))
+            if (!Room.CheckRights(session) && Room.RoomData.WhoCanKick != 2 && Room.RoomData.Group == null || Room.RoomData.Group != null && !Room.CheckRights(session))
             {
                 return;
             }

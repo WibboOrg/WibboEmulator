@@ -1,4 +1,4 @@
-namespace ConsoleWriter;
+namespace WibboEmulator.Utilities.ConsoleWriter;
 using System.Collections;
 using System.Text;
 using WibboEmulator;

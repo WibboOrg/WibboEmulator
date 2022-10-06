@@ -1,9 +1,9 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets.Horse;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.Catalog.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;

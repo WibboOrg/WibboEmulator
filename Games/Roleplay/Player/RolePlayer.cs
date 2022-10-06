@@ -4,8 +4,9 @@ using System.Data;
 using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Roleplay.Item;
 using WibboEmulator.Games.Roleplay.Weapon;
 using WibboEmulator.Games.Rooms;
 

@@ -1,9 +1,9 @@
-namespace WibboEmulator.Games.Rooms;
+namespace WibboEmulator.Games.Rooms.Map;
 using System.Collections.Concurrent;
 using System.Drawing;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
-using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms.PathFinding;
 
@@ -246,7 +246,7 @@ public class Gamemap
             Array.Clear(items, 0, items.Length);
         }
 
-        if (MaxY > (this.Model.MapSizeY - 1) || MaxX > (this.Model.MapSizeX - 1))
+        if (MaxY > this.Model.MapSizeY - 1 || MaxX > this.Model.MapSizeX - 1)
         {
             if (MaxX < this.Model.MapSizeX)
             {
@@ -792,7 +792,7 @@ public class Gamemap
 
                     for (var index = 1; index < Width; index++)
                     {
-                        PointList.Add(num++, new Coord(PosX + index, PosY + z, (z < index) ? index : z));
+                        PointList.Add(num++, new Coord(PosX + index, PosY + z, z < index ? index : z));
                     }
                 }
             }
@@ -803,7 +803,7 @@ public class Gamemap
                     PointList.Add(num++, new Coord(PosX + z, PosY, z));
                     for (var index = 1; index < Width; index++)
                     {
-                        PointList.Add(num++, new Coord(PosX + z, PosY + index, (z < index) ? index : z));
+                        PointList.Add(num++, new Coord(PosX + z, PosY + index, z < index ? index : z));
                     }
                 }
             }
@@ -818,7 +818,7 @@ public class Gamemap
                     PointList.Add(num++, new Coord(PosX + z, PosY, z));
                     for (var index = 1; index < Length; index++)
                     {
-                        PointList.Add(num++, new Coord(PosX + z, PosY + index, (z < index) ? index : z));
+                        PointList.Add(num++, new Coord(PosX + z, PosY + index, z < index ? index : z));
                     }
                 }
             }
@@ -829,7 +829,7 @@ public class Gamemap
                     PointList.Add(num++, new Coord(PosX, PosY + z, z));
                     for (var index = 1; index < Length; index++)
                     {
-                        PointList.Add(num++, new Coord(PosX + index, PosY + z, (z < index) ? index : z));
+                        PointList.Add(num++, new Coord(PosX + index, PosY + z, z < index ? index : z));
                     }
                 }
             }
@@ -1197,7 +1197,7 @@ public class Gamemap
         return true;
     }
 
-    public static bool TilesTouching(int X1, int Y1, int X2, int Y2) => (Math.Abs(X1 - X2) <= 1 && Math.Abs(Y1 - Y2) <= 1) || (X1 == X2 && Y1 == Y2);
+    public static bool TilesTouching(int X1, int Y1, int X2, int Y2) => Math.Abs(X1 - X2) <= 1 && Math.Abs(Y1 - Y2) <= 1 || X1 == X2 && Y1 == Y2;
 
     public static int TileDistance(int X1, int Y1, int X2, int Y2) => Math.Abs(X1 - X2) + Math.Abs(Y1 - Y2);
 

@@ -1,11 +1,11 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.PathFinding;
 
 internal class AllEyesOnMe : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
         var ThisUser = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
         if (ThisUser == null)

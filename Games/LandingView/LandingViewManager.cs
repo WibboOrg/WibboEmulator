@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Games.LandingView;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.LandingView.Promotions;
 

@@ -1,7 +1,8 @@
 ﻿namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Catalog;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
 internal class RedeemOfferCreditsEvent : IPacketEvent

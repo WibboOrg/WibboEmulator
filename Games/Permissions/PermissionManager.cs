@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Games.Permissions;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
 
 public class PermissionManager

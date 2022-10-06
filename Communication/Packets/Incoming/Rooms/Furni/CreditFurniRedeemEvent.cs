@@ -1,8 +1,9 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;

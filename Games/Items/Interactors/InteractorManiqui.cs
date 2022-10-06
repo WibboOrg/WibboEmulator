@@ -1,7 +1,7 @@
 ﻿namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Communication.Packets.Outgoing.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
 public class InteractorManiqui : FurniInteractor

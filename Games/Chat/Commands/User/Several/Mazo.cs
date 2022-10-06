@@ -1,11 +1,11 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
-using WibboEmulator.Database.Daos;
+namespace WibboEmulator.Games.Chat.Commands.User.Several;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class Mazo : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
         if (session.GetUser() == null)
         {

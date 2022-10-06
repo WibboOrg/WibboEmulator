@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Games.GameClients;
 

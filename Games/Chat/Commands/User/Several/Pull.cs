@@ -1,11 +1,11 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class Pull : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
         if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
         {
@@ -17,12 +17,12 @@ internal class Pull : IChatCommand
             return;
         }
 
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        var TargetUser = Room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(Params[1]));
+        var TargetUser = Room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
         if (TargetUser == null || TargetUser.GetClient() == null || TargetUser.GetClient().GetUser() == null)
         {
             return;
@@ -46,7 +46,7 @@ internal class Pull : IChatCommand
 
         if (Math.Abs(UserRoom.X - TargetUser.X) < 3 && Math.Abs(UserRoom.Y - TargetUser.Y) < 3)
         {
-            UserRoom.OnChat("*Tire " + Params[1] + "*", 0, false);
+            UserRoom.OnChat("*Tire " + parameters[1] + "*", 0, false);
             if (UserRoom.RotBody % 2 != 0)
             {
                 UserRoom.RotBody--;
@@ -71,7 +71,7 @@ internal class Pull : IChatCommand
         }
         else
         {
-            session.SendWhisper(Params[1] + " est trop loin de vous.");
+            session.SendWhisper(parameters[1] + " est trop loin de vous.");
             return;
         }
     }

@@ -1,17 +1,17 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class ForceEnable : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        int.TryParse(Params[1], out var EnableNum);
+        int.TryParse(parameters[1], out var EnableNum);
 
         if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(EnableNum, session.GetUser().HasPermission("perm_god")))
         {

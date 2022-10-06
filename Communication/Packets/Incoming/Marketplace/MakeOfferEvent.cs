@@ -1,6 +1,7 @@
 ﻿namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Catalog;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.Catalog.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;

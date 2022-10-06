@@ -1,6 +1,6 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 
 internal class GiveRoomScoreEvent : IPacketEvent

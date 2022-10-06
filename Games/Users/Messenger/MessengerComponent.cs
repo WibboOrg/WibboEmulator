@@ -1,7 +1,8 @@
 namespace WibboEmulator.Games.Users.Messenger;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Messenger;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Messenger;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Relationships;

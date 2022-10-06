@@ -1,11 +1,11 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class SummonAll : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
         foreach (var Client in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
         {

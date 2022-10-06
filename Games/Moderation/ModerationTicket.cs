@@ -1,5 +1,6 @@
 ﻿namespace WibboEmulator.Games.Moderation;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Moderation;
+using WibboEmulator.Database.Daos.User;
 
 public class ModerationTicket
 {

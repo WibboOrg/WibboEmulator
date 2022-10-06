@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Items;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.Users;

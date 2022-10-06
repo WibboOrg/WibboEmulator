@@ -1,5 +1,5 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
-using WibboEmulator.Database.Daos;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Stickys;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
@@ -21,7 +21,7 @@ internal class DeleteStickyNoteEvent : IPacketEvent
 
         var ItemId = Packet.PopInt();
         var roomItem = room.GetRoomItemHandler().GetItem(ItemId);
-        if (roomItem == null || (roomItem.GetBaseItem().InteractionType != InteractionType.POSTIT && roomItem.GetBaseItem().InteractionType != InteractionType.PHOTO))
+        if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.POSTIT && roomItem.GetBaseItem().InteractionType != InteractionType.PHOTO)
         {
             return;
         }

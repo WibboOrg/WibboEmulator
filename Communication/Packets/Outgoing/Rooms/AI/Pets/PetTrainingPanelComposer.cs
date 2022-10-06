@@ -1,5 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
-using WibboEmulator.Games.Pets;
+using WibboEmulator.Games.Rooms.AI;
 
 internal class PetTrainingPanelComposer : ServerPacket
 {

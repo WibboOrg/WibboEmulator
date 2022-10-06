@@ -1,17 +1,17 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class SuperPull : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        var TargetUser = Room.GetRoomUserManager().GetRoomUserByName(Params[1]);
+        var TargetUser = Room.GetRoomUserManager().GetRoomUserByName(parameters[1]);
         if (TargetUser == null)
         {
             return;
@@ -33,7 +33,7 @@ internal class SuperPull : IChatCommand
             return;
         }
 
-        UserRoom.OnChat("*Tire " + Params[1] + "*", 0, false);
+        UserRoom.OnChat("*Tire " + parameters[1] + "*", 0, false);
         if (UserRoom.RotBody % 2 != 0)
         {
             UserRoom.RotBody--;

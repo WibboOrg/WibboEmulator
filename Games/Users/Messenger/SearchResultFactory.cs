@@ -1,6 +1,6 @@
 namespace WibboEmulator.Games.Users.Messenger;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.User;
 
 public class SearchResultFactory
 {

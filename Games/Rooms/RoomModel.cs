@@ -1,5 +1,7 @@
 namespace WibboEmulator.Games.Rooms;
 
+using WibboEmulator.Games.Rooms.Map;
+
 public class RoomModel
 {
     public int DoorX;

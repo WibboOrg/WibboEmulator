@@ -1,15 +1,15 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class StartGameJD : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
         var roomId = 0;
-        if (Params.Length > 1)
+        if (parameters.Length > 1)
         {
-            int.TryParse(Params[1], out roomId);
+            int.TryParse(parameters[1], out roomId);
         }
 
         WibboEnvironment.GetGame().GetAnimationManager().StartGame(roomId);

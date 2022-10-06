@@ -1,10 +1,10 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Database.Daos;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Inventory.Bots;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Database.Daos.Bot;
 
 internal class PickUpBotEvent : IPacketEvent
 {

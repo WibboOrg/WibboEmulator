@@ -1,8 +1,7 @@
-namespace WibboEmulator.Games.Roleplay;
+namespace WibboEmulator.Games.Roleplay.Item;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Roleplay;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Roleplay.Item;
 
 public class RPItemManager
 {
@@ -38,7 +37,7 @@ public class RPItemManager
                         Convert.ToInt32(dataRow["price"]),
                         (string)dataRow["type"],
                         Convert.ToInt32(dataRow["value"]),
-                        ((string)dataRow["allowstack"]) == "1",
+                        (string)dataRow["allowstack"] == "1",
                         RPItemCategorys.GetTypeFromString((string)dataRow["category"])));
                 }
             }

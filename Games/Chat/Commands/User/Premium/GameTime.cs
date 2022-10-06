@@ -1,10 +1,10 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.User.Premium;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class GameTime : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
         if (WibboEnvironment.GetGame().GetAnimationManager().IsActivate())
         {

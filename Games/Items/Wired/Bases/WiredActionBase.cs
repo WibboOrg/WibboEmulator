@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired;
+﻿namespace WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items.Wired.Interfaces;

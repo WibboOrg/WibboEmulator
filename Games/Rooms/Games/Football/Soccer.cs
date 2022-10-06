@@ -1,6 +1,7 @@
-namespace WibboEmulator.Games.Rooms.Games;
+namespace WibboEmulator.Games.Rooms.Games.Football;
 using System.Drawing;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Games.Rooms.Map.Movement;
 
 public class Soccer

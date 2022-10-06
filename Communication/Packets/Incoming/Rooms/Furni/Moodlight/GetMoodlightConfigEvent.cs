@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Moodlight;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Moodlight;
 using WibboEmulator.Games.GameClients;
 

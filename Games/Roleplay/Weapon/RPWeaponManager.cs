@@ -1,6 +1,6 @@
 namespace WibboEmulator.Games.Roleplay.Weapon;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Roleplay;
 using WibboEmulator.Database.Interfaces;
 
 public class RPWeaponManager

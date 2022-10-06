@@ -1,18 +1,18 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class Enable : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        if (!int.TryParse(Params[1], out var NumEnable))
+        if (!int.TryParse(parameters[1], out var NumEnable))
         {
             return;
         }

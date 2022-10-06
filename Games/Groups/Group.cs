@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Games.Groups;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Guild;
 
 public class Group
 {

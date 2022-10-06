@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.Rooms;
 using System.Text;
 using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
+using WibboEmulator.Games.Rooms.Map;
 
 public class RoomModelDynamic
 {

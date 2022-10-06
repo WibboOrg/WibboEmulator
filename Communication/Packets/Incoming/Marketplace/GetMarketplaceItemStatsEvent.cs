@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Games.GameClients;
 
 internal class GetMarketplaceItemStatsEvent : IPacketEvent

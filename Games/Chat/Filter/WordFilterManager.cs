@@ -2,6 +2,7 @@
 using System.Data;
 using System.Text.RegularExpressions;
 using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Interfaces;
 
 public sealed class WordFilterManager

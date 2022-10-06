@@ -1,12 +1,12 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.User.RP;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class Steal : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 3)
+        if (parameters.Length != 3)
         {
             return;
         }
@@ -27,7 +27,7 @@ internal class Steal : IChatCommand
             return;
         }
 
-        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(Params[1].ToString());
+        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
 
         if (TargetRoomUser == null || TargetRoomUser.GetClient() == null || TargetRoomUser.GetClient().GetUser() == null)
         {
@@ -57,7 +57,7 @@ internal class Steal : IChatCommand
             return;
         }
 
-        if (!((Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2) || (Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2)))
+        if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2 || Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2))
         {
             Rp.Money += NumberMoney;
             RpTwo.Money -= NumberMoney;

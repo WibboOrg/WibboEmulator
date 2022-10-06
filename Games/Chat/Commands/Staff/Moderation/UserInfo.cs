@@ -1,18 +1,18 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Moderation;
 using System.Text;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class UserInfo : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        var username = Params[1];
+        var username = parameters[1];
 
         if (string.IsNullOrEmpty(username))
         {
@@ -37,7 +37,7 @@ internal class UserInfo : IChatCommand
         stringBuilder.Append("LimitCoins: " + user.LimitCoins + "\r");
         stringBuilder.Append("Crédits: " + user.Credits + "\r");
         stringBuilder.Append("Win-Win: " + user.AchievementPoints + "\r");
-        stringBuilder.Append("Premium: " + ((user.Rank > 1) ? "Oui" : "Non") + "\r");
+        stringBuilder.Append("Premium: " + (user.Rank > 1 ? "Oui" : "Non") + "\r");
         stringBuilder.Append("Mazo Score: " + user.MazoHighScore + "\r");
         stringBuilder.Append("Respects: " + user.Respect + "\r");
 

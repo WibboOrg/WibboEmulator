@@ -1,4 +1,4 @@
-namespace Enclosure.Algorithm;
+namespace WibboEmulator.Utilities.Enclosure.Algorithm;
 
 public class GametileUpdate
 {

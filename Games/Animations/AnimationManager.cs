@@ -3,7 +3,7 @@ namespace WibboEmulator.Games.Animations;
 using System.Data;
 using System.Diagnostics;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Interfaces;
 
 public class AnimationManager

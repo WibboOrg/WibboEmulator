@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Games.Catalog.Vouchers;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Interfaces;
 
 public class VoucherManager

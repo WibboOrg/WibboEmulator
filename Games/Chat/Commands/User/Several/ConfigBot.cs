@@ -1,33 +1,33 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
-using WibboEmulator.Database.Daos;
+namespace WibboEmulator.Games.Chat.Commands.User.Several;
+using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class ConfigBot : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length < 3)
+        if (parameters.Length < 3)
         {
             return;
         }
 
-        var Bot = Room.GetRoomUserManager().GetBotByName(Params[1]);
+        var Bot = Room.GetRoomUserManager().GetBotByName(parameters[1]);
         if (Bot == null)
         {
             return;
         }
 
-        switch (Params[2])
+        switch (parameters[2])
         {
             case "enable":
             {
-                if (Params.Length < 4)
+                if (parameters.Length < 4)
                 {
                     break;
                 }
 
-                int.TryParse(Params[3], out var IntValue);
+                int.TryParse(parameters[3], out var IntValue);
 
                 if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
                 {
@@ -50,12 +50,12 @@ internal class ConfigBot : IChatCommand
             }
             case "handitem":
             {
-                if (Params.Length < 4)
+                if (parameters.Length < 4)
                 {
                     break;
                 }
 
-                int.TryParse(Params[3], out var IntValue);
+                int.TryParse(parameters[3], out var IntValue);
 
                 if (Bot.CarryItemID != IntValue)
                 {
@@ -73,13 +73,13 @@ internal class ConfigBot : IChatCommand
             }
             case "rot":
             {
-                if (Params.Length < 4)
+                if (parameters.Length < 4)
                 {
                     break;
                 }
 
-                int.TryParse(Params[3], out var IntValue);
-                IntValue = (IntValue is > 7 or < 0) ? 0 : IntValue;
+                int.TryParse(parameters[3], out var IntValue);
+                IntValue = IntValue is > 7 or < 0 ? 0 : IntValue;
 
                 if (Bot.RotBody != IntValue)
                 {

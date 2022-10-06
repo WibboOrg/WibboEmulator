@@ -2,6 +2,7 @@
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map;
 
 public class InteractorSwitch : FurniInteractor
 {

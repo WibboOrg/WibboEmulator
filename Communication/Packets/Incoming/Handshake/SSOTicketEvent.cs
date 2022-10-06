@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Handshake;
 using WibboEmulator.Games.GameClients;
 
 internal class SSOTicketEvent : IPacketEvent

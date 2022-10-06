@@ -1,7 +1,10 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Bot;
+using WibboEmulator.Database.Daos.Catalog;
+using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
@@ -9,7 +12,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class DuplicateRoom : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
         var OldRoomId = Room.Id;
         int RoomId;

@@ -1,11 +1,11 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class Push : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
         if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
         {
@@ -17,16 +17,16 @@ internal class Push : IChatCommand
             return;
         }
 
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(Params[1]));
+        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
 
         if (TargetRoomUser == null)
         {
-            UserRoom.SendWhisperChat(Convert.ToString(Params[1]) + " n'est plus ici.");
+            UserRoom.SendWhisperChat(Convert.ToString(parameters[1]) + " n'est plus ici.");
             return;
         }
 
@@ -41,7 +41,7 @@ internal class Push : IChatCommand
             return;
         }
 
-        if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2) || (Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2))
+        if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2) || Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2)
         {
             if (TargetRoomUser.SetX - 1 == Room.GetGameMap().Model.DoorX)
             {
@@ -49,7 +49,7 @@ internal class Push : IChatCommand
             }
         }
 
-        if (!((Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2) || (Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2)))
+        if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2 || Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2))
         {
             if (UserRoom.RotBody == 4)
             { TargetRoomUser.MoveTo(TargetRoomUser.X, TargetRoomUser.Y + 1); }
@@ -87,11 +87,11 @@ internal class Push : IChatCommand
                 TargetRoomUser.MoveTo(TargetRoomUser.X, TargetRoomUser.Y + 1);
             }
 
-            UserRoom.OnChat("*pousse " + Params[1] + "*", 0, false);
+            UserRoom.OnChat("*pousse " + parameters[1] + "*", 0, false);
         }
         else
         {
-            UserRoom.SendWhisperChat(Params[1] + " est trop loin de vous.");
+            UserRoom.SendWhisperChat(parameters[1] + " est trop loin de vous.");
         }
     }
 }

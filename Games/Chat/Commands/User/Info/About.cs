@@ -1,11 +1,11 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.User.Info;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class About : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params) =>
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters) =>
         /// TimeSpan Uptime = DateTime.Now - ButterflyEnvironment.ServerStarted;
 
         session.SendPacket(new BroadcastMessageAlertComposer("<b>Butterfly Edition Wibbo</b>\n\n" +

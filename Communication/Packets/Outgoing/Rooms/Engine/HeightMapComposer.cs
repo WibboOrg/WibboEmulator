@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map;
 
 internal class HeightMapComposer : ServerPacket
 {

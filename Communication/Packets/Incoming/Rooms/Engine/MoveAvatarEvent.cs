@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 
 internal class MoveAvatarEvent : IPacketEvent
@@ -13,8 +13,8 @@ internal class MoveAvatarEvent : IPacketEvent
             return;
         }
 
-        var User = currentRoom.GetRoomUserManager().GetRoomUserByUserId((session.GetUser().ControlUserId == 0) ? session.GetUser().Id : session.GetUser().ControlUserId);
-        if (User == null || (!User.CanWalk && !User.TeleportEnabled))
+        var User = currentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().ControlUserId == 0 ? session.GetUser().Id : session.GetUser().ControlUserId);
+        if (User == null || !User.CanWalk && !User.TeleportEnabled)
         {
             return;
         }

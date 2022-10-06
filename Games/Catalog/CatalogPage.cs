@@ -1,5 +1,5 @@
 ﻿namespace WibboEmulator.Games.Catalog;
-using WibboEmulator.Core;
+using WibboEmulator.Core.Language;
 
 public class CatalogPage
 {

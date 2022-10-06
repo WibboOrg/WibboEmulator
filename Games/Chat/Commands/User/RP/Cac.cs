@@ -1,12 +1,12 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.User.RP;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class Cac : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
@@ -43,11 +43,11 @@ internal class Cac : IChatCommand
             UserRoom.FreezeEndCounter = Rp.WeaponCac.FreezeTime;
         }
 
-        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(Params[1].ToString());
+        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
 
         if (TargetRoomUser == null)
         {
-            var BotOrPet = Room.GetRoomUserManager().GetBotOrPetByName(Params[1].ToString());
+            var BotOrPet = Room.GetRoomUserManager().GetBotOrPetByName(parameters[1].ToString());
             if (BotOrPet == null || BotOrPet.BotData == null || BotOrPet.BotData.RoleBot == null)
             {
                 return;
@@ -70,7 +70,7 @@ internal class Cac : IChatCommand
         else
         {
             var RpTwo = TargetRoomUser.Roleplayer;
-            if (RpTwo == null || (!RpTwo.PvpEnable && RpTwo.AggroTimer <= 0))
+            if (RpTwo == null || !RpTwo.PvpEnable && RpTwo.AggroTimer <= 0)
             {
                 return;
             }

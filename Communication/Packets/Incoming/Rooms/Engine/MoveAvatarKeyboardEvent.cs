@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 
 internal class MoveAvatarKeyboardEvent : IPacketEvent
@@ -33,7 +33,7 @@ internal class MoveAvatarKeyboardEvent : IPacketEvent
 
         var User = currentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
 
-        if (User == null || (!User.CanWalk && !User.TeleportEnabled))
+        if (User == null || !User.CanWalk && !User.TeleportEnabled)
         {
             return;
         }
@@ -49,13 +49,13 @@ internal class MoveAvatarKeyboardEvent : IPacketEvent
 
         if (User.ReverseWalk)
         {
-            User.GoalX = User.SetX + (-targetX * 1000);
-            User.GoalY = User.SetY + (-targetY * 1000);
+            User.GoalX = User.SetX + -targetX * 1000;
+            User.GoalY = User.SetY + -targetY * 1000;
         }
         else
         {
-            User.GoalX = User.SetX + (targetX * 1000);
-            User.GoalY = User.SetY + (targetY * 1000);
+            User.GoalX = User.SetX + targetX * 1000;
+            User.GoalY = User.SetY + targetY * 1000;
         }
 
     }

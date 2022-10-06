@@ -2,7 +2,7 @@
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 

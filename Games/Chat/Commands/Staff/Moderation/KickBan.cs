@@ -1,17 +1,17 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Moderation;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class KickBan : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length < 2)
+        if (parameters.Length < 2)
         {
             return;
         }
 
-        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
+        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
         if (TargetUser == null || TargetUser.GetUser() == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
@@ -28,9 +28,9 @@ internal class KickBan : IChatCommand
         {
             var banMinutes = 2;
 
-            if (Params.Length >= 3)
+            if (parameters.Length >= 3)
             {
-                int.TryParse(Params[2], out banMinutes);
+                int.TryParse(parameters[2], out banMinutes);
             }
 
             if (banMinutes <= 0)

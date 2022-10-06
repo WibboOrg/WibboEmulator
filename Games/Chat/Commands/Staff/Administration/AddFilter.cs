@@ -1,17 +1,17 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class AddFilter : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        WibboEnvironment.GetGame().GetChatManager().GetFilter().AddFilterPub(Params[1].ToLower());
-        session.SendWhisper("Le mot" + Params[1] + " vient d'être ajouté au filtre");
+        WibboEnvironment.GetGame().GetChatManager().GetFilter().AddFilterPub(parameters[1].ToLower());
+        session.SendWhisper("Le mot" + parameters[1] + " vient d'être ajouté au filtre");
     }
 }

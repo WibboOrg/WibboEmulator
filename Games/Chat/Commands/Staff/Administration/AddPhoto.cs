@@ -1,19 +1,19 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
-using WibboEmulator.Database.Daos;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
 internal class AddPhoto : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length < 2)
+        if (parameters.Length < 2)
         {
             return;
         }
 
-        var PhotoId = Params[1];
+        var PhotoId = parameters[1];
         var ItemPhotoId = 4581;
         if (!WibboEnvironment.GetGame().GetItemManager().GetItem(ItemPhotoId, out var ItemData))
         {

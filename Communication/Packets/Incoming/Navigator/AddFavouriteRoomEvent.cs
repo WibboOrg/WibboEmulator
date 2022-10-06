@@ -1,6 +1,6 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
 internal class AddFavouriteRoomEvent : IPacketEvent

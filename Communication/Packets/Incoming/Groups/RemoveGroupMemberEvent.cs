@@ -1,11 +1,12 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
-using WibboEmulator.Database.Daos;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Database.Daos.Guild;
 
 internal class RemoveGroupMemberEvent : IPacketEvent
 {
@@ -137,7 +138,7 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                     user.MyGroups.Remove(Group.Id);
                 }
 
-                var StartIndex = ((1 - 1) * 14) + 14;
+                var StartIndex = (1 - 1) * 14 + 14;
 
                 var Members = new List<User>();
                 var MemberIds = Group.GetMembers.Skip(StartIndex).Take(14).ToList();

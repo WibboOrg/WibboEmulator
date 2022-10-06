@@ -1,9 +1,9 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Settings;
 using System.Text;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 
 internal class SaveRoomSettingsEvent : IPacketEvent
@@ -90,7 +90,7 @@ internal class SaveRoomSettingsEvent : IPacketEvent
             TrocStatus = 0;
         }
 
-        if (TagCount > 2 || (mutefuse != 0 && mutefuse != 1) || (kickfuse != 0 && kickfuse != 1 && kickfuse != 2) || (banfuse != 0 && banfuse != 1))
+        if (TagCount > 2 || mutefuse != 0 && mutefuse != 1 || kickfuse != 0 && kickfuse != 1 && kickfuse != 2 || banfuse != 0 && banfuse != 1)
         {
             return;
         }

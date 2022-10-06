@@ -1,6 +1,5 @@
-namespace Astar.Algorithm;
+namespace WibboEmulator.Utilities.Astar.Algorithm;
 using System.Drawing;
-using AStar.Algorithm;
 
 /// <summary>
 /// Uses about 50 MB for a 1024x1024 grid.
@@ -99,11 +98,11 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
         double dy1 = inStart.Y - this._endNode.Y;
         double dx2 = this._startNode.X - this._endNode.X;
         double dy2 = this._startNode.Y - this._endNode.Y;
-        var cross = Math.Abs((dx1 * dy2) - (dx2 * dy1));
+        var cross = Math.Abs(dx1 * dy2 - dx2 * dy1);
         return Math.Ceiling(Math.Abs(inStart.X - inEnd.X) + (double)Math.Abs(inStart.Y - inEnd.Y)) + cross;
     }
 
-    protected virtual double CalculateHeuristicShortestRoute(PathNode inStart, PathNode inEnd) => Math.Sqrt(((inStart.X - inEnd.X) * (inStart.X - inEnd.X)) + ((inStart.Y - inEnd.Y) * (inStart.Y - inEnd.Y)));
+    protected virtual double CalculateHeuristicShortestRoute(PathNode inStart, PathNode inEnd) => Math.Sqrt((inStart.X - inEnd.X) * (inStart.X - inEnd.X) + (inStart.Y - inEnd.Y) * (inStart.Y - inEnd.Y));
 
     /// <summary>
     /// Calculates the neighbour distance
@@ -268,7 +267,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
         var x = inAround.X;
         var y = inAround.Y;
 
-        if ((x > 0) && (y > 0))
+        if (x > 0 && y > 0)
         {
             inNeighbors[0] = this._searchSpace[y - 1, x - 1];
         }
@@ -286,7 +285,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
             inNeighbors[1] = null;
         }
 
-        if ((x < this.Width - 1) && (y > 0))
+        if (x < this.Width - 1 && y > 0)
         {
             inNeighbors[2] = this._searchSpace[y - 1, x + 1];
         }
@@ -313,7 +312,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
             inNeighbors[4] = null;
         }
 
-        if ((x > 0) && (y < this.Height - 1))
+        if (x > 0 && y < this.Height - 1)
         {
             inNeighbors[5] = this._searchSpace[y + 1, x - 1];
 
@@ -332,7 +331,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
             inNeighbors[6] = null;
         }
 
-        if ((x < this.Width - 1) && (y < this.Height - 1))
+        if (x < this.Width - 1 && y < this.Height - 1)
         {
             inNeighbors[7] = this._searchSpace[y + 1, x + 1];
         }

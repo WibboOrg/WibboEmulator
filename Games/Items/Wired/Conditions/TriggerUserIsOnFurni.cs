@@ -2,6 +2,7 @@
 using System.Data;
 using System.Drawing;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 

@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Games.Catalog;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Catalog.Marketplace;
 using WibboEmulator.Games.Catalog.Pets;

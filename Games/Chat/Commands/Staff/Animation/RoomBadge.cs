@@ -1,11 +1,11 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Animation;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class RoomBadge : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
         var currentRoom = session.GetUser().CurrentRoom;
         if (currentRoom == null)
@@ -13,7 +13,7 @@ internal class RoomBadge : IChatCommand
             return;
         }
 
-        var local_0 = Params[1];
+        var local_0 = parameters[1];
         foreach (var item_0 in currentRoom.GetRoomUserManager().GetUserList().ToList())
         {
             try

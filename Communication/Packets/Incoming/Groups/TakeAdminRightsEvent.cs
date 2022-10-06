@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;using WibboEmulator.Communication.Packets.Outgoing.Groups;
+namespace WibboEmulator.Communication.Packets.Incoming.Groups;using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Games.GameClients;using WibboEmulator.Games.Groups;using WibboEmulator.Games.Rooms;
 

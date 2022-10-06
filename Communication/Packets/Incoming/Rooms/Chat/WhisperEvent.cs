@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Chat;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Utilities;
@@ -20,23 +20,23 @@ internal class WhisperEvent : IPacketEvent
             return;
         }
 
-        var Params = StringCharFilter.Escape(packet.PopString());
-        if (string.IsNullOrEmpty(Params) || Params.Length > 100 || !Params.Contains(' '))
+        var parameters = StringCharFilter.Escape(packet.PopString());
+        if (string.IsNullOrEmpty(parameters) || parameters.Length > 100 || !parameters.Contains(' '))
         {
             return;
         }
 
-        var ToUser = Params.Split(new char[1] { ' ' })[0];
+        var ToUser = parameters.Split(new char[1] { ' ' })[0];
 
-        if (ToUser.Length + 1 > Params.Length)
+        if (ToUser.Length + 1 > parameters.Length)
         {
             return;
         }
 
-        var Message = Params[(ToUser.Length + 1)..];
+        var Message = parameters[(ToUser.Length + 1)..];
         var Color = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Color, out var Style) || (Style.RequiredRight.Length > 0 && !session.GetUser().HasPermission(Style.RequiredRight)))
+        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Color, out var Style) || Style.RequiredRight.Length > 0 && !session.GetUser().HasPermission(Style.RequiredRight))
         {
             Color = 0;
         }
@@ -94,7 +94,7 @@ internal class WhisperEvent : IPacketEvent
         }
         else if (timeSpan.TotalSeconds < 4.0 && session.GetUser().FloodCount > 5 && !session.GetUser().HasPermission("perm_mod"))
         {
-            session.GetUser().SpamProtectionTime = (room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium")) ? 5 : 15;
+            session.GetUser().SpamProtectionTime = room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium") ? 5 : 15;
             session.GetUser().SpamEnable = true;
 
             user.GetClient().SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
@@ -106,7 +106,7 @@ internal class WhisperEvent : IPacketEvent
             user.LastMessageCount = 0;
             user.LastMessage = "";
 
-            session.GetUser().SpamProtectionTime = (room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium")) ? 5 : 15;
+            session.GetUser().SpamProtectionTime = room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium") ? 5 : 15;
             session.GetUser().SpamEnable = true;
             user.GetClient().SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
             return;

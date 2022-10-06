@@ -1,18 +1,18 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Database.Daos;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class AllIgnore : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length < 2)
+        if (parameters.Length < 2)
         {
             return;
         }
 
-        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
+        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
         if (targetUser == null || targetUser.GetUser() == null)
         {
             return;
@@ -25,9 +25,9 @@ internal class AllIgnore : IChatCommand
         }
 
         double lengthSeconds = 788922000;
-        if (Params.Length == 3)
+        if (parameters.Length == 3)
         {
-            _ = double.TryParse(Params[2], out lengthSeconds);
+            _ = double.TryParse(parameters[2], out lengthSeconds);
         }
 
         if (lengthSeconds <= 600)
@@ -37,7 +37,7 @@ internal class AllIgnore : IChatCommand
         }
 
         var expireTime = WibboEnvironment.GetUnixTimestamp() + lengthSeconds;
-        var reason = CommandManager.MergeParams(Params, 3);
+        var reason = CommandManager.MergeParams(parameters, 3);
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         var isIgnoreall = BanDao.GetOneIgnoreAll(dbClient, targetUser.GetUser().Username);

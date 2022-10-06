@@ -1,4 +1,4 @@
-namespace WibboEmulator.Database.Daos;
+namespace WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Interfaces;
 
 internal class CatalogItemLimitedDao

@@ -3,6 +3,7 @@ using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Furni;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map;
 
 public class InteractorLoveLock : FurniInteractor
 {

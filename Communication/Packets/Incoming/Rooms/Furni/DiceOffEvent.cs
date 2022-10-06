@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni;
 using WibboEmulator.Games.GameClients;
 
 internal class DiceOffEvent : IPacketEvent

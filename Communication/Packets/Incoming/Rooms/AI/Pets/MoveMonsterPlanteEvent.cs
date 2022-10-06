@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;using WibboEmulator.Games.GameClients;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets;using WibboEmulator.Games.GameClients;
 internal class MoveMonsterPlanteEvent : IPacketEvent{
     public double Delay => 0;
 

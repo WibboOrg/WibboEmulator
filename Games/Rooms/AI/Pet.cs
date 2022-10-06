@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Pets;
+namespace WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Communication.Packets.Outgoing.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Games.Rooms;
@@ -131,7 +131,7 @@ public class Pet
         this.Z = z;
         this.PlacedInRoom = false;
         this.DBState = DatabaseUpdateState.UPDATED;
-        this.Saddle = (havesaddle == 1) ? 9 : (havesaddle == 2) ? 10 : 0;
+        this.Saddle = havesaddle == 1 ? 9 : havesaddle == 2 ? 10 : 0;
         this.HairDye = hairdye;
         this.PetHair = petHair;
         this.AnyoneCanRide = canMountAllPeople;

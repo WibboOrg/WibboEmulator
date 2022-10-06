@@ -1,4 +1,4 @@
-namespace Astar.Algorithm;
+namespace WibboEmulator.Utilities.Astar.Algorithm;
 
 public enum AStarHeuristicType
 {

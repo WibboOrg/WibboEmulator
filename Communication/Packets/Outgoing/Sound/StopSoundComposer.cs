@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Sound.SoundCustom;
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Sound;
 
 internal class StopSoundComposer : ServerPacket
 {

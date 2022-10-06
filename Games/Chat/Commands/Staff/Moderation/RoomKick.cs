@@ -1,12 +1,12 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Moderation;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class RoomKick : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        var MessageAlert = CommandManager.MergeParams(Params, 1);
+        var MessageAlert = CommandManager.MergeParams(parameters, 1);
         if (session.Antipub(MessageAlert, "<CMD>"))
         {
             return;

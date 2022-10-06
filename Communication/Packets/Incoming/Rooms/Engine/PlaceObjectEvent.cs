@@ -1,7 +1,7 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
@@ -196,7 +196,7 @@ internal class PlaceObjectEvent : IPacketEvent
 
     private static bool TrySetWallItem(string[] data, out string position)
     {
-        if (data.Length < 3 || !data[0].StartsWith(":w=") || !data[1].StartsWith("l=") || (data[2] != "r" && data[2] != "l"))
+        if (data.Length < 3 || !data[0].StartsWith(":w=") || !data[1].StartsWith("l=") || data[2] != "r" && data[2] != "l")
         {
             position = "";
             return false;

@@ -1,9 +1,11 @@
 namespace WibboEmulator.Games.Roleplay;
 using System.Collections.Concurrent;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Roleplay;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Roleplay.Enemy;
+using WibboEmulator.Games.Roleplay.Item;
+using WibboEmulator.Games.Roleplay.Player;
 using WibboEmulator.Games.Roleplay.Troc;
 using WibboEmulator.Games.Roleplay.Weapon;
 

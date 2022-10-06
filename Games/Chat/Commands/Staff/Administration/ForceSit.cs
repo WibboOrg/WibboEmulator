@@ -1,17 +1,17 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class ForceSit : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length == 1)
+        if (parameters.Length == 1)
         {
             return;
         }
 
-        var User = Room.GetRoomUserManager().GetRoomUserByName(Params[1]);
+        var User = Room.GetRoomUserManager().GetRoomUserByName(parameters[1]);
         if (User == null)
         {
             return;
@@ -24,7 +24,7 @@ internal class ForceSit : IChatCommand
 
         if (!User.ContainStatus("sit"))
         {
-            if ((User.RotBody % 2) == 0)
+            if (User.RotBody % 2 == 0)
             {
                 if (User == null)
                 {

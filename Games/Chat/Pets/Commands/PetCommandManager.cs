@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Games.Chat.Pets.Commands;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
 
 public class PetCommandManager

@@ -1,9 +1,11 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Log;
+using WibboEmulator.Database.Daos.Room;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
 internal class ChangeNameEvent : IPacketEvent

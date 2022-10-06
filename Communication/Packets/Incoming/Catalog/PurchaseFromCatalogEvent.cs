@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
@@ -7,12 +7,14 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
 using WibboEmulator.Games.Catalog.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Inventory.Bots;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Database.Daos.User;
+using WibboEmulator.Database.Daos.Catalog;
+using WibboEmulator.Database.Daos.Item;
 
 internal class PurchaseFromCatalogEvent : IPacketEvent
 {
@@ -58,10 +60,10 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
 
         var AmountPurchase = Item.Amount > 1 ? Item.Amount : Amount;
 
-        var TotalCreditsCost = Amount > 1 ? ((Item.CostCredits * Amount) - ((int)Math.Floor((double)Amount / 6) * Item.CostCredits)) : Item.CostCredits;
-        var TotalPixelCost = Amount > 1 ? ((Item.CostDuckets * Amount) - ((int)Math.Floor((double)Amount / 6) * Item.CostDuckets)) : Item.CostDuckets;
-        var TotalDiamondCost = Amount > 1 ? ((Item.CostWibboPoints * Amount) - ((int)Math.Floor((double)Amount / 6) * Item.CostWibboPoints)) : Item.CostWibboPoints;
-        var TotalLimitCoinCost = Amount > 1 ? ((Item.CostLimitCoins * Amount) - ((int)Math.Floor((double)Amount / 6) * Item.CostLimitCoins)) : Item.CostLimitCoins;
+        var TotalCreditsCost = Amount > 1 ? Item.CostCredits * Amount - (int)Math.Floor((double)Amount / 6) * Item.CostCredits : Item.CostCredits;
+        var TotalPixelCost = Amount > 1 ? Item.CostDuckets * Amount - (int)Math.Floor((double)Amount / 6) * Item.CostDuckets : Item.CostDuckets;
+        var TotalDiamondCost = Amount > 1 ? Item.CostWibboPoints * Amount - (int)Math.Floor((double)Amount / 6) * Item.CostWibboPoints : Item.CostWibboPoints;
+        var TotalLimitCoinCost = Amount > 1 ? Item.CostLimitCoins * Amount - (int)Math.Floor((double)Amount / 6) * Item.CostLimitCoins : Item.CostLimitCoins;
 
         if (session.GetUser().Credits < TotalCreditsCost ||
             session.GetUser().Duckets < TotalPixelCost ||

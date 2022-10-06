@@ -4,6 +4,7 @@ using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;

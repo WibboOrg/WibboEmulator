@@ -1,5 +1,4 @@
-namespace WibboEmulator.Games.Rooms.Games;
-
+namespace WibboEmulator.Games.Rooms.Games.Teams;
 public class TeamManager
 {
     public List<RoomUser> BlueTeam { get; set; }

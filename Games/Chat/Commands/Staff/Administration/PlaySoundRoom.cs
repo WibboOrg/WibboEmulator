@@ -1,20 +1,20 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 
-using WibboEmulator.Communication.Packets.Outgoing.Sound.SoundCustom;
+using WibboEmulator.Communication.Packets.Outgoing.Sound;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class PlaySoundRoom : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        var SongName = Params[1];
+        var songName = parameters[1];
 
-        Room.SendPacket(new PlaySoundComposer(SongName, 1)); //Type = Trax
+        room.SendPacket(new PlaySoundComposer(songName, 1)); //Type = Trax
     }
 }

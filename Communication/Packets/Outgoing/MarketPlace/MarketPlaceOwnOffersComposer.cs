@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Catalog;
 
 internal class MarketPlaceOwnOffersComposer : ServerPacket
 {

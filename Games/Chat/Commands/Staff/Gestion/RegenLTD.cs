@@ -1,13 +1,14 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Catalog;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 
 internal class RegenLTD : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
         if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(984897, out var Page))
         {

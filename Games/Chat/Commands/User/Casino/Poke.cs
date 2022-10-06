@@ -1,13 +1,13 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.User.Casino;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class Poke : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 4)
+        if (parameters.Length != 4)
         {
             return;
         }
@@ -22,9 +22,9 @@ internal class Poke : IChatCommand
             return;
         }
 
-        var Username = Params[1];
-        int.TryParse(Params[2], out var DiceCount);
-        int.TryParse(Params[3], out var WpCount);
+        var Username = parameters[1];
+        int.TryParse(parameters[2], out var DiceCount);
+        int.TryParse(parameters[3], out var WpCount);
 
         if (string.IsNullOrWhiteSpace(Username))
         {

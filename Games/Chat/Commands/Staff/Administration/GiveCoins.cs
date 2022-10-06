@@ -1,16 +1,16 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class GiveCoins : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
+        var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
         if (clientByUsername != null)
         {
-            if (int.TryParse(Params[2], out var result))
+            if (int.TryParse(parameters[2], out var result))
             {
                 clientByUsername.GetUser().Credits = clientByUsername.GetUser().Credits + result;
                 clientByUsername.SendPacket(new CreditBalanceComposer(clientByUsername.GetUser().Credits));

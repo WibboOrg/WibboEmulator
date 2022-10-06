@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Avatar;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.PathFinding;
 

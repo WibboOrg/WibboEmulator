@@ -6,14 +6,19 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
 using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Bot;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.Chat.Logs;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Games.Banzai;
+using WibboEmulator.Games.Rooms.Games.Football;
+using WibboEmulator.Games.Rooms.Games.Freeze;
+using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Games.Rooms.Jankens;
+using WibboEmulator.Games.Rooms.Map;
 using WibboEmulator.Games.Rooms.Moodlight;
 using WibboEmulator.Games.Rooms.Projectile;
 using WibboEmulator.Games.Rooms.Trading;
@@ -23,8 +28,8 @@ using WibboEmulator.Utilities.Events;
 
 public delegate void RoomEventDelegate(object sender, EventArgs e);
 public delegate void RoomUserSaysDelegate(object sender, UserSaysArgs e, ref bool messageHandled);
-public delegate void TriggerUserDelegate(RoomUser user, string ActionType);
-public delegate void BotCollisionDelegate(RoomUser user, string BotName);
+public delegate void TriggerUserDelegate(RoomUser user, string actionType);
+public delegate void BotCollisionDelegate(RoomUser user, string botName);
 
 public class Room
 {

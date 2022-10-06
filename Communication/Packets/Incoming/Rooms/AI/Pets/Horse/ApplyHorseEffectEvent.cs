@@ -1,7 +1,8 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets.Horse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Bot;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
@@ -103,7 +104,7 @@ internal class ApplyHorseEffectEvent : IPacketEvent
         {
             var Race = Item.GetBaseItem().ItemName.Split('_')[2];
             var Parse = int.Parse(Race);
-            var RaceLast = 2 + (Parse * 4) - 4;
+            var RaceLast = 2 + Parse * 4 - 4;
             if (Parse == 13)
             {
                 RaceLast = 61;

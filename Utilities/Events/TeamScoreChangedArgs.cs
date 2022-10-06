@@ -1,6 +1,6 @@
 namespace WibboEmulator.Utilities.Events;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class TeamScoreChangedArgs : EventArgs
 {

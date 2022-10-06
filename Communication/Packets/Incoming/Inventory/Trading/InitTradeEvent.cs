@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Trading;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -28,14 +28,14 @@ internal class InitTradeEvent : IPacketEvent
             }
 
             var Rp = RoomUser.Roleplayer;
-            if (Rp == null || Rp.TradeId > 0 || Rp.Dead || Rp.SendPrison || (Rp.PvpEnable && room.Roleplay.Pvp) || Rp.AggroTimer > 0)
+            if (Rp == null || Rp.TradeId > 0 || Rp.Dead || Rp.SendPrison || Rp.PvpEnable && room.Roleplay.Pvp || Rp.AggroTimer > 0)
             {
                 RoomUser.SendWhisperChat("Vous devez être en zone safe pour pouvoir troquer");
                 return;
             }
 
             var RpTarget = RoomUserTarget.Roleplayer;
-            if (RpTarget == null || RpTarget.TradeId > 0 || RpTarget.Dead || RpTarget.SendPrison || (RpTarget.PvpEnable && room.Roleplay.Pvp) || RpTarget.AggroTimer > 0)
+            if (RpTarget == null || RpTarget.TradeId > 0 || RpTarget.Dead || RpTarget.SendPrison || RpTarget.PvpEnable && room.Roleplay.Pvp || RpTarget.AggroTimer > 0)
             {
                 RoomUser.SendWhisperChat("Ce joueur ne peut pas troc");
                 return;

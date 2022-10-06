@@ -1,11 +1,21 @@
-﻿namespace WibboEmulator.Games.Chat.Commands;
+namespace WibboEmulator.Games.Chat.Commands;
 using System.Data;
 using System.Text;
-using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Core.Language;
+using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
-using WibboEmulator.Games.Chat.Commands.Cmd;
+using WibboEmulator.Games.Chat.Commands.Staff.Administration;
+using WibboEmulator.Games.Chat.Commands.Staff.Animation;
 using WibboEmulator.Games.Chat.Commands.Staff.Gestion;
+using WibboEmulator.Games.Chat.Commands.Staff.Moderation;
+using WibboEmulator.Games.Chat.Commands.User.Build;
+using WibboEmulator.Games.Chat.Commands.User.Casino;
+using WibboEmulator.Games.Chat.Commands.User.Info;
+using WibboEmulator.Games.Chat.Commands.User.Inventory;
+using WibboEmulator.Games.Chat.Commands.User.Premium;
+using WibboEmulator.Games.Chat.Commands.User.Room;
+using WibboEmulator.Games.Chat.Commands.User.RP;
+using WibboEmulator.Games.Chat.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Permissions;
 using WibboEmulator.Games.Rooms;
@@ -172,23 +182,23 @@ public class CommandManager
         return stringBuilder.ToString();
     }
 
-    public void Register(int CommandId, IChatCommand Command) => this._commands.Add(CommandId, Command);
+    public void Register(int commandId, IChatCommand command) => this._commands.Add(commandId, command);
 
 
-    public static string MergeParams(string[] Params, int Start)
+    public static string MergeParams(string[] parameters, int start)
     {
-        var Merged = new StringBuilder();
-        for (var i = Start; i < Params.Length; i++)
+        var merged = new StringBuilder();
+        for (var i = start; i < parameters.Length; i++)
         {
-            if (i > Start)
+            if (i > start)
             {
-                Merged.Append(' ');
+                merged.Append(' ');
             }
 
-            Merged.Append(Params[i]);
+            merged.Append(parameters[i]);
         }
 
-        return Merged.ToString();
+        return merged.ToString();
     }
 
     public void RegisterOwner()

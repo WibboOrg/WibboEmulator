@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Chat;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
@@ -44,7 +44,7 @@ internal class ShoutEvent : IPacketEvent
 
         var Colour = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Colour, out var Style) || (Style.RequiredRight.Length > 0 && !session.GetUser().HasPermission(Style.RequiredRight)))
+        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Colour, out var Style) || Style.RequiredRight.Length > 0 && !session.GetUser().HasPermission(Style.RequiredRight))
         {
             Colour = 0;
         }
@@ -98,7 +98,7 @@ internal class ShoutEvent : IPacketEvent
         }
         else if (timeSpan.TotalSeconds < 4.0 && session.GetUser().FloodCount > 5 && !session.GetUser().HasPermission("perm_mod"))
         {
-            session.GetUser().SpamProtectionTime = (room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium")) ? 5 : 15;
+            session.GetUser().SpamProtectionTime = room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium") ? 5 : 15;
             session.GetUser().SpamEnable = true;
 
             user.GetClient().SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
@@ -110,7 +110,7 @@ internal class ShoutEvent : IPacketEvent
             user.LastMessageCount = 0;
             user.LastMessage = "";
 
-            session.GetUser().SpamProtectionTime = (room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium")) ? 5 : 15;
+            session.GetUser().SpamProtectionTime = room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium") ? 5 : 15;
             session.GetUser().SpamEnable = true;
             user.GetClient().SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
             return;

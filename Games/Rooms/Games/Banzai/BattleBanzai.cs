@@ -1,12 +1,13 @@
-namespace WibboEmulator.Games.Rooms.Games;
+namespace WibboEmulator.Games.Rooms.Games.Banzai;
 using System.Collections;
 using System.Drawing;
-using Enclosure;
 using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms.Games.Teams;
+using WibboEmulator.Utilities.Enclosure;
 
 public class BattleBanzai
 {
@@ -281,7 +282,7 @@ public class BattleBanzai
             item.Team = team;
             item.Value = 1;
         }
-        var num = item.Value + ((int)item.Team * 3) - 1;
+        var num = item.Value + (int)item.Team * 3 - 1;
         item.ExtraData = num.ToString();
     }
 
@@ -358,7 +359,7 @@ public class BattleBanzai
         }
 
         item.Team = team;
-        var num = item.Value + ((int)item.Team * 3) - 1;
+        var num = item.Value + (int)item.Team * 3 - 1;
         item.ExtraData = num.ToString();
     }
 

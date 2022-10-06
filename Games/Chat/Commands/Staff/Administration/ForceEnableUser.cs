@@ -1,17 +1,17 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class ForceEnableUser : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 3)
+        if (parameters.Length != 3)
         {
             return;
         }
 
-        var Username = Params[1];
+        var Username = parameters[1];
 
         var roomUserByUserId = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(Username);
         if (roomUserByUserId == null || roomUserByUserId.GetClient() == null)
@@ -25,7 +25,7 @@ internal class ForceEnableUser : IChatCommand
             return;
         }
 
-        if (!int.TryParse(Params[2], out var NumEnable))
+        if (!int.TryParse(parameters[2], out var NumEnable))
         {
             return;
         }

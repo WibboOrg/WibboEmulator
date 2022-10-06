@@ -1,6 +1,4 @@
-namespace Astar.Algorithm;
-using AStar.Algorithm;
-
+namespace WibboEmulator.Utilities.Astar.Algorithm;
 public class PriorityQueue<T, TX> where T : IWeightAddable<TX>
 {
     public List<T> InnerList;

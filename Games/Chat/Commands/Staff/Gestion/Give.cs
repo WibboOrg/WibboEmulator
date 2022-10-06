@@ -1,15 +1,15 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class Give : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(Params[1]);
+        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
 
-        var UpdateVal = Params[2];
+        var UpdateVal = parameters[2];
         switch (UpdateVal.ToLower())
         {
             case "coins":
@@ -22,7 +22,7 @@ internal class Give : IChatCommand
                 }
                 else
                 {
-                    if (int.TryParse(Params[3], out var Amount))
+                    if (int.TryParse(parameters[3], out var Amount))
                     {
                         TargetUser.GetUser().Credits += Amount;
                         TargetUser.SendPacket(new CreditBalanceComposer(TargetUser.GetUser().Credits));
@@ -53,7 +53,7 @@ internal class Give : IChatCommand
                 }
                 else
                 {
-                    if (int.TryParse(Params[3], out var Amount))
+                    if (int.TryParse(parameters[3], out var Amount))
                     {
                         TargetUser.GetUser().WibboPoints += Amount;
                         TargetUser.SendPacket(new ActivityPointNotificationComposer(TargetUser.GetUser().WibboPoints, 0, 105));
@@ -84,7 +84,7 @@ internal class Give : IChatCommand
                 }
                 else
                 {
-                    if (int.TryParse(Params[3], out var Amount))
+                    if (int.TryParse(parameters[3], out var Amount))
                     {
                         TargetUser.GetUser().LimitCoins += Amount;
                         TargetUser.SendPacket(new ActivityPointNotificationComposer(TargetUser.GetUser().LimitCoins, 0, 55));

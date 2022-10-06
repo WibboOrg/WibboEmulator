@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Trading;
 using WibboEmulator.Games.GameClients;
 
 internal class TradingCancelConfirmEvent : IPacketEvent

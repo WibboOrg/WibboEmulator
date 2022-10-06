@@ -1,5 +1,5 @@
 ﻿namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
-using WibboEmulator.Games.Roleplay;
+using WibboEmulator.Games.Roleplay.Item;
 
 internal class AddInventoryItemRpComposer : ServerPacket
 {

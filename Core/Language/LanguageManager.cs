@@ -1,6 +1,6 @@
-namespace WibboEmulator.Core;
+namespace WibboEmulator.Core.Language;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
 
 public enum Language

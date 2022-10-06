@@ -1,13 +1,13 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.User.Room;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Polls;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class StartQuestion : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        var Question = CommandManager.MergeParams(Params, 1);
+        var Question = CommandManager.MergeParams(parameters, 1);
 
         if (string.IsNullOrWhiteSpace(Question))
         {

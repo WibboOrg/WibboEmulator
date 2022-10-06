@@ -1,9 +1,10 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Badges;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Catalog.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;

@@ -6,6 +6,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Communication.WebSocket;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Users.Messenger;
 
 public class GameClientManager

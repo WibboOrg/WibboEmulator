@@ -1,4 +1,4 @@
-namespace WibboEmulator.Database.Daos;
+namespace WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
 
 internal class EmulatorStatsDao

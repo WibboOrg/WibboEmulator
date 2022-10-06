@@ -1,5 +1,8 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
-using WibboEmulator.Database.Daos;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Settings;
+using WibboEmulator.Database.Daos.Bot;
+using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Database.Daos.Room;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
 internal class DeleteRoomEvent : IPacketEvent

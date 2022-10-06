@@ -1,5 +1,5 @@
 ﻿namespace WibboEmulator.Games.Items.Wired;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Actions;
 using WibboEmulator.Games.Items.Wired.Conditions;

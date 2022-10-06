@@ -1,7 +1,7 @@
-﻿namespace Enclosure;
+﻿namespace WibboEmulator.Utilities.Enclosure;
 using System.Drawing;
-using Astar.Algorithm;
-using Enclosure.Algorithm;
+using WibboEmulator.Utilities.Astar.Algorithm;
+using WibboEmulator.Utilities.Enclosure.Algorithm;
 
 public class GameField : IPathNode
 {
@@ -163,7 +163,7 @@ public class GameField : IPathNode
         foreach (var inStartNode in pointList)
         {
             ++num;
-            if (num == (pointList.Count / 2) + 1)
+            if (num == pointList.Count / 2 + 1)
             {
                 return list;
             }

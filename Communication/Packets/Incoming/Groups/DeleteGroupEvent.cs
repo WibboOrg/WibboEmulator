@@ -1,5 +1,8 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
-using WibboEmulator.Database.Daos;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Groups;
+using WibboEmulator.Database.Daos.Guild;
+using WibboEmulator.Database.Daos.Log;
+using WibboEmulator.Database.Daos.Room;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 

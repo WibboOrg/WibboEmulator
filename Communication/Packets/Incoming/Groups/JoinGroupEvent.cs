@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
@@ -20,7 +20,7 @@ internal class JoinGroupEvent : IPacketEvent
             return;
         }
 
-        if (Group.IsMember(session.GetUser().Id) || Group.IsAdmin(session.GetUser().Id) || (Group.HasRequest(session.GetUser().Id) && Group.GroupType == GroupType.LOCKED) || Group.GroupType == GroupType.PRIVATE)
+        if (Group.IsMember(session.GetUser().Id) || Group.IsAdmin(session.GetUser().Id) || Group.HasRequest(session.GetUser().Id) && Group.GroupType == GroupType.LOCKED || Group.GroupType == GroupType.PRIVATE)
         {
             return;
         }

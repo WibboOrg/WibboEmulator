@@ -1,12 +1,12 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Cmd;
+﻿namespace WibboEmulator.Games.Chat.Commands.User.RP;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class Prison : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
@@ -32,7 +32,7 @@ internal class Prison : IChatCommand
             return;
         }
 
-        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(Params[1].ToString());
+        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
 
         if (TargetRoomUser == null)
         {
@@ -67,7 +67,7 @@ internal class Prison : IChatCommand
             return;
         }
 
-        if (!((Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2) || (Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2)))
+        if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2 || Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2))
         {
             UserRoom.OnChat("*Arrête et envoie en prison " + TargetRoomUser.GetUsername() + "*");
 

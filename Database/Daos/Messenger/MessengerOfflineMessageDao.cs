@@ -1,4 +1,4 @@
-namespace WibboEmulator.Database.Daos;
+namespace WibboEmulator.Database.Daos.Messenger;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 

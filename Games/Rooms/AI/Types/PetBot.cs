@@ -1,7 +1,8 @@
 namespace WibboEmulator.Games.Rooms.AI.Types;
 using WibboEmulator.Core;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Pets;
+using WibboEmulator.Games.Rooms.AI;
+using WibboEmulator.Games.Rooms.Map;
 using WibboEmulator.Games.Rooms.PathFinding;
 
 public class PetBot : BotAI

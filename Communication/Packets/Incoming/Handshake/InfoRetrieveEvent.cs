@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Games.GameClients;
 

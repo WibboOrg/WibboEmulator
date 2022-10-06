@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Bots;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;

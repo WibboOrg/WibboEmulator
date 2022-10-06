@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing;
+﻿namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Moderation;
 
 internal class CfhTopicsInitComposer : ServerPacket

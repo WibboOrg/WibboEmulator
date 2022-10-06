@@ -1,7 +1,7 @@
 namespace WibboEmulator.Games.Rooms.Moodlight;
 using System.Data;
 using System.Text;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Item;
 
 public class MoodlightData
 {

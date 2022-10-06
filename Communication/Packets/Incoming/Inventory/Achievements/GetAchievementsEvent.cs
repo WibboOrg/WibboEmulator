@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Achievements;
 using WibboEmulator.Games.GameClients;
 
 internal class GetAchievementsEvent : IPacketEvent

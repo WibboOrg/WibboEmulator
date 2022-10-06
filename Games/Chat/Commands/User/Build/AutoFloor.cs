@@ -1,13 +1,14 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.User.Build;
 using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map;
 
 internal class AutoFloor : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
         var Map = "";
         for (var y = 0; y < Room.GetGameMap().Model.MapSizeY; y++)

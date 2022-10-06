@@ -1,9 +1,11 @@
 namespace WibboEmulator.Games.Items.Wired.Conditions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 {
@@ -321,28 +323,28 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "enemy":
             {
-                var Params = Value.Split(';');
-                if (Params.Length != 3)
+                var parameters = Value.Split(';');
+                if (parameters.Length != 3)
                 {
                     break;
                 }
 
-                var BotOrPet = Room.GetRoomUserManager().GetBotOrPetByName(Params[0]);
+                var BotOrPet = Room.GetRoomUserManager().GetBotOrPetByName(parameters[0]);
                 if (BotOrPet == null || BotOrPet.BotData == null || BotOrPet.BotData.RoleBot == null)
                 {
                     break;
                 }
 
-                switch (Params[1])
+                switch (parameters[1])
                 {
                     case "dead":
                     {
-                        if (BotOrPet.BotData.RoleBot.Dead && Params[2] == "true")
+                        if (BotOrPet.BotData.RoleBot.Dead && parameters[2] == "true")
                         {
                             Result = true;
                         }
 
-                        if (!BotOrPet.BotData.RoleBot.Dead && Params[2] == "false")
+                        if (!BotOrPet.BotData.RoleBot.Dead && parameters[2] == "false")
                         {
                             Result = true;
                         }
@@ -351,12 +353,12 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     }
                     case "aggro":
                     {
-                        if (BotOrPet.BotData.RoleBot.AggroVirtuelId > 0 && Params[2] == "true")
+                        if (BotOrPet.BotData.RoleBot.AggroVirtuelId > 0 && parameters[2] == "true")
                         {
                             Result = true;
                         }
 
-                        if (BotOrPet.BotData.RoleBot.AggroVirtuelId == 0 && Params[2] == "false")
+                        if (BotOrPet.BotData.RoleBot.AggroVirtuelId == 0 && parameters[2] == "false")
                         {
                             Result = true;
                         }

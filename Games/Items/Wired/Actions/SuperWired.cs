@@ -7,16 +7,18 @@ using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
-using WibboEmulator.Communication.Packets.Outgoing.Sound.SoundCustom;
+using WibboEmulator.Communication.Packets.Outgoing.Sound;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Roleplay;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using WibboEmulator.Games.Roleplay;
 using WibboEmulator.Games.Roleplay.Enemy;
+using WibboEmulator.Games.Roleplay.Item;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
-using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class SuperWired : WiredActionBase, IWired, IWiredEffect
 {
@@ -243,13 +245,13 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "setenemy":
             {
-                var Params = value.Split(';');
-                if (Params.Length != 3)
+                var parameters = value.Split(';');
+                if (parameters.Length != 3)
                 {
                     break;
                 }
 
-                var BotOrPet = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(Params[0]);
+                var BotOrPet = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(parameters[0]);
                 if (BotOrPet == null || BotOrPet.BotData == null || BotOrPet.BotData.RoleBot == null)
                 {
                     break;
@@ -270,11 +272,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                switch (Params[1])
+                switch (parameters[1])
                 {
                     case "health":
                     {
-                        if (!int.TryParse(Params[2], out var ParamInt))
+                        if (!int.TryParse(parameters[2], out var ParamInt))
                         {
                             break;
                         }
@@ -299,7 +301,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "weaponfarid":
                     {
-                        if (!int.TryParse(Params[2], out var ParamInt))
+                        if (!int.TryParse(parameters[2], out var ParamInt))
                         {
                             break;
                         }
@@ -324,7 +326,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "weaponcacid":
                     {
-                        if (!int.TryParse(Params[2], out var ParamInt))
+                        if (!int.TryParse(parameters[2], out var ParamInt))
                         {
                             break;
                         }
@@ -349,7 +351,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "deadtimer":
                     {
-                        if (!int.TryParse(Params[2], out var ParamInt))
+                        if (!int.TryParse(parameters[2], out var ParamInt))
                         {
                             break;
                         }
@@ -374,7 +376,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "lootitemid":
                     {
-                        if (!int.TryParse(Params[2], out var ParamInt))
+                        if (!int.TryParse(parameters[2], out var ParamInt))
                         {
                             break;
                         }
@@ -399,7 +401,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "moneydrop":
                     {
-                        if (!int.TryParse(Params[2], out var ParamInt))
+                        if (!int.TryParse(parameters[2], out var ParamInt))
                         {
                             break;
                         }
@@ -424,7 +426,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "teamid":
                     {
-                        if (!int.TryParse(Params[2], out var ParamInt))
+                        if (!int.TryParse(parameters[2], out var ParamInt))
                         {
                             break;
                         }
@@ -449,7 +451,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "aggrodistance":
                     {
-                        if (!int.TryParse(Params[2], out var ParamInt))
+                        if (!int.TryParse(parameters[2], out var ParamInt))
                         {
                             break;
                         }
@@ -474,7 +476,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "zonedistance":
                     {
-                        if (!int.TryParse(Params[2], out var ParamInt))
+                        if (!int.TryParse(parameters[2], out var ParamInt))
                         {
                             break;
                         }
@@ -499,7 +501,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "resetposition":
                     {
-                        RPEnemyConfig.ResetPosition = Params[2] == "true";
+                        RPEnemyConfig.ResetPosition = parameters[2] == "true";
                         BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
                         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
@@ -509,7 +511,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "lostaggrodistance":
                     {
-                        if (!int.TryParse(Params[2], out var ParamInt))
+                        if (!int.TryParse(parameters[2], out var ParamInt))
                         {
                             break;
                         }
@@ -534,7 +536,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "zombiemode":
                     {
-                        RPEnemyConfig.ZombieMode = Params[2] == "true";
+                        RPEnemyConfig.ZombieMode = parameters[2] == "true";
                         BotOrPet.BotData.RoleBot.SetConfig(RPEnemyConfig);
 
                         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
@@ -1130,29 +1132,29 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "configbot":
             {
-                var Params = value.Split(';');
+                var parameters = value.Split(';');
 
-                if (Params.Length < 3)
+                if (parameters.Length < 3)
                 {
                     break;
                 }
 
-                var Bot = this.RoomInstance.GetRoomUserManager().GetBotByName(Params[0]);
+                var Bot = this.RoomInstance.GetRoomUserManager().GetBotByName(parameters[0]);
                 if (Bot == null)
                 {
                     return;
                 }
 
-                switch (Params[1])
+                switch (parameters[1])
                 {
                     case "enable":
                     {
-                        if (Params.Length < 3)
+                        if (parameters.Length < 3)
                         {
                             break;
                         }
 
-                        int.TryParse(Params[2], out var IntValue);
+                        int.TryParse(parameters[2], out var IntValue);
 
                         if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
                         {
@@ -1173,12 +1175,12 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "handitem":
                     {
-                        if (Params.Length < 3)
+                        if (parameters.Length < 3)
                         {
                             break;
                         }
 
-                        int.TryParse(Params[2], out var IntValue);
+                        int.TryParse(parameters[2], out var IntValue);
 
                         if (Bot.CarryItemID != IntValue)
                         {
@@ -1194,12 +1196,12 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                     case "rot":
                     {
-                        if (Params.Length < 3)
+                        if (parameters.Length < 3)
                         {
                             break;
                         }
 
-                        int.TryParse(Params[2], out var IntValue);
+                        int.TryParse(parameters[2], out var IntValue);
                         IntValue = (IntValue is > 7 or < 0) ? 0 : IntValue;
 
                         if (Bot.RotBody != IntValue)

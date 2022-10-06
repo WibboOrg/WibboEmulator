@@ -1,4 +1,4 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Animation;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
@@ -6,10 +6,10 @@ using WibboEmulator.Games.Rooms;
 
 internal class ExtraBox : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
 
-        int.TryParse(Params[1], out var NbLot);
+        int.TryParse(parameters[1], out var NbLot);
 
         if (NbLot is < 0 or > 10)
         {

@@ -1,17 +1,17 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.User.Build;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class SetZ : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        var Heigth = Params[1];
+        var Heigth = parameters[1];
         if (!double.TryParse(Heigth, out var Result))
         {
             return;
@@ -34,7 +34,7 @@ internal class SetZ : IChatCommand
 
         if (Result >= 0)
         {
-            session.SendPacket(Room.GetGameMap().Model.SetHeightMap((Result > 63) ? 63 : Result));
+            session.SendPacket(Room.GetGameMap().Model.SetHeightMap(Result > 63 ? 63 : Result));
         }
     }
 }

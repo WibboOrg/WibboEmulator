@@ -1,12 +1,12 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class GiveItem : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        if (Params.Length != 2)
+        if (parameters.Length != 2)
         {
             return;
         }
@@ -16,7 +16,7 @@ internal class GiveItem : IChatCommand
             return;
         }
 
-        var roomUserByUserIdTarget = Room.GetRoomUserManager().GetRoomUserByName(Params[1]);
+        var roomUserByUserIdTarget = Room.GetRoomUserManager().GetRoomUserByName(parameters[1]);
         if (roomUserByUserIdTarget == null)
         {
             return;

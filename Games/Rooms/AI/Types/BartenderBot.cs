@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Rooms.AI.Types;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms.Map;
 
 public class BartenderBot : BotAI
 {

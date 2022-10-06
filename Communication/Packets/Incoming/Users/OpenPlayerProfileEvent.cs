@@ -1,6 +1,6 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Messenger;
 using WibboEmulator.Games.GameClients;
 
 internal class OpenPlayerProfileEvent : IPacketEvent

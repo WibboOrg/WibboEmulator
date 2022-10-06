@@ -1,7 +1,7 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Users;
@@ -27,7 +27,7 @@ internal class GetGroupMembersEvent : IPacketEvent
             return;
         }
 
-        var StartIndex = ((Page - 1) * 14) + 14;
+        var StartIndex = (Page - 1) * 14 + 14;
         var Members = new List<User>();
         var MemberCount = 0;
 

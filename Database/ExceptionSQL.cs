@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Database;
 using System.Text;
-using ConsoleWriter;
+using WibboEmulator.Utilities.ConsoleWriter;
 
 public static class ExceptionSQL
 {

@@ -1,7 +1,8 @@
 namespace WibboEmulator.Games.Groups;
 using System.Collections.Concurrent;
 using System.Data;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Guild;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Users;
 

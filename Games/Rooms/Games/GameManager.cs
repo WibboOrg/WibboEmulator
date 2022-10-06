@@ -1,5 +1,6 @@
 namespace WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Utilities.Events;
 
 public class GameManager

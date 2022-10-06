@@ -1,10 +1,11 @@
-namespace WibboEmulator.Games.Rooms.Games;
+namespace WibboEmulator.Games.Rooms.Games.Freeze;
 using System.Collections;
 using System.Drawing;
 using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Freeze;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class Freeze
 {
@@ -365,7 +366,7 @@ public class Freeze
     private void HandleUserFreeze(Point point)
     {
         var user = this._roomInstance.GetRoomUserManager().GetUserForSquare(point.X, point.Y);
-        if (user == null || (user.IsWalking && user.SetX != point.X && user.SetY != point.Y))
+        if (user == null || user.IsWalking && user.SetX != point.X && user.SetY != point.Y)
         {
             return;
         }
