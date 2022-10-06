@@ -5,11 +5,11 @@ internal class SaveWardrobeOutfitEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var slotId = Packet.PopInt();
-        var look = Packet.PopString();
-        var gender = Packet.PopString();
+        var slotId = packet.PopInt();
+        var look = packet.PopString();
+        var gender = packet.PopString();
 
         session.GetUser().GetWardrobeComponent().AddWardobe(look, gender, slotId);
     }

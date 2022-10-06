@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items;
+namespace WibboEmulator.Games.Items;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
@@ -139,28 +139,28 @@ internal static class ItemLootBox
         //Présentoir et badge
         var pageId = 987987;
 
-        var PageBadgeId = 18183;
-        WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageBadgeId, out var PageBadge);
-        if (PageBadge == null)
+        var pageBadgeId = 18183;
+        _ = WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageBadgeId, out var pageBadge);
+        if (pageBadge == null)
         {
             return;
         }
 
-        var BadgeCode = PageBadge.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, PageBadge.Items.Count - 1)).Value.Badge;
+        var badgeCode = pageBadge.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, pageBadge.Items.Count - 1)).Value.Badge;
 
-        if (!string.IsNullOrEmpty(BadgeCode) && !session.GetUser().GetBadgeComponent().HasBadge(BadgeCode))
+        if (!string.IsNullOrEmpty(badgeCode) && !session.GetUser().GetBadgeComponent().HasBadge(badgeCode))
         {
-            session.GetUser().GetBadgeComponent().GiveBadge(BadgeCode, true);
-            session.SendPacket(new ReceiveBadgeComposer(BadgeCode));
+            session.GetUser().GetBadgeComponent().GiveBadge(badgeCode, true);
+            session.SendPacket(new ReceiveBadgeComposer(badgeCode));
 
             var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
             if (roomUserByUserId != null)
             {
-                roomUserByUserId.SendWhisperChat("Tu as reçu le badge: " + BadgeCode);
+                roomUserByUserId.SendWhisperChat("Tu as reçu le badge: " + badgeCode);
             }
         }
 
-        EndOpenBox(session, present, room, pageId, 0, BadgeCode);
+        EndOpenBox(session, present, room, pageId, 0, badgeCode);
     }
 
     public static void OpenLegendBox(GameClient session, Item present, Room room)
@@ -212,14 +212,14 @@ internal static class ItemLootBox
             return;
         }
 
-        foreach (var Item in pageBadge.Items.OrderBy(a => Guid.NewGuid()).ToList())
+        foreach (var item in pageBadge.Items.OrderBy(a => Guid.NewGuid()).ToList())
         {
-            if (session.GetUser().GetBadgeComponent().HasBadge(Item.Value.Badge))
+            if (session.GetUser().GetBadgeComponent().HasBadge(item.Value.Badge))
             {
                 continue;
             }
 
-            badgeCode = Item.Value.Badge;
+            badgeCode = item.Value.Badge;
             break;
         }
 
@@ -257,7 +257,7 @@ internal static class ItemLootBox
 
     private static void EndOpenBox(GameClient session, Item present, Room room, int pageId, int forceItem = 0, string extraData = "")
     {
-        WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out var page);
+        _ = WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out var page);
         if (page == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.error", session.Langue));
@@ -310,7 +310,7 @@ internal static class ItemLootBox
         present.BaseItem = lotData.Id;
         present.ResetBaseItem();
 
-        var ItemIsInRoom = true;
+        var itemIsInRoom = true;
 
         if (present.Data.Type == 's')
         {
@@ -318,21 +318,21 @@ internal static class ItemLootBox
             {
                 ItemDao.UpdateResetRoomId(dbClient, present.Id);
 
-                ItemIsInRoom = false;
+                itemIsInRoom = false;
             }
         }
         else
         {
             ItemDao.UpdateResetRoomId(dbClient, present.Id);
 
-            ItemIsInRoom = false;
+            itemIsInRoom = false;
         }
 
-        session.SendPacket(new OpenGiftComposer(present.Data, present.ExtraData, present, ItemIsInRoom));
+        session.SendPacket(new OpenGiftComposer(present.Data, present.ExtraData, present, itemIsInRoom));
 
-        if (!ItemIsInRoom)
+        if (!itemIsInRoom)
         {
-            session.GetUser().GetInventoryComponent().TryAddItem(present);
+            _ = session.GetUser().GetInventoryComponent().TryAddItem(present);
         }
     }
 }

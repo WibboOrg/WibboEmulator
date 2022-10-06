@@ -2,6 +2,6 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
 internal class DoorbellComposer : ServerPacket
 {
-    public DoorbellComposer(string Username)
-        : base(ServerPacketHeader.ROOM_DOORBELL) => this.WriteString(Username);
+    public DoorbellComposer(string username)
+        : base(ServerPacketHeader.ROOM_DOORBELL) => this.WriteString(username);
 }

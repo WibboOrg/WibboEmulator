@@ -29,17 +29,17 @@ public class Trade
         }
     }
 
-    public Trade(int UserOneId, int UserTwoId, int RoomId)
+    public Trade(int userOneId, int userTwoId, int roomId)
     {
-        this._oneId = UserOneId;
-        this._twoId = UserTwoId;
+        this._oneId = userOneId;
+        this._twoId = userTwoId;
         this._users = new TradeUser[2];
-        this._users[0] = new TradeUser(UserOneId, RoomId);
-        this._users[1] = new TradeUser(UserTwoId, RoomId);
+        this._users[0] = new TradeUser(userOneId, roomId);
+        this._users[1] = new TradeUser(userTwoId, roomId);
         this._tradeStage = 1;
-        this._roomId = RoomId;
+        this._roomId = roomId;
 
-        this.SendMessageToUsers(new TradingStartComposer(UserOneId, UserTwoId));
+        this.SendMessageToUsers(new TradingStartComposer(userOneId, userTwoId));
 
         foreach (var tradeUser in this._users)
         {
@@ -51,11 +51,11 @@ public class Trade
         }
     }
 
-    public bool ContainsUser(int Id)
+    public bool ContainsUser(int id)
     {
         foreach (var tradeUser in this._users)
         {
-            if (tradeUser.UserId == Id)
+            if (tradeUser.UserId == id)
             {
                 return true;
             }
@@ -63,11 +63,11 @@ public class Trade
         return false;
     }
 
-    public TradeUser GetTradeUser(int Id)
+    public TradeUser GetTradeUser(int id)
     {
         foreach (var tradeUser in this._users)
         {
-            if (tradeUser.UserId == Id)
+            if (tradeUser.UserId == id)
             {
                 return tradeUser;
             }
@@ -76,50 +76,50 @@ public class Trade
         return null;
     }
 
-    public void OfferItem(int UserId, Item Item, bool UpdateWindows = true)
+    public void OfferItem(int userId, Item item, bool updateWindows = true)
     {
-        var tradeUser = this.GetTradeUser(UserId);
-        if (tradeUser == null || Item == null || !Item.GetBaseItem().AllowTrade || tradeUser.HasAccepted || this._tradeStage != 1)
+        var tradeUser = this.GetTradeUser(userId);
+        if (tradeUser == null || item == null || !item.GetBaseItem().AllowTrade || tradeUser.HasAccepted || this._tradeStage != 1)
         {
             return;
         }
 
         this.ClearAccepted();
 
-        if (!tradeUser.OfferedItems.Contains(Item))
+        if (!tradeUser.OfferedItems.Contains(item))
         {
-            tradeUser.OfferedItems.Add(Item);
+            tradeUser.OfferedItems.Add(item);
         }
 
-        if (UpdateWindows)
+        if (updateWindows)
         {
             this.UpdateTradeWindow();
         }
     }
 
-    public void TakeBackItem(int UserId, Item Item)
+    public void TakeBackItem(int userId, Item item)
     {
-        var tradeUser = this.GetTradeUser(UserId);
-        if (tradeUser == null || Item == null || tradeUser.HasAccepted || this._tradeStage != 1)
+        var tradeUser = this.GetTradeUser(userId);
+        if (tradeUser == null || item == null || tradeUser.HasAccepted || this._tradeStage != 1)
         {
             return;
         }
 
         this.ClearAccepted();
-        tradeUser.OfferedItems.Remove(Item);
+        _ = tradeUser.OfferedItems.Remove(item);
         this.UpdateTradeWindow();
     }
 
-    public void Accept(int UserId)
+    public void Accept(int userId)
     {
-        var tradeUser = this.GetTradeUser(UserId);
+        var tradeUser = this.GetTradeUser(userId);
         if (tradeUser == null || this._tradeStage != 1)
         {
             return;
         }
 
         tradeUser.HasAccepted = true;
-        this.SendMessageToUsers(new TradingAcceptComposer(UserId, 1));
+        this.SendMessageToUsers(new TradingAcceptComposer(userId, 1));
 
         if (!this.AllUsersAccepted)
         {
@@ -131,21 +131,21 @@ public class Trade
         this.ClearAccepted();
     }
 
-    public void Unaccept(int UserId)
+    public void Unaccept(int userId)
     {
-        var tradeUser = this.GetTradeUser(UserId);
+        var tradeUser = this.GetTradeUser(userId);
         if (tradeUser == null || this._tradeStage != 1 || this.AllUsersAccepted)
         {
             return;
         }
 
         tradeUser.HasAccepted = false;
-        this.SendMessageToUsers(new TradingAcceptComposer(UserId, 0));
+        this.SendMessageToUsers(new TradingAcceptComposer(userId, 0));
     }
 
-    public void CompleteTrade(int UserId)
+    public void CompleteTrade(int userId)
     {
-        var tradeUser = this.GetTradeUser(UserId);
+        var tradeUser = this.GetTradeUser(userId);
         if (tradeUser == null || this._tradeStage != 2)
         {
             return;
@@ -153,7 +153,7 @@ public class Trade
 
         tradeUser.HasAccepted = true;
 
-        this.SendMessageToUsers(new TradingAcceptComposer(UserId, 1));
+        this.SendMessageToUsers(new TradingAcceptComposer(userId, 1));
 
         if (!this.AllUsersAccepted)
         {
@@ -268,51 +268,51 @@ public class Trade
 
     private void SaveLogs()
     {
-        var ItemsOneCounter = new Dictionary<string, int>();
-        var ItemsTwoCounter = new Dictionary<string, int>();
+        var itemsOneCounter = new Dictionary<string, int>();
+        var itemsTwoCounter = new Dictionary<string, int>();
 
         foreach (var userItem in this.GetTradeUser(this._oneId).OfferedItems)
         {
-            if (!ItemsOneCounter.ContainsKey(userItem.GetBaseItem().ItemName))
+            if (!itemsOneCounter.ContainsKey(userItem.GetBaseItem().ItemName))
             {
-                ItemsOneCounter.Add(userItem.GetBaseItem().ItemName, 1);
+                itemsOneCounter.Add(userItem.GetBaseItem().ItemName, 1);
             }
             else
             {
-                ItemsOneCounter[userItem.GetBaseItem().ItemName]++;
+                itemsOneCounter[userItem.GetBaseItem().ItemName]++;
             }
         }
 
         foreach (var userItem in this.GetTradeUser(this._twoId).OfferedItems)
         {
-            if (!ItemsTwoCounter.ContainsKey(userItem.GetBaseItem().ItemName))
+            if (!itemsTwoCounter.ContainsKey(userItem.GetBaseItem().ItemName))
             {
-                ItemsTwoCounter.Add(userItem.GetBaseItem().ItemName, 1);
+                itemsTwoCounter.Add(userItem.GetBaseItem().ItemName, 1);
             }
             else
             {
-                ItemsTwoCounter[userItem.GetBaseItem().ItemName]++;
+                itemsTwoCounter[userItem.GetBaseItem().ItemName]++;
             }
         }
 
-        var LogsOneString = "";
-        foreach (var Logs in ItemsOneCounter)
+        var logsOneString = "";
+        foreach (var logs in itemsOneCounter)
         {
-            LogsOneString += $"{Logs.Key} ({Logs.Value}),";
+            logsOneString += $"{logs.Key} ({logs.Value}),";
         }
 
-        LogsOneString = LogsOneString.TrimEnd(',');
+        logsOneString = logsOneString.TrimEnd(',');
 
-        var LogsTwoString = "";
-        foreach (var Logs in ItemsTwoCounter)
+        var logsTwoString = "";
+        foreach (var logs in itemsTwoCounter)
         {
-            LogsTwoString += $"{Logs.Key} ({Logs.Value}),";
+            logsTwoString += $"{logs.Key} ({logs.Value}),";
         }
 
-        LogsTwoString = LogsTwoString.TrimEnd(',');
+        logsTwoString = logsTwoString.TrimEnd(',');
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        LogTradeDao.Insert(dbClient, this._oneId, this._twoId, LogsOneString, LogsTwoString, this._roomId);
+        LogTradeDao.Insert(dbClient, this._oneId, this._twoId, logsOneString, logsTwoString, this._roomId);
     }
 
     public void CloseTradeClean()
@@ -330,7 +330,7 @@ public class Trade
 
         if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this._roomId, out var room))
         {
-            room.ActiveTrades.Remove(this);
+            _ = room.ActiveTrades.Remove(this);
         }
     }
 

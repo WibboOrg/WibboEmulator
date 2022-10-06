@@ -6,14 +6,14 @@ internal class GetModeratorRoomInfoEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().HasPermission("perm_mod"))
         {
             return;
         }
 
-        var roomId = Packet.PopInt();
+        var roomId = packet.PopInt();
 
         var data = WibboEnvironment.GetGame().GetRoomManager().GenerateNullableRoomData(roomId);
 

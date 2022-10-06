@@ -8,7 +8,7 @@ internal class ActionEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -22,7 +22,7 @@ internal class ActionEvent : IPacketEvent
         }
 
         roomUserByUserId.Unidle();
-        var i = Packet.PopInt();
+        var i = packet.PopInt();
         roomUserByUserId.DanceId = 0;
 
         room.SendPacket(new ActionComposer(roomUserByUserId.VirtualId, i));

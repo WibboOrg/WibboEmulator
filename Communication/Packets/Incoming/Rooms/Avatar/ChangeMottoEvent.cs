@@ -9,9 +9,9 @@ internal class ChangeMottoEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var newMotto = StringCharFilter.Escape(Packet.PopString());
+        var newMotto = StringCharFilter.Escape(packet.PopString());
         if (newMotto == session.GetUser().Motto)
         {
             return;
@@ -68,6 +68,6 @@ internal class ChangeMottoEvent : IPacketEvent
             currentRoom.SendPacket(new UserChangeComposer(roomUserByUserId, false));
         }
 
-        WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_Motto", 1);
+        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_Motto", 1);
     }
 }

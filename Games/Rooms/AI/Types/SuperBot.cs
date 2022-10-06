@@ -6,12 +6,12 @@ using WibboEmulator.Games.Rooms.Map;
 
 public class SuperBot : BotAI
 {
-    private readonly int _virtualId;
     private int _actionTimer;
 
     public SuperBot(int virtualId)
     {
-        this._virtualId = virtualId;
+        this.VirtualId = virtualId;
+
         this._actionTimer = WibboEnvironment.GetRandomNumber(0, 60);
     }
 
@@ -47,7 +47,7 @@ public class SuperBot : BotAI
         var ownerUser = this.GetRoom().GetRoomUserManager().GetRoomUserByUserId((this.GetBotData().OwnerId == 0) ? this.GetRoom().RoomData.OwnerId : this.GetBotData().OwnerId);
         if (ownerUser == null)
         {
-            this.GetRoom().GetRoomUserManager().RemoveBot(this._virtualId, false);
+            this.GetRoom().GetRoomUserManager().RemoveBot(this.VirtualId, false);
 
             return;
         }

@@ -5,5 +5,5 @@ internal class StartQuestEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet) => WibboEnvironment.GetGame().GetQuestManager().ActivateQuest(session, Packet);
+    public void Parse(GameClient session, ClientPacket packet) => WibboEnvironment.GetGame().GetQuestManager().ActivateQuest(session, packet);
 }

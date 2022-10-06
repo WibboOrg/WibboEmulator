@@ -7,9 +7,9 @@ internal class AvatarEffectSelectedEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var NumEnable = Packet.PopInt();
+        var NumEnable = packet.PopInt();
 
         if (NumEnable < 0)
         {

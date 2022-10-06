@@ -48,12 +48,12 @@ internal class TradingUpdateComposer : ServerPacket
 
             if (userItem.ExtraData.Contains(Convert.ToChar(9).ToString()))
             {
-                var BadgeData = userItem.ExtraData.Split(Convert.ToChar(9));
+                var badgeData = userItem.ExtraData.Split(Convert.ToChar(9));
 
                 this.WriteString("0");//No idea
-                this.WriteString(BadgeData[0]);//Badge name
-                this.WriteString(BadgeData[1]);//Owner
-                this.WriteString(BadgeData[2]);//Date
+                this.WriteString(badgeData[0]);//Badge name
+                this.WriteString(badgeData[1]);//Owner
+                this.WriteString(badgeData[2]);//Date
             }
             else
             {

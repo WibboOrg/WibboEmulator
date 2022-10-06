@@ -16,7 +16,7 @@ internal class Youtube : IChatCommand
         var username = parameters[1];
         var Url = parameters[2];
 
-        if (string.IsNullOrEmpty(Url) || !Url.Contains("?v=") && !Url.Contains("youtu.be/")) //https://youtu.be/_mNig3ZxYbM
+        if (string.IsNullOrEmpty(Url) || (!Url.Contains("?v=") && !Url.Contains("youtu.be/"))) //https://youtu.be/_mNig3ZxYbM
         {
             return;
         }

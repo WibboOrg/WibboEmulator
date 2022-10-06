@@ -33,6 +33,10 @@ public class ItemTemp : IEquatable<ItemTemp>
     }
 
     public bool Equals(ItemTemp other) => other.Id == this.Id;
+
+    public override bool Equals(object obj) => this.Equals(obj as ItemTemp);
+
+    public override int GetHashCode() => this.Id;
 }
 
 public enum InteractionTypeTemp

@@ -6,9 +6,9 @@ internal class GetGuestRoomEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var roomID = Packet.PopInt();
+        var roomID = packet.PopInt();
 
         var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomID);
         if (roomData == null)
@@ -16,8 +16,8 @@ internal class GetGuestRoomEvent : IPacketEvent
             return;
         }
 
-        var isLoading = Packet.PopInt() == 1;
-        var checkEntry = Packet.PopInt() == 1;
+        var isLoading = packet.PopInt() == 1;
+        var checkEntry = packet.PopInt() == 1;
 
         session.SendPacket(new GetGuestRoomResultComposer(session, roomData, isLoading, checkEntry));
     }

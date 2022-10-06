@@ -9,12 +9,12 @@ internal class GetOffersEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var MinCost = Packet.PopInt();
-        var MaxCost = Packet.PopInt();
-        var SearchQuery = Packet.PopString();
-        var FilterMode = Packet.PopInt();
+        var MinCost = packet.PopInt();
+        var MaxCost = packet.PopInt();
+        var SearchQuery = packet.PopString();
+        var FilterMode = packet.PopInt();
 
         DataTable table = null;
 
@@ -60,12 +60,12 @@ internal class GetOffersEvent : IPacketEvent
                 {
                     if (dictionary[item.SpriteId].TotalPrice > item.TotalPrice)
                     {
-                        dictionary.Remove(item.SpriteId);
+                        _ = dictionary.Remove(item.SpriteId);
                         dictionary.Add(item.SpriteId, item);
                     }
 
                     var num = dictionary2[item.SpriteId];
-                    dictionary2.Remove(item.SpriteId);
+                    _ = dictionary2.Remove(item.SpriteId);
                     dictionary2.Add(item.SpriteId, num + 1);
                 }
             }

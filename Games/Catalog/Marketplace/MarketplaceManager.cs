@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Catalog.Marketplace;
+namespace WibboEmulator.Games.Catalog.Marketplace;
 using WibboEmulator.Database.Daos.Catalog;
 
 public class MarketplaceManager
@@ -49,7 +49,7 @@ public class MarketplaceManager
 
     public double FormatTimestamp() => WibboEnvironment.GetUnixTimestamp() - 172800;
 
-    public int OfferCountForSprite(int SpriteID)
+    public int OfferCountForSprite(int spriteID)
     {
         var dictionary = new Dictionary<int, MarketOffer>();
         var dictionary2 = new Dictionary<int, int>();
@@ -59,12 +59,12 @@ public class MarketplaceManager
             {
                 if (dictionary[item.SpriteId].TotalPrice > item.TotalPrice)
                 {
-                    dictionary.Remove(item.SpriteId);
+                    _ = dictionary.Remove(item.SpriteId);
                     dictionary.Add(item.SpriteId, item);
                 }
 
                 var num = dictionary2[item.SpriteId];
-                dictionary2.Remove(item.SpriteId);
+                _ = dictionary2.Remove(item.SpriteId);
                 dictionary2.Add(item.SpriteId, num + 1);
             }
             else
@@ -73,12 +73,12 @@ public class MarketplaceManager
                 dictionary2.Add(item.SpriteId, 1);
             }
         }
-        if (dictionary2.ContainsKey(SpriteID))
+        if (dictionary2.ContainsKey(spriteID))
         {
-            return dictionary2[SpriteID];
+            return dictionary2[spriteID];
         }
         return 0;
     }
 
-    public int CalculateComissionPrice(float SellingPrice) => Convert.ToInt32(Math.Ceiling(SellingPrice / 100 * 1));
+    public int CalculateComissionPrice(float sellingPrice) => Convert.ToInt32(Math.Ceiling(sellingPrice / 100 * 1));
 }

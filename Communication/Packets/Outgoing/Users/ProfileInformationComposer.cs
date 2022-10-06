@@ -31,7 +31,7 @@ internal class ProfileInformationComposer : ServerPacket
             this.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour2, false));
             this.WriteBoolean(habbo.FavouriteGroupId == group.Id); // todo favs
             this.WriteInteger(0);//what the fuck
-            this.WriteBoolean(group != null ? group.ForumEnabled : true);//HabboTalk
+            this.WriteBoolean(group == null || group.ForumEnabled);//HabboTalk
         }
 
         this.WriteInteger(Convert.ToInt32(WibboEnvironment.GetUnixTimestamp() - habbo.LastOnline)); // Last online

@@ -7,9 +7,9 @@ internal class ManageGroupEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = Packet.PopInt();
+        var GroupId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
         {

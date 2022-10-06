@@ -126,7 +126,7 @@ public class RolePlayer
         {
             if (!this._inventory.ContainsKey(Convert.ToInt32(dataRow["item_id"])))
             {
-                this._inventory.TryAdd(Convert.ToInt32(dataRow["item_id"]), new RolePlayInventoryItem(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["item_id"]), Convert.ToInt32(dataRow["count"])));
+                _ = this._inventory.TryAdd(Convert.ToInt32(dataRow["item_id"]), new RolePlayInventoryItem(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["item_id"]), Convert.ToInt32(dataRow["count"])));
             }
         }
 
@@ -136,7 +136,7 @@ public class RolePlayer
 
     internal RolePlayInventoryItem GetInventoryItem(int Id)
     {
-        this._inventory.TryGetValue(Id, out var Item);
+        _ = this._inventory.TryGetValue(Id, out var Item);
 
         return Item;
     }
@@ -154,7 +154,7 @@ public class RolePlayer
         {
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             var Id = UserRoleplayItemDao.Insert(dbClient, this._id, this._rpId, itemId, count);
-            this._inventory.TryAdd(itemId, new RolePlayInventoryItem(Id, itemId, count));
+            _ = this._inventory.TryAdd(itemId, new RolePlayInventoryItem(Id, itemId, count));
         }
         else
         {
@@ -184,7 +184,7 @@ public class RolePlayer
         }
         else
         {
-            this._inventory.TryRemove(ItemId, out Item);
+            _ = this._inventory.TryRemove(ItemId, out Item);
 
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             UserRoleplayItemDao.Delete(dbClient, this._id);
@@ -367,7 +367,7 @@ public class RolePlayer
                 var monaiePerdu = (int)Math.Floor((double)(this.Money / 100) * 20);
                 this.Money -= monaiePerdu;
 
-                room.GetRoomItemHandler().AddTempItem(user.VirtualId, 5461, user.SetX, user.SetY, user.Z, "1", monaiePerdu, InteractionTypeTemp.MONEY);
+                _ = room.GetRoomItemHandler().AddTempItem(user.VirtualId, 5461, user.SetX, user.SetY, user.Z, "1", monaiePerdu, InteractionTypeTemp.MONEY);
             }
 
             user.OnChat("A été mis K.O. ! [" + this.Health + "/" + this.HealthMax + "]", 0, true);

@@ -117,7 +117,7 @@ public class UserFactory
         return GenerateUser(dUserInfo, dUserStats, false, 0);
     }
 
-    public static User GenerateUser(DataRow dRow, DataRow dRow2, bool ChangeName, double ignoreAllExpire)
+    public static User GenerateUser(DataRow dRow, DataRow dRow2, bool changeName, double ignoreAllExpire)
     {
         var id = Convert.ToInt32(dRow["id"]);
         var username = (string)dRow["username"];
@@ -153,6 +153,6 @@ public class UserFactory
         var achievementPoints = Convert.ToInt32(dRow2["achievement_score"]);
         var favoriteGroup = Convert.ToInt32(dRow2["group_id"]);
 
-        return new User(id, username, rank, motto, look, gender, credits, diamonds, limitCoins, activityPoints, homeRoom, respect, dailyRespectPoints, dailyPetRespectPoints, hasFriendRequestsDisabled, currentQuestID, achievementPoints, lastOnline, favoriteGroup, accountCreated, acceptTrading, ip, hideInroom, hideOnline, mazoHighScore, mazo, clientVolume, nuxEnable, machineId, ChangeName, langue, ignoreAllExpire, ignoreRoomInvite, cameraFollowDisabled);
+        return new User(id, username, rank, motto, look, gender, credits, diamonds, limitCoins, activityPoints, homeRoom, respect, dailyRespectPoints, dailyPetRespectPoints, hasFriendRequestsDisabled, currentQuestID, achievementPoints, lastOnline, favoriteGroup, accountCreated, acceptTrading, ip, hideInroom, hideOnline, mazoHighScore, mazo, clientVolume, nuxEnable, machineId, changeName, langue, ignoreAllExpire, ignoreRoomInvite, cameraFollowDisabled);
     }
 }

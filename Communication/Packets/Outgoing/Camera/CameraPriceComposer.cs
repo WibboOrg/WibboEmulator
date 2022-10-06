@@ -2,11 +2,11 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Camera;
 
 internal class CameraPriceComposer : ServerPacket
 {
-    public CameraPriceComposer(int Credits, int Duckets, int PublishDuckets)
+    public CameraPriceComposer(int credits, int duckets, int publishDuckets)
         : base(ServerPacketHeader.INIT_CAMERA)
     {
-        this.WriteInteger(Credits);
-        this.WriteInteger(Duckets);
-        this.WriteInteger(PublishDuckets);
+        this.WriteInteger(credits);
+        this.WriteInteger(duckets);
+        this.WriteInteger(publishDuckets);
     }
 }

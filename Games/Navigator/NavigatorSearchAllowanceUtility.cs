@@ -1,32 +1,18 @@
-﻿namespace WibboEmulator.Games.Navigator;
+namespace WibboEmulator.Games.Navigator;
 
 public static class NavigatorSearchAllowanceUtility
 {
-    public static NavigatorSearchAllowance GetSearchAllowanceByString(string CategoryType)
+    public static NavigatorSearchAllowance GetSearchAllowanceByString(string categoryType) => categoryType.ToUpper() switch
     {
-        switch (CategoryType.ToUpper())
-        {
-            default:
-            case "NOTHING":
-                return NavigatorSearchAllowance.NOTHING;
-            case "SHOW_MORE":
-                return NavigatorSearchAllowance.SHOW_MORE;
-            case "GO_BACK":
-                return NavigatorSearchAllowance.GO_BACK;
-        }
-    }
+        "SHOW_MORE" => NavigatorSearchAllowance.SHOW_MORE,
+        "GO_BACK" => NavigatorSearchAllowance.GO_BACK,
+        _ => NavigatorSearchAllowance.NOTHING,
+    };
 
-    public static int GetIntegerValue(NavigatorSearchAllowance SearchAllowance)
+    public static int GetIntegerValue(NavigatorSearchAllowance searchAllowance) => searchAllowance switch
     {
-        switch (SearchAllowance)
-        {
-            default:
-            case NavigatorSearchAllowance.NOTHING:
-                return 0;
-            case NavigatorSearchAllowance.SHOW_MORE:
-                return 1;
-            case NavigatorSearchAllowance.GO_BACK:
-                return 2;
-        }
-    }
+        NavigatorSearchAllowance.SHOW_MORE => 1,
+        NavigatorSearchAllowance.GO_BACK => 2,
+        _ => 0,
+    };
 }

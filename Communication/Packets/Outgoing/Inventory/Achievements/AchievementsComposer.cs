@@ -4,24 +4,24 @@ using WibboEmulator.Games.GameClients;
 
 internal class AchievementsComposer : ServerPacket
 {
-    public AchievementsComposer(GameClient session, List<AchievementData> Achievements)
+    public AchievementsComposer(GameClient session, List<AchievementData> achievements)
         : base(ServerPacketHeader.ACHIEVEMENT_LIST)
     {
-        this.WriteInteger(Achievements.Count);
-        foreach (var achievement in Achievements)
+        this.WriteInteger(achievements.Count);
+        foreach (var achievement in achievements)
         {
             var achievementData = session.GetUser().GetAchievementComponent().GetAchievementData(achievement.GroupName);
-            var TargetLevel = achievementData != null ? achievementData.Level + 1 : 1;
+            var targetLevel = achievementData != null ? achievementData.Level + 1 : 1;
             var count = achievement.Levels.Count;
-            if (TargetLevel > count)
+            if (targetLevel > count)
             {
-                TargetLevel = count;
+                targetLevel = count;
             }
 
-            var achievementLevel = achievement.Levels[TargetLevel];
+            var achievementLevel = achievement.Levels[targetLevel];
             this.WriteInteger(achievement.Id);
-            this.WriteInteger(TargetLevel);
-            this.WriteString(achievement.GroupName + TargetLevel);
+            this.WriteInteger(targetLevel);
+            this.WriteString(achievement.GroupName + targetLevel);
             this.WriteInteger(0);
             this.WriteInteger(achievementLevel.Requirement); //?
             this.WriteInteger(achievementLevel.RewardPixels);

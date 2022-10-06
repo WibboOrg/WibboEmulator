@@ -3,15 +3,15 @@ using WibboEmulator.Games.Items;
 
 internal class OpenGiftComposer : ServerPacket
 {
-    public OpenGiftComposer(ItemData Data, string Text, Item Item, bool ItemIsInRoom)
+    public OpenGiftComposer(ItemData data, string text, Item item, bool itemIsInRoom)
         : base(ServerPacketHeader.GIFT_OPENED)
     {
-        this.WriteString(Data.Type.ToString());
-        this.WriteInteger(Data.SpriteId);
-        this.WriteString(Data.ItemName);
-        this.WriteInteger(Item.Id);
-        this.WriteString(Data.Type.ToString());
-        this.WriteBoolean(ItemIsInRoom);//Is it in the room?
-        this.WriteString(Text);
+        this.WriteString(data.Type.ToString());
+        this.WriteInteger(data.SpriteId);
+        this.WriteString(data.ItemName);
+        this.WriteInteger(item.Id);
+        this.WriteString(data.Type.ToString());
+        this.WriteBoolean(itemIsInRoom);//Is it in the room?
+        this.WriteString(text);
     }
 }

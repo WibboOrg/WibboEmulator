@@ -13,7 +13,7 @@ internal class RemoveSaddleFromHorseEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().InRoom)
         {
@@ -25,7 +25,7 @@ internal class RemoveSaddleFromHorseEvent : IPacketEvent
             return;
         }
 
-        if (!Room.GetRoomUserManager().TryGetPet(Packet.PopInt(), out var PetUser))
+        if (!Room.GetRoomUserManager().TryGetPet(packet.PopInt(), out var PetUser))
         {
             return;
         }
@@ -55,7 +55,7 @@ internal class RemoveSaddleFromHorseEvent : IPacketEvent
         var Item = ItemFactory.CreateSingleItemNullable(ItemData, session.GetUser(), "");
         if (Item != null)
         {
-            session.GetUser().GetInventoryComponent().TryAddItem(Item);
+            _ = session.GetUser().GetInventoryComponent().TryAddItem(Item);
             session.SendPacket(new FurniListNotificationComposer(Item.Id, 1));
             session.SendPacket(new PurchaseOKComposer());
         }

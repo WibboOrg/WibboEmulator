@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
@@ -81,7 +81,7 @@ public class HighScorePoints : WiredActionBase, IWired, IWiredEffect
         {
             var userData = data.Split(':');
 
-            int.TryParse(userData[userData.Length - 1], out var score);
+            _ = int.TryParse(userData[^1], out var score);
 
             var username = "";
             for (var i = 0; i < userData.Length - 1; i++)
@@ -105,7 +105,7 @@ public class HighScorePoints : WiredActionBase, IWired, IWiredEffect
 
     public override void OnTrigger(GameClient session)
     {
-        int.TryParse(this.ItemInstance.ExtraData, out var NumMode);
+        _ = int.TryParse(this.ItemInstance.ExtraData, out var NumMode);
 
         if (NumMode != 1)
         {

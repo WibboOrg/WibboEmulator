@@ -2,10 +2,10 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
 
 internal class RoomReadyComposer : ServerPacket
 {
-    public RoomReadyComposer(int RoomId, string Model)
+    public RoomReadyComposer(int roomId, string model)
         : base(ServerPacketHeader.ROOM_MODEL_NAME)
     {
-        this.WriteString(Model);
-        this.WriteInteger(RoomId);
+        this.WriteString(model);
+        this.WriteInteger(roomId);
     }
 }

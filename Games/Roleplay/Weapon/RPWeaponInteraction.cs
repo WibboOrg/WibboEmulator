@@ -6,14 +6,9 @@ public enum RPWeaponInteraction
 }
 public class RPWeaponInteractions
 {
-    public static RPWeaponInteraction GetTypeFromString(string pType)
+    public static RPWeaponInteraction GetTypeFromString(string pType) => pType switch
     {
-        switch (pType)
-        {
-            case "none":
-                return RPWeaponInteraction.NONE;
-            default:
-                return RPWeaponInteraction.NONE;
-        }
-    }
+        "none" => RPWeaponInteraction.NONE,
+        _ => RPWeaponInteraction.NONE,
+    };
 }

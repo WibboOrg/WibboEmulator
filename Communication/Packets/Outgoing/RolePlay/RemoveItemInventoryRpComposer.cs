@@ -1,11 +1,11 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
+namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 
 internal class RemoveItemInventoryRpComposer : ServerPacket
 {
-    public RemoveItemInventoryRpComposer(int ItemId, int Count)
+    public RemoveItemInventoryRpComposer(int itemId, int count)
       : base(ServerPacketHeader.REMOVE_ITEM_INVENTORY_RP)
     {
-        this.WriteInteger(ItemId);
-        this.WriteInteger(Count);
+        this.WriteInteger(itemId);
+        this.WriteInteger(count);
     }
 }

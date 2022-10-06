@@ -36,22 +36,14 @@ public class GameManager
         this._roomInstance = room;
     }
 
-    public Dictionary<int, Item> GetItems(TeamType team)
+    public Dictionary<int, Item> GetItems(TeamType team) => team switch
     {
-        switch (team)
-        {
-            case TeamType.RED:
-                return this._redTeamItems;
-            case TeamType.GREEN:
-                return this._greenTeamItems;
-            case TeamType.BLUE:
-                return this._blueTeamItems;
-            case TeamType.YELLOW:
-                return this._yellowTeamItems;
-            default:
-                return new Dictionary<int, Item>();
-        }
-    }
+        TeamType.RED => this._redTeamItems,
+        TeamType.GREEN => this._greenTeamItems,
+        TeamType.BLUE => this._blueTeamItems,
+        TeamType.YELLOW => this._yellowTeamItems,
+        _ => new Dictionary<int, Item>(),
+    };
 
     public TeamType GetWinningTeam()
     {
@@ -90,7 +82,7 @@ public class GameManager
 
         this.TeamPoints[(int)team] = points1;
 
-        this.OnScoreChanged?.Invoke(null, new TeamScoreChangedArgs(points1, team, user));
+        this.OnScoreChanged?.Invoke(null, new TeamScoreChangedEventArgs(points1, team, user));
 
         foreach (var roomItem in this.GetFurniItems(team).Values)
         {
@@ -112,22 +104,14 @@ public class GameManager
 
     private int GetScoreForTeam(TeamType team) => this.TeamPoints[(int)team];
 
-    private Dictionary<int, Item> GetFurniItems(TeamType team)
+    private Dictionary<int, Item> GetFurniItems(TeamType team) => team switch
     {
-        switch (team)
-        {
-            case TeamType.RED:
-                return this._redTeamItems;
-            case TeamType.GREEN:
-                return this._greenTeamItems;
-            case TeamType.BLUE:
-                return this._blueTeamItems;
-            case TeamType.YELLOW:
-                return this._yellowTeamItems;
-            default:
-                return new Dictionary<int, Item>();
-        }
-    }
+        TeamType.RED => this._redTeamItems,
+        TeamType.GREEN => this._greenTeamItems,
+        TeamType.BLUE => this._blueTeamItems,
+        TeamType.YELLOW => this._yellowTeamItems,
+        _ => new Dictionary<int, Item>(),
+    };
 
     private static bool isSoccerGoal(InteractionType type)
     {
@@ -141,24 +125,11 @@ public class GameManager
         }
     }
 
-    private static bool IsScoreItem(InteractionType type)
+    private static bool IsScoreItem(InteractionType type) => type switch
     {
-        switch (type)
-        {
-            case InteractionType.BANZAISCOREBLUE:
-            case InteractionType.BANZAISCORERED:
-            case InteractionType.BANZAISCOREYELLOW:
-            case InteractionType.BANZAISCOREGREEN:
-
-            case InteractionType.FREEZEBLUECOUNTER:
-            case InteractionType.FREEZEGREENCOUNTER:
-            case InteractionType.FREEZEREDCOUNTER:
-            case InteractionType.FREEZEYELLOWCOUNTER:
-                return true;
-        }
-        return false;
-
-    }
+        InteractionType.BANZAISCOREBLUE or InteractionType.BANZAISCORERED or InteractionType.BANZAISCOREYELLOW or InteractionType.BANZAISCOREGREEN or InteractionType.FREEZEBLUECOUNTER or InteractionType.FREEZEGREENCOUNTER or InteractionType.FREEZEREDCOUNTER or InteractionType.FREEZEYELLOWCOUNTER => true,
+        _ => false,
+    };
 
     public void AddFurnitureToTeam(Item item, TeamType team)
     {
@@ -200,16 +171,16 @@ public class GameManager
         switch (team)
         {
             case TeamType.RED:
-                this._redTeamItems.Remove(item.Id);
+                _ = this._redTeamItems.Remove(item.Id);
                 break;
             case TeamType.GREEN:
-                this._greenTeamItems.Remove(item.Id);
+                _ = this._greenTeamItems.Remove(item.Id);
                 break;
             case TeamType.BLUE:
-                this._blueTeamItems.Remove(item.Id);
+                _ = this._blueTeamItems.Remove(item.Id);
                 break;
             case TeamType.YELLOW:
-                this._yellowTeamItems.Remove(item.Id);
+                _ = this._yellowTeamItems.Remove(item.Id);
                 break;
         }
     }
@@ -218,26 +189,26 @@ public class GameManager
     {
         foreach (var roomItem in this._redTeamItems.Values)
         {
-            this.UnlockGate(roomItem);
+            UnlockGate(roomItem);
         }
 
         foreach (var roomItem in this._greenTeamItems.Values)
         {
-            this.UnlockGate(roomItem);
+            UnlockGate(roomItem);
         }
 
         foreach (var roomItem in this._blueTeamItems.Values)
         {
-            this.UnlockGate(roomItem);
+            UnlockGate(roomItem);
         }
 
         foreach (var roomItem in this._yellowTeamItems.Values)
         {
-            this.UnlockGate(roomItem);
+            UnlockGate(roomItem);
         }
     }
 
-    private void LockGate(Item item)
+    private static void LockGate(Item item)
     {
         switch (item.GetBaseItem().InteractionType)
         {
@@ -304,7 +275,7 @@ public class GameManager
         }
     }
 
-    private void UnlockGate(Item item)
+    private static void UnlockGate(Item item)
     {
         switch (item.GetBaseItem().InteractionType)
         {
@@ -325,22 +296,22 @@ public class GameManager
     {
         foreach (var roomItem in this._redTeamItems.Values)
         {
-            this.LockGate(roomItem);
+            LockGate(roomItem);
         }
 
         foreach (var roomItem in this._greenTeamItems.Values)
         {
-            this.LockGate(roomItem);
+            LockGate(roomItem);
         }
 
         foreach (var roomItem in this._blueTeamItems.Values)
         {
-            this.LockGate(roomItem);
+            LockGate(roomItem);
         }
 
         foreach (var roomItem in this._yellowTeamItems.Values)
         {
-            this.LockGate(roomItem);
+            LockGate(roomItem);
         }
     }
 

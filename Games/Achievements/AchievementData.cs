@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Achievements;
+namespace WibboEmulator.Games.Achievements;
 
 public class AchievementData
 {
@@ -15,5 +15,5 @@ public class AchievementData
         this.Levels = new Dictionary<int, AchievementLevel>();
     }
 
-    public void AddLevel(AchievementLevel Level) => this.Levels.Add(Level.Level, Level);
+    public void AddLevel(AchievementLevel level) => this.Levels.Add(level.Level, level);
 }

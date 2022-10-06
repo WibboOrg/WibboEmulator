@@ -6,7 +6,7 @@ internal class GetCreditsInfoEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
         session.SendPacket(new ActivityPointsComposer(session.GetUser().WibboPoints, session.GetUser().LimitCoins));

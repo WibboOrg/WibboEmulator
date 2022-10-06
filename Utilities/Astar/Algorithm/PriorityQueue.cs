@@ -4,7 +4,6 @@ public class PriorityQueue<T, TX> where T : IWeightAddable<TX>
     public List<T> InnerList;
     protected IComparer<T> Comparer;
 
-
     public PriorityQueue(IComparer<T> comparer, int size)
     {
         this.Comparer = comparer;
@@ -41,8 +40,6 @@ public class PriorityQueue<T, TX> where T : IWeightAddable<TX>
         return low;
     }
 
-
-
     /// <summary>
     /// Push an object onto the PQ
     /// </summary>
@@ -77,7 +74,4 @@ public class PriorityQueue<T, TX> where T : IWeightAddable<TX>
         element.WeightChange = newValue;
         this.Push(element);
     }
-
-
-
 }

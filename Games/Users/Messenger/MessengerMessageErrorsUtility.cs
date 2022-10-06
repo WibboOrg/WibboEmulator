@@ -2,28 +2,13 @@ namespace WibboEmulator.Games.Users.Messenger;
 
 public static class MessengerMessageErrorsUtility
 {
-    public static int GetMessageErrorPacketNum(MessengerMessageErrors error)
+    public static int GetMessageErrorPacketNum(MessengerMessageErrors error) => error switch
     {
-        switch (error)
-        {
-            default:
-            case MessengerMessageErrors.FriendMuted:
-                return 3;
-
-            case MessengerMessageErrors.YourMuted:
-                return 4;
-
-            case MessengerMessageErrors.FriendOffline:
-                return 5;
-
-            case MessengerMessageErrors.NotFriends:
-                return 6;
-
-            case MessengerMessageErrors.FriendBusy:
-                return 7;
-
-            case MessengerMessageErrors.OfflineFailed:
-                return 10;
-        }
-    }
+        MessengerMessageErrors.YourMuted => 4,
+        MessengerMessageErrors.FriendOffline => 5,
+        MessengerMessageErrors.NotFriends => 6,
+        MessengerMessageErrors.FriendBusy => 7,
+        MessengerMessageErrors.OfflineFailed => 10,
+        _ => 3,
+    };
 }

@@ -7,15 +7,15 @@ internal class GetGroupFurniSettingsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
         {
             return;
         }
 
-        var ItemId = Packet.PopInt();
-        var GroupId = Packet.PopInt();
+        var ItemId = packet.PopInt();
+        var GroupId = packet.PopInt();
 
         var Item = session.GetUser().CurrentRoom.GetRoomItemHandler().GetItem(ItemId);
         if (Item == null)

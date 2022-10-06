@@ -17,7 +17,7 @@ internal class HandItem : IChatCommand
             return;
         }
 
-        int.TryParse(parameters[1], out var handitemid);
+        _ = int.TryParse(parameters[1], out var handitemid);
         if (handitemid < 0)
         {
             return;

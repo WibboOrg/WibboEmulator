@@ -282,7 +282,7 @@ public class BattleBanzai
             item.Team = team;
             item.Value = 1;
         }
-        var num = item.Value + (int)item.Team * 3 - 1;
+        var num = item.Value + ((int)item.Team * 3) - 1;
         item.ExtraData = num.ToString();
     }
 
@@ -359,7 +359,7 @@ public class BattleBanzai
         }
 
         item.Team = team;
-        var num = item.Value + (int)item.Team * 3 - 1;
+        var num = item.Value + ((int)item.Team * 3) - 1;
         item.ExtraData = num.ToString();
     }
 

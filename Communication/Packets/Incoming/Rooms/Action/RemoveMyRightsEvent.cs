@@ -8,7 +8,7 @@ internal class RemoveMyRightsEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
@@ -48,7 +48,7 @@ internal class RemoveMyRightsEvent : IPacketEvent
 
             if (Room.UsersWithRights.Contains(session.GetUser().Id))
             {
-                Room.UsersWithRights.Remove(session.GetUser().Id);
+                _ = Room.UsersWithRights.Remove(session.GetUser().Id);
             }
         }
     }

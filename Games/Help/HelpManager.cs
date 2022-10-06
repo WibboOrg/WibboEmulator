@@ -1,8 +1,8 @@
-﻿namespace WibboEmulator.Games.Help;
+namespace WibboEmulator.Games.Help;
 
 public class HelpManager
 {
-    public Dictionary<int, bool> GuidesOnDuty = new();
+    public Dictionary<int, bool> GuidesOnDuty { get; set; } = new();
 
     public int GuidesCount => this.GuidesOnDuty.Count;
 
@@ -13,7 +13,7 @@ public class HelpManager
             return 0;
         }
 
-        var List = new List<int>();
+        var list = new List<int>();
 
         foreach (var entry in this.GuidesOnDuty)
         {
@@ -22,28 +22,28 @@ public class HelpManager
                 continue;
             }
 
-            List.Add(entry.Key);
+            list.Add(entry.Key);
         }
 
-        if (List.Count == 0)
+        if (list.Count == 0)
         {
             return 0;
         }
 
-        var RandomId = List[WibboEnvironment.GetRandomNumber(0, List.Count - 1)];
-        this.GuidesOnDuty[RandomId] = true;
+        var randomId = list[WibboEnvironment.GetRandomNumber(0, list.Count - 1)];
+        this.GuidesOnDuty[randomId] = true;
 
-        return RandomId;
+        return randomId;
     }
 
-    public void EndService(int Id)
+    public void EndService(int id)
     {
-        if (!this.GuidesOnDuty.ContainsKey(Id))
+        if (!this.GuidesOnDuty.ContainsKey(id))
         {
             return;
         }
 
-        this.GuidesOnDuty[Id] = false;
+        this.GuidesOnDuty[id] = false;
     }
 
     public void AddGuide(int guide)
@@ -63,6 +63,6 @@ public class HelpManager
             return;
         }
 
-        this.GuidesOnDuty.Remove(guide);
+        _ = this.GuidesOnDuty.Remove(guide);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Database;
+namespace WibboEmulator.Database;
 using MySql.Data.MySqlClient;
 using WibboEmulator.Database.Interfaces;
 
@@ -31,13 +31,13 @@ public sealed class DatabaseManager
     {
         try
         {
-            var Con = new MySqlConnection(this._connectionStr);
-            Con.Open();
-            var CMD = Con.CreateCommand();
-            CMD.CommandText = "SELECT 1+1";
-            CMD.ExecuteNonQuery();
-            CMD.Dispose();
-            Con.Close();
+            var con = new MySqlConnection(this._connectionStr);
+            con.Open();
+            var cmd = con.CreateCommand();
+            cmd.CommandText = "SELECT 1+1";
+            _ = cmd.ExecuteNonQuery();
+            cmd.Dispose();
+            con.Close();
         }
         catch (MySqlException)
         {
@@ -51,11 +51,11 @@ public sealed class DatabaseManager
     {
         try
         {
-            IDatabaseClient DbConnection = new DatabaseConnection(this._connectionStr);
+            IDatabaseClient dbConnection = new DatabaseConnection(this._connectionStr);
 
-            DbConnection.Connect();
+            dbConnection.Connect();
 
-            return DbConnection.GetQueryreactor();
+            return dbConnection.GetQueryreactor();
         }
         catch (Exception e)
         {

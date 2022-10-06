@@ -28,14 +28,14 @@ public class QueryChunk
     public void AddQuery(string query)
     {
         ++this._queryCount;
-        this._queries.Append(query);
+        _ = this._queries.Append(query);
         switch (this._endingType)
         {
             case EndingType.SEQUENTIAL:
-                this._queries.Append(';');
+                _ = this._queries.Append(';');
                 break;
             case EndingType.CONTINUOUS:
-                this._queries.Append(',');
+                _ = this._queries.Append(',');
                 break;
         }
     }
@@ -62,7 +62,7 @@ public class QueryChunk
     public void Dispose()
     {
         this._parameters.Clear();
-        this._queries.Clear();
+        _ = this._queries.Clear();
         this._parameters = null;
         this._queries = null;
     }

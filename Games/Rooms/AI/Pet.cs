@@ -61,7 +61,7 @@ public class Pet
             }
             else
             {
-                WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room);
+                _ = WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room);
 
                 return room;
             }
@@ -138,14 +138,14 @@ public class Pet
         this.PetCommands = this.GetPetCommands();
     }
 
-    public bool HasCommand(short Command)
+    public bool HasCommand(short command)
     {
-        if (!this.PetCommands.ContainsKey(Command))
+        if (!this.PetCommands.ContainsKey(command))
         {
             return false;
         }
 
-        return this.PetCommands[Command];
+        return this.PetCommands[command];
     }
 
     public Dictionary<short, bool> GetPetCommands()

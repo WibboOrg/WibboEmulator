@@ -147,9 +147,9 @@ public class ProjectileManager
                 }
 
             }
-            foreach (var Item in toAdd)
+            foreach (var item in toAdd)
             {
-                this._queueProjectile.Enqueue(Item);
+                this._queueProjectile.Enqueue(item);
             }
 
             toAdd.Clear();
@@ -186,19 +186,19 @@ public class ProjectileManager
             }
             else
             {
-                var Rp = userTouch.Roleplayer;
+                var rp = userTouch.Roleplayer;
 
-                if (Rp == null)
+                if (rp == null)
                 {
                     return;
                 }
 
-                if (!Rp.PvpEnable && Rp.AggroTimer == 0)
+                if (!rp.PvpEnable && rp.AggroTimer == 0)
                 {
                     return;
                 }
 
-                Rp.Hit(userTouch, item.Value, this._room, true, item.InteractionType == InteractionTypeTemp.PROJECTILE_BOT);
+                rp.Hit(userTouch, item.Value, this._room, true, item.InteractionType == InteractionTypeTemp.PROJECTILE_BOT);
             }
         }
         else
@@ -240,14 +240,14 @@ public class ProjectileManager
         }
         else
         {
-            var Rp = userTouch.Roleplayer;
+            var rp = userTouch.Roleplayer;
 
-            if (Rp == null)
+            if (rp == null)
             {
                 return false;
             }
 
-            if ((!Rp.PvpEnable && Rp.AggroTimer == 0) || Rp.Dead || Rp.SendPrison)
+            if ((!rp.PvpEnable && rp.AggroTimer == 0) || rp.Dead || rp.SendPrison)
             {
                 return false;
             }
@@ -264,7 +264,7 @@ public class ProjectileManager
             return;
         }
 
-        this._projectile.Remove(item);
+        _ = this._projectile.Remove(item);
 
         this._room.GetRoomItemHandler().RemoveTempItem(item.Id);
     }

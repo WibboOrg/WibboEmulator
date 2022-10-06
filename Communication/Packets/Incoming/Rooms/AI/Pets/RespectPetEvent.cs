@@ -9,7 +9,7 @@ internal class RespectPetEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null || !session.GetUser().InRoom || session.GetUser().DailyPetRespectPoints == 0)
         {
@@ -28,7 +28,7 @@ internal class RespectPetEvent : IPacketEvent
             return;
         }
 
-        var PetId = Packet.PopInt();
+        var PetId = packet.PopInt();
 
         if (!session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(PetId, out var Pet))
         {
@@ -52,8 +52,8 @@ internal class RespectPetEvent : IPacketEvent
 
             //And boom! Let us send some respect points.
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SOCIAL_RESPECT);
-            WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RespectGiven", 1);
-            WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(TargetUser.GetClient(), "ACH_RespectEarned", 1);
+            _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RespectGiven", 1);
+            _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(TargetUser.GetClient(), "ACH_RespectEarned", 1);
 
             //Take away from pet respect points, just in-case users abuse this..
             session.GetUser().DailyPetRespectPoints -= 1;
@@ -75,7 +75,7 @@ internal class RespectPetEvent : IPacketEvent
         }
 
         session.GetUser().DailyPetRespectPoints -= 1;
-        WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_PetRespectGiver", 1);
+        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_PetRespectGiver", 1);
 
         ThisUser.CarryItemID = 999999999;
         ThisUser.CarryTimer = 5;

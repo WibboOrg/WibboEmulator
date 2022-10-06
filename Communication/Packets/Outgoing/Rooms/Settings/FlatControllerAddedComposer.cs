@@ -2,11 +2,11 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 
 internal class FlatControllerAddedComposer : ServerPacket
 {
-    public FlatControllerAddedComposer(int RoomId, int UserId, string UserName)
+    public FlatControllerAddedComposer(int roomId, int userId, string userName)
         : base(ServerPacketHeader.ROOM_RIGHTS_LIST_ADD)
     {
-        this.WriteInteger(RoomId);
-        this.WriteInteger(UserId);
-        this.WriteString(UserName);
+        this.WriteInteger(roomId);
+        this.WriteInteger(userId);
+        this.WriteString(userName);
     }
 }

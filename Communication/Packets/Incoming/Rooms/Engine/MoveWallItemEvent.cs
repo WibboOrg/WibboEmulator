@@ -6,7 +6,7 @@ internal class MoveWallItemEvent : IPacketEvent
 {
     public double Delay => 200;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -18,8 +18,8 @@ internal class MoveWallItemEvent : IPacketEvent
             return;
         }
 
-        var Id = Packet.PopInt();
-        var str = Packet.PopString();
+        var Id = packet.PopInt();
+        var str = packet.PopString();
 
         var roomItem = room.GetRoomItemHandler().GetItem(Id);
         if (roomItem == null)
@@ -33,7 +33,7 @@ internal class MoveWallItemEvent : IPacketEvent
             return;
         }
 
-        var wallCoordinate = this.WallPositionCheck(":" + str.Split(':')[1]);
+        var wallCoordinate = WallPositionCheck(":" + str.Split(':')[1]);
         roomItem.WallCoord = wallCoordinate;
         room.GetRoomItemHandler().UpdateItem(roomItem);
 
@@ -41,7 +41,7 @@ internal class MoveWallItemEvent : IPacketEvent
 
     }
 
-    private string WallPositionCheck(string wallPosition)
+    private static string WallPositionCheck(string wallPosition)
     {
         //:w=3,2 l=9,63 l
         try

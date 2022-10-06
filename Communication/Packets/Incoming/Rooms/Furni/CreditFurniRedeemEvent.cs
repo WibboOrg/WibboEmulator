@@ -12,7 +12,7 @@ internal class CreditFurniRedeemEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().InRoom)
         {
@@ -29,7 +29,7 @@ internal class CreditFurniRedeemEvent : IPacketEvent
             return;
         }
 
-        var Exchange = Room.GetRoomItemHandler().GetItem(Packet.PopInt());
+        var Exchange = Room.GetRoomItemHandler().GetItem(packet.PopInt());
         if (Exchange == null)
         {
             return;

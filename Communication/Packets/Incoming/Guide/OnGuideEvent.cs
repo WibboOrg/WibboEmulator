@@ -6,10 +6,10 @@ internal class OnGuideEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var userId = Packet.PopInt();
-        var message = Packet.PopString();
+        var userId = packet.PopInt();
+        var message = packet.PopString();
 
         var guideManager = WibboEnvironment.GetGame().GetHelpManager();
         if (guideManager.GuidesCount <= 0)

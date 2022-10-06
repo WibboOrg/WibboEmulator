@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.User;
+namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Database.Daos.User;
 
@@ -11,18 +11,18 @@ internal class UpdateCreditsCommand : IRCONCommand
             return false;
         }
 
-        if (!int.TryParse(parameters[1], out var Userid))
+        if (!int.TryParse(parameters[1], out var userId))
         {
             return false;
         }
 
-        if (Userid == 0)
+        if (userId == 0)
         {
             return false;
         }
 
-        var Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid);
-        if (Client == null)
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        if (client == null)
         {
             return false;
         }
@@ -30,11 +30,11 @@ internal class UpdateCreditsCommand : IRCONCommand
         int credits;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            credits = UserDao.GetCredits(dbClient, Client.GetUser().Id);
+            credits = UserDao.GetCredits(dbClient, client.GetUser().Id);
         }
 
-        Client.GetUser().Credits = credits;
-        Client.SendPacket(new CreditBalanceComposer(Client.GetUser().Credits));
+        client.GetUser().Credits = credits;
+        client.SendPacket(new CreditBalanceComposer(client.GetUser().Credits));
 
         return true;
     }

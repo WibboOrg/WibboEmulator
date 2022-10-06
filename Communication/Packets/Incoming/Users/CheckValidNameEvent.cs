@@ -6,14 +6,14 @@ internal class CheckValidNameEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null || session == null)
         {
             return;
         }
 
-        var Name = Packet.PopString();
+        var Name = packet.PopString();
 
         session.SendPacket(new NameChangeUpdateComposer(Name));
     }

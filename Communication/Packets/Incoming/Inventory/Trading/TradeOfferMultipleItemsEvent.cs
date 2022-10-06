@@ -5,7 +5,7 @@ internal class TradeOfferMultipleItemsEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -18,10 +18,10 @@ internal class TradeOfferMultipleItemsEvent : IPacketEvent
             return;
         }
 
-        var ItemCount = Packet.PopInt();
+        var ItemCount = packet.PopInt();
         for (var i = 0; i < ItemCount; i++)
         {
-            var ItemId = Packet.PopInt();
+            var ItemId = packet.PopInt();
             var userItem = session.GetUser().GetInventoryComponent().GetItem(ItemId);
             if (userItem == null)
             {

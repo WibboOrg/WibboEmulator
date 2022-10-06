@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Groups;
+namespace WibboEmulator.Games.Groups;
 
 public class GroupMember
 {
@@ -6,10 +6,10 @@ public class GroupMember
     public string Username { get; set; }
     public string Look { get; set; }
 
-    public GroupMember(int Id, string Username, string Look)
+    public GroupMember(int id, string username, string look)
     {
-        this.Id = Id;
-        this.Username = Username;
-        this.Look = Look;
+        this.Id = id;
+        this.Username = username;
+        this.Look = look;
     }
 }

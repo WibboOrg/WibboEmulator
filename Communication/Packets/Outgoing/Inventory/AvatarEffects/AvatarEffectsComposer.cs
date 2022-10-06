@@ -2,14 +2,14 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Inventory.AvatarEffects;
 
 internal class AvatarEffectsComposer : ServerPacket
 {
-    public AvatarEffectsComposer(List<int> Enable)
+    public AvatarEffectsComposer(List<int> enable)
         : base(ServerPacketHeader.USER_EFFECTS)
     {
-        this.WriteInteger(Enable.Count);
+        this.WriteInteger(enable.Count);
 
-        foreach (var EffectId in Enable)
+        foreach (var effectId in enable)
         {
-            this.WriteInteger(EffectId);//Effect Id
+            this.WriteInteger(effectId);//Effect Id
             this.WriteInteger(1);//Type, 0 = Hand, 1 = Full
             this.WriteInteger(0);
             this.WriteInteger(1);

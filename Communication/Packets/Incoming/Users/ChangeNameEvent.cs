@@ -12,7 +12,7 @@ internal class ChangeNameEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null || session == null)
         {
@@ -30,7 +30,7 @@ internal class ChangeNameEvent : IPacketEvent
             return;
         }
 
-        var newUsername = Packet.PopString();
+        var newUsername = packet.PopString();
 
         if (!session.GetUser().CanChangeName && session.GetUser().Rank == 1)
         {
@@ -44,7 +44,7 @@ internal class ChangeNameEvent : IPacketEvent
             return;
         }
 
-        if (this.NameAvailable(newUsername) != 1)
+        if (NameAvailable(newUsername) != 1)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.changename.error.2", session.Langue));
             return;
@@ -59,8 +59,8 @@ internal class ChangeNameEvent : IPacketEvent
             LogFlagmeDao.Insert(dbClient, session.GetUser().Id, session.GetUser().Username, newUsername);
         }
 
-        WibboEnvironment.GetGame().GetGameClientManager().UpdateClientUsername(session.ConnectionID, session.GetUser().Username, newUsername);
-        room.GetRoomUserManager().UpdateClientUsername(roomUser, session.GetUser().Username, newUsername);
+        _ = WibboEnvironment.GetGame().GetGameClientManager().UpdateClientUsername(session.ConnectionID, session.GetUser().Username, newUsername);
+        _ = room.GetRoomUserManager().UpdateClientUsername(roomUser, session.GetUser().Username, newUsername);
         session.GetUser().Username = newUsername;
         session.GetUser().CanChangeName = false;
 
@@ -88,7 +88,7 @@ internal class ChangeNameEvent : IPacketEvent
         }
     }
 
-    private int NameAvailable(string Username)
+    private static int NameAvailable(string Username)
     {
         Username = Username.ToLower();
 

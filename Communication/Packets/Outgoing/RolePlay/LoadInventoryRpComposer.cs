@@ -1,24 +1,24 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
+namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using System.Collections.Concurrent;
 using WibboEmulator.Games.Roleplay.Player;
 
 internal class LoadInventoryRpComposer : ServerPacket
 {
-    public LoadInventoryRpComposer(ConcurrentDictionary<int, RolePlayInventoryItem> Items)
+    public LoadInventoryRpComposer(ConcurrentDictionary<int, RolePlayInventoryItem> items)
       : base(ServerPacketHeader.LOAD_INVENTORY_RP)
     {
-        this.WriteInteger(Items.Count);
+        this.WriteInteger(items.Count);
 
-        foreach (var Item in Items.Values)
+        foreach (var item in items.Values)
         {
-            var RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(Item.ItemId);
+            var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(item.ItemId);
 
-            this.WriteInteger(Item.ItemId);
-            this.WriteString(RpItem.Name);
-            this.WriteString(RpItem.Desc);
-            this.WriteInteger(Item.Count);
-            this.WriteInteger((int)RpItem.Category);
-            this.WriteInteger(RpItem.UseType);
+            this.WriteInteger(item.ItemId);
+            this.WriteString(rpItem.Name);
+            this.WriteString(rpItem.Desc);
+            this.WriteInteger(item.Count);
+            this.WriteInteger((int)rpItem.Category);
+            this.WriteInteger(rpItem.UseType);
         }
     }
 }

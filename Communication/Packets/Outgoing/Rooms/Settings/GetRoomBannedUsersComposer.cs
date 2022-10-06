@@ -9,19 +9,19 @@ internal class GetRoomBannedUsersComposer : ServerPacket
         this.WriteInteger(instance.Id);
 
         this.WriteInteger(instance.GetBans().Count);//Count
-        foreach (var Id in instance.GetBans().Keys)
+        foreach (var id in instance.GetBans().Keys)
         {
-            var Data = WibboEnvironment.GetUserById(Id);
+            var data = WibboEnvironment.GetUserById(id);
 
-            if (Data == null)
+            if (data == null)
             {
                 this.WriteInteger(0);
                 this.WriteString("Unknown Error");
             }
             else
             {
-                this.WriteInteger(Data.Id);
-                this.WriteString(Data.Username);
+                this.WriteInteger(data.Id);
+                this.WriteString(data.Username);
             }
         }
     }

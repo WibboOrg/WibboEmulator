@@ -10,24 +10,24 @@ internal class GetGroupMembersEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null)
         {
             return;
         }
 
-        var GroupId = Packet.PopInt();
-        var Page = Packet.PopInt();
-        var SearchVal = Packet.PopString();
-        var RequestType = Packet.PopInt();
+        var GroupId = packet.PopInt();
+        var Page = packet.PopInt();
+        var SearchVal = packet.PopString();
+        var RequestType = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
         {
             return;
         }
 
-        var StartIndex = (Page - 1) * 14 + 14;
+        var StartIndex = ((Page - 1) * 14) + 14;
         var Members = new List<User>();
         var MemberCount = 0;
 

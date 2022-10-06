@@ -7,14 +7,14 @@ internal class RemoveFavouriteRoomEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
             return;
         }
 
-        var roomId = Packet.PopInt();
+        var roomId = packet.PopInt();
 
         var roomdata = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
         if (roomdata == null)
@@ -22,7 +22,7 @@ internal class RemoveFavouriteRoomEvent : IPacketEvent
             return;
         }
 
-        session.GetUser().FavoriteRooms.Remove(roomId);
+        _ = session.GetUser().FavoriteRooms.Remove(roomId);
 
         session.SendPacket(new UpdateFavouriteRoomComposer(roomId, false));
 

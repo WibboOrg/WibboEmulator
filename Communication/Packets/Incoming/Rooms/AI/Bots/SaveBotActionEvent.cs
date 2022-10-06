@@ -10,7 +10,7 @@ internal class SaveBotActionEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().InRoom)
         {
@@ -23,9 +23,9 @@ internal class SaveBotActionEvent : IPacketEvent
             return;
         }
 
-        var BotId = Packet.PopInt();
-        var ActionId = Packet.PopInt();
-        var DataString = Packet.PopString();
+        var BotId = packet.PopInt();
+        var ActionId = packet.PopInt();
+        var DataString = packet.PopString();
 
         if (BotId <= 0)
         {

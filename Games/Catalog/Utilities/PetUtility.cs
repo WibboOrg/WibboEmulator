@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Catalog.Utilities;
+namespace WibboEmulator.Games.Catalog.Utilities;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.Rooms.AI;
 
@@ -19,11 +19,12 @@ public static class PetUtility
         return true;
     }
 
-    public static Pet CreatePet(int UserId, string Name, int Type, string Race, string Color)
+    public static Pet CreatePet(int userId, string name, int type, string race, string color)
     {
-        var pet = new Pet(404, UserId, 0, Name, Type, Race, Color, 0, 100, 100, 0, WibboEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 1, -1, false);
-
-        pet.DBState = DatabaseUpdateState.NEEDS_UPDATE;
+        var pet = new Pet(-1, userId, 0, name, type, race, color, 0, 100, 100, 0, WibboEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 1, -1, false)
+        {
+            DBState = DatabaseUpdateState.NEEDS_UPDATE
+        };
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {

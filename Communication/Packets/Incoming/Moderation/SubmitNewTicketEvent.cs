@@ -7,19 +7,19 @@ internal class SubmitNewTicketEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (WibboEnvironment.GetGame().GetModerationManager().UsersHasPendingTicket(session.GetUser().Id))
         {
             return;
         }
 
-        var Message = StringCharFilter.Escape(Packet.PopString());
-        var TicketType = Packet.PopInt();
-        var ReporterId = Packet.PopInt();
-        var RoomId = Packet.PopInt();
-        var chatEntriesCount = Packet.PopInt();
-        //chatEntries = Packet.PopString();
+        var Message = StringCharFilter.Escape(packet.PopString());
+        var TicketType = packet.PopInt();
+        var ReporterId = packet.PopInt();
+        var RoomId = packet.PopInt();
+        var chatEntriesCount = packet.PopInt();
+        //chatEntries = packet.PopString();
 
         WibboEnvironment.GetGame().GetModerationManager().SendNewTicket(session, TicketType, ReporterId, Message);
         WibboEnvironment.GetGame().GetModerationManager().ApplySanction(session, ReporterId);

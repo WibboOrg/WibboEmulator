@@ -43,7 +43,7 @@ internal class ForceTransf : IChatCommand
             var x = parameters[3];
             if (int.TryParse(x, out var value))
             {
-                int.TryParse(parameters[2], out raceid);
+                _ = int.TryParse(parameters[2], out raceid);
                 if (raceid is < 1 or > 50)
                 {
                     raceid = 0;

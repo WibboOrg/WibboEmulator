@@ -6,7 +6,7 @@ internal class GetPromoArticlesEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var currentView = WibboEnvironment.GetGame().GetHotelView();        if (session == null || session.GetUser() == null)
         {

@@ -28,7 +28,7 @@ internal class SuperBan : IChatCommand
             var num = 788922000;
             if (parameters.Length >= 3)
             {
-                int.TryParse(parameters[2], out num);
+                _ = int.TryParse(parameters[2], out num);
             }
 
             if (num <= 600)
@@ -41,7 +41,7 @@ internal class SuperBan : IChatCommand
                 session.SendWhisper("Tu as SuperBan " + TargetUser.GetUser().Username + " pour" + Raison + "!");
 
                 WibboEnvironment.GetGame().GetGameClientManager().BanUser(TargetUser, session.GetUser().Username, num, Raison, false, false);
-                session.Antipub(Raison, "<CMD>");
+                _ = session.Antipub(Raison, "<CMD>");
             }
         }
     }

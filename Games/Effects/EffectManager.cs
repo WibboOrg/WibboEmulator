@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Effects;
+namespace WibboEmulator.Games.Effects;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
@@ -48,14 +48,14 @@ public class EffectManager
         }
     }
 
-    public bool HaveEffect(int EffectId, bool Staff = false)
+    public bool HaveEffect(int effectId, bool isStaff = false)
     {
-        if (this._effects.Contains(EffectId))
+        if (this._effects.Contains(effectId))
         {
             return true;
         }
 
-        if (Staff && this._effectsStaff.Contains(EffectId))
+        if (isStaff && this._effectsStaff.Contains(effectId))
         {
             return true;
         }

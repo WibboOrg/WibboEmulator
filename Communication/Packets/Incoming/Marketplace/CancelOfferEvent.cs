@@ -10,7 +10,7 @@ internal class CancelOfferEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null)
         {
@@ -18,7 +18,7 @@ internal class CancelOfferEvent : IPacketEvent
         }
 
         DataRow Row = null;
-        var OfferId = Packet.PopInt();
+        var OfferId = packet.PopInt();
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
@@ -58,7 +58,7 @@ internal class CancelOfferEvent : IPacketEvent
 
         if (GiveItem != null)
         {
-            session.GetUser().GetInventoryComponent().TryAddItem(GiveItem);
+            _ = session.GetUser().GetInventoryComponent().TryAddItem(GiveItem);
             session.SendPacket(new FurniListNotificationComposer(GiveItem.Id, 1));
         }
 

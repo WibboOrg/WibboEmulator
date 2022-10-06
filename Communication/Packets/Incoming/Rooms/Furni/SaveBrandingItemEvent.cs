@@ -6,9 +6,9 @@ internal class SaveBrandingItemEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var itemId = Packet.PopInt();
+        var itemId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -26,15 +26,15 @@ internal class SaveBrandingItemEvent : IPacketEvent
             return;
         }
 
-        var Data = Packet.PopInt();
-        var text = Packet.PopString();
-        var text2 = Packet.PopString();
-        var text3 = Packet.PopString();
-        var text4 = Packet.PopString();
-        var text5 = Packet.PopString();
-        var text6 = Packet.PopString();
-        var text7 = Packet.PopString();
-        var text8 = Packet.PopString();
+        var Data = packet.PopInt();
+        var text = packet.PopString();
+        var text2 = packet.PopString();
+        var text3 = packet.PopString();
+        var text4 = packet.PopString();
+        var text5 = packet.PopString();
+        var text6 = packet.PopString();
+        var text7 = packet.PopString();
+        var text8 = packet.PopString();
         if (Data is not 10 and not 8)
         {
             return;

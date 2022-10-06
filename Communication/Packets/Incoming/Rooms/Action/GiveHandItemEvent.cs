@@ -5,7 +5,7 @@ internal class GiveHandItemEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
@@ -23,7 +23,7 @@ internal class GiveHandItemEvent : IPacketEvent
             return;
         }
 
-        var roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(Packet.PopInt());
+        var roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(packet.PopInt());
         if (roomUserByUserIdTarget == null)
         {
             return;

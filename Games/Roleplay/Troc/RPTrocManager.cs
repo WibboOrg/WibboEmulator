@@ -11,87 +11,87 @@ public class RPTrocManager
 
     public RPTrocManager() => this._usersTrade = new ConcurrentDictionary<int, RPTroc>();
 
-    public void Confirme(int TrocId, int UserId)
+    public void Confirme(int trocId, int userId)
     {
-        var Troc = this.GetTroc(TrocId);
-        if (Troc == null)
+        var troc = this.GetTroc(trocId);
+        if (troc == null)
         {
             return;
         }
 
-        var UserTroc = Troc.GetUser(UserId);
-        if (UserTroc == null || UserTroc.Confirmed)
+        var userTroc = troc.GetUser(userId);
+        if (userTroc == null || userTroc.Confirmed)
         {
             return;
         }
 
-        if (!Troc.AllAccepted)
+        if (!troc.AllAccepted)
         {
             return;
         }
 
-        UserTroc.Confirmed = true;
+        userTroc.Confirmed = true;
 
-        if (!Troc.AllConfirmed)
+        if (!troc.AllConfirmed)
         {
             return;
         }
 
-        if (!EndTrade(Troc))
+        if (!EndTrade(troc))
         {
             //SendPacket error ?
         }
 
-        this.CloseTrade(Troc);
+        this.CloseTrade(troc);
     }
 
-    public void Accepte(int TrocId, int UserId)
+    public void Accepte(int trocId, int userId)
     {
-        var Troc = this.GetTroc(TrocId);
-        if (Troc == null)
+        var troc = this.GetTroc(trocId);
+        if (troc == null)
         {
             return;
         }
 
-        var UserTroc = Troc.GetUser(UserId);
-        if (UserTroc == null)
+        var userTroc = troc.GetUser(userId);
+        if (userTroc == null)
         {
             return;
         }
 
-        if (Troc.AllAccepted || Troc.AllConfirmed)
+        if (troc.AllAccepted || troc.AllConfirmed)
         {
             return;
         }
 
-        if (UserTroc.Accepted)
+        if (userTroc.Accepted)
         {
-            UserTroc.Accepted = false;
+            userTroc.Accepted = false;
         }
         else
         {
-            UserTroc.Accepted = true;
+            userTroc.Accepted = true;
         }
 
-        SendPacketUsers(new RpTrocAccepteComposer(UserId, UserTroc.Accepted), Troc);
+        SendPacketUsers(new RpTrocAccepteComposer(userId, userTroc.Accepted), troc);
     }
 
 
-    private static void SendPacketUsers(IServerPacket packet, RPTroc Troc)
+    private static void SendPacketUsers(IServerPacket packet, RPTroc troc)
     {
-        var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(Troc.RPId);
+        var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(troc.RPId);
         if (rpManager == null)
         {
             return;
         }
 
-        var playerOne = rpManager.GetPlayer(Troc.UserOne.UserId);
+        var playerOne = rpManager.GetPlayer(troc.UserOne.UserId);
         if (playerOne != null)
         {
             playerOne.SendPacket(packet);
         }
 
-        var playerTwo = rpManager.GetPlayer(Troc.UserTwo.UserId);
+        var playerTwo = rpManager.GetPlayer(troc.UserTwo.UserId);
         if (playerTwo != null)
         {
             playerTwo.SendPacket(packet);
@@ -120,7 +120,7 @@ public class RPTrocManager
             playerTwo.SendPacket(new RpTrocStopComposer());
         }
 
-        this._usersTrade.TryRemove(troc.Id, out troc);
+        _ = this._usersTrade.TryRemove(troc.Id, out troc);
     }
 
     private static bool EndTrade(RPTroc troc)
@@ -307,7 +307,7 @@ public class RPTrocManager
         }
 
         this._tradeId++;
-        this._usersTrade.TryAdd(this._tradeId, new RPTroc(this._tradeId, rpId, userOne, userTwo));
+        _ = this._usersTrade.TryAdd(this._tradeId, new RPTroc(this._tradeId, rpId, userOne, userTwo));
 
         playerOne.TradeId = this._tradeId;
         playerOne.SendPacket(new RpTrocStartComposer(userTwo, userNameTwo));
@@ -323,29 +323,29 @@ public class RPTrocManager
             return;
         }
 
-        this._usersTrade.TryGetValue(trocId, out var Troc);
-        if (Troc == null)
+        _ = this._usersTrade.TryGetValue(trocId, out var troc);
+        if (troc == null)
         {
             return;
         }
 
-        if (Troc.AllConfirmed)
+        if (troc.AllConfirmed)
         {
             return;
         }
 
-        this.CloseTrade(Troc);
+        this.CloseTrade(troc);
     }
 
     public RPTroc GetTroc(int trocId)
     {
-        this._usersTrade.TryGetValue(trocId, out var troc);
+        _ = this._usersTrade.TryGetValue(trocId, out var troc);
         return troc;
     }
 
     public RPTrocUser GetTradeUser(int trocId, int userId)
     {
-        this._usersTrade.TryGetValue(trocId, out var troc);
+        _ = this._usersTrade.TryGetValue(trocId, out var troc);
         if (troc == null)
         {
             return null;

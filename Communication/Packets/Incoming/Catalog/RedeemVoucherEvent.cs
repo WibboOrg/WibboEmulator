@@ -9,9 +9,9 @@ internal class RedeemVoucherEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var VoucherCode = Packet.PopString().Replace("\r", "");
+        var VoucherCode = packet.PopString().Replace("\r", "");
 
         if (!WibboEnvironment.GetGame().GetCatalog().GetVoucherManager().TryGetVoucher(VoucherCode, out var Voucher))
         {

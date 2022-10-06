@@ -10,15 +10,15 @@ internal class UpdateFigureDataEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
             return;
         }
 
-        var Gender = Packet.PopString().ToUpper();
-        var Look = Packet.PopString();
+        var Gender = packet.PopString().ToUpper();
+        var Look = packet.PopString();
         if (Gender is not "M" and not "F")
         {
             return;
@@ -36,7 +36,7 @@ internal class UpdateFigureDataEvent : IPacketEvent
             UserDao.UpdateLookAndGender(dbClient, session.GetUser().Id, Look, Gender);
         }
 
-        WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_AvatarLooks", 1);
+        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_AvatarLooks", 1);
 
         if (!session.GetUser().InRoom)
         {

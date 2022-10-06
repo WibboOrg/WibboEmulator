@@ -8,22 +8,22 @@ internal class PetTrainingPanelComposer : ServerPacket
     {
         this.WriteInteger(petData.PetId);
 
-        var AvailableCommands = new List<short>();
+        var availableCommands = new List<short>();
 
         this.WriteInteger(petData.PetCommands.Count);
-        foreach (var Sh in petData.PetCommands.Keys)
+        foreach (var sh in petData.PetCommands.Keys)
         {
-            this.WriteInteger(Sh);
-            if (petData.PetCommands[Sh])
+            this.WriteInteger(sh);
+            if (petData.PetCommands[sh])
             {
-                AvailableCommands.Add(Sh);
+                availableCommands.Add(sh);
             }
         }
 
-        this.WriteInteger(AvailableCommands.Count);
-        foreach (var Sh in AvailableCommands)
+        this.WriteInteger(availableCommands.Count);
+        foreach (var sh in availableCommands)
         {
-            this.WriteInteger(Sh);
+            this.WriteInteger(sh);
         }
     }
 }

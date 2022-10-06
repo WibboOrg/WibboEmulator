@@ -7,14 +7,14 @@ internal class AddFavouriteRoomEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
             return;
         }
 
-        var roomId = Packet.PopInt();
+        var roomId = packet.PopInt();
 
         var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
         if (roomData == null || session.GetUser().FavoriteRooms.Count >= 30 || session.GetUser().FavoriteRooms.Contains(roomId))

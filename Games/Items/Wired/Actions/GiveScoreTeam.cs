@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -8,21 +8,21 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class GiveScoreTeam : WiredActionBase, IWiredEffect, IWired
 {
-    private RoomEventDelegate delegateFunction;
-    private int currentGameCount;
+    private RoomEventDelegate _delegateFunction;
+    private int _currentGameCount;
 
     public GiveScoreTeam(Item item, Room room) : base(item, room, (int)WiredActionType.GIVE_SCORE_TO_PREDEFINED_TEAM)
     {
-        this.currentGameCount = 0;
-        this.delegateFunction = new RoomEventDelegate(this.OnGameStart);
-        this.RoomInstance.GetGameManager().OnGameStart += this.delegateFunction;
+        this._currentGameCount = 0;
+        this._delegateFunction = new RoomEventDelegate(this.OnGameStart);
+        this.RoomInstance.GetGameManager().OnGameStart += this._delegateFunction;
 
         this.IntParams.Add(1);
         this.IntParams.Add(1);
         this.IntParams.Add((int)TeamType.RED);
     }
 
-    private void OnGameStart(object sender, EventArgs e) => this.currentGameCount = 0;
+    private void OnGameStart(object sender, EventArgs e) => this._currentGameCount = 0;
 
     public override bool OnCycle(RoomUser user, Item item)
     {
@@ -30,12 +30,12 @@ public class GiveScoreTeam : WiredActionBase, IWiredEffect, IWired
         var maxCountPerGame = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
         var team = (TeamType)((this.IntParams.Count > 2) ? this.IntParams[2] : 1);
 
-        if (maxCountPerGame <= this.currentGameCount)
+        if (maxCountPerGame <= this._currentGameCount)
         {
             return false;
         }
 
-        this.currentGameCount++;
+        this._currentGameCount++;
         this.RoomInstance.GetGameManager().AddPointToTeam(team, scoreToGive, user);
 
         return false;
@@ -45,8 +45,8 @@ public class GiveScoreTeam : WiredActionBase, IWiredEffect, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GetGameManager().OnGameStart -= this.delegateFunction;
-        this.delegateFunction = null;
+        this.RoomInstance.GetGameManager().OnGameStart -= this._delegateFunction;
+        this._delegateFunction = null;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

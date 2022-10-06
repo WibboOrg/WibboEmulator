@@ -6,9 +6,9 @@ internal class RpBotChooseEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var Message = Packet.PopString();
+        var Message = packet.PopString();
 
         if (session == null || session.GetUser() == null)
         {
@@ -27,6 +27,6 @@ internal class RpBotChooseEvent : IPacketEvent
             return;
         }
 
-        Room.AllowsShous(User, Message);
+        _ = Room.AllowsShous(User, Message);
     }
 }

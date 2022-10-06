@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.User;
+namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
 internal class FollowCommand : IRCONCommand
@@ -10,51 +10,51 @@ internal class FollowCommand : IRCONCommand
             return false;
         }
 
-        if (!int.TryParse(parameters[1], out var Userid))
+        if (!int.TryParse(parameters[1], out var userId))
         {
             return false;
         }
 
-        if (Userid == 0)
+        if (userId == 0)
         {
             return false;
         }
 
-        var Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid);
-        if (Client == null)
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        if (client == null)
         {
             return false;
         }
 
 
-        if (!int.TryParse(parameters[2], out var Userid2))
+        if (!int.TryParse(parameters[2], out var userIdTwo))
         {
             return false;
         }
 
-        if (Userid2 == 0)
+        if (userIdTwo == 0)
         {
             return false;
         }
 
-        var Client2 = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid2);
-        if (Client2 == null)
+        var clientTwo = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userIdTwo);
+        if (clientTwo == null)
         {
             return false;
         }
 
-        if (Client2.GetUser() == null || Client2.GetUser().CurrentRoom == null)
+        if (clientTwo.GetUser() == null || clientTwo.GetUser().CurrentRoom == null)
         {
             return false;
         }
 
-        var room = Client2.GetUser().CurrentRoom;
+        var room = clientTwo.GetUser().CurrentRoom;
         if (room == null)
         {
             return false;
         }
 
-        Client.SendPacket(new GetGuestRoomResultComposer(Client, room.RoomData, false, true));
+        client.SendPacket(new GetGuestRoomResultComposer(client, room.RoomData, false, true));
         return true;
     }
 }

@@ -11,22 +11,22 @@ internal class StaffKick : IChatCommand
             return;
         }
 
-        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (TargetUser == null || TargetUser.GetUser() == null)
+        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        if (targetUser == null || targetUser.GetUser() == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
-        else if (session.GetUser().Rank <= TargetUser.GetUser().Rank)
+        else if (session.GetUser().Rank <= targetUser.GetUser().Rank)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
         }
-        else if (TargetUser.GetUser().CurrentRoomId < 1U)
+        else if (targetUser.GetUser().CurrentRoomId < 1U)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("kick.error", session.Langue));
         }
         else
         {
-            room.GetRoomUserManager().RemoveUserFromRoom(TargetUser, true, false);
+            room.GetRoomUserManager().RemoveUserFromRoom(targetUser, true, false);
 
             if (parameters.Length > 2)
             {
@@ -36,11 +36,11 @@ internal class StaffKick : IChatCommand
                     return;
                 }
 
-                TargetUser.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("kick.withmessage", TargetUser.Langue) + message);
+                targetUser.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("kick.withmessage", targetUser.Langue) + message);
             }
             else
             {
-                TargetUser.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("kick.nomessage", TargetUser.Langue));
+                targetUser.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("kick.nomessage", targetUser.Langue));
             }
         }
     }

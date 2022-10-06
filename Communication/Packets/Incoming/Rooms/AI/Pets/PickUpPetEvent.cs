@@ -11,7 +11,7 @@ internal class PickUpPetEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().InRoom)
         {
@@ -29,12 +29,12 @@ internal class PickUpPetEvent : IPacketEvent
             return;
         }
 
-        var PetId = Packet.PopInt();
+        var PetId = packet.PopInt();
 
         if (!Room.GetRoomUserManager().TryGetPet(PetId, out var Pet))
         {
             //Check kick rights, just because it seems most appropriate.
-            if (!Room.CheckRights(session) && Room.RoomData.WhoCanKick != 2 && Room.RoomData.Group == null || Room.RoomData.Group != null && !Room.CheckRights(session))
+            if ((!Room.CheckRights(session) && Room.RoomData.WhoCanKick != 2 && Room.RoomData.Group == null) || (Room.RoomData.Group != null && !Room.CheckRights(session)))
             {
                 return;
             }
@@ -99,7 +99,7 @@ internal class PickUpPetEvent : IPacketEvent
             var Target = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(pet.OwnerId);
             if (Target != null)
             {
-                Target.GetUser().GetInventoryComponent().TryAddPet(Pet.PetData);
+                _ = Target.GetUser().GetInventoryComponent().TryAddPet(Pet.PetData);
                 Room.GetRoomUserManager().RemoveBot(Pet.VirtualId, false);
 
                 Target.SendPacket(new PetInventoryComposer(Target.GetUser().GetInventoryComponent().GetPets()));
@@ -108,7 +108,7 @@ internal class PickUpPetEvent : IPacketEvent
         }
         else
         {
-            session.GetUser().GetInventoryComponent().TryAddPet(Pet.PetData);
+            _ = session.GetUser().GetInventoryComponent().TryAddPet(Pet.PetData);
             Room.GetRoomUserManager().RemoveBot(Pet.VirtualId, false);
             session.SendPacket(new PetInventoryComposer(session.GetUser().GetInventoryComponent().GetPets()));
         }

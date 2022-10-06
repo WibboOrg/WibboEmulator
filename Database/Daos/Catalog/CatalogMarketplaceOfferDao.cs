@@ -17,30 +17,25 @@ internal class CatalogMarketplaceOfferDao
     internal static DataTable GetAll(IQueryAdapter dbClient, string searchQuery, int minCost, int maxCost, int filterMode)
     {
         var builder = new StringBuilder();
-        builder.Append("WHERE state = '1' AND timestamp >= " + WibboEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp());
+        _ = builder.Append("WHERE state = '1' AND timestamp >= " + WibboEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp());
         if (minCost >= 0)
         {
-            builder.Append(" AND total_price > " + minCost);
+            _ = builder.Append(" AND total_price > " + minCost);
         }
         if (maxCost >= 0)
         {
-            builder.Append(" AND total_price < " + maxCost);
+            _ = builder.Append(" AND total_price < " + maxCost);
         }
-        string str;
-        switch (filterMode)
-        {
-            case 1:
-                str = "ORDER BY asking_price DESC";
-                break;
 
-            default:
-                str = "ORDER BY asking_price ASC";
-                break;
-        }
+        var str = filterMode switch
+        {
+            1 => "ORDER BY asking_price DESC",
+            _ => "ORDER BY asking_price ASC",
+        };
 
         if (searchQuery.Length >= 1)
         {
-            builder.Append(" AND public_name LIKE @search_query");
+            _ = builder.Append(" AND public_name LIKE @search_query");
         }
 
         dbClient.SetQuery("SELECT offer_id, item_type, sprite_id, total_price, limited_number, limited_stack FROM `catalog_marketplace_offer` " + builder + " " + str + " LIMIT 500");

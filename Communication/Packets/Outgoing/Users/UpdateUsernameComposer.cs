@@ -1,21 +1,21 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Users;
+namespace WibboEmulator.Communication.Packets.Outgoing.Users;
 
 internal class UpdateUsernameComposer : ServerPacket
 {
-    public UpdateUsernameComposer(string Name)
+    public UpdateUsernameComposer(string name)
         : base(ServerPacketHeader.USER_CHANGE_NAME)
     {
         this.WriteInteger(0);
-        this.WriteString(Name);
+        this.WriteString(name);
         this.WriteInteger(0);
     }
 
-    public UpdateUsernameComposer(string Name, int VirtualId)
+    public UpdateUsernameComposer(string name, int virtualId)
         : base(ServerPacketHeader.USER_CHANGE_NAME)
     {
-        this.WriteInteger(VirtualId);
-        this.WriteString(Name);
+        this.WriteInteger(virtualId);
+        this.WriteString(name);
         this.WriteInteger(1);
-        this.WriteString(Name);
+        this.WriteString(name);
     }
 }

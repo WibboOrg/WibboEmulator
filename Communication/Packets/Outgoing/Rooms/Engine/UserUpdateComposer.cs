@@ -4,37 +4,37 @@ using WibboEmulator.Games.Rooms;
 
 internal class UserUpdateComposer : ServerPacket
 {
-    public UserUpdateComposer(ICollection<RoomUser> RoomUsers)
+    public UserUpdateComposer(ICollection<RoomUser> roomUsers)
         : base(ServerPacketHeader.UNIT_STATUS)
     {
-        this.WriteInteger(RoomUsers.Count);
-        foreach (var User in RoomUsers.ToList())
+        this.WriteInteger(roomUsers.Count);
+        foreach (var user in roomUsers.ToList())
         {
-            this.WriteInteger(User.VirtualId);
-            this.WriteInteger(User.X);
-            this.WriteInteger(User.Y);
-            this.WriteString(User.Z.ToString("0.00"));
-            this.WriteInteger(User.RotHead);
-            this.WriteInteger(User.RotBody);
+            this.WriteInteger(user.VirtualId);
+            this.WriteInteger(user.X);
+            this.WriteInteger(user.Y);
+            this.WriteString(user.Z.ToString("0.00"));
+            this.WriteInteger(user.RotHead);
+            this.WriteInteger(user.RotBody);
 
-            var StatusComposer = new StringBuilder();
-            StatusComposer.Append('/');
+            var statusComposer = new StringBuilder();
+            _ = statusComposer.Append('/');
 
-            foreach (var Status in User.Statusses.ToList())
+            foreach (var status in user.Statusses.ToList())
             {
-                StatusComposer.Append(Status.Key);
+                _ = statusComposer.Append(status.Key);
 
-                if (!string.IsNullOrEmpty(Status.Value))
+                if (!string.IsNullOrEmpty(status.Value))
                 {
-                    StatusComposer.Append(' ');
-                    StatusComposer.Append(Status.Value);
+                    _ = statusComposer.Append(' ');
+                    _ = statusComposer.Append(status.Value);
                 }
 
-                StatusComposer.Append('/');
+                _ = statusComposer.Append('/');
             }
 
-            StatusComposer.Append('/');
-            this.WriteString(StatusComposer.ToString());
+            _ = statusComposer.Append('/');
+            this.WriteString(statusComposer.ToString());
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Database.Interfaces;
@@ -28,8 +28,8 @@ public class TeamJoin : WiredActionBase, IWired, IWiredEffect
             managerForFreeze.AddUser(user);
             user.Room.GetGameManager().UpdateGatesTeamCounts();
 
-            var EffectId = (int)team + 39;
-            user.ApplyEffect(EffectId);
+            var effectId = (int)team + 39;
+            user.ApplyEffect(effectId);
 
             user.GetClient().SendPacket(new IsPlayingComposer(true));
         }

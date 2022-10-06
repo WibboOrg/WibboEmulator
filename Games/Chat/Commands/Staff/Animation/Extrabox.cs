@@ -9,7 +9,7 @@ internal class ExtraBox : IChatCommand
     public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
 
-        int.TryParse(parameters[1], out var NbLot);
+        _ = int.TryParse(parameters[1], out var NbLot);
 
         if (NbLot is < 0 or > 10)
         {

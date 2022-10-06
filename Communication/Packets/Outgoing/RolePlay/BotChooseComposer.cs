@@ -1,18 +1,18 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
+namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 
 internal class BotChooseComposer : ServerPacket
 {
-    public BotChooseComposer(List<string[]> ChooseList)
+    public BotChooseComposer(List<string[]> chooseList)
       : base(ServerPacketHeader.BOT_CHOOSE)
     {
-        this.WriteInteger(ChooseList.Count);
+        this.WriteInteger(chooseList.Count);
 
-        foreach (var Choose in ChooseList)
+        foreach (var choose in chooseList)
         {
-            this.WriteString(Choose[0]); //Username
-            this.WriteString(Choose[1]); //Code
-            this.WriteString(Choose[2]); //Message
-            this.WriteString(Choose[3]); //Look
+            this.WriteString(choose[0]); //Username
+            this.WriteString(choose[1]); //Code
+            this.WriteString(choose[2]); //Message
+            this.WriteString(choose[3]); //Look
         }
     }
 }

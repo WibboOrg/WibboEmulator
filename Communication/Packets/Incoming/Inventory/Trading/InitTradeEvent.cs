@@ -6,7 +6,7 @@ internal class InitTradeEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -16,7 +16,7 @@ internal class InitTradeEvent : IPacketEvent
         if (room.IsRoleplay)
         {
             var RoomUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-            var RoomUserTarget = room.GetRoomUserManager().GetRoomUserByVirtualId(Packet.PopInt());
+            var RoomUserTarget = room.GetRoomUserManager().GetRoomUserByVirtualId(packet.PopInt());
             if (RoomUser == null || RoomUser.GetClient() == null || RoomUser.GetClient().GetUser() == null)
             {
                 return;
@@ -28,14 +28,14 @@ internal class InitTradeEvent : IPacketEvent
             }
 
             var Rp = RoomUser.Roleplayer;
-            if (Rp == null || Rp.TradeId > 0 || Rp.Dead || Rp.SendPrison || Rp.PvpEnable && room.Roleplay.Pvp || Rp.AggroTimer > 0)
+            if (Rp == null || Rp.TradeId > 0 || Rp.Dead || Rp.SendPrison || (Rp.PvpEnable && room.Roleplay.Pvp) || Rp.AggroTimer > 0)
             {
                 RoomUser.SendWhisperChat("Vous devez être en zone safe pour pouvoir troquer");
                 return;
             }
 
             var RpTarget = RoomUserTarget.Roleplayer;
-            if (RpTarget == null || RpTarget.TradeId > 0 || RpTarget.Dead || RpTarget.SendPrison || RpTarget.PvpEnable && room.Roleplay.Pvp || RpTarget.AggroTimer > 0)
+            if (RpTarget == null || RpTarget.TradeId > 0 || RpTarget.Dead || RpTarget.SendPrison || (RpTarget.PvpEnable && room.Roleplay.Pvp) || RpTarget.AggroTimer > 0)
             {
                 RoomUser.SendWhisperChat("Ce joueur ne peut pas troc");
                 return;
@@ -57,7 +57,7 @@ internal class InitTradeEvent : IPacketEvent
         }
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-        var roomUserByVirtualId = room.GetRoomUserManager().GetRoomUserByVirtualId(Packet.PopInt());
+        var roomUserByVirtualId = room.GetRoomUserManager().GetRoomUserByVirtualId(packet.PopInt());
         if (roomUserByVirtualId == null || roomUserByVirtualId.GetClient() == null || roomUserByVirtualId.GetClient().GetUser() == null)
         {
             return;

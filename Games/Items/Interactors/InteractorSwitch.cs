@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 using WibboEmulator.Games.Rooms;
@@ -6,22 +6,22 @@ using WibboEmulator.Games.Rooms.Map;
 
 public class InteractorSwitch : FurniInteractor
 {
-    private readonly int Modes;
+    private readonly int _modes;
 
-    public InteractorSwitch(int Modes)
+    public InteractorSwitch(int modes)
     {
-        this.Modes = Modes - 1;
-        if (this.Modes >= 0)
+        this._modes = modes - 1;
+        if (this._modes >= 0)
         {
             return;
         }
 
-        this.Modes = 0;
+        this._modes = 0;
     }
 
     public override void OnPlace(GameClient session, Item item)
     {
-        if (string.IsNullOrEmpty(item.ExtraData) && this.Modes > 0)
+        if (string.IsNullOrEmpty(item.ExtraData) && this._modes > 0)
         {
             item.ExtraData = "0";
         }
@@ -29,7 +29,7 @@ public class InteractorSwitch : FurniInteractor
 
     public override void OnRemove(GameClient session, Item item)
     {
-        if (string.IsNullOrEmpty(item.ExtraData) && this.Modes > 0)
+        if (string.IsNullOrEmpty(item.ExtraData) && this._modes > 0)
         {
             item.ExtraData = "0";
         }
@@ -42,7 +42,7 @@ public class InteractorSwitch : FurniInteractor
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_SWITCH, 0);
         }
 
-        if (this.Modes == 0)
+        if (this._modes == 0)
         {
             return;
         }
@@ -63,15 +63,15 @@ public class InteractorSwitch : FurniInteractor
             return;
         }
 
-        int.TryParse(item.ExtraData, out var state);
+        _ = int.TryParse(item.ExtraData, out var state);
 
         if (reverse)
         {
-            item.ExtraData = (state > 0 ? state - 1 : this.Modes).ToString();
+            item.ExtraData = (state > 0 ? state - 1 : this._modes).ToString();
         }
         else
         {
-            item.ExtraData = (state < this.Modes ? state + 1 : 0).ToString();
+            item.ExtraData = (state < this._modes ? state + 1 : 0).ToString();
         }
 
         item.UpdateState();

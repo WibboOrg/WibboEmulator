@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Catalog;
+namespace WibboEmulator.Games.Catalog;
 using System.Data;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Interfaces;
@@ -34,7 +34,7 @@ public class CatalogManager
         this._badges = new List<string>();
     }
 
-    public void Init(IQueryAdapter dbClient, ItemDataManager ItemDataManager)
+    public void Init(IQueryAdapter dbClient, ItemDataManager itemDataManager)
     {
         if (this._pages.Count > 0)
         {
@@ -73,55 +73,55 @@ public class CatalogManager
 
         this._voucherManager.Init(dbClient);
 
-        var CatalogueItems = CatalogItemDao.GetAll(dbClient);
+        var catalogueItems = CatalogItemDao.GetAll(dbClient);
 
-        if (CatalogueItems != null)
+        if (catalogueItems != null)
         {
-            foreach (DataRow Row in CatalogueItems.Rows)
+            foreach (DataRow row in catalogueItems.Rows)
             {
-                if (Convert.ToInt32(Row["amount"]) <= 0)
+                if (Convert.ToInt32(row["amount"]) <= 0)
                 {
                     continue;
                 }
 
-                var ItemId = Convert.ToInt32(Row["id"]);
-                var PageId = Convert.ToInt32(Row["page_id"]);
-                var BaseId = Convert.ToInt32(Row["item_id"]);
+                var itemId = Convert.ToInt32(row["id"]);
+                var pageId = Convert.ToInt32(row["page_id"]);
+                var baseId = Convert.ToInt32(row["item_id"]);
 
-                if (!ItemDataManager.GetItem(BaseId, out var Data))
+                if (!itemDataManager.GetItem(baseId, out var data))
                 {
-                    Console.WriteLine("Couldn't load Catalog Item " + ItemId + ", no furniture record found.");
+                    Console.WriteLine("Couldn't load Catalog Item " + itemId + ", no furniture record found.");
                     continue;
                 }
 
-                if (!this._badges.Contains((string)Row["badge"]))
+                if (!this._badges.Contains((string)row["badge"]))
                 {
-                    this._badges.Add((string)Row["badge"]);
+                    this._badges.Add((string)row["badge"]);
                 }
 
-                if (!this._items.ContainsKey(PageId))
+                if (!this._items.ContainsKey(pageId))
                 {
-                    this._items[PageId] = new Dictionary<int, CatalogItem>();
+                    this._items[pageId] = new Dictionary<int, CatalogItem>();
                 }
 
-                this._items[PageId].Add(Convert.ToInt32(Row["id"]), new CatalogItem(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["item_id"]),
-                    Data, Convert.ToString(Row["catalog_name"]), Convert.ToInt32(Row["page_id"]), Convert.ToInt32(Row["cost_credits"]), Convert.ToInt32(Row["cost_pixels"]), Convert.ToInt32(Row["cost_diamonds"]), Convert.ToInt32(Row["cost_limitcoins"]),
-                    Convert.ToInt32(Row["amount"]), DBNull.Value.Equals(Row["limited_sells"]) ? 0 : Convert.ToInt32(Row["limited_sells"]), DBNull.Value.Equals(Row["limited_stack"]) ? 0 : Convert.ToInt32(Row["limited_stack"]), WibboEnvironment.EnumToBool(Row["offer_active"].ToString()), Convert.ToString(Row["badge"])));
+                this._items[pageId].Add(Convert.ToInt32(row["id"]), new CatalogItem(Convert.ToInt32(row["id"]), Convert.ToInt32(row["item_id"]),
+                    data, Convert.ToString(row["catalog_name"]), Convert.ToInt32(row["page_id"]), Convert.ToInt32(row["cost_credits"]), Convert.ToInt32(row["cost_pixels"]), Convert.ToInt32(row["cost_diamonds"]), Convert.ToInt32(row["cost_limitcoins"]),
+                    Convert.ToInt32(row["amount"]), DBNull.Value.Equals(row["limited_sells"]) ? 0 : Convert.ToInt32(row["limited_sells"]), DBNull.Value.Equals(row["limited_stack"]) ? 0 : Convert.ToInt32(row["limited_stack"]), WibboEnvironment.EnumToBool(row["offer_active"].ToString()), Convert.ToString(row["badge"])));
 
-                this._itemsPage.Add(Convert.ToInt32(Row["id"]), PageId);
+                this._itemsPage.Add(Convert.ToInt32(row["id"]), pageId);
             }
 
-            var CatalogPages = CatalogPageDao.GetAll(dbClient);
+            var catalogPages = CatalogPageDao.GetAll(dbClient);
 
-            if (CatalogPages != null)
+            if (catalogPages != null)
             {
-                foreach (DataRow Row in CatalogPages.Rows)
+                foreach (DataRow row in catalogPages.Rows)
                 {
-                    this._pages.Add(Convert.ToInt32(Row["id"]), new CatalogPage(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["parent_id"]), Row["enabled"].ToString(), Convert.ToString(Row["caption"]),
-                        Convert.ToString(Row["page_link"]), Convert.ToInt32(Row["icon_image"]), Convert.ToInt32(Row["min_rank"]), Convert.ToString(Row["page_layout"]),
-                        Convert.ToString(Row["page_strings_1"]), Convert.ToString(Row["page_strings_2"]), Convert.ToString(Row["caption_en"]),
-                        Convert.ToString(Row["caption_br"]), Convert.ToString(Row["page_strings_2_en"]), Convert.ToString(Row["page_strings_2_br"]),
-                        this._items.ContainsKey(Convert.ToInt32(Row["id"])) ? this._items[Convert.ToInt32(Row["id"])] : new Dictionary<int, CatalogItem>()));
+                    this._pages.Add(Convert.ToInt32(row["id"]), new CatalogPage(Convert.ToInt32(row["id"]), Convert.ToInt32(row["parent_id"]), row["enabled"].ToString(), Convert.ToString(row["caption"]),
+                        Convert.ToString(row["page_link"]), Convert.ToInt32(row["icon_image"]), Convert.ToInt32(row["min_rank"]), Convert.ToString(row["page_layout"]),
+                        Convert.ToString(row["page_strings_1"]), Convert.ToString(row["page_strings_2"]), Convert.ToString(row["caption_en"]),
+                        Convert.ToString(row["caption_br"]), Convert.ToString(row["page_strings_2_en"]), Convert.ToString(row["page_strings_2_br"]),
+                        this._items.ContainsKey(Convert.ToInt32(row["id"])) ? this._items[Convert.ToInt32(row["id"])] : new Dictionary<int, CatalogItem>()));
                 }
             }
 
@@ -129,35 +129,35 @@ public class CatalogManager
 
             if (bots != null)
             {
-                foreach (DataRow Row in bots.Rows)
+                foreach (DataRow row in bots.Rows)
                 {
-                    this._botPresets.Add(Convert.ToInt32(Row[0]), new CatalogBot(Convert.ToInt32(Row[0]), Convert.ToString(Row[1]), Convert.ToString(Row[2]), Convert.ToString(Row[3]), Convert.ToString(Row[4]), Convert.ToString(Row[5])));
+                    this._botPresets.Add(Convert.ToInt32(row[0]), new CatalogBot(Convert.ToInt32(row[0]), Convert.ToString(row[1]), Convert.ToString(row[2]), Convert.ToString(row[3]), Convert.ToString(row[4]), Convert.ToString(row[5])));
                 }
             }
 
-            var GetPromotions = CatalogPromotionDao.GetAll(dbClient);
+            var getPromotions = CatalogPromotionDao.GetAll(dbClient);
 
-            if (GetPromotions != null)
+            if (getPromotions != null)
             {
-                foreach (DataRow Row in GetPromotions.Rows)
+                foreach (DataRow row in getPromotions.Rows)
                 {
-                    if (!this._promotions.ContainsKey(Convert.ToInt32(Row["id"])))
+                    if (!this._promotions.ContainsKey(Convert.ToInt32(row["id"])))
                     {
-                        this._promotions.Add(Convert.ToInt32(Row["id"]), new CatalogPromotion(Convert.ToInt32(Row["id"]), Convert.ToString(Row["title"]), Convert.ToString(Row["title_en"]), Convert.ToString(Row["title_br"]), Convert.ToString(Row["image"]), Convert.ToInt32(Row["unknown"]), Convert.ToString(Row["page_link"]), Convert.ToInt32(Row["parent_id"])));
+                        this._promotions.Add(Convert.ToInt32(row["id"]), new CatalogPromotion(Convert.ToInt32(row["id"]), Convert.ToString(row["title"]), Convert.ToString(row["title_en"]), Convert.ToString(row["title_br"]), Convert.ToString(row["image"]), Convert.ToInt32(row["unknown"]), Convert.ToString(row["page_link"]), Convert.ToInt32(row["parent_id"])));
                     }
                 }
             }
 
-            var GetRaces = CatalogPetRaceDao.GetAll(dbClient);
+            var getRaces = CatalogPetRaceDao.GetAll(dbClient);
 
-            if (GetRaces != null)
+            if (getRaces != null)
             {
-                foreach (DataRow Row in GetRaces.Rows)
+                foreach (DataRow row in getRaces.Rows)
                 {
-                    var Race = new PetRace(Convert.ToInt32(Row["raceid"]), Convert.ToInt32(Row["color1"]), Convert.ToInt32(Row["color2"]), Convert.ToString(Row["has1color"]) == "1", Convert.ToString(Row["has2color"]) == "1");
-                    if (!this._races.Contains(Race))
+                    var race = new PetRace(Convert.ToInt32(row["raceid"]), Convert.ToInt32(row["color1"]), Convert.ToInt32(row["color2"]), Convert.ToString(row["has1color"]) == "1", Convert.ToString(row["has2color"]) == "1");
+                    if (!this._races.Contains(race))
                     {
-                        this._races.Add(Race);
+                        this._races.Add(race);
                     }
                 }
             }
@@ -166,38 +166,38 @@ public class CatalogManager
         Console.WriteLine("Catalog Manager -> LOADED");
     }
 
-    public List<PetRace> GetRacesForRaceId(int RaceId) => this._races.Where(Race => Race.RaceId == RaceId).ToList();
+    public List<PetRace> GetRacesForRaceId(int raceId) => this._races.Where(race => race.RaceId == raceId).ToList();
 
-    public bool HasBadge(string Code) => this._badges.Contains(Code);
+    public bool HasBadge(string code) => this._badges.Contains(code);
 
-    public CatalogItem FindItem(int ItemId, int Rank)
+    public CatalogItem FindItem(int itemId, int rank)
     {
-        if (!this._itemsPage.ContainsKey(ItemId))
+        if (!this._itemsPage.ContainsKey(itemId))
         {
             return null;
         }
 
-        var PageId = this._itemsPage[ItemId];
-        if (!this._pages.ContainsKey(PageId))
+        var pageId = this._itemsPage[itemId];
+        if (!this._pages.ContainsKey(pageId))
         {
             return null;
         }
 
-        var page = this._pages[PageId];
-        if (page == null || !page.Enabled || page.MinimumRank > Rank)
+        var page = this._pages[pageId];
+        if (page == null || !page.Enabled || page.MinimumRank > rank)
         {
             return null;
         }
 
-        if (page.Items.ContainsKey(ItemId))
+        if (page.Items.ContainsKey(itemId))
         {
-            return page.Items[ItemId];
+            return page.Items[itemId];
         }
 
         return null;
     }
 
-    public bool TryGetBot(int ItemId, out CatalogBot Bot) => this._botPresets.TryGetValue(ItemId, out Bot);
+    public bool TryGetBot(int itemId, out CatalogBot bot) => this._botPresets.TryGetValue(itemId, out bot);
 
     public bool TryGetPage(int pageId, out CatalogPage page) => this._pages.TryGetValue(pageId, out page);
 

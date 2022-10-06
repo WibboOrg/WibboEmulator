@@ -6,7 +6,7 @@ internal class LookToEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -20,8 +20,8 @@ internal class LookToEvent : IPacketEvent
         }
 
         User.Unidle();
-        var X2 = Packet.PopInt();
-        var Y2 = Packet.PopInt();
+        var X2 = packet.PopInt();
+        var Y2 = packet.PopInt();
         if (X2 == User.X && Y2 == User.Y)
         {
             if (User.SetStep)

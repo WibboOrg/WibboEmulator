@@ -75,19 +75,19 @@ public class TeamManager
     {
         if (user.Team.Equals(TeamType.BLUE))
         {
-            this.BlueTeam.Remove(user);
+            _ = this.BlueTeam.Remove(user);
         }
         else if (user.Team.Equals(TeamType.RED))
         {
-            this.RedTeam.Remove(user);
+            _ = this.RedTeam.Remove(user);
         }
         else if (user.Team.Equals(TeamType.YELLOW))
         {
-            this.YellowTeam.Remove(user);
+            _ = this.YellowTeam.Remove(user);
         }
         else if (user.Team.Equals(TeamType.GREEN))
         {
-            this.GreenTeam.Remove(user);
+            _ = this.GreenTeam.Remove(user);
         }
     }
 }

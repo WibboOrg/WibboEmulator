@@ -1,251 +1,140 @@
 namespace WibboEmulator.Games.Items;
 using WibboEmulator.Database.Daos.Item;
-using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.Users;
 
 public class ItemFactory
 {
-    public static Item CreateSingleItemNullable(ItemData Data, User user, string ExtraData, int LimitedNumber = 0, int LimitedStack = 0)
+    public static Item CreateSingleItemNullable(ItemData data, User user, string extraData, int limitedNumber = 0, int limitedStack = 0)
     {
-        if (Data == null)
+        if (data == null)
         {
             throw new InvalidOperationException("Data cannot be null.");
         }
 
-        var Item = new Item(0, 0, Data.Id, ExtraData, LimitedNumber, LimitedStack, 0, 0, 0, 0, "", null);
+        var item = new Item(0, 0, data.Id, extraData, limitedNumber, limitedStack, 0, 0, 0, 0, "", null);
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        Item.Id = ItemDao.Insert(dbClient, Data.Id, user.Id, ExtraData);
+        item.Id = ItemDao.Insert(dbClient, data.Id, user.Id, extraData);
 
-        if (LimitedNumber > 0)
+        if (limitedNumber > 0)
         {
-            ItemLimitedDao.Insert(dbClient, Item.Id, LimitedNumber, LimitedStack);
+            ItemLimitedDao.Insert(dbClient, item.Id, limitedNumber, limitedStack);
         }
 
-        return Item;
+        return item;
     }
 
-    public static Item CreateSingleItem(ItemData Data, User user, string ExtraData, int ItemId, int LimitedNumber = 0, int LimitedStack = 0)
+    public static Item CreateSingleItem(ItemData data, User user, string extraData, int itemId, int limitedNumber = 0, int limitedStack = 0)
     {
-        if (Data == null)
+        if (data == null)
         {
             return null;
         }
 
-        var InsertId = 0;
+        var insertId = 0;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            InsertId = ItemDao.Insert(dbClient, ItemId, Data.Id, user.Id, ExtraData);
+            insertId = ItemDao.Insert(dbClient, itemId, data.Id, user.Id, extraData);
 
-            if (LimitedNumber > 0 && InsertId > 0)
+            if (limitedNumber > 0 && insertId > 0)
             {
-                ItemLimitedDao.Insert(dbClient, ItemId, LimitedNumber, LimitedStack);
+                ItemLimitedDao.Insert(dbClient, itemId, limitedNumber, limitedStack);
             }
         }
 
-        if (InsertId <= 0)
+        if (insertId <= 0)
         {
             return null;
         }
 
-        var Item = new Item(ItemId, 0, Data.Id, ExtraData, LimitedNumber, LimitedStack, 0, 0, 0, 0, "", null);
-        return Item;
+        var item = new Item(itemId, 0, data.Id, extraData, limitedNumber, limitedStack, 0, 0, 0, 0, "", null);
+        return item;
     }
 
-    public static List<Item> CreateMultipleItems(ItemData Data, User user, string ExtraData, int Amount)
+    public static List<Item> CreateMultipleItems(ItemData data, User user, string extraData, int amount)
     {
-        if (Data == null)
+        if (data == null)
         {
             throw new InvalidOperationException("Data cannot be null.");
         }
 
-        var Items = new List<Item>();
+        var items = new List<Item>();
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            for (var i = 0; i < Amount; i++)
+            for (var i = 0; i < amount; i++)
             {
-                var itemId = ItemDao.Insert(dbClient, Data.Id, user.Id, ExtraData);
+                var itemId = ItemDao.Insert(dbClient, data.Id, user.Id, extraData);
 
-                var Item = new Item(itemId, 0, Data.Id, ExtraData, 0, 0, 0, 0, 0, 0, "", null);
+                var item = new Item(itemId, 0, data.Id, extraData, 0, 0, 0, 0, 0, 0, "", null);
 
-                Items.Add(Item);
+                items.Add(item);
             }
         }
-        return Items;
+        return items;
     }
 
     public static List<Item> CreateTeleporterItems(ItemData data, User user)
     {
-        var Items = new List<Item>();
+        var items = new List<Item>();
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            var Item1Id = ItemDao.Insert(dbClient, data.Id, user.Id, "");
-            var Item2Id = ItemDao.Insert(dbClient, data.Id, user.Id, Item1Id.ToString());
+            var item1Id = ItemDao.Insert(dbClient, data.Id, user.Id, "");
+            var item2Id = ItemDao.Insert(dbClient, data.Id, user.Id, item1Id.ToString());
 
-            var Item1 = new Item(Item1Id, 0, data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
-            var Item2 = new Item(Item2Id, 0, data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
+            var item1 = new Item(item1Id, 0, data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
+            var item2 = new Item(item2Id, 0, data.Id, "", 0, 0, 0, 0, 0, 0, "", null);
 
-            ItemTeleportDao.Insert(dbClient, Item1Id, Item2Id);
-            ItemTeleportDao.Insert(dbClient, Item2Id, Item1Id);
+            ItemTeleportDao.Insert(dbClient, item1Id, item2Id);
+            ItemTeleportDao.Insert(dbClient, item2Id, item1Id);
 
-            Items.Add(Item1);
-            Items.Add(Item2);
+            items.Add(item1);
+            items.Add(item2);
         }
-        return Items;
+        return items;
     }
 
-    public static void CreateMoodlightData(Item Item)
+    public static void CreateMoodlightData(Item item)
     {
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        ItemMoodlightDao.Insert(dbClient, Item.Id);
+        ItemMoodlightDao.Insert(dbClient, item.Id);
     }
 
-    public static FurniInteractor CreateInteractor(Item item)
+    public static FurniInteractor CreateInteractor(Item item) => item.GetBaseItem().InteractionType switch
     {
-        switch (item.GetBaseItem().InteractionType)
-        {
-            case InteractionType.GATE:
-            case InteractionType.BANZAIPYRAMID:
-                return new InteractorGate();
-            case InteractionType.SCOREBOARD:
-                return new InteractorScoreboard();
-            case InteractionType.VENDINGMACHINE:
-                return new InteractorVendor();
-            case InteractionType.VENDINGENABLEMACHINE:
-                return new InteractorVendorEnable();
-            case InteractionType.ALERT:
-                return new InteractorAlert();
-            case InteractionType.ONEWAYGATE:
-                return new InteractorOneWayGate();
-            case InteractionType.LOVESHUFFLER:
-                return new InteractorLoveShuffler();
-            case InteractionType.HABBOWHEEL:
-                return new InteractorHabboWheel();
-            case InteractionType.DICE:
-                return new InteractorDice();
-            case InteractionType.BOTTLE:
-                return new InteractorSpinningBottle();
-            case InteractionType.ARROW:
-            case InteractionType.TELEPORT:
-                return new InteractorTeleport();
-            case InteractionType.FOOTBALL:
-                return new InteractorFootball();
-            case InteractionType.FOOTBALLCOUNTERGREEN:
-            case InteractionType.FOOTBALLCOUNTERYELLOW:
-            case InteractionType.FOOTBALLCOUNTERBLUE:
-            case InteractionType.FOOTBALLCOUNTERRED:
-                return new InteractorScoreCounter();
-            case InteractionType.BANZAISCOREBLUE:
-            case InteractionType.BANZAISCORERED:
-            case InteractionType.BANZAISCOREYELLOW:
-            case InteractionType.BANZAISCOREGREEN:
-                return new InteractorBanzaiScoreCounter();
-            case InteractionType.CHRONOTIMER:
-                return new InteractorTimer();
-            case InteractionType.BANZAIBLO:
-            case InteractionType.BANZAIBLOB:
-                return new InteractorBlob();
-            case InteractionType.BANZAIPUCK:
-                return new InteractorBanzaiPuck();
-            case InteractionType.FREEZETILEBLOCK:
-                return new InteractorFreezeBlock();
-            case InteractionType.FREEZETILE:
-                return new InteractorFreezeTile();
-            case InteractionType.JUKEBOX:
-                return new InteractorJukebox();
-            case InteractionType.TRIGGER_ONCE:
-            case InteractionType.TRIGGER_AVATAR_ENTERS_ROOM:
-            case InteractionType.TRIGGER_GAME_ENDS:
-            case InteractionType.TRIGGER_GAME_STARTS:
-            case InteractionType.TRIGGER_PERIODICALLY:
-            case InteractionType.TRIGGER_PERIODICALLY_LONG:
-            case InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING:
-            case InteractionType.TRIGGER_COMMAND:
-            case InteractionType.TRIGGER_SELF:
-            case InteractionType.TRIGGER_COLLISION_USER:
-            case InteractionType.TRIGGER_SCORE_ACHIEVED:
-            case InteractionType.TRIGGER_STATE_CHANGED:
-            case InteractionType.TRIGGER_WALK_ON_FURNI:
-            case InteractionType.TRIGGER_WALK_OFF_FURNI:
-            case InteractionType.TRIGGER_COLLISION:
-            case InteractionType.ACTION_GIVE_SCORE:
-            case InteractionType.ACTION_POS_RESET:
-            case InteractionType.ACTION_MOVE_ROTATE:
-            case InteractionType.ACTION_RESET_TIMER:
-            case InteractionType.ACTIONSHOWMESSAGE:
-            case InteractionType.ACTION_GIVE_REWARD:
-            case InteractionType.ACTION_SUPER_WIRED:
-            case InteractionType.CONDITION_SUPER_WIRED:
-            case InteractionType.ACTION_TELEPORT_TO:
-            case InteractionType.ACTION_ENDGAME_TEAM:
-            case InteractionType.ACTION_CALL_STACKS:
-            case InteractionType.ACTION_TOGGLE_STATE:
-            case InteractionType.ACTION_KICK_USER:
-            case InteractionType.ACTION_FLEE:
-            case InteractionType.ACTION_CHASE:
-            case InteractionType.ACTION_COLLISION_CASE:
-            case InteractionType.ACTION_COLLISION_TEAM:
-            case InteractionType.ACTION_MOVE_TO_DIR:
-            case InteractionType.CONDITION_FURNIS_HAVE_USERS:
-            case InteractionType.CONDITION_FURNIS_HAVE_NO_USERS:
-            case InteractionType.CONDITION_HAS_FURNI_ON_FURNI:
-            case InteractionType.CONDITION_HAS_FURNI_ON_FURNI_NEGATIVE:
-            case InteractionType.CONDITION_STATE_POS:
-            case InteractionType.CONDITION_STUFF_IS:
-            case InteractionType.CONDITION_NOT_STUFF_IS:
-            case InteractionType.CONDITION_DATE_RNG_ACTIVE:
-            case InteractionType.CONDITION_STATE_POS_NEGATIVE:
-            case InteractionType.CONDITION_TIME_LESS_THAN:
-            case InteractionType.CONDITION_TIME_MORE_THAN:
-            case InteractionType.CONDITION_TRIGGER_ON_FURNI:
-            case InteractionType.CONDITION_TRIGGER_ON_FURNI_NEGATIVE:
-            case InteractionType.CONDITION_ACTOR_IN_GROUP:
-            case InteractionType.CONDITION_NOT_IN_GROUP:
-            case InteractionType.TRIGGER_BOT_REACHED_STF:
-            case InteractionType.TRIGGER_BOT_REACHED_AVTR:
-            case InteractionType.ACTION_BOT_CLOTHES:
-            case InteractionType.ACTION_BOT_TELEPORT:
-            case InteractionType.ACTION_BOT_FOLLOW_AVATAR:
-            case InteractionType.ACTION_BOT_GIVE_HANDITEM:
-            case InteractionType.ACTION_BOT_MOVE:
-            case InteractionType.ACTION_USER_MOVE:
-            case InteractionType.ACTION_BOT_TALK_TO_AVATAR:
-            case InteractionType.ACTION_BOT_TALK:
-            case InteractionType.CONDITION_HAS_HANDITEM:
-            case InteractionType.ACTION_JOIN_TEAM:
-            case InteractionType.ACTION_LEAVE_TEAM:
-            case InteractionType.ACTION_GIVE_SCORE_TM:
-            case InteractionType.CONDITION_ACTOR_IN_TEAM:
-            case InteractionType.CONDITION_NOT_IN_TEAM:
-            case InteractionType.CONDITION_NOT_USER_COUNT:
-            case InteractionType.CONDITION_USER_COUNT_IN:
-                return new InteractorWired();
-            case InteractionType.MANNEQUIN:
-                return new InteractorManiqui();
-            case InteractionType.TONER:
-                return new InteractorChangeBackgrounds();
-            case InteractionType.PUZZLEBOX:
-                return new InteractorPuzzleBox();
-            case InteractionType.FLOORSWITCH1:
-                return new InteractorSwitch(item.GetBaseItem().Modes);
-            case InteractionType.CRACKABLE:
-                return new InteractorCrackable(item.GetBaseItem().Modes);
-            case InteractionType.TVYOUTUBE:
-                return new InteractorTvYoutube();
-            case InteractionType.LOVELOCK:
-                return new InteractorLoveLock();
-            case InteractionType.PHOTO:
-                return new InteractorIgnore();
-            case InteractionType.BANZAITELE:
-                return new InteractorBanzaiTele();
-            case InteractionType.HIGHSCORE:
-            case InteractionType.HIGHSCOREPOINTS:
-                return new InteractorGenericSwitch(2);
-            default:
-                return new InteractorGenericSwitch(item.GetBaseItem().Modes);
-        }
-    }
+        InteractionType.GATE or InteractionType.BANZAIPYRAMID => new InteractorGate(),
+        InteractionType.SCOREBOARD => new InteractorScoreboard(),
+        InteractionType.VENDINGMACHINE => new InteractorVendor(),
+        InteractionType.VENDINGENABLEMACHINE => new InteractorVendorEnable(),
+        InteractionType.ALERT => new InteractorAlert(),
+        InteractionType.ONEWAYGATE => new InteractorOneWayGate(),
+        InteractionType.LOVESHUFFLER => new InteractorLoveShuffler(),
+        InteractionType.HABBOWHEEL => new InteractorHabboWheel(),
+        InteractionType.DICE => new InteractorDice(),
+        InteractionType.BOTTLE => new InteractorSpinningBottle(),
+        InteractionType.ARROW or InteractionType.TELEPORT => new InteractorTeleport(),
+        InteractionType.FOOTBALL => new InteractorFootball(),
+        InteractionType.FOOTBALLCOUNTERGREEN or InteractionType.FOOTBALLCOUNTERYELLOW or InteractionType.FOOTBALLCOUNTERBLUE or InteractionType.FOOTBALLCOUNTERRED => new InteractorScoreCounter(),
+        InteractionType.BANZAISCOREBLUE or InteractionType.BANZAISCORERED or InteractionType.BANZAISCOREYELLOW or InteractionType.BANZAISCOREGREEN => new InteractorBanzaiScoreCounter(),
+        InteractionType.CHRONOTIMER => new InteractorTimer(),
+        InteractionType.BANZAIBLO or InteractionType.BANZAIBLOB => new InteractorBlob(),
+        InteractionType.BANZAIPUCK => new InteractorBanzaiPuck(),
+        InteractionType.FREEZETILEBLOCK => new InteractorFreezeBlock(),
+        InteractionType.FREEZETILE => new InteractorFreezeTile(),
+        InteractionType.JUKEBOX => new InteractorJukebox(),
+        InteractionType.TRIGGER_ONCE or InteractionType.TRIGGER_AVATAR_ENTERS_ROOM or InteractionType.TRIGGER_GAME_ENDS or InteractionType.TRIGGER_GAME_STARTS or InteractionType.TRIGGER_PERIODICALLY or InteractionType.TRIGGER_PERIODICALLY_LONG or InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING or InteractionType.TRIGGER_COMMAND or InteractionType.TRIGGER_SELF or InteractionType.TRIGGER_COLLISION_USER or InteractionType.TRIGGER_SCORE_ACHIEVED or InteractionType.TRIGGER_STATE_CHANGED or InteractionType.TRIGGER_WALK_ON_FURNI or InteractionType.TRIGGER_WALK_OFF_FURNI or InteractionType.TRIGGER_COLLISION or InteractionType.ACTION_GIVE_SCORE or InteractionType.ACTION_POS_RESET or InteractionType.ACTION_MOVE_ROTATE or InteractionType.ACTION_RESET_TIMER or InteractionType.ACTIONSHOWMESSAGE or InteractionType.ACTION_GIVE_REWARD or InteractionType.ACTION_SUPER_WIRED or InteractionType.CONDITION_SUPER_WIRED or InteractionType.ACTION_TELEPORT_TO or InteractionType.ACTION_ENDGAME_TEAM or InteractionType.ACTION_CALL_STACKS or InteractionType.ACTION_TOGGLE_STATE or InteractionType.ACTION_KICK_USER or InteractionType.ACTION_FLEE or InteractionType.ACTION_CHASE or InteractionType.ACTION_COLLISION_CASE or InteractionType.ACTION_COLLISION_TEAM or InteractionType.ACTION_MOVE_TO_DIR or InteractionType.CONDITION_FURNIS_HAVE_USERS or InteractionType.CONDITION_FURNIS_HAVE_NO_USERS or InteractionType.CONDITION_HAS_FURNI_ON_FURNI or InteractionType.CONDITION_HAS_FURNI_ON_FURNI_NEGATIVE or InteractionType.CONDITION_STATE_POS or InteractionType.CONDITION_STUFF_IS or InteractionType.CONDITION_NOT_STUFF_IS or InteractionType.CONDITION_DATE_RNG_ACTIVE or InteractionType.CONDITION_STATE_POS_NEGATIVE or InteractionType.CONDITION_TIME_LESS_THAN or InteractionType.CONDITION_TIME_MORE_THAN or InteractionType.CONDITION_TRIGGER_ON_FURNI or InteractionType.CONDITION_TRIGGER_ON_FURNI_NEGATIVE or InteractionType.CONDITION_ACTOR_IN_GROUP or InteractionType.CONDITION_NOT_IN_GROUP or InteractionType.TRIGGER_BOT_REACHED_STF or InteractionType.TRIGGER_BOT_REACHED_AVTR or InteractionType.ACTION_BOT_CLOTHES or InteractionType.ACTION_BOT_TELEPORT or InteractionType.ACTION_BOT_FOLLOW_AVATAR or InteractionType.ACTION_BOT_GIVE_HANDITEM or InteractionType.ACTION_BOT_MOVE or InteractionType.ACTION_USER_MOVE or InteractionType.ACTION_BOT_TALK_TO_AVATAR or InteractionType.ACTION_BOT_TALK or InteractionType.CONDITION_HAS_HANDITEM or InteractionType.ACTION_JOIN_TEAM or InteractionType.ACTION_LEAVE_TEAM or InteractionType.ACTION_GIVE_SCORE_TM or InteractionType.CONDITION_ACTOR_IN_TEAM or InteractionType.CONDITION_NOT_IN_TEAM or InteractionType.CONDITION_NOT_USER_COUNT or InteractionType.CONDITION_USER_COUNT_IN => new InteractorWired(),
+        InteractionType.MANNEQUIN => new InteractorManiqui(),
+        InteractionType.TONER => new InteractorChangeBackgrounds(),
+        InteractionType.PUZZLEBOX => new InteractorPuzzleBox(),
+        InteractionType.FLOORSWITCH1 => new InteractorSwitch(item.GetBaseItem().Modes),
+        InteractionType.CRACKABLE => new InteractorCrackable(item.GetBaseItem().Modes),
+        InteractionType.TVYOUTUBE => new InteractorTvYoutube(),
+        InteractionType.LOVELOCK => new InteractorLoveLock(),
+        InteractionType.PHOTO => new InteractorIgnore(),
+        InteractionType.BANZAITELE => new InteractorBanzaiTele(),
+        InteractionType.HIGHSCORE or InteractionType.HIGHSCOREPOINTS => new InteractorGenericSwitch(2),
+        _ => new InteractorGenericSwitch(item.GetBaseItem().Modes),
+    };
 }

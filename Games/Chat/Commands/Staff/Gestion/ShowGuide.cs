@@ -16,7 +16,7 @@ internal class ShowGuide : IChatCommand
         {
             var stringBuilder = new StringBuilder();
 
-            stringBuilder.Append("Guide en service (" + guideManager.GuidesCount + "):\r\r");
+            _ = stringBuilder.Append("Guide en service (" + guideManager.GuidesCount + "):\r\r");
             foreach (var entry in guideManager.GuidesOnDuty)
             {
                 var guide = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(entry.Key);
@@ -27,15 +27,15 @@ internal class ShowGuide : IChatCommand
 
                 if (entry.Value)
                 {
-                    stringBuilder.Append("- " + guide.GetUser().Username + " (En service)\r");
+                    _ = stringBuilder.Append("- " + guide.GetUser().Username + " (En service)\r");
                 }
                 else
                 {
-                    stringBuilder.Append("- " + guide.GetUser().Username + " (Disponible)\r");
+                    _ = stringBuilder.Append("- " + guide.GetUser().Username + " (Disponible)\r");
                 }
             }
 
-            stringBuilder.Append('\r');
+            _ = stringBuilder.Append('\r');
             session.SendHugeNotif(stringBuilder.ToString());
         }
     }

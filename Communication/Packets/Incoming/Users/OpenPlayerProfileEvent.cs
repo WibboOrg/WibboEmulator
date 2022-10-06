@@ -7,10 +7,10 @@ internal class OpenPlayerProfileEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var userId = Packet.PopInt();
-        var IsMe = Packet.PopBoolean();
+        var userId = packet.PopInt();
+        var IsMe = packet.PopBoolean();
 
         var targetData = WibboEnvironment.GetUserById(userId);
         if (targetData == null)

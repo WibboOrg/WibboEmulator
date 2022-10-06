@@ -22,7 +22,7 @@ public class RPWeaponManager
             return weapon;
         }
 
-        this._weaponCac.TryGetValue(id, out weapon);
+        _ = this._weaponCac.TryGetValue(id, out weapon);
         return weapon;
     }
 
@@ -34,7 +34,7 @@ public class RPWeaponManager
             return weapon;
         }
 
-        this._weaponGun.TryGetValue(id, out weapon);
+        _ = this._weaponGun.TryGetValue(id, out weapon);
         return weapon;
     }
 

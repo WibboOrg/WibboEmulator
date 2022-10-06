@@ -13,9 +13,9 @@ public enum Language
 
 public class LanguageManager
 {
-    private Dictionary<string, string> _valuesFr;
-    private Dictionary<string, string> _valuesEn;
-    private Dictionary<string, string> _valuesBr;
+    private readonly Dictionary<string, string> _valuesFr;
+    private readonly Dictionary<string, string> _valuesEn;
+    private readonly Dictionary<string, string> _valuesBr;
 
     public LanguageManager()
     {
@@ -70,18 +70,11 @@ public class LanguageManager
         }
     }
 
-    public static Language ParseLanguage(string country)
+    public static Language ParseLanguage(string country) => country switch
     {
-        switch (country)
-        {
-            case "fr":
-                return Language.FRANCAIS;
-            case "en":
-                return Language.ANGLAIS;
-            case "br":
-                return Language.PORTUGAIS;
-            default:
-                return Language.FRANCAIS;
-        }
-    }
+        "fr" => Language.FRANCAIS,
+        "en" => Language.ANGLAIS,
+        "br" => Language.PORTUGAIS,
+        _ => Language.FRANCAIS,
+    };
 }

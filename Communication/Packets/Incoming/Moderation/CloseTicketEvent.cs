@@ -5,17 +5,17 @@ internal class CloseTicketEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null || !session.GetUser().HasPermission("perm_mod"))
         {
             return;
         }
 
-        var Result = Packet.PopInt();
-        Packet.PopInt();
-        var TicketId = Packet.PopInt();
+        var Result = packet.PopInt();
+        _ = packet.PopInt();
+        var TicketId = packet.PopInt();
 
-        WibboEnvironment.GetGame().GetModerationManager().CloseTicket(session, Packet.PopInt(), Result);
+        WibboEnvironment.GetGame().GetModerationManager().CloseTicket(session, packet.PopInt(), Result);
     }
 }

@@ -6,7 +6,7 @@ internal class UpdateStickyNoteEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -18,14 +18,14 @@ internal class UpdateStickyNoteEvent : IPacketEvent
             return;
         }
 
-        var roomItem = room.GetRoomItemHandler().GetItem(Packet.PopInt());
+        var roomItem = room.GetRoomItemHandler().GetItem(packet.PopInt());
         if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.POSTIT)
         {
             return;
         }
 
-        var Color = Packet.PopString();
-        var Message = Packet.PopString();
+        var Color = packet.PopString();
+        var Message = packet.PopString();
 
         if (!room.CheckRights(session) && !Message.StartsWith(roomItem.ExtraData))
         {

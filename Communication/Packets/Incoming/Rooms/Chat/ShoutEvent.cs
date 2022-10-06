@@ -44,7 +44,7 @@ internal class ShoutEvent : IPacketEvent
 
         var Colour = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Colour, out var Style) || Style.RequiredRight.Length > 0 && !session.GetUser().HasPermission(Style.RequiredRight))
+        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Colour, out var style) || (style.RequiredRight.Length > 0 && !session.GetUser().HasPermission(style.RequiredRight)))
         {
             Colour = 0;
         }

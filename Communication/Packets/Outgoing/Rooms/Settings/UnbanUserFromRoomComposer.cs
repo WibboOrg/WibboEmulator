@@ -1,11 +1,11 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 
 internal class UnbanUserFromRoomComposer : ServerPacket
 {
-    public UnbanUserFromRoomComposer(int RoomId, int UserId)
+    public UnbanUserFromRoomComposer(int roomId, int userId)
         : base(ServerPacketHeader.ROOM_BAN_REMOVE)
     {
-        this.WriteInteger(RoomId);
-        this.WriteInteger(UserId);
+        this.WriteInteger(roomId);
+        this.WriteInteger(userId);
     }
 }

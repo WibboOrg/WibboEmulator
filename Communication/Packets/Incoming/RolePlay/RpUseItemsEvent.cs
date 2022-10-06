@@ -7,10 +7,10 @@ internal class RpUseItemsEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var ItemId = Packet.PopInt();
-        var UseCount = Packet.PopInt();
+        var ItemId = packet.PopInt();
+        var UseCount = packet.PopInt();
 
         if (session == null || session.GetUser() == null)
         {

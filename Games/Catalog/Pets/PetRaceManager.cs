@@ -1,10 +1,10 @@
-﻿namespace WibboEmulator.Games.Catalog.Pets;
+namespace WibboEmulator.Games.Catalog.Pets;
 
 public class PetRaceManager
 {
     private readonly List<PetRace> _races = new();
 
-    public void Init()
+    public static void Init()
     {
 
     }

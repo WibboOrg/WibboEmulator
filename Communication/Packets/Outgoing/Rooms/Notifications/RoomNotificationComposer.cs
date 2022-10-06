@@ -2,66 +2,66 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 
 internal class RoomNotificationComposer : ServerPacket
 {
-    public RoomNotificationComposer(string Type, string Key, string Value)
+    public RoomNotificationComposer(string type, string key, string value)
        : base(ServerPacketHeader.NOTIFICATION_LIST)
     {
-        this.WriteString(Type);
-        this.WriteInteger((Type == "furni_placement_error") ? 2 : 1);//Count
+        this.WriteString(type);
+        this.WriteInteger((type == "furni_placement_error") ? 2 : 1);//Count
         {
-            if (Type == "furni_placement_error")
+            if (type == "furni_placement_error")
             {
                 this.WriteString("display");
                 this.WriteString("BUBBLE");
             }
-            this.WriteString(Key);
-            this.WriteString(Value);
+            this.WriteString(key);
+            this.WriteString(value);
         }
     }
 
-    public static ServerPacket SendBubble(string Image, string Message, string linkUrl = "")
+    public static ServerPacket SendBubble(string image, string message, string linkUrl = "")
     {
-        var RoomNotification = new ServerPacket(ServerPacketHeader.NOTIFICATION_LIST);
-        RoomNotification.WriteString(Image);
-        RoomNotification.WriteInteger(string.IsNullOrWhiteSpace(linkUrl) ? 2 : 3);//Count
+        var roomNotification = new ServerPacket(ServerPacketHeader.NOTIFICATION_LIST);
+        roomNotification.WriteString(image);
+        roomNotification.WriteInteger(string.IsNullOrWhiteSpace(linkUrl) ? 2 : 3);//Count
         {
-            RoomNotification.WriteString("display");
-            RoomNotification.WriteString("BUBBLE");
+            roomNotification.WriteString("display");
+            roomNotification.WriteString("BUBBLE");
 
-            RoomNotification.WriteString("message");
-            RoomNotification.WriteString(Message);
+            roomNotification.WriteString("message");
+            roomNotification.WriteString(message);
 
             if (!string.IsNullOrEmpty(linkUrl))
             {
-                RoomNotification.WriteString("linkUrl");
-                RoomNotification.WriteString(linkUrl);
+                roomNotification.WriteString("linkUrl");
+                roomNotification.WriteString(linkUrl);
             }
         }
 
-        return RoomNotification;
+        return roomNotification;
     }
 
-    public RoomNotificationComposer(string Title, string Message, string Image, string HotelName, string HotelURL)
+    public RoomNotificationComposer(string title, string message, string image, string hotelName, string hotelURL)
         : base(ServerPacketHeader.NOTIFICATION_LIST)
     {
-        var CountMessage = 2;
-        if (!string.IsNullOrEmpty(HotelName))
+        var countMessage = 2;
+        if (!string.IsNullOrEmpty(hotelName))
         {
-            CountMessage += 2;
+            countMessage += 2;
         }
 
-        this.WriteString(Image);
-        this.WriteInteger(CountMessage);
+        this.WriteString(image);
+        this.WriteInteger(countMessage);
         this.WriteString("title");
-        this.WriteString(Title);
+        this.WriteString(title);
         this.WriteString("message");
-        this.WriteString(Message);
+        this.WriteString(message);
 
-        if (!string.IsNullOrEmpty(HotelName))
+        if (!string.IsNullOrEmpty(hotelName))
         {
             this.WriteString("linkUrl");
-            this.WriteString(HotelURL);
+            this.WriteString(hotelURL);
             this.WriteString("linkTitle");
-            this.WriteString(HotelName);
+            this.WriteString(hotelName);
         }
     }
 }

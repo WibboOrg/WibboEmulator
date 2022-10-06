@@ -25,10 +25,10 @@ internal class ModeratorRoomChatlogComposer : ServerPacket
         {
             if (chat != null)
             {
-                this.WriteString(UnixTimestamp.FromUnixTimestamp(chat.timestamp).ToShortTimeString()); //this.timeSpoken.Minute
-                this.WriteInteger(chat.userID); //this.timeSpoken.Minute
-                this.WriteString(chat.username);
-                this.WriteString(chat.message);
+                this.WriteString(UnixTimestamp.FromUnixTimestamp(chat.Timestamp).ToShortTimeString()); //this.timeSpoken.Minute
+                this.WriteInteger(chat.UserID); //this.timeSpoken.Minute
+                this.WriteString(chat.Username);
+                this.WriteString(chat.Message);
                 this.WriteBoolean(false); // Text is bold
             }
             else

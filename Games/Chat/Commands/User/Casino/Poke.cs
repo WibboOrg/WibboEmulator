@@ -23,8 +23,8 @@ internal class Poke : IChatCommand
         }
 
         var Username = parameters[1];
-        int.TryParse(parameters[2], out var DiceCount);
-        int.TryParse(parameters[3], out var WpCount);
+        _ = int.TryParse(parameters[2], out var DiceCount);
+        _ = int.TryParse(parameters[3], out var WpCount);
 
         if (string.IsNullOrWhiteSpace(Username))
         {

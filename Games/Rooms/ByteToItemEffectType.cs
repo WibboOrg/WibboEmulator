@@ -2,32 +2,18 @@
 
 public static class ByteToItemEffectType
 {
-    public static ItemEffectType Parse(byte number)
+    public static ItemEffectType Parse(byte number) => number switch
     {
-        switch (number)
-        {
-            case 0:
-                return ItemEffectType.NONE;
-            case 1:
-                return ItemEffectType.SWIM;
-            case 2:
-                return ItemEffectType.NORMALSKATES;
-            case 3:
-                return ItemEffectType.ICESKATES;
-            case 4:
-                return ItemEffectType.SWIMLOW;
-            case 5:
-                return ItemEffectType.SWIMHALLOWEEN;
-            case 6:
-                return ItemEffectType.PUBLICPOOL;
-            case 7:
-                return ItemEffectType.TRAMPOLINE;
-            case 8:
-                return ItemEffectType.TREADMILL;
-            case 9:
-                return ItemEffectType.CROSSTRAINER;
-            default:
-                return ItemEffectType.NONE;
-        }
-    }
+        0 => ItemEffectType.NONE,
+        1 => ItemEffectType.SWIM,
+        2 => ItemEffectType.NORMALSKATES,
+        3 => ItemEffectType.ICESKATES,
+        4 => ItemEffectType.SWIMLOW,
+        5 => ItemEffectType.SWIMHALLOWEEN,
+        6 => ItemEffectType.PUBLICPOOL,
+        7 => ItemEffectType.TRAMPOLINE,
+        8 => ItemEffectType.TREADMILL,
+        9 => ItemEffectType.CROSSTRAINER,
+        _ => ItemEffectType.NONE,
+    };
 }

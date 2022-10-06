@@ -1,8 +1,8 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Polls;
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Polls;
 
 internal class QuestionAnsweredComposer : ServerPacket
 {
-    public QuestionAnsweredComposer(int userId, string value, int votedCountNo, int VotedCountYes)
+    public QuestionAnsweredComposer(int userId, string value, int votedCountNo, int votedCountYes)
   : base(ServerPacketHeader.QUESTION_ANSWERED)
     {
         this.WriteInteger(userId);
@@ -11,6 +11,6 @@ internal class QuestionAnsweredComposer : ServerPacket
         this.WriteString("0");
         this.WriteInteger(votedCountNo);
         this.WriteString("1");
-        this.WriteInteger(VotedCountYes);
+        this.WriteInteger(votedCountYes);
     }
 }

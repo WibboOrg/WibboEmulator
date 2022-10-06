@@ -1,15 +1,15 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
+namespace WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 
 internal class NotifAlertComposer : ServerPacket
 {
-    public NotifAlertComposer(string Image, string Title, string Message, string TextButton, int RoomId, string Url)
+    public NotifAlertComposer(string image, string title, string message, string textButton, int roomId, string url)
      : base(ServerPacketHeader.NOTIF_ALERT)
     {
-        this.WriteString(Image);
-        this.WriteString(Title);
-        this.WriteString(Message);
-        this.WriteString(TextButton);
-        this.WriteInteger(RoomId);
-        this.WriteString(Url);
+        this.WriteString(image);
+        this.WriteString(title);
+        this.WriteString(message);
+        this.WriteString(textButton);
+        this.WriteInteger(roomId);
+        this.WriteString(url);
     }
 }

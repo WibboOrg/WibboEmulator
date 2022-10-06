@@ -4,26 +4,26 @@ using WibboEmulator.Games.Rooms;
 
 public class WiredBase
 {
-    internal bool StuffTypeSelectionEnabled;
-    internal int FurniLimit;
+    internal bool StuffTypeSelectionEnabled { get; set; }
+    internal int FurniLimit { get; set; }
 
-    internal List<int> StuffIds;
-    internal int StuffTypeId;
-    internal int Id;
-    internal string StringParam;
-    internal List<int> IntParams;
-    internal int StuffTypeSelectionCode;
-    internal int Type;
-    internal List<int> Conflicting;
-    internal int Delay;
+    internal List<int> StuffIds { get; set; }
+    internal int StuffTypeId { get; set; }
+    internal int Id { get; set; }
+    internal string StringParam { get; set; }
+    internal List<int> IntParams { get; set; }
+    internal int StuffTypeSelectionCode { get; set; }
+    internal int Type { get; set; }
+    internal List<int> Conflicting { get; set; }
+    internal int Delay { get; set; }
 
-    internal Item ItemInstance;
-    internal Room RoomInstance;
-    internal List<Item> Items;
+    internal Item ItemInstance { get; set; }
+    internal Room RoomInstance { get; set; }
+    internal List<Item> Items { get; set; }
 
-    internal bool IsStaff;
-    internal bool IsGod;
-    internal bool IsDisposed;
+    internal bool IsStaff { get; set; }
+    internal bool IsGod { get; set; }
+    internal bool IsDisposed { get; set; }
 
     internal WiredBase(Item item, Room room, int type)
     {

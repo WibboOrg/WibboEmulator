@@ -6,9 +6,9 @@ internal class GetRoomSettingsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var roomId = Packet.PopInt();
+        var roomId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out var room))
         {

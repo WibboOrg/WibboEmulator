@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Chat.Filter;
+namespace WibboEmulator.Games.Chat.Filter;
 using System.Data;
 using System.Text.RegularExpressions;
 using WibboEmulator.Database.Daos;
@@ -60,58 +60,57 @@ public sealed class WordFilterManager
         }
     }
 
-    public string CheckMessage(string Message)
+    public string CheckMessage(string message)
     {
-        foreach (var Filter in this._filteredWords.ToList())
+        foreach (var filter in this._filteredWords.ToList())
         {
-            if (Message.ToLower().Contains(Filter))
+            if (message.ToLower().Contains(filter))
             {
-                Message = Regex.Replace(Message, Filter, "*****", RegexOptions.IgnoreCase);
+                message = Regex.Replace(message, filter, "*****", RegexOptions.IgnoreCase);
             }
         }
 
-        return Message;
+        return message;
     }
 
-    private string StringTranslate(ref string input, string frm, char to)
+    private static void StringTranslate(ref string input, string frm, char to)
     {
         for (var i = 0; i < frm.Length; i++)
         {
             input = input.Replace(frm[i], to);
         }
-        return input;
     }
 
-    private void ClearMessage(ref string message, bool OnlyLetter = true)
+    private static void ClearMessage(ref string message, bool onlyLetter = true)
     {
         message = message.Replace("()", "o").Replace("Æ", "ae");
 
-        this.StringTranslate(ref message, "ĀāĂăĄąΑΔΆÀÁÂÃÄÅàáâãäå4@å", 'a');
-        this.StringTranslate(ref message, "ßΒþ", 'b');
-        this.StringTranslate(ref message, "¢©ĆćĈĉĊċČč€Çç", 'c');
-        this.StringTranslate(ref message, "ĎďĐđ", 'd');
-        this.StringTranslate(ref message, "ĒēĔĕĖėĘęĚěΈÈÉÊËèéêë3", 'e');
-        this.StringTranslate(ref message, "ĜĝĞğĠġĢģ", 'g');
-        this.StringTranslate(ref message, "ĤĥĦħΉ", 'h');
-        this.StringTranslate(ref message, "¡ĨĩĪīĬĭĮįİıΊΐìíîïÌÍÎÏ1!", 'i');
-        this.StringTranslate(ref message, "Ĵĵ", 'j');
-        this.StringTranslate(ref message, "Ķķĸ", 'k');
-        this.StringTranslate(ref message, "£¦ĹĺĻļĽľĿŀŁłℓ", 'l');
-        this.StringTranslate(ref message, "M", 'm');
-        this.StringTranslate(ref message, "ŃńŅņŇňŉŊŋπñÑ", 'n');
-        this.StringTranslate(ref message, "¤ŌōŎŏŐőΌoOòóôõöÒÓÔÕÖøΩð0", 'o');
-        this.StringTranslate(ref message, "Pp₱", 'p');
-        this.StringTranslate(ref message, "ŔŕŖŗŘřя®", 'r');
-        this.StringTranslate(ref message, "§ŚśŜŝŞşSŠš", 's');
-        this.StringTranslate(ref message, "ŢţŤťŦŧ", 't');
-        this.StringTranslate(ref message, "ųŨũŪūŬŭŮůŰűŲųùúûüÙÚÛÜ", 'u');
-        this.StringTranslate(ref message, "√", 'v');
-        this.StringTranslate(ref message, "Ŵŵω", 'w');
-        this.StringTranslate(ref message, "×", 'x');
-        this.StringTranslate(ref message, "ŶŷΎýÿÝÝ", 'y');
-        this.StringTranslate(ref message, "ŹźŻż", 'z');
+        StringTranslate(ref message, "ĀāĂăĄąΑΔΆÀÁÂÃÄÅàáâãäå4@å", 'a');
+        StringTranslate(ref message, "ßΒþ", 'b');
+        StringTranslate(ref message, "¢©ĆćĈĉĊċČč€Çç", 'c');
+        StringTranslate(ref message, "ĎďĐđ", 'd');
+        StringTranslate(ref message, "ĒēĔĕĖėĘęĚěΈÈÉÊËèéêë3", 'e');
+        StringTranslate(ref message, "ĜĝĞğĠġĢģ", 'g');
+        StringTranslate(ref message, "ĤĥĦħΉ", 'h');
+        StringTranslate(ref message, "¡ĨĩĪīĬĭĮįİıΊΐìíîïÌÍÎÏ1!", 'i');
+        StringTranslate(ref message, "Ĵĵ", 'j');
+        StringTranslate(ref message, "Ķķĸ", 'k');
+        StringTranslate(ref message, "£¦ĹĺĻļĽľĿŀŁłℓ", 'l');
+        StringTranslate(ref message, "M", 'm');
+        StringTranslate(ref message, "ŃńŅņŇňŉŊŋπñÑ", 'n');
+        StringTranslate(ref message, "¤ŌōŎŏŐőΌoOòóôõöÒÓÔÕÖøΩð0", 'o');
+        StringTranslate(ref message, "Pp₱", 'p');
+        StringTranslate(ref message, "ŔŕŖŗŘřя®", 'r');
+        StringTranslate(ref message, "§ŚśŜŝŞşSŠš", 's');
+        StringTranslate(ref message, "ŢţŤťŦŧ", 't');
+        StringTranslate(ref message, "ųŨũŪūŬŭŮůŰűŲųùúûüÙÚÛÜ", 'u');
+        StringTranslate(ref message, "√", 'v');
+        StringTranslate(ref message, "Ŵŵω", 'w');
+        StringTranslate(ref message, "×", 'x');
+        StringTranslate(ref message, "ŶŷΎýÿÝÝ", 'y');
+        StringTranslate(ref message, "ŹźŻż", 'z');
 
-        if (OnlyLetter)
+        if (onlyLetter)
         {
             message = new Regex(@"[^a-z]", RegexOptions.IgnoreCase).Replace(message, string.Empty);
         }
@@ -126,7 +125,7 @@ public sealed class WordFilterManager
             return false;
         }
 
-        this.ClearMessage(ref message);
+        ClearMessage(ref message);
 
         foreach (var pattern in this._pubWords)
         {
@@ -143,7 +142,7 @@ public sealed class WordFilterManager
     {
         var OldLength = message.Replace(" ", "").Length;
 
-        this.ClearMessage(ref message, false);
+        ClearMessage(ref message, false);
 
         var LetterDelCount = OldLength - message.Length;
 

@@ -6,7 +6,7 @@ internal class UnIgnoreUserEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
@@ -18,7 +18,7 @@ internal class UnIgnoreUserEvent : IPacketEvent
             return;
         }
 
-        var str = Packet.PopString();
+        var str = packet.PopString();
 
         var user = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(str).GetUser();
         if (user == null || !session.GetUser().MutedUsers.Contains(user.Id))
@@ -26,7 +26,7 @@ internal class UnIgnoreUserEvent : IPacketEvent
             return;
         }
 
-        session.GetUser().MutedUsers.Remove(user.Id);
+        _ = session.GetUser().MutedUsers.Remove(user.Id);
 
         session.SendPacket(new IgnoreStatusComposer(3, str));
     }

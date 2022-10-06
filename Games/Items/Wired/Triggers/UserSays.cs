@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Triggers;
+namespace WibboEmulator.Games.Items.Wired.Triggers;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -8,17 +8,17 @@ using WibboEmulator.Utilities.Events;
 
 public class UserSays : WiredTriggerBase, IWired
 {
-    private readonly RoomUserSaysDelegate delegateFunction;
+    private readonly RoomUserSaysDelegate _delegateFunction;
 
     public UserSays(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_SAYS_SOMETHING)
     {
-        this.delegateFunction = new RoomUserSaysDelegate(this.OnUserSays);
-        room.OnUserSays += this.delegateFunction;
+        this._delegateFunction = new RoomUserSaysDelegate(this.OnUserSays);
+        room.OnUserSays += this._delegateFunction;
 
         this.IntParams.Add(0);
     }
 
-    private void OnUserSays(object sender, UserSaysArgs e, ref bool messageHandled)
+    private void OnUserSays(object sender, UserSaysEventArgs e, ref bool messageHandled)
     {
         var user = e.User;
         var message = e.Message;
@@ -51,7 +51,7 @@ public class UserSays : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GetWiredHandler().GetRoom().OnUserSays -= this.delegateFunction;
+        this.RoomInstance.GetWiredHandler().GetRoom().OnUserSays -= this._delegateFunction;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

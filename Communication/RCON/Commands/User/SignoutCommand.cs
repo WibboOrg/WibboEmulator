@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.User;
+namespace WibboEmulator.Communication.RCON.Commands.User;
 internal class SignOutCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
@@ -8,23 +8,23 @@ internal class SignOutCommand : IRCONCommand
             return false;
         }
 
-        if (!int.TryParse(parameters[1], out var Userid))
+        if (!int.TryParse(parameters[1], out var userId))
         {
             return false;
         }
 
-        if (Userid <= 0)
+        if (userId <= 0)
         {
             return false;
         }
 
-        var Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid);
-        if (Client == null)
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        if (client == null)
         {
             return false;
         }
 
-        Client.Disconnect();
+        client.Disconnect();
         return true;
     }
 }

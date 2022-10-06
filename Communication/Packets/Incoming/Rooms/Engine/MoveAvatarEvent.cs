@@ -5,7 +5,7 @@ internal class MoveAvatarEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var currentRoom = session.GetUser().CurrentRoom;
         if (currentRoom == null)
@@ -14,13 +14,13 @@ internal class MoveAvatarEvent : IPacketEvent
         }
 
         var User = currentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().ControlUserId == 0 ? session.GetUser().Id : session.GetUser().ControlUserId);
-        if (User == null || !User.CanWalk && !User.TeleportEnabled)
+        if (User == null || (!User.CanWalk && !User.TeleportEnabled))
         {
             return;
         }
 
-        var targetX = Packet.PopInt();
-        var targetY = Packet.PopInt();
+        var targetX = packet.PopInt();
+        var targetY = packet.PopInt();
 
         if (User.ReverseWalk)
         {

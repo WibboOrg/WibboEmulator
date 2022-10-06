@@ -11,7 +11,7 @@ internal class SetMax : IChatCommand
             return;
         }
 
-        int.TryParse(parameters[1], out var MaxUsers);
+        _ = int.TryParse(parameters[1], out var MaxUsers);
 
         if ((MaxUsers > 75 || MaxUsers <= 0) && !session.GetUser().HasPermission("perm_mod"))
         {

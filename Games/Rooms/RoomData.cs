@@ -6,44 +6,44 @@ using WibboEmulator.Games.Groups;
 
 public class RoomData
 {
-    public int Id;
-    public string Name;
-    public string Description;
-    public string OwnerName;
-    public int OwnerId;
-    public Language Langue;
-    public string Password;
-    public int State;
-    public int Category;
-    public int UsersNow;
-    public int UsersMax;
-    public string ModelName;
-    public int Score;
-    public List<string> Tags;
-    public bool AllowPets;
-    public bool AllowPetsEating;
-    public bool AllowWalkthrough;
-    public bool AllowRightsOverride;
-    public bool Hidewall;
-    public string Wallpaper;
-    public string Floor;
-    public string Landscape;
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public string OwnerName { get; set; }
+    public int OwnerId { get; set; }
+    public Language Langue { get; set; }
+    public string Password { get; set; }
+    public int State { get; set; }
+    public int Category { get; set; }
+    public int UsersNow { get; set; }
+    public int UsersMax { get; set; }
+    public string ModelName { get; set; }
+    public int Score { get; set; }
+    public List<string> Tags { get; set; }
+    public bool AllowPets { get; set; }
+    public bool AllowPetsEating { get; set; }
+    public bool AllowWalkthrough { get; set; }
+    public bool AllowRightsOverride { get; set; }
+    public bool Hidewall { get; set; }
+    public string Wallpaper { get; set; }
+    public string Floor { get; set; }
+    public string Landscape { get; set; }
     private RoomModel _roomModel;
-    public int WallThickness;
-    public int FloorThickness;
-    public int MuteFuse;
-    public int BanFuse;
-    public int WhoCanKick;
-    public int ChatType;
-    public int ChatBalloon;
-    public int ChatSpeed;
-    public int ChatMaxDistance;
-    public int ChatFloodProtection;
-    public int GroupId;
-    public int TrocStatus;
-    public Group Group;
-    public bool HideWireds;
-    public int SellPrice;
+    public int WallThickness { get; set; }
+    public int FloorThickness { get; set; }
+    public int MuteFuse { get; set; }
+    public int BanFuse { get; set; }
+    public int WhoCanKick { get; set; }
+    public int ChatType { get; set; }
+    public int ChatBalloon { get; set; }
+    public int ChatSpeed { get; set; }
+    public int ChatMaxDistance { get; set; }
+    public int ChatFloodProtection { get; set; }
+    public int GroupId { get; set; }
+    public int TrocStatus { get; set; }
+    public Group Group { get; set; }
+    public bool HideWireds { get; set; }
+    public int SellPrice { get; set; }
     public int TagCount => this.Tags.Count;
 
     public RoomAccess Access { get; set; }
@@ -125,22 +125,13 @@ public class RoomData
 
         var state = Row["state"].ToString();
 
-        switch (state?.ToLower())
+        this.State = (state?.ToLower()) switch
         {
-            case "open":
-                this.State = 0;
-                break;
-            case "password":
-                this.State = 2;
-                break;
-            case "hide":
-                this.State = 3;
-                break;
-            default:
-                this.State = 1;
-                break;
-        }
-
+            "open" => 0,
+            "password" => 2,
+            "hide" => 3,
+            _ => 1,
+        };
         this.Category = Convert.ToInt32(Row["category"]);
         this.UsersNow = Convert.ToInt32(Row["users_now"]);
         this.UsersMax = Convert.ToInt32(Row["users_max"]);
@@ -169,7 +160,7 @@ public class RoomData
         this.WhoCanKick = Convert.ToInt32((string)Row["moderation_kick_fuse"]);
         this.BanFuse = Convert.ToInt32((string)Row["moderation_ban_fuse"]);
         this.GroupId = Convert.ToInt32(Row["group_id"]);
-        WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(this.GroupId, out var Group);
+        _ = WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(this.GroupId, out var Group);
         this.Group = Group;
         this.HideWireds = WibboEnvironment.EnumToBool(Row["allow_hidewireds"].ToString());
         this.TrocStatus = Convert.ToInt32((string)Row["troc_status"]);

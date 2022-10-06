@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Rooms.Games;
+namespace WibboEmulator.Games.Rooms.Games;
 using System.Drawing;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
@@ -101,41 +101,41 @@ public class GameItemHandler
         }
     }
 
-    public void OnWalkableBanzaiBlob(RoomUser User, Item Item)
+    public void OnWalkableBanzaiBlob(RoomUser user, Item item)
     {
-        if (Item.ExtraData == "1")
+        if (item.ExtraData == "1")
         {
             return;
         }
 
-        this._roomInstance.GetGameManager().AddPointToTeam(User.Team, User);
-        Item.ExtraData = "1";
-        Item.UpdateState();
+        this._roomInstance.GetGameManager().AddPointToTeam(user.Team, user);
+        item.ExtraData = "1";
+        item.UpdateState();
     }
 
-    public void OnWalkableBanzaiBlo(RoomUser User, Item Item)
+    public void OnWalkableBanzaiBlo(RoomUser user, Item item)
     {
-        if (Item.ExtraData == "1")
+        if (item.ExtraData == "1")
         {
             return;
         }
 
-        this._roomInstance.GetGameManager().AddPointToTeam(User.Team, 5, User);
-        Item.ExtraData = "1";
-        Item.UpdateState();
+        this._roomInstance.GetGameManager().AddPointToTeam(user.Team, 5, user);
+        item.ExtraData = "1";
+        item.UpdateState();
     }
 
     public void ResetAllBlob()
     {
-        foreach (var Blob in this._banzaiBlobs.Values)
+        foreach (var blob in this._banzaiBlobs.Values)
         {
-            if (Blob.ExtraData == "0")
+            if (blob.ExtraData == "0")
             {
                 continue;
             }
 
-            Blob.ExtraData = "0";
-            Blob.UpdateState();
+            blob.ExtraData = "0";
+            blob.UpdateState();
         }
     }
 
@@ -157,10 +157,10 @@ public class GameItemHandler
         {
             return;
         }
-        this._groupGate[item.Coordinate].Remove(item);
+        _ = this._groupGate[item.Coordinate].Remove(item);
         if (this._groupGate.Count == 0)
         {
-            this._groupGate.Remove(item.Coordinate);
+            _ = this._groupGate.Remove(item.Coordinate);
         }
     }
 
@@ -169,7 +169,7 @@ public class GameItemHandler
         if (this._banzaiTeleports.ContainsKey(itemID))
         {
             //this.banzaiTeleports.Inner[itemID] = item;
-            this._banzaiTeleports.Remove(itemID);
+            _ = this._banzaiTeleports.Remove(itemID);
             this._banzaiTeleports.Add(itemID, item);
         }
         else
@@ -180,31 +180,31 @@ public class GameItemHandler
 
     public void RemoveTeleport(int itemID) => this._banzaiTeleports.Remove(itemID);
 
-    public bool CheckGroupGate(RoomUser user, Point Coordinate)
+    public bool CheckGroupGate(RoomUser user, Point coordinate)
     {
         if (this._groupGate == null)
         {
             return false;
         }
 
-        if (!this._groupGate.ContainsKey(Coordinate))
+        if (!this._groupGate.ContainsKey(coordinate))
         {
             return false;
         }
 
-        if (this._groupGate[Coordinate].Count == 0)
+        if (this._groupGate[coordinate].Count == 0)
         {
             return false;
         }
 
-        var item = this._groupGate[Coordinate].FirstOrDefault();
+        var item = this._groupGate[coordinate].FirstOrDefault();
 
         if (item == null)
         {
             return false;
         }
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out var group))
         {
             return true;
         }
@@ -239,7 +239,7 @@ public class GameItemHandler
             return true;
         }
 
-        if (user.GetClient().GetUser().MyGroups.Contains(Group.Id))
+        if (user.GetClient().GetUser().MyGroups.Contains(group.Id))
         {
             return false;
         }
@@ -247,9 +247,9 @@ public class GameItemHandler
         return true;
     }
 
-    public void OnTeleportRoomUserEnter(RoomUser User, Item Item)
+    public void OnTeleportRoomUserEnter(RoomUser user, Item item)
     {
-        var banzaiTeleports2 = this._banzaiTeleports.Values.Where(p => p.Id != Item.Id);
+        var banzaiTeleports2 = this._banzaiTeleports.Values.Where(p => p.Id != item.Id);
 
         var count = banzaiTeleports2.Count();
 
@@ -259,26 +259,26 @@ public class GameItemHandler
         }
 
         var countID = WibboEnvironment.GetRandomNumber(0, count - 1);
-        var BanzaiItem2 = banzaiTeleports2.ElementAt(countID);
+        var banzaiItem2 = banzaiTeleports2.ElementAt(countID);
 
-        if (BanzaiItem2 == null)
+        if (banzaiItem2 == null)
         {
             return;
         }
 
-        if (BanzaiItem2.InteractingUser != 0)
+        if (banzaiItem2.InteractingUser != 0)
         {
             return;
         }
 
-        User.IsWalking = false;
-        User.CanWalk = false;
-        BanzaiItem2.InteractingUser = User.UserId;
-        BanzaiItem2.ReqUpdate(2);
+        user.IsWalking = false;
+        user.CanWalk = false;
+        banzaiItem2.InteractingUser = user.UserId;
+        banzaiItem2.ReqUpdate(2);
 
-        Item.ExtraData = "1";
-        Item.UpdateState(false, true);
-        Item.ReqUpdate(2);
+        item.ExtraData = "1";
+        item.UpdateState(false, true);
+        item.ReqUpdate(2);
     }
 
     public void Destroy()

@@ -2,11 +2,11 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Pets;
 
 internal class NotifyNewPetLevelComposer : ServerPacket
 {
-    public NotifyNewPetLevelComposer(int PetId, string Name, int Level)
+    public NotifyNewPetLevelComposer(int petId, string name, int level)
         : base(ServerPacketHeader.PET_LEVEL_NOTIFICATION)
     {
-        this.WriteInteger(PetId);
-        this.WriteString(Name);
-        this.WriteInteger(Level);
+        this.WriteInteger(petId);
+        this.WriteString(name);
+        this.WriteInteger(level);
     }
 }

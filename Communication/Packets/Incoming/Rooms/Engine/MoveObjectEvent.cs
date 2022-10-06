@@ -7,7 +7,7 @@ internal class MoveObjectEvent : IPacketEvent
 {
     public double Delay => 200;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -19,7 +19,7 @@ internal class MoveObjectEvent : IPacketEvent
             return;
         }
 
-        var roomItem = room.GetRoomItemHandler().GetItem(Packet.PopInt());
+        var roomItem = room.GetRoomItemHandler().GetItem(packet.PopInt());
         if (roomItem == null)
         {
             return;
@@ -31,10 +31,10 @@ internal class MoveObjectEvent : IPacketEvent
             return;
         }
 
-        var newX = Packet.PopInt();
-        var newY = Packet.PopInt();
-        var newRot = Packet.PopInt();
-        Packet.PopInt();
+        var newX = packet.PopInt();
+        var newY = packet.PopInt();
+        var newRot = packet.PopInt();
+        _ = packet.PopInt();
 
         if (newX != roomItem.X || newY != roomItem.Y)
         {

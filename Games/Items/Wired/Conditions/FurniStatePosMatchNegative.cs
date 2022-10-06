@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Conditions;
+namespace WibboEmulator.Games.Items.Wired.Conditions;
 using System.Data;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
@@ -8,11 +8,11 @@ using WibboEmulator.Games.Rooms;
 
 public class FurniStatePosMatchNegative : WiredConditionBase, IWiredCondition, IWired
 {
-    private readonly Dictionary<int, ItemsPosReset> ItemsData;
+    private readonly Dictionary<int, ItemsPosReset> _itemsData;
 
     public FurniStatePosMatchNegative(Item item, Room room) : base(item, room, (int)WiredConditionType.NOT_STATES_MATCH)
     {
-        this.ItemsData = new Dictionary<int, ItemsPosReset>();
+        this._itemsData = new Dictionary<int, ItemsPosReset>();
 
         this.IntParams.Add(0);
         this.IntParams.Add(0);
@@ -27,7 +27,7 @@ public class FurniStatePosMatchNegative : WiredConditionBase, IWiredCondition, I
 
         foreach (var roomItem in this.Items.ToList())
         {
-            if (!this.ItemsData.TryGetValue(roomItem.Id, out var itemPosReset))
+            if (!this._itemsData.TryGetValue(roomItem.Id, out var itemPosReset))
             {
                 continue;
             }
@@ -76,18 +76,18 @@ public class FurniStatePosMatchNegative : WiredConditionBase, IWiredCondition, I
             return;
         }
 
-        this.ItemsData.Clear();
+        this._itemsData.Clear();
 
         foreach (var roomItem in this.Items.ToList())
         {
-            if (!this.ItemsData.ContainsKey(roomItem.Id))
+            if (!this._itemsData.ContainsKey(roomItem.Id))
             {
-                this.ItemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.X, roomItem.Y, roomItem.Z, roomItem.Rotation, roomItem.ExtraData));
+                this._itemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.X, roomItem.Y, roomItem.Z, roomItem.Rotation, roomItem.ExtraData));
             }
             else
             {
-                this.ItemsData.Remove(roomItem.Id);
-                this.ItemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.X, roomItem.Y, roomItem.Z, roomItem.Rotation, roomItem.ExtraData));
+                _ = this._itemsData.Remove(roomItem.Id);
+                this._itemsData.Add(roomItem.Id, new ItemsPosReset(roomItem.Id, roomItem.X, roomItem.Y, roomItem.Z, roomItem.Rotation, roomItem.ExtraData));
             }
         }
     }
@@ -96,7 +96,7 @@ public class FurniStatePosMatchNegative : WiredConditionBase, IWiredCondition, I
     {
         var triggerItems = "";
 
-        foreach (var roomItem in this.ItemsData.Values)
+        foreach (var roomItem in this._itemsData.Values)
         {
             triggerItems += roomItem.Id + ":" + roomItem.X + ":" + roomItem.Y + ":" + roomItem.Z + ":" + roomItem.Rot + ":" + roomItem.ExtraData + ";";
         }
@@ -169,7 +169,7 @@ public class FurniStatePosMatchNegative : WiredConditionBase, IWiredCondition, I
                 this.StuffIds.Add(id);
             }
 
-            this.ItemsData.Add(Convert.ToInt32(itemData[0]), new ItemsPosReset(Convert.ToInt32(itemData[0]), Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]), Convert.ToDouble(itemData[3]), Convert.ToInt32(itemData[4]), itemData[5]));
+            this._itemsData.Add(Convert.ToInt32(itemData[0]), new ItemsPosReset(Convert.ToInt32(itemData[0]), Convert.ToInt32(itemData[1]), Convert.ToInt32(itemData[2]), Convert.ToDouble(itemData[3]), Convert.ToInt32(itemData[4]), itemData[5]));
         }
     }
 }

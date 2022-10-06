@@ -9,6 +9,8 @@ public class BartenderBot : BotAI
 
     public BartenderBot(int virtualId)
     {
+        this.VirtualId = virtualId;
+
         this._speechTimer = WibboEnvironment.GetRandomNumber(10, 40);
         this._actionTimer = WibboEnvironment.GetRandomNumber(10, 30);
     }

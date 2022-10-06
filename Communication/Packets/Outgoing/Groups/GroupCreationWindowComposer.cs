@@ -3,16 +3,16 @@ using WibboEmulator.Games.Rooms;
 
 internal class GroupCreationWindowComposer : ServerPacket
 {
-    public GroupCreationWindowComposer(ICollection<RoomData> Rooms)
+    public GroupCreationWindowComposer(ICollection<RoomData> rooms)
         : base(ServerPacketHeader.GROUP_CREATE_OPTIONS)
     {
         this.WriteInteger(20);//Price
 
-        this.WriteInteger(Rooms.Count);//Room count that the user has.
-        foreach (var Room in Rooms)
+        this.WriteInteger(rooms.Count);//Room count that the user has.
+        foreach (var room in rooms)
         {
-            this.WriteInteger(Room.Id);//Room Id
-            this.WriteString(Room.Name);//Room Name
+            this.WriteInteger(room.Id);//Room Id
+            this.WriteString(room.Name);//Room Name
             this.WriteBoolean(false);//What?
         }
 

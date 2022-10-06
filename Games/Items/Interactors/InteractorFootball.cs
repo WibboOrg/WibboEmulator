@@ -20,46 +20,46 @@ public class InteractorFootball : FurniInteractor
             return;
         }
 
-        var User = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var user = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
 
-        if (User == null)
+        if (user == null)
         {
             return;
         }
 
-        var TropLoin = true;
-        var Deloin = false;
+        var tooLong = true;
+        var fromAfar = false;
 
-        var differenceX = User.SetX - item.X;
-        var differenceY = User.SetY - item.Y;
+        var differenceX = user.SetX - item.X;
+        var differenceY = user.SetY - item.Y;
 
         if (differenceX <= 1 && differenceX >= -1 && differenceY <= 1 && differenceY >= -1)
         {
-            TropLoin = false;
+            tooLong = false;
         }
 
-        var differenceX2 = User.X - item.X;
-        var differenceY2 = User.Y - item.Y;
+        var differenceX2 = user.X - item.X;
+        var differenceY2 = user.Y - item.Y;
 
         if (differenceX2 <= 1 && differenceX2 >= -1 && differenceY2 <= 1 && differenceY2 >= -1)
         {
-            TropLoin = false;
+            tooLong = false;
         }
 
-        var differenceX3 = User.GoalX - item.X;
-        var differenceY3 = User.GoalY - item.Y;
+        var differenceX3 = user.GoalX - item.X;
+        var differenceY3 = user.GoalY - item.Y;
 
         if (differenceX3 > 1 || differenceX3 < -1 || differenceY3 > 1 || differenceY3 < -1)
         {
-            Deloin = true;
+            fromAfar = true;
         }
 
-        if (TropLoin)
+        if (tooLong)
         {
             return;
         }
 
-        switch (User.RotHead)
+        switch (user.RotHead)
         {
             case 0:
                 item.MovementDir = MovementDirection.up;
@@ -88,28 +88,28 @@ public class InteractorFootball : FurniInteractor
         }
 
 
-        var GoalX = item.X;
-        var GoalY = item.Y;
+        var goalX = item.X;
+        var goalY = item.Y;
 
-        var NewPoint = item.GetMoveCoord(GoalX, GoalY, 1);
+        var newPoint = item.GetMoveCoord(goalX, goalY, 1);
 
         item.InteractionCountHelper = 0;
 
-        if (!item.GetRoom().GetGameMap().CanStackItem(NewPoint.X, NewPoint.Y, true))
+        if (!item.GetRoom().GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true))
         {
-            item.GetNewDir(NewPoint.X, NewPoint.Y);
-            NewPoint = item.GetMoveCoord(GoalX, GoalY, 1);
+            item.GetNewDir(newPoint.X, newPoint.Y);
+            newPoint = item.GetMoveCoord(goalX, goalY, 1);
         }
 
-        if (item.GetRoom().GetGameMap().CanStackItem(NewPoint.X, NewPoint.Y, true))
+        if (item.GetRoom().GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true))
         {
-            item.GetRoom().GetSoccer().MoveBall(item, NewPoint.X, NewPoint.Y);
+            item.GetRoom().GetSoccer().MoveBall(item, newPoint.X, newPoint.Y);
         }
 
-        if (!User.MoveWithBall && !Deloin && item.InteractionCountHelper == 0 && !item.GetRoom().OldFoot)
+        if (!user.MoveWithBall && !fromAfar && item.InteractionCountHelper == 0 && !item.GetRoom().OldFoot)
         {
             item.InteractionCountHelper = 2;
-            item.InteractingUser = User.VirtualId;
+            item.InteractingUser = user.VirtualId;
             item.ReqUpdate(1);
         }
     }
@@ -125,96 +125,96 @@ public class InteractorFootball : FurniInteractor
             return;
         }
 
-        var OldX = item.X;
-        var OldY = item.Y;
+        var oldX = item.X;
+        var oldY = item.Y;
 
-        var NewX = item.X;
-        var NewY = item.Y;
+        var newX = item.X;
+        var newY = item.Y;
 
-        var NewPoint = item.GetMoveCoord(OldX, OldY, 1);
+        var newPoint = item.GetMoveCoord(oldX, oldY, 1);
 
-        int Length;
+        int length;
         if (item.InteractionCountHelper > 3)
         {
-            Length = 3;
+            length = 3;
 
             item.ExtraData = "6";
             item.UpdateState(false, true);
         }
         else if (item.InteractionCountHelper is > 1 and < 4)
         {
-            Length = 2;
+            length = 2;
 
             item.ExtraData = "4";
             item.UpdateState(false, true);
         }
         else
         {
-            Length = 1;
+            length = 1;
 
             item.ExtraData = "2";
             item.UpdateState(false, true);
         }
 
 
-        if (Length != 1 && !item.GetRoom().GetGameMap().CanStackItem(NewPoint.X, NewPoint.Y, true))
+        if (length != 1 && !item.GetRoom().GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true))
         {
-            item.GetNewDir(NewX, NewY);
+            item.GetNewDir(newX, newY);
             item.InteractionCountHelper--;
         }
 
-        for (var i = 1; i <= Length; i++)
+        for (var i = 1; i <= length; i++)
         {
-            NewPoint = item.GetMoveCoord(OldX, OldY, i);
+            newPoint = item.GetMoveCoord(oldX, oldY, i);
 
-            if (item.InteractionCountHelper <= 3 && item.GetRoom().GetGameMap().SquareHasUsers(NewPoint.X, NewPoint.Y))
+            if (item.InteractionCountHelper <= 3 && item.GetRoom().GetGameMap().SquareHasUsers(newPoint.X, newPoint.Y))
             {
                 item.InteractionCountHelper = 0;
                 break;
             }
 
-            if (item.GetRoom().GetGameMap().CanStackItem(NewPoint.X, NewPoint.Y, true))
+            if (item.GetRoom().GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true))
             {
-                NewX = NewPoint.X;
-                NewY = NewPoint.Y;
-                item.GetRoom().GetSoccer().HandleFootballGameItems(new Point(NewPoint.X, NewPoint.Y));
+                newX = newPoint.X;
+                newY = newPoint.Y;
+                item.GetRoom().GetSoccer().HandleFootballGameItems(new Point(newPoint.X, newPoint.Y));
             }
             else
             {
-                item.GetNewDir(NewX, NewY);
+                item.GetNewDir(newX, newY);
                 item.InteractionCountHelper--;
                 break;
             }
 
-            if (!item.GetRoom().GetGameMap().SquareTakingOpen(NewPoint.X, NewPoint.Y))
+            if (!item.GetRoom().GetGameMap().SquareTakingOpen(newPoint.X, newPoint.Y))
             {
-                var Users = item.GetRoom().GetGameMap().GetNearUsers(new Point(NewPoint.X, NewPoint.Y), 1);
-                if (Users != null)
+                var users = item.GetRoom().GetGameMap().GetNearUsers(new Point(newPoint.X, newPoint.Y), 1);
+                if (users != null)
                 {
-                    var BreakMe = false;
-                    foreach (var User in Users)
+                    var breakMe = false;
+                    foreach (var user in users)
                     {
-                        if (User == null || item.InteractingUser == User.VirtualId)
+                        if (user == null || item.InteractingUser == user.VirtualId)
                         {
                             continue;
                         }
 
-                        if (User.SetX != NewPoint.X || User.SetY != NewPoint.Y)
+                        if (user.SetX != newPoint.X || user.SetY != newPoint.Y)
                         {
                             continue;
                         }
 
-                        if (User.SetStep && User.SetX == User.GoalX && User.SetY == User.GoalY)
+                        if (user.SetStep && user.SetX == user.GoalX && user.SetY == user.GoalY)
                         {
                             item.InteractionCountHelper = 6;
-                            item.InteractingUser = User.VirtualId;
-                            item.MovementDir = MovementUtility.GetMovementByDirection(User.RotBody);
-                            BreakMe = true;
+                            item.InteractingUser = user.VirtualId;
+                            item.MovementDir = MovementUtility.GetMovementByDirection(user.RotBody);
+                            breakMe = true;
                             break;
                         }
                     }
 
-                    if (BreakMe)
+                    if (breakMe)
                     {
                         return;
                     }
@@ -224,8 +224,8 @@ public class InteractorFootball : FurniInteractor
             item.InteractionCountHelper--;
         }
 
-        var Z = item.GetRoom().GetGameMap().SqAbsoluteHeight(NewX, NewY);
-        item.GetRoom().GetRoomItemHandler().PositionReset(item, NewX, NewY, Z);
+        var z = item.GetRoom().GetGameMap().SqAbsoluteHeight(newX, newY);
+        item.GetRoom().GetRoomItemHandler().PositionReset(item, newX, newY, z);
 
         item.UpdateCounter = 1;
     }

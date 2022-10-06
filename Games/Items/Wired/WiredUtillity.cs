@@ -1,106 +1,26 @@
-﻿namespace WibboEmulator.Games.Items.Wired;
+namespace WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
 
 public class WiredUtillity
 {
-    public static bool TypeIsWiredTrigger(InteractionType type)
+    public static bool TypeIsWiredTrigger(InteractionType type) => type switch
     {
-        switch (type)
-        {
-            case InteractionType.TRIGGER_COLLISION:
-            case InteractionType.TRIGGER_ONCE:
-            case InteractionType.TRIGGER_AVATAR_ENTERS_ROOM:
-            case InteractionType.TRIGGER_GAME_ENDS:
-            case InteractionType.TRIGGER_GAME_STARTS:
-            case InteractionType.TRIGGER_PERIODICALLY:
-            case InteractionType.TRIGGER_PERIODICALLY_LONG:
-            case InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING:
-            case InteractionType.TRIGGER_COMMAND:
-            case InteractionType.TRIGGER_SELF:
-            case InteractionType.TRIGGER_COLLISION_USER:
-            case InteractionType.TRIGGER_SCORE_ACHIEVED:
-            case InteractionType.TRIGGER_STATE_CHANGED:
-            case InteractionType.TRIGGER_WALK_ON_FURNI:
-            case InteractionType.TRIGGER_WALK_OFF_FURNI:
-            case InteractionType.TRIGGER_BOT_REACHED_AVTR:
-            case InteractionType.TRIGGER_BOT_REACHED_STF:
-                return true;
-            default:
-                return false;
-        }
-    }
+        InteractionType.TRIGGER_COLLISION or InteractionType.TRIGGER_ONCE or InteractionType.TRIGGER_AVATAR_ENTERS_ROOM or InteractionType.TRIGGER_GAME_ENDS or InteractionType.TRIGGER_GAME_STARTS or InteractionType.TRIGGER_PERIODICALLY or InteractionType.TRIGGER_PERIODICALLY_LONG or InteractionType.TRIGGER_AVATAR_SAYS_SOMETHING or InteractionType.TRIGGER_COMMAND or InteractionType.TRIGGER_SELF or InteractionType.TRIGGER_COLLISION_USER or InteractionType.TRIGGER_SCORE_ACHIEVED or InteractionType.TRIGGER_STATE_CHANGED or InteractionType.TRIGGER_WALK_ON_FURNI or InteractionType.TRIGGER_WALK_OFF_FURNI or InteractionType.TRIGGER_BOT_REACHED_AVTR or InteractionType.TRIGGER_BOT_REACHED_STF => true,
+        _ => false,
+    };
 
-    public static bool TypeIsWiredAction(InteractionType type)
+    public static bool TypeIsWiredAction(InteractionType type) => type switch
     {
-        switch (type)
-        {
-            case InteractionType.ACTION_GIVE_SCORE:
-            case InteractionType.ACTION_POS_RESET:
-            case InteractionType.ACTION_MOVE_ROTATE:
-            case InteractionType.ACTION_RESET_TIMER:
-            case InteractionType.ACTIONSHOWMESSAGE:
-            case InteractionType.HIGHSCORE:
-            case InteractionType.HIGHSCOREPOINTS:
-            case InteractionType.ACTION_SUPER_WIRED:
-            case InteractionType.ACTION_KICK_USER:
-            case InteractionType.ACTION_TELEPORT_TO:
-            case InteractionType.ACTION_ENDGAME_TEAM:
-            case InteractionType.ACTION_TOGGLE_STATE:
-            case InteractionType.ACTION_CALL_STACKS:
-            case InteractionType.ACTION_FLEE:
-            case InteractionType.ACTION_CHASE:
-            case InteractionType.ACTION_COLLISION_CASE:
-            case InteractionType.ACTION_COLLISION_TEAM:
-            case InteractionType.ACTION_GIVE_REWARD:
-            case InteractionType.ACTION_MOVE_TO_DIR:
-            case InteractionType.ACTION_BOT_CLOTHES:
-            case InteractionType.ACTION_BOT_TELEPORT:
-            case InteractionType.ACTION_BOT_FOLLOW_AVATAR:
-            case InteractionType.ACTION_BOT_GIVE_HANDITEM:
-            case InteractionType.ACTION_BOT_MOVE:
-            case InteractionType.ACTION_USER_MOVE:
-            case InteractionType.ACTION_BOT_TALK_TO_AVATAR:
-            case InteractionType.ACTION_BOT_TALK:
-            case InteractionType.ACTION_JOIN_TEAM:
-            case InteractionType.ACTION_LEAVE_TEAM:
-            case InteractionType.ACTION_GIVE_SCORE_TM:
-                return true;
-            default:
-                return false;
-        }
-    }
+        InteractionType.ACTION_GIVE_SCORE or InteractionType.ACTION_POS_RESET or InteractionType.ACTION_MOVE_ROTATE or InteractionType.ACTION_RESET_TIMER or InteractionType.ACTIONSHOWMESSAGE or InteractionType.HIGHSCORE or InteractionType.HIGHSCOREPOINTS or InteractionType.ACTION_SUPER_WIRED or InteractionType.ACTION_KICK_USER or InteractionType.ACTION_TELEPORT_TO or InteractionType.ACTION_ENDGAME_TEAM or InteractionType.ACTION_TOGGLE_STATE or InteractionType.ACTION_CALL_STACKS or InteractionType.ACTION_FLEE or InteractionType.ACTION_CHASE or InteractionType.ACTION_COLLISION_CASE or InteractionType.ACTION_COLLISION_TEAM or InteractionType.ACTION_GIVE_REWARD or InteractionType.ACTION_MOVE_TO_DIR or InteractionType.ACTION_BOT_CLOTHES or InteractionType.ACTION_BOT_TELEPORT or InteractionType.ACTION_BOT_FOLLOW_AVATAR or InteractionType.ACTION_BOT_GIVE_HANDITEM or InteractionType.ACTION_BOT_MOVE or InteractionType.ACTION_USER_MOVE or InteractionType.ACTION_BOT_TALK_TO_AVATAR or InteractionType.ACTION_BOT_TALK or InteractionType.ACTION_JOIN_TEAM or InteractionType.ACTION_LEAVE_TEAM or InteractionType.ACTION_GIVE_SCORE_TM => true,
+        _ => false,
+    };
 
-    public static bool TypeIsWiredCondition(InteractionType type)
+    public static bool TypeIsWiredCondition(InteractionType type) => type switch
     {
-        switch (type)
-        {
-            case InteractionType.CONDITION_FURNIS_HAVE_USERS:
-            case InteractionType.CONDITION_FURNIS_HAVE_NO_USERS:
-            case InteractionType.CONDITION_STATE_POS:
-            case InteractionType.CONDITION_STUFF_IS:
-            case InteractionType.CONDITION_NOT_STUFF_IS:
-            case InteractionType.CONDITION_STATE_POS_NEGATIVE:
-            case InteractionType.CONDITION_DATE_RNG_ACTIVE:
-            case InteractionType.CONDITION_TIME_LESS_THAN:
-            case InteractionType.CONDITION_TIME_MORE_THAN:
-            case InteractionType.CONDITION_TRIGGER_ON_FURNI:
-            case InteractionType.CONDITION_TRIGGER_ON_FURNI_NEGATIVE:
-            case InteractionType.CONDITION_HAS_FURNI_ON_FURNI:
-            case InteractionType.CONDITION_HAS_FURNI_ON_FURNI_NEGATIVE:
-            case InteractionType.CONDITION_ACTOR_IN_GROUP:
-            case InteractionType.CONDITION_NOT_IN_GROUP:
-            case InteractionType.CONDITION_SUPER_WIRED:
-            case InteractionType.CONDITION_HAS_HANDITEM:
-            case InteractionType.CONDITION_ACTOR_IN_TEAM:
-            case InteractionType.CONDITION_NOT_IN_TEAM:
-            case InteractionType.CONDITION_NOT_USER_COUNT:
-            case InteractionType.CONDITION_USER_COUNT_IN:
-                return true;
-            default:
-                return false;
-        }
-    }
+        InteractionType.CONDITION_FURNIS_HAVE_USERS or InteractionType.CONDITION_FURNIS_HAVE_NO_USERS or InteractionType.CONDITION_STATE_POS or InteractionType.CONDITION_STUFF_IS or InteractionType.CONDITION_NOT_STUFF_IS or InteractionType.CONDITION_STATE_POS_NEGATIVE or InteractionType.CONDITION_DATE_RNG_ACTIVE or InteractionType.CONDITION_TIME_LESS_THAN or InteractionType.CONDITION_TIME_MORE_THAN or InteractionType.CONDITION_TRIGGER_ON_FURNI or InteractionType.CONDITION_TRIGGER_ON_FURNI_NEGATIVE or InteractionType.CONDITION_HAS_FURNI_ON_FURNI or InteractionType.CONDITION_HAS_FURNI_ON_FURNI_NEGATIVE or InteractionType.CONDITION_ACTOR_IN_GROUP or InteractionType.CONDITION_NOT_IN_GROUP or InteractionType.CONDITION_SUPER_WIRED or InteractionType.CONDITION_HAS_HANDITEM or InteractionType.CONDITION_ACTOR_IN_TEAM or InteractionType.CONDITION_NOT_IN_TEAM or InteractionType.CONDITION_NOT_USER_COUNT or InteractionType.CONDITION_USER_COUNT_IN => true,
+        _ => false,
+    };
 
     public static bool TypeIsWired(InteractionType type)
     {
@@ -151,13 +71,13 @@ public class WiredUtillity
 
 public class ItemsPosReset
 {
-    public int Id;
+    public int Id { get; set; }
 
-    public int X;
-    public int Y;
-    public double Z;
-    public int Rot;
-    public string ExtraData;
+    public int X { get; set; }
+    public int Y { get; set; }
+    public double Z { get; set; }
+    public int Rot { get; set; }
+    public string ExtraData { get; set; }
 
     public ItemsPosReset(int id, int x, int y, double z, int rot, string extraData)
     {

@@ -8,19 +8,19 @@ internal class JoinGroupEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(Packet.PopInt(), out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(packet.PopInt(), out var Group))
         {
             return;
         }
 
-        if (Group.IsMember(session.GetUser().Id) || Group.IsAdmin(session.GetUser().Id) || Group.HasRequest(session.GetUser().Id) && Group.GroupType == GroupType.LOCKED || Group.GroupType == GroupType.PRIVATE)
+        if (Group.IsMember(session.GetUser().Id) || Group.IsAdmin(session.GetUser().Id) || (Group.HasRequest(session.GetUser().Id) && Group.GroupType == GroupType.LOCKED) || Group.GroupType == GroupType.PRIVATE)
         {
             return;
         }

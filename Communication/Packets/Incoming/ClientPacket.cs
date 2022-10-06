@@ -17,10 +17,7 @@ public class ClientPacket
 
     public void Init(int messageID, byte[] body)
     {
-        if (body == null)
-        {
-            body = Array.Empty<byte>();
-        }
+        body ??= Array.Empty<byte>();
 
         this.Id = messageID;
         this._body = body;

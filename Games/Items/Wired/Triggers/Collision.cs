@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Triggers;
+namespace WibboEmulator.Games.Items.Wired.Triggers;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -7,12 +7,12 @@ using WibboEmulator.Games.Rooms;
 
 public class Collision : WiredTriggerBase, IWired
 {
-    private readonly UserAndItemDelegate delegateFunction;
+    private readonly UserAndItemDelegate _delegateFunction;
 
     public Collision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION)
     {
-        this.delegateFunction = new UserAndItemDelegate(this.FurniCollision);
-        this.RoomInstance.GetWiredHandler().TrgCollision += this.delegateFunction;
+        this._delegateFunction = new UserAndItemDelegate(this.FurniCollision);
+        this.RoomInstance.GetWiredHandler().TrgCollision += this._delegateFunction;
     }
 
     private void FurniCollision(RoomUser user, Item item)
@@ -29,7 +29,7 @@ public class Collision : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GetWiredHandler().TrgCollision -= this.delegateFunction;
+        this.RoomInstance.GetWiredHandler().TrgCollision -= this._delegateFunction;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

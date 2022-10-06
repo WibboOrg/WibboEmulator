@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -26,13 +26,13 @@ public class KickUser : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
 
     public override void Handle(RoomUser user, Item item)
     {
-        if (this.BeforeCycle(user, item))
+        if (this.BeforeCycle(user))
         {
             base.Handle(user, item);
         }
     }
 
-    public bool BeforeCycle(RoomUser user, Item item)
+    public bool BeforeCycle(RoomUser user)
     {
         if (user != null && user.GetClient() != null && user.GetClient().GetUser() != null)
         {

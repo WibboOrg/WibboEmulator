@@ -9,7 +9,7 @@ internal class PlaceBotEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
@@ -26,9 +26,9 @@ internal class PlaceBotEvent : IPacketEvent
             return;
         }
 
-        var BotId = Packet.PopInt();
-        var X = Packet.PopInt();
-        var Y = Packet.PopInt();
+        var BotId = packet.PopInt();
+        var X = packet.PopInt();
+        var Y = packet.PopInt();
 
         if (!room.GetGameMap().CanWalk(X, Y, false) || !room.GetGameMap().ValidTile(X, Y))
         {

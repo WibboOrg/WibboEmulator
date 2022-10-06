@@ -2,11 +2,11 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Messenger;
 
 internal class NewConsoleComposer : ServerPacket
 {
-    public NewConsoleComposer(int Sender, string Message, int Time = 0)
+    public NewConsoleComposer(int sender, string message, int time = 0)
         : base(ServerPacketHeader.MESSENGER_CHAT)
     {
-        this.WriteInteger(Sender);
-        this.WriteString(Message);
-        this.WriteInteger(Time);
+        this.WriteInteger(sender);
+        this.WriteString(message);
+        this.WriteInteger(time);
     }
 }

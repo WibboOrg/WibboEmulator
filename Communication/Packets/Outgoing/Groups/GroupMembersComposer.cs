@@ -16,12 +16,12 @@ internal class GroupMembersComposer : ServerPacket
         this.WriteInteger(members.Count);
         if (membersCount > 0)
         {
-            foreach (var Data in members)
+            foreach (var data in members)
             {
-                this.WriteInteger(group.CreatorId == Data.Id ? 0 : group.IsAdmin(Data.Id) ? 1 : group.IsMember(Data.Id) ? 2 : 3);
-                this.WriteInteger(Data.Id);
-                this.WriteString(Data.Username);
-                this.WriteString(Data.Look);
+                this.WriteInteger(group.CreatorId == data.Id ? 0 : group.IsAdmin(data.Id) ? 1 : group.IsMember(data.Id) ? 2 : 3);
+                this.WriteInteger(data.Id);
+                this.WriteString(data.Username);
+                this.WriteString(data.Look);
                 this.WriteString(string.Empty);
             }
         }

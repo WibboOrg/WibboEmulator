@@ -50,7 +50,7 @@ internal class GetGuestRoomResultComposer : ServerPacket
         this.WriteInteger(Data.WhoCanKick); // who can kick
         this.WriteInteger(Data.BanFuse); // who can ban
 
-        this.WriteBoolean((session != null) ? Data.OwnerName.ToLower() != session.GetUser().Username.ToLower() : false);
+        this.WriteBoolean((session != null) && Data.OwnerName.ToLower() != session.GetUser().Username.ToLower());
         this.WriteInteger(Data.ChatType);  //ChatMode, ChatSize, ChatSpeed, HearingDistance, ExtraFlood is the order.
         this.WriteInteger(Data.ChatBalloon);
         this.WriteInteger(Data.ChatSpeed);

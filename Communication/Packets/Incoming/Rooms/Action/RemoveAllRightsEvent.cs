@@ -8,7 +8,7 @@ internal class RemoveAllRightsEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {

@@ -5,7 +5,7 @@ internal class KickUserEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
@@ -22,7 +22,7 @@ internal class KickUserEvent : IPacketEvent
             return;
         }
 
-        var pId = Packet.PopInt();
+        var pId = packet.PopInt();
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(pId);
         if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_mod") || roomUserByUserId.GetClient().GetUser().HasPermission("perm_no_kick"))

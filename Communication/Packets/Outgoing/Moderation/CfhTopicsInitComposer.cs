@@ -1,22 +1,22 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
+namespace WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.Moderation;
 
 internal class CfhTopicsInitComposer : ServerPacket
 {
-    public CfhTopicsInitComposer(Dictionary<string, List<ModerationPresetActions>> UserActionPresets)
+    public CfhTopicsInitComposer(Dictionary<string, List<ModerationPresetActions>> userActionPresets)
         : base(ServerPacketHeader.CFH_TOPICS)
     {
 
-        this.WriteInteger(UserActionPresets.Count);
-        foreach (var Cat in UserActionPresets.ToList())
+        this.WriteInteger(userActionPresets.Count);
+        foreach (var cat in userActionPresets.ToList())
         {
-            this.WriteString(Cat.Key);
-            this.WriteInteger(Cat.Value.Count);
-            foreach (var Preset in Cat.Value.ToList())
+            this.WriteString(cat.Key);
+            this.WriteInteger(cat.Value.Count);
+            foreach (var preset in cat.Value.ToList())
             {
-                this.WriteString(Preset.Caption);
-                this.WriteInteger(Preset.Id);
-                this.WriteString(Preset.Type);
+                this.WriteString(preset.Caption);
+                this.WriteInteger(preset.Id);
+                this.WriteString(preset.Type);
             }
         }
     }

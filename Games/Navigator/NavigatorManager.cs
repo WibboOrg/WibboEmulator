@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Navigator;
+namespace WibboEmulator.Games.Navigator;
 using System.Data;
 using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.Moderation;
@@ -36,88 +36,88 @@ public sealed class NavigatorManager
             this._featuredRooms.Clear();
         }
 
-        var Table = NavigatorCategoryDao.GetAll(dbClient);
+        var table = NavigatorCategoryDao.GetAll(dbClient);
 
-        if (Table != null)
+        if (table != null)
         {
-            foreach (DataRow Row in Table.Rows)
+            foreach (DataRow row in table.Rows)
             {
-                if (Convert.ToInt32(Row["enabled"]) == 1)
+                if (Convert.ToInt32(row["enabled"]) == 1)
                 {
-                    if (!this._searchResultLists.ContainsKey(Convert.ToInt32(Row["id"])))
+                    if (!this._searchResultLists.ContainsKey(Convert.ToInt32(row["id"])))
                     {
-                        this._searchResultLists.Add(Convert.ToInt32(Row["id"]), new SearchResultList(Convert.ToInt32(Row["id"]), Convert.ToString(Row["category"]), Convert.ToString(Row["category_identifier"]), Convert.ToString(Row["public_name"]), true, -1, Convert.ToInt32(Row["required_rank"]), Convert.ToInt32(Row["minimized"]) == 1, NavigatorViewModeUtility.GetViewModeByString(Convert.ToString(Row["view_mode"])), Convert.ToString(Row["category_type"]), Convert.ToString(Row["search_allowance"]), Convert.ToInt32(Row["order_id"])));
+                        this._searchResultLists.Add(Convert.ToInt32(row["id"]), new SearchResultList(Convert.ToInt32(row["id"]), Convert.ToString(row["category"]), Convert.ToString(row["category_identifier"]), Convert.ToString(row["public_name"]), true, -1, Convert.ToInt32(row["required_rank"]), Convert.ToInt32(row["minimized"]) == 1, NavigatorViewModeUtility.GetViewModeByString(Convert.ToString(row["view_mode"])), Convert.ToString(row["category_type"]), Convert.ToString(row["search_allowance"]), Convert.ToInt32(row["order_id"])));
                     }
                 }
             }
         }
 
-        var GetPublics = NavigatorPublicDao.GetAll(dbClient);
+        var getPublics = NavigatorPublicDao.GetAll(dbClient);
 
-        if (GetPublics != null)
+        if (getPublics != null)
         {
-            foreach (DataRow Row in GetPublics.Rows)
+            foreach (DataRow row in getPublics.Rows)
             {
-                if (Convert.ToInt32(Row["enabled"]) == 1)
+                if (Convert.ToInt32(row["enabled"]) == 1)
                 {
-                    if (!this._featuredRooms.ContainsKey(Convert.ToInt32(Row["room_id"])))
+                    if (!this._featuredRooms.ContainsKey(Convert.ToInt32(row["room_id"])))
                     {
-                        this._featuredRooms.Add(Convert.ToInt32(Row["room_id"]), new FeaturedRoom(Convert.ToInt32(Row["room_id"]), Convert.ToString(Row["image_url"]), LanguageManager.ParseLanguage(Convert.ToString(Row["langue"])), (string)Row["category_type"]));
+                        this._featuredRooms.Add(Convert.ToInt32(row["room_id"]), new FeaturedRoom(Convert.ToInt32(row["room_id"]), Convert.ToString(row["image_url"]), LanguageManager.ParseLanguage(Convert.ToString(row["langue"])), (string)row["category_type"]));
                     }
                 }
             }
         }
     }
 
-    public List<SearchResultList> GetCategorysForSearch(string Category)
+    public List<SearchResultList> GetCategorysForSearch(string category)
     {
-        var Categorys =
+        var categorys =
             from Cat in this._searchResultLists
-            where Cat.Value.Category == Category
+            where Cat.Value.Category == category
             orderby Cat.Value.OrderId ascending
             select Cat.Value;
-        return Categorys.ToList();
+        return categorys.ToList();
     }
 
-    public ICollection<SearchResultList> GetResultByIdentifier(string Category)
+    public ICollection<SearchResultList> GetResultByIdentifier(string category)
     {
-        var Categorys =
+        var categorys =
             from Cat in this._searchResultLists
-            where Cat.Value.CategoryIdentifier == Category
+            where Cat.Value.CategoryIdentifier == category
             orderby Cat.Value.OrderId ascending
             select Cat.Value;
-        return Categorys.ToList();
+        return categorys.ToList();
     }
 
     public ICollection<SearchResultList> GetFlatCategories()
     {
-        var Categorys =
+        var categorys =
             from Cat in this._searchResultLists
             where Cat.Value.CategoryType == NavigatorCategoryType.CATEGORY
             orderby Cat.Value.OrderId ascending
             select Cat.Value;
-        return Categorys.ToList();
+        return categorys.ToList();
     }
 
     public ICollection<SearchResultList> GetEventCategories()
     {
-        var Categorys =
+        var categorys =
             from Cat in this._searchResultLists
             where Cat.Value.CategoryType == NavigatorCategoryType.PROMOTION_CATEGORY
             orderby Cat.Value.OrderId ascending
             select Cat.Value;
-        return Categorys.ToList();
+        return categorys.ToList();
     }
 
     public ICollection<TopLevelItem> GetTopLevelItems() => this._topLevelItems.Values;
 
     public ICollection<SearchResultList> GetSearchResultLists() => this._searchResultLists.Values;
 
-    public bool TryGetTopLevelItem(int Id, out TopLevelItem TopLevelItem) => this._topLevelItems.TryGetValue(Id, out TopLevelItem);
+    public bool TryGetTopLevelItem(int id, out TopLevelItem topLevelItem) => this._topLevelItems.TryGetValue(id, out topLevelItem);
 
-    public bool TryGetSearchResultList(int Id, out SearchResultList SearchResultList) => this._searchResultLists.TryGetValue(Id, out SearchResultList);
+    public bool TryGetSearchResultList(int id, out SearchResultList searchResultList) => this._searchResultLists.TryGetValue(id, out searchResultList);
 
-    public bool TryGetFeaturedRoom(int RoomId, out FeaturedRoom PublicRoom) => this._featuredRooms.TryGetValue(RoomId, out PublicRoom);
+    public bool TryGetFeaturedRoom(int roomId, out FeaturedRoom publicRoom) => this._featuredRooms.TryGetValue(roomId, out publicRoom);
 
-    public ICollection<FeaturedRoom> GetFeaturedRooms(Language Langue) => this._featuredRooms.Values.Where(F => F.Langue == Langue).ToList();
+    public ICollection<FeaturedRoom> GetFeaturedRooms(Language langue) => this._featuredRooms.Values.Where(f => f.Langue == langue).ToList();
 }

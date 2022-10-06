@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Triggers;
+namespace WibboEmulator.Games.Items.Wired.Triggers;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -8,7 +8,7 @@ using WibboEmulator.Games.Rooms.Wired;
 
 public class WalksOffFurni : WiredTriggerBase, IWired, IWiredCycleable
 {
-    public int DelayCycle { get => this.Delay; }
+    public int DelayCycle => this.Delay;
 
     private readonly UserAndItemDelegate delegateFunction;
 

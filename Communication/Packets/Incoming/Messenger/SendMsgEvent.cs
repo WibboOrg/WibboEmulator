@@ -5,21 +5,21 @@ internal class SendMsgEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null || session.GetUser().GetMessenger() == null)
         {
             return;
         }
 
-        var userId = Packet.PopInt();
+        var userId = packet.PopInt();
 
         if (userId == session.GetUser().Id)
         {
             return;
         }
 
-        var Message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
+        var Message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
         if (string.IsNullOrWhiteSpace(Message))
         {
             return;

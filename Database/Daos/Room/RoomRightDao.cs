@@ -38,10 +38,10 @@ internal class RoomRightDao
         {
             if (index > 0)
             {
-                deleteParams.Append(" OR ");
+                _ = deleteParams.Append(" OR ");
             }
 
-            deleteParams.Append("room_id = '" + roomId + "' AND user_id = '" + userId + "'");
+            _ = deleteParams.Append("room_id = '" + roomId + "' AND user_id = '" + userId + "'");
             index++;
         }
 

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
@@ -19,31 +19,31 @@ internal class StaffAlert : IChatCommand
             return;
         }
 
-        foreach (var Staff in WibboEnvironment.GetGame().GetGameClientManager().GetClients)
+        foreach (var staff in WibboEnvironment.GetGame().GetGameClientManager().GetClients)
         {
-            if (Staff == null)
+            if (staff == null)
             {
                 continue;
             }
 
-            if (Staff.GetUser() == null)
+            if (staff.GetUser() == null)
             {
                 continue;
             }
 
-            if (Staff.GetUser().CurrentRoom == null)
+            if (staff.GetUser().CurrentRoom == null)
             {
                 continue;
             }
 
-            if (Staff.GetUser().Rank < 3)
+            if (staff.GetUser().Rank < 3)
             {
                 continue;
             }
 
-            var User = Staff.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(Staff.GetUser().Id);
+            var user = staff.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(staff.GetUser().Id);
 
-            User.GetClient().SendPacket(new WhisperComposer(User.VirtualId, "[STAFF ALERT] " + messageTxt + " - " + roomUser.GetUsername(), 23));
+            user.GetClient().SendPacket(new WhisperComposer(user.VirtualId, "[STAFF ALERT] " + messageTxt + " - " + roomUser.GetUsername(), 23));
         }
     }
 }

@@ -10,9 +10,9 @@ internal class SaveRoomSettingsEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var roomId = Packet.PopInt();
+        var roomId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(roomId, out var room))
         {
@@ -24,41 +24,41 @@ internal class SaveRoomSettingsEvent : IPacketEvent
             return;
         }
 
-        var Name = Packet.PopString();
-        var Description = Packet.PopString();
-        var State = Packet.PopInt();
-        var Password = Packet.PopString();
-        var MaxUsers = Packet.PopInt();
-        var CategoryId = Packet.PopInt();
-        var TagCount = Packet.PopInt();
+        var Name = packet.PopString();
+        var Description = packet.PopString();
+        var State = packet.PopInt();
+        var Password = packet.PopString();
+        var MaxUsers = packet.PopInt();
+        var CategoryId = packet.PopInt();
+        var TagCount = packet.PopInt();
         var tags = new List<string>();
         var stringBuilder = new StringBuilder();
         for (var index = 0; index < TagCount; ++index)
         {
             if (index > 0)
             {
-                stringBuilder.Append(',');
+                _ = stringBuilder.Append(',');
             }
 
-            var tag = Packet.PopString().ToLower();
+            var tag = packet.PopString().ToLower();
             tags.Add(tag);
-            stringBuilder.Append(tag);
+            _ = stringBuilder.Append(tag);
         }
-        var TrocStatus = Packet.PopInt();
-        var AllowPets = Packet.PopBoolean();
-        var AllowPetsEat = Packet.PopBoolean();
-        var AllowWalkthrough = Packet.PopBoolean();
-        var Hidewall = Packet.PopBoolean();
-        var WallThickness = Packet.PopInt();
-        var FloorThickness = Packet.PopInt();
-        var mutefuse = Packet.PopInt();
-        var kickfuse = Packet.PopInt();
-        var banfuse = Packet.PopInt();
-        var ChatType = Packet.PopInt();
-        var ChatBalloon = Packet.PopInt();
-        var ChatSpeed = Packet.PopInt();
-        var ChatMaxDistance = Packet.PopInt();
-        var ChatFloodProtection = Packet.PopInt();
+        var TrocStatus = packet.PopInt();
+        var AllowPets = packet.PopBoolean();
+        var AllowPetsEat = packet.PopBoolean();
+        var AllowWalkthrough = packet.PopBoolean();
+        var Hidewall = packet.PopBoolean();
+        var WallThickness = packet.PopInt();
+        var FloorThickness = packet.PopInt();
+        var mutefuse = packet.PopInt();
+        var kickfuse = packet.PopInt();
+        var banfuse = packet.PopInt();
+        var ChatType = packet.PopInt();
+        var ChatBalloon = packet.PopInt();
+        var ChatSpeed = packet.PopInt();
+        var ChatMaxDistance = packet.PopInt();
+        var ChatFloodProtection = packet.PopInt();
 
         if (WallThickness is < (-2) or > 1)
         {
@@ -90,7 +90,7 @@ internal class SaveRoomSettingsEvent : IPacketEvent
             TrocStatus = 0;
         }
 
-        if (TagCount > 2 || mutefuse != 0 && mutefuse != 1 || kickfuse != 0 && kickfuse != 1 && kickfuse != 2 || banfuse != 0 && banfuse != 1)
+        if (TagCount > 2 || (mutefuse != 0 && mutefuse != 1) || (kickfuse != 0 && kickfuse != 1 && kickfuse != 2) || (banfuse != 0 && banfuse != 1))
         {
             return;
         }

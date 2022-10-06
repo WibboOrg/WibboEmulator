@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.User.Several;
+namespace WibboEmulator.Games.Chat.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -11,18 +11,18 @@ internal class Kick : IChatCommand
             return;
         }
 
-        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
 
-        if (TargetUser == null || TargetUser.GetUser() == null)
+        if (targetUser == null || targetUser.GetUser() == null)
         {
             return;
         }
 
-        if (session.GetUser().Rank <= TargetUser.GetUser().Rank)
+        if (session.GetUser().Rank <= targetUser.GetUser().Rank)
         {
             return;
         }
 
-        room.GetRoomUserManager().RemoveUserFromRoom(TargetUser, true, true);
+        room.GetRoomUserManager().RemoveUserFromRoom(targetUser, true, true);
     }
 }

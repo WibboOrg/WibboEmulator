@@ -1,11 +1,11 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc;
+namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc;
 
 internal class RpTrocAccepteComposer : ServerPacket
 {
-    public RpTrocAccepteComposer(int UserId, bool Etat)
+    public RpTrocAccepteComposer(int userId, bool isAccepted)
       : base(ServerPacketHeader.RP_TROC_ACCEPTE)
     {
-        this.WriteInteger(UserId);
-        this.WriteBoolean(Etat);
+        this.WriteInteger(userId);
+        this.WriteBoolean(isAccepted);
     }
 }

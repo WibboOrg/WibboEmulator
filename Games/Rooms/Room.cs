@@ -27,7 +27,7 @@ using WibboEmulator.Utilities;
 using WibboEmulator.Utilities.Events;
 
 public delegate void RoomEventDelegate(object sender, EventArgs e);
-public delegate void RoomUserSaysDelegate(object sender, UserSaysArgs e, ref bool messageHandled);
+public delegate void RoomUserSaysDelegate(object sender, UserSaysEventArgs e, ref bool messageHandled);
 public delegate void TriggerUserDelegate(RoomUser user, string actionType);
 public delegate void BotCollisionDelegate(RoomUser user, string botName);
 
@@ -39,7 +39,7 @@ public class Room
 
     public Task ProcessTask;
 
-    public bool IsRoleplay { get { return this.Roleplay != null; } }
+    public bool IsRoleplay => this.Roleplay != null;
     public RoomRoleplay Roleplay;
     public List<int> UsersWithRights;
     public bool EveryoneGotRights;
@@ -231,7 +231,7 @@ public class Room
     public bool AllowsShous(RoomUser user, string message)
     {
         var messageHandled = false;
-        this.OnUserSays?.Invoke(null, new UserSaysArgs(user, message), ref messageHandled);
+        this.OnUserSays?.Invoke(null, new UserSaysEventArgs(user, message), ref messageHandled);
 
         return messageHandled;
     }
@@ -349,7 +349,7 @@ public class Room
         {
             var PetData = new Pet(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), Convert.ToInt32(Row["room_id"]), (string)Row["name"], Convert.ToInt32(Row["type"]), (string)Row["race"], (string)Row["color"], Convert.ToInt32(Row["experience"]), Convert.ToInt32(Row["energy"]), Convert.ToInt32(Row["nutrition"]), Convert.ToInt32(Row["respect"]), (double)Row["createstamp"], Convert.ToInt32(Row["x"]), Convert.ToInt32(Row["y"]), (double)Row["z"], Convert.ToInt32(Row["have_saddle"]), Convert.ToInt32(Row["hairdye"]), Convert.ToInt32(Row["pethair"]), (string)Row["anyone_ride"] == "1");
             var list = new List<string>();
-            this._roomUserManager.DeployBot(new RoomBot(PetData.PetId, PetData.OwnerId, this.Id, BotAIType.Pet, true, PetData.Name, "", "", PetData.Look, PetData.X, PetData.Y, PetData.Z, 0, false, "", 0, false, 0, 0, 0), PetData);
+            _ = this._roomUserManager.DeployBot(new RoomBot(PetData.PetId, PetData.OwnerId, this.Id, BotAIType.Pet, true, PetData.Name, "", "", PetData.Look, PetData.X, PetData.Y, PetData.Z, 0, false, "", 0, false, 0, 0, 0), PetData);
         }
     }
 
@@ -1001,7 +1001,7 @@ public class Room
         }
 
         userTrade.CloseTrade(UserId);
-        this.ActiveTrades.Remove(userTrade);
+        _ = this.ActiveTrades.Remove(userTrade);
     }
 
     public void SetMaxUsers(int MaxUsers)

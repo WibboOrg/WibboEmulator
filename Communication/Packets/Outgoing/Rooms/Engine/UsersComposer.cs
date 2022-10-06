@@ -9,9 +9,9 @@ internal class UsersComposer : ServerPacket
         : base(ServerPacketHeader.UNIT)
     {
         this.WriteInteger(users.Count);
-        foreach (var User in users.ToList())
+        foreach (var user in users.ToList())
         {
-            this.WriteUser(User);
+            this.WriteUser(user);
         }
     }
 
@@ -63,9 +63,9 @@ internal class UsersComposer : ServerPacket
                 this.WriteString(roomUser.BotData.OwnerName);
 
                 //List<int> ActionIds = new List<int>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 24, 25 };
-                var ActionIds = new List<int>() { 1, 2, 3, 4, 5, 6 };
-                this.WriteInteger(ActionIds.Count);
-                foreach (var id in ActionIds)
+                var actionIds = new List<int>() { 1, 2, 3, 4, 5, 6 };
+                this.WriteInteger(actionIds.Count);
+                foreach (var id in actionIds)
                 {
                     this.WriteShort(id);
                 }
@@ -98,12 +98,12 @@ internal class UsersComposer : ServerPacket
             {
                 var user = roomUser.GetClient().GetUser();
 
-                Group Group = null;
+                Group group = null;
                 if (user.FavouriteGroupId > 0)
                 {
-                    if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out Group))
+                    if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.FavouriteGroupId, out group))
                     {
-                        Group = null;
+                        group = null;
                     }
                 }
 
@@ -162,11 +162,11 @@ internal class UsersComposer : ServerPacket
                     this.WriteInteger(1);
                     this.WriteString(user.Gender.ToLower());
 
-                    if (Group != null)
+                    if (group != null)
                     {
-                        this.WriteInteger(Group.Id);
+                        this.WriteInteger(group.Id);
                         this.WriteInteger(0);
-                        this.WriteString(Group.Name);
+                        this.WriteString(group.Name);
                     }
                     else
                     {

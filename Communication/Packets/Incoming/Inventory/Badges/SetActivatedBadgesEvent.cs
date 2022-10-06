@@ -8,7 +8,7 @@ internal class SetActivatedBadgesEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null)
         {
@@ -34,8 +34,8 @@ internal class SetActivatedBadgesEvent : IPacketEvent
 
         for (var i = 0; i < 5; i++)
         {
-            var Slot = Packet.PopInt();
-            var Badge = Packet.PopString();
+            var Slot = packet.PopInt();
+            var Badge = packet.PopString();
 
             if (string.IsNullOrEmpty(Badge))
             {

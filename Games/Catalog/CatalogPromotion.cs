@@ -1,16 +1,16 @@
-﻿namespace WibboEmulator.Games.Catalog;
+namespace WibboEmulator.Games.Catalog;
 using WibboEmulator.Core.Language;
 
 public class CatalogPromotion
 {
-    public int Id;
-    public string Title;
-    public string TitleEn;
-    public string TitleBr;
-    public string Image;
-    public int Unknown;
-    public string PageLink;
-    public int ParentId;
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public string TitleEn { get; set; }
+    public string TitleBr { get; set; }
+    public string Image { get; set; }
+    public int Unknown { get; set; }
+    public string PageLink { get; set; }
+    public int ParentId { get; set; }
 
     public CatalogPromotion(int id, string title, string titleEn, string titleBr, string image, int unknown, string pageLink, int parentId)
     {

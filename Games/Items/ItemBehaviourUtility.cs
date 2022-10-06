@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items;
+namespace WibboEmulator.Games.Items;
 using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Games.Groups;
 
@@ -67,8 +67,8 @@ internal static class ItemBehaviourUtility
 
             case InteractionType.GUILD_ITEM:
             case InteractionType.GUILD_GATE:
-                Group Group = null;
-                if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out Group))
+                Group group = null;
+                if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(item.GroupId, out group))
                 {
                     message.WriteInteger(0);
                     message.WriteString(item.ExtraData);
@@ -78,10 +78,10 @@ internal static class ItemBehaviourUtility
                     message.WriteInteger(2);
                     message.WriteInteger(5);
                     message.WriteString(item.ExtraData.Split(new char[1] { ';' })[0]);
-                    message.WriteString(Group.Id.ToString());
-                    message.WriteString(Group.Badge);
-                    message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(Group.Colour1, true));
-                    message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(Group.Colour2, false));
+                    message.WriteString(group.Id.ToString());
+                    message.WriteString(group.Badge);
+                    message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour1, true));
+                    message.WriteString(WibboEnvironment.GetGame().GetGroupManager().GetColourCode(group.Colour2, false));
                 }
                 break;
 
@@ -109,14 +109,14 @@ internal static class ItemBehaviourUtility
             case InteractionType.LOVELOCK:
                 if (item.ExtraData.Contains(Convert.ToChar(5).ToString()))
                 {
-                    var EData = item.ExtraData.Split((char)5);
-                    var I = 0;
+                    var eData = item.ExtraData.Split((char)5);
+                    var i = 0;
                     message.WriteInteger(2);
-                    message.WriteInteger(EData.Length);
-                    while (I < EData.Length)
+                    message.WriteInteger(eData.Length);
+                    while (i < eData.Length)
                     {
-                        message.WriteString(EData[I]);
-                        I++;
+                        message.WriteString(eData[i]);
+                        i++;
                     }
                 }
                 else
@@ -129,10 +129,10 @@ internal static class ItemBehaviourUtility
             case InteractionType.CRACKABLE:
                 message.WriteInteger(7); //Type
 
-                int.TryParse(item.ExtraData, out var ClickNumber);
+                _ = int.TryParse(item.ExtraData, out var clickNumber);
 
                 message.WriteString(item.ExtraData);
-                message.WriteInteger(ClickNumber);
+                message.WriteInteger(clickNumber);
                 message.WriteInteger(itemData.Modes - 1); //Type de duré
                 break;
 
@@ -141,15 +141,15 @@ internal static class ItemBehaviourUtility
                 {
                     message.WriteInteger(1);
 
-                    var ExtraDatabackground = "state" + Convert.ToChar(9) + "0" + Convert.ToChar(9) + item.ExtraData;
+                    var extraDatabackground = "state" + Convert.ToChar(9) + "0" + Convert.ToChar(9) + item.ExtraData;
 
-                    ExtraDatabackground = ExtraDatabackground.Replace('=', Convert.ToChar(9));
-                    message.WriteInteger(ExtraDatabackground.Split(Convert.ToChar(9)).Length / 2);
+                    extraDatabackground = extraDatabackground.Replace('=', Convert.ToChar(9));
+                    message.WriteInteger(extraDatabackground.Split(Convert.ToChar(9)).Length / 2);
 
-                    for (var i = 0; i <= ExtraDatabackground.Split(Convert.ToChar(9)).Length - 1; i++)
+                    for (var i = 0; i <= extraDatabackground.Split(Convert.ToChar(9)).Length - 1; i++)
                     {
-                        var Data = ExtraDatabackground.Split(Convert.ToChar(9))[i];
-                        message.WriteString(Data);
+                        var data = extraDatabackground.Split(Convert.ToChar(9))[i];
+                        message.WriteString(data);
                     }
                 }
                 else
@@ -165,24 +165,24 @@ internal static class ItemBehaviourUtility
             case InteractionType.LOOTBOX2022:
             case InteractionType.BADGEBOX:
             {
-                var LotName = "RareBox";
+                var lotName = "RareBox";
                 switch (itemData.InteractionType)
                 {
                     case InteractionType.LEGENDBOX:
-                        LotName = "LegendBox";
+                        lotName = "LegendBox";
                         break;
                     case InteractionType.DELUXEBOX:
-                        LotName = "RareBox Deluxe";
+                        lotName = "RareBox Deluxe";
                         break;
                     case InteractionType.BADGEBOX:
-                        LotName = "BadgeBox";
+                        lotName = "BadgeBox";
                         break;
                 }
 
                 message.WriteInteger(1);
                 message.WriteInteger(3);
                 message.WriteString("MESSAGE");
-                message.WriteString($"Bravo tu as reçu une {LotName} ! Ouvre-là pour y découvrir ton lot");
+                message.WriteString($"Bravo tu as reçu une {lotName} ! Ouvre-là pour y découvrir ton lot");
                 message.WriteString("PURCHASER_NAME");
                 message.WriteString("Wibbo");
                 message.WriteString("PURCHASER_FIGURE");
@@ -200,10 +200,10 @@ internal static class ItemBehaviourUtility
                 else
                 {
 
-                    var ExtraData = item.ExtraData.Split(Convert.ToChar(5));
-                    var Style = (int.Parse(item.ExtraData.Split(new char[1] { '\x0005' })[1]) * 1000) + int.Parse(item.ExtraData.Split(new char[1] { '\x0005' })[2]);
+                    var extraData = item.ExtraData.Split(Convert.ToChar(5));
+                    var style = (int.Parse(item.ExtraData.Split(new char[1] { '\x0005' })[1]) * 1000) + int.Parse(item.ExtraData.Split(new char[1] { '\x0005' })[2]);
 
-                    var Purchaser = WibboEnvironment.GetUserById(int.Parse(item.ExtraData.Split(new char[1] { ';' })[0]));
+                    var purchaser = WibboEnvironment.GetUserById(int.Parse(item.ExtraData.Split(new char[1] { ';' })[0]));
                     message.WriteInteger(1);
                     message.WriteInteger(6);
                     message.WriteString("EXTRA_PARAM");
@@ -211,13 +211,13 @@ internal static class ItemBehaviourUtility
                     message.WriteString("MESSAGE");
                     message.WriteString(item.ExtraData.Split(new char[1] { ';' })[1].Split(new char[1] { '\x0005' })[0]);
                     message.WriteString("PURCHASER_NAME");
-                    message.WriteString(Purchaser == null ? "" : Purchaser.Username);
+                    message.WriteString(purchaser == null ? "" : purchaser.Username);
                     message.WriteString("PURCHASER_FIGURE");
-                    message.WriteString(Purchaser == null ? "" : Purchaser.Look);
+                    message.WriteString(purchaser == null ? "" : purchaser.Look);
                     message.WriteString("PRODUCT_CODE");
                     message.WriteString(itemData.SpriteId.ToString());
                     message.WriteString("state");
-                    message.WriteString(Style.ToString());
+                    message.WriteString(style.ToString());
                 }
             }
             break;
@@ -227,13 +227,13 @@ internal static class ItemBehaviourUtility
                 message.WriteInteger(3);
                 if (item.ExtraData.Contains(';'))
                 {
-                    var Stuff = item.ExtraData.Split(new char[1] { ';' });
+                    var stuff = item.ExtraData.Split(new char[1] { ';' });
                     message.WriteString("GENDER");
-                    message.WriteString(Stuff[0].ToUpper() == "M" ? "M" : "F");
+                    message.WriteString(stuff[0].ToUpper() == "M" ? "M" : "F");
                     message.WriteString("FIGURE");
-                    message.WriteString(Stuff[1]);
+                    message.WriteString(stuff[1]);
                     message.WriteString("OUTFIT_NAME");
-                    message.WriteString(Stuff[2]);
+                    message.WriteString(stuff[2]);
                 }
                 else
                 {
@@ -270,12 +270,12 @@ internal static class ItemBehaviourUtility
 
                 if (item.ExtraData.Contains(Convert.ToChar(9).ToString()))
                 {
-                    var BadgeData = item.ExtraData.Split(Convert.ToChar(9));
+                    var badgeData = item.ExtraData.Split(Convert.ToChar(9));
 
                     message.WriteString("0");//No idea
-                    message.WriteString(BadgeData[0]);//Badge name
-                    message.WriteString(BadgeData[1]);//Owner
-                    message.WriteString(BadgeData[2]);//Date
+                    message.WriteString(badgeData[0]);//Badge name
+                    message.WriteString(badgeData[1]);//Owner
+                    message.WriteString(badgeData[2]);//Date
                 }
                 else
                 {
@@ -317,30 +317,14 @@ internal static class ItemBehaviourUtility
         }
     }
 
-    public static int ItemCategory(Item item)
+    public static int ItemCategory(Item item) => item.GetBaseItem().InteractionType switch
     {
-        switch (item.GetBaseItem().InteractionType)
-        {
-            case InteractionType.GIFT:
-            case InteractionType.LEGENDBOX:
-            case InteractionType.BADGEBOX:
-            case InteractionType.LOOTBOX2022:
-            case InteractionType.DELUXEBOX:
-            case InteractionType.EXTRABOX:
-                return 9;
-            case InteractionType.GUILD_ITEM:
-            case InteractionType.GUILD_GATE:
-                return 17;
-            case InteractionType.LANDSCAPE:
-                return 4;
-            case InteractionType.FLOOR:
-                return 3;
-            case InteractionType.WALLPAPER:
-                return 2;
-            case InteractionType.TROPHY:
-                return 11;
-            default:
-                return 1;
-        }
-    }
+        InteractionType.GIFT or InteractionType.LEGENDBOX or InteractionType.BADGEBOX or InteractionType.LOOTBOX2022 or InteractionType.DELUXEBOX or InteractionType.EXTRABOX => 9,
+        InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE => 17,
+        InteractionType.LANDSCAPE => 4,
+        InteractionType.FLOOR => 3,
+        InteractionType.WALLPAPER => 2,
+        InteractionType.TROPHY => 11,
+        _ => 1,
+    };
 }

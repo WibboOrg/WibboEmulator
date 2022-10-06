@@ -27,31 +27,21 @@ internal class QuestCompletedComposer : ServerPacket
         this.WriteString(Quest.Name);
         this.WriteInteger(num);
         this.WriteInteger(Quest.GoalData);
-        this.WriteInteger(this.GetIntValue(Quest.Category));
+        this.WriteInteger(GetIntValue(Quest.Category));
         this.WriteString("set_kuurna");
         this.WriteString("MAIN_CHAIN");
         this.WriteBoolean(true);
         this.WriteBoolean(true);
     }
 
-    private int GetIntValue(string QuestCategory)
+    private static int GetIntValue(string QuestCategory) => QuestCategory switch
     {
-        switch (QuestCategory)
-        {
-            case "room_builder":
-                return 2;
-            case "social":
-                return 3;
-            case "identity":
-                return 4;
-            case "explore":
-                return 5;
-            case "battleball":
-                return 7;
-            case "freeze":
-                return 8;
-            default:
-                return 0;
-        }
-    }
+        "room_builder" => 2,
+        "social" => 3,
+        "identity" => 4,
+        "explore" => 5,
+        "battleball" => 7,
+        "freeze" => 8,
+        _ => 0,
+    };
 }

@@ -3,19 +3,19 @@ using WibboEmulator.Games.Catalog.Pets;
 
 internal class SellablePetBreedsComposer : ServerPacket
 {
-    public SellablePetBreedsComposer(string PetType, int PetId, ICollection<PetRace> Races)
+    public SellablePetBreedsComposer(string petType, int petId, ICollection<PetRace> races)
          : base(ServerPacketHeader.CATALOG_RECEIVE_PET_BREEDS)
     {
-        this.WriteString(PetType);
+        this.WriteString(petType);
 
-        this.WriteInteger(Races.Count);
-        foreach (var Race in Races.ToList())
+        this.WriteInteger(races.Count);
+        foreach (var race in races.ToList())
         {
-            this.WriteInteger(PetId);
-            this.WriteInteger(Race.PrimaryColour);
-            this.WriteInteger(Race.SecondaryColour);
-            this.WriteBoolean(Race.HasPrimaryColour);
-            this.WriteBoolean(Race.HasSecondaryColour);
+            this.WriteInteger(petId);
+            this.WriteInteger(race.PrimaryColour);
+            this.WriteInteger(race.SecondaryColour);
+            this.WriteBoolean(race.HasPrimaryColour);
+            this.WriteBoolean(race.HasSecondaryColour);
         }
     }
 }

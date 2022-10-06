@@ -6,10 +6,10 @@ internal class GetGroupInfoEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = Packet.PopInt();
-        var NewWindow = Packet.PopBoolean();
+        var GroupId = packet.PopInt();
+        var NewWindow = packet.PopBoolean();
 
         if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
         {

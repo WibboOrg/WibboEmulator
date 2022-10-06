@@ -210,9 +210,9 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         }
 
         this.RpCommand(command, value, user, item);
-        this.UserCommand(command, value, user, item);
+        UserCommand(command, value, user, item);
         this.RoomCommand(command, value, user, item);
-        this.BotCommand(command, value, user, item);
+        BotCommand(command, value, user, item);
 
         return false;
     }
@@ -560,14 +560,14 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().RemoveEnemyBot(BotOrPet.BotData.Id);
                     BotOrPet.BotData.RoleBot = null;
                     BotOrPet.BotData.AiType = BotAIType.Generic;
-                    BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
+                    _ = BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                 }
                 else
                 {
                     WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().RemoveEnemyPet(BotOrPet.BotData.Id);
                     BotOrPet.BotData.RoleBot = null;
                     BotOrPet.BotData.AiType = BotAIType.Pet;
-                    BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
+                    _ = BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                 }
                 break;
             }
@@ -586,7 +586,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     {
                         BotOrPet.BotData.RoleBot = new RoleBot(RPEnemyConfig);
                         BotOrPet.BotData.AiType = BotAIType.RoleplayBot;
-                        BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
+                        _ = BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                     }
                 }
                 else
@@ -596,7 +596,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     {
                         BotOrPet.BotData.RoleBot = new RoleBot(RPEnemyConfig);
                         BotOrPet.BotData.AiType = BotAIType.RoleplayPet;
-                        BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
+                        _ = BotOrPet.BotData.GenerateBotAI(BotOrPet.VirtualId);
                     }
                 }
                 break;
@@ -642,7 +642,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "inventoryadd":
             {
-                int.TryParse(value, out var ItemId);
+                _ = int.TryParse(value, out var ItemId);
 
                 var RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
                 if (RpItem == null)
@@ -655,7 +655,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "inventoryremove":
             {
-                int.TryParse(value, out var ItemId);
+                _ = int.TryParse(value, out var ItemId);
 
                 var RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
                 if (RpItem == null)
@@ -739,7 +739,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "removeenergy":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
 
                 Rp.RemoveEnergy(Nb);
 
@@ -748,7 +748,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "addenergy":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
 
                 Rp.AddEnergy(Nb);
 
@@ -757,7 +757,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "weaponfarid":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
                 if (Nb is < 0 or > 2)
                 {
                     Nb = 0;
@@ -769,7 +769,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "weaponcacid":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
 
                 if (Nb is < 0 or > 3)
                 {
@@ -794,7 +794,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "munition":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
                 if (Nb > 99)
                 {
                     Nb = 99;
@@ -812,7 +812,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "addmunition":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
 
                 Rp.AddMunition(Nb);
                 Rp.SendUpdate();
@@ -820,7 +820,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "removemunition":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
 
                 Rp.RemoveMunition(Nb);
                 Rp.SendUpdate();
@@ -828,7 +828,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "rpexp":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
                 if (Nb <= 0)
                 {
                     break;
@@ -839,7 +839,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "rpremoveexp":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
                 if (Nb <= 0)
                 {
                     break;
@@ -850,7 +850,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "removemoney":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
                 if (Nb <= 0)
                 {
                     break;
@@ -869,7 +869,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "addmoney":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
                 if (Nb <= 0)
                 {
                     break;
@@ -881,7 +881,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "health":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
                 if (Nb <= 0)
                 {
                     break;
@@ -901,7 +901,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "healthplus":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
                 if (Nb <= 0)
                 {
                     break;
@@ -914,7 +914,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "hit":
             {
-                int.TryParse(value, out var Nb);
+                _ = int.TryParse(value, out var Nb);
                 if (Nb <= 0)
                 {
                     break;
@@ -936,19 +936,19 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "droprpitem":
             {
-                int.TryParse(value, out var ValueNumber);
+                _ = int.TryParse(value, out var ValueNumber);
                 if (ValueNumber <= 0)
                 {
                     break;
                 }
 
-                this.RoomInstance.GetRoomItemHandler().AddTempItem(user.VirtualId, ValueNumber, user.SetX, user.SetY, user.Z, "1", 0, InteractionTypeTemp.RPITEM);
+                _ = this.RoomInstance.GetRoomItemHandler().AddTempItem(user.VirtualId, ValueNumber, user.SetX, user.SetY, user.Z, "1", 0, InteractionTypeTemp.RPITEM);
                 break;
             }
         }
     }
 
-    private void BotCommand(string command, string value, RoomUser user, Item item)
+    private static void BotCommand(string command, string value, RoomUser user, Item item)
     {
         if (user == null || !user.IsBot)
         {
@@ -1154,7 +1154,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                             break;
                         }
 
-                        int.TryParse(parameters[2], out var IntValue);
+                        _ = int.TryParse(parameters[2], out var IntValue);
 
                         if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
                         {
@@ -1180,7 +1180,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                             break;
                         }
 
-                        int.TryParse(parameters[2], out var IntValue);
+                        _ = int.TryParse(parameters[2], out var IntValue);
 
                         if (Bot.CarryItemID != IntValue)
                         {
@@ -1201,7 +1201,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                             break;
                         }
 
-                        int.TryParse(parameters[2], out var IntValue);
+                        _ = int.TryParse(parameters[2], out var IntValue);
                         IntValue = (IntValue is > 7 or < 0) ? 0 : IntValue;
 
                         if (Bot.RotBody != IntValue)
@@ -1566,7 +1566,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         }
     }
 
-    private void UserCommand(string cmd, string value, RoomUser user, Item triggerItem)
+    private static void UserCommand(string cmd, string value, RoomUser user, Item triggerItem)
     {
         if (user == null || user.IsBot || user.GetClient() == null)
         {
@@ -1744,7 +1744,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "rot":
             {
-                int.TryParse(value, out var ValueInt);
+                _ = int.TryParse(value, out var ValueInt);
 
                 if (ValueInt is > 7 or < 0)
                 {
@@ -1802,7 +1802,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                int.TryParse(value, out var count);
+                _ = int.TryParse(value, out var count);
 
                 if (user.Room == null)
                 {
@@ -1827,7 +1827,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "usertimer":
             {
-                int.TryParse(value, out var Points);
+                _ = int.TryParse(value, out var Points);
 
                 user.UserTimer = Points;
 
@@ -1835,7 +1835,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "addusertimer":
             {
-                int.TryParse(value, out var Points);
+                _ = int.TryParse(value, out var Points);
 
                 if (Points == 0)
                 {
@@ -1851,7 +1851,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "removeusertimer":
             {
-                int.TryParse(value, out var Points);
+                _ = int.TryParse(value, out var Points);
 
                 if (Points == 0)
                 {
@@ -1871,7 +1871,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "point":
             {
-                int.TryParse(value, out var Points);
+                _ = int.TryParse(value, out var Points);
 
                 user.WiredPoints = Points;
 
@@ -1879,7 +1879,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "addpoint":
             {
-                int.TryParse(value, out var Points);
+                _ = int.TryParse(value, out var Points);
 
                 if (Points == 0)
                 {
@@ -1895,7 +1895,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "removepoint":
             {
-                int.TryParse(value, out var Points);
+                _ = int.TryParse(value, out var Points);
 
                 if (Points == 0)
                 {
@@ -1914,7 +1914,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "freeze":
             {
-                int.TryParse(value, out var Seconde);
+                _ = int.TryParse(value, out var Seconde);
                 Seconde *= 2;
                 user.Freeze = true;
                 user.FreezeEndCounter = Seconde;
@@ -2104,7 +2104,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "achievement":
             {
-                WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), value, 1);
+                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), value, 1);
                 break;
             }
             case "winmovierun":
@@ -2182,7 +2182,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     UserDao.UpdateAddGamePoints(dbClient, user.GetClient().GetUser().Id);
                 }
 
-                WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), "ACH_Extrabox", 1);
+                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), "ACH_Extrabox", 1);
                 WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, user.Room.RoomData.OwnerName, user.RoomId, string.Empty, "givelot", "SuperWired givelot: " + user.GetUsername());
 
                 break;

@@ -9,7 +9,7 @@ internal class RedeemOfferCreditsEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var CreditsOwed = 0;
 

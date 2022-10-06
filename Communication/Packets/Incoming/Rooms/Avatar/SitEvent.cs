@@ -5,7 +5,7 @@ internal class SitEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var room = session.GetUser().CurrentRoom;        if (room == null)
         {

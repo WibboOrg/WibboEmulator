@@ -6,10 +6,10 @@ internal class RpBuyItemsEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var ItemId = Packet.PopInt();
-        var Count = Packet.PopInt();
+        var ItemId = packet.PopInt();
+        var Count = packet.PopInt();
 
         if (session == null || session.GetUser() == null)
         {

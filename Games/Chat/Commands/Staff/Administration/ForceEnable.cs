@@ -11,7 +11,7 @@ internal class ForceEnable : IChatCommand
             return;
         }
 
-        int.TryParse(parameters[1], out var EnableNum);
+        _ = int.TryParse(parameters[1], out var EnableNum);
 
         if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(EnableNum, session.GetUser().HasPermission("perm_god")))
         {

@@ -99,7 +99,7 @@ public class User
     public bool InfoSaved { get; set; }
     public bool AcceptTrading { get; set; }
     public bool HideInRoom { get; set; }
-    public int PubDectectCount { get; set; }
+    public int PubDetectCount { get; set; }
     public DateTime OnlineTime { get; set; }
     public bool PremiumProtect { get; set; }
     public int ControlUserId { get; set; }
@@ -624,7 +624,7 @@ public class User
 
     public int GetQuestProgress(int p)
     {
-        this.Quests.TryGetValue(p, out var num);
+        _ = this.Quests.TryGetValue(p, out var num);
         return num;
     }
 }

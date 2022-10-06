@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -28,9 +28,9 @@ public class ItemUserCollision : WiredActionBase, IWiredEffect, IWired
             return;
         }
 
-        foreach (var Coord in item.GetCoords)
+        foreach (var coord in item.GetCoords)
         {
-            var roomUser = this.RoomInstance.GetRoomUserManager().GetUserForSquare(Coord.X, Coord.Y);
+            var roomUser = this.RoomInstance.GetRoomUserManager().GetUserForSquare(coord.X, coord.Y);
             if (roomUser != null)
             {
                 this.RoomInstance.GetWiredHandler().TriggerCollision(roomUser, item);

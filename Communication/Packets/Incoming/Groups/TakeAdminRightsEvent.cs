@@ -5,8 +5,8 @@ using WibboEmulator.Games.GameClients;using WibboEmulator.Games.Groups;using W
 internal class TakeAdminRightsEvent : IPacketEvent{
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket Packet)    {        var GroupId = Packet.PopInt();
-        var UserId = Packet.PopInt();
+    public void Parse(GameClient session, ClientPacket packet)    {        var GroupId = packet.PopInt();
+        var UserId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
         {

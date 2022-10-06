@@ -11,7 +11,7 @@ internal class PlaceObjectEvent : IPacketEvent
 {
     public double Delay => 200;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
         {
@@ -35,7 +35,7 @@ internal class PlaceObjectEvent : IPacketEvent
             return;
         }
 
-        var RawData = Packet.PopString();
+        var RawData = packet.PopString();
         var Data = RawData.Split(' ');
 
         if (!int.TryParse(Data[0], out var ItemId))
@@ -196,7 +196,7 @@ internal class PlaceObjectEvent : IPacketEvent
 
     private static bool TrySetWallItem(string[] data, out string position)
     {
-        if (data.Length < 3 || !data[0].StartsWith(":w=") || !data[1].StartsWith("l=") || data[2] != "r" && data[2] != "l")
+        if (data.Length < 3 || !data[0].StartsWith(":w=") || !data[1].StartsWith("l=") || (data[2] != "r" && data[2] != "l"))
         {
             position = "";
             return false;
@@ -212,14 +212,14 @@ internal class PlaceObjectEvent : IPacketEvent
         }
 
 
-        int.TryParse(wBit.Split(',')[0], out var w1);
-        int.TryParse(wBit.Split(',')[1], out var w2);
-        int.TryParse(lBit.Split(',')[0], out var l1);
-        int.TryParse(lBit.Split(',')[1], out var l2);
+        _ = int.TryParse(wBit.Split(',')[0], out var w1);
+        _ = int.TryParse(wBit.Split(',')[1], out var w2);
+        _ = int.TryParse(lBit.Split(',')[0], out var l1);
+        _ = int.TryParse(lBit.Split(',')[1], out var l2);
 
-        var WallPos = ":w=" + w1 + "," + w2 + " l=" + l1 + "," + l2 + " " + data[2];
+        var wallPos = ":w=" + w1 + "," + w2 + " l=" + l1 + "," + l2 + " " + data[2];
 
-        position = WallPositionCheck(WallPos);
+        position = WallPositionCheck(wallPos);
 
         return position != "";
     }

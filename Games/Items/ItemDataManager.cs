@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items;
+namespace WibboEmulator.Games.Items;
 using System.Data;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
@@ -26,36 +26,36 @@ public class ItemDataManager
             this._gifts.Clear();
         }
 
-        var ItemData = ItemBaseDao.GetAll(dbClient);
+        var itemDataTable = ItemBaseDao.GetAll(dbClient);
 
-        if (ItemData != null)
+        if (itemDataTable != null)
         {
-            foreach (DataRow Row in ItemData.Rows)
+            foreach (DataRow row in itemDataTable.Rows)
             {
                 try
                 {
-                    var id = Convert.ToInt32(Row["id"]);
-                    var spriteID = Convert.ToInt32(Row["sprite_id"]);
-                    var itemName = Convert.ToString(Row["item_name"]);
-                    var type = Row["type"].ToString();
-                    var width = Convert.ToInt32(Row["width"]);
-                    var length = Convert.ToInt32(Row["length"]);
-                    var height = Convert.ToDouble(Row["stack_height"]);
-                    var allowStack = WibboEnvironment.EnumToBool(Row["can_stack"].ToString());
-                    var allowWalk = WibboEnvironment.EnumToBool(Row["is_walkable"].ToString());
-                    var allowSit = WibboEnvironment.EnumToBool(Row["can_sit"].ToString());
-                    var allowRecycle = WibboEnvironment.EnumToBool(Row["allow_recycle"].ToString());
-                    var allowTrade = WibboEnvironment.EnumToBool(Row["allow_trade"].ToString());
-                    var allowGift = Convert.ToInt32(Row["allow_gift"]) == 1;
-                    var allowInventoryStack = WibboEnvironment.EnumToBool(Row["allow_inventory_stack"].ToString());
-                    var interactionType = InteractionTypes.GetTypeFromString(Convert.ToString(Row["interaction_type"]));
-                    var cycleCount = Convert.ToInt32(Row["interaction_modes_count"]);
-                    var vendingIDS = Convert.ToString(Row["vending_ids"]);
-                    var heightAdjustable = Convert.ToString(Row["height_adjustable"]);
-                    var effectId = Convert.ToInt32(Row["effect_id"]);
-                    var isRare = WibboEnvironment.EnumToBool(Row["is_rare"].ToString());
-                    var rarityLevel = Convert.ToInt32(Row["rarity_level"].ToString());
-                    var amount = !DBNull.Value.Equals(Row["amount"]) ? Convert.ToInt32(Convert.ToString(Row["amount"])) : -1;
+                    var id = Convert.ToInt32(row["id"]);
+                    var spriteID = Convert.ToInt32(row["sprite_id"]);
+                    var itemName = Convert.ToString(row["item_name"]);
+                    var type = row["type"].ToString();
+                    var width = Convert.ToInt32(row["width"]);
+                    var length = Convert.ToInt32(row["length"]);
+                    var height = Convert.ToDouble(row["stack_height"]);
+                    var allowStack = WibboEnvironment.EnumToBool(row["can_stack"].ToString());
+                    var allowWalk = WibboEnvironment.EnumToBool(row["is_walkable"].ToString());
+                    var allowSit = WibboEnvironment.EnumToBool(row["can_sit"].ToString());
+                    var allowRecycle = WibboEnvironment.EnumToBool(row["allow_recycle"].ToString());
+                    var allowTrade = WibboEnvironment.EnumToBool(row["allow_trade"].ToString());
+                    var allowGift = Convert.ToInt32(row["allow_gift"]) == 1;
+                    var allowInventoryStack = WibboEnvironment.EnumToBool(row["allow_inventory_stack"].ToString());
+                    var interactionType = InteractionTypes.GetTypeFromString(Convert.ToString(row["interaction_type"]));
+                    var cycleCount = Convert.ToInt32(row["interaction_modes_count"]);
+                    var vendingIDS = Convert.ToString(row["vending_ids"]);
+                    var heightAdjustable = Convert.ToString(row["height_adjustable"]);
+                    var effectId = Convert.ToInt32(row["effect_id"]);
+                    var isRare = WibboEnvironment.EnumToBool(row["is_rare"].ToString());
+                    var rarityLevel = Convert.ToInt32(row["rarity_level"].ToString());
+                    var amount = !DBNull.Value.Equals(row["amount"]) ? Convert.ToInt32(Convert.ToString(row["amount"])) : -1;
 
                     var itemData = new ItemData(id, spriteID, itemName, type, width, length, height, allowStack, allowWalk, allowSit, allowRecycle, allowTrade, allowGift, allowInventoryStack, interactionType, cycleCount, vendingIDS, heightAdjustable, effectId, isRare, rarityLevel, amount);
 
@@ -79,9 +79,9 @@ public class ItemDataManager
         Console.WriteLine("Item Manager -> LOADED");
     }
 
-    public bool GetGift(int SpriteId, out ItemData Item)
+    public bool GetGift(int spriteId, out ItemData item)
     {
-        if (this._gifts.TryGetValue(SpriteId, out Item))
+        if (this._gifts.TryGetValue(spriteId, out item))
         {
             return true;
         }
@@ -89,9 +89,9 @@ public class ItemDataManager
         return false;
     }
 
-    public bool GetItem(int Id, out ItemData Item)
+    public bool GetItem(int id, out ItemData item)
     {
-        if (this._items.TryGetValue(Id, out Item))
+        if (this._items.TryGetValue(id, out item))
         {
             return true;
         }

@@ -7,15 +7,15 @@ internal class SetRelationshipEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null || session.GetUser().GetMessenger() == null)
         {
             return;
         }
 
-        var User = Packet.PopInt();
-        var Type = Packet.PopInt();
+        var User = packet.PopInt();
+        var Type = packet.PopInt();
 
         if (Type is < 0 or > 3)
         {
@@ -31,7 +31,7 @@ internal class SetRelationshipEvent : IPacketEvent
         {
             if (session.GetUser().GetMessenger().Relation.ContainsKey(User))
             {
-                session.GetUser().GetMessenger().Relation.Remove(User);
+                _ = session.GetUser().GetMessenger().Relation.Remove(User);
             }
         }
         else

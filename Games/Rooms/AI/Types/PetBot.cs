@@ -7,13 +7,13 @@ using WibboEmulator.Games.Rooms.PathFinding;
 
 public class PetBot : BotAI
 {
-    private int _speechTimer;
     private int _actionTimer;
     private int _energyTimer;
 
     public PetBot(int virtualId)
     {
-        this._speechTimer = new Random((virtualId ^ 2) + DateTime.Now.Millisecond).Next(10, 60);
+        this.VirtualId = virtualId;
+
         this._actionTimer = new Random((virtualId ^ 2) + DateTime.Now.Millisecond).Next(10, 30 + virtualId);
         this._energyTimer = new Random((virtualId ^ 2) + DateTime.Now.Millisecond).Next(10, 60);
     }
@@ -156,7 +156,6 @@ public class PetBot : BotAI
                         roomUser.SetStatus("ded", roomUser.Z.ToString());
                         roomUser.UpdateNeeded = true;
                         roomUser.PetData.AddExpirience(10);
-                        this._speechTimer = 45;
                         this._actionTimer = 30;
                         break;
                     case 6:
@@ -171,7 +170,6 @@ public class PetBot : BotAI
                         roomUser.UpdateNeeded = true;
                         roomUser.PetData.AddExpirience(10);
                         this._energyTimer = 5;
-                        this._speechTimer = 10;
                         this._actionTimer = 5;
                         break;
                     case 10:
@@ -188,7 +186,6 @@ public class PetBot : BotAI
                         roomUser.UpdateNeeded = true;
                         roomUser.PetData.AddExpirience(10);
                         this._energyTimer = 5;
-                        this._speechTimer = 30;
                         this._actionTimer = 45;
                         break;
                     case 14:
@@ -225,7 +222,6 @@ public class PetBot : BotAI
                         roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
                         roomUser.SetStatus("lay", roomUser.Z.ToString());
                         roomUser.IsLay = true;
-                        this._speechTimer = 50;
                         this._actionTimer = 45;
                         this._energyTimer = 5;
                     }

@@ -28,7 +28,7 @@ internal class FurniListComposer : ServerPacket
 
         this.WriteBoolean(Item.GetBaseItem().AllowEcotronRecycle);
         this.WriteBoolean(Item.GetBaseItem().AllowTrade);
-        this.WriteBoolean(Item.Limited == 0 ? Item.GetBaseItem().AllowInventoryStack : false);
+        this.WriteBoolean(Item.Limited == 0 && Item.GetBaseItem().AllowInventoryStack);
         this.WriteBoolean(ItemUtility.IsRare(Item));
         this.WriteInteger(-1);//Seconds to expiration.
         this.WriteBoolean(true);

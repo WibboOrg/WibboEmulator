@@ -1,8 +1,8 @@
-﻿namespace WibboEmulator.Games.Chat.Emotions;
+namespace WibboEmulator.Games.Chat.Emotions;
 
 public sealed class ChatEmotionsManager
 {
-    private readonly Dictionary<string, ChatEmotions> Emotions = new()
+    private readonly Dictionary<string, ChatEmotions> _emotions = new()
         {
             // Smile
             { ":)", ChatEmotions.SMILE },
@@ -51,7 +51,7 @@ public sealed class ChatEmotionsManager
     /// <returns></returns>
     public int GetEmotionsForText(string Text)
     {
-        foreach (var Kvp in this.Emotions)
+        foreach (var Kvp in this._emotions)
         {
             if (Text.ToLower().Contains(Kvp.Key.ToLower()))
             {
@@ -67,25 +67,12 @@ public sealed class ChatEmotionsManager
     /// </summary>
     /// <param name="e">Chat Emotion</param>
     /// <returns></returns>
-    private static int GetEmoticonPacketNum(ChatEmotions e)
+    private static int GetEmoticonPacketNum(ChatEmotions e) => e switch
     {
-        switch (e)
-        {
-            case ChatEmotions.SMILE:
-                return 1;
-
-            case ChatEmotions.ANGRY:
-                return 2;
-
-            case ChatEmotions.SHOCKED:
-                return 3;
-
-            case ChatEmotions.SAD:
-                return 4;
-
-            case ChatEmotions.NONE:
-            default:
-                return 0;
-        }
-    }
+        ChatEmotions.SMILE => 1,
+        ChatEmotions.ANGRY => 2,
+        ChatEmotions.SHOCKED => 3,
+        ChatEmotions.SAD => 4,
+        _ => 0,
+    };
 }

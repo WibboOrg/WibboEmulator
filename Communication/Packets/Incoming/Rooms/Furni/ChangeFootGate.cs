@@ -6,11 +6,11 @@ internal class ChangeFootGate : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var Id = Packet.PopInt();
-        var gender = Packet.PopString();
-        var look = Packet.PopString();
+        var Id = packet.PopInt();
+        var gender = packet.PopString();
+        var look = packet.PopString();
 
         var room = session.GetUser().CurrentRoom;
         if (room == null || !room.CheckRights(session, true))

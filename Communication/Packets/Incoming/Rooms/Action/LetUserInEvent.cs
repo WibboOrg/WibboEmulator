@@ -7,7 +7,7 @@ internal class LetUserInEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
@@ -24,8 +24,8 @@ internal class LetUserInEvent : IPacketEvent
             return;
         }
 
-        var username = Packet.PopString();
-        var allowUserToEnter = Packet.PopBoolean();
+        var username = packet.PopString();
+        var allowUserToEnter = packet.PopBoolean();
 
         var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
         if (clientByUsername == null || clientByUsername.GetUser() == null)

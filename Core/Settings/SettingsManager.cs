@@ -1,11 +1,11 @@
-﻿namespace WibboEmulator.Core.Settings;
+namespace WibboEmulator.Core.Settings;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
 
 public class SettingsManager
 {
-    private Dictionary<string, string> _settings = new();
+    private readonly Dictionary<string, string> _settings = new();
 
 
     public void Init(IQueryAdapter dbClient)
@@ -30,21 +30,21 @@ public class SettingsManager
 
     public bool GetDataBool(string key)
     {
-        this._settings.TryGetValue(key, out var value);
+        _ = this._settings.TryGetValue(key, out var value);
 
         return value == "true";
     }
 
     public string GetDataString(string key)
     {
-        this._settings.TryGetValue(key, out var value);
+        _ = this._settings.TryGetValue(key, out var value);
 
         return value;
     }
 
     public T GetData<T>(string key) where T : IConvertible
     {
-        this._settings.TryGetValue(key, out var value);
+        _ = this._settings.TryGetValue(key, out var value);
 
         return (T)Convert.ChangeType(value, typeof(T));
     }

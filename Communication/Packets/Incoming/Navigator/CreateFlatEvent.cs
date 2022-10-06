@@ -7,7 +7,7 @@ internal class CreateFlatEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null)
         {
@@ -20,12 +20,12 @@ internal class CreateFlatEvent : IPacketEvent
             return;
         }
 
-        var name = Packet.PopString();
-        var desc = Packet.PopString();
-        var model = Packet.PopString();
-        var category = Packet.PopInt();
-        var maxVisitors = Packet.PopInt();
-        var tradeSettings = Packet.PopInt();
+        var name = packet.PopString();
+        var desc = packet.PopString();
+        var model = packet.PopString();
+        var category = packet.PopInt();
+        var maxVisitors = packet.PopInt();
+        var tradeSettings = packet.PopInt();
 
         if (maxVisitors is > 50 or < 1)
         {

@@ -8,7 +8,7 @@ internal class SendRoomInviteEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var timeSpan = DateTime.Now - session.GetUser().FloodTime;
         if (timeSpan.Seconds > 4)
@@ -24,7 +24,7 @@ internal class SendRoomInviteEvent : IPacketEvent
         session.GetUser().FloodTime = DateTime.Now;
         session.GetUser().FloodCount++;
 
-        var inviteCount = Packet.PopInt();
+        var inviteCount = packet.PopInt();
         if (inviteCount > 100)
         {
             return;
@@ -33,14 +33,14 @@ internal class SendRoomInviteEvent : IPacketEvent
         var targets = new List<int>();
         for (var i = 0; i < inviteCount; ++i)
         {
-            var Id = Packet.PopInt();
+            var Id = packet.PopInt();
             if (i < 100)
             {
                 targets.Add(Id);
             }
         }
 
-        var textMessage = StringCharFilter.Escape(Packet.PopString());
+        var textMessage = StringCharFilter.Escape(packet.PopString());
         if (textMessage.Length > 121)
         {
             textMessage = textMessage[..121];

@@ -6,14 +6,14 @@ internal class GetModeratorUserRoomVisitsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().HasPermission("perm_mod"))
         {
             return;
         }
 
-        var userId = Packet.PopInt();
+        var userId = packet.PopInt();
 
         var clientTarget = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
 

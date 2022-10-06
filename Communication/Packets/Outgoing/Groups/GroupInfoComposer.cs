@@ -28,6 +28,6 @@ internal class GroupInfoComposer : ServerPacket
         this.WriteBoolean(Group.AdminOnlyDeco == 0); // Any user can place furni in home room
         this.WriteInteger(Group.CreatorId == session.GetUser().Id ? Group.RequestCount : Group.IsAdmin(session.GetUser().Id) ? Group.RequestCount : Group.IsMember(session.GetUser().Id) ? 0 : 0); // Pending users
         //base.WriteInteger(0);//what the fuck
-        this.WriteBoolean(Group != null ? Group.ForumEnabled : true);
+        this.WriteBoolean(Group == null || Group.ForumEnabled);
     }
 }

@@ -6,9 +6,9 @@ internal class GuideToolMessageNewEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var message = Packet.PopString();
+        var message = packet.PopString();
 
         var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.GetUser().GuideOtherUserId);
         if (requester == null)

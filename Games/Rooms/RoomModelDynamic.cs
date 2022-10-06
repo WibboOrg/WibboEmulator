@@ -6,35 +6,36 @@ using WibboEmulator.Games.Rooms.Map;
 
 public class RoomModelDynamic
 {
-    private RoomModel staticModel;
+    private RoomModel _staticModel;
 
-    public int DoorX;
-    public int DoorY;
-    public double DoorZ;
-    public int DoorOrientation;
-    public string Heightmap;
+    public int DoorX { get; set; }
+    public int DoorY { get; set; }
+    public double DoorZ { get; set; }
+    public int DoorOrientation { get; set; }
+    public string Heightmap { get; set; }
 
-    public SquareStateType[,] SqState;
-    public short[,] SqFloorHeight;
-    public int MapSizeX;
-    public int MapSizeY;
-    private ServerPacket SerializedRelativeHeightmap;
-    private bool RelativeSerialized;
-    private ServerPacket SerializedHeightmap;
-    private bool HeightmapSerialized;
-    public int WallHeight;
+    public SquareStateType[,] SqState { get; set; }
+    public short[,] SqFloorHeight { get; set; }
+    public int MapSizeX { get; set; }
+    public int MapSizeY { get; set; }
+    public int WallHeight { get; set; }
 
-    public RoomModelDynamic(RoomModel pModel)
+    private ServerPacket _serializedRelativeHeightmap;
+    private bool _relativeSerialized;
+    private ServerPacket _serializedHeightmap;
+    private bool _heightmapSerialized;
+
+    public RoomModelDynamic(RoomModel model)
     {
-        this.staticModel = pModel;
-        this.DoorX = this.staticModel.DoorX;
-        this.DoorY = this.staticModel.DoorY;
-        this.DoorZ = this.staticModel.DoorZ;
-        this.DoorOrientation = this.staticModel.DoorOrientation;
-        this.Heightmap = this.staticModel.Heightmap;
-        this.MapSizeX = this.staticModel.MapSizeX;
-        this.MapSizeY = this.staticModel.MapSizeY;
-        this.WallHeight = this.staticModel.WallHeight;
+        this._staticModel = model;
+        this.DoorX = this._staticModel.DoorX;
+        this.DoorY = this._staticModel.DoorY;
+        this.DoorZ = this._staticModel.DoorZ;
+        this.DoorOrientation = this._staticModel.DoorOrientation;
+        this.Heightmap = this._staticModel.Heightmap;
+        this.MapSizeX = this._staticModel.MapSizeX;
+        this.MapSizeY = this._staticModel.MapSizeY;
+        this.WallHeight = this._staticModel.WallHeight;
         this.Generate();
     }
 
@@ -46,47 +47,47 @@ public class RoomModelDynamic
         {
             for (var index2 = 0; index2 < this.MapSizeX; ++index2)
             {
-                if (index2 > this.staticModel.MapSizeX - 1 || index1 > this.staticModel.MapSizeY - 1)
+                if (index2 > this._staticModel.MapSizeX - 1 || index1 > this._staticModel.MapSizeY - 1)
                 {
                     this.SqState[index2, index1] = SquareStateType.BLOCKED;
                 }
                 else
                 {
-                    this.SqState[index2, index1] = this.staticModel.SqState[index2, index1];
-                    this.SqFloorHeight[index2, index1] = this.staticModel.SqFloorHeight[index2, index1];
+                    this.SqState[index2, index1] = this._staticModel.SqState[index2, index1];
+                    this.SqFloorHeight[index2, index1] = this._staticModel.SqFloorHeight[index2, index1];
                 }
             }
         }
-        this.RelativeSerialized = false;
-        this.HeightmapSerialized = false;
+        this._relativeSerialized = false;
+        this._heightmapSerialized = false;
     }
 
     public void SetUpdateState()
     {
-        this.RelativeSerialized = false;
-        this.HeightmapSerialized = false;
+        this._relativeSerialized = false;
+        this._heightmapSerialized = false;
     }
 
     public ServerPacket SerializeRelativeHeightmap()
     {
-        if (!this.RelativeSerialized)
+        if (!this._relativeSerialized)
         {
-            this.SerializedRelativeHeightmap = new HeightMapComposer(this);
-            this.RelativeSerialized = true;
+            this._serializedRelativeHeightmap = new HeightMapComposer(this);
+            this._relativeSerialized = true;
         }
 
-        return this.SerializedRelativeHeightmap;
+        return this._serializedRelativeHeightmap;
     }
 
     public ServerPacket GetHeightmap()
     {
-        if (!this.HeightmapSerialized)
+        if (!this._heightmapSerialized)
         {
-            this.SerializedHeightmap = this.SerializeHeightmap();
-            this.HeightmapSerialized = true;
+            this._serializedHeightmap = this.SerializeHeightmap();
+            this._heightmapSerialized = true;
         }
 
-        return this.SerializedHeightmap;
+        return this._serializedHeightmap;
     }
 
     private ServerPacket SerializeHeightmap()
@@ -99,77 +100,51 @@ public class RoomModelDynamic
             {
                 if (x == this.DoorX && y == this.DoorY)
                 {
-                    thatMessage.Append(this.Parse(Convert.ToInt16(this.DoorZ)));
+                    _ = thatMessage.Append(Parse(Convert.ToInt16(this.DoorZ)));
                 }
                 else if (this.SqState[x, y] == SquareStateType.BLOCKED)
                 {
-                    thatMessage.Append('x');
+                    _ = thatMessage.Append('x');
                 }
                 else
                 {
-                    thatMessage.Append(this.Parse(this.SqFloorHeight[x, y]));
+                    _ = thatMessage.Append(Parse(this.SqFloorHeight[x, y]));
                 }
             }
 
-            thatMessage.Append(Convert.ToChar(13));
+            _ = thatMessage.Append(Convert.ToChar(13));
         }
 
         return new FloorHeightMapComposer(this.WallHeight, thatMessage.ToString());
     }
 
-    private string Parse(short text)
+    private static string Parse(short text) => text switch
     {
-        switch (text)
-        {
-            case 10:
-                return "a";
-            case 11:
-                return "b";
-            case 12:
-                return "c";
-            case 13:
-                return "d";
-            case 14:
-                return "e";
-            case 15:
-                return "f";
-            case 16:
-                return "g";
-            case 17:
-                return "h";
-            case 18:
-                return "i";
-            case 19:
-                return "j";
-            case 20:
-                return "k";
-            case 21:
-                return "l";
-            case 22:
-                return "m";
-            case 23:
-                return "n";
-            case 24:
-                return "o";
-            case 25:
-                return "p";
-            case 26:
-                return "q";
-            case 27:
-                return "r";
-            case 28:
-                return "s";
-            case 29:
-                return "t";
-            case 30:
-                return "u";
-            case 31:
-                return "v";
-            case 32:
-                return "w";
-        }
-        return text.ToString();
-    }
+        10 => "a",
+        11 => "b",
+        12 => "c",
+        13 => "d",
+        14 => "e",
+        15 => "f",
+        16 => "g",
+        17 => "h",
+        18 => "i",
+        19 => "j",
+        20 => "k",
+        21 => "l",
+        22 => "m",
+        23 => "n",
+        24 => "o",
+        25 => "p",
+        26 => "q",
+        27 => "r",
+        28 => "s",
+        29 => "t",
+        30 => "u",
+        31 => "v",
+        32 => "w",
+        _ => text.ToString(),
+    };
 
     public ServerPacket SetHeightMap(double height) => new HeightMapComposer(this, height);
 
@@ -189,7 +164,7 @@ public class RoomModelDynamic
         {
             for (var index2 = 0; index2 < this.MapSizeX; ++index2)
             {
-                if (index2 > this.staticModel.MapSizeX - 1 || index1 > this.staticModel.MapSizeY - 1)
+                if (index2 > this._staticModel.MapSizeX - 1 || index1 > this._staticModel.MapSizeY - 1)
                 {
                     squareStateArray[index2, index1] = SquareStateType.BLOCKED;
                 }
@@ -202,8 +177,8 @@ public class RoomModelDynamic
         }
         this.SqState = squareStateArray;
         this.SqFloorHeight = numArray1;
-        this.RelativeSerialized = false;
-        this.HeightmapSerialized = false;
+        this._relativeSerialized = false;
+        this._heightmapSerialized = false;
     }
 
 
@@ -211,7 +186,7 @@ public class RoomModelDynamic
     {
         Array.Clear(this.SqState, 0, this.SqState.Length);
         Array.Clear(this.SqFloorHeight, 0, this.SqFloorHeight.Length);
-        this.staticModel = null;
+        this._staticModel = null;
         this.Heightmap = null;
         this.SqState = null;
         this.SqFloorHeight = null;

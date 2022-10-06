@@ -2,38 +2,38 @@ namespace WibboEmulator.Games.Rooms.PathFinding;
 
 public static class Rotation
 {
-    public static int Calculate(int X1, int Y1, int X2, int Y2)
+    public static int Calculate(int x1, int y1, int x2, int y2)
     {
         var num = 0;
-        if (X1 > X2 && Y1 > Y2)
+        if (x1 > x2 && y1 > y2)
         {
             num = 7;
         }
-        else if (X1 < X2 && Y1 < Y2)
+        else if (x1 < x2 && y1 < y2)
         {
             num = 3;
         }
-        else if (X1 > X2 && Y1 < Y2)
+        else if (x1 > x2 && y1 < y2)
         {
             num = 5;
         }
-        else if (X1 < X2 && Y1 > Y2)
+        else if (x1 < x2 && y1 > y2)
         {
             num = 1;
         }
-        else if (X1 > X2)
+        else if (x1 > x2)
         {
             num = 6;
         }
-        else if (X1 < X2)
+        else if (x1 < x2)
         {
             num = 2;
         }
-        else if (Y1 < Y2)
+        else if (y1 < y2)
         {
             num = 4;
         }
-        else if (Y1 > Y2)
+        else if (y1 > y2)
         {
             num = 0;
         }

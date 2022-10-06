@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Database;
+namespace WibboEmulator.Database;
 using System.Data;
 using MySql.Data.MySqlClient;
 using WibboEmulator.Database.Adapter;
@@ -9,10 +9,13 @@ public class DatabaseConnection : IDatabaseClient, IDisposable
     private readonly IQueryAdapter _adapter;
     private readonly MySqlConnection _con;
 
-    public DatabaseConnection(string ConnectionStr)
+    public string ConnectionStr { get; }
+
+    public DatabaseConnection(string connectionStr)
     {
-        this._con = new MySqlConnection(ConnectionStr);
+        this._con = new MySqlConnection(connectionStr);
         this._adapter = new NormaldbClient(this);
+        this.ConnectionStr = connectionStr;
     }
 
     public void Dispose()

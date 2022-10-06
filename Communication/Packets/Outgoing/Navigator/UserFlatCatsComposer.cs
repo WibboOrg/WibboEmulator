@@ -3,15 +3,15 @@ using WibboEmulator.Games.Navigator;
 
 internal class UserFlatCatsComposer : ServerPacket
 {
-    public UserFlatCatsComposer(ICollection<SearchResultList> Categories, int Rank)
+    public UserFlatCatsComposer(ICollection<SearchResultList> categories, int rank)
         : base(ServerPacketHeader.NAVIGATOR_CATEGORIES)
     {
-        this.WriteInteger(Categories.Count);
-        foreach (var Cat in Categories)
+        this.WriteInteger(categories.Count);
+        foreach (var cat in categories)
         {
-            this.WriteInteger(Cat.Id);
-            this.WriteString(Cat.PublicName);
-            this.WriteBoolean(Cat.RequiredRank <= Rank);
+            this.WriteInteger(cat.Id);
+            this.WriteString(cat.PublicName);
+            this.WriteBoolean(cat.RequiredRank <= rank);
             this.WriteBoolean(false);
             this.WriteString("");
             this.WriteString("");

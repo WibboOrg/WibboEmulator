@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Triggers;
+namespace WibboEmulator.Games.Items.Wired.Triggers;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -8,11 +8,11 @@ using WibboEmulator.Games.Rooms.Wired;
 
 public class WalksOnFurni : WiredTriggerBase, IWired, IWiredCycleable
 {
-    public int DelayCycle { get => this.Delay; }
+    public int DelayCycle => this.Delay;
 
-    private readonly UserAndItemDelegate delegateFunction;
+    private readonly UserAndItemDelegate _delegateFunction;
 
-    public WalksOnFurni(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_WALKS_ON_FURNI) => this.delegateFunction = new UserAndItemDelegate(this.OnUserWalksOnFurni);
+    public WalksOnFurni(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_WALKS_ON_FURNI) => this._delegateFunction = new UserAndItemDelegate(this.OnUserWalksOnFurni);
 
     public bool OnCycle(RoomUser user, Item item)
     {
@@ -44,7 +44,7 @@ public class WalksOnFurni : WiredTriggerBase, IWired, IWiredCycleable
         {
             foreach (var roomItem in this.Items.ToList())
             {
-                roomItem.OnUserWalksOnFurni += this.delegateFunction;
+                roomItem.OnUserWalksOnFurni += this._delegateFunction;
             }
         }
     }
@@ -55,7 +55,7 @@ public class WalksOnFurni : WiredTriggerBase, IWired, IWiredCycleable
         {
             foreach (var roomItem in this.Items.ToList())
             {
-                roomItem.OnUserWalksOnFurni -= this.delegateFunction;
+                roomItem.OnUserWalksOnFurni -= this._delegateFunction;
             }
         }
 

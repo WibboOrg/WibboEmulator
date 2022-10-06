@@ -6,14 +6,14 @@ internal class UseFurnitureEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
             return;
         }
 
-        var Id = Packet.PopInt();
+        var Id = packet.PopInt();
 
         var RoomItem = room.GetRoomItemHandler().GetItem(Id);
         if (RoomItem == null)
@@ -80,7 +80,7 @@ internal class UseFurnitureEvent : IPacketEvent
             UserHasRights = true;
         }
 
-        var Request = Packet.PopInt();
+        var Request = packet.PopInt();
 
         RoomItem.Interactor.OnTrigger(session, RoomItem, Request, UserHasRights, false);
         RoomItem.OnTrigger(room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id));

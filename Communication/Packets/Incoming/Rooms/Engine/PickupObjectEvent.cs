@@ -7,10 +7,10 @@ internal class PickupObjectEvent : IPacketEvent
 {
     public double Delay => 200;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        Packet.PopInt();
-        var ItemId = Packet.PopInt();
+        _ = packet.PopInt();
+        var ItemId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {

@@ -10,9 +10,9 @@ internal class DeleteGroupEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var groupId = Packet.PopInt();
+        var groupId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var Group))
         {

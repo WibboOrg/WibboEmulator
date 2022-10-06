@@ -1,19 +1,19 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
+namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay;
 using WibboEmulator.Games.Roleplay.Item;
 
 internal class BuyItemsListComposer : ServerPacket
 {
-    public BuyItemsListComposer(List<RPItem> ItemsBuy)
+    public BuyItemsListComposer(List<RPItem> itemsBuy)
       : base(ServerPacketHeader.BUY_ITEMS_LIST)
     {
-        this.WriteInteger(ItemsBuy.Count);
+        this.WriteInteger(itemsBuy.Count);
 
-        foreach (var Item in ItemsBuy)
+        foreach (var item in itemsBuy)
         {
-            this.WriteInteger(Item.Id);
-            this.WriteString(Item.Name);
-            this.WriteString(Item.Desc);
-            this.WriteInteger(Item.Price);
+            this.WriteInteger(item.Id);
+            this.WriteString(item.Name);
+            this.WriteString(item.Desc);
+            this.WriteInteger(item.Price);
         }
     }
 }

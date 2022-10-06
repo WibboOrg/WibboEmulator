@@ -1,23 +1,23 @@
 namespace WibboEmulator.Games.Roleplay.Item;
 public class RPItem
 {
-    public int Id;
-    public string Name;
-    public string Title;
-    public string Desc;
-    public int Price;
-    public string Type;
-    public int Value;
-    public bool AllowStack;
-    public RPItemCategory Category;
-    public int UseType;
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Title { get; set; }
+    public string Desc { get; set; }
+    public int Price { get; set; }
+    public string Type { get; set; }
+    public int Value { get; set; }
+    public bool AllowStack { get; set; }
+    public RPItemCategory Category { get; set; }
+    public int UseType { get; set; }
 
     public RPItem(int pId, string pName, string pDesc, int pPrice, string pType, int pValue, bool pAllowStack, RPItemCategory pCatagory)
     {
         this.Id = pId;
         this.Name = pName;
         this.Title = pDesc;
-        this.Desc = this.generateDesc(pDesc, pType, pValue);
+        this.Desc = generateDesc(pDesc, pType, pValue);
         this.Price = pPrice;
         this.Type = pType;
         this.Value = pValue;
@@ -26,47 +26,31 @@ public class RPItem
         this.UseType = GetUseType(this.Type);
     }
 
-    private static int GetUseType(string type)
-    {
+    private static int GetUseType(string type) =>
         /*  UseType:
-            0: Non utilisable
-            1: Utilisable mais limité à 1
-            2: Utilisable et possibilité de choisir le nombre à utiliser
-        */
-        switch (type)
+0: Non utilisable
+1: Utilisable mais limité à 1
+2: Utilisable et possibilité de choisir le nombre à utiliser
+*/
+        type switch
         {
-            case "openguide":
-                return 1;
-            case "hit":
-                return 2;
-            case "enable":
-                return 1;
-            case "showtime":
-                return 1;
-            case "money":
-                return 2;
-            case "munition":
-                return 2;
-            case "energytired":
-                return 2;
-            case "healthtired":
-                return 2;
-            case "healthenergy":
-                return 2;
-            case "energy":
-                return 2;
-            case "health":
-                return 2;
-            case "weapon_cac":
-                return 1;
-            case "weapon_far":
-                return 1;
-            default:
-                return 0;
-        }
-    }
+            "openguide" => 1,
+            "hit" => 2,
+            "enable" => 1,
+            "showtime" => 1,
+            "money" => 2,
+            "munition" => 2,
+            "energytired" => 2,
+            "healthtired" => 2,
+            "healthenergy" => 2,
+            "energy" => 2,
+            "health" => 2,
+            "weapon_cac" => 1,
+            "weapon_far" => 1,
+            _ => 0,
+        };
 
-    private string generateDesc(string Desc, string Type, int Value)
+    private static string generateDesc(string Desc, string Type, int Value)
     {
         var Text = "[u]" + Desc + "[/u][br]";
 

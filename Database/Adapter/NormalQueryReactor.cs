@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Database.Adapter;
+namespace WibboEmulator.Database.Adapter;
 using WibboEmulator.Database.Interfaces;
 
 public class NormaldbClient : QueryAdapter, IQueryAdapter, IRegularQueryAdapter, IDisposable

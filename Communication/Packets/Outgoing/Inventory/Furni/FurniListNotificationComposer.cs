@@ -3,20 +3,20 @@ using WibboEmulator.Games.Items;
 
 internal class FurniListNotificationComposer : ServerPacket
 {
-    public FurniListNotificationComposer(int Id, int Type)
+    public FurniListNotificationComposer(int id, int type)
         : base(ServerPacketHeader.UNSEEN_ITEMS)
     {
         this.WriteInteger(1);
-        this.WriteInteger(Type);
+        this.WriteInteger(type);
         this.WriteInteger(1);
-        this.WriteInteger(Id);
+        this.WriteInteger(id);
     }
 
-    public FurniListNotificationComposer(List<Item> items, int Type)
+    public FurniListNotificationComposer(List<Item> items, int type)
         : base(ServerPacketHeader.UNSEEN_ITEMS)
     {
         this.WriteInteger(1);
-        this.WriteInteger(Type);
+        this.WriteInteger(type);
         this.WriteInteger(items.Count);
         foreach (var item in items)
         {

@@ -12,10 +12,10 @@ internal class RemoveGroupMemberEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = Packet.PopInt();
-        var UserId = Packet.PopInt();
+        var GroupId = packet.PopInt();
+        var UserId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
         {
@@ -29,7 +29,7 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                 Group.DeleteMember(UserId);
             }
 
-            session.GetUser().MyGroups.Remove(Group.Id);
+            _ = session.GetUser().MyGroups.Remove(Group.Id);
 
             if (Group.IsAdmin(UserId))
             {
@@ -135,10 +135,10 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                 var user = WibboEnvironment.GetUserById(UserId);
                 if (user != null)
                 {
-                    user.MyGroups.Remove(Group.Id);
+                    _ = user.MyGroups.Remove(Group.Id);
                 }
 
-                var StartIndex = (1 - 1) * 14 + 14;
+                var StartIndex = ((1 - 1) * 14) + 14;
 
                 var Members = new List<User>();
                 var MemberIds = Group.GetMembers.Skip(StartIndex).Take(14).ToList();

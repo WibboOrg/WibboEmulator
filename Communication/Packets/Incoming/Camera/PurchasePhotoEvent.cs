@@ -43,10 +43,10 @@ internal class PurchasePhotoEvent : IPacketEvent
         var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.GetUser().Username + "\", \"s\":\"" + session.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
         var itemSmall = ItemFactory.CreateSingleItemNullable(itemDataSmall, session.GetUser(), extraData);
-        session.GetUser().GetInventoryComponent().TryAddItem(itemSmall);
+        _ = session.GetUser().GetInventoryComponent().TryAddItem(itemSmall);
 
         var item = ItemFactory.CreateSingleItemNullable(itemData, session.GetUser(), extraData);
-        session.GetUser().GetInventoryComponent().TryAddItem(item);
+        _ = session.GetUser().GetInventoryComponent().TryAddItem(item);
 
         session.SendPacket(new CameraPurchaseSuccesfullComposer());
     }

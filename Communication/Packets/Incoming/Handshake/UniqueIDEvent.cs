@@ -7,13 +7,13 @@ internal class UniqueIDEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var CookieId = Packet.PopString();
-        var McId = Packet.PopString();
-        var Junk = Packet.PopString();
+        var CookieId = packet.PopString();
+        var McId = packet.PopString();
+        var Junk = packet.PopString();
 
-        var Head = string.IsNullOrWhiteSpace(CookieId) || CookieId.Length != 13 ? IDGenerator.Instance.Next : CookieId;
+        var Head = string.IsNullOrWhiteSpace(CookieId) || CookieId.Length != 13 ? IDGenerator.Next : CookieId;
 
         session.MachineId = Head + McId + Junk;
 

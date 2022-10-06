@@ -176,7 +176,7 @@ public class MessengerComponent : IDisposable
             MessengerRequestDao.Delete(dbClient, this._userInstance.Id, sender);
         }
 
-        this.Requests.Remove(sender);
+        _ = this.Requests.Remove(sender);
     }
 
     public void CreateFriendship(int friendID)
@@ -267,8 +267,8 @@ public class MessengerComponent : IDisposable
 
     public void OnDestroyFriendship(int friendId)
     {
-        this.Friends.Remove(friendId);
-        this.Relation.Remove(friendId);
+        _ = this.Friends.Remove(friendId);
+        _ = this.Relation.Remove(friendId);
 
         this.GetClient().SendPacket(new FriendListUpdateComposer(null, friendId));
     }

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Core.FigureData;
+namespace WibboEmulator.Core.FigureData;
 using System.Text.Json;
 using WibboEmulator.Core.FigureData.JsonObject;
 using WibboEmulator.Core.FigureData.Types;
@@ -67,25 +67,25 @@ public class FigureDataManager
             }
         }
 
-        foreach (var Child in figureData.SetTypes)
+        foreach (var child in figureData.SetTypes)
         {
-            this._setTypes.Add(Child.Type, new FigureSet(SetTypeUtility.GetSetType(Child.Type), Child.PaletteId));
+            this._setTypes.Add(child.Type, new FigureSet(SetTypeUtility.GetSetType(child.Type), child.PaletteId));
 
-            foreach (var set in Child.Sets)
+            foreach (var set in child.Sets)
             {
-                if (!this._setTypes[Child.Type].Sets.ContainsKey(set.Id))
+                if (!this._setTypes[child.Type].Sets.ContainsKey(set.Id))
                 {
-                    this._setTypes[Child.Type].Sets.Add(set.Id, new Set(set.Id, set.Gender, set.Club, set.Colorable));
+                    this._setTypes[child.Type].Sets.Add(set.Id, new Set(set.Id, set.Gender, set.Club, set.Colorable));
                 }
 
                 foreach (var part in set.Parts)
                 {
                     if (part.Type != null)
                     {
-                        if (!this._setTypes[Child.Type].Sets[set.Id].Parts.ContainsKey(part.Id + "-" + part.Type))
+                        if (!this._setTypes[child.Type].Sets[set.Id].Parts.ContainsKey(part.Id + "-" + part.Type))
                         {
-                            this._setTypes[Child.Type].Sets[set.Id].Parts.Add(part.Id + "-" + part.Type,
-                          new Part(part.Id, SetTypeUtility.GetSetType(Child.Type), part.Colorable, part.Index, part.Colorindex));
+                            this._setTypes[child.Type].Sets[set.Id].Parts.Add(part.Id + "-" + part.Type,
+                          new Part(part.Id, SetTypeUtility.GetSetType(child.Type), part.Colorable, part.Index, part.Colorindex));
                         }
                     }
                 }
@@ -132,12 +132,12 @@ public class FigureDataManager
                     {
                         if (set.Gender != gender && set.Gender != "U")
                         {
-                            if (figureSet.Sets.Count(x => x.Value.Gender == gender || x.Value.Gender == "U") > 0)
+                            if (figureSet.Sets.Any(x => x.Value.Gender == gender || x.Value.Gender == "U"))
                             {
                                 partId = figureSet.Sets.FirstOrDefault(x => x.Value.Gender == gender || x.Value.Gender == "U").Value.Id;
 
                                 //Fetch the new set.
-                                figureSet.Sets.TryGetValue(partId, out set);
+                                _ = figureSet.Sets.TryGetValue(partId, out set);
 
                                 colorId = this.GetRandomColor(figureSet.PalletId);
                             }
@@ -242,7 +242,7 @@ public class FigureDataManager
                         {
                             partId = figureSet.Sets.FirstOrDefault(x => x.Value.Gender == gender || (x.Value.Gender == "U" && x.Value.ClubLevel == 0)).Value.Id;
 
-                            figureSet.Sets.TryGetValue(partId, out set);
+                            _ = figureSet.Sets.TryGetValue(partId, out set);
 
                             colorId = this.GetRandomColor(figureSet.PalletId);
                         }

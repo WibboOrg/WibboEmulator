@@ -25,7 +25,7 @@ public delegate void UserAndItemDelegate(RoomUser user, Item item);
 
 public class RoomUserManager
 {
-    private Room _room;
+    private readonly Room _room;
     private readonly ConcurrentDictionary<string, RoomUser> _usersByUsername;
     private readonly ConcurrentDictionary<int, RoomUser> _usersByUserID;
 
@@ -63,7 +63,7 @@ public class RoomUserManager
 
         Bot.Id = -key;
 
-        this._users.TryAdd(key, roomUser);
+        _ = this._users.TryAdd(key, roomUser);
 
         roomUser.SetPos(Bot.X, Bot.Y, Bot.Z);
         roomUser.SetRot(Bot.Rot, false);
@@ -87,7 +87,7 @@ public class RoomUserManager
         }
         else
         {
-            this._bots.TryAdd(roomUser.BotData.Id, roomUser);
+            _ = this._bots.TryAdd(roomUser.BotData.Id, roomUser);
         }
 
         return roomUser;
@@ -100,8 +100,8 @@ public class RoomUserManager
             return false;
         }
 
-        this._usersByUsername.TryRemove(OldUsername.ToLower(), out User);
-        this._usersByUsername.TryAdd(NewUsername.ToLower(), User);
+        _ = this._usersByUsername.TryRemove(OldUsername.ToLower(), out User);
+        _ = this._usersByUsername.TryAdd(NewUsername.ToLower(), User);
         return true;
     }
 
@@ -110,7 +110,7 @@ public class RoomUserManager
         var key = this._primaryPrivateUserID++;
         var roomUser = new RoomUser(0, this._room.Id, key, this._room);
 
-        this._users.TryAdd(key, roomUser);
+        _ = this._users.TryAdd(key, roomUser);
 
         roomUser.SetPos(Bot.X, Bot.Y, Bot.Z);
         roomUser.SetRot(Bot.Rot, false);
@@ -200,7 +200,7 @@ public class RoomUserManager
             }
             else
             {
-                this._pets.TryAdd(roomUser.PetData.PetId, roomUser);
+                _ = this._pets.TryAdd(roomUser.PetData.PetId, roomUser);
             }
         }
         else if (this._bots.ContainsKey(roomUser.BotData.Id))
@@ -209,7 +209,7 @@ public class RoomUserManager
         }
         else
         {
-            this._bots.TryAdd(roomUser.BotData.Id, roomUser);
+            _ = this._bots.TryAdd(roomUser.BotData.Id, roomUser);
         }
 
         return roomUser;
@@ -225,11 +225,11 @@ public class RoomUserManager
 
         if (roomUserByVirtualId.IsPet)
         {
-            this._pets.TryRemove(roomUserByVirtualId.PetData.PetId, out var PetRemoval);
+            _ = this._pets.TryRemove(roomUserByVirtualId.PetData.PetId, out var PetRemoval);
         }
         else
         {
-            this._bots.TryRemove(roomUserByVirtualId.BotData.Id, out var BotRemoval);
+            _ = this._bots.TryRemove(roomUserByVirtualId.BotData.Id, out var BotRemoval);
         }
 
         roomUserByVirtualId.BotAI.OnSelfLeaveRoom(Kicked);
@@ -239,7 +239,7 @@ public class RoomUserManager
         this._room.GetGameMap().RemoveTakingSquare(roomUserByVirtualId.SetX, roomUserByVirtualId.SetY);
         this._room.GetGameMap().RemoveUserFromMap(roomUserByVirtualId, new Point(roomUserByVirtualId.X, roomUserByVirtualId.Y));
 
-        this._users.TryRemove(roomUserByVirtualId.VirtualId, out var toRemove);
+        _ = this._users.TryRemove(roomUserByVirtualId.VirtualId, out var toRemove);
 
     }
 
@@ -410,16 +410,16 @@ public class RoomUserManager
 
         if (this._usersByUsername.ContainsKey(Username.ToLower()))
         {
-            this._usersByUsername.TryRemove(Username.ToLower(), out var userRemoved);
+            _ = this._usersByUsername.TryRemove(Username.ToLower(), out var userRemoved);
         }
 
         if (this._usersByUserID.ContainsKey(UserId))
         {
-            this._usersByUserID.TryRemove(UserId, out var userRemoved);
+            _ = this._usersByUserID.TryRemove(UserId, out var userRemoved);
         }
 
-        this._usersByUsername.TryAdd(Username.ToLower(), user);
-        this._usersByUserID.TryAdd(UserId, user);
+        _ = this._usersByUsername.TryAdd(Username.ToLower(), user);
+        _ = this._usersByUserID.TryAdd(UserId, user);
 
         var roomModel = this._room.GetGameMap().Model;
         if (roomModel == null)
@@ -623,7 +623,7 @@ public class RoomUserManager
 
             if (this._usersRank.Contains(user.UserId))
             {
-                this._usersRank.Remove(user.UserId);
+                _ = this._usersRank.Remove(user.UserId);
             }
 
             if (user.Team != TeamType.NONE)
@@ -692,8 +692,8 @@ public class RoomUserManager
             user.FreezeEndCounter = 0;
             user.Dispose();
 
-            this._usersByUserID.TryRemove(user.UserId, out user);
-            this._usersByUsername.TryRemove(session.GetUser().Username.ToLower(), out user);
+            _ = this._usersByUserID.TryRemove(user.UserId, out user);
+            _ = this._usersByUsername.TryRemove(session.GetUser().Username.ToLower(), out user);
         }
         catch (Exception ex)
         {
@@ -708,7 +708,7 @@ public class RoomUserManager
 
         this._room.SendPacket(new UserRemoveComposer(user.VirtualId));
 
-        this._users.TryRemove(user.VirtualId, out var toRemove);
+        _ = this._users.TryRemove(user.VirtualId, out var toRemove);
     }
 
     public void UpdateUserCount(int count)

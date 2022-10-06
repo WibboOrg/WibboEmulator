@@ -6,16 +6,16 @@ internal class ModerationBanEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().HasPermission("perm_ban"))
         {
             return;
         }
 
-        var UserId = Packet.PopInt();
-        var Message = Packet.PopString();
-        var Length = Packet.PopInt() * 3600;
+        var UserId = packet.PopInt();
+        var Message = packet.PopString();
+        var Length = packet.PopInt() * 3600;
 
         ModerationManager.BanUser(session, UserId, Length, Message);
     }

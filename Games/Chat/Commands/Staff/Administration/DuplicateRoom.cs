@@ -30,7 +30,7 @@ internal class DuplicateRoom : IChatCommand
             var catalogItemTable = CatalogItemDao.GetItemIdByRank(dbClient, session.GetUser().Rank);
             foreach (DataRow dataRow in catalogItemTable.Rows)
             {
-                int.TryParse(dataRow["item_id"].ToString(), out var itemId);
+                _ = int.TryParse(dataRow["item_id"].ToString(), out var itemId);
                 if (!furniIdAllow.Contains(itemId))
                 {
                     furniIdAllow.Add(itemId);
@@ -52,7 +52,7 @@ internal class DuplicateRoom : IChatCommand
                     continue;
                 }
 
-                WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var Data);
+                _ = WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var Data);
                 if (Data == null || Data.IsRare || Data.RarityLevel > 0)
                 {
                     continue;

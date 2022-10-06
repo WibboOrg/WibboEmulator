@@ -5,5 +5,5 @@ internal class GetQuestListEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet) => WibboEnvironment.GetGame().GetQuestManager().SendQuestList(session, false);
+    public void Parse(GameClient session, ClientPacket packet) => WibboEnvironment.GetGame().GetQuestManager().SendQuestList(session, false);
 }

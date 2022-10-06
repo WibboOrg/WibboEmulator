@@ -1,12 +1,12 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.WibboTool;
+namespace WibboEmulator.Communication.Packets.Outgoing.WibboTool;
 
 internal class AddChatlogsComposer : ServerPacket
 {
-    public AddChatlogsComposer(int UserId, string Pseudo, string Message)
+    public AddChatlogsComposer(int userId, string userName, string message)
       : base(ServerPacketHeader.ADD_CHATLOGS)
     {
-        this.WriteInteger(UserId);
-        this.WriteString(Pseudo);
-        this.WriteString(Message);
+        this.WriteInteger(userId);
+        this.WriteString(userName);
+        this.WriteString(message);
     }
 }

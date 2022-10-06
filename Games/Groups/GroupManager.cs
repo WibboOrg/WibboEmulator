@@ -68,31 +68,31 @@ public class GroupManager
         }
     }
 
-    public bool TryGetGroup(int id, out Group Group)
+    public bool TryGetGroup(int id, out Group group)
     {
-        Group = null;
+        group = null;
 
         if (this._groups.ContainsKey(id))
         {
-            return this._groups.TryGetValue(id, out Group);
+            return this._groups.TryGetValue(id, out group);
         }
 
         lock (this._groupLoadingSync)
         {
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                var Row = GuildDao.GetOne(dbClient, id);
+                var row = GuildDao.GetOne(dbClient, id);
 
-                if (Row == null)
+                if (row == null)
                 {
                     return false;
                 }
 
-                Group = new Group(
-                        Convert.ToInt32(Row["id"]), Convert.ToString(Row["name"]), Convert.ToString(Row["desc"]), Convert.ToString(Row["badge"]), Convert.ToInt32(Row["room_id"]), Convert.ToInt32(Row["owner_id"]),
-                        Convert.ToInt32(Row["created"]), Convert.ToInt32(Row["state"]), Convert.ToInt32(Row["colour1"]), Convert.ToInt32(Row["colour2"]), Convert.ToInt32(Row["admindeco"]), Convert.ToInt32(Row["has_forum"]) == 1);
+                group = new Group(
+                        Convert.ToInt32(row["id"]), Convert.ToString(row["name"]), Convert.ToString(row["desc"]), Convert.ToString(row["badge"]), Convert.ToInt32(row["room_id"]), Convert.ToInt32(row["owner_id"]),
+                        Convert.ToInt32(row["created"]), Convert.ToInt32(row["state"]), Convert.ToInt32(row["colour1"]), Convert.ToInt32(row["colour2"]), Convert.ToInt32(row["admindeco"]), Convert.ToInt32(row["has_forum"]) == 1);
 
-                this._groups.TryAdd(Group.Id, Group);
+                _ = this._groups.TryAdd(group.Id, group);
             }
 
             return true;
@@ -151,30 +151,30 @@ public class GroupManager
 
     public void DeleteGroup(int id)
     {
-        Group Group = null;
+        Group group = null;
         if (this._groups.ContainsKey(id))
         {
-            this._groups.TryRemove(id, out Group);
+            _ = this._groups.TryRemove(id, out _);
         }
 
-        if (Group != null)
+        if (group != null)
         {
-            Group.Dispose();
+            group.Dispose();
         }
     }
 
-    public List<Group> GetGroupsForUser(List<int> GroupIds)
+    public List<Group> GetGroupsForUser(List<int> groupIds)
     {
-        var Groups = new List<Group>();
+        var groups = new List<Group>();
 
-        foreach (var Id in GroupIds)
+        foreach (var id in groupIds)
         {
-            if (this.TryGetGroup(Id, out var Group))
+            if (this.TryGetGroup(id, out var group))
             {
-                Groups.Add(Group);
+                groups.Add(group);
             }
         }
-        return Groups;
+        return groups;
     }
 
 

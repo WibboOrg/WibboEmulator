@@ -5,17 +5,17 @@ internal class AcceptBuddyEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser().GetMessenger() == null)
         {
             return;
         }
 
-        var Count = Packet.PopInt();
+        var Count = packet.PopInt();
         for (var index = 0; index < Count; ++index)
         {
-            var num2 = Packet.PopInt();
+            var num2 = packet.PopInt();
             var request = session.GetUser().GetMessenger().GetRequest(num2);
             if (request != null)
             {

@@ -17,7 +17,7 @@ internal class CatalogIndexComposer : ServerPacket
                 continue;
             }
 
-            this.WritePage(Parent, this.CalcTreeSize(session, Pages, Parent.Id), session.Langue);
+            this.WritePage(Parent, CalcTreeSize(session, Pages, Parent.Id), session.Langue);
 
             foreach (var child in Pages)
             {
@@ -28,11 +28,11 @@ internal class CatalogIndexComposer : ServerPacket
 
                 if (child.Enabled)
                 {
-                    this.WritePage(child, this.CalcTreeSize(session, Pages, child.Id), session.Langue);
+                    this.WritePage(child, CalcTreeSize(session, Pages, child.Id), session.Langue);
                 }
                 else
                 {
-                    this.WriteNodeIndex(child, this.CalcTreeSize(session, Pages, child.Id), session.Langue);
+                    this.WriteNodeIndex(child, CalcTreeSize(session, Pages, child.Id), session.Langue);
                 }
 
                 foreach (var SubChild in Pages)
@@ -44,11 +44,11 @@ internal class CatalogIndexComposer : ServerPacket
 
                     if (SubChild.Enabled)
                     {
-                        this.WritePage(SubChild, this.CalcTreeSize(session, Pages, SubChild.Id), session.Langue);
+                        this.WritePage(SubChild, CalcTreeSize(session, Pages, SubChild.Id), session.Langue);
                     }
                     else
                     {
-                        this.WriteNodeIndex(SubChild, this.CalcTreeSize(session, Pages, SubChild.Id), session.Langue);
+                        this.WriteNodeIndex(SubChild, CalcTreeSize(session, Pages, SubChild.Id), session.Langue);
                     }
 
                     foreach (var SubSubChild in Pages)
@@ -84,7 +84,7 @@ internal class CatalogIndexComposer : ServerPacket
         this.WriteString(string.Empty);
 
         this.WriteInteger(0);
-        this.WriteInteger(this.CalcTreeSize(session, pages, -1));
+        this.WriteInteger(CalcTreeSize(session, pages, -1));
     }
 
     public void WriteNodeIndex(CatalogPage page, int treeSize, Language Langue)
@@ -115,7 +115,7 @@ internal class CatalogIndexComposer : ServerPacket
         this.WriteInteger(treeSize);
     }
 
-    public int CalcTreeSize(GameClient session, ICollection<CatalogPage> Pages, int ParentId)
+    public static int CalcTreeSize(GameClient session, ICollection<CatalogPage> Pages, int ParentId)
     {
         var i = 0;
         foreach (var Page in Pages)

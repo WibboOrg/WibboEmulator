@@ -8,7 +8,7 @@ internal class GetCatalogIndexEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var packetList = new ServerPacketList();
 

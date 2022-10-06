@@ -8,7 +8,7 @@ internal class ModifyWhoCanRideHorseEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().InRoom)
         {
@@ -20,7 +20,7 @@ internal class ModifyWhoCanRideHorseEvent : IPacketEvent
             return;
         }
 
-        var PetId = Packet.PopInt();
+        var PetId = packet.PopInt();
 
         if (!Room.GetRoomUserManager().TryGetPet(PetId, out var Pet))
         {

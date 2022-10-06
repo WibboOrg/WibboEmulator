@@ -1,25 +1,25 @@
-﻿namespace WibboEmulator.Games.Catalog;
+namespace WibboEmulator.Games.Catalog;
 using WibboEmulator.Core.Language;
 
 public class CatalogPage
 {
-    public int Id;
+    public int Id { get; set; }
 
-    public int ParentId;
+    public int ParentId { get; set; }
 
-    public bool Enabled;
+    public bool Enabled { get; set; }
 
-    private readonly string Caption;
-    private readonly string CaptionEn;
-    private readonly string CaptionBr;
+    public string Caption { get; set; }
+    public string CaptionEn { get; set; }
+    public string CaptionBr { get; set; }
 
-    public string PageLink;
+    public string PageLink { get; set; }
 
-    public int Icon;
+    public int Icon { get; set; }
 
-    public int MinimumRank;
+    public int MinimumRank { get; set; }
 
-    public string Template;
+    public string Template { get; set; }
 
     public List<string> PageStrings1 { get; private set; }
 
@@ -27,59 +27,59 @@ public class CatalogPage
 
     public Dictionary<int, CatalogItem> ItemOffers { get; private set; }
 
-    private readonly List<string> PageStrings2;
-    private readonly List<string> PageStrings2En;
-    private readonly List<string> PageStrings2Br;
+    private readonly List<string> _pageStrings2;
+    private readonly List<string> _pageStrings2En;
+    private readonly List<string> _pageStrings2Br;
 
-    public CatalogPage(int Id, int ParentId, string Enabled, string Caption, string PageLink, int Icon, int MinRank,
-        string Template, string PageStrings1, string PageStrings2, string CaptionEn, string CaptionBr, string PageStrings2En,
-        string PageStrings2Br, Dictionary<int, CatalogItem> Items)
+    public CatalogPage(int id, int parentId, string enabled, string caption, string pageLink, int icon, int minRank,
+        string template, string pageStrings1, string pageStrings2, string captionEn, string captionBr, string pageStrings2En,
+        string pageStrings2Br, Dictionary<int, CatalogItem> items)
     {
-        this.Id = Id;
-        this.ParentId = ParentId;
-        this.Enabled = Enabled.ToLower() == "1";
+        this.Id = id;
+        this.ParentId = parentId;
+        this.Enabled = enabled.ToLower() == "1";
 
-        this.Caption = Caption;
-        this.CaptionEn = CaptionEn;
-        this.CaptionBr = CaptionBr;
+        this.Caption = caption;
+        this.CaptionEn = captionEn;
+        this.CaptionBr = captionBr;
 
-        this.PageLink = PageLink;
-        this.Icon = Icon;
-        this.MinimumRank = MinRank;
-        this.Template = Template;
+        this.PageLink = pageLink;
+        this.Icon = icon;
+        this.MinimumRank = minRank;
+        this.Template = template;
 
-        foreach (var Str in PageStrings1.Split('|'))
+        foreach (var Str in pageStrings1.Split('|'))
         {
             if (this.PageStrings1 == null)
             { this.PageStrings1 = new List<string>(); }
             this.PageStrings1.Add(Str);
         }
 
-        foreach (var Str in PageStrings2.Split('|'))
+        foreach (var Str in pageStrings2.Split('|'))
         {
-            if (this.PageStrings2 == null)
-            { this.PageStrings2 = new List<string>(); }
-            this.PageStrings2.Add(Str);
+            if (this._pageStrings2 == null)
+            { this._pageStrings2 = new List<string>(); }
+            this._pageStrings2.Add(Str);
         }
 
-        foreach (var Str in PageStrings2En.Split('|'))
+        foreach (var str in pageStrings2En.Split('|'))
         {
-            if (this.PageStrings2En == null)
-            { this.PageStrings2En = new List<string>(); }
-            this.PageStrings2En.Add(Str);
+            if (this._pageStrings2En == null)
+            { this._pageStrings2En = new List<string>(); }
+            this._pageStrings2En.Add(str);
         }
 
-        foreach (var Str in PageStrings2Br.Split('|'))
+        foreach (var str in pageStrings2Br.Split('|'))
         {
-            if (this.PageStrings2Br == null)
-            { this.PageStrings2Br = new List<string>(); }
-            this.PageStrings2Br.Add(Str);
+            if (this._pageStrings2Br == null)
+            { this._pageStrings2Br = new List<string>(); }
+            this._pageStrings2Br.Add(str);
         }
 
-        this.Items = Items;
+        this.Items = items;
 
         this.ItemOffers = new Dictionary<int, CatalogItem>();
-        if (Template.StartsWith("default_3x3"))
+        if (template.StartsWith("default_3x3"))
         {
             foreach (var item in this.Items.Values)
             {
@@ -96,13 +96,13 @@ public class CatalogPage
         }
     }
 
-    public string GetCaptionByLangue(Language Langue)
+    public string GetCaptionByLangue(Language langue)
     {
-        if (Langue == Language.ANGLAIS)
+        if (langue == Language.ANGLAIS)
         {
             return this.CaptionEn;
         }
-        else if (Langue == Language.PORTUGAIS)
+        else if (langue == Language.PORTUGAIS)
         {
             return this.CaptionBr;
         }
@@ -110,18 +110,18 @@ public class CatalogPage
         return this.Caption;
     }
 
-    public List<string> GetPageStrings2ByLangue(Language Langue)
+    public List<string> GetPageStrings2ByLangue(Language langue)
     {
-        if (Langue == Language.ANGLAIS)
+        if (langue == Language.ANGLAIS)
         {
-            return this.PageStrings2En;
+            return this._pageStrings2En;
         }
-        else if (Langue == Language.PORTUGAIS)
+        else if (langue == Language.PORTUGAIS)
         {
-            return this.PageStrings2Br;
+            return this._pageStrings2Br;
         }
 
-        return this.PageStrings2;
+        return this._pageStrings2;
     }
 
     public CatalogItem GetItem(int pId)

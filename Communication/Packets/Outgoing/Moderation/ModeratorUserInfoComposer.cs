@@ -13,7 +13,7 @@ internal class ModeratorUserInfoComposer : ServerPacket
         this.WriteString(User != null ? Convert.ToString(User["look"]) : "Unknown");
         this.WriteInteger(User != null ? Convert.ToInt32(Math.Ceiling((WibboEnvironment.GetUnixTimestamp() - Convert.ToDouble(User["account_created"])) / 60)) : 0);
         this.WriteInteger(User != null ? Convert.ToInt32(Math.Ceiling((WibboEnvironment.GetUnixTimestamp() - Convert.ToDouble(User["last_online"])) / 60)) : 0);
-        this.WriteBoolean(User != null ? WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Convert.ToInt32(User["id"])) != null : false);
+        this.WriteBoolean(User != null && WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Convert.ToInt32(User["id"])) != null);
         this.WriteInteger(Info != null ? Convert.ToInt32(Info["cfhs"]) : 0);
         this.WriteInteger(Info != null ? Convert.ToInt32(Info["cfhs_abusive"]) : 0);
         this.WriteInteger(Info != null ? Convert.ToInt32(Info["cautions"]) : 0);

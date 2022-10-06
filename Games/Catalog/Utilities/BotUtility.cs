@@ -14,29 +14,20 @@ public static class BotUtility
         }
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        var Id = BotUserDao.InsertAndGetId(dbClient, ownerId, cataBot.Name, cataBot.Motto, cataBot.Figure, cataBot.Gender);
+        var id = BotUserDao.InsertAndGetId(dbClient, ownerId, cataBot.Name, cataBot.Motto, cataBot.Figure, cataBot.Gender);
 
-        var BotData = BotUserDao.GetOne(dbClient, ownerId, Id);
+        var botData = BotUserDao.GetOne(dbClient, ownerId, id);
 
-        return new Bot(Convert.ToInt32(BotData["id"]), Convert.ToInt32(BotData["user_id"]), Convert.ToString(BotData["name"]), Convert.ToString(BotData["motto"]), Convert.ToString(BotData["look"]), Convert.ToString(BotData["gender"]), false, true, "", 0, false, 0, 0, 0);
+        return new Bot(Convert.ToInt32(botData["id"]), Convert.ToInt32(botData["user_id"]), Convert.ToString(botData["name"]), Convert.ToString(botData["motto"]), Convert.ToString(botData["look"]), Convert.ToString(botData["gender"]), false, true, "", 0, false, 0, 0, 0);
     }
 
-    public static BotAIType GetAIFromString(string type)
+    public static BotAIType GetAIFromString(string type) => type switch
     {
-        switch (type)
-        {
-            case "pet":
-                return BotAIType.Pet;
-            case "generic":
-                return BotAIType.Generic;
-            case "copybot":
-                return BotAIType.CopyBot;
-            case "roleplaybot":
-                return BotAIType.RoleplayBot;
-            case "roleplaypet":
-                return BotAIType.RoleplayPet;
-            default:
-                return BotAIType.Generic;
-        }
-    }
+        "pet" => BotAIType.Pet,
+        "generic" => BotAIType.Generic,
+        "copybot" => BotAIType.CopyBot,
+        "roleplaybot" => BotAIType.RoleplayBot,
+        "roleplaypet" => BotAIType.RoleplayPet,
+        _ => BotAIType.Generic,
+    };
 }

@@ -82,101 +82,101 @@ public class Soccer
         }
     }
 
-    public void OnUserWalk(RoomUser User, bool Shoot)
+    public void OnUserWalk(RoomUser user, bool shoot)
     {
-        if (User == null)
+        if (user == null)
         {
             return;
         }
 
-        if (!User.AllowBall && Shoot && !this._roomInstance.OldFoot)
+        if (!user.AllowBall && shoot && !this._roomInstance.OldFoot)
         {
-            User.AllowBall = true;
-            User.MoveWithBall = false;
+            user.AllowBall = true;
+            user.MoveWithBall = false;
             return;
         }
 
-        var roomItemForSquare = this._roomInstance.GetGameMap().GetCoordinatedItems(new Point(User.SetX, User.SetY));
+        var roomItemForSquare = this._roomInstance.GetGameMap().GetCoordinatedItems(new Point(user.SetX, user.SetY));
 
-        var MoveBall = false;
+        var moveBall = false;
 
-        foreach (var Ball in roomItemForSquare)
+        foreach (var ball in roomItemForSquare)
         {
-            if (Ball.GetBaseItem().InteractionType != InteractionType.FOOTBALL)
+            if (ball.GetBaseItem().InteractionType != InteractionType.FOOTBALL)
             {
                 continue;
             }
 
-            switch (User.RotBody)
+            switch (user.RotBody)
             {
                 case 0:
-                    Ball.MovementDir = MovementDirection.up;
+                    ball.MovementDir = MovementDirection.up;
                     break;
                 case 1:
-                    Ball.MovementDir = MovementDirection.upright;
+                    ball.MovementDir = MovementDirection.upright;
                     break;
                 case 2:
-                    Ball.MovementDir = MovementDirection.right;
+                    ball.MovementDir = MovementDirection.right;
                     break;
                 case 3:
-                    Ball.MovementDir = MovementDirection.downright;
+                    ball.MovementDir = MovementDirection.downright;
                     break;
                 case 4:
-                    Ball.MovementDir = MovementDirection.down;
+                    ball.MovementDir = MovementDirection.down;
                     break;
                 case 5:
-                    Ball.MovementDir = MovementDirection.downleft;
+                    ball.MovementDir = MovementDirection.downleft;
                     break;
                 case 6:
-                    Ball.MovementDir = MovementDirection.left;
+                    ball.MovementDir = MovementDirection.left;
                     break;
                 case 7:
-                    Ball.MovementDir = MovementDirection.upleft;
+                    ball.MovementDir = MovementDirection.upleft;
                     break;
             }
 
-            if (Shoot)
+            if (shoot)
             {
-                Ball.InteractionCountHelper = 6;
-                Ball.InteractingUser = User.VirtualId;
-                Ball.ReqUpdate(1);
+                ball.InteractionCountHelper = 6;
+                ball.InteractingUser = user.VirtualId;
+                ball.ReqUpdate(1);
             }
             else
             {
-                var GoalX = Ball.X;
-                var GoalY = Ball.Y;
+                var goalX = ball.X;
+                var goalY = ball.Y;
 
-                var NewPoint = Ball.GetMoveCoord(GoalX, GoalY, 1);
+                var newPoint = ball.GetMoveCoord(goalX, goalY, 1);
 
-                Ball.InteractionCountHelper = 0;
+                ball.InteractionCountHelper = 0;
 
-                if (User.AllowBall && !User.MoveWithBall)
+                if (user.AllowBall && !user.MoveWithBall)
                 {
-                    User.AllowBall = false;
+                    user.AllowBall = false;
                 }
                 else
                 {
-                    User.AllowBall = true;
+                    user.AllowBall = true;
                 }
 
-                if (Ball.GetRoom().GetGameMap().CanStackItem(NewPoint.X, NewPoint.Y, true))
+                if (ball.GetRoom().GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true))
                 {
-                    this.MoveBall(Ball, NewPoint.X, NewPoint.Y);
+                    this.MoveBall(ball, newPoint.X, newPoint.Y);
                 }
             }
 
-            MoveBall = true;
+            moveBall = true;
 
             break;
         }
 
-        if (!MoveBall)
+        if (!moveBall)
         {
-            User.SetMoveWithBall = true;
+            user.SetMoveWithBall = true;
         }
         else
         {
-            User.MoveWithBall = true;
+            user.MoveWithBall = true;
         }
     }
 
@@ -191,8 +191,8 @@ public class Soccer
 
         item.UpdateState(false, true);
 
-        var Z = this._roomInstance.GetGameMap().SqAbsoluteHeight(newX, newY);
-        this._roomInstance.GetRoomItemHandler().PositionReset(item, newX, newY, Z);
+        var z = this._roomInstance.GetGameMap().SqAbsoluteHeight(newX, newY);
+        this._roomInstance.GetRoomItemHandler().PositionReset(item, newX, newY, z);
 
         this.HandleFootballGameItems(new Point(newX, newY));
     }

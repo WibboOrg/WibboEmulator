@@ -1,15 +1,15 @@
-﻿namespace WibboEmulator.Games.Permissions;
+namespace WibboEmulator.Games.Permissions;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 public struct AuthorizationCommands
 {
-    public readonly int CommandID;
-    public readonly string Input;
-    public readonly int MinRank;
-    public readonly string DescriptionFr;
-    public readonly string DescriptionEn;
-    public readonly string DescriptionBr;
+    public int CommandID { get; private set; }
+    public string Input { get; private set; }
+    public int MinRank { get; private set; }
+    public string DescriptionFr { get; private set; }
+    public string DescriptionEn { get; private set; }
+    public string DescriptionBr { get; private set; }
 
     public AuthorizationCommands(int commandID, string input, int rank, string descriptionFr, string descriptionEn, string descriptionBr)
     {

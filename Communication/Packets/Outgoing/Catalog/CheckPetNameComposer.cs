@@ -3,10 +3,10 @@ using WibboEmulator.Games.Catalog.Utilities;
 
 internal class CheckPetNameComposer : ServerPacket
 {
-    public CheckPetNameComposer(string PetName)
+    public CheckPetNameComposer(string petName)
         : base(ServerPacketHeader.CATALOG_APPROVE_NAME_RESULT)
     {
-        this.WriteInteger(PetUtility.CheckPetName(PetName) ? 0 : 2);
-        this.WriteString(PetName);
+        this.WriteInteger(PetUtility.CheckPetName(petName) ? 0 : 2);
+        this.WriteString(petName);
     }
 }

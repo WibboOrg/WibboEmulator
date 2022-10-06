@@ -2,55 +2,55 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Users;
 
 internal class NameChangeUpdateComposer : ServerPacket
 {
-    public NameChangeUpdateComposer(string Name)
+    public NameChangeUpdateComposer(string name)
         : base(ServerPacketHeader.CHECK_USER_NAME)
     {
-        switch (this.NameAvailable(Name))
+        switch (NameAvailable(name))
         {
             case -2:
                 this.WriteInteger(4);
-                this.WriteString(Name);
+                this.WriteString(name);
                 this.WriteInteger(0);
                 break;
             case -1:
                 this.WriteInteger(4);
-                this.WriteString(Name);
+                this.WriteString(name);
                 this.WriteInteger(0);
                 break;
             case 0:
                 this.WriteInteger(5);
-                this.WriteString(Name);
+                this.WriteString(name);
                 this.WriteInteger(2);
-                this.WriteString("--" + Name + "--");
-                this.WriteString("Xx" + Name + "xX");
+                this.WriteString("--" + name + "--");
+                this.WriteString("Xx" + name + "xX");
                 break;
             default:
                 this.WriteInteger(0);
-                this.WriteString(Name);
+                this.WriteString(name);
                 this.WriteInteger(0);
                 break;
         }
     }
 
-    private int NameAvailable(string Username)
+    private static int NameAvailable(string username)
     {
-        Username = Username.ToLower();
+        username = username.ToLower();
 
-        if (Username.Length > 15)
+        if (username.Length > 15)
         {
             return -2;
         }
 
-        if (Username.Length < 3)
+        if (username.Length < 3)
         {
             return -2;
         }
 
-        if (!WibboEnvironment.IsValidAlphaNumeric(Username))
+        if (!WibboEnvironment.IsValidAlphaNumeric(username))
         {
             return -1;
         }
 
-        return WibboEnvironment.UsernameExists(Username) ? 0 : 1;
+        return WibboEnvironment.UsernameExists(username) ? 0 : 1;
     }
 }

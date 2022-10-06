@@ -34,7 +34,7 @@ public class RoleplayManager
             return null;
         }
 
-        this._rolePlay.TryGetValue(ownerId, out var rp);
+        _ = this._rolePlay.TryGetValue(ownerId, out var rp);
         return rp;
     }
 
@@ -59,7 +59,7 @@ public class RoleplayManager
             {
                 if (!this._rolePlay.ContainsKey(Convert.ToInt32(dataRow["owner_id"])))
                 {
-                    this._rolePlay.TryAdd(Convert.ToInt32(dataRow["owner_id"]), new RolePlayerManager(Convert.ToInt32(dataRow["owner_id"]), Convert.ToInt32(dataRow["hopital_id"]), Convert.ToInt32(dataRow["prison_id"])));
+                    _ = this._rolePlay.TryAdd(Convert.ToInt32(dataRow["owner_id"]), new RolePlayerManager(Convert.ToInt32(dataRow["owner_id"]), Convert.ToInt32(dataRow["hopital_id"]), Convert.ToInt32(dataRow["prison_id"])));
                 }
                 else
                 {

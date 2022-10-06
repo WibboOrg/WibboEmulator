@@ -3,14 +3,14 @@ using WibboEmulator.Games.Rooms.Moodlight;
 
 internal class MoodlightConfigComposer : ServerPacket
 {
-    public MoodlightConfigComposer(MoodlightData MoodlightData)
+    public MoodlightConfigComposer(MoodlightData moodlightData)
         : base(ServerPacketHeader.ITEM_DIMMER_SETTINGS)
     {
-        this.WriteInteger(MoodlightData.Presets.Count);
-        this.WriteInteger(MoodlightData.CurrentPreset);
+        this.WriteInteger(moodlightData.Presets.Count);
+        this.WriteInteger(moodlightData.CurrentPreset);
 
         var i = 0;
-        foreach (var moodlightPreset in MoodlightData.Presets)
+        foreach (var moodlightPreset in moodlightData.Presets)
         {
             i++;
             this.WriteInteger(i);

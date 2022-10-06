@@ -27,7 +27,7 @@ internal class ConfigBot : IChatCommand
                     break;
                 }
 
-                int.TryParse(parameters[3], out var IntValue);
+                _ = int.TryParse(parameters[3], out var IntValue);
 
                 if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
                 {
@@ -55,7 +55,7 @@ internal class ConfigBot : IChatCommand
                     break;
                 }
 
-                int.TryParse(parameters[3], out var IntValue);
+                _ = int.TryParse(parameters[3], out var IntValue);
 
                 if (Bot.CarryItemID != IntValue)
                 {
@@ -78,7 +78,7 @@ internal class ConfigBot : IChatCommand
                     break;
                 }
 
-                int.TryParse(parameters[3], out var IntValue);
+                _ = int.TryParse(parameters[3], out var IntValue);
                 IntValue = IntValue is > 7 or < 0 ? 0 : IntValue;
 
                 if (Bot.RotBody != IntValue)

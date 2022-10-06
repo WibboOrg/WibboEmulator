@@ -6,7 +6,7 @@ internal class GetPetInventoryEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {

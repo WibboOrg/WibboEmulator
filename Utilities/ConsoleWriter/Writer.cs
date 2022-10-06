@@ -70,50 +70,50 @@ public class Writer
     public static void HandleException(Exception pException, string pLocation)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("Exception logged " + DateTime.Now.ToString() + " in " + pLocation + ":");
-        stringBuilder.AppendLine(pException.ToString());
+        _ = stringBuilder.AppendLine("Exception logged " + DateTime.Now.ToString() + " in " + pLocation + ":");
+        _ = stringBuilder.AppendLine(pException.ToString());
         if (pException.InnerException != null)
         {
-            stringBuilder.AppendLine("Inner exception:");
-            stringBuilder.AppendLine(pException.InnerException.ToString());
+            _ = stringBuilder.AppendLine("Inner exception:");
+            _ = stringBuilder.AppendLine(pException.InnerException.ToString());
         }
         if (pException.HelpLink != null)
         {
-            stringBuilder.AppendLine("Help link:");
-            stringBuilder.AppendLine(pException.HelpLink);
+            _ = stringBuilder.AppendLine("Help link:");
+            _ = stringBuilder.AppendLine(pException.HelpLink);
         }
         if (pException.Source != null)
         {
-            stringBuilder.AppendLine("Source:");
-            stringBuilder.AppendLine(pException.Source);
+            _ = stringBuilder.AppendLine("Source:");
+            _ = stringBuilder.AppendLine(pException.Source);
         }
         if (pException.Data != null)
         {
-            stringBuilder.AppendLine("Data:");
+            _ = stringBuilder.AppendLine("Data:");
             foreach (DictionaryEntry dictionaryEntry in pException.Data)
             {
-                stringBuilder.AppendLine("  Key: " + dictionaryEntry.Key + "Value: " + dictionaryEntry.Value);
+                _ = stringBuilder.AppendLine("  Key: " + dictionaryEntry.Key + "Value: " + dictionaryEntry.Value);
             }
         }
         if (pException.Message != null)
         {
-            stringBuilder.AppendLine("Message:");
-            stringBuilder.AppendLine(pException.Message);
+            _ = stringBuilder.AppendLine("Message:");
+            _ = stringBuilder.AppendLine(pException.Message);
         }
         if (pException.StackTrace != null)
         {
-            stringBuilder.AppendLine("Stack trace:");
-            stringBuilder.AppendLine(pException.StackTrace);
+            _ = stringBuilder.AppendLine("Stack trace:");
+            _ = stringBuilder.AppendLine(pException.StackTrace);
         }
-        stringBuilder.AppendLine();
-        stringBuilder.AppendLine();
+        _ = stringBuilder.AppendLine();
+        _ = stringBuilder.AppendLine();
         LogException(stringBuilder.ToString());
     }
 
-    public static void DisablePrimaryWriting(bool ClearConsole)
+    public static void DisablePrimaryWriting(bool clearConsole)
     {
         DisabledState = true;
-        if (!ClearConsole)
+        if (!clearConsole)
         {
             return;
         }
@@ -131,7 +131,7 @@ public class Writer
 
             if (!string.IsNullOrEmpty(fullPath))
             {
-                Directory.CreateDirectory(fullPath);
+                _ = Directory.CreateDirectory(fullPath);
             }
 
             var fileStream = new FileStream(WibboEnvironment.PatchDir + path, FileMode.Append, FileAccess.Write);

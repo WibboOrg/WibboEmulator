@@ -1,13 +1,13 @@
-﻿namespace WibboEmulator.Games.Rooms.Wired;
+namespace WibboEmulator.Games.Rooms.Wired;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 
 public class WiredCycle
 {
-    public RoomUser User;
-    public Item Item;
-    public IWiredCycleable WiredCycleable;
-    public int Cycle;
+    public RoomUser User { get; set; }
+    public Item Item { get; set; }
+    public IWiredCycleable WiredCycleable { get; set; }
+    public int Cycle { get; set; }
 
     public WiredCycle(IWiredCycleable wiredCycleable, RoomUser user, Item item)
     {

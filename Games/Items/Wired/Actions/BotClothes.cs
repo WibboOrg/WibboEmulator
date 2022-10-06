@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Interfaces;
@@ -28,15 +28,15 @@ public class BotClothes : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
             return false;
         }
 
-        var Bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(nameBot);
-        if (Bot == null)
+        var bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(nameBot);
+        if (bot == null)
         {
             return false;
         }
 
-        Bot.BotData.Look = look;
+        bot.BotData.Look = look;
 
-        this.RoomInstance.SendPacket(new UserChangeComposer(Bot));
+        this.RoomInstance.SendPacket(new UserChangeComposer(bot));
 
         return false;
     }

@@ -1,12 +1,12 @@
-﻿namespace WibboEmulator.Games.Chat.Styles;
+namespace WibboEmulator.Games.Chat.Styles;
 
 public sealed class ChatStyle
 {
-    public ChatStyle(int Id, string Name, string RequiredRight)
+    public ChatStyle(int id, string name, string requiredRight)
     {
-        this.Id = Id;
-        this.Name = Name;
-        this.RequiredRight = RequiredRight;
+        this.Id = id;
+        this.Name = name;
+        this.RequiredRight = requiredRight;
     }
 
     public int Id { get; set; }

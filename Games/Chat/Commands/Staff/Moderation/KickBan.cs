@@ -30,7 +30,7 @@ internal class KickBan : IChatCommand
 
             if (parameters.Length >= 3)
             {
-                int.TryParse(parameters[2], out banMinutes);
+                _ = int.TryParse(parameters[2], out banMinutes);
             }
 
             if (banMinutes <= 0)

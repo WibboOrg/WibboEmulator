@@ -5,7 +5,7 @@ internal class BanUserEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
@@ -22,9 +22,9 @@ internal class BanUserEvent : IPacketEvent
             return;
         }
 
-        var pId = Packet.PopInt();
-        var num = Packet.PopInt();
-        var str = Packet.PopString();
+        var pId = packet.PopInt();
+        var num = packet.PopInt();
+        var str = packet.PopString();
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(pId);
         int Time;

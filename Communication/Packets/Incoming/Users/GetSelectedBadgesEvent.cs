@@ -6,9 +6,9 @@ internal class GetSelectedBadgesEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var UserId = Packet.PopInt();
+        var UserId = packet.PopInt();
 
         var User = WibboEnvironment.GetUserById(UserId);
         if (User == null)

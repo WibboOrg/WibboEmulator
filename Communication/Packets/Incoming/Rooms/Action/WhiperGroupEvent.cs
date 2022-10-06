@@ -5,7 +5,7 @@ internal class WhiperGroupEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -18,7 +18,7 @@ internal class WhiperGroupEvent : IPacketEvent
             return;
         }
 
-        var name = Packet.PopString();
+        var name = packet.PopString();
 
         var roomUserByUserTarget = room.GetRoomUserManager().GetRoomUserByName(name);
         if (roomUserByUserTarget == null)
@@ -37,7 +37,7 @@ internal class WhiperGroupEvent : IPacketEvent
         }
         else
         {
-            roomUserByUserId.WhiperGroupUsers.Remove(roomUserByUserTarget.GetUsername());
+            _ = roomUserByUserId.WhiperGroupUsers.Remove(roomUserByUserTarget.GetUsername());
         }
     }
 }

@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms.Wired;
 
 public class WiredActionBase : WiredBase, IWiredCycleable
 {
-    public int DelayCycle { get => this.Delay; }
+    public int DelayCycle => this.Delay;
 
     public virtual void Handle(RoomUser user, Item item)
     {
@@ -17,7 +17,7 @@ public class WiredActionBase : WiredBase, IWiredCycleable
         }
         else
         {
-            this.OnCycle(user, item);
+            _ = this.OnCycle(user, item);
         }
     }
 

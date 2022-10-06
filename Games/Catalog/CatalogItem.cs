@@ -14,7 +14,7 @@ public class CatalogItem
     public int PageID { get; private set; }
     public int CostDuckets { get; private set; }
     public int LimitedEditionStack { get; private set; }
-    public int LimitedEditionSells;
+    public int LimitedEditionSells { get; set; }
     public int CostWibboPoints { get; private set; }
     public int CostLimitCoins { get; private set; }
     public string Badge { get; private set; }

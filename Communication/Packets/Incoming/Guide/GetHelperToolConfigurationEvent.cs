@@ -6,7 +6,7 @@ internal class GetHelperToolConfigurationEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().HasPermission("perm_helptool"))
         {
@@ -14,10 +14,10 @@ internal class GetHelperToolConfigurationEvent : IPacketEvent
         }
 
         var guideManager = WibboEnvironment.GetGame().GetHelpManager();
-        var onDuty = Packet.PopBoolean();
-        Packet.PopBoolean();
-        Packet.PopBoolean();
-        Packet.PopBoolean();
+        var onDuty = packet.PopBoolean();
+        _ = packet.PopBoolean();
+        _ = packet.PopBoolean();
+        _ = packet.PopBoolean();
 
         if (onDuty && !session.GetUser().OnDuty)
         {

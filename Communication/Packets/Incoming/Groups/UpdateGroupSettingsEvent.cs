@@ -10,9 +10,9 @@ internal class UpdateGroupSettingsEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = Packet.PopInt();
+        var GroupId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
         {
@@ -24,23 +24,15 @@ internal class UpdateGroupSettingsEvent : IPacketEvent
             return;
         }
 
-        var Type = Packet.PopInt();
-        var FurniOptions = Packet.PopInt();
+        var Type = packet.PopInt();
+        var FurniOptions = packet.PopInt();
 
-        switch (Type)
+        Group.GroupType = Type switch
         {
-            default:
-            case 0:
-                Group.GroupType = GroupType.OPEN;
-                break;
-            case 1:
-                Group.GroupType = GroupType.LOCKED;
-                break;
-            case 2:
-                Group.GroupType = GroupType.PRIVATE;
-                break;
-        }
-
+            1 => GroupType.LOCKED,
+            2 => GroupType.PRIVATE,
+            _ => GroupType.OPEN,
+        };
         if (Group.GroupType != GroupType.LOCKED)
         {
             if (Group.GetRequests.Count > 0)

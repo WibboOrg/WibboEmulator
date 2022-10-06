@@ -7,16 +7,16 @@ internal class UserSettingsSoundEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
             return;
         }
 
-        var Volume1 = Packet.PopInt();
-        var Volume2 = Packet.PopInt();
-        var Volume3 = Packet.PopInt();
+        var Volume1 = packet.PopInt();
+        var Volume2 = packet.PopInt();
+        var Volume3 = packet.PopInt();
 
 
         if (session.GetUser().ClientVolume[0] == Volume1 && session.GetUser().ClientVolume[1] == Volume2 && session.GetUser().ClientVolume[2] == Volume3)

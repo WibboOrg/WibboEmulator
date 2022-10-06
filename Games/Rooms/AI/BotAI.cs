@@ -4,6 +4,7 @@ using WibboEmulator.Games.GameClients;
 public abstract class BotAI
 {
     public int Id { get; set; }
+    public int VirtualId { get; set; }
     private RoomUser _roomUser;
     private Room _room;
 

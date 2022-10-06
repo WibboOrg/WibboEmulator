@@ -5,10 +5,10 @@ internal class MoveAvatarKeyboardEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var targetX = Packet.PopInt();
-        var targetY = Packet.PopInt();
+        var targetX = packet.PopInt();
+        var targetY = packet.PopInt();
 
         if (targetX is > 1 or < (-1))
         {
@@ -33,7 +33,7 @@ internal class MoveAvatarKeyboardEvent : IPacketEvent
 
         var User = currentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
 
-        if (User == null || !User.CanWalk && !User.TeleportEnabled)
+        if (User == null || (!User.CanWalk && !User.TeleportEnabled))
         {
             return;
         }
@@ -49,13 +49,13 @@ internal class MoveAvatarKeyboardEvent : IPacketEvent
 
         if (User.ReverseWalk)
         {
-            User.GoalX = User.SetX + -targetX * 1000;
-            User.GoalY = User.SetY + -targetY * 1000;
+            User.GoalX = User.SetX + (-targetX * 1000);
+            User.GoalY = User.SetY + (-targetY * 1000);
         }
         else
         {
-            User.GoalX = User.SetX + targetX * 1000;
-            User.GoalY = User.SetY + targetY * 1000;
+            User.GoalX = User.SetX + (targetX * 1000);
+            User.GoalY = User.SetY + (targetY * 1000);
         }
 
     }

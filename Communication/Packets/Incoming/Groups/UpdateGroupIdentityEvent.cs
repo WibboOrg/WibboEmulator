@@ -8,11 +8,11 @@ internal class UpdateGroupIdentityEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = Packet.PopInt();
-        var Name = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
-        var Desc = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(Packet.PopString());
+        var GroupId = packet.PopInt();
+        var Name = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+        var Desc = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
 
         if (Name.Length > 50)
         {

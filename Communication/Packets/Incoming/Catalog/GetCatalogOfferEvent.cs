@@ -6,9 +6,9 @@ internal class GetCatalogOfferEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var id = Packet.PopInt();
+        var id = packet.PopInt();
         var Item = WibboEnvironment.GetGame().GetCatalog().FindItem(id, session.GetUser().Rank);
         if (Item == null)
         {

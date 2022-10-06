@@ -21,7 +21,7 @@ public class RPEnemyManager
             return null;
         }
 
-        this._enemyBot.TryGetValue(id, out var enemy);
+        _ = this._enemyBot.TryGetValue(id, out var enemy);
         return enemy;
     }
 
@@ -32,7 +32,7 @@ public class RPEnemyManager
             return null;
         }
 
-        this._enemyPet.TryGetValue(id, out var enemy);
+        _ = this._enemyPet.TryGetValue(id, out var enemy);
         return enemy;
     }
 
@@ -51,83 +51,83 @@ public class RPEnemyManager
                     continue;
                 }
 
-                var Config = new RPEnemy(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["health"]), Convert.ToInt32(dataRow["weapon_far_id"]), Convert.ToInt32(dataRow["weapon_cac_id"]), Convert.ToInt32(dataRow["dead_timer"]),
+                var config = new RPEnemy(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["health"]), Convert.ToInt32(dataRow["weapon_far_id"]), Convert.ToInt32(dataRow["weapon_cac_id"]), Convert.ToInt32(dataRow["dead_timer"]),
                     Convert.ToInt32(dataRow["loot_item_id"]), Convert.ToInt32(dataRow["money_drop"]), Convert.ToInt32((string)dataRow["drop_script_id"]), Convert.ToInt32(dataRow["team_id"]), Convert.ToInt32(dataRow["aggro_distance"]),
                     Convert.ToInt32(dataRow["zone_distance"]), Convert.ToInt32((string)dataRow["reset_position"]) == 1, Convert.ToInt32(dataRow["lost_aggro_distance"]), Convert.ToInt32((string)dataRow["zombie_mode"]) == 1);
 
                 if ((string)dataRow["type"] == "bot")
                 {
-                    this._enemyBot.Add(Convert.ToInt32(dataRow["id"]), Config);
+                    this._enemyBot.Add(Convert.ToInt32(dataRow["id"]), config);
                 }
                 else
                 {
-                    this._enemyPet.Add(Convert.ToInt32(dataRow["id"]), Config);
+                    this._enemyPet.Add(Convert.ToInt32(dataRow["id"]), config);
                 }
             }
         }
     }
 
-    public RPEnemy AddEnemyBot(int BotId)
+    public RPEnemy AddEnemyBot(int botId)
     {
-        if (this._enemyBot.ContainsKey(BotId))
+        if (this._enemyBot.ContainsKey(botId))
         {
-            return this.GetEnemyBot(BotId);
+            return this.GetEnemyBot(botId);
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoleplayEnemyDao.Insert(dbClient, BotId, "bot");
+            RoleplayEnemyDao.Insert(dbClient, botId, "bot");
         }
 
-        var EnemyConfig = new RPEnemy(BotId, 100, 1, 4, 30, 0, 0, 5461, 0, 0, 0, true, 12, false);
-        this._enemyBot.Add(BotId, EnemyConfig);
-        return this.GetEnemyBot(BotId);
+        var enemyConfig = new RPEnemy(botId, 100, 1, 4, 30, 0, 0, 5461, 0, 0, 0, true, 12, false);
+        this._enemyBot.Add(botId, enemyConfig);
+        return this.GetEnemyBot(botId);
     }
 
-    public RPEnemy AddEnemyPet(int PetId)
+    public RPEnemy AddEnemyPet(int petId)
     {
-        if (this._enemyPet.ContainsKey(PetId))
+        if (this._enemyPet.ContainsKey(petId))
         {
-            return this.GetEnemyPet(PetId);
+            return this.GetEnemyPet(petId);
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoleplayEnemyDao.Insert(dbClient, PetId, "pet");
+            RoleplayEnemyDao.Insert(dbClient, petId, "pet");
         }
 
-        var EnemyConfig = new RPEnemy(PetId, 100, 0, 0, 0, 0, 0, 5461, 0, 0, 0, true, 12, false);
-        this._enemyPet.Add(PetId, EnemyConfig);
-        return this.GetEnemyPet(PetId);
+        var enemyConfig = new RPEnemy(petId, 100, 0, 0, 0, 0, 0, 5461, 0, 0, 0, true, 12, false);
+        this._enemyPet.Add(petId, enemyConfig);
+        return this.GetEnemyPet(petId);
     }
 
-    internal void RemoveEnemyBot(int BotId)
+    internal void RemoveEnemyBot(int botId)
     {
-        if (!this._enemyBot.ContainsKey(BotId))
+        if (!this._enemyBot.ContainsKey(botId))
         {
             return;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoleplayEnemyDao.Delete(dbClient, BotId);
+            RoleplayEnemyDao.Delete(dbClient, botId);
         }
 
-        this._enemyBot.Remove(BotId);
+        _ = this._enemyBot.Remove(botId);
     }
 
-    internal void RemoveEnemyPet(int PetId)
+    internal void RemoveEnemyPet(int petId)
     {
-        if (!this._enemyPet.ContainsKey(PetId))
+        if (!this._enemyPet.ContainsKey(petId))
         {
             return;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoleplayEnemyDao.Delete(dbClient, PetId);
+            RoleplayEnemyDao.Delete(dbClient, petId);
         }
 
-        this._enemyPet.Remove(PetId);
+        _ = this._enemyPet.Remove(petId);
     }
 }

@@ -18,7 +18,7 @@ public class WiredHandler
     private ConcurrentQueue<WiredCycle> _requestingUpdates;
 
     private readonly Room _room;
-    private bool _doCleanup = false;
+    private bool _doCleanup;
 
     public event BotCollisionDelegate TrgBotCollision;
     public event UserAndItemDelegate TrgCollision;
@@ -49,7 +49,7 @@ public class WiredHandler
             }
             else
             {
-                this._actionStacks.TryAdd(itemCoord, new List<Item>() { item });
+                _ = this._actionStacks.TryAdd(itemCoord, new List<Item>() { item });
             }
         }
         else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
@@ -60,7 +60,7 @@ public class WiredHandler
             }
             else
             {
-                this._conditionStacks.TryAdd(itemCoord, new List<Item>() { item });
+                _ = this._conditionStacks.TryAdd(itemCoord, new List<Item>() { item });
             }
         }
         else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
@@ -89,10 +89,10 @@ public class WiredHandler
             {
                 return;
             }
-            this._actionStacks[coordinate].Remove(item);
+            _ = this._actionStacks[coordinate].Remove(item);
             if (this._actionStacks[coordinate].Count == 0)
             {
-                this._actionStacks.TryRemove(coordinate, out var newList);
+                _ = this._actionStacks.TryRemove(coordinate, out var newList);
             }
         }
         else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
@@ -101,24 +101,24 @@ public class WiredHandler
             {
                 return;
             }
-            this._conditionStacks[itemCoord].Remove(item);
+            _ = this._conditionStacks[itemCoord].Remove(item);
             if (this._conditionStacks[itemCoord].Count == 0)
             {
-                this._conditionStacks.TryRemove(itemCoord, out var newList);
+                _ = this._conditionStacks.TryRemove(itemCoord, out var newList);
             }
         }
         else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
         {
             if (this._specialRandom.Contains(itemCoord))
             {
-                this._specialRandom.Remove(itemCoord);
+                _ = this._specialRandom.Remove(itemCoord);
             }
         }
         else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALUNSEEN)
         {
             if (this._specialUnseen.ContainsKey(itemCoord))
             {
-                this._specialUnseen.Remove(itemCoord);
+                _ = this._specialUnseen.Remove(itemCoord);
             }
         }
     }
@@ -228,7 +228,7 @@ public class WiredHandler
             }
             else
             {
-                this._wiredUsed.TryAdd(coordinate, new List<RoomUser>() { user });
+                _ = this._wiredUsed.TryAdd(coordinate, new List<RoomUser>() { user });
             }
         }
 

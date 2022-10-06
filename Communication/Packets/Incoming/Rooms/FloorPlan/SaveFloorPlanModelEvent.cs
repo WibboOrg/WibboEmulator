@@ -9,15 +9,15 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var Map = Packet.PopString().ToLower().TrimEnd('\r');
-        var DoorX = Packet.PopInt();
-        var DoorY = Packet.PopInt();
-        var DoorDirection = Packet.PopInt();
-        var WallThick = Packet.PopInt();
-        var FloorThick = Packet.PopInt();
-        var WallHeight = Packet.PopInt();
+        var Map = packet.PopString().ToLower().TrimEnd('\r');
+        var DoorX = packet.PopInt();
+        var DoorY = packet.PopInt();
+        var DoorDirection = packet.PopInt();
+        var WallThick = packet.PopInt();
+        var FloorThick = packet.PopInt();
+        var WallHeight = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -147,78 +147,40 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
         }
     }
 
-    private static short Parse(char input)
+    private static short Parse(char input) => input switch
     {
-
-        switch (input)
-        {
-            default:
-            case '0':
-                return 0;
-            case '1':
-                return 1;
-            case '2':
-                return 2;
-            case '3':
-                return 3;
-            case '4':
-                return 4;
-            case '5':
-                return 5;
-            case '6':
-                return 6;
-            case '7':
-                return 7;
-            case '8':
-                return 8;
-            case '9':
-                return 9;
-            case 'a':
-                return 10;
-            case 'b':
-                return 11;
-            case 'c':
-                return 12;
-            case 'd':
-                return 13;
-            case 'e':
-                return 14;
-            case 'f':
-                return 15;
-            case 'g':
-                return 16;
-            case 'h':
-                return 17;
-            case 'i':
-                return 18;
-            case 'j':
-                return 19;
-            case 'k':
-                return 20;
-            case 'l':
-                return 21;
-            case 'm':
-                return 22;
-            case 'n':
-                return 23;
-            case 'o':
-                return 24;
-            case 'p':
-                return 25;
-            case 'q':
-                return 26;
-            case 'r':
-                return 27;
-            case 's':
-                return 28;
-            case 't':
-                return 29;
-            case 'u':
-                return 30;
-            case 'v':
-                return 31;
-            case 'w':
-                return 32;
-        }
-    }
+        '1' => 1,
+        '2' => 2,
+        '3' => 3,
+        '4' => 4,
+        '5' => 5,
+        '6' => 6,
+        '7' => 7,
+        '8' => 8,
+        '9' => 9,
+        'a' => 10,
+        'b' => 11,
+        'c' => 12,
+        'd' => 13,
+        'e' => 14,
+        'f' => 15,
+        'g' => 16,
+        'h' => 17,
+        'i' => 18,
+        'j' => 19,
+        'k' => 20,
+        'l' => 21,
+        'm' => 22,
+        'n' => 23,
+        'o' => 24,
+        'p' => 25,
+        'q' => 26,
+        'r' => 27,
+        's' => 28,
+        't' => 29,
+        'u' => 30,
+        'v' => 31,
+        'w' => 32,
+        _ => 0,
+    };
 }

@@ -9,10 +9,10 @@ internal class ConfirmLoveLockEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var Id = Packet.PopInt();
-        var isConfirmed = Packet.PopBoolean();
+        var Id = packet.PopInt();
+        var isConfirmed = packet.PopBoolean();
 
         var Room = session.GetUser().CurrentRoom;
         if (Room == null || !Room.CheckRights(session))

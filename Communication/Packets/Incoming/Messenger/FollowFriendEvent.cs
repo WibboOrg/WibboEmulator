@@ -6,11 +6,11 @@ internal class FollowFriendEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var userId = Packet.PopInt();
+        var userId = packet.PopInt();
         var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (clientByUserId == null || clientByUserId.GetUser() == null || !clientByUserId.GetUser().InRoom || clientByUserId.GetUser().HideInRoom && !session.GetUser().HasPermission("perm_mod"))
+        if (clientByUserId == null || clientByUserId.GetUser() == null || !clientByUserId.GetUser().InRoom || (clientByUserId.GetUser().HideInRoom && !session.GetUser().HasPermission("perm_mod")))
         {
             return;
         }

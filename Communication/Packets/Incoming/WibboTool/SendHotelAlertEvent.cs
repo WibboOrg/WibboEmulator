@@ -7,7 +7,7 @@ internal class SendHotelAlertEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null)
         {
@@ -19,10 +19,10 @@ internal class SendHotelAlertEvent : IPacketEvent
             return;
         }
 
-        var EventAlert = Packet.PopBoolean();
-        var Message = Packet.PopString();
-        var Url = Packet.PopString();
-        var Preview = Packet.PopBoolean();
+        var EventAlert = packet.PopBoolean();
+        var Message = packet.PopString();
+        var Url = packet.PopString();
+        var Preview = packet.PopBoolean();
 
         if (string.IsNullOrWhiteSpace(Message) || Message.Length > 2000 || Message.Length < 50)
         {

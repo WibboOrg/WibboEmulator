@@ -4,21 +4,21 @@ using WibboEmulator.Games.Users.Achievements;
 
 internal class AchievementProgressedComposer : ServerPacket
 {
-    public AchievementProgressedComposer(AchievementData Achievement, int TargetLevel, AchievementLevel TargetLevelData, int TotalLevels, UserAchievement UserData)
+    public AchievementProgressedComposer(AchievementData achievement, int targetLevel, AchievementLevel targetLevelData, int totalLevels, UserAchievement userData)
         : base(ServerPacketHeader.ACHIEVEMENT_PROGRESSED)
     {
-        this.WriteInteger(Achievement.Id);
-        this.WriteInteger(TargetLevel);
-        this.WriteString(Achievement.GroupName + TargetLevel);
+        this.WriteInteger(achievement.Id);
+        this.WriteInteger(targetLevel);
+        this.WriteString(achievement.GroupName + targetLevel);
         this.WriteInteger(0);
-        this.WriteInteger(TargetLevelData.Requirement);
-        this.WriteInteger(TargetLevelData.RewardPixels);
+        this.WriteInteger(targetLevelData.Requirement);
+        this.WriteInteger(targetLevelData.RewardPixels);
         this.WriteInteger(0);
-        this.WriteInteger(UserData != null ? UserData.Progress : 0);
-        this.WriteBoolean(UserData != null && UserData.Level >= TotalLevels);
-        this.WriteString(Achievement.Category);
+        this.WriteInteger(userData != null ? userData.Progress : 0);
+        this.WriteBoolean(userData != null && userData.Level >= totalLevels);
+        this.WriteString(achievement.Category);
         this.WriteString(string.Empty);
-        this.WriteInteger(TotalLevels);
+        this.WriteInteger(totalLevels);
         this.WriteInteger(0);
     }
 }

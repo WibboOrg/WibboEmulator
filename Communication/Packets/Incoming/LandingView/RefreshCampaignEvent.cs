@@ -6,9 +6,9 @@ internal class RefreshCampaignEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var parseCampaings = Packet.PopString();
+        var parseCampaings = packet.PopString();
         if (parseCampaings.Contains("gamesmaker"))
         {
             return;

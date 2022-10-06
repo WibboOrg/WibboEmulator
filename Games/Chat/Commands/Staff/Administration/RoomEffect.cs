@@ -12,7 +12,7 @@ internal class RoomEffect : IChatCommand
             return;
         }
 
-        int.TryParse(parameters[1], out var number);
+        _ = int.TryParse(parameters[1], out var number);
 
         if (number > 3)
         {

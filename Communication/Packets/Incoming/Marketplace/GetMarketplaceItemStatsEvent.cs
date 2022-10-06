@@ -7,10 +7,10 @@ internal class GetMarketplaceItemStatsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var ItemId = Packet.PopInt();
-        var SpriteId = Packet.PopInt();
+        var ItemId = packet.PopInt();
+        var SpriteId = packet.PopInt();
 
         var avgprice = 0;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())

@@ -6,8 +6,8 @@ using WibboEmulator.Database.Interfaces;
 
 public class QueryAdapter : IRegularQueryAdapter
 {
-    protected IDatabaseClient Client;
-    protected MySqlCommand Command;
+    public IDatabaseClient Client { get; set; }
+    public MySqlCommand Command { get; set; }
 
     private readonly bool _dbEnabled = true;
 
@@ -41,7 +41,7 @@ public class QueryAdapter : IRegularQueryAdapter
             var obj2 = this.Command.ExecuteScalar();
             if (obj2 != null)
             {
-                int.TryParse(obj2.ToString(), out result);
+                _ = int.TryParse(obj2.ToString(), out result);
             }
         }
         catch (Exception exception)
@@ -60,7 +60,7 @@ public class QueryAdapter : IRegularQueryAdapter
             var dataSet = new DataSet();
             using (var adapter = new MySqlDataAdapter(this.Command))
             {
-                adapter.Fill(dataSet);
+                _ = adapter.Fill(dataSet);
             }
             if ((dataSet.Tables.Count > 0) && (dataSet.Tables[0].Rows.Count == 1))
             {
@@ -105,7 +105,7 @@ public class QueryAdapter : IRegularQueryAdapter
         try
         {
             using var adapter = new MySqlDataAdapter(this.Command);
-            adapter.Fill(dataTable);
+            _ = adapter.Fill(dataTable);
         }
         catch (Exception exception)
         {
@@ -142,7 +142,7 @@ public class QueryAdapter : IRegularQueryAdapter
         var lastInsertedId = 0L;
         try
         {
-            this.Command.ExecuteScalar();
+            _ = this.Command.ExecuteScalar();
             lastInsertedId = this.Command.LastInsertedId;
         }
         catch (Exception exception)
@@ -161,7 +161,7 @@ public class QueryAdapter : IRegularQueryAdapter
 
         try
         {
-            this.Command.ExecuteNonQuery();
+            _ = this.Command.ExecuteNonQuery();
         }
         catch (Exception exception)
         {

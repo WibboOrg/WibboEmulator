@@ -2,7 +2,7 @@ namespace WibboEmulator.Games.Rooms.PathFinding;
 
 public class Vector2D
 {
-    public static Vector2D Zero = new(0, 0);
+    public static Vector2D Zero { get; set; } = new(0, 0);
 
     public Vector2D()
     {

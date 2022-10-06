@@ -1,9 +1,9 @@
-﻿namespace WibboEmulator.Games.Rooms.AI.Types;
+namespace WibboEmulator.Games.Rooms.AI.Types;
 using WibboEmulator.Games.GameClients;
 
 public class RoleplayBot : BotAI
 {
-    public RoleplayBot(int VirtualId)
+    public RoleplayBot(int virtualId)
     {
     }
 

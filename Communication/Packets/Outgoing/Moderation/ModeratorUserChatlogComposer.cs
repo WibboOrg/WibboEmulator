@@ -23,10 +23,10 @@ internal class ModeratorUserChatlogComposer : ServerPacket
         this.WriteShort(chatlogs.Count);
         foreach (var chat in chatlogs)
         {
-            this.WriteString(UnixTimestamp.FromUnixTimestamp(chat.timestamp).ToShortTimeString());
-            this.WriteInteger(chat.userID);
-            this.WriteString(chat.username);
-            this.WriteString(chat.message);
+            this.WriteString(UnixTimestamp.FromUnixTimestamp(chat.Timestamp).ToShortTimeString());
+            this.WriteInteger(chat.UserID);
+            this.WriteString(chat.Username);
+            this.WriteString(chat.Message);
             this.WriteBoolean(false);
         }
     }

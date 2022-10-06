@@ -6,7 +6,7 @@ internal class ScrGetUserInfoMessageEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
 
         double timeLeft = 30000000;

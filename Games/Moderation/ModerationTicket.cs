@@ -1,23 +1,23 @@
-﻿namespace WibboEmulator.Games.Moderation;
+namespace WibboEmulator.Games.Moderation;
 using WibboEmulator.Database.Daos.Moderation;
 using WibboEmulator.Database.Daos.User;
 
 public class ModerationTicket
 {
-    public int Id;
-    public int Score;
-    public int Type;
-    public TicketStatusType Status;
-    public int SenderId;
-    public int ReportedId;
-    public int ModeratorId;
-    public string Message;
-    public int RoomId;
-    public string RoomName;
-    public double Timestamp;
-    public string SenderName;
-    public string ReportedName;
-    public string ModName;
+    public int Id { get; set; }
+    public int Score { get; set; }
+    public int Type { get; set; }
+    public TicketStatusType Status { get; set; }
+    public int SenderId { get; set; }
+    public int ReportedId { get; set; }
+    public int ModeratorId { get; set; }
+    public string Message { get; set; }
+    public int RoomId { get; set; }
+    public string RoomName { get; set; }
+    public double Timestamp { get; set; }
+    public string SenderName { get; set; }
+    public string ReportedName { get; set; }
+    public string ModName { get; set; }
 
     public int TabId
     {
@@ -39,42 +39,42 @@ public class ModerationTicket
 
     public int TicketId => this.Id;
 
-    public ModerationTicket(int Id, int Score, int Type, int SenderId, int ReportedId, string Message, int RoomId, string RoomName, double Timestamp)
+    public ModerationTicket(int id, int score, int type, int senderId, int reportedId, string message, int roomId, string roomName, double timestamp)
     {
-        this.Id = Id;
-        this.Score = Score;
-        this.Type = Type;
+        this.Id = id;
+        this.Score = score;
+        this.Type = type;
         this.Status = TicketStatusType.OPEN;
-        this.SenderId = SenderId;
-        this.ReportedId = ReportedId;
+        this.SenderId = senderId;
+        this.ReportedId = reportedId;
         this.ModeratorId = 0;
-        this.Message = Message;
-        this.RoomId = RoomId;
-        this.RoomName = RoomName;
-        this.Timestamp = Timestamp;
-        this.SenderName = this.GetNameById(SenderId);
-        this.ReportedName = this.GetNameById(ReportedId);
-        this.ModName = this.GetNameById(this.ModeratorId);
+        this.Message = message;
+        this.RoomId = roomId;
+        this.RoomName = roomName;
+        this.Timestamp = timestamp;
+        this.SenderName = GetNameById(senderId);
+        this.ReportedName = GetNameById(reportedId);
+        this.ModName = GetNameById(this.ModeratorId);
     }
 
-    public string GetNameById(int Id)
+    public static string GetNameById(int id)
     {
         var username = "";
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            username = UserDao.GetNameById(dbClient, Id);
+            username = UserDao.GetNameById(dbClient, id);
         }
 
         return username;
     }
 
-    public void Pick(int moderatorId, bool UpdateInDb)
+    public void Pick(int moderatorId, bool updateInDb)
     {
         this.Status = TicketStatusType.PICKED;
         this.ModeratorId = moderatorId;
         this.Timestamp = WibboEnvironment.GetUnixTimestamp();
 
-        if (!UpdateInDb)
+        if (!updateInDb)
         {
             return;
         }
@@ -83,37 +83,29 @@ public class ModerationTicket
         ModerationTicketDao.UpdateStatusPicked(dbClient, moderatorId, this.Id);
     }
 
-    public void Close(TicketStatusType NewStatus, bool UpdateInDb)
+    public void Close(TicketStatusType newStatus, bool updateInDb)
     {
-        this.Status = NewStatus;
-        if (!UpdateInDb)
+        this.Status = newStatus;
+        if (!updateInDb)
         {
             return;
         }
 
-        string str;
-        switch (NewStatus)
+        var str = newStatus switch
         {
-            case TicketStatusType.ABUSIVE:
-                str = "abusive";
-                break;
-            case TicketStatusType.INVALID:
-                str = "invalid";
-                break;
-            default:
-                str = "resolved";
-                break;
-        }
-
+            TicketStatusType.ABUSIVE => "abusive",
+            TicketStatusType.INVALID => "invalid",
+            _ => "resolved",
+        };
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         ModerationTicketDao.UpdateStatus(dbClient, str, this.Id);
     }
 
-    public void Release(bool UpdateInDb)
+    public void Release(bool updateInDb)
     {
         this.Status = TicketStatusType.OPEN;
 
-        if (!UpdateInDb)
+        if (!updateInDb)
         {
             return;
         }
@@ -122,11 +114,11 @@ public class ModerationTicket
         ModerationTicketDao.UpdateStatusOpen(dbClient, this.Id);
     }
 
-    public void Delete(bool UpdateInDb)
+    public void Delete(bool updateInDb)
     {
         this.Status = TicketStatusType.DELETED;
 
-        if (!UpdateInDb)
+        if (!updateInDb)
         {
             return;
         }

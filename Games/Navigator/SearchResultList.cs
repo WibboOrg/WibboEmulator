@@ -1,23 +1,22 @@
-﻿namespace WibboEmulator.Games.Navigator;
+namespace WibboEmulator.Games.Navigator;
 
 public class SearchResultList
 {
-    private int _orderId;
-
-    public SearchResultList(int Id, string Category, string CategoryIdentifier, string PublicName, bool CanDoActions, int Colour, int RequiredRank, bool Minimized, NavigatorViewMode ViewMode, string CategoryType, string SearchAllowance, int OrderId)
+    public SearchResultList(int id, string category, string categoryIdentifier, string publicName, bool canDoActions, int colour, int requiredRank,
+        bool minimized, NavigatorViewMode viewMode, string categoryType, string searchAllowance, int orderId)
     {
-        this.Id = Id;
-        this.Category = Category;
-        this.CategoryIdentifier = CategoryIdentifier;
-        this.PublicName = PublicName;
-        this.CanDoActions = CanDoActions;
-        this.Colour = Colour;
-        this.RequiredRank = RequiredRank;
-        this.ViewMode = ViewMode;
-        this.Minimized = Minimized;
-        this.CategoryType = NavigatorCategoryTypeUtility.GetCategoryTypeByString(CategoryType);
-        this.SearchAllowance = NavigatorSearchAllowanceUtility.GetSearchAllowanceByString(SearchAllowance);
-        this._orderId = OrderId;
+        this.Id = id;
+        this.Category = category;
+        this.CategoryIdentifier = categoryIdentifier;
+        this.PublicName = publicName;
+        this.CanDoActions = canDoActions;
+        this.Colour = colour;
+        this.RequiredRank = requiredRank;
+        this.ViewMode = viewMode;
+        this.Minimized = minimized;
+        this.CategoryType = NavigatorCategoryTypeUtility.GetCategoryTypeByString(categoryType);
+        this.SearchAllowance = NavigatorSearchAllowanceUtility.GetSearchAllowanceByString(searchAllowance);
+        this.OrderId = orderId;
     }
 
     public int Id { get; set; }
@@ -42,9 +41,5 @@ public class SearchResultList
 
     public NavigatorSearchAllowance SearchAllowance { get; set; }
 
-    public int OrderId
-    {
-        get => this._orderId;
-        set => this._orderId = value;
-    }
+    public int OrderId { get; set; }
 }

@@ -14,9 +14,9 @@ internal class ObjectsComposer : ServerPacket
         this.WriteString(room.RoomData.OwnerName);
 
         this.WriteInteger(items.Length);
-        foreach (var Item in items)
+        foreach (var item in items)
         {
-            this.WriteFloorItem(Item, Convert.ToInt32(room.RoomData.OwnerId), room.RoomData.HideWireds);
+            this.WriteFloorItem(item, Convert.ToInt32(room.RoomData.OwnerId), room.RoomData.HideWireds);
         }
     }
 
@@ -29,9 +29,9 @@ internal class ObjectsComposer : ServerPacket
         this.WriteString(room.RoomData.OwnerName);
 
         this.WriteInteger(items.Length);
-        foreach (var Item in items)
+        foreach (var item in items)
         {
-            this.WriteFloorItem(Item, Convert.ToInt32(room.RoomData.OwnerId));
+            this.WriteFloorItem(item, Convert.ToInt32(room.RoomData.OwnerId));
         }
     }
 

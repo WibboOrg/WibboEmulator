@@ -8,9 +8,9 @@ internal class FavouritesComposer : ServerPacket
         this.WriteInteger(30);
         this.WriteInteger(favouriteIDs.Count);
 
-        foreach (var RoomId in favouriteIDs)
+        foreach (var roomId in favouriteIDs)
         {
-            this.WriteInteger(RoomId);
+            this.WriteInteger(roomId);
         }
     }
 }

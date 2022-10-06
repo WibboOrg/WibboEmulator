@@ -70,7 +70,7 @@ internal class Cac : IChatCommand
         else
         {
             var RpTwo = TargetRoomUser.Roleplayer;
-            if (RpTwo == null || !RpTwo.PvpEnable && RpTwo.AggroTimer <= 0)
+            if (RpTwo == null || (!RpTwo.PvpEnable && RpTwo.AggroTimer <= 0))
             {
                 return;
             }

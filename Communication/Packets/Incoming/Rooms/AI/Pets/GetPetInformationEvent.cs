@@ -6,14 +6,14 @@ internal class GetPetInformationEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null || session.GetUser().CurrentRoom == null)
         {
             return;
         }
 
-        var PetId = Packet.PopInt();
+        var PetId = packet.PopInt();
 
         if (!session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(PetId, out var Pet))
         {

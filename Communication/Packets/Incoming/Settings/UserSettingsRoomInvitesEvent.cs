@@ -6,9 +6,9 @@ internal class UserSettingsRoomInvitesEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var flag = Packet.PopBoolean();
+        var flag = packet.PopBoolean();
 
         if (session == null || session.GetUser() == null)
         {

@@ -4,18 +4,18 @@ using WibboEmulator.Games.Rooms;
 
 internal class ItemWallComposer : ServerPacket
 {
-    public ItemWallComposer(Item[] item, Room room)
+    public ItemWallComposer(Item[] items, Room room)
         : base(ServerPacketHeader.ITEM_WALL)
     {
         this.WriteInteger(1); // total Owners
         this.WriteInteger(room.RoomData.OwnerId);
         this.WriteString(room.RoomData.OwnerName);
 
-        this.WriteInteger(item.Length);
+        this.WriteInteger(items.Length);
 
-        foreach (var Item in item)
+        foreach (var item in items)
         {
-            this.WriteWallItem(Item, room.RoomData.OwnerId);
+            this.WriteWallItem(item, room.RoomData.OwnerId);
         }
     }
 

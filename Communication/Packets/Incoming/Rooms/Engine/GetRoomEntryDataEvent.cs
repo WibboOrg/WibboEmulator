@@ -10,7 +10,7 @@ internal class GetRoomEntryDataEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null)
         {
@@ -82,7 +82,7 @@ internal class GetRoomEntryDataEvent : IPacketEvent
 
         if (room.RoomData.OwnerId != session.GetUser().Id)
         {
-            WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RoomEntry", 1);
+            _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RoomEntry", 1);
         }
 
         var timeStampNow = UnixTimestamp.GetNow();

@@ -59,7 +59,7 @@ public class Gamemap
         }
         else
         {
-            this._userMap.TryAdd(coord, new List<RoomUser>() { user });
+            _ = this._userMap.TryAdd(coord, new List<RoomUser>() { user });
         }
         if (this.ValidTile(coord.X, coord.Y))
         {
@@ -103,7 +103,7 @@ public class Gamemap
 
         if (this._userMap[coord].Contains(user))
         {
-            this._userMap[coord].Remove(user);
+            _ = this._userMap[coord].Remove(user);
         }
 
         if (this._userMap[coord].Count > 0)
@@ -111,7 +111,7 @@ public class Gamemap
             return;
         }
 
-        this._userMap.TryRemove(coord, out var UserList);
+        _ = this._userMap.TryRemove(coord, out var UserList);
 
         if (this.ValidTile(coord.X, coord.Y))
         {
@@ -318,37 +318,18 @@ public class Gamemap
                     this.ItemHeightMap[Coord.X, Coord.Y] = Item.TotalHeight - this.Model.SqFloorHeight[Item.X, Item.Y];
                 }
 
-                switch (Item.GetBaseItem().InteractionType)
+                this.EffectMap[Coord.X, Coord.Y] = Item.GetBaseItem().InteractionType switch
                 {
-                    case InteractionType.POOL:
-                        this.EffectMap[Coord.X, Coord.Y] = 1;
-                        break;
-                    case InteractionType.ICESKATES:
-                        this.EffectMap[Coord.X, Coord.Y] = 3;
-                        break;
-                    case InteractionType.NORMSLASKATES:
-                        this.EffectMap[Coord.X, Coord.Y] = 2;
-                        break;
-                    case InteractionType.LOWPOOL:
-                        this.EffectMap[Coord.X, Coord.Y] = 4;
-                        break;
-                    case InteractionType.HALOWEENPOOL:
-                        this.EffectMap[Coord.X, Coord.Y] = 5;
-                        break;
-                    case InteractionType.TRAMPOLINE:
-                        this.EffectMap[Coord.X, Coord.Y] = 7;
-                        break;
-                    case InteractionType.TREADMILL:
-                        this.EffectMap[Coord.X, Coord.Y] = 8;
-                        break;
-                    case InteractionType.CROSSTRAINER:
-                        this.EffectMap[Coord.X, Coord.Y] = 9;
-                        break;
-                    default:
-                        this.EffectMap[Coord.X, Coord.Y] = 0;
-                        break;
-                }
-
+                    InteractionType.POOL => 1,
+                    InteractionType.ICESKATES => 3,
+                    InteractionType.NORMSLASKATES => 2,
+                    InteractionType.LOWPOOL => 4,
+                    InteractionType.HALOWEENPOOL => 5,
+                    InteractionType.TRAMPOLINE => 7,
+                    InteractionType.TREADMILL => 8,
+                    InteractionType.CROSSTRAINER => 9,
+                    _ => 0,
+                };
                 if (Item.GetBaseItem().InteractionType == InteractionType.FREEZETILEBLOCK && Item.ExtraData != "")
                 {
                     if (this.GameMap[Coord.X, Coord.Y] != 3)
@@ -402,7 +383,7 @@ public class Gamemap
         var list1 = new List<Item>();
         if (!this.CoordinatedItems.ContainsKey(coord))
         {
-            this.CoordinatedItems.TryAdd(coord, new List<Item>() { item });
+            _ = this.CoordinatedItems.TryAdd(coord, new List<Item>() { item });
         }
         else
         {
@@ -437,7 +418,7 @@ public class Gamemap
         {
             return false;
         }
-        this.CoordinatedItems[point].Remove(item);
+        _ = this.CoordinatedItems[point].Remove(item);
         return true;
     }
 
@@ -575,7 +556,7 @@ public class Gamemap
             var SubItems = NoDoublons[Coord];
             foreach (var roomItem in SubItems.ToList())
             {
-                this.ConstructMapForItem(roomItem, Coord);
+                _ = this.ConstructMapForItem(roomItem, Coord);
             }
         }
         NoDoublons.Clear();
@@ -1197,7 +1178,7 @@ public class Gamemap
         return true;
     }
 
-    public static bool TilesTouching(int X1, int Y1, int X2, int Y2) => Math.Abs(X1 - X2) <= 1 && Math.Abs(Y1 - Y2) <= 1 || X1 == X2 && Y1 == Y2;
+    public static bool TilesTouching(int X1, int Y1, int X2, int Y2) => (Math.Abs(X1 - X2) <= 1 && Math.Abs(Y1 - Y2) <= 1) || (X1 == X2 && Y1 == Y2);
 
     public static int TileDistance(int X1, int Y1, int X2, int Y2) => Math.Abs(X1 - X2) + Math.Abs(Y1 - Y2);
 

@@ -103,11 +103,11 @@ public class InteractorGenericSwitch : FurniInteractor
         int state;
         if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
         {
-            int.TryParse(item.ExtraData.Split(';')[0], out state);
+            _ = int.TryParse(item.ExtraData.Split(';')[0], out state);
         }
         else
         {
-            int.TryParse(item.ExtraData, out state);
+            _ = int.TryParse(item.ExtraData, out state);
         }
 
         int newState;

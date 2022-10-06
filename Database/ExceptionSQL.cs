@@ -26,7 +26,7 @@ public static class ExceptionSQL
 
     public static void LogQueryError(Exception Exception, string query) => Writer.LogQueryError(Exception, DateTime.Now.ToString() + ": " + query);
 
-    public static void LogPacketException(string Packet, string Exception) => Writer.LogPacketException(Packet, DateTime.Now.ToString() + " : " + Exception);
+    public static void LogPacketException(string packet, string Exception) => Writer.LogPacketException(packet, DateTime.Now.ToString() + " : " + Exception);
 
     public static void HandleException(Exception pException, string pLocation) => Writer.HandleException(pException, DateTime.Now.ToString() + ": " + pLocation);
 

@@ -187,7 +187,7 @@ public class RoleBot
 
             if (this.Config.MoneyDrop > 0)
             {
-                room.GetRoomItemHandler().AddTempItem(bot.VirtualId, this.Config.DropScriptId, bot.SetX, bot.SetY, bot.Z, "1", this.Config.MoneyDrop, InteractionTypeTemp.MONEY);
+                _ = room.GetRoomItemHandler().AddTempItem(bot.VirtualId, this.Config.DropScriptId, bot.SetX, bot.SetY, bot.Z, "1", this.Config.MoneyDrop, InteractionTypeTemp.MONEY);
             }
 
             if (this.Config.LootItemId > 0)
@@ -195,7 +195,7 @@ public class RoleBot
                 var item = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(this.Config.LootItemId);
                 if (item != null)
                 {
-                    room.GetRoomItemHandler().AddTempItem(bot.VirtualId, 3996, bot.SetX, bot.SetY, bot.Z, item.Name, this.Config.LootItemId, InteractionTypeTemp.RPITEM);
+                    _ = room.GetRoomItemHandler().AddTempItem(bot.VirtualId, 3996, bot.SetX, bot.SetY, bot.Z, item.Name, this.Config.LootItemId, InteractionTypeTemp.RPITEM);
                 }
             }
 

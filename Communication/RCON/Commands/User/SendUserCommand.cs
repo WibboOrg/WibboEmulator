@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.User;
+namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 
 internal class SendUserCommand : IRCONCommand
@@ -10,18 +10,18 @@ internal class SendUserCommand : IRCONCommand
             return false;
         }
 
-        if (!int.TryParse(parameters[1], out var Userid))
+        if (!int.TryParse(parameters[1], out var userId))
         {
             return false;
         }
 
-        if (Userid == 0)
+        if (userId == 0)
         {
             return false;
         }
 
-        var Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid);
-        if (Client == null || Client.GetUser() == null)
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        if (client == null || client.GetUser() == null)
         {
             return false;
         }
@@ -43,7 +43,7 @@ internal class SendUserCommand : IRCONCommand
             return false;
         }
 
-        Client.SendPacket(new GetGuestRoomResultComposer(Client, roomData, false, true));
+        client.SendPacket(new GetGuestRoomResultComposer(client, roomData, false, true));
         return true;
     }
 }

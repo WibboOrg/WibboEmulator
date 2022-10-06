@@ -11,7 +11,7 @@ internal class ApplyHorseEffectEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().InRoom)
         {
@@ -23,14 +23,14 @@ internal class ApplyHorseEffectEvent : IPacketEvent
             return;
         }
 
-        var ItemId = Packet.PopInt();
+        var ItemId = packet.PopInt();
         var Item = Room.GetRoomItemHandler().GetItem(ItemId);
         if (Item == null)
         {
             return;
         }
 
-        var PetId = Packet.PopInt();
+        var PetId = packet.PopInt();
 
         if (!Room.GetRoomUserManager().TryGetPet(PetId, out var PetUser))
         {
@@ -104,7 +104,7 @@ internal class ApplyHorseEffectEvent : IPacketEvent
         {
             var Race = Item.GetBaseItem().ItemName.Split('_')[2];
             var Parse = int.Parse(Race);
-            var RaceLast = 2 + Parse * 4 - 4;
+            var RaceLast = 2 + (Parse * 4) - 4;
             if (Parse == 13)
             {
                 RaceLast = 61;

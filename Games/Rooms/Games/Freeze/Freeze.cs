@@ -355,7 +355,7 @@ public class Freeze
     {
         if (this._freezeBlocks.ContainsKey(item.Id))
         {
-            this._freezeBlocks.Remove(item.Id);
+            _ = this._freezeBlocks.Remove(item.Id);
         }
 
         this._freezeBlocks.Add(item.Id, item);
@@ -366,7 +366,7 @@ public class Freeze
     private void HandleUserFreeze(Point point)
     {
         var user = this._roomInstance.GetRoomUserManager().GetUserForSquare(point.X, point.Y);
-        if (user == null || user.IsWalking && user.SetX != point.X && user.SetY != point.Y)
+        if (user == null || (user.IsWalking && user.SetX != point.X && user.SetY != point.Y))
         {
             return;
         }

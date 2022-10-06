@@ -2,13 +2,13 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 
 internal class WhisperComposer : ServerPacket
 {
-    public WhisperComposer(int VirtualId, string Text, int Colour)
+    public WhisperComposer(int virtualId, string text, int colour)
         : base(ServerPacketHeader.UNIT_CHAT_WHISPER)
     {
-        this.WriteInteger(VirtualId);
-        this.WriteString(Text);
-        this.WriteInteger(WibboEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(Text));
-        this.WriteInteger(Colour);
+        this.WriteInteger(virtualId);
+        this.WriteString(text);
+        this.WriteInteger(WibboEnvironment.GetGame().GetChatManager().GetEmotions().GetEmotionsForText(text));
+        this.WriteInteger(colour);
 
         this.WriteInteger(0);
         this.WriteInteger(-1);

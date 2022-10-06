@@ -6,7 +6,7 @@ internal class AnswerPollEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -19,15 +19,15 @@ internal class AnswerPollEvent : IPacketEvent
             return;
         }
 
-        var Id = Packet.PopInt();
-        var QuestionId = Packet.PopInt();
+        var Id = packet.PopInt();
+        var QuestionId = packet.PopInt();
 
-        var Count = Packet.PopInt();//Count
+        var Count = packet.PopInt();//Count
 
         var Value = "0";
         for (var i = 0; i < Count; i++)
         {
-            Value = Packet.PopString();
+            Value = packet.PopString();
         }
 
         Value = Value is not "0" and not "1" ? "0" : Value;

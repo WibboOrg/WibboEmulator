@@ -1,10 +1,10 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 
 public class InteractorTimer : FurniInteractor
 {
-    private bool _pendingReset = false;
-    private bool _chronoStarter = false;
+    private bool _pendingReset;
+    private bool _chronoStarter;
 
     public override void OnPlace(GameClient session, Item item)
     {
@@ -22,7 +22,7 @@ public class InteractorTimer : FurniInteractor
         var time = 0;
         if (!string.IsNullOrEmpty(item.ExtraData))
         {
-            int.TryParse(item.ExtraData, out time);
+            _ = int.TryParse(item.ExtraData, out time);
         }
 
         if (request == 2)

@@ -10,11 +10,11 @@ internal class UpdateGroupColoursEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = Packet.PopInt();
-        var Colour1 = Packet.PopInt();
-        var Colour2 = Packet.PopInt();
+        var GroupId = packet.PopInt();
+        var Colour1 = packet.PopInt();
+        var Colour2 = packet.PopInt();
 
         if (Colour1 is < 0 or > 200)
         {

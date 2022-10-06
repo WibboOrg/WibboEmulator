@@ -134,7 +134,7 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
                     var Race = Bits[1];
                     var Color = Bits[2];
 
-                    int.Parse(Race); // to trigger any possible errors
+                    _ = int.Parse(Race); // to trigger any possible errors
 
                     if (PetUtility.CheckPetName(PetName))
                     {
@@ -151,7 +151,7 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
                         return;
                     }
 
-                    WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_PetLover", 1);
+                    _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_PetLover", 1);
                 }
                 catch
                 {
@@ -245,7 +245,7 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             var receiver = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(user.Id);
             if (receiver != null)
             {
-                receiver.GetUser().GetInventoryComponent().TryAddItem(giveItem);
+                _ = receiver.GetUser().GetInventoryComponent().TryAddItem(giveItem);
                 receiver.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
                 receiver.SendPacket(new PurchaseOKComposer());
                 //Receiver.SendPacket(new FurniListUpdateComposer());
@@ -253,10 +253,10 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
             if (user.Id != session.GetUser().Id && !string.IsNullOrWhiteSpace(giftMessage))
             {
-                WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_GiftGiver", 1);
+                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_GiftGiver", 1);
                 if (receiver != null)
                 {
-                    WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(receiver, "ACH_GiftReceiver", 1);
+                    _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(receiver, "ACH_GiftReceiver", 1);
                 }
             }
         }

@@ -26,8 +26,8 @@ internal class ManageGroupComposer : ServerPacket
             var symbol = BadgeParts[x];
 
             this.WriteInteger((symbol.Length >= 6) ? int.TryParse(symbol[..3], out var symbolInt) ? symbolInt : 0 : int.TryParse(symbol[..2], out symbolInt) ? symbolInt : 0);
-            this.WriteInteger((symbol.Length >= 6) ? int.TryParse(symbol.Substring(3, 2), out symbolInt) ? symbolInt : 0 : int.TryParse(symbol.Substring(2, 2), out symbolInt) ? symbolInt : 0);
-            this.WriteInteger(symbol.Length < 5 ? 0 : symbol.Length >= 6 ? int.TryParse(symbol.Substring(5, 1), out symbolInt) ? symbolInt : 0 : int.TryParse(symbol.Substring(4, 1), out symbolInt) ? symbolInt : 0);
+            this.WriteInteger((symbol.Length >= 6) ? int.TryParse(symbol.AsSpan(3, 2), out symbolInt) ? symbolInt : 0 : int.TryParse(symbol.AsSpan(2, 2), out symbolInt) ? symbolInt : 0);
+            this.WriteInteger(symbol.Length < 5 ? 0 : symbol.Length >= 6 ? int.TryParse(symbol.AsSpan(5, 1), out symbolInt) ? symbolInt : 0 : int.TryParse(symbol.AsSpan(4, 1), out symbolInt) ? symbolInt : 0);
         }
 
         var i = 0;

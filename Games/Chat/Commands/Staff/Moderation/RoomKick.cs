@@ -12,7 +12,7 @@ internal class RoomKick : IChatCommand
             return;
         }
 
-        Room.RunTask(async () =>
+        _ = Room.RunTask(async () =>
         {
             var userKick = new List<RoomUser>();
             foreach (var user in Room.GetRoomUserManager().GetUserList().ToList())

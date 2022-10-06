@@ -8,7 +8,7 @@ internal class RemoveRightsEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
@@ -26,13 +26,13 @@ internal class RemoveRightsEvent : IPacketEvent
         }
 
         var userIds = new List<int>();
-        var Amount = Packet.PopInt();
+        var Amount = packet.PopInt();
         for (var index = 0; index < Amount; ++index)
         {
-            var UserId = Packet.PopInt();
+            var UserId = packet.PopInt();
             if (room.UsersWithRights.Contains(UserId))
             {
-                room.UsersWithRights.Remove(UserId);
+                _ = room.UsersWithRights.Remove(UserId);
             }
 
             if (!userIds.Contains(UserId))
@@ -58,7 +58,7 @@ internal class RemoveRightsEvent : IPacketEvent
             }
             else
             {
-                room.UsersWithRights.Contains(UserId);
+                _ = room.UsersWithRights.Contains(UserId);
                 session.SendPacket(new RoomRightsListComposer(room));
             }
         }

@@ -1,40 +1,42 @@
-﻿namespace WibboEmulator.Games.Groups;
+namespace WibboEmulator.Games.Groups;
 using System.Data;
 using WibboEmulator.Database.Daos.Guild;
 
 public class Group
 {
-    public int Id;
-    public string Name;
-    public int AdminOnlyDeco;
-    public string Badge;
-    public int CreateTime;
-    public int CreatorId;
-    public string Description;
-    public int RoomId;
-    public int Colour1;
-    public int Colour2;
-    public bool ForumEnabled;
-    public GroupType GroupType;
-    public bool HasForum;
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int AdminOnlyDeco { get; set; }
+    public string Badge { get; set; }
+    public int CreateTime { get; set; }
+    public int CreatorId { get; set; }
+    public string Description { get; set; }
+    public int RoomId { get; set; }
+    public int Colour1 { get; set; }
+    public int Colour2 { get; set; }
+    public bool ForumEnabled { get; set; }
+    public GroupType GroupType { get; set; }
+    public bool HasForum { get; set; }
+
     private readonly List<int> _members;
     private readonly List<int> _requests;
     private readonly List<int> _administrators;
 
-    public Group(int Id, string Name, string Description, string Badge, int RoomId, int Owner, int Time, int Type, int Colour1, int Colour2, int AdminOnlyDeco, bool HasForum)
+    public Group(int id, string name, string description, string badge, int roomId, int owner, int time, int type, int colour1, int colour2,
+        int adminOnlyDeco, bool hasForum)
     {
-        this.Id = Id;
-        this.Name = Name;
-        this.Description = Description;
-        this.RoomId = RoomId;
-        this.Badge = Badge;
-        this.CreateTime = Time;
-        this.CreatorId = Owner;
-        this.Colour1 = (Colour1 == 0) ? 1 : Colour1;
-        this.Colour2 = (Colour2 == 0) ? 1 : Colour2;
-        this.HasForum = HasForum;
+        this.Id = id;
+        this.Name = name;
+        this.Description = description;
+        this.RoomId = roomId;
+        this.Badge = badge;
+        this.CreateTime = time;
+        this.CreatorId = owner;
+        this.Colour1 = (colour1 == 0) ? 1 : colour1;
+        this.Colour2 = (colour2 == 0) ? 1 : colour2;
+        this.HasForum = hasForum;
 
-        switch (Type)
+        switch (type)
         {
             case 0:
                 this.GroupType = GroupType.OPEN;
@@ -47,7 +49,7 @@ public class Group
                 break;
         }
 
-        this.AdminOnlyDeco = AdminOnlyDeco;
+        this.AdminOnlyDeco = adminOnlyDeco;
         this.ForumEnabled = false;
 
         this._members = new List<int>();
@@ -60,47 +62,47 @@ public class Group
     public void InitMembers()
     {
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        var GetMembers = GuildMembershipDao.GetAll(dbClient, this.Id);
+        var getMembers = GuildMembershipDao.GetAll(dbClient, this.Id);
 
-        if (GetMembers != null)
+        if (getMembers != null)
         {
-            foreach (DataRow Row in GetMembers.Rows)
+            foreach (DataRow row in getMembers.Rows)
             {
-                var UserId = Convert.ToInt32(Row["user_id"]);
-                var IsAdmin = Convert.ToInt32(Row["rank"]) != 0;
+                var userId = Convert.ToInt32(row["user_id"]);
+                var isAdmin = Convert.ToInt32(row["rank"]) != 0;
 
-                if (IsAdmin)
+                if (isAdmin)
                 {
-                    if (!this._administrators.Contains(UserId))
+                    if (!this._administrators.Contains(userId))
                     {
-                        this._administrators.Add(UserId);
+                        this._administrators.Add(userId);
                     }
                 }
                 else
                 {
-                    if (!this._members.Contains(UserId))
+                    if (!this._members.Contains(userId))
                     {
-                        this._members.Add(UserId);
+                        this._members.Add(userId);
                     }
                 }
             }
         }
 
-        var GetRequests = GuildRequestDao.GetAll(dbClient, this.Id);
+        var getRequests = GuildRequestDao.GetAll(dbClient, this.Id);
 
-        if (GetRequests != null)
+        if (getRequests != null)
         {
-            foreach (DataRow Row in GetRequests.Rows)
+            foreach (DataRow row in getRequests.Rows)
             {
-                var UserId = Convert.ToInt32(Row["user_id"]);
+                var userId = Convert.ToInt32(row["user_id"]);
 
-                if (this._members.Contains(UserId) || this._administrators.Contains(UserId))
+                if (this._members.Contains(userId) || this._administrators.Contains(userId))
                 {
-                    GuildRequestDao.Delete(dbClient, this.Id, UserId);
+                    GuildRequestDao.Delete(dbClient, this.Id, userId);
                 }
-                else if (!this._requests.Contains(UserId))
+                else if (!this._requests.Contains(userId))
                 {
-                    this._requests.Add(UserId);
+                    this._requests.Add(userId);
                 }
             }
         }
@@ -116,10 +118,10 @@ public class Group
     {
         get
         {
-            var Members = new List<int>(this._administrators.ToList());
-            Members.AddRange(this._members.ToList());
+            var members = new List<int>(this._administrators.ToList());
+            members.AddRange(this._members.ToList());
 
-            return Members;
+            return members;
         }
     }
 
@@ -137,7 +139,7 @@ public class Group
     {
         if (this._members.Contains(userId))
         {
-            this._members.Remove(userId);
+            _ = this._members.Remove(userId);
         }
 
         if (this._administrators.Contains(userId))
@@ -158,7 +160,7 @@ public class Group
             return;
         }
 
-        this._administrators.Remove(userId);
+        _ = this._administrators.Remove(userId);
 
         if (!this._members.Contains(userId))
         {
@@ -175,7 +177,7 @@ public class Group
         if (this.IsAdmin(userId))
         {
             GuildMembershipDao.UpdateRank(dbClient, this.Id, userId, 0);
-            this._administrators.Remove(userId);
+            _ = this._administrators.Remove(userId);
             this._members.Add(userId);
         }
         else if (this.GroupType == GroupType.LOCKED)
@@ -202,14 +204,14 @@ public class Group
         {
             if (this._members.Contains(userId))
             {
-                this._members.Remove(userId);
+                _ = this._members.Remove(userId);
             }
         }
         else if (this.IsAdmin(userId))
         {
             if (this._administrators.Contains(userId))
             {
-                this._administrators.Remove(userId);
+                _ = this._administrators.Remove(userId);
             }
         }
         else
@@ -221,11 +223,11 @@ public class Group
         GuildMembershipDao.Delete(dbClient, this.Id, userId);
     }
 
-    public void HandleRequest(int userId, bool Accepted)
+    public void HandleRequest(int userId, bool accepted)
     {
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            if (Accepted)
+            if (accepted)
             {
                 GuildMembershipDao.Insert(dbClient, this.Id, userId);
 
@@ -240,7 +242,7 @@ public class Group
 
         if (this._requests.Contains(userId))
         {
-            this._requests.Remove(userId);
+            _ = this._requests.Remove(userId);
         }
     }
 

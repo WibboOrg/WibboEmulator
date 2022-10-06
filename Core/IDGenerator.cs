@@ -3,7 +3,7 @@ namespace WibboEmulator.Core;
 public sealed class IDGenerator
 {
     private const string ENCODE_32_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
-    private static char[] _buffer = new char[13];
+    private static readonly char[] Buffer = new char[13];
     private static long _lastId = DateTime.UtcNow.Ticks;
 
     private IDGenerator() { }
@@ -16,11 +16,11 @@ public sealed class IDGenerator
     /// <summary>
     /// Returns an ID. e.g: <c>XOGLN1-0HLHI1F5INOFA</c>
     /// </summary>
-    public string Next => GenerateImpl(Interlocked.Increment(ref _lastId));
+    public static string Next => GenerateImpl(Interlocked.Increment(ref _lastId));
 
     private static string GenerateImpl(long id)
     {
-        var buffer = _buffer;
+        var buffer = Buffer;
 
         buffer[0] = ENCODE_32_CHARS[(int)(id >> 60) & 31];
         buffer[1] = ENCODE_32_CHARS[(int)(id >> 55) & 31];

@@ -9,7 +9,7 @@ internal class StartGameJD : IChatCommand
         var roomId = 0;
         if (parameters.Length > 1)
         {
-            int.TryParse(parameters[1], out roomId);
+            _ = int.TryParse(parameters[1], out roomId);
         }
 
         WibboEnvironment.GetGame().GetAnimationManager().StartGame(roomId);

@@ -1,12 +1,12 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Sound;
+namespace WibboEmulator.Communication.Packets.Outgoing.Sound;
 
 internal class PlaySoundComposer : ServerPacket
 {
-    public PlaySoundComposer(string Name, int Type, bool Loop = false)
+    public PlaySoundComposer(string name, int type, bool loop = false)
         : base(ServerPacketHeader.PLAY_SOUND)
     {
-        this.WriteString(Name);
-        this.WriteInteger(Type);
-        this.WriteBoolean(Loop);
+        this.WriteString(name);
+        this.WriteInteger(type);
+        this.WriteBoolean(loop);
     }
 }

@@ -2,11 +2,11 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 
 internal class AddExperiencePointsComposer : ServerPacket
 {
-    public AddExperiencePointsComposer(int PetId, int VirtualId, int Amount)
+    public AddExperiencePointsComposer(int petId, int virtualId, int amount)
         : base(ServerPacketHeader.PET_EXPERIENCE)
     {
-        this.WriteInteger(PetId);
-        this.WriteInteger(VirtualId);
-        this.WriteInteger(Amount);
+        this.WriteInteger(petId);
+        this.WriteInteger(virtualId);
+        this.WriteInteger(amount);
     }
 }

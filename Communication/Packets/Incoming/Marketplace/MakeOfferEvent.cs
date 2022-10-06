@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
+namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
@@ -10,11 +10,11 @@ internal class MakeOfferEvent : IPacketEvent
 {
     public double Delay => 1000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var SellingPrice = Packet.PopInt();
-        var ComissionPrice = Packet.PopInt();
-        var ItemId = Packet.PopInt();
+        var SellingPrice = packet.PopInt();
+        var ComissionPrice = packet.PopInt();
+        var ItemId = packet.PopInt();
 
         var Item = session.GetUser().GetInventoryComponent().GetItem(ItemId);
         if (Item == null)

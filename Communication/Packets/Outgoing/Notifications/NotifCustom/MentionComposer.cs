@@ -1,13 +1,13 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
+namespace WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 
 internal class MentionComposer : ServerPacket
 {
-    public MentionComposer(int UserId, string Username, string Look, string Msg)
+    public MentionComposer(int userId, string username, string look, string msg)
      : base(ServerPacketHeader.MENTION)
     {
-        this.WriteInteger(UserId);
-        this.WriteString(Username);
-        this.WriteString(Look);
-        this.WriteString(Msg);
+        this.WriteInteger(userId);
+        this.WriteString(username);
+        this.WriteString(look);
+        this.WriteString(msg);
     }
 }

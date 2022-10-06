@@ -15,9 +15,9 @@ public class GameClientManager
     private readonly ConcurrentDictionary<string, string> _usernameRegister;
     private readonly ConcurrentDictionary<int, string> _userIDRegister;
 
-    public int OnlineUsersFr;
-    public int OnlineUsersEn;
-    public int OnlineUsersBr;
+    public int OnlineUsersFr { get; set; }
+    public int OnlineUsersEn { get; set; }
+    public int OnlineUsersBr { get; set; }
 
     private readonly List<int> _userStaff;
 
@@ -51,7 +51,7 @@ public class GameClientManager
 
     public GameClient GetClientById(string clientID)
     {
-        this.TryGetClient(clientID, out var client);
+        _ = this.TryGetClient(clientID, out var client);
 
         return client;
     }
@@ -94,8 +94,8 @@ public class GameClientManager
             return false;
         }
 
-        this._usernameRegister.TryRemove(OldUsername.ToLower(), out ClientId);
-        this._usernameRegister.TryAdd(NewUsername.ToLower(), ClientId);
+        _ = this._usernameRegister.TryRemove(OldUsername.ToLower(), out ClientId);
+        _ = this._usernameRegister.TryAdd(NewUsername.ToLower(), ClientId);
         return true;
     }
 
@@ -134,7 +134,7 @@ public class GameClientManager
         return clientOnline;
     }
 
-    public void SendMessageStaff(IServerPacket Packet)
+    public void SendMessageStaff(IServerPacket packet)
     {
         foreach (var UserId in this._userStaff)
         {
@@ -144,11 +144,11 @@ public class GameClientManager
                 continue;
             }
 
-            Client.SendPacket(Packet);
+            Client.SendPacket(packet);
         }
     }
 
-    public void SendMessage(IServerPacket Packet)
+    public void SendMessage(IServerPacket packet)
     {
         foreach (var Client in this._clients.Values.ToList())
         {
@@ -157,7 +157,7 @@ public class GameClientManager
                 continue;
             }
 
-            Client.SendPacket(Packet);
+            Client.SendPacket(packet);
         }
     }
 
@@ -182,7 +182,7 @@ public class GameClientManager
             Client.Dispose();
         }
 
-        this._clients.TryRemove(clientID, out Client);
+        _ = this._clients.TryRemove(clientID, out Client);
     }
 
     public void LogClonesOut(int UserID)
@@ -204,7 +204,7 @@ public class GameClientManager
         }
         else
         {
-            this._usernameRegister.TryAdd(username.ToLower(), client.ConnectionID);
+            _ = this._usernameRegister.TryAdd(username.ToLower(), client.ConnectionID);
         }
 
         if (this._userIDRegister.ContainsKey(userID))
@@ -213,14 +213,14 @@ public class GameClientManager
         }
         else
         {
-            this._userIDRegister.TryAdd(userID, client.ConnectionID);
+            _ = this._userIDRegister.TryAdd(userID, client.ConnectionID);
         }
     }
 
     public void UnregisterClient(int userid, string username)
     {
-        this._userIDRegister.TryRemove(userid, out var Client);
-        this._usernameRegister.TryRemove(username.ToLower(), out Client);
+        _ = this._userIDRegister.TryRemove(userid, out var Client);
+        _ = this._usernameRegister.TryRemove(username.ToLower(), out Client);
     }
 
     public void AddUserStaff(int UserId)
@@ -235,7 +235,7 @@ public class GameClientManager
     {
         if (this._userStaff.Contains(UserId))
         {
-            this._userStaff.Remove(UserId);
+            _ = this._userStaff.Remove(UserId);
         }
     }
 
@@ -257,8 +257,8 @@ public class GameClientManager
                     var TimeOnline = DateTime.Now - client.GetUser().OnlineTime;
                     var TimeOnlineSec = (int)TimeOnline.TotalSeconds;
 
-                    stringBuilder.Append(UserDao.BuildUpdateQuery(client.GetUser().Id, client.GetUser().Duckets, client.GetUser().Credits));
-                    stringBuilder.Append(UserStatsDao.BuildUpdateQuery(client.GetUser().Id, client.GetUser().FavouriteGroupId, TimeOnlineSec, client.GetUser().CurrentQuestId, client.GetUser().Respect, client.GetUser().DailyRespectPoints, client.GetUser().DailyPetRespectPoints));
+                    _ = stringBuilder.Append(UserDao.BuildUpdateQuery(client.GetUser().Id, client.GetUser().Duckets, client.GetUser().Credits));
+                    _ = stringBuilder.Append(UserStatsDao.BuildUpdateQuery(client.GetUser().Id, client.GetUser().FavouriteGroupId, TimeOnlineSec, client.GetUser().CurrentQuestId, client.GetUser().Respect, client.GetUser().DailyRespectPoints, client.GetUser().DailyPetRespectPoints));
 
                 }
                 catch

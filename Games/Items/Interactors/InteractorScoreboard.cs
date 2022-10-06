@@ -22,7 +22,7 @@ public class InteractorScoreboard : FurniInteractor
         if (!string.IsNullOrEmpty(item.ExtraData))
         {
 
-            int.TryParse(item.ExtraData, out num);
+            _ = int.TryParse(item.ExtraData, out num);
         }
 
         if (request == 1)
@@ -63,7 +63,7 @@ public class InteractorScoreboard : FurniInteractor
             return;
         }
 
-        int.TryParse(item.ExtraData, out var num);
+        _ = int.TryParse(item.ExtraData, out var num);
 
         if (num > 0)
         {

@@ -6,10 +6,10 @@ internal class EditTvYoutubeEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var ItemId = Packet.PopInt();
-        var Url = Packet.PopString();
+        var ItemId = packet.PopInt();
+        var Url = packet.PopString();
 
         if (session == null || session.GetUser() == null)
         {

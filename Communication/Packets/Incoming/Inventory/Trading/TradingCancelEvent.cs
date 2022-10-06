@@ -5,7 +5,7 @@ internal class TradingCancelEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
         {

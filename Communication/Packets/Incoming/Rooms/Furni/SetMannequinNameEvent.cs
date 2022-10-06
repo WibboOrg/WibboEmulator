@@ -6,10 +6,10 @@ internal class SetMannequinNameEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var ItemId = Packet.PopInt();
-        var Name = Packet.PopString();
+        var ItemId = packet.PopInt();
+        var Name = packet.PopString();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {

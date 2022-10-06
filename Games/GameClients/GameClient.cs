@@ -34,15 +34,15 @@ public class GameClient
     private int _packetCount;
     private double _packetLastTimestamp;
 
-    public string MachineId;
-    public Language Langue;
+    public string MachineId { get; set; }
+    public Language Langue { get; set; }
 
-    public string ConnectionID;
-    public bool ShowGameAlert;
+    public string ConnectionID { get; set; }
+    public bool ShowGameAlert { get; set; }
 
-    public GameClient(string ClientId, GameWebSocket connection)
+    public GameClient(string clientId, GameWebSocket connection)
     {
-        this.ConnectionID = ClientId;
+        this.ConnectionID = clientId;
         this.Langue = Language.FRANCAIS;
         this._connection = connection;
 
@@ -51,9 +51,9 @@ public class GameClient
         this._packetLastTimestamp = UnixTimestamp.GetNow();
     }
 
-    public void TryAuthenticate(string AuthTicket)
+    public void TryAuthenticate(string authTicket)
     {
-        if (string.IsNullOrEmpty(AuthTicket))
+        if (string.IsNullOrEmpty(authTicket))
         {
             return;
         }
@@ -61,7 +61,7 @@ public class GameClient
         try
         {
             var ip = this.GetConnection().GetIp();
-            var user = UserFactory.GetUserData(AuthTicket, ip, this.MachineId);
+            var user = UserFactory.GetUserData(authTicket, ip, this.MachineId);
 
             if (user == null)
             {
@@ -167,26 +167,26 @@ public class GameClient
 
         this.GetUser().NewUser = false;
 
-        var RoomId = 0;
+        var roomId = 0;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoomId = RoomDao.InsertDuplicate(dbClient, this.GetUser().Username, WibboEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
+            roomId = RoomDao.InsertDuplicate(dbClient, this.GetUser().Username, WibboEnvironment.GetLanguageManager().TryGetValue("room.welcome.desc", this.Langue));
 
-            UserDao.UpdateNuxEnable(dbClient, this.GetUser().Id, RoomId);
-            if (RoomId == 0)
+            UserDao.UpdateNuxEnable(dbClient, this.GetUser().Id, roomId);
+            if (roomId == 0)
             {
                 return false;
             }
 
-            ItemDao.InsertDuplicate(dbClient, this.GetUser().Id, RoomId);
+            ItemDao.InsertDuplicate(dbClient, this.GetUser().Id, roomId);
         }
 
-        if (!this.GetUser().UsersRooms.Contains(RoomId))
+        if (!this.GetUser().UsersRooms.Contains(roomId))
         {
-            this.GetUser().UsersRooms.Add(RoomId);
+            this.GetUser().UsersRooms.Add(roomId);
         }
 
-        this.GetUser().HomeRoom = RoomId;
+        this.GetUser().HomeRoom = roomId;
 
         return true;
     }
@@ -195,7 +195,7 @@ public class GameClient
 
     public User GetUser() => this._user;
 
-    public bool Antipub(string Message, string type, int RoomId = 0)
+    public bool Antipub(string message, string type, int roomId = 0)
     {
         if (this.GetUser() == null)
         {
@@ -207,23 +207,23 @@ public class GameClient
             return false;
         }
 
-        if (Message.Length <= 3)
+        if (message.Length <= 3)
         {
             return false;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            LogChatDao.Insert(dbClient, this.GetUser().Id, RoomId, Message, type, this.GetUser().Username);
+            LogChatDao.Insert(dbClient, this.GetUser().Id, roomId, message, type, this.GetUser().Username);
         }
 
-        if (!WibboEnvironment.GetGame().GetChatManager().GetFilter().Ispub(Message))
+        if (!WibboEnvironment.GetGame().GetChatManager().GetFilter().Ispub(message))
         {
-            if (WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessageWord(Message))
+            if (WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessageWord(message))
             {
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    LogChatPubDao.Insert(dbClient, this.GetUser().Id, "A vérifié: " + type + Message, this.GetUser().Username);
+                    LogChatPubDao.Insert(dbClient, this.GetUser().Id, "A vérifié: " + type + message, this.GetUser().Username);
                 }
 
                 foreach (var Client in WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers())
@@ -233,7 +233,7 @@ public class GameClient
                         continue;
                     }
 
-                    Client.SendPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + Message));
+                    Client.SendPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + message));
                 }
 
                 return false;
@@ -242,39 +242,39 @@ public class GameClient
             return false;
         }
 
-        var PubCount = this.GetUser().PubDectectCount++;
+        var pubCount = this.GetUser().PubDetectCount++;
 
         if (type == "<CMD>")
         {
-            PubCount = 4;
+            pubCount = 4;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            LogChatPubDao.Insert(dbClient, this.GetUser().Id, "Pub numero " + PubCount + ": " + type + Message, this.GetUser().Username);
+            LogChatPubDao.Insert(dbClient, this.GetUser().Id, "Pub numero " + pubCount + ": " + type + message, this.GetUser().Username);
         }
 
-        if (PubCount is < 3 and > 0)
+        if (pubCount is < 3 and > 0)
         {
-            this.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.1", this.Langue), PubCount));
+            this.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.1", this.Langue), pubCount));
         }
-        else if (PubCount == 3)
+        else if (pubCount == 3)
         {
             this.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.antipub.warn.2", this.Langue));
         }
-        else if (PubCount == 4)
+        else if (pubCount == 4)
         {
             WibboEnvironment.GetGame().GetGameClientManager().BanUser(this, "Robot", 86400, "Notre Robot a detecte de la pub pour sur le compte " + this.GetUser().Username, true, false);
         }
 
-        foreach (var Client in WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers())
+        foreach (var client in WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers())
         {
-            if (Client == null || Client.GetUser() == null)
+            if (client == null || client.GetUser() == null)
             {
                 continue;
             }
 
-            Client.SendPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + Message));
+            client.SendPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + message));
         }
 
         return true;
@@ -294,9 +294,9 @@ public class GameClient
 
         this.SendPacket(new WhisperComposer(user.VirtualId, message, Info ? 34 : 0));
     }
-    public void SendNotification(string Message) => this.SendPacket(new BroadcastMessageAlertComposer(Message));
+    public void SendNotification(string message) => this.SendPacket(new BroadcastMessageAlertComposer(message));
 
-    public void SendHugeNotif(string Message) => this.SendPacket(new MOTDNotificationComposer(Message));
+    public void SendHugeNotif(string message) => this.SendPacket(new MOTDNotificationComposer(message));
 
     public bool PacketTimeout(int packetId, double delay)
     {
@@ -329,7 +329,7 @@ public class GameClient
                 return true;
             }
 
-            this._packetTimeout.Remove(packetId);
+            _ = this._packetTimeout.Remove(packetId);
         }
 
         this._packetTimeout.Add(packetId, timestampNow + (delay / 1000));

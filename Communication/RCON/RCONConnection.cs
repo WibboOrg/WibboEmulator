@@ -15,7 +15,7 @@ public class RCONConnection
         this._socket = socket;
         try
         {
-            this._socket.BeginReceive(this._buffer, 0, this._buffer.Length, SocketFlags.None, new AsyncCallback(this.OnCallBack), this._socket);
+            _ = this._socket.BeginReceive(this._buffer, 0, this._buffer.Length, SocketFlags.None, new AsyncCallback(this.OnCallBack), this._socket);
         }
         catch
         {

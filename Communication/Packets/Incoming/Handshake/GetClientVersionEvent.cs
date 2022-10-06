@@ -5,12 +5,12 @@ internal class GetClientVersionEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var Release = Packet.PopString();
-        var Type = Packet.PopString();
-        var Platform = Packet.PopInt();
-        var Category = Packet.PopInt();
+        var Release = packet.PopString();
+        var Type = packet.PopString();
+        var Platform = packet.PopInt();
+        var Category = packet.PopInt();
 
         if (Release != "PRODUCTION-201611291003-338511768")
         {

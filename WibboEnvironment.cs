@@ -27,11 +27,11 @@ public static class WibboEnvironment
     private static LanguageManager _languageManager;
     private static SettingsManager _settingsManager;
 
-    private static HttpClient _httpClient = new();
     private static Random _random = new();
-    private static ConcurrentDictionary<int, User> _usersCached = new();
+    private static readonly HttpClient _httpClient = new();
+    private static readonly ConcurrentDictionary<int, User> _usersCached = new();
 
-    private static List<char> _allowedchars = new(new[]
+    private static readonly List<char> _allowedchars = new(new[]
         {
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -137,7 +137,7 @@ public static class WibboEnvironment
             if (databaseConfiguration == null)
             {
                 ExceptionLogger.WriteLine("Failed to load Json MySQL.");
-                Console.ReadKey(true);
+                _ = Console.ReadKey(true);
                 Environment.Exit(1);
                 return;
             }
@@ -147,7 +147,7 @@ public static class WibboEnvironment
             if (!_datebaseManager.IsConnected())
             {
                 ExceptionLogger.WriteLine("Failed to connect to the specified MySQL server.");
-                Console.ReadKey(true);
+                _ = Console.ReadKey(true);
                 Environment.Exit(1);
                 return;
             }
@@ -193,19 +193,19 @@ public static class WibboEnvironment
             ExceptionLogger.WriteLine("Please check your configuration file - some values appear to be missing.");
             ExceptionLogger.WriteLine("Press any key to shut down ...");
             ExceptionLogger.WriteLine(ex.ToString());
-            Console.ReadKey(true);
+            _ = Console.ReadKey(true);
         }
         catch (InvalidOperationException ex)
         {
             ExceptionLogger.WriteLine("Failed to initialize ButterflyEmulator: " + ex.Message);
             ExceptionLogger.WriteLine("Press any key to shut down ...");
-            Console.ReadKey(true);
+            _ = Console.ReadKey(true);
         }
         catch (Exception ex)
         {
             Console.WriteLine("Fatal error during startup: " + ex.ToString());
             Console.WriteLine("Press a key to exit");
-            Console.ReadKey();
+            _ = Console.ReadKey();
             Environment.Exit(1000);
         }
     }
@@ -305,7 +305,7 @@ public static class WibboEnvironment
                 {
                     if (_usersCached.ContainsKey(userId))
                     {
-                        _usersCached.TryRemove(userId, out user);
+                        _ = _usersCached.TryRemove(userId, out user);
                     }
 
                     return user;
@@ -324,7 +324,7 @@ public static class WibboEnvironment
                         var user = UserFactory.GetUserData(userId);
                         if (user != null)
                         {
-                            _usersCached.TryAdd(userId, user);
+                            _ = _usersCached.TryAdd(userId, user);
                             return user;
                         }
                     }

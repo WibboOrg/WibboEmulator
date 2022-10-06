@@ -20,17 +20,17 @@ public class HighScore : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var Scores = this.ItemInstance.Scores;
+        var scores = this.ItemInstance.Scores;
 
-        var ListUsernameScore = new List<string>() { user.GetUsername() };
+        var listUsernameScore = new List<string>() { user.GetUsername() };
 
-        if (Scores.ContainsKey(ListUsernameScore[0]))
+        if (scores.ContainsKey(listUsernameScore[0]))
         {
-            Scores[ListUsernameScore[0]] += 1;
+            scores[listUsernameScore[0]] += 1;
         }
         else
         {
-            Scores.Add(ListUsernameScore[0], 1);
+            scores.Add(listUsernameScore[0], 1);
         }
 
         this.RoomInstance.SendPacket(new ObjectUpdateComposer(this.ItemInstance, this.RoomInstance.RoomData.OwnerId));
@@ -103,18 +103,18 @@ public class HighScore : WiredActionBase, IWired, IWiredEffect
 
     public override void OnTrigger(GameClient session)
     {
-        int.TryParse(this.ItemInstance.ExtraData, out var NumMode);
+        _ = int.TryParse(this.ItemInstance.ExtraData, out var numMode);
 
-        if (NumMode != 1)
+        if (numMode != 1)
         {
-            NumMode = 1;
+            numMode = 1;
         }
         else
         {
-            NumMode = 0;
+            numMode = 0;
         }
 
-        this.ItemInstance.ExtraData = NumMode.ToString();
+        this.ItemInstance.ExtraData = numMode.ToString();
         this.ItemInstance.UpdateState(false, true);
     }
 }

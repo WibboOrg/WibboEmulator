@@ -36,7 +36,7 @@ internal class WhisperEvent : IPacketEvent
         var Message = parameters[(ToUser.Length + 1)..];
         var Color = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Color, out var Style) || Style.RequiredRight.Length > 0 && !session.GetUser().HasPermission(Style.RequiredRight))
+        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Color, out var Style) || (Style.RequiredRight.Length > 0 && !session.GetUser().HasPermission(Style.RequiredRight)))
         {
             Color = 0;
         }
@@ -184,13 +184,13 @@ internal class WhisperEvent : IPacketEvent
 
                     if (UserWhiper == null || UserWhiper.GetClient() == null || UserWhiper.GetClient().GetUser() == null)
                     {
-                        user.WhiperGroupUsers.Remove(Username);
+                        _ = user.WhiperGroupUsers.Remove(Username);
                         continue;
                     }
 
                     if (UserWhiper.IsSpectator || UserWhiper.IsBot || UserWhiper.UserId == user.UserId || UserWhiper.GetClient().GetUser().MutedUsers.Contains(session.GetUser().Id))
                     {
-                        user.WhiperGroupUsers.Remove(Username);
+                        _ = user.WhiperGroupUsers.Remove(Username);
                         continue;
                     }
 

@@ -3,18 +3,18 @@ using WibboEmulator.Games.Rooms;
 
 internal class OpenBotActionComposer : ServerPacket
 {
-    public OpenBotActionComposer(RoomUser BotUser, int ActionId, string BotSpeech)
+    public OpenBotActionComposer(RoomUser botUser, int actionId, string botSpeech)
         : base(ServerPacketHeader.BOT_COMMAND_CONFIGURATION)
     {
-        this.WriteInteger(BotUser.BotData.Id);
-        this.WriteInteger(ActionId);
-        if (ActionId == 2)
+        this.WriteInteger(botUser.BotData.Id);
+        this.WriteInteger(actionId);
+        if (actionId == 2)
         {
-            this.WriteString(BotSpeech);
+            this.WriteString(botSpeech);
         }
-        else if (ActionId == 5)
+        else if (actionId == 5)
         {
-            this.WriteString(BotUser.BotData.Name);
+            this.WriteString(botUser.BotData.Name);
         }
     }
 }

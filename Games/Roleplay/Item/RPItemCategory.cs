@@ -9,20 +9,12 @@ public enum RPItemCategory
 }
 public class RPItemCategorys
 {
-    public static RPItemCategory GetTypeFromString(string pType)
+    public static RPItemCategory GetTypeFromString(string pType) => pType switch
     {
-        switch (pType)
-        {
-            case "EQUIP":
-                return RPItemCategory.EQUIP;
-            case "UTIL":
-                return RPItemCategory.UTIL;
-            case "RESSOURCE":
-                return RPItemCategory.RESSOURCE;
-            case "QUETE":
-                return RPItemCategory.QUETE;
-            default:
-                return RPItemCategory.QUETE;
-        }
-    }
+        "EQUIP" => RPItemCategory.EQUIP,
+        "UTIL" => RPItemCategory.UTIL,
+        "RESSOURCE" => RPItemCategory.RESSOURCE,
+        "QUETE" => RPItemCategory.QUETE,
+        _ => RPItemCategory.QUETE,
+    };
 }

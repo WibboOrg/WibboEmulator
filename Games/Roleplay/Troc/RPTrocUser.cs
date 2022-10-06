@@ -2,14 +2,14 @@ namespace WibboEmulator.Games.Roleplay.Troc;
 
 public class RPTrocUser
 {
-    public int UserId;
-    public Dictionary<int, int> ItemIds;
-    public bool Accepted;
-    public bool Confirmed;
+    public int UserId { get; set; }
+    public Dictionary<int, int> ItemIds { get; set; }
+    public bool Accepted { get; set; }
+    public bool Confirmed { get; set; }
 
-    public RPTrocUser(int pUserId)
+    public RPTrocUser(int userId)
     {
-        this.UserId = pUserId;
+        this.UserId = userId;
         this.ItemIds = new Dictionary<int, int>();
         this.Accepted = false;
         this.Confirmed = false;
@@ -27,32 +27,32 @@ public class RPTrocUser
         }
     }
 
-    public void AddItemId(int ItemId)
+    public void AddItemId(int itemId)
     {
-        if (!this.ItemIds.ContainsKey(ItemId))
+        if (!this.ItemIds.ContainsKey(itemId))
         {
-            this.ItemIds.Add(ItemId, 1);
+            this.ItemIds.Add(itemId, 1);
         }
         else
         {
-            this.ItemIds[ItemId]++;
+            this.ItemIds[itemId]++;
         }
     }
 
-    public void RemoveItemId(int ItemId)
+    public void RemoveItemId(int itemId)
     {
-        if (!this.ItemIds.ContainsKey(ItemId))
+        if (!this.ItemIds.ContainsKey(itemId))
         {
             return;
         }
 
-        if (this.ItemIds[ItemId] > 1)
+        if (this.ItemIds[itemId] > 1)
         {
-            this.ItemIds[ItemId]--;
+            this.ItemIds[itemId]--;
         }
         else
         {
-            this.ItemIds.Remove(ItemId);
+            _ = this.ItemIds.Remove(itemId);
         }
     }
 }

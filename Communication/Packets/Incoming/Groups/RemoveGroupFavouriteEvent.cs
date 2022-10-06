@@ -7,7 +7,7 @@ internal class RemoveGroupFavouriteEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         session.GetUser().FavouriteGroupId = 0;
 

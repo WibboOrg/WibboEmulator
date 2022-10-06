@@ -20,7 +20,7 @@ internal class RequestFurniInventoryEvent : IPacketEvent
 
         session.GetUser().GetInventoryComponent().LoadInventory();
 
-        var Items = session.GetUser().GetInventoryComponent().GetWallAndFloor;
-        session.SendPacket(new FurniListComposer(Items.ToList(), 1, 0));
+        var items = session.GetUser().GetInventoryComponent().GetWallAndFloor;
+        session.SendPacket(new FurniListComposer(items.ToList(), 1, 0));
     }
 }

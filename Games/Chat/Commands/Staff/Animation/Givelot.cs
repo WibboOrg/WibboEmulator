@@ -35,18 +35,18 @@ internal class GiveLot : IChatCommand
 
         var lootboxId = WibboEnvironment.GetSettings().GetData<int>("givelot.lootbox.id");
 
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(lootboxId, out var ItemData))
+        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(lootboxId, out var itemData))
         {
             return;
         }
 
-        var Items = ItemFactory.CreateMultipleItems(ItemData, roomUserByUserId.GetClient().GetUser(), "", lotCount);
+        var items = ItemFactory.CreateMultipleItems(itemData, roomUserByUserId.GetClient().GetUser(), "", lotCount);
 
-        foreach (var PurchasedItem in Items)
+        foreach (var purchasedItem in items)
         {
-            if (roomUserByUserId.GetClient().GetUser().GetInventoryComponent().TryAddItem(PurchasedItem))
+            if (roomUserByUserId.GetClient().GetUser().GetInventoryComponent().TryAddItem(purchasedItem))
             {
-                roomUserByUserId.GetClient().SendPacket(new FurniListNotificationComposer(PurchasedItem.Id, 1));
+                roomUserByUserId.GetClient().SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
             }
         }
 
@@ -58,6 +58,6 @@ internal class GiveLot : IChatCommand
             UserDao.UpdateAddGamePoints(dbClient, roomUserByUserId.GetClient().GetUser().Id);
         }
 
-        WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserId.GetClient(), "ACH_Extrabox", 1);
+        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserId.GetClient(), "ACH_Extrabox", 1);
     }
 }

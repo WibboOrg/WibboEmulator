@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Settings;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Settings;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Settings;
 using WibboEmulator.Games.GameClients;
 
@@ -13,20 +13,20 @@ internal class UnbanUserFromRoomEvent : IPacketEvent
             return;
         }
 
-        var Instance = session.GetUser().CurrentRoom;
-        if (Instance == null || !Instance.CheckRights(session, true))
+        var instance = session.GetUser().CurrentRoom;
+        if (instance == null || !instance.CheckRights(session, true))
         {
             return;
         }
 
-        var UserId = packet.PopInt();
-        var RoomId = packet.PopInt();
+        var userId = packet.PopInt();
+        var roomId = packet.PopInt();
 
-        if (!Instance.HasBanExpired(UserId))
+        if (!instance.HasBanExpired(userId))
         {
-            Instance.RemoveBan(UserId);
+            instance.RemoveBan(userId);
 
-            session.SendPacket(new UnbanUserFromRoomComposer(RoomId, UserId));
+            session.SendPacket(new UnbanUserFromRoomComposer(roomId, userId));
         }
     }
 }

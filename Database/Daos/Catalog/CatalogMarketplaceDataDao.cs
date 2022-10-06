@@ -6,11 +6,11 @@ internal class CatalogMarketplaceDataDao
     internal static void Replace(IQueryAdapter dbClient, int spriteId, int totalPrice)
     {
         dbClient.SetQuery("SELECT id FROM `catalog_marketplace_data` WHERE sprite = " + spriteId + " LIMIT 1");
-        var Id = dbClient.GetInteger();
+        var id = dbClient.GetInteger();
 
-        if (Id > 0)
+        if (id > 0)
         {
-            dbClient.RunQuery("UPDATE `catalog_marketplace_data` SET sold = sold + 1, avgprice = (avgprice + " + totalPrice + ") WHERE id = " + Id + " LIMIT 1");
+            dbClient.RunQuery("UPDATE `catalog_marketplace_data` SET sold = sold + 1, avgprice = (avgprice + " + totalPrice + ") WHERE id = " + id + " LIMIT 1");
         }
         else
         {

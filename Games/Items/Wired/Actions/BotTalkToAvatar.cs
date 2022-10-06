@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
@@ -53,7 +53,7 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
 
         if (isWhisper && textMessage.Contains(" : ") && (this.RoomInstance.IsRoleplay || this.RoomInstance.RoomData.OwnerName == "LieuPublic"))
         {
-            this.SendBotChoose(textMessage, user, bot.BotData);
+            SendBotChoose(textMessage, user, bot.BotData);
         }
 
         if (isWhisper)
@@ -68,26 +68,26 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
         return false;
     }
 
-    private void SendBotChoose(string TextMessage, RoomUser user, RoomBot BotData)
+    private static void SendBotChoose(string textMessage, RoomUser user, RoomBot botData)
     {
-        var SplitText = TextMessage.Split(new[] { " : " }, StringSplitOptions.None);
-        if (SplitText.Length != 2)
+        var splitText = textMessage.Split(new[] { " : " }, StringSplitOptions.None);
+        if (splitText.Length != 2)
         {
             return;
         }
 
-        var ChooseList = new List<string[]>
+        var chooseList = new List<string[]>
         {
             new List<string>
             {
-                BotData.Name,
-                SplitText[0],
-                SplitText[1],
-                BotData.Look
+                botData.Name,
+                splitText[0],
+                splitText[1],
+                botData.Look
             }.ToArray()
         };
 
-        user.GetClient().SendPacket(new BotChooseComposer(ChooseList));
+        user.GetClient().SendPacket(new BotChooseComposer(chooseList));
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)
@@ -111,13 +111,13 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
             this.IntParams.Add(isWhisper ? 1 : 0);
         }
 
-        var Data = row["trigger_data"].ToString();
+        var data = row["trigger_data"].ToString();
 
-        if (string.IsNullOrWhiteSpace(Data) || !Data.Contains('\t'))
+        if (string.IsNullOrWhiteSpace(data) || !data.Contains('\t'))
         {
             return;
         }
 
-        this.StringParam = Data;
+        this.StringParam = data;
     }
 }

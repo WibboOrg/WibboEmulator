@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Triggers;
+namespace WibboEmulator.Games.Items.Wired.Triggers;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -9,10 +9,11 @@ using WibboEmulator.Utilities.Events;
 
 public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
 {
-    public int DelayCycle { get => this.Delay; }
-    private readonly OnItemTrigger delegateFunction;
+    public int DelayCycle => this.Delay;
 
-    public SateChanged(Item item, Room room) : base(item, room, (int)WiredTriggerType.TOGGLE_FURNI) => this.delegateFunction = new OnItemTrigger(this.Triggered);
+    private readonly OnItemTrigger _delegateFunction;
+
+    public SateChanged(Item item, Room room) : base(item, room, (int)WiredTriggerType.TOGGLE_FURNI) => this._delegateFunction = new OnItemTrigger(this.Triggered);
 
     public bool OnCycle(RoomUser user, Item item)
     {
@@ -24,7 +25,7 @@ public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
         return false;
     }
 
-    private void Triggered(object sender, ItemTriggeredArgs e)
+    private void Triggered(object sender, ItemTriggeredEventArgs e)
     {
         if (this.Delay > 0)
         {
@@ -46,7 +47,7 @@ public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
         {
             foreach (var roomItem in this.Items.ToList())
             {
-                roomItem.ItemTriggerEventHandler += this.delegateFunction;
+                roomItem.ItemTriggerEventHandler += this._delegateFunction;
             }
         }
     }
@@ -57,7 +58,7 @@ public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
         {
             foreach (var roomItem in this.Items.ToList())
             {
-                roomItem.ItemTriggerEventHandler -= this.delegateFunction;
+                roomItem.ItemTriggerEventHandler -= this._delegateFunction;
             }
         }
 

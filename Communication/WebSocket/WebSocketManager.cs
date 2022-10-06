@@ -94,11 +94,11 @@ public class WebSocketManager
                     this._bannedIp.Add(ip);
                 }
 
-                this._lastTimeConnection.TryRemove(ip, out lastTime);
+                _ = this._lastTimeConnection.TryRemove(ip, out lastTime);
             }
             else
             {
-                this._lastTimeConnection.TryAdd(ip, GetUnixTimestamp());
+                _ = this._lastTimeConnection.TryAdd(ip, GetUnixTimestamp());
             }
         }
     }
@@ -114,10 +114,10 @@ public class WebSocketManager
 
         if (this._ipConnectionsCount.ContainsKey(ip))
         {
-            this._ipConnectionsCount.TryRemove(ip, out var am);
+            _ = this._ipConnectionsCount.TryRemove(ip, out var am);
         }
 
-        this._ipConnectionsCount.TryAdd(ip, amount);
+        _ = this._ipConnectionsCount.TryAdd(ip, amount);
     }
 
     private int GetAmountOfConnectionFromIp(string ip)
@@ -131,7 +131,7 @@ public class WebSocketManager
 
             if (this._ipConnectionsCount.ContainsKey(ip))
             {
-                this._ipConnectionsCount.TryGetValue(ip, out var Count);
+                _ = this._ipConnectionsCount.TryGetValue(ip, out var Count);
                 return Count;
             }
             else

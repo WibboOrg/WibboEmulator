@@ -7,7 +7,7 @@ internal class AddStickyNoteEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -19,8 +19,8 @@ internal class AddStickyNoteEvent : IPacketEvent
             return;
         }
 
-        var Id = Packet.PopInt();
-        var str = Packet.PopString();
+        var Id = packet.PopInt();
+        var str = packet.PopString();
 
         var userItem = session.GetUser().GetInventoryComponent().GetItem(Id);
         if (userItem == null)
@@ -33,7 +33,7 @@ internal class AddStickyNoteEvent : IPacketEvent
             return;
         }
 
-        var wallCoord = this.WallPositionCheck(":" + str.Split(':')[1]);
+        var wallCoord = WallPositionCheck(":" + str.Split(':')[1]);
         var roomItem = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallCoord, room);
         if (!room.GetRoomItemHandler().SetWallItem(session, roomItem))
         {
@@ -48,7 +48,7 @@ internal class AddStickyNoteEvent : IPacketEvent
         session.GetUser().GetInventoryComponent().RemoveItem(Id);
     }
 
-    private string WallPositionCheck(string wallPosition)
+    private static string WallPositionCheck(string wallPosition)
     {
         //:w=3,2 l=9,63 l
         try

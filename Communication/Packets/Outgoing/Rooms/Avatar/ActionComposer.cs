@@ -2,10 +2,10 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 
 internal class ActionComposer : ServerPacket
 {
-    public ActionComposer(int VirtualId, int ActionId)
+    public ActionComposer(int virtualId, int actionId)
         : base(ServerPacketHeader.UNIT_EXPRESSION)
     {
-        this.WriteInteger(VirtualId);
-        this.WriteInteger(ActionId);
+        this.WriteInteger(virtualId);
+        this.WriteInteger(actionId);
     }
 }

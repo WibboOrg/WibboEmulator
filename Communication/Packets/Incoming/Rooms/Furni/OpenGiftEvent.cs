@@ -11,7 +11,7 @@ internal class OpenGiftEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null || !session.GetUser().InRoom)
         {
@@ -24,7 +24,7 @@ internal class OpenGiftEvent : IPacketEvent
             return;
         }
 
-        var PresentId = Packet.PopInt();
+        var PresentId = packet.PopInt();
         var Present = Room.GetRoomItemHandler().GetItem(PresentId);
         if (Present == null)
         {
@@ -72,7 +72,7 @@ internal class OpenGiftEvent : IPacketEvent
                 return;
             }
 
-            this.FinishOpenGift(session, BaseItem, Present, Room, Data);
+            FinishOpenGift(session, BaseItem, Present, Room, Data);
         }
         else if (Present.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
         {
@@ -96,7 +96,7 @@ internal class OpenGiftEvent : IPacketEvent
         }
     }
 
-    private void FinishOpenGift(GameClient session, ItemData BaseItem, Item Present, Room Room, DataRow Row)
+    private static void FinishOpenGift(GameClient session, ItemData BaseItem, Item Present, Room Room, DataRow Row)
     {
         var ItemIsInRoom = true;
 
@@ -122,7 +122,7 @@ internal class OpenGiftEvent : IPacketEvent
                     ItemDao.UpdateResetRoomId(dbClient, Present.Id);
                 }
 
-                session.GetUser().GetInventoryComponent().TryAddItem(Present);
+                _ = session.GetUser().GetInventoryComponent().TryAddItem(Present);
 
                 ItemIsInRoom = false;
             }
@@ -134,7 +134,7 @@ internal class OpenGiftEvent : IPacketEvent
                 ItemDao.UpdateResetRoomId(dbClient, Present.Id);
             }
 
-            session.GetUser().GetInventoryComponent().TryAddItem(Present);
+            _ = session.GetUser().GetInventoryComponent().TryAddItem(Present);
 
             ItemIsInRoom = false;
         }

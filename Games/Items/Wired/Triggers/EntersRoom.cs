@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Triggers;
+namespace WibboEmulator.Games.Items.Wired.Triggers;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -7,12 +7,12 @@ using WibboEmulator.Games.Rooms;
 
 public class EntersRoom : WiredTriggerBase, IWired
 {
-    private readonly RoomEventDelegate delegateFunction;
+    private readonly RoomEventDelegate _delegateFunction;
 
     public EntersRoom(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_ENTERS_ROOM)
     {
-        this.delegateFunction = new RoomEventDelegate(this.OnUserEnter);
-        this.RoomInstance.GetRoomUserManager().OnUserEnter += this.delegateFunction;
+        this._delegateFunction = new RoomEventDelegate(this.OnUserEnter);
+        this.RoomInstance.GetRoomUserManager().OnUserEnter += this._delegateFunction;
     }
 
     private void OnUserEnter(object sender, EventArgs e)
@@ -38,7 +38,7 @@ public class EntersRoom : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GetRoomUserManager().OnUserEnter -= this.delegateFunction;
+        this.RoomInstance.GetRoomUserManager().OnUserEnter -= this._delegateFunction;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);

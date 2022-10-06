@@ -1,20 +1,20 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc;
+namespace WibboEmulator.Communication.Packets.Outgoing.RolePlay.Troc;
 internal class RpTrocUpdateItemsComposer : ServerPacket
 {
-    public RpTrocUpdateItemsComposer(int UserId, Dictionary<int, int> Items)
+    public RpTrocUpdateItemsComposer(int userId, Dictionary<int, int> items)
       : base(ServerPacketHeader.RP_TROC_UPDATE_ITEMS)
     {
-        this.WriteInteger(UserId);
-        this.WriteInteger(Items.Count);
+        this.WriteInteger(userId);
+        this.WriteInteger(items.Count);
 
-        foreach (var Item in Items)
+        foreach (var item in items)
         {
-            var RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(Item.Key);
+            var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(item.Key);
 
-            this.WriteInteger(Item.Key);
-            this.WriteString((RpItem == null) ? "" : RpItem.Name);
-            this.WriteString((RpItem == null) ? "" : RpItem.Desc);
-            this.WriteInteger(Item.Value);
+            this.WriteInteger(item.Key);
+            this.WriteString((rpItem == null) ? "" : rpItem.Name);
+            this.WriteString((rpItem == null) ? "" : rpItem.Desc);
+            this.WriteInteger(item.Value);
         }
     }
 }

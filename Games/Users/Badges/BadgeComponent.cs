@@ -90,21 +90,21 @@ public class BadgeComponent : IDisposable
         return this.BadgeList.ContainsKey(Badge);
     }
 
-    public void GiveBadge(string Badge, bool InDatabase) => this.GiveBadge(Badge, 0, InDatabase);
+    public void GiveBadge(string badge, bool inDatabase) => this.GiveBadge(badge, 0, inDatabase);
 
-    public void GiveBadge(string Badge, int Slot, bool InDatabase)
+    public void GiveBadge(string badge, int slot, bool inDatabase)
     {
-        if (this.HasBadge(Badge))
+        if (this.HasBadge(badge))
         {
             return;
         }
 
-        if (InDatabase)
+        if (inDatabase)
         {
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserBadgeDao.Insert(dbClient, this._userInstance.Id, Slot, Badge);
+            UserBadgeDao.Insert(dbClient, this._userInstance.Id, slot, badge);
         }
-        this.BadgeList.Add(Badge, new Badge(Badge, Slot));
+        this.BadgeList.Add(badge, new Badge(badge, slot));
     }
 
     public void ResetSlots()
@@ -127,7 +127,7 @@ public class BadgeComponent : IDisposable
             UserBadgeDao.Delete(dbClient, this._userInstance.Id, Badge);
         }
 
-        this.BadgeList.Remove(this.GetBadge(Badge).Code);
+        _ = this.BadgeList.Remove(this.GetBadge(Badge).Code);
     }
 
     public void Dispose()

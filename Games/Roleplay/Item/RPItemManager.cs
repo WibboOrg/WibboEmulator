@@ -16,7 +16,7 @@ public class RPItemManager
             return null;
         }
 
-        this._items.TryGetValue(id, out var item);
+        _ = this._items.TryGetValue(id, out var item);
         return item;
     }
 

@@ -1,28 +1,28 @@
-﻿namespace WibboEmulator.Games.Catalog.Utilities;
+namespace WibboEmulator.Games.Catalog.Utilities;
 using WibboEmulator.Games.Items;
 
 public static class ItemUtility
 {
-    public static bool CanGiftItem(CatalogItem Item)
+    public static bool CanGiftItem(CatalogItem item)
     {
-        if (Item.Data.InteractionType == InteractionType.TROPHY)
+        if (item.Data.InteractionType == InteractionType.TROPHY)
         {
             return true;
         }
 
-        if (!Item.Data.AllowGift || Item.IsLimited || Item.Amount > 1 || Item.Data.InteractionType == InteractionType.EXCHANGE ||
-            Item.Data.InteractionType == InteractionType.BADGE || (Item.Data.Type != 's' && Item.Data.Type != 'i') || Item.CostWibboPoints > 0 ||
-            Item.Data.InteractionType == InteractionType.TELEPORT || Item.Data.InteractionType == InteractionType.ARROW)
+        if (!item.Data.AllowGift || item.IsLimited || item.Amount > 1 || item.Data.InteractionType == InteractionType.EXCHANGE ||
+            item.Data.InteractionType == InteractionType.BADGE || (item.Data.Type != 's' && item.Data.Type != 'i') || item.CostWibboPoints > 0 ||
+            item.Data.InteractionType == InteractionType.TELEPORT || item.Data.InteractionType == InteractionType.ARROW)
         {
             return false;
         }
 
-        if (Item.Data.IsRare || Item.Data.RarityLevel > 0)
+        if (item.Data.IsRare || item.Data.RarityLevel > 0)
         {
             return false;
         }
 
-        if (Item.Data.InteractionType == InteractionType.PET)
+        if (item.Data.InteractionType == InteractionType.PET)
         {
             return false;
         }
@@ -30,9 +30,9 @@ public static class ItemUtility
         return true;
     }
 
-    public static bool CanSelectAmount(CatalogItem Item)
+    public static bool CanSelectAmount(CatalogItem item)
     {
-        if (Item.IsLimited || Item.Amount > 1 || Item.Data.InteractionType == InteractionType.EXCHANGE || !Item.HaveOffer || Item.Data.InteractionType == InteractionType.BADGE)
+        if (item.IsLimited || item.Amount > 1 || item.Data.InteractionType == InteractionType.EXCHANGE || !item.HaveOffer || item.Data.InteractionType == InteractionType.BADGE)
         {
             return false;
         }
@@ -40,31 +40,25 @@ public static class ItemUtility
         return true;
     }
 
-    public static int GetSaddleId(int Saddle)
+    public static int GetSaddleId(int saddle) => saddle switch
     {
-        switch (Saddle)
-        {
-            default:
-            case 9:
-                return 2804;
-            case 10:
-                return 7544143;
-        }
-    }
+        10 => 7544143,
+        _ => 2804,
+    };
 
-    public static bool IsRare(Item Item)
+    public static bool IsRare(Item item)
     {
-        if (Item.Data.InteractionType == InteractionType.EXCHANGE)
+        if (item.Data.InteractionType == InteractionType.EXCHANGE)
         {
             return false;
         }
 
-        if (Item.Limited > 0)
+        if (item.Limited > 0)
         {
             return true;
         }
 
-        if (Item.Data.IsRare || Item.Data.RarityLevel > 0)
+        if (item.Data.IsRare || item.Data.RarityLevel > 0)
         {
             return true;
         }

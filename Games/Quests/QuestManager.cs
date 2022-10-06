@@ -57,14 +57,14 @@ public class QuestManager
 
     public Quest GetQuest(int Id)
     {
-        this._quests.TryGetValue(Id, out var quest);
+        _ = this._quests.TryGetValue(Id, out var quest);
 
         return quest;
     }
 
     public int GetAmountOfQuestsInCategory(string Category)
     {
-        this._questCount.TryGetValue(Category, out var num);
+        _ = this._questCount.TryGetValue(Category, out var num);
 
         return num;
     }

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.User;
+namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 
 internal class UpdateWibboPointsCommand : IRCONCommand
@@ -10,34 +10,34 @@ internal class UpdateWibboPointsCommand : IRCONCommand
             return false;
         }
 
-        if (!int.TryParse(parameters[1], out var Userid))
+        if (!int.TryParse(parameters[1], out var userid))
         {
             return false;
         }
 
-        if (Userid == 0)
+        if (userid == 0)
         {
             return false;
         }
 
-        var Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid);
-        if (Client == null)
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userid);
+        if (client == null)
         {
             return false;
         }
 
-        if (!int.TryParse(parameters[2], out var NbWb))
+        if (!int.TryParse(parameters[2], out var nbWb))
         {
             return false;
         }
 
-        if (NbWb == 0)
+        if (nbWb == 0)
         {
             return false;
         }
 
-        Client.GetUser().WibboPoints += NbWb;
-        Client.SendPacket(new ActivityPointNotificationComposer(Client.GetUser().WibboPoints, 0, 105));
+        client.GetUser().WibboPoints += nbWb;
+        client.SendPacket(new ActivityPointNotificationComposer(client.GetUser().WibboPoints, 0, 105));
 
         return true;
     }

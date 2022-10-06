@@ -1,9 +1,9 @@
-﻿namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
+namespace WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Games.Catalog.Marketplace;
 
 internal class MarketPlaceOffersComposer : ServerPacket
 {
-    public MarketPlaceOffersComposer(int MinCost, int MaxCost, Dictionary<int, MarketOffer> dictionary, Dictionary<int, int> dictionary2)
+    public MarketPlaceOffersComposer(int minCost, int MaxCost, Dictionary<int, MarketOffer> dictionary, Dictionary<int, int> dictionary2)
         : base(ServerPacketHeader.MARKETPLACE_ITEMS_SEARCHED)
     {
         this.WriteInteger(dictionary.Count);

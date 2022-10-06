@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Triggers;
+namespace WibboEmulator.Games.Items.Wired.Triggers;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -8,7 +8,7 @@ using WibboEmulator.Games.Rooms.Wired;
 
 public class Repeater : WiredTriggerBase, IWired, IWiredCycleable
 {
-    public int DelayCycle { get => this.IntParams.Count > 0 ? this.IntParams[0] : 0; }
+    public int DelayCycle => this.IntParams.Count > 0 ? this.IntParams[0] : 0;
 
     public Repeater(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_PERIODICALLY)
     {

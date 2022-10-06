@@ -23,14 +23,14 @@ public class ServerPacket : IServerPacket
 
     public void WriteString(string s)
     {
-        var Message = this._encoding.GetBytes(s);
-        this.WriteShort(Message.Length);
-        this.WriteByte(Message, false);
+        var message = this._encoding.GetBytes(s);
+        this.WriteShort(message.Length);
+        this.WriteByte(message, false);
     }
 
-    public void WriteByte(byte[] b, bool IsInt)
+    public void WriteByte(byte[] b, bool isInt)
     {
-        if (IsInt)
+        if (isInt)
         {
             for (var i = b.Length - 1; i > -1; --i)
             {

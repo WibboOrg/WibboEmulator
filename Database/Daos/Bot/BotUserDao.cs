@@ -13,13 +13,13 @@ internal class BotUserDao
 
         foreach (var bot in botList)
         {
-            var BotData = bot.BotData;
-            if (BotData.AiType == BotAIType.RoleplayBot)
+            var botData = bot.BotData;
+            if (botData.AiType == BotAIType.RoleplayBot)
             {
                 continue;
             }
 
-            if (bot.X != BotData.X || bot.Y != BotData.Y || bot.Z != BotData.Z || bot.RotBody != BotData.Rot)
+            if (bot.X != botData.X || bot.Y != botData.Y || bot.Z != botData.Z || bot.RotBody != botData.Rot)
             {
                 queryChunk.AddQuery("UPDATE `bot_user` SET `x` = '" + bot.X + "', `y` = '" + bot.Y + "', `z` = '" + bot.Z + "', `rotation` = '" + bot.RotBody + "' WHERE `id` = " + bot.BotData.Id);
             }

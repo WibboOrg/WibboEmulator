@@ -1,50 +1,27 @@
-﻿namespace WibboEmulator.Games.Navigator;
+namespace WibboEmulator.Games.Navigator;
 
 public static class NavigatorCategoryTypeUtility
 {
-    public static NavigatorCategoryType GetCategoryTypeByString(string CategoryType)
+    public static NavigatorCategoryType GetCategoryTypeByString(string categoryType) => categoryType.ToLower() switch
     {
-        switch (CategoryType.ToLower())
-        {
-            default:
-            case "category":
-                return NavigatorCategoryType.CATEGORY;
-            case "featured":
-                return NavigatorCategoryType.FEATURED;
-            case "featured_new":
-                return NavigatorCategoryType.FEATURED_NEW;
-            case "featured_help_security":
-                return NavigatorCategoryType.FEATURED_HELP_SECURITY;
-            case "featured_run":
-                return NavigatorCategoryType.FEATURED_RUN;
-            case "featured_game":
-                return NavigatorCategoryType.FEATURED_GAME;
-            case "featured_casino":
-                return NavigatorCategoryType.FEATURED_CASINO;
-            case "popular":
-                return NavigatorCategoryType.POPULAR;
-            case "recommended":
-                return NavigatorCategoryType.RECOMMENDED;
-            case "query":
-                return NavigatorCategoryType.QUERY;
-            case "my_rooms":
-                return NavigatorCategoryType.MY_ROOMS;
-            case "my_favorites":
-                return NavigatorCategoryType.MY_FAVORITES;
-            case "my_groups":
-                return NavigatorCategoryType.MY_GROUPS;
-            case "my_history":
-                return NavigatorCategoryType.MY_HISTORY;
-            case "my_friends_room":
-                return NavigatorCategoryType.MY_FRIENDS_ROOMS;
-            case "my_history_freq":
-                return NavigatorCategoryType.MY_HISTORY_FREQ;
-            case "top_promotions":
-                return NavigatorCategoryType.TOP_PROMOTIONS;
-            case "promotion_category":
-                return NavigatorCategoryType.PROMOTION_CATEGORY;
-            case "my_rights":
-                return NavigatorCategoryType.MY_RIGHTS;
-        }
-    }
+        "featured" => NavigatorCategoryType.FEATURED,
+        "featured_new" => NavigatorCategoryType.FEATURED_NEW,
+        "featured_help_security" => NavigatorCategoryType.FEATURED_HELP_SECURITY,
+        "featured_run" => NavigatorCategoryType.FEATURED_RUN,
+        "featured_game" => NavigatorCategoryType.FEATURED_GAME,
+        "featured_casino" => NavigatorCategoryType.FEATURED_CASINO,
+        "popular" => NavigatorCategoryType.POPULAR,
+        "recommended" => NavigatorCategoryType.RECOMMENDED,
+        "query" => NavigatorCategoryType.QUERY,
+        "my_rooms" => NavigatorCategoryType.MY_ROOMS,
+        "my_favorites" => NavigatorCategoryType.MY_FAVORITES,
+        "my_groups" => NavigatorCategoryType.MY_GROUPS,
+        "my_history" => NavigatorCategoryType.MY_HISTORY,
+        "my_friends_room" => NavigatorCategoryType.MY_FRIENDS_ROOMS,
+        "my_history_freq" => NavigatorCategoryType.MY_HISTORY_FREQ,
+        "top_promotions" => NavigatorCategoryType.TOP_PROMOTIONS,
+        "promotion_category" => NavigatorCategoryType.PROMOTION_CATEGORY,
+        "my_rights" => NavigatorCategoryType.MY_RIGHTS,
+        _ => NavigatorCategoryType.CATEGORY,
+    };
 }

@@ -47,7 +47,7 @@ public class AchievementComponent : IDisposable
 
     public UserAchievement GetAchievementData(string p)
     {
-        this._achievements.TryGetValue(p, out var userAchievement);
+        _ = this._achievements.TryGetValue(p, out var userAchievement);
         return userAchievement;
     }
 

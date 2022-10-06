@@ -162,15 +162,15 @@ public class CommandManager
             {
                 if (client.Langue == Language.ANGLAIS)
                 {
-                    stringBuilder.Append(":" + chatCommand.Input + " - " + chatCommand.DescriptionEn + "\r\r");
+                    _ = stringBuilder.Append(":" + chatCommand.Input + " - " + chatCommand.DescriptionEn + "\r\r");
                 }
                 else if (client.Langue == Language.PORTUGAIS)
                 {
-                    stringBuilder.Append(":" + chatCommand.Input + " - " + chatCommand.DescriptionBr + "\r\r");
+                    _ = stringBuilder.Append(":" + chatCommand.Input + " - " + chatCommand.DescriptionBr + "\r\r");
                 }
                 else
                 {
-                    stringBuilder.Append(":" + chatCommand.Input + " - " + chatCommand.DescriptionFr + "\r\r");
+                    _ = stringBuilder.Append(":" + chatCommand.Input + " - " + chatCommand.DescriptionFr + "\r\r");
                 }
 
                 NotDoublons.Add(chatCommand.Input);
@@ -192,10 +192,10 @@ public class CommandManager
         {
             if (i > start)
             {
-                merged.Append(' ');
+                _ = merged.Append(' ');
             }
 
-            merged.Append(parameters[i]);
+            _ = merged.Append(parameters[i]);
         }
 
         return merged.ToString();

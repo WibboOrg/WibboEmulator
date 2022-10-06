@@ -19,11 +19,11 @@ public class WardrobeComponent : IDisposable
     {
         this._wardrobes.Clear();
 
-        var WardrobeData = UserWardrobeDao.GetAll(dbClient, this._userInstance.Id);
+        var wardrobeData = UserWardrobeDao.GetAll(dbClient, this._userInstance.Id);
 
-        foreach (DataRow Row in WardrobeData.Rows)
+        foreach (DataRow row in wardrobeData.Rows)
         {
-            var slotId = Convert.ToInt32(Row["slot_id"]);
+            var slotId = Convert.ToInt32(row["slot_id"]);
 
             if (this._wardrobes.ContainsKey(slotId))
             {
@@ -35,7 +35,7 @@ public class WardrobeComponent : IDisposable
                 continue;
             }
 
-            var wardrobe = new Wardrobe(slotId, Row["look"].ToString(), Row["gender"].ToString()!.ToUpper());
+            var wardrobe = new Wardrobe(slotId, row["look"].ToString(), row["gender"].ToString()!.ToUpper());
             this._wardrobes.Add(slotId, wardrobe);
         }
     }
@@ -56,7 +56,7 @@ public class WardrobeComponent : IDisposable
 
         if (this._wardrobes.ContainsKey(slotId))
         {
-            this._wardrobes.Remove(slotId);
+            _ = this._wardrobes.Remove(slotId);
         }
 
         look = WibboEnvironment.GetFigureManager().ProcessFigure(look, gender, true);

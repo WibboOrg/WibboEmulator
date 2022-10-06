@@ -1,59 +1,59 @@
-﻿namespace WibboEmulator.Games.Items;
+namespace WibboEmulator.Games.Items;
 
 public class ItemData
 {
-    public int Id;
-    public int SpriteId;
-    public string ItemName;
-    public char Type;
-    public int Width;
-    public int Length;
-    public double Height;
-    public bool Stackable;
-    public bool Walkable;
-    public bool IsSeat;
-    public bool AllowEcotronRecycle;
-    public bool AllowTrade;
-    public bool AllowMarketplaceSell;
-    public bool AllowGift;
-    public bool AllowInventoryStack;
-    public InteractionType InteractionType;
-    public int Modes;
-    public List<int> VendingIds;
-    public List<double> AdjustableHeights;
-    public int EffectId;
-    public bool IsRare;
-    public int RarityLevel;
-    public int Amount;
+    public int Id { get; set; }
+    public int SpriteId { get; set; }
+    public string ItemName { get; set; }
+    public char Type { get; set; }
+    public int Width { get; set; }
+    public int Length { get; set; }
+    public double Height { get; set; }
+    public bool Stackable { get; set; }
+    public bool Walkable { get; set; }
+    public bool IsSeat { get; set; }
+    public bool AllowEcotronRecycle { get; set; }
+    public bool AllowTrade { get; set; }
+    public bool AllowMarketplaceSell { get; set; }
+    public bool AllowGift { get; set; }
+    public bool AllowInventoryStack { get; set; }
+    public InteractionType InteractionType { get; set; }
+    public int Modes { get; set; }
+    public List<int> VendingIds { get; set; }
+    public List<double> AdjustableHeights { get; set; }
+    public int EffectId { get; set; }
+    public bool IsRare { get; set; }
+    public int RarityLevel { get; set; }
+    public int Amount { get; set; }
 
-    public ItemData(int Id, int Sprite, string Name, string Type, int Width, int Length, double Height, bool Stackable, bool Walkable, bool IsSeat,
-        bool AllowRecycle, bool AllowTrade, bool AllowGift, bool AllowInventoryStack, InteractionType InteractionType, int Modes,
-        string VendingIds, string AdjustableHeights, int EffectId, bool IsRare, int rarityLevel, int amount)
+    public ItemData(int id, int sprite, string name, string type, int width, int length, double height, bool stackable, bool walkable, bool isSeat,
+        bool allowRecycle, bool allowTrade, bool allowGift, bool allowInventoryStack, InteractionType interactionType, int modes,
+        string vendingIds, string adjustableHeights, int effectId, bool isRare, int rarityLevel, int amount)
     {
-        this.Id = Id;
-        this.SpriteId = Sprite;
-        this.ItemName = Name;
-        this.Type = char.Parse(Type);
-        this.Width = Width;
-        this.Length = Length;
-        this.Height = Height;
-        this.Stackable = Stackable;
-        this.Walkable = Walkable;
-        this.IsSeat = IsSeat;
-        this.AllowEcotronRecycle = AllowRecycle;
-        this.AllowTrade = AllowTrade;
-        this.AllowGift = AllowGift;
-        this.AllowInventoryStack = AllowInventoryStack;
-        this.InteractionType = InteractionType;
-        this.Modes = Modes;
+        this.Id = id;
+        this.SpriteId = sprite;
+        this.ItemName = name;
+        this.Type = char.Parse(type);
+        this.Width = width;
+        this.Length = length;
+        this.Height = height;
+        this.Stackable = stackable;
+        this.Walkable = walkable;
+        this.IsSeat = isSeat;
+        this.AllowEcotronRecycle = allowRecycle;
+        this.AllowTrade = allowTrade;
+        this.AllowGift = allowGift;
+        this.AllowInventoryStack = allowInventoryStack;
+        this.InteractionType = interactionType;
+        this.Modes = modes;
         this.VendingIds = new List<int>();
-        if (VendingIds.Contains(','))
+        if (vendingIds.Contains(','))
         {
-            foreach (var VendingId in VendingIds.Split(','))
+            foreach (var vendingId in vendingIds.Split(','))
             {
                 try
                 {
-                    this.VendingIds.Add(int.Parse(VendingId));
+                    this.VendingIds.Add(int.Parse(vendingId));
                 }
                 catch
                 {
@@ -62,26 +62,26 @@ public class ItemData
                 }
             }
         }
-        else if (!string.IsNullOrEmpty(VendingIds) && int.Parse(VendingIds) > 0)
+        else if (!string.IsNullOrEmpty(vendingIds) && int.Parse(vendingIds) > 0)
         {
-            this.VendingIds.Add(int.Parse(VendingIds));
+            this.VendingIds.Add(int.Parse(vendingIds));
         }
 
         this.AdjustableHeights = new List<double>();
 
         try
         {
-            if (AdjustableHeights.Contains(','))
+            if (adjustableHeights.Contains(','))
             {
-                foreach (var H in AdjustableHeights.Split(','))
+                foreach (var H in adjustableHeights.Split(','))
                 {
                     this.AdjustableHeights.Add(double.Parse(H));
                 }
             }
 
-            else if (!string.IsNullOrEmpty(AdjustableHeights) && double.Parse(AdjustableHeights) > 0)
+            else if (!string.IsNullOrEmpty(adjustableHeights) && double.Parse(adjustableHeights) > 0)
             {
-                this.AdjustableHeights.Add(double.Parse(AdjustableHeights));
+                this.AdjustableHeights.Add(double.Parse(adjustableHeights));
             }
         }
         catch (Exception e)
@@ -89,8 +89,8 @@ public class ItemData
             Console.WriteLine("ID ( " + this.Id + " ) : " + e);
         }
 
-        this.EffectId = EffectId;
-        this.IsRare = IsRare;
+        this.EffectId = effectId;
+        this.IsRare = isRare;
         this.RarityLevel = rarityLevel;
         this.Amount = amount;
     }

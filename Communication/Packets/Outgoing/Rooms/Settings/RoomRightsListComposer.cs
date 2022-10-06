@@ -3,24 +3,24 @@ using WibboEmulator.Games.Rooms;
 
 internal class RoomRightsListComposer : ServerPacket
 {
-    public RoomRightsListComposer(Room Instance)
+    public RoomRightsListComposer(Room instance)
         : base(ServerPacketHeader.ROOM_RIGHTS_LIST)
     {
-        this.WriteInteger(Instance.Id);
+        this.WriteInteger(instance.Id);
 
-        this.WriteInteger(Instance.UsersWithRights.Count);
-        foreach (var Id in Instance.UsersWithRights.ToList())
+        this.WriteInteger(instance.UsersWithRights.Count);
+        foreach (var id in instance.UsersWithRights.ToList())
         {
-            var Data = WibboEnvironment.GetUserById(Id);
-            if (Data == null)
+            var data = WibboEnvironment.GetUserById(id);
+            if (data == null)
             {
                 this.WriteInteger(0);
                 this.WriteString("Unknown Error");
             }
             else
             {
-                this.WriteInteger(Data.Id);
-                this.WriteString(Data.Username);
+                this.WriteInteger(data.Id);
+                this.WriteString(data.Username);
             }
         }
     }

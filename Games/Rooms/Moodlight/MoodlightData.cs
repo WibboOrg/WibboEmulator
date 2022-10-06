@@ -5,37 +5,37 @@ using WibboEmulator.Database.Daos.Item;
 
 public class MoodlightData
 {
-    public int ItemId;
-    public int CurrentPreset;
-    public bool Enabled;
+    public int ItemId { get; set; }
+    public int CurrentPreset { get; set; }
+    public bool Enabled { get; set; }
 
-    public List<MoodlightPreset> Presets;
+    public List<MoodlightPreset> Presets { get; set; }
 
-    public MoodlightData(int ItemId)
+    public MoodlightData(int itemId)
     {
-        this.ItemId = ItemId;
+        this.ItemId = itemId;
 
-        DataRow Row = null;
+        DataRow row = null;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            Row = ItemMoodlightDao.GetOne(dbClient, ItemId);
+            row = ItemMoodlightDao.GetOne(dbClient, itemId);
         }
 
-        if (Row == null)
+        if (row == null)
         {
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            ItemMoodlightDao.Insert(dbClient, ItemId);
-            Row = ItemMoodlightDao.GetOne(dbClient, ItemId);
+            ItemMoodlightDao.Insert(dbClient, itemId);
+            row = ItemMoodlightDao.GetOne(dbClient, itemId);
         }
 
-        this.Enabled = WibboEnvironment.EnumToBool(Row["enabled"].ToString());
-        this.CurrentPreset = Convert.ToInt32(Row["current_preset"]);
+        this.Enabled = WibboEnvironment.EnumToBool(row["enabled"].ToString());
+        this.CurrentPreset = Convert.ToInt32(row["current_preset"]);
         this.Presets = new List<MoodlightPreset>
         {
-            GeneratePreset(Convert.ToString(Row["preset_one"])),
-            GeneratePreset(Convert.ToString(Row["preset_two"])),
-            GeneratePreset(Convert.ToString(Row["preset_three"]))
+            GeneratePreset(Convert.ToString(row["preset_one"])),
+            GeneratePreset(Convert.ToString(row["preset_two"])),
+            GeneratePreset(Convert.ToString(row["preset_three"]))
         };
     }
 
@@ -62,30 +62,15 @@ public class MoodlightData
             return;
         }
 
-        string Pr;
-
-        switch (preset)
+        var pr = preset switch
         {
-            case 3:
-
-                Pr = "three";
-                break;
-
-            case 2:
-
-                Pr = "two";
-                break;
-
-            case 1:
-            default:
-
-                Pr = "one";
-                break;
-        }
-
+            3 => "three",
+            2 => "two",
+            _ => "one",
+        };
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            ItemMoodlightDao.Update(dbClient, this.ItemId, color, Pr, intensity, bgOnly);
+            ItemMoodlightDao.Update(dbClient, this.ItemId, color, pr, intensity, bgOnly);
         }
 
         this.GetPreset(preset).ColorCode = color;
@@ -93,16 +78,16 @@ public class MoodlightData
         this.GetPreset(preset).BackgroundOnly = bgOnly;
     }
 
-    public static MoodlightPreset GeneratePreset(string Data)
+    public static MoodlightPreset GeneratePreset(string data)
     {
-        var Bits = Data.Split(',');
+        var bits = data.Split(',');
 
-        if (!IsValidColor(Bits[0]))
+        if (!IsValidColor(bits[0]))
         {
-            Bits[0] = "#000000";
+            bits[0] = "#000000";
         }
 
-        return new MoodlightPreset(Bits[0], int.Parse(Bits[1]), WibboEnvironment.EnumToBool(Bits[2]));
+        return new MoodlightPreset(bits[0], int.Parse(bits[1]), WibboEnvironment.EnumToBool(bits[2]));
     }
 
     public MoodlightPreset GetPreset(int i)
@@ -117,29 +102,15 @@ public class MoodlightData
         return new MoodlightPreset("#000000", 255, false);
     }
 
-    public static bool IsValidColor(string ColorCode)
+    public static bool IsValidColor(string colorCode) => colorCode switch
     {
-        switch (ColorCode)
-        {
-            case "#000000":
-            case "#0053F7":
-            case "#EA4532":
-            case "#82F349":
-            case "#74F5F5":
-            case "#E759DE":
-            case "#F2F851":
+        "#000000" or "#0053F7" or "#EA4532" or "#82F349" or "#74F5F5" or "#E759DE" or "#F2F851" => true,
+        _ => false,
+    };
 
-                return true;
-
-            default:
-
-                return false;
-        }
-    }
-
-    public static bool IsValidIntensity(int Intensity)
+    public static bool IsValidIntensity(int intensity)
     {
-        if (Intensity is < 0 or > 255)
+        if (intensity is < 0 or > 255)
         {
             return false;
         }
@@ -149,21 +120,21 @@ public class MoodlightData
 
     public string GenerateExtraData()
     {
-        var Preset = this.GetPreset(this.CurrentPreset);
-        var SB = new StringBuilder();
+        var preset = this.GetPreset(this.CurrentPreset);
+        var sb = new StringBuilder();
 
-        SB.Append(this.Enabled ? 2 : 1);
+        _ = sb.Append(this.Enabled ? 2 : 1);
 
-        SB.Append(',');
-        SB.Append(this.CurrentPreset);
-        SB.Append(',');
+        _ = sb.Append(',');
+        _ = sb.Append(this.CurrentPreset);
+        _ = sb.Append(',');
 
-        SB.Append(Preset.BackgroundOnly ? 2 : 1);
+        _ = sb.Append(preset.BackgroundOnly ? 2 : 1);
 
-        SB.Append(',');
-        SB.Append(Preset.ColorCode);
-        SB.Append(',');
-        SB.Append(Preset.ColorIntensity);
-        return SB.ToString();
+        _ = sb.Append(',');
+        _ = sb.Append(preset.ColorCode);
+        _ = sb.Append(',');
+        _ = sb.Append(preset.ColorIntensity);
+        return sb.ToString();
     }
 }

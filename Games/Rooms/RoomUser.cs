@@ -12,113 +12,113 @@ using WibboEmulator.Games.Rooms.Utils;
 
 public class RoomUser : IEquatable<RoomUser>
 {
-    public int UserId;
-    public int VirtualId;
-    public int RoomId;
-    public int IdleTime;
+    public int UserId { get; set; }
+    public int VirtualId { get; set; }
+    public int RoomId { get; set; }
+    public int IdleTime { get; set; }
 
-    public int X;
-    public int Y;
-    public double Z;
-    public int GoalX;
-    public int GoalY;
+    public int X { get; set; }
+    public int Y { get; set; }
+    public double Z { get; set; }
+    public int GoalX { get; set; }
+    public int GoalY { get; set; }
 
-    public bool SetStep;
-    public int SetX;
-    public int SetY;
-    public double SetZ;
+    public bool SetStep { get; set; }
+    public int SetX { get; set; }
+    public int SetY { get; set; }
+    public double SetZ { get; set; }
 
-    public int LastBubble = 0;
-    public int CarryItemID;
-    public int CarryTimer;
-    public int RotHead;
-    public int RotBody;
-    public bool CanWalk;
-    public bool AllowOverride;
-    public bool TeleportEnabled;
+    public int LastBubble { get; set; }
+    public int CarryItemID { get; set; }
+    public int CarryTimer { get; set; }
+    public int RotHead { get; set; }
+    public int RotBody { get; set; }
+    public bool CanWalk { get; set; }
+    public bool AllowOverride { get; set; }
+    public bool TeleportEnabled { get; set; }
 
-    public bool AllowMoveToRoller;
+    public bool AllowMoveToRoller { get; set; }
 
     private GameClient _client;
 
-    public RoomBot BotData;
-    public Pet PetData;
-    public BotAI BotAI;
-    public Room Room;
+    public RoomBot BotData { get; set; }
+    public Pet PetData { get; set; }
+    public BotAI BotAI { get; set; }
+    public Room Room { get; set; }
 
-    public ItemEffectType CurrentItemEffect;
-    public bool Freezed;
-    public int FreezeCounter;
-    public TeamType Team;
-    public FreezePowerUp BanzaiPowerUp;
-    public int FreezeLives;
-    public bool ShieldActive;
-    public int ShieldCounter;
-    public int CountFreezeBall = 1;
-    public bool MoonwalkEnabled;
-    public bool FacewalkEnabled;
-    public bool RidingHorse;
-    public bool IsSit;
-    public bool IsLay;
-    public int HorseID;
-    public bool IsWalking;
-    public bool UpdateNeeded;
-    public bool IsAsleep;
-    public Dictionary<string, string> _statusses;
-    public int DanceId;
-    public bool IsSpectator;
+    public ItemEffectType CurrentItemEffect { get; set; }
+    public bool Freezed { get; set; }
+    public int FreezeCounter { get; set; }
+    public TeamType Team { get; set; }
+    public FreezePowerUp BanzaiPowerUp { get; set; }
+    public int FreezeLives { get; set; }
+    public bool ShieldActive { get; set; }
+    public int ShieldCounter { get; set; }
+    public int CountFreezeBall { get; set; } = 1;
+    public bool MoonwalkEnabled { get; set; }
+    public bool FacewalkEnabled { get; set; }
+    public bool RidingHorse { get; set; }
+    public bool IsSit { get; set; }
+    public bool IsLay { get; set; }
+    public int HorseID { get; set; }
+    public bool IsWalking { get; set; }
+    public bool UpdateNeeded { get; set; }
+    public bool IsAsleep { get; set; }
+    public Dictionary<string, string> Statusses { get; set; }
+    public int DanceId { get; set; }
+    public bool IsSpectator { get; set; }
 
-    public int DiceCounterAmount;
-    public int DiceCounter;
+    public int DiceCounterAmount { get; set; }
+    public int DiceCounter { get; set; }
 
-    public bool ConstruitEnable = false;
-    public bool ConstruitZMode = false;
-    public double ConstruitHeigth = 1.0;
+    public bool ConstruitEnable { get; set; }
+    public bool ConstruitZMode { get; set; }
+    public double ConstruitHeigth { get; set; }
 
-    public bool Freeze;
-    public int FreezeEndCounter;
+    public bool Freeze { get; set; }
+    public int FreezeEndCounter { get; set; }
 
-    public bool IsTransf;
-    public bool TransfBot;
-    public string TransfRace;
+    public bool IsTransf { get; set; }
+    public bool TransfBot { get; set; }
+    public string TransfRace { get; set; }
 
-    public bool AllowBall;
-    public bool MoveWithBall;
-    public bool SetMoveWithBall;
-    public bool AllowShoot;
+    public bool AllowBall { get; set; }
+    public bool MoveWithBall { get; set; }
+    public bool SetMoveWithBall { get; set; }
+    public bool AllowShoot { get; set; }
 
-    public string ChatTextColor;
+    public string ChatTextColor { get; set; }
 
-    public string LastMessage;
-    public int LastMessageCount;
+    public string LastMessage { get; set; }
+    public int LastMessageCount { get; set; }
 
-    public int PartyId;
-    public int TimerResetEffect;
+    public int PartyId { get; set; }
+    public int TimerResetEffect { get; set; }
 
-    public string LoaderVideoId;
+    public string LoaderVideoId { get; set; }
 
-    public int WiredPoints;
-    public bool InGame;
-    public bool WiredGivelot;
+    public int WiredPoints { get; set; }
+    public bool InGame { get; set; }
+    public bool WiredGivelot { get; set; }
 
     //Walk
-    public bool BreakWalkEnable;
-    public bool StopWalking;
-    public bool ReverseWalk;
-    public bool WalkSpeed;
-    public bool AllowMoveTo;
+    public bool BreakWalkEnable { get; set; }
+    public bool StopWalking { get; set; }
+    public bool ReverseWalk { get; set; }
+    public bool WalkSpeed { get; set; }
+    public bool AllowMoveTo { get; set; }
 
-    public int LLPartner = 0;
+    public int LLPartner { get; set; }
 
-    public int CurrentEffect;
+    public int CurrentEffect { get; set; }
 
     //RP STATS TEMP
-    public List<int> AllowBuyItems;
+    public List<int> AllowBuyItems { get; set; }
 
-    public bool IsDispose;
-    public int UserTimer;
+    public bool IsDispose { get; set; }
+    public int UserTimer { get; set; }
 
-    public List<string> WhiperGroupUsers;
+    public List<string> WhiperGroupUsers { get; set; }
 
     public Point Coordinate => new(this.X, this.Y);
 
@@ -170,14 +170,6 @@ public class RoomUser : IEquatable<RoomUser>
         }
     }
 
-    public Dictionary<string, string> Statusses
-    {
-        get
-        {
-            return this._statusses;
-        }
-    }
-
     public RoomUser(int userId, int RoomId, int VirtualId, Room room)
     {
         this.Freezed = false;
@@ -191,7 +183,7 @@ public class RoomUser : IEquatable<RoomUser>
         this.RotHead = 0;
         this.RotBody = 0;
         this.UpdateNeeded = true;
-        this._statusses = new Dictionary<string, string>();
+        this.Statusses = new Dictionary<string, string>();
         this.Room = room;
         this.AllowOverride = false;
         this.CanWalk = true;
@@ -271,7 +263,7 @@ public class RoomUser : IEquatable<RoomUser>
 
     public void Dispose()
     {
-        this._statusses.Clear();
+        this.Statusses.Clear();
         this.IsDispose = true;
         this.Room = null;
         this._client = null;
@@ -439,28 +431,28 @@ public class RoomUser : IEquatable<RoomUser>
         this.UpdateNeeded = true;
     }
 
-    public bool ContainStatus(string key) => this._statusses.ContainsKey(key);
+    public bool ContainStatus(string key) => this.Statusses.ContainsKey(key);
 
     public void SetStatus(string Key, string Value)
     {
-        if (this._statusses.ContainsKey(Key))
+        if (this.Statusses.ContainsKey(Key))
         {
-            this._statusses[Key] = Value;
+            this.Statusses[Key] = Value;
         }
         else
         {
-            this._statusses.Add(Key, Value);
+            this.Statusses.Add(Key, Value);
         }
     }
 
     public void RemoveStatus(string Key)
     {
-        if (!this._statusses.ContainsKey(Key))
+        if (!this.Statusses.ContainsKey(Key))
         {
             return;
         }
 
-        this._statusses.Remove(Key);
+        _ = this.Statusses.Remove(Key);
     }
 
     public void ApplyEffect(int EffectId, bool DontSave = false)

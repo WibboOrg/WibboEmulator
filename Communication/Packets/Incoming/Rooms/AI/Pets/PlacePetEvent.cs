@@ -9,7 +9,7 @@ internal class PlacePetEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var Room))
         {
@@ -28,7 +28,7 @@ internal class PlacePetEvent : IPacketEvent
             return;
         }
 
-        if (!session.GetUser().GetInventoryComponent().TryGetPet(Packet.PopInt(), out var Pet))
+        if (!session.GetUser().GetInventoryComponent().TryGetPet(packet.PopInt(), out var Pet))
         {
             return;
         }
@@ -43,8 +43,8 @@ internal class PlacePetEvent : IPacketEvent
             return;
         }
 
-        var X = Packet.PopInt();
-        var Y = Packet.PopInt();
+        var X = packet.PopInt();
+        var Y = packet.PopInt();
 
         if (!Room.GetGameMap().CanWalk(X, Y, false))
         {
@@ -63,7 +63,7 @@ internal class PlacePetEvent : IPacketEvent
         Pet.PlacedInRoom = true;
         Pet.RoomId = Room.Id;
 
-        Room.GetRoomUserManager().DeployBot(new RoomBot(Pet.PetId, Pet.OwnerId, Pet.RoomId, BotAIType.Pet, true, Pet.Name, "", "", Pet.Look, X, Y, 0, 0, false, "", 0, false, 0, 0, 0), Pet);
+        _ = Room.GetRoomUserManager().DeployBot(new RoomBot(Pet.PetId, Pet.OwnerId, Pet.RoomId, BotAIType.Pet, true, Pet.Name, "", "", Pet.Look, X, Y, 0, 0, false, "", 0, false, 0, 0, 0), Pet);
 
         Pet.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 

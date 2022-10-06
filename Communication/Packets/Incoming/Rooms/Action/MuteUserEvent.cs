@@ -5,7 +5,7 @@ internal class MuteUserEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
@@ -22,12 +22,12 @@ internal class MuteUserEvent : IPacketEvent
             return;
         }
 
-        var Id = Packet.PopInt();
-        var num = Packet.PopInt();
+        var Id = packet.PopInt();
+        var num = packet.PopInt();
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Id);
 
-        var Time = Packet.PopInt() * 60;
+        var Time = packet.PopInt() * 60;
 
         if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_mod"))
         {

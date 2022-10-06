@@ -237,10 +237,10 @@ public class AnimationManager
     public void OnCycle(Stopwatch moduleWatch)
     {
         this.AnimationCycle();
-        this.HandleFunctionReset(moduleWatch, "AnimationCycle");
+        HandleFunctionReset(moduleWatch, "AnimationCycle");
     }
 
-    private void HandleFunctionReset(Stopwatch watch, string methodName)
+    private static void HandleFunctionReset(Stopwatch watch, string methodName)
     {
         try
         {

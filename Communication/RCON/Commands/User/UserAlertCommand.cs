@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.User;
+namespace WibboEmulator.Communication.RCON.Commands.User;
 internal class UserAlertCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
@@ -8,23 +8,23 @@ internal class UserAlertCommand : IRCONCommand
             return false;
         }
 
-        if (!int.TryParse(parameters[1], out var Userid))
+        if (!int.TryParse(parameters[1], out var userid))
         {
             return false;
         }
 
-        if (Userid == 0)
+        if (userid == 0)
         {
             return false;
         }
 
-        var Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid);
-        if (Client == null)
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userid);
+        if (client == null)
         {
             return false;
         }
 
-        Client.SendNotification(parameters[2]);
+        client.SendNotification(parameters[2]);
         return true;
     }
 }

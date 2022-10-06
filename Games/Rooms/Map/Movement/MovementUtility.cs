@@ -134,9 +134,9 @@ public static class MovementUtility
         }
     }
 
-    public static Point HandleMovementDir(int X, int Y, MovementDirection state)
+    public static Point HandleMovementDir(int x, int y, MovementDirection state)
     {
-        var newPoint = new Point(X, Y);
+        var newPoint = new Point(x, y);
 
         switch (state)
         {
@@ -186,11 +186,11 @@ public static class MovementUtility
         return newPoint;
     }
 
-    public static MovementDirection GetMovementByDirection(int Rot)
+    public static MovementDirection GetMovementByDirection(int rot)
     {
         var movement = MovementDirection.none;
 
-        switch (Rot)
+        switch (rot)
         {
             case 0:
                 movement = MovementDirection.up;

@@ -6,9 +6,9 @@ internal class OnGuideSessionDetachedEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var state = Packet.PopBoolean();
+        var state = packet.PopBoolean();
 
         var requester = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(session.GetUser().GuideOtherUserId);
 

@@ -28,13 +28,13 @@ public class ServerStatusUpdater
             _lowPriorityProcessWatch.Restart();
             try
             {
-                var UsersOnline = WibboEnvironment.GetGame().GetGameClientManager().Count;
+                var usersOnline = WibboEnvironment.GetGame().GetGameClientManager().Count;
 
-                WibboEnvironment.GetGame().GetAnimationManager().OnUpdateUsersOnline(UsersOnline);
+                WibboEnvironment.GetGame().GetAnimationManager().OnUpdateUsersOnline(usersOnline);
 
-                if (UsersOnline > _userPeak)
+                if (usersOnline > _userPeak)
                 {
-                    _userPeak = UsersOnline;
+                    _userPeak = usersOnline;
                 }
 
                 var roomsLoaded = WibboEnvironment.GetGame().GetRoomManager().Count;
@@ -45,8 +45,8 @@ public class ServerStatusUpdater
                 //+ UsersOnline + " Joueur(s) en ligne " + " | " + RoomsLoaded + " Appartement(s) en ligne";
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                EmulatorStatsDao.Insert(dbClient, UsersOnline, roomsLoaded);
-                EmulatorStatusDao.UpdateScore(dbClient, UsersOnline, roomsLoaded, _userPeak);
+                EmulatorStatsDao.Insert(dbClient, usersOnline, roomsLoaded);
+                EmulatorStatusDao.UpdateScore(dbClient, usersOnline, roomsLoaded, _userPeak);
             }
             catch (Exception e) { ExceptionLogger.LogThreadException(e.ToString(), "Server status update task"); }
         }

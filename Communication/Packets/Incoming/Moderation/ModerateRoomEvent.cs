@@ -6,17 +6,17 @@ internal class ModerateRoomEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().HasPermission("perm_mod"))
         {
             return;
         }
 
-        var RoomId = Packet.PopInt();
-        var LockRoom = Packet.PopInt() == 1;
-        var InappropriateRoom = Packet.PopInt() == 1;
-        var KickUsers = Packet.PopInt() == 1;
+        var RoomId = packet.PopInt();
+        var LockRoom = packet.PopInt() == 1;
+        var InappropriateRoom = packet.PopInt() == 1;
+        var KickUsers = packet.PopInt() == 1;
 
         ModerationManager.PerformRoomAction(session, RoomId, KickUsers, LockRoom, InappropriateRoom);
     }

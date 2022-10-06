@@ -138,7 +138,7 @@ public class RoomItemHandling
             Limited = !DBNull.Value.Equals(dataRow[10]) ? Convert.ToInt32(dataRow[10]) : 0;
             LimitedTo = !DBNull.Value.Equals(dataRow[11]) ? Convert.ToInt32(dataRow[11]) : 0;
 
-            WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var Data);
+            _ = WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var Data);
 
             if (Data == null)
             {
@@ -159,7 +159,7 @@ public class RoomItemHandling
                 var roomItem = new Item(itemID, this._room.Id, baseID, ExtraData, Limited, LimitedTo, 0, 0, 0.0, 0, wallCoord, this._room);
                 if (!this._wallItems.ContainsKey(itemID))
                 {
-                    this._wallItems.TryAdd(itemID, roomItem);
+                    _ = this._wallItems.TryAdd(itemID, roomItem);
                 }
 
                 if (roomItem.GetBaseItem().InteractionType == InteractionType.MOODLIGHT)
@@ -176,7 +176,7 @@ public class RoomItemHandling
 
                 if (!this._floorItems.ContainsKey(itemID))
                 {
-                    this._floorItems.TryAdd(itemID, roomItem);
+                    _ = this._floorItems.TryAdd(itemID, roomItem);
                 }
             }
         }
@@ -278,7 +278,7 @@ public class RoomItemHandling
         }
 
         this._room.SendPacket(new ObjectRemoveComposer(item.Id, 0));
-        this._itemsTemp.TryRemove(pId, out item);
+        _ = this._itemsTemp.TryRemove(pId, out item);
     }
 
     private void RemoveRoomItem(Item item)
@@ -294,22 +294,22 @@ public class RoomItemHandling
 
         if (item.IsWallItem)
         {
-            this._wallItems.TryRemove(item.Id, out var itemRemoved);
+            _ = this._wallItems.TryRemove(item.Id, out var itemRemoved);
         }
         else
         {
-            this._floorItems.TryRemove(item.Id, out var itemRemoved);
-            this._room.GetGameMap().RemoveFromMap(item);
+            _ = this._floorItems.TryRemove(item.Id, out var itemRemoved);
+            _ = this._room.GetGameMap().RemoveFromMap(item);
         }
 
         if (this._updateItems.ContainsKey(item.Id))
         {
-            this._updateItems.TryRemove(item.Id, out var itemRemoved);
+            _ = this._updateItems.TryRemove(item.Id, out var itemRemoved);
         }
 
         if (this._rollers.ContainsKey(item.Id))
         {
-            this._rollers.TryRemove(item.Id, out var itemRemoved);
+            _ = this._rollers.TryRemove(item.Id, out var itemRemoved);
         }
 
         if (item.WiredHandler != null)
@@ -402,7 +402,7 @@ public class RoomItemHandling
                             this._rollerMessages.Add(new SlideObjectBundleComposer(item.X, item.Y, item.Z, nextCoord.X, nextCoord.Y, nextZ + rollerHeight, item.Id));
                             this._rollerItemsMoved.Add(item.Id);
 
-                            this.SetFloorItem(item, nextCoord.X, nextCoord.Y, nextZ + rollerHeight);
+                            _ = this.SetFloorItem(item, nextCoord.X, nextCoord.Y, nextZ + rollerHeight);
                         }
                     }
 
@@ -436,7 +436,7 @@ public class RoomItemHandling
     {
         this._room.SendPacket(new SlideObjectBundleComposer(item.X, item.Y, item.Z, x, y, z, item.Id));
 
-        this.SetFloorItem(item, x, y, z);
+        _ = this.SetFloorItem(item, x, y, z);
     }
 
     public void RotReset(Item pItem, int newRot)
@@ -491,7 +491,7 @@ public class RoomItemHandling
 
         if (!this._itemsTemp.ContainsKey(Item.Id))
         {
-            this._itemsTemp.TryAdd(Item.Id, Item);
+            _ = this._itemsTemp.TryAdd(Item.Id, Item);
         }
 
         this._room.SendPacket(new ObjectAddComposer(Item));
@@ -515,7 +515,7 @@ public class RoomItemHandling
                 if (NeedsReAdd)
                 {
                     this.UpdateItem(Item);
-                    this._room.GetGameMap().AddItemToMap(Item);
+                    _ = this._room.GetGameMap().AddItemToMap(Item);
                 }
                 return false;
             }
@@ -599,7 +599,7 @@ public class RoomItemHandling
                     if (NeedsReAdd)
                     {
                         this.UpdateItem(Item);
-                        this._room.GetGameMap().AddItemToMap(Item);
+                        _ = this._room.GetGameMap().AddItemToMap(Item);
                     }
                     return false;
                 }
@@ -641,11 +641,11 @@ public class RoomItemHandling
             {
                 if (Item.IsFloorItem && !this._floorItems.ContainsKey(Item.Id))
                 {
-                    this._floorItems.TryAdd(Item.Id, Item);
+                    _ = this._floorItems.TryAdd(Item.Id, Item);
                 }
                 else if (Item.IsWallItem && !this._wallItems.ContainsKey(Item.Id))
                 {
-                    this._wallItems.TryAdd(Item.Id, Item);
+                    _ = this._wallItems.TryAdd(Item.Id, Item);
                 }
 
                 this.UpdateItem(Item);
@@ -664,7 +664,7 @@ public class RoomItemHandling
             }
         }
 
-        this._room.GetGameMap().AddItemToMap(Item);
+        _ = this._room.GetGameMap().AddItemToMap(Item);
 
         foreach (var threeDcoord in Item.GetAffectedTiles.Values)
         {
@@ -695,10 +695,10 @@ public class RoomItemHandling
 
     public bool SetFloorItem(Item Item, int newX, int newY, double newZ)
     {
-        this._room.GetGameMap().RemoveFromMap(Item);
+        _ = this._room.GetGameMap().RemoveFromMap(Item);
         Item.SetState(newX, newY, newZ, Gamemap.GetAffectedTiles(Item.GetBaseItem().Length, Item.GetBaseItem().Width, newX, newY, Item.Rotation));
         this.UpdateItem(Item);
-        this._room.GetGameMap().AddItemToMap(Item);
+        _ = this._room.GetGameMap().AddItemToMap(Item);
         return true;
     }
 
@@ -721,7 +721,7 @@ public class RoomItemHandling
                 this._room.MoodlightData = new MoodlightData(Item.Id);
                 Item.ExtraData = this._room.MoodlightData.GenerateExtraData();
             }
-            this._wallItems.TryAdd(Item.Id, Item);
+            _ = this._wallItems.TryAdd(Item.Id, Item);
             this.UpdateItem(Item);
 
             this._room.SendPacket(new ItemAddComposer(Item, this._room.RoomData.OwnerName, this._room.RoomData.OwnerId));
@@ -737,7 +737,7 @@ public class RoomItemHandling
             return;
         }
 
-        this._updateItems.TryAdd(item.Id, item);
+        _ = this._updateItems.TryAdd(item.Id, item);
     }
 
     public void OnCycle()

@@ -7,9 +7,9 @@ internal class NavigatorHomeRoomEvent : IPacketEvent
 {
     public double Delay => 500;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var RoomId = Packet.PopInt();
+        var RoomId = packet.PopInt();
         var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
         if (RoomId != 0 && (roomData == null || roomData.OwnerName.ToLower() != session.GetUser().Username.ToLower()))
         {

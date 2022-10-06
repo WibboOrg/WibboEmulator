@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.User;
+namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 
 internal class UpdateLimitCoinsCommand : IRCONCommand
@@ -20,8 +20,8 @@ internal class UpdateLimitCoinsCommand : IRCONCommand
             return false;
         }
 
-        var Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
-        if (Client == null)
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        if (client == null)
         {
             return false;
         }
@@ -36,8 +36,8 @@ internal class UpdateLimitCoinsCommand : IRCONCommand
             return false;
         }
 
-        Client.GetUser().LimitCoins += amount;
-        Client.SendPacket(new ActivityPointNotificationComposer(Client.GetUser().LimitCoins, 0, 55));
+        client.GetUser().LimitCoins += amount;
+        client.SendPacket(new ActivityPointNotificationComposer(client.GetUser().LimitCoins, 0, 55));
 
         return true;
     }

@@ -5,15 +5,15 @@ internal class ModerationMsgEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().HasPermission("perm_alert"))
         {
             return;
         }
 
-        var userId = Packet.PopInt();
-        var message = Packet.PopString();
+        var userId = packet.PopInt();
+        var message = packet.PopString();
 
         var clientTarget = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
         if (clientTarget == null)

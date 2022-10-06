@@ -45,16 +45,16 @@ public class RoomManager
         return new RoomModel(roomID.ToString(), Convert.ToInt32(row["door_x"]), Convert.ToInt32(row["door_y"]), (double)row["door_z"], Convert.ToInt32(row["door_dir"]), (string)row["heightmap"], Convert.ToInt32(row["wall_height"]));
     }
 
-    public RoomModel GetModel(string Model, int RoomID)
+    public RoomModel GetModel(string model, int roomID)
     {
-        if (Model == "model_custom")
+        if (model == "model_custom")
         {
-            return GetCustomData(RoomID);
+            return GetCustomData(roomID);
         }
 
-        if (this._roomModels.ContainsKey(Model))
+        if (this._roomModels.ContainsKey(model))
         {
-            return this._roomModels[Model];
+            return this._roomModels[model];
         }
         else
         {
@@ -62,15 +62,15 @@ public class RoomManager
         }
     }
 
-    public RoomData GenerateNullableRoomData(int RoomId)
+    public RoomData GenerateNullableRoomData(int roomId)
     {
-        if (this.GenerateRoomData(RoomId) != null)
+        if (this.GenerateRoomData(roomId) != null)
         {
-            return this.GenerateRoomData(RoomId);
+            return this.GenerateRoomData(roomId);
         }
 
         var roomData = new RoomData();
-        roomData.FillNull(RoomId);
+        roomData.FillNull(roomId);
         return roomData;
     }
 
@@ -102,7 +102,7 @@ public class RoomManager
 
         if (!this._roomsData.ContainsKey(roomId))
         {
-            this._roomsData.TryAdd(roomId, roomData);
+            _ = this._roomsData.TryAdd(roomId, roomData);
         }
 
         return roomData;
@@ -127,31 +127,31 @@ public class RoomManager
 
             if (!this._rooms.ContainsKey(room.Id))
             {
-                this._rooms.TryAdd(room.Id, room);
+                _ = this._rooms.TryAdd(room.Id, room);
             }
 
             if (this._roomsData.ContainsKey(room.Id))
             {
-                this._roomsData.TryRemove(room.Id, out data);
+                _ = this._roomsData.TryRemove(room.Id, out data);
             }
 
             return room;
         }
     }
 
-    public void RoomDataRemove(int Id)
+    public void RoomDataRemove(int id)
     {
-        if (this._roomsData.ContainsKey(Id))
+        if (this._roomsData.ContainsKey(id))
         {
-            this._roomsData.TryRemove(Id, out var Data);
+            _ = this._roomsData.TryRemove(id, out _);
         }
     }
 
-    public bool TryGetRoom(int RoomId, out Room Room) => this._rooms.TryGetValue(RoomId, out Room);
+    public bool TryGetRoom(int roomId, out Room room) => this._rooms.TryGetValue(roomId, out room);
 
     public bool TryGetRoomModels(string model, out RoomModel roomModel) => this._roomModels.TryGetValue(model, out roomModel);
 
-    public bool TryGetRoomData(int RoomId, out RoomData RoomData) => this._roomsData.TryGetValue(RoomId, out RoomData);
+    public bool TryGetRoomData(int roomId, out RoomData roomData) => this._roomsData.TryGetValue(roomId, out roomData);
 
     public RoomData FetchRoomData(int roomID, DataRow dRow)
     {
@@ -187,10 +187,10 @@ public class RoomManager
     public void OnCycle(Stopwatch moduleWatch)
     {
         this.RoomCycleTask();
-        this.HandleFunctionReset(moduleWatch, "RoomCycleTask");
+        HandleFunctionReset(moduleWatch, "RoomCycleTask");
     }
 
-    private void HandleFunctionReset(Stopwatch watch, string methodName)
+    private static void HandleFunctionReset(Stopwatch watch, string methodName)
     {
         try
         {
@@ -207,80 +207,80 @@ public class RoomManager
         watch.Restart();
     }
 
-    public List<RoomData> SearchGroupRooms(string Query)
+    public List<RoomData> SearchGroupRooms(string query)
     {
-        var InstanceMatches =
+        var instanceMatches =
             (from RoomInstance in this._rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
              RoomInstance.Value.RoomData.State != 3 &&
              RoomInstance.Value.RoomData.Group != null &&
-             (RoomInstance.Value.RoomData.OwnerName.StartsWith(Query) ||
-             RoomInstance.Value.RoomData.Tags.Contains(Query) ||
-             RoomInstance.Value.RoomData.Name.Contains(Query))
+             (RoomInstance.Value.RoomData.OwnerName.StartsWith(query) ||
+             RoomInstance.Value.RoomData.Tags.Contains(query) ||
+             RoomInstance.Value.RoomData.Name.Contains(query))
              orderby RoomInstance.Value.RoomData.UsersNow descending
              select RoomInstance.Value.RoomData).Take(50);
-        return InstanceMatches.ToList();
+        return instanceMatches.ToList();
     }
 
     public List<RoomData> SearchTaggedRooms(string Query)
     {
-        var InstanceMatches =
+        var instanceMatches =
             (from RoomInstance in this._rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
              RoomInstance.Value.RoomData.State != 3 &&
              RoomInstance.Value.RoomData.Tags.Contains(Query)
              orderby RoomInstance.Value.RoomData.UsersNow descending
              select RoomInstance.Value.RoomData).Take(50);
-        return InstanceMatches.ToList();
+        return instanceMatches.ToList();
     }
 
-    public List<RoomData> GetPopularRooms(int category, int Amount = 50, Language Langue = Language.FRANCAIS)
+    public List<RoomData> GetPopularRooms(int category, int amount = 50, Language langue = Language.FRANCAIS)
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
              where RoomInstance.Value != null && RoomInstance.Value.RoomData != null &&
              RoomInstance.Value.RoomData.UsersNow > 0 &&
              (category == -1 || RoomInstance.Value.RoomData.Category == category) &&
-             RoomInstance.Value.RoomData.State != 3 && RoomInstance.Value.RoomData.Langue == Langue
+             RoomInstance.Value.RoomData.State != 3 && RoomInstance.Value.RoomData.Langue == langue
              orderby RoomInstance.Value.RoomData.Score descending
              orderby RoomInstance.Value.RoomData.UsersNow descending
-             select RoomInstance.Value.RoomData).Take(Amount);
+             select RoomInstance.Value.RoomData).Take(amount);
         return rooms.ToList();
     }
 
-    public List<RoomData> GetRecommendedRooms(int Amount = 50, int CurrentRoomId = 0)
+    public List<RoomData> GetRecommendedRooms(int amount = 50, int currentRoomId = 0)
     {
-        var Rooms =
+        var rooms =
             (from RoomInstance in this._rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
              RoomInstance.Value.RoomData.Score >= 0 &&
              RoomInstance.Value.RoomData.State != 3 &&
-             RoomInstance.Value.RoomData.Id != CurrentRoomId
+             RoomInstance.Value.RoomData.Id != currentRoomId
              orderby RoomInstance.Value.RoomData.Score descending
              orderby RoomInstance.Value.RoomData.UsersNow descending
-             select RoomInstance.Value.RoomData).Take(Amount);
-        return Rooms.ToList();
+             select RoomInstance.Value.RoomData).Take(amount);
+        return rooms.ToList();
     }
 
-    public List<RoomData> GetPopularRatedRooms(int Amount = 50)
+    public List<RoomData> GetPopularRatedRooms(int amount = 50)
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
              where RoomInstance.Value.RoomData.State != 3
              orderby RoomInstance.Value.RoomData.Score descending
-             select RoomInstance.Value.RoomData).Take(Amount);
+             select RoomInstance.Value.RoomData).Take(amount);
         return rooms.ToList();
     }
 
-    public List<RoomData> GetRoomsByCategory(int Category, int Amount = 50)
+    public List<RoomData> GetRoomsByCategory(int category, int amount = 50)
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
-             where RoomInstance.Value.RoomData.Category == Category &&
+             where RoomInstance.Value.RoomData.Category == category &&
              RoomInstance.Value.RoomData.UsersNow > 0 &&
              RoomInstance.Value.RoomData.State != 3
              orderby RoomInstance.Value.RoomData.UsersNow descending
-             select RoomInstance.Value.RoomData).Take(Amount);
+             select RoomInstance.Value.RoomData).Take(amount);
         return rooms.ToList();
     }
 
@@ -311,24 +311,24 @@ public class RoomManager
             }
         }
 
-        var SortedTags = new List<KeyValuePair<string, int>>(TagValues);
-        SortedTags.Sort((FirstPair, NextPair) =>
+        var sortedTags = new List<KeyValuePair<string, int>>(TagValues);
+        sortedTags.Sort((firstPair, nextPair) =>
         {
-            return FirstPair.Value.CompareTo(NextPair.Value);
+            return firstPair.Value.CompareTo(nextPair.Value);
         });
 
-        SortedTags.Reverse();
-        return SortedTags;
+        sortedTags.Reverse();
+        return sortedTags;
     }
 
-    public List<RoomData> GetGroupRooms(int Amount = 50)
+    public List<RoomData> GetGroupRooms(int amount = 50)
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
              where RoomInstance.Value.RoomData.Group != null &&
              RoomInstance.Value.RoomData.State != 3
              orderby RoomInstance.Value.RoomData.Score descending
-             select RoomInstance.Value.RoomData).Take(Amount);
+             select RoomInstance.Value.RoomData).Take(amount);
         return rooms.ToList();
     }
 
@@ -377,14 +377,14 @@ public class RoomManager
         var count = this._rooms.Count;
         var num = 0;
 
-        foreach (var Room in this._rooms.Values.ToList())
+        foreach (var room in this._rooms.Values.ToList())
         {
-            if (Room == null)
+            if (room == null)
             {
                 continue;
             }
 
-            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
+            WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
             Console.Clear();
             Console.WriteLine("<<- SERVER SHUTDOWN ->> ROOM ITEM SAVE: " + string.Format("{0:0.##}", num / (double)count * 100.0) + "%");
             num++;
@@ -411,16 +411,16 @@ public class RoomManager
         }
     }
 
-    public void UnloadRoom(Room Room)
+    public void UnloadRoom(Room room)
     {
-        if (Room == null)
+        if (room == null)
         {
             return;
         }
 
-        if (this._rooms.TryRemove(Room.Id, out var room))
+        if (this._rooms.TryRemove(room.Id, out _))
         {
-            Room.Dispose();
+            room.Dispose();
         }
     }
 }

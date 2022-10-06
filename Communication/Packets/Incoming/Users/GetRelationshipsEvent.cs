@@ -8,9 +8,9 @@ internal class GetRelationshipsEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var User = WibboEnvironment.GetUserById(Packet.PopInt());
+        var User = WibboEnvironment.GetUserById(packet.PopInt());
         if (User == null)
         {
             return;

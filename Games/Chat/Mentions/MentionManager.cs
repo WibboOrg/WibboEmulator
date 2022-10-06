@@ -37,13 +37,13 @@ public class MentionManager
 
             if (targetUsername == "everyone")
             {
-                if (!this.EveryoneFriend(session, message))
+                if (!EveryoneFriend(session, message))
                 {
                     break;
                 }
             }
 
-            else if (!this.SendNotif(session, targetUsername, message))
+            else if (!SendNotif(session, targetUsername, message))
             {
                 continue;
             }
@@ -57,7 +57,7 @@ public class MentionManager
         return styledMessage;
     }
 
-    public bool SendNotif(GameClient session, string TargetUsername, string Message)
+    public static bool SendNotif(GameClient session, string TargetUsername, string Message)
     {
         var TargetClient = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(TargetUsername);
 
@@ -87,7 +87,7 @@ public class MentionManager
         return true;
     }
 
-    public bool EveryoneFriend(GameClient session, string Message)
+    public static bool EveryoneFriend(GameClient session, string Message)
     {
         if (session.GetUser().Rank < 2)
         {

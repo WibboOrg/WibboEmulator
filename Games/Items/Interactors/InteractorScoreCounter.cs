@@ -29,7 +29,7 @@ public class InteractorScoreCounter : FurniInteractor
         var num = 0;
         if (!string.IsNullOrEmpty(item.ExtraData))
         {
-            int.TryParse(item.ExtraData, out num);
+            _ = int.TryParse(item.ExtraData, out num);
         }
 
         if (request == 1)

@@ -14,11 +14,11 @@ internal class LootboxInfo : IChatCommand
 
         var stringBuilder = new StringBuilder();
 
-        stringBuilder.Append("- Information sur le nombre de rare distribuer ce mois-ci -\r");
-        stringBuilder.Append("Basique: " + basicCount + "\r");
-        stringBuilder.Append("Commun: " + communCount + "\r");
-        stringBuilder.Append("Epique: " + epicCount + "\r");
-        stringBuilder.Append("Legendaire: " + legendaryCount + "\r");
+        _ = stringBuilder.Append("- Information sur le nombre de rare distribuer ce mois-ci -\r");
+        _ = stringBuilder.Append("Basique: " + basicCount + "\r");
+        _ = stringBuilder.Append("Commun: " + communCount + "\r");
+        _ = stringBuilder.Append("Epique: " + epicCount + "\r");
+        _ = stringBuilder.Append("Legendaire: " + legendaryCount + "\r");
 
         session.SendNotification(stringBuilder.ToString());
     }

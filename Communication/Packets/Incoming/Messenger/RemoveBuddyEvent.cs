@@ -5,14 +5,14 @@ internal class RemoveBuddyEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser().GetMessenger() == null)
         {
             return;
         }
 
-        var count = Packet.PopInt();
+        var count = packet.PopInt();
 
         if (count > 200)
         {
@@ -22,7 +22,7 @@ internal class RemoveBuddyEvent : IPacketEvent
         int friendId;
         for (var index = 0; index < count; index++)
         {
-            friendId = Packet.PopInt();
+            friendId = packet.PopInt();
             session.GetUser().GetMessenger().DestroyFriendship(friendId);
         }
     }

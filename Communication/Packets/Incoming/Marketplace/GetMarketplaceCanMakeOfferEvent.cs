@@ -6,7 +6,7 @@ internal class GetMarketplaceCanMakeOfferEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         var ErrorCode = 1;
 

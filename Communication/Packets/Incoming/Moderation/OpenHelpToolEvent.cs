@@ -6,7 +6,7 @@ internal class OpenHelpToolEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null || session.GetUser().HasPermission("perm_helptool"))
         {

@@ -5,14 +5,14 @@ internal class PickTicketEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().HasPermission("perm_mod"))
         {
             return;
         }
 
-        Packet.PopInt();
-        WibboEnvironment.GetGame().GetModerationManager().PickTicket(session, Packet.PopInt());
+        _ = packet.PopInt();
+        WibboEnvironment.GetGame().GetModerationManager().PickTicket(session, packet.PopInt());
     }
 }

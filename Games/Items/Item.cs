@@ -12,7 +12,7 @@ using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms.PathFinding;
 using WibboEmulator.Utilities.Events;
 
-public delegate void OnItemTrigger(object sender, ItemTriggeredArgs e);
+public delegate void OnItemTrigger(object sender, ItemTriggeredEventArgs e);
 
 public class Item : IEquatable<Item>
 {
@@ -98,9 +98,9 @@ public class Item : IEquatable<Item>
         }
     }
 
-    public bool IsWallItem;
+    public bool IsWallItem { get; set; }
 
-    public bool IsFloorItem;
+    public bool IsFloorItem { get; set; }
 
     public Point SquareInFront
     {
@@ -194,8 +194,8 @@ public class Item : IEquatable<Item>
         }
     }
 
-    public ItemData Data;
-    public FurniInteractor Interactor;
+    public ItemData Data { get; set; }
+    public FurniInteractor Interactor { get; set; }
 
     public Item(int id, int roomId, int baseItem, string extraData, int limitedNumber, int limitedStack, int x, int y, double z, int rot,
         string wallCoord, Room room)
@@ -290,7 +290,7 @@ public class Item : IEquatable<Item>
         }
     }
 
-    public void SetState(int pX, int pY, double pZ, Dictionary<int, Coord> Tiles)
+    public void SetState(int pX, int pY, double pZ, Dictionary<int, Coord> tiles)
     {
         this.X = pX;
         this.Y = pY;
@@ -299,7 +299,7 @@ public class Item : IEquatable<Item>
             this.Z = pZ;
         }
 
-        this.GetAffectedTiles = Tiles;
+        this.GetAffectedTiles = tiles;
     }
 
     public void OnTrigger(RoomUser user)
@@ -309,7 +309,7 @@ public class Item : IEquatable<Item>
             return;
         }
 
-        this.ItemTriggerEventHandler(null, new ItemTriggeredArgs(user, this));
+        this.ItemTriggerEventHandler(null, new ItemTriggeredEventArgs(user, this));
     }
 
     public void Destroy()
@@ -331,61 +331,61 @@ public class Item : IEquatable<Item>
 
     public bool Equals(Item other) => other.Id == this.Id;
 
-    public Point GetMoveCoord(int X, int Y, int i)
+    public Point GetMoveCoord(int x, int y, int i)
     {
 
         switch (this.MovementDir)
         {
             case MovementDirection.up:
             {
-                Y -= i;
+                y -= i;
                 break;
             }
             case MovementDirection.upright:
             {
-                X += i;
-                Y -= i;
+                x += i;
+                y -= i;
                 break;
             }
             case MovementDirection.right:
             {
-                X += i;
+                x += i;
                 break;
             }
             case MovementDirection.downright:
             {
-                X += i;
-                Y += i;
+                x += i;
+                y += i;
                 break;
             }
             case MovementDirection.down:
             {
-                Y += i;
+                y += i;
                 break;
             }
             case MovementDirection.downleft:
             {
-                X -= i;
-                Y += i;
+                x -= i;
+                y += i;
                 break;
             }
             case MovementDirection.left:
             {
-                X -= i;
+                x -= i;
                 break;
             }
             case MovementDirection.upleft:
             {
-                X -= i;
-                Y -= i;
+                x -= i;
+                y -= i;
                 break;
             }
         }
 
-        return new Point(X, Y);
+        return new Point(x, y);
     }
 
-    public void GetNewDir(int X, int Y)
+    public void GetNewDir(int x, int y)
     {
         switch (this.MovementDir)
         {
@@ -403,13 +403,13 @@ public class Item : IEquatable<Item>
                 break;
 
             case MovementDirection.upright:
-                if (!this.GetRoom().GetGameMap().CanStackItem(X + 1, Y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(X - 1, Y - 1, true))
+                if (!this.GetRoom().GetGameMap().CanStackItem(x + 1, y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(x - 1, y - 1, true))
                 {
                     this.MovementDir = MovementDirection.downleft;
                 }
                 else
                 {
-                    if (this.GetRoom().GetGameMap().CanStackItem(X + 1, Y + 1, true) && this.GetRoom().GetGameMap().CanStackItem(X - 1, Y - 1, true))
+                    if (this.GetRoom().GetGameMap().CanStackItem(x + 1, y + 1, true) && this.GetRoom().GetGameMap().CanStackItem(x - 1, y - 1, true))
                     {
                         if (WibboEnvironment.GetRandomNumber(1, 2) == 1)
                         {
@@ -422,11 +422,11 @@ public class Item : IEquatable<Item>
                     }
                     else
                     {
-                        if (this.GetRoom().GetGameMap().CanStackItem(X - 1, Y - 1, true) && !this.GetRoom().GetGameMap().CanStackItem(X + 1, Y + 1, true))
+                        if (this.GetRoom().GetGameMap().CanStackItem(x - 1, y - 1, true) && !this.GetRoom().GetGameMap().CanStackItem(x + 1, y + 1, true))
                         {
                             this.MovementDir = MovementDirection.upleft;
                         }
-                        else if (this.GetRoom().GetGameMap().CanStackItem(X + 1, Y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(X - 1, Y - 1, true))
+                        else if (this.GetRoom().GetGameMap().CanStackItem(x + 1, y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(x - 1, y - 1, true))
                         {
                             this.MovementDir = MovementDirection.downright;
                         }
@@ -434,13 +434,13 @@ public class Item : IEquatable<Item>
                 }
                 break;
             case MovementDirection.upleft:
-                if (!this.GetRoom().GetGameMap().CanStackItem(X - 1, Y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(X + 1, Y - 1, true))
+                if (!this.GetRoom().GetGameMap().CanStackItem(x - 1, y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(x + 1, y - 1, true))
                 {
                     this.MovementDir = MovementDirection.downright;
                 }
                 else
                 {
-                    if (this.GetRoom().GetGameMap().CanStackItem(X - 1, Y + 1, true) && this.GetRoom().GetGameMap().CanStackItem(X + 1, Y - 1, true))
+                    if (this.GetRoom().GetGameMap().CanStackItem(x - 1, y + 1, true) && this.GetRoom().GetGameMap().CanStackItem(x + 1, y - 1, true))
                     {
                         if (WibboEnvironment.GetRandomNumber(1, 2) == 1)
                         {
@@ -453,11 +453,11 @@ public class Item : IEquatable<Item>
                     }
                     else
                     {
-                        if (this.GetRoom().GetGameMap().CanStackItem(X + 1, Y - 1, true) && !this.GetRoom().GetGameMap().CanStackItem(X - 1, Y + 1, true))
+                        if (this.GetRoom().GetGameMap().CanStackItem(x + 1, y - 1, true) && !this.GetRoom().GetGameMap().CanStackItem(x - 1, y + 1, true))
                         {
                             this.MovementDir = MovementDirection.upright;
                         }
-                        else if (this.GetRoom().GetGameMap().CanStackItem(X - 1, Y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(X + 1, Y - 1, true))
+                        else if (this.GetRoom().GetGameMap().CanStackItem(x - 1, y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(x + 1, y - 1, true))
                         {
                             this.MovementDir = MovementDirection.downleft;
                         }
@@ -465,13 +465,13 @@ public class Item : IEquatable<Item>
                 }
                 break;
             case MovementDirection.downright:
-                if (!this.GetRoom().GetGameMap().CanStackItem(X - 1, Y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(X + 1, Y - 1, true))
+                if (!this.GetRoom().GetGameMap().CanStackItem(x - 1, y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(x + 1, y - 1, true))
                 {
                     this.MovementDir = MovementDirection.upleft;
                 }
                 else
                 {
-                    if (this.GetRoom().GetGameMap().CanStackItem(X - 1, Y + 1, true) && this.GetRoom().GetGameMap().CanStackItem(X + 1, Y - 1, true))
+                    if (this.GetRoom().GetGameMap().CanStackItem(x - 1, y + 1, true) && this.GetRoom().GetGameMap().CanStackItem(x + 1, y - 1, true))
                     {
                         if (WibboEnvironment.GetRandomNumber(1, 2) == 1)
                         {
@@ -484,11 +484,11 @@ public class Item : IEquatable<Item>
                     }
                     else
                     {
-                        if (this.GetRoom().GetGameMap().CanStackItem(X + 1, Y - 1, true) && !this.GetRoom().GetGameMap().CanStackItem(X - 1, Y + 1, true))
+                        if (this.GetRoom().GetGameMap().CanStackItem(x + 1, y - 1, true) && !this.GetRoom().GetGameMap().CanStackItem(x - 1, y + 1, true))
                         {
                             this.MovementDir = MovementDirection.upright;
                         }
-                        else if (this.GetRoom().GetGameMap().CanStackItem(X - 1, Y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(X + 1, Y - 1, true))
+                        else if (this.GetRoom().GetGameMap().CanStackItem(x - 1, y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(x + 1, y - 1, true))
                         {
                             this.MovementDir = MovementDirection.downleft;
                         }
@@ -496,13 +496,13 @@ public class Item : IEquatable<Item>
                 }
                 break;
             case MovementDirection.downleft:
-                if (!this.GetRoom().GetGameMap().CanStackItem(X + 1, Y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(X - 1, Y - 1, true))
+                if (!this.GetRoom().GetGameMap().CanStackItem(x + 1, y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(x - 1, y - 1, true))
                 {
                     this.MovementDir = MovementDirection.upright;
                 }
                 else
                 {
-                    if (this.GetRoom().GetGameMap().CanStackItem(X + 1, Y + 1, true) && this.GetRoom().GetGameMap().CanStackItem(X - 1, Y - 1, true))
+                    if (this.GetRoom().GetGameMap().CanStackItem(x + 1, y + 1, true) && this.GetRoom().GetGameMap().CanStackItem(x - 1, y - 1, true))
                     {
                         if (WibboEnvironment.GetRandomNumber(1, 2) == 1)
                         {
@@ -515,11 +515,11 @@ public class Item : IEquatable<Item>
                     }
                     else
                     {
-                        if (this.GetRoom().GetGameMap().CanStackItem(X - 1, Y - 1, true) && !this.GetRoom().GetGameMap().CanStackItem(X + 1, Y + 1, true))
+                        if (this.GetRoom().GetGameMap().CanStackItem(x - 1, y - 1, true) && !this.GetRoom().GetGameMap().CanStackItem(x + 1, y + 1, true))
                         {
                             this.MovementDir = MovementDirection.upleft;
                         }
-                        else if (this.GetRoom().GetGameMap().CanStackItem(X + 1, Y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(X - 1, Y - 1, true))
+                        else if (this.GetRoom().GetGameMap().CanStackItem(x + 1, y + 1, true) && !this.GetRoom().GetGameMap().CanStackItem(x - 1, y - 1, true))
                         {
                             this.MovementDir = MovementDirection.downright;
                         }
@@ -542,14 +542,14 @@ public class Item : IEquatable<Item>
         this.Interactor.OnTick(this);
     }
 
-    public void ReqUpdate(int Cycles)
+    public void ReqUpdate(int cycles)
     {
         if (this.UpdateCounter > 0)
         {
             return;
         }
 
-        this.UpdateCounter = Cycles;
+        this.UpdateCounter = cycles;
         this.GetRoom().GetRoomItemHandler().QueueRoomItemUpdate(this);
     }
 

@@ -51,7 +51,7 @@ public class InventoryComponent : IDisposable
                 }
                 else
                 {
-                    rareAmounts.Remove(roomItem.BaseItem);
+                    _ = rareAmounts.Remove(roomItem.BaseItem);
                     rareAmounts.Add(roomItem.BaseItem, value + 1);
                 }
             }
@@ -79,7 +79,7 @@ public class InventoryComponent : IDisposable
                 var limitedTo = DBNull.Value.Equals(dataRow["limited_stack"]) ? 0 : Convert.ToInt32(dataRow["limited_stack"]);
 
                 var userItem = new Item(id, 0, baseItem, extraData, limited, limitedTo, 0, 0, 0.0, 0, "", null);
-                this._userItems.TryAdd(id, userItem);
+                _ = this._userItems.TryAdd(id, userItem);
             }
         }
 
@@ -115,67 +115,67 @@ public class InventoryComponent : IDisposable
 
     public ICollection<Pet> GetPets() => this._petsItems.Values;
 
-    public bool TryAddPet(Pet Pet)
+    public bool TryAddPet(Pet pet)
     {
-        Pet.RoomId = 0;
-        Pet.PlacedInRoom = false;
+        pet.RoomId = 0;
+        pet.PlacedInRoom = false;
 
-        return this._petsItems.TryAdd(Pet.PetId, Pet);
+        return this._petsItems.TryAdd(pet.PetId, pet);
     }
 
-    public bool TryRemovePet(int PetId, out Pet PetItem)
+    public bool TryRemovePet(int petId, out Pet petItem)
     {
-        if (this._petsItems.ContainsKey(PetId))
+        if (this._petsItems.ContainsKey(petId))
         {
-            return this._petsItems.TryRemove(PetId, out PetItem);
+            return this._petsItems.TryRemove(petId, out petItem);
         }
         else
         {
-            PetItem = null;
+            petItem = null;
             return false;
         }
     }
 
-    public bool TryGetPet(int PetId, out Pet Pet)
+    public bool TryGetPet(int petId, out Pet pet)
     {
-        if (this._petsItems.ContainsKey(PetId))
+        if (this._petsItems.ContainsKey(petId))
         {
-            return this._petsItems.TryGetValue(PetId, out Pet);
+            return this._petsItems.TryGetValue(petId, out pet);
         }
         else
         {
-            Pet = null;
+            pet = null;
             return false;
         }
     }
 
-    public bool TryGetBot(int BotId, out Bot Bot)
+    public bool TryGetBot(int botId, out Bot bot)
     {
-        if (this._botItems.ContainsKey(BotId))
+        if (this._botItems.ContainsKey(botId))
         {
-            return this._botItems.TryGetValue(BotId, out Bot);
+            return this._botItems.TryGetValue(botId, out bot);
         }
         else
         {
-            Bot = null;
+            bot = null;
             return false;
         }
     }
 
-    public bool TryRemoveBot(int BotId, out Bot Bot)
+    public bool TryRemoveBot(int botId, out Bot bot)
     {
-        if (this._botItems.ContainsKey(BotId))
+        if (this._botItems.ContainsKey(botId))
         {
-            return this._botItems.TryRemove(BotId, out Bot);
+            return this._botItems.TryRemove(botId, out bot);
         }
         else
         {
-            Bot = null;
+            bot = null;
             return false;
         }
     }
 
-    public bool TryAddBot(Bot Bot) => this._botItems.TryAdd(Bot.Id, Bot);
+    public bool TryAddBot(Bot bot) => this._botItems.TryAdd(bot.Id, bot);
 
     public ICollection<Bot> GetBots() => this._botItems.Values;
 
@@ -205,13 +205,13 @@ public class InventoryComponent : IDisposable
         foreach (DataRow dataRow in dItems.Rows)
         {
             var id = Convert.ToInt32(dataRow["id"]);
-            var BaseItem = Convert.ToInt32(dataRow["base_item"]);
-            var ExtraData = DBNull.Value.Equals(dataRow["extra_data"]) ? string.Empty : (string)dataRow["extra_data"];
-            var Limited = DBNull.Value.Equals(dataRow["limited_number"]) ? 0 : Convert.ToInt32(dataRow["limited_number"]);
-            var LimitedTo = DBNull.Value.Equals(dataRow["limited_stack"]) ? 0 : Convert.ToInt32(dataRow["limited_stack"]);
+            var baseItem = Convert.ToInt32(dataRow["base_item"]);
+            var extraData = DBNull.Value.Equals(dataRow["extra_data"]) ? string.Empty : (string)dataRow["extra_data"];
+            var limited = DBNull.Value.Equals(dataRow["limited_number"]) ? 0 : Convert.ToInt32(dataRow["limited_number"]);
+            var limitedTo = DBNull.Value.Equals(dataRow["limited_stack"]) ? 0 : Convert.ToInt32(dataRow["limited_stack"]);
 
-            var userItem = new Item(id, 0, BaseItem, ExtraData, Limited, LimitedTo, 0, 0, 0.0, 0, "", null);
-            this._userItems.TryAdd(id, userItem);
+            var userItem = new Item(id, 0, baseItem, extraData, limited, limitedTo, 0, 0, 0.0, 0, "", null);
+            _ = this._userItems.TryAdd(id, userItem);
         }
 
         var dPets = BotPetDao.GetAllByUserId(dbClient, this._userInstance.Id);
@@ -220,26 +220,26 @@ public class InventoryComponent : IDisposable
             foreach (DataRow row in dPets.Rows)
             {
                 var pet = new Pet(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), Convert.ToInt32(row["room_id"]), (string)row["name"], Convert.ToInt32(row["type"]), (string)row["race"], (string)row["color"], Convert.ToInt32(row["experience"]), Convert.ToInt32(row["energy"]), Convert.ToInt32(row["nutrition"]), Convert.ToInt32(row["respect"]), (double)row["createstamp"], Convert.ToInt32(row["x"]), Convert.ToInt32(row["y"]), (double)row["z"], Convert.ToInt32(row["have_saddle"]), Convert.ToInt32(row["hairdye"]), Convert.ToInt32(row["pethair"]), (string)row["anyone_ride"] == "1");
-                this._petsItems.TryAdd(pet.PetId, pet);
+                _ = this._petsItems.TryAdd(pet.PetId, pet);
             }
         }
 
         var dBots = BotUserDao.GetAllByUserId(dbClient, this._userInstance.Id);
         if (dBots != null)
         {
-            foreach (DataRow Row in dBots.Rows)
+            foreach (DataRow row in dBots.Rows)
             {
-                var bot = new Bot(Convert.ToInt32(Row["id"]), Convert.ToInt32(Row["user_id"]), (string)Row["name"], (string)Row["motto"], (string)Row["look"], (string)Row["gender"], (string)Row["walk_enabled"] == "1", (string)Row["chat_enabled"] == "1", (string)Row["chat_text"], Convert.ToInt32(Row["chat_seconds"]), (string)Row["is_dancing"] == "1", Convert.ToInt32(Row["enable"]), Convert.ToInt32(Row["handitem"]), Convert.ToInt32((string)Row["status"]));
-                this._botItems.TryAdd(Convert.ToInt32(Row["id"]), bot);
+                var bot = new Bot(Convert.ToInt32(row["id"]), Convert.ToInt32(row["user_id"]), (string)row["name"], (string)row["motto"], (string)row["look"], (string)row["gender"], (string)row["walk_enabled"] == "1", (string)row["chat_enabled"] == "1", (string)row["chat_text"], Convert.ToInt32(row["chat_seconds"]), (string)row["is_dancing"] == "1", Convert.ToInt32(row["enable"]), Convert.ToInt32(row["handitem"]), Convert.ToInt32((string)row["status"]));
+                _ = this._botItems.TryAdd(Convert.ToInt32(row["id"]), bot);
             }
         }
     }
 
-    public Item GetItem(int Id)
+    public Item GetItem(int id)
     {
-        if (this._userItems.ContainsKey(Id))
+        if (this._userItems.ContainsKey(id))
         {
-            return this._userItems[Id];
+            return this._userItems[id];
         }
         else
         {
@@ -247,20 +247,20 @@ public class InventoryComponent : IDisposable
         }
     }
 
-    public Item AddNewItem(int Id, int BaseItem, string ExtraData, int Limited = 0, int LimitedStack = 0)
+    public Item AddNewItem(int id, int baseItem, string extraData, int limited = 0, int limitedStack = 0)
     {
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            ItemDao.UpdateRoomIdAndUserId(dbClient, Id, 0, this._userInstance.Id);
+            ItemDao.UpdateRoomIdAndUserId(dbClient, id, 0, this._userInstance.Id);
         }
 
-        var userItem = new Item(Id, 0, BaseItem, ExtraData, Limited, LimitedStack, 0, 0, 0.0, 0, "", null);
-        if (this.UserHoldsItem(Id))
+        var userItem = new Item(id, 0, baseItem, extraData, limited, limitedStack, 0, 0, 0.0, 0, "", null);
+        if (this.UserHoldsItem(id))
         {
-            this.RemoveItem(Id);
+            this.RemoveItem(id);
         }
 
-        this._userItems.TryAdd(userItem.Id, userItem);
+        _ = this._userItems.TryAdd(userItem.Id, userItem);
 
         this._userInstance.GetClient().SendPacket(new FurniListAddComposer(userItem));
 
@@ -269,23 +269,23 @@ public class InventoryComponent : IDisposable
 
     private bool UserHoldsItem(int itemID) => this._userItems.ContainsKey(itemID);
 
-    public void RemoveItem(int Id)
+    public void RemoveItem(int id)
     {
-        if (this._userItems.ContainsKey(Id))
+        if (this._userItems.ContainsKey(id))
         {
-            this._userItems.TryRemove(Id, out var ToRemove);
+            _ = this._userItems.TryRemove(id, out _);
         }
 
-        this.GetClient().SendPacket(new FurniListRemoveComposer(Id));
+        this.GetClient().SendPacket(new FurniListRemoveComposer(id));
     }
 
     public IEnumerable<Item> GetWallAndFloor => this._userItems.Values;
 
     private GameClient GetClient() => WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._userInstance.Id);
 
-    public void AddItemArray(List<Item> RoomItemList)
+    public void AddItemArray(List<Item> roomItemList)
     {
-        foreach (var roomItem in RoomItemList)
+        foreach (var roomItem in roomItemList)
         {
             this.AddItem(roomItem);
         }
@@ -304,7 +304,7 @@ public class InventoryComponent : IDisposable
             this.RemoveItem(item.Id);
         }
 
-        this._userItems.TryAdd(userItem.Id, userItem);
+        _ = this._userItems.TryAdd(userItem.Id, userItem);
 
         this._userInstance.GetClient().SendPacket(new FurniListAddComposer(userItem));
     }

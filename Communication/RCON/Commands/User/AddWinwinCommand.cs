@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.User;
+namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Achievements;
 
 internal class AddWinwinCommand : IRCONCommand
@@ -10,34 +10,34 @@ internal class AddWinwinCommand : IRCONCommand
             return false;
         }
 
-        if (!int.TryParse(parameters[1], out var Userid))
+        if (!int.TryParse(parameters[1], out var userId))
         {
             return false;
         }
 
-        if (Userid == 0)
+        if (userId == 0)
         {
             return false;
         }
 
-        var Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid);
-        if (Client == null)
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        if (client == null)
         {
             return false;
         }
 
-        if (!int.TryParse(parameters[2], out var Winwin))
+        if (!int.TryParse(parameters[2], out var winwin))
         {
             return false;
         }
 
-        if (Winwin == 0)
+        if (winwin == 0)
         {
             return false;
         }
 
-        Client.GetUser().AchievementPoints = Client.GetUser().AchievementPoints + Winwin;
-        Client.SendPacket(new AchievementScoreComposer(Client.GetUser().AchievementPoints));
+        client.GetUser().AchievementPoints = client.GetUser().AchievementPoints + winwin;
+        client.SendPacket(new AchievementScoreComposer(client.GetUser().AchievementPoints));
 
         return true;
     }

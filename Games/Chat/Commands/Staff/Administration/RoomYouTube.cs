@@ -15,7 +15,7 @@ internal class RoomYouTube : IChatCommand
 
         var Url = parameters[1];
 
-        if (string.IsNullOrEmpty(Url) || !Url.Contains("?v=") && !Url.Contains("youtu.be/")) //https://youtu.be/_mNig3ZxYbM
+        if (string.IsNullOrEmpty(Url) || (!Url.Contains("?v=") && !Url.Contains("youtu.be/"))) //https://youtu.be/_mNig3ZxYbM
         {
             return;
         }

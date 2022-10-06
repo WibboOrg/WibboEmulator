@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -75,18 +75,18 @@ public class BotTalk : WiredActionBase, IWired, IWiredEffect
             this.IntParams.Add(isShout ? 1 : 0);
         }
 
-        var Data = row["trigger_data"].ToString();
+        var data = row["trigger_data"].ToString();
 
-        if (Data == null)
+        if (data == null)
         {
             return;
         }
 
-        if (!Data.Contains('\t'))
+        if (!data.Contains('\t'))
         {
             return;
         }
 
-        this.StringParam = Data;
+        this.StringParam = data;
     }
 }

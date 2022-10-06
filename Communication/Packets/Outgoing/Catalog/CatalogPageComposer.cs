@@ -6,103 +6,103 @@ using WibboEmulator.Games.Items;
 
 public class CatalogPageComposer : ServerPacket
 {
-    public CatalogPageComposer(CatalogPage Page, string CataMode, Language Langue)
+    public CatalogPageComposer(CatalogPage page, string cataMode, Language langue)
         : base(ServerPacketHeader.CATALOG_PAGE)
     {
-        this.WriteInteger(Page.Id);
-        this.WriteString(CataMode);
-        this.WriteString(Page.Template);
+        this.WriteInteger(page.Id);
+        this.WriteString(cataMode);
+        this.WriteString(page.Template);
 
-        this.WriteInteger(Page.PageStrings1.Count);
-        foreach (var s in Page.PageStrings1)
+        this.WriteInteger(page.PageStrings1.Count);
+        foreach (var s in page.PageStrings1)
         {
             this.WriteString(s);
         }
 
-        if (Page.GetPageStrings2ByLangue(Langue).Count == 1 && (Page.Template == "default_3x3" || Page.Template == "default_3x3_color_grouping") && string.IsNullOrEmpty(Page.GetPageStrings2ByLangue(Langue)[0]))
+        if (page.GetPageStrings2ByLangue(langue).Count == 1 && (page.Template == "default_3x3" || page.Template == "default_3x3_color_grouping") && string.IsNullOrEmpty(page.GetPageStrings2ByLangue(langue)[0]))
         {
             this.WriteInteger(1);
-            this.WriteString(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("catalog.desc.default", Langue), Page.GetCaptionByLangue(Langue)));
+            this.WriteString(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("catalog.desc.default", langue), page.GetCaptionByLangue(langue)));
         }
         else
         {
-            this.WriteInteger(Page.GetPageStrings2ByLangue(Langue).Count);
-            foreach (var s in Page.GetPageStrings2ByLangue(Langue))
+            this.WriteInteger(page.GetPageStrings2ByLangue(langue).Count);
+            foreach (var s in page.GetPageStrings2ByLangue(langue))
             {
                 this.WriteString(s);
             }
         }
 
-        if (!Page.Template.Equals("frontpage") && !Page.Template.Equals("club_buy"))
+        if (!page.Template.Equals("frontpage") && !page.Template.Equals("club_buy"))
         {
-            this.WriteInteger(Page.Items.Count);
-            foreach (var Item in Page.Items.Values)
+            this.WriteInteger(page.Items.Count);
+            foreach (var item in page.Items.Values)
             {
-                this.WriteInteger(Item.Id);
-                this.WriteString(Item.Name);
+                this.WriteInteger(item.Id);
+                this.WriteString(item.Name);
                 this.WriteBoolean(false);//IsRentable
-                this.WriteInteger(Item.CostCredits);
+                this.WriteInteger(item.CostCredits);
 
-                if (Item.CostWibboPoints > 0)
+                if (item.CostWibboPoints > 0)
                 {
-                    this.WriteInteger(Item.CostWibboPoints);
+                    this.WriteInteger(item.CostWibboPoints);
                     this.WriteInteger(105); // Diamonds
                 }
-                else if (Item.CostLimitCoins > 0)
+                else if (item.CostLimitCoins > 0)
                 {
-                    this.WriteInteger(Item.CostLimitCoins);
+                    this.WriteInteger(item.CostLimitCoins);
                     this.WriteInteger(55);
                 }
                 else
                 {
-                    this.WriteInteger(Item.CostDuckets);
+                    this.WriteInteger(item.CostDuckets);
                     this.WriteInteger(0);
                 }
 
-                this.WriteBoolean(ItemUtility.CanGiftItem(Item));
+                this.WriteBoolean(ItemUtility.CanGiftItem(item));
 
-                this.WriteInteger(string.IsNullOrEmpty(Item.Badge) || Item.Data.Type.ToString() == "b" ? 1 : 2);
+                this.WriteInteger(string.IsNullOrEmpty(item.Badge) || item.Data.Type.ToString() == "b" ? 1 : 2);
 
-                if (Item.Data.Type.ToString().ToLower() != "b")
+                if (item.Data.Type.ToString().ToLower() != "b")
                 {
-                    this.WriteString(Item.Data.Type.ToString());
-                    this.WriteInteger(Item.Data.SpriteId);
-                    if (Item.Data.InteractionType is InteractionType.WALLPAPER or InteractionType.FLOOR or InteractionType.LANDSCAPE)
+                    this.WriteString(item.Data.Type.ToString());
+                    this.WriteInteger(item.Data.SpriteId);
+                    if (item.Data.InteractionType is InteractionType.WALLPAPER or InteractionType.FLOOR or InteractionType.LANDSCAPE)
                     {
-                        this.WriteString(Item.Name.Split('_')[2]);
+                        this.WriteString(item.Name.Split('_')[2]);
                     }
-                    else if (Item.Data.InteractionType == InteractionType.BOT)//Bots
+                    else if (item.Data.InteractionType == InteractionType.BOT)//Bots
                     {
-                        if (!WibboEnvironment.GetGame().GetCatalog().TryGetBot(Item.ItemId, out var CatalogBot))
+                        if (!WibboEnvironment.GetGame().GetCatalog().TryGetBot(item.ItemId, out var catalogBot))
                         {
                             this.WriteString("hd-180-7.ea-1406-62.ch-210-1321.hr-831-49.ca-1813-62.sh-295-1321.lg-285-92");
                         }
                         else
                         {
-                            this.WriteString(CatalogBot.Figure);
+                            this.WriteString(catalogBot.Figure);
                         }
                     }
                     else
                     {
                         this.WriteString("");
                     }
-                    this.WriteInteger(Item.Amount);
-                    this.WriteBoolean(Item.IsLimited); // IsLimited
-                    if (Item.IsLimited)
+                    this.WriteInteger(item.Amount);
+                    this.WriteBoolean(item.IsLimited); // IsLimited
+                    if (item.IsLimited)
                     {
-                        this.WriteInteger(Item.LimitedEditionStack);
-                        this.WriteInteger(Item.LimitedEditionStack - Item.LimitedEditionSells);
+                        this.WriteInteger(item.LimitedEditionStack);
+                        this.WriteInteger(item.LimitedEditionStack - item.LimitedEditionSells);
                     }
                 }
 
-                if (!string.IsNullOrEmpty(Item.Badge))
+                if (!string.IsNullOrEmpty(item.Badge))
                 {
                     this.WriteString("b");
-                    this.WriteString(Item.Badge);
+                    this.WriteString(item.Badge);
                 }
 
                 this.WriteInteger(0); //club_level
-                this.WriteBoolean(ItemUtility.CanSelectAmount(Item));
+                this.WriteBoolean(ItemUtility.CanSelectAmount(item));
 
                 this.WriteBoolean(false);// TODO: Figure out
                 this.WriteString("");//previewImage -> e.g; catalogue/pet_lion.png
@@ -117,14 +117,14 @@ public class CatalogPageComposer : ServerPacket
         this.WriteBoolean(false);
 
         this.WriteInteger(WibboEnvironment.GetGame().GetCatalog().GetPromotions().ToList().Count);//Count
-        foreach (var Promotion in WibboEnvironment.GetGame().GetCatalog().GetPromotions().ToList())
+        foreach (var promotion in WibboEnvironment.GetGame().GetCatalog().GetPromotions().ToList())
         {
-            this.WriteInteger(Promotion.Id);
-            this.WriteString(Promotion.GetTitleByLangue(Langue));
-            this.WriteString(Promotion.Image);
-            this.WriteInteger(Promotion.Unknown);
-            this.WriteString(Promotion.PageLink);
-            this.WriteInteger(Promotion.ParentId);
+            this.WriteInteger(promotion.Id);
+            this.WriteString(promotion.GetTitleByLangue(langue));
+            this.WriteString(promotion.Image);
+            this.WriteInteger(promotion.Unknown);
+            this.WriteString(promotion.PageLink);
+            this.WriteInteger(promotion.ParentId);
         }
     }
 }

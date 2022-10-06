@@ -2,67 +2,36 @@ namespace WibboEmulator.Games.Quests;
 
 public class QuestTypeUtillity
 {
-    public static int GetIntValue(string questCategory)
+    public static int GetIntValue(string questCategory) => questCategory switch
     {
-        switch (questCategory)
-        {
-            case "room_builder":
-                return 2;
-            case "social":
-                return 3;
-            case "identity":
-                return 4;
-            case "explore":
-                return 5;
-            case "battleball":
-                return 7;
-            case "freeze":
-                return 8;
-            default:
-                return 0;
-        }
-    }
+        "room_builder" => 2,
+        "social" => 3,
+        "identity" => 4,
+        "explore" => 5,
+        "battleball" => 7,
+        "freeze" => 8,
+        _ => 0,
+    };
 
-    public static string GetString(QuestType type)
+    public static string GetString(QuestType type) => type switch
     {
-        switch (type)
-        {
-            case QuestType.FURNI_MOVE:
-                return "MOVE_ITEM";
-            case QuestType.FURNI_ROTATE:
-                return "ROTATE_ITEM";
-            case QuestType.FURNI_PLACE:
-                return "PLACE_ITEM";
-            case QuestType.FURNI_PICK:
-                return "PICKUP_ITEM";
-            case QuestType.FURNI_SWITCH:
-                return "SWITCH_ITEM_STATE";
-            case QuestType.FURNI_STACK:
-                return "STACK_ITEM";
-            case QuestType.FURNI_DECORATION_FLOOR:
-                return "PLACE_FLOOR";
-            case QuestType.FURNI_DECORATION_WALL:
-                return "PLACE_WALLPAPER";
-            case QuestType.SOCIAL_VISIT:
-                return "ENTER_OTHERS_ROOM";
-            case QuestType.SOCIAL_CHAT:
-                return "CHAT_WITH_SOMEONE";
-            case QuestType.SOCIAL_FRIEND:
-                return "REQUEST_FRIEND";
-            case QuestType.SOCIAL_RESPECT:
-                return "GIVE_RESPECT";
-            case QuestType.SOCIAL_DANCE:
-                return "DANCE";
-            case QuestType.SOCIAL_WAVE:
-                return "WAVE";
-            case QuestType.PROFILE_CHANGE_LOOK:
-                return "CHANGE_FIGURE";
-            case QuestType.PROFILE_CHANGE_MOTTO:
-                return "CHANGE_MOTTO";
-            case QuestType.PROFILE_BADGE:
-                return "WEAR_BADGE";
-            default:
-                return "FIND_STUFF";
-        }
-    }
+        QuestType.FURNI_MOVE => "MOVE_ITEM",
+        QuestType.FURNI_ROTATE => "ROTATE_ITEM",
+        QuestType.FURNI_PLACE => "PLACE_ITEM",
+        QuestType.FURNI_PICK => "PICKUP_ITEM",
+        QuestType.FURNI_SWITCH => "SWITCH_ITEM_STATE",
+        QuestType.FURNI_STACK => "STACK_ITEM",
+        QuestType.FURNI_DECORATION_FLOOR => "PLACE_FLOOR",
+        QuestType.FURNI_DECORATION_WALL => "PLACE_WALLPAPER",
+        QuestType.SOCIAL_VISIT => "ENTER_OTHERS_ROOM",
+        QuestType.SOCIAL_CHAT => "CHAT_WITH_SOMEONE",
+        QuestType.SOCIAL_FRIEND => "REQUEST_FRIEND",
+        QuestType.SOCIAL_RESPECT => "GIVE_RESPECT",
+        QuestType.SOCIAL_DANCE => "DANCE",
+        QuestType.SOCIAL_WAVE => "WAVE",
+        QuestType.PROFILE_CHANGE_LOOK => "CHANGE_FIGURE",
+        QuestType.PROFILE_CHANGE_MOTTO => "CHANGE_MOTTO",
+        QuestType.PROFILE_BADGE => "WEAR_BADGE",
+        _ => "FIND_STUFF",
+    };
 }

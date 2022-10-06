@@ -98,11 +98,11 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
         double dy1 = inStart.Y - this._endNode.Y;
         double dx2 = this._startNode.X - this._endNode.X;
         double dy2 = this._startNode.Y - this._endNode.Y;
-        var cross = Math.Abs(dx1 * dy2 - dx2 * dy1);
+        var cross = Math.Abs((dx1 * dy2) - (dx2 * dy1));
         return Math.Ceiling(Math.Abs(inStart.X - inEnd.X) + (double)Math.Abs(inStart.Y - inEnd.Y)) + cross;
     }
 
-    protected virtual double CalculateHeuristicShortestRoute(PathNode inStart, PathNode inEnd) => Math.Sqrt((inStart.X - inEnd.X) * (inStart.X - inEnd.X) + (inStart.Y - inEnd.Y) * (inStart.Y - inEnd.Y));
+    protected virtual double CalculateHeuristicShortestRoute(PathNode inStart, PathNode inEnd) => Math.Sqrt(((inStart.X - inEnd.X) * (inStart.X - inEnd.X)) + ((inStart.Y - inEnd.Y) * (inStart.Y - inEnd.Y)));
 
     /// <summary>
     /// Calculates the neighbour distance
@@ -115,15 +115,12 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
         var diffX = Math.Abs(inStart.X - inEnd.X);
         var diffY = Math.Abs(inStart.Y - inEnd.Y);
 
-        switch (diffX + diffY)
+        return (diffX + diffY) switch
         {
-            case 1:
-                return 1;
-            case 2:
-                return SQRT_2;
-            default:
-                throw new ApplicationException();
-        }
+            1 => 1,
+            2 => SQRT_2,
+            _ => 0,
+        };
     }
 
     /// <summary>
@@ -182,7 +179,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
             {
                 var result = this.ReconstructPath(x);
 
-                result.AddLast(this._endNode);
+                _ = result.AddLast(this._endNode);
 
                 return result;
             }
@@ -386,17 +383,17 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
     {
         var result = new LinkedList<PathNode>();
 
-        this.ReconstructPathRecursive(current_node, result);
+        ReconstructPathRecursive(current_node, result);
 
         return result;
     }
-    private void ReconstructPathRecursive(PathNode current_node, LinkedList<PathNode> result)
+    private static void ReconstructPathRecursive(PathNode current_node, LinkedList<PathNode> result)
     {
         var item = current_node;
-        result.AddFirst(item);
+        _ = result.AddFirst(item);
         while ((item = item.parent) != null)
         {
-            result.AddFirst(item);
+            _ = result.AddFirst(item);
         }
     }
 

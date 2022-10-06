@@ -7,15 +7,15 @@ internal class OpenBotActionEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().InRoom)
         {
             return;
         }
 
-        var BotId = Packet.PopInt();
-        var ActionId = Packet.PopInt();
+        var BotId = packet.PopInt();
+        var ActionId = packet.PopInt();
 
         if (BotId <= 0)
         {

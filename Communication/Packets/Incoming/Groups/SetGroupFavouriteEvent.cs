@@ -9,14 +9,14 @@ internal class SetGroupFavouriteEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null)
         {
             return;
         }
 
-        var GroupId = Packet.PopInt();
+        var GroupId = packet.PopInt();
         if (GroupId == 0)
         {
             return;

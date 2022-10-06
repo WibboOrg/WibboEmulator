@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.GameCenter;
 using WibboEmulator.Database.Interfaces;
@@ -15,34 +15,34 @@ public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
     {
         var managerForBanzai = this.RoomInstance.GetTeamManager();
 
-        var ListTeam = new List<RoomUser>();
+        var listTeam = new List<RoomUser>();
 
         var team = (TeamType)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
         if (team == TeamType.BLUE)
         {
-            ListTeam.AddRange(managerForBanzai.BlueTeam);
+            listTeam.AddRange(managerForBanzai.BlueTeam);
         }
         else if (team == TeamType.GREEN)
         {
-            ListTeam.AddRange(managerForBanzai.GreenTeam);
+            listTeam.AddRange(managerForBanzai.GreenTeam);
         }
         else if (team == TeamType.RED)
         {
-            ListTeam.AddRange(managerForBanzai.RedTeam);
+            listTeam.AddRange(managerForBanzai.RedTeam);
         }
         else if (team == TeamType.YELLOW)
         {
-            ListTeam.AddRange(managerForBanzai.YellowTeam);
+            listTeam.AddRange(managerForBanzai.YellowTeam);
         }
         else
         {
             return false;
         }
 
-        var ExitTeleport = this.RoomInstance.GetGameItemHandler().GetExitTeleport();
+        var exitTeleport = this.RoomInstance.GetGameItemHandler().GetExitTeleport();
 
-        foreach (var teamuser in ListTeam)
+        foreach (var teamuser in listTeam)
         {
             if (teamuser == null)
             {
@@ -56,9 +56,9 @@ public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
 
             teamuser.GetClient().SendPacket(new IsPlayingComposer(false));
 
-            if (ExitTeleport != null)
+            if (exitTeleport != null)
             {
-                this.RoomInstance.GetGameMap().TeleportToItem(teamuser, ExitTeleport);
+                this.RoomInstance.GetGameMap().TeleportToItem(teamuser, exitTeleport);
             }
         }
 

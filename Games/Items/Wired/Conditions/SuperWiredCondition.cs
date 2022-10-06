@@ -201,7 +201,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 
         if (Bool == false)
         {
-            Bool = this.RoomCommand(this.RoomInstance, Effect, Value);
+            Bool = RoomCommand(this.RoomInstance, Effect, Value);
         }
 
         if (Bool == false)
@@ -211,12 +211,12 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
 
         if (Bool == false)
         {
-            Bool = this.RpGlobalCommand(this.RoomInstance, Effect, Value);
+            Bool = RpGlobalCommand(this.RoomInstance, Effect, Value);
         }
 
         if (Bool == false && item != null)
         {
-            Bool = this.ItemCommand(item, user, Effect, Value);
+            Bool = ItemCommand(item, user, Effect, Value);
         }
 
         if (Effect.Contains("not"))
@@ -227,7 +227,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
         return Bool;
     }
 
-    private bool RpGlobalCommand(Room Room, string Effect, string Value)
+    private static bool RpGlobalCommand(Room Room, string Effect, string Value)
     {
         if (Room == null || !Room.IsRoleplay)
         {
@@ -412,7 +412,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "energyplus":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
 
                 if (Rp.Energy >= ValueInt)
                 {
@@ -423,7 +423,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "energymoins":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
 
                 if (Rp.Energy < ValueInt)
                 {
@@ -434,7 +434,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "munition":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
 
                 if (Rp.Munition == ValueInt)
                 {
@@ -445,7 +445,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "munitionplus":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
 
                 if (Rp.Munition >= ValueInt)
                 {
@@ -456,7 +456,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "munitionmoins":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
 
                 if (Rp.Munition < ValueInt)
                 {
@@ -467,7 +467,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "moneyplus":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
                 if (Rp.Money >= ValueInt)
                 {
                     Result = true;
@@ -477,7 +477,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "moneymoins":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
                 if (Rp.Money < ValueInt)
                 {
                     Result = true;
@@ -487,7 +487,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "levelplus":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
                 if (Rp.Level >= ValueInt)
                 {
                     Result = true;
@@ -497,7 +497,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "levelmoins":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
                 if (Rp.Level < ValueInt)
                 {
                     Result = true;
@@ -507,7 +507,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "healthplus":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
                 if (Rp.Health >= ValueInt)
                 {
                     Result = true;
@@ -517,7 +517,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "healthmoins":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
                 if (Rp.Health < ValueInt)
                 {
                     Result = true;
@@ -527,7 +527,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "health":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
                 if (Rp.Health == ValueInt)
                 {
                     Result = true;
@@ -548,7 +548,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "weaponfarid":
             case "notweaponfarid":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
 
                 if (Rp.WeaponGun.Id == ValueInt)
                 {
@@ -560,7 +560,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "weaponcacid":
             case "notweaponcacid":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
 
                 if (Rp.WeaponCac.Id == ValueInt)
                 {
@@ -606,7 +606,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
         return Result;
     }
 
-    private bool ItemCommand(Item item, RoomUser User, string Effect, string Value)
+    private static bool ItemCommand(Item item, RoomUser User, string Effect, string Value)
     {
         var Bool = false;
         switch (Effect)
@@ -626,7 +626,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "itemrot":
             case "itemnotrot":
             {
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
 
                 if (item.Rotation == ValueInt)
                 {
@@ -642,7 +642,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
 
                 if (Math.Abs(User.X - item.X) >= ValueInt && Math.Abs(User.Y - item.Y) >= ValueInt)
                 {
@@ -658,7 +658,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(Value, out var ValueInt);
 
                 if (Math.Abs(User.X - item.X) <= ValueInt && Math.Abs(User.Y - item.Y) <= ValueInt)
                 {
@@ -672,7 +672,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
         return Bool;
     }
 
-    private bool RoomCommand(Room room, string Effect, string Value)
+    private static bool RoomCommand(Room room, string Effect, string Value)
     {
         if (room == null)
         {
@@ -707,7 +707,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 var TeamManager = room.GetTeamManager();
 
-                int.TryParse(Value, out var Count);
+                _ = int.TryParse(Value, out var Count);
                 if (TeamManager.GetAllPlayer().Count == Count)
                 {
                     Bool = true;
@@ -720,7 +720,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 var TeamManager = room.GetTeamManager();
 
-                int.TryParse(Value, out var Count);
+                _ = int.TryParse(Value, out var Count);
                 if (TeamManager.RedTeam.Count == Count)
                 {
                     Bool = true;
@@ -733,7 +733,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 var TeamManager = room.GetTeamManager();
 
-                int.TryParse(Value, out var Count);
+                _ = int.TryParse(Value, out var Count);
                 if (TeamManager.YellowTeam.Count == Count)
                 {
                     Bool = true;
@@ -746,7 +746,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 var TeamManager = room.GetTeamManager();
 
-                int.TryParse(Value, out var Count);
+                _ = int.TryParse(Value, out var Count);
                 if (TeamManager.BlueTeam.Count == Count)
                 {
                     Bool = true;
@@ -759,7 +759,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 var TeamManager = room.GetTeamManager();
 
-                int.TryParse(Value, out var Count);
+                _ = int.TryParse(Value, out var Count);
                 if (TeamManager.GreenTeam.Count == Count)
                 {
                     Bool = true;
@@ -827,7 +827,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "favogroupid":
             case "notfavogroupid":
             {
-                int.TryParse(Value, out var GroupId);
+                _ = int.TryParse(Value, out var GroupId);
 
                 if (!user.IsBot && user.GetClient().GetUser().FavouriteGroupId == GroupId)
                 {
@@ -930,7 +930,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "usertimer":
             {
-                int.TryParse(Value, out var Points);
+                _ = int.TryParse(Value, out var Points);
 
                 if (user.UserTimer == Points)
                 {
@@ -941,7 +941,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "usertimerplus":
             {
-                int.TryParse(Value, out var Points);
+                _ = int.TryParse(Value, out var Points);
 
                 if (user.UserTimer > Points)
                 {
@@ -952,7 +952,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "usertimermoins":
             {
-                int.TryParse(Value, out var point);
+                _ = int.TryParse(Value, out var point);
 
                 if (user.UserTimer < point)
                 {
@@ -963,7 +963,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "point":
             {
-                int.TryParse(Value, out var point);
+                _ = int.TryParse(Value, out var point);
 
                 if (user.WiredPoints == point)
                 {
@@ -974,7 +974,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "pointplus":
             {
-                int.TryParse(Value, out var Points);
+                _ = int.TryParse(Value, out var Points);
 
                 if (user.WiredPoints > Points)
                 {
@@ -985,7 +985,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
             case "pointmoins":
             {
-                int.TryParse(Value, out var Points);
+                _ = int.TryParse(Value, out var Points);
 
                 if (user.WiredPoints < Points)
                 {
@@ -997,7 +997,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "ingroup":
             case "innotgroup":
             {
-                int.TryParse(Value, out var GroupId);
+                _ = int.TryParse(Value, out var GroupId);
 
                 if (GroupId == 0)
                 {

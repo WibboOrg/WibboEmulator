@@ -10,14 +10,14 @@ internal class PickUpBotEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().InRoom)
         {
             return;
         }
 
-        var BotId = Packet.PopInt();
+        var BotId = packet.PopInt();
         if (BotId <= 0)
         {
             return;
@@ -58,7 +58,7 @@ internal class PickUpBotEvent : IPacketEvent
             BotUserDao.UpdateRoomId(dbClient, BotId);
         }
 
-        session.GetUser().GetInventoryComponent().TryAddBot(new Bot(BotUser.BotData.Id, BotUser.BotData.OwnerId, BotUser.BotData.Name, BotUser.BotData.Motto, BotUser.BotData.Look, BotUser.BotData.Gender, BotUser.BotData.WalkingEnabled, BotUser.BotData.AutomaticChat, BotUser.BotData.ChatText, BotUser.BotData.SpeakingInterval, BotUser.BotData.IsDancing, BotUser.BotData.Enable, BotUser.BotData.Handitem, BotUser.BotData.Status));
+        _ = session.GetUser().GetInventoryComponent().TryAddBot(new Bot(BotUser.BotData.Id, BotUser.BotData.OwnerId, BotUser.BotData.Name, BotUser.BotData.Motto, BotUser.BotData.Look, BotUser.BotData.Gender, BotUser.BotData.WalkingEnabled, BotUser.BotData.AutomaticChat, BotUser.BotData.ChatText, BotUser.BotData.SpeakingInterval, BotUser.BotData.IsDancing, BotUser.BotData.Enable, BotUser.BotData.Handitem, BotUser.BotData.Status));
         session.SendPacket(new BotInventoryComposer(session.GetUser().GetInventoryComponent().GetBots()));
         Room.GetRoomUserManager().RemoveBot(BotUser.VirtualId, false);
     }

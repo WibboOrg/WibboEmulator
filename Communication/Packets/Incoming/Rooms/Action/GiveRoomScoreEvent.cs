@@ -7,7 +7,7 @@ internal class GiveRoomScoreEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
@@ -24,7 +24,7 @@ internal class GiveRoomScoreEvent : IPacketEvent
             return;
         }
 
-        var score = Packet.PopInt();
+        var score = packet.PopInt();
         switch (score)
         {
             case -1:

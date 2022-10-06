@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.User;
+namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 
 internal class HaCommand : IRCONCommand
@@ -10,26 +10,26 @@ internal class HaCommand : IRCONCommand
             return false;
         }
 
-        if (!int.TryParse(parameters[1], out var Userid))
+        if (!int.TryParse(parameters[1], out var userId))
         {
             return false;
         }
 
-        if (Userid == 0)
+        if (userId == 0)
         {
             return false;
         }
 
-        var Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(Userid);
-        if (Client == null)
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+        if (client == null)
         {
             return false;
         }
 
-        var Message = parameters[2];
+        var message = parameters[2];
 
-        WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(Client.GetUser().Id, Client.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", Message));
-        if (Client.Antipub(Message, "<alert>"))
+        WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(client.GetUser().Id, client.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", message));
+        if (client.Antipub(message, "<alert>"))
         {
             return false;
         }
@@ -37,7 +37,7 @@ internal class HaCommand : IRCONCommand
         WibboEnvironment
             .GetGame()
             .GetGameClientManager()
-            .SendMessage(new BroadcastMessageAlertComposer(WibboEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", Client.Langue) + "\r\n" + Message + "\r\n- " + Client.GetUser().Username));
+            .SendMessage(new BroadcastMessageAlertComposer(WibboEnvironment.GetLanguageManager().TryGetValue("hotelallert.notice", client.Langue) + "\r\n" + message + "\r\n- " + client.GetUser().Username));
         return true;
     }
 }

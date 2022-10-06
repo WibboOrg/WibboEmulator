@@ -2,11 +2,11 @@ namespace WibboEmulator.Communication.Packets.Outgoing.Messenger;
 
 internal class InstantMessageErrorComposer : ServerPacket
 {
-    public InstantMessageErrorComposer(int Error, int Target)
+    public InstantMessageErrorComposer(int error, int target)
         : base(ServerPacketHeader.MESSENGER_INSTANCE_MESSAGE_ERROR)
     {
-        this.WriteInteger(Error);
-        this.WriteInteger(Target);
+        this.WriteInteger(error);
+        this.WriteInteger(target);
         this.WriteString("");
     }
 }

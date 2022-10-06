@@ -6,9 +6,9 @@ internal class RpTrocRemoveItemEvent : IPacketEvent
 {
     public double Delay => 100;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var ItemId = Packet.PopInt();
+        var ItemId = packet.PopInt();
 
         if (session == null || session.GetUser() == null)
         {

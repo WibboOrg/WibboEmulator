@@ -14,23 +14,23 @@ internal class UserChangeComposer : ServerPacket
         this.WriteInteger(user.GetClient().GetUser().AchievementPoints);
     }
 
-    public UserChangeComposer(RoomUser User) //Bot
+    public UserChangeComposer(RoomUser user) //Bot
         : base(ServerPacketHeader.UNIT_INFO)
     {
-        this.WriteInteger(User.VirtualId);
-        this.WriteString(User.BotData.Look);
-        this.WriteString(User.BotData.Gender);
-        this.WriteString(User.BotData.Motto);
+        this.WriteInteger(user.VirtualId);
+        this.WriteString(user.BotData.Look);
+        this.WriteString(user.BotData.Gender);
+        this.WriteString(user.BotData.Motto);
         this.WriteInteger(0);
     }
 
-    public UserChangeComposer(GameClient Client)
+    public UserChangeComposer(GameClient client)
         : base(ServerPacketHeader.UNIT_INFO)
     {
         this.WriteInteger(-1);
-        this.WriteString(Client.GetUser().Look);
-        this.WriteString(Client.GetUser().Gender);
-        this.WriteString(Client.GetUser().Motto);
-        this.WriteInteger(Client.GetUser().AchievementPoints);
+        this.WriteString(client.GetUser().Look);
+        this.WriteString(client.GetUser().Gender);
+        this.WriteString(client.GetUser().Motto);
+        this.WriteInteger(client.GetUser().AchievementPoints);
     }
 }

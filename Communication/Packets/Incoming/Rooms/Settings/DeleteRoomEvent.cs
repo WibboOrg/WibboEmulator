@@ -9,9 +9,9 @@ internal class DeleteRoomEvent : IPacketEvent
 {
     public double Delay => 5000;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
-        var roomId = Packet.PopInt();
+        var roomId = packet.PopInt();
 
         if (session == null || session.GetUser() == null || session.GetUser().UsersRooms == null)
         {
@@ -48,14 +48,14 @@ internal class DeleteRoomEvent : IPacketEvent
 
         if (session.GetUser().UsersRooms.Contains(roomId))
         {
-            session.GetUser().UsersRooms.Remove(roomId);
+            _ = session.GetUser().UsersRooms.Remove(roomId);
         }
 
         if (session.GetUser().FavoriteRooms != null)
         {
             if (session.GetUser().FavoriteRooms.Contains(roomId))
             {
-                session.GetUser().FavoriteRooms.Remove(roomId);
+                _ = session.GetUser().FavoriteRooms.Remove(roomId);
             }
         }
     }

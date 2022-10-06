@@ -4,17 +4,17 @@ using WibboEmulator.Games.Rooms.Map;
 
 public class RoomModel
 {
-    public int DoorX;
-    public int DoorY;
-    public double DoorZ;
-    public int DoorOrientation;
-    public int WallHeight;
-    public string Heightmap;
+    public int DoorX { get; set; }
+    public int DoorY { get; set; }
+    public double DoorZ { get; set; }
+    public int DoorOrientation { get; set; }
+    public int WallHeight { get; set; }
+    public string Heightmap { get; set; }
 
-    public SquareStateType[,] SqState;
-    public short[,] SqFloorHeight;
-    public int MapSizeX;
-    public int MapSizeY;
+    public SquareStateType[,] SqState { get; set; }
+    public short[,] SqFloorHeight { get; set; }
+    public int MapSizeX { get; set; }
+    public int MapSizeY { get; set; }
 
     public RoomModel(string id, int doorX, int doorY, double doorZ, int doorOrientation, string heightmap, int wallheight)
     {

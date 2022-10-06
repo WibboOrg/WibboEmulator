@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -18,8 +18,8 @@ public class BotTeleport : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var Bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(this.StringParam);
-        if (Bot == null)
+        var bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(this.StringParam);
+        if (bot == null)
         {
             return false;
         }
@@ -30,9 +30,9 @@ public class BotTeleport : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        if (roomItem.Coordinate != Bot.Coordinate)
+        if (roomItem.Coordinate != bot.Coordinate)
         {
-            this.RoomInstance.GetGameMap().TeleportToItem(Bot, roomItem);
+            this.RoomInstance.GetGameMap().TeleportToItem(bot, roomItem);
         }
 
         return false;

@@ -5,15 +5,15 @@ internal class OpenFlatConnectionEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session == null || session.GetUser() == null)
         {
             return;
         }
 
-        var RoomId = Packet.PopInt();
-        var Password = Packet.PopString();
+        var RoomId = packet.PopInt();
+        var Password = packet.PopString();
 
         session.GetUser().PrepareRoom(RoomId, Password);
     }

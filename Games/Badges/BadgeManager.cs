@@ -3,7 +3,7 @@ using WibboEmulator.Database.Interfaces;
 
 public class BadgeManager
 {
-    private List<string> _notAllowed;
+    private readonly List<string> _notAllowed;
 
     public BadgeManager() => this._notAllowed = new List<string>();
 

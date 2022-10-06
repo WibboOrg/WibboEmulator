@@ -6,15 +6,15 @@ internal class ModeratorActionEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!session.GetUser().HasPermission("perm_alert"))
         {
             return;
         }
 
-        var AlertMode = Packet.PopInt();
-        var AlertMessage = Packet.PopString();
+        var AlertMode = packet.PopInt();
+        var AlertMessage = packet.PopString();
         var IsCaution = AlertMode != 3;
 
         if (session.Antipub(AlertMessage, "<MT>"))

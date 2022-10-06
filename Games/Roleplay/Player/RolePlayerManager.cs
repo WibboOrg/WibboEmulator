@@ -48,7 +48,7 @@ public class RolePlayerManager
 
         if (player != null)
         {
-            this._player.TryAdd(userId, player);
+            _ = this._player.TryAdd(userId, player);
             player.SendUpdate(true);
             player.LoadInventory();
         }
@@ -64,7 +64,7 @@ public class RolePlayerManager
         }
 
         player.Destroy();
-        this._player.TryRemove(id, out player);
+        _ = this._player.TryRemove(id, out player);
     }
 
     public RolePlayer GetPlayer(int id)
@@ -74,7 +74,7 @@ public class RolePlayerManager
             return null;
         }
 
-        this._player.TryGetValue(id, out var player);
+        _ = this._player.TryGetValue(id, out var player);
         return player;
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Permissions;
+namespace WibboEmulator.Games.Permissions;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
@@ -32,23 +32,23 @@ public class PermissionManager
         }
     }
 
-    public bool RankExactRight(int RankId, string Fuse)
+    public bool RankExactRight(int rankId, string fuse)
     {
-        if (!this._rights.ContainsKey(Fuse))
+        if (!this._rights.ContainsKey(fuse))
         {
             return false;
         }
 
-        return RankId == this._rights[Fuse];
+        return rankId == this._rights[fuse];
     }
 
-    public bool RankHasRight(int RankId, string Fuse)
+    public bool RankHasRight(int rankId, string fuse)
     {
-        if (!this._rights.ContainsKey(Fuse))
+        if (!this._rights.ContainsKey(fuse))
         {
             return false;
         }
 
-        return RankId >= this._rights[Fuse];
+        return rankId >= this._rights[fuse];
     }
 }

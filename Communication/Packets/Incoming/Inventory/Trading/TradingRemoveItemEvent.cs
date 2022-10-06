@@ -5,7 +5,7 @@ internal class TradingRemoveItemEvent : IPacketEvent
 {
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -13,7 +13,7 @@ internal class TradingRemoveItemEvent : IPacketEvent
         }
 
         var userTrade = room.GetUserTrade(session.GetUser().Id);
-        var userItem = session.GetUser().GetInventoryComponent().GetItem(Packet.PopInt());
+        var userItem = session.GetUser().GetInventoryComponent().GetItem(packet.PopInt());
         if (userTrade == null || userItem == null)
         {
             return;

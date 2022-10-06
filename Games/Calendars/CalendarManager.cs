@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Calendars;
+namespace WibboEmulator.Games.Calendars;
 using WibboEmulator.Database.Interfaces;
 
 public class CalendarManager

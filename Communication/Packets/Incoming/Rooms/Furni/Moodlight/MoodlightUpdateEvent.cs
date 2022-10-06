@@ -6,7 +6,7 @@ internal class MoodlightUpdateEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -24,10 +24,10 @@ internal class MoodlightUpdateEvent : IPacketEvent
             return;
         }
 
-        var Preset = Packet.PopInt();
-        var num = Packet.PopInt();
-        var Color = Packet.PopString();
-        var Intensity = Packet.PopInt();
+        var Preset = packet.PopInt();
+        var num = packet.PopInt();
+        var Color = packet.PopString();
+        var Intensity = packet.PopInt();
 
         var BgOnly = false;
 

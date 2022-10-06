@@ -6,7 +6,7 @@ internal class IgnoreUserEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (session.GetUser() == null)
         {
@@ -18,7 +18,7 @@ internal class IgnoreUserEvent : IPacketEvent
             return;
         }
 
-        var UserName = Packet.PopString();
+        var UserName = packet.PopString();
 
         var gameclient = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(UserName);
         if (gameclient == null)

@@ -1,19 +1,19 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 
 public class InteractorCrackable : FurniInteractor
 {
-    private readonly int Modes;
+    private readonly int _modes;
 
-    public InteractorCrackable(int Modes)
+    public InteractorCrackable(int modes)
     {
-        this.Modes = Modes - 1;
-        if (this.Modes >= 0)
+        this._modes = modes - 1;
+        if (this._modes >= 0)
         {
             return;
         }
 
-        this.Modes = 0;
+        this._modes = 0;
     }
 
     public override void OnPlace(GameClient session, Item item)
@@ -26,21 +26,21 @@ public class InteractorCrackable : FurniInteractor
 
     public override void OnTrigger(GameClient session, Item item, int request, bool userHasRights, bool reverse)
     {
-        if (!userHasRights || this.Modes == 0)
+        if (!userHasRights || this._modes == 0)
         {
             return;
         }
 
-        int.TryParse(item.ExtraData, out var NumMode);
+        _ = int.TryParse(item.ExtraData, out var numMode);
 
-        NumMode++;
+        numMode++;
 
-        if (NumMode > this.Modes)
+        if (numMode > this._modes)
         {
-            NumMode = 0;
+            numMode = 0;
         }
 
-        item.ExtraData = NumMode.ToString();
+        item.ExtraData = numMode.ToString();
         item.UpdateState();
     }
 

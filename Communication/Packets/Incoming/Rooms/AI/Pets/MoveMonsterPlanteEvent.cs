@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets;using Wibb
 internal class MoveMonsterPlanteEvent : IPacketEvent{
     public double Delay => 0;
 
-    public void Parse(GameClient session, ClientPacket Packet)    {
+    public void Parse(GameClient session, ClientPacket packet)    {
 
 
     }}

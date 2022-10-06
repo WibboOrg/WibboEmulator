@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -16,11 +16,11 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
     {
         foreach (var roomItem in this.Items.ToList())
         {
-            foreach (var Coord in roomItem.GetCoords)
+            foreach (var coord in roomItem.GetCoords)
             {
-                if (Coord != this.ItemInstance.Coordinate)
+                if (coord != this.ItemInstance.Coordinate)
                 {
-                    this.RoomInstance.GetWiredHandler().ExecutePile(Coord, user, item);
+                    this.RoomInstance.GetWiredHandler().ExecutePile(coord, user, item);
                 }
             }
         }

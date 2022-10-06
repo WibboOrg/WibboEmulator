@@ -5,7 +5,7 @@ internal class ApplySignEvent : IPacketEvent
 {
     public double Delay => 250;
 
-    public void Parse(GameClient session, ClientPacket Packet)
+    public void Parse(GameClient session, ClientPacket packet)
     {
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -20,7 +20,7 @@ internal class ApplySignEvent : IPacketEvent
 
         roomUserByUserId.Unidle();
 
-        var num = Packet.PopInt();
+        var num = packet.PopInt();
         if (roomUserByUserId.ContainStatus("sign"))
         {
             roomUserByUserId.RemoveStatus("sign");

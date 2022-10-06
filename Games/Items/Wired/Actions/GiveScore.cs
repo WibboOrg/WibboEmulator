@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -8,32 +8,32 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class GiveScore : WiredActionBase, IWiredEffect, IWired
 {
-    private int currentGameCount;
-    private RoomEventDelegate delegateFunction;
+    private int _currentGameCount;
+    private RoomEventDelegate _delegateFunction;
 
     public GiveScore(Item item, Room room) : base(item, room, (int)WiredActionType.GIVE_SCORE)
     {
-        this.currentGameCount = 0;
-        this.delegateFunction = new RoomEventDelegate(this.OnGameStart);
-        this.RoomInstance.GetGameManager().OnGameStart += this.delegateFunction;
+        this._currentGameCount = 0;
+        this._delegateFunction = new RoomEventDelegate(this.OnGameStart);
+        this.RoomInstance.GetGameManager().OnGameStart += this._delegateFunction;
 
         this.IntParams.Add(1);
         this.IntParams.Add(1);
     }
 
-    private void OnGameStart(object sender, EventArgs e) => this.currentGameCount = 0;
+    private void OnGameStart(object sender, EventArgs e) => this._currentGameCount = 0;
 
     public override bool OnCycle(RoomUser user, Item item)
     {
         var scoreToGive = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
         var maxCountPerGame = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
 
-        if (user == null || user.Team == TeamType.NONE || maxCountPerGame <= this.currentGameCount)
+        if (user == null || user.Team == TeamType.NONE || maxCountPerGame <= this._currentGameCount)
         {
             return false;
         }
 
-        this.currentGameCount++;
+        this._currentGameCount++;
         this.RoomInstance.GetGameManager().AddPointToTeam(user.Team, scoreToGive, user);
 
         return false;
@@ -43,8 +43,8 @@ public class GiveScore : WiredActionBase, IWiredEffect, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GetGameManager().OnGameStart -= this.delegateFunction;
-        this.delegateFunction = null;
+        this.RoomInstance.GetGameManager().OnGameStart -= this._delegateFunction;
+        this._delegateFunction = null;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)
