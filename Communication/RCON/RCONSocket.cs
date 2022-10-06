@@ -1,4 +1,4 @@
-namespace WibboEmulator.Net;
+namespace WibboEmulator.Communication.RCON;
 using System.Net;
 using System.Net.Sockets;
 using WibboEmulator.Communication.RCON.Commands;
@@ -44,17 +44,17 @@ public class RCONSocket
                 return;
             }
 
-            var _socket = ((Socket)iAr.AsyncState).EndAccept(iAr);
+            var socket = ((Socket)iAr.AsyncState).EndAccept(iAr);
 
-            var str = _socket.RemoteEndPoint?.ToString()?.Split(':')[0];
+            var str = socket.RemoteEndPoint?.ToString()?.Split(':')[0];
             if (this._allowedIps.Contains(str) || str == "127.0.0.1")
             {
-                new RCONConnection(_socket);
+                new RCONConnection(socket);
             }
             else
             {
                 Console.WriteLine("MusSocket Ip non autorisé: " + str);
-                _socket.Close();
+                socket.Close();
             }
         }
         catch

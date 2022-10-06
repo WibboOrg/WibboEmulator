@@ -1,5 +1,5 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Structure;
-using WibboEmulator.Database.Daos;
+﻿namespace WibboEmulator.Communication.Packets.Incoming.Settings;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 
 internal class UserSettingsRoomInvitesEvent : IPacketEvent

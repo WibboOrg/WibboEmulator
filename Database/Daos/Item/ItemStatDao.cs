@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Database.Daos;
+﻿namespace WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Utilities;
 

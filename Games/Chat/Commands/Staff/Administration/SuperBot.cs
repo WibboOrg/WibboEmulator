@@ -1,19 +1,19 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 
 internal class SuperBot : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
 
-        if (Params.Length > 1)
+        if (parameters.Length > 1)
         {
             int count;
-            if (Params.Length == 2)
+            if (parameters.Length == 2)
             {
-                int.TryParse(Params[1], out count);
+                int.TryParse(parameters[1], out count);
                 for (var i = 0; i < count; i++)
                 {
                     if (!Room.IsRoleplay)
@@ -27,9 +27,9 @@ internal class SuperBot : IChatCommand
                     }
                 }
             }
-            else if (Params.Length > 2)
+            else if (parameters.Length > 2)
             {
-                var GetUserRoom = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(Params[1]);
+                var GetUserRoom = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(parameters[1]);
                 if (GetUserRoom == null)
                 {
                     return;
@@ -41,7 +41,7 @@ internal class SuperBot : IChatCommand
                     return;
                 }
 
-                int.TryParse(Params[2], out count);
+                int.TryParse(parameters[2], out count);
                 for (var i = 0; i < count; i++)
                 {
                     var superBot = Room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, GetUserRoom.GetClient().GetUser().Id, Room.Id, BotAIType.SuperBot, false, GetUserRoom.GetClient().GetUser().Username, "SuperBot", GetUserRoom.GetClient().GetUser().Gender, GetUserRoom.GetClient().GetUser().Look, GetUserRoom.X, GetUserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));

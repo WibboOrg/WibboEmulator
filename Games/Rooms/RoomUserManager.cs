@@ -9,15 +9,15 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
 using WibboEmulator.Core;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Bot;
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.Quests;
 using WibboEmulator.Games.Roleplay.Enemy;
 using WibboEmulator.Games.Rooms.AI;
-using WibboEmulator.Games.Rooms.Games;
+using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms.PathFinding;
 

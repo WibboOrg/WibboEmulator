@@ -1,6 +1,6 @@
 ﻿namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map;
 
 public class InteractorDice : FurniInteractor
 {

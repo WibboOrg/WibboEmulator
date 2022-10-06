@@ -1,4 +1,4 @@
-namespace WibboEmulator.Database.Daos;
+namespace WibboEmulator.Database.Daos.Bot;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Rooms;

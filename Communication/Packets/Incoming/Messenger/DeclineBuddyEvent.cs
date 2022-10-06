@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Messenger;
 using WibboEmulator.Games.GameClients;
 
 internal class DeclineBuddyEvent : IPacketEvent

@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Wired;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Wireds;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items.Wired;

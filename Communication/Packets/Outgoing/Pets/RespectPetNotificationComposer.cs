@@ -1,6 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Pets;
-using WibboEmulator.Games.Pets;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Games.Users;
 
 internal class RespectPetNotificationComposer : ServerPacket

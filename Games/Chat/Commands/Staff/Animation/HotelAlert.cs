@@ -1,13 +1,13 @@
-namespace WibboEmulator.Games.Chat.Commands.Cmd;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Animation;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class HotelAlert : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] Params)
+    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
     {
-        var Message = CommandManager.MergeParams(Params, 1);
+        var Message = CommandManager.MergeParams(parameters, 1);
         if (session.Antipub(Message, "<CMD>", Room.Id))
         {
             return;

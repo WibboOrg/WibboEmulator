@@ -3,7 +3,8 @@ using System.Data;
 using WibboEmulator.Communication.Packets.Incoming;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Quests;
-using WibboEmulator.Database.Daos;
+using WibboEmulator.Database.Daos.Emulator;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 

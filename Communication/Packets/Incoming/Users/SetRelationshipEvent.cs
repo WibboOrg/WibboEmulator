@@ -1,5 +1,5 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
-using WibboEmulator.Database.Daos;
+namespace WibboEmulator.Communication.Packets.Incoming.Users;
+using WibboEmulator.Database.Daos.Messenger;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Relationships;
 

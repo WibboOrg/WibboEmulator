@@ -1,5 +1,5 @@
-namespace WibboEmulator.Communication.Packets.Incoming.Structure;
-using WibboEmulator.Database.Daos;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.Stickys;
+using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 
