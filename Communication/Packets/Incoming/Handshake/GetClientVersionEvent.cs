@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Handshake;
+namespace WibboEmulator.Communication.Packets.Incoming.Handshake;
 using WibboEmulator.Games.GameClients;
 
 internal class GetClientVersionEvent : IPacketEvent
@@ -7,19 +7,10 @@ internal class GetClientVersionEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var Release = packet.PopString();
-        var Type = packet.PopString();
-        var Platform = packet.PopInt();
-        var Category = packet.PopInt();
+        var release = packet.PopString();
+        var type = packet.PopString();
+        var platform = packet.PopInt();
+        var category = packet.PopInt();
 
-        if (Release != "PRODUCTION-201611291003-338511768")
-        {
-            return;
-        }
-
-        if (Type != "FLASH" || Platform != 1 || Category != 0)
-        {
-            return;
-        }
     }
 }

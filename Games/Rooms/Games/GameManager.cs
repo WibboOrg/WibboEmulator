@@ -19,11 +19,9 @@ public class GameManager
         set => this.TeamPoints = value;
     }
 
-    public event TeamScoreChangedDelegate OnScoreChanged;
-
-    public event RoomEventDelegate OnGameStart;
-
-    public event RoomEventDelegate OnGameEnd;
+    public event EventHandler<TeamScoreChangedEventArgs> OnScoreChanged;
+    public event EventHandler OnGameStart;
+    public event EventHandler OnGameEnd;
 
     public GameManager(Room room)
     {
@@ -47,22 +45,22 @@ public class GameManager
 
     public TeamType GetWinningTeam()
     {
-        var NbTeam = 0;
-        var MaxPoints = 0;
+        var nbTeam = 0;
+        var maxPoints = 0;
         for (var i = 1; i < 5; ++i)
         {
-            if (this.TeamPoints[i] == MaxPoints)
+            if (this.TeamPoints[i] == maxPoints)
             {
-                NbTeam = 0;
+                nbTeam = 0;
             }
 
-            if (this.TeamPoints[i] > MaxPoints && this.TeamPoints[i] > 0)
+            if (this.TeamPoints[i] > maxPoints && this.TeamPoints[i] > 0)
             {
-                MaxPoints = this.TeamPoints[i];
-                NbTeam = i;
+                maxPoints = this.TeamPoints[i];
+                nbTeam = i;
             }
         }
-        return (TeamType)NbTeam;
+        return (TeamType)nbTeam;
     }
 
     public void AddPointToTeam(TeamType team, RoomUser user) => this.AddPointToTeam(team, 1, user);
@@ -112,18 +110,6 @@ public class GameManager
         TeamType.YELLOW => this._yellowTeamItems,
         _ => new Dictionary<int, Item>(),
     };
-
-    private static bool isSoccerGoal(InteractionType type)
-    {
-        if (type is not InteractionType.footballgoalblue and not InteractionType.FOOTBALLGOALGREEN and not InteractionType.FOOTBALLGOALRED and not InteractionType.FOOTBALLGOALYELLOW)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
 
     private static bool IsScoreItem(InteractionType type) => type switch
     {
@@ -320,7 +306,7 @@ public class GameManager
         this._roomInstance.GetBanzai().BanzaiEnd();
         this._roomInstance.GetFreeze().StopGame();
 
-        this.OnGameEnd?.Invoke(null, null);
+        this.OnGameEnd?.Invoke(this, new());
     }
 
     public void StartGame()
@@ -328,9 +314,9 @@ public class GameManager
         this._roomInstance.GetBanzai().BanzaiStart();
         this._roomInstance.GetFreeze().StartGame();
 
-        this.OnGameStart?.Invoke(null, null);
+        this.OnGameStart?.Invoke(this, new());
 
-        this._roomInstance.lastTimerReset = DateTime.Now;
+        this._roomInstance.LastTimerReset = DateTime.Now;
     }
 
     public Room GetRoom() => this._roomInstance;

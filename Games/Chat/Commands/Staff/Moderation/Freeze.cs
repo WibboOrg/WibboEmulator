@@ -4,20 +4,20 @@ using WibboEmulator.Games.Rooms;
 
 internal class Freeze : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        var TargetUser = UserRoom.Room.GetRoomUserManager().GetRoomUserByName(parameters[1]);
-        if (TargetUser == null)
+        var targetUser = userRoom.Room.GetRoomUserManager().GetRoomUserByName(parameters[1]);
+        if (targetUser == null)
         {
             return;
         }
 
-        TargetUser.Freeze = !TargetUser.Freeze;
-        TargetUser.FreezeEndCounter = 0;
+        targetUser.Freeze = !targetUser.Freeze;
+        targetUser.FreezeEndCounter = 0;
     }
 }

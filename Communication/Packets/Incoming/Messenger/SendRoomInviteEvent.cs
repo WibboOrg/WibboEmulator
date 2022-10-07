@@ -33,10 +33,10 @@ internal class SendRoomInviteEvent : IPacketEvent
         var targets = new List<int>();
         for (var i = 0; i < inviteCount; ++i)
         {
-            var Id = packet.PopInt();
+            var id = packet.PopInt();
             if (i < 100)
             {
-                targets.Add(Id);
+                targets.Add(id);
             }
         }
 
@@ -59,11 +59,11 @@ internal class SendRoomInviteEvent : IPacketEvent
 
         ServerPacket roomInvitePacket = new RoomInviteComposer(session.GetUser().Id, textMessage);
 
-        foreach (var UserId in targets)
+        foreach (var userId in targets)
         {
-            if (session.GetUser().GetMessenger().FriendshipExists(UserId))
+            if (session.GetUser().GetMessenger().FriendshipExists(userId))
             {
-                var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(UserId);
+                var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
                 if (clientByUserId == null || clientByUserId.GetUser().IgnoreRoomInvites)
                 {
                     break;

@@ -1,16 +1,16 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class Give : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
 
-        var UpdateVal = parameters[2];
-        switch (UpdateVal.ToLower())
+        var updateVal = parameters[2];
+        switch (updateVal.ToLower())
         {
             case "coins":
             case "credits":
@@ -22,17 +22,17 @@ internal class Give : IChatCommand
                 }
                 else
                 {
-                    if (int.TryParse(parameters[3], out var Amount))
+                    if (int.TryParse(parameters[3], out var amount))
                     {
-                        TargetUser.GetUser().Credits += Amount;
-                        TargetUser.SendPacket(new CreditBalanceComposer(TargetUser.GetUser().Credits));
+                        targetUser.GetUser().Credits += amount;
+                        targetUser.SendPacket(new CreditBalanceComposer(targetUser.GetUser().Credits));
 
-                        if (TargetUser.GetUser().Id != session.GetUser().Id)
+                        if (targetUser.GetUser().Id != session.GetUser().Id)
                         {
-                            TargetUser.SendNotification(session.GetUser().Username + " t'a donné  " + Amount.ToString() + " crédit(s)!");
+                            targetUser.SendNotification(session.GetUser().Username + " t'a donné  " + amount.ToString() + " crédit(s)!");
                         }
 
-                        session.SendWhisper("Tu as donné " + Amount + " crédit(s) à " + TargetUser.GetUser().Username + "!");
+                        session.SendWhisper("Tu as donné " + amount + " crédit(s) à " + targetUser.GetUser().Username + "!");
                         break;
                     }
                     else
@@ -53,17 +53,17 @@ internal class Give : IChatCommand
                 }
                 else
                 {
-                    if (int.TryParse(parameters[3], out var Amount))
+                    if (int.TryParse(parameters[3], out var amount))
                     {
-                        TargetUser.GetUser().WibboPoints += Amount;
-                        TargetUser.SendPacket(new ActivityPointNotificationComposer(TargetUser.GetUser().WibboPoints, 0, 105));
+                        targetUser.GetUser().WibboPoints += amount;
+                        targetUser.SendPacket(new ActivityPointNotificationComposer(targetUser.GetUser().WibboPoints, 0, 105));
 
-                        if (TargetUser.GetUser().Id != session.GetUser().Id)
+                        if (targetUser.GetUser().Id != session.GetUser().Id)
                         {
-                            TargetUser.SendNotification(session.GetUser().Username + " t'a donné " + Amount.ToString() + " WibboPoint(s)!");
+                            targetUser.SendNotification(session.GetUser().Username + " t'a donné " + amount.ToString() + " WibboPoint(s)!");
                         }
 
-                        session.SendWhisper("Tu as donné " + Amount + " WibboPoint(s) à " + TargetUser.GetUser().Username + "!");
+                        session.SendWhisper("Tu as donné " + amount + " WibboPoint(s) à " + targetUser.GetUser().Username + "!");
                         break;
                     }
                     else
@@ -84,17 +84,17 @@ internal class Give : IChatCommand
                 }
                 else
                 {
-                    if (int.TryParse(parameters[3], out var Amount))
+                    if (int.TryParse(parameters[3], out var amount))
                     {
-                        TargetUser.GetUser().LimitCoins += Amount;
-                        TargetUser.SendPacket(new ActivityPointNotificationComposer(TargetUser.GetUser().LimitCoins, 0, 55));
+                        targetUser.GetUser().LimitCoins += amount;
+                        targetUser.SendPacket(new ActivityPointNotificationComposer(targetUser.GetUser().LimitCoins, 0, 55));
 
-                        if (TargetUser.GetUser().Id != session.GetUser().Id)
+                        if (targetUser.GetUser().Id != session.GetUser().Id)
                         {
-                            TargetUser.SendNotification(session.GetUser().Username + " t'a donné " + Amount.ToString() + " Limit'Coin(s)!");
+                            targetUser.SendNotification(session.GetUser().Username + " t'a donné " + amount.ToString() + " Limit'Coin(s)!");
                         }
 
-                        session.SendWhisper("Tu as donné " + Amount + " Limit'Coin(s) à " + TargetUser.GetUser().Username + "!");
+                        session.SendWhisper("Tu as donné " + amount + " Limit'Coin(s) à " + targetUser.GetUser().Username + "!");
                         break;
                     }
                     else
@@ -106,7 +106,7 @@ internal class Give : IChatCommand
             }
 
             default:
-                session.SendWhisper("'" + UpdateVal + "' n'est pas une monnaie ! ");
+                session.SendWhisper("'" + updateVal + "' n'est pas une monnaie ! ");
                 break;
         }
     }

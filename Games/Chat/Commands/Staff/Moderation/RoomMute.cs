@@ -4,18 +4,18 @@ using WibboEmulator.Games.Rooms;
 
 internal class RoomMute : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        Room.RoomMuted = !Room.RoomMuted;
+        room.RoomMuted = !room.RoomMuted;
 
-        foreach (var User in Room.GetRoomUserManager().GetRoomUsers())
+        foreach (var user in room.GetRoomUserManager().GetRoomUsers())
         {
-            if (User == null)
+            if (user == null)
             {
                 continue;
             }
 
-            User.SendWhisperChat(Room.RoomMuted ? "Vous ne pouvez plus parler" : "Vous pouvez parler");
+            user.SendWhisperChat(room.RoomMuted ? "Vous ne pouvez plus parler" : "Vous pouvez parler");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Database.Daos.Bot;
@@ -12,18 +12,18 @@ using WibboEmulator.Games.Rooms;
 
 internal class DuplicateRoom : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var OldRoomId = Room.Id;
-        int RoomId;
+        var oldRoomId = room.Id;
+        int roomId;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            Room.GetRoomItemHandler().SaveFurniture();
+            room.GetRoomItemHandler().SaveFurniture();
 
-            RoomId = RoomDao.InsertDuplicate(dbClient, OldRoomId, session.GetUser().Username);
+            roomId = RoomDao.InsertDuplicate(dbClient, oldRoomId, session.GetUser().Username);
 
-            RoomModelCustomDao.InsertDuplicate(dbClient, RoomId, OldRoomId);
+            RoomModelCustomDao.InsertDuplicate(dbClient, roomId, oldRoomId);
 
             var furniIdAllow = new List<int>();
 
@@ -41,10 +41,10 @@ internal class DuplicateRoom : IChatCommand
             var wiredId = new List<int>();
             var teleportId = new List<int>();
 
-            var itemTable = ItemDao.GetAllIdAndBaseItem(dbClient, OldRoomId);
+            var itemTable = ItemDao.GetAllIdAndBaseItem(dbClient, oldRoomId);
             foreach (DataRow dataRow in itemTable.Rows)
             {
-                var OldItemId = Convert.ToInt32(dataRow["id"]);
+                var oldItemId = Convert.ToInt32(dataRow["id"]);
                 var baseID = Convert.ToInt32(dataRow["base_item"]);
 
                 if (!furniIdAllow.Contains(baseID))
@@ -52,31 +52,31 @@ internal class DuplicateRoom : IChatCommand
                     continue;
                 }
 
-                _ = WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var Data);
-                if (Data == null || Data.IsRare || Data.RarityLevel > 0)
+                _ = WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var data);
+                if (data == null || data.IsRare || data.RarityLevel > 0)
                 {
                     continue;
                 }
 
-                var ItemId = ItemDao.InsertDuplicate(dbClient, session.GetUser().Id, RoomId, OldItemId);
+                var itemId = ItemDao.InsertDuplicate(dbClient, session.GetUser().Id, roomId, oldItemId);
 
-                newItemsId.Add(OldItemId, ItemId);
+                newItemsId.Add(oldItemId, itemId);
 
-                if (Data.InteractionType is InteractionType.TELEPORT or InteractionType.ARROW)
+                if (data.InteractionType is InteractionType.TELEPORT or InteractionType.ARROW)
                 {
-                    teleportId.Add(OldItemId);
+                    teleportId.Add(oldItemId);
                 }
 
-                if (Data.InteractionType == InteractionType.MOODLIGHT)
+                if (data.InteractionType == InteractionType.MOODLIGHT)
                 {
-                    ItemMoodlightDao.InsertDuplicate(dbClient, ItemId, OldItemId);
+                    ItemMoodlightDao.InsertDuplicate(dbClient, itemId, oldItemId);
                 }
 
-                if (WiredUtillity.TypeIsWired(Data.InteractionType))
+                if (WiredUtillity.TypeIsWired(data.InteractionType))
                 {
-                    ItemWiredDao.InsertDuplicate(dbClient, ItemId, OldItemId);
+                    ItemWiredDao.InsertDuplicate(dbClient, itemId, oldItemId);
 
-                    wiredId.Add(ItemId);
+                    wiredId.Add(itemId);
                 }
             }
 
@@ -112,16 +112,16 @@ internal class DuplicateRoom : IChatCommand
 
                 var triggerItems = "";
 
-                var OldItem = (string)wiredRow["triggers_item"];
+                var oldItems = (string)wiredRow["triggers_item"];
 
-                if (OldItem.Length <= 0)
+                if (oldItems.Length <= 0)
                 {
                     continue;
                 }
 
-                if (OldItem.Contains(':'))
+                if (oldItems.Contains(':'))
                 {
-                    foreach (var oldItem in OldItem.Split(';'))
+                    foreach (var oldItem in oldItems.Split(';'))
                     {
                         var itemData = oldItem.Split(':');
 
@@ -142,7 +142,7 @@ internal class DuplicateRoom : IChatCommand
                 }
                 else
                 {
-                    foreach (var itemData in OldItem.Split(';'))
+                    foreach (var itemData in oldItems.Split(';'))
                     {
                         if (!int.TryParse(itemData, out var oldId))
                         {
@@ -166,17 +166,17 @@ internal class DuplicateRoom : IChatCommand
                 ItemWiredDao.UpdateTriggerItem(dbClient, triggerItems, id);
             }
 
-            BotUserDao.DupliqueAllBotInRoomId(dbClient, session.GetUser().Id, RoomId, OldRoomId);
+            BotUserDao.DupliqueAllBotInRoomId(dbClient, session.GetUser().Id, roomId, oldRoomId);
 
-            BotPetDao.InsertDuplicate(dbClient, session.GetUser().Id, RoomId, OldRoomId);
+            BotPetDao.InsertDuplicate(dbClient, session.GetUser().Id, roomId, oldRoomId);
         }
 
-        if (!session.GetUser().UsersRooms.Contains(RoomId))
+        if (!session.GetUser().UsersRooms.Contains(roomId))
         {
-            session.GetUser().UsersRooms.Add(RoomId);
+            session.GetUser().UsersRooms.Add(roomId);
         }
 
-        session.SendNotification("Copie de l'appartement " + OldRoomId + " en cours de chargement...");
-        session.SendPacket(new FlatCreatedComposer(RoomId, "Appart " + OldRoomId + " copie"));
+        session.SendNotification("Copie de l'appartement " + oldRoomId + " en cours de chargement...");
+        session.SendPacket(new FlatCreatedComposer(roomId, "Appart " + oldRoomId + " copie"));
     }
 }

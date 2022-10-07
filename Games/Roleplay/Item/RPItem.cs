@@ -17,7 +17,7 @@ public class RPItem
         this.Id = pId;
         this.Name = pName;
         this.Title = pDesc;
-        this.Desc = generateDesc(pDesc, pType, pValue);
+        this.Desc = GenerateDesc(pDesc, pType, pValue);
         this.Price = pPrice;
         this.Type = pType;
         this.Value = pValue;
@@ -28,10 +28,10 @@ public class RPItem
 
     private static int GetUseType(string type) =>
         /*  UseType:
-0: Non utilisable
-1: Utilisable mais limité à 1
-2: Utilisable et possibilité de choisir le nombre à utiliser
-*/
+        0: Non utilisable
+        1: Utilisable mais limité à 1
+        2: Utilisable et possibilité de choisir le nombre à utiliser
+        */
         type switch
         {
             "openguide" => 1,
@@ -50,84 +50,84 @@ public class RPItem
             _ => 0,
         };
 
-    private static string generateDesc(string Desc, string Type, int Value)
+    private static string GenerateDesc(string desc, string type, int value)
     {
-        var Text = "[u]" + Desc + "[/u][br]";
+        var text = "[u]" + desc + "[/u][br]";
 
-        switch (Type)
+        switch (type)
         {
             case "openguide":
             {
-                Text += "Divers aide pour commencer le jeu";
+                text += "Divers aide pour commencer le jeu";
                 break;
             }
             case "hit":
             {
-                Text += "Vous fait perdre " + Value + " vie";
+                text += "Vous fait perdre " + value + " vie";
                 break;
             }
             case "enable":
             {
-                Text += "Active l'enable " + Value;
+                text += "Active l'enable " + value;
                 break;
             }
             case "showtime":
             {
-                Text += "Affiche l'heure du jeu";
+                text += "Affiche l'heure du jeu";
                 break;
             }
             case "money":
             {
-                Text += "Ajoute " + Value + " Dollars";
+                text += "Ajoute " + value + " Dollars";
                 break;
             }
             case "munition":
             {
-                Text += "Ajoute " + Value + " munitions";
+                text += "Ajoute " + value + " munitions";
                 break;
             }
             case "energytired":
             {
-                Text += "Augmente votre énergie de " + Value + " mais diminue votre vie du même montant";
+                text += "Augmente votre énergie de " + value + " mais diminue votre vie du même montant";
                 break;
             }
             case "healthtired":
             {
-                Text += "Augmente votre vie de " + Value + " mais diminue votre énergie du même montant";
+                text += "Augmente votre vie de " + value + " mais diminue votre énergie du même montant";
                 break;
             }
             case "healthenergy":
             {
-                Text += "Augmente votre vie et énergie de " + Value;
+                text += "Augmente votre vie et énergie de " + value;
                 break;
             }
             case "energy":
             {
-                Text += "Augmente votre énergie de " + Value;
+                text += "Augmente votre énergie de " + value;
                 break;
             }
             case "health":
             {
-                Text += "Soigne " + Value + " points de vie";
+                text += "Soigne " + value + " points de vie";
                 break;
             }
             case "weapon_cac":
             {
-                Text += "Arme corps à corps (:cac x)";
+                text += "Arme corps à corps (:cac x)";
                 break;
             }
             case "weapon_far":
             {
-                Text += "Arme distante (:pan)";
+                text += "Arme distante (:pan)";
                 break;
             }
             default:
             {
-                Text += "Non utilisable";
+                text += "Non utilisable";
                 break;
             }
         }
 
-        return Text;
+        return text;
     }
 }

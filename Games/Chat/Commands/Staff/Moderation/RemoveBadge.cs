@@ -5,13 +5,13 @@ using WibboEmulator.Games.Rooms;
 
 internal class RemoveBadge : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (TargetUser != null && TargetUser.GetUser() != null)
+        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        if (targetUser != null && targetUser.GetUser() != null)
         {
-            TargetUser.GetUser().GetBadgeComponent().RemoveBadge(parameters[2]);
-            TargetUser.SendPacket(new BadgesComposer(TargetUser.GetUser().GetBadgeComponent().BadgeList));
+            targetUser.GetUser().GetBadgeComponent().RemoveBadge(parameters[2]);
+            targetUser.SendPacket(new BadgesComposer(targetUser.GetUser().GetBadgeComponent().BadgeList));
         }
         else
         {

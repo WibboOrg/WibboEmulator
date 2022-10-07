@@ -1,4 +1,4 @@
-namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
+namespace WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 
 internal class CantConnectComposer : ServerPacket
 {

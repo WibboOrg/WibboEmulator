@@ -57,37 +57,37 @@ public class MentionManager
         return styledMessage;
     }
 
-    public static bool SendNotif(GameClient session, string TargetUsername, string Message)
+    public static bool SendNotif(GameClient session, string targetUsername, string message)
     {
-        var TargetClient = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(TargetUsername);
+        var targetClient = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(targetUsername);
 
-        if (TargetClient == null)
+        if (targetClient == null)
         {
             return false;
         }
 
-        if (TargetClient == session)
+        if (targetClient == session)
         {
             return false;
         }
 
-        if (TargetClient.GetUser() == null || TargetClient.GetUser().GetMessenger() == null)
+        if (targetClient.GetUser() == null || targetClient.GetUser().GetMessenger() == null)
         {
             return false;
         }
 
-        if (!TargetClient.GetUser().GetMessenger().FriendshipExists(session.GetUser().Id) && !session.GetUser().HasPermission("perm_mention"))
+        if (!targetClient.GetUser().GetMessenger().FriendshipExists(session.GetUser().Id) && !session.GetUser().HasPermission("perm_mention"))
         {
-            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Tu as besoin d'être ami avec {TargetUsername} pour pouvoir le taguer"));
+            session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Tu as besoin d'être ami avec {targetUsername} pour pouvoir le taguer"));
             return false;
         }
 
-        TargetClient.SendPacket(new MentionComposer(session.GetUser().Id, session.GetUser().Username, session.GetUser().Look, Message));
+        targetClient.SendPacket(new MentionComposer(session.GetUser().Id, session.GetUser().Username, session.GetUser().Look, message));
 
         return true;
     }
 
-    public static bool EveryoneFriend(GameClient session, string Message)
+    public static bool EveryoneFriend(GameClient session, string message)
     {
         if (session.GetUser().Rank < 2)
         {
@@ -111,13 +111,13 @@ public class MentionManager
             return false;
         }
 
-        foreach (var TargetClient in onlineUsers)
+        foreach (var targetClient in onlineUsers)
         {
-            if (TargetClient != null && TargetClient.GetUser() != null && TargetClient.GetUser().GetMessenger() != null)
+            if (targetClient != null && targetClient.GetUser() != null && targetClient.GetUser().GetMessenger() != null)
             {
-                if (TargetClient.GetUser().GetMessenger().FriendshipExists(session.GetUser().Id))
+                if (targetClient.GetUser().GetMessenger().FriendshipExists(session.GetUser().Id))
                 {
-                    TargetClient.SendPacket(new MentionComposer(session.GetUser().Id, session.GetUser().Username, session.GetUser().Look, Message));
+                    targetClient.SendPacket(new MentionComposer(session.GetUser().Id, session.GetUser().Username, session.GetUser().Look, message));
                 }
             }
         }

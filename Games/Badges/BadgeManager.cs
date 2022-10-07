@@ -1,5 +1,4 @@
-﻿namespace WibboEmulator.Games.Badges;
-using WibboEmulator.Database.Interfaces;
+namespace WibboEmulator.Games.Badges;
 
 public class BadgeManager
 {
@@ -7,7 +6,7 @@ public class BadgeManager
 
     public BadgeManager() => this._notAllowed = new List<string>();
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init()
     {
         this._notAllowed.Clear();
 

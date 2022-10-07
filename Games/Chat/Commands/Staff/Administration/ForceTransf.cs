@@ -5,11 +5,16 @@ using WibboEmulator.Games.Rooms;
 
 internal class ForceTransf : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
+        if (parameters.Length < 2)
+        {
+            return;
+        }
+
         var username = parameters[1];
 
-        var roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByName(username);
+        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(username);
         if (roomUserByUserId == null)
         {
             return;
@@ -31,31 +36,25 @@ internal class ForceTransf : IChatCommand
             return;
         }
 
-        var RoomClient = roomUserByUserId.GetClient().GetUser().CurrentRoom;
-        if (RoomClient == null)
-        {
-            return;
-        }
-
-        var raceid = 0;
+        var raceId = 0;
         if (parameters.Length == 4)
         {
             var x = parameters[3];
-            if (int.TryParse(x, out var value))
+            if (int.TryParse(x, out _))
             {
-                _ = int.TryParse(parameters[2], out raceid);
-                if (raceid is < 1 or > 50)
+                _ = int.TryParse(parameters[2], out raceId);
+                if (raceId is < 1 or > 50)
                 {
-                    raceid = 0;
+                    raceId = 0;
                 }
             }
         }
         else
         {
-            raceid = 0;
+            raceId = 0;
         }
 
-        if (!roomUserByUserId.SetPetTransformation(parameters[2], raceid))
+        if (!roomUserByUserId.SetPetTransformation(parameters[2], raceId))
         {
             session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.transf.help", session.Langue));
             return;
@@ -65,7 +64,7 @@ internal class ForceTransf : IChatCommand
 
         roomUserByUserId.IsTransf = true;
 
-        RoomClient.SendPacket(new UserRemoveComposer(roomUserByUserId.VirtualId));
-        RoomClient.SendPacket(new UsersComposer(roomUserByUserId));
+        room.SendPacket(new UserRemoveComposer(roomUserByUserId.VirtualId));
+        room.SendPacket(new UsersComposer(roomUserByUserId));
     }
 }

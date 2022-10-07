@@ -4,32 +4,27 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Utilities.Events;
 
 public class Collision : WiredTriggerBase, IWired
 {
-    private readonly UserAndItemDelegate _delegateFunction;
+    public Collision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION) => this.RoomInstance.GetWiredHandler().TrgCollision += this.OnFurniCollision;
 
-    public Collision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION)
+    private void OnFurniCollision(object obj, ItemTriggeredEventArgs args)
     {
-        this._delegateFunction = new UserAndItemDelegate(this.FurniCollision);
-        this.RoomInstance.GetWiredHandler().TrgCollision += this._delegateFunction;
-    }
-
-    private void FurniCollision(RoomUser user, Item item)
-    {
-        if (user == null)
+        if (args.User == null)
         {
             return;
         }
 
-        this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, item);
+        this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
     }
 
     public override void Dispose()
     {
         base.Dispose();
 
-        this.RoomInstance.GetWiredHandler().TrgCollision -= this._delegateFunction;
+        this.RoomInstance.GetWiredHandler().TrgCollision -= this.OnFurniCollision;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

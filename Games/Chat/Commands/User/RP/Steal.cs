@@ -1,74 +1,74 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.User.RP;
+namespace WibboEmulator.Games.Chat.Commands.User.RP;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class Steal : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 3)
         {
             return;
         }
 
-        if (!Room.IsRoleplay)
+        if (!room.IsRoleplay)
         {
             return;
         }
 
-        var Rp = UserRoom.Roleplayer;
-        if (Rp == null)
+        var rp = userRoom.Roleplayer;
+        if (rp == null)
         {
             return;
         }
 
-        if (Rp.Dead || Rp.SendPrison)
+        if (rp.Dead || rp.SendPrison)
         {
             return;
         }
 
-        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
+        var targetRoomUser = room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
 
-        if (TargetRoomUser == null || TargetRoomUser.GetClient() == null || TargetRoomUser.GetClient().GetUser() == null)
+        if (targetRoomUser == null || targetRoomUser.GetClient() == null || targetRoomUser.GetClient().GetUser() == null)
         {
             return;
         }
 
-        var RpTwo = TargetRoomUser.Roleplayer;
-        if (RpTwo == null)
+        var rpTwo = targetRoomUser.Roleplayer;
+        if (rpTwo == null)
         {
             return;
         }
 
-        if (TargetRoomUser.GetClient().GetUser().Id == session.GetUser().Id)
+        if (targetRoomUser.GetClient().GetUser().Id == session.GetUser().Id)
         {
             return;
         }
 
-        if (RpTwo.Dead || RpTwo.SendPrison)
+        if (rpTwo.Dead || rpTwo.SendPrison)
         {
             return;
         }
 
-        var NumberMoney = (int)Math.Floor((double)((double)Rp.Money / 100) * 15);
+        var numberMoney = (int)Math.Floor((double)((double)rp.Money / 100) * 15);
 
-        if (Rp.Money < NumberMoney)
+        if (rp.Money < numberMoney)
         {
             return;
         }
 
-        if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2 || Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2))
+        if (!(Math.Abs(targetRoomUser.X - userRoom.X) >= 2 || Math.Abs(targetRoomUser.Y - userRoom.Y) >= 2))
         {
-            Rp.Money += NumberMoney;
-            RpTwo.Money -= NumberMoney;
+            rp.Money += numberMoney;
+            rpTwo.Money -= numberMoney;
 
-            Rp.SendUpdate();
-            RpTwo.SendUpdate();
+            rp.SendUpdate();
+            rpTwo.SendUpdate();
 
-            TargetRoomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.receive", TargetRoomUser.GetClient().Langue), NumberMoney, UserRoom.GetUsername()));
+            targetRoomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.receive", targetRoomUser.GetClient().Langue), numberMoney, userRoom.GetUsername()));
 
-            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.send", session.Langue), NumberMoney, TargetRoomUser.GetUsername()));
-            UserRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.send.chat", session.Langue), TargetRoomUser.GetUsername()), 0, true);
+            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.send", session.Langue), numberMoney, targetRoomUser.GetUsername()));
+            userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.send.chat", session.Langue), targetRoomUser.GetUsername()), 0, true);
         }
     }
 }

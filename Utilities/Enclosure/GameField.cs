@@ -22,7 +22,7 @@ public class GameField : IPathNode
 
     public void UpdateLocation(int x, int y, byte value) => this._newEntries.Enqueue(new GametileUpdate(x, y, value));
 
-    public List<PointField> DoUpdate(bool oneloop = false)
+    public List<PointField> DoUpdate()
     {
         var list = new List<PointField>();
         while (this._newEntries.Count > 0)
@@ -34,7 +34,7 @@ public class GameField : IPathNode
             var connectedItems = this.GetConnectedItems(this._currentlyChecking);
             if (connectedItems.Count > 1)
             {
-                foreach (var nodeList in this.HandleListOfConnectedPoints(connectedItems, this._currentlyChecking))
+                foreach (var nodeList in this.HandleListOfConnectedPoints(connectedItems))
                 {
                     if (nodeList.Count >= 4)
                     {
@@ -50,7 +50,7 @@ public class GameField : IPathNode
         return list;
     }
 
-    private PointField FindClosed(LinkedList<AStarSolver<GameField>.PathNode> nodeList, byte Team)
+    private PointField FindClosed(LinkedList<AStarSolver<GameField>.PathNode> nodeList, byte team)
     {
         var pointField = new PointField(this._currentlyChecking.Value);
         var num1 = int.MaxValue;
@@ -113,7 +113,7 @@ public class GameField : IPathNode
             }
 
             Point point;
-            if (this[y2 - 1, x2] && this._currentField[y2 - 1, x2] != Team)
+            if (this[y2 - 1, x2] && this._currentField[y2 - 1, x2] != team)
             {
                 point = new Point(x2, y2 - 1);
                 if (!list1.Contains(point) && !list2.Contains(point))
@@ -121,7 +121,7 @@ public class GameField : IPathNode
                     list1.Add(point);
                 }
             }
-            if (this[y2 + 1, x2] && this._currentField[y2 + 1, x2] != Team)
+            if (this[y2 + 1, x2] && this._currentField[y2 + 1, x2] != team)
             {
                 point = new Point(x2, y2 + 1);
                 if (!list1.Contains(point) && !list2.Contains(point))
@@ -129,7 +129,7 @@ public class GameField : IPathNode
                     list1.Add(point);
                 }
             }
-            if (this[y2, x2 - 1] && this._currentField[y2, x2 - 1] != Team)
+            if (this[y2, x2 - 1] && this._currentField[y2, x2 - 1] != team)
             {
                 point = new Point(x2 - 1, y2);
                 if (!list1.Contains(point) && !list2.Contains(point))
@@ -137,7 +137,7 @@ public class GameField : IPathNode
                     list1.Add(point);
                 }
             }
-            if (this[y2, x2 + 1] && this._currentField[y2, x2 + 1] != Team)
+            if (this[y2, x2 + 1] && this._currentField[y2, x2 + 1] != team)
             {
                 point = new Point(x2 + 1, y2);
                 if (!list1.Contains(point) && !list2.Contains(point))
@@ -145,7 +145,7 @@ public class GameField : IPathNode
                     list1.Add(point);
                 }
             }
-            if (this.GetValue(p) != Team)
+            if (this.GetValue(p) != team)
             {
                 pointField.Add(p);
             }
@@ -156,7 +156,7 @@ public class GameField : IPathNode
         return pointField;
     }
 
-    private List<LinkedList<AStarSolver<GameField>.PathNode>> HandleListOfConnectedPoints(List<Point> pointList, GametileUpdate update)
+    private List<LinkedList<AStarSolver<GameField>.PathNode>> HandleListOfConnectedPoints(List<Point> pointList)
     {
         var list = new List<LinkedList<AStarSolver<GameField>.PathNode>>();
         var num = 0;

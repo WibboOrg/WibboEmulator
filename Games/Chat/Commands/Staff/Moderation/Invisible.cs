@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class Invisible : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (session.GetUser().SpectatorMode)
         {
@@ -18,6 +18,6 @@ internal class Invisible : IChatCommand
             session.GetUser().HideInRoom = true;
         }
 
-        session.SendPacket(new GetGuestRoomResultComposer(session, Room.RoomData, false, true));
+        session.SendPacket(new GetGuestRoomResultComposer(session, room.RoomData, false, true));
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
+namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos.Catalog;
@@ -11,16 +11,16 @@ internal class GetOffersEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var MinCost = packet.PopInt();
-        var MaxCost = packet.PopInt();
-        var SearchQuery = packet.PopString();
-        var FilterMode = packet.PopInt();
+        var minCost = packet.PopInt();
+        var maxCost = packet.PopInt();
+        var searchQuery = packet.PopString();
+        var filterMode = packet.PopInt();
 
         DataTable table = null;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            table = CatalogMarketplaceOfferDao.GetAll(dbClient, SearchQuery, MinCost, MaxCost, FilterMode);
+            table = CatalogMarketplaceOfferDao.GetAll(dbClient, searchQuery, minCost, maxCost, filterMode);
         }
 
         WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();
@@ -83,6 +83,6 @@ internal class GetOffersEvent : IPacketEvent
             }
         }
 
-        session.SendPacket(new MarketPlaceOffersComposer(MinCost, MaxCost, dictionary, dictionary2));
+        session.SendPacket(new MarketPlaceOffersComposer(dictionary, dictionary2));
     }
 }

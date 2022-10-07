@@ -11,8 +11,8 @@ internal class UpdateMagicTileEvent : IPacketEvent
     {
         if (session != null && session.GetUser() != null)
         {
-            var ItemId = packet.PopInt();
-            var HeightToSet = packet.PopInt();
+            var itemId = packet.PopInt();
+            var heightToSet = packet.PopInt();
 
             if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
             {
@@ -24,21 +24,21 @@ internal class UpdateMagicTileEvent : IPacketEvent
                 return;
             }
 
-            var item = room.GetRoomItemHandler().GetItem(ItemId);
-            if (item == null ? false : item.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
+            var item = room.GetRoomItemHandler().GetItem(itemId);
+            if (item != null && item.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
             {
-                if (HeightToSet > 5000)
+                if (heightToSet > 5000)
                 {
-                    HeightToSet = 5000;
+                    heightToSet = 5000;
                 }
-                if (HeightToSet < 0)
+                if (heightToSet < 0)
                 {
-                    HeightToSet = 0;
+                    heightToSet = 0;
                 }
 
-                var TotalZ = (double)(HeightToSet / 100.00);
+                var totalZ = (double)(heightToSet / 100.00);
 
-                item.SetState(item.X, item.Y, TotalZ, item.GetAffectedTiles);
+                item.SetState(item.X, item.Y, totalZ, item.GetAffectedTiles);
 
                 room.SendPacket(new ObjectUpdateComposer(item, room.RoomData.OwnerId));
             }

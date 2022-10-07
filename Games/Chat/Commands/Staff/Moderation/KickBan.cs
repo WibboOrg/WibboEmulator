@@ -4,23 +4,23 @@ using WibboEmulator.Games.Rooms;
 
 internal class KickBan : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
             return;
         }
 
-        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (TargetUser == null || TargetUser.GetUser() == null)
+        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        if (targetUser == null || targetUser.GetUser() == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
-        else if (session.GetUser().Rank <= TargetUser.GetUser().Rank)
+        else if (session.GetUser().Rank <= targetUser.GetUser().Rank)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
         }
-        else if (TargetUser.GetUser().CurrentRoomId <= 0)
+        else if (targetUser.GetUser().CurrentRoomId <= 0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("kick.error", session.Langue));
         }
@@ -38,8 +38,8 @@ internal class KickBan : IChatCommand
                 banMinutes = 2;
             }
 
-            Room.AddBan(TargetUser.GetUser().Id, banMinutes * 60);
-            Room.GetRoomUserManager().RemoveUserFromRoom(TargetUser, true, true);
+            room.AddBan(targetUser.GetUser().Id, banMinutes * 60);
+            room.GetRoomUserManager().RemoveUserFromRoom(targetUser, true, true);
         }
     }
 }

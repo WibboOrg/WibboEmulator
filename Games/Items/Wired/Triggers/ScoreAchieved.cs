@@ -4,17 +4,13 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Utilities.Events;
 
 public class ScoreAchieved : WiredTriggerBase, IWired
 {
-    private readonly TeamScoreChangedDelegate _scoreChangedDelegate;
-
     public ScoreAchieved(Item item, Room room) : base(item, room, (int)WiredTriggerType.SCORE_ACHIEVED)
     {
-        this._scoreChangedDelegate = new TeamScoreChangedDelegate(this.OnScoreChanged);
-        this.RoomInstance.GetGameManager().OnScoreChanged += this._scoreChangedDelegate;
+        this.RoomInstance.GetGameManager().OnScoreChanged += this.OnScoreChanged;
 
         this.IntParams.Add(0);
     }
@@ -32,7 +28,7 @@ public class ScoreAchieved : WiredTriggerBase, IWired
 
     public override void Dispose()
     {
-        this.RoomInstance.GetWiredHandler().GetRoom().GetGameManager().OnScoreChanged -= this._scoreChangedDelegate;
+        this.RoomInstance.GetWiredHandler().GetRoom().GetGameManager().OnScoreChanged -= this.OnScoreChanged;
 
         base.Dispose();
     }

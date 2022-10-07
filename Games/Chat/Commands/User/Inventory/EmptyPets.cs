@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class EmptyPets : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         session.GetUser().GetInventoryComponent().ClearPets();
         session.SendPacket(new PetInventoryComposer(session.GetUser().GetInventoryComponent().GetPets()));

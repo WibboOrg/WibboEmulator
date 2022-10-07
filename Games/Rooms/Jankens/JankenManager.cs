@@ -289,14 +289,14 @@ public class JankenManager
         user.TimerResetEffect = 10;
     }
 
-    public void RemovePlayer(RoomUser User)
+    public void RemovePlayer(RoomUser user)
     {
-        if (User.PartyId == 0)
+        if (user.PartyId == 0)
         {
             return;
         }
 
-        var party = this.GetParty(User.PartyId);
+        var party = this.GetParty(user.PartyId);
         if (party == null)
         {
             return;

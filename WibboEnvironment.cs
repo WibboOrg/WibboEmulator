@@ -13,7 +13,6 @@ using WibboEmulator.Core.Settings;
 using WibboEmulator.Database;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games;
-using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users;
 using WibboEmulator.Games.Users.Authentificator;
 
@@ -28,10 +27,10 @@ public static class WibboEnvironment
     private static SettingsManager _settingsManager;
 
     private static Random _random = new();
-    private static readonly HttpClient _httpClient = new();
-    private static readonly ConcurrentDictionary<int, User> _usersCached = new();
 
-    private static readonly List<char> _allowedchars = new(new[]
+    private static readonly HttpClient HttpClient = new();
+    private static readonly ConcurrentDictionary<int, User> UsersCached = new();
+    private static readonly List<char> Allowedchars = new(new[]
         {
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -226,7 +225,7 @@ public static class WibboEnvironment
 
     public static int GetUnixTimestamp() => (int)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;
 
-    private static bool IsValid(char character) => _allowedchars.Contains(character);
+    private static bool IsValid(char character) => Allowedchars.Contains(character);
 
     public static bool IsValidAlphaNumeric(string inputStr)
     {
@@ -265,9 +264,9 @@ public static class WibboEnvironment
             return client.GetUser().Username;
         }
 
-        if (_usersCached.ContainsKey(userId))
+        if (UsersCached.ContainsKey(userId))
         {
-            return _usersCached[userId].Username;
+            return UsersCached[userId].Username;
         }
 
         using var dbClient = GetDatabaseManager().GetQueryReactor();
@@ -303,9 +302,9 @@ public static class WibboEnvironment
                 var user = client.GetUser();
                 if (user != null && user.Id > 0)
                 {
-                    if (_usersCached.ContainsKey(userId))
+                    if (UsersCached.ContainsKey(userId))
                     {
-                        _ = _usersCached.TryRemove(userId, out user);
+                        _ = UsersCached.TryRemove(userId, out user);
                     }
 
                     return user;
@@ -315,16 +314,16 @@ public static class WibboEnvironment
             {
                 try
                 {
-                    if (_usersCached.ContainsKey(userId))
+                    if (UsersCached.ContainsKey(userId))
                     {
-                        return _usersCached[userId];
+                        return UsersCached[userId];
                     }
                     else
                     {
                         var user = UserFactory.GetUserData(userId);
                         if (user != null)
                         {
-                            _ = _usersCached.TryAdd(userId, user);
+                            _ = UsersCached.TryAdd(userId, user);
                             return user;
                         }
                     }
@@ -357,7 +356,7 @@ public static class WibboEnvironment
 
     public static DatabaseManager GetDatabaseManager() => _datebaseManager;
 
-    public static HttpClient GetHttpClient() => _httpClient;
+    public static HttpClient GetHttpClient() => HttpClient;
 
     public static void PreformShutDown()
     {

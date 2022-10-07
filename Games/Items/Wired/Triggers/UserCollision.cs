@@ -7,15 +7,9 @@ using WibboEmulator.Games.Rooms;
 
 public class UserCollision : WiredTriggerBase, IWired
 {
-    private readonly RoomEventDelegate _delegateFunction;
+    public UserCollision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION) => this.RoomInstance.GetWiredHandler().GetRoom().OnUserCls += this.OnUserCollisionDelegate;
 
-    public UserCollision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION)
-    {
-        this._delegateFunction = new RoomEventDelegate(this.UserCollisionDelegate);
-        this.RoomInstance.GetWiredHandler().GetRoom().OnUserCls += this._delegateFunction;
-    }
-
-    private void UserCollisionDelegate(object sender, EventArgs e)
+    private void OnUserCollisionDelegate(object sender, EventArgs e)
     {
         var user = (RoomUser)sender;
         if (user == null)
@@ -27,7 +21,7 @@ public class UserCollision : WiredTriggerBase, IWired
     }
     public override void Dispose()
     {
-        this.RoomInstance.GetWiredHandler().GetRoom().OnUserCls -= this._delegateFunction;
+        this.RoomInstance.GetWiredHandler().GetRoom().OnUserCls -= this.OnUserCollisionDelegate;
 
         base.Dispose();
     }

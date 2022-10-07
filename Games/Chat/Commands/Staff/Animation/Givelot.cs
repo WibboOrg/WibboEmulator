@@ -3,6 +3,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Moderation;
 using WibboEmulator.Games.Rooms;
 
 internal class GiveLot : IChatCommand
@@ -23,7 +24,7 @@ internal class GiveLot : IChatCommand
         if (roomUserByUserId.GetUsername() == session.GetUser().Username || roomUserByUserId.GetClient().GetUser().IP == session.GetUser().IP)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", session.Langue));
-            WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + roomUserByUserId.GetUsername());
+            ModerationManager.LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + roomUserByUserId.GetUsername());
             return;
         }
 

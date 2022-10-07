@@ -93,7 +93,7 @@ public class Game : IDisposable
         this._helpManager = new HelpManager();
 
         this._packetManager = new PacketManager();
-        this._packetManager.Init(dbClient);
+        this._packetManager.Init();
 
         this._chatManager = new ChatManager();
         this._chatManager.Init(dbClient);
@@ -102,7 +102,7 @@ public class Game : IDisposable
         this._effectManager.Init(dbClient);
 
         this._badgeManager = new BadgeManager();
-        this._badgeManager.Init(dbClient);
+        this._badgeManager.Init();
 
         this._achievementManager = new AchievementManager();
         this._achievementManager.Init(dbClient);

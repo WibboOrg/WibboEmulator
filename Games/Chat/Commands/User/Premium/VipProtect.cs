@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class VipProtect : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         session.GetUser().PremiumProtect = !session.GetUser().PremiumProtect;
 

@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class InfoSuperWired : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         session.SendPacket(new InClientLinkComposer("habbopages/infosuperwired"));
 

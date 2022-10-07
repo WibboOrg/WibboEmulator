@@ -5,16 +5,16 @@ using WibboEmulator.Games.Rooms;
 
 internal class HideWireds : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        Room.RoomData.HideWireds = !Room.RoomData.HideWireds;
+        room.RoomData.HideWireds = !room.RoomData.HideWireds;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoomDao.UpdateHideWireds(dbClient, Room.Id, Room.RoomData.HideWireds);
+            RoomDao.UpdateHideWireds(dbClient, room.Id, room.RoomData.HideWireds);
         }
 
-        if (Room.RoomData.HideWireds)
+        if (room.RoomData.HideWireds)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.hidewireds.true", session.Langue));
         }

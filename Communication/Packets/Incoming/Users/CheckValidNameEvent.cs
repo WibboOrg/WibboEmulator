@@ -13,8 +13,8 @@ internal class CheckValidNameEvent : IPacketEvent
             return;
         }
 
-        var Name = packet.PopString();
+        var name = packet.PopString();
 
-        session.SendPacket(new NameChangeUpdateComposer(Name));
+        session.SendPacket(new NameChangeUpdateComposer(name));
     }
 }

@@ -13,8 +13,8 @@ public class MoreThanTimer : WiredConditionBase, IWiredCondition, IWired
     {
         var timeout = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
 
-        var dateTime = this.RoomInstance.lastTimerReset;
-        return (DateTime.Now - this.RoomInstance.lastTimerReset).TotalSeconds > timeout / 2;
+        var dateTime = this.RoomInstance.LastTimerReset;
+        return (DateTime.Now - this.RoomInstance.LastTimerReset).TotalSeconds > timeout / 2;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

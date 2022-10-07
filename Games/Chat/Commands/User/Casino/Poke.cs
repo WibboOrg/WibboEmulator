@@ -5,14 +5,14 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class Poke : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 4)
         {
             return;
         }
 
-        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
+        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
         {
             return;
         }
@@ -22,32 +22,32 @@ internal class Poke : IChatCommand
             return;
         }
 
-        var Username = parameters[1];
-        _ = int.TryParse(parameters[2], out var DiceCount);
-        _ = int.TryParse(parameters[3], out var WpCount);
+        var username = parameters[1];
+        _ = int.TryParse(parameters[2], out var diceCount);
+        _ = int.TryParse(parameters[3], out var wpCount);
 
-        if (string.IsNullOrWhiteSpace(Username))
+        if (string.IsNullOrWhiteSpace(username))
         {
             return;
         }
 
-        if (DiceCount is > 5 or < 1)
+        if (diceCount is > 5 or < 1)
         {
             return;
         }
 
-        if (WpCount > session.GetUser().WibboPoints)
+        if (wpCount > session.GetUser().WibboPoints)
         {
             return;
         }
 
-        var TargetUser = Room.GetRoomUserManager().GetRoomUserByName(Username);
-        if (TargetUser == null || TargetUser.GetClient() == null || TargetUser.GetClient().GetUser() == null)
+        var targetUser = room.GetRoomUserManager().GetRoomUserByName(username);
+        if (targetUser == null || targetUser.GetClient() == null || targetUser.GetClient().GetUser() == null)
         {
             return;
         }
 
-        if (WpCount > TargetUser.GetClient().GetUser().WibboPoints)
+        if (wpCount > targetUser.GetClient().GetUser().WibboPoints)
         {
             return;
         }

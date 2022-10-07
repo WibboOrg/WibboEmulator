@@ -1,27 +1,27 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.PathFinding;
 
 internal class AllEyesOnMe : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var ThisUser = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-        if (ThisUser == null)
+        var thisUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (thisUser == null)
         {
             return;
         }
 
-        var Users = Room.GetRoomUserManager().GetRoomUsers();
-        foreach (var U in Users.ToList())
+        var users = room.GetRoomUserManager().GetRoomUsers();
+        foreach (var u in users.ToList())
         {
-            if (U == null || session.GetUser().Id == U.UserId)
+            if (u == null || session.GetUser().Id == u.UserId)
             {
                 continue;
             }
 
-            U.SetRot(Rotation.Calculate(U.X, U.Y, ThisUser.X, ThisUser.Y), false);
+            u.SetRot(Rotation.Calculate(u.X, u.Y, thisUser.X, thisUser.Y), false);
         }
     }
 }

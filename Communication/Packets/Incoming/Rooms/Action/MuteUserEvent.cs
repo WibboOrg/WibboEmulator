@@ -22,18 +22,18 @@ internal class MuteUserEvent : IPacketEvent
             return;
         }
 
-        var Id = packet.PopInt();
+        var id = packet.PopInt();
         var num = packet.PopInt();
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(Id);
+        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(id);
 
-        var Time = packet.PopInt() * 60;
+        var time = packet.PopInt() * 60;
 
         if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_mod"))
         {
             return;
         }
 
-        room.AddMute(Id, Time);
+        room.AddMute(id, time);
     }
 }

@@ -12,8 +12,6 @@ using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms.PathFinding;
 using WibboEmulator.Utilities.Events;
 
-public delegate void OnItemTrigger(object sender, ItemTriggeredEventArgs e);
-
 public class Item : IEquatable<Item>
 {
     public int Id { get; set; }
@@ -39,11 +37,11 @@ public class Item : IEquatable<Item>
     public MovementDirection MovementDir { get; set; }
 
     public Dictionary<string, int> Scores { get; set; }
-
     public IWired WiredHandler { get; set; }
-    public event OnItemTrigger ItemTriggerEventHandler;
-    public event UserAndItemDelegate OnUserWalksOffFurni;
-    public event UserAndItemDelegate OnUserWalksOnFurni;
+
+    public event EventHandler<ItemTriggeredEventArgs> ItemTrigger;
+    public event EventHandler<ItemTriggeredEventArgs> OnUserWalksOffFurni;
+    public event EventHandler<ItemTriggeredEventArgs> OnUserWalksOnFurni;
 
     private Room _roomInstance;
 
@@ -200,7 +198,7 @@ public class Item : IEquatable<Item>
     public Item(int id, int roomId, int baseItem, string extraData, int limitedNumber, int limitedStack, int x, int y, double z, int rot,
         string wallCoord, Room room)
     {
-        if (WibboEnvironment.GetGame().GetItemManager().GetItem(baseItem, out var Data))
+        if (WibboEnvironment.GetGame().GetItemManager().GetItem(baseItem, out var data))
         {
             this.Id = id;
             this.RoomId = roomId;
@@ -221,7 +219,7 @@ public class Item : IEquatable<Item>
             this.Value = 0;
             this.Limited = limitedNumber;
             this.LimitedStack = limitedStack;
-            this.Data = Data;
+            this.Data = data;
             this.WallCoord = wallCoord;
 
             this.Scores = new Dictionary<string, int>();
@@ -304,12 +302,12 @@ public class Item : IEquatable<Item>
 
     public void OnTrigger(RoomUser user)
     {
-        if (this.ItemTriggerEventHandler == null)
+        if (this.ItemTrigger == null)
         {
             return;
         }
 
-        this.ItemTriggerEventHandler(null, new ItemTriggeredEventArgs(user, this));
+        this.ItemTrigger(null, new ItemTriggeredEventArgs(user, this));
     }
 
     public void Destroy()
@@ -324,7 +322,7 @@ public class Item : IEquatable<Item>
         this._roomInstance = null;
         this.WiredHandler = null;
 
-        this.ItemTriggerEventHandler = null;
+        this.ItemTrigger = null;
         this.OnUserWalksOffFurni = null;
         this.OnUserWalksOnFurni = null;
     }
@@ -626,7 +624,7 @@ public class Item : IEquatable<Item>
                 {
                     if (this.ExtraData.Contains(';'))
                     {
-                        if(int.TryParse(this.ExtraData.Split(new char[1] { ';' })[1], out var groupId))
+                        if (int.TryParse(this.ExtraData.Split(new char[1] { ';' })[1], out var groupId))
                         {
                             this.GroupId = groupId;
                         }
@@ -660,7 +658,7 @@ public class Item : IEquatable<Item>
             return;
         }
 
-        this.OnUserWalksOnFurni(user, item);
+        this.OnUserWalksOnFurni?.Invoke(this, new(user, item));
     }
 
     public void UserWalksOffFurni(RoomUser user, Item item)
@@ -670,6 +668,10 @@ public class Item : IEquatable<Item>
             return;
         }
 
-        this.OnUserWalksOffFurni(user, item);
+        this.OnUserWalksOffFurni?.Invoke(this, new(user, item));
     }
+
+    public override bool Equals(object obj) => this.Equals(obj as Item);
+
+    public override int GetHashCode() => this.Id;
 }

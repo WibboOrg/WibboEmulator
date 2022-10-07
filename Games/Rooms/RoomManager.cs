@@ -39,7 +39,7 @@ public class RoomManager
 
         if (row == null)
         {
-            throw new Exception("The custom room model for room " + roomID + " was not found");
+            throw new ArgumentNullException("The custom room model for room " + roomID + " was not found");
         }
 
         return new RoomModel(roomID.ToString(), Convert.ToInt32(row["door_x"]), Convert.ToInt32(row["door_y"]), (double)row["door_z"], Convert.ToInt32(row["door_dir"]), (string)row["heightmap"], Convert.ToInt32(row["wall_height"]));
@@ -86,19 +86,19 @@ public class RoomManager
             return roomData;
         }
 
-        DataRow Row = null;
+        DataRow row = null;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            Row = RoomDao.GetOne(dbClient, roomId);
+            row = RoomDao.GetOne(dbClient, roomId);
         }
 
-        if (Row == null)
+        if (row == null)
         {
             return null;
         }
 
         roomData = new RoomData();
-        roomData.Fill(Row);
+        roomData.Fill(row);
 
         if (!this._roomsData.ContainsKey(roomId))
         {
@@ -222,13 +222,13 @@ public class RoomManager
         return instanceMatches.ToList();
     }
 
-    public List<RoomData> SearchTaggedRooms(string Query)
+    public List<RoomData> SearchTaggedRooms(string query)
     {
         var instanceMatches =
             (from RoomInstance in this._rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
              RoomInstance.Value.RoomData.State != 3 &&
-             RoomInstance.Value.RoomData.Tags.Contains(Query)
+             RoomInstance.Value.RoomData.Tags.Contains(query)
              orderby RoomInstance.Value.RoomData.UsersNow descending
              select RoomInstance.Value.RoomData).Take(50);
         return instanceMatches.ToList();
@@ -286,7 +286,7 @@ public class RoomManager
 
     public List<KeyValuePair<string, int>> GetPopularRoomTags()
     {
-        var Tags =
+        var tags =
             (from RoomInstance in this._rooms.ToList()
              where RoomInstance.Value.RoomData.UsersNow >= 0 &&
              RoomInstance.Value.RoomData.State != 3
@@ -294,28 +294,25 @@ public class RoomManager
              orderby RoomInstance.Value.RoomData.Score descending
              select RoomInstance.Value.RoomData.Tags).Take(50);
 
-        var TagValues = new Dictionary<string, int>();
+        var tagValues = new Dictionary<string, int>();
 
-        foreach (var TagList in Tags)
+        foreach (var tagList in tags)
         {
-            foreach (var Tag in TagList)
+            foreach (var tag in tagList)
             {
-                if (!TagValues.ContainsKey(Tag))
+                if (!tagValues.ContainsKey(tag))
                 {
-                    TagValues.Add(Tag, 1);
+                    tagValues.Add(tag, 1);
                 }
                 else
                 {
-                    TagValues[Tag]++;
+                    tagValues[tag]++;
                 }
             }
         }
 
-        var sortedTags = new List<KeyValuePair<string, int>>(TagValues);
-        sortedTags.Sort((firstPair, nextPair) =>
-        {
-            return firstPair.Value.CompareTo(nextPair.Value);
-        });
+        var sortedTags = new List<KeyValuePair<string, int>>(tagValues);
+        sortedTags.Sort((firstPair, nextPair) => firstPair.Value.CompareTo(nextPair.Value));
 
         sortedTags.Reverse();
         return sortedTags;

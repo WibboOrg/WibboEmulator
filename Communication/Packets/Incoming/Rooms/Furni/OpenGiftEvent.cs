@@ -18,127 +18,127 @@ internal class OpenGiftEvent : IPacketEvent
             return;
         }
 
-        var Room = session.GetUser().CurrentRoom;
-        if (Room == null)
+        var room = session.GetUser().CurrentRoom;
+        if (room == null)
         {
             return;
         }
 
-        var PresentId = packet.PopInt();
-        var Present = Room.GetRoomItemHandler().GetItem(PresentId);
-        if (Present == null)
+        var presentId = packet.PopInt();
+        var present = room.GetRoomItemHandler().GetItem(presentId);
+        if (present == null)
         {
             return;
         }
 
-        if (!Room.CheckRights(session, true))
+        if (!room.CheckRights(session, true))
         {
             return;
         }
 
-        if (Present.GetBaseItem().InteractionType == InteractionType.GIFT)
+        if (present.GetBaseItem().InteractionType == InteractionType.GIFT)
         {
-            DataRow Data = null;
+            DataRow data = null;
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                Data = UserPresentDao.GetOne(dbClient, Present.Id);
+                data = UserPresentDao.GetOne(dbClient, present.Id);
             }
 
-            if (Data == null)
+            if (data == null)
             {
-                Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id);
+                room.GetRoomItemHandler().RemoveFurniture(null, present.Id);
 
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    ItemDao.Delete(dbClient, Present.Id);
-                    UserPresentDao.Delete(dbClient, Present.Id);
+                    ItemDao.Delete(dbClient, present.Id);
+                    UserPresentDao.Delete(dbClient, present.Id);
                 }
 
-                session.GetUser().GetInventoryComponent().RemoveItem(Present.Id);
+                session.GetUser().GetInventoryComponent().RemoveItem(present.Id);
                 return;
             }
 
-            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(Data["base_id"]), out var BaseItem))
+            if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(data["base_id"]), out _))
             {
-                Room.GetRoomItemHandler().RemoveFurniture(null, Present.Id);
+                room.GetRoomItemHandler().RemoveFurniture(null, present.Id);
 
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    ItemDao.Delete(dbClient, Present.Id);
-                    UserPresentDao.Delete(dbClient, Present.Id);
+                    ItemDao.Delete(dbClient, present.Id);
+                    UserPresentDao.Delete(dbClient, present.Id);
                 }
 
-                session.GetUser().GetInventoryComponent().RemoveItem(Present.Id);
+                session.GetUser().GetInventoryComponent().RemoveItem(present.Id);
                 return;
             }
 
-            FinishOpenGift(session, BaseItem, Present, Room, Data);
+            FinishOpenGift(session, present, room, data);
         }
-        else if (Present.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
+        else if (present.GetBaseItem().InteractionType == InteractionType.EXTRABOX)
         {
-            ItemLootBox.OpenExtrabox(session, Present, Room);
+            ItemLootBox.OpenExtrabox(session, present, room);
         }
-        else if (Present.GetBaseItem().InteractionType == InteractionType.DELUXEBOX)
+        else if (present.GetBaseItem().InteractionType == InteractionType.DELUXEBOX)
         {
-            ItemLootBox.OpenDeluxeBox(session, Present, Room);
+            ItemLootBox.OpenDeluxeBox(session, present, room);
         }
-        else if (Present.GetBaseItem().InteractionType == InteractionType.LOOTBOX2022)
+        else if (present.GetBaseItem().InteractionType == InteractionType.LOOTBOX2022)
         {
-            ItemLootBox.OpenLootBox2022(session, Present, Room);
+            ItemLootBox.OpenLootBox2022(session, present, room);
         }
-        else if (Present.GetBaseItem().InteractionType == InteractionType.LEGENDBOX)
+        else if (present.GetBaseItem().InteractionType == InteractionType.LEGENDBOX)
         {
-            ItemLootBox.OpenLegendBox(session, Present, Room);
+            ItemLootBox.OpenLegendBox(session, present, room);
         }
-        else if (Present.GetBaseItem().InteractionType == InteractionType.BADGEBOX)
+        else if (present.GetBaseItem().InteractionType == InteractionType.BADGEBOX)
         {
-            ItemLootBox.OpenBadgeBox(session, Present, Room);
+            ItemLootBox.OpenBadgeBox(session, present, room);
         }
     }
 
-    private static void FinishOpenGift(GameClient session, ItemData BaseItem, Item Present, Room Room, DataRow Row)
+    private static void FinishOpenGift(GameClient session, Item present, Room room, DataRow row)
     {
-        var ItemIsInRoom = true;
+        var itemIsInRoom = true;
 
-        Room.GetRoomItemHandler().RemoveFurniture(session, Present.Id);
+        room.GetRoomItemHandler().RemoveFurniture(session, present.Id);
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            ItemDao.UpdateBaseItemAndExtraData(dbClient, Present.Id, Convert.ToInt32(Row["base_id"]), Row["extra_data"].ToString());
+            ItemDao.UpdateBaseItemAndExtraData(dbClient, present.Id, Convert.ToInt32(row["base_id"]), row["extra_data"].ToString());
 
-            UserPresentDao.Delete(dbClient, Present.Id);
+            UserPresentDao.Delete(dbClient, present.Id);
         }
 
-        Present.BaseItem = Convert.ToInt32(Row["base_id"]);
-        Present.ResetBaseItem();
-        Present.ExtraData = !string.IsNullOrEmpty(Convert.ToString(Row["extra_data"])) ? Convert.ToString(Row["extra_data"]) : "";
+        present.BaseItem = Convert.ToInt32(row["base_id"]);
+        present.ResetBaseItem();
+        present.ExtraData = !string.IsNullOrEmpty(Convert.ToString(row["extra_data"])) ? Convert.ToString(row["extra_data"]) : "";
 
-        if (Present.Data.Type == 's')
+        if (present.Data.Type == 's')
         {
-            if (!Room.GetRoomItemHandler().SetFloorItem(session, Present, Present.X, Present.Y, Present.Rotation, true, false, true))
+            if (!room.GetRoomItemHandler().SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
             {
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    ItemDao.UpdateResetRoomId(dbClient, Present.Id);
+                    ItemDao.UpdateResetRoomId(dbClient, present.Id);
                 }
 
-                _ = session.GetUser().GetInventoryComponent().TryAddItem(Present);
+                _ = session.GetUser().GetInventoryComponent().TryAddItem(present);
 
-                ItemIsInRoom = false;
+                itemIsInRoom = false;
             }
         }
         else
         {
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                ItemDao.UpdateResetRoomId(dbClient, Present.Id);
+                ItemDao.UpdateResetRoomId(dbClient, present.Id);
             }
 
-            _ = session.GetUser().GetInventoryComponent().TryAddItem(Present);
+            _ = session.GetUser().GetInventoryComponent().TryAddItem(present);
 
-            ItemIsInRoom = false;
+            itemIsInRoom = false;
         }
 
-        session.SendPacket(new OpenGiftComposer(Present.Data, Present.ExtraData, Present, ItemIsInRoom));
+        session.SendPacket(new OpenGiftComposer(present.Data, present.ExtraData, present, itemIsInRoom));
     }
 }

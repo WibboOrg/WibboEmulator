@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 
 using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using WibboEmulator.Games.GameClients;
@@ -6,14 +6,14 @@ using WibboEmulator.Games.Rooms;
 
 internal class NotifTop : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var Message = CommandManager.MergeParams(parameters, 1);
-        if (string.IsNullOrEmpty(Message))
+        var message = CommandManager.MergeParams(parameters, 1);
+        if (string.IsNullOrEmpty(message))
         {
             return;
         }
 
-        WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifTopComposer(Message));
+        WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifTopComposer(message));
     }
 }

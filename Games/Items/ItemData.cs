@@ -73,9 +73,9 @@ public class ItemData
         {
             if (adjustableHeights.Contains(','))
             {
-                foreach (var H in adjustableHeights.Split(','))
+                foreach (var h in adjustableHeights.Split(','))
                 {
-                    this.AdjustableHeights.Add(double.Parse(H));
+                    this.AdjustableHeights.Add(double.Parse(h));
                 }
             }
 

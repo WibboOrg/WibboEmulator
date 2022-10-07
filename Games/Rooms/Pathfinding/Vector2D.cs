@@ -18,10 +18,10 @@ public class Vector2D
 
     public int Y { get; set; }
 
-    public int GetDistanceSquared(Vector2D Point)
+    public int GetDistanceSquared(Vector2D point)
     {
-        var dx = this.X - Point.X;
-        var dy = this.Y - Point.Y;
+        var dx = this.X - point.X;
+        var dy = this.Y - point.Y;
         return (dx * dx) + (dy * dy);
     }
 
@@ -39,13 +39,7 @@ public class Vector2D
 
     public override string ToString() => this.X + ", " + this.Y;
 
-    public static Vector2D operator +(Vector2D One, Vector2D Two)
-    {
-        return new Vector2D(One.X + Two.X, One.Y + Two.Y);
-    }
+    public static Vector2D operator +(Vector2D one, Vector2D two) => new(one.X + two.X, one.Y + two.Y);
 
-    public static Vector2D operator -(Vector2D One, Vector2D Two)
-    {
-        return new Vector2D(One.X - Two.X, One.Y - Two.Y);
-    }
+    public static Vector2D operator -(Vector2D one, Vector2D two) => new(one.X - two.X, one.Y - two.Y);
 }

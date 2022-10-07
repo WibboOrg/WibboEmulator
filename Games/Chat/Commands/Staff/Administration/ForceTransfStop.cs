@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class ForceTransfStop : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -14,7 +14,7 @@ internal class ForceTransfStop : IChatCommand
 
         var username = parameters[1];
 
-        var roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByName(username);
+        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(username);
         if (roomUserByUserId == null)
         {
             return;
@@ -22,14 +22,10 @@ internal class ForceTransfStop : IChatCommand
 
         if (roomUserByUserId.IsTransf && !roomUserByUserId.IsSpectator)
         {
-            var RoomClient = roomUserByUserId.Room;
-            if (RoomClient != null)
-            {
-                roomUserByUserId.IsTransf = false;
+            roomUserByUserId.IsTransf = false;
 
-                RoomClient.SendPacket(new UserRemoveComposer(roomUserByUserId.VirtualId));
-                RoomClient.SendPacket(new UsersComposer(roomUserByUserId));
-            }
+            room.SendPacket(new UserRemoveComposer(roomUserByUserId.VirtualId));
+            room.SendPacket(new UsersComposer(roomUserByUserId));
         }
     }
 }

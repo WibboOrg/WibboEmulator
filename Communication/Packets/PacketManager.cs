@@ -47,7 +47,6 @@ using WibboEmulator.Communication.Packets.Incoming.Televisions;
 using WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Incoming.WibboTool;
 using WibboEmulator.Core;
-using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
 
 public sealed class PacketManager
@@ -55,11 +54,10 @@ public sealed class PacketManager
     private readonly Dictionary<int, IPacketEvent> _incomingPackets;
 
     private readonly TimeSpan _maximumRunTimeInSec = TimeSpan.FromSeconds(5);
-    private readonly CancellationTokenSource _cancellationTokenSource = new();
 
     public PacketManager() => this._incomingPackets = new Dictionary<int, IPacketEvent>();
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init()
     {
         this.UnregisterAll();
 
@@ -135,13 +133,13 @@ public sealed class PacketManager
         var timeExecution = timeEnded - timeStarted;
         if (timeExecution > this._maximumRunTimeInSec)
         {
-            ExceptionLogger.LogPacketException(packet.ToString(), String.Format("High latency in {0}: {1}ms", session.GetUser()?.Username ?? session.GetConnection().GetIp(), timeExecution.TotalMilliseconds));
+            ExceptionLogger.LogPacketException(packet.ToString(), string.Format("High latency in {0}: {1}ms", session.GetUser()?.Username ?? session.GetConnection().GetIp(), timeExecution.TotalMilliseconds));
         }
 
         //await ExecutePacketAsync(session, packet, pak);
     }
 
-    private async Task ExecutePacketAsync(GameClient session, ClientPacket packet, IPacketEvent pak)
+    /*private async Task ExecutePacketAsync(GameClient session, ClientPacket packet, IPacketEvent pak)
     {
         if (this._cancellationTokenSource.IsCancellationRequested)
         {
@@ -162,7 +160,7 @@ public sealed class PacketManager
                 }
             }
         });
-    }
+    }*/
 
     public void UnregisterAll() => this._incomingPackets.Clear();
 

@@ -13,10 +13,10 @@ internal class ModerationBanEvent : IPacketEvent
             return;
         }
 
-        var UserId = packet.PopInt();
-        var Message = packet.PopString();
-        var Length = packet.PopInt() * 3600;
+        var userId = packet.PopInt();
+        var message = packet.PopString();
+        var length = packet.PopInt() * 3600;
 
-        ModerationManager.BanUser(session, UserId, Length, Message);
+        ModerationManager.BanUser(session, userId, length, message);
     }
 }

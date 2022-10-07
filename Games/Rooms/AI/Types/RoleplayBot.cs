@@ -3,9 +3,7 @@ using WibboEmulator.Games.GameClients;
 
 public class RoleplayBot : BotAI
 {
-    public RoleplayBot(int virtualId)
-    {
-    }
+    public RoleplayBot(int virtualId) => this.VirtualId = virtualId;
 
     public override void OnSelfEnterRoom()
     {

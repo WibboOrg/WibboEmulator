@@ -14,7 +14,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
     private PathNode _endNode;
     private bool[,] _closedSet;
     private bool[,] _openSet;
-    private PriorityQueue<PathNode, double> _orderedOpenSet;
+    private PriorityQueueAstar<PathNode, double> _orderedOpenSet;
     private PathNode[,] _searchSpace;
     private int _size;
 
@@ -42,7 +42,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
         this.Height = height;//inGrid.GetLength(0);
         this._size = this.Width * this.Height;
         this._searchSpace = new PathNode[this.Height, this.Width];
-        this._orderedOpenSet = new PriorityQueue<PathNode, double>(PathNode.Comparer, this.Width + this.Height);
+        this._orderedOpenSet = new PriorityQueueAstar<PathNode, double>(PathNode.Comparer, this.Width + this.Height);
 
     }
 
@@ -135,7 +135,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
         //if (width < inEndNode.X || height < inEndNode.Y)
         //    return null;
         this.ResetSearchSpace();
-        this._orderedOpenSet = new PriorityQueue<PathNode, double>(PathNode.Comparer, this.Width + this.Height);
+        this._orderedOpenSet = new PriorityQueueAstar<PathNode, double>(PathNode.Comparer, this.Width + this.Height);
 
         this._closedSet = new bool[this.Height, this.Width];
         this._openSet = new bool[this.Height, this.Width];
@@ -165,7 +165,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
         this._startNode.F = this._startNode.Optimal;
 
         this._orderedOpenSet.Push(this._startNode);
-        this._startNode.extraWeight = this._size;
+        this._startNode.ExtraWeight = this._size;
 
         double trailScore;
         bool wasAdded;
@@ -177,7 +177,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
         {
             if (x == this._endNode)
             {
-                var result = this.ReconstructPath(x);
+                var result = ReconstructPath(x);
 
                 _ = result.AddLast(this._endNode);
 
@@ -234,13 +234,13 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
 
                 if (scoreResultBetter)
                 {
-                    y.parent = x;
+                    y.Parent = x;
 
                     if (wasAdded)
                     {
                         y.G = trailScore;
-                        y.Optimal = this.CalculateHeuristicBetween(y, this._endNode) + (x.extraWeight - 10);
-                        y.extraWeight = x.extraWeight - 10;
+                        y.Optimal = this.CalculateHeuristicBetween(y, this._endNode) + (x.ExtraWeight - 10);
+                        y.ExtraWeight = x.ExtraWeight - 10;
                         y.F = y.G + y.Optimal;
                         this._orderedOpenSet.Push(y);
                     }
@@ -248,9 +248,9 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
                     else
                     {
                         y.G = trailScore;
-                        y.Optimal = this.CalculateHeuristicBetween(y, this._endNode) + (x.extraWeight - 10);
+                        y.Optimal = this.CalculateHeuristicBetween(y, this._endNode) + (x.ExtraWeight - 10);
                         this._orderedOpenSet.Update(y, y.G + y.Optimal);
-                        y.extraWeight = x.extraWeight - 10;
+                        y.ExtraWeight = x.ExtraWeight - 10;
                     }
                 }
             }
@@ -379,7 +379,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
         }
     }
 
-    private LinkedList<PathNode> ReconstructPath(PathNode current_node)
+    private static LinkedList<PathNode> ReconstructPath(PathNode current_node)
     {
         var result = new LinkedList<PathNode>();
 
@@ -391,7 +391,7 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
     {
         var item = current_node;
         _ = result.AddFirst(item);
-        while ((item = item.parent) != null)
+        while ((item = item.Parent) != null)
         {
             _ = result.AddFirst(item);
         }
@@ -469,13 +469,13 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
         public double Optimal { get; internal set; }
         public double F { get; internal set; }
 
-        public PathNode parent;
+        public PathNode Parent { get; set; }
 
         public bool IsBlocked(int x, int y, bool lastTile) => this.UserItem.IsBlocked(x, y, lastTile);
 
         public int X { get; internal set; }
         public int Y { get; internal set; }
-        public int extraWeight;
+        public int ExtraWeight { get; set; }
         public int Compare(PathNode x, PathNode y)
         {
             if (x.F < y.F)
@@ -504,6 +504,6 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
             set => this.F = value;
         }
 
-        public bool BeenThere;
+        public bool BeenThere { get; set; }
     }
 }

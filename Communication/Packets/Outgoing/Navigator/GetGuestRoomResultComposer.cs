@@ -4,36 +4,36 @@ using WibboEmulator.Games.Rooms;
 
 internal class GetGuestRoomResultComposer : ServerPacket
 {
-    public GetGuestRoomResultComposer(GameClient session, RoomData Data, bool isLoading, bool checkEntry)
+    public GetGuestRoomResultComposer(GameClient session, RoomData data, bool isLoading, bool checkEntry)
         : base(ServerPacketHeader.ROOM_INFO)
     {
         this.WriteBoolean(isLoading);
-        this.WriteInteger(Data.Id);
-        this.WriteString(Data.Name);
-        this.WriteInteger(Data.OwnerId);
-        this.WriteString(Data.OwnerName);
-        this.WriteInteger(session.GetUser().IsTeleporting ? 0 : Data.State);
-        this.WriteInteger(Data.UsersNow);
-        this.WriteInteger(Data.UsersMax);
-        this.WriteString(Data.Description);
-        this.WriteInteger(Data.TrocStatus);
-        this.WriteInteger(Data.Score);
+        this.WriteInteger(data.Id);
+        this.WriteString(data.Name);
+        this.WriteInteger(data.OwnerId);
+        this.WriteString(data.OwnerName);
+        this.WriteInteger(session.GetUser().IsTeleporting ? 0 : data.State);
+        this.WriteInteger(data.UsersNow);
+        this.WriteInteger(data.UsersMax);
+        this.WriteString(data.Description);
+        this.WriteInteger(data.TrocStatus);
+        this.WriteInteger(data.Score);
         this.WriteInteger(0);//Top rated room rank.
-        this.WriteInteger(Data.Category);
+        this.WriteInteger(data.Category);
 
-        this.WriteInteger(Data.Tags.Count);
-        foreach (var Tag in Data.Tags)
+        this.WriteInteger(data.Tags.Count);
+        foreach (var tag in data.Tags)
         {
-            this.WriteString(Tag);
+            this.WriteString(tag);
         }
 
 
-        if (Data.Group != null)
+        if (data.Group != null)
         {
             this.WriteInteger(58);//What?
-            this.WriteInteger(Data.Group == null ? 0 : Data.Group.Id);
-            this.WriteString(Data.Group == null ? "" : Data.Group.Name);
-            this.WriteString(Data.Group == null ? "" : Data.Group.Badge);
+            this.WriteInteger(data.Group == null ? 0 : data.Group.Id);
+            this.WriteString(data.Group == null ? "" : data.Group.Name);
+            this.WriteString(data.Group == null ? "" : data.Group.Badge);
         }
         else
         {
@@ -46,15 +46,15 @@ internal class GetGuestRoomResultComposer : ServerPacket
         this.WriteBoolean(false);
         this.WriteBoolean(false);
 
-        this.WriteInteger(Data.MuteFuse); // who can mute
-        this.WriteInteger(Data.WhoCanKick); // who can kick
-        this.WriteInteger(Data.BanFuse); // who can ban
+        this.WriteInteger(data.MuteFuse); // who can mute
+        this.WriteInteger(data.WhoCanKick); // who can kick
+        this.WriteInteger(data.BanFuse); // who can ban
 
-        this.WriteBoolean((session != null) && Data.OwnerName.ToLower() != session.GetUser().Username.ToLower());
-        this.WriteInteger(Data.ChatType);  //ChatMode, ChatSize, ChatSpeed, HearingDistance, ExtraFlood is the order.
-        this.WriteInteger(Data.ChatBalloon);
-        this.WriteInteger(Data.ChatSpeed);
-        this.WriteInteger(Data.ChatMaxDistance);
-        this.WriteInteger(Data.ChatFloodProtection);
+        this.WriteBoolean((session != null) && data.OwnerName.ToLower() != session.GetUser().Username.ToLower());
+        this.WriteInteger(data.ChatType);  //ChatMode, ChatSize, ChatSpeed, HearingDistance, ExtraFlood is the order.
+        this.WriteInteger(data.ChatBalloon);
+        this.WriteInteger(data.ChatSpeed);
+        this.WriteInteger(data.ChatMaxDistance);
+        this.WriteInteger(data.ChatFloodProtection);
     }
 }

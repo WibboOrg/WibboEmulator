@@ -12,7 +12,7 @@ internal class ApplyDecorationEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var ItemId = packet.PopInt();
+        var itemId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -24,32 +24,32 @@ internal class ApplyDecorationEvent : IPacketEvent
             return;
         }
 
-        var userItem = session.GetUser().GetInventoryComponent().GetItem(ItemId);
+        var userItem = session.GetUser().GetInventoryComponent().GetItem(itemId);
         if (userItem == null)
         {
             return;
         }
 
-        string DecorationKey;
+        string decorationKey;
         switch (userItem.GetBaseItem().InteractionType)
         {
             case InteractionType.FLOOR:
-                DecorationKey = "floor";
+                decorationKey = "floor";
                 break;
 
             case InteractionType.WALLPAPER:
-                DecorationKey = "wallpaper";
+                decorationKey = "wallpaper";
                 break;
 
             case InteractionType.LANDSCAPE:
-                DecorationKey = "landscape";
+                decorationKey = "landscape";
                 break;
 
             default:
                 return;
         }
 
-        switch (DecorationKey)
+        switch (decorationKey)
         {
             case "floor":
                 room.RoomData.Floor = userItem.ExtraData;
@@ -66,12 +66,12 @@ internal class ApplyDecorationEvent : IPacketEvent
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoomDao.UpdateDecoration(dbClient, room.Id, DecorationKey, userItem.ExtraData);
+            RoomDao.UpdateDecoration(dbClient, room.Id, decorationKey, userItem.ExtraData);
 
             ItemDao.Delete(dbClient, userItem.Id);
         }
 
         session.GetUser().GetInventoryComponent().RemoveItem(userItem.Id);
-        room.SendPacket(new RoomPropertyComposer(DecorationKey, userItem.ExtraData));
+        room.SendPacket(new RoomPropertyComposer(decorationKey, userItem.ExtraData));
     }
 }

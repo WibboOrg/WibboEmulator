@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Games.GameClients;
@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class Update : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -101,7 +101,7 @@ internal class Update : IChatCommand
             {
                 WibboEnvironment.GetGame().GetModerationManager().Init(dbClient);
                 session.SendWhisper("Moderation mis à jour");
-                WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(new WhisperComposer(UserRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous!", 23));
+                WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(new WhisperComposer(userRoom.VirtualId, "Les outils de modération viennent d'être mis à jour, reconnectez-vous!", 23));
                 break;
             }
             case "catalogue":

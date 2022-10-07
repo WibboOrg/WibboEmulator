@@ -1,6 +1,5 @@
 namespace WibboEmulator.Games.Rooms.Games;
 using System.Drawing;
-using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
 
 public class GameItemHandler

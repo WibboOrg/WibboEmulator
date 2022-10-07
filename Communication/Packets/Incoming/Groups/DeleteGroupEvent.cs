@@ -1,10 +1,9 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Groups;
+namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Database.Daos.Log;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
 
 internal class DeleteGroupEvent : IPacketEvent
 {
@@ -14,42 +13,42 @@ internal class DeleteGroupEvent : IPacketEvent
     {
         var groupId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
         {
             return;
         }
 
-        if (Group.CreatorId != session.GetUser().Id && !session.GetUser().HasPermission("perm_delete_group"))
+        if (group.CreatorId != session.GetUser().Id && !session.GetUser().HasPermission("perm_delete_group"))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.1", session.Langue));
             return;
         }
 
-        if (Group.MemberCount >= 100 && !session.GetUser().HasPermission("perm_delete_group_limit"))
+        if (group.MemberCount >= 100 && !session.GetUser().HasPermission("perm_delete_group_limit"))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.error.2", session.Langue));
             return;
         }
 
-        WibboEnvironment.GetGame().GetGroupManager().DeleteGroup(Group.Id);
+        WibboEnvironment.GetGame().GetGroupManager().DeleteGroup(group.Id);
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            GuildDao.Delete(dbClient, Group.Id);
-            GuildMembershipDao.Delete(dbClient, Group.Id);
-            GuildRequestDao.Delete(dbClient, Group.Id);
-            RoomDao.UpdateResetGroupId(dbClient, Group.RoomId);
-            UserStatsDao.UpdateRemoveAllGroupId(dbClient, Group.Id);
+            GuildDao.Delete(dbClient, group.Id);
+            GuildMembershipDao.Delete(dbClient, group.Id);
+            GuildRequestDao.Delete(dbClient, group.Id);
+            RoomDao.UpdateResetGroupId(dbClient, group.RoomId);
+            UserStatsDao.UpdateRemoveAllGroupId(dbClient, group.Id);
 
-            if (Group.CreatorId != session.GetUser().Id)
+            if (group.CreatorId != session.GetUser().Id)
             {
-                LogStaffDao.Insert(dbClient, session.GetUser().Username, $"Suppresion du groupe {Group.Id} crée par {Group.CreatorId}");
+                LogStaffDao.Insert(dbClient, session.GetUser().Username, $"Suppresion du groupe {group.Id} crée par {group.CreatorId}");
             }
         }
 
         session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.groupdelete.succes", session.Langue));
 
-        if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out var room))
+        if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var room))
         {
             room.RoomData.Group = null;
             WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);

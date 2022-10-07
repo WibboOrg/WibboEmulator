@@ -1,7 +1,6 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Users;
+namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
 
 internal class GetUserGroupBadgesEvent : IPacketEvent
 {
@@ -19,42 +18,42 @@ internal class GetUserGroupBadgesEvent : IPacketEvent
             return;
         }
 
-        var Badges = new Dictionary<int, string>();
-        foreach (var User in room.GetRoomUserManager().GetRoomUsers().ToList())
+        var badges = new Dictionary<int, string>();
+        foreach (var user in room.GetRoomUserManager().GetRoomUsers().ToList())
         {
-            if (User.IsBot || User.GetClient() == null || User.GetClient().GetUser() == null)
+            if (user.IsBot || user.GetClient() == null || user.GetClient().GetUser() == null)
             {
                 continue;
             }
 
-            if (User.GetClient().GetUser().FavouriteGroupId == 0 || Badges.ContainsKey(User.GetClient().GetUser().FavouriteGroupId))
+            if (user.GetClient().GetUser().FavouriteGroupId == 0 || badges.ContainsKey(user.GetClient().GetUser().FavouriteGroupId))
             {
                 continue;
             }
 
-            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(User.GetClient().GetUser().FavouriteGroupId, out var Group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.GetClient().GetUser().FavouriteGroupId, out var group))
             {
                 continue;
             }
 
-            if (!Badges.ContainsKey(Group.Id))
+            if (!badges.ContainsKey(group.Id))
             {
-                Badges.Add(Group.Id, Group.Badge);
+                badges.Add(group.Id, group.Badge);
             }
         }
 
         if (session.GetUser().FavouriteGroupId > 0)
         {
-            if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(session.GetUser().FavouriteGroupId, out var Group))
+            if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(session.GetUser().FavouriteGroupId, out var group))
             {
-                if (!Badges.ContainsKey(Group.Id))
+                if (!badges.ContainsKey(group.Id))
                 {
-                    Badges.Add(Group.Id, Group.Badge);
+                    badges.Add(group.Id, group.Badge);
                 }
             }
         }
 
-        room.SendPacket(new UserGroupBadgesComposer(Badges));
-        session.SendPacket(new UserGroupBadgesComposer(Badges));
+        room.SendPacket(new UserGroupBadgesComposer(badges));
+        session.SendPacket(new UserGroupBadgesComposer(badges));
     }
 }

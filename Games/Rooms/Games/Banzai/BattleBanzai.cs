@@ -7,6 +7,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.Games.Teams;
+using WibboEmulator.Games.Rooms.Map;
 using WibboEmulator.Utilities.Enclosure;
 
 public class BattleBanzai
@@ -40,14 +41,14 @@ public class BattleBanzai
 
     public void RemoveTile(int itemID) => this.BanzaiTiles.Remove(itemID);
 
-    public void OnUserWalk(RoomUser User)
+    public void OnUserWalk(RoomUser user)
     {
-        if (User == null)
+        if (user == null)
         {
             return;
         }
 
-        var roomItemForSquare = this._roomInstance.GetGameMap().GetCoordinatedItems(new Point(User.SetX, User.SetY));
+        var roomItemForSquare = this._roomInstance.GetGameMap().GetCoordinatedItems(new Point(user.SetX, user.SetY));
 
         foreach (var ball in roomItemForSquare)
         {
@@ -60,7 +61,7 @@ public class BattleBanzai
             var goalX = ball.X;
             var goalY = ball.Y;
 
-            switch (User.RotBody)
+            switch (user.RotBody)
             {
                 case 0:
                     goalX = ball.X;
@@ -98,7 +99,7 @@ public class BattleBanzai
 
             if (!this._roomInstance.GetGameMap().CanStackItem(goalX, goalY))
             {
-                switch (User.RotBody)
+                switch (user.RotBody)
                 {
                     case 0:
                         goalX = ball.X;
@@ -134,7 +135,7 @@ public class BattleBanzai
                         break;
                 }
             }
-            this.MovePuck(ball, User.GetClient(), goalX, goalY, User.Team);
+            this.MovePuck(ball, user.GetClient(), goalX, goalY, user.Team);
             break;
         }
     }
@@ -210,7 +211,7 @@ public class BattleBanzai
 
             if (this._roomInstance.GetGameItemHandler().GetExitTeleport() != null)
             {
-                this._roomInstance.GetGameMap().TeleportToItem(roomUser, this._roomInstance.GetGameItemHandler().GetExitTeleport());
+                Gamemap.TeleportToItem(roomUser, this._roomInstance.GetGameItemHandler().GetExitTeleport());
             }
 
             var managerForBanzai = roomUser.GetClient().GetUser().CurrentRoom.GetTeamManager();
@@ -259,7 +260,7 @@ public class BattleBanzai
                 {
                     this._roomInstance.GetGameManager().AddPointToTeam(item.Team, user);
                     this._field.UpdateLocation(item.X, item.Y, (byte)team);
-                    foreach (var pointField in this._field.DoUpdate(false))
+                    foreach (var pointField in this._field.DoUpdate())
                     {
                         var team1 = (TeamType)pointField.ForValue;
                         foreach (var point in pointField.GetPoints())

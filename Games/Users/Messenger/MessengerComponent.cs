@@ -30,29 +30,29 @@ public class MessengerComponent : IDisposable
 
     public void Init(IQueryAdapter dbClient, bool appearOffline)
     {
-        var dFrienShips = UserDao.GetAllFriendShips(dbClient, this._userInstance.Id);
+        var frienShips = UserDao.GetAllFriendShips(dbClient, this._userInstance.Id);
 
-        var Requests = UserDao.GetAllFriendRequests(dbClient, this._userInstance.Id);
+        var requests = UserDao.GetAllFriendRequests(dbClient, this._userInstance.Id);
 
-        foreach (DataRow dataRow in dFrienShips.Rows)
+        foreach (DataRow dataRow in frienShips.Rows)
         {
             var userId = Convert.ToInt32(dataRow["id"]);
             var pUsername = (string)dataRow["username"];
-            var Relation = Convert.ToInt32(dataRow["relation"]);
+            var relation = Convert.ToInt32(dataRow["relation"]);
             if (userId != this._userInstance.Id)
             {
                 if (!this.Friends.ContainsKey(userId))
                 {
-                    this.Friends.Add(userId, new MessengerBuddy(userId, pUsername, "", Relation));
-                    if (Relation != 0)
+                    this.Friends.Add(userId, new MessengerBuddy(userId, pUsername, "", relation));
+                    if (relation != 0)
                     {
-                        this.Relation.Add(userId, new Relationship(userId, Relation));
+                        this.Relation.Add(userId, new Relationship(userId, relation));
                     }
                 }
             }
         }
 
-        foreach (DataRow dataRow in Requests.Rows)
+        foreach (DataRow dataRow in requests.Rows)
         {
             var fromId = Convert.ToInt32(dataRow["from_id"]);
             var toId = Convert.ToInt32(dataRow["to_id"]);
@@ -103,9 +103,11 @@ public class MessengerComponent : IDisposable
         this.Requests.Clear();
         this.Relation.Clear();
         this.Friends.Clear();
+
+        GC.SuppressFinalize(this);
     }
 
-    public void RelationChanged(int Id, int Type) => this.Friends[Id].UpdateRelation(Type);
+    public void RelationChanged(int id, int type) => this.Friends[id].UpdateRelation(type);
 
     public void OnStatusChanged()
     {
@@ -273,9 +275,9 @@ public class MessengerComponent : IDisposable
         this.GetClient().SendPacket(new FriendListUpdateComposer(null, friendId));
     }
 
-    public bool RequestBuddy(string UserQuery)
+    public bool RequestBuddy(string userQuery)
     {
-        var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(UserQuery);
+        var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(userQuery);
         int sender;
         bool flag;
         if (clientByUsername == null)
@@ -283,7 +285,7 @@ public class MessengerComponent : IDisposable
             DataRow dataRow = null;
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                dataRow = UserDao.GetOneIdAndBlockNewFriend(dbClient, UserQuery.ToLower());
+                dataRow = UserDao.GetOneIdAndBlockNewFriend(dbClient, userQuery.ToLower());
             }
 
             if (dataRow == null)
@@ -362,8 +364,8 @@ public class MessengerComponent : IDisposable
             return;
         }
 
-        var Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(toId);
-        if (Client == null || Client.GetUser() == null || Client.GetUser().GetMessenger() == null)
+        var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(toId);
+        if (client == null || client.GetUser() == null || client.GetUser().GetMessenger() == null)
         {
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             MessengerOfflineMessageDao.Insert(dbClient, toId, this.GetClient().GetUser().Id, message);
@@ -371,18 +373,18 @@ public class MessengerComponent : IDisposable
             return;
         }
 
-        if (Client.GetUser().IgnoreRoomInvites)
+        if (client.GetUser().IgnoreRoomInvites)
         {
             this.GetClient().SendPacket(new InstantMessageErrorComposer(7, toId));
             return;
         }
 
-        if (Client.GetUser().FloodCount > 0)
+        if (client.GetUser().FloodCount > 0)
         {
             this.GetClient().SendPacket(new InstantMessageErrorComposer(4, toId));
         }
 
-        Client.SendPacket(new NewConsoleComposer(this._userInstance.Id, message));
+        client.SendPacket(new NewConsoleComposer(this._userInstance.Id, message));
     }
 
     public void ProcessOfflineMessages()

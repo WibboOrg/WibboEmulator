@@ -8,19 +8,19 @@ internal class GetSelectedBadgesEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var UserId = packet.PopInt();
+        var userId = packet.PopInt();
 
-        var User = WibboEnvironment.GetUserById(UserId);
-        if (User == null)
+        var user = WibboEnvironment.GetUserById(userId);
+        if (user == null)
         {
             return;
         }
 
-        if (User.GetBadgeComponent() == null)
+        if (user.GetBadgeComponent() == null)
         {
             return;
         }
 
-        session.SendPacket(new UserBadgesComposer(User));
+        session.SendPacket(new UserBadgesComposer(user));
     }
 }

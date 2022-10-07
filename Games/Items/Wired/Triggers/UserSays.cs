@@ -8,20 +8,17 @@ using WibboEmulator.Utilities.Events;
 
 public class UserSays : WiredTriggerBase, IWired
 {
-    private readonly RoomUserSaysDelegate _delegateFunction;
-
     public UserSays(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_SAYS_SOMETHING)
     {
-        this._delegateFunction = new RoomUserSaysDelegate(this.OnUserSays);
-        room.OnUserSays += this._delegateFunction;
+        room.OnUserSays += this.OnUserSays;
 
         this.IntParams.Add(0);
     }
 
-    private void OnUserSays(object sender, UserSaysEventArgs e, ref bool messageHandled)
+    private void OnUserSays(object sender, UserSaysEventArgs args, ref bool messageHandled)
     {
-        var user = e.User;
-        var message = e.Message;
+        var user = args.User;
+        var message = args.Message;
 
         var isOwnerOnly = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
 
@@ -51,7 +48,7 @@ public class UserSays : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GetWiredHandler().GetRoom().OnUserSays -= this._delegateFunction;
+        this.RoomInstance.GetWiredHandler().GetRoom().OnUserSays -= this.OnUserSays;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

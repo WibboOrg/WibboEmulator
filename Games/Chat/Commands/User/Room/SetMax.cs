@@ -4,22 +4,22 @@ using WibboEmulator.Games.Rooms;
 
 internal class SetMax : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 1)
         {
             return;
         }
 
-        _ = int.TryParse(parameters[1], out var MaxUsers);
+        _ = int.TryParse(parameters[1], out var maxUsers);
 
-        if ((MaxUsers > 75 || MaxUsers <= 0) && !session.GetUser().HasPermission("perm_mod"))
+        if ((maxUsers > 75 || maxUsers <= 0) && !session.GetUser().HasPermission("perm_mod"))
         {
-            Room.SetMaxUsers(75);
+            room.SetMaxUsers(75);
         }
         else
         {
-            Room.SetMaxUsers(MaxUsers);
+            room.SetMaxUsers(maxUsers);
         }
     }
 }

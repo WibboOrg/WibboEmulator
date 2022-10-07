@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class ForceTransfBot : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -14,7 +14,7 @@ internal class ForceTransfBot : IChatCommand
 
         var username = parameters[1];
 
-        var roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByName(username);
+        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(username);
         if (roomUserByUserId == null || roomUserByUserId.GetClient() == null)
         {
             return;
@@ -22,20 +22,16 @@ internal class ForceTransfBot : IChatCommand
 
         if (session.Langue != roomUserByUserId.GetClient().Langue)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", roomUserByUserId.GetClient().Langue), session.Langue));
+            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue.user", session.Langue), roomUserByUserId.GetClient().Langue));
             return;
         }
 
         if (!roomUserByUserId.IsTransf && !roomUserByUserId.IsSpectator)
         {
-            var RoomClient = session.GetUser().CurrentRoom;
-            if (RoomClient != null)
-            {
-                roomUserByUserId.TransfBot = !roomUserByUserId.TransfBot;
+            roomUserByUserId.TransfBot = !roomUserByUserId.TransfBot;
 
-                RoomClient.SendPacket(new UserRemoveComposer(roomUserByUserId.VirtualId));
-                RoomClient.SendPacket(new UsersComposer(roomUserByUserId));
-            }
+            room.SendPacket(new UserRemoveComposer(roomUserByUserId.VirtualId));
+            room.SendPacket(new UsersComposer(roomUserByUserId));
         }
 
     }

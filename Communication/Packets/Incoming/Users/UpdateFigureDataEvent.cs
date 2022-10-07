@@ -17,23 +17,23 @@ internal class UpdateFigureDataEvent : IPacketEvent
             return;
         }
 
-        var Gender = packet.PopString().ToUpper();
-        var Look = packet.PopString();
-        if (Gender is not "M" and not "F")
+        var gender = packet.PopString().ToUpper();
+        var look = packet.PopString();
+        if (gender is not "M" and not "F")
         {
             return;
         }
 
-        Look = WibboEnvironment.GetFigureManager().ProcessFigure(Look, Gender, true);
+        look = WibboEnvironment.GetFigureManager().ProcessFigure(look, gender, true);
 
         WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.PROFILE_CHANGE_LOOK, 0);
 
-        session.GetUser().Look = Look;
-        session.GetUser().Gender = Gender.ToLower();
+        session.GetUser().Look = look;
+        session.GetUser().Gender = gender.ToLower();
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateLookAndGender(dbClient, session.GetUser().Id, Look, Gender);
+            UserDao.UpdateLookAndGender(dbClient, session.GetUser().Id, look, gender);
         }
 
         _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_AvatarLooks", 1);

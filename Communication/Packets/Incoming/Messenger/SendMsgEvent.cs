@@ -19,8 +19,8 @@ internal class SendMsgEvent : IPacketEvent
             return;
         }
 
-        var Message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
-        if (string.IsNullOrWhiteSpace(Message))
+        var message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+        if (string.IsNullOrWhiteSpace(message))
         {
             return;
         }
@@ -39,7 +39,7 @@ internal class SendMsgEvent : IPacketEvent
         session.GetUser().FloodTime = DateTime.Now;
         session.GetUser().FloodCount++;
 
-        if (session.Antipub("<" + userId + "> " + Message, "<MP>"))
+        if (session.Antipub("<" + userId + "> " + message, "<MP>"))
         {
             return;
         }
@@ -49,6 +49,6 @@ internal class SendMsgEvent : IPacketEvent
             return;
         }
 
-        session.GetUser().GetMessenger().SendInstantMessage(userId, Message);
+        session.GetUser().GetMessenger().SendInstantMessage(userId, message);
     }
 }

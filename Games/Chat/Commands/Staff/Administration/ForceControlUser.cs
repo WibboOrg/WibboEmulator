@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class ForceControlUser : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -13,7 +13,7 @@ internal class ForceControlUser : IChatCommand
 
         var username = parameters[1];
 
-        var roomUserByUserId = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
+        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(username);
         if (roomUserByUserId == null || roomUserByUserId.GetClient() == null)
         {
             return;

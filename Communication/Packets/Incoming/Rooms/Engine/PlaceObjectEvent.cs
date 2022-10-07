@@ -35,20 +35,20 @@ internal class PlaceObjectEvent : IPacketEvent
             return;
         }
 
-        var RawData = packet.PopString();
-        var Data = RawData.Split(' ');
+        var rawData = packet.PopString();
+        var data = rawData.Split(' ');
 
-        if (!int.TryParse(Data[0], out var ItemId))
+        if (!int.TryParse(data[0], out var itemId))
         {
             return;
         }
 
-        if (ItemId <= 0)
+        if (itemId <= 0)
         {
             return;
         }
 
-        var userItem = session.GetUser().GetInventoryComponent().GetItem(ItemId);
+        var userItem = session.GetUser().GetInventoryComponent().GetItem(itemId);
         if (userItem == null)
         {
             return;
@@ -70,10 +70,10 @@ internal class PlaceObjectEvent : IPacketEvent
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                ItemDao.Delete(dbClient, ItemId);
+                ItemDao.Delete(dbClient, itemId);
             }
 
-            session.GetUser().GetInventoryComponent().RemoveItem(ItemId);
+            session.GetUser().GetInventoryComponent().RemoveItem(itemId);
 
             session.GetUser().GetBadgeComponent().GiveBadge(userItem.ExtraData, true);
             session.SendPacket(new ReceiveBadgeComposer(userItem.ExtraData));
@@ -84,22 +84,22 @@ internal class PlaceObjectEvent : IPacketEvent
 
         if (!userItem.IsWallItem)
         {
-            if (Data.Length < 4)
+            if (data.Length < 4)
             {
                 return;
             }
 
-            if (!int.TryParse(Data[1], out var X))
+            if (!int.TryParse(data[1], out var x))
             {
                 return;
             }
 
-            if (!int.TryParse(Data[2], out var Y))
+            if (!int.TryParse(data[2], out var y))
             {
                 return;
             }
 
-            if (!int.TryParse(Data[3], out var rotation))
+            if (!int.TryParse(data[3], out var rotation))
             {
                 return;
             }
@@ -109,15 +109,15 @@ internal class PlaceObjectEvent : IPacketEvent
                 rotation = session.GetUser().ForceRot;
             }
 
-            var item = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, X, Y, 0.0, rotation, "", room);
-            if (room.GetRoomItemHandler().SetFloorItem(session, item, X, Y, rotation, true, false, true))
+            var item = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, x, y, 0.0, rotation, "", room);
+            if (room.GetRoomItemHandler().SetFloorItem(session, item, x, y, rotation, true, false, true))
             {
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, room.Id, room.RoomData.OwnerId);
+                    ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                 }
 
-                session.GetUser().GetInventoryComponent().RemoveItem(ItemId);
+                session.GetUser().GetInventoryComponent().RemoveItem(itemId);
 
                 if (WiredUtillity.TypeIsWired(userItem.GetBaseItem().InteractionType))
                 {
@@ -165,24 +165,24 @@ internal class PlaceObjectEvent : IPacketEvent
 
         else if (userItem.IsWallItem)
         {
-            var CorrectedData = new string[Data.Length - 1];
+            var correctedData = new string[data.Length - 1];
 
-            for (var i = 1; i < Data.Length; i++)
+            for (var i = 1; i < data.Length; i++)
             {
-                CorrectedData[i - 1] = Data[i];
+                correctedData[i - 1] = data[i];
             }
 
-            if (TrySetWallItem(CorrectedData, out var wallPos))
+            if (TrySetWallItem(correctedData, out var wallPos))
             {
                 var roomItem = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallPos, room);
                 if (room.GetRoomItemHandler().SetWallItem(session, roomItem))
                 {
                     using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        ItemDao.UpdateRoomIdAndUserId(dbClient, ItemId, room.Id, room.RoomData.OwnerId);
+                        ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                     }
 
-                    session.GetUser().GetInventoryComponent().RemoveItem(ItemId);
+                    session.GetUser().GetInventoryComponent().RemoveItem(itemId);
                 }
             }
             else

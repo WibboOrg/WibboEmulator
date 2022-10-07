@@ -34,23 +34,23 @@ internal class SetActivatedBadgesEvent : IPacketEvent
 
         for (var i = 0; i < 5; i++)
         {
-            var Slot = packet.PopInt();
-            var Badge = packet.PopString();
+            var slot = packet.PopInt();
+            var badge = packet.PopString();
 
-            if (string.IsNullOrEmpty(Badge))
+            if (string.IsNullOrEmpty(badge))
             {
                 continue;
             }
 
-            if (!session.GetUser().GetBadgeComponent().HasBadge(Badge) || Slot < 1 || Slot > 5)
+            if (!session.GetUser().GetBadgeComponent().HasBadge(badge) || slot < 1 || slot > 5)
             {
                 continue;
             }
 
-            session.GetUser().GetBadgeComponent().GetBadge(Badge).Slot = Slot;
+            session.GetUser().GetBadgeComponent().GetBadge(badge).Slot = slot;
 
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserBadgeDao.UpdateSlot(dbClient, session.GetUser().Id, Slot, Badge);
+            UserBadgeDao.UpdateSlot(dbClient, session.GetUser().Id, slot, badge);
         }
 
         WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.PROFILE_BADGE, 0);

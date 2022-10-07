@@ -1,7 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Bots;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
 internal class OpenBotActionEvent : IPacketEvent
 {
@@ -14,41 +13,41 @@ internal class OpenBotActionEvent : IPacketEvent
             return;
         }
 
-        var BotId = packet.PopInt();
-        var ActionId = packet.PopInt();
+        var botId = packet.PopInt();
+        var actionId = packet.PopInt();
 
-        if (BotId <= 0)
+        if (botId <= 0)
         {
             return;
         }
 
-        var Room = session.GetUser().CurrentRoom;
-        if (Room == null || !Room.CheckRights(session))
+        var room = session.GetUser().CurrentRoom;
+        if (room == null || !room.CheckRights(session))
         {
             return;
         }
 
-        if (!Room.GetRoomUserManager().TryGetBot(BotId, out var BotUser))
+        if (!room.GetRoomUserManager().TryGetBot(botId, out var botUser))
         {
             return;
         }
 
-        var BotSpeech = "";
-        foreach (var Speech in BotUser.BotData.RandomSpeech.ToList())
+        var botSpeech = "";
+        foreach (var speech in botUser.BotData.RandomSpeech.ToList())
         {
-            BotSpeech += Speech + "\n";
+            botSpeech += speech + "\n";
         }
 
-        BotSpeech += ";#;";
-        BotSpeech += BotUser.BotData.AutomaticChat;
-        BotSpeech += ";#;";
-        BotSpeech += BotUser.BotData.SpeakingInterval;
-        BotSpeech += ";#;";
-        BotSpeech += BotUser.BotData.MixSentences;
+        botSpeech += ";#;";
+        botSpeech += botUser.BotData.AutomaticChat;
+        botSpeech += ";#;";
+        botSpeech += botUser.BotData.SpeakingInterval;
+        botSpeech += ";#;";
+        botSpeech += botUser.BotData.MixSentences;
 
-        if (ActionId is 2 or 5)
+        if (actionId is 2 or 5)
         {
-            session.SendPacket(new OpenBotActionComposer(BotUser, ActionId, BotSpeech));
+            session.SendPacket(new OpenBotActionComposer(botUser, actionId, botSpeech));
         }
     }
 }

@@ -5,9 +5,9 @@ using WibboEmulator.Games.Rooms;
 
 internal class FaceLess : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (UserRoom.IsTransf || UserRoom.IsSpectator)
+        if (userRoom.IsTransf || userRoom.IsSpectator)
         {
             return;
         }
@@ -30,7 +30,7 @@ internal class FaceLess : IChatCommand
 
             session.GetUser().Look = look;
 
-            Room.SendPacket(new UserChangeComposer(UserRoom, false));
+            room.SendPacket(new UserChangeComposer(userRoom, false));
         }
     }
 }

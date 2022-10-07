@@ -26,21 +26,21 @@ internal class RemoveRightsEvent : IPacketEvent
         }
 
         var userIds = new List<int>();
-        var Amount = packet.PopInt();
-        for (var index = 0; index < Amount; ++index)
+        var amount = packet.PopInt();
+        for (var index = 0; index < amount; ++index)
         {
-            var UserId = packet.PopInt();
-            if (room.UsersWithRights.Contains(UserId))
+            var userId = packet.PopInt();
+            if (room.UsersWithRights.Contains(userId))
             {
-                _ = room.UsersWithRights.Remove(UserId);
+                _ = room.UsersWithRights.Remove(userId);
             }
 
-            if (!userIds.Contains(UserId))
+            if (!userIds.Contains(userId))
             {
-                userIds.Add(UserId);
+                userIds.Add(userId);
             }
 
-            var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(UserId);
+            var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(userId);
             if (roomUserByUserId != null && !roomUserByUserId.IsBot)
             {
                 roomUserByUserId.GetClient().SendPacket(new YouAreControllerComposer(0));
@@ -50,7 +50,7 @@ internal class RemoveRightsEvent : IPacketEvent
                 roomUserByUserId.UpdateNeeded = true;
             }
 
-            session.SendPacket(new FlatControllerRemovedMessageComposer(room.Id, UserId));
+            session.SendPacket(new FlatControllerRemovedMessageComposer(room.Id, userId));
 
             if (room.UsersWithRights.Count <= 0)
             {
@@ -58,7 +58,7 @@ internal class RemoveRightsEvent : IPacketEvent
             }
             else
             {
-                _ = room.UsersWithRights.Contains(UserId);
+                _ = room.UsersWithRights.Contains(userId);
                 session.SendPacket(new RoomRightsListComposer(room));
             }
         }

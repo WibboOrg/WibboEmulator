@@ -1,5 +1,4 @@
 namespace WibboEmulator.Games.Calendars;
-using WibboEmulator.Database.Interfaces;
 
 public class CalendarManager
 {
@@ -11,7 +10,7 @@ public class CalendarManager
     {
     }
 
-    public void Init(IQueryAdapter dbClient)
+    public void Init()
     {
         this._calendarItem = new Dictionary<int, CalendarItem>();
         this._currentDay = 0;

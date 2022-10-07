@@ -3,7 +3,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users.Inventory.Bots;
-using WibboEmulator.Games.Rooms;
 using WibboEmulator.Database.Daos.Bot;
 
 internal class PickUpBotEvent : IPacketEvent
@@ -17,49 +16,47 @@ internal class PickUpBotEvent : IPacketEvent
             return;
         }
 
-        var BotId = packet.PopInt();
-        if (BotId <= 0)
+        var botId = packet.PopInt();
+        if (botId <= 0)
         {
             return;
         }
 
-        var Room = session.GetUser().CurrentRoom;
-        if (Room == null || !Room.CheckRights(session, true))
+        var room = session.GetUser().CurrentRoom;
+        if (room == null || !room.CheckRights(session, true))
         {
             return;
         }
 
-        if (!Room.GetRoomUserManager().TryGetBot(BotId, out var BotUser))
+        if (!room.GetRoomUserManager().TryGetBot(botId, out var botUser))
         {
-            var TargetUser = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(BotId);
-            if (TargetUser == null)
+            var targetUser = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(botId);
+            if (targetUser == null)
             {
                 return;
             }
 
             //Check some values first, please!
-            if (TargetUser.GetClient() == null || TargetUser.GetClient().GetUser() == null)
+            if (targetUser.GetClient() == null || targetUser.GetClient().GetUser() == null)
             {
                 return;
             }
 
-            TargetUser.TransfBot = false;
+            targetUser.TransfBot = false;
 
-            //Quickly remove the old user instance.
-            Room.SendPacket(new UserRemoveComposer(TargetUser.VirtualId));
+            room.SendPacket(new UserRemoveComposer(targetUser.VirtualId));
 
-            //Add the new one, they won't even notice a thing!!11 8-)
-            Room.SendPacket(new UsersComposer(TargetUser));
+            room.SendPacket(new UsersComposer(targetUser));
             return;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            BotUserDao.UpdateRoomId(dbClient, BotId);
+            BotUserDao.UpdateRoomId(dbClient, botId);
         }
 
-        _ = session.GetUser().GetInventoryComponent().TryAddBot(new Bot(BotUser.BotData.Id, BotUser.BotData.OwnerId, BotUser.BotData.Name, BotUser.BotData.Motto, BotUser.BotData.Look, BotUser.BotData.Gender, BotUser.BotData.WalkingEnabled, BotUser.BotData.AutomaticChat, BotUser.BotData.ChatText, BotUser.BotData.SpeakingInterval, BotUser.BotData.IsDancing, BotUser.BotData.Enable, BotUser.BotData.Handitem, BotUser.BotData.Status));
+        _ = session.GetUser().GetInventoryComponent().TryAddBot(new Bot(botUser.BotData.Id, botUser.BotData.OwnerId, botUser.BotData.Name, botUser.BotData.Motto, botUser.BotData.Look, botUser.BotData.Gender, botUser.BotData.WalkingEnabled, botUser.BotData.AutomaticChat, botUser.BotData.ChatText, botUser.BotData.SpeakingInterval, botUser.BotData.IsDancing, botUser.BotData.Enable, botUser.BotData.Handitem, botUser.BotData.Status));
         session.SendPacket(new BotInventoryComposer(session.GetUser().GetInventoryComponent().GetBots()));
-        Room.GetRoomUserManager().RemoveBot(BotUser.VirtualId, false);
+        room.GetRoomUserManager().RemoveBot(botUser.VirtualId, false);
     }
 }

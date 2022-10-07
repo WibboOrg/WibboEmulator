@@ -14,24 +14,24 @@ internal class UserSettingsSoundEvent : IPacketEvent
             return;
         }
 
-        var Volume1 = packet.PopInt();
-        var Volume2 = packet.PopInt();
-        var Volume3 = packet.PopInt();
+        var volume1 = packet.PopInt();
+        var volume2 = packet.PopInt();
+        var volume3 = packet.PopInt();
 
 
-        if (session.GetUser().ClientVolume[0] == Volume1 && session.GetUser().ClientVolume[1] == Volume2 && session.GetUser().ClientVolume[2] == Volume3)
+        if (session.GetUser().ClientVolume[0] == volume1 && session.GetUser().ClientVolume[1] == volume2 && session.GetUser().ClientVolume[2] == volume3)
         {
             return;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateVolume(dbClient, session.GetUser().Id, Volume1, +Volume2, +Volume3);
+            UserDao.UpdateVolume(dbClient, session.GetUser().Id, volume1, +volume2, +volume3);
         }
 
         session.GetUser().ClientVolume.Clear();
-        session.GetUser().ClientVolume.Add(Volume1);
-        session.GetUser().ClientVolume.Add(Volume2);
-        session.GetUser().ClientVolume.Add(Volume3);
+        session.GetUser().ClientVolume.Add(volume1);
+        session.GetUser().ClientVolume.Add(volume2);
+        session.GetUser().ClientVolume.Add(volume3);
     }
 }

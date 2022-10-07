@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Misc;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
@@ -50,15 +50,15 @@ internal class GetRoomEntryDataEvent : IPacketEvent
         session.SendPacket(new RoomEntryInfoComposer(room.Id, room.CheckRights(session, true)));
         session.SendPacket(new RoomVisualizationSettingsComposer(room.RoomData.WallThickness, room.RoomData.FloorThickness, room.RoomData.Hidewall));
 
-        var ThisUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var thisUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
 
-        if (ThisUser != null)
+        if (thisUser != null)
         {
-            room.SendPacket(new UserChangeComposer(ThisUser, false));
+            room.SendPacket(new UserChangeComposer(thisUser, false));
 
-            if (!ThisUser.IsSpectator)
+            if (!thisUser.IsSpectator)
             {
-                room.GetRoomUserManager().UserEnter(ThisUser);
+                room.GetRoomUserManager().UserEnter(thisUser);
             }
         }
 

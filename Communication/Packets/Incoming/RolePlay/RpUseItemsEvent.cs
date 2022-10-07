@@ -1,7 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.RolePlay;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
 internal class RpUseItemsEvent : IPacketEvent
 {
@@ -9,201 +8,201 @@ internal class RpUseItemsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var ItemId = packet.PopInt();
-        var UseCount = packet.PopInt();
+        var itemId = packet.PopInt();
+        var useCount = packet.PopInt();
 
         if (session == null || session.GetUser() == null)
         {
             return;
         }
 
-        var Room = session.GetUser().CurrentRoom;
-        if (Room == null || !Room.IsRoleplay)
+        var room = session.GetUser().CurrentRoom;
+        if (room == null || !room.IsRoleplay)
         {
             return;
         }
 
-        var User = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-        if (User == null)
+        var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (user == null)
         {
             return;
         }
 
-        if (User.Freeze)
+        if (user.Freeze)
         {
             return;
         }
 
-        var Rp = User.Roleplayer;
-        if (Rp == null || Rp.Dead || Rp.SendPrison || Rp.TradeId > 0)
+        var rp = user.Roleplayer;
+        if (rp == null || rp.Dead || rp.SendPrison || rp.TradeId > 0)
         {
             return;
         }
 
-        if (Rp.AggroTimer > 0)
+        if (rp.AggroTimer > 0)
         {
-            User.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.useitem.notallowed", session.Langue), Math.Round((double)Rp.AggroTimer / 2)));
+            user.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.useitem.notallowed", session.Langue), Math.Round((double)rp.AggroTimer / 2)));
             return;
         }
 
-        var RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
-        if (RpItem == null)
-        {
-            return;
-        }
-
-        var RpItemInventory = Rp.GetInventoryItem(ItemId);
-        if (RpItemInventory == null || RpItemInventory.Count <= 0 || RpItem.Type == "none")
+        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
+        if (rpItem == null)
         {
             return;
         }
 
-        if (UseCount <= 0 || RpItem.UseType != 2)
+        var rpItemInventory = rp.GetInventoryItem(itemId);
+        if (rpItemInventory == null || rpItemInventory.Count <= 0 || rpItem.Type == "none")
         {
-            UseCount = 1;
+            return;
         }
 
-        if (UseCount > RpItemInventory.Count)
+        if (useCount <= 0 || rpItem.UseType != 2)
         {
-            UseCount = RpItemInventory.Count;
+            useCount = 1;
         }
 
-        if (User.FreezeEndCounter <= 1)
+        if (useCount > rpItemInventory.Count)
         {
-            User.Freeze = true;
-            User.FreezeEndCounter = 1;
+            useCount = rpItemInventory.Count;
         }
 
-        if (RpItem.Id == 75)
+        if (user.FreezeEndCounter <= 1)
         {
-            Rp.AddInventoryItem(45, UseCount);
+            user.Freeze = true;
+            user.FreezeEndCounter = 1;
         }
 
-        switch (RpItem.Type)
+        if (rpItem.Id == 75)
+        {
+            rp.AddInventoryItem(45, useCount);
+        }
+
+        switch (rpItem.Type)
         {
             case "openpage":
             {
-                User.GetClient().SendPacket(new InClientLinkComposer("habbopages/roleplay/" + RpItem.Value));
+                user.GetClient().SendPacket(new InClientLinkComposer("habbopages/roleplay/" + rpItem.Value));
                 break;
             }
             case "openguide":
             {
-                User.GetClient().SendPacket(new InClientLinkComposer("habbopages/westworld/westworld"));
+                user.GetClient().SendPacket(new InClientLinkComposer("habbopages/westworld/westworld"));
                 break;
             }
             case "hit":
             {
-                Rp.Hit(User, RpItem.Value * UseCount, Room, false, true, false);
-                Rp.RemoveInventoryItem(RpItem.Id, UseCount);
+                rp.Hit(user, rpItem.Value * useCount, room, false, true, false);
+                rp.RemoveInventoryItem(rpItem.Id, useCount);
                 break;
             }
             case "enable":
             {
-                User.ApplyEffect(RpItem.Value);
+                user.ApplyEffect(rpItem.Value);
                 break;
             }
             case "showtime":
             {
-                User.SendWhisperChat("Il est " + Room.Roleplay.Hour + " heures et " + Room.Roleplay.Minute + " minutes");
+                user.SendWhisperChat("Il est " + room.Roleplay.Hour + " heures et " + room.Roleplay.Minute + " minutes");
                 break;
             }
             case "money":
             {
-                Rp.Money += RpItem.Value * UseCount;
-                Rp.RemoveInventoryItem(RpItem.Id, UseCount);
-                Rp.SendUpdate();
+                rp.Money += rpItem.Value * useCount;
+                rp.RemoveInventoryItem(rpItem.Id, useCount);
+                rp.SendUpdate();
                 break;
             }
             case "munition":
             {
-                Rp.AddMunition(RpItem.Value * UseCount);
-                Rp.RemoveInventoryItem(RpItem.Id, UseCount);
-                Rp.SendUpdate();
+                rp.AddMunition(rpItem.Value * useCount);
+                rp.RemoveInventoryItem(rpItem.Id, useCount);
+                rp.SendUpdate();
                 break;
             }
             case "energytired":
             {
-                User.ApplyEffect(4, true);
-                User.TimerResetEffect = 2;
+                user.ApplyEffect(4, true);
+                user.TimerResetEffect = 2;
 
-                Rp.AddEnergy(RpItem.Value * UseCount);
-                Rp.Hit(User, RpItem.Value * UseCount, Room, false, true, false);
-                Rp.SendUpdate();
-                Rp.RemoveInventoryItem(RpItem.Id, UseCount);
+                rp.AddEnergy(rpItem.Value * useCount);
+                rp.Hit(user, rpItem.Value * useCount, room, false, true, false);
+                rp.SendUpdate();
+                rp.RemoveInventoryItem(rpItem.Id, useCount);
 
-                User.OnChat("*Consomme " + char.ToLowerInvariant(RpItem.Title[0]) + RpItem.Title[1..] + "*");
+                user.OnChat("*Consomme " + char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..] + "*");
                 break;
             }
             case "healthtired":
             {
-                User.ApplyEffect(4, true);
-                User.TimerResetEffect = 2;
+                user.ApplyEffect(4, true);
+                user.TimerResetEffect = 2;
 
-                Rp.RemoveEnergy(RpItem.Value * UseCount);
-                Rp.AddHealth(RpItem.Value * UseCount);
-                Rp.SendUpdate();
-                Rp.RemoveInventoryItem(RpItem.Id, UseCount);
+                rp.RemoveEnergy(rpItem.Value * useCount);
+                rp.AddHealth(rpItem.Value * useCount);
+                rp.SendUpdate();
+                rp.RemoveInventoryItem(rpItem.Id, useCount);
 
-                User.OnChat("*Consomme " + char.ToLowerInvariant(RpItem.Title[0]) + RpItem.Title[1..] + "*");
+                user.OnChat("*Consomme " + char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..] + "*");
                 break;
             }
             case "healthenergy":
             {
-                User.ApplyEffect(4, true);
-                User.TimerResetEffect = 2;
+                user.ApplyEffect(4, true);
+                user.TimerResetEffect = 2;
 
-                Rp.AddEnergy(RpItem.Value * UseCount);
-                Rp.AddHealth(RpItem.Value * UseCount);
-                Rp.SendUpdate();
-                Rp.RemoveInventoryItem(RpItem.Id, UseCount);
+                rp.AddEnergy(rpItem.Value * useCount);
+                rp.AddHealth(rpItem.Value * useCount);
+                rp.SendUpdate();
+                rp.RemoveInventoryItem(rpItem.Id, useCount);
 
-                User.OnChat("*Consomme " + char.ToLowerInvariant(RpItem.Title[0]) + RpItem.Title[1..] + "*");
+                user.OnChat("*Consomme " + char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..] + "*");
                 break;
             }
             case "energy":
             {
-                User.ApplyEffect(4, true);
-                User.TimerResetEffect = 2;
+                user.ApplyEffect(4, true);
+                user.TimerResetEffect = 2;
 
-                Rp.AddEnergy(RpItem.Value * UseCount);
-                Rp.SendUpdate();
-                Rp.RemoveInventoryItem(RpItem.Id, UseCount);
+                rp.AddEnergy(rpItem.Value * useCount);
+                rp.SendUpdate();
+                rp.RemoveInventoryItem(rpItem.Id, useCount);
 
-                User.OnChat("*Consomme " + char.ToLowerInvariant(RpItem.Title[0]) + RpItem.Title[1..] + "*");
+                user.OnChat("*Consomme " + char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..] + "*");
                 break;
             }
             case "health":
             {
-                User.ApplyEffect(737, true);
-                User.TimerResetEffect = 4;
+                user.ApplyEffect(737, true);
+                user.TimerResetEffect = 4;
 
-                Rp.AddHealth(RpItem.Value * UseCount);
-                Rp.SendUpdate();
-                Rp.RemoveInventoryItem(RpItem.Id, UseCount);
+                rp.AddHealth(rpItem.Value * useCount);
+                rp.SendUpdate();
+                rp.RemoveInventoryItem(rpItem.Id, useCount);
 
-                User.OnChat("*Consomme " + char.ToLowerInvariant(RpItem.Title[0]) + RpItem.Title[1..] + "*");
+                user.OnChat("*Consomme " + char.ToLowerInvariant(rpItem.Title[0]) + rpItem.Title[1..] + "*");
                 break;
             }
             case "weapon_cac":
             {
-                if (Rp.WeaponCac.Id == RpItem.Value)
+                if (rp.WeaponCac.Id == rpItem.Value)
                 {
                     break;
                 }
 
-                Rp.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(RpItem.Value);
-                User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.changearmecac", session.Langue));
+                rp.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(rpItem.Value);
+                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.changearmecac", session.Langue));
                 break;
             }
             case "weapon_far":
             {
-                if (Rp.WeaponGun.Id == RpItem.Value)
+                if (rp.WeaponGun.Id == rpItem.Value)
                 {
                     break;
                 }
 
-                Rp.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(RpItem.Value);
-                User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.changearmefar", session.Langue));
+                rp.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(rpItem.Value);
+                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.changearmefar", session.Langue));
                 break;
             }
         }

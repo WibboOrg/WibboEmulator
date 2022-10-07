@@ -1,23 +1,23 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.User.Room;
+namespace WibboEmulator.Games.Chat.Commands.User.Room;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Polls;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class StartQuestion : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var Question = CommandManager.MergeParams(parameters, 1);
+        var question = CommandManager.MergeParams(parameters, 1);
 
-        if (string.IsNullOrWhiteSpace(Question))
+        if (string.IsNullOrWhiteSpace(question))
         {
             session.SendWhisper("Votre question ne peut pas être vide");
             return;
         }
 
-        Room.SendPacket(new QuestionComposer(Question));
+        room.SendPacket(new QuestionComposer(question));
 
-        Room.VotedNoCount = 0;
-        Room.VotedYesCount = 0;
+        room.VotedNoCount = 0;
+        room.VotedYesCount = 0;
     }
 }

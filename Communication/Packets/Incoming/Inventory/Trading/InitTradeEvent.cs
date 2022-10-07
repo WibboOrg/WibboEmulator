@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Inventory.Trading;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
 internal class InitTradeEvent : IPacketEvent
 {
@@ -13,35 +12,37 @@ internal class InitTradeEvent : IPacketEvent
             return;
         }
 
+        var virtualId = packet.PopInt();
+
         if (room.IsRoleplay)
         {
-            var RoomUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-            var RoomUserTarget = room.GetRoomUserManager().GetRoomUserByVirtualId(packet.PopInt());
-            if (RoomUser == null || RoomUser.GetClient() == null || RoomUser.GetClient().GetUser() == null)
+            var roomUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            var roomUserTarget = room.GetRoomUserManager().GetRoomUserByVirtualId(virtualId);
+            if (roomUser == null || roomUser.GetClient() == null || roomUser.GetClient().GetUser() == null)
             {
                 return;
             }
 
-            if (RoomUserTarget == null || RoomUserTarget.GetClient() == null || RoomUserTarget.GetClient().GetUser() == null)
+            if (roomUserTarget == null || roomUserTarget.GetClient() == null || roomUserTarget.GetClient().GetUser() == null)
             {
                 return;
             }
 
-            var Rp = RoomUser.Roleplayer;
-            if (Rp == null || Rp.TradeId > 0 || Rp.Dead || Rp.SendPrison || (Rp.PvpEnable && room.Roleplay.Pvp) || Rp.AggroTimer > 0)
+            var rp = roomUser.Roleplayer;
+            if (rp == null || rp.TradeId > 0 || rp.Dead || rp.SendPrison || (rp.PvpEnable && room.Roleplay.Pvp) || rp.AggroTimer > 0)
             {
-                RoomUser.SendWhisperChat("Vous devez être en zone safe pour pouvoir troquer");
+                roomUser.SendWhisperChat("Vous devez être en zone safe pour pouvoir troquer");
                 return;
             }
 
-            var RpTarget = RoomUserTarget.Roleplayer;
-            if (RpTarget == null || RpTarget.TradeId > 0 || RpTarget.Dead || RpTarget.SendPrison || (RpTarget.PvpEnable && room.Roleplay.Pvp) || RpTarget.AggroTimer > 0)
+            var rpTarget = roomUserTarget.Roleplayer;
+            if (rpTarget == null || rpTarget.TradeId > 0 || rpTarget.Dead || rpTarget.SendPrison || (rpTarget.PvpEnable && room.Roleplay.Pvp) || rpTarget.AggroTimer > 0)
             {
-                RoomUser.SendWhisperChat("Ce joueur ne peut pas troc");
+                roomUser.SendWhisperChat("Ce joueur ne peut pas troc");
                 return;
             }
 
-            WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().AddTrade(room.RoomData.OwnerId, RoomUser.UserId, RoomUserTarget.UserId, RoomUser.GetUsername(), RoomUserTarget.GetUsername());
+            WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().AddTrade(room.RoomData.OwnerId, roomUser.UserId, roomUserTarget.UserId, roomUser.GetUsername(), roomUserTarget.GetUsername());
             return;
         }
 

@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Moderation;
 using WibboEmulator.Utilities;
 
 internal class SubmitNewTicketEvent : IPacketEvent
@@ -14,15 +15,15 @@ internal class SubmitNewTicketEvent : IPacketEvent
             return;
         }
 
-        var Message = StringCharFilter.Escape(packet.PopString());
-        var TicketType = packet.PopInt();
-        var ReporterId = packet.PopInt();
-        var RoomId = packet.PopInt();
+        var message = StringCharFilter.Escape(packet.PopString());
+        var ticketType = packet.PopInt();
+        var reporterId = packet.PopInt();
+        var roomId = packet.PopInt();
         var chatEntriesCount = packet.PopInt();
         //chatEntries = packet.PopString();
 
-        WibboEnvironment.GetGame().GetModerationManager().SendNewTicket(session, TicketType, ReporterId, Message);
-        WibboEnvironment.GetGame().GetModerationManager().ApplySanction(session, ReporterId);
+        WibboEnvironment.GetGame().GetModerationManager().SendNewTicket(session, ticketType, reporterId, message);
+        ModerationManager.ApplySanction(session, reporterId);
         WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", "Un nouveau ticket vient d'arriver sur le support"));
     }
 }

@@ -37,7 +37,7 @@ internal class CreateFlatEvent : IPacketEvent
             tradeSettings = 0;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoomModels(model, out var roomModel))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoomModels(model, out _))
         {
             return;
         }
@@ -57,14 +57,14 @@ internal class CreateFlatEvent : IPacketEvent
             return;
         }
 
-        var RoomId = 0;
+        var roomId = 0;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoomId = RoomDao.Insert(dbClient, name, desc, session.GetUser().Username, model, category, maxVisitors, tradeSettings);
+            roomId = RoomDao.Insert(dbClient, name, desc, session.GetUser().Username, model, category, maxVisitors, tradeSettings);
         }
-        session.GetUser().UsersRooms.Add(RoomId);
+        session.GetUser().UsersRooms.Add(roomId);
 
-        var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
+        var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
 
         session.SendPacket(new FlatCreatedComposer(roomData.Id, name));
     }

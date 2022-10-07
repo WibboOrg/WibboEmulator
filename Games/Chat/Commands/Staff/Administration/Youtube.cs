@@ -6,7 +6,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class Youtube : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 3)
         {
@@ -14,31 +14,31 @@ internal class Youtube : IChatCommand
         }
 
         var username = parameters[1];
-        var Url = parameters[2];
+        var url = parameters[2];
 
-        if (string.IsNullOrEmpty(Url) || (!Url.Contains("?v=") && !Url.Contains("youtu.be/"))) //https://youtu.be/_mNig3ZxYbM
+        if (string.IsNullOrEmpty(url) || (!url.Contains("?v=") && !url.Contains("youtu.be/")))
         {
             return;
         }
 
-        var Split = "";
+        var split = "";
 
-        if (Url.Contains("?v="))
+        if (url.Contains("?v="))
         {
-            Split = Url.Split(new string[] { "?v=" }, StringSplitOptions.None)[1];
+            split = url.Split(new string[] { "?v=" }, StringSplitOptions.None)[1];
         }
-        else if (Url.Contains("youtu.be/"))
+        else if (url.Contains("youtu.be/"))
         {
-            Split = Url.Split(new string[] { "youtu.be/" }, StringSplitOptions.None)[1];
+            split = url.Split(new string[] { "youtu.be/" }, StringSplitOptions.None)[1];
         }
 
-        if (Split.Length < 11)
+        if (split.Length < 11)
         {
             return;
         }
-        var VideoId = Split[..11];
+        var videoId = split[..11];
 
-        var roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByName(username);
+        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(username);
         if (roomUserByUserId == null || roomUserByUserId.GetClient() == null || roomUserByUserId.GetClient().GetUser() == null)
         {
             return;
@@ -46,10 +46,10 @@ internal class Youtube : IChatCommand
 
         if (session.Langue != roomUserByUserId.GetClient().Langue)
         {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", roomUserByUserId.GetClient().Langue), session.Langue));
+            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue.user", session.Langue), roomUserByUserId.GetClient().Langue));
             return;
         }
 
-        roomUserByUserId.GetClient().SendPacket(new YoutubeTvComposer(0, VideoId));
+        roomUserByUserId.GetClient().SendPacket(new YoutubeTvComposer(0, videoId));
     }
 }

@@ -28,35 +28,35 @@ public sealed class WordFilterManager
             this._pubWords.Clear();
         }
 
-        var Data = RoomSwearwordFilterDao.GetAll(dbClient);
+        var data = RoomSwearwordFilterDao.GetAll(dbClient);
 
-        if (Data != null)
+        if (data != null)
         {
-            foreach (DataRow Row in Data.Rows)
+            foreach (DataRow row in data.Rows)
             {
-                this._filteredWords.Add(Convert.ToString(Row["word"]));
+                this._filteredWords.Add(Convert.ToString(row["word"]));
             }
         }
 
-        var Data2 = WordFilterRetroDao.GetAll(dbClient);
+        var data2 = WordFilterRetroDao.GetAll(dbClient);
 
-        if (Data2 != null)
+        if (data2 != null)
         {
-            foreach (DataRow Row in Data2.Rows)
+            foreach (DataRow row in data2.Rows)
             {
-                this._pubWords.Add(Convert.ToString(Row["word"]));
+                this._pubWords.Add(Convert.ToString(row["word"]));
             }
         }
     }
 
-    public void AddFilterPub(string Word)
+    public void AddFilterPub(string word)
     {
-        if (!this._pubWords.Contains(Word))
+        if (!this._pubWords.Contains(word))
         {
-            this._pubWords.Add(Word);
+            this._pubWords.Add(word);
 
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            WordFilterRetroDao.Insert(dbClient, Word);
+            WordFilterRetroDao.Insert(dbClient, word);
         }
     }
 
@@ -140,13 +140,13 @@ public sealed class WordFilterManager
 
     public bool CheckMessageWord(string message)
     {
-        var OldLength = message.Replace(" ", "").Length;
+        var oldLength = message.Replace(" ", "").Length;
 
         ClearMessage(ref message, false);
 
-        var LetterDelCount = OldLength - message.Length;
+        var letterDelCount = oldLength - message.Length;
 
-        var WordPub = new List<string>() { "go",
+        var wordPub = new List<string>() { "go",
                                                     ".fr",
                                                     ".com",
                                                     ".me",
@@ -183,24 +183,24 @@ public sealed class WordFilterManager
                                                     "recru",
                                                     };
 
-        var DetectCount = 0;
-        foreach (var Pattern in WordPub)
+        var detectCount = 0;
+        foreach (var pattern in wordPub)
         {
-            if (message.Contains(Pattern))
+            if (message.Contains(pattern))
             {
-                DetectCount++;
+                detectCount++;
                 continue;
             }
         }
 
-        if (DetectCount >= 4 || (LetterDelCount > 5 && DetectCount >= 4))
+        if (detectCount >= 4 || (letterDelCount > 5 && detectCount >= 4))
         {
             return true;
         }
 
-        foreach (var Filter in this._filteredWords.ToList())
+        foreach (var filter in this._filteredWords.ToList())
         {
-            if (message.Contains(Filter))
+            if (message.Contains(filter))
             {
                 return true;
             }

@@ -47,15 +47,15 @@ public sealed class ChatEmotionsManager
     /// <summary>
     /// Searches the provided text for any emotions that need to be applied and returns the packet number.
     /// </summary>
-    /// <param name="Text">The text to search through</param>
+    /// <param name="text">The text to search through</param>
     /// <returns></returns>
-    public int GetEmotionsForText(string Text)
+    public int GetEmotionsForText(string text)
     {
-        foreach (var Kvp in this._emotions)
+        foreach (var kvp in this._emotions)
         {
-            if (Text.ToLower().Contains(Kvp.Key.ToLower()))
+            if (text.ToLower().Contains(kvp.Key.ToLower()))
             {
-                return GetEmoticonPacketNum(Kvp.Value);
+                return GetEmoticonPacketNum(kvp.Value);
             }
         }
 

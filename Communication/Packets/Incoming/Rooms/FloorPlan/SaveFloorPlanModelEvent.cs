@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.FloorPlan;
 using System.Text.RegularExpressions;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 
@@ -11,13 +11,13 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var Map = packet.PopString().ToLower().TrimEnd('\r');
-        var DoorX = packet.PopInt();
-        var DoorY = packet.PopInt();
-        var DoorDirection = packet.PopInt();
-        var WallThick = packet.PopInt();
-        var FloorThick = packet.PopInt();
-        var WallHeight = packet.PopInt();
+        var map = packet.PopString().ToLower().TrimEnd('\r');
+        var doorX = packet.PopInt();
+        var doorY = packet.PopInt();
+        var doorDirection = packet.PopInt();
+        var wallThick = packet.PopInt();
+        var floorThick = packet.PopInt();
+        var wallHeight = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -41,32 +41,32 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
             'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', '\r'
         };
 
-        if (Map.Length > 5776) //76x76
+        if (map.Length > 5776) //76x76
         {
             session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "(%%%general%%%): %%%too_large_area%%% (%%%max%%% 5776 %%%tiles%%%)"));
             return;
         }
 
-        Map = new Regex(@"[^a-z0-9\r]", RegexOptions.IgnoreCase).Replace(Map, string.Empty);
+        map = new Regex(@"[^a-z0-9\r]", RegexOptions.IgnoreCase).Replace(map, string.Empty);
 
-        if (string.IsNullOrEmpty(Map))
+        if (string.IsNullOrEmpty(map))
         {
             session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entré un Floormap invalide! (Map vide)"));
             return;
         }
 
-        if (Map.Any(letter => !validLetters.Contains(letter)))
+        if (map.Any(letter => !validLetters.Contains(letter)))
         {
             session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "Oups, il semble que vous avez entré un Floormap invalide! (Code map)"));
             return;
         }
 
-        var modelData = Map.Split('\r');
+        var modelData = map.Split('\r');
 
-        var SizeY = modelData.Length;
-        var SizeX = modelData[0].Length;
+        var sizeY = modelData.Length;
+        var sizeX = modelData[0].Length;
 
-        if (SizeY > 75 || SizeX > 75 || SizeX < 1 || SizeY < 1)
+        if (sizeY > 75 || sizeX > 75 || sizeX < 1 || sizeY < 1)
         {
             session.SendPacket(new RoomNotificationComposer("floorplan_editor.error", "errors", "La hauteur et la largeur maximales d'un modèle sont de 75x75!"));
             return;
@@ -76,7 +76,7 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
 
         for (var i = 0; i < modelData.Length; i++)
         {
-            if (SizeX != modelData[i].Length)
+            if (sizeX != modelData[i].Length)
             {
                 isValid = false;
             }
@@ -88,62 +88,62 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
             return;
         }
 
-        var DoorZ = 0;
+        var doorZ = 0;
 
         try
         {
-            DoorZ = Parse(modelData[DoorY][DoorX]);
+            doorZ = Parse(modelData[doorY][doorX]);
         }
         catch { }
 
-        if (WallThick > 1)
+        if (wallThick > 1)
         {
-            WallThick = 1;
+            wallThick = 1;
         }
 
-        if (WallThick < -2)
+        if (wallThick < -2)
         {
-            WallThick = -2;
+            wallThick = -2;
         }
 
-        if (FloorThick > 1)
+        if (floorThick > 1)
         {
-            FloorThick = 1;
+            floorThick = 1;
         }
 
-        if (FloorThick < -2)
+        if (floorThick < -2)
         {
-            WallThick = -2;
+            wallThick = -2;
         }
 
-        if (WallHeight < 0)
+        if (wallHeight < 0)
         {
-            WallHeight = 0;
+            wallHeight = 0;
         }
 
-        if (WallHeight > 15)
+        if (wallHeight > 15)
         {
-            WallHeight = 15;
+            wallHeight = 15;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoomModelCustomDao.Replace(dbClient, room.Id, DoorX, DoorY, DoorZ, DoorDirection, Map, WallHeight);
-            RoomDao.UpdateModelWallThickFloorThick(dbClient, room.Id, WallThick, FloorThick);
+            RoomModelCustomDao.Replace(dbClient, room.Id, doorX, doorY, doorZ, doorDirection, map, wallHeight);
+            RoomDao.UpdateModelWallThickFloorThick(dbClient, room.Id, wallThick, floorThick);
         }
 
-        var UsersToReturn = room.GetRoomUserManager().GetRoomUsers().ToList();
+        var usersToReturn = room.GetRoomUserManager().GetRoomUsers().ToList();
 
         WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
 
-        foreach (var User in UsersToReturn)
+        foreach (var user in usersToReturn)
         {
-            if (User == null || User.GetClient() == null)
+            if (user == null || user.GetClient() == null)
             {
                 continue;
             }
 
-            User.GetClient().SendPacket(new RoomForwardComposer(room.Id));
+            user.GetClient().SendPacket(new RoomForwardComposer(room.Id));
         }
     }
 

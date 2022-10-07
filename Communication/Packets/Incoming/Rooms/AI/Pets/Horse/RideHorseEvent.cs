@@ -16,110 +16,110 @@ internal class RideHorseEvent : IPacketEvent
         }
 
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var Room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
             return;
         }
 
-        var User = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-        if (User == null)
+        var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (user == null)
         {
             return;
         }
 
-        var PetId = packet.PopInt();
-        var Type = packet.PopBoolean();
+        var petId = packet.PopInt();
+        var type = packet.PopBoolean();
 
-        if (!Room.GetRoomUserManager().TryGetPet(PetId, out var Pet))
+        if (!room.GetRoomUserManager().TryGetPet(petId, out var pet))
         {
             return;
         }
 
-        if (Pet.PetData == null || Pet.PetData.Type != 13)
+        if (pet.PetData == null || pet.PetData.Type != 13)
         {
             return;
         }
 
-        if (!Pet.PetData.AnyoneCanRide && Pet.PetData.OwnerId != User.UserId)
+        if (!pet.PetData.AnyoneCanRide && pet.PetData.OwnerId != user.UserId)
         {
             return;
         }
 
-        if (Math.Abs(User.X - Pet.X) >= 2 || Math.Abs(User.Y - Pet.Y) >= 2)
+        if (Math.Abs(user.X - pet.X) >= 2 || Math.Abs(user.Y - pet.Y) >= 2)
         {
-            User.MoveTo(Pet.X, Pet.Y);
+            user.MoveTo(pet.X, pet.Y);
             return;
         }
 
-        if (Type && !User.RidingHorse)
+        if (type && !user.RidingHorse)
         {
-            if (Pet.RidingHorse)
+            if (pet.RidingHorse)
             {
-                var Speechtxt = WibboEnvironment.GetLanguageManager().TryGetValue("pet.alreadymounted", session.Langue);
-                Pet.OnChat(Speechtxt, 0, false);
+                var speechtxt = WibboEnvironment.GetLanguageManager().TryGetValue("pet.alreadymounted", session.Langue);
+                pet.OnChat(speechtxt, 0, false);
             }
-            else if (User.RidingHorse)
+            else if (user.RidingHorse)
             {
                 return;
             }
             else
             {
-                User.RemoveStatus("sit");
-                User.RemoveStatus("lay");
-                User.RemoveStatus("snf");
-                User.RemoveStatus("eat");
-                User.RemoveStatus("ded");
-                User.RemoveStatus("jmp");
+                user.RemoveStatus("sit");
+                user.RemoveStatus("lay");
+                user.RemoveStatus("snf");
+                user.RemoveStatus("eat");
+                user.RemoveStatus("ded");
+                user.RemoveStatus("jmp");
 
-                var NewX2 = Pet.X;
-                var NewY2 = Pet.Y;
-                Room.SendPacket(Room.GetRoomItemHandler().TeleportUser(User, new Point(NewX2, NewY2), 0, Room.GetGameMap().SqAbsoluteHeight(NewX2, NewY2) + 1));
-                Room.SendPacket(Room.GetRoomItemHandler().TeleportUser(Pet, new Point(NewX2, NewY2), 0, Room.GetGameMap().SqAbsoluteHeight(NewX2, NewY2)));
+                var newX2 = pet.X;
+                var newY2 = pet.Y;
+                room.SendPacket(RoomItemHandling.TeleportUser(user, new Point(newX2, newY2), 0, room.GetGameMap().SqAbsoluteHeight(newX2, newY2) + 1));
+                room.SendPacket(RoomItemHandling.TeleportUser(pet, new Point(newX2, newY2), 0, room.GetGameMap().SqAbsoluteHeight(newX2, newY2)));
 
-                User.MoveTo(NewX2, NewY2);
+                user.MoveTo(newX2, newY2);
 
-                User.RidingHorse = true;
-                Pet.RidingHorse = true;
-                Pet.HorseID = User.VirtualId;
-                User.HorseID = Pet.VirtualId;
+                user.RidingHorse = true;
+                pet.RidingHorse = true;
+                pet.HorseID = user.VirtualId;
+                user.HorseID = pet.VirtualId;
 
-                if (Pet.PetData.Saddle == 9)
+                if (pet.PetData.Saddle == 9)
                 {
-                    User.ApplyEffect(77);
+                    user.ApplyEffect(77);
                 }
                 else
                 {
-                    User.ApplyEffect(103);
+                    user.ApplyEffect(103);
                 }
 
-                User.RotBody = Pet.RotBody;
-                User.RotHead = Pet.RotHead;
+                user.RotBody = pet.RotBody;
+                user.RotHead = pet.RotHead;
 
-                User.UpdateNeeded = true;
-                Pet.UpdateNeeded = true;
+                user.UpdateNeeded = true;
+                pet.UpdateNeeded = true;
             }
         }
         else
         {
-            if (User.VirtualId == Pet.HorseID)
+            if (user.VirtualId == pet.HorseID)
             {
-                Pet.RemoveStatus("sit");
-                Pet.RemoveStatus("lay");
-                Pet.RemoveStatus("snf");
-                Pet.RemoveStatus("eat");
-                Pet.RemoveStatus("ded");
-                Pet.RemoveStatus("jmp");
-                User.RidingHorse = false;
-                User.HorseID = 0;
-                Pet.RidingHorse = false;
-                Pet.HorseID = 0;
-                User.MoveTo(new Point(User.X + 1, User.Y + 1));
-                User.ApplyEffect(-1);
-                User.UpdateNeeded = true;
-                Pet.UpdateNeeded = true;
+                pet.RemoveStatus("sit");
+                pet.RemoveStatus("lay");
+                pet.RemoveStatus("snf");
+                pet.RemoveStatus("eat");
+                pet.RemoveStatus("ded");
+                pet.RemoveStatus("jmp");
+                user.RidingHorse = false;
+                user.HorseID = 0;
+                pet.RidingHorse = false;
+                pet.HorseID = 0;
+                user.MoveTo(new Point(user.X + 1, user.Y + 1));
+                user.ApplyEffect(-1);
+                user.UpdateNeeded = true;
+                pet.UpdateNeeded = true;
             }
         }
 
-        Room.SendPacket(new PetHorseFigureInformationComposer(Pet));
+        room.SendPacket(new PetHorseFigureInformationComposer(pet));
     }
 }

@@ -9,8 +9,8 @@ internal class CheckPetNameEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var PetName = packet.PopString();
+        var petName = packet.PopString();
 
-        session.SendPacket(new CheckPetNameComposer(PetName));
+        session.SendPacket(new CheckPetNameComposer(petName));
     }
 }

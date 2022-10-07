@@ -13,26 +13,26 @@ internal class LookToEvent : IPacketEvent
             return;
         }
 
-        var User = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-        if (User == null || User.RidingHorse)
+        var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (user == null || user.RidingHorse)
         {
             return;
         }
 
-        User.Unidle();
-        var X2 = packet.PopInt();
-        var Y2 = packet.PopInt();
-        if (X2 == User.X && Y2 == User.Y)
+        user.Unidle();
+        var x2 = packet.PopInt();
+        var y2 = packet.PopInt();
+        if (x2 == user.X && y2 == user.Y)
         {
-            if (User.SetStep)
+            if (user.SetStep)
             {
-                var rotation = Rotation.RotationIverse(User.RotBody);
-                User.SetRot(rotation, false, true);
+                var rotation = Rotation.RotationIverse(user.RotBody);
+                user.SetRot(rotation, false, true);
             }
             return;
         }
 
-        var Rotation2 = Rotation.Calculate(User.X, User.Y, X2, Y2);
-        User.SetRot(Rotation2, false);
+        var rotation2 = Rotation.Calculate(user.X, user.Y, x2, y2);
+        user.SetRot(rotation2, false);
     }
 }

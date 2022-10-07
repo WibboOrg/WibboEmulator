@@ -10,10 +10,10 @@ internal class InitializeNewNavigatorEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var TopLevelItems = WibboEnvironment.GetGame().GetNavigator().GetTopLevelItems();
+        var topLevelItems = WibboEnvironment.GetGame().GetNavigator().GetTopLevelItems();
 
         var packetList = new ServerPacketList();
-        packetList.Add(new NavigatorMetaDataParserComposer(TopLevelItems));
+        packetList.Add(new NavigatorMetaDataParserComposer(topLevelItems));
         packetList.Add(new NavigatorLiftedRoomsComposer());
         packetList.Add(new NavigatorCollapsedCategoriesComposer());
         packetList.Add(new NavigatorPreferencesComposer());

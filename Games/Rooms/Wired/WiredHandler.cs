@@ -4,6 +4,7 @@ using System.Drawing;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Items.Wired.Interfaces;
+using WibboEmulator.Utilities.Events;
 
 public class WiredHandler
 {
@@ -20,9 +21,9 @@ public class WiredHandler
     private readonly Room _room;
     private bool _doCleanup;
 
-    public event BotCollisionDelegate TrgBotCollision;
-    public event UserAndItemDelegate TrgCollision;
-    public event RoomEventDelegate TrgTimer;
+    public event EventHandler<ItemTriggeredEventArgs> TrgBotCollision;
+    public event EventHandler<ItemTriggeredEventArgs> TrgCollision;
+    public event EventHandler TrgTimer;
 
     public WiredHandler(Room room)
     {
@@ -92,7 +93,7 @@ public class WiredHandler
             _ = this._actionStacks[coordinate].Remove(item);
             if (this._actionStacks[coordinate].Count == 0)
             {
-                _ = this._actionStacks.TryRemove(coordinate, out var newList);
+                _ = this._actionStacks.TryRemove(coordinate, out _);
             }
         }
         else if (WiredUtillity.TypeIsWiredCondition(item.GetBaseItem().InteractionType))
@@ -104,7 +105,7 @@ public class WiredHandler
             _ = this._conditionStacks[itemCoord].Remove(item);
             if (this._conditionStacks[itemCoord].Count == 0)
             {
-                _ = this._conditionStacks.TryRemove(itemCoord, out var newList);
+                _ = this._conditionStacks.TryRemove(itemCoord, out _);
             }
         }
         else if (item.GetBaseItem().InteractionType == InteractionType.SPECIALRANDOM)
@@ -332,9 +333,9 @@ public class WiredHandler
         this._wiredUsed.Clear();
     }
 
-    public void TriggerCollision(RoomUser roomUser, Item item) => this.TrgCollision?.Invoke(roomUser, item);
+    public void TriggerCollision(RoomUser roomUser, Item item) => this.TrgCollision?.Invoke(this, new(roomUser, item));
 
-    public void TriggerBotCollision(RoomUser roomUser, string botName) => this.TrgBotCollision?.Invoke(roomUser, botName);
+    public void TriggerBotCollision(RoomUser roomUser, string botName) => this.TrgBotCollision?.Invoke(null, new(roomUser, null, botName));
 
-    public void TriggerTimer() => this.TrgTimer?.Invoke(null, null);
+    public void TriggerTimer() => this.TrgTimer?.Invoke(null, new());
 }

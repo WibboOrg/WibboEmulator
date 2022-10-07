@@ -1,6 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Moderation;
 
 internal class ModeratorActionEvent : IPacketEvent
 {
@@ -13,17 +14,17 @@ internal class ModeratorActionEvent : IPacketEvent
             return;
         }
 
-        var AlertMode = packet.PopInt();
-        var AlertMessage = packet.PopString();
-        var IsCaution = AlertMode != 3;
+        var alertMode = packet.PopInt();
+        var alertMessage = packet.PopString();
+        var isCaution = alertMode != 3;
 
-        if (session.Antipub(AlertMessage, "<MT>"))
+        if (session.Antipub(alertMessage, "<MT>"))
         {
             return;
         }
 
-        WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, AlertMessage.Split(' ')[0].Replace(":", ""), string.Format("Modtool Roomalert: {0}", AlertMessage));
+        ModerationManager.LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, alertMessage.Split(' ')[0].Replace(":", ""), string.Format("Modtool Roomalert: {0}", alertMessage));
 
-        session.GetUser().CurrentRoom.SendPacket(new BroadcastMessageAlertComposer(AlertMessage));
+        session.GetUser().CurrentRoom.SendPacket(new BroadcastMessageAlertComposer(alertMessage));
     }
 }

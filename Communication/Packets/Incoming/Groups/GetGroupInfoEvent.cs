@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Groups;
+namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
 
@@ -8,14 +8,14 @@ internal class GetGroupInfoEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = packet.PopInt();
-        var NewWindow = packet.PopBoolean();
+        var groupId = packet.PopInt();
+        var newWindow = packet.PopBoolean();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
         {
             return;
         }
 
-        session.SendPacket(new GroupInfoComposer(Group, session, NewWindow));
+        session.SendPacket(new GroupInfoComposer(group, session, newWindow));
     }
 }

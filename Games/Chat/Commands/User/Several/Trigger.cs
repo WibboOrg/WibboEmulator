@@ -4,29 +4,29 @@ using WibboEmulator.Games.Rooms;
 
 internal class Trigger : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
+        var targetRoomUser = room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
 
-        if (TargetRoomUser == null || TargetRoomUser.GetClient() == null || TargetRoomUser.GetClient().GetUser() == null)
+        if (targetRoomUser == null || targetRoomUser.GetClient() == null || targetRoomUser.GetClient().GetUser() == null)
         {
             return;
         }
 
-        if (TargetRoomUser.GetClient().GetUser().Id == session.GetUser().Id)
+        if (targetRoomUser.GetClient().GetUser().Id == session.GetUser().Id)
         {
             return;
         }
 
-        if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2 || Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2))
+        if (!(Math.Abs(targetRoomUser.X - userRoom.X) >= 2 || Math.Abs(targetRoomUser.Y - userRoom.Y) >= 2))
         {
-            Room.OnTriggerUser(TargetRoomUser, true);
-            Room.OnTriggerUser(UserRoom, false);
+            room.OnTriggerUser(targetRoomUser, true);
+            room.OnTriggerUser(userRoom, false);
         }
     }
 }

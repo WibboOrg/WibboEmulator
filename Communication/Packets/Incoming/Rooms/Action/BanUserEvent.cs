@@ -27,14 +27,14 @@ internal class BanUserEvent : IPacketEvent
         var str = packet.PopString();
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(pId);
-        int Time;
+        int time;
         if (str.Equals("RWUAM_BAN_USER_HOUR"))
         {
-            Time = 3600;
+            time = 3600;
         }
         else if (str.Equals("RWUAM_BAN_USER_DAY"))
         {
-            Time = 86400;
+            time = 86400;
         }
         else
         {
@@ -43,14 +43,14 @@ internal class BanUserEvent : IPacketEvent
                 return;
             }
 
-            Time = 429496729;
+            time = 429496729;
         }
         if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_kick"))
         {
             return;
         }
 
-        room.AddBan(pId, Time);
+        room.AddBan(pId, time);
         room.GetRoomUserManager().RemoveUserFromRoom(roomUserByUserId.GetClient(), true, true);
     }
 }

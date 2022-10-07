@@ -29,8 +29,8 @@ internal class ShoutEvent : IPacketEvent
 
         if (room.IsRoleplay)
         {
-            var Rp = user.Roleplayer;
-            if (Rp != null && Rp.Dead)
+            var rp = user.Roleplayer;
+            if (rp != null && rp.Dead)
             {
                 return;
             }
@@ -42,11 +42,11 @@ internal class ShoutEvent : IPacketEvent
             message = message[..100];
         }
 
-        var Colour = packet.PopInt();
+        var colour = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(Colour, out var style) || (style.RequiredRight.Length > 0 && !session.GetUser().HasPermission(style.RequiredRight)))
+        if (!WibboEnvironment.GetGame().GetChatManager().GetChatStyles().TryGetStyle(colour, out var style) || (style.RequiredRight.Length > 0 && !session.GetUser().HasPermission(style.RequiredRight)))
         {
-            Colour = 0;
+            colour = 0;
         }
 
         user.Unidle();
@@ -176,7 +176,7 @@ internal class ShoutEvent : IPacketEvent
 
                 if (user.TransfBot)
                 {
-                    Colour = 2;
+                    colour = 2;
                 }
             }
         }
@@ -209,6 +209,6 @@ internal class ShoutEvent : IPacketEvent
             message = user.ChatTextColor + " " + message;
         }
 
-        user.OnChat(message, Colour, true);
+        user.OnChat(message, colour, true);
     }
 }

@@ -4,25 +4,20 @@ using WibboEmulator.Games.Rooms;
 
 internal class WarpStaff : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (TargetUser == null)
+        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        if (targetUser == null)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(TargetUser.GetUser().CurrentRoomId, out var room))
-        {
-            return;
-        }
-
-        var roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(TargetUser.GetUser().Id);
+        var roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(targetUser.GetUser().Id);
         if (roomUserByUserIdTarget == null)
         {
             return;
@@ -34,6 +29,6 @@ internal class WarpStaff : IChatCommand
             return;
         }
 
-        room.SendPacket(room.GetRoomItemHandler().TeleportUser(roomUserByUserIdTarget, roomUserByUserId.Coordinate, 0, room.GetGameMap().SqAbsoluteHeight(roomUserByUserId.X, roomUserByUserId.Y)));
+        room.SendPacket(RoomItemHandling.TeleportUser(roomUserByUserIdTarget, roomUserByUserId.Coordinate, 0, room.GetGameMap().SqAbsoluteHeight(roomUserByUserId.X, roomUserByUserId.Y)));
     }
 }

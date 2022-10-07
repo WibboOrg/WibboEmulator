@@ -1,5 +1,5 @@
 namespace WibboEmulator.Games.Chat.Commands.User.Build;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
@@ -7,60 +7,60 @@ using WibboEmulator.Games.Rooms.Map;
 
 internal class MaxFloor : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var Map = "";
-        var TailleFloor = 50;
+        var map = "";
+        var maxSize = 50;
         if (session.GetUser().Rank > 1)
         {
-            TailleFloor = 75;
+            maxSize = 75;
         }
 
-        for (var y = 0; y < (Room.GetGameMap().Model.MapSizeY > TailleFloor ? Room.GetGameMap().Model.MapSizeY : TailleFloor); y++)
+        for (var y = 0; y < (room.GetGameMap().Model.MapSizeY > maxSize ? room.GetGameMap().Model.MapSizeY : maxSize); y++)
         {
-            var Line = "";
-            for (var x = 0; x < (Room.GetGameMap().Model.MapSizeX > TailleFloor ? Room.GetGameMap().Model.MapSizeX : TailleFloor); x++)
+            var line = "";
+            for (var x = 0; x < (room.GetGameMap().Model.MapSizeX > maxSize ? room.GetGameMap().Model.MapSizeX : maxSize); x++)
             {
-                if (x >= Room.GetGameMap().Model.MapSizeX || y >= Room.GetGameMap().Model.MapSizeY)
+                if (x >= room.GetGameMap().Model.MapSizeX || y >= room.GetGameMap().Model.MapSizeY)
                 {
-                    Line += "0";
+                    line += "0";
                 }
                 else
                 {
-                    if (Room.GetGameMap().Model.SqState[x, y] == SquareStateType.BLOCKED)
+                    if (room.GetGameMap().Model.SqState[x, y] == SquareStateType.BLOCKED)
                     {
-                        Line += "0";//x
+                        line += "0";//x
                     }
                     else
                     {
-                        Line += ParseInverse(Room.GetGameMap().Model.SqFloorHeight[x, y]);
+                        line += ParseInverse(room.GetGameMap().Model.SqFloorHeight[x, y]);
                     }
                 }
             }
-            Map += Line + Convert.ToChar(13);
+            map += line + Convert.ToChar(13);
         }
 
-        Map = Map.TrimEnd(Convert.ToChar(13));
+        map = map.TrimEnd(Convert.ToChar(13));
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoomModelCustomDao.Replace(dbClient, Room.Id, Room.GetGameMap().Model.DoorX, Room.GetGameMap().Model.DoorY, Room.GetGameMap().Model.DoorZ, Room.GetGameMap().Model.DoorOrientation, Map, Room.GetGameMap().Model.WallHeight);
-            RoomDao.UpdateModel(dbClient, Room.Id);
+            RoomModelCustomDao.Replace(dbClient, room.Id, room.GetGameMap().Model.DoorX, room.GetGameMap().Model.DoorY, room.GetGameMap().Model.DoorZ, room.GetGameMap().Model.DoorOrientation, map, room.GetGameMap().Model.WallHeight);
+            RoomDao.UpdateModel(dbClient, room.Id);
         }
 
-        var UsersToReturn = Room.GetRoomUserManager().GetRoomUsers().ToList();
+        var usersToReturn = room.GetRoomUserManager().GetRoomUsers().ToList();
 
-        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(Room);
+        WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
 
 
-        foreach (var User in UsersToReturn)
+        foreach (var user in usersToReturn)
         {
-            if (User == null || User.GetClient() == null)
+            if (user == null || user.GetClient() == null)
             {
                 continue;
             }
 
-            User.GetClient().SendPacket(new RoomForwardComposer(Room.Id));
+            user.GetClient().SendPacket(new RoomForwardComposer(room.Id));
         }
     }
 

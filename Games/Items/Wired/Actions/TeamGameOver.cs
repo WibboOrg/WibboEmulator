@@ -6,6 +6,7 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
+using WibboEmulator.Games.Rooms.Map;
 
 public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
 {
@@ -58,7 +59,7 @@ public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
 
             if (exitTeleport != null)
             {
-                this.RoomInstance.GetGameMap().TeleportToItem(teamuser, exitTeleport);
+                Gamemap.TeleportToItem(teamuser, exitTeleport);
             }
         }
 

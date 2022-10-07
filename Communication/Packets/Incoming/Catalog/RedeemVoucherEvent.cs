@@ -11,15 +11,15 @@ internal class RedeemVoucherEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var VoucherCode = packet.PopString().Replace("\r", "");
+        var voucherCode = packet.PopString().Replace("\r", "");
 
-        if (!WibboEnvironment.GetGame().GetCatalog().GetVoucherManager().TryGetVoucher(VoucherCode, out var Voucher))
+        if (!WibboEnvironment.GetGame().GetCatalog().GetVoucherManager().TryGetVoucher(voucherCode, out var voucher))
         {
             session.SendPacket(new VoucherRedeemErrorComposer(0));
             return;
         }
 
-        if (Voucher.CurrentUses >= Voucher.MaxUses)
+        if (voucher.CurrentUses >= voucher.MaxUses)
         {
             return;
         }
@@ -27,7 +27,7 @@ internal class RedeemVoucherEvent : IPacketEvent
         var haveVoucher = false;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            haveVoucher = UserVoucherDao.HaveVoucher(dbClient, session.GetUser().Id, VoucherCode);
+            haveVoucher = UserVoucherDao.HaveVoucher(dbClient, session.GetUser().Id, voucherCode);
         }
 
         if (!haveVoucher)
@@ -37,20 +37,20 @@ internal class RedeemVoucherEvent : IPacketEvent
         else
         {
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserVoucherDao.Insert(dbClient, session.GetUser().Id, VoucherCode);
+            UserVoucherDao.Insert(dbClient, session.GetUser().Id, voucherCode);
         }
 
-        Voucher.UpdateUses();
+        voucher.UpdateUses();
 
-        if (Voucher.Type == VoucherType.CREDIT)
+        if (voucher.Type == VoucherType.CREDIT)
         {
-            session.GetUser().Credits += Voucher.Value;
+            session.GetUser().Credits += voucher.Value;
             session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
         }
-        else if (Voucher.Type == VoucherType.DUCKET)
+        else if (voucher.Type == VoucherType.DUCKET)
         {
-            session.GetUser().Duckets += Voucher.Value;
-            session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().Duckets, Voucher.Value));
+            session.GetUser().Duckets += voucher.Value;
+            session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().Duckets, voucher.Value));
         }
 
         //session.SendPacket(new VoucherRedeemOkComposer());

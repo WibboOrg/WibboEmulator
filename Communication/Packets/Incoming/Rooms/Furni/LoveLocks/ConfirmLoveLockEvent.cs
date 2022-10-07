@@ -1,9 +1,8 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.LoveLocks;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Furni.LoveLocks;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Furni.Furni;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Rooms;
 
 internal class ConfirmLoveLockEvent : IPacketEvent
 {
@@ -11,113 +10,113 @@ internal class ConfirmLoveLockEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var Id = packet.PopInt();
+        var id = packet.PopInt();
         var isConfirmed = packet.PopBoolean();
 
-        var Room = session.GetUser().CurrentRoom;
-        if (Room == null || !Room.CheckRights(session))
+        var room = session.GetUser().CurrentRoom;
+        if (room == null || !room.CheckRights(session))
         {
             return;
         }
 
-        var Item = Room.GetRoomItemHandler().GetItem(Id);
+        var item = room.GetRoomItemHandler().GetItem(id);
 
-        if (Item == null || Item.GetBaseItem() == null || Item.GetBaseItem().InteractionType != InteractionType.LOVELOCK)
+        if (item == null || item.GetBaseItem() == null || item.GetBaseItem().InteractionType != InteractionType.LOVELOCK)
         {
             return;
         }
 
-        var UserOneId = Item.InteractingUser;
-        var UserTwoId = Item.InteractingUser2;
+        var userOneId = item.InteractingUser;
+        var userTwoId = item.InteractingUser2;
 
-        var UserOne = Room.GetRoomUserManager().GetRoomUserByUserId(UserOneId);
-        var UserTwo = Room.GetRoomUserManager().GetRoomUserByUserId(UserTwoId);
+        var userOne = room.GetRoomUserManager().GetRoomUserByUserId(userOneId);
+        var userTwo = room.GetRoomUserManager().GetRoomUserByUserId(userTwoId);
 
-        if (UserOne == null || UserTwo == null)
+        if (userOne == null || userTwo == null)
         {
-            Item.InteractingUser = 0;
-            Item.InteractingUser2 = 0;
+            item.InteractingUser = 0;
+            item.InteractingUser2 = 0;
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", session.Langue));
             return;
         }
-        else if (UserOne.GetClient() == null || UserTwo.GetClient() == null)
+        else if (userOne.GetClient() == null || userTwo.GetClient() == null)
         {
-            Item.InteractingUser = 0;
-            Item.InteractingUser2 = 0;
+            item.InteractingUser = 0;
+            item.InteractingUser2 = 0;
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", session.Langue));
             return;
         }
-        else if (UserOne == null)
+        else if (userOne == null)
         {
-            UserTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", UserTwo.GetClient().Langue));
-            UserTwo.LLPartner = 0;
-            Item.InteractingUser = 0;
-            Item.InteractingUser2 = 0;
+            userTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", userTwo.GetClient().Langue));
+            userTwo.LLPartner = 0;
+            item.InteractingUser = 0;
+            item.InteractingUser2 = 0;
             return;
         }
-        else if (UserTwo == null)
+        else if (userTwo == null)
         {
-            UserOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", UserOne.GetClient().Langue));
-            UserOne.LLPartner = 0;
-            Item.InteractingUser = 0;
-            Item.InteractingUser2 = 0;
+            userOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", userOne.GetClient().Langue));
+            userOne.LLPartner = 0;
+            item.InteractingUser = 0;
+            item.InteractingUser2 = 0;
             return;
         }
-        else if (Item.ExtraData.Contains(Convert.ToChar(5).ToString()))
+        else if (item.ExtraData.Contains(Convert.ToChar(5).ToString()))
         {
-            UserTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.2", UserTwo.GetClient().Langue));
-            UserTwo.LLPartner = 0;
+            userTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.2", userTwo.GetClient().Langue));
+            userTwo.LLPartner = 0;
 
-            UserOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.2", UserOne.GetClient().Langue));
-            UserOne.LLPartner = 0;
+            userOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.2", userOne.GetClient().Langue));
+            userOne.LLPartner = 0;
 
-            Item.InteractingUser = 0;
-            Item.InteractingUser2 = 0;
+            item.InteractingUser = 0;
+            item.InteractingUser2 = 0;
             return;
         }
         else if (!isConfirmed)
         {
-            Item.InteractingUser = 0;
-            Item.InteractingUser2 = 0;
+            item.InteractingUser = 0;
+            item.InteractingUser2 = 0;
 
-            UserOne.LLPartner = 0;
-            UserTwo.LLPartner = 0;
+            userOne.LLPartner = 0;
+            userTwo.LLPartner = 0;
             return;
         }
         else
         {
-            if (UserOneId == session.GetUser().Id)
+            if (userOneId == session.GetUser().Id)
             {
-                session.SendPacket(new LoveLockDialogueSetLockedComposer(Id));
-                UserOne.LLPartner = UserTwoId;
+                session.SendPacket(new LoveLockDialogueSetLockedComposer(id));
+                userOne.LLPartner = userTwoId;
             }
-            else if (UserTwoId == session.GetUser().Id)
+            else if (userTwoId == session.GetUser().Id)
             {
-                session.SendPacket(new LoveLockDialogueSetLockedComposer(Id));
-                UserTwo.LLPartner = UserOneId;
+                session.SendPacket(new LoveLockDialogueSetLockedComposer(id));
+                userTwo.LLPartner = userOneId;
             }
 
-            if (UserOne.LLPartner == 0 || UserTwo.LLPartner == 0)
+            if (userOne.LLPartner == 0 || userTwo.LLPartner == 0)
             {
                 return;
             }
             else
             {
-                Item.ExtraData = "1" + (char)5 + UserOne.GetUsername() + (char)5 + UserTwo.GetUsername() + (char)5 + UserOne.GetClient().GetUser().Look + (char)5 + UserTwo.GetClient().GetUser().Look + (char)5 + DateTime.Now.ToString("dd/MM/yyyy");
+                item.ExtraData = "1" + (char)5 + userOne.GetUsername() + (char)5 + userTwo.GetUsername() + (char)5 + userOne.GetClient().GetUser().Look + (char)5 + userTwo.GetClient().GetUser().Look + (char)5 + DateTime.Now.ToString("dd/MM/yyyy");
 
-                Item.InteractingUser = 0;
-                Item.InteractingUser2 = 0;
+                item.InteractingUser = 0;
+                item.InteractingUser2 = 0;
 
-                UserOne.LLPartner = 0;
-                UserTwo.LLPartner = 0;
+                userOne.LLPartner = 0;
+                userTwo.LLPartner = 0;
 
-                Item.UpdateState(true, true);
+                item.UpdateState(true, true);
 
-                UserOne.GetClient().SendPacket(new LoveLockDialogueCloseComposer(Id));
-                UserTwo.GetClient().SendPacket(new LoveLockDialogueCloseComposer(Id));
+                userOne.GetClient().SendPacket(new LoveLockDialogueCloseComposer(id));
+                userTwo.GetClient().SendPacket(new LoveLockDialogueCloseComposer(id));
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                ItemDao.UpdateExtradata(dbClient, Item.Id, Item.ExtraData);
+                ItemDao.UpdateExtradata(dbClient, item.Id, item.ExtraData);
             }
         }
     }

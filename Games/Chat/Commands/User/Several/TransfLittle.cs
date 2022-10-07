@@ -6,32 +6,32 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class TransfLittle : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
+        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
         {
             return;
         }
 
-        if (session.GetUser().SpectatorMode || UserRoom.InGame)
+        if (session.GetUser().SpectatorMode || userRoom.InGame)
         {
             return;
         }
 
-        if (!UserRoom.SetPetTransformation("little" + parameters[1], 0))
+        if (!userRoom.SetPetTransformation("little" + parameters[1], 0))
         {
             session.SendHugeNotif(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.littleorbig.help", session.Langue));
             return;
         }
 
-        UserRoom.IsTransf = true;
+        userRoom.IsTransf = true;
 
-        Room.SendPacket(new UserRemoveComposer(UserRoom.VirtualId));
-        Room.SendPacket(new UsersComposer(UserRoom));
+        room.SendPacket(new UserRemoveComposer(userRoom.VirtualId));
+        room.SendPacket(new UsersComposer(userRoom));
     }
 }

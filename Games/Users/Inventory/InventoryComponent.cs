@@ -27,9 +27,9 @@ public class InventoryComponent : IDisposable
         this._botItems = new ConcurrentDictionary<int, Bot>();
     }
 
-    public void ClearItems(bool All = false)
+    public void ClearItems(bool all = false)
     {
-        if (All)
+        if (all)
         {
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
@@ -111,6 +111,8 @@ public class InventoryComponent : IDisposable
         this._userItems.Clear();
         this._petsItems.Clear();
         this._botItems.Clear();
+
+        GC.SuppressFinalize(this);
     }
 
     public ICollection<Pet> GetPets() => this._petsItems.Values;

@@ -7,15 +7,9 @@ using WibboEmulator.Games.Rooms;
 
 public class UserCommand : WiredTriggerBase, IWired
 {
-    private readonly RoomEventDelegate _delegateFunction;
+    public UserCommand(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION) => room.OnTrigger += this.OnUserSays;
 
-    public UserCommand(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION)
-    {
-        this._delegateFunction = new RoomEventDelegate(this.RoomUserManager_OnUserSays);
-        room.OnTrigger += this._delegateFunction;
-    }
-
-    private void RoomUserManager_OnUserSays(object sender, EventArgs e)
+    private void OnUserSays(object sender, EventArgs e)
     {
         var user = (RoomUser)sender;
         if (user == null || user.IsBot)
@@ -30,7 +24,7 @@ public class UserCommand : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GetWiredHandler().GetRoom().OnTrigger -= this._delegateFunction;
+        this.RoomInstance.GetWiredHandler().GetRoom().OnTrigger -= this.OnUserSays;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

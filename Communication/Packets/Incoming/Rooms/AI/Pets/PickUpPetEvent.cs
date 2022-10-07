@@ -4,7 +4,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 
 internal class PickUpPetEvent : IPacketEvent
@@ -24,92 +23,87 @@ internal class PickUpPetEvent : IPacketEvent
         }
 
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var Room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
             return;
         }
 
-        var PetId = packet.PopInt();
+        var petId = packet.PopInt();
 
-        if (!Room.GetRoomUserManager().TryGetPet(PetId, out var Pet))
+        if (!room.GetRoomUserManager().TryGetPet(petId, out var pet))
         {
-            //Check kick rights, just because it seems most appropriate.
-            if ((!Room.CheckRights(session) && Room.RoomData.WhoCanKick != 2 && Room.RoomData.Group == null) || (Room.RoomData.Group != null && !Room.CheckRights(session)))
+            if ((!room.CheckRights(session) && room.RoomData.WhoCanKick != 2 && room.RoomData.Group == null) || (room.RoomData.Group != null && !room.CheckRights(session)))
             {
                 return;
             }
 
-            //Okay so, we've established we have no pets in this room by this virtual Id, let us check out users, maybe they're creeping as a pet?!
-            var TargetUser = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(PetId);
-            if (TargetUser == null)
+            var targetUser = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(petId);
+            if (targetUser == null)
             {
                 return;
             }
 
-            //Check some values first, please!
-            if (TargetUser.GetClient() == null || TargetUser.GetClient().GetUser() == null)
+            if (targetUser.GetClient() == null || targetUser.GetClient().GetUser() == null)
             {
                 return;
             }
 
-            TargetUser.IsTransf = false;
+            targetUser.IsTransf = false;
 
-            //Quickly remove the old user instance.
-            Room.SendPacket(new UserRemoveComposer(TargetUser.VirtualId));
+            room.SendPacket(new UserRemoveComposer(targetUser.VirtualId));
 
-            //Add the new one, they won't even notice a thing!!11 8-)
-            Room.SendPacket(new UsersComposer(TargetUser));
+            room.SendPacket(new UsersComposer(targetUser));
             return;
         }
 
-        if (session.GetUser().Id != Pet.PetData.OwnerId && !Room.CheckRights(session, true))
+        if (session.GetUser().Id != pet.PetData.OwnerId && !room.CheckRights(session, true))
         {
             return;
         }
 
-        if (Pet.RidingHorse)
+        if (pet.RidingHorse)
         {
-            var UserRiding = Room.GetRoomUserManager().GetRoomUserByVirtualId(Pet.HorseID);
-            if (UserRiding != null)
+            var userRiding = room.GetRoomUserManager().GetRoomUserByVirtualId(pet.HorseID);
+            if (userRiding != null)
             {
-                UserRiding.RidingHorse = false;
-                UserRiding.ApplyEffect(-1);
-                UserRiding.MoveTo(new Point(UserRiding.X + 1, UserRiding.Y + 1));
+                userRiding.RidingHorse = false;
+                userRiding.ApplyEffect(-1);
+                userRiding.MoveTo(new Point(userRiding.X + 1, userRiding.Y + 1));
             }
             else
             {
-                Pet.RidingHorse = false;
+                pet.RidingHorse = false;
             }
         }
 
-        var pet = Pet.PetData;
+        var petData = pet.PetData;
 
         pet.RoomId = 0;
-        pet.PlacedInRoom = false;
+        petData.PlacedInRoom = false;
 
-        pet.DBState = DatabaseUpdateState.NEEDS_UPDATE;
+        petData.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            BotPetDao.UpdateRoomId(dbClient, pet.PetId, 0);
+            BotPetDao.UpdateRoomId(dbClient, petData.PetId, 0);
         }
 
-        if (pet.OwnerId != session.GetUser().Id)
+        if (petData.OwnerId != session.GetUser().Id)
         {
-            var Target = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(pet.OwnerId);
-            if (Target != null)
+            var target = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(petData.OwnerId);
+            if (target != null)
             {
-                _ = Target.GetUser().GetInventoryComponent().TryAddPet(Pet.PetData);
-                Room.GetRoomUserManager().RemoveBot(Pet.VirtualId, false);
+                _ = target.GetUser().GetInventoryComponent().TryAddPet(pet.PetData);
+                room.GetRoomUserManager().RemoveBot(pet.VirtualId, false);
 
-                Target.SendPacket(new PetInventoryComposer(Target.GetUser().GetInventoryComponent().GetPets()));
+                target.SendPacket(new PetInventoryComposer(target.GetUser().GetInventoryComponent().GetPets()));
                 return;
             }
         }
         else
         {
-            _ = session.GetUser().GetInventoryComponent().TryAddPet(Pet.PetData);
-            Room.GetRoomUserManager().RemoveBot(Pet.VirtualId, false);
+            _ = session.GetUser().GetInventoryComponent().TryAddPet(pet.PetData);
+            room.GetRoomUserManager().RemoveBot(pet.VirtualId, false);
             session.SendPacket(new PetInventoryComposer(session.GetUser().GetInventoryComponent().GetPets()));
         }
     }

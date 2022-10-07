@@ -2,8 +2,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
-using WibboEmulator.Games.Rooms;
 
 internal class GiveAdminRightsEvent : IPacketEvent
 {
@@ -11,46 +9,46 @@ internal class GiveAdminRightsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = packet.PopInt();
-        var UserId = packet.PopInt();
+        var groupId = packet.PopInt();
+        var userId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
         {
             return;
         }
 
-        if (session.GetUser().Id != Group.CreatorId || !Group.IsMember(UserId))
+        if (session.GetUser().Id != group.CreatorId || !group.IsMember(userId))
         {
             return;
         }
 
-        var user = WibboEnvironment.GetUserById(UserId);
+        var user = WibboEnvironment.GetUserById(userId);
         if (user == null)
         {
             return;
         }
 
-        Group.MakeAdmin(UserId);
+        group.MakeAdmin(userId);
 
-        if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out var Room))
+        if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var room))
         {
-            var User = Room.GetRoomUserManager().GetRoomUserByUserId(UserId);
-            if (User != null)
+            var userRooom = room.GetRoomUserManager().GetRoomUserByUserId(userId);
+            if (userRooom != null)
             {
-                if (!User.ContainStatus("flatctrl"))
+                if (!userRooom.ContainStatus("flatctrl"))
                 {
-                    User.SetStatus("flatctrl", "1");
+                    userRooom.SetStatus("flatctrl", "1");
                 }
 
-                User.UpdateNeeded = true;
+                userRooom.UpdateNeeded = true;
 
-                if (User.GetClient() != null)
+                if (userRooom.GetClient() != null)
                 {
-                    User.GetClient().SendPacket(new YouAreControllerComposer(1));
+                    userRooom.GetClient().SendPacket(new YouAreControllerComposer(1));
                 }
             }
         }
 
-        session.SendPacket(new GroupMemberUpdatedComposer(GroupId, user, 1));
+        session.SendPacket(new GroupMemberUpdatedComposer(groupId, user, 1));
     }
 }

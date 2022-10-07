@@ -3,8 +3,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.AI;
 
 internal class SaveBotActionEvent : IPacketEvent
 {
@@ -17,33 +15,33 @@ internal class SaveBotActionEvent : IPacketEvent
             return;
         }
 
-        var Room = session.GetUser().CurrentRoom;
-        if (Room == null || !Room.CheckRights(session, true))
+        var room = session.GetUser().CurrentRoom;
+        if (room == null || !room.CheckRights(session, true))
         {
             return;
         }
 
-        var BotId = packet.PopInt();
-        var ActionId = packet.PopInt();
-        var DataString = packet.PopString();
+        var botId = packet.PopInt();
+        var actionId = packet.PopInt();
+        var dataString = packet.PopString();
 
-        if (BotId <= 0)
+        if (botId <= 0)
         {
             return;
         }
 
-        if (ActionId is < 1 or > 5)
+        if (actionId is < 1 or > 5)
         {
             return;
         }
 
-        if (!Room.GetRoomUserManager().TryGetBot(BotId, out var Bot))
+        if (!room.GetRoomUserManager().TryGetBot(botId, out var bot))
         {
             return;
         }
 
-        var RoomBot = Bot.BotData;
-        if (RoomBot == null)
+        var roomBot = bot.BotData;
+        if (roomBot == null)
         {
             return;
         }
@@ -55,52 +53,49 @@ internal class SaveBotActionEvent : IPacketEvent
          * 5 = Change Name
          */
 
-        switch (ActionId)
+        switch (actionId)
         {
             case 1:
             {
                 //Change the defaults
-                Bot.BotData.Look = session.GetUser().Look;
-                Bot.BotData.Gender = session.GetUser().Gender;
+                bot.BotData.Look = session.GetUser().Look;
+                bot.BotData.Gender = session.GetUser().Gender;
 
-                Room.SendPacket(new UserChangeComposer(Bot));
+                room.SendPacket(new UserChangeComposer(bot));
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                BotUserDao.UpdateLookGender(dbClient, Bot.BotData.Id, session.GetUser().Gender, session.GetUser().Look);
+                BotUserDao.UpdateLookGender(dbClient, bot.BotData.Id, session.GetUser().Gender, session.GetUser().Look);
                 break;
             }
 
             case 2:
             {
 
-                var ConfigData = DataString.Split(new string[]
-                {
-                        ";#;"
-                }, StringSplitOptions.None);
+                var configData = dataString.Split(";#;", StringSplitOptions.None);
 
-                var SpeechData = ConfigData[0].Split(new char[]
+                var speechData = configData[0].Split(new char[]
                 {
                         '\r',
                         '\n'
                 }, StringSplitOptions.RemoveEmptyEntries);
 
-                var AutomaticChat = Convert.ToString(ConfigData[1]);
-                var SpeakingIntervalIsInt = int.TryParse(ConfigData[2], out var SpeakingInterval);
-                var MixChat = Convert.ToString(ConfigData[3]);
+                var automaticChat = Convert.ToString(configData[1]);
+                var speakingIntervalIsInt = int.TryParse(configData[2], out var speakingInterval);
+                var mixChat = Convert.ToString(configData[3]);
 
-                if (SpeakingInterval <= 0 || SpeakingInterval < 7 || !SpeakingIntervalIsInt)
+                if (speakingInterval <= 0 || speakingInterval < 7 || !speakingIntervalIsInt)
                 {
-                    SpeakingInterval = 7;
+                    speakingInterval = 7;
                 }
 
-                RoomBot.AutomaticChat = Convert.ToBoolean(AutomaticChat);
-                RoomBot.SpeakingInterval = SpeakingInterval;
-                RoomBot.MixSentences = Convert.ToBoolean(MixChat);
+                roomBot.AutomaticChat = Convert.ToBoolean(automaticChat);
+                roomBot.SpeakingInterval = speakingInterval;
+                roomBot.MixSentences = Convert.ToBoolean(mixChat);
 
                 var text = "";
-                for (var i = 0; i <= SpeechData.Length - 1; i++)
+                for (var i = 0; i <= speechData.Length - 1; i++)
                 {
-                    var phrase = SpeechData[i];
+                    var phrase = speechData[i];
                     if (phrase.Length > 150)
                     {
                         phrase = phrase[..150];
@@ -109,68 +104,68 @@ internal class SaveBotActionEvent : IPacketEvent
                     text += phrase[i] + "\r";
                 }
 
-                RoomBot.ChatText = text;
-                RoomBot.LoadRandomSpeech(text);
+                roomBot.ChatText = text;
+                roomBot.LoadRandomSpeech(text);
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                BotUserDao.UpdateChat(dbClient, BotId, RoomBot.AutomaticChat, RoomBot.SpeakingInterval, RoomBot.MixSentences, RoomBot.ChatText);
+                BotUserDao.UpdateChat(dbClient, botId, roomBot.AutomaticChat, roomBot.SpeakingInterval, roomBot.MixSentences, roomBot.ChatText);
 
                 break;
             }
 
             case 3:
             {
-                Bot.BotData.WalkingEnabled = !Bot.BotData.WalkingEnabled;
+                bot.BotData.WalkingEnabled = !bot.BotData.WalkingEnabled;
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                BotUserDao.UpdateWalkEnabled(dbClient, Bot.BotData.Id, Bot.BotData.WalkingEnabled);
+                BotUserDao.UpdateWalkEnabled(dbClient, bot.BotData.Id, bot.BotData.WalkingEnabled);
                 break;
             }
 
             case 4:
             {
-                if (Bot.DanceId > 0)
+                if (bot.DanceId > 0)
                 {
-                    Bot.DanceId = 0;
-                    Bot.BotData.IsDancing = false;
+                    bot.DanceId = 0;
+                    bot.BotData.IsDancing = false;
                 }
                 else
                 {
-                    Bot.DanceId = WibboEnvironment.GetRandomNumber(1, 4);
-                    Bot.BotData.IsDancing = true;
+                    bot.DanceId = WibboEnvironment.GetRandomNumber(1, 4);
+                    bot.BotData.IsDancing = true;
                 }
 
-                Room.SendPacket(new DanceComposer(Bot.VirtualId, Bot.DanceId));
+                room.SendPacket(new DanceComposer(bot.VirtualId, bot.DanceId));
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                BotUserDao.UpdateIsDancing(dbClient, Bot.BotData.Id, Bot.BotData.IsDancing);
+                BotUserDao.UpdateIsDancing(dbClient, bot.BotData.Id, bot.BotData.IsDancing);
 
                 break;
             }
 
             case 5:
             {
-                if (DataString.Length == 0)
+                if (dataString.Length == 0)
                 {
                     return;
                 }
-                else if (DataString.Length >= 16)
-                {
-                    return;
-                }
-
-                if (DataString.Contains("<img src") || DataString.Contains("<font ") || DataString.Contains("</font>") || DataString.Contains("</a>") || DataString.Contains("<i>"))
+                else if (dataString.Length >= 16)
                 {
                     return;
                 }
 
-                Bot.BotData.Name = DataString;
+                if (dataString.Contains("<img src") || dataString.Contains("<font ") || dataString.Contains("</font>") || dataString.Contains("</a>") || dataString.Contains("<i>"))
+                {
+                    return;
+                }
+
+                bot.BotData.Name = dataString;
 
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    BotUserDao.UpdateName(dbClient, Bot.BotData.Id, DataString);
+                    BotUserDao.UpdateName(dbClient, bot.BotData.Id, dataString);
                 }
 
-                Room.SendPacket(new UserNameChangeComposer(Bot.BotData.Name, Bot.VirtualId));
+                room.SendPacket(new UserNameChangeComposer(bot.BotData.Name, bot.VirtualId));
                 break;
             }
         }

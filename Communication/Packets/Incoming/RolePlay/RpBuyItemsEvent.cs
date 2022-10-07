@@ -1,6 +1,5 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.RolePlay;
+namespace WibboEmulator.Communication.Packets.Incoming.RolePlay;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
 internal class RpBuyItemsEvent : IPacketEvent
 {
@@ -8,81 +7,81 @@ internal class RpBuyItemsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var ItemId = packet.PopInt();
-        var Count = packet.PopInt();
+        var itemId = packet.PopInt();
+        var count = packet.PopInt();
 
         if (session == null || session.GetUser() == null)
         {
             return;
         }
 
-        if (Count > 99)
+        if (count > 99)
         {
-            Count = 99;
+            count = 99;
         }
 
-        if (Count < 1)
+        if (count < 1)
         {
-            Count = 1;
+            count = 1;
         }
 
-        var Room = session.GetUser().CurrentRoom;
-        if (Room == null || !Room.IsRoleplay)
+        var room = session.GetUser().CurrentRoom;
+        if (room == null || !room.IsRoleplay)
         {
             return;
         }
 
-        var User = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-        if (User == null)
+        var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (user == null)
         {
             return;
         }
 
-        if (!User.AllowBuyItems.Contains(ItemId))
+        if (!user.AllowBuyItems.Contains(itemId))
         {
             return;
         }
 
-        var Rp = User.Roleplayer;
-        if (Rp == null || Rp.Dead || Rp.SendPrison)
+        var rp = user.Roleplayer;
+        if (rp == null || rp.Dead || rp.SendPrison)
         {
             return;
         }
 
-        var RpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(ItemId);
-        if (RpItem == null)
+        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
+        if (rpItem == null)
         {
             return;
         }
 
-        if (!RpItem.AllowStack && Rp.GetInventoryItem(RpItem.Id) != null)
+        if (!rpItem.AllowStack && rp.GetInventoryItem(rpItem.Id) != null)
         {
-            User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itemown", session.Langue));
+            user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itemown", session.Langue));
             return;
         }
 
-        if (!RpItem.AllowStack && Count > 1)
+        if (!rpItem.AllowStack && count > 1)
         {
-            Count = 1;
+            count = 1;
         }
 
-        if (Rp.Money < (RpItem.Price * Count))
+        if (rp.Money < (rpItem.Price * count))
         {
             return;
         }
 
-        Rp.AddInventoryItem(RpItem.Id, Count);
+        rp.AddInventoryItem(rpItem.Id, count);
 
-        if (RpItem.Price == 0)
+        if (rpItem.Price == 0)
         {
-            User.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itempick", session.Langue));
+            user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itempick", session.Langue));
         }
         else
         {
-            User.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itembuy", session.Langue), RpItem.Price));
+            user.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itembuy", session.Langue), rpItem.Price));
         }
 
-        Rp.Money -= RpItem.Price * Count;
-        Rp.SendUpdate();
+        rp.Money -= rpItem.Price * count;
+        rp.SendUpdate();
     }
 }

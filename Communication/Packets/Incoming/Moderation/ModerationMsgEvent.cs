@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Moderation;
 
 internal class ModerationMsgEvent : IPacketEvent
 {
@@ -36,7 +37,7 @@ internal class ModerationMsgEvent : IPacketEvent
             return;
         }
 
-        WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, "ModTool", string.Format("Modtool alert ( {1} ): {0}", message, clientTarget.GetUser().Username));
+        ModerationManager.LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, "ModTool", string.Format("Modtool alert ( {1} ): {0}", message, clientTarget.GetUser().Username));
 
         clientTarget.SendNotification(message);
     }

@@ -6,19 +6,19 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class TransfStop : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
+        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
         {
             return;
         }
 
-        if (UserRoom.IsTransf && !UserRoom.IsSpectator && !UserRoom.InGame)
+        if (userRoom.IsTransf && !userRoom.IsSpectator && !userRoom.InGame)
         {
-            UserRoom.IsTransf = false;
+            userRoom.IsTransf = false;
 
-            Room.SendPacket(new UserRemoveComposer(UserRoom.VirtualId));
-            Room.SendPacket(new UsersComposer(UserRoom));
+            room.SendPacket(new UserRemoveComposer(userRoom.VirtualId));
+            room.SendPacket(new UsersComposer(userRoom));
         }
     }
 }

@@ -6,6 +6,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Freeze;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms.Games.Teams;
+using WibboEmulator.Games.Rooms.Map;
 
 public class Freeze
 {
@@ -58,9 +59,9 @@ public class Freeze
         }
         else if (roomUser.Team != TeamType.NONE)
         {
-            var FirstTile = this.GetFirstTile(roomUser.X, roomUser.Y);
+            var firstTile = this.GetFirstTile(roomUser.X, roomUser.Y);
 
-            if (FirstTile == null)
+            if (firstTile == null)
             {
                 return;
             }
@@ -76,7 +77,7 @@ public class Freeze
 
             if (this._roomInstance.GetGameItemHandler().GetExitTeleport() != null)
             {
-                this._roomInstance.GetGameMap().TeleportToItem(roomUser, this._roomInstance.GetGameItemHandler().GetExitTeleport());
+                Gamemap.TeleportToItem(roomUser, this._roomInstance.GetGameItemHandler().GetExitTeleport());
             }
 
             roomUser.Freezed = false;
@@ -89,6 +90,11 @@ public class Freeze
 
     public void CycleUser(RoomUser user)
     {
+        if (!this.IsGameActive && !user.Freezed && !user.ShieldActive)
+        {
+            return;
+        }
+
         if (user.Freezed)
         {
             user.FreezeCounter++;
@@ -99,20 +105,18 @@ public class Freeze
                 ActivateShield(user);
             }
         }
-        if (!user.ShieldActive)
+        if (user.ShieldActive)
         {
-            return;
-        }
+            user.ShieldCounter++;
+            if (user.ShieldCounter <= 10)
+            {
+                return;
+            }
 
-        ++user.ShieldCounter;
-        if (user.ShieldCounter <= 10)
-        {
-            return;
+            user.ShieldActive = false;
+            user.ShieldCounter = 10;
+            user.ApplyEffect((int)user.Team + 39);
         }
-
-        user.ShieldActive = false;
-        user.ShieldCounter = 10;
-        user.ApplyEffect((int)user.Team + 39);
     }
 
     public void ResetGame()
@@ -186,21 +190,21 @@ public class Freeze
             return;
         }
 
-        var Tile = this.GetFirstTile(item.X, item.Y);
+        var tile = this.GetFirstTile(item.X, item.Y);
 
-        if (Tile == null)
+        if (tile == null)
         {
             return;
         }
 
-        if (Tile.InteractionCountHelper == 0)
+        if (tile.InteractionCountHelper == 0)
         {
-            Tile.InteractionCountHelper = 1;
-            Tile.ExtraData = "1000";
-            Tile.UpdateState();
-            Tile.InteractingUser = roomUserByUserId.UserId;
-            Tile.FreezePowerUp = roomUserByUserId.BanzaiPowerUp;
-            Tile.ReqUpdate(5);
+            tile.InteractionCountHelper = 1;
+            tile.ExtraData = "1000";
+            tile.UpdateState();
+            tile.InteractingUser = roomUserByUserId.UserId;
+            tile.FreezePowerUp = roomUserByUserId.BanzaiPowerUp;
+            tile.ReqUpdate(5);
             roomUserByUserId.CountFreezeBall -= 1;
             switch (roomUserByUserId.BanzaiPowerUp)
             {
@@ -409,7 +413,7 @@ public class Freeze
 
                 if (this._roomInstance.GetGameItemHandler().GetExitTeleport() != null)
                 {
-                    this._roomInstance.GetGameMap().TeleportToItem(user, this._roomInstance.GetGameItemHandler().GetExitTeleport());
+                    Gamemap.TeleportToItem(user, this._roomInstance.GetGameItemHandler().GetExitTeleport());
                 }
 
                 user.Freezed = false;

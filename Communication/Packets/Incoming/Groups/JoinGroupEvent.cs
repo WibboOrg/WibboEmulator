@@ -15,12 +15,12 @@ internal class JoinGroupEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(packet.PopInt(), out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(packet.PopInt(), out var group))
         {
             return;
         }
 
-        if (Group.IsMember(session.GetUser().Id) || Group.IsAdmin(session.GetUser().Id) || (Group.HasRequest(session.GetUser().Id) && Group.GroupType == GroupType.LOCKED) || Group.GroupType == GroupType.PRIVATE)
+        if (group.IsMember(session.GetUser().Id) || group.IsAdmin(session.GetUser().Id) || (group.HasRequest(session.GetUser().Id) && group.GroupType == GroupType.LOCKED) || group.GroupType == GroupType.PRIVATE)
         {
             return;
         }
@@ -31,17 +31,17 @@ internal class JoinGroupEvent : IPacketEvent
             return;
         }
 
-        Group.AddMember(session.GetUser().Id);
+        group.AddMember(session.GetUser().Id);
 
-        if (Group.GroupType == GroupType.LOCKED)
+        if (group.GroupType == GroupType.LOCKED)
         {
-            session.SendPacket(new GroupInfoComposer(Group, session));
+            session.SendPacket(new GroupInfoComposer(group, session));
         }
         else
         {
-            session.GetUser().MyGroups.Add(Group.Id);
+            session.GetUser().MyGroups.Add(group.Id);
             session.SendPacket(new GroupFurniConfigComposer(WibboEnvironment.GetGame().GetGroupManager().GetGroupsForUser(session.GetUser().MyGroups)));
-            session.SendPacket(new GroupInfoComposer(Group, session));
+            session.SendPacket(new GroupInfoComposer(group, session));
 
             if (session.GetUser().CurrentRoom != null)
             {

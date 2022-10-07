@@ -11,9 +11,7 @@ public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
 {
     public int DelayCycle => this.Delay;
 
-    private readonly OnItemTrigger _delegateFunction;
-
-    public SateChanged(Item item, Room room) : base(item, room, (int)WiredTriggerType.TOGGLE_FURNI) => this._delegateFunction = new OnItemTrigger(this.Triggered);
+    public SateChanged(Item item, Room room) : base(item, room, (int)WiredTriggerType.TOGGLE_FURNI) { }
 
     public bool OnCycle(RoomUser user, Item item)
     {
@@ -25,7 +23,7 @@ public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
         return false;
     }
 
-    private void Triggered(object sender, ItemTriggeredEventArgs e)
+    private void OnTriggered(object sender, ItemTriggeredEventArgs e)
     {
         if (this.Delay > 0)
         {
@@ -47,7 +45,7 @@ public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
         {
             foreach (var roomItem in this.Items.ToList())
             {
-                roomItem.ItemTriggerEventHandler += this._delegateFunction;
+                roomItem.ItemTrigger += this.OnTriggered;
             }
         }
     }
@@ -58,7 +56,7 @@ public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
         {
             foreach (var roomItem in this.Items.ToList())
             {
-                roomItem.ItemTriggerEventHandler -= this._delegateFunction;
+                roomItem.ItemTrigger -= this.OnTriggered;
             }
         }
 

@@ -4,14 +4,14 @@ using WibboEmulator.Games.Rooms.AI;
 
 public static class PetUtility
 {
-    public static bool CheckPetName(string PetName)
+    public static bool CheckPetName(string petName)
     {
-        if (PetName.Length is < 1 or > 16)
+        if (petName.Length is < 1 or > 16)
         {
             return false;
         }
 
-        if (!WibboEnvironment.IsValidAlphaNumeric(PetName))
+        if (!WibboEnvironment.IsValidAlphaNumeric(petName))
         {
             return false;
         }

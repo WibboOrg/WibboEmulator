@@ -26,7 +26,7 @@ internal class SaveBrandingItemEvent : IPacketEvent
             return;
         }
 
-        var Data = packet.PopInt();
+        var data = packet.PopInt();
         var text = packet.PopString();
         var text2 = packet.PopString();
         var text3 = packet.PopString();
@@ -35,12 +35,12 @@ internal class SaveBrandingItemEvent : IPacketEvent
         var text6 = packet.PopString();
         var text7 = packet.PopString();
         var text8 = packet.PopString();
-        if (Data is not 10 and not 8)
+        if (data is not 10 and not 8)
         {
             return;
         }
 
-        var BrandData = string.Concat(new object[]
+        var brandData = string.Concat(new object[]
                 {
                     text.Replace("=", ""),
                     "=",
@@ -59,7 +59,7 @@ internal class SaveBrandingItemEvent : IPacketEvent
                     text8.Replace("=", "")
                 });
 
-        roomItem.ExtraData = BrandData;
+        roomItem.ExtraData = brandData;
         roomItem.UpdateState();
     }
 }

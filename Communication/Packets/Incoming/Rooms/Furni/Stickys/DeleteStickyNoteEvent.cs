@@ -19,8 +19,8 @@ internal class DeleteStickyNoteEvent : IPacketEvent
             return;
         }
 
-        var ItemId = packet.PopInt();
-        var roomItem = room.GetRoomItemHandler().GetItem(ItemId);
+        var itemId = packet.PopInt();
+        var roomItem = room.GetRoomItemHandler().GetItem(itemId);
         if (roomItem == null || (roomItem.GetBaseItem().InteractionType != InteractionType.POSTIT && roomItem.GetBaseItem().InteractionType != InteractionType.PHOTO))
         {
             return;

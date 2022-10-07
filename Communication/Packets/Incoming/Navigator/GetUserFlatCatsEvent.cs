@@ -8,8 +8,8 @@ internal class GetUserFlatCatsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var Categories = WibboEnvironment.GetGame().GetNavigator().GetFlatCategories();
+        var categories = WibboEnvironment.GetGame().GetNavigator().GetFlatCategories();
 
-        session.SendPacket(new UserFlatCatsComposer(Categories, session.GetUser().Rank));
+        session.SendPacket(new UserFlatCatsComposer(categories, session.GetUser().Rank));
     }
 }

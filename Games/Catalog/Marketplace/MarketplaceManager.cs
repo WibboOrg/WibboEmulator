@@ -3,10 +3,10 @@ using WibboEmulator.Database.Daos.Catalog;
 
 public class MarketplaceManager
 {
-    public List<int> MarketItemKeys = new();
-    public List<MarketOffer> MarketItems = new();
-    public Dictionary<int, int> MarketCounts = new();
-    public Dictionary<int, int> MarketAverages = new();
+    public List<int> MarketItemKeys { get; set; } = new();
+    public List<MarketOffer> MarketItems { get; set; } = new();
+    public Dictionary<int, int> MarketCounts { get; set; } = new();
+    public Dictionary<int, int> MarketAverages { get; set; } = new();
 
     public MarketplaceManager()
     {
@@ -16,28 +16,28 @@ public class MarketplaceManager
         this.MarketAverages = new Dictionary<int, int>();
     }
 
-    public int AvgPriceForSprite(int SpriteID)
+    public int AvgPriceForSprite(int spriteID)
     {
         var num = 0;
         var num2 = 0;
-        if (this.MarketAverages.ContainsKey(SpriteID) && this.MarketCounts.ContainsKey(SpriteID))
+        if (this.MarketAverages.ContainsKey(spriteID) && this.MarketCounts.ContainsKey(spriteID))
         {
-            if (this.MarketCounts[SpriteID] > 0)
+            if (this.MarketCounts[spriteID] > 0)
             {
-                return this.MarketAverages[SpriteID] / this.MarketCounts[SpriteID];
+                return this.MarketAverages[spriteID] / this.MarketCounts[spriteID];
             }
             return 0;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            num = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, SpriteID);
+            num = CatalogMarketplaceDataDao.GetPriceBySprite(dbClient, spriteID);
 
-            num2 = CatalogMarketplaceDataDao.GetSoldBySprite(dbClient, SpriteID);
+            num2 = CatalogMarketplaceDataDao.GetSoldBySprite(dbClient, spriteID);
         }
 
-        this.MarketAverages.Add(SpriteID, num);
-        this.MarketCounts.Add(SpriteID, num2);
+        this.MarketAverages.Add(spriteID, num);
+        this.MarketCounts.Add(spriteID, num2);
 
         if (num2 > 0)
         {
@@ -47,7 +47,7 @@ public class MarketplaceManager
         return 0;
     }
 
-    public double FormatTimestamp() => WibboEnvironment.GetUnixTimestamp() - 172800;
+    public static double FormatTimestamp() => WibboEnvironment.GetUnixTimestamp() - 172800;
 
     public int OfferCountForSprite(int spriteID)
     {
@@ -80,5 +80,5 @@ public class MarketplaceManager
         return 0;
     }
 
-    public int CalculateComissionPrice(float sellingPrice) => Convert.ToInt32(Math.Ceiling(sellingPrice / 100 * 1));
+    public static int CalculateComissionPrice(float sellingPrice) => Convert.ToInt32(Math.Ceiling(sellingPrice / 100 * 1));
 }

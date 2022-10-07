@@ -5,6 +5,7 @@ using System.Diagnostics;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Moderation;
 
 public class AnimationManager
 {
@@ -222,7 +223,7 @@ public class AnimationManager
             "[center][img]https://cdn.wibbo.org/uploads/1659791208.png[/img]  - Jack et Daisy, [b][u][color=696969]Animateurs robotisés[/color][/u][/b] 🤖  -  [img]https://cdn.wibbo.org/uploads/1659791188.png[/img][/center]";
         var gameOwner = WibboEnvironment.GetSettings().GetData<string>("autogame.owner");
 
-        WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(1953042, gameOwner, room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
+        ModerationManager.LogStaffEntry(1953042, gameOwner, room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
 
         WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer(
             "gameauto", // image

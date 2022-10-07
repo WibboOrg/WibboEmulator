@@ -42,7 +42,7 @@ internal class ObjectsComposer : ServerPacket
         this.WriteInteger(item.X);
         this.WriteInteger(item.Y);
         this.WriteInteger(2);
-        this.WriteString(string.Format("{0:0.00}", item.Z));
+        this.WriteString(string.Format(/*lang=json*/ "{0:0.00}", item.Z));
         this.WriteString(string.Empty);
 
         if (item.InteractionType == InteractionTypeTemp.RPITEM)
@@ -83,7 +83,7 @@ internal class ObjectsComposer : ServerPacket
         this.WriteInteger(item.X);
         this.WriteInteger(item.Y);
         this.WriteInteger(item.Rotation);
-        this.WriteString(string.Format("{0:0.00}", item.Z));
+        this.WriteString(string.Format(/*lang=json*/ "{0:0.00}", item.Z));
         this.WriteString(item.GetBaseItem().Height.ToString());
 
         ItemBehaviourUtility.GenerateExtradata(item, this);

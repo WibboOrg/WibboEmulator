@@ -1,6 +1,7 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
+namespace WibboEmulator.Games.Items.Interactors;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms.Map;
 
 public class InteractorTeleport : FurniInteractor
 {
@@ -125,7 +126,7 @@ public class InteractorTeleport : FurniInteractor
                             else
                             {
                                 roomUserTarget.SetRot(roomItem.Rotation, false);
-                                roomItem.GetRoom().GetGameMap().TeleportToItem(roomUserTarget, roomItem);
+                                Gamemap.TeleportToItem(roomUserTarget, roomItem);
                                 roomItem.ExtraData = "2";
                                 roomItem.UpdateState(false, true);
                                 roomItem.InteractingUser2 = item.InteractingUser;

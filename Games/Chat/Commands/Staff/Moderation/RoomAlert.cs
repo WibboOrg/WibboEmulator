@@ -4,17 +4,17 @@ using WibboEmulator.Games.Rooms;
 
 internal class RoomAlert : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var Message = CommandManager.MergeParams(parameters, 1);
-        foreach (var RoomUser in Room.GetRoomUserManager().GetRoomUsers())
+        var message = CommandManager.MergeParams(parameters, 1);
+        foreach (var roomUser in room.GetRoomUserManager().GetRoomUsers())
         {
-            if (RoomUser == null || RoomUser.GetClient() == null || session.GetUser().Id == RoomUser.UserId)
+            if (roomUser == null || roomUser.GetClient() == null || session.GetUser().Id == roomUser.UserId)
             {
                 continue;
             }
 
-            RoomUser.GetClient().SendNotification(Message);
+            roomUser.GetClient().SendNotification(message);
         }
     }
 }

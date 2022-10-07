@@ -1,8 +1,7 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Action;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
 internal class RemoveMyRightsEvent : IPacketEvent
 {
@@ -20,35 +19,35 @@ internal class RemoveMyRightsEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var Room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
             return;
         }
 
-        if (!Room.CheckRights(session))
+        if (!room.CheckRights(session))
         {
             return;
         }
 
-        if (Room.UsersWithRights.Contains(session.GetUser().Id))
+        if (room.UsersWithRights.Contains(session.GetUser().Id))
         {
-            var User = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-            if (User != null && !User.IsBot)
+            var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            if (user != null && !user.IsBot)
             {
-                User.RemoveStatus("flatctrl");
-                User.UpdateNeeded = true;
+                user.RemoveStatus("flatctrl");
+                user.UpdateNeeded = true;
 
-                User.GetClient().SendPacket(new YouAreNotControllerComposer());
+                user.GetClient().SendPacket(new YouAreNotControllerComposer());
             }
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                RoomRightDao.Delete(dbClient, Room.Id, session.GetUser().Id);
+                RoomRightDao.Delete(dbClient, room.Id, session.GetUser().Id);
             }
 
-            if (Room.UsersWithRights.Contains(session.GetUser().Id))
+            if (room.UsersWithRights.Contains(session.GetUser().Id))
             {
-                _ = Room.UsersWithRights.Remove(session.GetUser().Id);
+                _ = room.UsersWithRights.Remove(session.GetUser().Id);
             }
         }
     }

@@ -11,12 +11,12 @@ internal class ObjectAddComposer : ServerPacket
         this.WriteInteger(item.X);
         this.WriteInteger(item.Y);
         this.WriteInteger(item.Rotation);
-        this.WriteString(string.Format("{0:0.00}", item.Z));
+        this.WriteString(string.Format(/*lang=json*/ "{0:0.00}", item.Z));
         this.WriteString(string.Empty);
 
         ItemBehaviourUtility.GenerateExtradata(item, this);
 
-        this.WriteInteger(-1); // to-do: check
+        this.WriteInteger(-1);
         this.WriteInteger(1);
         this.WriteInteger(userId);
         this.WriteString(userame);
@@ -26,11 +26,11 @@ internal class ObjectAddComposer : ServerPacket
         : base(ServerPacketHeader.FURNITURE_FLOOR_ADD)
     {
         this.WriteInteger(item.Id);
-        this.WriteInteger(item.SpriteId); //ScriptId
+        this.WriteInteger(item.SpriteId);
         this.WriteInteger(item.X);
         this.WriteInteger(item.Y);
         this.WriteInteger(2);
-        this.WriteString(string.Format("{0:0.00}", item.Z));
+        this.WriteString(string.Format(/*lang=json*/ "{0:0.00}", item.Z));
         this.WriteString("");
 
         if (item.InteractionType == InteractionTypeTemp.RPITEM)
@@ -43,7 +43,7 @@ internal class ObjectAddComposer : ServerPacket
             this.WriteString("state");
             this.WriteString("0");
             this.WriteString("imageUrl");
-            this.WriteString("https://swf.wibbo.me/items/" + item.ExtraData + ".png");
+            this.WriteString("https://cdn.wibbo.org/items/" + item.ExtraData + ".png");
             this.WriteString("offsetX");
             this.WriteString("-20");
             this.WriteString("offsetY");

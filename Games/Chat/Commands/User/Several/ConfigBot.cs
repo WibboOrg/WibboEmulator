@@ -5,15 +5,15 @@ using WibboEmulator.Games.Rooms;
 
 internal class ConfigBot : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 3)
         {
             return;
         }
 
-        var Bot = Room.GetRoomUserManager().GetBotByName(parameters[1]);
-        if (Bot == null)
+        var bot = room.GetRoomUserManager().GetBotByName(parameters[1]);
+        if (bot == null)
         {
             return;
         }
@@ -27,24 +27,24 @@ internal class ConfigBot : IChatCommand
                     break;
                 }
 
-                _ = int.TryParse(parameters[3], out var IntValue);
+                _ = int.TryParse(parameters[3], out var intValue);
 
-                if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(IntValue, false))
+                if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(intValue, false))
                 {
                     return;
                 }
 
-                if (Bot.CurrentEffect != IntValue)
+                if (bot.CurrentEffect != intValue)
                 {
-                    Bot.ApplyEffect(IntValue);
+                    bot.ApplyEffect(intValue);
                 }
 
-                if (Bot.BotData.Enable != IntValue)
+                if (bot.BotData.Enable != intValue)
                 {
-                    Bot.BotData.Enable = IntValue;
+                    bot.BotData.Enable = intValue;
 
                     using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                    BotUserDao.UpdateEnable(dbClient, Bot.BotData.Id, IntValue);
+                    BotUserDao.UpdateEnable(dbClient, bot.BotData.Id, intValue);
                 }
                 break;
             }
@@ -55,19 +55,19 @@ internal class ConfigBot : IChatCommand
                     break;
                 }
 
-                _ = int.TryParse(parameters[3], out var IntValue);
+                _ = int.TryParse(parameters[3], out var intValue);
 
-                if (Bot.CarryItemID != IntValue)
+                if (bot.CarryItemID != intValue)
                 {
-                    Bot.CarryItem(IntValue, true);
+                    bot.CarryItem(intValue, true);
                 }
 
-                if (Bot.BotData.Handitem != IntValue)
+                if (bot.BotData.Handitem != intValue)
                 {
-                    Bot.BotData.Handitem = IntValue;
+                    bot.BotData.Handitem = intValue;
 
                     using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                    BotUserDao.UpdateHanditem(dbClient, Bot.BotData.Id, IntValue);
+                    BotUserDao.UpdateHanditem(dbClient, bot.BotData.Id, intValue);
                 }
                 break;
             }
@@ -78,80 +78,80 @@ internal class ConfigBot : IChatCommand
                     break;
                 }
 
-                _ = int.TryParse(parameters[3], out var IntValue);
-                IntValue = IntValue is > 7 or < 0 ? 0 : IntValue;
+                _ = int.TryParse(parameters[3], out var intValue);
+                intValue = intValue is > 7 or < 0 ? 0 : intValue;
 
-                if (Bot.RotBody != IntValue)
+                if (bot.RotBody != intValue)
                 {
-                    Bot.RotBody = IntValue;
-                    Bot.RotHead = IntValue;
-                    Bot.UpdateNeeded = true;
+                    bot.RotBody = intValue;
+                    bot.RotHead = intValue;
+                    bot.UpdateNeeded = true;
                 }
 
-                if (Bot.BotData.Rot != IntValue)
+                if (bot.BotData.Rot != intValue)
                 {
-                    Bot.BotData.Rot = IntValue;
+                    bot.BotData.Rot = intValue;
 
                     using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                    BotUserDao.UpdateRotation(dbClient, Bot.BotData.Id, Bot.RotBody);
+                    BotUserDao.UpdateRotation(dbClient, bot.BotData.Id, bot.RotBody);
                 }
                 break;
             }
             case "sit":
             {
-                if (Bot.BotData.Status == 1)
+                if (bot.BotData.Status == 1)
                 {
-                    Bot.BotData.Status = 0;
+                    bot.BotData.Status = 0;
 
-                    Bot.RemoveStatus("sit");
-                    Bot.IsSit = false;
-                    Bot.UpdateNeeded = true;
+                    bot.RemoveStatus("sit");
+                    bot.IsSit = false;
+                    bot.UpdateNeeded = true;
 
                     using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                    BotUserDao.UpdateStatus0(dbClient, Bot.BotData.Id);
+                    BotUserDao.UpdateStatus0(dbClient, bot.BotData.Id);
                 }
                 else
                 {
-                    if (!Bot.IsSit)
+                    if (!bot.IsSit)
                     {
-                        Bot.SetStatus("sit", Bot.IsPet ? "" : "0.5");
-                        Bot.IsSit = true;
-                        Bot.UpdateNeeded = true;
+                        bot.SetStatus("sit", bot.IsPet ? "" : "0.5");
+                        bot.IsSit = true;
+                        bot.UpdateNeeded = true;
                     }
 
-                    Bot.BotData.Status = 1;
+                    bot.BotData.Status = 1;
 
                     using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                    BotUserDao.UpdateStatus1(dbClient, Bot.BotData.Id);
+                    BotUserDao.UpdateStatus1(dbClient, bot.BotData.Id);
                 }
                 break;
             }
             case "lay":
             {
-                if (Bot.BotData.Status == 2)
+                if (bot.BotData.Status == 2)
                 {
-                    Bot.BotData.Status = 0;
+                    bot.BotData.Status = 0;
 
-                    Bot.RemoveStatus("lay");
-                    Bot.IsSit = false;
-                    Bot.UpdateNeeded = true;
+                    bot.RemoveStatus("lay");
+                    bot.IsSit = false;
+                    bot.UpdateNeeded = true;
 
                     using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                    BotUserDao.UpdateStatus0(dbClient, Bot.BotData.Id);
+                    BotUserDao.UpdateStatus0(dbClient, bot.BotData.Id);
                 }
                 else
                 {
-                    if (!Bot.IsLay)
+                    if (!bot.IsLay)
                     {
-                        Bot.SetStatus("lay", Bot.IsPet ? "" : "0.7");
-                        Bot.IsLay = true;
-                        Bot.UpdateNeeded = true;
+                        bot.SetStatus("lay", bot.IsPet ? "" : "0.7");
+                        bot.IsLay = true;
+                        bot.UpdateNeeded = true;
                     }
 
-                    Bot.BotData.Status = 2;
+                    bot.BotData.Status = 2;
 
                     using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                    BotUserDao.UpdateStatus2(dbClient, Bot.BotData.Id);
+                    BotUserDao.UpdateStatus2(dbClient, bot.BotData.Id);
                 }
                 break;
             }

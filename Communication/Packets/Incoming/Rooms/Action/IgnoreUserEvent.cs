@@ -18,9 +18,9 @@ internal class IgnoreUserEvent : IPacketEvent
             return;
         }
 
-        var UserName = packet.PopString();
+        var userName = packet.PopString();
 
-        var gameclient = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(UserName);
+        var gameclient = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(userName);
         if (gameclient == null)
         {
             return;
@@ -34,6 +34,6 @@ internal class IgnoreUserEvent : IPacketEvent
 
         session.GetUser().MutedUsers.Add(user.Id);
 
-        session.SendPacket(new IgnoreStatusComposer(1, UserName));
+        session.SendPacket(new IgnoreStatusComposer(1, userName));
     }
 }

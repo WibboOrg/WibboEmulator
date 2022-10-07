@@ -24,21 +24,21 @@ internal class UpdateStickyNoteEvent : IPacketEvent
             return;
         }
 
-        var Color = packet.PopString();
-        var Message = packet.PopString();
+        var color = packet.PopString();
+        var message = packet.PopString();
 
-        if (!room.CheckRights(session) && !Message.StartsWith(roomItem.ExtraData))
+        if (!room.CheckRights(session) && !message.StartsWith(roomItem.ExtraData))
         {
             return;
         }
 
-        switch (Color)
+        switch (color)
         {
             case "FFFF33":
             case "FF9CFF":
             case "9CCEFF":
             case "9CFF9C":
-                roomItem.ExtraData = Color + " " + Message;
+                roomItem.ExtraData = color + " " + message;
                 roomItem.UpdateState(true, true);
                 break;
         }

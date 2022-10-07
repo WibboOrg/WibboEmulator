@@ -4,23 +4,23 @@ using WibboEmulator.Games.Rooms;
 
 internal class RoomEnable : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (!int.TryParse(parameters[1], out var NumEnable))
+        if (!int.TryParse(parameters[1], out var effectId))
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, session.GetUser().HasPermission("perm_god")))
+        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(effectId, session.GetUser().HasPermission("perm_god")))
         {
             return;
         }
 
-        foreach (var User in Room.GetRoomUserManager().GetUserList().ToList())
+        foreach (var user in room.GetRoomUserManager().GetUserList().ToList())
         {
-            if (!User.IsBot)
+            if (!user.IsBot)
             {
-                User.ApplyEffect(NumEnable);
+                user.ApplyEffect(effectId);
             }
         }
     }

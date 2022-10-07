@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Quests;
 
 internal class PickupObjectEvent : IPacketEvent
@@ -10,7 +9,7 @@ internal class PickupObjectEvent : IPacketEvent
     public void Parse(GameClient session, ClientPacket packet)
     {
         _ = packet.PopInt();
-        var ItemId = packet.PopInt();
+        var itemId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -22,8 +21,8 @@ internal class PickupObjectEvent : IPacketEvent
             return;
         }
 
-        var Item = room.GetRoomItemHandler().GetItem(ItemId);
-        if (Item == null)
+        var item = room.GetRoomItemHandler().GetItem(itemId);
+        if (item == null)
         {
             return;
         }
@@ -34,8 +33,8 @@ internal class PickupObjectEvent : IPacketEvent
             return;
         }
 
-        room.GetRoomItemHandler().RemoveFurniture(session, Item.Id);
-        session.GetUser().GetInventoryComponent().AddItem(Item);
+        room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
+        session.GetUser().GetInventoryComponent().AddItem(item);
         WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_PICK, 0);
     }
 }

@@ -13,34 +13,30 @@ internal class GetPetInformationEvent : IPacketEvent
             return;
         }
 
-        var PetId = packet.PopInt();
+        var petId = packet.PopInt();
 
-        if (!session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(PetId, out var Pet))
+        if (!session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(petId, out var pet))
         {
-            //Okay so, we've established we have no pets in this room by this virtual Id, let us check out users, maybe they're creeping as a pet?!
-            var User = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(PetId);
-            if (User == null)
+            var user = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(petId);
+            if (user == null)
             {
                 return;
             }
 
-            //Check some values first, please!
-            if (User.GetClient() == null || User.GetClient().GetUser() == null)
+            if (user.GetClient() == null || user.GetClient().GetUser() == null)
             {
                 return;
             }
 
-            //And boom! Let us send the information composer 8-).
-            session.SendPacket(new PetInformationComposer(User.GetClient().GetUser()));
+            session.SendPacket(new PetInformationComposer(user.GetClient().GetUser()));
             return;
         }
 
-        //Continue as a regular pet..
-        if (Pet.RoomId != session.GetUser().CurrentRoomId || Pet.PetData == null)
+        if (pet.RoomId != session.GetUser().CurrentRoomId || pet.PetData == null)
         {
             return;
         }
 
-        session.SendPacket(new PetInformationComposer(Pet.PetData, Pet.RidingHorse));
+        session.SendPacket(new PetInformationComposer(pet.PetData, pet.RidingHorse));
     }
 }

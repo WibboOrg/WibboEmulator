@@ -12,9 +12,9 @@ internal class OpenFlatConnectionEvent : IPacketEvent
             return;
         }
 
-        var RoomId = packet.PopInt();
-        var Password = packet.PopString();
+        var roomId = packet.PopInt();
+        var password = packet.PopString();
 
-        session.GetUser().PrepareRoom(RoomId, Password);
+        session.GetUser().PrepareRoom(roomId, password);
     }
 }

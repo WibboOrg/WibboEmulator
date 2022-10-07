@@ -1,20 +1,20 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.User.RP;
+namespace WibboEmulator.Games.Chat.Commands.User.RP;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map.Movement;
 
 internal class GunFire : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (!UserRoom.AllowShoot || UserRoom.Freeze)
+        if (!userRoom.AllowShoot || userRoom.Freeze)
         {
             return;
         }
 
         var movement = MovementDirection.none;
 
-        switch (UserRoom.RotBody)
+        switch (userRoom.RotBody)
         {
             case 0:
                 movement = MovementDirection.up;
@@ -42,12 +42,12 @@ internal class GunFire : IChatCommand
                 break;
         }
 
-        if (UserRoom.FreezeEndCounter <= 2)
+        if (userRoom.FreezeEndCounter <= 2)
         {
-            UserRoom.Freeze = true;
-            UserRoom.FreezeEndCounter = 2;
+            userRoom.Freeze = true;
+            userRoom.FreezeEndCounter = 2;
         }
 
-        Room.GetProjectileManager().AddProjectile(UserRoom.VirtualId, UserRoom.SetX, UserRoom.SetY, UserRoom.SetZ, movement);
+        room.GetProjectileManager().AddProjectile(userRoom.VirtualId, userRoom.SetX, userRoom.SetY, userRoom.SetZ, movement);
     }
 }

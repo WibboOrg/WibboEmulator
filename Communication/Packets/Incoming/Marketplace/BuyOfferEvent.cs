@@ -16,35 +16,35 @@ internal class BuyOfferEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var OfferId = packet.PopInt();
+        var offerId = packet.PopInt();
 
-        DataRow Row = null;
+        DataRow row = null;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            Row = CatalogMarketplaceOfferDao.GetOneByOfferId(dbClient, OfferId);
+            row = CatalogMarketplaceOfferDao.GetOneByOfferId(dbClient, offerId);
         }
 
-        if (Row == null)
+        if (row == null)
         {
             ReloadOffers(session);
             return;
         }
 
-        if (Convert.ToString(Row["state"]) == "2")
+        if (Convert.ToString(row["state"]) == "2")
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.1", session.Langue));
             ReloadOffers(session);
             return;
         }
 
-        if (WibboEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp() > Convert.ToDouble(Row["timestamp"]))
+        if (MarketplaceManager.FormatTimestamp() > Convert.ToDouble(row["timestamp"]))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.2", session.Langue));
             ReloadOffers(session);
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(Row["item_id"]), out var Item))
+        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(row["item_id"]), out var item))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.3", session.Langue));
             ReloadOffers(session);
@@ -52,31 +52,31 @@ internal class BuyOfferEvent : IPacketEvent
         }
         else
         {
-            if (Convert.ToInt32(Row["user_id"]) == session.GetUser().Id)
+            if (Convert.ToInt32(row["user_id"]) == session.GetUser().Id)
             {
                 session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.4", session.Langue));
                 return;
             }
 
-            if (Convert.ToInt32(Row["total_price"]) > session.GetUser().WibboPoints)
+            if (Convert.ToInt32(row["total_price"]) > session.GetUser().WibboPoints)
             {
                 session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyoffer.error.5", session.Langue));
                 return;
             }
 
-            session.GetUser().WibboPoints -= Convert.ToInt32(Row["total_price"]);
+            session.GetUser().WibboPoints -= Convert.ToInt32(row["total_price"]);
             session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().WibboPoints, 0, 105));
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                UserDao.UpdateRemovePoints(dbClient, session.GetUser().Id, Convert.ToInt32(Row["total_price"]));
+                UserDao.UpdateRemovePoints(dbClient, session.GetUser().Id, Convert.ToInt32(row["total_price"]));
             }
 
-            var GiveItem = ItemFactory.CreateSingleItem(Item, session.GetUser(), Convert.ToString(Row["extra_data"]), Convert.ToInt32(Row["furni_id"]), Convert.ToInt32(Row["limited_number"]), Convert.ToInt32(Row["limited_stack"]));
-            if (GiveItem != null)
+            var giveItem = ItemFactory.CreateSingleItem(item, session.GetUser(), Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
+            if (giveItem != null)
             {
-                _ = session.GetUser().GetInventoryComponent().TryAddItem(GiveItem);
-                session.SendPacket(new FurniListNotificationComposer(GiveItem.Id, 1));
+                _ = session.GetUser().GetInventoryComponent().TryAddItem(giveItem);
+                session.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
 
                 session.SendPacket(new PurchaseOKComposer());
             }
@@ -84,30 +84,30 @@ internal class BuyOfferEvent : IPacketEvent
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                CatalogMarketplaceOfferDao.UpdateState(dbClient, OfferId);
+                CatalogMarketplaceOfferDao.UpdateState(dbClient, offerId);
 
-                CatalogMarketplaceDataDao.Replace(dbClient, Item.SpriteId, Convert.ToInt32(Row["total_price"]));
+                CatalogMarketplaceDataDao.Replace(dbClient, item.SpriteId, Convert.ToInt32(row["total_price"]));
 
-                if (WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.ContainsKey(Item.SpriteId) && WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(Item.SpriteId))
+                if (WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.ContainsKey(item.SpriteId) && WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(item.SpriteId))
                 {
-                    var num3 = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts[Item.SpriteId];
-                    var num4 = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages[Item.SpriteId] += Convert.ToInt32(Row["total_price"]);
+                    var num3 = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts[item.SpriteId];
+                    var num4 = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages[item.SpriteId] += Convert.ToInt32(row["total_price"]);
 
-                    _ = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Remove(Item.SpriteId);
-                    WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Add(Item.SpriteId, num4);
-                    _ = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Remove(Item.SpriteId);
-                    WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Add(Item.SpriteId, num3 + 1);
+                    _ = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Remove(item.SpriteId);
+                    WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Add(item.SpriteId, num4);
+                    _ = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Remove(item.SpriteId);
+                    WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Add(item.SpriteId, num3 + 1);
                 }
                 else
                 {
-                    if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.ContainsKey(Item.SpriteId))
+                    if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.ContainsKey(item.SpriteId))
                     {
-                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Add(Item.SpriteId, Convert.ToInt32(Row["total_price"]));
+                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketAverages.Add(item.SpriteId, Convert.ToInt32(row["total_price"]));
                     }
 
-                    if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(Item.SpriteId))
+                    if (!WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.ContainsKey(item.SpriteId))
                     {
-                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Add(Item.SpriteId, 1);
+                        WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketCounts.Add(item.SpriteId, 1);
                     }
                 }
             }
@@ -118,16 +118,16 @@ internal class BuyOfferEvent : IPacketEvent
 
     private static void ReloadOffers(GameClient session)
     {
-        var MinCost = -1;
-        var MaxCost = -1;
-        var SearchQuery = "";
-        var FilterMode = 1;
+        var minCost = -1;
+        var maxCost = -1;
+        var searchQuery = "";
+        var filterMode = 1;
 
         DataTable table = null;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            table = CatalogMarketplaceOfferDao.GetAll(dbClient, SearchQuery, MinCost, MaxCost, FilterMode);
+            table = CatalogMarketplaceOfferDao.GetAll(dbClient, searchQuery, minCost, maxCost, filterMode);
         }
 
         WibboEnvironment.GetGame().GetCatalog().GetMarketplace().MarketItems.Clear();
@@ -169,6 +169,6 @@ internal class BuyOfferEvent : IPacketEvent
             }
         }
 
-        session.SendPacket(new MarketPlaceOffersComposer(MinCost, MaxCost, dictionary, dictionary2));
+        session.SendPacket(new MarketPlaceOffersComposer(dictionary, dictionary2));
     }
 }

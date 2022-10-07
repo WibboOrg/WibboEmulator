@@ -1,99 +1,99 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.User.RP;
+namespace WibboEmulator.Games.Chat.Commands.User.RP;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class Cac : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        if (!Room.IsRoleplay)
+        if (!room.IsRoleplay)
         {
             return;
         }
 
-        if (!Room.Roleplay.Pvp)
+        if (!room.Roleplay.Pvp)
         {
             return;
         }
 
-        var Rp = UserRoom.Roleplayer;
-        if (Rp == null)
+        var rp = userRoom.Roleplayer;
+        if (rp == null)
         {
             return;
         }
 
-        if (Rp.Dead || !Rp.PvpEnable || Rp.SendPrison || UserRoom.Freeze)
+        if (rp.Dead || !rp.PvpEnable || rp.SendPrison || userRoom.Freeze)
         {
             return;
         }
 
-        var WeaponEanble = Rp.WeaponCac.Enable;
+        var weaponEanble = rp.WeaponCac.Enable;
 
-        UserRoom.ApplyEffect(WeaponEanble, true);
-        UserRoom.TimerResetEffect = Rp.WeaponCac.FreezeTime + 1;
+        userRoom.ApplyEffect(weaponEanble, true);
+        userRoom.TimerResetEffect = rp.WeaponCac.FreezeTime + 1;
 
-        if (UserRoom.FreezeEndCounter <= Rp.WeaponCac.FreezeTime)
+        if (userRoom.FreezeEndCounter <= rp.WeaponCac.FreezeTime)
         {
-            UserRoom.Freeze = true;
-            UserRoom.FreezeEndCounter = Rp.WeaponCac.FreezeTime;
+            userRoom.Freeze = true;
+            userRoom.FreezeEndCounter = rp.WeaponCac.FreezeTime;
         }
 
-        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
+        var targetRoomUser = room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
 
-        if (TargetRoomUser == null)
+        if (targetRoomUser == null)
         {
-            var BotOrPet = Room.GetRoomUserManager().GetBotOrPetByName(parameters[1].ToString());
-            if (BotOrPet == null || BotOrPet.BotData == null || BotOrPet.BotData.RoleBot == null)
+            var botOrPet = room.GetRoomUserManager().GetBotOrPetByName(parameters[1].ToString());
+            if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot == null)
             {
                 return;
             }
 
-            if (BotOrPet.BotData.RoleBot.Dead)
+            if (botOrPet.BotData.RoleBot.Dead)
             {
                 return;
             }
 
-            if (Math.Abs(BotOrPet.X - UserRoom.X) >= 2 || Math.Abs(BotOrPet.Y - UserRoom.Y) >= 2)
+            if (Math.Abs(botOrPet.X - userRoom.X) >= 2 || Math.Abs(botOrPet.Y - userRoom.Y) >= 2)
             {
                 return;
             }
 
-            var Dmg = WibboEnvironment.GetRandomNumber(Rp.WeaponCac.DmgMin, Rp.WeaponCac.DmgMax);
-            BotOrPet.BotData.RoleBot.Hit(BotOrPet, Dmg, Room, UserRoom.VirtualId, -1);
+            var dmg = WibboEnvironment.GetRandomNumber(rp.WeaponCac.DmgMin, rp.WeaponCac.DmgMax);
+            botOrPet.BotData.RoleBot.Hit(botOrPet, dmg, room, userRoom.VirtualId, -1);
 
         }
         else
         {
-            var RpTwo = TargetRoomUser.Roleplayer;
-            if (RpTwo == null || (!RpTwo.PvpEnable && RpTwo.AggroTimer <= 0))
+            var rpTwo = targetRoomUser.Roleplayer;
+            if (rpTwo == null || (!rpTwo.PvpEnable && rpTwo.AggroTimer <= 0))
             {
                 return;
             }
 
-            if (TargetRoomUser.GetClient().GetUser().Id == session.GetUser().Id)
+            if (targetRoomUser.GetClient().GetUser().Id == session.GetUser().Id)
             {
                 return;
             }
 
-            if (RpTwo.Dead || RpTwo.SendPrison)
+            if (rpTwo.Dead || rpTwo.SendPrison)
             {
                 return;
             }
 
-            if (Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2 || Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2)
+            if (Math.Abs(targetRoomUser.X - userRoom.X) >= 2 || Math.Abs(targetRoomUser.Y - userRoom.Y) >= 2)
             {
                 return;
             }
 
-            var Dmg = WibboEnvironment.GetRandomNumber(Rp.WeaponCac.DmgMin, Rp.WeaponCac.DmgMax);
+            var dmg = WibboEnvironment.GetRandomNumber(rp.WeaponCac.DmgMin, rp.WeaponCac.DmgMax);
 
-            Rp.AggroTimer = 30;
-            RpTwo.Hit(TargetRoomUser, Dmg, Room);
+            rp.AggroTimer = 30;
+            rpTwo.Hit(targetRoomUser, dmg, room);
         }
     }
 }

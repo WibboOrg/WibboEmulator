@@ -12,10 +12,10 @@ internal class CloseTicketEvent : IPacketEvent
             return;
         }
 
-        var Result = packet.PopInt();
+        var result = packet.PopInt();
         _ = packet.PopInt();
-        var TicketId = packet.PopInt();
+        var ticketId = packet.PopInt();
 
-        WibboEnvironment.GetGame().GetModerationManager().CloseTicket(session, packet.PopInt(), Result);
+        WibboEnvironment.GetGame().GetModerationManager().CloseTicket(session, ticketId, result);
     }
 }

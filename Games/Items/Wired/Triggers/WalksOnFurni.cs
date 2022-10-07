@@ -5,14 +5,13 @@ using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Wired;
+using WibboEmulator.Utilities.Events;
 
 public class WalksOnFurni : WiredTriggerBase, IWired, IWiredCycleable
 {
     public int DelayCycle => this.Delay;
 
-    private readonly UserAndItemDelegate _delegateFunction;
-
-    public WalksOnFurni(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_WALKS_ON_FURNI) => this._delegateFunction = new UserAndItemDelegate(this.OnUserWalksOnFurni);
+    public WalksOnFurni(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_WALKS_ON_FURNI) { }
 
     public bool OnCycle(RoomUser user, Item item)
     {
@@ -24,15 +23,15 @@ public class WalksOnFurni : WiredTriggerBase, IWired, IWiredCycleable
         return false;
     }
 
-    private void OnUserWalksOnFurni(RoomUser user, Item item)
+    private void OnUserWalksOnFurni(object obj, ItemTriggeredEventArgs args)
     {
         if (this.DelayCycle > 0)
         {
-            this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, user, item));
+            this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, args.User, args.Item));
         }
         else
         {
-            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, item);
+            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
         }
     }
 
@@ -44,7 +43,7 @@ public class WalksOnFurni : WiredTriggerBase, IWired, IWiredCycleable
         {
             foreach (var roomItem in this.Items.ToList())
             {
-                roomItem.OnUserWalksOnFurni += this._delegateFunction;
+                roomItem.OnUserWalksOnFurni += this.OnUserWalksOnFurni;
             }
         }
     }
@@ -55,7 +54,7 @@ public class WalksOnFurni : WiredTriggerBase, IWired, IWiredCycleable
         {
             foreach (var roomItem in this.Items.ToList())
             {
-                roomItem.OnUserWalksOnFurni -= this._delegateFunction;
+                roomItem.OnUserWalksOnFurni -= this.OnUserWalksOnFurni;
             }
         }
 

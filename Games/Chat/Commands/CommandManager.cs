@@ -17,6 +17,7 @@ using WibboEmulator.Games.Chat.Commands.User.Room;
 using WibboEmulator.Games.Chat.Commands.User.RP;
 using WibboEmulator.Games.Chat.Commands.User.Several;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Moderation;
 using WibboEmulator.Games.Permissions;
 using WibboEmulator.Games.Rooms;
 
@@ -105,7 +106,7 @@ public class CommandManager
 
         if (cmdInfo.UserGotAuthorizationStaffLog())
         {
-            WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(session.GetUser().Id, session.GetUser().Username, room.Id, string.Empty, split[0].ToLower(), string.Format("Tchat commande: {0}", string.Join(" ", split)));
+            ModerationManager.LogStaffEntry(session.GetUser().Id, session.GetUser().Username, room.Id, string.Empty, split[0].ToLower(), string.Format("Tchat commande: {0}", string.Join(" ", split)));
         }
 
         cmd.Execute(session, room, user, split);
@@ -153,12 +154,12 @@ public class CommandManager
             return this._listCommande[rank];
         }
 
-        var NotDoublons = new List<string>();
+        var notDoublons = new List<string>();
         var stringBuilder = new StringBuilder();
 
         foreach (var chatCommand in this._commandRegisterInvokeable.Values)
         {
-            if (chatCommand.UserGotAuthorization(client, room) && !NotDoublons.Contains(chatCommand.Input))
+            if (chatCommand.UserGotAuthorization(client, room) && !notDoublons.Contains(chatCommand.Input))
             {
                 if (client.Langue == Language.ANGLAIS)
                 {
@@ -173,10 +174,10 @@ public class CommandManager
                     _ = stringBuilder.Append(":" + chatCommand.Input + " - " + chatCommand.DescriptionFr + "\r\r");
                 }
 
-                NotDoublons.Add(chatCommand.Input);
+                notDoublons.Add(chatCommand.Input);
             }
         }
-        NotDoublons.Clear();
+        notDoublons.Clear();
 
         this._listCommande.Add(rank, stringBuilder.ToString());
         return stringBuilder.ToString();
@@ -295,7 +296,7 @@ public class CommandManager
         this.Register(80, new Info());
         this.Register(81, new FaceWalk());
         this.Register(82, new VipProtect());
-        this.Register(83, new Vip());
+        this.Register(83, new Premium());
         this.Register(84, new TransfBot());
         this.Register(85, new RandomLook());
         this.Register(86, new GameTime());

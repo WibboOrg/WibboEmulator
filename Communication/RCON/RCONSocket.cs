@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using WibboEmulator.Communication.RCON.Commands;
 
-public class RCONSocket
+public class RCONSocket : IDisposable
 {
     private readonly Socket _socket;
     private readonly int _musPort;
@@ -64,4 +64,11 @@ public class RCONSocket
     }
 
     public CommandManager GetCommands() => this._commands;
+
+    public void Dispose()
+    {
+        this._socket.Dispose();
+
+        GC.SuppressFinalize(this);
+    }
 }

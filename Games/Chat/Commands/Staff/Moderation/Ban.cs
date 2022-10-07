@@ -4,21 +4,21 @@ using WibboEmulator.Games.Rooms;
 
 internal class Ban : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
             return;
         }
 
-        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (TargetUser == null || TargetUser.GetUser() == null)
+        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        if (targetUser == null || targetUser.GetUser() == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
             return;
         }
 
-        if (TargetUser.GetUser().Rank >= session.GetUser().Rank)
+        if (targetUser.GetUser().Rank >= session.GetUser().Rank)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
             return;
@@ -31,11 +31,11 @@ internal class Ban : IChatCommand
         }
         else
         {
-            var Raison = CommandManager.MergeParams(parameters, 3);
-            session.SendWhisper("Tu as bannit " + TargetUser.GetUser().Username + " pour " + Raison + "!");
+            var raison = CommandManager.MergeParams(parameters, 3);
+            session.SendWhisper("Tu as bannit " + targetUser.GetUser().Username + " pour " + raison + "!");
 
-            WibboEnvironment.GetGame().GetGameClientManager().BanUser(TargetUser, session.GetUser().Username, num, Raison, false, false);
-            _ = session.Antipub(Raison, "<CMD>", Room.Id);
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(targetUser, session.GetUser().Username, num, raison, false, false);
+            _ = session.Antipub(raison, "<CMD>", room.Id);
         }
     }
 }

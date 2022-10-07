@@ -4,30 +4,30 @@ using WibboEmulator.Games.Rooms;
 
 internal class GiveItem : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        if (UserRoom.CarryItemID <= 0 || UserRoom.CarryTimer <= 0)
+        if (userRoom.CarryItemID <= 0 || userRoom.CarryTimer <= 0)
         {
             return;
         }
 
-        var roomUserByUserIdTarget = Room.GetRoomUserManager().GetRoomUserByName(parameters[1]);
+        var roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByName(parameters[1]);
         if (roomUserByUserIdTarget == null)
         {
             return;
         }
 
-        if (Math.Abs(UserRoom.X - roomUserByUserIdTarget.X) >= 3 || Math.Abs(UserRoom.Y - roomUserByUserIdTarget.Y) >= 3)
+        if (Math.Abs(userRoom.X - roomUserByUserIdTarget.X) >= 3 || Math.Abs(userRoom.Y - roomUserByUserIdTarget.Y) >= 3)
         {
             return;
         }
 
-        roomUserByUserIdTarget.CarryItem(UserRoom.CarryItemID);
-        UserRoom.CarryItem(0);
+        roomUserByUserIdTarget.CarryItem(userRoom.CarryItemID);
+        userRoom.CarryItem(0);
     }
 }

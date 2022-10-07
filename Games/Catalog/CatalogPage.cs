@@ -48,31 +48,27 @@ public class CatalogPage
         this.MinimumRank = minRank;
         this.Template = template;
 
-        foreach (var Str in pageStrings1.Split('|'))
+        foreach (var str in pageStrings1.Split('|'))
         {
-            if (this.PageStrings1 == null)
-            { this.PageStrings1 = new List<string>(); }
-            this.PageStrings1.Add(Str);
+            this.PageStrings1 ??= new List<string>();
+            this.PageStrings1.Add(str);
         }
 
-        foreach (var Str in pageStrings2.Split('|'))
+        foreach (var str in pageStrings2.Split('|'))
         {
-            if (this._pageStrings2 == null)
-            { this._pageStrings2 = new List<string>(); }
-            this._pageStrings2.Add(Str);
+            this._pageStrings2 ??= new List<string>();
+            this._pageStrings2.Add(str);
         }
 
         foreach (var str in pageStrings2En.Split('|'))
         {
-            if (this._pageStrings2En == null)
-            { this._pageStrings2En = new List<string>(); }
+            this._pageStrings2En ??= new List<string>();
             this._pageStrings2En.Add(str);
         }
 
         foreach (var str in pageStrings2Br.Split('|'))
         {
-            if (this._pageStrings2Br == null)
-            { this._pageStrings2Br = new List<string>(); }
+            this._pageStrings2Br ??= new List<string>();
             this._pageStrings2Br.Add(str);
         }
 

@@ -88,25 +88,25 @@ internal class ChangeNameEvent : IPacketEvent
         }
     }
 
-    private static int NameAvailable(string Username)
+    private static int NameAvailable(string username)
     {
-        Username = Username.ToLower();
+        username = username.ToLower();
 
-        if (Username.Length > 15)
+        if (username.Length > 15)
         {
             return -2;
         }
 
-        if (Username.Length < 3)
+        if (username.Length < 3)
         {
             return -2;
         }
 
-        if (!WibboEnvironment.IsValidAlphaNumeric(Username))
+        if (!WibboEnvironment.IsValidAlphaNumeric(username))
         {
             return -1;
         }
 
-        return WibboEnvironment.UsernameExists(Username) ? 0 : 1;
+        return WibboEnvironment.UsernameExists(username) ? 0 : 1;
     }
 }

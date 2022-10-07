@@ -4,7 +4,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
-using WibboEmulator.Games.Rooms;
 
 internal class UpdateGroupSettingsEvent : IPacketEvent
 {
@@ -12,75 +11,75 @@ internal class UpdateGroupSettingsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = packet.PopInt();
+        var groupId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
         {
             return;
         }
 
-        if (Group.CreatorId != session.GetUser().Id)
+        if (group.CreatorId != session.GetUser().Id)
         {
             return;
         }
 
-        var Type = packet.PopInt();
-        var FurniOptions = packet.PopInt();
+        var type = packet.PopInt();
+        var furniOptions = packet.PopInt();
 
-        Group.GroupType = Type switch
+        group.GroupType = type switch
         {
             1 => GroupType.LOCKED,
             2 => GroupType.PRIVATE,
             _ => GroupType.OPEN,
         };
-        if (Group.GroupType != GroupType.LOCKED)
+        if (group.GroupType != GroupType.LOCKED)
         {
-            if (Group.GetRequests.Count > 0)
+            if (group.GetRequests.Count > 0)
             {
-                foreach (var UserId in Group.GetRequests.ToList())
+                foreach (var userId in group.GetRequests.ToList())
                 {
-                    Group.HandleRequest(UserId, false);
+                    group.HandleRequest(userId, false);
                 }
 
-                Group.ClearRequests();
+                group.ClearRequests();
             }
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            GuildDao.UpdateStateAndDeco(dbClient, Group.Id, Group.GroupType == GroupType.OPEN ? 0 : Group.GroupType == GroupType.LOCKED ? 1 : 2, FurniOptions);
+            GuildDao.UpdateStateAndDeco(dbClient, group.Id, group.GroupType == GroupType.OPEN ? 0 : group.GroupType == GroupType.LOCKED ? 1 : 2, furniOptions);
         }
 
-        Group.AdminOnlyDeco = FurniOptions;
+        group.AdminOnlyDeco = furniOptions;
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(Group.RoomId, out var Room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var room))
         {
             return;
         }
 
-        foreach (var User in Room.GetRoomUserManager().GetRoomUsers().ToList())
+        foreach (var user in room.GetRoomUserManager().GetRoomUsers().ToList())
         {
-            if (Room.RoomData.OwnerId == User.UserId || Group.IsAdmin(User.UserId) || !Group.IsMember(User.UserId))
+            if (room.RoomData.OwnerId == user.UserId || group.IsAdmin(user.UserId) || !group.IsMember(user.UserId))
             {
                 continue;
             }
 
-            if (FurniOptions == 1)
+            if (furniOptions == 1)
             {
-                User.RemoveStatus("flatctrl");
-                User.UpdateNeeded = true;
+                user.RemoveStatus("flatctrl");
+                user.UpdateNeeded = true;
 
-                User.GetClient().SendPacket(new YouAreControllerComposer(0));
+                user.GetClient().SendPacket(new YouAreControllerComposer(0));
             }
-            else if (FurniOptions == 0 && !User.ContainStatus("flatctrl"))
+            else if (furniOptions == 0 && !user.ContainStatus("flatctrl"))
             {
-                User.SetStatus("flatctrl", "1");
-                User.UpdateNeeded = true;
+                user.SetStatus("flatctrl", "1");
+                user.UpdateNeeded = true;
 
-                User.GetClient().SendPacket(new YouAreControllerComposer(1));
+                user.GetClient().SendPacket(new YouAreControllerComposer(1));
             }
         }
 
-        session.SendPacket(new GroupInfoComposer(Group, session));
+        session.SendPacket(new GroupInfoComposer(group, session));
     }
 }

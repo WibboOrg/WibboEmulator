@@ -1,14 +1,14 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.User.Room;
+namespace WibboEmulator.Games.Chat.Commands.User.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class OldFoot : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        Room.OldFoot = !Room.OldFoot;
+        room.OldFoot = !room.OldFoot;
 
-        if (Room.OldFoot)
+        if (room.OldFoot)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.oldfoot.true", session.Langue));
         }

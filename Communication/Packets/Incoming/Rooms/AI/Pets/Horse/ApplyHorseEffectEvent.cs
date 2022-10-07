@@ -5,7 +5,6 @@ using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Rooms;
 
 internal class ApplyHorseEffectEvent : IPacketEvent
 {
@@ -18,123 +17,123 @@ internal class ApplyHorseEffectEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var Room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
             return;
         }
 
-        var ItemId = packet.PopInt();
-        var Item = Room.GetRoomItemHandler().GetItem(ItemId);
-        if (Item == null)
+        var itemId = packet.PopInt();
+        var item = room.GetRoomItemHandler().GetItem(itemId);
+        if (item == null)
         {
             return;
         }
 
-        var PetId = packet.PopInt();
+        var petId = packet.PopInt();
 
-        if (!Room.GetRoomUserManager().TryGetPet(PetId, out var PetUser))
+        if (!room.GetRoomUserManager().TryGetPet(petId, out var petUser))
         {
             return;
         }
 
-        if (PetUser.PetData == null || PetUser.PetData.OwnerId != session.GetUser().Id || PetUser.PetData.Type != 13)
+        if (petUser.PetData == null || petUser.PetData.OwnerId != session.GetUser().Id || petUser.PetData.Type != 13)
         {
             return;
         }
 
-        if (Item.Data.InteractionType == InteractionType.HORSE_SADDLE_1)
+        if (item.Data.InteractionType == InteractionType.HORSE_SADDLE_1)
         {
-            PetUser.PetData.Saddle = 9;
+            petUser.PetData.Saddle = 9;
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                BotPetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 1);
-                ItemDao.Delete(dbClient, Item.Id);
+                BotPetDao.UpdateHaveSaddle(dbClient, petUser.PetData.PetId, 1);
+                ItemDao.Delete(dbClient, item.Id);
             }
 
             //We only want to use this if we're successful. 
-            Room.GetRoomItemHandler().RemoveFurniture(session, Item.Id);
+            room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
         }
-        else if (Item.Data.InteractionType == InteractionType.HORSE_SADDLE_2)
+        else if (item.Data.InteractionType == InteractionType.HORSE_SADDLE_2)
         {
-            PetUser.PetData.Saddle = 10;
+            petUser.PetData.Saddle = 10;
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                BotPetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 2);
-                ItemDao.Delete(dbClient, Item.Id);
+                BotPetDao.UpdateHaveSaddle(dbClient, petUser.PetData.PetId, 2);
+                ItemDao.Delete(dbClient, item.Id);
             }
 
             //We only want to use this if we're successful. 
-            Room.GetRoomItemHandler().RemoveFurniture(session, Item.Id);
+            room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
         }
-        else if (Item.Data.InteractionType == InteractionType.HORSE_HAIRSTYLE)
+        else if (item.Data.InteractionType == InteractionType.HORSE_HAIRSTYLE)
         {
-            var Parse = 100;
-            var HairType = Item.GetBaseItem().ItemName.Split('_')[2];
+            var parse = 100;
+            var hairType = item.GetBaseItem().ItemName.Split('_')[2];
 
-            Parse += int.Parse(HairType);
+            parse += int.Parse(hairType);
 
-            PetUser.PetData.PetHair = Parse;
+            petUser.PetData.PetHair = parse;
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                BotPetDao.UpdatePethair(dbClient, PetUser.PetData.PetId, PetUser.PetData.PetHair);
-                ItemDao.Delete(dbClient, Item.Id);
+                BotPetDao.UpdatePethair(dbClient, petUser.PetData.PetId, petUser.PetData.PetHair);
+                ItemDao.Delete(dbClient, item.Id);
             }
 
             //We only want to use this if we're successful. 
-            Room.GetRoomItemHandler().RemoveFurniture(session, Item.Id);
+            room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
         }
-        else if (Item.Data.InteractionType == InteractionType.HORSE_HAIR_DYE)
+        else if (item.Data.InteractionType == InteractionType.HORSE_HAIR_DYE)
         {
-            var HairDye = 48;
-            var HairType = Item.GetBaseItem().ItemName.Split('_')[2];
+            var hairDye = 48;
+            var hairType = item.GetBaseItem().ItemName.Split('_')[2];
 
-            HairDye += int.Parse(HairType);
-            PetUser.PetData.HairDye = HairDye;
+            hairDye += int.Parse(hairType);
+            petUser.PetData.HairDye = hairDye;
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                BotPetDao.UpdateHairdye(dbClient, PetUser.PetData.PetId, PetUser.PetData.HairDye);
-                ItemDao.Delete(dbClient, Item.Id);
+                BotPetDao.UpdateHairdye(dbClient, petUser.PetData.PetId, petUser.PetData.HairDye);
+                ItemDao.Delete(dbClient, item.Id);
             }
 
             //We only want to use this if we're successful. 
-            Room.GetRoomItemHandler().RemoveFurniture(session, Item.Id);
+            room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
         }
-        else if (Item.Data.InteractionType == InteractionType.HORSE_BODY_DYE)
+        else if (item.Data.InteractionType == InteractionType.HORSE_BODY_DYE)
         {
-            var Race = Item.GetBaseItem().ItemName.Split('_')[2];
-            var Parse = int.Parse(Race);
-            var RaceLast = 2 + (Parse * 4) - 4;
-            if (Parse == 13)
+            var race = item.GetBaseItem().ItemName.Split('_')[2];
+            var parse = int.Parse(race);
+            var raceLast = 2 + (parse * 4) - 4;
+            if (parse == 13)
             {
-                RaceLast = 61;
+                raceLast = 61;
             }
-            else if (Parse == 14)
+            else if (parse == 14)
             {
-                RaceLast = 65;
+                raceLast = 65;
             }
-            else if (Parse == 15)
+            else if (parse == 15)
             {
-                RaceLast = 69;
+                raceLast = 69;
             }
-            else if (Parse == 16)
+            else if (parse == 16)
             {
-                RaceLast = 73;
+                raceLast = 73;
             }
 
-            PetUser.PetData.Race = RaceLast.ToString();
+            petUser.PetData.Race = raceLast.ToString();
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                BotPetDao.UpdateRace(dbClient, PetUser.PetData.PetId, PetUser.PetData.Race);
-                ItemDao.Delete(dbClient, Item.Id);
+                BotPetDao.UpdateRace(dbClient, petUser.PetData.PetId, petUser.PetData.Race);
+                ItemDao.Delete(dbClient, item.Id);
             }
 
             //We only want to use this if we're successful. 
-            Room.GetRoomItemHandler().RemoveFurniture(session, Item.Id);
+            room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
         }
 
-        Room.SendPacket(new UsersComposer(PetUser));
-        Room.SendPacket(new PetHorseFigureInformationComposer(PetUser));
+        room.SendPacket(new UsersComposer(petUser));
+        room.SendPacket(new PetHorseFigureInformationComposer(petUser));
     }
 }

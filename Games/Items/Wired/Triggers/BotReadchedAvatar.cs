@@ -4,30 +4,25 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Utilities.Events;
 
 public class BotReadchedAvatar : WiredTriggerBase, IWired
 {
-    private readonly BotCollisionDelegate _delegateFunction;
+    public BotReadchedAvatar(Item item, Room room) : base(item, room, (int)WiredTriggerType.BOT_REACHED_AVATAR) => this.RoomInstance.GetWiredHandler().TrgBotCollision += this.OnCollision;
 
-    public BotReadchedAvatar(Item item, Room room) : base(item, room, (int)WiredTriggerType.BOT_REACHED_AVATAR)
+    private void OnCollision(object obj, ItemTriggeredEventArgs args)
     {
-        this._delegateFunction = new BotCollisionDelegate(this.Collision);
-        this.RoomInstance.GetWiredHandler().TrgBotCollision += this._delegateFunction;
-    }
-
-    private void Collision(RoomUser user, string botName)
-    {
-        if (user == null || user.IsBot)
+        if (args.User == null || args.User.IsBot)
         {
             return;
         }
 
-        if (!string.IsNullOrEmpty(this.StringParam) && this.StringParam != botName)
+        if (!string.IsNullOrEmpty(this.StringParam) && this.StringParam != args.Value)
         {
             return;
         }
 
-        this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, null);
+        this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, args.User, null);
     }
 
 
@@ -35,7 +30,7 @@ public class BotReadchedAvatar : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GetWiredHandler().TrgBotCollision -= this._delegateFunction;
+        this.RoomInstance.GetWiredHandler().TrgBotCollision -= this.OnCollision;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, false, null);

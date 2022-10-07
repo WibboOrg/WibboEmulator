@@ -7,7 +7,6 @@ using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.Catalog.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Rooms;
 
 internal class RemoveSaddleFromHorseEvent : IPacketEvent
 {
@@ -20,47 +19,44 @@ internal class RemoveSaddleFromHorseEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var Room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
             return;
         }
 
-        if (!Room.GetRoomUserManager().TryGetPet(packet.PopInt(), out var PetUser))
+        if (!room.GetRoomUserManager().TryGetPet(packet.PopInt(), out var petUser))
         {
             return;
         }
 
-        if (PetUser.PetData == null || PetUser.PetData.OwnerId != session.GetUser().Id || PetUser.PetData.Type != 13)
+        if (petUser.PetData == null || petUser.PetData.OwnerId != session.GetUser().Id || petUser.PetData.Type != 13)
         {
             return;
         }
 
-        //Fetch the furniture Id for the pets current saddle.
-        var SaddleId = ItemUtility.GetSaddleId(PetUser.PetData.Saddle);
+        var saddleId = ItemUtility.GetSaddleId(petUser.PetData.Saddle);
 
-        //Remove the saddle from the pet.
-        PetUser.PetData.Saddle = 0;
+        petUser.PetData.Saddle = 0;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            BotPetDao.UpdateHaveSaddle(dbClient, PetUser.PetData.PetId, 0);
+            BotPetDao.UpdateHaveSaddle(dbClient, petUser.PetData.PetId, 0);
         }
 
-        //Give the saddle back to the user.
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(SaddleId, out var ItemData))
+        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(saddleId, out var itemData))
         {
             return;
         }
 
-        var Item = ItemFactory.CreateSingleItemNullable(ItemData, session.GetUser(), "");
-        if (Item != null)
+        var item = ItemFactory.CreateSingleItemNullable(itemData, session.GetUser(), "");
+        if (item != null)
         {
-            _ = session.GetUser().GetInventoryComponent().TryAddItem(Item);
-            session.SendPacket(new FurniListNotificationComposer(Item.Id, 1));
+            _ = session.GetUser().GetInventoryComponent().TryAddItem(item);
+            session.SendPacket(new FurniListNotificationComposer(item.Id, 1));
             session.SendPacket(new PurchaseOKComposer());
         }
 
-        Room.SendPacket(new UsersComposer(PetUser));
-        Room.SendPacket(new PetHorseFigureInformationComposer(PetUser));
+        room.SendPacket(new UsersComposer(petUser));
+        room.SendPacket(new PetHorseFigureInformationComposer(petUser));
     }
 }

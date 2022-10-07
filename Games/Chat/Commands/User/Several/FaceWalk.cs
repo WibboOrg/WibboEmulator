@@ -5,15 +5,15 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class FaceWalk : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
+        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
         {
             return;
         }
 
-        UserRoom.FacewalkEnabled = !UserRoom.FacewalkEnabled;
-        if (UserRoom.FacewalkEnabled)
+        userRoom.FacewalkEnabled = !userRoom.FacewalkEnabled;
+        if (userRoom.FacewalkEnabled)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.facewalk.true", session.Langue));
         }

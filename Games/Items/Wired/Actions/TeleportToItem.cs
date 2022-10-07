@@ -1,9 +1,10 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map;
 
 public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
 {
@@ -26,12 +27,12 @@ public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEf
 
             if (roomItem.Coordinate != user.Coordinate)
             {
-                this.RoomInstance.GetGameMap().TeleportToItem(user, roomItem);
+                Gamemap.TeleportToItem(user, roomItem);
             }
         }
         else if (this.Items.Count == 1)
         {
-            this.RoomInstance.GetGameMap().TeleportToItem(user, Enumerable.First<Item>(this.Items));
+            Gamemap.TeleportToItem(user, Enumerable.First(this.Items));
         }
 
         user.ApplyEffect(user.CurrentEffect, true);

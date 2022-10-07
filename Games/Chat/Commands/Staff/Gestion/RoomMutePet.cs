@@ -4,17 +4,17 @@ using WibboEmulator.Games.Rooms;
 
 internal class RoomMutePet : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (Room.RoomMutePets)
+        if (room.RoomMutePets)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roommutepet.true", session.Langue));
-            Room.RoomMutePets = false;
+            room.RoomMutePets = false;
         }
         else
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.roommutepet.false", session.Langue));
-            Room.RoomMutePets = true;
+            room.RoomMutePets = true;
         }
     }
 }

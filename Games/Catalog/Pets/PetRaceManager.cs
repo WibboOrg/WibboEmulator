@@ -9,5 +9,5 @@ public class PetRaceManager
 
     }
 
-    public List<PetRace> GetRacesForRaceId(int RaceId) => this._races.Where(Race => Race.RaceId == RaceId).ToList();
+    public List<PetRace> GetRacesForRaceId(int raceId) => this._races.Where(race => race.RaceId == raceId).ToList();
 }

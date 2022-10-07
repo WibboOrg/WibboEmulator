@@ -9,19 +9,20 @@ internal class NavigatorHomeRoomEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var RoomId = packet.PopInt();
-        var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
-        if (RoomId != 0 && (roomData == null || roomData.OwnerName.ToLower() != session.GetUser().Username.ToLower()))
+        var roomId = packet.PopInt();
+
+        var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+        if (roomId != 0 && (roomData == null || roomData.OwnerName.ToLower() != session.GetUser().Username.ToLower()))
         {
             return;
         }
 
-        session.GetUser().HomeRoom = RoomId;
+        session.GetUser().HomeRoom = roomId;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateHomeRoom(dbClient, session.GetUser().Id, RoomId);
+            UserDao.UpdateHomeRoom(dbClient, session.GetUser().Id, roomId);
         }
 
-        session.SendPacket(new NavigatorHomeRoomComposer(RoomId, 0));
+        session.SendPacket(new NavigatorHomeRoomComposer(roomId, 0));
     }
 }

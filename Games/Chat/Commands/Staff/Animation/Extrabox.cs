@@ -6,28 +6,28 @@ using WibboEmulator.Games.Rooms;
 
 internal class ExtraBox : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
 
-        _ = int.TryParse(parameters[1], out var NbLot);
+        _ = int.TryParse(parameters[1], out var nbLot);
 
-        if (NbLot is < 0 or > 10)
+        if (nbLot is < 0 or > 10)
         {
             return;
         }
 
         var lootboxId = WibboEnvironment.GetSettings().GetData<int>("givelot.lootbox.id");
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(lootboxId, out var ItemData))
+        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(lootboxId, out var itemData))
         {
             return;
         }
 
-        var Items = ItemFactory.CreateMultipleItems(ItemData, session.GetUser(), "", NbLot);
-        foreach (var PurchasedItem in Items)
+        var items = ItemFactory.CreateMultipleItems(itemData, session.GetUser(), "", nbLot);
+        foreach (var purchasedItem in items)
         {
-            if (session.GetUser().GetInventoryComponent().TryAddItem(PurchasedItem))
+            if (session.GetUser().GetInventoryComponent().TryAddItem(purchasedItem))
             {
-                session.SendPacket(new FurniListNotificationComposer(PurchasedItem.Id, 1));
+                session.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
             }
         }
     }

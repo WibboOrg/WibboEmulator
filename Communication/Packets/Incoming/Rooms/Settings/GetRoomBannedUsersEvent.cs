@@ -13,15 +13,15 @@ internal class GetRoomBannedUsersEvent : IPacketEvent
             return;
         }
 
-        var Instance = session.GetUser().CurrentRoom;
-        if (Instance == null || !Instance.CheckRights(session, true))
+        var room = session.GetUser().CurrentRoom;
+        if (room == null || !room.CheckRights(session, true))
         {
             return;
         }
 
-        if (Instance.GetBans().Count > 0)
+        if (room.GetBans().Count > 0)
         {
-            session.SendPacket(new GetRoomBannedUsersComposer(Instance));
+            session.SendPacket(new GetRoomBannedUsersComposer(room));
         }
     }
 }

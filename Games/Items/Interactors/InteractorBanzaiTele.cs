@@ -1,5 +1,6 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms.Map;
 
 public class InteractorBanzaiTele : FurniInteractor
 {
@@ -32,7 +33,7 @@ public class InteractorBanzaiTele : FurniInteractor
         var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
         if (roomUserByUserId != null)
         {
-            item.GetRoom().GetGameMap().TeleportToItem(roomUserByUserId, item);
+            Gamemap.TeleportToItem(roomUserByUserId, item);
             roomUserByUserId.SetRot(WibboEnvironment.GetRandomNumber(0, 7), false);
             roomUserByUserId.CanWalk = true;
         }

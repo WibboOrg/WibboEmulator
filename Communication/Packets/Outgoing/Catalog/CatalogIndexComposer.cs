@@ -5,66 +5,66 @@ using WibboEmulator.Games.GameClients;
 
 internal class CatalogIndexComposer : ServerPacket
 {
-    public CatalogIndexComposer(GameClient session, ICollection<CatalogPage> Pages, int Sub = 0)
+    public CatalogIndexComposer(GameClient session, ICollection<CatalogPage> pages)
          : base(ServerPacketHeader.CATALOG_PAGE_LIST)
     {
-        this.WriteRootIndex(session, Pages);
+        this.WriteRootIndex(session, pages);
 
-        foreach (var Parent in Pages)
+        foreach (var parent in pages)
         {
-            if (Parent.ParentId != -1 || Parent.MinimumRank > session.GetUser().Rank)
+            if (parent.ParentId != -1 || parent.MinimumRank > session.GetUser().Rank)
             {
                 continue;
             }
 
-            this.WritePage(Parent, CalcTreeSize(session, Pages, Parent.Id), session.Langue);
+            this.WritePage(parent, CalcTreeSize(session, pages, parent.Id), session.Langue);
 
-            foreach (var child in Pages)
+            foreach (var child in pages)
             {
-                if (child.ParentId != Parent.Id || child.MinimumRank > session.GetUser().Rank)
+                if (child.ParentId != parent.Id || child.MinimumRank > session.GetUser().Rank)
                 {
                     continue;
                 }
 
                 if (child.Enabled)
                 {
-                    this.WritePage(child, CalcTreeSize(session, Pages, child.Id), session.Langue);
+                    this.WritePage(child, CalcTreeSize(session, pages, child.Id), session.Langue);
                 }
                 else
                 {
-                    this.WriteNodeIndex(child, CalcTreeSize(session, Pages, child.Id), session.Langue);
+                    this.WriteNodeIndex(child, CalcTreeSize(session, pages, child.Id), session.Langue);
                 }
 
-                foreach (var SubChild in Pages)
+                foreach (var subChild in pages)
                 {
-                    if (SubChild.ParentId != child.Id || SubChild.MinimumRank > session.GetUser().Rank)
+                    if (subChild.ParentId != child.Id || subChild.MinimumRank > session.GetUser().Rank)
                     {
                         continue;
                     }
 
-                    if (SubChild.Enabled)
+                    if (subChild.Enabled)
                     {
-                        this.WritePage(SubChild, CalcTreeSize(session, Pages, SubChild.Id), session.Langue);
+                        this.WritePage(subChild, CalcTreeSize(session, pages, subChild.Id), session.Langue);
                     }
                     else
                     {
-                        this.WriteNodeIndex(SubChild, CalcTreeSize(session, Pages, SubChild.Id), session.Langue);
+                        this.WriteNodeIndex(subChild, CalcTreeSize(session, pages, subChild.Id), session.Langue);
                     }
 
-                    foreach (var SubSubChild in Pages)
+                    foreach (var subSubChild in pages)
                     {
-                        if (SubSubChild.ParentId != SubChild.Id || SubSubChild.MinimumRank > session.GetUser().Rank)
+                        if (subSubChild.ParentId != subChild.Id || subSubChild.MinimumRank > session.GetUser().Rank)
                         {
                             continue;
                         }
 
-                        if (SubSubChild.Enabled)
+                        if (subSubChild.Enabled)
                         {
-                            this.WritePage(SubSubChild, 0, session.Langue);
+                            this.WritePage(subSubChild, 0, session.Langue);
                         }
                         else
                         {
-                            this.WriteNodeIndex(SubSubChild, 0, session.Langue);
+                            this.WriteNodeIndex(subSubChild, 0, session.Langue);
                         }
                     }
                 }
@@ -87,24 +87,24 @@ internal class CatalogIndexComposer : ServerPacket
         this.WriteInteger(CalcTreeSize(session, pages, -1));
     }
 
-    public void WriteNodeIndex(CatalogPage page, int treeSize, Language Langue)
+    public void WriteNodeIndex(CatalogPage page, int treeSize, Language langue)
     {
         this.WriteBoolean(true); // Visible
         this.WriteInteger(page.Icon);
         this.WriteInteger(-1);
         this.WriteString(page.PageLink);
-        this.WriteString(page.GetCaptionByLangue(Langue));
+        this.WriteString(page.GetCaptionByLangue(langue));
         this.WriteInteger(0);
         this.WriteInteger(treeSize);
     }
 
-    public void WritePage(CatalogPage page, int treeSize, Language Langue)
+    public void WritePage(CatalogPage page, int treeSize, Language langue)
     {
         this.WriteBoolean(true);
         this.WriteInteger(page.Icon);
         this.WriteInteger(page.Id);
         this.WriteString(page.PageLink);
-        this.WriteString(page.GetCaptionByLangue(Langue));
+        this.WriteString(page.GetCaptionByLangue(langue));
 
         this.WriteInteger(page.ItemOffers.Count);
         foreach (var i in page.ItemOffers.Keys)
@@ -115,17 +115,17 @@ internal class CatalogIndexComposer : ServerPacket
         this.WriteInteger(treeSize);
     }
 
-    public static int CalcTreeSize(GameClient session, ICollection<CatalogPage> Pages, int ParentId)
+    public static int CalcTreeSize(GameClient session, ICollection<CatalogPage> pages, int parentId)
     {
         var i = 0;
-        foreach (var Page in Pages)
+        foreach (var page in pages)
         {
-            if (Page.MinimumRank > session.GetUser().Rank || Page.ParentId != ParentId)
+            if (page.MinimumRank > session.GetUser().Rank || page.ParentId != parentId)
             {
                 continue;
             }
 
-            if (Page.ParentId == ParentId)
+            if (page.ParentId == parentId)
             {
                 i++;
             }

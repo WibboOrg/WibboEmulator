@@ -106,19 +106,19 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
             case InteractionType.GUILD_ITEM:
             case InteractionType.GUILD_GATE:
-                var Groupid = 0;
-                if (!int.TryParse(data, out Groupid))
+                var groupId = 0;
+                if (!int.TryParse(data, out groupId))
                 {
                     return;
                 }
 
-                if (Groupid == 0)
+                if (groupId == 0)
                 {
                     return;
                 }
 
                 Group groupItem;
-                if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(Groupid, out groupItem))
+                if (WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out groupItem))
                 {
                     itemExtraData = "0;" + groupItem.Id;
                 }
@@ -129,24 +129,24 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
                 try
                 {
-                    var Bits = data.Split('\n');
-                    var PetName = Bits[0];
-                    var Race = Bits[1];
-                    var Color = Bits[2];
+                    var bits = data.Split('\n');
+                    var petName = bits[0];
+                    var race = bits[1];
+                    var color = bits[2];
 
-                    _ = int.Parse(Race); // to trigger any possible errors
+                    _ = int.Parse(race); // to trigger any possible errors
 
-                    if (PetUtility.CheckPetName(PetName))
+                    if (PetUtility.CheckPetName(petName))
                     {
                         return;
                     }
 
-                    if (Race.Length > 2)
+                    if (race.Length > 2)
                     {
                         return;
                     }
 
-                    if (Color.Length != 6)
+                    if (color.Length != 6)
                     {
                         return;
                     }

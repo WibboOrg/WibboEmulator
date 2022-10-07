@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
@@ -8,44 +8,44 @@ using WibboEmulator.Games.Rooms;
 
 internal class RegenLTD : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(984897, out var Page))
+        if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(984897, out var page))
         {
             return;
         }
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        foreach (var Item in Page.Items.Values)
+        foreach (var item in page.Items.Values)
         {
-            var LimitedStack = Item.LimitedEditionStack;
+            var limitedStack = item.LimitedEditionStack;
 
-            for (var LimitedNumber = 1; LimitedNumber < LimitedStack + 1; LimitedNumber++)
+            for (var limitedNumber = 1; limitedNumber < limitedStack + 1; limitedNumber++)
             {
-                var Row = ItemDao.GetOneLimitedId(dbClient, LimitedNumber, Item.ItemId);
+                var row = ItemDao.GetOneLimitedId(dbClient, limitedNumber, item.ItemId);
 
-                if (Row != null)
+                if (row != null)
                 {
                     continue;
                 }
 
-                var RowMarketPlace = CatalogMarketplaceOfferDao.GetOneLTD(dbClient, Item.ItemId, LimitedNumber);
+                var rowMarketPlace = CatalogMarketplaceOfferDao.GetOneLTD(dbClient, item.ItemId, limitedNumber);
 
-                if (RowMarketPlace != null)
+                if (rowMarketPlace != null)
                 {
                     continue;
                 }
 
-                var NewItem = ItemFactory.CreateSingleItemNullable(Item.Data, session.GetUser(), "", LimitedNumber, LimitedStack);
+                var newItem = ItemFactory.CreateSingleItemNullable(item.Data, session.GetUser(), "", limitedNumber, limitedStack);
 
-                if (NewItem == null)
+                if (newItem == null)
                 {
                     continue;
                 }
 
-                if (session.GetUser().GetInventoryComponent().TryAddItem(NewItem))
+                if (session.GetUser().GetInventoryComponent().TryAddItem(newItem))
                 {
-                    session.SendPacket(new FurniListNotificationComposer(NewItem.Id, 1));
+                    session.SendPacket(new FurniListNotificationComposer(newItem.Id, 1));
                 }
             }
         }

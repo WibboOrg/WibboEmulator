@@ -4,6 +4,7 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Map;
 
 public class BotTeleport : WiredActionBase, IWired, IWiredEffect
 {
@@ -32,7 +33,7 @@ public class BotTeleport : WiredActionBase, IWired, IWiredEffect
 
         if (roomItem.Coordinate != bot.Coordinate)
         {
-            this.RoomInstance.GetGameMap().TeleportToItem(bot, roomItem);
+            Gamemap.TeleportToItem(bot, roomItem);
         }
 
         return false;

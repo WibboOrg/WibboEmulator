@@ -18,11 +18,11 @@ internal class TradeOfferMultipleItemsEvent : IPacketEvent
             return;
         }
 
-        var ItemCount = packet.PopInt();
-        for (var i = 0; i < ItemCount; i++)
+        var itemCount = packet.PopInt();
+        for (var i = 0; i < itemCount; i++)
         {
-            var ItemId = packet.PopInt();
-            var userItem = session.GetUser().GetInventoryComponent().GetItem(ItemId);
+            var itemId = packet.PopInt();
+            var userItem = session.GetUser().GetInventoryComponent().GetItem(itemId);
             if (userItem == null)
             {
                 continue;

@@ -1,26 +1,20 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class AllAroundMe : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var User = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-        if (User == null)
+        var users = room.GetRoomUserManager().GetRoomUsers();
+        foreach (var user in users.ToList())
         {
-            return;
-        }
-
-        var Users = Room.GetRoomUserManager().GetRoomUsers();
-        foreach (var U in Users.ToList())
-        {
-            if (U == null || session.GetUser().Id == U.UserId)
+            if (user == null || session.GetUser().Id == user.UserId)
             {
                 continue;
             }
 
-            U.MoveTo(User.X, User.Y, true);
+            user.MoveTo(userRoom.X, userRoom.Y, true);
         }
     }
 }

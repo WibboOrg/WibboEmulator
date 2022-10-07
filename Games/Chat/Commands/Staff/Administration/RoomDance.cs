@@ -1,29 +1,29 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Avatar;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class RoomDance : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length == 1)
         {
-            session.SendWhisper("Please enter a dance ID. (1-4)");
+            session.SendWhisper("Entrer une dance ID (1-4)");
             return;
         }
 
-        var DanceId = Convert.ToInt32(parameters[1]);
-        if (DanceId is < 0 or > 4)
+        var danceId = Convert.ToInt32(parameters[1]);
+        if (danceId is < 0 or > 4)
         {
-            session.SendWhisper("Please enter a dance ID. (1-4)");
+            session.SendWhisper("Entrer une dance ID (1-4)");
             return;
         }
 
-        var Users = Room.GetRoomUserManager().GetRoomUsers();
-        if (Users.Count > 0)
+        var users = room.GetRoomUserManager().GetRoomUsers();
+        if (users.Count > 0)
         {
-            foreach (var user in Users.ToList())
+            foreach (var user in users.ToList())
             {
                 if (user == null)
                 {
@@ -35,8 +35,8 @@ internal class RoomDance : IChatCommand
                     user.CarryItemID = 0;
                 }
 
-                user.DanceId = DanceId;
-                Room.SendPacket(new DanceComposer(user.VirtualId, DanceId));
+                user.DanceId = danceId;
+                room.SendPacket(new DanceComposer(user.VirtualId, danceId));
             }
         }
     }

@@ -8,16 +8,16 @@ internal class GetCatalogPageEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var PageId = packet.PopInt();
-        var Something = packet.PopInt();
-        var CataMode = packet.PopString();
+        var pageId = packet.PopInt();
+        var something = packet.PopInt();
+        var cataMode = packet.PopString();
 
-        _ = WibboEnvironment.GetGame().GetCatalog().TryGetPage(PageId, out var Page);
-        if (Page == null || Page.MinimumRank > session.GetUser().Rank)
+        _ = WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out var page);
+        if (page == null || page.MinimumRank > session.GetUser().Rank)
         {
             return;
         }
 
-        session.SendPacket(new CatalogPageComposer(Page, CataMode, session.Langue));
+        session.SendPacket(new CatalogPageComposer(page, cataMode, session.Langue));
     }
 }

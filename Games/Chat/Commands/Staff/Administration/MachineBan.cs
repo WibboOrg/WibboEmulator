@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class MachineBan : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
@@ -27,15 +27,15 @@ internal class MachineBan : IChatCommand
         }
         else
         {
-            var Raison = "";
+            var raison = "";
             if (parameters.Length > 2)
             {
-                Raison = CommandManager.MergeParams(parameters, 2);
+                raison = CommandManager.MergeParams(parameters, 2);
             }
 
-            WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUsername, session.GetUser().Username, 788922000, Raison, true, true);
-            session.SendWhisper("Tu viens de bannir " + clientByUsername.GetUser().Username + " pour la raison : " + Raison + " !");
-            _ = session.Antipub(Raison, "<CMD>");
+            WibboEnvironment.GetGame().GetGameClientManager().BanUser(clientByUsername, session.GetUser().Username, 788922000, raison, true, true);
+            session.SendWhisper("Tu viens de bannir " + clientByUsername.GetUser().Username + " pour la raison : " + raison + " !");
+            _ = session.Antipub(raison, "<CMD>");
             return;
         }
     }

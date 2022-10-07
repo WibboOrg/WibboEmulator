@@ -12,8 +12,8 @@ internal class AcceptBuddyEvent : IPacketEvent
             return;
         }
 
-        var Count = packet.PopInt();
-        for (var index = 0; index < Count; ++index)
+        var count = packet.PopInt();
+        for (var index = 0; index < count; ++index)
         {
             var num2 = packet.PopInt();
             var request = session.GetUser().GetMessenger().GetRequest(num2);

@@ -8,9 +8,9 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class RandomLook : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
+        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
         {
             return;
         }
@@ -20,7 +20,7 @@ internal class RandomLook : IChatCommand
             return;
         }
 
-        if (UserRoom.IsTransf || UserRoom.IsSpectator)
+        if (userRoom.IsTransf || userRoom.IsSpectator)
         {
             return;
         }
@@ -31,7 +31,7 @@ internal class RandomLook : IChatCommand
         }
 
         session.SendPacket(new FigureUpdateComposer(session.GetUser().Look, session.GetUser().Gender));
-        session.SendPacket(new UserChangeComposer(UserRoom, true));
-        Room.SendPacket(new UserChangeComposer(UserRoom, false));
+        session.SendPacket(new UserChangeComposer(userRoom, true));
+        room.SendPacket(new UserChangeComposer(userRoom, false));
     }
 }

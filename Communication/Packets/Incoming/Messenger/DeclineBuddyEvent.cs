@@ -12,10 +12,10 @@ internal class DeclineBuddyEvent : IPacketEvent
             return;
         }
 
-        var DeleteAllFriend = packet.PopBoolean();
-        var RequestCount = packet.PopInt();
+        var deleteAllFriend = packet.PopBoolean();
+        var requestCount = packet.PopInt();
 
-        if (!DeleteAllFriend && RequestCount == 1)
+        if (!deleteAllFriend && requestCount == 1)
         {
             session.GetUser().GetMessenger().HandleRequest(packet.PopInt());
         }

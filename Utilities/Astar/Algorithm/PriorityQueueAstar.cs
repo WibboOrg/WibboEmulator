@@ -1,10 +1,11 @@
 namespace WibboEmulator.Utilities.Astar.Algorithm;
-public class PriorityQueue<T, TX> where T : IWeightAddable<TX>
-{
-    public List<T> InnerList;
-    protected IComparer<T> Comparer;
 
-    public PriorityQueue(IComparer<T> comparer, int size)
+public class PriorityQueueAstar<T, TX> where T : IWeightAddable<TX>
+{
+    public List<T> InnerList { get; set; }
+    protected IComparer<T> Comparer { get; set; }
+
+    public PriorityQueueAstar(IComparer<T> comparer, int size)
     {
         this.Comparer = comparer;
         this.InnerList = new List<T>(size);

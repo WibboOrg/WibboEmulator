@@ -5,22 +5,27 @@ using WibboEmulator.Games.Rooms;
 
 internal class MassBadge : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var Badge = parameters[1];
-
-        if (string.IsNullOrEmpty(Badge))
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        foreach (var Client in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
+        var badge = parameters[1];
+
+        if (string.IsNullOrEmpty(badge))
         {
-            if (Client.GetUser() != null)
+            return;
+        }
+
+        foreach (var client in WibboEnvironment.GetGame().GetGameClientManager().GetClients.ToList())
+        {
+            if (client.GetUser() != null)
             {
-                Client.GetUser().GetBadgeComponent().GiveBadge(Badge, true);
-                Client.SendPacket(new ReceiveBadgeComposer(Badge));
-                Client.SendNotification("Vous venez de recevoir le badge : " + Badge + " !");
+                client.GetUser().GetBadgeComponent().GiveBadge(badge, true);
+                client.SendPacket(new ReceiveBadgeComposer(badge));
+                client.SendNotification("Vous venez de recevoir le badge : " + badge + " !");
             }
         }
     }

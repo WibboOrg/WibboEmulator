@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class AllIgnore : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {

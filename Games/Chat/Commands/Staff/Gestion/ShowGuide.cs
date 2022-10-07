@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class ShowGuide : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var guideManager = WibboEnvironment.GetGame().GetHelpManager();
         if (guideManager.GuidesCount <= 0)

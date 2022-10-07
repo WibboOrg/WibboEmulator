@@ -8,7 +8,7 @@ internal class ChangeFootGate : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var Id = packet.PopInt();
+        var id = packet.PopInt();
         var gender = packet.PopString();
         var look = packet.PopString();
 
@@ -18,7 +18,7 @@ internal class ChangeFootGate : IPacketEvent
             return;
         }
 
-        var item = room.GetRoomItemHandler().GetItem(Id);
+        var item = room.GetRoomItemHandler().GetItem(id);
         if (item == null || item.GetBaseItem().InteractionType != InteractionType.FBGATE)
         {
             return;
@@ -26,13 +26,13 @@ internal class ChangeFootGate : IPacketEvent
 
         if (gender.ToUpper() == "M")
         {
-            var Figures = item.ExtraData.Split(',');
+            var figures = item.ExtraData.Split(',');
             var newFigures = new string[2];
 
             newFigures[0] = look;
-            if (Figures.Length > 1)
+            if (figures.Length > 1)
             {
-                newFigures[1] = Figures[1];
+                newFigures[1] = figures[1];
             }
             else
             {
@@ -43,12 +43,12 @@ internal class ChangeFootGate : IPacketEvent
         }
         else if (gender.ToUpper() == "F")
         {
-            var Figures = item.ExtraData.Split(',');
+            var figures = item.ExtraData.Split(',');
             var newFigures = new string[2];
 
-            if (!string.IsNullOrWhiteSpace(Figures[0]))
+            if (!string.IsNullOrWhiteSpace(figures[0]))
             {
-                newFigures[0] = Figures[0];
+                newFigures[0] = figures[0];
             }
             else
             {

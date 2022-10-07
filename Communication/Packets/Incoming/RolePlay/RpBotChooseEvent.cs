@@ -1,6 +1,5 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.RolePlay;
+namespace WibboEmulator.Communication.Packets.Incoming.RolePlay;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
 internal class RpBotChooseEvent : IPacketEvent
 {
@@ -8,25 +7,25 @@ internal class RpBotChooseEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var Message = packet.PopString();
+        var message = packet.PopString();
 
         if (session == null || session.GetUser() == null)
         {
             return;
         }
 
-        var Room = session.GetUser().CurrentRoom;
-        if (Room == null)
+        var room = session.GetUser().CurrentRoom;
+        if (room == null)
         {
             return;
         }
 
-        var User = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-        if (User == null)
+        var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (user == null)
         {
             return;
         }
 
-        _ = Room.AllowsShous(User, Message);
+        _ = room.AllowsShous(user, message);
     }
 }

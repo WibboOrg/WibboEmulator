@@ -43,7 +43,7 @@ public class WebSocketManager
                 this._webSocketServer.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls12;
             }
         }
-        this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => new GameWebSocket() { IgnoreExtensions = true });
+        this._webSocketServer.AddWebSocketService<GameWebSocket>("/", (initializer) => _ = new GameWebSocket() { IgnoreExtensions = true });
         this._webSocketServer.Start();
 
         if (Debugger.IsAttached)
@@ -73,8 +73,8 @@ public class WebSocketManager
 
         this.AlterIpConnectionCount(ip, this.GetAmountOfConnectionFromIp(ip) + 1);
 
-        var ConnectionCount = this.GetAmountOfConnectionFromIp(ip);
-        if (ConnectionCount <= 10)
+        var connectionCount = this.GetAmountOfConnectionFromIp(ip);
+        if (connectionCount <= 10)
         {
             WibboEnvironment.GetGame().GetGameClientManager().CreateAndStartClient(connection.ID, connection);
         }
@@ -94,7 +94,7 @@ public class WebSocketManager
                     this._bannedIp.Add(ip);
                 }
 
-                _ = this._lastTimeConnection.TryRemove(ip, out lastTime);
+                _ = this._lastTimeConnection.TryRemove(ip, out _);
             }
             else
             {
@@ -131,8 +131,8 @@ public class WebSocketManager
 
             if (this._ipConnectionsCount.ContainsKey(ip))
             {
-                _ = this._ipConnectionsCount.TryGetValue(ip, out var Count);
-                return Count;
+                _ = this._ipConnectionsCount.TryGetValue(ip, out var count);
+                return count;
             }
             else
             {
@@ -156,7 +156,7 @@ public class GameWebSocket : WebSocketBehavior
 {
     private string _ip;
 
-    protected override void OnError(WebSocketSharp.ErrorEventArgs e) => ExceptionLogger.LogException(e.Message);
+    protected override void OnError(ErrorEventArgs e) => ExceptionLogger.LogException(e.Message);
 
     protected override void OnClose(CloseEventArgs e) => WibboEnvironment.GetWebSocketManager().DisposeClient(this);
 

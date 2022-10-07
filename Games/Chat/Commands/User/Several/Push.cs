@@ -5,14 +5,14 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class Push : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
+        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
         {
             return;
         }
 
-        if (!Room.PushPullAllowed)
+        if (!room.PushPullAllowed)
         {
             return;
         }
@@ -22,76 +22,76 @@ internal class Push : IChatCommand
             return;
         }
 
-        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
+        var targetRoomUser = room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
 
-        if (TargetRoomUser == null)
+        if (targetRoomUser == null)
         {
-            UserRoom.SendWhisperChat(Convert.ToString(parameters[1]) + " n'est plus ici.");
+            userRoom.SendWhisperChat(Convert.ToString(parameters[1]) + " n'est plus ici.");
             return;
         }
 
-        if (TargetRoomUser.GetClient().GetUser().Id == session.GetUser().Id)
+        if (targetRoomUser.GetClient().GetUser().Id == session.GetUser().Id)
         {
             return;
         }
 
-        if (TargetRoomUser.GetClient().GetUser().PremiumProtect && !session.GetUser().HasPermission("perm_mod"))
+        if (targetRoomUser.GetClient().GetUser().PremiumProtect && !session.GetUser().HasPermission("perm_mod"))
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
             return;
         }
 
-        if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2) || Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2)
+        if (!(Math.Abs(targetRoomUser.X - userRoom.X) >= 2) || Math.Abs(targetRoomUser.Y - userRoom.Y) >= 2)
         {
-            if (TargetRoomUser.SetX - 1 == Room.GetGameMap().Model.DoorX)
+            if (targetRoomUser.SetX - 1 == room.GetGameMap().Model.DoorX)
             {
                 return;
             }
         }
 
-        if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2 || Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2))
+        if (!(Math.Abs(targetRoomUser.X - userRoom.X) >= 2 || Math.Abs(targetRoomUser.Y - userRoom.Y) >= 2))
         {
-            if (UserRoom.RotBody == 4)
-            { TargetRoomUser.MoveTo(TargetRoomUser.X, TargetRoomUser.Y + 1); }
+            if (userRoom.RotBody == 4)
+            { targetRoomUser.MoveTo(targetRoomUser.X, targetRoomUser.Y + 1); }
 
-            if (UserRoom.RotBody == 0)
-            { TargetRoomUser.MoveTo(TargetRoomUser.X, TargetRoomUser.Y - 1); }
+            if (userRoom.RotBody == 0)
+            { targetRoomUser.MoveTo(targetRoomUser.X, targetRoomUser.Y - 1); }
 
-            if (UserRoom.RotBody == 6)
-            { TargetRoomUser.MoveTo(TargetRoomUser.X - 1, TargetRoomUser.Y); }
+            if (userRoom.RotBody == 6)
+            { targetRoomUser.MoveTo(targetRoomUser.X - 1, targetRoomUser.Y); }
 
-            if (UserRoom.RotBody == 2)
-            { TargetRoomUser.MoveTo(TargetRoomUser.X + 1, TargetRoomUser.Y); }
+            if (userRoom.RotBody == 2)
+            { targetRoomUser.MoveTo(targetRoomUser.X + 1, targetRoomUser.Y); }
 
-            if (UserRoom.RotBody == 3)
+            if (userRoom.RotBody == 3)
             {
-                TargetRoomUser.MoveTo(TargetRoomUser.X + 1, TargetRoomUser.Y);
-                TargetRoomUser.MoveTo(TargetRoomUser.X, TargetRoomUser.Y + 1);
+                targetRoomUser.MoveTo(targetRoomUser.X + 1, targetRoomUser.Y);
+                targetRoomUser.MoveTo(targetRoomUser.X, targetRoomUser.Y + 1);
             }
 
-            if (UserRoom.RotBody == 1)
+            if (userRoom.RotBody == 1)
             {
-                TargetRoomUser.MoveTo(TargetRoomUser.X + 1, TargetRoomUser.Y);
-                TargetRoomUser.MoveTo(TargetRoomUser.X, TargetRoomUser.Y - 1);
+                targetRoomUser.MoveTo(targetRoomUser.X + 1, targetRoomUser.Y);
+                targetRoomUser.MoveTo(targetRoomUser.X, targetRoomUser.Y - 1);
             }
 
-            if (UserRoom.RotBody == 7)
+            if (userRoom.RotBody == 7)
             {
-                TargetRoomUser.MoveTo(TargetRoomUser.X - 1, TargetRoomUser.Y);
-                TargetRoomUser.MoveTo(TargetRoomUser.X, TargetRoomUser.Y - 1);
+                targetRoomUser.MoveTo(targetRoomUser.X - 1, targetRoomUser.Y);
+                targetRoomUser.MoveTo(targetRoomUser.X, targetRoomUser.Y - 1);
             }
 
-            if (UserRoom.RotBody == 5)
+            if (userRoom.RotBody == 5)
             {
-                TargetRoomUser.MoveTo(TargetRoomUser.X - 1, TargetRoomUser.Y);
-                TargetRoomUser.MoveTo(TargetRoomUser.X, TargetRoomUser.Y + 1);
+                targetRoomUser.MoveTo(targetRoomUser.X - 1, targetRoomUser.Y);
+                targetRoomUser.MoveTo(targetRoomUser.X, targetRoomUser.Y + 1);
             }
 
-            UserRoom.OnChat("*pousse " + parameters[1] + "*", 0, false);
+            userRoom.OnChat("*pousse " + parameters[1] + "*", 0, false);
         }
         else
         {
-            UserRoom.SendWhisperChat(parameters[1] + " est trop loin de vous.");
+            userRoom.SendWhisperChat(parameters[1] + " est trop loin de vous.");
         }
     }
 }

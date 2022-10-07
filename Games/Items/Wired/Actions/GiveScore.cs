@@ -9,13 +9,11 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 public class GiveScore : WiredActionBase, IWiredEffect, IWired
 {
     private int _currentGameCount;
-    private RoomEventDelegate _delegateFunction;
 
     public GiveScore(Item item, Room room) : base(item, room, (int)WiredActionType.GIVE_SCORE)
     {
         this._currentGameCount = 0;
-        this._delegateFunction = new RoomEventDelegate(this.OnGameStart);
-        this.RoomInstance.GetGameManager().OnGameStart += this._delegateFunction;
+        this.RoomInstance.GetGameManager().OnGameStart += this.OnGameStart;
 
         this.IntParams.Add(1);
         this.IntParams.Add(1);
@@ -43,8 +41,7 @@ public class GiveScore : WiredActionBase, IWiredEffect, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GetGameManager().OnGameStart -= this._delegateFunction;
-        this._delegateFunction = null;
+        this.RoomInstance.GetGameManager().OnGameStart -= this.OnGameStart;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

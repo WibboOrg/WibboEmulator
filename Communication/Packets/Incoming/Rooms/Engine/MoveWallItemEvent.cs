@@ -18,10 +18,10 @@ internal class MoveWallItemEvent : IPacketEvent
             return;
         }
 
-        var Id = packet.PopInt();
+        var id = packet.PopInt();
         var str = packet.PopString();
 
-        var roomItem = room.GetRoomItemHandler().GetItem(Id);
+        var roomItem = room.GetRoomItemHandler().GetItem(id);
         if (roomItem == null)
         {
             return;

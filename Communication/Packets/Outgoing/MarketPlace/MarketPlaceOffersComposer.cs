@@ -3,7 +3,7 @@ using WibboEmulator.Games.Catalog.Marketplace;
 
 internal class MarketPlaceOffersComposer : ServerPacket
 {
-    public MarketPlaceOffersComposer(int minCost, int MaxCost, Dictionary<int, MarketOffer> dictionary, Dictionary<int, int> dictionary2)
+    public MarketPlaceOffersComposer(Dictionary<int, MarketOffer> dictionary, Dictionary<int, int> dictionary2)
         : base(ServerPacketHeader.MARKETPLACE_ITEMS_SEARCHED)
     {
         this.WriteInteger(dictionary.Count);

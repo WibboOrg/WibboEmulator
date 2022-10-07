@@ -2,7 +2,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
 
 internal class AcceptGroupMembershipEvent : IPacketEvent
 {
@@ -10,34 +9,34 @@ internal class AcceptGroupMembershipEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = packet.PopInt();
-        var UserId = packet.PopInt();
+        var groupId = packet.PopInt();
+        var userId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
         {
             return;
         }
 
-        if (session.GetUser().Id != Group.CreatorId && !Group.IsAdmin(session.GetUser().Id) && !session.GetUser().HasPermission("perm_delete_group_limit"))
+        if (session.GetUser().Id != group.CreatorId && !group.IsAdmin(session.GetUser().Id) && !session.GetUser().HasPermission("perm_delete_group_limit"))
         {
             return;
         }
 
-        if (!Group.HasRequest(UserId))
+        if (!group.HasRequest(userId))
         {
             return;
         }
 
-        var user = WibboEnvironment.GetUserById(UserId);
+        var user = WibboEnvironment.GetUserById(userId);
         if (user == null)
         {
             return;
         }
 
-        Group.HandleRequest(UserId, true);
+        group.HandleRequest(userId, true);
 
-        user.MyGroups.Add(Group.Id);
+        user.MyGroups.Add(group.Id);
 
-        session.SendPacket(new GroupMemberUpdatedComposer(GroupId, user, 4));
+        session.SendPacket(new GroupMemberUpdatedComposer(groupId, user, 4));
     }
 }

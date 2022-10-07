@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class MakeSayBot : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 3)
         {
@@ -12,18 +12,18 @@ internal class MakeSayBot : IChatCommand
         }
 
         var username = parameters[1];
-        var Bot = Room.GetRoomUserManager().GetBotOrPetByName(username);
-        if (Bot == null)
+        var bot = room.GetRoomUserManager().GetBotOrPetByName(username);
+        if (bot == null)
         {
             return;
         }
 
-        var Message = CommandManager.MergeParams(parameters, 2);
-        if (string.IsNullOrEmpty(Message))
+        var message = CommandManager.MergeParams(parameters, 2);
+        if (string.IsNullOrEmpty(message))
         {
             return;
         }
 
-        Bot.OnChat(Message, Bot.IsPet ? 0 : 2, false);
+        bot.OnChat(message, bot.IsPet ? 0 : 2, false);
     }
 }

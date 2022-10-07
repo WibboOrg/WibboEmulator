@@ -3,7 +3,6 @@ using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
 
 internal class SetGroupFavouriteEvent : IPacketEvent
 {
@@ -16,18 +15,18 @@ internal class SetGroupFavouriteEvent : IPacketEvent
             return;
         }
 
-        var GroupId = packet.PopInt();
-        if (GroupId == 0)
+        var groupId = packet.PopInt();
+        if (groupId == 0)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
         {
             return;
         }
 
-        session.GetUser().FavouriteGroupId = Group.Id;
+        session.GetUser().FavouriteGroupId = group.Id;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
             UserStatsDao.UpdateGroupId(dbClient, session.GetUser().FavouriteGroupId, session.GetUser().Id);
@@ -36,14 +35,14 @@ internal class SetGroupFavouriteEvent : IPacketEvent
         if (session.GetUser().InRoom && session.GetUser().CurrentRoom != null)
         {
             session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));
-            if (Group != null)
+            if (group != null)
             {
-                session.GetUser().CurrentRoom.SendPacket(new UserGroupBadgesComposer(Group));
+                session.GetUser().CurrentRoom.SendPacket(new UserGroupBadgesComposer(group));
 
-                var User = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-                if (User != null)
+                var user = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+                if (user != null)
                 {
-                    session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(Group, User.VirtualId));
+                    session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(group, user.VirtualId));
                 }
             }
         }

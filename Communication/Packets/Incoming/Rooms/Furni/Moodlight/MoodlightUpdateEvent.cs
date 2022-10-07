@@ -24,21 +24,21 @@ internal class MoodlightUpdateEvent : IPacketEvent
             return;
         }
 
-        var Preset = packet.PopInt();
+        var preset = packet.PopInt();
         var num = packet.PopInt();
-        var Color = packet.PopString();
-        var Intensity = packet.PopInt();
+        var color = packet.PopString();
+        var intensity = packet.PopInt();
 
-        var BgOnly = false;
+        var bgOnly = false;
 
         if (num >= 2)
         {
-            BgOnly = true;
+            bgOnly = true;
         }
 
         room.MoodlightData.Enabled = true;
-        room.MoodlightData.CurrentPreset = Preset;
-        room.MoodlightData.UpdatePreset(Preset, Color, Intensity, BgOnly);
+        room.MoodlightData.CurrentPreset = preset;
+        room.MoodlightData.UpdatePreset(preset, color, intensity, bgOnly);
         roomItem.ExtraData = room.MoodlightData.GenerateExtraData();
         roomItem.UpdateState();
     }

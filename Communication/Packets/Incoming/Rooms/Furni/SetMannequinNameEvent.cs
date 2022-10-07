@@ -8,8 +8,8 @@ internal class SetMannequinNameEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var ItemId = packet.PopInt();
-        var Name = packet.PopString();
+        var itemId = packet.PopInt();
+        var name = packet.PopString();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -21,35 +21,35 @@ internal class SetMannequinNameEvent : IPacketEvent
             return;
         }
 
-        var roomItem = room.GetRoomItemHandler().GetItem(ItemId);
+        var roomItem = room.GetRoomItemHandler().GetItem(itemId);
         if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.MANNEQUIN)
         {
             return;
         }
 
-        var Look = "";
-        foreach (var Part in session.GetUser().Look.Split('.'))
+        var look = "";
+        foreach (var part in session.GetUser().Look.Split('.'))
         {
-            if (Part.StartsWith("ch") || Part.StartsWith("lg") || Part.StartsWith("cc") || Part.StartsWith("ca") || Part.StartsWith("sh") || Part.StartsWith("wa"))
+            if (part.StartsWith("ch") || part.StartsWith("lg") || part.StartsWith("cc") || part.StartsWith("ca") || part.StartsWith("sh") || part.StartsWith("wa"))
             {
-                Look = Look + Part + ".";
+                look = look + part + ".";
             }
         }
 
-        Look = Look[..^1];
-        if (Look.Length > 200)
+        look = look[..^1];
+        if (look.Length > 200)
         {
-            Look = Look[..200];
+            look = look[..200];
         }
 
-        if (Name.Length > 100)
+        if (name.Length > 100)
         {
-            Name = Name[..100];
+            name = name[..100];
         }
 
-        Name = Name.Replace(";", ":");
+        name = name.Replace(";", ":");
 
-        roomItem.ExtraData = session.GetUser().Gender.ToUpper() + ";" + Look + ";" + Name;
+        roomItem.ExtraData = session.GetUser().Gender.ToUpper() + ";" + look + ";" + name;
         roomItem.UpdateState();
     }
 }

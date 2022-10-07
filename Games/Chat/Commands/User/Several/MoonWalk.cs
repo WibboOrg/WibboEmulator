@@ -5,20 +5,20 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class MoonWalk : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
+        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
         {
             return;
         }
 
-        if (UserRoom.InGame)
+        if (userRoom.InGame)
         {
             return;
         }
 
-        UserRoom.MoonwalkEnabled = !UserRoom.MoonwalkEnabled;
-        if (UserRoom.MoonwalkEnabled)
+        userRoom.MoonwalkEnabled = !userRoom.MoonwalkEnabled;
+        if (userRoom.MoonwalkEnabled)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.moonwalk.true", session.Langue));
         }

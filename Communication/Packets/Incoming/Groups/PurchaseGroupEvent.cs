@@ -2,7 +2,7 @@ namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Catalog;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 
@@ -12,54 +12,54 @@ internal class PurchaseGroupEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var Name = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
-        var Description = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
-        var RoomId = packet.PopInt();
-        var Colour1 = packet.PopInt();
-        var Colour2 = packet.PopInt();
-        var Unknown = packet.PopInt();
+        var name = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+        var description = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+        var roomId = packet.PopInt();
+        var colour1 = packet.PopInt();
+        var colour2 = packet.PopInt();
+        var unknown = packet.PopInt();
 
-        if (Name.Length > 50)
+        if (name.Length > 50)
         {
             return;
         }
 
-        if (Description.Length > 255)
+        if (description.Length > 255)
         {
             return;
         }
 
-        if (Colour1 is < 0 or > 200)
+        if (colour1 is < 0 or > 200)
         {
             return;
         }
 
-        if (Colour2 is < 0 or > 200)
+        if (colour2 is < 0 or > 200)
         {
             return;
         }
 
-        var Room = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
-        if (Room == null || Room.OwnerId != session.GetUser().Id || Room.Group != null)
+        var room = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+        if (room == null || room.OwnerId != session.GetUser().Id || room.Group != null)
         {
             return;
         }
 
-        var Badge = string.Empty;
+        var badge = string.Empty;
 
         for (var i = 0; i < 5; i++)
         {
-            Badge += BadgePartUtility.WorkBadgeParts(i == 0, packet.PopInt().ToString(), packet.PopInt().ToString(), packet.PopInt().ToString());
+            badge += BadgePartUtility.WorkBadgeParts(i == 0, packet.PopInt().ToString(), packet.PopInt().ToString(), packet.PopInt().ToString());
         }
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryCreateGroup(session.GetUser(), Name, Description, RoomId, Badge, Colour1, Colour2, out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryCreateGroup(session.GetUser(), name, description, roomId, badge, colour1, colour2, out var group))
         {
             return;
         }
 
         session.SendPacket(new PurchaseOKComposer());
 
-        Room.Group = Group;
+        room.Group = group;
 
         var groupCost = 20;
 
@@ -71,11 +71,11 @@ internal class PurchaseGroupEvent : IPacketEvent
         session.GetUser().Credits -= groupCost;
         session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
 
-        if (session.GetUser().CurrentRoomId != Room.Id)
+        if (session.GetUser().CurrentRoomId != room.Id)
         {
-            session.SendPacket(new RoomForwardComposer(Room.Id));
+            session.SendPacket(new RoomForwardComposer(room.Id));
         }
 
-        session.SendPacket(new NewGroupInfoComposer(RoomId, Group.Id));
+        session.SendPacket(new NewGroupInfoComposer(roomId, group.Id));
     }
 }

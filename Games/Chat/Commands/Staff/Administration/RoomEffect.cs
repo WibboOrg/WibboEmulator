@@ -1,11 +1,11 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Administration;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class RoomEffect : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
@@ -23,6 +23,6 @@ internal class RoomEffect : IChatCommand
             number = 0;
         }
 
-        Room.SendPacket(new RoomEffectComposer(number));
+        room.SendPacket(new RoomEffectComposer(number));
     }
 }

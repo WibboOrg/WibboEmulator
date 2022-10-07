@@ -5,12 +5,12 @@ using WibboEmulator.Games.Rooms;
 
 internal class Info : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var Uptime = DateTime.Now - WibboEnvironment.ServerStarted;
+        var uptime = DateTime.Now - WibboEnvironment.ServerStarted;
 
-        var OnlineUsers = WibboEnvironment.GetGame().GetGameClientManager().Count;
-        var RoomCount = WibboEnvironment.GetGame().GetRoomManager().Count;
+        var onlineUsers = WibboEnvironment.GetGame().GetGameClientManager().Count;
+        var roomCount = WibboEnvironment.GetGame().GetRoomManager().Count;
 
         session.SendPacket(new BroadcastMessageAlertComposer("<b>Butterfly Edition Wibbo</b>\n\n" +
              "   <b>Credits</b>:\n" +
@@ -18,8 +18,8 @@ internal class Info : IChatCommand
              "   Mike, Sledmore, Joopie, Tweeny, \n" +
              "   JasonDhose, Leenster, Moogly, Niels, AKllX, rbi0s\n\n" +
              "   <b>Information sur le serveur</b>:\n" +
-             "   Joueurs en ligne: " + OnlineUsers + "\n" +
-             "   Appartements actifs: " + RoomCount + "\n" +
-             "   Uptime: " + Uptime.Days + " jour(s), " + Uptime.Hours + " heure(s) et " + Uptime.Minutes + " minutes.\n\n"));
+             "   Joueurs en ligne: " + onlineUsers + "\n" +
+             "   Appartements actifs: " + roomCount + "\n" +
+             "   Uptime: " + uptime.Days + " jour(s), " + uptime.Hours + " heure(s) et " + uptime.Minutes + " minutes.\n\n"));
     }
 }

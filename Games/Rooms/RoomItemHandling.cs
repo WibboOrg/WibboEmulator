@@ -100,9 +100,9 @@ public class RoomItemHandling
 
     public void SetSpeed(int p) => this._rollerSpeed = p;
 
-    public void LoadFurniture(int RoomId = 0)
+    public void LoadFurniture(int roomId = 0)
     {
-        if (RoomId == 0)
+        if (roomId == 0)
         {
             this._floorItems.Clear();
             this._wallItems.Clear();
@@ -110,42 +110,42 @@ public class RoomItemHandling
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         int itemID;
-        int UserId;
+        int userId;
         int baseID;
-        string ExtraData;
+        string extraData;
         int x;
         int y;
         double z;
         sbyte n;
         string wallposs;
-        int Limited;
-        int LimitedTo;
+        int limited;
+        int limitedTo;
         string wallCoord;
 
-        var itemTable = ItemDao.GetAll(dbClient, (RoomId == 0) ? this._room.Id : RoomId);
+        var itemTable = ItemDao.GetAll(dbClient, (roomId == 0) ? this._room.Id : roomId);
 
         foreach (DataRow dataRow in itemTable.Rows)
         {
             itemID = Convert.ToInt32(dataRow[0]);
-            UserId = Convert.ToInt32(dataRow[1]);
+            userId = Convert.ToInt32(dataRow[1]);
             baseID = Convert.ToInt32(dataRow[3]);
-            ExtraData = !DBNull.Value.Equals(dataRow[4]) ? (string)dataRow[4] : string.Empty;
+            extraData = !DBNull.Value.Equals(dataRow[4]) ? (string)dataRow[4] : string.Empty;
             x = Convert.ToInt32(dataRow[5]);
             y = Convert.ToInt32(dataRow[6]);
             z = Convert.ToDouble(dataRow[7]);
             n = Convert.ToSByte(dataRow[8]);
             wallposs = !DBNull.Value.Equals(dataRow[9]) ? (string)dataRow[9] : string.Empty;
-            Limited = !DBNull.Value.Equals(dataRow[10]) ? Convert.ToInt32(dataRow[10]) : 0;
-            LimitedTo = !DBNull.Value.Equals(dataRow[11]) ? Convert.ToInt32(dataRow[11]) : 0;
+            limited = !DBNull.Value.Equals(dataRow[10]) ? Convert.ToInt32(dataRow[10]) : 0;
+            limitedTo = !DBNull.Value.Equals(dataRow[11]) ? Convert.ToInt32(dataRow[11]) : 0;
 
-            _ = WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var Data);
+            _ = WibboEnvironment.GetGame().GetItemManager().GetItem(baseID, out var data);
 
-            if (Data == null)
+            if (data == null)
             {
                 continue;
             }
 
-            if (Data.Type.ToString() == "i")
+            if (data.Type.ToString() == "i")
             {
                 if (string.IsNullOrEmpty(wallposs))
                 {
@@ -156,7 +156,7 @@ public class RoomItemHandling
                     wallCoord = wallposs;
                 }
 
-                var roomItem = new Item(itemID, this._room.Id, baseID, ExtraData, Limited, LimitedTo, 0, 0, 0.0, 0, wallCoord, this._room);
+                var roomItem = new Item(itemID, this._room.Id, baseID, extraData, limited, limitedTo, 0, 0, 0.0, 0, wallCoord, this._room);
                 if (!this._wallItems.ContainsKey(itemID))
                 {
                     _ = this._wallItems.TryAdd(itemID, roomItem);
@@ -164,15 +164,12 @@ public class RoomItemHandling
 
                 if (roomItem.GetBaseItem().InteractionType == InteractionType.MOODLIGHT)
                 {
-                    if (this._room.MoodlightData == null)
-                    {
-                        this._room.MoodlightData = new MoodlightData(roomItem.Id);
-                    }
+                    this._room.MoodlightData ??= new MoodlightData(roomItem.Id);
                 }
             }
             else //Is flooritem
             {
-                var roomItem = new Item(itemID, this._room.Id, baseID, ExtraData, Limited, LimitedTo, x, y, (double)z, n, "", this._room);
+                var roomItem = new Item(itemID, this._room.Id, baseID, extraData, limited, limitedTo, x, y, (double)z, n, "", this._room);
 
                 if (!this._floorItems.ContainsKey(itemID))
                 {
@@ -181,13 +178,13 @@ public class RoomItemHandling
             }
         }
 
-        if (RoomId == 0)
+        if (roomId == 0)
         {
-            foreach (var Item in this._floorItems.Values)
+            foreach (var item in this._floorItems.Values)
             {
-                if (WiredUtillity.TypeIsWired(Item.GetBaseItem().InteractionType))
+                if (WiredUtillity.TypeIsWired(item.GetBaseItem().InteractionType))
                 {
-                    WiredRegister.HandleRegister(Item, this._room, dbClient);
+                    WiredRegister.HandleRegister(item, this._room, dbClient);
                 }
             }
         }
@@ -197,19 +194,19 @@ public class RoomItemHandling
 
     public ItemTemp GetFirstTempDrop(int x, int y)
     {
-        foreach (var Item in this._itemsTemp.Values)
+        foreach (var item in this._itemsTemp.Values)
         {
-            if (Item.InteractionType is not InteractionTypeTemp.RPITEM and not InteractionTypeTemp.MONEY)
+            if (item.InteractionType is not InteractionTypeTemp.RPITEM and not InteractionTypeTemp.MONEY)
             {
                 continue;
             }
 
-            if (Item.X != x || Item.Y != y)
+            if (item.X != x || item.Y != y)
             {
                 continue;
             }
 
-            return Item;
+            return item;
         }
 
         return null;
@@ -219,9 +216,9 @@ public class RoomItemHandling
     {
         if (this._itemsTemp != null && this._itemsTemp.ContainsKey(pId))
         {
-            if (this._itemsTemp.TryGetValue(pId, out var Item))
+            if (this._itemsTemp.TryGetValue(pId, out var item))
             {
-                return Item;
+                return item;
             }
         }
 
@@ -232,16 +229,16 @@ public class RoomItemHandling
     {
         if (this._floorItems != null && this._floorItems.ContainsKey(pId))
         {
-            if (this._floorItems.TryGetValue(pId, out var Item))
+            if (this._floorItems.TryGetValue(pId, out var item))
             {
-                return Item;
+                return item;
             }
         }
         else if (this._wallItems != null && this._wallItems.ContainsKey(pId))
         {
-            if (this._wallItems.TryGetValue(pId, out var Item))
+            if (this._wallItems.TryGetValue(pId, out var item))
             {
-                return Item;
+                return item;
             }
         }
 
@@ -269,16 +266,16 @@ public class RoomItemHandling
         roomItem.Destroy();
     }
 
-    public void RemoveTempItem(int pId)
+    public void RemoveTempItem(int id)
     {
-        var item = this.GetTempItem(pId);
+        var item = this.GetTempItem(id);
         if (item == null)
         {
             return;
         }
 
         this._room.SendPacket(new ObjectRemoveComposer(item.Id, 0));
-        _ = this._itemsTemp.TryRemove(pId, out item);
+        _ = this._itemsTemp.TryRemove(id, out _);
     }
 
     private void RemoveRoomItem(Item item)
@@ -294,22 +291,22 @@ public class RoomItemHandling
 
         if (item.IsWallItem)
         {
-            _ = this._wallItems.TryRemove(item.Id, out var itemRemoved);
+            _ = this._wallItems.TryRemove(item.Id, out _);
         }
         else
         {
-            _ = this._floorItems.TryRemove(item.Id, out var itemRemoved);
+            _ = this._floorItems.TryRemove(item.Id, out _);
             _ = this._room.GetGameMap().RemoveFromMap(item);
         }
 
         if (this._updateItems.ContainsKey(item.Id))
         {
-            _ = this._updateItems.TryRemove(item.Id, out var itemRemoved);
+            _ = this._updateItems.TryRemove(item.Id, out _);
         }
 
         if (this._rollers.ContainsKey(item.Id))
         {
-            _ = this._rollers.TryRemove(item.Id, out var itemRemoved);
+            _ = this._rollers.TryRemove(item.Id, out _);
         }
 
         if (item.WiredHandler != null)
@@ -332,11 +329,11 @@ public class RoomItemHandling
                 continue;
             }
 
-            foreach (var User in userForSquare)
+            foreach (var user in userForSquare)
             {
-                if (!User.IsWalking)
+                if (!user.IsWalking)
                 {
-                    this._room.GetRoomUserManager().UpdateUserStatus(User, false);
+                    this._room.GetRoomUserManager().UpdateUserStatus(user, false);
                 }
             }
         }
@@ -446,7 +443,7 @@ public class RoomItemHandling
         this._room.SendPacket(new ObjectUpdateComposer(pItem, this._room.RoomData.OwnerId));
     }
 
-    public ServerPacket TeleportUser(RoomUser user, Point nextCoord, int rollerID, double nextZ, bool noAnimation = false)
+    public static ServerPacket TeleportUser(RoomUser user, Point nextCoord, int rollerID, double nextZ, bool noAnimation = false)
     {
         var x = noAnimation ? nextCoord.X : user.X;
         var y = noAnimation ? nextCoord.Y : user.Y;
@@ -487,35 +484,35 @@ public class RoomItemHandling
     public ItemTemp AddTempItem(int itemId, int spriteId, int x, int y, double z, string extraData, int value = 0, InteractionTypeTemp pInteraction = InteractionTypeTemp.NONE, MovementDirection movement = MovementDirection.none, int pDistance = 0, int pTeamId = 0)
     {
         var id = this._itemTempoId--;
-        var Item = new ItemTemp(id, itemId, spriteId, x, y, z, extraData, movement, value, pInteraction, pDistance, pTeamId);
+        var item = new ItemTemp(id, itemId, spriteId, x, y, z, extraData, movement, value, pInteraction, pDistance, pTeamId);
 
-        if (!this._itemsTemp.ContainsKey(Item.Id))
+        if (!this._itemsTemp.ContainsKey(item.Id))
         {
-            _ = this._itemsTemp.TryAdd(Item.Id, Item);
+            _ = this._itemsTemp.TryAdd(item.Id, item);
         }
 
-        this._room.SendPacket(new ObjectAddComposer(Item));
+        this._room.SendPacket(new ObjectAddComposer(item));
 
-        return Item;
+        return item;
     }
 
-    public bool SetFloorItem(GameClient session, Item Item, int newX, int newY, int newRot, bool newItem, bool OnRoller, bool sendMessage)
+    public bool SetFloorItem(GameClient session, Item item, int newX, int newY, int newRot, bool newItem, bool onRoller, bool sendMessage)
     {
-        var NeedsReAdd = false;
+        var needsReAdd = false;
         if (!newItem)
         {
-            NeedsReAdd = this._room.GetGameMap().RemoveFromMap(Item);
+            needsReAdd = this._room.GetGameMap().RemoveFromMap(item);
         }
 
-        var affectedTiles = Gamemap.GetAffectedTiles(Item.GetBaseItem().Length, Item.GetBaseItem().Width, newX, newY, newRot);
+        var affectedTiles = Gamemap.GetAffectedTiles(item.GetBaseItem().Length, item.GetBaseItem().Width, newX, newY, newRot);
         foreach (var threeDcoord in affectedTiles.Values)
         {
-            if (!this._room.GetGameMap().ValidTile(threeDcoord.X, threeDcoord.Y) || (this._room.GetGameMap().SquareHasUsers(threeDcoord.X, threeDcoord.Y) && !Item.GetBaseItem().IsSeat && Item.GetBaseItem().InteractionType != InteractionType.BED) || this._room.GetGameMap().Model.SqState[threeDcoord.X, threeDcoord.Y] != SquareStateType.OPEN)
+            if (!this._room.GetGameMap().ValidTile(threeDcoord.X, threeDcoord.Y) || (this._room.GetGameMap().SquareHasUsers(threeDcoord.X, threeDcoord.Y) && !item.GetBaseItem().IsSeat && item.GetBaseItem().InteractionType != InteractionType.BED) || this._room.GetGameMap().Model.SqState[threeDcoord.X, threeDcoord.Y] != SquareStateType.OPEN)
             {
-                if (NeedsReAdd)
+                if (needsReAdd)
                 {
-                    this.UpdateItem(Item);
-                    _ = this._room.GetGameMap().AddItemToMap(Item);
+                    this.UpdateItem(item);
+                    _ = this._room.GetGameMap().AddItemToMap(item);
                 }
                 return false;
             }
@@ -523,27 +520,27 @@ public class RoomItemHandling
 
         double pZ = this._room.GetGameMap().Model.SqFloorHeight[newX, newY];
 
-        var ItemsAffected = new List<Item>();
-        var ItemsComplete = new List<Item>();
+        var itemsAffected = new List<Item>();
+        var itemsComplete = new List<Item>();
 
         foreach (var threeDcoord in affectedTiles.Values)
         {
-            var Temp = this._room.GetGameMap().GetCoordinatedItems(new Point(threeDcoord.X, threeDcoord.Y));
-            if (Temp != null)
+            var temp = this._room.GetGameMap().GetCoordinatedItems(new Point(threeDcoord.X, threeDcoord.Y));
+            if (temp != null)
             {
-                ItemsAffected.AddRange(Temp);
+                itemsAffected.AddRange(temp);
             }
         }
-        ItemsComplete.AddRange(ItemsAffected);
+        itemsComplete.AddRange(itemsAffected);
 
-        var ConstruitMode = false;
-        var ConstruitZMode = false;
-        var ConstruitHeigth = 1.0;
-        var PileMagic = false;
+        var construitMode = false;
+        var construitZMode = false;
+        var construitHeigth = 1.0;
+        var pileMagic = false;
 
-        if (Item.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
+        if (item.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
         {
-            PileMagic = true;
+            pileMagic = true;
         }
 
         if (session != null && session.GetUser() != null && session.GetUser().CurrentRoom != null)
@@ -551,36 +548,36 @@ public class RoomItemHandling
             var roomUser = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
             if (roomUser != null)
             {
-                ConstruitMode = roomUser.ConstruitEnable;
-                ConstruitZMode = roomUser.ConstruitZMode;
-                ConstruitHeigth = roomUser.ConstruitHeigth;
+                construitMode = roomUser.ConstruitEnable;
+                construitZMode = roomUser.ConstruitZMode;
+                construitHeigth = roomUser.ConstruitHeigth;
             }
         }
 
-        if (Item.Rotation != newRot && Item.X == newX && Item.Y == newY && !ConstruitZMode)
+        if (item.Rotation != newRot && item.X == newX && item.Y == newY && !construitZMode)
         {
-            pZ = Item.Z;
+            pZ = item.Z;
         }
 
-        if (ConstruitZMode)
+        if (construitZMode)
         {
-            pZ += ConstruitHeigth;
+            pZ += construitHeigth;
         }
         else
         {
-            foreach (var roomItem in ItemsComplete)
+            foreach (var roomItem in itemsComplete)
             {
                 if (roomItem.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
                 {
                     pZ = roomItem.Z;
-                    PileMagic = true;
+                    pileMagic = true;
                     break;
                 }
-                if (roomItem.Id != Item.Id && roomItem.TotalHeight > pZ)
+                if (roomItem.Id != item.Id && roomItem.TotalHeight > pZ)
                 {
-                    if (ConstruitMode)
+                    if (construitMode)
                     {
-                        pZ = roomItem.Z + ConstruitHeigth;
+                        pZ = roomItem.Z + construitHeigth;
                     }
                     else
                     {
@@ -590,16 +587,16 @@ public class RoomItemHandling
             }
         }
 
-        if (!OnRoller)
+        if (!onRoller)
         {
-            foreach (var roomItem in ItemsComplete)
+            foreach (var roomItem in itemsComplete)
             {
-                if (roomItem != null && roomItem.Id != Item.Id && roomItem.GetBaseItem() != null && !roomItem.GetBaseItem().Stackable && !ConstruitMode && !PileMagic && !ConstruitZMode)
+                if (roomItem != null && roomItem.Id != item.Id && roomItem.GetBaseItem() != null && !roomItem.GetBaseItem().Stackable && !construitMode && !pileMagic && !construitZMode)
                 {
-                    if (NeedsReAdd)
+                    if (needsReAdd)
                     {
-                        this.UpdateItem(Item);
-                        _ = this._room.GetGameMap().AddItemToMap(Item);
+                        this.UpdateItem(item);
+                        _ = this._room.GetGameMap().AddItemToMap(item);
                     }
                     return false;
                 }
@@ -613,22 +610,22 @@ public class RoomItemHandling
 
         var userForSquare = new List<RoomUser>();
 
-        foreach (var threeDcoord in Item.GetAffectedTiles.Values)
+        foreach (var threeDcoord in item.GetAffectedTiles.Values)
         {
             userForSquare.AddRange(this._room.GetGameMap().GetRoomUsers(new Point(threeDcoord.X, threeDcoord.Y)));
         }
 
-        Item.Rotation = newRot;
-        Item.SetState(newX, newY, pZ, affectedTiles);
+        item.Rotation = newRot;
+        item.SetState(newX, newY, pZ, affectedTiles);
 
-        if (!OnRoller && session != null)
+        if (!onRoller && session != null)
         {
-            Item.Interactor.OnPlace(session, Item);
+            item.Interactor.OnPlace(session, item);
         }
 
         if (newItem)
         {
-            if (this._floorItems.ContainsKey(Item.Id))
+            if (this._floorItems.ContainsKey(item.Id))
             {
                 if (session != null)
                 {
@@ -639,92 +636,92 @@ public class RoomItemHandling
             }
             else
             {
-                if (Item.IsFloorItem && !this._floorItems.ContainsKey(Item.Id))
+                if (item.IsFloorItem && !this._floorItems.ContainsKey(item.Id))
                 {
-                    _ = this._floorItems.TryAdd(Item.Id, Item);
+                    _ = this._floorItems.TryAdd(item.Id, item);
                 }
-                else if (Item.IsWallItem && !this._wallItems.ContainsKey(Item.Id))
+                else if (item.IsWallItem && !this._wallItems.ContainsKey(item.Id))
                 {
-                    _ = this._wallItems.TryAdd(Item.Id, Item);
+                    _ = this._wallItems.TryAdd(item.Id, item);
                 }
 
-                this.UpdateItem(Item);
+                this.UpdateItem(item);
                 if (sendMessage)
                 {
-                    this._room.SendPacket(new ObjectAddComposer(Item, this._room.RoomData.OwnerName, this._room.RoomData.OwnerId));
+                    this._room.SendPacket(new ObjectAddComposer(item, this._room.RoomData.OwnerName, this._room.RoomData.OwnerId));
                 }
             }
         }
         else
         {
-            this.UpdateItem(Item);
-            if (!OnRoller && sendMessage)
+            this.UpdateItem(item);
+            if (!onRoller && sendMessage)
             {
-                this._room.SendPacket(new ObjectUpdateComposer(Item, this._room.RoomData.OwnerId));
+                this._room.SendPacket(new ObjectUpdateComposer(item, this._room.RoomData.OwnerId));
             }
         }
 
-        _ = this._room.GetGameMap().AddItemToMap(Item);
+        _ = this._room.GetGameMap().AddItemToMap(item);
 
-        foreach (var threeDcoord in Item.GetAffectedTiles.Values)
+        foreach (var threeDcoord in item.GetAffectedTiles.Values)
         {
             userForSquare.AddRange(this._room.GetGameMap().GetRoomUsers(new Point(threeDcoord.X, threeDcoord.Y)));
         }
 
-        foreach (var User in userForSquare)
+        foreach (var user in userForSquare)
         {
-            if (User == null)
+            if (user == null)
             {
                 continue;
             }
 
-            if (User.IsWalking)
+            if (user.IsWalking)
             {
                 continue;
             }
 
-            this._room.GetRoomUserManager().UpdateUserStatus(User, false);
+            this._room.GetRoomUserManager().UpdateUserStatus(user, false);
         }
 
         return true;
     }
 
-    public void TryAddRoller(int ItemId, Item Roller) => this._rollers.TryAdd(ItemId, Roller);
+    public void TryAddRoller(int itemId, Item roller) => this._rollers.TryAdd(itemId, roller);
 
     public ICollection<Item> GetRollers() => this._rollers.Values;
 
-    public bool SetFloorItem(Item Item, int newX, int newY, double newZ)
+    public bool SetFloorItem(Item item, int newX, int newY, double newZ)
     {
-        _ = this._room.GetGameMap().RemoveFromMap(Item);
-        Item.SetState(newX, newY, newZ, Gamemap.GetAffectedTiles(Item.GetBaseItem().Length, Item.GetBaseItem().Width, newX, newY, Item.Rotation));
-        this.UpdateItem(Item);
-        _ = this._room.GetGameMap().AddItemToMap(Item);
+        _ = this._room.GetGameMap().RemoveFromMap(item);
+        item.SetState(newX, newY, newZ, Gamemap.GetAffectedTiles(item.GetBaseItem().Length, item.GetBaseItem().Width, newX, newY, item.Rotation));
+        this.UpdateItem(item);
+        _ = this._room.GetGameMap().AddItemToMap(item);
         return true;
     }
 
-    public bool SetWallItem(GameClient session, Item Item)
+    public bool SetWallItem(GameClient session, Item item)
     {
-        if (!Item.IsWallItem || this._wallItems.ContainsKey(Item.Id))
+        if (!item.IsWallItem || this._wallItems.ContainsKey(item.Id))
         {
             return false;
         }
 
-        if (this._floorItems.ContainsKey(Item.Id))
+        if (this._floorItems.ContainsKey(item.Id))
         {
             return true;
         }
         else
         {
-            Item.Interactor.OnPlace(session, Item);
-            if (Item.GetBaseItem().InteractionType == InteractionType.MOODLIGHT && this._room.MoodlightData == null)
+            item.Interactor.OnPlace(session, item);
+            if (item.GetBaseItem().InteractionType == InteractionType.MOODLIGHT && this._room.MoodlightData == null)
             {
-                this._room.MoodlightData = new MoodlightData(Item.Id);
-                Item.ExtraData = this._room.MoodlightData.GenerateExtraData();
+                this._room.MoodlightData = new MoodlightData(item.Id);
+                item.ExtraData = this._room.MoodlightData.GenerateExtraData();
             }
-            _ = this._wallItems.TryAdd(Item.Id, Item);
-            this.UpdateItem(Item);
+            _ = this._wallItems.TryAdd(item.Id, item);
+            this.UpdateItem(item);
 
-            this._room.SendPacket(new ItemAddComposer(Item, this._room.RoomData.OwnerName, this._room.RoomData.OwnerId));
+            this._room.SendPacket(new ItemAddComposer(item, this._room.RoomData.OwnerName, this._room.RoomData.OwnerId));
 
             return true;
         }

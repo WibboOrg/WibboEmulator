@@ -1,8 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
-
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
 
 internal class DeclineGroupMembershipEvent : IPacketEvent
 {
@@ -10,25 +8,25 @@ internal class DeclineGroupMembershipEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = packet.PopInt();
-        var UserId = packet.PopInt();
+        var groupId = packet.PopInt();
+        var userId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
         {
             return;
         }
 
-        if (session.GetUser().Id != Group.CreatorId && !Group.IsAdmin(session.GetUser().Id))
+        if (session.GetUser().Id != group.CreatorId && !group.IsAdmin(session.GetUser().Id))
         {
             return;
         }
 
-        if (!Group.HasRequest(UserId))
+        if (!group.HasRequest(userId))
         {
             return;
         }
 
-        Group.HandleRequest(UserId, false);
-        session.SendPacket(new UnknownGroupComposer(Group.Id, UserId));
+        group.HandleRequest(userId, false);
+        session.SendPacket(new UnknownGroupComposer(group.Id, userId));
     }
 }

@@ -2,7 +2,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
 
 internal class UpdateGroupIdentityEvent : IPacketEvent
 {
@@ -10,39 +9,39 @@ internal class UpdateGroupIdentityEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = packet.PopInt();
-        var Name = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
-        var Desc = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+        var groupId = packet.PopInt();
+        var name = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
+        var desc = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(packet.PopString());
 
-        if (Name.Length > 50)
+        if (name.Length > 50)
         {
             return;
         }
 
-        if (Desc.Length > 255)
+        if (desc.Length > 255)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
         {
             return;
         }
 
-        if (Group.CreatorId != session.GetUser().Id)
+        if (group.CreatorId != session.GetUser().Id)
         {
             return;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            GuildDao.UpdateNameAndDesc(dbClient, GroupId, Name, Desc);
+            GuildDao.UpdateNameAndDesc(dbClient, groupId, name, desc);
         }
 
-        Group.Name = Name;
-        Group.Description = Desc;
+        group.Name = name;
+        group.Description = desc;
 
-        session.SendPacket(new GroupInfoComposer(Group, session));
+        session.SendPacket(new GroupInfoComposer(group, session));
 
     }
 }

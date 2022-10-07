@@ -4,15 +4,15 @@ using WibboEmulator.Games.Rooms;
 
 internal class Alert : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 3)
         {
             return;
         }
 
-        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (TargetUser == null)
+        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        if (targetUser == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
@@ -24,7 +24,7 @@ internal class Alert : IChatCommand
                 return;
             }
 
-            TargetUser.SendNotification(message);
+            targetUser.SendNotification(message);
         }
     }
 }

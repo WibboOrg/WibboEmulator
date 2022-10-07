@@ -2,7 +2,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.AI;
 
 internal class PlacePetEvent : IPacketEvent
@@ -11,70 +10,69 @@ internal class PlacePetEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var Room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
             return;
         }
 
-        if (!Room.CheckRights(session, true))
+        if (!room.CheckRights(session, true))
         {
             //session.SendPacket(new RoomErrorNotifComposer(1));
             return;
         }
 
-        if (Room.GetRoomUserManager().BotPetCount >= 30)
+        if (room.GetRoomUserManager().BotPetCount >= 30)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.placepet.error", session.Langue));
             return;
         }
 
-        if (!session.GetUser().GetInventoryComponent().TryGetPet(packet.PopInt(), out var Pet))
+        if (!session.GetUser().GetInventoryComponent().TryGetPet(packet.PopInt(), out var pet))
         {
             return;
         }
 
-        if (Pet == null)
+        if (pet == null)
         {
             return;
         }
 
-        if (Pet.PlacedInRoom)
+        if (pet.PlacedInRoom)
         {
             return;
         }
 
-        var X = packet.PopInt();
-        var Y = packet.PopInt();
+        var x = packet.PopInt();
+        var y = packet.PopInt();
 
-        if (!Room.GetGameMap().CanWalk(X, Y, false))
+        if (!room.GetGameMap().CanWalk(x, y, false))
         {
-            //session.SendPacket(new RoomErrorNotifComposer(4));
             return;
         }
 
-        if (Room.GetRoomUserManager().TryGetPet(Pet.PetId, out var OldPet))
+        if (room.GetRoomUserManager().TryGetPet(pet.PetId, out var oldPet))
         {
-            Room.GetRoomUserManager().RemoveBot(OldPet.VirtualId, false);
+            room.GetRoomUserManager().RemoveBot(oldPet.VirtualId, false);
         }
 
-        Pet.X = X;
-        Pet.Y = Y;
+        pet.X = x;
+        pet.Y = y;
 
-        Pet.PlacedInRoom = true;
-        Pet.RoomId = Room.Id;
+        pet.PlacedInRoom = true;
+        pet.RoomId = room.Id;
 
-        _ = Room.GetRoomUserManager().DeployBot(new RoomBot(Pet.PetId, Pet.OwnerId, Pet.RoomId, BotAIType.Pet, true, Pet.Name, "", "", Pet.Look, X, Y, 0, 0, false, "", 0, false, 0, 0, 0), Pet);
+        _ = room.GetRoomUserManager().DeployBot(new RoomBot(pet.PetId, pet.OwnerId, pet.RoomId, BotAIType.Pet, true, pet.Name, "", "", pet.Look, x, y, 0, 0, false, "", 0, false, 0, 0, 0), pet);
 
-        Pet.DBState = DatabaseUpdateState.NEEDS_UPDATE;
+        pet.DBState = DatabaseUpdateState.NEEDS_UPDATE;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            BotPetDao.UpdateRoomId(dbClient, Pet.PetId, Pet.RoomId);
+            BotPetDao.UpdateRoomId(dbClient, pet.PetId, pet.RoomId);
         }
 
-        if (!session.GetUser().GetInventoryComponent().TryRemovePet(Pet.PetId, out var ToRemove))
+        if (!session.GetUser().GetInventoryComponent().TryRemovePet(pet.PetId, out var toRemove))
         {
-            Console.WriteLine("Error whilst removing pet: " + ToRemove.PetId);
+            Console.WriteLine("Error whilst removing pet: " + toRemove.PetId);
             return;
         }
 

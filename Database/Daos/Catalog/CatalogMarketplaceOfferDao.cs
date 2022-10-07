@@ -2,6 +2,7 @@ namespace WibboEmulator.Database.Daos.Catalog;
 using System.Data;
 using System.Text;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Games.Catalog.Marketplace;
 
 internal class CatalogMarketplaceOfferDao
 {
@@ -17,7 +18,7 @@ internal class CatalogMarketplaceOfferDao
     internal static DataTable GetAll(IQueryAdapter dbClient, string searchQuery, int minCost, int maxCost, int filterMode)
     {
         var builder = new StringBuilder();
-        _ = builder.Append("WHERE state = '1' AND timestamp >= " + WibboEnvironment.GetGame().GetCatalog().GetMarketplace().FormatTimestamp());
+        _ = builder.Append("WHERE state = '1' AND timestamp >= " + MarketplaceManager.FormatTimestamp());
         if (minCost >= 0)
         {
             _ = builder.Append(" AND total_price > " + minCost);

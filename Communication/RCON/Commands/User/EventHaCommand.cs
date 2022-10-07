@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using System.Text.RegularExpressions;
+using WibboEmulator.Games.Moderation;
 
 internal class EventHaCommand : IRCONCommand
 {
@@ -28,7 +29,7 @@ internal class EventHaCommand : IRCONCommand
 
         var message = parameters[2];
 
-        WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(client.GetUser().Id, client.GetUser().Username, 0, string.Empty, "eventha", string.Format("WbTool eventha: {0}", message));
+        ModerationManager.LogStaffEntry(client.GetUser().Id, client.GetUser().Username, 0, string.Empty, "eventha", string.Format("WbTool eventha: {0}", message));
         if (client.Antipub(message, "<eventalert>", client.GetUser().CurrentRoom.Id))
         {
             return false;
@@ -46,7 +47,7 @@ internal class EventHaCommand : IRCONCommand
         message = new Regex(@"\[u\](.*?)\[\/u\]").Replace(message, "<u>$1</u>");
 
         var alertMessage = message + "\r\n- " + client.GetUser().Username;
-        WibboEnvironment.GetGame().GetGameClientManager().SendSuperNotif("Message des Staffs", alertMessage, "game_promo_small", "event:navigator/goto/" + client.GetUser().CurrentRoom.Id, "Je veux y accéder!", true, true);
+        WibboEnvironment.GetGame().GetGameClientManager().SendSuperNotif("Message des Staffs", alertMessage, "game_promo_small", "event:navigator/goto/" + client.GetUser().CurrentRoom.Id, "Je veux y accéder!");
         client.GetUser().CurrentRoom.CloseFullRoom = true;
 
         return true;

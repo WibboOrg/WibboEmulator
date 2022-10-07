@@ -19,10 +19,10 @@ internal class AddStickyNoteEvent : IPacketEvent
             return;
         }
 
-        var Id = packet.PopInt();
+        var id = packet.PopInt();
         var str = packet.PopString();
 
-        var userItem = session.GetUser().GetInventoryComponent().GetItem(Id);
+        var userItem = session.GetUser().GetInventoryComponent().GetItem(id);
         if (userItem == null)
         {
             return;
@@ -42,10 +42,10 @@ internal class AddStickyNoteEvent : IPacketEvent
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            ItemDao.UpdateRoomIdAndUserId(dbClient, Id, room.Id, room.RoomData.OwnerId);
+            ItemDao.UpdateRoomIdAndUserId(dbClient, id, room.Id, room.RoomData.OwnerId);
         }
 
-        session.GetUser().GetInventoryComponent().RemoveItem(Id);
+        session.GetUser().GetInventoryComponent().RemoveItem(id);
     }
 
     private static string WallPositionCheck(string wallPosition)

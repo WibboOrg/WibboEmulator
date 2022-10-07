@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
+namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
@@ -17,51 +17,51 @@ internal class CancelOfferEvent : IPacketEvent
             return;
         }
 
-        DataRow Row = null;
-        var OfferId = packet.PopInt();
+        DataRow row = null;
+        var offerId = packet.PopInt();
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            Row = CatalogMarketplaceOfferDao.GetByOfferId(dbClient, OfferId);
+            row = CatalogMarketplaceOfferDao.GetByOfferId(dbClient, offerId);
         }
 
-        if (Row == null)
+        if (row == null)
         {
-            session.SendPacket(new MarketplaceCancelOfferResultComposer(OfferId, false));
+            session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
         }
 
-        if (Convert.ToString(Row["state"]) == "2")
+        if (Convert.ToString(row["state"]) == "2")
         {
-            session.SendPacket(new MarketplaceCancelOfferResultComposer(OfferId, false));
+            session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
         }
 
-        if (Convert.ToInt32(Row["user_id"]) != session.GetUser().Id)
+        if (Convert.ToInt32(row["user_id"]) != session.GetUser().Id)
         {
-            session.SendPacket(new MarketplaceCancelOfferResultComposer(OfferId, false));
+            session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(Row["item_id"]), out var Item))
+        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(row["item_id"]), out var item))
         {
-            session.SendPacket(new MarketplaceCancelOfferResultComposer(OfferId, false));
+            session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, false));
             return;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            CatalogMarketplaceOfferDao.DeleteUserOffer(dbClient, OfferId, session.GetUser().Id);
+            CatalogMarketplaceOfferDao.DeleteUserOffer(dbClient, offerId, session.GetUser().Id);
         }
 
-        var GiveItem = ItemFactory.CreateSingleItem(Item, session.GetUser(), Convert.ToString(Row["extra_data"]), Convert.ToInt32(Row["furni_id"]), Convert.ToInt32(Row["limited_number"]), Convert.ToInt32(Row["limited_stack"]));
+        var giveItem = ItemFactory.CreateSingleItem(item, session.GetUser(), Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
 
-        if (GiveItem != null)
+        if (giveItem != null)
         {
-            _ = session.GetUser().GetInventoryComponent().TryAddItem(GiveItem);
-            session.SendPacket(new FurniListNotificationComposer(GiveItem.Id, 1));
+            _ = session.GetUser().GetInventoryComponent().TryAddItem(giveItem);
+            session.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
         }
 
-        session.SendPacket(new MarketplaceCancelOfferResultComposer(OfferId, true));
+        session.SendPacket(new MarketplaceCancelOfferResultComposer(offerId, true));
     }
 }

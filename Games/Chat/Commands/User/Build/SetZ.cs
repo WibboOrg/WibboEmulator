@@ -4,37 +4,37 @@ using WibboEmulator.Games.Rooms;
 
 internal class SetZ : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        var Heigth = parameters[1];
-        if (!double.TryParse(Heigth, out var Result))
+        var heigth = parameters[1];
+        if (!double.TryParse(heigth, out var result))
         {
             return;
         }
 
-        if (Result < -100)
+        if (result < -100)
         {
-            Result = 0;
+            result = 0;
         }
 
-        if (Result > 100)
+        if (result > 100)
         {
-            Result = 100;
+            result = 100;
         }
 
-        UserRoom.ConstruitZMode = true;
-        UserRoom.ConstruitHeigth = Result;
+        userRoom.ConstruitZMode = true;
+        userRoom.ConstruitHeigth = result;
 
-        session.SendWhisper("SetZ: " + Result);
+        session.SendWhisper("SetZ: " + result);
 
-        if (Result >= 0)
+        if (result >= 0)
         {
-            session.SendPacket(Room.GetGameMap().Model.SetHeightMap(Result > 63 ? 63 : Result));
+            session.SendPacket(room.GetGameMap().Model.SetHeightMap(result > 63 ? 63 : result));
         }
     }
 }

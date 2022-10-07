@@ -4,20 +4,20 @@ using WibboEmulator.Games.Rooms;
 
 internal class Lay : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (UserRoom.ContainStatus("lay") || UserRoom.ContainStatus("sit"))
+        if (userRoom.ContainStatus("lay") || userRoom.ContainStatus("sit"))
         {
             return;
         }
 
-        if (UserRoom.RotBody % 2 == 0 || UserRoom.IsTransf)
+        if (userRoom.RotBody % 2 == 0 || userRoom.IsTransf)
         {
-            if (UserRoom.RotBody == 4 || UserRoom.RotBody == 0 || UserRoom.IsTransf)
+            if (userRoom.RotBody == 4 || userRoom.RotBody == 0 || userRoom.IsTransf)
             {
-                if (Room.GetGameMap().CanWalk(UserRoom.X, UserRoom.Y + 1))
+                if (room.GetGameMap().CanWalk(userRoom.X, userRoom.Y + 1))
                 {
-                    UserRoom.RotBody = 0;
+                    userRoom.RotBody = 0;
                 }
                 else
                 {
@@ -26,23 +26,23 @@ internal class Lay : IChatCommand
             }
             else
             {
-                if (!Room.GetGameMap().CanWalk(UserRoom.X + 1, UserRoom.Y))
+                if (!room.GetGameMap().CanWalk(userRoom.X + 1, userRoom.Y))
                 {
                     return;
                 }
             }
 
-            if (UserRoom.IsTransf)
+            if (userRoom.IsTransf)
             {
-                UserRoom.SetStatus("lay", "0");
+                userRoom.SetStatus("lay", "0");
             }
             else
             {
-                UserRoom.SetStatus("lay", "0.7");
+                userRoom.SetStatus("lay", "0.7");
             }
 
-            UserRoom.IsLay = true;
-            UserRoom.UpdateNeeded = true;
+            userRoom.IsLay = true;
+            userRoom.UpdateNeeded = true;
         }
     }
 }

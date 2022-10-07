@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Catalog.Vouchers;
+namespace WibboEmulator.Games.Catalog.Vouchers;
 using System.Data;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Interfaces;
@@ -16,20 +16,20 @@ public class VoucherManager
             this._vouchers.Clear();
         }
 
-        var GetVouchers = CatalogVoucherDao.GetAll(dbClient);
+        var getVouchers = CatalogVoucherDao.GetAll(dbClient);
 
-        if (GetVouchers != null)
+        if (getVouchers != null)
         {
-            foreach (DataRow Row in GetVouchers.Rows)
+            foreach (DataRow row in getVouchers.Rows)
             {
-                this._vouchers.Add(Convert.ToString(Row["voucher"]), new Voucher(Convert.ToString(Row["voucher"]), Convert.ToString(Row["type"]), Convert.ToInt32(Row["value"]), Convert.ToInt32(Row["current_uses"]), Convert.ToInt32(Row["max_uses"])));
+                this._vouchers.Add(Convert.ToString(row["voucher"]), new Voucher(Convert.ToString(row["voucher"]), Convert.ToString(row["type"]), Convert.ToInt32(row["value"]), Convert.ToInt32(row["current_uses"]), Convert.ToInt32(row["max_uses"])));
             }
         }
     }
 
-    public bool TryGetVoucher(string Code, out Voucher Voucher)
+    public bool TryGetVoucher(string code, out Voucher voucher)
     {
-        if (this._vouchers.TryGetValue(Code, out Voucher))
+        if (this._vouchers.TryGetValue(code, out voucher))
         {
             return true;
         }

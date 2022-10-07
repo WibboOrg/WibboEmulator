@@ -13,76 +13,76 @@ internal class UseFurnitureEvent : IPacketEvent
             return;
         }
 
-        var Id = packet.PopInt();
+        var id = packet.PopInt();
 
-        var RoomItem = room.GetRoomItemHandler().GetItem(Id);
-        if (RoomItem == null)
+        var roomItem = room.GetRoomItemHandler().GetItem(id);
+        if (roomItem == null)
         {
             return;
         }
 
-        if (RoomItem.GetBaseItem().ItemName == "bw_lgchair")
+        if (roomItem.GetBaseItem().ItemName == "bw_lgchair")
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 1936);
         }
-        else if (RoomItem.GetBaseItem().ItemName.Contains("bw_sboard"))
+        else if (roomItem.GetBaseItem().ItemName.Contains("bw_sboard"))
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 1969);
         }
-        else if (RoomItem.GetBaseItem().ItemName.Contains("bw_van"))
+        else if (roomItem.GetBaseItem().ItemName.Contains("bw_van"))
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 1956);
         }
-        else if (RoomItem.GetBaseItem().ItemName.Contains("party_floor"))
+        else if (roomItem.GetBaseItem().ItemName.Contains("party_floor"))
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 1369);
         }
-        else if (RoomItem.GetBaseItem().ItemName.Contains("party_ball"))
+        else if (roomItem.GetBaseItem().ItemName.Contains("party_ball"))
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 1375);
         }
-        else if (RoomItem.GetBaseItem().ItemName.Contains("jukebox"))
+        else if (roomItem.GetBaseItem().ItemName.Contains("jukebox"))
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 1019);
         }
-        else if (RoomItem.GetBaseItem().ItemName.Contains("bb_gate"))
+        else if (roomItem.GetBaseItem().ItemName.Contains("bb_gate"))
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 2050);
         }
-        else if (RoomItem.GetBaseItem().ItemName == "bb_patch1")
+        else if (roomItem.GetBaseItem().ItemName == "bb_patch1")
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 2040);
         }
-        else if (RoomItem.GetBaseItem().ItemName == "bb_rnd_tele")
+        else if (roomItem.GetBaseItem().ItemName == "bb_rnd_tele")
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 2049);
         }
-        else if (RoomItem.GetBaseItem().ItemName.Contains("es_gate_"))
+        else if (roomItem.GetBaseItem().ItemName.Contains("es_gate_"))
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 2167);
         }
-        else if (RoomItem.GetBaseItem().ItemName.Contains("es_score_"))
+        else if (roomItem.GetBaseItem().ItemName.Contains("es_score_"))
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 2172);
         }
-        else if (RoomItem.GetBaseItem().ItemName.Contains("es_exit"))
+        else if (roomItem.GetBaseItem().ItemName.Contains("es_exit"))
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 2166);
         }
-        else if (RoomItem.GetBaseItem().ItemName == "es_tagging")
+        else if (roomItem.GetBaseItem().ItemName == "es_tagging")
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.EXPLORE_FIND_ITEM, 2148);
         }
 
-        var UserHasRights = false;
+        var userHasRights = false;
         if (room.CheckRights(session))
         {
-            UserHasRights = true;
+            userHasRights = true;
         }
 
-        var Request = packet.PopInt();
+        var request = packet.PopInt();
 
-        RoomItem.Interactor.OnTrigger(session, RoomItem, Request, UserHasRights, false);
-        RoomItem.OnTrigger(room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id));
+        roomItem.Interactor.OnTrigger(session, roomItem, request, userHasRights, false);
+        roomItem.OnTrigger(room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id));
     }
 }

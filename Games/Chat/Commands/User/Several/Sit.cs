@@ -4,26 +4,26 @@ using WibboEmulator.Games.Rooms;
 
 internal class Sit : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (UserRoom.ContainStatus("sit") || UserRoom.ContainStatus("lay"))
+        if (userRoom.ContainStatus("sit") || userRoom.ContainStatus("lay"))
         {
             return;
         }
 
-        if (UserRoom.RotBody % 2 == 0)
+        if (userRoom.RotBody % 2 == 0)
         {
-            if (UserRoom.IsTransf)
+            if (userRoom.IsTransf)
             {
-                UserRoom.SetStatus("sit", "0");
+                userRoom.SetStatus("sit", "0");
             }
             else
             {
-                UserRoom.SetStatus("sit", "0.5");
+                userRoom.SetStatus("sit", "0.5");
             }
 
-            UserRoom.IsSit = true;
-            UserRoom.UpdateNeeded = true;
+            userRoom.IsSit = true;
+            userRoom.UpdateNeeded = true;
         }
     }
 }

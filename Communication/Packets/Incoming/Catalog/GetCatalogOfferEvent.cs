@@ -9,27 +9,27 @@ internal class GetCatalogOfferEvent : IPacketEvent
     public void Parse(GameClient session, ClientPacket packet)
     {
         var id = packet.PopInt();
-        var Item = WibboEnvironment.GetGame().GetCatalog().FindItem(id, session.GetUser().Rank);
-        if (Item == null)
+        var item = WibboEnvironment.GetGame().GetCatalog().FindItem(id, session.GetUser().Rank);
+        if (item == null)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(Item.PageID, out var Page))
+        if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(item.PageID, out var page))
         {
             return;
         }
 
-        if (!Page.Enabled || Page.MinimumRank > session.GetUser().Rank)
+        if (!page.Enabled || page.MinimumRank > session.GetUser().Rank)
         {
             return;
         }
 
-        if (Item.IsLimited)
+        if (item.IsLimited)
         {
             return;
         }
 
-        session.SendPacket(new CatalogOfferComposer(Item));
+        session.SendPacket(new CatalogOfferComposer(item));
     }
 }

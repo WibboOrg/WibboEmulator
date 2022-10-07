@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms.AI;
 
 internal class SuperBot : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
 
         if (parameters.Length > 1)
@@ -16,58 +16,58 @@ internal class SuperBot : IChatCommand
                 _ = int.TryParse(parameters[1], out count);
                 for (var i = 0; i < count; i++)
                 {
-                    if (!Room.IsRoleplay)
+                    if (!room.IsRoleplay)
                     {
-                        var superBot = Room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, session.GetUser().Id, Room.Id, BotAIType.SuperBot, false, session.GetUser().Username, "SuperBot", session.GetUser().Gender, session.GetUser().Look, UserRoom.X, UserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
-                        superBot.BotData.FollowUser = UserRoom.VirtualId;
+                        var superBot = room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, session.GetUser().Id, room.Id, BotAIType.SuperBot, false, session.GetUser().Username, "SuperBot", session.GetUser().Gender, session.GetUser().Look, userRoom.X, userRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                        superBot.BotData.FollowUser = userRoom.VirtualId;
                     }
                     else
                     {
-                        _ = Room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, session.GetUser().Id, Room.Id, BotAIType.SuperBot, false, session.GetUser().Username, "SuperBot", session.GetUser().Gender, session.GetUser().Look, UserRoom.X, UserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                        _ = room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, session.GetUser().Id, room.Id, BotAIType.SuperBot, false, session.GetUser().Username, "SuperBot", session.GetUser().Gender, session.GetUser().Look, userRoom.X, userRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
                     }
                 }
             }
             else if (parameters.Length > 2)
             {
-                var GetUserRoom = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(parameters[1]);
-                if (GetUserRoom == null)
+                var getUserRoom = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(parameters[1]);
+                if (getUserRoom == null)
                 {
                     return;
                 }
 
-                if (session.Langue != GetUserRoom.GetClient().Langue)
+                if (session.Langue != getUserRoom.GetClient().Langue)
                 {
-                    session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue(string.Format("cmd.authorized.langue.user", GetUserRoom.GetClient().Langue), session.Langue));
+                    session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue.user", session.Langue), getUserRoom.GetClient().Langue));
                     return;
                 }
 
                 _ = int.TryParse(parameters[2], out count);
                 for (var i = 0; i < count; i++)
                 {
-                    var superBot = Room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, GetUserRoom.GetClient().GetUser().Id, Room.Id, BotAIType.SuperBot, false, GetUserRoom.GetClient().GetUser().Username, "SuperBot", GetUserRoom.GetClient().GetUser().Gender, GetUserRoom.GetClient().GetUser().Look, GetUserRoom.X, GetUserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
-                    superBot.BotData.FollowUser = GetUserRoom.VirtualId;
+                    var superBot = room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, getUserRoom.GetClient().GetUser().Id, room.Id, BotAIType.SuperBot, false, getUserRoom.GetClient().GetUser().Username, "SuperBot", getUserRoom.GetClient().GetUser().Gender, getUserRoom.GetClient().GetUser().Look, getUserRoom.X, getUserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                    superBot.BotData.FollowUser = getUserRoom.VirtualId;
                 }
             }
         }
         else
         {
-            var Users = WibboEnvironment.GetGame().GetGameClientManager().GetClients;
+            var users = WibboEnvironment.GetGame().GetGameClientManager().GetClients;
 
-            if (Users == null)
+            if (users == null)
             {
                 return;
             }
 
-            foreach (var GameClient in Users)
+            foreach (var user in users)
             {
-                if (GameClient.GetUser() == null)
+                if (user.GetUser() == null)
                 {
                     continue;
                 }
 
-                var randomWalkableSquare = Room.GetGameMap().GetRandomWalkableSquare(UserRoom.X, UserRoom.Y);
+                var randomWalkableSquare = room.GetGameMap().GetRandomWalkableSquare(userRoom.X, userRoom.Y);
 
-                var superBot = Room.GetRoomUserManager().DeploySuperBot(new RoomBot(0, session.GetUser().Id, Room.Id, BotAIType.SuperBot, false, GameClient.GetUser().Username, GameClient.GetUser().Motto, GameClient.GetUser().Gender, GameClient.GetUser().Look, UserRoom.X, UserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                var superBot = room.GetRoomUserManager().DeploySuperBot(new RoomBot(0, session.GetUser().Id, room.Id, BotAIType.SuperBot, false, user.GetUser().Username, user.GetUser().Motto, user.GetUser().Gender, user.GetUser().Look, userRoom.X, userRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
                 superBot.MoveTo(randomWalkableSquare, true);
             }
         }

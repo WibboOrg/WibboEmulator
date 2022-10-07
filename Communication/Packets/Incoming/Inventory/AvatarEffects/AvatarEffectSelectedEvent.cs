@@ -1,6 +1,5 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Inventory.AvatarEffects;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class AvatarEffectSelectedEvent : IPacketEvent
@@ -9,33 +8,33 @@ internal class AvatarEffectSelectedEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var NumEnable = packet.PopInt();
+        var effectId = packet.PopInt();
 
-        if (NumEnable < 0)
+        if (effectId < 0)
         {
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(NumEnable, session.GetUser().HasPermission("perm_god")))
+        if (!WibboEnvironment.GetGame().GetEffectManager().HaveEffect(effectId, session.GetUser().HasPermission("perm_god")))
         {
             return;
         }
 
-        var Room = session.GetUser().CurrentRoom;
-        if (Room == null)
+        var room = session.GetUser().CurrentRoom;
+        if (room == null)
         {
             return;
         }
 
-        var User = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
 
-        if (User == null)
+        if (user == null)
         {
             return;
         }
 
-        var CurrentEnable = User.CurrentEffect;
-        if (CurrentEnable is 28 or 29 or 30 or 37 or 184 or 77 or 103
+        var currentEnable = user.CurrentEffect;
+        if (currentEnable is 28 or 29 or 30 or 37 or 184 or 77 or 103
             or 40 or 41 or 42 or 43
             or 49 or 50 or 51 or 52
             or 33 or 34 or 35 or 36)
@@ -43,11 +42,11 @@ internal class AvatarEffectSelectedEvent : IPacketEvent
             return;
         }
 
-        if (User.Team != TeamType.NONE || User.InGame)
+        if (user.Team != TeamType.NONE || user.InGame)
         {
             return;
         }
 
-        User.ApplyEffect(NumEnable);
+        user.ApplyEffect(effectId);
     }
 }

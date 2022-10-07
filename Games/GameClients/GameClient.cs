@@ -1,6 +1,5 @@
 namespace WibboEmulator.Games.GameClients;
 using WibboEmulator.Communication.Interfaces;
-using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Communication.Packets.Outgoing.BuildersClub;
 using WibboEmulator.Communication.Packets.Outgoing.Handshake;
 using WibboEmulator.Communication.Packets.Outgoing.Help;
@@ -226,14 +225,14 @@ public class GameClient
                     LogChatPubDao.Insert(dbClient, this.GetUser().Id, "A vérifié: " + type + message, this.GetUser().Username);
                 }
 
-                foreach (var Client in WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers())
+                foreach (var client in WibboEnvironment.GetGame().GetGameClientManager().GetStaffUsers())
                 {
-                    if (Client == null || Client.GetUser() == null)
+                    if (client == null || client.GetUser() == null)
                     {
                         continue;
                     }
 
-                    Client.SendPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + message));
+                    client.SendPacket(new AddChatlogsComposer(this._user.Id, this._user.Username, type + message));
                 }
 
                 return false;
@@ -279,7 +278,7 @@ public class GameClient
 
         return true;
     }
-    public void SendWhisper(string message, bool Info = true)
+    public void SendWhisper(string message, bool info = true)
     {
         if (this.GetUser() == null || this.GetUser().CurrentRoom == null)
         {
@@ -292,7 +291,7 @@ public class GameClient
             return;
         }
 
-        this.SendPacket(new WhisperComposer(user.VirtualId, message, Info ? 34 : 0));
+        this.SendPacket(new WhisperComposer(user.VirtualId, message, info ? 34 : 0));
     }
     public void SendNotification(string message) => this.SendPacket(new BroadcastMessageAlertComposer(message));
 
@@ -354,7 +353,7 @@ public class GameClient
 
         if (this.GetUser() != null)
         {
-            this._user.OnDisconnect();
+            this._user.Dispose();
         }
 
         if (this._packetTimeout != null)

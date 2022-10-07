@@ -1,7 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
 
 internal class ManageGroupEvent : IPacketEvent
 {
@@ -9,18 +8,18 @@ internal class ManageGroupEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var GroupId = packet.PopInt();
+        var groupId = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
         {
             return;
         }
 
-        if (Group.CreatorId != session.GetUser().Id && !session.GetUser().HasPermission("perm_owner_all_rooms"))
+        if (group.CreatorId != session.GetUser().Id && !session.GetUser().HasPermission("perm_owner_all_rooms"))
         {
             return;
         }
 
-        session.SendPacket(new ManageGroupComposer(Group, Group.Badge.Replace("b", "").Split('s')));
+        session.SendPacket(new ManageGroupComposer(group, group.Badge.Replace("b", "").Split('s')));
     }
 }

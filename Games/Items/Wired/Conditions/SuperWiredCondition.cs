@@ -4,7 +4,6 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
@@ -179,158 +178,157 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             return false;
         }
 
-        var Value = "";
-
-
-        string Effect;
+        string value;
+        string effect;
         if (this.StringParam.Contains(':'))
         {
-            Effect = this.StringParam.Split(':')[0].ToLower();
-            Value = this.StringParam.Split(':')[1];
+            effect = this.StringParam.Split(':')[0].ToLower();
+            value = this.StringParam.Split(':')[1];
         }
         else
         {
-            Effect = this.StringParam;
+            effect = this.StringParam;
+            value = string.Empty;
         }
 
-        var Bool = false;
+        var result = false;
         if (user != null)
         {
-            Bool = this.UserCommand(user, this.RoomInstance, Effect, Value);
+            result = UserCommand(user, this.RoomInstance, effect, value);
         }
 
-        if (Bool == false)
+        if (result == false)
         {
-            Bool = RoomCommand(this.RoomInstance, Effect, Value);
+            result = RoomCommand(this.RoomInstance, effect, value);
         }
 
-        if (Bool == false)
+        if (result == false)
         {
-            Bool = this.RpUserCommand(user, Effect, Value);
+            result = RpUserCommand(this.RoomInstance, user, effect, value);
         }
 
-        if (Bool == false)
+        if (result == false)
         {
-            Bool = RpGlobalCommand(this.RoomInstance, Effect, Value);
+            result = RpGlobalCommand(this.RoomInstance, effect, value);
         }
 
-        if (Bool == false && item != null)
+        if (result == false && item != null)
         {
-            Bool = ItemCommand(item, user, Effect, Value);
+            result = ItemCommand(item, user, effect, value);
         }
 
-        if (Effect.Contains("not"))
+        if (effect.Contains("not"))
         {
-            Bool = !Bool;
+            result = !result;
         }
 
-        return Bool;
+        return result;
     }
 
-    private static bool RpGlobalCommand(Room Room, string Effect, string Value)
+    private static bool RpGlobalCommand(Room room, string effect, string value)
     {
-        if (Room == null || !Room.IsRoleplay)
+        if (!room.IsRoleplay)
         {
             return false;
         }
 
-        var Result = false;
-        switch (Effect)
+        var result = false;
+        switch (effect)
         {
             case "rpminuteplus":
             {
-                if (!int.TryParse(Value, out var ValueInt))
+                if (!int.TryParse(value, out var valueInt))
                 {
                     break;
                 }
 
-                if (Room.Roleplay.Minute >= ValueInt)
+                if (room.Roleplay.Minute >= valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "rpminutemoins":
             {
-                if (!int.TryParse(Value, out var ValueInt))
+                if (!int.TryParse(value, out var valueInt))
                 {
                     break;
                 }
 
-                if (Room.Roleplay.Minute < ValueInt)
+                if (room.Roleplay.Minute < valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "rpminute":
             {
-                if (!int.TryParse(Value, out var ValueInt))
+                if (!int.TryParse(value, out var valueInt))
                 {
                     break;
                 }
 
-                if (Room.Roleplay.Minute == ValueInt)
+                if (room.Roleplay.Minute == valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "rphourplus":
             {
-                if (!int.TryParse(Value, out var ValueInt))
+                if (!int.TryParse(value, out var valueInt))
                 {
                     break;
                 }
 
-                if (Room.Roleplay.Hour >= ValueInt)
+                if (room.Roleplay.Hour >= valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "rphourmoins":
             {
-                if (!int.TryParse(Value, out var ValueInt))
+                if (!int.TryParse(value, out var valueInt))
                 {
                     break;
                 }
 
-                if (Room.Roleplay.Hour < ValueInt)
+                if (room.Roleplay.Hour < valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "rphour":
             {
-                if (!int.TryParse(Value, out var ValueInt))
+                if (!int.TryParse(value, out var valueInt))
                 {
                     break;
                 }
 
-                if (Room.Roleplay.Hour == ValueInt)
+                if (room.Roleplay.Hour == valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "enemy":
             {
-                var parameters = Value.Split(';');
+                var parameters = value.Split(';');
                 if (parameters.Length != 3)
                 {
                     break;
                 }
 
-                var BotOrPet = Room.GetRoomUserManager().GetBotOrPetByName(parameters[0]);
-                if (BotOrPet == null || BotOrPet.BotData == null || BotOrPet.BotData.RoleBot == null)
+                var botOrPet = room.GetRoomUserManager().GetBotOrPetByName(parameters[0]);
+                if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot == null)
                 {
                     break;
                 }
@@ -339,28 +337,28 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                 {
                     case "dead":
                     {
-                        if (BotOrPet.BotData.RoleBot.Dead && parameters[2] == "true")
+                        if (botOrPet.BotData.RoleBot.Dead && parameters[2] == "true")
                         {
-                            Result = true;
+                            result = true;
                         }
 
-                        if (!BotOrPet.BotData.RoleBot.Dead && parameters[2] == "false")
+                        if (!botOrPet.BotData.RoleBot.Dead && parameters[2] == "false")
                         {
-                            Result = true;
+                            result = true;
                         }
 
                         break;
                     }
                     case "aggro":
                     {
-                        if (BotOrPet.BotData.RoleBot.AggroVirtuelId > 0 && parameters[2] == "true")
+                        if (botOrPet.BotData.RoleBot.AggroVirtuelId > 0 && parameters[2] == "true")
                         {
-                            Result = true;
+                            result = true;
                         }
 
-                        if (BotOrPet.BotData.RoleBot.AggroVirtuelId == 0 && parameters[2] == "false")
+                        if (botOrPet.BotData.RoleBot.AggroVirtuelId == 0 && parameters[2] == "false")
                         {
-                            Result = true;
+                            result = true;
                         }
 
                         break;
@@ -370,167 +368,166 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             }
         }
 
-        return Result;
+        return result;
     }
 
-    private bool RpUserCommand(RoomUser User, string Effect, string Value)
+    private static bool RpUserCommand(Room room, RoomUser user, string effect, string value)
     {
-        var Room = this.RoomInstance;
-        if (Room == null || !Room.IsRoleplay)
+        if (!room.IsRoleplay)
         {
             return false;
         }
 
-        if (User == null || User.GetClient() == null || User.GetClient().GetUser() == null)
+        if (user == null || user.GetClient() == null || user.GetClient().GetUser() == null)
         {
             return false;
         }
 
-        var Rp = User.Roleplayer;
-        if (Rp == null)
+        var rp = user.Roleplayer;
+        if (rp == null)
         {
             return false;
         }
 
-        var Result = false;
-        switch (Effect)
+        var result = false;
+        switch (effect)
         {
             case "inventoryitem":
             case "inventorynotitem":
             {
-                if (!int.TryParse(Value, out var ValueInt))
+                if (!int.TryParse(value, out var valueInt))
                 {
                     break;
                 }
 
-                if (Rp.GetInventoryItem(ValueInt) != null)
+                if (rp.GetInventoryItem(valueInt) != null)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "energyplus":
             {
-                _ = int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(value, out var valueInt);
 
-                if (Rp.Energy >= ValueInt)
+                if (rp.Energy >= valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "energymoins":
             {
-                _ = int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(value, out var valueInt);
 
-                if (Rp.Energy < ValueInt)
+                if (rp.Energy < valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "munition":
             {
-                _ = int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(value, out var valueInt);
 
-                if (Rp.Munition == ValueInt)
+                if (rp.Munition == valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "munitionplus":
             {
-                _ = int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(value, out var valueInt);
 
-                if (Rp.Munition >= ValueInt)
+                if (rp.Munition >= valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "munitionmoins":
             {
-                _ = int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(value, out var valueInt);
 
-                if (Rp.Munition < ValueInt)
+                if (rp.Munition < valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "moneyplus":
             {
-                _ = int.TryParse(Value, out var ValueInt);
-                if (Rp.Money >= ValueInt)
+                _ = int.TryParse(value, out var valueInt);
+                if (rp.Money >= valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "moneymoins":
             {
-                _ = int.TryParse(Value, out var ValueInt);
-                if (Rp.Money < ValueInt)
+                _ = int.TryParse(value, out var valueInt);
+                if (rp.Money < valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "levelplus":
             {
-                _ = int.TryParse(Value, out var ValueInt);
-                if (Rp.Level >= ValueInt)
+                _ = int.TryParse(value, out var valueInt);
+                if (rp.Level >= valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "levelmoins":
             {
-                _ = int.TryParse(Value, out var ValueInt);
-                if (Rp.Level < ValueInt)
+                _ = int.TryParse(value, out var valueInt);
+                if (rp.Level < valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "healthplus":
             {
-                _ = int.TryParse(Value, out var ValueInt);
-                if (Rp.Health >= ValueInt)
+                _ = int.TryParse(value, out var valueInt);
+                if (rp.Health >= valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "healthmoins":
             {
-                _ = int.TryParse(Value, out var ValueInt);
-                if (Rp.Health < ValueInt)
+                _ = int.TryParse(value, out var valueInt);
+                if (rp.Health < valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "health":
             {
-                _ = int.TryParse(Value, out var ValueInt);
-                if (Rp.Health == ValueInt)
+                _ = int.TryParse(value, out var valueInt);
+                if (rp.Health == valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -538,9 +535,9 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "dead":
             case "notdead":
             {
-                if (Rp.Dead)
+                if (rp.Dead)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -548,11 +545,11 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "weaponfarid":
             case "notweaponfarid":
             {
-                _ = int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(value, out var valueInt);
 
-                if (Rp.WeaponGun.Id == ValueInt)
+                if (rp.WeaponGun.Id == valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -560,11 +557,11 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "weaponcacid":
             case "notweaponcacid":
             {
-                _ = int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(value, out var valueInt);
 
-                if (Rp.WeaponCac.Id == ValueInt)
+                if (rp.WeaponCac.Id == valueInt)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -572,53 +569,53 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "winusermoney":
             case "notwinusermoney":
             {
-                Result = true;
+                result = true;
 
-                foreach (var UserSearch in Room.GetRoomUserManager().GetRoomUsers())
+                foreach (var userSearch in room.GetRoomUserManager().GetRoomUsers())
                 {
-                    if (UserSearch == null)
+                    if (userSearch == null)
                     {
                         continue;
                     }
 
-                    if (UserSearch == User)
+                    if (userSearch == user)
                     {
                         continue;
                     }
 
-                    if (UserSearch.Roleplayer == null)
+                    if (userSearch.Roleplayer == null)
                     {
                         continue;
                     }
 
-                    if (UserSearch.Roleplayer.Money < Rp.Money)
+                    if (userSearch.Roleplayer.Money < rp.Money)
                     {
                         continue;
                     }
 
-                    Result = false;
+                    result = false;
                     break;
                 }
 
                 break;
             }
         }
-        return Result;
+        return result;
     }
 
-    private static bool ItemCommand(Item item, RoomUser User, string Effect, string Value)
+    private static bool ItemCommand(Item item, RoomUser user, string effect, string value)
     {
-        var Bool = false;
-        switch (Effect)
+        var result = false;
+        switch (effect)
         {
             case "itemmode":
             case "itemnotmode":
             {
-                if (int.TryParse(item.ExtraData, out var Num))
+                if (int.TryParse(item.ExtraData, out _))
                 {
-                    if (item.ExtraData == Value)
+                    if (item.ExtraData == value)
                     {
-                        Bool = true;
+                        result = true;
                     }
                 }
                 break;
@@ -626,68 +623,63 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "itemrot":
             case "itemnotrot":
             {
-                _ = int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(value, out var valueInt);
 
-                if (item.Rotation == ValueInt)
+                if (item.Rotation == valueInt)
                 {
-                    Bool = true;
+                    result = true;
                 }
 
                 break;
             }
             case "itemdistanceplus":
             {
-                if (User == null)
+                if (user == null)
                 {
                     break;
                 }
 
-                _ = int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(value, out var valueInt);
 
-                if (Math.Abs(User.X - item.X) >= ValueInt && Math.Abs(User.Y - item.Y) >= ValueInt)
+                if (Math.Abs(user.X - item.X) >= valueInt && Math.Abs(user.Y - item.Y) >= valueInt)
                 {
-                    Bool = true;
+                    result = true;
                 }
 
                 break;
             }
             case "itemdistancemoins":
             {
-                if (User == null)
+                if (user == null)
                 {
                     break;
                 }
 
-                _ = int.TryParse(Value, out var ValueInt);
+                _ = int.TryParse(value, out var valueInt);
 
-                if (Math.Abs(User.X - item.X) <= ValueInt && Math.Abs(User.Y - item.Y) <= ValueInt)
+                if (Math.Abs(user.X - item.X) <= valueInt && Math.Abs(user.Y - item.Y) <= valueInt)
                 {
-                    Bool = true;
+                    result = true;
                 }
 
                 break;
             }
         }
 
-        return Bool;
+        return result;
     }
 
-    private static bool RoomCommand(Room room, string Effect, string Value)
+    private static bool RoomCommand(Room room, string effect, string value)
     {
-        if (room == null)
-        {
-            return false;
-        }
-
-        var Bool = false;
-        switch (Effect)
+        var result = false;
+        switch (effect)
         {
             case "roomopen":
             case "roomnotopen":
             {
                 if (room.RoomData.State == 0)
                 {
-                    Bool = true;
+                    result = true;
                 }
 
                 break;
@@ -697,7 +689,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 if (room.RoomData.State == 1)
                 {
-                    Bool = true;
+                    result = true;
                 }
 
                 break;
@@ -705,12 +697,12 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "teamallcount":
             case "teamallnotcount":
             {
-                var TeamManager = room.GetTeamManager();
+                var teamManager = room.GetTeamManager();
 
-                _ = int.TryParse(Value, out var Count);
-                if (TeamManager.GetAllPlayer().Count == Count)
+                _ = int.TryParse(value, out var count);
+                if (teamManager.GetAllPlayer().Count == count)
                 {
-                    Bool = true;
+                    result = true;
                 }
 
                 break;
@@ -718,12 +710,12 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "teamredcount":
             case "teamrednotcount":
             {
-                var TeamManager = room.GetTeamManager();
+                var teamManager = room.GetTeamManager();
 
-                _ = int.TryParse(Value, out var Count);
-                if (TeamManager.RedTeam.Count == Count)
+                _ = int.TryParse(value, out var count);
+                if (teamManager.RedTeam.Count == count)
                 {
-                    Bool = true;
+                    result = true;
                 }
 
                 break;
@@ -731,12 +723,12 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "teamyellowcount":
             case "teamyellownotcount":
             {
-                var TeamManager = room.GetTeamManager();
+                var teamManager = room.GetTeamManager();
 
-                _ = int.TryParse(Value, out var Count);
-                if (TeamManager.YellowTeam.Count == Count)
+                _ = int.TryParse(value, out var count);
+                if (teamManager.YellowTeam.Count == count)
                 {
-                    Bool = true;
+                    result = true;
                 }
 
                 break;
@@ -744,12 +736,12 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "teambluecount":
             case "teambluenotcount":
             {
-                var TeamManager = room.GetTeamManager();
+                var teamManager = room.GetTeamManager();
 
-                _ = int.TryParse(Value, out var Count);
-                if (TeamManager.BlueTeam.Count == Count)
+                _ = int.TryParse(value, out var count);
+                if (teamManager.BlueTeam.Count == count)
                 {
-                    Bool = true;
+                    result = true;
                 }
 
                 break;
@@ -757,48 +749,48 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "teamgreencount":
             case "teamgreennotcount":
             {
-                var TeamManager = room.GetTeamManager();
+                var teamManager = room.GetTeamManager();
 
-                _ = int.TryParse(Value, out var Count);
-                if (TeamManager.GreenTeam.Count == Count)
+                _ = int.TryParse(value, out var count);
+                if (teamManager.GreenTeam.Count == count)
                 {
-                    Bool = true;
+                    result = true;
                 }
 
                 break;
             }
         }
-        return Bool;
+        return result;
     }
 
-    private bool UserCommand(RoomUser user, Room Room, string Effect, string Value)
+    private static bool UserCommand(RoomUser user, Room room, string effect, string value)
     {
-        var Result = false;
-        switch (Effect)
+        var result = false;
+        switch (effect)
         {
             case "winuserpoint":
             case "notwinuserpoint":
             {
-                Result = true;
+                result = true;
 
-                foreach (var UserSearch in Room.GetRoomUserManager().GetRoomUsers())
+                foreach (var userSearch in room.GetRoomUserManager().GetRoomUsers())
                 {
-                    if (UserSearch == null)
+                    if (userSearch == null)
                     {
                         continue;
                     }
 
-                    if (UserSearch == user)
+                    if (userSearch == user)
                     {
                         continue;
                     }
 
-                    if (UserSearch.WiredPoints < user.WiredPoints)
+                    if (userSearch.WiredPoints < user.WiredPoints)
                     {
                         continue;
                     }
 
-                    Result = false;
+                    result = false;
                     break;
                 }
 
@@ -807,9 +799,9 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "missioncontais":
             case "notmissioncontais":
             {
-                if (!user.IsBot && user.GetClient().GetUser().Motto.Contains(Value))
+                if (!user.IsBot && user.GetClient().GetUser().Motto.Contains(value))
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -817,9 +809,9 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "mission":
             case "notmission":
             {
-                if (!user.IsBot && user.GetClient().GetUser().Motto == Value)
+                if (!user.IsBot && user.GetClient().GetUser().Motto == value)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -827,11 +819,11 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "favogroupid":
             case "notfavogroupid":
             {
-                _ = int.TryParse(Value, out var GroupId);
+                _ = int.TryParse(value, out var groupId);
 
-                if (!user.IsBot && user.GetClient().GetUser().FavouriteGroupId == GroupId)
+                if (!user.IsBot && user.GetClient().GetUser().FavouriteGroupId == groupId)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -841,7 +833,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 if (!user.IsBot && user.GetClient().GetUser().Gender.ToUpper() == "F")
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -851,7 +843,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 if (!user.IsBot && user.GetClient().GetUser().Gender.ToUpper() == "M")
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -859,9 +851,9 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "namebot":
             case "notnamebot":
             {
-                if (user.IsBot && user.BotData.Name == Value)
+                if (user.IsBot && user.BotData.Name == value)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -871,7 +863,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 if (user.IsBot)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -881,7 +873,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 if (user.AllowShoot)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -894,16 +886,10 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                var room = this.RoomInstance;
-                if (room == null)
-                {
-                    break;
-                }
-
                 var winningTeam = room.GetGameManager().GetWinningTeam();
                 if (user.Team == winningTeam)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -913,7 +899,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 if (user.Freeze)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -923,73 +909,73 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 if (user.InGame)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "usertimer":
             {
-                _ = int.TryParse(Value, out var Points);
+                _ = int.TryParse(value, out var points);
 
-                if (user.UserTimer == Points)
+                if (user.UserTimer == points)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "usertimerplus":
             {
-                _ = int.TryParse(Value, out var Points);
+                _ = int.TryParse(value, out var points);
 
-                if (user.UserTimer > Points)
+                if (user.UserTimer > points)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "usertimermoins":
             {
-                _ = int.TryParse(Value, out var point);
+                _ = int.TryParse(value, out var point);
 
                 if (user.UserTimer < point)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "point":
             {
-                _ = int.TryParse(Value, out var point);
+                _ = int.TryParse(value, out var point);
 
                 if (user.WiredPoints == point)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "pointplus":
             {
-                _ = int.TryParse(Value, out var Points);
+                _ = int.TryParse(value, out var points);
 
-                if (user.WiredPoints > Points)
+                if (user.WiredPoints > points)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
             case "pointmoins":
             {
-                _ = int.TryParse(Value, out var Points);
+                _ = int.TryParse(value, out var points);
 
-                if (user.WiredPoints < Points)
+                if (user.WiredPoints < points)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -997,16 +983,16 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "ingroup":
             case "innotgroup":
             {
-                _ = int.TryParse(Value, out var GroupId);
+                _ = int.TryParse(value, out var groupId);
 
-                if (GroupId == 0)
+                if (groupId == 0)
                 {
                     break;
                 }
 
-                if (user.IsBot || (user.GetClient() != null && user.GetClient().GetUser() != null && user.GetClient().GetUser().MyGroups.Contains(GroupId)))
+                if (user.IsBot || (user.GetClient() != null && user.GetClient().GetUser() != null && user.GetClient().GetUser().MyGroups.Contains(groupId)))
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -1016,7 +1002,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 if (user.Team != TeamType.NONE)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -1026,7 +1012,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 if (user.ContainStatus("sit"))
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -1036,7 +1022,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 if (user.ContainStatus("lay"))
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -1044,9 +1030,9 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "rot":
             case "notrot":
             {
-                if (user.RotBody.ToString() == Value)
+                if (user.RotBody.ToString() == value)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -1056,7 +1042,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 if (user.IsTransf)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -1064,9 +1050,9 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "username":
             case "notusername":
             {
-                if (user.GetUsername().ToLower() == Value.ToLower())
+                if (user.GetUsername().ToLower() == value.ToLower())
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -1074,9 +1060,9 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "handitem":
             case "nothanditem":
             {
-                if (user.CarryItemID.ToString() == Value)
+                if (user.CarryItemID.ToString() == value)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -1089,9 +1075,9 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.GetClient().GetUser().GetBadgeComponent().HasBadge(Value))
+                if (user.GetClient().GetUser().GetBadgeComponent().HasBadge(value))
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -1099,9 +1085,9 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "enable":
             case "notenable":
             {
-                if (user.CurrentEffect.ToString() == Value)
+                if (user.CurrentEffect.ToString() == value)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -1113,9 +1099,9 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.GetClient().GetUser().Rank.ToString() == Value)
+                if (user.GetClient().GetUser().Rank.ToString() == value)
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -1127,9 +1113,9 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.GetClient().GetUser().Rank > Convert.ToInt32(Value))
+                if (user.GetClient().GetUser().Rank > Convert.ToInt32(value))
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
@@ -1141,15 +1127,15 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.GetClient().GetUser().Rank < Convert.ToInt32(Value))
+                if (user.GetClient().GetUser().Rank < Convert.ToInt32(value))
                 {
-                    Result = true;
+                    result = true;
                 }
 
                 break;
             }
         }
-        return Result;
+        return result;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);

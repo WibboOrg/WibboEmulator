@@ -15,7 +15,7 @@ internal class AssignRightsEvent : IPacketEvent
             return;
         }
 
-        var UserId = packet.PopInt();
+        var userId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -27,28 +27,28 @@ internal class AssignRightsEvent : IPacketEvent
             return;
         }
 
-        if (room.UsersWithRights.Contains(UserId))
+        if (room.UsersWithRights.Contains(userId))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.giverights.error", session.Langue));
         }
         else
         {
-            var Userright = WibboEnvironment.GetUserById(UserId);
-            if (Userright == null)
+            var userRight = WibboEnvironment.GetUserById(userId);
+            if (userRight == null)
             {
                 return;
             }
 
-            room.UsersWithRights.Add(UserId);
+            room.UsersWithRights.Add(userId);
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
             {
-                RoomRightDao.Insert(dbClient, room.Id, UserId);
+                RoomRightDao.Insert(dbClient, room.Id, userId);
             }
 
-            session.SendPacket(new FlatControllerAddedComposer(room.Id, UserId, Userright.Username));
+            session.SendPacket(new FlatControllerAddedComposer(room.Id, userId, userRight.Username));
 
-            var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(UserId);
+            var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(userId);
             if (roomUserByUserId == null || roomUserByUserId.IsBot)
             {
                 return;

@@ -1,27 +1,27 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
+namespace WibboEmulator.Games.Chat.Commands.Staff.Gestion;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class RoomRemoveSell : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (session == null || session.GetUser() == null)
         {
             return;
         }
 
-        if (Room.RoomData.SellPrice == 0)
+        if (room.RoomData.SellPrice == 0)
         {
             return;
         }
 
-        Room.RoomData.SellPrice = 0;
+        room.RoomData.SellPrice = 0;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoomDao.UpdatePrice(dbClient, Room.Id, 0);
+            RoomDao.UpdatePrice(dbClient, room.Id, 0);
         }
 
         session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.remove", session.Langue));

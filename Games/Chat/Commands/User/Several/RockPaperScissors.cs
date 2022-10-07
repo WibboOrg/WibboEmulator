@@ -5,14 +5,14 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class RockPaperScissors : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
+        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
         {
             return;
         }
@@ -22,26 +22,25 @@ internal class RockPaperScissors : IChatCommand
             return;
         }
 
-        var Username = parameters[1];
+        var username = parameters[1];
 
-        if (string.IsNullOrWhiteSpace(Username))
+        if (string.IsNullOrWhiteSpace(username))
         {
             return;
         }
 
-        var roomUserTarget = Room.GetRoomUserManager().GetRoomUserByName(Username);
+        var roomUserTarget = room.GetRoomUserManager().GetRoomUserByName(username);
         if (roomUserTarget == null)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
             return;
         }
 
-        if (roomUserTarget.UserId == UserRoom.UserId)
+        if (roomUserTarget.UserId == userRoom.UserId)
         {
             return;
         }
 
-        var Jankan = Room.GetJanken();
-        Jankan.Start(UserRoom, roomUserTarget);
+        room.GetJanken().Start(userRoom, roomUserTarget);
     }
 }

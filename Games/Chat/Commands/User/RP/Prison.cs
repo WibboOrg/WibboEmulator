@@ -1,96 +1,96 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.User.RP;
+namespace WibboEmulator.Games.Chat.Commands.User.RP;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class Prison : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        if (!Room.IsRoleplay)
+        if (!room.IsRoleplay)
         {
             return;
         }
 
-        if (!Room.Roleplay.Pvp)
+        if (!room.Roleplay.Pvp)
         {
             return;
         }
 
-        var Rp = UserRoom.Roleplayer;
-        if (Rp == null)
+        var rp = userRoom.Roleplayer;
+        if (rp == null)
         {
             return;
         }
 
-        if (Rp.Dead || Rp.SendPrison)
+        if (rp.Dead || rp.SendPrison)
         {
             return;
         }
 
-        var TargetRoomUser = Room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
+        var targetRoomUser = room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
 
-        if (TargetRoomUser == null)
+        if (targetRoomUser == null)
         {
             return;
         }
 
-        var RpTwo = TargetRoomUser.Roleplayer;
-        if (RpTwo == null)
+        var rpTwo = targetRoomUser.Roleplayer;
+        if (rpTwo == null)
         {
             return;
         }
 
-        if (TargetRoomUser.GetClient().GetUser().Id == session.GetUser().Id)
+        if (targetRoomUser.GetClient().GetUser().Id == session.GetUser().Id)
         {
             return;
         }
 
-        if (RpTwo.Dead || RpTwo.SendPrison)
+        if (rpTwo.Dead || rpTwo.SendPrison)
         {
             return;
         }
 
-        if (RpTwo.SendPrison)
+        if (rpTwo.SendPrison)
         {
             return;
         }
 
-        if (Math.Floor((double)(RpTwo.Health / (double)RpTwo.HealthMax) * 100) > 75)
+        if (Math.Floor((double)(rpTwo.Health / (double)rpTwo.HealthMax) * 100) > 75)
         {
-            UserRoom.OnChat("*Tente d'arrêter " + TargetRoomUser.GetUsername() + "*");
+            userRoom.OnChat("*Tente d'arrêter " + targetRoomUser.GetUsername() + "*");
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("rp.prisonnotallowed", session.Langue));
             return;
         }
 
-        if (!(Math.Abs(TargetRoomUser.X - UserRoom.X) >= 2 || Math.Abs(TargetRoomUser.Y - UserRoom.Y) >= 2))
+        if (!(Math.Abs(targetRoomUser.X - userRoom.X) >= 2 || Math.Abs(targetRoomUser.Y - userRoom.Y) >= 2))
         {
-            UserRoom.OnChat("*Arrête et envoie en prison " + TargetRoomUser.GetUsername() + "*");
+            userRoom.OnChat("*Arrête et envoie en prison " + targetRoomUser.GetUsername() + "*");
 
-            TargetRoomUser.ApplyEffect(729, true);
-            TargetRoomUser.RotBody = 2;
-            TargetRoomUser.RotHead = 2;
-            TargetRoomUser.SetStatus("sit", "0.5");
-            TargetRoomUser.Freeze = true;
-            TargetRoomUser.FreezeEndCounter = 0;
-            TargetRoomUser.IsSit = true;
-            TargetRoomUser.UpdateNeeded = true;
+            targetRoomUser.ApplyEffect(729, true);
+            targetRoomUser.RotBody = 2;
+            targetRoomUser.RotHead = 2;
+            targetRoomUser.SetStatus("sit", "0.5");
+            targetRoomUser.Freeze = true;
+            targetRoomUser.FreezeEndCounter = 0;
+            targetRoomUser.IsSit = true;
+            targetRoomUser.UpdateNeeded = true;
 
-            RpTwo.SendPrison = true;
-            RpTwo.PrisonTimer = 10 * 2;
+            rpTwo.SendPrison = true;
+            rpTwo.PrisonTimer = 10 * 2;
         }
 
-        //UserRoom.ApplyEffect(737, true);
-        //UserRoom.TimerResetEffect = 2;
+        //userRoom.ApplyEffect(737, true);
+        //userRoom.TimerResetEffect = 2;
 
-        if (UserRoom.FreezeEndCounter <= 2)
+        if (userRoom.FreezeEndCounter <= 2)
         {
-            UserRoom.Freeze = true;
-            UserRoom.FreezeEndCounter = 2;
+            userRoom.Freeze = true;
+            userRoom.FreezeEndCounter = 2;
         }
     }
 }

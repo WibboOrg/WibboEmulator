@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
+namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Database.Daos.Catalog;
@@ -11,29 +11,29 @@ internal class RedeemOfferCreditsEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var CreditsOwed = 0;
+        var creditsOwed = 0;
 
-        DataTable Table = null;
+        DataTable table = null;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            Table = CatalogMarketplaceOfferDao.GetPriceByUserId(dbClient, session.GetUser().Id);
+            table = CatalogMarketplaceOfferDao.GetPriceByUserId(dbClient, session.GetUser().Id);
         }
 
-        if (Table != null)
+        if (table != null)
         {
-            foreach (DataRow row in Table.Rows)
+            foreach (DataRow row in table.Rows)
             {
-                CreditsOwed += Convert.ToInt32(row["asking_price"]);
+                creditsOwed += Convert.ToInt32(row["asking_price"]);
             }
 
-            if (CreditsOwed >= 1)
+            if (creditsOwed >= 1)
             {
-                session.GetUser().WibboPoints += CreditsOwed;
+                session.GetUser().WibboPoints += creditsOwed;
                 session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().WibboPoints, 0, 105));
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
                 CatalogMarketplaceOfferDao.Delete(dbClient, session.GetUser().Id);
-                UserDao.UpdateAddPoints(dbClient, session.GetUser().Id, CreditsOwed);
+                UserDao.UpdateAddPoints(dbClient, session.GetUser().Id, creditsOwed);
             }
         }
     }

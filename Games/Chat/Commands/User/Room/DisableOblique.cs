@@ -4,5 +4,5 @@ using WibboEmulator.Games.Rooms;
 
 internal class DisableOblique : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters) => Room.GetGameMap().ObliqueDisable = !Room.GetGameMap().ObliqueDisable;
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters) => room.GetGameMap().ObliqueDisable = !room.GetGameMap().ObliqueDisable;
 }

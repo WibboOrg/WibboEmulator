@@ -10,7 +10,7 @@ internal class OpenPlayerProfileEvent : IPacketEvent
     public void Parse(GameClient session, ClientPacket packet)
     {
         var userId = packet.PopInt();
-        var IsMe = packet.PopBoolean();
+        var isMe = packet.PopBoolean();
 
         var targetData = WibboEnvironment.GetUserById(userId);
         if (targetData == null)
@@ -18,7 +18,7 @@ internal class OpenPlayerProfileEvent : IPacketEvent
             return;
         }
 
-        var Groups = WibboEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.MyGroups);
+        var groups = WibboEnvironment.GetGame().GetGroupManager().GetGroupsForUser(targetData.MyGroups);
 
         var friendCount = 0;
 
@@ -32,6 +32,6 @@ internal class OpenPlayerProfileEvent : IPacketEvent
             friendCount = MessengerFriendshipDao.GetCount(dbClient, userId);
         }
 
-        session.SendPacket(new ProfileInformationComposer(targetData, session, Groups, friendCount));
+        session.SendPacket(new ProfileInformationComposer(targetData, session, groups, friendCount));
     }
 }

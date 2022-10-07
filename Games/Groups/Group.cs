@@ -129,11 +129,11 @@ public class Group
 
     public int RequestCount => this._requests.Count;
 
-    public bool IsMember(int Id) => this._members.Contains(Id) || this._administrators.Contains(Id);
+    public bool IsMember(int id) => this._members.Contains(id) || this._administrators.Contains(id);
 
-    public bool IsAdmin(int Id) => this._administrators.Contains(Id);
+    public bool IsAdmin(int id) => this._administrators.Contains(id);
 
-    public bool HasRequest(int Id) => this._requests.Contains(Id);
+    public bool HasRequest(int id) => this._requests.Contains(id);
 
     public void MakeAdmin(int userId)
     {

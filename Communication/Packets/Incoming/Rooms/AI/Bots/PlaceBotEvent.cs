@@ -1,7 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Users.Inventory.Bots;
 using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Database.Daos.Bot;
 
@@ -26,16 +25,16 @@ internal class PlaceBotEvent : IPacketEvent
             return;
         }
 
-        var BotId = packet.PopInt();
-        var X = packet.PopInt();
-        var Y = packet.PopInt();
+        var botId = packet.PopInt();
+        var x = packet.PopInt();
+        var y = packet.PopInt();
 
-        if (!room.GetGameMap().CanWalk(X, Y, false) || !room.GetGameMap().ValidTile(X, Y))
+        if (!room.GetGameMap().CanWalk(x, y, false) || !room.GetGameMap().ValidTile(x, y))
         {
             return;
         }
 
-        if (!session.GetUser().GetInventoryComponent().TryGetBot(BotId, out var Bot))
+        if (!session.GetUser().GetInventoryComponent().TryGetBot(botId, out var bot))
         {
             return;
         }
@@ -48,12 +47,12 @@ internal class PlaceBotEvent : IPacketEvent
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            BotUserDao.UpdatePosition(dbClient, Bot.Id, room.Id, X, Y);
+            BotUserDao.UpdatePosition(dbClient, bot.Id, room.Id, x, y);
         }
 
-        var roomUser = room.GetRoomUserManager().DeployBot(new RoomBot(Bot.Id, Bot.OwnerId, room.Id, BotAIType.Generic, Bot.WalkingEnabled, Bot.Name, Bot.Motto, Bot.Gender, Bot.Figure, X, Y, 0, 2, Bot.ChatEnabled, Bot.ChatText, Bot.ChatSeconds, Bot.IsDancing, Bot.Enable, Bot.Handitem, Bot.Status), null);
+        _ = room.GetRoomUserManager().DeployBot(new RoomBot(bot.Id, bot.OwnerId, room.Id, BotAIType.Generic, bot.WalkingEnabled, bot.Name, bot.Motto, bot.Gender, bot.Figure, x, y, 0, 2, bot.ChatEnabled, bot.ChatText, bot.ChatSeconds, bot.IsDancing, bot.Enable, bot.Handitem, bot.Status), null);
 
-        if (!session.GetUser().GetInventoryComponent().TryRemoveBot(BotId, out var ToRemove))
+        if (!session.GetUser().GetInventoryComponent().TryRemoveBot(botId, out _))
         {
             return;
         }

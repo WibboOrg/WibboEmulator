@@ -14,21 +14,21 @@ internal class GetGroupCreationWindowEvent : IPacketEvent
             return;
         }
 
-        var ValidRooms = new List<RoomData>();
-        foreach (var RoomId in session.GetUser().UsersRooms)
+        var validRooms = new List<RoomData>();
+        foreach (var roomId in session.GetUser().UsersRooms)
         {
-            var Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
-            if (Data == null)
+            var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+            if (data == null)
             {
                 continue;
             }
 
-            if (Data.Group == null)
+            if (data.Group == null)
             {
-                ValidRooms.Add(Data);
+                validRooms.Add(data);
             }
         }
 
-        session.SendPacket(new GroupCreationWindowComposer(ValidRooms));
+        session.SendPacket(new GroupCreationWindowComposer(validRooms));
     }
 }

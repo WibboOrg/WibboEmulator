@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired;
+namespace WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Actions;
@@ -230,7 +230,7 @@ public class WiredRegister
                 handler.SaveToDatabase(dbClient);
             }
 
-            HandleSave(handler, room, item);
+            HandleSave(handler, item);
         }
     }
 
@@ -242,7 +242,7 @@ public class WiredRegister
         {
             handler.LoadItems();
 
-            HandleSave(handler, room, item);
+            HandleSave(handler, item);
         }
     }
 
@@ -260,11 +260,11 @@ public class WiredRegister
 
             handler.LoadItems(true);
 
-            HandleSave(handler, room, item);
+            HandleSave(handler, item);
         }
     }
 
-    private static void HandleSave(IWired handler, Room room, Item item)
+    private static void HandleSave(IWired handler, Item item)
     {
         if (item.WiredHandler != null)
         {

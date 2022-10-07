@@ -14,7 +14,7 @@ public class Gamemap
     public bool DiagonalEnabled { get; set; }
     public bool ObliqueDisable { get; set; }
 
-    public RoomModelDynamic Model;
+    public RoomModelDynamic Model { get; set; }
 
     public byte[,] EffectMap { get; private set; }
 
@@ -36,7 +36,7 @@ public class Gamemap
         var mStaticModel = WibboEnvironment.GetGame().GetRoomManager().GetModel(room.RoomData.ModelName, room.Id);
         if (mStaticModel == null)
         {
-            throw new Exception("No modeldata found for roomID " + room.Id);
+            throw new ArgumentNullException("No modeldata found for roomID " + room.Id);
         }
 
         this.Model = new RoomModelDynamic(mStaticModel);
@@ -67,11 +67,11 @@ public class Gamemap
         }
     }
 
-    public void TeleportToItem(RoomUser user, Item item)
+    public static void TeleportToItem(RoomUser user, Item item)
     {
         if (item.GetRoom() != null)
         {
-            item.GetRoom().SendPacket(user.Room.GetRoomItemHandler().TeleportUser(user, item.Coordinate, 0, item.Z, true));
+            item.GetRoom().SendPacket(RoomItemHandling.TeleportUser(user, item.Coordinate, 0, item.Z, true));
             item.GetRoom().GetRoomUserManager().UpdateUserStatus(user, false);
         }
 
@@ -111,7 +111,7 @@ public class Gamemap
             return;
         }
 
-        _ = this._userMap.TryRemove(coord, out var UserList);
+        _ = this._userMap.TryRemove(coord, out _);
 
         if (this.ValidTile(coord.X, coord.Y))
         {
@@ -119,30 +119,30 @@ public class Gamemap
         }
     }
 
-    public void AddTakingSquare(int X, int Y)
+    public void AddTakingSquare(int x, int y)
     {
-        if (this.ValidTile(X, Y))
+        if (this.ValidTile(x, y))
         {
-            this.SquareTaking[X, Y] = 1;
+            this.SquareTaking[x, y] = 1;
         }
     }
 
-    public void RemoveTakingSquare(int X, int Y)
+    public void RemoveTakingSquare(int x, int y)
     {
-        if (this.ValidTile(X, Y))
+        if (this.ValidTile(x, y))
         {
-            this.SquareTaking[X, Y] = 0;
+            this.SquareTaking[x, y] = 0;
         }
     }
 
-    public bool SquareTakingOpen(int X, int Y)
+    public bool SquareTakingOpen(int x, int y)
     {
-        if (!this.ValidTile(X, Y))
+        if (!this.ValidTile(x, y))
         {
             return true;
         }
 
-        return this._roomInstance.RoomData.AllowWalkthrough || this.SquareTaking[X, Y] == 0;
+        return this._roomInstance.RoomData.AllowWalkthrough || this.SquareTaking[x, y] == 0;
     }
 
     public List<RoomUser> GetRoomUsers(Point coord)
@@ -157,21 +157,21 @@ public class Gamemap
         }
     }
 
-    public List<RoomUser> GetNearUsers(Point coord, int MaxDistance)
+    public List<RoomUser> GetNearUsers(Point coord, int maxDistance)
     {
-        var UsersNear = new List<RoomUser>();
+        var usersNear = new List<RoomUser>();
 
-        foreach (var Users in this._userMap)
+        foreach (var users in this._userMap)
         {
-            if (Math.Abs(Users.Key.X - coord.X) > MaxDistance || Math.Abs(Users.Key.Y - coord.Y) > MaxDistance)
+            if (Math.Abs(users.Key.X - coord.X) > maxDistance || Math.Abs(users.Key.Y - coord.Y) > maxDistance)
             {
                 continue;
             }
 
-            UsersNear.AddRange(Users.Value);
+            usersNear.AddRange(users.Value);
         }
 
-        return UsersNear.OrderBy(u => !u.IsBot).ToList();
+        return usersNear.OrderBy(u => !u.IsBot).ToList();
     }
 
     public Point GetRandomWalkableSquare(int x, int y)
@@ -206,9 +206,9 @@ public class Gamemap
 
     public void UpdateMapForItem(Item item)
     {
-        foreach (var Coord in item.GetCoords)
+        foreach (var coord in item.GetCoords)
         {
-            if (!this.ConstructMapForItem(item, Coord))
+            if (!this.ConstructMapForItem(item, coord))
             {
                 return;
             }
@@ -217,8 +217,8 @@ public class Gamemap
 
     public void GenerateMaps(bool checkLines = true)
     {
-        var MaxX = 0;
-        var MaxY = 0;
+        var maxX = 0;
+        var maxY = 0;
         if (checkLines)
         {
             var items = this._roomInstance.GetRoomItemHandler().GetFloor.ToArray();
@@ -229,16 +229,16 @@ public class Gamemap
                     continue;
                 }
 
-                foreach (var Point in item.GetAffectedTiles.Values)
+                foreach (var point in item.GetAffectedTiles.Values)
                 {
-                    if (Point.X > MaxX)
+                    if (point.X > maxX)
                     {
-                        MaxX = Point.X;
+                        maxX = point.X;
                     }
 
-                    if (Point.Y > MaxY)
+                    if (point.Y > maxY)
                     {
-                        MaxY = Point.Y;
+                        maxY = point.Y;
                     }
                 }
             }
@@ -246,19 +246,19 @@ public class Gamemap
             Array.Clear(items, 0, items.Length);
         }
 
-        if (MaxY > this.Model.MapSizeY - 1 || MaxX > this.Model.MapSizeX - 1)
+        if (maxY > this.Model.MapSizeY - 1 || maxX > this.Model.MapSizeX - 1)
         {
-            if (MaxX < this.Model.MapSizeX)
+            if (maxX < this.Model.MapSizeX)
             {
-                MaxX = this.Model.MapSizeX - 1;
+                maxX = this.Model.MapSizeX - 1;
             }
 
-            if (MaxY < this.Model.MapSizeY)
+            if (maxY < this.Model.MapSizeY)
             {
-                MaxY = this.Model.MapSizeY - 1;
+                maxY = this.Model.MapSizeY - 1;
             }
 
-            this.Model.SetMapsize(MaxX + 1, MaxY + 1);
+            this.Model.SetMapsize(maxX + 1, maxY + 1);
         }
 
         this.CoordinatedItems.Clear();
@@ -282,9 +282,9 @@ public class Gamemap
             }
         }
 
-        foreach (var Item in this._roomInstance.GetRoomItemHandler().GetFloor.ToArray())
+        foreach (var item in this._roomInstance.GetRoomItemHandler().GetFloor.ToArray())
         {
-            if (!this.AddItemToMap(Item))
+            if (!this.AddItemToMap(item))
             {
                 continue;
             }
@@ -299,26 +299,26 @@ public class Gamemap
         }
     }
 
-    private bool ConstructMapForItem(Item Item, Point Coord)
+    private bool ConstructMapForItem(Item item, Point coord)
     {
-        if (!this.ValidTile(Coord.X, Coord.Y))
+        if (!this.ValidTile(coord.X, coord.Y))
         {
             return false;
         }
         else
         {
-            if (this.ItemHeightMap[Coord.X, Coord.Y] <= Item.TotalHeight)
+            if (this.ItemHeightMap[coord.X, coord.Y] <= item.TotalHeight)
             {
-                if (Item.GetBaseItem().IsSeat || Item.GetBaseItem().InteractionType == InteractionType.BED)
+                if (item.GetBaseItem().IsSeat || item.GetBaseItem().InteractionType == InteractionType.BED)
                 {
-                    this.ItemHeightMap[Coord.X, Coord.Y] = Item.Z - this.Model.SqFloorHeight[Item.X, Item.Y];
+                    this.ItemHeightMap[coord.X, coord.Y] = item.Z - this.Model.SqFloorHeight[item.X, item.Y];
                 }
                 else
                 {
-                    this.ItemHeightMap[Coord.X, Coord.Y] = Item.TotalHeight - this.Model.SqFloorHeight[Item.X, Item.Y];
+                    this.ItemHeightMap[coord.X, coord.Y] = item.TotalHeight - this.Model.SqFloorHeight[item.X, item.Y];
                 }
 
-                this.EffectMap[Coord.X, Coord.Y] = Item.GetBaseItem().InteractionType switch
+                this.EffectMap[coord.X, coord.Y] = item.GetBaseItem().InteractionType switch
                 {
                     InteractionType.POOL => 1,
                     InteractionType.ICESKATES => 3,
@@ -330,48 +330,48 @@ public class Gamemap
                     InteractionType.CROSSTRAINER => 9,
                     _ => 0,
                 };
-                if (Item.GetBaseItem().InteractionType == InteractionType.FREEZETILEBLOCK && Item.ExtraData != "")
+                if (item.GetBaseItem().InteractionType == InteractionType.FREEZETILEBLOCK && item.ExtraData != "")
                 {
-                    if (this.GameMap[Coord.X, Coord.Y] != 3)
+                    if (this.GameMap[coord.X, coord.Y] != 3)
                     {
-                        this.GameMap[Coord.X, Coord.Y] = 1;
+                        this.GameMap[coord.X, coord.Y] = 1;
                     }
                 }
-                else if (Item.GetBaseItem().InteractionType == InteractionType.BANZAIPYRAMID && Item.ExtraData == "1")
+                else if (item.GetBaseItem().InteractionType == InteractionType.BANZAIPYRAMID && item.ExtraData == "1")
                 {
-                    if (this.GameMap[Coord.X, Coord.Y] != 3)
+                    if (this.GameMap[coord.X, coord.Y] != 3)
                     {
-                        this.GameMap[Coord.X, Coord.Y] = 1;
+                        this.GameMap[coord.X, coord.Y] = 1;
                     }
                 }
-                else if (Item.GetBaseItem().InteractionType == InteractionType.GATE && Item.ExtraData == "1")
+                else if (item.GetBaseItem().InteractionType == InteractionType.GATE && item.ExtraData == "1")
                 {
-                    if (this.GameMap[Coord.X, Coord.Y] != 3)
+                    if (this.GameMap[coord.X, coord.Y] != 3)
                     {
-                        this.GameMap[Coord.X, Coord.Y] = 1;
+                        this.GameMap[coord.X, coord.Y] = 1;
                     }
                 }
-                else if (Item.GetBaseItem().Walkable)
+                else if (item.GetBaseItem().Walkable)
                 {
-                    if (this.GameMap[Coord.X, Coord.Y] != 3)
+                    if (this.GameMap[coord.X, coord.Y] != 3)
                     {
-                        this.GameMap[Coord.X, Coord.Y] = 1;
+                        this.GameMap[coord.X, coord.Y] = 1;
                     }
                 }
-                else if (!Item.GetBaseItem().Walkable && Item.GetBaseItem().Stackable)
+                else if (!item.GetBaseItem().Walkable && item.GetBaseItem().Stackable)
                 {
-                    if (this.GameMap[Coord.X, Coord.Y] != 3)
+                    if (this.GameMap[coord.X, coord.Y] != 3)
                     {
-                        this.GameMap[Coord.X, Coord.Y] = 2;
+                        this.GameMap[coord.X, coord.Y] = 2;
                     }
                 }
-                else if (Item.GetBaseItem().IsSeat || Item.GetBaseItem().InteractionType == InteractionType.BED)
+                else if (item.GetBaseItem().IsSeat || item.GetBaseItem().InteractionType == InteractionType.BED)
                 {
-                    this.GameMap[Coord.X, Coord.Y] = 3;
+                    this.GameMap[coord.X, coord.Y] = 3;
                 }
-                else if (this.GameMap[Coord.X, Coord.Y] != 3)
+                else if (this.GameMap[coord.X, coord.Y] != 3)
                 {
-                    this.GameMap[Coord.X, Coord.Y] = 0;
+                    this.GameMap[coord.X, coord.Y] = 0;
                 }
             }
         }
@@ -380,7 +380,6 @@ public class Gamemap
 
     public void AddCoordinatedItem(Item item, Point coord)
     {
-        var list1 = new List<Item>();
         if (!this.CoordinatedItems.ContainsKey(coord))
         {
             _ = this.CoordinatedItems.TryAdd(coord, new List<Item>() { item });
@@ -531,35 +530,35 @@ public class Gamemap
             }
         }
 
-        var NoDoublons = new Dictionary<Point, List<Item>>();
-        foreach (var Tile in item.GetCoords.ToList())
+        var noDoublons = new Dictionary<Point, List<Item>>();
+        foreach (var tile in item.GetCoords.ToList())
         {
-            var point = new Point(Tile.X, Tile.Y);
+            var point = new Point(tile.X, tile.Y);
             if (this.CoordinatedItems.ContainsKey(point))
             {
                 var list = this.CoordinatedItems[point];
-                if (!NoDoublons.ContainsKey(Tile))
+                if (!noDoublons.ContainsKey(tile))
                 {
-                    NoDoublons.Add(Tile, list);
+                    noDoublons.Add(tile, list);
                 }
             }
-            this.SetDefaultValue(Tile.X, Tile.Y);
+            this.SetDefaultValue(tile.X, tile.Y);
         }
 
-        foreach (var Coord in NoDoublons.Keys.ToList())
+        foreach (var coord in noDoublons.Keys.ToList())
         {
-            if (!NoDoublons.ContainsKey(Coord))
+            if (!noDoublons.ContainsKey(coord))
             {
                 continue;
             }
 
-            var SubItems = NoDoublons[Coord];
-            foreach (var roomItem in SubItems.ToList())
+            var subItems = noDoublons[coord];
+            foreach (var roomItem in subItems.ToList())
             {
-                _ = this.ConstructMapForItem(roomItem, Coord);
+                _ = this.ConstructMapForItem(roomItem, coord);
             }
         }
-        NoDoublons.Clear();
+        noDoublons.Clear();
         return flag;
     }
 
@@ -630,9 +629,9 @@ public class Gamemap
             return true;
         }
 
-        foreach (var Coord in item.GetCoords)
+        foreach (var coord in item.GetCoords)
         {
-            if (!this.ConstructMapForItem(item, Coord))
+            if (!this.ConstructMapForItem(item, coord))
             {
                 return false;
             }
@@ -640,39 +639,39 @@ public class Gamemap
         return true;
     }
 
-    public bool CanStackItem(int X, int Y, bool NoUser = false)
+    public bool CanStackItem(int x, int y, bool noUser = false)
     {
-        if (!this.ValidTile(X, Y))
+        if (!this.ValidTile(x, y))
         {
             return false;
         }
         else
         {
-            return (this.UserOnMap[X, Y] == 0 || NoUser) && (this.GameMap[X, Y] == 1 || this.GameMap[X, Y] == 2);
+            return (this.UserOnMap[x, y] == 0 || noUser) && (this.GameMap[x, y] == 1 || this.GameMap[x, y] == 2);
         }
     }
 
-    public bool CanWalk(int X, int Y, bool Override = false)
+    public bool CanWalk(int x, int y, bool @override = false)
     {
-        if (!this.ValidTile(X, Y))
+        if (!this.ValidTile(x, y))
         {
             return false;
         }
         else
         {
-            return (this._roomInstance.RoomData.AllowWalkthrough || Override || this.UserOnMap[X, Y] == 0) && CanWalkState(this.GameMap[X, Y], Override);
+            return (this._roomInstance.RoomData.AllowWalkthrough || @override || this.UserOnMap[x, y] == 0) && CanWalkState(this.GameMap[x, y], @override);
         };
     }
 
-    public bool CanWalkState(int X, int Y, bool Override)
+    public bool CanWalkState(int x, int y, bool @override)
     {
-        if (!this.ValidTile(X, Y))
+        if (!this.ValidTile(x, y))
         {
             return false;
         }
         else
         {
-            return CanWalkState(this.GameMap[X, Y], Override);
+            return CanWalkState(this.GameMap[x, y], @override);
         }
     }
 
@@ -688,11 +687,11 @@ public class Gamemap
         }
     }
 
-    public static bool CanWalkState(byte pState, bool pOverride) => pOverride || pState == 3 || pState == 1;
+    public static bool CanWalkState(byte state, bool isOverride) => isOverride || state == 3 || state == 1;
 
-    public bool ValidTile(int X, int Y)
+    public bool ValidTile(int x, int y)
     {
-        if (X < 0 || Y < 0 || X >= this.Model.MapSizeX || Y >= this.Model.MapSizeY)
+        if (x < 0 || y < 0 || x >= this.Model.MapSizeX || y >= this.Model.MapSizeY)
         {
             return false;
         }
@@ -700,31 +699,31 @@ public class Gamemap
         return true;
     }
 
-    public double SqAbsoluteHeight(int X, int Y)
+    public double SqAbsoluteHeight(int x, int y)
     {
-        var point = new Point(X, Y);
+        var point = new Point(x, y);
         if (!this.CoordinatedItems.ContainsKey(point))
         {
             return (double)this.GetHeightForSquareFromData(point);
         }
 
-        var ItemsOnSquare = this.CoordinatedItems[point];
-        return this.SqAbsoluteHeight(X, Y, ItemsOnSquare);
+        var itemsOnSquare = this.CoordinatedItems[point];
+        return this.SqAbsoluteHeight(x, y, itemsOnSquare);
     }
 
-    public double SqAbsoluteHeight(int X, int Y, List<Item> ItemsOnSquare)
+    public double SqAbsoluteHeight(int x, int y, List<Item> itemsOnSquare)
     {
-        if (!this.ValidTile(X, Y))
+        if (!this.ValidTile(x, y))
         {
             return 0.0;
         }
 
-        var HighestStack = 0.0;
+        var highestStack = 0.0;
         var deduct = false;
         var deductable = 0.0;
-        foreach (var roomItem in ItemsOnSquare)
+        foreach (var roomItem in itemsOnSquare)
         {
-            if (roomItem.TotalHeight > HighestStack)
+            if (roomItem.TotalHeight > highestStack)
             {
                 if (roomItem.GetBaseItem().IsSeat || roomItem.GetBaseItem().InteractionType == InteractionType.BED)
                 {
@@ -736,11 +735,11 @@ public class Gamemap
                     deduct = false;
                 }
 
-                HighestStack = roomItem.TotalHeight;
+                highestStack = roomItem.TotalHeight;
             }
         }
-        double floorHeight = this.Model.SqFloorHeight[X, Y];
-        var stackHeight = HighestStack - this.Model.SqFloorHeight[X, Y];
+        double floorHeight = this.Model.SqFloorHeight[x, y];
+        var stackHeight = highestStack - this.Model.SqFloorHeight[x, y];
         if (deduct)
         {
             stackHeight -= deductable;
@@ -754,68 +753,68 @@ public class Gamemap
         return floorHeight + stackHeight;
     }
 
-    public static Dictionary<int, Coord> GetAffectedTiles(int Length, int Width, int PosX, int PosY, int Rotation)
+    public static Dictionary<int, Coord> GetAffectedTiles(int length, int width, int posX, int posY, int rotation)
     {
         var num = 1;
 
-        var PointList = new Dictionary<int, Coord>
+        var pointList = new Dictionary<int, Coord>
         {
-            { 0, new Coord(PosX, PosY, 0) }
+            { 0, new Coord(posX, posY, 0) }
         };
 
-        if (Length > 1)
+        if (length > 1)
         {
-            if (Rotation is 0 or 4)
+            if (rotation is 0 or 4)
             {
-                for (var z = 1; z < Length; z++)
+                for (var z = 1; z < length; z++)
                 {
-                    PointList.Add(num++, new Coord(PosX, PosY + z, z));
+                    pointList.Add(num++, new Coord(posX, posY + z, z));
 
-                    for (var index = 1; index < Width; index++)
+                    for (var index = 1; index < width; index++)
                     {
-                        PointList.Add(num++, new Coord(PosX + index, PosY + z, z < index ? index : z));
+                        pointList.Add(num++, new Coord(posX + index, posY + z, z < index ? index : z));
                     }
                 }
             }
-            else if (Rotation is 2 or 6)
+            else if (rotation is 2 or 6)
             {
-                for (var z = 1; z < Length; z++)
+                for (var z = 1; z < length; z++)
                 {
-                    PointList.Add(num++, new Coord(PosX + z, PosY, z));
-                    for (var index = 1; index < Width; index++)
+                    pointList.Add(num++, new Coord(posX + z, posY, z));
+                    for (var index = 1; index < width; index++)
                     {
-                        PointList.Add(num++, new Coord(PosX + z, PosY + index, z < index ? index : z));
+                        pointList.Add(num++, new Coord(posX + z, posY + index, z < index ? index : z));
                     }
                 }
             }
         }
 
-        if (Width > 1)
+        if (width > 1)
         {
-            if (Rotation is 0 or 4)
+            if (rotation is 0 or 4)
             {
-                for (var z = 1; z < Width; z++)
+                for (var z = 1; z < width; z++)
                 {
-                    PointList.Add(num++, new Coord(PosX + z, PosY, z));
-                    for (var index = 1; index < Length; index++)
+                    pointList.Add(num++, new Coord(posX + z, posY, z));
+                    for (var index = 1; index < length; index++)
                     {
-                        PointList.Add(num++, new Coord(PosX + z, PosY + index, z < index ? index : z));
+                        pointList.Add(num++, new Coord(posX + z, posY + index, z < index ? index : z));
                     }
                 }
             }
-            else if (Rotation is 2 or 6)
+            else if (rotation is 2 or 6)
             {
-                for (var z = 1; z < Width; z++)
+                for (var z = 1; z < width; z++)
                 {
-                    PointList.Add(num++, new Coord(PosX, PosY + z, z));
-                    for (var index = 1; index < Length; index++)
+                    pointList.Add(num++, new Coord(posX, posY + z, z));
+                    for (var index = 1; index < length; index++)
                     {
-                        PointList.Add(num++, new Coord(PosX + index, PosY + z, z < index ? index : z));
+                        pointList.Add(num++, new Coord(posX + index, posY + z, z < index ? index : z));
                     }
                 }
             }
         }
-        return PointList;
+        return pointList;
     }
 
     public List<Item> GetRoomItemForSquare(int pX, int pY, double minZ)
@@ -835,7 +834,7 @@ public class Gamemap
         return list;
     }
 
-    public MovementState GetChasingMovement(int X, int Y, MovementState OldMouvement)
+    public MovementState GetChasingMovement(int x, int y, MovementState oldMouvement)
     {
         var moveToLeft = true;
         var moveToRight = true;
@@ -845,41 +844,41 @@ public class Gamemap
         for (var i = 1; i < 4; i++)
         {
             // Left
-            if (i == 1 && !this.CanStackItem(X - i, Y))
+            if (i == 1 && !this.CanStackItem(x - i, y))
             {
                 moveToLeft = false;
             }
-            else if (moveToLeft && this.SquareHasUsers(X - i, Y))
+            else if (moveToLeft && this.SquareHasUsers(x - i, y))
             {
                 return MovementState.left;
             }
 
             // Right
-            if (i == 1 && !this.CanStackItem(X + i, Y))
+            if (i == 1 && !this.CanStackItem(x + i, y))
             {
                 moveToRight = false;
             }
-            else if (moveToRight && this.SquareHasUsers(X + i, Y))
+            else if (moveToRight && this.SquareHasUsers(x + i, y))
             {
                 return MovementState.right;
             }
 
             // Up
-            if (i == 1 && !this.CanStackItem(X, Y - i))
+            if (i == 1 && !this.CanStackItem(x, y - i))
             {
                 moveToUp = false;
             }
-            else if (moveToUp && this.SquareHasUsers(X, Y - i))
+            else if (moveToUp && this.SquareHasUsers(x, y - i))
             {
                 return MovementState.up;
             }
 
             // Down
-            if (i == 1 && !this.CanStackItem(X, Y + i))
+            if (i == 1 && !this.CanStackItem(x, y + i))
             {
                 moveToDown = false;
             }
-            else if (moveToDown && this.SquareHasUsers(X, Y + i))
+            else if (moveToDown && this.SquareHasUsers(x, y + i))
             {
                 return MovementState.down;
             }
@@ -892,22 +891,22 @@ public class Gamemap
         }
 
         var movements = new List<MovementState>();
-        if (moveToLeft && OldMouvement != MovementState.right)
+        if (moveToLeft && oldMouvement != MovementState.right)
         {
             movements.Add(MovementState.left);
         }
 
-        if (moveToRight && OldMouvement != MovementState.left)
+        if (moveToRight && oldMouvement != MovementState.left)
         {
             movements.Add(MovementState.right);
         }
 
-        if (moveToUp && OldMouvement != MovementState.down)
+        if (moveToUp && oldMouvement != MovementState.down)
         {
             movements.Add(MovementState.up);
         }
 
-        if (moveToDown && OldMouvement != MovementState.up)
+        if (moveToDown && oldMouvement != MovementState.up)
         {
             movements.Add(MovementState.down);
         }
@@ -918,22 +917,22 @@ public class Gamemap
         }
         else
         {
-            if (moveToLeft && OldMouvement == MovementState.left)
+            if (moveToLeft && oldMouvement == MovementState.left)
             {
                 return MovementState.left;
             }
 
-            if (moveToRight && OldMouvement == MovementState.right)
+            if (moveToRight && oldMouvement == MovementState.right)
             {
                 return MovementState.right;
             }
 
-            if (moveToUp && OldMouvement == MovementState.up)
+            if (moveToUp && oldMouvement == MovementState.up)
             {
                 return MovementState.up;
             }
 
-            if (moveToDown && OldMouvement == MovementState.down)
+            if (moveToDown && oldMouvement == MovementState.down)
             {
                 return MovementState.down;
             }
@@ -968,7 +967,7 @@ public class Gamemap
         return MovementState.none;
     }
 
-    public MovementState GetEscapeMovement(int X, int Y, MovementState OldMouvement)
+    public MovementState GetEscapeMovement(int x, int y, MovementState oldMouvement)
     {
         var moveToLeft = true;
         var moveToRight = true;
@@ -978,41 +977,41 @@ public class Gamemap
         for (var i = 1; i < 4; i++)
         {
             // Left
-            if (i == 1 && !this.CanStackItem(X - i, Y))
+            if (i == 1 && !this.CanStackItem(x - i, y))
             {
                 moveToLeft = false;
             }
-            else if (moveToLeft && this.SquareHasUsers(X - i, Y))
+            else if (moveToLeft && this.SquareHasUsers(x - i, y))
             {
                 moveToLeft = false;
             }
 
             // Right
-            if (i == 1 && !this.CanStackItem(X + i, Y))
+            if (i == 1 && !this.CanStackItem(x + i, y))
             {
                 moveToRight = false;
             }
-            else if (moveToRight && this.SquareHasUsers(X + i, Y))
+            else if (moveToRight && this.SquareHasUsers(x + i, y))
             {
                 moveToRight = false;
             }
 
             // Up
-            if (i == 1 && !this.CanStackItem(X, Y - i))
+            if (i == 1 && !this.CanStackItem(x, y - i))
             {
                 moveToUp = false;
             }
-            else if (moveToUp && this.SquareHasUsers(X, Y - i))
+            else if (moveToUp && this.SquareHasUsers(x, y - i))
             {
                 moveToUp = false;
             }
 
             // Down
-            if (i == 1 && !this.CanStackItem(X, Y + i))
+            if (i == 1 && !this.CanStackItem(x, y + i))
             {
                 moveToDown = false;
             }
-            else if (moveToDown && this.SquareHasUsers(X, Y + i))
+            else if (moveToDown && this.SquareHasUsers(x, y + i))
             {
                 moveToDown = false;
             }
@@ -1025,22 +1024,22 @@ public class Gamemap
         }
 
         var movements = new List<MovementState>();
-        if (moveToLeft && OldMouvement != MovementState.right)
+        if (moveToLeft && oldMouvement != MovementState.right)
         {
             movements.Add(MovementState.left);
         }
 
-        if (moveToRight && OldMouvement != MovementState.left)
+        if (moveToRight && oldMouvement != MovementState.left)
         {
             movements.Add(MovementState.right);
         }
 
-        if (moveToUp && OldMouvement != MovementState.down)
+        if (moveToUp && oldMouvement != MovementState.down)
         {
             movements.Add(MovementState.up);
         }
 
-        if (moveToDown && OldMouvement != MovementState.up)
+        if (moveToDown && oldMouvement != MovementState.up)
         {
             movements.Add(MovementState.down);
         }
@@ -1051,22 +1050,22 @@ public class Gamemap
         }
         else
         {
-            if (moveToLeft && OldMouvement == MovementState.left)
+            if (moveToLeft && oldMouvement == MovementState.left)
             {
                 return MovementState.left;
             }
 
-            if (moveToRight && OldMouvement == MovementState.right)
+            if (moveToRight && oldMouvement == MovementState.right)
             {
                 return MovementState.right;
             }
 
-            if (moveToUp && OldMouvement == MovementState.up)
+            if (moveToUp && oldMouvement == MovementState.up)
             {
                 return MovementState.up;
             }
 
-            if (moveToDown && OldMouvement == MovementState.down)
+            if (moveToDown && oldMouvement == MovementState.down)
             {
                 return MovementState.down;
             }
@@ -1101,76 +1100,76 @@ public class Gamemap
         return MovementState.none;
     }
 
-    public RoomUser SquareHasUserNear(int X, int Y, int Distance = 0)
+    public RoomUser SquareHasUserNear(int x, int y)
     {
-        if (this.SquareHasUsers(X - 1, Y))
+        if (this.SquareHasUsers(x - 1, y))
         {
-            return this._roomInstance.GetRoomUserManager().GetUserForSquare(X - 1, Y);
+            return this._roomInstance.GetRoomUserManager().GetUserForSquare(x - 1, y);
         }
-        else if (this.SquareHasUsers(X + 1, Y))
+        else if (this.SquareHasUsers(x + 1, y))
         {
-            return this._roomInstance.GetRoomUserManager().GetUserForSquare(X + 1, Y);
+            return this._roomInstance.GetRoomUserManager().GetUserForSquare(x + 1, y);
         }
-        else if (this.SquareHasUsers(X, Y - 1))
+        else if (this.SquareHasUsers(x, y - 1))
         {
-            return this._roomInstance.GetRoomUserManager().GetUserForSquare(X, Y - 1);
+            return this._roomInstance.GetRoomUserManager().GetUserForSquare(x, y - 1);
         }
-        else if (this.SquareHasUsers(X, Y + 1))
+        else if (this.SquareHasUsers(x, y + 1))
         {
-            return this._roomInstance.GetRoomUserManager().GetUserForSquare(X, Y + 1);
+            return this._roomInstance.GetRoomUserManager().GetUserForSquare(x, y + 1);
         }
 
         return null;
     }
 
-    public RoomUser LookHasUserNearNotBot(int X, int Y, int Distance = 0)
+    public RoomUser LookHasUserNearNotBot(int x, int y, int distance = 0)
     {
-        Distance++;
-        if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y) != null)
+        distance++;
+        if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x - distance, y) != null)
         {
-            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y);
+            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x - distance, y);
         }
-        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y) != null)
+        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x + distance, y) != null)
         {
-            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y);
+            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x + distance, y);
         }
-        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X, Y - Distance) != null)
+        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x, y - distance) != null)
         {
-            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X, Y - Distance);
+            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x, y - distance);
         }
-        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X, Y + Distance) != null)
+        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x, y + distance) != null)
         {
-            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X, Y + Distance);
+            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x, y + distance);
         }
         //diago
-        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y + Distance) != null)
+        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x + distance, y + distance) != null)
         {
-            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y + Distance);
+            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x + distance, y + distance);
         }
-        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y - Distance) != null)
+        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x - distance, y - distance) != null)
         {
-            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y + Distance);
+            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x - distance, y + distance);
         }
-        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y + Distance) != null)
+        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x - distance, y + distance) != null)
         {
-            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X - Distance, Y + Distance);
+            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x - distance, y + distance);
         }
-        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y - Distance) != null)
+        else if (this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x + distance, y - distance) != null)
         {
-            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(X + Distance, Y + Distance);
+            return this._roomInstance.GetRoomUserManager().GetUserForSquareNotBot(x + distance, y + distance);
         }
 
         return null;
     }
 
-    public bool SquareHasUsers(int X, int Y)
+    public bool SquareHasUsers(int x, int y)
     {
-        if (!this.ValidTile(X, Y))
+        if (!this.ValidTile(x, y))
         {
             return false;
         }
 
-        if (this.UserOnMap[X, Y] == 0)
+        if (this.UserOnMap[x, y] == 0)
         {
             return false;
         }
@@ -1178,9 +1177,9 @@ public class Gamemap
         return true;
     }
 
-    public static bool TilesTouching(int X1, int Y1, int X2, int Y2) => (Math.Abs(X1 - X2) <= 1 && Math.Abs(Y1 - Y2) <= 1) || (X1 == X2 && Y1 == Y2);
+    public static bool TilesTouching(int x1, int y1, int x2, int y2) => (Math.Abs(x1 - x2) <= 1 && Math.Abs(y1 - y2) <= 1) || (x1 == x2 && y1 == y2);
 
-    public static int TileDistance(int X1, int Y1, int X2, int Y2) => Math.Abs(X1 - X2) + Math.Abs(Y1 - Y2);
+    public static int TileDistance(int x1, int y1, int x2, int y2) => Math.Abs(x1 - x2) + Math.Abs(y1 - y2);
 
     public void Destroy()
     {

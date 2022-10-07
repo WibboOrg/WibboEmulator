@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
 
 internal class MoveAvatarKeyboardEvent : IPacketEvent
@@ -31,31 +31,31 @@ internal class MoveAvatarKeyboardEvent : IPacketEvent
             return;
         }
 
-        var User = currentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var user = currentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
 
-        if (User == null || (!User.CanWalk && !User.TeleportEnabled))
+        if (user == null || (!user.CanWalk && !user.TeleportEnabled))
         {
             return;
         }
 
-        if (!User.AllowMoveTo)
+        if (!user.AllowMoveTo)
         {
             return;
         }
 
-        User.Unidle();
+        user.Unidle();
 
-        User.IsWalking = true;
+        user.IsWalking = true;
 
-        if (User.ReverseWalk)
+        if (user.ReverseWalk)
         {
-            User.GoalX = User.SetX + (-targetX * 1000);
-            User.GoalY = User.SetY + (-targetY * 1000);
+            user.GoalX = user.SetX + (-targetX * 1000);
+            user.GoalY = user.SetY + (-targetY * 1000);
         }
         else
         {
-            User.GoalX = User.SetX + (targetX * 1000);
-            User.GoalY = User.SetY + (targetY * 1000);
+            user.GoalX = user.SetX + (targetX * 1000);
+            user.GoalY = user.SetY + (targetY * 1000);
         }
 
     }

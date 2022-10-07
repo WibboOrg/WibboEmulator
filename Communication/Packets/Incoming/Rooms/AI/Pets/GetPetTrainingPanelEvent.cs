@@ -13,19 +13,19 @@ internal class GetPetTrainingPanelEvent : IPacketEvent
             return;
         }
 
-        var PetId = packet.PopInt();
+        var petId = packet.PopInt();
 
-        if (!session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(PetId, out var Pet))
+        if (!session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(petId, out var pet))
         {
             return;
         }
 
         //Continue as a regular pet..
-        if (Pet.RoomId != session.GetUser().CurrentRoomId || Pet.PetData == null)
+        if (pet.RoomId != session.GetUser().CurrentRoomId || pet.PetData == null)
         {
             return;
         }
 
-        session.SendPacket(new PetTrainingPanelComposer(Pet.PetData));
+        session.SendPacket(new PetTrainingPanelComposer(pet.PetData));
     }
 }

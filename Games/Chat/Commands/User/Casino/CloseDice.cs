@@ -6,18 +6,18 @@ using WibboEmulator.Games.Rooms.Map;
 
 internal class CloseDice : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var userBooth = Room.GetRoomItemHandler().GetFloor.Where(x => x != null && Gamemap.TilesTouching(
-            x.X, x.Y, UserRoom.X, UserRoom.Y) && x.Data.InteractionType == InteractionType.DICE).ToList();
+        var userBooth = room.GetRoomItemHandler().GetFloor.Where(x => x != null && Gamemap.TilesTouching(
+            x.X, x.Y, userRoom.X, userRoom.Y) && x.Data.InteractionType == InteractionType.DICE).ToList();
 
         if (userBooth == null)
         {
             return;
         }
 
-        UserRoom.DiceCounterAmount = 0;
-        UserRoom.DiceCounter = 0;
+        userRoom.DiceCounterAmount = 0;
+        userRoom.DiceCounter = 0;
 
         userBooth.ForEach(x =>
         {

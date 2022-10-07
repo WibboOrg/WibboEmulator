@@ -1,20 +1,20 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Quests;
 
 public class InteractorGenericSwitch : FurniInteractor
 {
-    private readonly int Modes;
+    private readonly int _modes;
 
-    public InteractorGenericSwitch(int Modes)
+    public InteractorGenericSwitch(int modes)
     {
-        this.Modes = Modes - 1;
-        if (this.Modes >= 0)
+        this._modes = modes - 1;
+        if (this._modes >= 0)
         {
             return;
         }
 
-        this.Modes = 0;
+        this._modes = 0;
     }
 
     public override void OnPlace(GameClient session, Item item)
@@ -40,7 +40,7 @@ public class InteractorGenericSwitch : FurniInteractor
             item.InteractingUser2 = 0;
         }
 
-        if (string.IsNullOrEmpty(item.ExtraData) && this.Modes > 0)
+        if (string.IsNullOrEmpty(item.ExtraData) && this._modes > 0)
         {
             if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
             {
@@ -75,7 +75,7 @@ public class InteractorGenericSwitch : FurniInteractor
 
             item.InteractingUser2 = 0;
         }
-        if (string.IsNullOrEmpty(item.ExtraData) && this.Modes > 0)
+        if (string.IsNullOrEmpty(item.ExtraData) && this._modes > 0)
         {
             if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)
             {
@@ -95,7 +95,7 @@ public class InteractorGenericSwitch : FurniInteractor
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_SWITCH, 0);
         }
 
-        if (!userHasRights || this.Modes == 0)
+        if (!userHasRights || this._modes == 0)
         {
             return;
         }
@@ -114,16 +114,16 @@ public class InteractorGenericSwitch : FurniInteractor
 
         if (reverse)
         {
-            newState = state > 0 ? state - 1 : this.Modes;
+            newState = state > 0 ? state - 1 : this._modes;
         }
         else
         {
-            newState = state < this.Modes ? state + 1 : 0;
+            newState = state < this._modes ? state + 1 : 0;
         }
 
         if (session != null && session.GetUser() != null && session.GetUser().ForceUse > -1)
         {
-            newState = (session.GetUser().ForceUse <= this.Modes) ? session.GetUser().ForceUse : 0;
+            newState = (session.GetUser().ForceUse <= this._modes) ? session.GetUser().ForceUse : 0;
         }
 
         if (item.GetBaseItem().InteractionType is InteractionType.GUILD_ITEM or InteractionType.GUILD_GATE)

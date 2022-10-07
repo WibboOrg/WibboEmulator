@@ -8,7 +8,7 @@ internal class SetTonerEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var ItemId = packet.PopInt();
+        var itemId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -20,7 +20,7 @@ internal class SetTonerEvent : IPacketEvent
             return;
         }
 
-        var roomItem = room.GetRoomItemHandler().GetItem(ItemId);
+        var roomItem = room.GetRoomItemHandler().GetItem(itemId);
         if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.TONER)
         {
             return;

@@ -5,29 +5,29 @@ using WibboEmulator.Games.Rooms;
 
 internal class Mute : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        var TargetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
-        if (TargetUser == null || TargetUser.GetUser() == null)
+        var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
+        if (targetUser == null || targetUser.GetUser() == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
         }
-        else if (TargetUser.GetUser().Rank >= session.GetUser().Rank)
+        else if (targetUser.GetUser().Rank >= session.GetUser().Rank)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("action.notallowed", session.Langue));
         }
         else
         {
-            var user = TargetUser.GetUser();
+            var user = targetUser.GetUser();
 
             user.SpamProtectionTime = 300;
             user.SpamEnable = true;
-            TargetUser.SendPacket(new FloodControlComposer(user.SpamProtectionTime));
+            targetUser.SendPacket(new FloodControlComposer(user.SpamProtectionTime));
         }
     }
 }

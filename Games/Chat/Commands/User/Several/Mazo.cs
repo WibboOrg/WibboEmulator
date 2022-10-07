@@ -5,14 +5,14 @@ using WibboEmulator.Games.Rooms;
 
 internal class Mazo : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (session.GetUser() == null)
         {
             return;
         }
 
-        if (Room.IsRoleplay)
+        if (room.IsRoleplay)
         {
             return;
         }
@@ -37,8 +37,8 @@ internal class Mazo : IChatCommand
                 session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.mazo.win", session.Langue), user.Mazo));
             }
 
-            UserRoom.ApplyEffect(566, true);
-            UserRoom.TimerResetEffect = 4;
+            userRoom.ApplyEffect(566, true);
+            userRoom.TimerResetEffect = 4;
 
         }
         else
@@ -54,8 +54,8 @@ internal class Mazo : IChatCommand
 
             user.Mazo = 0;
 
-            UserRoom.ApplyEffect(567, true);
-            UserRoom.TimerResetEffect = 4;
+            userRoom.ApplyEffect(567, true);
+            userRoom.TimerResetEffect = 4;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())

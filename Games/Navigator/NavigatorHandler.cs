@@ -3,7 +3,6 @@ using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Rooms;
 
 internal static class NavigatorHandler
@@ -46,66 +45,66 @@ internal static class NavigatorHandler
                         }
 
                         message.WriteInteger(results.Count);
-                        foreach (var Data in results.ToList())
+                        foreach (var data in results.ToList())
                         {
-                            RoomAppender.WriteRoom(message, Data);
+                            RoomAppender.WriteRoom(message, data);
                         }
                     }
                 }
                 else if (searchData.ToLower().StartsWith("tag:"))
                 {
                     searchData = searchData.Remove(0, 4);
-                    ICollection<RoomData> TagMatches = WibboEnvironment.GetGame().GetRoomManager().SearchTaggedRooms(searchData);
+                    ICollection<RoomData> tagMatches = WibboEnvironment.GetGame().GetRoomManager().SearchTaggedRooms(searchData);
 
-                    message.WriteInteger(TagMatches.Count);
-                    foreach (var Data in TagMatches.ToList())
+                    message.WriteInteger(tagMatches.Count);
+                    foreach (var data in tagMatches.ToList())
                     {
-                        RoomAppender.WriteRoom(message, Data);
+                        RoomAppender.WriteRoom(message, data);
                     }
                 }
                 else if (searchData.ToLower().StartsWith("group:"))
                 {
                     searchData = searchData.Remove(0, 6);
-                    ICollection<RoomData> GroupRooms = WibboEnvironment.GetGame().GetRoomManager().SearchGroupRooms(searchData);
+                    ICollection<RoomData> groupRooms = WibboEnvironment.GetGame().GetRoomManager().SearchGroupRooms(searchData);
 
-                    message.WriteInteger(GroupRooms.Count);
-                    foreach (var Data in GroupRooms.ToList())
+                    message.WriteInteger(groupRooms.Count);
+                    foreach (var data in groupRooms.ToList())
                     {
-                        RoomAppender.WriteRoom(message, Data);
+                        RoomAppender.WriteRoom(message, data);
                     }
                 }
                 else
                 {
                     if (searchData.Length > 0)
                     {
-                        DataTable Table = null;
+                        DataTable table = null;
                         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                         {
-                            Table = RoomDao.GetAllSearch(dbClient, searchData);
+                            table = RoomDao.GetAllSearch(dbClient, searchData);
                         }
 
-                        var Results = new List<RoomData>();
-                        if (Table != null)
+                        var results = new List<RoomData>();
+                        if (table != null)
                         {
-                            foreach (DataRow Row in Table.Rows)
+                            foreach (DataRow row in table.Rows)
                             {
-                                if (Convert.ToString(Row["state"]) == "invisible")
+                                if (Convert.ToString(row["state"]) == "invisible")
                                 {
                                     continue;
                                 }
 
-                                var RData = WibboEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(Row["id"]), Row);
-                                if (RData != null && !Results.Contains(RData))
+                                var rData = WibboEnvironment.GetGame().GetRoomManager().FetchRoomData(Convert.ToInt32(row["id"]), row);
+                                if (rData != null && !results.Contains(rData))
                                 {
-                                    Results.Add(RData);
+                                    results.Add(rData);
                                 }
                             }
                         }
 
-                        message.WriteInteger(Results.Count);
-                        foreach (var Data in Results.ToList())
+                        message.WriteInteger(results.Count);
+                        foreach (var data in results.ToList())
                         {
-                            RoomAppender.WriteRoom(message, Data);
+                            RoomAppender.WriteRoom(message, data);
                         }
                     }
                 }
@@ -119,155 +118,155 @@ internal static class NavigatorHandler
             case NavigatorCategoryType.FEATURED_HELP_SECURITY:
             case NavigatorCategoryType.FEATURED_RUN:
             case NavigatorCategoryType.FEATURED_CASINO:
-                var Rooms = new List<RoomData>();
-                var Featured = WibboEnvironment.GetGame().GetNavigator().GetFeaturedRooms(session.Langue);
-                foreach (var FeaturedItem in Featured.ToList())
+                var rooms = new List<RoomData>();
+                var featured = WibboEnvironment.GetGame().GetNavigator().GetFeaturedRooms(session.Langue);
+                foreach (var featuredItem in featured.ToList())
                 {
-                    if (FeaturedItem == null)
+                    if (featuredItem == null)
                     {
                         continue;
                     }
 
-                    if (FeaturedItem.CategoryType != searchResult.CategoryType)
+                    if (featuredItem.CategoryType != searchResult.CategoryType)
                     {
                         continue;
                     }
 
-                    var Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(FeaturedItem.RoomId);
-                    if (Data == null)
+                    var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(featuredItem.RoomId);
+                    if (data == null)
                     {
                         continue;
                     }
 
-                    if (!Rooms.Contains(Data))
+                    if (!rooms.Contains(data))
                     {
-                        Rooms.Add(Data);
+                        rooms.Add(data);
                     }
                 }
 
-                message.WriteInteger(Rooms.Count);
-                foreach (var Data in Rooms.ToList())
+                message.WriteInteger(rooms.Count);
+                foreach (var data in rooms.ToList())
                 {
-                    RoomAppender.WriteRoom(message, Data);
+                    RoomAppender.WriteRoom(message, data);
                 }
                 break;
 
             case NavigatorCategoryType.POPULAR:
             {
-                var PopularRooms = new List<RoomData>();
+                var popularRooms = new List<RoomData>();
 
-                PopularRooms.AddRange(WibboEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, 50, session.Langue)); //FetchLimit
+                popularRooms.AddRange(WibboEnvironment.GetGame().GetRoomManager().GetPopularRooms(-1, 50, session.Langue)); //FetchLimit
 
-                message.WriteInteger(PopularRooms.Count);
-                foreach (var Data in PopularRooms.ToList())
+                message.WriteInteger(popularRooms.Count);
+                foreach (var data in popularRooms.ToList())
                 {
-                    RoomAppender.WriteRoom(message, Data);
+                    RoomAppender.WriteRoom(message, data);
                 }
                 break;
             }
 
             case NavigatorCategoryType.RECOMMENDED:
             {
-                var RecommendedRooms = WibboEnvironment.GetGame().GetRoomManager().GetRecommendedRooms(fetchLimit);
+                var recommendedRooms = WibboEnvironment.GetGame().GetRoomManager().GetRecommendedRooms(fetchLimit);
 
-                message.WriteInteger(RecommendedRooms.Count);
-                foreach (var Data in RecommendedRooms.ToList())
+                message.WriteInteger(recommendedRooms.Count);
+                foreach (var data in recommendedRooms.ToList())
                 {
-                    RoomAppender.WriteRoom(message, Data);
+                    RoomAppender.WriteRoom(message, data);
                 }
                 break;
             }
 
             case NavigatorCategoryType.CATEGORY:
             {
-                var GetRoomsByCategory = WibboEnvironment.GetGame().GetRoomManager().GetRoomsByCategory(searchResult.Id, fetchLimit);
+                var getRoomsByCategory = WibboEnvironment.GetGame().GetRoomManager().GetRoomsByCategory(searchResult.Id, fetchLimit);
 
-                message.WriteInteger(GetRoomsByCategory.Count);
-                foreach (var Data in GetRoomsByCategory.ToList())
+                message.WriteInteger(getRoomsByCategory.Count);
+                foreach (var data in getRoomsByCategory.ToList())
                 {
-                    RoomAppender.WriteRoom(message, Data);
+                    RoomAppender.WriteRoom(message, data);
                 }
                 break;
             }
 
             case NavigatorCategoryType.MY_ROOMS:
 
-                var MyRooms = new List<RoomData>();
+                var myRooms = new List<RoomData>();
 
-                foreach (var RoomId in session.GetUser().UsersRooms)
+                foreach (var roomId in session.GetUser().UsersRooms)
                 {
-                    var Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
-                    if (Data == null)
+                    var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+                    if (data == null)
                     {
                         continue;
                     }
 
-                    if (!MyRooms.Contains(Data))
+                    if (!myRooms.Contains(data))
                     {
-                        MyRooms.Add(Data);
+                        myRooms.Add(data);
                     }
                 }
 
-                message.WriteInteger(MyRooms.Count);
-                foreach (var Data in MyRooms.OrderBy(a => a.Name).ToList())
+                message.WriteInteger(myRooms.Count);
+                foreach (var data in myRooms.OrderBy(a => a.Name).ToList())
                 {
-                    RoomAppender.WriteRoom(message, Data);
+                    RoomAppender.WriteRoom(message, data);
                 }
                 break;
 
             case NavigatorCategoryType.MY_FAVORITES:
-                var Favourites = new List<RoomData>();
-                foreach (var RoomId in session.GetUser().FavoriteRooms)
+                var favourites = new List<RoomData>();
+                foreach (var roomId in session.GetUser().FavoriteRooms)
                 {
-                    var Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
-                    if (Data == null)
+                    var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+                    if (data == null)
                     {
                         continue;
                     }
 
-                    if (!Favourites.Contains(Data))
+                    if (!favourites.Contains(data))
                     {
-                        Favourites.Add(Data);
+                        favourites.Add(data);
                     }
                 }
 
-                Favourites = Favourites.Take(fetchLimit).ToList();
+                favourites = favourites.Take(fetchLimit).ToList();
 
-                message.WriteInteger(Favourites.Count);
-                foreach (var Data in Favourites.ToList())
+                message.WriteInteger(favourites.Count);
+                foreach (var data in favourites.ToList())
                 {
-                    RoomAppender.WriteRoom(message, Data);
+                    RoomAppender.WriteRoom(message, data);
                 }
                 break;
 
             case NavigatorCategoryType.MY_GROUPS:
-                var MyGroups = new List<RoomData>();
+                var myGroups = new List<RoomData>();
 
-                foreach (var GroupId in session.GetUser().MyGroups.ToList())
+                foreach (var groupId in session.GetUser().MyGroups.ToList())
                 {
-                    if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
+                    if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
                     {
                         continue;
                     }
 
-                    var Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(Group.RoomId);
-                    if (Data == null)
+                    var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(group.RoomId);
+                    if (data == null)
                     {
                         continue;
                     }
 
-                    if (!MyGroups.Contains(Data))
+                    if (!myGroups.Contains(data))
                     {
-                        MyGroups.Add(Data);
+                        myGroups.Add(data);
                     }
                 }
 
-                MyGroups = MyGroups.Take(fetchLimit).ToList();
+                myGroups = myGroups.Take(fetchLimit).ToList();
 
-                message.WriteInteger(MyGroups.Count);
-                foreach (var Data in MyGroups.ToList())
+                message.WriteInteger(myGroups.Count);
+                foreach (var data in myGroups.ToList())
                 {
-                    RoomAppender.WriteRoom(message, Data);
+                    RoomAppender.WriteRoom(message, data);
                 }
                 break;
 
@@ -290,28 +289,28 @@ internal static class NavigatorHandler
                 break;*/
 
             case NavigatorCategoryType.MY_RIGHTS:
-                var MyRights = new List<RoomData>();
+                var myRights = new List<RoomData>();
 
-                foreach (var RoomId in session.GetUser().RoomRightsList)
+                foreach (var roomId in session.GetUser().RoomRightsList)
                 {
-                    var Data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(RoomId);
-                    if (Data == null)
+                    var data = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
+                    if (data == null)
                     {
                         continue;
                     }
 
-                    if (!MyRights.Contains(Data))
+                    if (!myRights.Contains(data))
                     {
-                        MyRights.Add(Data);
+                        myRights.Add(data);
                     }
                 }
 
-                MyRights = MyRights.Take(fetchLimit).ToList();
+                myRights = myRights.Take(fetchLimit).ToList();
 
-                message.WriteInteger(MyRights.Count);
-                foreach (var Data in MyRights.ToList())
+                message.WriteInteger(myRights.Count);
+                foreach (var data in myRights.ToList())
                 {
-                    RoomAppender.WriteRoom(message, Data);
+                    RoomAppender.WriteRoom(message, data);
                 }
                 break;
         }

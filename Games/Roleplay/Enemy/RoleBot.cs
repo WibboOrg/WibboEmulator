@@ -647,7 +647,7 @@ public class RoleBot
             {
                 bot.RotHead = bot.BotData.Rot;
                 bot.RotBody = bot.BotData.Rot;
-                room.SendPacket(room.GetRoomItemHandler().TeleportUser(bot, new Point(bot.BotData.X, bot.BotData.Y), 0, room.GetGameMap().SqAbsoluteHeight(bot.BotData.X, bot.BotData.Y)));
+                room.SendPacket(RoomItemHandling.TeleportUser(bot, new Point(bot.BotData.X, bot.BotData.Y), 0, room.GetGameMap().SqAbsoluteHeight(bot.BotData.X, bot.BotData.Y)));
             }
         }
     }

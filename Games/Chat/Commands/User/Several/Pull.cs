@@ -5,14 +5,14 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class Pull : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
+        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
         {
             return;
         }
 
-        if (!Room.PushPullAllowed)
+        if (!room.PushPullAllowed)
         {
             return;
         }
@@ -22,51 +22,51 @@ internal class Pull : IChatCommand
             return;
         }
 
-        var TargetUser = Room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
-        if (TargetUser == null || TargetUser.GetClient() == null || TargetUser.GetClient().GetUser() == null)
+        var targetUser = room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
+        if (targetUser == null || targetUser.GetClient() == null || targetUser.GetClient().GetUser() == null)
         {
             return;
         }
 
-        if (TargetUser.GetClient().GetUser().Id == session.GetUser().Id)
+        if (targetUser.GetClient().GetUser().Id == session.GetUser().Id)
         {
             return;
         }
 
-        if (TargetUser.GetClient().GetUser().PremiumProtect && !session.GetUser().HasPermission("perm_mod"))
+        if (targetUser.GetClient().GetUser().PremiumProtect && !session.GetUser().HasPermission("perm_mod"))
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
             return;
         }
 
-        if (UserRoom.SetX - 1 == Room.GetGameMap().Model.DoorX)
+        if (userRoom.SetX - 1 == room.GetGameMap().Model.DoorX)
         {
             return;
         }
 
-        if (Math.Abs(UserRoom.X - TargetUser.X) < 3 && Math.Abs(UserRoom.Y - TargetUser.Y) < 3)
+        if (Math.Abs(userRoom.X - targetUser.X) < 3 && Math.Abs(userRoom.Y - targetUser.Y) < 3)
         {
-            UserRoom.OnChat("*Tire " + parameters[1] + "*", 0, false);
-            if (UserRoom.RotBody % 2 != 0)
+            userRoom.OnChat("*Tire " + parameters[1] + "*", 0, false);
+            if (userRoom.RotBody % 2 != 0)
             {
-                UserRoom.RotBody--;
+                userRoom.RotBody--;
             }
 
-            if (UserRoom.RotBody == 0)
+            if (userRoom.RotBody == 0)
             {
-                TargetUser.MoveTo(UserRoom.X, UserRoom.Y - 1);
+                targetUser.MoveTo(userRoom.X, userRoom.Y - 1);
             }
-            else if (UserRoom.RotBody == 2)
+            else if (userRoom.RotBody == 2)
             {
-                TargetUser.MoveTo(UserRoom.X + 1, UserRoom.Y);
+                targetUser.MoveTo(userRoom.X + 1, userRoom.Y);
             }
-            else if (UserRoom.RotBody == 4)
+            else if (userRoom.RotBody == 4)
             {
-                TargetUser.MoveTo(UserRoom.X, UserRoom.Y + 1);
+                targetUser.MoveTo(userRoom.X, userRoom.Y + 1);
             }
-            else if (UserRoom.RotBody == 6)
+            else if (userRoom.RotBody == 6)
             {
-                TargetUser.MoveTo(UserRoom.X - 1, UserRoom.Y);
+                targetUser.MoveTo(userRoom.X - 1, userRoom.Y);
             }
         }
         else

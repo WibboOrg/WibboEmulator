@@ -6,7 +6,6 @@ using WibboEmulator.Database.Daos.Item;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Games.Rooms;
 
 internal class CreditFurniRedeemEvent : IPacketEvent
 {
@@ -19,66 +18,66 @@ internal class CreditFurniRedeemEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var Room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
             return;
         }
 
-        if (!Room.CheckRights(session, true))
+        if (!room.CheckRights(session, true))
         {
             return;
         }
 
-        var Exchange = Room.GetRoomItemHandler().GetItem(packet.PopInt());
-        if (Exchange == null)
+        var exchange = room.GetRoomItemHandler().GetItem(packet.PopInt());
+        if (exchange == null)
         {
             return;
         }
 
-        if (Exchange.Data.InteractionType != InteractionType.EXCHANGE)
+        if (exchange.Data.InteractionType != InteractionType.EXCHANGE)
         {
             return;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            ItemDao.Delete(dbClient, Exchange.Id);
+            ItemDao.Delete(dbClient, exchange.Id);
         }
 
-        Room.GetRoomItemHandler().RemoveFurniture(null, Exchange.Id);
+        room.GetRoomItemHandler().RemoveFurniture(null, exchange.Id);
 
-        var Value = int.Parse(Exchange.GetBaseItem().ItemName.Split(new char[1] { '_' })[1]);
+        var value = int.Parse(exchange.GetBaseItem().ItemName.Split(new char[1] { '_' })[1]);
 
-        if (Value > 0)
+        if (value > 0)
         {
-            if (Exchange.GetBaseItem().ItemName.StartsWith("CF_") || Exchange.GetBaseItem().ItemName.StartsWith("CFC_"))
+            if (exchange.GetBaseItem().ItemName.StartsWith("CF_") || exchange.GetBaseItem().ItemName.StartsWith("CFC_"))
             {
-                session.GetUser().Credits += Value;
+                session.GetUser().Credits += value;
                 session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
             }
-            else if (Exchange.GetBaseItem().ItemName.StartsWith("PntEx_"))
+            else if (exchange.GetBaseItem().ItemName.StartsWith("PntEx_"))
             {
-                session.GetUser().WibboPoints += Value;
+                session.GetUser().WibboPoints += value;
                 session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().WibboPoints, 0, 105));
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                UserDao.UpdateAddPoints(dbClient, session.GetUser().Id, Value);
+                UserDao.UpdateAddPoints(dbClient, session.GetUser().Id, value);
             }
-            else if (Exchange.GetBaseItem().ItemName.StartsWith("WwnEx_"))
+            else if (exchange.GetBaseItem().ItemName.StartsWith("WwnEx_"))
             {
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserStatsDao.UpdateAchievementScore(dbClient, session.GetUser().Id, Value);
+                    UserStatsDao.UpdateAchievementScore(dbClient, session.GetUser().Id, value);
                 }
 
-                session.GetUser().AchievementPoints += Value;
+                session.GetUser().AchievementPoints += value;
                 session.SendPacket(new AchievementScoreComposer(session.GetUser().AchievementPoints));
 
-                var roomUserByUserId = Room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+                var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
                 if (roomUserByUserId != null)
                 {
                     session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
-                    Room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
+                    room.SendPacket(new UserChangeComposer(roomUserByUserId, false));
                 }
             }
         }

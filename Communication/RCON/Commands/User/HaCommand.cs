@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.RCON.Commands.User;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
+using WibboEmulator.Games.Moderation;
 
 internal class HaCommand : IRCONCommand
 {
@@ -28,7 +29,7 @@ internal class HaCommand : IRCONCommand
 
         var message = parameters[2];
 
-        WibboEnvironment.GetGame().GetModerationManager().LogStaffEntry(client.GetUser().Id, client.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", message));
+        ModerationManager.LogStaffEntry(client.GetUser().Id, client.GetUser().Username, 0, string.Empty, "ha", string.Format("WbTool ha: {0}", message));
         if (client.Antipub(message, "<alert>"))
         {
             return false;

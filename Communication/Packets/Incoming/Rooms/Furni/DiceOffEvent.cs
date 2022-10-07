@@ -18,13 +18,13 @@ internal class DiceOffEvent : IPacketEvent
             return;
         }
 
-        var UserHasRights = false;
+        var userHasRights = false;
         if (room.CheckRights(session))
         {
-            UserHasRights = true;
+            userHasRights = true;
         }
 
-        roomItem.Interactor.OnTrigger(session, roomItem, -1, UserHasRights, false);
+        roomItem.Interactor.OnTrigger(session, roomItem, -1, userHasRights, false);
         roomItem.OnTrigger(room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id));
     }
 }

@@ -3,7 +3,6 @@ using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Database.Daos.Guild;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Users;
 
 internal class GetGroupMembersEvent : IPacketEvent
@@ -17,84 +16,84 @@ internal class GetGroupMembersEvent : IPacketEvent
             return;
         }
 
-        var GroupId = packet.PopInt();
-        var Page = packet.PopInt();
-        var SearchVal = packet.PopString();
-        var RequestType = packet.PopInt();
+        var groupId = packet.PopInt();
+        var page = packet.PopInt();
+        var searchVal = packet.PopString();
+        var requestType = packet.PopInt();
 
-        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(GroupId, out var Group))
+        if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(groupId, out var group))
         {
             return;
         }
 
-        var StartIndex = ((Page - 1) * 14) + 14;
-        var Members = new List<User>();
-        var MemberCount = 0;
+        var startIndex = ((page - 1) * 14) + 14;
+        var members = new List<User>();
+        var memberCount = 0;
 
-        switch (RequestType)
+        switch (requestType)
         {
             case 0:
-                MemberCount = Group.GetAllMembers.Count;
-                List<int> MemberIds;
-                if (!string.IsNullOrEmpty(SearchVal))
+                memberCount = group.GetAllMembers.Count;
+                List<int> memberIds;
+                if (!string.IsNullOrEmpty(searchVal))
                 {
-                    MemberIds = GetSearchMembres(Group.Id, SearchVal);
+                    memberIds = GetSearchMembres(group.Id, searchVal);
                 }
                 else
                 {
-                    MemberIds = Group.GetAllMembers.Skip(StartIndex).Take(14).ToList();
+                    memberIds = group.GetAllMembers.Skip(startIndex).Take(14).ToList();
                 }
 
-                foreach (var Id in MemberIds.ToList())
+                foreach (var id in memberIds.ToList())
                 {
-                    var GroupMember = WibboEnvironment.GetUserById(Id);
-                    if (GroupMember == null)
+                    var groupMember = WibboEnvironment.GetUserById(id);
+                    if (groupMember == null)
                     {
                         continue;
                     }
 
-                    if (!Members.Contains(GroupMember))
+                    if (!members.Contains(groupMember))
                     {
-                        Members.Add(GroupMember);
+                        members.Add(groupMember);
                     }
                 }
                 break;
             case 1:
-                MemberCount = Group.GetAdministrators.Count;
-                List<int> AdminIds;
-                if (!string.IsNullOrEmpty(SearchVal))
+                memberCount = group.GetAdministrators.Count;
+                List<int> adminIds;
+                if (!string.IsNullOrEmpty(searchVal))
                 {
-                    AdminIds = GetSearchAdmins(Group.Id, SearchVal);
+                    adminIds = GetSearchAdmins(group.Id, searchVal);
                 }
                 else
                 {
-                    AdminIds = Group.GetAdministrators.Skip(StartIndex).Take(14).ToList();
+                    adminIds = group.GetAdministrators.Skip(startIndex).Take(14).ToList();
                 }
 
-                foreach (var User in AdminIds.ToList())
+                foreach (var user in adminIds.ToList())
                 {
-                    var GroupMember = WibboEnvironment.GetUserById(User);
-                    if (GroupMember == null)
+                    var groupMember = WibboEnvironment.GetUserById(user);
+                    if (groupMember == null)
                     {
                         continue;
                     }
 
-                    if (!Members.Contains(GroupMember))
+                    if (!members.Contains(groupMember))
                     {
-                        Members.Add(GroupMember);
+                        members.Add(groupMember);
                     }
                 }
                 break;
             case 2:
-                MemberCount = Group.GetRequests.Count;
+                memberCount = group.GetRequests.Count;
                 List<int> requestIds;
-                if (!string.IsNullOrEmpty(SearchVal))
+                if (!string.IsNullOrEmpty(searchVal))
                 {
-                    requestIds = GetSearchRequests(Group.Id, SearchVal);
+                    requestIds = GetSearchRequests(group.Id, searchVal);
                 }
                 else
                 {
-                    requestIds = Group.GetRequests.Skip(StartIndex).Take(14).ToList();
+                    requestIds = group.GetRequests.Skip(startIndex).Take(14).ToList();
                 }
 
                 foreach (var id in requestIds.ToList())
@@ -105,15 +104,15 @@ internal class GetGroupMembersEvent : IPacketEvent
                         continue;
                     }
 
-                    if (!Members.Contains(groupMember))
+                    if (!members.Contains(groupMember))
                     {
-                        Members.Add(groupMember);
+                        members.Add(groupMember);
                     }
                 }
                 break;
         }
 
-        session.SendPacket(new GroupMembersComposer(Group, Members.ToList(), MemberCount, Page, Group.CreatorId == session.GetUser().Id || Group.IsAdmin(session.GetUser().Id), RequestType, SearchVal));
+        session.SendPacket(new GroupMembersComposer(group, members.ToList(), memberCount, page, group.CreatorId == session.GetUser().Id || group.IsAdmin(session.GetUser().Id), requestType, searchVal));
     }
 
     private static List<int> GetSearchRequests(int groupeId, string searchVal)

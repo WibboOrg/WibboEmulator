@@ -13,17 +13,17 @@ internal class GetRoomRightsEvent : IPacketEvent
             return;
         }
 
-        var Instance = session.GetUser().CurrentRoom;
-        if (Instance == null)
+        var rooom = session.GetUser().CurrentRoom;
+        if (rooom == null)
         {
             return;
         }
 
-        if (!Instance.CheckRights(session))
+        if (!rooom.CheckRights(session))
         {
             return;
         }
 
-        session.SendPacket(new RoomRightsListComposer(Instance));
+        session.SendPacket(new RoomRightsListComposer(rooom));
     }
 }

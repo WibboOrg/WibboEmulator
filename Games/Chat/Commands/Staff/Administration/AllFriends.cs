@@ -4,33 +4,33 @@ using WibboEmulator.Games.Rooms;
 
 internal class AllFriends : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        foreach (var User in WibboEnvironment.GetGame().GetGameClientManager().GetClients)
+        foreach (var user in WibboEnvironment.GetGame().GetGameClientManager().GetClients)
         {
-            if (User == null)
+            if (user == null)
             {
                 continue;
             }
 
-            if (User.GetUser() == null)
+            if (user.GetUser() == null)
             {
                 continue;
             }
 
-            if (User.GetUser().GetMessenger() == null)
+            if (user.GetUser().GetMessenger() == null)
             {
                 continue;
             }
 
-            if (!User.GetUser().GetMessenger().FriendshipExists(UserRoom.UserId))
+            if (!user.GetUser().GetMessenger().FriendshipExists(userRoom.UserId))
             {
-                User.GetUser().GetMessenger().OnNewFriendship(UserRoom.UserId);
+                user.GetUser().GetMessenger().OnNewFriendship(userRoom.UserId);
             }
 
-            if (!session.GetUser().GetMessenger().FriendshipExists(User.GetUser().Id))
+            if (!session.GetUser().GetMessenger().FriendshipExists(user.GetUser().Id))
             {
-                session.GetUser().GetMessenger().OnNewFriendship(User.GetUser().Id);
+                session.GetUser().GetMessenger().OnNewFriendship(user.GetUser().Id);
             }
         }
     }

@@ -12,7 +12,7 @@ internal class ObjectUpdateComposer : ServerPacket
         this.WriteInteger(item.X);
         this.WriteInteger(item.Y);
         this.WriteInteger(item.Rotation);
-        this.WriteString(string.Format("{0:0.00}", item.Z));
+        this.WriteString(string.Format(/*lang=json*/ "{0:0.00}", item.Z));
         this.WriteString(string.Empty);
 
         ItemBehaviourUtility.GenerateExtradata(item, this);

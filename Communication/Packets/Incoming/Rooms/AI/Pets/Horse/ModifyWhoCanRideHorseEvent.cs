@@ -2,7 +2,6 @@ namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Pets.Horse;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.AI.Pets;
 using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Rooms;
 
 internal class ModifyWhoCanRideHorseEvent : IPacketEvent
 {
@@ -15,46 +14,46 @@ internal class ModifyWhoCanRideHorseEvent : IPacketEvent
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var Room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
             return;
         }
 
-        var PetId = packet.PopInt();
+        var petId = packet.PopInt();
 
-        if (!Room.GetRoomUserManager().TryGetPet(PetId, out var Pet))
+        if (!room.GetRoomUserManager().TryGetPet(petId, out var pet))
         {
             return;
         }
 
-        if (Pet.PetData == null || Pet.PetData.OwnerId != session.GetUser().Id || Pet.PetData.Type != 13)
+        if (pet.PetData == null || pet.PetData.OwnerId != session.GetUser().Id || pet.PetData.Type != 13)
         {
             return;
         }
 
-        if (Pet.PetData.AnyoneCanRide)
+        if (pet.PetData.AnyoneCanRide)
         {
-            Pet.PetData.AnyoneCanRide = false;
+            pet.PetData.AnyoneCanRide = false;
         }
         else
         {
-            Pet.PetData.AnyoneCanRide = true;
+            pet.PetData.AnyoneCanRide = true;
         }
 
-        if (!Pet.PetData.AnyoneCanRide)
+        if (!pet.PetData.AnyoneCanRide)
         {
-            if (Pet.RidingHorse)
+            if (pet.RidingHorse)
             {
-                Pet.RidingHorse = false;
-                var User = Room.GetRoomUserManager().GetRoomUserByVirtualId(Pet.HorseID);
-                if (User != null)
+                pet.RidingHorse = false;
+                var user = room.GetRoomUserManager().GetRoomUserByVirtualId(pet.HorseID);
+                if (user != null)
                 {
-                    if (Room.CheckRights(User.GetClient(), true))
+                    if (room.CheckRights(user.GetClient(), true))
                     {
-                        User.RidingHorse = false;
-                        User.HorseID = 0;
-                        User.ApplyEffect(-1);
-                        User.MoveTo(User.X + 1, User.Y + 1);
+                        user.RidingHorse = false;
+                        user.HorseID = 0;
+                        user.ApplyEffect(-1);
+                        user.MoveTo(user.X + 1, user.Y + 1);
                     }
                 }
             }
@@ -63,9 +62,9 @@ internal class ModifyWhoCanRideHorseEvent : IPacketEvent
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            BotPetDao.UpdateAnyoneRide(dbClient, PetId, Pet.PetData.AnyoneCanRide);
+            BotPetDao.UpdateAnyoneRide(dbClient, petId, pet.PetData.AnyoneCanRide);
         }
 
-        Room.SendPacket(new PetInformationComposer(Pet.PetData, Pet.RidingHorse));
+        room.SendPacket(new PetInformationComposer(pet.PetData, pet.RidingHorse));
     }
 }

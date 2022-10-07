@@ -6,29 +6,29 @@ using WibboEmulator.Games.Rooms;
 
 internal class AddPhoto : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length < 2)
         {
             return;
         }
 
-        var PhotoId = parameters[1];
-        var ItemPhotoId = 4581;
-        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(ItemPhotoId, out var ItemData))
+        var photoId = parameters[1];
+        var itemPhotoId = 4581;
+        if (!WibboEnvironment.GetGame().GetItemManager().GetItem(itemPhotoId, out var itemData))
         {
             return;
         }
 
-        var Time = WibboEnvironment.GetUnixTimestamp();
-        var ExtraData = "{\"w\":\"" + "/photos/" + PhotoId + ".png" + "\", \"n\":\"" + session.GetUser().Username + "\", \"s\":\"" + session.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + Time + "000" + "\"}";
+        var time = WibboEnvironment.GetUnixTimestamp();
+        var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.GetUser().Username + "\", \"s\":\"" + session.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
-        var Item = ItemFactory.CreateSingleItemNullable(ItemData, session.GetUser(), ExtraData);
-        _ = session.GetUser().GetInventoryComponent().TryAddItem(Item);
+        var item = ItemFactory.CreateSingleItemNullable(itemData, session.GetUser(), extraData);
+        _ = session.GetUser().GetInventoryComponent().TryAddItem(item);
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserPhotoDao.Insert(dbClient, session.GetUser().Id, PhotoId, Time);
+            UserPhotoDao.Insert(dbClient, session.GetUser().Id, photoId, time);
         }
 
         session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buyphoto.valide", session.Langue));

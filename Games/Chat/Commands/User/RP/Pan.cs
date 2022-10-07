@@ -1,74 +1,74 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.User.RP;
+namespace WibboEmulator.Games.Chat.Commands.User.RP;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 using WibboEmulator.Games.Rooms.Map.Movement;
 
 internal class Pan : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (!Room.IsRoleplay || UserRoom.Freeze)
+        if (!room.IsRoleplay || userRoom.Freeze)
         {
             return;
         }
 
-        if (!Room.Roleplay.Pvp)
+        if (!room.Roleplay.Pvp)
         {
             return;
         }
 
-        var Rp = UserRoom.Roleplayer;
-        if (Rp == null)
+        var rp = userRoom.Roleplayer;
+        if (rp == null)
         {
             return;
         }
 
-        if (Rp.Dead || !Rp.PvpEnable || Rp.SendPrison)
+        if (rp.Dead || !rp.PvpEnable || rp.SendPrison)
         {
             return;
         }
 
-        if (Rp.Munition <= 0)
+        if (rp.Munition <= 0)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("rp.munitionnotfound", session.Langue));
             return;
         }
 
-        if (Rp.GunLoad <= 0)
+        if (rp.GunLoad <= 0)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("rp.reloadweapon", session.Langue));
             return;
         }
 
-        var movement = MovementUtility.GetMovementByDirection(UserRoom.RotBody);
+        var movement = MovementUtility.GetMovementByDirection(userRoom.RotBody);
 
-        var WeaponEanble = Rp.WeaponGun.Enable;
+        var weaponEanble = rp.WeaponGun.Enable;
 
-        UserRoom.ApplyEffect(WeaponEanble, true);
-        UserRoom.TimerResetEffect = Rp.WeaponGun.FreezeTime + 1;
+        userRoom.ApplyEffect(weaponEanble, true);
+        userRoom.TimerResetEffect = rp.WeaponGun.FreezeTime + 1;
 
-        Rp.AggroTimer = 30;
+        rp.AggroTimer = 30;
 
-        if (UserRoom.FreezeEndCounter <= Rp.WeaponGun.FreezeTime)
+        if (userRoom.FreezeEndCounter <= rp.WeaponGun.FreezeTime)
         {
-            UserRoom.Freeze = true;
-            UserRoom.FreezeEndCounter = Rp.WeaponGun.FreezeTime;
+            userRoom.Freeze = true;
+            userRoom.FreezeEndCounter = rp.WeaponGun.FreezeTime;
         }
 
-        for (var i = 0; i < Rp.WeaponGun.FreezeTime; i++)
+        for (var i = 0; i < rp.WeaponGun.FreezeTime; i++)
         {
-            if (Rp.Munition <= 0 || Rp.GunLoad <= 0)
+            if (rp.Munition <= 0 || rp.GunLoad <= 0)
             {
                 break;
             }
 
-            Rp.Munition--;
-            Rp.GunLoad--;
+            rp.Munition--;
+            rp.GunLoad--;
 
-            var Dmg = WibboEnvironment.GetRandomNumber(Rp.WeaponGun.DmgMin, Rp.WeaponGun.DmgMax);
-            Room.GetProjectileManager().AddProjectile(UserRoom.VirtualId, UserRoom.SetX, UserRoom.SetY, UserRoom.SetZ, movement, Dmg, Rp.WeaponGun.Distance);
+            var dmg = WibboEnvironment.GetRandomNumber(rp.WeaponGun.DmgMin, rp.WeaponGun.DmgMax);
+            room.GetProjectileManager().AddProjectile(userRoom.VirtualId, userRoom.SetX, userRoom.SetY, userRoom.SetZ, movement, dmg, rp.WeaponGun.Distance);
         }
 
-        Rp.SendUpdate();
+        rp.SendUpdate();
     }
 }

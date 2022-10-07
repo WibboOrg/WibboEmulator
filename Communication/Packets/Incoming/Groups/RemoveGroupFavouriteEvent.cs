@@ -13,10 +13,10 @@ internal class RemoveGroupFavouriteEvent : IPacketEvent
 
         if (session.GetUser().InRoom)
         {
-            var User = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-            if (User != null)
+            var userRoom = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            if (userRoom != null)
             {
-                session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(null, User.VirtualId));
+                session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(null, userRoom.VirtualId));
             }
 
             session.GetUser().CurrentRoom.SendPacket(new RefreshFavouriteGroupComposer(session.GetUser().Id));

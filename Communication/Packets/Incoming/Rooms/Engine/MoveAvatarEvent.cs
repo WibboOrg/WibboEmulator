@@ -13,8 +13,8 @@ internal class MoveAvatarEvent : IPacketEvent
             return;
         }
 
-        var User = currentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().ControlUserId == 0 ? session.GetUser().Id : session.GetUser().ControlUserId);
-        if (User == null || (!User.CanWalk && !User.TeleportEnabled))
+        var user = currentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().ControlUserId == 0 ? session.GetUser().Id : session.GetUser().ControlUserId);
+        if (user == null || (!user.CanWalk && !user.TeleportEnabled))
         {
             return;
         }
@@ -22,12 +22,12 @@ internal class MoveAvatarEvent : IPacketEvent
         var targetX = packet.PopInt();
         var targetY = packet.PopInt();
 
-        if (User.ReverseWalk)
+        if (user.ReverseWalk)
         {
-            targetX = User.SetX + (User.SetX - targetX);
-            targetY = User.SetY + (User.SetY - targetY);
+            targetX = user.SetX + (user.SetX - targetX);
+            targetY = user.SetY + (user.SetY - targetY);
         }
 
-        User.MoveTo(targetX, targetY, User.AllowOverride || User.TeleportEnabled || User.ReverseWalk);
+        user.MoveTo(targetX, targetY, user.AllowOverride || user.TeleportEnabled || user.ReverseWalk);
     }
 }

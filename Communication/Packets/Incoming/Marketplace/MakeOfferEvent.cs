@@ -2,9 +2,9 @@ namespace WibboEmulator.Communication.Packets.Incoming.Marketplace;
 using WibboEmulator.Communication.Packets.Outgoing.MarketPlace;
 using WibboEmulator.Database.Daos.Catalog;
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Games.Catalog.Marketplace;
 using WibboEmulator.Games.Catalog.Utilities;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Items;
 
 internal class MakeOfferEvent : IPacketEvent
 {
@@ -12,45 +12,45 @@ internal class MakeOfferEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var SellingPrice = packet.PopInt();
-        var ComissionPrice = packet.PopInt();
-        var ItemId = packet.PopInt();
+        var sellingPrice = packet.PopInt();
+        _ = packet.PopInt();
+        var itemId = packet.PopInt();
 
-        var Item = session.GetUser().GetInventoryComponent().GetItem(ItemId);
-        if (Item == null)
+        var item = session.GetUser().GetInventoryComponent().GetItem(itemId);
+        if (item == null)
         {
             session.SendPacket(new MarketplaceMakeOfferResultComposer(0));
             return;
         }
 
-        if (!ItemUtility.IsRare(Item))
+        if (!ItemUtility.IsRare(item))
         {
             return;
         }
 
-        if (SellingPrice is > 999999 or <= 0)
+        if (sellingPrice is > 999999 or <= 0)
         {
             session.SendPacket(new MarketplaceMakeOfferResultComposer(0));
             return;
         }
 
-        var Comission = WibboEnvironment.GetGame().GetCatalog().GetMarketplace().CalculateComissionPrice(SellingPrice);
-        var TotalPrice = SellingPrice + Comission;
-        var ItemType = 1;
-        if (Item.GetBaseItem().Type == 'i')
+        var comission = MarketplaceManager.CalculateComissionPrice(sellingPrice);
+        var totalPrice = sellingPrice + comission;
+        var itemType = 1;
+        if (item.GetBaseItem().Type == 'i')
         {
-            ItemType++;
+            itemType++;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            ItemDao.Delete(dbClient, ItemId);
+            ItemDao.Delete(dbClient, itemId);
 
-            CatalogMarketplaceOfferDao.Insert(dbClient, Item.GetBaseItem().ItemName, Item.ExtraData, ItemId, Item.BaseItem, session.GetUser().Id, SellingPrice, TotalPrice, Item.GetBaseItem().SpriteId, ItemType, Item.Limited, Item.LimitedStack);
+            CatalogMarketplaceOfferDao.Insert(dbClient, item.GetBaseItem().ItemName, item.ExtraData, itemId, item.BaseItem, session.GetUser().Id, sellingPrice, totalPrice, item.GetBaseItem().SpriteId, itemType, item.Limited, item.LimitedStack);
 
         }
 
-        session.GetUser().GetInventoryComponent().RemoveItem(ItemId);
+        session.GetUser().GetInventoryComponent().RemoveItem(itemId);
         session.SendPacket(new MarketplaceMakeOfferResultComposer(1));
     }
 }

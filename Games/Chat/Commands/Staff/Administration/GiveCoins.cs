@@ -5,7 +5,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class GiveCoins : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var clientByUsername = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(parameters[1]);
         if (clientByUsername != null)

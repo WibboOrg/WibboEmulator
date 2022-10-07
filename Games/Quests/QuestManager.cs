@@ -1,6 +1,5 @@
 namespace WibboEmulator.Games.Quests;
 using System.Data;
-using WibboEmulator.Communication.Packets.Incoming;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Quests;
 using WibboEmulator.Database.Daos.Emulator;
@@ -55,21 +54,26 @@ public class QuestManager
         }
     }
 
-    public Quest GetQuest(int Id)
+    public Quest GetQuest(int id)
     {
-        _ = this._quests.TryGetValue(Id, out var quest);
+        if (this._quests.TryGetValue(id, out var quest))
+        {
+            return quest;
+        }
 
-        return quest;
+        return null;
     }
 
-    public int GetAmountOfQuestsInCategory(string Category)
+    public int GetAmountOfQuestsInCategory(string category)
     {
-        _ = this._questCount.TryGetValue(Category, out var num);
-
-        return num;
+        if (this._questCount.TryGetValue(category, out var num))
+        {
+            return num;
+        }
+        return 0;
     }
 
-    public void ProgressUserQuest(GameClient session, QuestType QuestType, int EventData = 0)
+    public void ProgressUserQuest(GameClient session, QuestType questType, int eventData = 0)
     {
         if (session == null || session.GetUser() == null || session.GetUser().CurrentQuestId <= 0)
         {
@@ -77,7 +81,7 @@ public class QuestManager
         }
 
         var quest = this.GetQuest(session.GetUser().CurrentQuestId);
-        if (quest == null || quest.GoalType != QuestType)
+        if (quest == null || quest.GoalType != questType)
         {
             return;
         }
@@ -85,7 +89,7 @@ public class QuestManager
         var questProgress = session.GetUser().GetQuestProgress(quest.Id);
         var flag = false;
         int progress;
-        if (QuestType != QuestType.EXPLORE_FIND_ITEM)
+        if (questType != QuestType.EXPLORE_FIND_ITEM)
         {
             progress = questProgress + 1;
             if (progress >= (long)quest.GoalData)
@@ -95,7 +99,7 @@ public class QuestManager
         }
         else
         {
-            if (EventData != quest.GoalData)
+            if (eventData != quest.GoalData)
             {
                 return;
             }
@@ -124,11 +128,11 @@ public class QuestManager
         this.SendQuestList(session);
     }
 
-    public Quest GetNextQuestInSeries(string Category, int Number)
+    public Quest GetNextQuestInSeries(string category, int number)
     {
         foreach (var quest in this._quests.Values)
         {
-            if (quest.Category == Category && quest.Number == Number)
+            if (quest.Category == category && quest.Number == number)
             {
                 return quest;
             }
@@ -174,9 +178,9 @@ public class QuestManager
         session.SendPacket(new QuestListComposer(dictionary2, session, send));
     }
 
-    public void ActivateQuest(GameClient session, ClientPacket Message)
+    public void ActivateQuest(GameClient session, int questId)
     {
-        var quest = this.GetQuest(Message.PopInt());
+        var quest = this.GetQuest(questId);
         if (quest == null)
         {
             return;

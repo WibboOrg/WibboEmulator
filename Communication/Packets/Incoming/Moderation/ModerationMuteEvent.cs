@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Moderation;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Moderation;
 
 internal class ModerationMuteEvent : IPacketEvent
 {
@@ -12,6 +13,6 @@ internal class ModerationMuteEvent : IPacketEvent
             return;
         }
 
-        WibboEnvironment.GetGame().GetModerationManager().KickUser(session, packet.PopInt(), packet.PopString(), false);
+        ModerationManager.KickUser(session, packet.PopInt(), packet.PopString(), false);
     }
 }

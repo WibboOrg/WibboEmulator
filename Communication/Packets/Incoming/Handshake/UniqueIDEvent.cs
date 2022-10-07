@@ -9,14 +9,14 @@ internal class UniqueIDEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var CookieId = packet.PopString();
-        var McId = packet.PopString();
-        var Junk = packet.PopString();
+        var cookieId = packet.PopString();
+        var mcId = packet.PopString();
+        var junk = packet.PopString();
 
-        var Head = string.IsNullOrWhiteSpace(CookieId) || CookieId.Length != 13 ? IDGenerator.Next : CookieId;
+        var head = string.IsNullOrWhiteSpace(cookieId) || cookieId.Length != 13 ? IDGenerator.Next : cookieId;
 
-        session.MachineId = Head + McId + Junk;
+        session.MachineId = head + mcId + junk;
 
-        session.SendPacket(new SetUniqueIdComposer(Head));
+        session.SendPacket(new SetUniqueIdComposer(head));
     }
 }

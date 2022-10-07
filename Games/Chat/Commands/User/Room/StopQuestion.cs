@@ -1,13 +1,13 @@
-﻿namespace WibboEmulator.Games.Chat.Commands.User.Room;
+namespace WibboEmulator.Games.Chat.Commands.User.Room;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Polls;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
 internal class StopQuestion : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        Room.SendPacket(new QuestionFinishedComposer(Room.VotedNoCount, Room.VotedYesCount));
+        room.SendPacket(new QuestionFinishedComposer(room.VotedNoCount, room.VotedYesCount));
 
         session.SendWhisper("Question terminée!");
     }

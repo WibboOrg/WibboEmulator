@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Data;
 using WibboEmulator.Communication.Interfaces;
 using WibboEmulator.Communication.Packets.Outgoing.RolePlay;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Roleplay.Item;
@@ -17,48 +17,48 @@ public class RolePlayer
 
     private readonly ConcurrentDictionary<int, RolePlayInventoryItem> _inventory;
 
-    public int Health;
-    public int HealthMax;
+    public int Health { get; set; }
+    public int HealthMax { get; set; }
 
-    public int Money;
-    public int Munition;
-    public int GunLoad;
-    public int Exp;
-    public bool Dead;
-    public bool SendPrison;
-    public int Level;
-    public RPWeapon WeaponGun;
-    public RPWeapon WeaponCac;
-    public int Energy;
-    public int GunLoadTimer;
-    public int PrisonTimer;
-    public int DeadTimer;
-    public int SlowTimer;
-    public int AggroTimer;
-    public int PlayerOutTimer;
-    public bool PvpEnable;
+    public int Money { get; set; }
+    public int Munition { get; set; }
+    public int GunLoad { get; set; }
+    public int Exp { get; set; }
+    public bool Dead { get; set; }
+    public bool SendPrison { get; set; }
+    public int Level { get; set; }
+    public RPWeapon WeaponGun { get; set; }
+    public RPWeapon WeaponCac { get; set; }
+    public int Energy { get; set; }
+    public int GunLoadTimer { get; set; }
+    public int PrisonTimer { get; set; }
+    public int DeadTimer { get; set; }
+    public int SlowTimer { get; set; }
+    public int AggroTimer { get; set; }
+    public int PlayerOutTimer { get; set; }
+    public bool PvpEnable { get; set; }
 
-    public int TradeId;
-    public bool NeedUpdate;
-    public bool Dispose;
+    public int TradeId { get; set; }
+    public bool NeedUpdate { get; set; }
+    public bool Dispose { get; set; }
 
-    public RolePlayer(int pRpId, int pId, int pHealth, int pMoney, int pMunition, int pExp, int pEnergy, int pWeaponGun, int pWeaponCac)
+    public RolePlayer(int rpId, int id, int health, int money, int munition, int pxp, int energy, int weaponGun, int weaponCac)
     {
-        this._rpId = pRpId;
-        this._id = pId;
-        this.Health = pHealth;
-        this.Energy = pEnergy;
-        this.Money = pMoney;
-        this.Munition = pMunition;
-        this.Exp = pExp;
+        this._rpId = rpId;
+        this._id = id;
+        this.Health = health;
+        this.Energy = energy;
+        this.Money = money;
+        this.Munition = munition;
+        this.Exp = pxp;
         this.PvpEnable = true;
-        this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(pWeaponCac);
-        this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(pWeaponGun);
+        this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(weaponCac);
+        this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(weaponGun);
 
         this.GunLoad = 6;
         this.GunLoadTimer = 0;
 
-        var Level = 1;
+        var level = 1;
         for (var i = 1; i < 100; i++)
         {
 
@@ -69,10 +69,10 @@ public class RolePlayer
                 continue;
             }
 
-            Level = i;
+            level = i;
             break;
         }
-        this.Level = Level;
+        this.Level = level;
         this.HealthMax = 90 + (this.Level * 10);
 
         this.SendPrison = false;
@@ -116,13 +116,13 @@ public class RolePlayer
 
     public void LoadInventory()
     {
-        DataTable Table;
+        DataTable table;
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            Table = UserRoleplayItemDao.GetAll(dbClient, this._id, this._rpId);
+            table = UserRoleplayItemDao.GetAll(dbClient, this._id, this._rpId);
         }
 
-        foreach (DataRow dataRow in Table.Rows)
+        foreach (DataRow dataRow in table.Rows)
         {
             if (!this._inventory.ContainsKey(Convert.ToInt32(dataRow["item_id"])))
             {
@@ -134,122 +134,127 @@ public class RolePlayer
         this.SendPacket(new LoadInventoryRpComposer(this._inventory));
     }
 
-    internal RolePlayInventoryItem GetInventoryItem(int Id)
+    internal RolePlayInventoryItem GetInventoryItem(int id)
     {
-        _ = this._inventory.TryGetValue(Id, out var Item);
-
-        return Item;
+        if (this._inventory.TryGetValue(id, out var item))
+        {
+            return item;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     internal void AddInventoryItem(int itemId, int count = 1)
     {
-        var RPItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
-        if (RPItem == null)
+        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
+        if (rpItem == null)
         {
             return;
         }
 
-        var Item = this.GetInventoryItem(itemId);
-        if (Item == null)
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+
+        var item = this.GetInventoryItem(itemId);
+        if (item == null)
         {
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            var Id = UserRoleplayItemDao.Insert(dbClient, this._id, this._rpId, itemId, count);
-            _ = this._inventory.TryAdd(itemId, new RolePlayInventoryItem(Id, itemId, count));
+            var id = UserRoleplayItemDao.Insert(dbClient, this._id, this._rpId, itemId, count);
+            _ = this._inventory.TryAdd(itemId, new RolePlayInventoryItem(id, itemId, count));
         }
         else
         {
-            Item.Count += count;
-            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserRoleplayItemDao.UpdateAddCount(dbClient, Item.Id, count);
+            item.Count += count;
+            UserRoleplayItemDao.UpdateAddCount(dbClient, item.Id, count);
         }
 
 
-        this.SendPacket(new AddInventoryItemRpComposer(RPItem, count));
+        this.SendPacket(new AddInventoryItemRpComposer(rpItem, count));
     }
 
-    internal void RemoveInventoryItem(int ItemId, int Count = 1)
+    internal void RemoveInventoryItem(int itemId, int count = 1)
     {
-        var Item = this.GetInventoryItem(ItemId);
-        if (Item == null)
+        var item = this.GetInventoryItem(itemId);
+        if (item == null)
         {
             return;
         }
 
-        if (Item.Count > Count)
+        if (item.Count > count)
         {
-            Item.Count -= Count;
+            item.Count -= count;
 
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-            UserRoleplayItemDao.UpdateRemoveCount(dbClient, Item.Id, Count);
+            UserRoleplayItemDao.UpdateRemoveCount(dbClient, item.Id, count);
         }
         else
         {
-            _ = this._inventory.TryRemove(ItemId, out Item);
+            _ = this._inventory.TryRemove(itemId, out _);
 
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             UserRoleplayItemDao.Delete(dbClient, this._id);
         }
 
-        this.SendPacket(new RemoveItemInventoryRpComposer(ItemId, Count));
+        this.SendPacket(new RemoveItemInventoryRpComposer(itemId, count));
     }
 
-    public void SendPacket(IServerPacket Message)
+    public void SendPacket(IServerPacket message)
     {
         var session = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this._id);
         if (session != null)
         {
-            session.SendPacket(Message);
+            session.SendPacket(message);
         }
     }
 
-    internal void RemoveMunition(int Nb)
+    internal void RemoveMunition(int count)
     {
-        if (this.Munition - Nb <= 0)
+        if (this.Munition - count <= 0)
         {
             this.Munition = 0;
         }
         else
         {
-            this.Munition -= Nb;
+            this.Munition -= count;
         }
     }
 
-    internal void AddMunition(int Nb)
+    internal void AddMunition(int count)
     {
-        if (Nb <= 0)
+        if (count <= 0)
         {
             return;
         }
 
-        if (Nb > 99)
+        if (count > 99)
         {
-            Nb = 99;
+            count = 99;
         }
 
-        if (this.Munition + Nb > 99)
+        if (this.Munition + count > 99)
         {
             this.Munition = 99;
         }
         else
         {
-            this.Munition += Nb;
+            this.Munition += count;
         }
     }
 
-    internal void AddHealth(int Nb)
+    internal void AddHealth(int count)
     {
-        if (Nb <= 0)
+        if (count <= 0)
         {
             return;
         }
 
-        if (this.Health + Nb > this.HealthMax)
+        if (this.Health + count > this.HealthMax)
         {
             this.Health = this.HealthMax;
         }
         else
         {
-            this.Health += Nb;
+            this.Health += count;
         }
     }
 
@@ -257,7 +262,7 @@ public class RolePlayer
     {
         this.Exp += pNb;
 
-        var Level = 1;
+        var level = 1;
         for (var i = 1; i < 100; i++)
         {
             var expmax = (i * 50) + (i * 10 * i);
@@ -267,13 +272,13 @@ public class RolePlayer
                 continue;
             }
 
-            Level = i;
+            level = i;
             break;
         }
 
-        if (this.Level < Level)
+        if (this.Level < level)
         {
-            this.Level = Level;
+            this.Level = level;
             this.HealthMax = 90 + (this.Level * 10);
             this.Health = this.HealthMax;
             this.SendUpdate();
@@ -291,7 +296,7 @@ public class RolePlayer
             this.Exp = 0;
         }
 
-        var Level = 1;
+        var level = 1;
         for (var i = 1; i < 100; i++)
         {
             var expmax = (i * 50) + (i * 10 * i);
@@ -301,28 +306,28 @@ public class RolePlayer
                 continue;
             }
 
-            Level = i;
+            level = i;
             break;
         }
 
-        if (this.Level != Level)
+        if (this.Level != level)
         {
-            this.Level = Level;
+            this.Level = level;
             this.HealthMax = 90 + (this.Level * 10);
             this.Health = this.HealthMax;
             this.SendUpdate();
         }
     }
 
-    internal void AddEnergy(int Nb)
+    internal void AddEnergy(int count)
     {
-        if (this.Energy + Nb > 100)
+        if (this.Energy + count > 100)
         {
             this.Energy = 100;
         }
         else
         {
-            this.Energy += Nb;
+            this.Energy += count;
         }
     }
 
@@ -408,9 +413,9 @@ public class RolePlayer
         this.SendUpdate();
     }
 
-    public void SendUpdate(bool SendNow = false)
+    public void SendUpdate(bool sendNow = false)
     {
-        if (SendNow)
+        if (sendNow)
         {
             this.SendPacket(new RpStatsComposer((!this.Dispose) ? this._rpId : 0, this.Health, this.HealthMax, this.Energy, this.Money, this.Munition, this.Level));
         }
@@ -420,20 +425,20 @@ public class RolePlayer
         }
     }
 
-    public void SendItemsList(List<RPItem> ItemsList) => this.SendPacket(new BuyItemsListComposer(ItemsList));
+    public void SendItemsList(List<RPItem> itemsList) => this.SendPacket(new BuyItemsListComposer(itemsList));
 
-    public void OnCycle(RoomUser User, RolePlayerManager RPManager)
+    public void OnCycle(RoomUser user, RolePlayerManager rpManager)
     {
 
         if (this.SlowTimer > 0)
         {
             this.SlowTimer--;
 
-            User.BreakWalkEnable = true;
+            user.BreakWalkEnable = true;
         }
         else
         {
-            User.BreakWalkEnable = false;
+            user.BreakWalkEnable = false;
         }
 
         if (this.PlayerOutTimer > 0)
@@ -447,10 +452,10 @@ public class RolePlayer
 
                 if (!this.Dead && !this.SendPrison)
                 {
-                    User.Freeze = false;
-                    User.IsSit = false;
-                    User.RemoveStatus("sit");
-                    User.UpdateNeeded = true;
+                    user.Freeze = false;
+                    user.IsSit = false;
+                    user.RemoveStatus("sit");
+                    user.UpdateNeeded = true;
                 }
             }
         }
@@ -460,16 +465,16 @@ public class RolePlayer
             {
                 this.PlayerOutTimer = 60;
 
-                User.RotBody = 2;
-                User.RotHead = 2;
-                User.Freeze = true;
-                User.FreezeEndCounter = 0;
-                User.OnChat("*Tombe d'épuisement*");
-                User.SetStatus("sit", "0.5");
-                User.IsSit = true;
-                User.UpdateNeeded = true;
+                user.RotBody = 2;
+                user.RotHead = 2;
+                user.Freeze = true;
+                user.FreezeEndCounter = 0;
+                user.OnChat("*Tombe d'épuisement*");
+                user.SetStatus("sit", "0.5");
+                user.IsSit = true;
+                user.UpdateNeeded = true;
 
-                User.SendWhisperChat("Vous êtes tombé de fatiguer, reposez-vous pendants 30 secondes", true);
+                user.SendWhisperChat("Vous êtes tombé de fatiguer, reposez-vous pendants 30 secondes", true);
             }
         }
 
@@ -487,7 +492,7 @@ public class RolePlayer
             if (this.GunLoad == 0)
             {
                 this.GunLoadTimer = 6;
-                User.OnChat("*Recharge mon arme*");
+                user.OnChat("*Recharge mon arme*");
             }
         }
 
@@ -506,9 +511,9 @@ public class RolePlayer
             else
             {
                 this.SendPrison = false;
-                User.GetClient().GetUser().IsTeleporting = true;
-                User.GetClient().GetUser().TeleportingRoomID = RPManager.PrisonId;
-                User.GetClient().SendPacket(new RoomForwardComposer(RPManager.PrisonId));
+                user.GetClient().GetUser().IsTeleporting = true;
+                user.GetClient().GetUser().TeleportingRoomID = rpManager.PrisonId;
+                user.GetClient().SendPacket(new RoomForwardComposer(rpManager.PrisonId));
             }
         }
 
@@ -521,9 +526,9 @@ public class RolePlayer
             else
             {
                 this.Dead = false;
-                User.GetClient().GetUser().IsTeleporting = true;
-                User.GetClient().GetUser().TeleportingRoomID = RPManager.HopitalId;
-                User.GetClient().SendPacket(new RoomForwardComposer(RPManager.HopitalId));
+                user.GetClient().GetUser().IsTeleporting = true;
+                user.GetClient().GetUser().TeleportingRoomID = rpManager.HopitalId;
+                user.GetClient().SendPacket(new RoomForwardComposer(rpManager.HopitalId));
             }
         }
 

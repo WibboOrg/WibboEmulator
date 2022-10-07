@@ -5,14 +5,14 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 internal class HandItem : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        if (UserRoom.Team != TeamType.NONE || UserRoom.InGame)
+        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
         {
             return;
         }
@@ -23,6 +23,6 @@ internal class HandItem : IChatCommand
             return;
         }
 
-        UserRoom.CarryItem(handitemid);
+        userRoom.CarryItem(handitemid);
     }
 }

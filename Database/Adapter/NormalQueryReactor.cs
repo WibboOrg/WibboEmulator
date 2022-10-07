@@ -3,8 +3,8 @@ using WibboEmulator.Database.Interfaces;
 
 public class NormaldbClient : QueryAdapter, IQueryAdapter, IRegularQueryAdapter, IDisposable
 {
-    public NormaldbClient(IDatabaseClient Client)
-        : base(Client) => this.Command = Client.CreateNewCommand();
+    public NormaldbClient(IDatabaseClient client)
+        : base(client) => this.Command = client.CreateNewCommand();
 
     public void Dispose()
     {

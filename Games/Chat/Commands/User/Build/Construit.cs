@@ -4,23 +4,23 @@ using WibboEmulator.Games.Rooms;
 
 internal class Construit : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (parameters.Length != 2)
         {
             return;
         }
 
-        var Heigth = parameters[1];
-        if (double.TryParse(Heigth, out var Result))
+        var heigth = parameters[1];
+        if (double.TryParse(heigth, out var result))
         {
-            if (Result is >= 0.01 and <= 10)
+            if (result is >= 0.01 and <= 10)
             {
-                UserRoom.ConstruitEnable = true;
-                UserRoom.ConstruitHeigth = Result;
+                userRoom.ConstruitEnable = true;
+                userRoom.ConstruitHeigth = result;
             }
         }
 
-        session.SendWhisper("Construit: " + Result);
+        session.SendWhisper("Construit: " + result);
     }
 }

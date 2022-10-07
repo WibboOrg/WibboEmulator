@@ -6,7 +6,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Help;
 using WibboEmulator.Communication.Packets.Outgoing.Navigator;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Notifications;
-using WibboEmulator.Communication.Packets.Outgoing.Rooms.session;
+using WibboEmulator.Communication.Packets.Outgoing.Rooms.Session;
 using WibboEmulator.Core;
 using WibboEmulator.Games.Chat.Logs;
 using WibboEmulator.Games.GameClients;
@@ -22,7 +22,7 @@ using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Database.Daos.Guild;
 
-public class User
+public class User : IDisposable
 {
     private GameClient _clientInstance;
 
@@ -77,7 +77,7 @@ public class User
     private PermissionComponent _permissions;
 
     public bool SpectatorMode { get; set; }
-    public bool Disconnected { get; set; }
+    public bool IsDisposed { get; set; }
     public bool HasFriendRequestsDisabled { get; set; }
     public int FavouriteGroupId { get; set; }
 
@@ -229,7 +229,7 @@ public class User
         this.ControlUserId = 0;
         this.IP = ip;
         this.SpectatorMode = false;
-        this.Disconnected = false;
+        this.IsDisposed = false;
         this.HideInRoom = hideInroom;
         this.HideOnline = hideOnline;
         this.MazoHighScore = mazoHighScore;
@@ -256,7 +256,7 @@ public class User
         this._wardrobeComponent = new WardrobeComponent(this);
         this._messengerComponent = new MessengerComponent(this);
         this._chatMessageManager = new ChatlogManager();
-        this._permissions = new PermissionComponent(this);
+        this._permissions = new PermissionComponent();
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         this._badgeComponent.Init(dbClient);
@@ -325,7 +325,7 @@ public class User
             return;
         }
 
-        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(id, out var room))
+        if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(id, out _))
         {
             var timeSpan = DateTime.Now - this.LastLoadedRoomTime;
             if (timeSpan.TotalSeconds < 2)
@@ -352,7 +352,7 @@ public class User
             this.LastLoadedRoomTime = DateTime.Now;
         }
 
-        room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(id);
+        var room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(id);
         if (room == null)
         {
             this.GetClient().SendPacket(new CloseConnectionComposer());
@@ -496,14 +496,14 @@ public class User
         return false;
     }
 
-    public void OnDisconnect()
+    public void Dispose()
     {
-        if (this.Disconnected)
+        if (this.IsDisposed)
         {
             return;
         }
 
-        this.Disconnected = true;
+        this.IsDisposed = true;
 
         WibboEnvironment.GetGame().GetGameClientManager().UnregisterClient(this.Id, this.Username);
 
@@ -604,6 +604,8 @@ public class User
         }
 
         this._clientInstance = null;
+
+        GC.SuppressFinalize(this);
     }
 
     public GameClient GetClient() => this._clientInstance;

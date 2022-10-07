@@ -8,9 +8,9 @@ internal class RequestBuddyEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var UserName = packet.PopString();
+        var userName = packet.PopString();
 
-        if (session.GetUser().GetMessenger() == null || !session.GetUser().GetMessenger().RequestBuddy(UserName))
+        if (session.GetUser().GetMessenger() == null || !session.GetUser().GetMessenger().RequestBuddy(userName))
         {
             return;
         }

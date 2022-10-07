@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Polls;
+namespace WibboEmulator.Communication.Packets.Incoming.Rooms.Polls;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Polls;
 using WibboEmulator.Games.GameClients;
 
@@ -13,26 +13,26 @@ internal class AnswerPollEvent : IPacketEvent
             return;
         }
 
-        var User = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-        if (User == null)
+        var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        if (user == null)
         {
             return;
         }
 
-        var Id = packet.PopInt();
-        var QuestionId = packet.PopInt();
+        var id = packet.PopInt();
+        var questionId = packet.PopInt();
 
-        var Count = packet.PopInt();//Count
+        var count = packet.PopInt();//Count
 
-        var Value = "0";
-        for (var i = 0; i < Count; i++)
+        var value = "0";
+        for (var i = 0; i < count; i++)
         {
-            Value = packet.PopString();
+            value = packet.PopString();
         }
 
-        Value = Value is not "0" and not "1" ? "0" : Value;
+        value = value is not "0" and not "1" ? "0" : value;
 
-        if (Value == "0")
+        if (value == "0")
         {
             room.VotedNoCount++;
         }
@@ -41,12 +41,12 @@ internal class AnswerPollEvent : IPacketEvent
             room.VotedYesCount++;
         }
 
-        room.SendPacket(new QuestionAnsweredComposer(session.GetUser().Id, Value, room.VotedNoCount, room.VotedYesCount));
+        room.SendPacket(new QuestionAnsweredComposer(session.GetUser().Id, value, room.VotedNoCount, room.VotedYesCount));
 
-        var WiredCode = Value == "0" ? "QUESTION_NO" : "QUESTION_YES";
-        if (room.AllowsShous(User, WiredCode))
+        var wiredCode = value == "0" ? "QUESTION_NO" : "QUESTION_YES";
+        if (room.AllowsShous(user, wiredCode))
         {
-            User.SendWhisperChat(WiredCode, false);
+            user.SendWhisperChat(wiredCode, false);
         }
     }
 }

@@ -13,11 +13,11 @@ internal class ModerateRoomEvent : IPacketEvent
             return;
         }
 
-        var RoomId = packet.PopInt();
-        var LockRoom = packet.PopInt() == 1;
-        var InappropriateRoom = packet.PopInt() == 1;
-        var KickUsers = packet.PopInt() == 1;
+        var roomId = packet.PopInt();
+        var lockRoom = packet.PopInt() == 1;
+        var inappropriateRoom = packet.PopInt() == 1;
+        var kickUsers = packet.PopInt() == 1;
 
-        ModerationManager.PerformRoomAction(session, RoomId, KickUsers, LockRoom, InappropriateRoom);
+        ModerationManager.PerformRoomAction(session, roomId, kickUsers, lockRoom, inappropriateRoom);
     }
 }

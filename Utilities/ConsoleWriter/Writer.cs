@@ -49,15 +49,15 @@ public class Writer
         WriteLine(logText);
     }
 
-    public static void LogThreadException(string Exception, string Threadname)
+    public static void LogThreadException(string exception, string threadname)
     {
-        WriteToFile("logs/threaderror.txt", "Error in thread " + Threadname + ": \r\n" + Exception + "\r\n\r\n");
-        WriteLine("Error in " + Threadname + " caught");
+        WriteToFile("logs/threaderror.txt", "Error in thread " + threadname + ": \r\n" + exception + "\r\n\r\n");
+        WriteLine("Error in " + threadname + " caught");
     }
 
-    public static void LogQueryError(Exception Exception, string query)
+    public static void LogQueryError(Exception exception, string query)
     {
-        WriteToFile("logs/MySQLerrors.txt", "Error in query: \r\n" + (object)query + "\r\n" + Exception.ToString() + "\r\n\r\n");
+        WriteToFile("logs/MySQLerrors.txt", "Error in query: \r\n" + (object)query + "\r\n" + exception.ToString() + "\r\n\r\n");
         WriteLine("Error in query caught");
     }
 
@@ -67,43 +67,43 @@ public class Writer
         WriteLine("User disconnection logged: " + exception);
     }
 
-    public static void HandleException(Exception pException, string pLocation)
+    public static void HandleException(Exception exception, string location)
     {
         var stringBuilder = new StringBuilder();
-        _ = stringBuilder.AppendLine("Exception logged " + DateTime.Now.ToString() + " in " + pLocation + ":");
-        _ = stringBuilder.AppendLine(pException.ToString());
-        if (pException.InnerException != null)
+        _ = stringBuilder.AppendLine("Exception logged " + DateTime.Now.ToString() + " in " + location + ":");
+        _ = stringBuilder.AppendLine(exception.ToString());
+        if (exception.InnerException != null)
         {
             _ = stringBuilder.AppendLine("Inner exception:");
-            _ = stringBuilder.AppendLine(pException.InnerException.ToString());
+            _ = stringBuilder.AppendLine(exception.InnerException.ToString());
         }
-        if (pException.HelpLink != null)
+        if (exception.HelpLink != null)
         {
             _ = stringBuilder.AppendLine("Help link:");
-            _ = stringBuilder.AppendLine(pException.HelpLink);
+            _ = stringBuilder.AppendLine(exception.HelpLink);
         }
-        if (pException.Source != null)
+        if (exception.Source != null)
         {
             _ = stringBuilder.AppendLine("Source:");
-            _ = stringBuilder.AppendLine(pException.Source);
+            _ = stringBuilder.AppendLine(exception.Source);
         }
-        if (pException.Data != null)
+        if (exception.Data != null)
         {
             _ = stringBuilder.AppendLine("Data:");
-            foreach (DictionaryEntry dictionaryEntry in pException.Data)
+            foreach (DictionaryEntry dictionaryEntry in exception.Data)
             {
                 _ = stringBuilder.AppendLine("  Key: " + dictionaryEntry.Key + "Value: " + dictionaryEntry.Value);
             }
         }
-        if (pException.Message != null)
+        if (exception.Message != null)
         {
             _ = stringBuilder.AppendLine("Message:");
-            _ = stringBuilder.AppendLine(pException.Message);
+            _ = stringBuilder.AppendLine(exception.Message);
         }
-        if (pException.StackTrace != null)
+        if (exception.StackTrace != null)
         {
             _ = stringBuilder.AppendLine("Stack trace:");
-            _ = stringBuilder.AppendLine(pException.StackTrace);
+            _ = stringBuilder.AppendLine(exception.StackTrace);
         }
         _ = stringBuilder.AppendLine();
         _ = stringBuilder.AppendLine();

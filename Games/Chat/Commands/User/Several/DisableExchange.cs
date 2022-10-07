@@ -4,7 +4,7 @@ using WibboEmulator.Games.Rooms;
 
 internal class DisableExchange : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         if (session.GetUser().AcceptTrading)
         {

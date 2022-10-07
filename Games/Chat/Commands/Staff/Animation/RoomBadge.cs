@@ -5,16 +5,16 @@ using WibboEmulator.Games.Rooms;
 
 internal class RoomBadge : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var currentRoom = session.GetUser().CurrentRoom;
-        if (currentRoom == null)
+        if (parameters.Length != 2)
         {
             return;
         }
 
-        var local_0 = parameters[1];
-        foreach (var item_0 in currentRoom.GetRoomUserManager().GetUserList().ToList())
+        var badgeId = parameters[1];
+
+        foreach (var item_0 in room.GetRoomUserManager().GetUserList().ToList())
         {
             try
             {
@@ -24,8 +24,8 @@ internal class RoomBadge : IChatCommand
                     {
                         if (item_0.GetClient().GetUser() != null)
                         {
-                            item_0.GetClient().GetUser().GetBadgeComponent().GiveBadge(local_0, true);
-                            item_0.GetClient().SendPacket(new ReceiveBadgeComposer(local_0));
+                            item_0.GetClient().GetUser().GetBadgeComponent().GiveBadge(badgeId, true);
+                            item_0.GetClient().SendPacket(new ReceiveBadgeComposer(badgeId));
                         }
                     }
                 }

@@ -7,21 +7,15 @@ using WibboEmulator.Games.Rooms;
 
 public class GameEnds : WiredTriggerBase, IWired
 {
-    private readonly RoomEventDelegate _gameEndsDeletgate;
+    public GameEnds(Item item, Room room) : base(item, room, (int)WiredTriggerType.GAME_ENDS) => this.RoomInstance.GetGameManager().OnGameEnd += this.OnGameEnd;
 
-    public GameEnds(Item item, Room room) : base(item, room, (int)WiredTriggerType.GAME_ENDS)
-    {
-        this._gameEndsDeletgate = new RoomEventDelegate(this.GameManager_OnGameEnd);
-        this.RoomInstance.GetGameManager().OnGameEnd += this._gameEndsDeletgate;
-    }
-
-    private void GameManager_OnGameEnd(object sender, EventArgs e) => this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, null, null);
+    private void OnGameEnd(object sender, EventArgs e) => this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, null, null);
 
     public override void Dispose()
     {
         base.Dispose();
 
-        this.RoomInstance.GetWiredHandler().GetRoom().GetGameManager().OnGameEnd -= this._gameEndsDeletgate;
+        this.RoomInstance.GetWiredHandler().GetRoom().GetGameManager().OnGameEnd -= this.OnGameEnd;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

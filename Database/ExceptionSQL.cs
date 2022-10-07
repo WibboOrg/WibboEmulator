@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Database;
+namespace WibboEmulator.Database;
 using System.Text;
 using WibboEmulator.Utilities.ConsoleWriter;
 
@@ -10,7 +10,7 @@ public static class ExceptionSQL
         set => Writer.DisabledState = value;
     }
 
-    public static void WriteLine(string Line) => Writer.WriteLine(Line);
+    public static void WriteLine(string line) => Writer.WriteLine(line);
 
     public static void LogException(string logText) => Writer.LogException(DateTime.Now.ToString() + ": " + Environment.NewLine + logText + Environment.NewLine);
 
@@ -22,15 +22,15 @@ public static class ExceptionSQL
 
     public static void LogMessage(string logText) => Writer.LogMessage(DateTime.Now.ToString() + ": " + logText);
 
-    public static void LogThreadException(string Exception, string Threadname) => Writer.LogThreadException(DateTime.Now.ToString() + ": " + Exception, Threadname);
+    public static void LogThreadException(string exception, string threadname) => Writer.LogThreadException(DateTime.Now.ToString() + ": " + exception, threadname);
 
-    public static void LogQueryError(Exception Exception, string query) => Writer.LogQueryError(Exception, DateTime.Now.ToString() + ": " + query);
+    public static void LogQueryError(Exception exception, string query) => Writer.LogQueryError(exception, DateTime.Now.ToString() + ": " + query);
 
-    public static void LogPacketException(string packet, string Exception) => Writer.LogPacketException(packet, DateTime.Now.ToString() + " : " + Exception);
+    public static void LogPacketException(string packet, string exception) => Writer.LogPacketException(packet, DateTime.Now.ToString() + " : " + exception);
 
-    public static void HandleException(Exception pException, string pLocation) => Writer.HandleException(pException, DateTime.Now.ToString() + ": " + pLocation);
+    public static void HandleException(Exception exception, string location) => Writer.HandleException(exception, DateTime.Now.ToString() + ": " + location);
 
-    public static void DisablePrimaryWriting(bool ClearConsole) => Writer.DisablePrimaryWriting(ClearConsole);
+    public static void DisablePrimaryWriting(bool clearConsole) => Writer.DisablePrimaryWriting(clearConsole);
 
     public static void LogShutdown(StringBuilder builder) => Writer.LogShutdown(builder);
 }

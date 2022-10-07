@@ -5,20 +5,20 @@ using WibboEmulator.Utilities;
 
 internal class AllWarp : IChatCommand
 {
-    public void Execute(GameClient session, Room Room, RoomUser UserRoom, string[] parameters)
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var MessageList = new ServerPacketList();
+        var messageList = new ServerPacketList();
 
-        foreach (var user in Room.GetRoomUserManager().GetUserList().ToList())
+        foreach (var user in room.GetRoomUserManager().GetUserList().ToList())
         {
             if (user == null || user.IsBot)
             {
                 continue;
             }
 
-            MessageList.Add(Room.GetRoomItemHandler().TeleportUser(user, UserRoom.Coordinate, 0, Room.GetGameMap().SqAbsoluteHeight(UserRoom.X, UserRoom.Y)));
+            messageList.Add(RoomItemHandling.TeleportUser(user, userRoom.Coordinate, 0, room.GetGameMap().SqAbsoluteHeight(userRoom.X, userRoom.Y)));
         }
 
-        Room.SendMessage(MessageList);
+        room.SendMessage(messageList);
     }
 }

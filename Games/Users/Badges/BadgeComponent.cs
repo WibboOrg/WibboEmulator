@@ -21,12 +21,12 @@ public class BadgeComponent : IDisposable
 
         foreach (DataRow dataRow in table.Rows)
         {
-            var Code = (string)dataRow["badge_id"];
-            var Slot = Convert.ToInt32(dataRow["badge_slot"]);
+            var code = (string)dataRow["badge_id"];
+            var slot = Convert.ToInt32(dataRow["badge_slot"]);
 
-            if (!this.BadgeList.ContainsKey(Code))
+            if (!this.BadgeList.ContainsKey(code))
             {
-                this.BadgeList.Add(Code, new Badge(Code, Slot));
+                this.BadgeList.Add(code, new Badge(code, slot));
             }
         }
     }
@@ -54,11 +54,11 @@ public class BadgeComponent : IDisposable
 
     public Dictionary<string, Badge> BadgeList { get; }
 
-    public bool HasBadgeSlot(string Badge)
+    public bool HasBadgeSlot(string badge)
     {
-        if (this.BadgeList.ContainsKey(Badge))
+        if (this.BadgeList.ContainsKey(badge))
         {
-            return this.BadgeList[Badge].Slot > 0;
+            return this.BadgeList[badge].Slot > 0;
         }
         else
         {
@@ -68,11 +68,11 @@ public class BadgeComponent : IDisposable
 
     public ICollection<Badge> GetBadges() => this.BadgeList.Values;
 
-    public Badge GetBadge(string Badge)
+    public Badge GetBadge(string badge)
     {
-        if (this.BadgeList.ContainsKey(Badge))
+        if (this.BadgeList.ContainsKey(badge))
         {
-            return this.BadgeList[Badge];
+            return this.BadgeList[badge];
         }
         else
         {
@@ -80,14 +80,14 @@ public class BadgeComponent : IDisposable
         }
     }
 
-    public bool HasBadge(string Badge)
+    public bool HasBadge(string badge)
     {
-        if (string.IsNullOrEmpty(Badge))
+        if (string.IsNullOrEmpty(badge))
         {
             return true;
         }
 
-        return this.BadgeList.ContainsKey(Badge);
+        return this.BadgeList.ContainsKey(badge);
     }
 
     public void GiveBadge(string badge, bool inDatabase) => this.GiveBadge(badge, 0, inDatabase);
@@ -115,19 +115,19 @@ public class BadgeComponent : IDisposable
         }
     }
 
-    public void RemoveBadge(string Badge)
+    public void RemoveBadge(string badge)
     {
-        if (!this.HasBadge(Badge))
+        if (!this.HasBadge(badge))
         {
             return;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserBadgeDao.Delete(dbClient, this._userInstance.Id, Badge);
+            UserBadgeDao.Delete(dbClient, this._userInstance.Id, badge);
         }
 
-        _ = this.BadgeList.Remove(this.GetBadge(Badge).Code);
+        _ = this.BadgeList.Remove(this.GetBadge(badge).Code);
     }
 
     public void Dispose()

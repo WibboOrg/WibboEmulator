@@ -8,7 +8,7 @@ internal class SetMannequinFigureEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var ItemId = packet.PopInt();
+        var itemId = packet.PopInt();
 
         if (!WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(session.GetUser().CurrentRoomId, out var room))
         {
@@ -20,36 +20,36 @@ internal class SetMannequinFigureEvent : IPacketEvent
             return;
         }
 
-        var roomItem = room.GetRoomItemHandler().GetItem(ItemId);
+        var roomItem = room.GetRoomItemHandler().GetItem(itemId);
         if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.MANNEQUIN)
         {
             return;
         }
 
-        var Look = "";
-        foreach (var Part in session.GetUser().Look.Split('.'))
+        var look = "";
+        foreach (var part in session.GetUser().Look.Split('.'))
         {
-            if (Part.StartsWith("ch") || Part.StartsWith("lg") || Part.StartsWith("cc") || Part.StartsWith("ca") || Part.StartsWith("sh") || Part.StartsWith("wa"))
+            if (part.StartsWith("ch") || part.StartsWith("lg") || part.StartsWith("cc") || part.StartsWith("ca") || part.StartsWith("sh") || part.StartsWith("wa"))
             {
-                Look = Look + Part + ".";
+                look = look + part + ".";
             }
         }
 
-        Look = Look[..^1];
-        if (Look.Length > 200)
+        look = look[..^1];
+        if (look.Length > 200)
         {
-            Look = Look[..200];
+            look = look[..200];
         }
 
-        var Stuff = roomItem.ExtraData.Split(new char[1] { ';' });
-        var Name = "";
+        var stuff = roomItem.ExtraData.Split(new char[1] { ';' });
+        var name = "";
 
-        if (Stuff.Length >= 3)
+        if (stuff.Length >= 3)
         {
-            Name = Stuff[2];
+            name = stuff[2];
         }
 
-        roomItem.ExtraData = session.GetUser().Gender.ToUpper() + ";" + Look + ";" + Name;
+        roomItem.ExtraData = session.GetUser().Gender.ToUpper() + ";" + look + ";" + name;
         roomItem.UpdateState();
     }
 }
