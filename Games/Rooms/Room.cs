@@ -46,7 +46,7 @@ public class Room
     public List<Trade> ActiveTrades { get; set; }
     public RoomData RoomData { get; set; }
 
-    private readonly TimeSpan _maximumRunTimeInSec = TimeSpan.FromSeconds(5);
+    private readonly TimeSpan _maximumRunTimeInSec = TimeSpan.FromSeconds(1);
 
     private TeamManager _teamManager;
     private GameManager _gameManager;

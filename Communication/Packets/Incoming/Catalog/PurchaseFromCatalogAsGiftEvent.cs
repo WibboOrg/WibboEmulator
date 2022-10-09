@@ -91,11 +91,9 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         }
 
         var ed = session.GetUser().Id + ";" + giftMessage + Convert.ToChar(5) + ribbon + Convert.ToChar(5) + colour;
-
-        var newItemId = 0;
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
-        newItemId = ItemDao.Insert(dbClient, presentData.Id, user.Id, ed);
+        var newItemId = ItemDao.Insert(dbClient, presentData.Id, user.Id, ed);
 
         var itemExtraData = "";
         switch (item.Data.InteractionType)

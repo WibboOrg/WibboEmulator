@@ -114,7 +114,7 @@ public class WebSocketManager
 
         if (this._ipConnectionsCount.ContainsKey(ip))
         {
-            _ = this._ipConnectionsCount.TryRemove(ip, out var am);
+            _ = this._ipConnectionsCount.TryRemove(ip, out _);
         }
 
         _ = this._ipConnectionsCount.TryAdd(ip, amount);
@@ -156,7 +156,7 @@ public class GameWebSocket : WebSocketBehavior
 {
     private string _ip;
 
-    protected override void OnError(ErrorEventArgs e) => ExceptionLogger.LogException(e.Message);
+    //protected override void OnError(ErrorEventArgs e) => ExceptionLogger.LogException(e.Message);
 
     protected override void OnClose(CloseEventArgs e) => WibboEnvironment.GetWebSocketManager().DisposeClient(this);
 

@@ -6,7 +6,7 @@ internal class SetMax : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (parameters.Length < 1)
+        if (parameters.Length < 2)
         {
             return;
         }

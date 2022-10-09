@@ -44,12 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="websocket-sharp">
-      <HintPath>..\websocket-sharp\websocket-sharp\bin\Release\net6.0\websocket-sharp.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -68,6 +62,10 @@
     <None Update="Configuration\database.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="WebSocketSharp\" />
   </ItemGroup>
 
 </Project>

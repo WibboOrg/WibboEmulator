@@ -8,6 +8,8 @@ using WibboEmulator.Utilities;
 
 public class ProjectileManager
 {
+    private readonly object _projectileSync = new();
+
     private readonly List<ItemTemp> _projectile;
     private readonly ConcurrentQueue<ItemTemp> _queueProjectile;
     private readonly Room _room;
@@ -129,27 +131,33 @@ public class ProjectileManager
         if (!this._queueProjectile.IsEmpty)
         {
             var toAdd = new List<ItemTemp>();
-            while (!this._queueProjectile.IsEmpty)
+            lock (this._projectileSync)
             {
-                if (this._queueProjectile.TryDequeue(out var item))
+                while (!this._queueProjectile.IsEmpty)
                 {
-                    if (!bulletUser.ContainsKey(item.VirtualUserId))
+                    if (this._queueProjectile.TryDequeue(out var item))
                     {
-                        bulletUser.Add(item.VirtualUserId, 1);
-                        this._projectile.Add(item);
-                    }
-                    else
-                    {
-                        bulletUser[item.VirtualUserId]++;
+                        if (!bulletUser.ContainsKey(item.VirtualUserId))
+                        {
+                            bulletUser.Add(item.VirtualUserId, 1);
+                            this._projectile.Add(item);
+                        }
+                        else
+                        {
+                            bulletUser[item.VirtualUserId]++;
 
-                        toAdd.Add(item);
+                            toAdd.Add(item);
+                        }
                     }
                 }
-
             }
-            foreach (var item in toAdd)
+
+            lock (this._projectileSync)
             {
-                this._queueProjectile.Enqueue(item);
+                foreach (var item in toAdd)
+                {
+                    this._queueProjectile.Enqueue(item);
+                }
             }
 
             toAdd.Clear();
@@ -272,6 +280,10 @@ public class ProjectileManager
     public void AddProjectile(int id, int x, int y, double z, MovementDirection movement, int dmg = 0, int distance = 10, int teamId = -1, bool isBot = false)
     {
         var item = this._room.GetRoomItemHandler().AddTempItem(id, 77151726, x, y, z, "1", dmg, isBot ? InteractionTypeTemp.PROJECTILE_BOT : InteractionTypeTemp.PROJECTILE, movement, distance, teamId);
-        this._queueProjectile.Enqueue(item);
+
+        lock (this._projectileSync)
+        {
+            this._queueProjectile.Enqueue(item);
+        }
     }
 }
