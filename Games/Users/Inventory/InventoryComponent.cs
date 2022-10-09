@@ -2,12 +2,12 @@ namespace WibboEmulator.Games.Users.Inventory;
 using System.Collections.Concurrent;
 using System.Data;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Furni;
-using WibboEmulator.Games.Users.Inventory.Bots;
-using WibboEmulator.Games.Items;
-using WibboEmulator.Games.GameClients;
 using WibboEmulator.Database.Daos.Bot;
-using WibboEmulator.Games.Rooms.AI;
 using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms.AI;
+using WibboEmulator.Games.Users.Inventory.Bots;
 
 public class InventoryComponent : IDisposable
 {

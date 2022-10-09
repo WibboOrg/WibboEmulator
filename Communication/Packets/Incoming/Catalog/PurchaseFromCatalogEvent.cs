@@ -7,13 +7,13 @@ using WibboEmulator.Communication.Packets.Outgoing.Inventory.Pets;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Purse;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Core;
+using WibboEmulator.Database.Daos.Catalog;
+using WibboEmulator.Database.Daos.Item;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.Catalog.Utilities;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.Items;
-using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Daos.Catalog;
-using WibboEmulator.Database.Daos.Item;
 
 internal class PurchaseFromCatalogEvent : IPacketEvent
 {

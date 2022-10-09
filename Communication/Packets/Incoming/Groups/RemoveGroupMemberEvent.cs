@@ -1,10 +1,10 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Groups;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Permissions;
+using WibboEmulator.Database.Daos.Guild;
+using WibboEmulator.Database.Daos.User;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Users;
-using WibboEmulator.Database.Daos.User;
-using WibboEmulator.Database.Daos.Guild;
 
 internal class RemoveGroupMemberEvent : IPacketEvent
 {

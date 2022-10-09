@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Games.Users;
-using WibboEmulator.Games.Groups;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Groups;
+using WibboEmulator.Games.Users;
 
 internal class ProfileInformationComposer : ServerPacket
 {

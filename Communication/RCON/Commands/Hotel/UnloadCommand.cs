@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Communication.RCON.Commands.Hotel;
+namespace WibboEmulator.Communication.RCON.Commands.Hotel;
 internal class UnloadCommand : IRCONCommand
 {
     public bool TryExecute(string[] parameters)
@@ -7,7 +7,6 @@ internal class UnloadCommand : IRCONCommand
         {
             return false;
         }
-
 
         if (!int.TryParse(parameters[1], out var roomId))
         {

@@ -1,8 +1,8 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Rooms.AI.Bots;
 using WibboEmulator.Communication.Packets.Outgoing.Inventory.Bots;
+using WibboEmulator.Database.Daos.Bot;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.AI;
-using WibboEmulator.Database.Daos.Bot;
 
 internal class PlaceBotEvent : IPacketEvent
 {
