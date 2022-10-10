@@ -33,9 +33,7 @@ public class Room
     public int IsLagging { get; set; }
     public int IdleTime { get; set; }
     public bool Disposed { get; set; }
-
     public Task ProcessTask { get; set; }
-
     public RoomRoleplay Roleplay { get; set; }
     public bool IsRoleplay => this.Roleplay != null;
     public List<int> UsersWithRights { get; set; }

@@ -14,20 +14,20 @@ internal class InitTradeEvent : IPacketEvent
 
         var virtualId = packet.PopInt();
 
+        var roomUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserTarget = room.GetRoomUserManager().GetRoomUserByVirtualId(virtualId);
+        if (roomUser == null || roomUser.GetClient() == null || roomUser.GetClient().GetUser() == null)
+        {
+            return;
+        }
+
+        if (roomUserTarget == null || roomUserTarget.GetClient() == null || roomUserTarget.GetClient().GetUser() == null)
+        {
+            return;
+        }
+
         if (room.IsRoleplay)
         {
-            var roomUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-            var roomUserTarget = room.GetRoomUserManager().GetRoomUserByVirtualId(virtualId);
-            if (roomUser == null || roomUser.GetClient() == null || roomUser.GetClient().GetUser() == null)
-            {
-                return;
-            }
-
-            if (roomUserTarget == null || roomUserTarget.GetClient() == null || roomUserTarget.GetClient().GetUser() == null)
-            {
-                return;
-            }
-
             var rp = roomUser.Roleplayer;
             if (rp == null || rp.TradeId > 0 || rp.Dead || rp.SendPrison || (rp.PvpEnable && room.Roleplay.Pvp) || rp.AggroTimer > 0)
             {
@@ -57,24 +57,17 @@ internal class InitTradeEvent : IPacketEvent
             return;
         }
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-        var roomUserByVirtualId = room.GetRoomUserManager().GetRoomUserByVirtualId(packet.PopInt());
-        if (roomUserByVirtualId == null || roomUserByVirtualId.GetClient() == null || roomUserByVirtualId.GetClient().GetUser() == null)
-        {
-            return;
-        }
-
-        if (!roomUserByVirtualId.GetClient().GetUser().AcceptTrading && session.GetUser().Rank < 3)
+        if (!roomUserTarget.GetClient().GetUser().AcceptTrading && session.GetUser().Rank < 3)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.tradedisabled", session.Langue));
         }
-        else if (roomUserByVirtualId.IsTransf || roomUserByUserId.IsTransf || roomUserByUserId.IsSpectator || roomUserByVirtualId.IsSpectator)
+        else if (roomUserTarget.IsTransf || roomUser.IsTransf || roomUser.IsSpectator || roomUserTarget.IsSpectator)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.3", session.Langue));
         }
         else
         {
-            room.TryStartTrade(roomUserByUserId, roomUserByVirtualId);
+            room.TryStartTrade(roomUser, roomUserTarget);
         }
     }
 }

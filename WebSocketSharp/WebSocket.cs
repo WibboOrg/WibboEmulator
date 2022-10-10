@@ -2557,7 +2557,7 @@ public class WebSocket : IDisposable
                   var cont = this.ProcessReceivedFrame(frame)
                        && this._readyState != WebSocketState.Closed;
 
-                  if (!cont)
+                  if (!cont || this._stream == null)
                   {
                       var exited = this._receivingExited;
 
@@ -4541,7 +4541,7 @@ public class WebSocket : IDisposable
     ///   Closing or Closed.
     ///   </para>
     /// </remarks>
-    void IDisposable.Dispose()
+    public void Dispose()
     {
         this.Close(1001, string.Empty);
         GC.SuppressFinalize(this);
