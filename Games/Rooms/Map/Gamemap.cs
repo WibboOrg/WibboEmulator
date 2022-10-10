@@ -5,6 +5,7 @@ using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Games.Rooms.Map.Movement;
+using WibboEmulator.Utilities;
 
 public class Gamemap
 {
@@ -205,7 +206,7 @@ public class Gamemap
 
     public void UpdateMapForItem(Item item)
     {
-        foreach (var coord in item.GetAffectedTiles.Values)
+        foreach (var coord in item.GetAffectedTiles)
         {
             if (!this.ConstructMapForItem(item, coord))
             {
@@ -228,7 +229,7 @@ public class Gamemap
                     continue;
                 }
 
-                foreach (var point in item.GetAffectedTiles.Values)
+                foreach (var point in item.GetAffectedTiles)
                 {
                     if (point.X > maxX)
                     {
@@ -521,7 +522,7 @@ public class Gamemap
         this.RemoveSpecialItem(item);
 
         var flag = false;
-        foreach (var coord in item.GetAffectedTiles.Values)
+        foreach (var coord in item.GetAffectedTiles)
         {
             if (this.RemoveCoordinatedItem(item, coord))
             {
@@ -530,7 +531,7 @@ public class Gamemap
         }
 
         var noDoublons = new Dictionary<Point, List<Item>>();
-        foreach (var tile in item.GetAffectedTiles.Values.ToList())
+        foreach (var tile in item.GetAffectedTiles)
         {
             if (this.CoordinatedItems.ContainsKey(tile))
             {
@@ -617,7 +618,7 @@ public class Gamemap
             return true;
         }
 
-        foreach (var point in item.GetAffectedTiles.Values)
+        foreach (var point in item.GetAffectedTiles)
         {
             this.AddCoordinatedItem(item, point);
         }
@@ -627,7 +628,7 @@ public class Gamemap
             return true;
         }
 
-        foreach (var coord in item.GetAffectedTiles.Values)
+        foreach (var coord in item.GetAffectedTiles)
         {
             if (!this.ConstructMapForItem(item, coord))
             {
@@ -751,37 +752,36 @@ public class Gamemap
         return floorHeight + stackHeight;
     }
 
-    public static Dictionary<int, Point> GetAffectedTiles(int length, int width, int posX, int posY, int rotation)
+    public static List<Point> GetAffectedTiles(int length, int width, int posX, int posY, int rotation)
     {
-        var num = 1;
-
-        var pointList = new Dictionary<int, Point>
+        var pointList = new List<Point>
         {
-            { 0, new Point(posX, posY) }
+            { new Point(posX, posY) }
         };
 
         if (length > 1)
         {
             if (rotation is 0 or 4)
             {
-                for (var z = 1; z < length; z++)
+                for (var i = 1; i < length; i++)
                 {
-                    pointList.Add(num++, new Point(posX, posY + z));
+                    pointList.AddIfNotExists(new Point(posX, posY + i));
 
-                    for (var index = 1; index < width; index++)
+                    for (var j = 1; j < width; j++)
                     {
-                        pointList.Add(num++, new Point(posX + index, posY + z));
+                        pointList.AddIfNotExists(new Point(posX + j, posY + i));
                     }
                 }
             }
             else if (rotation is 2 or 6)
             {
-                for (var z = 1; z < length; z++)
+                for (var i = 1; i < length; i++)
                 {
-                    pointList.Add(num++, new Point(posX + z, posY));
-                    for (var index = 1; index < width; index++)
+                    pointList.AddIfNotExists(new Point(posX + i, posY));
+
+                    for (var j = 1; j < width; j++)
                     {
-                        pointList.Add(num++, new Point(posX + z, posY + index));
+                        pointList.AddIfNotExists(new Point(posX + i, posY + j));
                     }
                 }
             }
@@ -791,29 +791,31 @@ public class Gamemap
         {
             if (rotation is 0 or 4)
             {
-                for (var z = 1; z < width; z++)
+                for (var i = 1; i < width; i++)
                 {
-                    pointList.Add(num++, new Point(posX + z, posY));
-                    for (var index = 1; index < length; index++)
+                    pointList.AddIfNotExists(new Point(posX + i, posY));
+
+                    for (var j = 1; j < length; j++)
                     {
-                        pointList.Add(num++, new Point(posX + z, posY + index));
+                        pointList.AddIfNotExists(new Point(posX + i, posY + j));
                     }
                 }
             }
             else if (rotation is 2 or 6)
             {
-                for (var z = 1; z < width; z++)
+                for (var i = 1; i < width; i++)
                 {
-                    pointList.Add(num++, new Point(posX, posY + z));
-                    for (var index = 1; index < length; index++)
+                    pointList.AddIfNotExists(new Point(posX, posY + i));
+
+                    for (var j = 1; j < length; j++)
                     {
-                        pointList.Add(num++, new Point(posX + index, posY + z));
+                        pointList.AddIfNotExists(new Point(posX + j, posY + i));
                     }
                 }
             }
         }
 
-        return pointList;
+        return pointList.OrderBy(x => x.X + x.Y).ToList();
     }
 
     public List<Item> GetRoomItemForSquare(int pX, int pY, double minZ)

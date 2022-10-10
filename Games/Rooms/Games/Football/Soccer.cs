@@ -14,7 +14,7 @@ public class Soccer
     {
         foreach (var roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.RED).Values)
         {
-            foreach (var threeDcoord in roomItem.GetAffectedTiles.Values)
+            foreach (var threeDcoord in roomItem.GetAffectedTiles)
             {
                 if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                 {
@@ -25,7 +25,7 @@ public class Soccer
         }
         foreach (var roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.GREEN).Values)
         {
-            foreach (var threeDcoord in roomItem.GetAffectedTiles.Values)
+            foreach (var threeDcoord in roomItem.GetAffectedTiles)
             {
                 if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                 {
@@ -36,7 +36,7 @@ public class Soccer
         }
         foreach (var roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.BLUE).Values)
         {
-            foreach (var threeDcoord in roomItem.GetAffectedTiles.Values)
+            foreach (var threeDcoord in roomItem.GetAffectedTiles)
             {
                 if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                 {
@@ -47,7 +47,7 @@ public class Soccer
         }
         foreach (var roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.YELLOW).Values)
         {
-            foreach (var threeDcoord in roomItem.GetAffectedTiles.Values)
+            foreach (var threeDcoord in roomItem.GetAffectedTiles)
             {
                 if (threeDcoord.X == ballItemCoord.X && threeDcoord.Y == ballItemCoord.Y)
                 {

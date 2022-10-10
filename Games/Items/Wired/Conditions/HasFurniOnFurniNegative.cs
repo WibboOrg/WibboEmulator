@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Conditions;
+namespace WibboEmulator.Games.Items.Wired.Conditions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -20,7 +20,7 @@ public class HasFurniOnFurniNegative : WiredConditionBase, IWiredCondition, IWir
 
         foreach (var roomItem in this.Items.ToList())
         {
-            foreach (var coord in roomItem.GetAffectedTiles.Values)
+            foreach (var coord in roomItem.GetAffectedTiles)
             {
                 if (this.RoomInstance.GetGameMap().Model.SqFloorHeight[coord.X, coord.Y] + this.RoomInstance.GetGameMap().ItemHeightMap[coord.X, coord.Y] > roomItem.TotalHeight)
                 {

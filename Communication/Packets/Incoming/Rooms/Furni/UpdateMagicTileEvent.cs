@@ -38,7 +38,7 @@ internal class UpdateMagicTileEvent : IPacketEvent
 
                 var totalZ = (double)(heightToSet / 100.00);
 
-                item.SetState(item.X, item.Y, totalZ, item.GetAffectedTiles);
+                item.SetState(item.X, item.Y, totalZ);
 
                 room.SendPacket(new ObjectUpdateComposer(item, room.RoomData.OwnerId));
             }

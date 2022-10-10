@@ -28,7 +28,7 @@ public class ItemUserCollision : WiredActionBase, IWiredEffect, IWired
             return;
         }
 
-        foreach (var coord in item.GetAffectedTiles.Values)
+        foreach (var coord in item.GetAffectedTiles)
         {
             var roomUser = this.RoomInstance.GetRoomUserManager().GetUserForSquare(coord.X, coord.Y);
             if (roomUser != null)

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Conditions;
+namespace WibboEmulator.Games.Items.Wired.Conditions;
 using System.Data;
 using System.Drawing;
 using WibboEmulator.Database.Interfaces;
@@ -23,7 +23,7 @@ public class TriggerUserIsOnFurni : WiredConditionBase, IWiredCondition, IWired
 
         foreach (var roomItem in this.Items.ToList())
         {
-            foreach (var coor in roomItem.GetAffectedTiles.Values)
+            foreach (var coor in roomItem.GetAffectedTiles)
             {
                 coord = new Point(coor.X, coor.Y);
                 if (coord == user.Coordinate)

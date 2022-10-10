@@ -9,7 +9,6 @@ using WibboEmulator.Games.Rooms.Games.Freeze;
 using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Games.Rooms.Map;
 using WibboEmulator.Games.Rooms.Map.Movement;
-using WibboEmulator.Games.Rooms.PathFinding;
 using WibboEmulator.Utilities.Events;
 
 public class Item : IEquatable<Item>
@@ -45,7 +44,7 @@ public class Item : IEquatable<Item>
 
     private Room _roomInstance;
 
-    public Dictionary<int, Point> GetAffectedTiles { get; private set; }
+    public List<Point> GetAffectedTiles { get; private set; }
 
     public int X { get; private set; }
 
@@ -265,13 +264,18 @@ public class Item : IEquatable<Item>
             this.IsWallItem = this.GetBaseItem().Type.ToString().ToLower() == "i";
             this.IsFloorItem = this.GetBaseItem().Type.ToString().ToLower() == "s";
 
+            if (room == null)
+            {
+                return;
+            }
+
             this.GetAffectedTiles = Gamemap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.X, this.Y, rot);
 
             this.Interactor = ItemFactory.CreateInteractor(this);
         }
     }
 
-    public void SetState(int pX, int pY, double pZ, Dictionary<int, Point> tiles)
+    public void SetState(int pX, int pY, double pZ, bool updateTiles = false)
     {
         this.X = pX;
         this.Y = pY;
@@ -280,7 +284,10 @@ public class Item : IEquatable<Item>
             this.Z = pZ;
         }
 
-        this.GetAffectedTiles = tiles;
+        if (updateTiles)
+        {
+            this.GetAffectedTiles = Gamemap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.X, this.Y, this.Rotation);
+        }
     }
 
     public void OnTrigger(RoomUser user)

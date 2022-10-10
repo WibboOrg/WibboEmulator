@@ -321,7 +321,7 @@ public class RoomItemHandling
             item.WiredHandler = null;
         }
 
-        foreach (var threeDcoord in item.GetAffectedTiles.Values)
+        foreach (var threeDcoord in item.GetAffectedTiles)
         {
             var userForSquare = this._room.GetGameMap().GetRoomUsers(new Point(threeDcoord.X, threeDcoord.Y));
             if (userForSquare == null)
@@ -505,7 +505,7 @@ public class RoomItemHandling
         }
 
         var affectedTiles = Gamemap.GetAffectedTiles(item.GetBaseItem().Length, item.GetBaseItem().Width, newX, newY, newRot);
-        foreach (var threeDcoord in affectedTiles.Values)
+        foreach (var threeDcoord in affectedTiles)
         {
             if (!this._room.GetGameMap().ValidTile(threeDcoord.X, threeDcoord.Y) || (this._room.GetGameMap().SquareHasUsers(threeDcoord.X, threeDcoord.Y) && !item.GetBaseItem().IsSeat && item.GetBaseItem().InteractionType != InteractionType.BED) || this._room.GetGameMap().Model.SqState[threeDcoord.X, threeDcoord.Y] != SquareStateType.OPEN)
             {
@@ -523,7 +523,7 @@ public class RoomItemHandling
         var itemsAffected = new List<Item>();
         var itemsComplete = new List<Item>();
 
-        foreach (var threeDcoord in affectedTiles.Values)
+        foreach (var threeDcoord in affectedTiles)
         {
             var temp = this._room.GetGameMap().GetCoordinatedItems(new Point(threeDcoord.X, threeDcoord.Y));
             if (temp != null)
@@ -610,13 +610,13 @@ public class RoomItemHandling
 
         var userForSquare = new List<RoomUser>();
 
-        foreach (var threeDcoord in item.GetAffectedTiles.Values)
+        foreach (var threeDcoord in item.GetAffectedTiles)
         {
             userForSquare.AddRange(this._room.GetGameMap().GetRoomUsers(new Point(threeDcoord.X, threeDcoord.Y)));
         }
 
         item.Rotation = newRot;
-        item.SetState(newX, newY, pZ, affectedTiles);
+        item.SetState(newX, newY, pZ, true);
 
         if (!onRoller && session != null)
         {
@@ -663,7 +663,7 @@ public class RoomItemHandling
 
         _ = this._room.GetGameMap().AddItemToMap(item);
 
-        foreach (var threeDcoord in item.GetAffectedTiles.Values)
+        foreach (var threeDcoord in item.GetAffectedTiles)
         {
             userForSquare.AddRange(this._room.GetGameMap().GetRoomUsers(new Point(threeDcoord.X, threeDcoord.Y)));
         }
@@ -693,7 +693,7 @@ public class RoomItemHandling
     public bool SetFloorItem(Item item, int newX, int newY, double newZ)
     {
         _ = this._room.GetGameMap().RemoveFromMap(item);
-        item.SetState(newX, newY, newZ, Gamemap.GetAffectedTiles(item.GetBaseItem().Length, item.GetBaseItem().Width, newX, newY, item.Rotation));
+        item.SetState(newX, newY, newZ, true);
         this.UpdateItem(item);
         _ = this._room.GetGameMap().AddItemToMap(item);
         return true;

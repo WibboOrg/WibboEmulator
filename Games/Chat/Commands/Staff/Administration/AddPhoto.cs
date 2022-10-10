@@ -14,7 +14,7 @@ internal class AddPhoto : IChatCommand
         }
 
         var photoId = parameters[1];
-        var itemPhotoId = 4581;
+        var itemPhotoId = WibboEnvironment.GetSettings().GetData<int>("photo.item.id");
         if (!WibboEnvironment.GetGame().GetItemManager().GetItem(itemPhotoId, out var itemData))
         {
             return;

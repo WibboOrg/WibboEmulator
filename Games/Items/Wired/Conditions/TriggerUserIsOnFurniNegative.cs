@@ -20,7 +20,7 @@ public class TriggerUserIsOnFurniNegative : WiredConditionBase, IWiredCondition,
 
         foreach (var roomItem in this.Items.ToList())
         {
-            foreach (var coord in roomItem.GetAffectedTiles.Values)
+            foreach (var coord in roomItem.GetAffectedTiles)
             {
                 if (coord == user.Coordinate)
                 {
