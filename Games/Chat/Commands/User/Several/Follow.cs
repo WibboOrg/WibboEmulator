@@ -22,10 +22,6 @@ internal class Follow : IChatCommand
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.follow.notallowed", session.Langue));
         }
-        else if (targetUser.GetUser().Rank >= 8)
-        {
-            session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.follow.notallowed", session.Langue));
-        }
         else
         {
             var currentRoom = targetUser.GetUser().CurrentRoom;

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Conditions;
+namespace WibboEmulator.Games.Items.Wired.Conditions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -20,7 +20,7 @@ public class TriggerUserIsOnFurniNegative : WiredConditionBase, IWiredCondition,
 
         foreach (var roomItem in this.Items.ToList())
         {
-            foreach (var coord in roomItem.GetCoords)
+            foreach (var coord in roomItem.GetAffectedTiles.Values)
             {
                 if (coord == user.Coordinate)
                 {

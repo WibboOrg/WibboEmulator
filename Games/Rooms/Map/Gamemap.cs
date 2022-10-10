@@ -5,7 +5,6 @@ using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Games.Rooms.Map.Movement;
-using WibboEmulator.Games.Rooms.PathFinding;
 
 public class Gamemap
 {
@@ -206,7 +205,7 @@ public class Gamemap
 
     public void UpdateMapForItem(Item item)
     {
-        foreach (var coord in item.GetCoords)
+        foreach (var coord in item.GetAffectedTiles.Values)
         {
             if (!this.ConstructMapForItem(item, coord))
             {
@@ -522,7 +521,7 @@ public class Gamemap
         this.RemoveSpecialItem(item);
 
         var flag = false;
-        foreach (var coord in item.GetCoords)
+        foreach (var coord in item.GetAffectedTiles.Values)
         {
             if (this.RemoveCoordinatedItem(item, coord))
             {
@@ -531,12 +530,11 @@ public class Gamemap
         }
 
         var noDoublons = new Dictionary<Point, List<Item>>();
-        foreach (var tile in item.GetCoords.ToList())
+        foreach (var tile in item.GetAffectedTiles.Values.ToList())
         {
-            var point = new Point(tile.X, tile.Y);
-            if (this.CoordinatedItems.ContainsKey(point))
+            if (this.CoordinatedItems.ContainsKey(tile))
             {
-                var list = this.CoordinatedItems[point];
+                var list = this.CoordinatedItems[tile];
                 if (!noDoublons.ContainsKey(tile))
                 {
                     noDoublons.Add(tile, list);
@@ -619,9 +617,9 @@ public class Gamemap
             return true;
         }
 
-        foreach (var point in item.GetCoords)
+        foreach (var point in item.GetAffectedTiles.Values)
         {
-            this.AddCoordinatedItem(item, new Point(point.X, point.Y));
+            this.AddCoordinatedItem(item, point);
         }
 
         if (item.GetBaseItem().InteractionType == InteractionType.FOOTBALL)
@@ -629,7 +627,7 @@ public class Gamemap
             return true;
         }
 
-        foreach (var coord in item.GetCoords)
+        foreach (var coord in item.GetAffectedTiles.Values)
         {
             if (!this.ConstructMapForItem(item, coord))
             {
@@ -753,13 +751,13 @@ public class Gamemap
         return floorHeight + stackHeight;
     }
 
-    public static Dictionary<int, Coord> GetAffectedTiles(int length, int width, int posX, int posY, int rotation)
+    public static Dictionary<int, Point> GetAffectedTiles(int length, int width, int posX, int posY, int rotation)
     {
         var num = 1;
 
-        var pointList = new Dictionary<int, Coord>
+        var pointList = new Dictionary<int, Point>
         {
-            { 0, new Coord(posX, posY, 0) }
+            { 0, new Point(posX, posY) }
         };
 
         if (length > 1)
@@ -768,11 +766,11 @@ public class Gamemap
             {
                 for (var z = 1; z < length; z++)
                 {
-                    pointList.Add(num++, new Coord(posX, posY + z, z));
+                    pointList.Add(num++, new Point(posX, posY + z));
 
                     for (var index = 1; index < width; index++)
                     {
-                        pointList.Add(num++, new Coord(posX + index, posY + z, z < index ? index : z));
+                        pointList.Add(num++, new Point(posX + index, posY + z));
                     }
                 }
             }
@@ -780,10 +778,10 @@ public class Gamemap
             {
                 for (var z = 1; z < length; z++)
                 {
-                    pointList.Add(num++, new Coord(posX + z, posY, z));
+                    pointList.Add(num++, new Point(posX + z, posY));
                     for (var index = 1; index < width; index++)
                     {
-                        pointList.Add(num++, new Coord(posX + z, posY + index, z < index ? index : z));
+                        pointList.Add(num++, new Point(posX + z, posY + index));
                     }
                 }
             }
@@ -795,10 +793,10 @@ public class Gamemap
             {
                 for (var z = 1; z < width; z++)
                 {
-                    pointList.Add(num++, new Coord(posX + z, posY, z));
+                    pointList.Add(num++, new Point(posX + z, posY));
                     for (var index = 1; index < length; index++)
                     {
-                        pointList.Add(num++, new Coord(posX + z, posY + index, z < index ? index : z));
+                        pointList.Add(num++, new Point(posX + z, posY + index));
                     }
                 }
             }
@@ -806,14 +804,15 @@ public class Gamemap
             {
                 for (var z = 1; z < width; z++)
                 {
-                    pointList.Add(num++, new Coord(posX, posY + z, z));
+                    pointList.Add(num++, new Point(posX, posY + z));
                     for (var index = 1; index < length; index++)
                     {
-                        pointList.Add(num++, new Coord(posX + index, posY + z, z < index ? index : z));
+                        pointList.Add(num++, new Point(posX + index, posY + z));
                     }
                 }
             }
         }
+
         return pointList;
     }
 

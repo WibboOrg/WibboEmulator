@@ -45,7 +45,7 @@ public class Item : IEquatable<Item>
 
     private Room _roomInstance;
 
-    public Dictionary<int, Coord> GetAffectedTiles { get; private set; }
+    public Dictionary<int, Point> GetAffectedTiles { get; private set; }
 
     public int X { get; private set; }
 
@@ -54,23 +54,6 @@ public class Item : IEquatable<Item>
     public double Z { get; private set; }
 
     public Point Coordinate => new(this.X, this.Y);
-
-    public List<Point> GetCoords
-    {
-        get
-        {
-            var list = new List<Point>
-            {
-                this.Coordinate
-            };
-            foreach (var threeDcoord in this.GetAffectedTiles.Values)
-            {
-                list.Add(new Point(threeDcoord.X, threeDcoord.Y));
-            }
-
-            return list;
-        }
-    }
 
     public double TotalHeight => this.Z + this.Height;
 
@@ -288,7 +271,7 @@ public class Item : IEquatable<Item>
         }
     }
 
-    public void SetState(int pX, int pY, double pZ, Dictionary<int, Coord> tiles)
+    public void SetState(int pX, int pY, double pZ, Dictionary<int, Point> tiles)
     {
         this.X = pX;
         this.Y = pY;

@@ -16,7 +16,7 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
     {
         foreach (var roomItem in this.Items.ToList())
         {
-            foreach (var coord in roomItem.GetCoords)
+            foreach (var coord in roomItem.GetAffectedTiles.Values)
             {
                 if (coord != this.ItemInstance.Coordinate)
                 {

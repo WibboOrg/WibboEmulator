@@ -21,7 +21,7 @@ public static class PetUtility
 
     public static Pet CreatePet(int userId, string name, int type, string race, string color)
     {
-        var pet = new Pet(-1, userId, 0, name, type, race, color, 0, 100, 100, 0, WibboEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 1, -1, false)
+        var pet = new Pet(0, userId, 0, name, type, race, color, 0, 100, 100, 0, WibboEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 1, -1, false)
         {
             DBState = DatabaseUpdateState.NEEDS_UPDATE
         };
