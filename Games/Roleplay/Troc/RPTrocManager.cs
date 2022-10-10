@@ -120,7 +120,7 @@ public class RPTrocManager
             playerTwo.SendPacket(new RpTrocStopComposer());
         }
 
-        _ = this._usersTrade.TryRemove(troc.Id, out troc);
+        _ = this._usersTrade.TryRemove(troc.Id, out _);
     }
 
     private static bool EndTrade(RPTroc troc)

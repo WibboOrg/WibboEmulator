@@ -58,14 +58,14 @@ public sealed class HttpListenerRequest
 {
     #region Private Fields
 
-    private static readonly byte[] _100continue;
+    private static readonly byte[] Http100continue;
     private string[] _acceptTypes;
     private bool _chunked;
     private readonly HttpConnection _connection;
     private Encoding _contentEncoding;
     private readonly HttpListenerContext _context;
     private CookieCollection _cookies;
-    private static readonly Encoding _defaultEncoding;
+    private static readonly Encoding DefaultEncoding;
     private readonly WebHeaderCollection _headers;
     private Stream _inputStream;
     private NameValueCollection _queryString;
@@ -80,8 +80,8 @@ public sealed class HttpListenerRequest
 
     static HttpListenerRequest()
     {
-        _100continue = Encoding.ASCII.GetBytes("HTTP/1.1 100 Continue\r\n\r\n");
-        _defaultEncoding = Encoding.UTF8;
+        Http100continue = Encoding.ASCII.GetBytes("HTTP/1.1 100 Continue\r\n\r\n");
+        DefaultEncoding = Encoding.UTF8;
     }
 
     #endregion
@@ -166,7 +166,7 @@ public sealed class HttpListenerRequest
     {
         get
         {
-            this._contentEncoding ??= this.getContentEncoding();
+            this._contentEncoding ??= this.GetContentEncoding();
 
             return this._contentEncoding;
         }
@@ -363,7 +363,7 @@ public sealed class HttpListenerRequest
                 var url = this.Url;
                 var query = url?.Query;
 
-                this._queryString = QueryStringCollection.Parse(query, _defaultEncoding);
+                this._queryString = QueryStringCollection.Parse(query, DefaultEncoding);
             }
 
             return this._queryString;
@@ -539,19 +539,19 @@ public sealed class HttpListenerRequest
 
     #region Private Methods
 
-    private Encoding getContentEncoding()
+    private Encoding GetContentEncoding()
     {
         var val = this._headers["Content-Type"];
 
         if (val == null)
         {
-            return _defaultEncoding;
+            return DefaultEncoding;
         }
 
 
         return HttpUtility.TryGetEncoding(val, out var ret)
                ? ret
-               : _defaultEncoding;
+               : DefaultEncoding;
     }
 
     #endregion
@@ -707,7 +707,7 @@ public sealed class HttpListenerRequest
 
             var output = this._connection.GetResponseStream();
 
-            output.InternalWrite(_100continue, 0, _100continue.Length);
+            output.InternalWrite(Http100continue, 0, Http100continue.Length);
         }
     }
 
@@ -836,57 +836,6 @@ public sealed class HttpListenerRequest
     #endregion
 
     #region Public Methods
-
-    /// <summary>
-    /// Begins getting the certificate provided by the client asynchronously.
-    /// </summary>
-    /// <returns>
-    /// An <see cref="IAsyncResult"/> instance that indicates the status of
-    /// the operation.
-    /// </returns>
-    /// <param name="requestCallback">
-    /// An <see cref="AsyncCallback"/> delegate that invokes the method called
-    /// when the operation is complete.
-    /// </param>
-    /// <param name="state">
-    /// An <see cref="object"/> that specifies a user defined object to pass
-    /// to the callback delegate.
-    /// </param>
-    /// <exception cref="NotSupportedException">
-    /// This method is not supported.
-    /// </exception>
-    public IAsyncResult BeginGetClientCertificate(
-      AsyncCallback requestCallback, object state
-    ) => throw new NotSupportedException();
-
-    /// <summary>
-    /// Ends an asynchronous operation to get the certificate provided by
-    /// the client.
-    /// </summary>
-    /// <returns>
-    /// A <see cref="X509Certificate2"/> that represents an X.509 certificate
-    /// provided by the client.
-    /// </returns>
-    /// <param name="asyncResult">
-    /// An <see cref="IAsyncResult"/> instance returned when the operation
-    /// started.
-    /// </param>
-    /// <exception cref="NotSupportedException">
-    /// This method is not supported.
-    /// </exception>
-    public X509Certificate2 EndGetClientCertificate(IAsyncResult asyncResult) => throw new NotSupportedException();
-
-    /// <summary>
-    /// Gets the certificate provided by the client.
-    /// </summary>
-    /// <returns>
-    /// A <see cref="X509Certificate2"/> that represents an X.509 certificate
-    /// provided by the client.
-    /// </returns>
-    /// <exception cref="NotSupportedException">
-    /// This method is not supported.
-    /// </exception>
-    public X509Certificate2 GetClientCertificate() => throw new NotSupportedException();
 
     /// <summary>
     /// Returns a string that represents the current instance.

@@ -53,11 +53,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
-internal sealed class EndPointListener
+internal sealed class EndPointListener : IDisposable
 {
     #region Private Fields
 
@@ -200,16 +199,6 @@ internal sealed class EndPointListener
         }
     }
 
-    private static RSACryptoServiceProvider CreateRSAFromFile(string path)
-    {
-        var rsa = new RSACryptoServiceProvider();
-
-        var key = File.ReadAllBytes(path);
-        rsa.ImportCspBlob(key);
-
-        return rsa;
-    }
-
     private static X509Certificate2 GetCertificate(
       int port, string folderPath, X509Certificate2 defaultCertificate
     )
@@ -226,10 +215,7 @@ internal sealed class EndPointListener
 
             if (File.Exists(cer) && File.Exists(key))
             {
-                var cert = new X509Certificate2(cer)
-                {
-                    PrivateKey = CreateRSAFromFile(key)
-                };
+                var cert = X509Certificate2.CreateFromPemFile(cer, key);
 
                 return cert;
             }
@@ -571,9 +557,12 @@ internal sealed class EndPointListener
     public void Close()
     {
         this._socket.Close();
+        this._socket.Dispose();
 
         this.ClearConnections();
         _ = EndPointManager.RemoveEndPoint(this._endpoint);
+
+        this.Dispose();
     }
 
     public void RemovePrefix(HttpListenerPrefix prefix)
@@ -652,6 +641,8 @@ internal sealed class EndPointListener
 
         this.LeaveIfNoPrefix();
     }
+
+    public void Dispose() => GC.SuppressFinalize(this);
 
     #endregion
 }

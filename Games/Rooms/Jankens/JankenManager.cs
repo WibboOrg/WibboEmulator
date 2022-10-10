@@ -30,7 +30,7 @@ public class JankenManager
                 return;
             }
 
-            _ = this._party.TryRemove(user.PartyId, out party);
+            _ = this._party.TryRemove(user.PartyId, out _);
         }
 
         if (duelUser.PartyId > 0)
@@ -317,7 +317,7 @@ public class JankenManager
                 roomuserTwo.PartyId = 0;
             }
 
-            _ = this._party.TryRemove(party.UserOne, out party);
+            _ = this._party.TryRemove(party.UserOne, out _);
         }
     }
 

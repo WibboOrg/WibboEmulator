@@ -105,7 +105,7 @@ public class HttpListenerPrefixCollection : ICollection<string>
     /// <summary>
     /// Adds the specified URI prefix to the collection.
     /// </summary>
-    /// <param name="uriPrefix">
+    /// <param name="item">
     ///   <para>
     ///   A <see cref="string"/> that specifies the URI prefix to add.
     ///   </para>
@@ -115,32 +115,32 @@ public class HttpListenerPrefixCollection : ICollection<string>
     ///   </para>
     /// </param>
     /// <exception cref="ArgumentNullException">
-    /// <paramref name="uriPrefix"/> is <see langword="null"/>.
+    /// <paramref name="item"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ArgumentException">
-    /// <paramref name="uriPrefix"/> is invalid.
+    /// <paramref name="item"/> is invalid.
     /// </exception>
     /// <exception cref="ObjectDisposedException">
     /// The <see cref="HttpListener"/> instance associated with this
     /// collection is closed.
     /// </exception>
-    public void Add(string uriPrefix)
+    public void Add(string item)
     {
         this._listener.CheckDisposed();
 
-        HttpListenerPrefix.CheckPrefix(uriPrefix);
+        HttpListenerPrefix.CheckPrefix(item);
 
-        if (this._prefixes.Contains(uriPrefix))
+        if (this._prefixes.Contains(item))
         {
             return;
         }
 
         if (this._listener.IsListening)
         {
-            EndPointManager.AddPrefix(uriPrefix, this._listener);
+            EndPointManager.AddPrefix(item, this._listener);
         }
 
-        this._prefixes.Add(uriPrefix);
+        this._prefixes.Add(item);
     }
 
     /// <summary>
@@ -170,26 +170,26 @@ public class HttpListenerPrefixCollection : ICollection<string>
     /// <c>true</c> if the collection contains the URI prefix; otherwise,
     /// <c>false</c>.
     /// </returns>
-    /// <param name="uriPrefix">
+    /// <param name="item">
     /// A <see cref="string"/> that specifies the URI prefix to test.
     /// </param>
     /// <exception cref="ArgumentNullException">
-    /// <paramref name="uriPrefix"/> is <see langword="null"/>.
+    /// <paramref name="item"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ObjectDisposedException">
     /// The <see cref="HttpListener"/> instance associated with this
     /// collection is closed.
     /// </exception>
-    public bool Contains(string uriPrefix)
+    public bool Contains(string item)
     {
         this._listener.CheckDisposed();
 
-        if (uriPrefix == null)
+        if (item == null)
         {
-            throw new ArgumentNullException(nameof(uriPrefix));
+            throw new ArgumentNullException(nameof(item));
         }
 
-        return this._prefixes.Contains(uriPrefix);
+        return this._prefixes.Contains(item);
     }
 
     /// <summary>
@@ -199,7 +199,7 @@ public class HttpListenerPrefixCollection : ICollection<string>
     /// An array of <see cref="string"/> that specifies the destination of
     /// the URI prefix strings copied from the collection.
     /// </param>
-    /// <param name="offset">
+    /// <param name="arrayIndex">
     /// An <see cref="int"/> that specifies the zero-based index in
     /// the array at which copying begins.
     /// </param>
@@ -207,28 +207,27 @@ public class HttpListenerPrefixCollection : ICollection<string>
     /// <paramref name="array"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ArgumentOutOfRangeException">
-    /// <paramref name="offset"/> is less than zero.
+    /// <paramref name="arrayIndex"/> is less than zero.
     /// </exception>
     /// <exception cref="ArgumentException">
-    /// The space from <paramref name="offset"/> to the end of
+    /// The space from <paramref name="arrayIndex"/> to the end of
     /// <paramref name="array"/> is not enough to copy to.
     /// </exception>
     /// <exception cref="ObjectDisposedException">
     /// The <see cref="HttpListener"/> instance associated with this
     /// collection is closed.
     /// </exception>
-    public void CopyTo(string[] array, int offset)
+    public void CopyTo(string[] array, int arrayIndex)
     {
         this._listener.CheckDisposed();
 
-        this._prefixes.CopyTo(array, offset);
+        this._prefixes.CopyTo(array, arrayIndex);
     }
 
     /// <summary>
     /// Gets the enumerator that iterates through the collection.
     /// </summary>
     /// <returns>
-    /// An <see cref="T:System.Collections.Generic.IEnumerator{string}"/>
     /// instance that can be used to iterate through the collection.
     /// </returns>
     public IEnumerator<string> GetEnumerator() => this._prefixes.GetEnumerator();
@@ -240,36 +239,36 @@ public class HttpListenerPrefixCollection : ICollection<string>
     /// <c>true</c> if the URI prefix is successfully removed; otherwise,
     /// <c>false</c>.
     /// </returns>
-    /// <param name="uriPrefix">
+    /// <param name="item">
     /// A <see cref="string"/> that specifies the URI prefix to remove.
     /// </param>
     /// <exception cref="ArgumentNullException">
-    /// <paramref name="uriPrefix"/> is <see langword="null"/>.
+    /// <paramref name="item"/> is <see langword="null"/>.
     /// </exception>
     /// <exception cref="ObjectDisposedException">
     /// The <see cref="HttpListener"/> instance associated with this
     /// collection is closed.
     /// </exception>
-    public bool Remove(string uriPrefix)
+    public bool Remove(string item)
     {
         this._listener.CheckDisposed();
 
-        if (uriPrefix == null)
+        if (item == null)
         {
-            throw new ArgumentNullException(nameof(uriPrefix));
+            throw new ArgumentNullException(nameof(item));
         }
 
-        if (!this._prefixes.Contains(uriPrefix))
+        if (!this._prefixes.Contains(item))
         {
             return false;
         }
 
         if (this._listener.IsListening)
         {
-            EndPointManager.RemovePrefix(uriPrefix, this._listener);
+            EndPointManager.RemovePrefix(item, this._listener);
         }
 
-        return this._prefixes.Remove(uriPrefix);
+        return this._prefixes.Remove(item);
     }
 
     #endregion

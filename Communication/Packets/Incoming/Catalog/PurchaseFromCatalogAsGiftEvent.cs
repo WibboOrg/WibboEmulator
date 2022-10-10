@@ -25,7 +25,8 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
         var spriteId = packet.PopInt();
         var ribbon = packet.PopInt();
         var colour = packet.PopInt();
-        var dnow = packet.PopBoolean();
+
+        _ = packet.PopBoolean();
 
         if (!WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out var page))
         {

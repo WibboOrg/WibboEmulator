@@ -11,7 +11,8 @@ internal class SSOTicketEvent : IPacketEvent
             return;
         }
 
-        var ssoTicket = packet.PopString();        var timer = packet.PopInt();
+        var ssoTicket = packet.PopString();
+        _ = packet.PopInt();
 
         session.TryAuthenticate(ssoTicket);
     }

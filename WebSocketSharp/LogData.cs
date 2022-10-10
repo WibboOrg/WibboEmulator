@@ -108,12 +108,12 @@ public class LogData
         var level = string.Format("{0,-5}", this.Level.ToString().ToUpper());
 
         var method = this.Caller.GetMethod();
-        var type = method.DeclaringType;
+        var type = method?.DeclaringType;
 #if DEBUG
         var num = this.Caller.GetFileLineNumber();
-        var caller = string.Format("{0}.{1}:{2}", type.Name, method.Name, num);
+        var caller = string.Format("{0}.{1}:{2}", type?.Name, method?.Name, num);
 #else
-        var caller = String.Format ("{0}.{1}", type.Name, method.Name);
+        var caller = String.Format ("{0}.{1}", type?.Name, method?.Name);
 #endif
         var msgs = this.Message.Replace("\r\n", "\n").TrimEnd('\n').Split('\n');
 

@@ -89,14 +89,14 @@ public sealed class Cookie
     private Uri _commentUri;
     private bool _discard;
     private string _domain;
-    private static readonly int[] _emptyPorts;
+    private static readonly int[] EmptyPorts;
     private DateTime _expires;
     private bool _httpOnly;
     private string _name;
     private string _path;
     private string _port;
     private int[] _ports;
-    private static readonly char[] _reservedCharsForValue;
+    private static readonly char[] ReservedCharsForValue;
     private string _sameSite;
     private bool _secure;
     private DateTime _timeStamp;
@@ -109,8 +109,8 @@ public sealed class Cookie
 
     static Cookie()
     {
-        _emptyPorts = Array.Empty<int>();
-        _reservedCharsForValue = new[] { ';', ',' };
+        EmptyPorts = Array.Empty<int>();
+        ReservedCharsForValue = new[] { ';', ',' };
     }
 
     #endregion
@@ -120,7 +120,7 @@ public sealed class Cookie
     /// <summary>
     /// Initializes a new instance of the <see cref="Cookie"/> class.
     /// </summary>
-    internal Cookie() => this.init(string.Empty, string.Empty, string.Empty, string.Empty);
+    internal Cookie() => this.Init(string.Empty, string.Empty, string.Empty, string.Empty);
 
     #endregion
 
@@ -306,7 +306,7 @@ public sealed class Cookie
 
         value ??= string.Empty;
 
-        if (value.Contains(_reservedCharsForValue))
+        if (value.Contains(ReservedCharsForValue))
         {
             if (!value.IsEnclosedIn('"'))
             {
@@ -315,7 +315,7 @@ public sealed class Cookie
             }
         }
 
-        this.init(name, value, path ?? string.Empty, domain ?? string.Empty);
+        this.Init(name, value, path ?? string.Empty, domain ?? string.Empty);
     }
 
     #endregion
@@ -348,7 +348,7 @@ public sealed class Cookie
                        : DateTime.Now;
     }
 
-    internal int[] Ports => this._ports ?? _emptyPorts;
+    internal int[] Ports => this._ports ?? EmptyPorts;
 
     internal string SameSite
     {
@@ -604,7 +604,7 @@ public sealed class Cookie
 
         internal set
         {
-            if (!tryCreatePorts(value, out var ports))
+            if (!TryCreatePorts(value, out var ports))
             {
                 return;
             }
@@ -665,7 +665,7 @@ public sealed class Cookie
         {
             value ??= string.Empty;
 
-            if (value.Contains(_reservedCharsForValue))
+            if (value.Contains(ReservedCharsForValue))
             {
                 if (!value.IsEnclosedIn('"'))
                 {
@@ -712,13 +712,13 @@ public sealed class Cookie
 
     #region Private Methods
 
-    private static int hash(int i, int j, int k, int l, int m) => i
+    private static int Hash(int i, int j, int k, int l, int m) => i
                ^ ((j << 13) | (j >> 19))
                ^ ((k << 26) | (k >> 6))
                ^ ((l << 7) | (l >> 25))
                ^ ((m << 20) | (m >> 12));
 
-    private void init(string name, string value, string path, string domain)
+    private void Init(string name, string value, string path, string domain)
     {
         this._name = name;
         this._value = value;
@@ -729,7 +729,7 @@ public sealed class Cookie
         this._timeStamp = DateTime.Now;
     }
 
-    private string toResponseStringVersion0()
+    private string ToResponseStringVersion0()
     {
         var buff = new StringBuilder(64);
 
@@ -774,7 +774,7 @@ public sealed class Cookie
         return buff.ToString();
     }
 
-    private string toResponseStringVersion1()
+    private string ToResponseStringVersion1()
     {
         var buff = new StringBuilder(64);
 
@@ -833,7 +833,7 @@ public sealed class Cookie
         return buff.ToString();
     }
 
-    private static bool tryCreatePorts(string value, out int[] result)
+    private static bool TryCreatePorts(string value, out int[] result)
     {
         result = null;
 
@@ -947,8 +947,8 @@ public sealed class Cookie
     internal string ToResponseString() => this._name.Length == 0
                ? string.Empty
                : this._version == 0
-                 ? this.toResponseStringVersion0()
-                 : this.toResponseStringVersion1();
+                 ? this.ToResponseStringVersion0()
+                 : this.ToResponseStringVersion1();
 
     internal static bool TryCreate(
       string name, string value, out Cookie result
@@ -1012,7 +1012,7 @@ public sealed class Cookie
     /// <returns>
     /// An <see cref="int"/> that represents the hash code.
     /// </returns>
-    public override int GetHashCode() => hash(
+    public override int GetHashCode() => Hash(
                  StringComparer.InvariantCultureIgnoreCase.GetHashCode(this._name),
                  this._value.GetHashCode(),
                  this._path.GetHashCode(),

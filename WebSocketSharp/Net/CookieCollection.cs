@@ -85,7 +85,7 @@ public class CookieCollection : ICollection<Cookie>
             var list = new List<Cookie>(this._list);
             if (list.Count > 1)
             {
-                list.Sort(compareForSorted);
+                list.Sort(CompareForSorted);
             }
 
             return list;
@@ -136,7 +136,7 @@ public class CookieCollection : ICollection<Cookie>
     ///   The default value is <c>false</c>.
     ///   </para>
     /// </value>
-    public bool IsSynchronized => false;
+    public static bool IsSynchronized => false;
 
     /// <summary>
     /// Gets the cookie at the specified index from the collection.
@@ -216,22 +216,22 @@ public class CookieCollection : ICollection<Cookie>
 
     #region Private Methods
 
-    private void add(Cookie cookie)
+    public void Add(Cookie item)
     {
-        var idx = this.search(cookie);
+        var idx = this.Search(item);
         if (idx == -1)
         {
-            this._list.Add(cookie);
+            this._list.Add(item);
             return;
         }
 
-        this._list[idx] = cookie;
+        this._list[idx] = item;
     }
 
-    private static int compareForSort(Cookie x, Cookie y) => x.Name.Length + x.Value.Length
+    private static int CompareForSort(Cookie x, Cookie y) => x.Name.Length + x.Value.Length
                - (y.Name.Length + y.Value.Length);
 
-    private static int compareForSorted(Cookie x, Cookie y)
+    private static int CompareForSorted(Cookie x, Cookie y)
     {
         var ret = x.Version - y.Version;
         return ret != 0
@@ -241,7 +241,7 @@ public class CookieCollection : ICollection<Cookie>
                  : y.Path.Length - x.Path.Length;
     }
 
-    private static CookieCollection parseRequest(string value)
+    private static CookieCollection ParseRequest(string value)
     {
         var ret = new CookieCollection();
 
@@ -280,7 +280,7 @@ public class CookieCollection : ICollection<Cookie>
             {
                 if (cookie != null)
                 {
-                    ret.add(cookie);
+                    ret.Add(cookie);
                     cookie = null;
                 }
 
@@ -358,7 +358,7 @@ public class CookieCollection : ICollection<Cookie>
 
             if (cookie != null)
             {
-                ret.add(cookie);
+                ret.Add(cookie);
             }
 
             if (!Cookie.TryCreate(name, val, out cookie))
@@ -374,13 +374,13 @@ public class CookieCollection : ICollection<Cookie>
 
         if (cookie != null)
         {
-            ret.add(cookie);
+            ret.Add(cookie);
         }
 
         return ret;
     }
 
-    private static CookieCollection parseResponse(string value)
+    private static CookieCollection ParseResponse(string value)
     {
         var ret = new CookieCollection();
 
@@ -436,7 +436,7 @@ public class CookieCollection : ICollection<Cookie>
             {
                 if (cookie != null)
                 {
-                    ret.add(cookie);
+                    ret.Add(cookie);
                     cookie = null;
                 }
 
@@ -595,7 +595,7 @@ public class CookieCollection : ICollection<Cookie>
                     continue;
                 }
 
-                cookie.Comment = urlDecode(val, Encoding.UTF8);
+                cookie.Comment = UrlDecode(val, Encoding.UTF8);
                 continue;
             }
 
@@ -633,7 +633,7 @@ public class CookieCollection : ICollection<Cookie>
 
             if (cookie != null)
             {
-                ret.add(cookie);
+                ret.Add(cookie);
             }
 
             _ = Cookie.TryCreate(name, val, out cookie);
@@ -641,13 +641,13 @@ public class CookieCollection : ICollection<Cookie>
 
         if (cookie != null)
         {
-            ret.add(cookie);
+            ret.Add(cookie);
         }
 
         return ret;
     }
 
-    private int search(Cookie cookie)
+    private int Search(Cookie cookie)
     {
         for (var i = this._list.Count - 1; i >= 0; i--)
         {
@@ -660,7 +660,7 @@ public class CookieCollection : ICollection<Cookie>
         return -1;
     }
 
-    private static string urlDecode(string s, Encoding encoding)
+    private static string UrlDecode(string s, Encoding encoding)
     {
         if (s.IndexOfAny(new[] { '%', '+' }) == -1)
         {
@@ -686,8 +686,8 @@ public class CookieCollection : ICollection<Cookie>
         try
         {
             return response
-                   ? parseResponse(value)
-                   : parseRequest(value);
+                   ? ParseResponse(value)
+                   : ParseRequest(value);
         }
         catch (Exception ex)
         {
@@ -697,7 +697,7 @@ public class CookieCollection : ICollection<Cookie>
 
     internal void SetOrRemove(Cookie cookie)
     {
-        var idx = this.search(cookie);
+        var idx = this.Search(cookie);
         if (idx == -1)
         {
             if (cookie.Expired)
@@ -730,42 +730,13 @@ public class CookieCollection : ICollection<Cookie>
     {
         if (this._list.Count > 1)
         {
-            this._list.Sort(compareForSort);
+            this._list.Sort(CompareForSort);
         }
     }
 
     #endregion
 
     #region Public Methods
-
-    /// <summary>
-    /// Adds the specified cookie to the collection.
-    /// </summary>
-    /// <param name="item">
-    /// A <see cref="Cookie"/> to add.
-    /// </param>
-    /// <exception cref="InvalidOperationException">
-    /// The collection is read-only.
-    /// </exception>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="item"/> is <see langword="null"/>.
-    /// </exception>
-    public void Add(Cookie item)
-    {
-        if (this._readOnly)
-        {
-            var msg = "The collection is read-only.";
-            throw new InvalidOperationException(msg);
-        }
-
-        if (item == null)
-        {
-            throw new ArgumentNullException(nameof(item));
-        }
-
-        this.add(item);
-    }
-
     /// <summary>
     /// Adds the specified cookies to the collection.
     /// </summary>
@@ -793,7 +764,7 @@ public class CookieCollection : ICollection<Cookie>
 
         foreach (var cookie in cookies._list)
         {
-            this.add(cookie);
+            this.Add(cookie);
         }
     }
 
@@ -834,7 +805,7 @@ public class CookieCollection : ICollection<Cookie>
             throw new ArgumentNullException(nameof(item));
         }
 
-        return this.search(item) > -1;
+        return this.Search(item) > -1;
     }
 
     /// <summary>
@@ -922,7 +893,7 @@ public class CookieCollection : ICollection<Cookie>
             throw new ArgumentNullException(nameof(item));
         }
 
-        var idx = this.search(item);
+        var idx = this.Search(item);
         if (idx == -1)
         {
             return false;

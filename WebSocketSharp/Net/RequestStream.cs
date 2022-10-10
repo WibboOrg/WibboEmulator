@@ -102,7 +102,7 @@ internal class RequestStream : Stream
 
     #region Private Methods
 
-    private int fillFromInitialBuffer(byte[] buffer, int offset, int count)
+    private int FillFromInitialBuffer(byte[] buffer, int offset, int count)
     {
         // This method returns a int:
         // - > 0 The number of bytes read from the initial buffer
@@ -190,7 +190,7 @@ internal class RequestStream : Stream
             return this._innerStream.BeginRead(buffer, offset, 0, callback, state);
         }
 
-        var nread = this.fillFromInitialBuffer(buffer, offset, count);
+        var nread = this.FillFromInitialBuffer(buffer, offset, count);
 
         if (nread != 0)
         {
@@ -235,10 +235,8 @@ internal class RequestStream : Stream
             throw new ArgumentNullException(nameof(asyncResult));
         }
 
-        if (asyncResult is HttpStreamAsyncResult)
+        if (asyncResult is HttpStreamAsyncResult ares)
         {
-            var ares = (HttpStreamAsyncResult)asyncResult;
-
             if (!ares.IsCompleted)
             {
                 _ = ares.AsyncWaitHandle.WaitOne();
@@ -305,7 +303,7 @@ internal class RequestStream : Stream
             return 0;
         }
 
-        var nread = this.fillFromInitialBuffer(buffer, offset, count);
+        var nread = this.FillFromInitialBuffer(buffer, offset, count);
 
         if (nread == -1)
         {

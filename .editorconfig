@@ -502,3 +502,12 @@ dotnet_diagnostic.CA1707.severity = silent
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 ##########################################
+
+# CA5350: Ne pas utiliser d'algorithmes de chiffrement faibles
+dotnet_diagnostic.CA5350.severity = none
+
+# CA5351: Ne pas utiliser d'algorithmes de chiffrement cassés
+dotnet_diagnostic.CA5351.severity = none
+
+# CA1010: Une interface générique doit également être implémentée
+dotnet_diagnostic.CA1010.severity = none

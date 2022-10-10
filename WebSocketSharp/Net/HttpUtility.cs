@@ -54,8 +54,8 @@ internal static class HttpUtility
     #region Private Fields
 
     private static Dictionary<string, char> _entities;
-    private static readonly char[] _hexChars;
-    private static readonly object _sync;
+    private static readonly char[] HexChars;
+    private static readonly object Sync;
 
     #endregion
 
@@ -63,28 +63,28 @@ internal static class HttpUtility
 
     static HttpUtility()
     {
-        _hexChars = "0123456789ABCDEF".ToCharArray();
-        _sync = new object();
+        HexChars = "0123456789ABCDEF".ToCharArray();
+        Sync = new object();
     }
 
     #endregion
 
     #region Private Methods
 
-    private static Dictionary<string, char> getEntities()
+    private static Dictionary<string, char> GetEntities()
     {
-        lock (_sync)
+        lock (Sync)
         {
             if (_entities == null)
             {
-                initEntities();
+                InitEntities();
             }
 
             return _entities;
         }
     }
 
-    private static int getNumber(char c) => c is >= '0' and <= '9'
+    private static int GetNumber(char c) => c is >= '0' and <= '9'
                ? c - '0'
                : c is >= 'A' and <= 'F'
                  ? c - 'A' + 10
@@ -92,14 +92,14 @@ internal static class HttpUtility
                    ? c - 'a' + 10
                    : -1;
 
-    private static int getNumber(byte[] bytes, int offset, int count)
+    private static int GetNumber(byte[] bytes, int offset, int count)
     {
         var ret = 0;
 
         var end = offset + count - 1;
         for (var i = offset; i <= end; i++)
         {
-            var num = getNumber((char)bytes[i]);
+            var num = GetNumber((char)bytes[i]);
             if (num == -1)
             {
                 return -1;
@@ -111,7 +111,7 @@ internal static class HttpUtility
         return ret;
     }
 
-    private static string htmlDecode(string s)
+    private static string HtmlDecodeHttp(string s)
     {
         var buff = new StringBuilder();
 
@@ -143,7 +143,7 @@ internal static class HttpUtility
 
             if (c == '&')
             {
-                _ = buff.Append(reference.ToString());
+                _ = buff.Append(reference);
 
                 reference.Length = 0;
                 _ = reference.Append('&');
@@ -158,7 +158,7 @@ internal static class HttpUtility
             {
                 if (c == ';')
                 {
-                    _ = buff.Append(reference.ToString());
+                    _ = buff.Append(reference);
 
                     reference.Length = 0;
                     state = 0;
@@ -179,7 +179,7 @@ internal static class HttpUtility
                     var entity = reference.ToString();
                     var name = entity[1..^1];
 
-                    var entities = getEntities();
+                    var entities = GetEntities();
                     if (entities.ContainsKey(name))
                     {
                         _ = buff.Append(entities[name]);
@@ -208,7 +208,7 @@ internal static class HttpUtility
                     }
                     else
                     {
-                        _ = buff.Append(reference.ToString());
+                        _ = buff.Append(reference);
                     }
 
                     reference.Length = 0;
@@ -223,7 +223,7 @@ internal static class HttpUtility
                     continue;
                 }
 
-                if (!isNumeric(c))
+                if (!IsNumeric(c))
                 {
                     state = 2;
                     continue;
@@ -243,7 +243,7 @@ internal static class HttpUtility
                     }
                     else
                     {
-                        _ = buff.Append(reference.ToString());
+                        _ = buff.Append(reference);
                     }
 
                     reference.Length = 0;
@@ -252,7 +252,7 @@ internal static class HttpUtility
                     continue;
                 }
 
-                var n = getNumber(c);
+                var n = GetNumber(c);
                 if (n == -1)
                 {
                     state = 2;
@@ -265,7 +265,7 @@ internal static class HttpUtility
 
         if (reference.Length > 0)
         {
-            _ = buff.Append(reference.ToString());
+            _ = buff.Append(reference);
         }
 
         return buff.ToString();
@@ -294,7 +294,7 @@ internal static class HttpUtility
     /// A <see cref="bool"/>: <c>true</c> if encodes without a NCR;
     /// otherwise, <c>false</c>.
     /// </param>
-    private static string htmlEncode(string s, bool minimal)
+    private static string HtmlEncode(string s, bool minimal)
     {
         var buff = new StringBuilder();
 
@@ -325,9 +325,7 @@ internal static class HttpUtility
     /// This method builds a dictionary of HTML character entity references.
     /// This dictionary comes from the HTML 4.01 W3C recommendation.
     /// </remarks>
-    private static void initEntities()
-    {
-        _entities = new Dictionary<string, char>
+    private static void InitEntities() => _entities = new Dictionary<string, char>
         {
             { "nbsp", '\u00A0' },
             { "iexcl", '\u00A1' },
@@ -582,19 +580,18 @@ internal static class HttpUtility
             { "rsaquo", '\u203A' },
             { "euro", '\u20AC' }
         };
-    }
 
-    private static bool isAlphabet(char c) => c is (>= 'A' and <= 'Z')
+    private static bool IsAlphabet(char c) => c is (>= 'A' and <= 'Z')
                or (>= 'a' and <= 'z');
 
-    private static bool isNumeric(char c) => c is >= '0' and <= '9';
+    private static bool IsNumeric(char c) => c is >= '0' and <= '9';
 
-    private static bool isUnreserved(char c) => c is '*'
+    private static bool IsUnreserved(char c) => c is '*'
                or '-'
                or '.'
                or '_';
 
-    private static byte[] urlDecodeToBytes(byte[] bytes, int offset, int count)
+    private static byte[] UrlDecodeToBytesHttp(byte[] bytes, int offset, int count)
     {
         using var buff = new MemoryStream();
         var end = offset + count - 1;
@@ -610,7 +607,7 @@ internal static class HttpUtility
                     break;
                 }
 
-                var num = getNumber(bytes, i + 1, 2);
+                var num = GetNumber(bytes, i + 1, 2);
                 if (num == -1)
                 {
                     break;
@@ -635,7 +632,7 @@ internal static class HttpUtility
         return buff.ToArray();
     }
 
-    private static void urlEncode(byte b, Stream output)
+    private static void UrlEncode(byte b, Stream output)
     {
         if (b is > 31 and < 127)
         {
@@ -646,19 +643,19 @@ internal static class HttpUtility
                 return;
             }
 
-            if (isNumeric(c))
+            if (IsNumeric(c))
             {
                 output.WriteByte(b);
                 return;
             }
 
-            if (isAlphabet(c))
+            if (IsAlphabet(c))
             {
                 output.WriteByte(b);
                 return;
             }
 
-            if (isUnreserved(c))
+            if (IsUnreserved(c))
             {
                 output.WriteByte(b);
                 return;
@@ -668,8 +665,8 @@ internal static class HttpUtility
         var i = (int)b;
         var bytes = new byte[] {
                 (byte) '%',
-                (byte) _hexChars[i >> 4],
-                (byte) _hexChars[i & 0x0F]
+                (byte) HexChars[i >> 4],
+                (byte) HexChars[i & 0x0F]
               };
 
         output.Write(bytes, 0, 3);
@@ -681,7 +678,7 @@ internal static class HttpUtility
         var end = offset + count - 1;
         for (var i = offset; i <= end; i++)
         {
-            urlEncode(bytes[i], buff);
+            UrlEncode(bytes[i], buff);
         }
 
         buff.Close();
@@ -898,7 +895,7 @@ internal static class HttpUtility
             throw new ArgumentNullException(nameof(s));
         }
 
-        return s.Length > 0 ? htmlEncode(s, true) : s;
+        return s.Length > 0 ? HtmlEncode(s, true) : s;
     }
 
     public static void HtmlAttributeEncode(string s, TextWriter output)
@@ -918,7 +915,7 @@ internal static class HttpUtility
             return;
         }
 
-        output.Write(htmlEncode(s, true));
+        output.Write(HtmlEncode(s, true));
     }
 
     public static string HtmlDecode(string s)
@@ -928,7 +925,7 @@ internal static class HttpUtility
             throw new ArgumentNullException(nameof(s));
         }
 
-        return s.Length > 0 ? htmlDecode(s) : s;
+        return s.Length > 0 ? HtmlDecodeHttp(s) : s;
     }
 
     public static void HtmlDecode(string s, TextWriter output)
@@ -948,7 +945,7 @@ internal static class HttpUtility
             return;
         }
 
-        output.Write(htmlDecode(s));
+        output.Write(HtmlDecode(s));
     }
 
     public static string HtmlEncode(string s)
@@ -958,7 +955,7 @@ internal static class HttpUtility
             throw new ArgumentNullException(nameof(s));
         }
 
-        return s.Length > 0 ? htmlEncode(s, false) : s;
+        return s.Length > 0 ? HtmlEncode(s, false) : s;
     }
 
     public static void HtmlEncode(string s, TextWriter output)
@@ -978,7 +975,7 @@ internal static class HttpUtility
             return;
         }
 
-        output.Write(htmlEncode(s, false));
+        output.Write(HtmlEncode(s, false));
     }
 
     public static string UrlDecode(string s) => UrlDecode(s, Encoding.UTF8);
@@ -993,7 +990,7 @@ internal static class HttpUtility
         var len = bytes.Length;
         return len > 0
                ? (encoding ?? Encoding.UTF8).GetString(
-                   urlDecodeToBytes(bytes, 0, len)
+                   UrlDecodeToBytes(bytes, 0, len)
                  )
                : string.Empty;
     }
@@ -1012,7 +1009,7 @@ internal static class HttpUtility
 
         var bytes = Encoding.ASCII.GetBytes(s);
         return (encoding ?? Encoding.UTF8).GetString(
-                 urlDecodeToBytes(bytes, 0, bytes.Length)
+                 UrlDecodeToBytes(bytes, 0, bytes.Length)
                );
     }
 
@@ -1053,7 +1050,7 @@ internal static class HttpUtility
 
         return count > 0
                ? (encoding ?? Encoding.UTF8).GetString(
-                   urlDecodeToBytes(bytes, offset, count)
+                   UrlDecodeToBytes(bytes, offset, count)
                  )
                : string.Empty;
     }
@@ -1067,7 +1064,7 @@ internal static class HttpUtility
 
         var len = bytes.Length;
         return len > 0
-               ? urlDecodeToBytes(bytes, 0, len)
+               ? UrlDecodeToBytes(bytes, 0, len)
                : bytes;
     }
 
@@ -1084,7 +1081,7 @@ internal static class HttpUtility
         }
 
         var bytes = Encoding.ASCII.GetBytes(s);
-        return urlDecodeToBytes(bytes, 0, bytes.Length);
+        return UrlDecodeToBytes(bytes, 0, bytes.Length);
     }
 
     public static byte[] UrlDecodeToBytes(byte[] bytes, int offset, int count)
@@ -1121,7 +1118,7 @@ internal static class HttpUtility
         }
 
         return count > 0
-               ? urlDecodeToBytes(bytes, offset, count)
+               ? UrlDecodeToBytesHttp(bytes, offset, count)
                : Array.Empty<byte>();
     }
 

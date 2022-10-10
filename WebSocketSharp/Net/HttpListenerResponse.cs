@@ -112,7 +112,7 @@ public sealed class HttpListenerResponse : IDisposable
             {
                 headers.InternalSet(
                   "Content-Type",
-                  createContentTypeHeaderText(this._contentType, this._contentEncoding),
+                  CreateContentTypeHeaderText(this._contentType, this._contentEncoding),
                   true
                 );
             }
@@ -308,7 +308,7 @@ public sealed class HttpListenerResponse : IDisposable
             if (value < 0)
             {
                 var msg = "Less than zero.";
-                throw new ArgumentOutOfRangeException(msg, "value");
+                throw new ArgumentOutOfRangeException(nameof(value), msg);
             }
 
             this._contentLength = value;
@@ -382,7 +382,7 @@ public sealed class HttpListenerResponse : IDisposable
                 throw new ArgumentException(msg, nameof(value));
             }
 
-            if (!isValidForContentType(value))
+            if (!IsValidForContentType(value))
             {
                 var msg = "It contains an invalid character.";
                 throw new ArgumentException(msg, nameof(value));
@@ -567,9 +567,7 @@ public sealed class HttpListenerResponse : IDisposable
     /// </exception>
     public string RedirectLocation
     {
-        get => this._redirectLocation != null
-                   ? this._redirectLocation.OriginalString
-                   : null;
+        get => this._redirectLocation?.OriginalString;
 
         set
         {
@@ -764,7 +762,7 @@ public sealed class HttpListenerResponse : IDisposable
                 return;
             }
 
-            if (!isValidForStatusDescription(value))
+            if (!IsValidForStatusDescription(value))
             {
                 var msg = "It contains an invalid character.";
                 throw new ArgumentException(msg, nameof(value));
@@ -778,9 +776,9 @@ public sealed class HttpListenerResponse : IDisposable
 
     #region Private Methods
 
-    private bool canSetCookie(Cookie cookie)
+    private bool CanSetCookie(Cookie cookie)
     {
-        var found = this.findCookie(cookie).ToList();
+        var found = this.FindCookie(cookie).ToList();
 
         if (found.Count == 0)
         {
@@ -800,20 +798,20 @@ public sealed class HttpListenerResponse : IDisposable
         return false;
     }
 
-    private void close(bool force)
+    private void Close(bool force)
     {
         this._disposed = true;
         this._context.Connection.Close(force);
     }
 
-    private void close(byte[] responseEntity, int bufferLength, bool willBlock)
+    private void Close(byte[] responseEntity, int bufferLength, bool willBlock)
     {
         var stream = this.OutputStream;
 
         if (willBlock)
         {
             stream.WriteBytes(responseEntity, bufferLength);
-            this.close(false);
+            this.Close(false);
 
             return;
         }
@@ -821,12 +819,12 @@ public sealed class HttpListenerResponse : IDisposable
         stream.WriteBytesAsync(
           responseEntity,
           bufferLength,
-          () => this.close(false),
+          () => this.Close(false),
           null
         );
     }
 
-    private static string createContentTypeHeaderText(
+    private static string CreateContentTypeHeaderText(
       string value, Encoding encoding
     )
     {
@@ -843,7 +841,7 @@ public sealed class HttpListenerResponse : IDisposable
         return string.Format("{0}; charset={1}", value, encoding.WebName);
     }
 
-    private IEnumerable<Cookie> findCookie(Cookie cookie)
+    private IEnumerable<Cookie> FindCookie(Cookie cookie)
     {
         if (this._cookies == null || this._cookies.Count == 0)
         {
@@ -859,7 +857,7 @@ public sealed class HttpListenerResponse : IDisposable
         }
     }
 
-    private static bool isValidForContentType(string value)
+    private static bool IsValidForContentType(string value)
     {
         foreach (var c in value)
         {
@@ -882,7 +880,7 @@ public sealed class HttpListenerResponse : IDisposable
         return true;
     }
 
-    private static bool isValidForStatusDescription(string value)
+    private static bool IsValidForStatusDescription(string value)
     {
         foreach (var c in value)
         {
@@ -914,7 +912,7 @@ public sealed class HttpListenerResponse : IDisposable
             return;
         }
 
-        this.close(true);
+        this.Close(true);
     }
 
     /// <summary>
@@ -992,7 +990,7 @@ public sealed class HttpListenerResponse : IDisposable
             return;
         }
 
-        this.close(false);
+        this.Close(false);
     }
 
     /// <summary>
@@ -1029,7 +1027,7 @@ public sealed class HttpListenerResponse : IDisposable
 
         if (len > int.MaxValue)
         {
-            this.close(responseEntity, 1024, willBlock);
+            this.Close(responseEntity, 1024, willBlock);
             return;
         }
 
@@ -1038,7 +1036,7 @@ public sealed class HttpListenerResponse : IDisposable
         if (willBlock)
         {
             stream.Write(responseEntity, 0, (int)len);
-            this.close(false);
+            this.Close(false);
 
             return;
         }
@@ -1050,7 +1048,7 @@ public sealed class HttpListenerResponse : IDisposable
           ar =>
           {
               stream.EndWrite(ar);
-              this.close(false);
+              this.Close(false);
           },
           null
         );
@@ -1185,7 +1183,7 @@ public sealed class HttpListenerResponse : IDisposable
             throw new ArgumentNullException(nameof(cookie));
         }
 
-        if (!this.canSetCookie(cookie))
+        if (!this.CanSetCookie(cookie))
         {
             var msg = "It cannot be updated.";
             throw new ArgumentException(msg, nameof(cookie));
@@ -1259,7 +1257,7 @@ public sealed class HttpListenerResponse : IDisposable
             return;
         }
 
-        this.close(true);
+        this.Close(true);
     }
 
     #endregion

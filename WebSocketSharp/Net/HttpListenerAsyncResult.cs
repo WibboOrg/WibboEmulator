@@ -49,7 +49,7 @@ namespace WibboEmulator.WebSocketSharp.Net;
 using System;
 using System.Threading;
 
-internal class HttpListenerAsyncResult : IAsyncResult
+internal class HttpListenerAsyncResult : IAsyncResult, IDisposable
 {
     #region Private Fields
 
@@ -128,7 +128,7 @@ internal class HttpListenerAsyncResult : IAsyncResult
 
     #region Private Methods
 
-    private void complete()
+    private void Complete()
     {
         lock (this.SyncRoot)
         {
@@ -165,7 +165,7 @@ internal class HttpListenerAsyncResult : IAsyncResult
     {
         this._exception = exception;
 
-        this.complete();
+        this.Complete();
     }
 
     internal void Complete(
@@ -175,8 +175,10 @@ internal class HttpListenerAsyncResult : IAsyncResult
         this._context = context;
         this.CompletedSynchronously = completedSynchronously;
 
-        this.complete();
+        this.Complete();
     }
+
+    public void Dispose() => GC.SuppressFinalize(this);
 
     #endregion
 }

@@ -8,8 +8,9 @@ internal class OpenCampaignCalendarDoorAsStaffEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var campaignName = packet.PopString();
-        var campaingnId = packet.PopInt();
+        _ = packet.PopString();
+
+        _ = packet.PopInt();
 
         session.SendPacket(new CampaignCalendarDoorOpenedComposer(true, "", "", ""));
     }

@@ -31,7 +31,6 @@ namespace WibboEmulator.WebSocketSharp.Server;
 using System;
 using System.Collections;
 using System.IO;
-using System.Threading;
 using WibboEmulator.WebSocketSharp;
 
 /// <summary>
@@ -41,7 +40,7 @@ using WibboEmulator.WebSocketSharp;
 /// This class manages the sessions in a WebSocket service provided by the
 /// <see cref="WebSocketServer"/> or <see cref="HttpServer"/> class.
 /// </remarks>
-public class WebSocketSessionManager
+public class WebSocketSessionManager : IDisposable
 {
     #region Private Fields
 
@@ -461,6 +460,7 @@ public class WebSocketSessionManager
         {
             this._state = ServerState.ShuttingDown;
             this._sweepTimer.Enabled = false;
+            this._sweepTimer.Dispose();
 
             foreach (var session in this._sessions.Values.ToList())
             {
@@ -469,6 +469,8 @@ public class WebSocketSessionManager
 
             this._state = ServerState.Stop;
         }
+
+        this.Dispose();
     }
 
     private bool TryGetSession(string id, out IWebSocketSession session)
@@ -1671,6 +1673,8 @@ public class WebSocketSessionManager
 
         this._sweeping = false;
     }
+
+    public void Dispose() => GC.SuppressFinalize(this);
 
     #endregion
 }

@@ -52,7 +52,7 @@ using WibboEmulator.WebSocketSharp.Net.WebSockets;
 /// <remarks>
 /// This class cannot be inherited.
 /// </remarks>
-public sealed class HttpListenerContext
+public sealed class HttpListenerContext : IDisposable
 {
     #region Private Fields
 
@@ -188,6 +188,8 @@ public sealed class HttpListenerContext
         {
             this.Connection.Close(true);
         }
+
+        this.Dispose();
     }
 
     internal void SendError(int statusCode)
@@ -219,7 +221,7 @@ public sealed class HttpListenerContext
                      credentialsFinder
                    );
 
-        if (user == null)
+        if (user == null || user.Identity == null)
         {
             return false;
         }
@@ -299,7 +301,6 @@ public sealed class HttpListenerContext
     /// </param>
     /// <param name="initializer">
     ///   <para>
-    ///   An <see cref="T:System.Action{WebSocket}"/> delegate.
     ///   </para>
     ///   <para>
     ///   It specifies the delegate that invokes the method called when
@@ -381,6 +382,8 @@ public sealed class HttpListenerContext
 
         return ret;
     }
+
+    public void Dispose() => GC.SuppressFinalize(this);
 
     #endregion
 }

@@ -19,8 +19,9 @@ internal class AnswerPollEvent : IPacketEvent
             return;
         }
 
-        var id = packet.PopInt();
-        var questionId = packet.PopInt();
+        _ = packet.PopInt();
+
+        _ = packet.PopInt();
 
         var count = packet.PopInt();//Count
 

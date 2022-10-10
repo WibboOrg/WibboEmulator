@@ -9,7 +9,8 @@ internal class GetCatalogPageEvent : IPacketEvent
     public void Parse(GameClient session, ClientPacket packet)
     {
         var pageId = packet.PopInt();
-        var something = packet.PopInt();
+
+        _ = packet.PopInt();
         var cataMode = packet.PopString();
 
         _ = WibboEnvironment.GetGame().GetCatalog().TryGetPage(pageId, out var page);

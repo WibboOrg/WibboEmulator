@@ -113,7 +113,7 @@ public enum HttpStatusCode
     ///   Ambiguous is a synonym for MultipleChoices.
     ///   </para>
     /// </summary>
-    Ambiguous = 300,
+    //Ambiguous = 300,
     /// <summary>
     ///   <para>
     ///   Equivalent to status code 301. Indicates that the requested resource
@@ -135,7 +135,7 @@ public enum HttpStatusCode
     ///   Moved is a synonym for MovedPermanently.
     ///   </para>
     /// </summary>
-    Moved = 301,
+    //Moved = 301,
     /// <summary>
     ///   <para>
     ///   Equivalent to status code 302. Indicates that the requested resource
@@ -155,7 +155,7 @@ public enum HttpStatusCode
     ///   Redirect is a synonym for Found.
     ///   </para>
     /// </summary>
-    Redirect = 302,
+    //Redirect = 302,
     /// <summary>
     ///   <para>
     ///   Equivalent to status code 303. Indicates that the response to
@@ -177,7 +177,7 @@ public enum HttpStatusCode
     ///   RedirectMethod is a synonym for SeeOther.
     ///   </para>
     /// </summary>
-    RedirectMethod = 303,
+    //RedirectMethod = 303,
     /// <summary>
     /// Equivalent to status code 304. Indicates that the client has performed
     /// a conditional GET request and access is allowed, but the document has
@@ -214,7 +214,7 @@ public enum HttpStatusCode
     ///   RedirectKeepVerb is a synonym for TemporaryRedirect.
     ///   </para>
     /// </summary>
-    RedirectKeepVerb = 307,
+    //RedirectKeepVerb = 307,
     /// <summary>
     /// Equivalent to status code 400. Indicates that the client's request could
     /// not be understood by the server due to malformed syntax.

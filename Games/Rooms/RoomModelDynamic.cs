@@ -159,7 +159,8 @@ public class RoomModelDynamic
     {
         var squareStateArray = new SquareStateType[this.MapSizeX, this.MapSizeY];
         var numArray1 = new short[this.MapSizeX, this.MapSizeY];
-        var numArray2 = new byte[this.MapSizeX, this.MapSizeY];
+
+        _ = new byte[this.MapSizeX, this.MapSizeY];
         for (var index1 = 0; index1 < this.MapSizeY; ++index1)
         {
             for (var index2 = 0; index2 < this.MapSizeX; ++index2)

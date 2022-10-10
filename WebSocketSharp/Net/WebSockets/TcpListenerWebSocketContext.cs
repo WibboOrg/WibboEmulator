@@ -50,7 +50,7 @@ using WibboEmulator.WebSocketSharp.Net;
 /// Provides the access to the information in a WebSocket handshake request
 /// to a <see cref="TcpListener"/> instance.
 /// </summary>
-internal class TcpListenerWebSocketContext : WebSocketContext
+internal class TcpListenerWebSocketContext : WebSocketContext, IDisposable
 {
     #region Private Fields
 
@@ -229,7 +229,7 @@ internal class TcpListenerWebSocketContext : WebSocketContext
             if (this._queryString == null)
             {
                 var uri = this.RequestUri;
-                var query = uri != null ? uri.Query : null;
+                var query = uri?.Query;
 
                 this._queryString = QueryStringCollection.Parse(query, Encoding.UTF8);
             }
@@ -389,6 +389,7 @@ internal class TcpListenerWebSocketContext : WebSocketContext
     {
         this.Stream.Close();
         this._tcpClient.Close();
+        this.Dispose();
     }
 
     internal void Close(HttpStatusCode code)
@@ -397,6 +398,7 @@ internal class TcpListenerWebSocketContext : WebSocketContext
 
         this.Stream.Close();
         this._tcpClient.Close();
+        this.Dispose();
     }
 
     internal void SendAuthenticationChallenge(string challenge)
@@ -420,7 +422,7 @@ internal class TcpListenerWebSocketContext : WebSocketContext
                      credentialsFinder
                    );
 
-        if (user == null)
+        if (user == null || user.Identity == null)
         {
             return false;
         }
@@ -447,6 +449,8 @@ internal class TcpListenerWebSocketContext : WebSocketContext
     /// included in the handshake request.
     /// </returns>
     public override string ToString() => this._request.ToString();
+
+    public void Dispose() => GC.SuppressFinalize(this);
 
     #endregion
 }

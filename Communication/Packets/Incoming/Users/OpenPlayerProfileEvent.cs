@@ -10,7 +10,8 @@ internal class OpenPlayerProfileEvent : IPacketEvent
     public void Parse(GameClient session, ClientPacket packet)
     {
         var userId = packet.PopInt();
-        var isMe = packet.PopBoolean();
+
+        _ = packet.PopBoolean();
 
         var targetData = WibboEnvironment.GetUserById(userId);
         if (targetData == null)

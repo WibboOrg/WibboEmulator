@@ -100,7 +100,6 @@ public class Logger
     /// A <see cref="string"/> that specifies the path to the log file.
     /// </param>
     /// <param name="output">
-    /// An <see cref="T:System.Action{LogData, string}"/> that specifies
     /// the delegate used to output a log.
     /// </param>
     public Logger(LogLevel level, string file, Action<LogData, string> output)
@@ -167,7 +166,6 @@ public class Logger
     /// </summary>
     /// <value>
     ///   <para>
-    ///   An <see cref="T:System.Action{LogData, string}"/> delegate.
     ///   </para>
     ///   <para>
     ///   It references the method used to output a log.
@@ -210,7 +208,7 @@ public class Logger
         }
     }
 
-    private void output(string message, LogLevel level)
+    private void OutputMessage(string message, LogLevel level)
     {
         lock (this._sync)
         {
@@ -238,11 +236,9 @@ public class Logger
 
     private static void WriteToFile(string value, string path)
     {
-        using (var writer = new StreamWriter(path, true))
-        using (var syncWriter = TextWriter.Synchronized(writer))
-        {
-            syncWriter.WriteLine(value);
-        }
+        using var writer = new StreamWriter(path, true);
+        using var syncWriter = TextWriter.Synchronized(writer);
+        syncWriter.WriteLine(value);
     }
 
     #endregion
@@ -266,7 +262,7 @@ public class Logger
             return;
         }
 
-        this.output(message, LogLevel.Debug);
+        this.OutputMessage(message, LogLevel.Debug);
     }
 
     /// <summary>
@@ -286,7 +282,7 @@ public class Logger
             return;
         }
 
-        this.output(message, LogLevel.Error);
+        this.OutputMessage(message, LogLevel.Error);
     }
 
     /// <summary>
@@ -302,7 +298,7 @@ public class Logger
             return;
         }
 
-        this.output(message, LogLevel.Fatal);
+        this.OutputMessage(message, LogLevel.Fatal);
     }
 
     /// <summary>
@@ -322,7 +318,7 @@ public class Logger
             return;
         }
 
-        this.output(message, LogLevel.Info);
+        this.OutputMessage(message, LogLevel.Info);
     }
 
     /// <summary>
@@ -342,7 +338,7 @@ public class Logger
             return;
         }
 
-        this.output(message, LogLevel.Trace);
+        this.OutputMessage(message, LogLevel.Trace);
     }
 
     /// <summary>
@@ -362,7 +358,7 @@ public class Logger
             return;
         }
 
-        this.output(message, LogLevel.Warn);
+        this.OutputMessage(message, LogLevel.Warn);
     }
 
     #endregion

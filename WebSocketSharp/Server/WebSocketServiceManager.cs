@@ -214,7 +214,7 @@ public class WebSocketServiceManager
         {
             lock (this._sync)
             {
-                if (!this.canSet())
+                if (!this.CanSet())
                 {
                     return;
                 }
@@ -286,7 +286,7 @@ public class WebSocketServiceManager
 
             lock (this._sync)
             {
-                if (!this.canSet())
+                if (!this.CanSet())
                 {
                     return;
                 }
@@ -305,7 +305,7 @@ public class WebSocketServiceManager
 
     #region Private Methods
 
-    private bool canSet() => this._state is ServerState.Ready or ServerState.Stop;
+    private bool CanSet() => this._state is ServerState.Ready or ServerState.Stop;
 
     #endregion
 

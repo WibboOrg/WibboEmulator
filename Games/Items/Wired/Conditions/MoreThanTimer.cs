@@ -13,7 +13,7 @@ public class MoreThanTimer : WiredConditionBase, IWiredCondition, IWired
     {
         var timeout = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
 
-        var dateTime = this.RoomInstance.LastTimerReset;
+        _ = this.RoomInstance.LastTimerReset;
         return (DateTime.Now - this.RoomInstance.LastTimerReset).TotalSeconds > timeout / 2;
     }
 

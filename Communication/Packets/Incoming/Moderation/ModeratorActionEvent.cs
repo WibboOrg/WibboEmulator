@@ -16,7 +16,8 @@ internal class ModeratorActionEvent : IPacketEvent
 
         var alertMode = packet.PopInt();
         var alertMessage = packet.PopString();
-        var isCaution = alertMode != 3;
+
+        _ = alertMode != 3;
 
         if (session.Antipub(alertMessage, "<MT>"))
         {

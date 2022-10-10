@@ -82,7 +82,7 @@ internal class AuthenticationResponse : AuthenticationBase
         this._nonceCount = nonceCount;
         if (scheme == AuthenticationSchemes.Digest)
         {
-            this.initAsDigest();
+            this.InitAsDigest();
         }
     }
 
@@ -114,17 +114,17 @@ internal class AuthenticationResponse : AuthenticationBase
 
     #region Private Methods
 
-    private static string createA1(string username, string password, string realm) => string.Format("{0}:{1}:{2}", username, realm, password);
+    private static string CreateA1(string username, string password, string realm) => string.Format("{0}:{1}:{2}", username, realm, password);
 
-    private static string createA1(
+    private static string CreateA1(
       string username, string password, string realm, string nonce, string cnonce) => string.Format(
-          "{0}:{1}:{2}", hash(createA1(username, password, realm)), nonce, cnonce);
+          "{0}:{1}:{2}", Hash(CreateA1(username, password, realm)), nonce, cnonce);
 
-    private static string createA2(string method, string uri) => string.Format("{0}:{1}", method, uri);
+    private static string CreateA2(string method, string uri) => string.Format("{0}:{1}", method, uri);
 
-    private static string createA2(string method, string uri, string entity) => string.Format("{0}:{1}:{2}", method, uri, hash(entity));
+    private static string CreateA2(string method, string uri, string entity) => string.Format("{0}:{1}:{2}", method, uri, Hash(entity));
 
-    private static string hash(string value)
+    private static string Hash(string value)
     {
         var src = Encoding.UTF8.GetBytes(value);
         var md5 = MD5.Create();
@@ -139,7 +139,7 @@ internal class AuthenticationResponse : AuthenticationBase
         return res.ToString();
     }
 
-    private void initAsDigest()
+    private void InitAsDigest()
     {
         var qops = this.Parameters["qop"];
         if (qops != null)
@@ -178,19 +178,19 @@ internal class AuthenticationResponse : AuthenticationBase
         var method = parameters["method"];
 
         var a1 = algo != null && algo.ToLower() == "md5-sess"
-                 ? createA1(user, pass, realm, nonce, cnonce)
-                 : createA1(user, pass, realm);
+                 ? CreateA1(user, pass, realm, nonce, cnonce)
+                 : CreateA1(user, pass, realm);
 
         var a2 = qop != null && qop.ToLower() == "auth-int"
-                 ? createA2(method, uri, parameters["entity"])
-                 : createA2(method, uri);
+                 ? CreateA2(method, uri, parameters["entity"])
+                 : CreateA2(method, uri);
 
-        var secret = hash(a1);
+        var secret = Hash(a1);
         var data = qop != null
-                   ? string.Format("{0}:{1}:{2}:{3}:{4}", nonce, nc, cnonce, qop, hash(a2))
-                   : string.Format("{0}:{1}", nonce, hash(a2));
+                   ? string.Format("{0}:{1}:{2}:{3}:{4}", nonce, nc, cnonce, qop, Hash(a2))
+                   : string.Format("{0}:{1}", nonce, Hash(a2));
 
-        return hash(string.Format("{0}:{1}", secret, data));
+        return Hash(string.Format("{0}:{1}", secret, data));
     }
 
     internal static AuthenticationResponse Parse(string value)
@@ -294,7 +294,7 @@ internal class AuthenticationResponse : AuthenticationBase
     {
         var schm = this.Scheme;
         return schm == AuthenticationSchemes.Basic
-               ? new HttpBasicIdentity(this.Parameters["username"], this.Parameters["password"]) as IIdentity
+               ? new HttpBasicIdentity(this.Parameters["username"], this.Parameters["password"])
                : schm == AuthenticationSchemes.Digest
                  ? new HttpDigestIdentity(this.Parameters)
                  : null;

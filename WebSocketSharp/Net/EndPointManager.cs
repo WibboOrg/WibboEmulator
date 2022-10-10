@@ -76,11 +76,11 @@ internal sealed class EndPointManager
 
     #region Private Methods
 
-    private static void addPrefix(string uriPrefix, HttpListener listener)
+    private static void AddPrefixEnd(string uriPrefix, HttpListener listener)
     {
         var pref = new HttpListenerPrefix(uriPrefix, listener);
 
-        var addr = convertToIPAddress(pref.Host);
+        var addr = ConvertToIPAddress(pref.Host);
 
         if (addr == null)
         {
@@ -155,7 +155,7 @@ internal sealed class EndPointManager
         lsnr.AddPrefix(pref);
     }
 
-    private static IPAddress convertToIPAddress(string hostname)
+    private static IPAddress ConvertToIPAddress(string hostname)
     {
         if (hostname == "*")
         {
@@ -170,11 +170,11 @@ internal sealed class EndPointManager
         return hostname.ToIPAddress();
     }
 
-    private static void removePrefix(string uriPrefix, HttpListener listener)
+    private static void RemovePrefixEnd(string uriPrefix, HttpListener listener)
     {
         var pref = new HttpListenerPrefix(uriPrefix, listener);
 
-        var addr = convertToIPAddress(pref.Host);
+        var addr = ConvertToIPAddress(pref.Host);
 
         if (addr == null)
         {
@@ -251,7 +251,7 @@ internal sealed class EndPointManager
             {
                 foreach (var pref in listener.Prefixes)
                 {
-                    addPrefix(pref, listener);
+                    AddPrefixEnd(pref, listener);
                     added.Add(pref);
                 }
             }
@@ -259,7 +259,7 @@ internal sealed class EndPointManager
             {
                 foreach (var pref in added)
                 {
-                    removePrefix(pref, listener);
+                    RemovePrefixEnd(pref, listener);
                 }
 
                 throw;
@@ -271,7 +271,7 @@ internal sealed class EndPointManager
     {
         lock (((ICollection)Endpoints).SyncRoot)
         {
-            addPrefix(uriPrefix, listener);
+            AddPrefixEnd(uriPrefix, listener);
         }
     }
 
@@ -281,7 +281,7 @@ internal sealed class EndPointManager
         {
             foreach (var pref in listener.Prefixes)
             {
-                removePrefix(pref, listener);
+                RemovePrefixEnd(pref, listener);
             }
         }
     }
@@ -290,7 +290,7 @@ internal sealed class EndPointManager
     {
         lock (((ICollection)Endpoints).SyncRoot)
         {
-            removePrefix(uriPrefix, listener);
+            RemovePrefixEnd(uriPrefix, listener);
         }
     }
 

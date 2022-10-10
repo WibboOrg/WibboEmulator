@@ -48,7 +48,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 using System.Text;
 
 /// <summary>
@@ -61,7 +60,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
 {
     #region Private Fields
 
-    private static readonly Dictionary<string, HttpHeaderInfo> _headers;
+    private static readonly Dictionary<string, HttpHeaderInfo> Headers;
     private readonly bool _internallyUsed;
     private HttpHeaderType _state;
 
@@ -69,7 +68,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
 
     #region Static Constructor
 
-    static WebHeaderCollection() => _headers =
+    static WebHeaderCollection() => Headers =
           new Dictionary<string, HttpHeaderInfo>(
             StringComparer.InvariantCultureIgnoreCase
           )
@@ -683,7 +682,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
         get
         {
             var key = header.ToString();
-            var name = getHeaderName(key);
+            var name = GetHeaderName(key);
 
             return this.Get(name);
         }
@@ -728,7 +727,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
         get
         {
             var key = header.ToString();
-            var name = getHeaderName(key);
+            var name = GetHeaderName(key);
 
             return this.Get(name);
         }
@@ -749,7 +748,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
 
     #region Private Methods
 
-    private void add(string name, string value, HttpHeaderType headerType)
+    private void Add(string name, string value, HttpHeaderType headerType)
     {
         base.Add(name, value);
 
@@ -766,7 +765,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
         this._state = headerType;
     }
 
-    private void checkAllowed(HttpHeaderType headerType)
+    private void CheckAllowed(HttpHeaderType headerType)
     {
         if (this._state == HttpHeaderType.Unspecified)
         {
@@ -786,7 +785,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
         }
     }
 
-    private static string checkName(string name, string paramName)
+    private static string CheckName(string name, string paramName)
     {
         if (name == null)
         {
@@ -821,7 +820,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
         return name;
     }
 
-    private void checkRestricted(string name, HttpHeaderType headerType)
+    private void CheckRestricted(string name, HttpHeaderType headerType)
     {
         if (this._internallyUsed)
         {
@@ -830,7 +829,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
 
         var res = headerType == HttpHeaderType.Response;
 
-        if (isRestricted(name, res))
+        if (IsRestricted(name, res))
         {
             var msg = "The header is a restricted header.";
 
@@ -838,7 +837,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
         }
     }
 
-    private static string checkValue(string value, string paramName)
+    private static string CheckValue(string value, string paramName)
     {
         if (value == null)
         {
@@ -871,11 +870,11 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
         return value;
     }
 
-    private static HttpHeaderInfo getHeaderInfo(string name)
+    private static HttpHeaderInfo GetHeaderInfo(string name)
     {
         var comparison = StringComparison.InvariantCultureIgnoreCase;
 
-        foreach (var headerInfo in _headers.Values)
+        foreach (var headerInfo in Headers.Values)
         {
             if (headerInfo.HeaderName.Equals(name, comparison))
             {
@@ -886,17 +885,11 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
         return null;
     }
 
-    private static string getHeaderName(string key)
-    {
+    private static string GetHeaderName(string key) => Headers.TryGetValue(key, out var headerInfo) ? headerInfo.HeaderName : null;
 
-        return _headers.TryGetValue(key, out var headerInfo)
-               ? headerInfo.HeaderName
-               : null;
-    }
-
-    private static HttpHeaderType getHeaderType(string name)
+    private static HttpHeaderType GetHeaderType(string name)
     {
-        var headerInfo = getHeaderInfo(name);
+        var headerInfo = GetHeaderInfo(name);
 
         if (headerInfo == null)
         {
@@ -915,21 +908,21 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
                : HttpHeaderType.Unspecified;
     }
 
-    private static bool isMultiValue(string name, bool response)
+    private static bool IsMultiValue(string name, bool response)
     {
-        var headerInfo = getHeaderInfo(name);
+        var headerInfo = GetHeaderInfo(name);
 
         return headerInfo != null && headerInfo.IsMultiValue(response);
     }
 
-    private static bool isRestricted(string name, bool response)
+    public static bool IsRestricted(string name, bool response = false)
     {
-        var headerInfo = getHeaderInfo(name);
+        var headerInfo = GetHeaderInfo(name);
 
         return headerInfo != null && headerInfo.IsRestricted(response);
     }
 
-    private void set(string name, string value, HttpHeaderType headerType)
+    private void Set(string name, string value, HttpHeaderType headerType)
     {
         base.Set(name, value);
 
@@ -968,10 +961,10 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
                   ? header[(idx + 1)..]
                   : string.Empty;
 
-        name = checkName(name, nameof(header));
-        val = checkValue(val, nameof(header));
+        name = CheckName(name, nameof(header));
+        val = CheckValue(val, nameof(header));
 
-        if (isMultiValue(name, response))
+        if (IsMultiValue(name, response))
         {
             base.Add(name, val);
 
@@ -983,9 +976,9 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
 
     internal void InternalSet(string name, string value, bool response)
     {
-        value = checkValue(value, nameof(value));
+        value = CheckValue(value, nameof(value));
 
-        if (isMultiValue(name, response))
+        if (IsMultiValue(name, response))
         {
             base.Add(name, value);
 
@@ -1010,7 +1003,7 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
         {
             var name = this.GetKey(i);
 
-            if (isMultiValue(name, response))
+            if (IsMultiValue(name, response))
             {
                 foreach (var val in this.GetValues(i))
                 {
@@ -1077,13 +1070,13 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     /// </exception>
     protected void AddWithoutValidate(string headerName, string headerValue)
     {
-        headerName = checkName(headerName, nameof(headerName));
-        headerValue = checkValue(headerValue, nameof(headerValue));
+        headerName = CheckName(headerName, nameof(headerName));
+        headerValue = CheckValue(headerValue, nameof(headerValue));
 
-        var headerType = getHeaderType(headerName);
+        var headerType = GetHeaderType(headerName);
 
-        this.checkAllowed(headerType);
-        this.add(headerName, headerValue, headerType);
+        this.CheckAllowed(headerType);
+        this.Add(headerName, headerValue, headerType);
     }
 
     #endregion
@@ -1180,14 +1173,14 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
                   ? header[(idx + 1)..]
                   : string.Empty;
 
-        name = checkName(name, nameof(header));
-        val = checkValue(val, nameof(header));
+        name = CheckName(name, nameof(header));
+        val = CheckValue(val, nameof(header));
 
-        var headerType = getHeaderType(name);
+        var headerType = GetHeaderType(name);
 
-        this.checkRestricted(name, headerType);
-        this.checkAllowed(headerType);
-        this.add(name, val, headerType);
+        this.CheckRestricted(name, headerType);
+        this.CheckAllowed(headerType);
+        this.Add(name, val, headerType);
     }
 
     /// <summary>
@@ -1225,14 +1218,14 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     /// </exception>
     public void Add(HttpRequestHeader header, string value)
     {
-        value = checkValue(value, nameof(value));
+        value = CheckValue(value, nameof(value));
 
         var key = header.ToString();
-        var name = getHeaderName(key);
+        var name = GetHeaderName(key);
 
-        this.checkRestricted(name, HttpHeaderType.Request);
-        this.checkAllowed(HttpHeaderType.Request);
-        this.add(name, value, HttpHeaderType.Request);
+        this.CheckRestricted(name, HttpHeaderType.Request);
+        this.CheckAllowed(HttpHeaderType.Request);
+        this.Add(name, value, HttpHeaderType.Request);
     }
 
     /// <summary>
@@ -1270,14 +1263,14 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     /// </exception>
     public void Add(HttpResponseHeader header, string value)
     {
-        value = checkValue(value, nameof(value));
+        value = CheckValue(value, nameof(value));
 
         var key = header.ToString();
-        var name = getHeaderName(key);
+        var name = GetHeaderName(key);
 
-        this.checkRestricted(name, HttpHeaderType.Response);
-        this.checkAllowed(HttpHeaderType.Response);
-        this.add(name, value, HttpHeaderType.Response);
+        this.CheckRestricted(name, HttpHeaderType.Response);
+        this.CheckAllowed(HttpHeaderType.Response);
+        this.Add(name, value, HttpHeaderType.Response);
     }
 
     /// <summary>
@@ -1330,14 +1323,14 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     /// </exception>
     public override void Add(string name, string value)
     {
-        name = checkName(name, nameof(name));
-        value = checkValue(value, nameof(value));
+        name = CheckName(name, nameof(name));
+        value = CheckValue(value, nameof(value));
 
-        var headerType = getHeaderType(name);
+        var headerType = GetHeaderType(name);
 
-        this.checkRestricted(name, headerType);
-        this.checkAllowed(headerType);
-        this.add(name, value, headerType);
+        this.CheckRestricted(name, headerType);
+        this.CheckAllowed(headerType);
+        this.Add(name, value, headerType);
     }
 
     /// <summary>
@@ -1493,78 +1486,6 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     }
 
     /// <summary>
-    /// Determines whether the specified HTTP header can be set for the request.
-    /// </summary>
-    /// <returns>
-    /// <c>true</c> if the header cannot be set; otherwise, <c>false</c>.
-    /// </returns>
-    /// <param name="headerName">
-    /// A <see cref="string"/> that specifies the name of the header to test.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="headerName"/> is <see langword="null"/>.
-    /// </exception>
-    /// <exception cref="ArgumentException">
-    ///   <para>
-    ///   <paramref name="headerName"/> is an empty string.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="headerName"/> is a string of spaces.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="headerName"/> contains an invalid character.
-    ///   </para>
-    /// </exception>
-    public static bool IsRestricted(string headerName) => IsRestricted(headerName, false);
-
-    /// <summary>
-    /// Determines whether the specified HTTP header can be set for the request
-    /// or the response.
-    /// </summary>
-    /// <returns>
-    /// <c>true</c> if the header cannot be set; otherwise, <c>false</c>.
-    /// </returns>
-    /// <param name="headerName">
-    /// A <see cref="string"/> that specifies the name of the header to test.
-    /// </param>
-    /// <param name="response">
-    /// A <see cref="bool"/>: <c>true</c> if the test is for the response;
-    /// otherwise, <c>false</c>.
-    /// </param>
-    /// <exception cref="ArgumentNullException">
-    /// <paramref name="headerName"/> is <see langword="null"/>.
-    /// </exception>
-    /// <exception cref="ArgumentException">
-    ///   <para>
-    ///   <paramref name="headerName"/> is an empty string.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="headerName"/> is a string of spaces.
-    ///   </para>
-    ///   <para>
-    ///   -or-
-    ///   </para>
-    ///   <para>
-    ///   <paramref name="headerName"/> contains an invalid character.
-    ///   </para>
-    /// </exception>
-    public static bool IsRestricted(string headerName, bool response)
-    {
-        headerName = checkName(headerName, nameof(headerName));
-
-        return isRestricted(headerName, response);
-    }
-
-    /// <summary>
     /// Implements the <see cref="ISerializable"/> interface and raises
     /// the deserialization event when the deserialization is complete.
     /// </summary>
@@ -1596,10 +1517,10 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     public void Remove(HttpRequestHeader header)
     {
         var key = header.ToString();
-        var name = getHeaderName(key);
+        var name = GetHeaderName(key);
 
-        this.checkRestricted(name, HttpHeaderType.Request);
-        this.checkAllowed(HttpHeaderType.Request);
+        this.CheckRestricted(name, HttpHeaderType.Request);
+        this.CheckAllowed(HttpHeaderType.Request);
         base.Remove(name);
     }
 
@@ -1623,10 +1544,10 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     public void Remove(HttpResponseHeader header)
     {
         var key = header.ToString();
-        var name = getHeaderName(key);
+        var name = GetHeaderName(key);
 
-        this.checkRestricted(name, HttpHeaderType.Response);
-        this.checkAllowed(HttpHeaderType.Response);
+        this.CheckRestricted(name, HttpHeaderType.Response);
+        this.CheckAllowed(HttpHeaderType.Response);
         base.Remove(name);
     }
 
@@ -1667,12 +1588,12 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     /// </exception>
     public override void Remove(string name)
     {
-        name = checkName(name, nameof(name));
+        name = CheckName(name, nameof(name));
 
-        var headerType = getHeaderType(name);
+        var headerType = GetHeaderType(name);
 
-        this.checkRestricted(name, headerType);
-        this.checkAllowed(headerType);
+        this.CheckRestricted(name, headerType);
+        this.CheckAllowed(headerType);
         base.Remove(name);
     }
 
@@ -1711,14 +1632,14 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     /// </exception>
     public void Set(HttpRequestHeader header, string value)
     {
-        value = checkValue(value, nameof(value));
+        value = CheckValue(value, nameof(value));
 
         var key = header.ToString();
-        var name = getHeaderName(key);
+        var name = GetHeaderName(key);
 
-        this.checkRestricted(name, HttpHeaderType.Request);
-        this.checkAllowed(HttpHeaderType.Request);
-        this.set(name, value, HttpHeaderType.Request);
+        this.CheckRestricted(name, HttpHeaderType.Request);
+        this.CheckAllowed(HttpHeaderType.Request);
+        this.Set(name, value, HttpHeaderType.Request);
     }
 
     /// <summary>
@@ -1756,14 +1677,14 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     /// </exception>
     public void Set(HttpResponseHeader header, string value)
     {
-        value = checkValue(value, nameof(value));
+        value = CheckValue(value, nameof(value));
 
         var key = header.ToString();
-        var name = getHeaderName(key);
+        var name = GetHeaderName(key);
 
-        this.checkRestricted(name, HttpHeaderType.Response);
-        this.checkAllowed(HttpHeaderType.Response);
-        this.set(name, value, HttpHeaderType.Response);
+        this.CheckRestricted(name, HttpHeaderType.Response);
+        this.CheckAllowed(HttpHeaderType.Response);
+        this.Set(name, value, HttpHeaderType.Response);
     }
 
     /// <summary>
@@ -1816,14 +1737,14 @@ public class WebHeaderCollection : NameValueCollection, ISerializable
     /// </exception>
     public override void Set(string name, string value)
     {
-        name = checkName(name, nameof(name));
-        value = checkValue(value, nameof(value));
+        name = CheckName(name, nameof(name));
+        value = CheckValue(value, nameof(value));
 
-        var headerType = getHeaderType(name);
+        var headerType = GetHeaderType(name);
 
-        this.checkRestricted(name, headerType);
-        this.checkAllowed(headerType);
-        this.set(name, value, headerType);
+        this.CheckRestricted(name, headerType);
+        this.CheckAllowed(headerType);
+        this.Set(name, value, headerType);
     }
 
     /// <summary>

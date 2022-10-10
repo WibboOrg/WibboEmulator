@@ -23,7 +23,8 @@ internal class MuteUserEvent : IPacketEvent
         }
 
         var id = packet.PopInt();
-        var num = packet.PopInt();
+
+        _ = packet.PopInt();
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(id);
 

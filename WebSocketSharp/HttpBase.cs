@@ -114,7 +114,7 @@ internal abstract class HttpBase
     {
         get
         {
-            this._messageBody ??= this.getMessageBody();
+            this._messageBody ??= this.GetMessageBody();
 
             return this._messageBody;
         }
@@ -128,7 +128,7 @@ internal abstract class HttpBase
 
     #region Private Methods
 
-    private string getMessageBody()
+    private string GetMessageBody()
     {
         if (this.MessageBodyData == null || this.MessageBodyData.LongLength == 0)
         {
@@ -144,7 +144,7 @@ internal abstract class HttpBase
         return enc.GetString(this.MessageBodyData);
     }
 
-    private static byte[] readMessageBodyFrom(Stream stream, string length)
+    private static byte[] ReadMessageBodyFrom(Stream stream, string length)
     {
 
         if (!long.TryParse(length, out var len))
@@ -168,7 +168,7 @@ internal abstract class HttpBase
                  : null;
     }
 
-    private static string[] readMessageHeaderFrom(Stream stream)
+    private static string[] ReadMessageHeaderFrom(Stream stream)
     {
         var buff = new List<byte>();
         var cnt = 0;
@@ -250,14 +250,14 @@ internal abstract class HttpBase
 
         try
         {
-            var header = readMessageHeaderFrom(stream);
+            var header = ReadMessageHeaderFrom(stream);
             ret = parser(header);
 
             var contentLen = ret.Headers["Content-Length"];
 
             if (contentLen != null && contentLen.Length > 0)
             {
-                ret.MessageBodyData = readMessageBodyFrom(stream, contentLen);
+                ret.MessageBodyData = ReadMessageBodyFrom(stream, contentLen);
             }
         }
         catch (Exception ex)

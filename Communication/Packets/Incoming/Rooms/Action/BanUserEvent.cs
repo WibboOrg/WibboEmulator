@@ -23,7 +23,8 @@ internal class BanUserEvent : IPacketEvent
         }
 
         var pId = packet.PopInt();
-        var num = packet.PopInt();
+
+        _ = packet.PopInt();
         var str = packet.PopString();
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(pId);

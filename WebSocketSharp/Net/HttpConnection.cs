@@ -57,13 +57,13 @@ using System.Text;
 using System.Threading;
 using WebSocketSharp;
 
-internal sealed class HttpConnection
+internal sealed class HttpConnection : IDisposable
 {
     #region Private Fields
 
     private int _attempts;
     private readonly byte[] _buffer;
-    private static readonly int _bufferLength;
+    private static readonly int BufferLength;
     private HttpListenerContext _context;
     private StringBuilder _currentLine;
     private readonly EndPointListener _endPointListener;
@@ -71,7 +71,7 @@ internal sealed class HttpConnection
     private RequestStream _inputStream;
     private LineState _lineState;
     private readonly EndPoint _localEndPoint;
-    private static readonly int _maxInputLength;
+    private static readonly int MaxInputLength;
     private ResponseStream _outputStream;
     private int _position;
     private readonly EndPoint _remoteEndPoint;
@@ -88,8 +88,8 @@ internal sealed class HttpConnection
 
     static HttpConnection()
     {
-        _bufferLength = 8192;
-        _maxInputLength = 32768;
+        BufferLength = 8192;
+        MaxInputLength = 32768;
     }
 
     #endregion
@@ -127,15 +127,15 @@ internal sealed class HttpConnection
             this.Stream = netStream;
         }
 
-        this._buffer = new byte[_bufferLength];
+        this._buffer = new byte[BufferLength];
         this._localEndPoint = socket.LocalEndPoint;
         this._remoteEndPoint = socket.RemoteEndPoint;
         this._sync = new object();
         this._timeoutCanceled = new Dictionary<int, bool>();
-        this._timer = new Timer(onTimeout, this, Timeout.Infinite, Timeout.Infinite);
+        this._timer = new Timer(OnTimeout, this, Timeout.Infinite, Timeout.Infinite);
 
         // 90k ms for first request, 15k ms from then on.
-        this.init(new MemoryStream(), 90000);
+        this.Init(new MemoryStream(), 90000);
     }
 
     #endregion
@@ -160,7 +160,7 @@ internal sealed class HttpConnection
 
     #region Private Methods
 
-    private void close()
+    private void Close()
     {
         lock (this._sync)
         {
@@ -169,17 +169,19 @@ internal sealed class HttpConnection
                 return;
             }
 
-            this.disposeTimer();
-            this.disposeRequestBuffer();
-            this.disposeStream();
-            this.closeSocket();
+            this.DisposeTimer();
+            this.DisposeRequestBuffer();
+            this.DisposeStream();
+            this.CloseSocket();
         }
 
         this._context.Unregister();
         this._endPointListener.RemoveConnection(this);
+
+        this.Dispose();
     }
 
-    private void closeSocket()
+    private void CloseSocket()
     {
         try
         {
@@ -190,20 +192,19 @@ internal sealed class HttpConnection
         }
 
         this._socket.Close();
+        this._socket.Dispose();
 
         this._socket = null;
     }
 
-    private static MemoryStream createRequestBuffer(
+    private static MemoryStream CreateRequestBuffer(
       RequestStream inputStream
     )
     {
         var ret = new MemoryStream();
 
-        if (inputStream is ChunkedRequestStream)
+        if (inputStream is ChunkedRequestStream crs)
         {
-            var crs = (ChunkedRequestStream)inputStream;
-
             if (crs.HasRemainingBuffer)
             {
                 var buff = crs.RemainingBuffer;
@@ -224,7 +225,7 @@ internal sealed class HttpConnection
         return ret;
     }
 
-    private void disposeRequestBuffer()
+    private void DisposeRequestBuffer()
     {
         if (this._requestBuffer == null)
         {
@@ -236,7 +237,7 @@ internal sealed class HttpConnection
         this._requestBuffer = null;
     }
 
-    private void disposeStream()
+    private void DisposeStream()
     {
         if (this.Stream == null)
         {
@@ -248,7 +249,7 @@ internal sealed class HttpConnection
         this.Stream = null;
     }
 
-    private void disposeTimer()
+    private void DisposeTimer()
     {
         if (this._timer == null)
         {
@@ -268,7 +269,7 @@ internal sealed class HttpConnection
         this._timer = null;
     }
 
-    private void init(MemoryStream requestBuffer, int timeout)
+    private void Init(MemoryStream requestBuffer, int timeout)
     {
         this._requestBuffer = requestBuffer;
         this._timeout = timeout;
@@ -282,9 +283,15 @@ internal sealed class HttpConnection
         this._position = 0;
     }
 
-    private static void onRead(IAsyncResult asyncResult)
+    private static void OnRead(IAsyncResult asyncResult)
     {
         var conn = (HttpConnection)asyncResult.AsyncState;
+
+        if (conn == null)
+        {
+            return;
+        }
+
         var current = conn._attempts;
 
         if (conn._socket == null)
@@ -312,21 +319,21 @@ internal sealed class HttpConnection
             {
                 // TODO: Logging.
 
-                conn.close();
+                conn.Close();
 
                 return;
             }
 
             if (nread <= 0)
             {
-                conn.close();
+                conn.Close();
 
                 return;
             }
 
             conn._requestBuffer.Write(conn._buffer, 0, nread);
 
-            if (conn.processRequestBuffer())
+            if (conn.ProcessRequestBuffer())
             {
                 return;
             }
@@ -335,7 +342,7 @@ internal sealed class HttpConnection
         }
     }
 
-    private static void onTimeout(object state)
+    private static void OnTimeout(object state)
     {
         var conn = (HttpConnection)state;
         var current = conn._attempts;
@@ -361,7 +368,7 @@ internal sealed class HttpConnection
         }
     }
 
-    private bool processInput(byte[] data, int length)
+    private bool ProcessInput(byte[] data, int length)
     {
         // This method returns a bool:
         // - true  Done processing
@@ -373,7 +380,7 @@ internal sealed class HttpConnection
         {
             while (true)
             {
-                var line = this.readLineFrom(data, this._position, length, out var nread);
+                var line = this.ReadLineFrom(data, this._position, length, out var nread);
 
                 this._position += nread;
 
@@ -389,7 +396,7 @@ internal sealed class HttpConnection
                         continue;
                     }
 
-                    if (this._position > _maxInputLength)
+                    if (this._position > MaxInputLength)
                     {
                         this._context.ErrorMessage = "Headers too long";
                     }
@@ -423,7 +430,7 @@ internal sealed class HttpConnection
             return true;
         }
 
-        if (this._position >= _maxInputLength)
+        if (this._position >= MaxInputLength)
         {
             this._context.ErrorMessage = "Headers too long";
 
@@ -433,7 +440,7 @@ internal sealed class HttpConnection
         return false;
     }
 
-    private bool processRequestBuffer()
+    private bool ProcessRequestBuffer()
     {
         // This method returns a bool:
         // - true  Done processing
@@ -442,7 +449,7 @@ internal sealed class HttpConnection
         var data = this._requestBuffer.GetBuffer();
         var len = (int)this._requestBuffer.Length;
 
-        if (!this.processInput(data, len))
+        if (!this.ProcessInput(data, len))
         {
             return false;
         }
@@ -475,7 +482,7 @@ internal sealed class HttpConnection
         return true;
     }
 
-    private string readLineFrom(
+    private string ReadLineFrom(
       byte[] buffer, int offset, int length, out int nread
     )
     {
@@ -517,11 +524,11 @@ internal sealed class HttpConnection
         return ret;
     }
 
-    private MemoryStream takeOverRequestBuffer()
+    private MemoryStream TakeOverRequestBuffer()
     {
         if (this._inputStream != null)
         {
-            return createRequestBuffer(this._inputStream);
+            return CreateRequestBuffer(this._inputStream);
         }
 
         var ret = new MemoryStream();
@@ -535,7 +542,7 @@ internal sealed class HttpConnection
             ret.Write(buff, this._position, cnt);
         }
 
-        this.disposeRequestBuffer();
+        this.DisposeRequestBuffer();
 
         return ret;
     }
@@ -553,17 +560,17 @@ internal sealed class HttpConnection
 
         try
         {
-            _ = this.Stream.BeginRead(this._buffer, 0, _bufferLength, onRead, this);
+            _ = this.Stream.BeginRead(this._buffer, 0, BufferLength, OnRead, this);
         }
         catch (Exception)
         {
             // TODO: Logging.
 
-            this.close();
+            this.Close();
         }
     }
 
-    internal void Close(bool force)
+    internal void Close(bool force = false)
     {
         if (this._socket == null)
         {
@@ -584,7 +591,7 @@ internal sealed class HttpConnection
                     this._outputStream.Close(true);
                 }
 
-                this.close();
+                this.Close();
 
                 return;
             }
@@ -593,14 +600,14 @@ internal sealed class HttpConnection
 
             if (this._context.Response.CloseConnection)
             {
-                this.close();
+                this.Close();
 
                 return;
             }
 
             if (!this._context.Request.FlushInput())
             {
-                this.close();
+                this.Close();
 
                 return;
             }
@@ -609,14 +616,14 @@ internal sealed class HttpConnection
 
             this.Reuses++;
 
-            var buff = this.takeOverRequestBuffer();
+            var buff = this.TakeOverRequestBuffer();
             var len = buff.Length;
 
-            this.init(buff, 15000);
+            this.Init(buff, 15000);
 
             if (len > 0)
             {
-                if (this.processRequestBuffer())
+                if (this.ProcessRequestBuffer())
                 {
                     return;
                 }
@@ -624,14 +631,13 @@ internal sealed class HttpConnection
 
             this.BeginReadRequest();
         }
+
+        this.Dispose();
     }
 
     #endregion
 
     #region Public Methods
-
-    public void Close() => this.Close(false);
-
     public RequestStream GetRequestStream(long contentLength, bool chunked)
     {
         lock (this._sync)
@@ -658,7 +664,7 @@ internal sealed class HttpConnection
                                this.Stream, buff, this._position, cnt, contentLength
                              );
 
-            this.disposeRequestBuffer();
+            this.DisposeRequestBuffer();
 
             return this._inputStream;
         }
@@ -686,6 +692,8 @@ internal sealed class HttpConnection
             return this._outputStream;
         }
     }
+
+    public void Dispose() => GC.SuppressFinalize(this);
 
     #endregion
 }

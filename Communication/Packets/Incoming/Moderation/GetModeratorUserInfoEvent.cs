@@ -18,7 +18,7 @@ internal class GetModeratorUserInfoEvent : IPacketEvent
         var userId = packet.PopInt();
         if (WibboEnvironment.GetGame().GetGameClientManager().GetNameById(userId) != "")
         {
-            var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
+            _ = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
             DataRow user = null;
             DataRow info = null;
 

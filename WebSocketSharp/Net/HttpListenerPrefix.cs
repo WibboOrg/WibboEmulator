@@ -70,7 +70,7 @@ internal sealed class HttpListenerPrefix
         this.Original = uriPrefix;
         this.Listener = listener;
 
-        this.parse(uriPrefix);
+        this.Parse(uriPrefix);
     }
 
     #endregion
@@ -93,7 +93,7 @@ internal sealed class HttpListenerPrefix
 
     #region Private Methods
 
-    private void parse(string uriPrefix)
+    private void Parse(string uriPrefix)
     {
         if (uriPrefix.StartsWith("https"))
         {

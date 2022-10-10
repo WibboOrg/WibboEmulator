@@ -18,8 +18,10 @@ internal class SubmitNewTicketEvent : IPacketEvent
         var message = StringCharFilter.Escape(packet.PopString());
         var ticketType = packet.PopInt();
         var reporterId = packet.PopInt();
-        var roomId = packet.PopInt();
-        var chatEntriesCount = packet.PopInt();
+
+        _ = packet.PopInt();
+
+        _ = packet.PopInt();
         //chatEntries = packet.PopString();
 
         WibboEnvironment.GetGame().GetModerationManager().SendNewTicket(session, ticketType, reporterId, message);

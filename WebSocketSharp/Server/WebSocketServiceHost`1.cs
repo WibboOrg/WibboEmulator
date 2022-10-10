@@ -45,7 +45,7 @@ where TBehavior : WebSocketBehavior, new()
     internal WebSocketServiceHost(
       string path, Action<TBehavior> initializer, Logger log
     )
-      : base(path, log) => this._creator = createSessionCreator(initializer);
+      : base(path, log) => this._creator = CreateSessionCreator(initializer);
 
     #endregion
 
@@ -57,7 +57,7 @@ where TBehavior : WebSocketBehavior, new()
 
     #region Private Methods
 
-    private static Func<TBehavior> createSessionCreator(
+    private static Func<TBehavior> CreateSessionCreator(
       Action<TBehavior> initializer
     )
     {

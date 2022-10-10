@@ -42,7 +42,7 @@ internal abstract class AuthenticationBase
 
     #region Internal Fields
 
-    internal NameValueCollection Parameters;
+    internal NameValueCollection Parameters { get; set; }
 
     #endregion
 

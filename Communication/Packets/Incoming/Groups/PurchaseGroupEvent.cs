@@ -17,7 +17,8 @@ internal class PurchaseGroupEvent : IPacketEvent
         var roomId = packet.PopInt();
         var colour1 = packet.PopInt();
         var colour2 = packet.PopInt();
-        var unknown = packet.PopInt();
+
+        _ = packet.PopInt();
 
         if (name.Length > 50)
         {

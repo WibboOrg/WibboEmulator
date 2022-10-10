@@ -59,7 +59,7 @@ public class WebSocketServer
 
     private bool _allowForwardedRequest;
     private AuthenticationSchemes _authSchemes;
-    private static readonly string _defaultRealm;
+    private static readonly string DefaultRealm;
     private bool _dnsStyle;
     private string _hostname;
     private TcpListener _listener;
@@ -77,7 +77,7 @@ public class WebSocketServer
 
     #region Static Constructor
 
-    static WebSocketServer() => _defaultRealm = "SECRET AREA";
+    static WebSocketServer() => DefaultRealm = "SECRET AREA";
 
     #endregion
 
@@ -744,7 +744,7 @@ public class WebSocketServer
     {
         var realm = this._realm;
 
-        return realm != null && realm.Length > 0 ? realm : _defaultRealm;
+        return realm != null && realm.Length > 0 ? realm : DefaultRealm;
     }
 
     private ServerSslConfiguration GetSslConfiguration()

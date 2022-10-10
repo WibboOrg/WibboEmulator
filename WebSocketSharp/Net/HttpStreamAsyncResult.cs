@@ -42,7 +42,7 @@ namespace WibboEmulator.WebSocketSharp.Net;
 using System;
 using System.Threading;
 
-internal class HttpStreamAsyncResult : IAsyncResult
+internal class HttpStreamAsyncResult : IAsyncResult, IDisposable
 {
     #region Private Fields
 
@@ -161,6 +161,8 @@ internal class HttpStreamAsyncResult : IAsyncResult
             }
         }
     }
+
+    public void Dispose() => GC.SuppressFinalize(this);
 
     #endregion
 }

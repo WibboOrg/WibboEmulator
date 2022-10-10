@@ -23,6 +23,12 @@ internal class Update : IChatCommand
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         switch (cmd.ToLower())
         {
+            case "emuban":
+            {
+                WibboEnvironment.GetWebSocketManager().ResetBan();
+                session.SendWhisper("Emulateur banni reset");
+                break;
+            }
             case "random":
             {
                 WibboEnvironment.RegenRandom();

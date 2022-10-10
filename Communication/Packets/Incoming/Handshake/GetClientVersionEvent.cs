@@ -7,10 +7,13 @@ internal class GetClientVersionEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        var release = packet.PopString();
-        var type = packet.PopString();
-        var platform = packet.PopInt();
-        var category = packet.PopInt();
+        _ = packet.PopString();
+
+        _ = packet.PopString();
+
+        _ = packet.PopInt();
+
+        _ = packet.PopInt();
 
     }
 }

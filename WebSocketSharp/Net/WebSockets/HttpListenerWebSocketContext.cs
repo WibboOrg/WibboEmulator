@@ -40,7 +40,7 @@ using WibboEmulator.WebSocketSharp.Net;
 /// Provides the access to the information in a WebSocket handshake request
 /// to a <see cref="HttpListener"/> instance.
 /// </summary>
-public class HttpListenerWebSocketContext : WebSocketContext
+public class HttpListenerWebSocketContext : WebSocketContext, IDisposable
 {
     #region Private Fields
 
@@ -209,7 +209,6 @@ public class HttpListenerWebSocketContext : WebSocketContext
     /// </summary>
     /// <value>
     ///   <para>
-    ///   An <see cref="T:System.Collections.Generic.IEnumerable{string}"/>
     ///   instance.
     ///   </para>
     ///   <para>
@@ -302,12 +301,17 @@ public class HttpListenerWebSocketContext : WebSocketContext
 
     #region Internal Methods
 
-    internal void Close() => this._context.Connection.Close(true);
+    internal void Close()
+    {
+        this._context.Connection.Close(true);
+        this.Dispose();
+    }
 
     internal void Close(HttpStatusCode code)
     {
         this._context.Response.StatusCode = (int)code;
         this._context.Response.Close();
+        this.Dispose();
     }
 
     #endregion
@@ -322,6 +326,8 @@ public class HttpListenerWebSocketContext : WebSocketContext
     /// included in the handshake request.
     /// </returns>
     public override string ToString() => this._context.Request.ToString();
+
+    public void Dispose() => GC.SuppressFinalize(this);
 
     #endregion
 }

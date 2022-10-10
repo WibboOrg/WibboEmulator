@@ -48,7 +48,6 @@ public class ServerSslConfiguration
 {
     #region Private Fields
 
-    private RemoteCertificateValidationCallback _clientCertValidationCallback;
 
     #endregion
 
@@ -79,7 +78,7 @@ public class ServerSslConfiguration
 
         this.CheckCertificateRevocation = configuration.CheckCertificateRevocation;
         this.ClientCertificateRequired = configuration.ClientCertificateRequired;
-        this._clientCertValidationCallback = configuration._clientCertValidationCallback;
+        this.ClientCertificateValidationCallback = configuration.ClientCertificateValidationCallback;
         this.EnabledSslProtocols = configuration.EnabledSslProtocols;
         this.ServerCertificate = configuration.ServerCertificate;
     }
@@ -135,17 +134,7 @@ public class ServerSslConfiguration
     ///   returns <c>true</c>.
     ///   </para>
     /// </value>
-    public RemoteCertificateValidationCallback ClientCertificateValidationCallback
-    {
-        get
-        {
-            this._clientCertValidationCallback ??= defaultValidateClientCertificate;
-
-            return this._clientCertValidationCallback;
-        }
-
-        set => this._clientCertValidationCallback = value;
-    }
+    public RemoteCertificateValidationCallback ClientCertificateValidationCallback { get; set; }
 
     /// <summary>
     /// Gets or sets the protocols used for authentication.
@@ -178,17 +167,6 @@ public class ServerSslConfiguration
     ///   </para>
     /// </value>
     public X509Certificate2 ServerCertificate { get; set; }
-
-    #endregion
-
-    #region Private Methods
-
-    private static bool defaultValidateClientCertificate(
-      object sender,
-      X509Certificate certificate,
-      X509Chain chain,
-      SslPolicyErrors sslPolicyErrors
-    ) => true;
 
     #endregion
 }

@@ -253,12 +253,9 @@ internal class WebSocketFrame : IEnumerable<byte>
         {
             long lineCnt = 0;
 
-            return (arg1, arg2, arg3, arg4) =>
-            {
-                _ = buff.AppendFormat(
+            return (arg1, arg2, arg3, arg4) => _ = buff.AppendFormat(
             lineFmt, ++lineCnt, arg1, arg2, arg3, arg4
           );
-            };
         }
 
         var printLine = linePrinter();
@@ -302,7 +299,7 @@ internal class WebSocketFrame : IEnumerable<byte>
         return buff.ToString();
     }
 
-    private static string print(WebSocketFrame frame)
+    private static string Print(WebSocketFrame frame)
     {
         // Payload Length
         var payloadLen = frame.PayloadLength;
@@ -493,7 +490,7 @@ Extended Payload Length: {7}
         );
     }
 
-    private static WebSocketFrame readHeader(Stream stream)
+    private static WebSocketFrame ReadHeader(Stream stream)
     {
         var bytes = stream.ReadBytes(2);
 
@@ -702,7 +699,7 @@ Extended Payload Length: {7}
 
     internal static WebSocketFrame ReadFrame(Stream stream, bool unmask)
     {
-        var frame = readHeader(stream);
+        var frame = ReadHeader(stream);
 
         _ = ReadExtendedPayloadLength(stream, frame);
         _ = ReadMaskingKey(stream, frame);
@@ -780,60 +777,58 @@ Extended Payload Length: {7}
 
     public void Print(bool dumped)
     {
-        var val = dumped ? Dump(this) : print(this);
+        var val = dumped ? Dump(this) : Print(this);
 
         Console.WriteLine(val);
     }
 
-    public string PrintToString(bool dumped) => dumped ? Dump(this) : print(this);
+    public string PrintToString(bool dumped) => dumped ? Dump(this) : Print(this);
 
     public byte[] ToArray()
     {
-        using (var buff = new MemoryStream())
+        using var buff = new MemoryStream();
+        var header = (int)this.Fin;
+        header = (header << 1) + (int)this.Rsv1;
+        header = (header << 1) + (int)this.Rsv2;
+        header = (header << 1) + (int)this.Rsv3;
+        header = (header << 4) + (int)this.Opcode;
+        header = (header << 1) + (int)this.Mask;
+        header = (header << 7) + this.PayloadLength;
+
+        var headerAsUshort = (ushort)header;
+        var headerAsBytes = headerAsUshort.ToByteArray(ByteOrder.Big);
+
+        buff.Write(headerAsBytes, 0, 2);
+
+        if (this.PayloadLength > 125)
         {
-            var header = (int)this.Fin;
-            header = (header << 1) + (int)this.Rsv1;
-            header = (header << 1) + (int)this.Rsv2;
-            header = (header << 1) + (int)this.Rsv3;
-            header = (header << 4) + (int)this.Opcode;
-            header = (header << 1) + (int)this.Mask;
-            header = (header << 7) + this.PayloadLength;
+            var cnt = this.PayloadLength == 126 ? 2 : 8;
 
-            var headerAsUshort = (ushort)header;
-            var headerAsBytes = headerAsUshort.ToByteArray(ByteOrder.Big);
-
-            buff.Write(headerAsBytes, 0, 2);
-
-            if (this.PayloadLength > 125)
-            {
-                var cnt = this.PayloadLength == 126 ? 2 : 8;
-
-                buff.Write(this.ExtendedPayloadLength, 0, cnt);
-            }
-
-            if (this.Mask == Mask.On)
-            {
-                buff.Write(this.MaskingKey, 0, 4);
-            }
-
-            if (this.PayloadLength > 0)
-            {
-                var bytes = this.PayloadData.ToArray();
-
-                if (this.PayloadLength < 127)
-                {
-                    buff.Write(bytes, 0, bytes.Length);
-                }
-                else
-                {
-                    buff.WriteBytes(bytes, 1024);
-                }
-            }
-
-            buff.Close();
-
-            return buff.ToArray();
+            buff.Write(this.ExtendedPayloadLength, 0, cnt);
         }
+
+        if (this.Mask == Mask.On)
+        {
+            buff.Write(this.MaskingKey, 0, 4);
+        }
+
+        if (this.PayloadLength > 0)
+        {
+            var bytes = this.PayloadData.ToArray();
+
+            if (this.PayloadLength < 127)
+            {
+                buff.Write(bytes, 0, bytes.Length);
+            }
+            else
+            {
+                buff.WriteBytes(bytes, 1024);
+            }
+        }
+
+        buff.Close();
+
+        return buff.ToArray();
     }
 
     public override string ToString()

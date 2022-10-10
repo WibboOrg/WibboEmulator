@@ -77,7 +77,7 @@ public sealed class HttpListener : IDisposable
     private readonly Queue<HttpListenerContext> _contextQueue;
     private readonly LinkedList<HttpListenerContext> _contextRegistry;
     private readonly object _contextRegistrySync;
-    private static readonly string _defaultRealm;
+    private static readonly string DefaultRealm;
     private bool _disposed;
     private bool _ignoreWriteExceptions;
     private volatile bool _listening;
@@ -93,7 +93,7 @@ public sealed class HttpListener : IDisposable
 
     #region Static Constructor
 
-    static HttpListener() => _defaultRealm = "SECRET AREA";
+    static HttpListener() => DefaultRealm = "SECRET AREA";
 
     #endregion
 
@@ -513,9 +513,9 @@ public sealed class HttpListener : IDisposable
 
     #region Private Methods
 
-    private bool authenticateClient(HttpListenerContext context)
+    private bool AuthenticateClient(HttpListenerContext context)
     {
-        var schm = this.selectAuthenticationScheme(context.Request);
+        var schm = this.SelectAuthenticationScheme(context.Request);
 
         if (schm == AuthenticationSchemes.Anonymous)
         {
@@ -530,7 +530,7 @@ public sealed class HttpListener : IDisposable
             return false;
         }
 
-        var realm = this.getRealm();
+        var realm = this.GetRealm();
 
         if (!context.SetUser(schm, realm, this._userCredFinder))
         {
@@ -542,7 +542,7 @@ public sealed class HttpListener : IDisposable
         return true;
     }
 
-    private HttpListenerAsyncResult beginGetContext(
+    private HttpListenerAsyncResult BeginGetContextHttp(
       AsyncCallback callback, object state
     )
     {
@@ -571,7 +571,7 @@ public sealed class HttpListener : IDisposable
         }
     }
 
-    private void cleanupContextQueue(bool force)
+    private void CleanupContextQueue(bool force)
     {
         if (this._contextQueue.Count == 0)
         {
@@ -595,7 +595,7 @@ public sealed class HttpListener : IDisposable
         }
     }
 
-    private void cleanupContextRegistry()
+    private void CleanupContextRegistry()
     {
         var cnt = this._contextRegistry.Count;
 
@@ -618,7 +618,7 @@ public sealed class HttpListener : IDisposable
         }
     }
 
-    private void cleanupWaitQueue(string message)
+    private void CleanupWaitQueue(string message)
     {
         if (this._waitQueue.Count == 0)
         {
@@ -636,7 +636,7 @@ public sealed class HttpListener : IDisposable
         }
     }
 
-    private void close(bool force)
+    private void Close(bool force)
     {
         lock (this._sync)
         {
@@ -657,11 +657,11 @@ public sealed class HttpListener : IDisposable
                 this._listening = false;
             }
 
-            this.cleanupContextQueue(force);
-            this.cleanupContextRegistry();
+            this.CleanupContextQueue(force);
+            this.CleanupContextRegistry();
 
             var msg = "The listener is closed.";
-            this.cleanupWaitQueue(msg);
+            this.CleanupWaitQueue(msg);
 
             EndPointManager.RemoveListener(this);
 
@@ -669,14 +669,14 @@ public sealed class HttpListener : IDisposable
         }
     }
 
-    private string getRealm()
+    private string GetRealm()
     {
         var realm = this._realm;
 
-        return realm != null && realm.Length > 0 ? realm : _defaultRealm;
+        return realm != null && realm.Length > 0 ? realm : DefaultRealm;
     }
 
-    private bool registerContext(HttpListenerContext context)
+    private bool RegisterContextHttp(HttpListenerContext context)
     {
         if (!this._listening)
         {
@@ -708,7 +708,7 @@ public sealed class HttpListener : IDisposable
         }
     }
 
-    private AuthenticationSchemes selectAuthenticationScheme(
+    private AuthenticationSchemes SelectAuthenticationScheme(
       HttpListenerRequest request
     )
     {
@@ -743,12 +743,12 @@ public sealed class HttpListener : IDisposable
 
     internal bool RegisterContext(HttpListenerContext context)
     {
-        if (!this.authenticateClient(context))
+        if (!this.AuthenticateClient(context))
         {
             return false;
         }
 
-        if (!this.registerContext(context))
+        if (!this.RegisterContextHttp(context))
         {
             context.SendError(503);
 
@@ -780,7 +780,7 @@ public sealed class HttpListener : IDisposable
             return;
         }
 
-        this.close(true);
+        this.Close(true);
     }
 
     /// <summary>
@@ -846,7 +846,7 @@ public sealed class HttpListener : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        return this.beginGetContext(callback, state);
+        return this.BeginGetContextHttp(callback, state);
     }
 
     /// <summary>
@@ -859,7 +859,7 @@ public sealed class HttpListener : IDisposable
             return;
         }
 
-        this.close(false);
+        this.Close(false);
     }
 
     /// <summary>
@@ -919,9 +919,8 @@ public sealed class HttpListener : IDisposable
             throw new ArgumentNullException(nameof(asyncResult));
         }
 
-        var ares = asyncResult as HttpListenerAsyncResult;
 
-        if (ares == null)
+        if (asyncResult is not HttpListenerAsyncResult ares)
         {
             var msg = "A wrong IAsyncResult instance.";
 
@@ -996,7 +995,7 @@ public sealed class HttpListener : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        var ares = this.beginGetContext(null, null);
+        var ares = this.BeginGetContextHttp(null, null);
         ares.EndCalled = true;
 
         if (!ares.IsCompleted)
@@ -1071,11 +1070,11 @@ public sealed class HttpListener : IDisposable
                 this._listening = false;
             }
 
-            this.cleanupContextQueue(false);
-            this.cleanupContextRegistry();
+            this.CleanupContextQueue(false);
+            this.CleanupContextRegistry();
 
             var msg = "The listener is stopped.";
-            this.cleanupWaitQueue(msg);
+            this.CleanupWaitQueue(msg);
 
             EndPointManager.RemoveListener(this);
         }
@@ -1095,7 +1094,7 @@ public sealed class HttpListener : IDisposable
             return;
         }
 
-        this.close(true);
+        this.Close(true);
     }
 
     #endregion

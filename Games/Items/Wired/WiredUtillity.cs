@@ -87,7 +87,8 @@ public class ItemsPosReset
         this.Z = z;
         this.Rot = rot;
 
-        if (int.TryParse(extraData, out var result) || (!extraData.Contains(';') && !extraData.Contains(':')))
+
+        if (int.TryParse(extraData, out _) || (!extraData.Contains(';') && !extraData.Contains(':')))
         {
             this.ExtraData = extraData;
         }

@@ -40,11 +40,14 @@ public class ProjectileManager
 
             var endProjectile = false;
             var usersTouch = new List<RoomUser>();
-            var newPoint = new Point(item.X, item.Y);
+
+            _ = new Point(item.X, item.Y);
             var newX = item.X;
             var newY = item.Y;
             var newZ = item.Z;
 
+
+            Point newPoint;
             if (item.InteractionType == InteractionTypeTemp.GRENADE)
             {
                 newPoint = MovementUtility.GetMoveCoord(item.X, item.Y, 1, item.Movement);

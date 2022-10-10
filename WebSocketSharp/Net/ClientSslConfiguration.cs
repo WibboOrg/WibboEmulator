@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.WebSocketSharp.Net;
+namespace WibboEmulator.WebSocketSharp.Net;
 
 #region License
 /*
@@ -49,7 +49,6 @@ public class ClientSslConfiguration
     #region Private Fields
 
     private LocalCertificateSelectionCallback _clientCertSelectionCallback;
-    private RemoteCertificateValidationCallback _serverCertValidationCallback;
     private string _targetHost;
 
     #endregion
@@ -107,7 +106,7 @@ public class ClientSslConfiguration
         this._clientCertSelectionCallback = configuration._clientCertSelectionCallback;
         this.ClientCertificates = configuration.ClientCertificates;
         this.EnabledSslProtocols = configuration.EnabledSslProtocols;
-        this._serverCertValidationCallback = configuration._serverCertValidationCallback;
+        this.ServerCertificateValidationCallback = configuration.ServerCertificateValidationCallback;
         this._targetHost = configuration._targetHost;
     }
 
@@ -168,7 +167,7 @@ public class ClientSslConfiguration
     {
         get
         {
-            this._clientCertSelectionCallback ??= defaultSelectClientCertificate;
+            this._clientCertSelectionCallback ??= DefaultSelectClientCertificate;
 
             return this._clientCertSelectionCallback;
         }
@@ -209,17 +208,7 @@ public class ClientSslConfiguration
     ///   returns <c>true</c>.
     ///   </para>
     /// </value>
-    public RemoteCertificateValidationCallback ServerCertificateValidationCallback
-    {
-        get
-        {
-            this._serverCertValidationCallback ??= defaultValidateServerCertificate;
-
-            return this._serverCertValidationCallback;
-        }
-
-        set => this._serverCertValidationCallback = value;
-    }
+    public RemoteCertificateValidationCallback ServerCertificateValidationCallback { get; set; }
 
     /// <summary>
     /// Gets or sets the target host server name.
@@ -258,20 +247,13 @@ public class ClientSslConfiguration
 
     #region Private Methods
 
-    private static X509Certificate defaultSelectClientCertificate(
+    private static X509Certificate DefaultSelectClientCertificate(
       object sender,
       string targetHost,
       X509CertificateCollection clientCertificates,
       X509Certificate serverCertificate,
       string[] acceptableIssuers
     ) => null;
-
-    private static bool defaultValidateServerCertificate(
-      object sender,
-      X509Certificate certificate,
-      X509Chain chain,
-      SslPolicyErrors sslPolicyErrors
-    ) => true;
 
     #endregion
 }

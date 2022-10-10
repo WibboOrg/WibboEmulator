@@ -85,13 +85,13 @@ internal class ResponseStream : Stream
 
         if (ignoreWriteExceptions)
         {
-            this._write = this.writeWithoutThrowingException;
-            this._writeChunked = this.writeChunkedWithoutThrowingException;
+            this._write = this.WriteWithoutThrowingException;
+            this._writeChunked = this.WriteChunkedWithoutThrowingException;
         }
         else
         {
             this._write = innerStream.Write;
-            this._writeChunked = this.writeChunked;
+            this._writeChunked = this.WriteChunked;
         }
 
         this._bodyBuffer = new MemoryStream();
@@ -120,11 +120,11 @@ internal class ResponseStream : Stream
 
     #region Private Methods
 
-    private bool flush(bool closing)
+    private bool Flush(bool closing)
     {
         if (!this._response.HeadersSent)
         {
-            if (!this.flushHeaders())
+            if (!this.FlushHeaders())
             {
                 return false;
             }
@@ -135,12 +135,12 @@ internal class ResponseStream : Stream
             this._writeBody = this._sendChunked ? this._writeChunked : this._write;
         }
 
-        this.flushBody(closing);
+        this.FlushBody(closing);
 
         return true;
     }
 
-    private void flushBody(bool closing)
+    private void FlushBody(bool closing)
     {
         using (this._bodyBuffer)
         {
@@ -184,7 +184,7 @@ internal class ResponseStream : Stream
         this._bodyBuffer = null;
     }
 
-    private bool flushHeaders()
+    private bool FlushHeaders()
     {
         if (!this._response.SendChunked)
         {
@@ -222,36 +222,36 @@ internal class ResponseStream : Stream
         return true;
     }
 
-    private static byte[] getChunkSizeBytes(int size)
+    private static byte[] GetChunkSizeBytes(int size)
     {
         var chunkSize = string.Format("{0:x}\r\n", size);
 
         return Encoding.ASCII.GetBytes(chunkSize);
     }
 
-    private void writeChunked(byte[] buffer, int offset, int count)
+    private void WriteChunked(byte[] buffer, int offset, int count)
     {
-        var size = getChunkSizeBytes(count);
+        var size = GetChunkSizeBytes(count);
 
         this._innerStream.Write(size, 0, size.Length);
         this._innerStream.Write(buffer, offset, count);
         this._innerStream.Write(Crlf, 0, 2);
     }
 
-    private void writeChunkedWithoutThrowingException(
+    private void WriteChunkedWithoutThrowingException(
       byte[] buffer, int offset, int count
     )
     {
         try
         {
-            this.writeChunked(buffer, offset, count);
+            this.WriteChunked(buffer, offset, count);
         }
         catch
         {
         }
     }
 
-    private void writeWithoutThrowingException(
+    private void WriteWithoutThrowingException(
       byte[] buffer, int offset, int count
     )
     {
@@ -279,7 +279,7 @@ internal class ResponseStream : Stream
 
         if (!force)
         {
-            if (this.flush(true))
+            if (this.Flush(true))
             {
                 this._response.Close();
 
@@ -374,7 +374,7 @@ internal class ResponseStream : Stream
             return;
         }
 
-        _ = this.flush(false);
+        _ = this.Flush(false);
     }
 
     public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();

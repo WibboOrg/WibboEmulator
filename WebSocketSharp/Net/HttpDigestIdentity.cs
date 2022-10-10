@@ -46,7 +46,7 @@ public class HttpDigestIdentity : GenericIdentity
     #region Internal Constructors
 
     internal HttpDigestIdentity(NameValueCollection parameters)
-      : base(parameters["username"], "Digest") => this._parameters = parameters;
+      : base(parameters["username"] ?? "", "Digest") => this._parameters = parameters;
 
     #endregion
 

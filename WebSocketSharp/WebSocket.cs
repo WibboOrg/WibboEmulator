@@ -86,11 +86,11 @@ public class WebSocket : IDisposable
     private MemoryStream _fragmentsBuffer;
     private bool _fragmentsCompressed;
     private Opcode _fragmentsOpcode;
-    private const string _guid = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+    private const string GUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
     private bool _inContinuation;
     private volatile bool _inMessage;
     private volatile Logger _logger;
-    private static readonly int _maxRetryCountForConnect;
+    private static readonly int MaxRetryCountForConnect;
     private readonly Action<MessageEventArgs> _message;
     private Queue<MessageEventArgs> _messageEventQueue;
     private uint _nonceCount;
@@ -146,7 +146,7 @@ public class WebSocket : IDisposable
 
     static WebSocket()
     {
-        _maxRetryCountForConnect = 10;
+        MaxRetryCountForConnect = 10;
         EmptyBytes = Array.Empty<byte>();
         FragmentLength = 1016;
         RandomNumber = RandomNumberGenerator.Create();
@@ -169,7 +169,7 @@ public class WebSocket : IDisposable
         this._stream = context.Stream;
         this._waitTime = TimeSpan.FromSeconds(1);
 
-        this.init();
+        this.Init();
     }
 
     // As server
@@ -185,7 +185,7 @@ public class WebSocket : IDisposable
         this._stream = context.Stream;
         this._waitTime = TimeSpan.FromSeconds(1);
 
-        this.init();
+        this.Init();
     }
 
     #endregion
@@ -263,7 +263,7 @@ public class WebSocket : IDisposable
 
         if (protocols != null && protocols.Length > 0)
         {
-            if (!checkProtocols(protocols, out msg))
+            if (!CheckProtocols(protocols, out msg))
             {
                 throw new ArgumentException(msg, nameof(protocols));
             }
@@ -274,11 +274,11 @@ public class WebSocket : IDisposable
         this._base64Key = CreateBase64Key();
         this._client = true;
         this._logger = new Logger();
-        this._message = this.messagec;
+        this._message = this.Messagec;
         this.IsSecure = this._uri.Scheme == "wss";
         this._waitTime = TimeSpan.FromSeconds(5);
 
-        this.init();
+        this.Init();
     }
 
     #endregion
@@ -344,7 +344,7 @@ public class WebSocket : IDisposable
                 throw new InvalidOperationException(msg);
             }
 
-            if (!this.canSet(out msg))
+            if (!this.CanSet(out msg))
             {
                 this._logger.Warn(msg);
                 return;
@@ -352,7 +352,7 @@ public class WebSocket : IDisposable
 
             lock (this._forState)
             {
-                if (!this.canSet(out msg))
+                if (!this.CanSet(out msg))
                 {
                     this._logger.Warn(msg);
                     return;
@@ -439,7 +439,7 @@ public class WebSocket : IDisposable
                 throw new InvalidOperationException(msg);
             }
 
-            if (!this.canSet(out msg))
+            if (!this.CanSet(out msg))
             {
                 this._logger.Warn(msg);
                 return;
@@ -447,7 +447,7 @@ public class WebSocket : IDisposable
 
             lock (this._forState)
             {
-                if (!this.canSet(out msg))
+                if (!this.CanSet(out msg))
                 {
                     this._logger.Warn(msg);
                     return;
@@ -478,7 +478,7 @@ public class WebSocket : IDisposable
     /// <value>
     /// <c>true</c> if the connection is alive; otherwise, <c>false</c>.
     /// </value>
-    public bool IsAlive => this.ping(EmptyBytes);
+    public bool IsAlive => this.Ping(EmptyBytes);
 
     /// <summary>
     /// Gets a value indicating whether a secure connection is used.
@@ -577,7 +577,7 @@ public class WebSocket : IDisposable
                 }
             }
 
-            if (!this.canSet(out msg))
+            if (!this.CanSet(out msg))
             {
                 this._logger.Warn(msg);
                 return;
@@ -585,7 +585,7 @@ public class WebSocket : IDisposable
 
             lock (this._forState)
             {
-                if (!this.canSet(out msg))
+                if (!this.CanSet(out msg))
                 {
                     this._logger.Warn(msg);
                     return;
@@ -666,7 +666,7 @@ public class WebSocket : IDisposable
                 throw new InvalidOperationException(msg);
             }
 
-            return this.getSslConfiguration();
+            return this.GetSslConfiguration();
         }
     }
 
@@ -708,7 +708,7 @@ public class WebSocket : IDisposable
                 throw new ArgumentOutOfRangeException(nameof(value), "Zero or less.");
             }
 
-            if (!this.canSet(out var msg))
+            if (!this.CanSet(out var msg))
             {
                 this._logger.Warn(msg);
                 return;
@@ -716,7 +716,7 @@ public class WebSocket : IDisposable
 
             lock (this._forState)
             {
-                if (!this.canSet(out msg))
+                if (!this.CanSet(out msg))
                 {
                     this._logger.Warn(msg);
                     return;
@@ -756,7 +756,7 @@ public class WebSocket : IDisposable
     #region Private Methods
 
     // As server
-    private bool accept()
+    private bool AcceptWS()
     {
         lock (this._forState)
         {
@@ -775,7 +775,7 @@ public class WebSocket : IDisposable
 
                 this._logger.Error(msg);
 
-                this.error(msg, null);
+                this.Error(msg, null);
 
                 return false;
             }
@@ -786,14 +786,14 @@ public class WebSocket : IDisposable
 
                 this._logger.Error(msg);
 
-                this.error(msg, null);
+                this.Error(msg, null);
 
                 return false;
             }
 
             try
             {
-                var accepted = this.acceptHandshake();
+                var accepted = this.AcceptHandshake();
 
                 if (!accepted)
                 {
@@ -806,7 +806,7 @@ public class WebSocket : IDisposable
                 this._logger.Debug(ex.ToString());
 
                 var msg = "An exception has occurred while attempting to accept.";
-                this.fatal(msg, ex);
+                this.Fatal(msg, ex);
 
                 return false;
             }
@@ -818,29 +818,29 @@ public class WebSocket : IDisposable
     }
 
     // As server
-    private bool acceptHandshake()
+    private bool AcceptHandshake()
     {
         var fmt = "A handshake request from {0}:\n{1}";
         var msg = string.Format(fmt, this._context.UserEndPoint, this._context);
 
         this._logger.Debug(msg);
 
-        if (!this.checkHandshakeRequest(this._context, out msg))
+        if (!this.CheckHandshakeRequest(this._context, out msg))
         {
             this._logger.Error(msg);
 
             var reason = "A handshake error has occurred while attempting to accept.";
-            this.refuseHandshake(CloseStatusCode.ProtocolError, reason);
+            this.RefuseHandshake(CloseStatusCode.ProtocolError, reason);
 
             return false;
         }
 
-        if (!this.customCheckHandshakeRequest(this._context, out msg))
+        if (!this.CustomCheckHandshakeRequest(this._context, out msg))
         {
             this._logger.Error(msg);
 
             var reason = "A handshake error has occurred while attempting to accept.";
-            this.refuseHandshake(CloseStatusCode.PolicyViolation, reason);
+            this.RefuseHandshake(CloseStatusCode.PolicyViolation, reason);
 
             return false;
         }
@@ -851,22 +851,22 @@ public class WebSocket : IDisposable
         {
             var vals = this._context.SecWebSocketProtocols;
 
-            this.processSecWebSocketProtocolClientHeader(vals);
+            this.ProcessSecWebSocketProtocolClientHeader(vals);
         }
 
         if (!this.IgnoreExtensions)
         {
             var val = this._context.Headers["Sec-WebSocket-Extensions"];
 
-            this.processSecWebSocketExtensionsClientHeader(val);
+            this.ProcessSecWebSocketExtensionsClientHeader(val);
         }
 
-        var res = this.createHandshakeResponse();
+        var res = this.CreateHandshakeResponse();
 
-        return this.sendHttpResponse(res);
+        return this.SendHttpResponse(res);
     }
 
-    private bool canSet(out string message)
+    private bool CanSet(out string message)
     {
         message = null;
 
@@ -886,7 +886,7 @@ public class WebSocket : IDisposable
     }
 
     // As server
-    private bool checkHandshakeRequest(
+    private bool CheckHandshakeRequest(
       WebSocketContext context, out string message
     )
     {
@@ -965,7 +965,7 @@ public class WebSocket : IDisposable
     }
 
     // As client
-    private bool checkHandshakeResponse(
+    private bool CheckHandshakeResponse(
       HttpResponse response, out string message
     )
     {
@@ -1056,7 +1056,7 @@ public class WebSocket : IDisposable
         return true;
     }
 
-    private static bool checkProtocols(string[] protocols, out string message)
+    private static bool CheckProtocols(string[] protocols, out string message)
     {
         message = null;
 
@@ -1078,7 +1078,7 @@ public class WebSocket : IDisposable
         return true;
     }
 
-    private bool checkReceivedFrame(WebSocketFrame frame, out string message)
+    private bool CheckReceivedFrame(WebSocketFrame frame, out string message)
     {
         message = null;
 
@@ -1129,7 +1129,7 @@ public class WebSocket : IDisposable
         return true;
     }
 
-    private void close(ushort code, string reason)
+    private void CloseWS(ushort code, string reason)
     {
         if (this._readyState == WebSocketState.Closing)
         {
@@ -1147,7 +1147,7 @@ public class WebSocket : IDisposable
 
         if (code == 1005)
         {
-            this.close(PayloadData.Empty, true, false);
+            this.Close(PayloadData.Empty, true, false);
 
             return;
         }
@@ -1155,10 +1155,10 @@ public class WebSocket : IDisposable
         var data = new PayloadData(code, reason);
         var send = !code.IsReserved();
 
-        this.close(data, send, false);
+        this.Close(data, send, false);
     }
 
-    private void close(PayloadData payloadData, bool send, bool received)
+    private void Close(PayloadData payloadData, bool send, bool received)
     {
         lock (this._forState)
         {
@@ -1185,7 +1185,7 @@ public class WebSocket : IDisposable
 
         var res = this.CloseHandshake(payloadData, send, received);
 
-        this.releaseResources();
+        this.ReleaseResources();
 
         this._logger.Trace("End closing the connection.");
 
@@ -1204,7 +1204,7 @@ public class WebSocket : IDisposable
         }
     }
 
-    private void closeAsync(ushort code, string reason)
+    private void CloseWSAsync(ushort code, string reason)
     {
         if (this._readyState == WebSocketState.Closing)
         {
@@ -1222,7 +1222,7 @@ public class WebSocket : IDisposable
 
         if (code == 1005)
         {
-            this.closeAsync(PayloadData.Empty, true, false);
+            this.CloseAsync(PayloadData.Empty, true, false);
 
             return;
         }
@@ -1230,12 +1230,12 @@ public class WebSocket : IDisposable
         var data = new PayloadData(code, reason);
         var send = !code.IsReserved();
 
-        this.closeAsync(data, send, false);
+        this.CloseAsync(data, send, false);
     }
 
-    private void closeAsync(PayloadData payloadData, bool send, bool received)
+    private void CloseAsync(PayloadData payloadData, bool send, bool received)
     {
-        Action<PayloadData, bool, bool> closer = this.close;
+        Action<PayloadData, bool, bool> closer = this.Close;
 
         _ = closer.BeginInvoke(
           payloadData, send, received, ar => closer.EndInvoke(ar), null
@@ -1253,7 +1253,7 @@ public class WebSocket : IDisposable
             var frame = WebSocketFrame.CreateCloseFrame(payloadData, this._client);
             var bytes = frame.ToArray();
 
-            sent = this.sendBytes(bytes);
+            sent = this.SendBytes(bytes);
 
             if (this._client)
             {
@@ -1283,7 +1283,7 @@ public class WebSocket : IDisposable
     }
 
     // As client
-    private bool connect()
+    private bool ConnectWS()
     {
         if (this._readyState == WebSocketState.Open)
         {
@@ -1309,18 +1309,18 @@ public class WebSocket : IDisposable
                 this._logger.Error(msg);
 
                 msg = "An interruption has occurred while attempting to connect.";
-                this.error(msg, null);
+                this.Error(msg, null);
 
                 return false;
             }
 
-            if (this._retryCountForConnect > _maxRetryCountForConnect)
+            if (this._retryCountForConnect > MaxRetryCountForConnect)
             {
                 var msg = "An opportunity for reconnecting has been lost.";
                 this._logger.Error(msg);
 
                 msg = "An interruption has occurred while attempting to connect.";
-                this.error(msg, null);
+                this.Error(msg, null);
 
                 return false;
             }
@@ -1329,7 +1329,7 @@ public class WebSocket : IDisposable
 
             try
             {
-                this.doHandshake();
+                this.DoHandshake();
             }
             catch (Exception ex)
             {
@@ -1339,7 +1339,7 @@ public class WebSocket : IDisposable
                 this._logger.Debug(ex.ToString());
 
                 var msg = "An exception has occurred while attempting to connect.";
-                this.fatal(msg, ex);
+                this.Fatal(msg, ex);
 
                 return false;
             }
@@ -1352,7 +1352,7 @@ public class WebSocket : IDisposable
     }
 
     // As client
-    private AuthenticationResponse createAuthenticationResponse()
+    private AuthenticationResponse CreateAuthenticationResponse()
     {
         if (this.Credentials == null)
         {
@@ -1374,7 +1374,7 @@ public class WebSocket : IDisposable
     }
 
     // As client
-    private string createExtensions()
+    private string CreateExtensions()
     {
         var buff = new StringBuilder(80);
 
@@ -1400,7 +1400,7 @@ public class WebSocket : IDisposable
     }
 
     // As server
-    private HttpResponse createHandshakeFailureResponse(HttpStatusCode code)
+    private static HttpResponse CreateHandshakeFailureResponse(HttpStatusCode code)
     {
         var ret = HttpResponse.CreateCloseResponse(code);
 
@@ -1410,7 +1410,7 @@ public class WebSocket : IDisposable
     }
 
     // As client
-    private HttpRequest createHandshakeRequest()
+    private HttpRequest CreateHandshakeRequest()
     {
         var ret = HttpRequest.CreateWebSocketHandshakeRequest(this._uri);
 
@@ -1431,7 +1431,7 @@ public class WebSocket : IDisposable
             this._protocolsRequested = true;
         }
 
-        var exts = this.createExtensions();
+        var exts = this.CreateExtensions();
 
         if (exts != null)
         {
@@ -1440,7 +1440,7 @@ public class WebSocket : IDisposable
             this._extensionsRequested = true;
         }
 
-        var ares = this.createAuthenticationResponse();
+        var ares = this.CreateAuthenticationResponse();
 
         if (ares != null)
         {
@@ -1456,7 +1456,7 @@ public class WebSocket : IDisposable
     }
 
     // As server
-    private HttpResponse createHandshakeResponse()
+    private HttpResponse CreateHandshakeResponse()
     {
         var ret = HttpResponse.CreateWebSocketHandshakeResponse();
 
@@ -1483,7 +1483,7 @@ public class WebSocket : IDisposable
     }
 
     // As server
-    private bool customCheckHandshakeRequest(
+    private bool CustomCheckHandshakeRequest(
       WebSocketContext context, out string message
     )
     {
@@ -1500,14 +1500,14 @@ public class WebSocket : IDisposable
     }
 
     // As client
-    private void doHandshake()
+    private void DoHandshake()
     {
-        this.setClientStream();
+        this.SetClientStream();
 
-        var res = this.sendHandshakeRequest();
+        var res = this.SendHandshakeRequest();
 
 
-        if (!this.checkHandshakeResponse(res, out var msg))
+        if (!this.CheckHandshakeResponse(res, out var msg))
         {
             throw new WebSocketException(CloseStatusCode.ProtocolError, msg);
         }
@@ -1521,13 +1521,13 @@ public class WebSocket : IDisposable
         {
             var val = res.Headers["Sec-WebSocket-Extensions"];
 
-            this.processSecWebSocketExtensionsServerHeader(val);
+            this.ProcessSecWebSocketExtensionsServerHeader(val);
         }
 
-        this.processCookies(res.Cookies);
+        this.ProcessCookies(res.Cookies);
     }
 
-    private void enqueueToMessageEventQueue(MessageEventArgs e)
+    private void EnqueueToMessageEventQueue(MessageEventArgs e)
     {
         lock (this._forMessageEventQueue)
         {
@@ -1535,7 +1535,7 @@ public class WebSocket : IDisposable
         }
     }
 
-    private void error(string message, Exception exception)
+    private void Error(string message, Exception exception)
     {
         var e = new ErrorEventArgs(message, exception);
 
@@ -1550,30 +1550,30 @@ public class WebSocket : IDisposable
         }
     }
 
-    private void fatal(string message, Exception exception)
+    private void Fatal(string message, Exception exception)
     {
-        var code = exception is WebSocketException
-                   ? ((WebSocketException)exception).Code
+        var code = exception is WebSocketException exception1
+                   ? exception1.Code
                    : CloseStatusCode.Abnormal;
 
-        this.fatal(message, (ushort)code);
+        this.Fatal(message, (ushort)code);
     }
 
-    private void fatal(string message, ushort code)
+    private void Fatal(string message, ushort code)
     {
         var data = new PayloadData(code, message);
 
-        this.close(data, false, false);
+        this.Close(data, false, false);
     }
 
-    private ClientSslConfiguration getSslConfiguration()
+    private ClientSslConfiguration GetSslConfiguration()
     {
         this._sslConfig ??= new ClientSslConfiguration(this._uri.DnsSafeHost);
 
         return this._sslConfig;
     }
 
-    private void init()
+    private void Init()
     {
         this._compression = CompressionMethod.None;
         this.CookieCollection = new CookieCollection();
@@ -1585,7 +1585,7 @@ public class WebSocket : IDisposable
         this._readyState = WebSocketState.Connecting;
     }
 
-    private void message()
+    private void Message()
     {
         MessageEventArgs e = null;
 
@@ -1614,7 +1614,7 @@ public class WebSocket : IDisposable
         this._message(e);
     }
 
-    private void messagec(MessageEventArgs e)
+    private void Messagec(MessageEventArgs e)
     {
         do
         {
@@ -1627,7 +1627,7 @@ public class WebSocket : IDisposable
                 this._logger.Error(ex.Message);
                 this._logger.Debug(ex.ToString());
 
-                this.error("An exception has occurred during an OnMessage event.", ex);
+                this.Error("An exception has occurred during an OnMessage event.", ex);
             }
 
             lock (this._forMessageEventQueue)
@@ -1663,7 +1663,7 @@ public class WebSocket : IDisposable
             this._logger.Error(ex.Message);
             this._logger.Debug(ex.ToString());
 
-            this.error("An exception has occurred during an OnMessage event.", ex);
+            this.Error("An exception has occurred during an OnMessage event.", ex);
         }
 
         lock (this._forMessageEventQueue)
@@ -1688,11 +1688,11 @@ public class WebSocket : IDisposable
         _ = Task.Run(() => this.Messages(e));
     }
 
-    private void Open()
+    private void OpenWS()
     {
         this._inMessage = true;
 
-        this.startReceiving();
+        this.StartReceiving();
 
         try
         {
@@ -1703,7 +1703,7 @@ public class WebSocket : IDisposable
             this._logger.Error(ex.Message);
             this._logger.Debug(ex.ToString());
 
-            this.error("An exception has occurred during the OnOpen event.", ex);
+            this.Error("An exception has occurred during the OnOpen event.", ex);
         }
 
         MessageEventArgs e = null;
@@ -1730,7 +1730,7 @@ public class WebSocket : IDisposable
         _ = this._message.BeginInvoke(e, ar => this._message.EndInvoke(ar), null);
     }
 
-    private bool ping(byte[] data)
+    private bool Ping(byte[] data)
     {
         if (this._readyState != WebSocketState.Open)
         {
@@ -1750,7 +1750,7 @@ public class WebSocket : IDisposable
             {
                 _ = received.Reset();
 
-                var sent = this.send(Fin.Final, Opcode.Ping, data, false);
+                var sent = this.Send(Fin.Final, Opcode.Ping, data, false);
 
                 if (!sent)
                 {
@@ -1766,18 +1766,18 @@ public class WebSocket : IDisposable
         }
     }
 
-    private bool processCloseFrame(WebSocketFrame frame)
+    private bool ProcessCloseFrame(WebSocketFrame frame)
     {
         var data = frame.PayloadData;
         var send = !data.HasReservedCode;
 
-        this.close(data, send, true);
+        this.Close(data, send, true);
 
         return false;
     }
 
     // As client
-    private void processCookies(CookieCollection cookies)
+    private void ProcessCookies(CookieCollection cookies)
     {
         if (cookies.Count == 0)
         {
@@ -1787,7 +1787,7 @@ public class WebSocket : IDisposable
         this.CookieCollection.SetOrRemove(cookies);
     }
 
-    private bool processDataFrame(WebSocketFrame frame)
+    private bool ProcessDataFrame(WebSocketFrame frame)
     {
         var e = frame.IsCompressed
                 ? new MessageEventArgs(
@@ -1796,12 +1796,12 @@ public class WebSocket : IDisposable
                   )
                 : new MessageEventArgs(frame);
 
-        this.enqueueToMessageEventQueue(e);
+        this.EnqueueToMessageEventQueue(e);
 
         return true;
     }
 
-    private bool processFragmentFrame(WebSocketFrame frame)
+    private bool ProcessFragmentFrame(WebSocketFrame frame)
     {
         if (!this._inContinuation)
         {
@@ -1828,7 +1828,7 @@ public class WebSocket : IDisposable
 
                 var e = new MessageEventArgs(this._fragmentsOpcode, data);
 
-                this.enqueueToMessageEventQueue(e);
+                this.EnqueueToMessageEventQueue(e);
             }
 
             this._fragmentsBuffer = null;
@@ -1838,7 +1838,7 @@ public class WebSocket : IDisposable
         return true;
     }
 
-    private bool processPingFrame(WebSocketFrame frame)
+    private bool ProcessPingFrame(WebSocketFrame frame)
     {
         this._logger.Trace("A ping was received.");
 
@@ -1854,7 +1854,7 @@ public class WebSocket : IDisposable
             }
 
             var bytes = pong.ToArray();
-            var sent = this.sendBytes(bytes);
+            var sent = this.SendBytes(bytes);
 
             if (!sent)
             {
@@ -1873,14 +1873,19 @@ public class WebSocket : IDisposable
 
             var e = new MessageEventArgs(frame);
 
-            this.enqueueToMessageEventQueue(e);
+            this.EnqueueToMessageEventQueue(e);
         }
 
         return true;
     }
 
-    private bool processPongFrame(WebSocketFrame frame)
+    private bool ProcessPongFrame(WebSocketFrame frame)
     {
+        if (frame is null)
+        {
+            throw new ArgumentNullException(nameof(frame));
+        }
+
         this._logger.Trace("A pong was received.");
 
         try
@@ -1901,10 +1906,10 @@ public class WebSocket : IDisposable
         return true;
     }
 
-    private bool processReceivedFrame(WebSocketFrame frame)
+    private bool ProcessReceivedFrame(WebSocketFrame frame)
     {
 
-        if (!this.checkReceivedFrame(frame, out var msg))
+        if (!this.CheckReceivedFrame(frame, out var msg))
         {
             throw new WebSocketException(CloseStatusCode.ProtocolError, msg);
         }
@@ -1912,20 +1917,20 @@ public class WebSocket : IDisposable
         frame.Unmask();
 
         return frame.IsFragment
-               ? this.processFragmentFrame(frame)
+               ? this.ProcessFragmentFrame(frame)
                : frame.IsData
-                 ? this.processDataFrame(frame)
+                 ? this.ProcessDataFrame(frame)
                  : frame.IsPing
-                   ? this.processPingFrame(frame)
+                   ? this.ProcessPingFrame(frame)
                    : frame.IsPong
-                     ? this.processPongFrame(frame)
+                     ? this.ProcessPongFrame(frame)
                      : frame.IsClose
-                       ? this.processCloseFrame(frame)
-                       : this.processUnsupportedFrame(frame);
+                       ? this.ProcessCloseFrame(frame)
+                       : this.ProcessUnsupportedFrame(frame);
     }
 
     // As server
-    private void processSecWebSocketExtensionsClientHeader(string value)
+    private void ProcessSecWebSocketExtensionsClientHeader(string value)
     {
         if (value == null)
         {
@@ -1976,7 +1981,7 @@ public class WebSocket : IDisposable
     }
 
     // As client
-    private void processSecWebSocketExtensionsServerHeader(string value)
+    private void ProcessSecWebSocketExtensionsServerHeader(string value)
     {
         if (value == null)
         {
@@ -1989,7 +1994,7 @@ public class WebSocket : IDisposable
     }
 
     // As server
-    private void processSecWebSocketProtocolClientHeader(
+    private void ProcessSecWebSocketProtocolClientHeader(
       IEnumerable<string> values
     )
     {
@@ -2001,25 +2006,25 @@ public class WebSocket : IDisposable
         this._protocol = null;
     }
 
-    private bool processUnsupportedFrame(WebSocketFrame frame)
+    private bool ProcessUnsupportedFrame(WebSocketFrame frame)
     {
         this._logger.Fatal("An unsupported frame was received.");
         this._logger.Debug("The frame is" + frame.PrintToString(false));
 
-        this.fatal("There is no way to handle it.", 1003);
+        this.Fatal("There is no way to handle it.", 1003);
 
         return false;
     }
 
     // As server
-    private void refuseHandshake(CloseStatusCode code, string reason)
+    private void RefuseHandshake(CloseStatusCode code, string reason)
     {
         this._readyState = WebSocketState.Closing;
 
-        var res = this.createHandshakeFailureResponse(HttpStatusCode.BadRequest);
-        _ = this.sendHttpResponse(res);
+        var res = CreateHandshakeFailureResponse(HttpStatusCode.BadRequest);
+        _ = this.SendHttpResponse(res);
 
-        this.releaseServerResources();
+        this.ReleaseServerResources();
 
         this._readyState = WebSocketState.Closed;
 
@@ -2037,7 +2042,7 @@ public class WebSocket : IDisposable
     }
 
     // As client
-    private void releaseClientResources()
+    private void ReleaseClientResources()
     {
         if (this._stream != null)
         {
@@ -2052,7 +2057,7 @@ public class WebSocket : IDisposable
         }
     }
 
-    private void releaseCommonResources()
+    private void ReleaseCommonResources()
     {
         if (this._fragmentsBuffer != null)
         {
@@ -2074,22 +2079,22 @@ public class WebSocket : IDisposable
         }
     }
 
-    private void releaseResources()
+    private void ReleaseResources()
     {
         if (this._client)
         {
-            this.releaseClientResources();
+            this.ReleaseClientResources();
         }
         else
         {
-            this.releaseServerResources();
+            this.ReleaseServerResources();
         }
 
-        this.releaseCommonResources();
+        this.ReleaseCommonResources();
     }
 
     // As server
-    private void releaseServerResources()
+    private void ReleaseServerResources()
     {
         if (this._closeContext == null)
         {
@@ -2102,7 +2107,7 @@ public class WebSocket : IDisposable
         this._context = null;
     }
 
-    private bool send(Opcode opcode, Stream stream)
+    private bool Send(Opcode opcode, Stream stream)
     {
         lock (this._forSend)
         {
@@ -2118,11 +2123,11 @@ public class WebSocket : IDisposable
                     compressed = true;
                 }
 
-                sent = this.send(opcode, stream, compressed);
+                sent = this.Send(opcode, stream, compressed);
 
                 if (!sent)
                 {
-                    this.error("A send has been interrupted.", null);
+                    this.Error("A send has been interrupted.", null);
                 }
             }
             catch (Exception ex)
@@ -2130,7 +2135,7 @@ public class WebSocket : IDisposable
                 this._logger.Error(ex.Message);
                 this._logger.Debug(ex.ToString());
 
-                this.error("An exception has occurred during a send.", ex);
+                this.Error("An exception has occurred during a send.", ex);
             }
             finally
             {
@@ -2146,13 +2151,13 @@ public class WebSocket : IDisposable
         }
     }
 
-    private bool send(Opcode opcode, Stream stream, bool compressed)
+    private bool Send(Opcode opcode, Stream stream, bool compressed)
     {
         var len = stream.Length;
 
         if (len == 0)
         {
-            return this.send(Fin.Final, opcode, EmptyBytes, false);
+            return this.Send(Fin.Final, opcode, EmptyBytes, false);
         }
 
         var quo = len / FragmentLength;
@@ -2164,7 +2169,7 @@ public class WebSocket : IDisposable
             buff = new byte[rem];
 
             return stream.Read(buff, 0, rem) == rem
-                   && this.send(Fin.Final, opcode, buff, compressed);
+                   && this.Send(Fin.Final, opcode, buff, compressed);
         }
 
         if (quo == 1 && rem == 0)
@@ -2172,7 +2177,7 @@ public class WebSocket : IDisposable
             buff = new byte[FragmentLength];
 
             return stream.Read(buff, 0, FragmentLength) == FragmentLength
-                   && this.send(Fin.Final, opcode, buff, compressed);
+                   && this.Send(Fin.Final, opcode, buff, compressed);
         }
 
         /* Send fragments */
@@ -2182,7 +2187,7 @@ public class WebSocket : IDisposable
         buff = new byte[FragmentLength];
 
         var sent = stream.Read(buff, 0, FragmentLength) == FragmentLength
-                   && this.send(Fin.More, opcode, buff, compressed);
+                   && this.Send(Fin.More, opcode, buff, compressed);
 
         if (!sent)
         {
@@ -2194,7 +2199,7 @@ public class WebSocket : IDisposable
         for (long i = 0; i < n; i++)
         {
             sent = stream.Read(buff, 0, FragmentLength) == FragmentLength
-                   && this.send(Fin.More, Opcode.Cont, buff, false);
+                   && this.Send(Fin.More, Opcode.Cont, buff, false);
 
             if (!sent)
             {
@@ -2214,10 +2219,10 @@ public class WebSocket : IDisposable
         }
 
         return stream.Read(buff, 0, rem) == rem
-               && this.send(Fin.Final, Opcode.Cont, buff, false);
+               && this.Send(Fin.Final, Opcode.Cont, buff, false);
     }
 
-    private bool send(Fin fin, Opcode opcode, byte[] data, bool compressed)
+    private bool Send(Fin fin, Opcode opcode, byte[] data, bool compressed)
     {
         lock (this._forState)
         {
@@ -2231,15 +2236,15 @@ public class WebSocket : IDisposable
             var frame = new WebSocketFrame(fin, opcode, data, compressed, this._client);
             var bytes = frame.ToArray();
 
-            return this.sendBytes(bytes);
+            return this.SendBytes(bytes);
         }
     }
 
-    private void sendAsync(
+    private void SendAsync(
       Opcode opcode, Stream stream, Action<bool> completed
     )
     {
-        Func<Opcode, Stream, bool> sender = this.send;
+        Func<Opcode, Stream, bool> sender = this.Send;
 
         _ = sender.BeginInvoke(
           opcode,
@@ -2257,7 +2262,7 @@ public class WebSocket : IDisposable
                   this._logger.Error(ex.Message);
                   this._logger.Debug(ex.ToString());
 
-                  this.error(
+                  this.Error(
               "An exception has occurred during the callback for an async send.",
               ex
             );
@@ -2267,7 +2272,7 @@ public class WebSocket : IDisposable
         );
     }
 
-    private bool sendBytes(byte[] bytes)
+    private bool SendBytes(byte[] bytes)
     {
         try
         {
@@ -2285,10 +2290,10 @@ public class WebSocket : IDisposable
     }
 
     // As client
-    private HttpResponse sendHandshakeRequest()
+    private HttpResponse SendHandshakeRequest()
     {
-        var req = this.createHandshakeRequest();
-        var res = this.sendHttpRequest(req, 90000);
+        var req = this.CreateHandshakeRequest();
+        var res = this.SendHttpRequest(req, 90000);
 
         if (res.IsUnauthorized)
         {
@@ -2339,11 +2344,11 @@ public class WebSocket : IDisposable
 
             if (res.CloseConnection)
             {
-                this.releaseClientResources();
-                this.setClientStream();
+                this.ReleaseClientResources();
+                this.SetClientStream();
             }
 
-            res = this.sendHttpRequest(req, 15000);
+            res = this.SendHttpRequest(req, 15000);
         }
 
         if (res.IsRedirect)
@@ -2362,29 +2367,28 @@ public class WebSocket : IDisposable
                 return res;
             }
 
-
-            if (!val.TryCreateWebSocketUri(out var uri, out var msg))
+            if (!val.TryCreateWebSocketUri(out var uri, out _))
             {
                 this._logger.Error("An invalid url to redirect is located.");
 
                 return res;
             }
 
-            this.releaseClientResources();
+            this.ReleaseClientResources();
 
             this._uri = uri;
             this.IsSecure = uri.Scheme == "wss";
 
-            this.setClientStream();
+            this.SetClientStream();
 
-            return this.sendHandshakeRequest();
+            return this.SendHandshakeRequest();
         }
 
         return res;
     }
 
     // As client
-    private HttpResponse sendHttpRequest(
+    private HttpResponse SendHttpRequest(
       HttpRequest request, int millisecondsTimeout
     )
     {
@@ -2402,7 +2406,7 @@ public class WebSocket : IDisposable
     }
 
     // As server
-    private bool sendHttpResponse(HttpResponse response)
+    private bool SendHttpResponse(HttpResponse response)
     {
         var fmt = "An HTTP response to {0}:\n{1}";
         var msg = string.Format(fmt, this._context.UserEndPoint, response);
@@ -2411,14 +2415,14 @@ public class WebSocket : IDisposable
 
         var bytes = response.ToByteArray();
 
-        return this.sendBytes(bytes);
+        return this.SendBytes(bytes);
     }
 
     // As client
-    private void sendProxyConnectRequest()
+    private void SendProxyConnectRequest()
     {
         var req = HttpRequest.CreateConnectRequest(this._uri);
-        var res = this.sendHttpRequest(req, 90000);
+        var res = this.SendHttpRequest(req, 90000);
 
         if (res.IsProxyAuthenticationRequired)
         {
@@ -2453,13 +2457,13 @@ public class WebSocket : IDisposable
 
             if (res.CloseConnection)
             {
-                this.releaseClientResources();
+                this.ReleaseClientResources();
 
                 this._tcpClient = new TcpClient(this._proxyUri.DnsSafeHost, this._proxyUri.Port);
                 this._stream = this._tcpClient.GetStream();
             }
 
-            res = this.sendHttpRequest(req, 15000);
+            res = this.SendHttpRequest(req, 15000);
 
             if (res.IsProxyAuthenticationRequired)
             {
@@ -2478,14 +2482,14 @@ public class WebSocket : IDisposable
     }
 
     // As client
-    private void setClientStream()
+    private void SetClientStream()
     {
         if (this._proxyUri != null)
         {
             this._tcpClient = new TcpClient(this._proxyUri.DnsSafeHost, this._proxyUri.Port);
             this._stream = this._tcpClient.GetStream();
 
-            this.sendProxyConnectRequest();
+            this.SendProxyConnectRequest();
         }
         else
         {
@@ -2495,7 +2499,7 @@ public class WebSocket : IDisposable
 
         if (this.IsSecure)
         {
-            var conf = this.getSslConfiguration();
+            var conf = this.GetSslConfiguration();
             var host = conf.TargetHost;
 
             if (host != this._uri.DnsSafeHost)
@@ -2534,7 +2538,7 @@ public class WebSocket : IDisposable
         }
     }
 
-    private void startReceiving()
+    private void StartReceiving()
     {
         if (this._messageEventQueue.Count > 0)
         {
@@ -2550,7 +2554,7 @@ public class WebSocket : IDisposable
               false,
               frame =>
               {
-                  var cont = this.processReceivedFrame(frame)
+                  var cont = this.ProcessReceivedFrame(frame)
                        && this._readyState != WebSocketState.Closed;
 
                   if (!cont)
@@ -2572,14 +2576,14 @@ public class WebSocket : IDisposable
                       return;
                   }
 
-                  this.message();
+                  this.Message();
               },
               ex =>
               {
                   this._logger.Fatal(ex.Message);
                   this._logger.Debug(ex.ToString());
 
-                  this.fatal("An exception has occurred while receiving.", ex);
+                  this.Fatal("An exception has occurred while receiving.", ex);
               }
             );
 
@@ -2662,20 +2666,20 @@ public class WebSocket : IDisposable
     // As server
     internal void Accept()
     {
-        var accepted = this.accept();
+        var accepted = this.AcceptWS();
 
         if (!accepted)
         {
             return;
         }
 
-        this.Open();
+        this.OpenWS();
     }
 
     // As server
     internal void AcceptAsync()
     {
-        Func<bool> acceptor = this.accept;
+        Func<bool> acceptor = this.AcceptWS;
 
         _ = acceptor.BeginInvoke(
           ar =>
@@ -2687,7 +2691,7 @@ public class WebSocket : IDisposable
                   return;
               }
 
-              this.Open();
+              this.OpenWS();
           },
           null
         );
@@ -2698,14 +2702,14 @@ public class WebSocket : IDisposable
     {
         this._readyState = WebSocketState.Closing;
 
-        _ = this.sendHttpResponse(response);
-        this.releaseServerResources();
+        _ = this.SendHttpResponse(response);
+        this.ReleaseServerResources();
 
         this._readyState = WebSocketState.Closed;
     }
 
     // As server
-    internal void Close(HttpStatusCode code) => this.Close(this.createHandshakeFailureResponse(code));
+    internal void Close(HttpStatusCode code) => this.Close(CreateHandshakeFailureResponse(code));
 
     // As server
     internal void Close(PayloadData payloadData, byte[] frameAsBytes)
@@ -2731,10 +2735,8 @@ public class WebSocket : IDisposable
 
         this._logger.Trace("Begin closing the connection.");
 
-        var sent = frameAsBytes != null && this.sendBytes(frameAsBytes);
-        var received = sent && this._receivingExited != null
-                       ? this._receivingExited.WaitOne(this._waitTime)
-                       : false;
+        var sent = frameAsBytes != null && this.SendBytes(frameAsBytes);
+        var received = sent && this._receivingExited != null && this._receivingExited.WaitOne(this._waitTime);
 
         var res = sent && received;
 
@@ -2747,8 +2749,8 @@ public class WebSocket : IDisposable
 
         this._logger.Debug(msg);
 
-        this.releaseServerResources();
-        this.releaseCommonResources();
+        this.ReleaseServerResources();
+        this.ReleaseCommonResources();
 
         this._logger.Trace("End closing the connection.");
 
@@ -2779,7 +2781,7 @@ public class WebSocket : IDisposable
     internal static string CreateResponseKey(string base64Key)
     {
         var buff = new StringBuilder(base64Key, 64);
-        _ = buff.Append(_guid);
+        _ = buff.Append(GUID);
         var sha1 = SHA1.Create();
         var src = sha1.ComputeHash(buff.ToString().GetUTF8EncodedBytes());
 
@@ -2791,7 +2793,7 @@ public class WebSocket : IDisposable
     {
         try
         {
-            if (!this.acceptHandshake())
+            if (!this.AcceptHandshake())
             {
                 return;
             }
@@ -2802,14 +2804,14 @@ public class WebSocket : IDisposable
             this._logger.Debug(ex.ToString());
 
             var msg = "An exception has occurred while attempting to accept.";
-            this.fatal(msg, ex);
+            this.Fatal(msg, ex);
 
             return;
         }
 
         this._readyState = WebSocketState.Open;
 
-        this.Open();
+        this.OpenWS();
     }
 
     // As server
@@ -2840,7 +2842,7 @@ public class WebSocket : IDisposable
                         return false;
                     }
 
-                    var sent = this.sendBytes(frameAsBytes);
+                    var sent = this.SendBytes(frameAsBytes);
 
                     if (!sent)
                     {
@@ -2886,7 +2888,7 @@ public class WebSocket : IDisposable
                     cache.Add(this._compression, found);
                 }
 
-                _ = this.sendBytes(found);
+                _ = this.SendBytes(found);
             }
         }
     }
@@ -2908,7 +2910,7 @@ public class WebSocket : IDisposable
                 found.Position = 0;
             }
 
-            _ = this.send(opcode, found, this._compression != CompressionMethod.None);
+            _ = this.Send(opcode, found, this._compression != CompressionMethod.None);
         }
     }
 
@@ -2923,7 +2925,7 @@ public class WebSocket : IDisposable
     /// This method does nothing if the current state of the connection is
     /// Closing or Closed.
     /// </remarks>
-    public void Close() => this.close(1005, string.Empty);
+    public void Close() => this.Close(1005, string.Empty);
 
     /// <summary>
     /// Closes the connection with the specified code.
@@ -2979,7 +2981,7 @@ public class WebSocket : IDisposable
             throw new ArgumentException(msg, nameof(code));
         }
 
-        this.close(code, string.Empty);
+        this.Close(code, string.Empty);
     }
 
     /// <summary>
@@ -3026,7 +3028,7 @@ public class WebSocket : IDisposable
             throw new ArgumentException(msg, nameof(code));
         }
 
-        this.close((ushort)code, string.Empty);
+        this.Close((ushort)code, string.Empty);
     }
 
     /// <summary>
@@ -3113,7 +3115,7 @@ public class WebSocket : IDisposable
 
         if (reason.IsNullOrEmpty())
         {
-            this.close(code, string.Empty);
+            this.CloseWS(code, string.Empty);
             return;
         }
 
@@ -3135,7 +3137,7 @@ public class WebSocket : IDisposable
             throw new ArgumentOutOfRangeException(nameof(reason), msg);
         }
 
-        this.close(code, reason);
+        this.CloseWS(code, reason);
     }
 
     /// <summary>
@@ -3208,7 +3210,7 @@ public class WebSocket : IDisposable
 
         if (reason.IsNullOrEmpty())
         {
-            this.close((ushort)code, string.Empty);
+            this.CloseWS((ushort)code, string.Empty);
             return;
         }
 
@@ -3230,7 +3232,7 @@ public class WebSocket : IDisposable
             throw new ArgumentOutOfRangeException(nameof(reason), msg);
         }
 
-        this.close((ushort)code, reason);
+        this.CloseWS((ushort)code, reason);
     }
 
     /// <summary>
@@ -3245,7 +3247,7 @@ public class WebSocket : IDisposable
     ///   Closing or Closed.
     ///   </para>
     /// </remarks>
-    public void CloseAsync() => this.closeAsync(1005, string.Empty);
+    public void CloseAsync() => this.CloseAsync(1005, string.Empty);
 
     /// <summary>
     /// Closes the connection asynchronously with the specified code.
@@ -3306,7 +3308,7 @@ public class WebSocket : IDisposable
             throw new ArgumentException(msg, nameof(code));
         }
 
-        this.closeAsync(code, string.Empty);
+        this.CloseWSAsync(code, string.Empty);
     }
 
     /// <summary>
@@ -3358,7 +3360,7 @@ public class WebSocket : IDisposable
             throw new ArgumentException(msg, nameof(code));
         }
 
-        this.closeAsync((ushort)code, string.Empty);
+        this.CloseWSAsync((ushort)code, string.Empty);
     }
 
     /// <summary>
@@ -3450,7 +3452,7 @@ public class WebSocket : IDisposable
 
         if (reason.IsNullOrEmpty())
         {
-            this.closeAsync(code, string.Empty);
+            this.CloseWSAsync(code, string.Empty);
             return;
         }
 
@@ -3472,7 +3474,7 @@ public class WebSocket : IDisposable
             throw new ArgumentOutOfRangeException(nameof(reason), msg);
         }
 
-        this.closeAsync(code, reason);
+        this.CloseWSAsync(code, reason);
     }
 
     /// <summary>
@@ -3550,7 +3552,7 @@ public class WebSocket : IDisposable
 
         if (reason.IsNullOrEmpty())
         {
-            this.closeAsync((ushort)code, string.Empty);
+            this.CloseWSAsync((ushort)code, string.Empty);
             return;
         }
 
@@ -3572,7 +3574,7 @@ public class WebSocket : IDisposable
             throw new ArgumentOutOfRangeException(nameof(reason), msg);
         }
 
-        this.closeAsync((ushort)code, reason);
+        this.CloseWSAsync((ushort)code, reason);
     }
 
     /// <summary>
@@ -3612,15 +3614,15 @@ public class WebSocket : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (this._retryCountForConnect > _maxRetryCountForConnect)
+        if (this._retryCountForConnect > MaxRetryCountForConnect)
         {
             var msg = "A series of reconnecting has failed.";
             throw new InvalidOperationException(msg);
         }
 
-        if (this.connect())
+        if (this.ConnectWS())
         {
-            this.Open();
+            this.OpenWS();
         }
     }
 
@@ -3667,19 +3669,19 @@ public class WebSocket : IDisposable
             throw new InvalidOperationException(msg);
         }
 
-        if (this._retryCountForConnect > _maxRetryCountForConnect)
+        if (this._retryCountForConnect > MaxRetryCountForConnect)
         {
             var msg = "A series of reconnecting has failed.";
             throw new InvalidOperationException(msg);
         }
 
-        Func<bool> connector = this.connect;
+        Func<bool> connector = this.ConnectWS;
         _ = connector.BeginInvoke(
           ar =>
           {
               if (connector.EndInvoke(ar))
               {
-                  this.Open();
+                  this.OpenWS();
               }
           },
           null
@@ -3693,7 +3695,7 @@ public class WebSocket : IDisposable
     /// <c>true</c> if the send has done with no error and a pong has been
     /// received within a time; otherwise, <c>false</c>.
     /// </returns>
-    public bool Ping() => this.ping(EmptyBytes);
+    public bool Ping() => this.Ping(EmptyBytes);
 
     /// <summary>
     /// Sends a ping with <paramref name="message"/> using the WebSocket
@@ -3721,7 +3723,7 @@ public class WebSocket : IDisposable
     {
         if (message.IsNullOrEmpty())
         {
-            return this.ping(EmptyBytes);
+            return this.Ping(EmptyBytes);
         }
 
         if (!message.TryGetUTF8EncodedBytes(out var bytes))
@@ -3736,7 +3738,7 @@ public class WebSocket : IDisposable
             throw new ArgumentOutOfRangeException(nameof(message), msg);
         }
 
-        return this.ping(bytes);
+        return this.Ping(bytes);
     }
 
     /// <summary>
@@ -3764,7 +3766,7 @@ public class WebSocket : IDisposable
             throw new ArgumentNullException(nameof(data));
         }
 
-        _ = this.send(Opcode.Binary, new MemoryStream(data));
+        _ = this.Send(Opcode.Binary, new MemoryStream(data));
     }
 
     /// <summary>
@@ -3820,7 +3822,7 @@ public class WebSocket : IDisposable
             throw new ArgumentException(msg, nameof(fileInfo));
         }
 
-        _ = this.send(Opcode.Binary, stream);
+        _ = this.Send(Opcode.Binary, stream);
     }
 
     /// <summary>
@@ -3857,7 +3859,7 @@ public class WebSocket : IDisposable
             throw new ArgumentException(msg, nameof(data));
         }
 
-        _ = this.send(Opcode.Text, new MemoryStream(bytes));
+        _ = this.Send(Opcode.Text, new MemoryStream(bytes));
     }
 
     /// <summary>
@@ -3941,7 +3943,7 @@ public class WebSocket : IDisposable
             );
         }
 
-        _ = this.send(Opcode.Binary, new MemoryStream(bytes));
+        _ = this.Send(Opcode.Binary, new MemoryStream(bytes));
     }
 
     /// <summary>
@@ -3985,7 +3987,7 @@ public class WebSocket : IDisposable
             throw new ArgumentNullException(nameof(data));
         }
 
-        this.sendAsync(Opcode.Binary, new MemoryStream(data), completed);
+        this.SendAsync(Opcode.Binary, new MemoryStream(data), completed);
     }
 
     /// <summary>
@@ -4057,7 +4059,7 @@ public class WebSocket : IDisposable
             throw new ArgumentException(msg, nameof(fileInfo));
         }
 
-        this.sendAsync(Opcode.Binary, stream, completed);
+        this.SendAsync(Opcode.Binary, stream, completed);
     }
 
     /// <summary>
@@ -4110,7 +4112,7 @@ public class WebSocket : IDisposable
             throw new ArgumentException(msg, nameof(data));
         }
 
-        this.sendAsync(Opcode.Text, new MemoryStream(bytes), completed);
+        this.SendAsync(Opcode.Text, new MemoryStream(bytes), completed);
     }
 
     /// <summary>
@@ -4211,7 +4213,7 @@ public class WebSocket : IDisposable
             );
         }
 
-        this.sendAsync(Opcode.Binary, new MemoryStream(bytes), completed);
+        this.SendAsync(Opcode.Binary, new MemoryStream(bytes), completed);
     }
 
     /// <summary>
@@ -4244,7 +4246,7 @@ public class WebSocket : IDisposable
             throw new ArgumentNullException(nameof(cookie));
         }
 
-        if (!this.canSet(out msg))
+        if (!this.CanSet(out msg))
         {
             this._logger.Warn(msg);
             return;
@@ -4252,7 +4254,7 @@ public class WebSocket : IDisposable
 
         lock (this._forState)
         {
-            if (!this.canSet(out msg))
+            if (!this.CanSet(out msg))
             {
                 this._logger.Warn(msg);
                 return;
@@ -4336,7 +4338,7 @@ public class WebSocket : IDisposable
             }
         }
 
-        if (!this.canSet(out msg))
+        if (!this.CanSet(out msg))
         {
             this._logger.Warn(msg);
             return;
@@ -4344,7 +4346,7 @@ public class WebSocket : IDisposable
 
         lock (this._forState)
         {
-            if (!this.canSet(out msg))
+            if (!this.CanSet(out msg))
             {
                 this._logger.Warn(msg);
                 return;
@@ -4488,7 +4490,7 @@ public class WebSocket : IDisposable
             }
         }
 
-        if (!this.canSet(out msg))
+        if (!this.CanSet(out msg))
         {
             this._logger.Warn(msg);
             return;
@@ -4496,7 +4498,7 @@ public class WebSocket : IDisposable
 
         lock (this._forState)
         {
-            if (!this.canSet(out msg))
+            if (!this.CanSet(out msg))
             {
                 this._logger.Warn(msg);
                 return;
@@ -4541,7 +4543,7 @@ public class WebSocket : IDisposable
     /// </remarks>
     void IDisposable.Dispose()
     {
-        this.close(1001, string.Empty);
+        this.Close(1001, string.Empty);
         GC.SuppressFinalize(this);
     }
 

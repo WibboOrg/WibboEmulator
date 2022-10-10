@@ -116,6 +116,12 @@ internal class ChunkedRequestStream : RequestStream
     private void OnRead(IAsyncResult asyncResult)
     {
         var rstate = (ReadBufferState)asyncResult.AsyncState;
+
+        if (rstate == null)
+        {
+            return;
+        }
+
         var ares = rstate.AsyncResult;
 
         try
@@ -261,7 +267,6 @@ internal class ChunkedRequestStream : RequestStream
         {
             throw new ArgumentNullException(nameof(asyncResult));
         }
-
 
         if (asyncResult is not HttpStreamAsyncResult ares)
         {

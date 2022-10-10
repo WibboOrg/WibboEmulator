@@ -145,6 +145,8 @@ public class WebSocketManager
         }
     }
 
+    public void ResetBan() => this._bannedIp.Clear();
+
     public void Destroy()
     {
         this._webSocketServer.Stop();

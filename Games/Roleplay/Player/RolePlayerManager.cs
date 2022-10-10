@@ -64,7 +64,7 @@ public class RolePlayerManager
         }
 
         player.Destroy();
-        _ = this._player.TryRemove(id, out player);
+        _ = this._player.TryRemove(id, out _);
     }
 
     public RolePlayer GetPlayer(int id)

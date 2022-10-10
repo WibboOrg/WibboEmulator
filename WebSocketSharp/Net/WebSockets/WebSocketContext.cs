@@ -163,7 +163,6 @@ public abstract class WebSocketContext
     /// </summary>
     /// <value>
     ///   <para>
-    ///   An <see cref="T:System.Collections.Generic.IEnumerable{string}"/>
     ///   instance.
     ///   </para>
     ///   <para>

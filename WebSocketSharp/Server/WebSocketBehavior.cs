@@ -74,7 +74,7 @@ public abstract class WebSocketBehavior : IWebSocketSession
     ///   <see langword="null"/> if the session has not started yet.
     ///   </para>
     /// </value>
-    protected NameValueCollection Headers => this.Context != null ? this.Context.Headers : null;
+    protected NameValueCollection Headers => this.Context?.Headers;
 
     /// <summary>
     /// Gets the query string included in a WebSocket handshake request.
@@ -91,7 +91,7 @@ public abstract class WebSocketBehavior : IWebSocketSession
     ///   <see langword="null"/> if the session has not started yet.
     ///   </para>
     /// </value>
-    protected NameValueCollection QueryString => this.Context != null ? this.Context.QueryString : null;
+    protected NameValueCollection QueryString => this.Context?.QueryString;
 
     /// <summary>
     /// Gets the management function for the sessions in the service.
@@ -357,7 +357,7 @@ public abstract class WebSocketBehavior : IWebSocketSession
         return null;
     }
 
-    private void onClose(object sender, CloseEventArgs e)
+    private void OnClose(object sender, CloseEventArgs e)
     {
         if (this.ID == null)
         {
@@ -369,11 +369,11 @@ public abstract class WebSocketBehavior : IWebSocketSession
         this.OnClose(e);
     }
 
-    private void onError(object sender, WebSocketSharp.ErrorEventArgs e) => this.OnError(e);
+    private void OnError(object sender, WebSocketSharp.ErrorEventArgs e) => this.OnError(e);
 
-    private void onMessage(object sender, MessageEventArgs e) => this.OnMessage(e);
+    private void OnMessage(object sender, MessageEventArgs e) => this.OnMessage(e);
 
-    private void onOpen(object sender, EventArgs e)
+    private void OnOpen(object sender, EventArgs e)
     {
         this.ID = this.Sessions.Add(this);
 
@@ -413,10 +413,10 @@ public abstract class WebSocketBehavior : IWebSocketSession
             this._websocket.WaitTime = waitTime;
         }
 
-        this._websocket.OnOpen += this.onOpen;
-        this._websocket.OnMessage += this.onMessage;
-        this._websocket.OnError += this.onError;
-        this._websocket.OnClose += this.onClose;
+        this._websocket.OnOpen += this.OnOpen;
+        this._websocket.OnMessage += this.OnMessage;
+        this._websocket.OnError += this.OnError;
+        this._websocket.OnClose += this.OnClose;
 
         this._websocket.InternalAccept();
     }

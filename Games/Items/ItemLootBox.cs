@@ -74,7 +74,7 @@ internal static class ItemLootBox
 
         var probab = WibboEnvironment.GetRandomNumber(1, 20001);
 
-        var basicCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(1);
+        _ = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(1);
         var communCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(2);
         var epicCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(3);
         var legendaryCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(4);
