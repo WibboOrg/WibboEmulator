@@ -5,6 +5,7 @@ using WibboEmulator;
 
 public class Writer
 {
+    private readonly object _sync = new();
     public static bool DisabledState { get; set; }
 
     public static void WriteLine(string line)
@@ -23,12 +24,6 @@ public class Writer
         WriteLine("Exception has been saved");
     }
 
-    public static void LogDDOS(string logText)
-    {
-        WriteToFile("logs/ddos.txt", logText + "\r\n\r\n");
-        WriteLine("Exception has been saved");
-    }
-
     public static void LogCriticalException(string logText)
     {
         WriteToFile("logs/criticalexceptions.txt", logText + "\r\n\r\n");
@@ -43,7 +38,7 @@ public class Writer
 
     public static void LogMessage(string logText) => Console.WriteLine(logText);
 
-    public static void LogDDOSS(string logText)
+    public static void LogDDOS(string logText)
     {
         WriteToFile("logs/ddos.txt", logText + "\r\n\r\n");
         WriteLine(logText);

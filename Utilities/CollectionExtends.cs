@@ -1,7 +1,7 @@
 namespace WibboEmulator.Utilities;
 using System.Collections.Generic;
 
-internal static class EnumerableUtility
+internal static class CollectionExtends
 {
     public static void AddIfNotExists<T>(this ICollection<T> list, T value)
     {

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Core;
+namespace WibboEmulator.Core;
 using WibboEmulator.Communication.Packets.Outgoing.Moderation;
 
 public class ConsoleCommands
@@ -41,7 +41,6 @@ public class ConsoleCommands
                     Console.WriteLine("Alert successfully sent.");
                     break;
                 }
-
 
                 default:
                     ExceptionLogger.LogMessage(parameters[0].ToLower() + " is an unknown or unsupported command. Type help for more information");

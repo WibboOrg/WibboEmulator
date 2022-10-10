@@ -7,7 +7,6 @@ public class SettingsManager
 {
     private readonly Dictionary<string, string> _settings = new();
 
-
     public void Init(IQueryAdapter dbClient)
     {
         this._settings.Clear();
@@ -26,20 +25,6 @@ public class SettingsManager
 
             this._settings.Add(key, value);
         }
-    }
-
-    public bool GetDataBool(string key)
-    {
-        _ = this._settings.TryGetValue(key, out var value);
-
-        return value == "true";
-    }
-
-    public string GetDataString(string key)
-    {
-        _ = this._settings.TryGetValue(key, out var value);
-
-        return value;
     }
 
     public T GetData<T>(string key) where T : IConvertible

@@ -18,7 +18,7 @@ public static class ExceptionLogger
 
     public static void LogCacheError(string logText) => Writer.LogCacheError(DateTime.Now.ToString() + ": " + logText);
 
-    public static void LogDenial(string logText) => Writer.LogDDOSS(DateTime.Now.ToString() + ": " + logText);
+    public static void LogDenial(string logText) => Writer.LogDDOS(DateTime.Now.ToString() + ": " + logText);
 
     public static void LogMessage(string logText) => Writer.LogMessage(DateTime.Now.ToString() + ": " + logText);
 

@@ -1,5 +1,6 @@
 namespace WibboEmulator.Database;
 using MySql.Data.MySqlClient;
+using WibboEmulator.Core;
 using WibboEmulator.Database.Interfaces;
 
 public sealed class DatabaseManager
@@ -59,7 +60,7 @@ public sealed class DatabaseManager
         }
         catch (Exception e)
         {
-            ExceptionSQL.LogException(e.ToString());
+            ExceptionLogger.LogException(e.ToString());
             return null;
         }
     }
