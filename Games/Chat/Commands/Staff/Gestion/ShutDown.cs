@@ -6,7 +6,6 @@ internal class ShutDown : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var shutdownTask = new Task(WibboEnvironment.PreformShutDown);
-        shutdownTask.Start();
+        _ = Task.Run(() => WibboEnvironment.PreformShutDown());
     }
 }

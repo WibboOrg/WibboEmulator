@@ -233,8 +233,6 @@ public class Game : IDisposable
         {
             Thread.Sleep(this._cycleSleepTime);
         }
-
-        this._gameLoop.Dispose();
     }
 
     public void Dispose()
