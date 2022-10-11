@@ -383,7 +383,7 @@ public sealed class PacketManager
         this._incomingPackets.Add(ClientPacketHeader.GROUP_SETTINGS, new ManageGroupEvent());
         this._incomingPackets.Add(ClientPacketHeader.GROUP_ADMIN_ADD, new GiveAdminRightsEvent());
         this._incomingPackets.Add(ClientPacketHeader.GROUP_ADMIN_REMOVE, new TakeAdminRightsEvent());
-        this._incomingPackets.Add(ClientPacketHeader.GROUP_MEMBER_REMOVE, new RemoveGroupMemberEvent());
+        this._incomingPackets.Add(ClientPacketHeader.GROUP_MEMBER_REMOVE_CONFIRM, new RemoveGroupMemberEvent());
         this._incomingPackets.Add(ClientPacketHeader.GROUP_REQUEST_ACCEPT, new AcceptGroupMembershipEvent());
         this._incomingPackets.Add(ClientPacketHeader.GROUP_REQUEST_DECLINE, new DeclineGroupMembershipEvent());
         this._incomingPackets.Add(ClientPacketHeader.GROUP_DELETE, new DeleteGroupEvent());
