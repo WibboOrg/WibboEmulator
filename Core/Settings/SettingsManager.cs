@@ -2,6 +2,7 @@ namespace WibboEmulator.Core.Settings;
 using System.Data;
 using WibboEmulator.Database.Daos.Emulator;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Utilities;
 
 public class SettingsManager
 {
@@ -27,10 +28,5 @@ public class SettingsManager
         }
     }
 
-    public T GetData<T>(string key) where T : IConvertible
-    {
-        _ = this._settings.TryGetValue(key, out var value);
-
-        return (T)Convert.ChangeType(value, typeof(T));
-    }
+    public T GetData<T>(string key) where T : IConvertible => this._settings.GetData<T>(key);
 }

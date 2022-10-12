@@ -10,7 +10,7 @@ using WibboEmulator.Games.Rooms.Map;
 
 public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
 {
-    public TeamGameOver(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.IntParams.Add((int)TeamType.RED);
+    public TeamGameOver(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.IntParams.Add((int)TeamType.Red);
 
     public override bool OnCycle(RoomUser user, Item item)
     {
@@ -20,19 +20,19 @@ public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
 
         var team = (TeamType)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
-        if (team == TeamType.BLUE)
+        if (team == TeamType.Blue)
         {
             listTeam.AddRange(managerForBanzai.BlueTeam);
         }
-        else if (team == TeamType.GREEN)
+        else if (team == TeamType.Green)
         {
             listTeam.AddRange(managerForBanzai.GreenTeam);
         }
-        else if (team == TeamType.RED)
+        else if (team == TeamType.Red)
         {
             listTeam.AddRange(managerForBanzai.RedTeam);
         }
-        else if (team == TeamType.YELLOW)
+        else if (team == TeamType.Yellow)
         {
             listTeam.AddRange(managerForBanzai.YellowTeam);
         }
@@ -53,9 +53,9 @@ public class TeamGameOver : WiredActionBase, IWired, IWiredEffect
             managerForBanzai.OnUserLeave(teamuser);
             this.RoomInstance.GetGameManager().UpdateGatesTeamCounts();
             teamuser.ApplyEffect(0);
-            teamuser.Team = TeamType.NONE;
+            teamuser.Team = TeamType.None;
 
-            teamuser.GetClient().SendPacket(new IsPlayingComposer(false));
+            teamuser.Client.SendPacket(new IsPlayingComposer(false));
 
             if (exitTeleport != null)
             {

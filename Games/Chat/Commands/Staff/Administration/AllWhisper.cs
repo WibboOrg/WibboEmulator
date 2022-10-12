@@ -16,11 +16,11 @@ internal class AllWhisper : IChatCommand
 
         foreach (var user in room.GetRoomUserManager().GetUserList().ToList())
         {
-            if (user == null || user.GetClient() == null)
+            if (user == null || user.Client == null)
             {
                 continue;
             }
-            user.GetClient().SendPacket(new WhisperComposer(userRoom.VirtualId, message, 0));
+            user.Client.SendPacket(new WhisperComposer(userRoom.VirtualId, message, 0));
         }
     }
 }

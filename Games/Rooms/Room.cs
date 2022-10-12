@@ -30,6 +30,7 @@ public delegate void RoomUserSaysEvent(object sender, UserSaysEventArgs e, ref b
 
 public class Room
 {
+    public int Id => this.Data.Id;
     public int IsLagging { get; set; }
     public int IdleTime { get; set; }
     public bool Disposed { get; set; }
@@ -37,25 +38,41 @@ public class Room
     public RoomRoleplay Roleplay { get; set; }
     public bool IsRoleplay => this.Roleplay != null;
     public List<int> UsersWithRights { get; set; }
-    public bool EveryoneGotRights { get; set; }
-    public bool HeightMapLoaded { get; set; }
     public DateTime LastTimerReset { get; set; }
     public MoodlightData MoodlightData { get; set; }
     public List<Trade> ActiveTrades { get; set; }
-    public RoomData RoomData { get; set; }
+    public RoomData Data { get; set; }
+    public bool RoomMuted { get; set; }
+    public bool RoomMutePets { get; set; }
+    public bool FreezeRoom { get; set; }
+    public bool PushPullAllowed { get; set; }
+    public bool CloseFullRoom { get; set; }
+    public bool OldFoot { get; set; }
+    public bool IngameChat { get; set; }
 
+    //Question
+    public int VotedYesCount { get; set; }
+    public int VotedNoCount { get; set; }
+    public int UserCount => this._roomUserManager.GetRoomUserCount();
+
+    public event RoomUserSaysEvent OnUserSays;
+    public event EventHandler OnTrigger;
+    public event EventHandler OnTriggerSelf;
+    public event EventHandler OnUserCls;
+
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
     private readonly TimeSpan _maximumRunTimeInSec = TimeSpan.FromSeconds(1);
 
-    private TeamManager _teamManager;
-    private GameManager _gameManager;
+    private readonly TeamManager _teamManager;
+    private readonly GameManager _gameManager;
     private readonly Gamemap _gameMap;
     private readonly RoomItemHandling _roomItemHandling;
     private readonly RoomUserManager _roomUserManager;
-    private Soccer _soccer;
-    private BattleBanzai _banzai;
-    private Freeze _freeze;
-    private JankenManager _jankan;
-    private GameItemHandler _gameItemHandler;
+    private readonly Soccer _soccer;
+    private readonly BattleBanzai _banzai;
+    private readonly Freeze _freeze;
+    private readonly JankenManager _jankan;
+    private readonly GameItemHandler _gameItemHandler;
     private readonly WiredHandler _wiredHandler;
     private readonly ProjectileManager _projectileManager;
     private readonly ChatlogManager _chatMessageManager;
@@ -63,30 +80,7 @@ public class Room
     private readonly Dictionary<int, double> _bans;
     private readonly Dictionary<int, double> _mutes;
 
-    public bool RoomMuted { get; set; }
-    public bool RoomMutePets { get; set; }
-    public bool FreezeRoom { get; set; }
-    public bool PushPullAllowed { get; set; }
-    public bool CloseFullRoom { get; set; }
-    public bool OldFoot { get; set; }
-    public bool RoomIngameChat { get; set; }
-
     private int _saveFurnitureTimer;
-
-    //Question
-    public int VotedYesCount { get; set; }
-    public int VotedNoCount { get; set; }
-
-    private readonly CancellationTokenSource _cancellationTokenSource = new();
-
-    public int UserCount => this._roomUserManager.GetRoomUserCount();
-
-    public int Id => this.RoomData.Id;
-
-    public event RoomUserSaysEvent OnUserSays;
-    public event EventHandler OnTrigger;
-    public event EventHandler OnTriggerSelf;
-    public event EventHandler OnUserCls;
 
     public Room(RoomData data)
     {
@@ -101,13 +95,11 @@ public class Room
         this._bans = new Dictionary<int, double>();
         this._mutes = new Dictionary<int, double>();
         this.ActiveTrades = new List<Trade>();
-        this.HeightMapLoaded = false;
-        this.RoomData = data;
-        this.EveryoneGotRights = data.AllowRightsOverride;
+        this.Data = data;
         this.IdleTime = 0;
         this.RoomMuted = false;
         this.PushPullAllowed = true;
-        this.RoomIngameChat = false;
+        this.IngameChat = false;
 
         this._gameMap = new Gamemap(this);
         this._roomItemHandling = new RoomItemHandling(this);
@@ -115,11 +107,18 @@ public class Room
         this._wiredHandler = new WiredHandler(this);
         this._projectileManager = new ProjectileManager(this);
         this._chatMessageManager = new ChatlogManager();
+        this._gameItemHandler = new GameItemHandler(this);
+        this._gameManager = new GameManager(this);
+        this._jankan = new JankenManager(this);
+        this._freeze = new Freeze(this);
+        this._banzai = new BattleBanzai(this);
+        this._teamManager = new TeamManager();
+        this._soccer = new Soccer(this);
 
         this._chatMessageManager.LoadRoomChatlogs(this.Id);
 
         this.GetRoomItemHandler().LoadFurniture();
-        if (this.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
+        if (this.Data.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
         {
             this.GetRoomItemHandler().LoadFurniture(WibboEnvironment.GetSettings().GetData<int>("autogame.deco.room.id"));
         }
@@ -137,62 +136,23 @@ public class Room
 
     public RoomUserManager GetRoomUserManager() => this._roomUserManager;
 
-    public Soccer GetSoccer()
-    {
-        this._soccer ??= new Soccer(this);
+    public Soccer GetSoccer() => this._soccer;
 
-        return this._soccer;
-    }
+    public TeamManager GetTeamManager() => this._teamManager;
 
-    public TeamManager GetTeamManager()
-    {
-        this._teamManager ??= new TeamManager();
+    public BattleBanzai GetBanzai() => this._banzai;
 
-        return this._teamManager;
-    }
+    public Freeze GetFreeze() => this._freeze;
 
-    public BattleBanzai GetBanzai()
-    {
-        this._banzai ??= new BattleBanzai(this);
+    public JankenManager GetJanken() => this._jankan;
 
-        return this._banzai;
-    }
+    public GameManager GetGameManager() => this._gameManager;
 
-    public Freeze GetFreeze()
-    {
-        this._freeze ??= new Freeze(this);
-
-        return this._freeze;
-    }
-
-    public JankenManager GetJanken()
-    {
-        this._jankan ??= new JankenManager(this);
-
-        return this._jankan;
-    }
-
-    public GameManager GetGameManager()
-    {
-        this._gameManager ??= new GameManager(this);
-
-        return this._gameManager;
-    }
-
-    public GameItemHandler GetGameItemHandler()
-    {
-        this._gameItemHandler ??= new GameItemHandler(this);
-
-        return this._gameItemHandler;
-    }
+    public GameItemHandler GetGameItemHandler() => this._gameItemHandler;
 
     public WiredHandler GetWiredHandler() => this._wiredHandler;
 
     public ProjectileManager GetProjectileManager() => this._projectileManager;
-
-    public bool GotSoccer() => this._soccer != null;
-
-    public bool GotBanzai() => this._banzai != null;
 
     public bool GotFreeze() => this._freeze != null;
 
@@ -265,7 +225,7 @@ public class Room
             return;
         }
 
-        if (userGoal.Team == user.Team && user.Team != TeamType.NONE)
+        if (userGoal.Team == user.Team && user.Team != TeamType.None)
         {
             return;
         }
@@ -285,9 +245,9 @@ public class Room
         }
     }
 
-    public void ClearTags() => this.RoomData.Tags.Clear();
+    public void ClearTags() => this.Data.Tags.Clear();
 
-    public void AddTagRange(List<string> tags) => this.RoomData.Tags.AddRange(tags);
+    public void AddTagRange(List<string> tags) => this.Data.Tags.AddRange(tags);
 
     private void LoadBots()
     {
@@ -330,9 +290,9 @@ public class Room
     {
         foreach (var roomUser in this._roomUserManager.GetUserList().ToList())
         {
-            if (!roomUser.IsBot && !roomUser.GetClient().GetUser().HasPermission("perm_no_kick"))
+            if (!roomUser.IsBot && !roomUser.Client.GetUser().HasPermission("perm_no_kick"))
             {
-                this.GetRoomUserManager().RemoveUserFromRoom(roomUser.GetClient(), true, true);
+                this.GetRoomUserManager().RemoveUserFromRoom(roomUser.Client, true, true);
             }
         }
     }
@@ -358,7 +318,7 @@ public class Room
         var dataTable = new DataTable();
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            dataTable = RoomRightDao.GetAllByRoomId(dbClient, this.RoomData.Id);
+            dataTable = RoomRightDao.GetAllByRoomId(dbClient, this.Data.Id);
         }
 
         if (dataTable == null)
@@ -379,7 +339,7 @@ public class Room
             return 0;
         }
 
-        if (session.GetUser().Username == this.RoomData.OwnerName || session.GetUser().HasPermission("perm_owner_all_rooms"))
+        if (session.GetUser().Username == this.Data.OwnerName || session.GetUser().HasPermission("perm_owner_all_rooms"))
         {
             return 4;
         }
@@ -394,7 +354,7 @@ public class Room
             return 1;
         }
 
-        if (this.EveryoneGotRights)
+        if (this.Data.AllowRightsOverride)
         {
             return 1;
         }
@@ -409,7 +369,7 @@ public class Room
             return false;
         }
 
-        if (session.GetUser().Username == this.RoomData.OwnerName || session.GetUser().HasPermission("perm_owner_all_rooms"))
+        if (session.GetUser().Username == this.Data.OwnerName || session.GetUser().HasPermission("perm_owner_all_rooms"))
         {
             return true;
         }
@@ -421,24 +381,24 @@ public class Room
                 return true;
             }
 
-            if (this.EveryoneGotRights)
+            if (this.Data.AllowRightsOverride)
             {
                 return true;
             }
 
-            if (this.RoomData.Group == null)
+            if (this.Data.Group == null)
             {
                 return false;
             }
 
-            if (this.RoomData.Group.IsAdmin(session.GetUser().Id))
+            if (this.Data.Group.IsAdmin(session.GetUser().Id))
             {
                 return true;
             }
 
-            if (this.RoomData.Group.AdminOnlyDeco == 0)
+            if (this.Data.Group.AdminOnlyDeco == 0)
             {
-                if (this.RoomData.Group.IsMember(session.GetUser().Id))
+                if (this.Data.Group.IsMember(session.GetUser().Id))
                 {
                     return true;
                 }
@@ -463,12 +423,12 @@ public class Room
                 continue;
             }
 
-            if (!roomUser.IsBot && roomUser.GetClient() == null)
+            if (!roomUser.IsBot && roomUser.Client == null)
             {
                 continue;
             }
 
-            if (!roomUser.IsBot && roomUser.GetClient().GetUser() == null)
+            if (!roomUser.IsBot && roomUser.Client != null && roomUser.Client.GetUser() == null)
             {
                 continue;
             }
@@ -507,88 +467,81 @@ public class Room
 
     public Task ProcessRoom()
     {
+        if (this.Disposed)
+        {
+            return Task.CompletedTask;
+        }
+
         try
         {
             var timeStarted = DateTime.Now;
 
-            if (this.Disposed)
+            var idleCount = 0;
+
+            this.GetRoomUserManager().OnCycle(ref idleCount);
+
+            this.GetRoomItemHandler().OnCycle();
+
+            this.RpCycleHour();
+
+            this.GetProjectileManager().OnCycle();
+
+            if (idleCount > 0)
             {
+                this.IdleTime++;
+            }
+            else
+            {
+                this.IdleTime = 0;
+            }
+
+            if (this.IdleTime >= 60)
+            {
+                WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
+
                 return Task.CompletedTask;
             }
-
-            try
+            else
             {
-                var idleCount = 0;
-
-                this.GetRoomUserManager().OnCycle(ref idleCount);
-
-                this.GetRoomItemHandler().OnCycle();
-
-                this.RpCycleHour();
-
-                this.GetProjectileManager().OnCycle();
-
-                if (idleCount > 0)
-                {
-                    this.IdleTime++;
-                }
-                else
-                {
-                    this.IdleTime = 0;
-                }
-
-                if (this.IdleTime >= 60)
-                {
-                    WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(this);
-
-                    return Task.CompletedTask;
-                }
-                else
-                {
-                    this.GetRoomUserManager().SerializeStatusUpdates();
-                }
-
-                if (this.GetGameItemHandler() != null)
-                {
-                    this.GetGameItemHandler().OnCycle();
-                }
-
-                if (this.GetWiredHandler() != null)
-                {
-                    this.GetWiredHandler().OnCycle();
-                }
-
-                if (this.GotJanken())
-                {
-                    this.GetJanken().OnCycle();
-                }
-
-                if (this._saveFurnitureTimer < 240)
-                {
-                    this._saveFurnitureTimer++;
-                }
-                else
-                {
-                    this._saveFurnitureTimer = 0;
-                    this.GetRoomItemHandler().SaveFurniture();
-                }
-
-                var timeEnded = DateTime.Now;
-
-                var timeExecution = timeEnded - timeStarted;
-                if (timeExecution > this._maximumRunTimeInSec)
-                {
-                    ExceptionLogger.LogThreadException(string.Format("High latency in {0}: {1}ms", this.Id, timeExecution.TotalMilliseconds), "ProcessRoom");
-                }
+                this.GetRoomUserManager().SerializeStatusUpdates();
             }
-            catch (Exception ex)
+
+            if (this.GetGameItemHandler() != null)
             {
-                this.OnRoomCrash(ex);
+                this.GetGameItemHandler().OnCycle();
+            }
+
+            if (this.GetWiredHandler() != null)
+            {
+                this.GetWiredHandler().OnCycle();
+            }
+
+            if (this.GotJanken())
+            {
+                this.GetJanken().OnCycle();
+            }
+
+            if (this._saveFurnitureTimer < 240)
+            {
+                this._saveFurnitureTimer++;
+            }
+            else
+            {
+                this._saveFurnitureTimer = 0;
+                this.GetRoomItemHandler().SaveFurniture();
+            }
+
+            var timeEnded = DateTime.Now;
+
+            var timeExecution = timeEnded - timeStarted;
+            if (timeExecution > this._maximumRunTimeInSec)
+            {
+                ExceptionLogger.LogThreadException(string.Format("High latency in {0}: {1}ms", this.Id, timeExecution.TotalMilliseconds), "ProcessRoom");
             }
         }
         catch (Exception ex)
         {
-            ExceptionLogger.LogCriticalException("Sub crash in room cycle: " + ex.ToString());
+            this.OnRoomCrash(ex);
         }
         return Task.CompletedTask;
     }
@@ -600,7 +553,7 @@ public class Room
             return;
         }
 
-        if (this.RoomData.OwnerName == "WibboParty")
+        if (this.Data.OwnerName == "WibboParty")
         {
             return;
         }
@@ -724,17 +677,17 @@ public class Room
                     continue;
                 }
 
-                if (user.GetClient() == null || user.GetClient().GetConnection() == null || user.GetClient().GetUser() == null)
+                if (user.Client == null || user.Client.GetConnection() == null || user.Client.GetUser() == null)
                 {
                     continue;
                 }
 
-                if (userMutedOnly && thisUser != null && user.GetClient().GetUser().MutedUsers.Contains(thisUser.UserId))
+                if (userMutedOnly && thisUser != null && user.Client.GetUser().MutedUsers.Contains(thisUser.UserId))
                 {
                     continue;
                 }
 
-                if (thisUser != null && thisUser.GetClient() != null && thisUser.GetClient().GetUser() != null && thisUser.GetClient().GetUser().IgnoreAll && thisUser != user)
+                if (thisUser != null && thisUser.Client != null && thisUser.Client.GetUser() != null && thisUser.Client.GetUser().IgnoreAll && thisUser != user)
                 {
                     continue;
                 }
@@ -744,17 +697,17 @@ public class Room
                     continue;
                 }
 
-                if (this.RoomIngameChat && userNotIngameOnly && user.Team != TeamType.NONE)
+                if (this.IngameChat && userNotIngameOnly && user.Team != TeamType.None)
                 {
                     continue;
                 }
 
-                if (thisUser != null && this.RoomData.ChatMaxDistance > 0 && (Math.Abs(thisUser.X - user.X) > this.RoomData.ChatMaxDistance || Math.Abs(thisUser.Y - user.Y) > this.RoomData.ChatMaxDistance))
+                if (thisUser != null && this.Data.ChatMaxDistance > 0 && (Math.Abs(thisUser.X - user.X) > this.Data.ChatMaxDistance || Math.Abs(thisUser.Y - user.Y) > this.Data.ChatMaxDistance))
                 {
                     continue;
                 }
 
-                user.GetClient().SendPacket(message);
+                user.Client.SendPacket(message);
             }
         }
         catch (Exception ex)
@@ -790,17 +743,17 @@ public class Room
                     continue;
                 }
 
-                if (user.GetClient() == null || user.GetClient().GetConnection() == null)
+                if (user.Client == null || user.Client.GetConnection() == null)
                 {
                     continue;
                 }
 
-                if (usersWithRightsOnly && !this.CheckRights(user.GetClient()))
+                if (usersWithRightsOnly && !this.CheckRights(user.Client))
                 {
                     continue;
                 }
 
-                user.GetClient().SendPacket(message);
+                user.Client.SendPacket(message);
             }
         }
         catch (Exception ex)
@@ -828,12 +781,12 @@ public class Room
                 continue;
             }
 
-            if (user.GetClient() == null || user.GetClient().GetConnection() == null)
+            if (user.Client == null || user.Client.GetConnection() == null)
             {
                 continue;
             }
 
-            user.GetClient().GetConnection().SendData(packet);
+            user.Client.GetConnection().SendData(packet);
         }
     }
 
@@ -861,57 +814,58 @@ public class Room
 
         this.GetRoomItemHandler().SaveFurniture();
 
-        this.RoomData.Tags.Clear();
+        this.Data.Tags.Clear();
         this.UsersWithRights.Clear();
         this._bans.Clear();
+        this.ActiveTrades.Clear();
 
         foreach (var roomItem in this.GetRoomItemHandler().GetWallAndFloor)
         {
             roomItem.Destroy();
         }
 
+        this.GetWiredHandler().Destroy();
         this.GetRoomItemHandler().Destroy();
-        this.ActiveTrades.Clear();
         this.GetRoomUserManager().UpdateUserCount(0);
         this.GetRoomUserManager().Destroy();
-        this._gameMap.Destroy();
+        this.GetGameMap().Destroy();
     }
 
     public Dictionary<int, double> GetBans() => this._bans;
 
-    public bool UserIsBanned(int pId) => this._bans.ContainsKey(pId);
+    public bool UserIsBanned(int id) => this._bans.ContainsKey(id);
 
-    public void RemoveBan(int pId) => this._bans.Remove(pId);
+    public void RemoveBan(int id) => this._bans.Remove(id);
 
-    public void AddBan(int pId, int time)
+    public void AddBan(int id, int time)
     {
-        if (this._bans.ContainsKey(pId))
+        if (this._bans.ContainsKey(id))
         {
             return;
         }
 
-        this._bans.Add(pId, WibboEnvironment.GetUnixTimestamp() + time);
+        this._bans.Add(id, WibboEnvironment.GetUnixTimestamp() + time);
     }
 
-    public bool HasBanExpired(int pId) => !this.UserIsBanned(pId) || this._bans[pId] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
+    public bool HasBanExpired(int id) => !this.UserIsBanned(id) || this._bans[id] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
 
     public Dictionary<int, double> GetMute() => this._mutes;
 
-    public bool UserIsMuted(int pId) => this._mutes.ContainsKey(pId);
+    public bool UserIsMuted(int id) => this._mutes.ContainsKey(id);
 
-    public void RemoveMute(int pId) => this._mutes.Remove(pId);
+    public void RemoveMute(int id) => this._mutes.Remove(id);
 
-    public void AddMute(int pId, int time)
+    public void AddMute(int id, int time)
     {
-        if (this._mutes.ContainsKey(pId))
+        if (this._mutes.ContainsKey(id))
         {
-            return;
+            this.RemoveMute(id);
         }
 
-        this._mutes.Add(pId, WibboEnvironment.GetUnixTimestamp() + time);
+        this._mutes.Add(id, WibboEnvironment.GetUnixTimestamp() + time);
     }
 
-    public bool HasMuteExpired(int pId) => !this.UserIsMuted(pId) || this._mutes[pId] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
+    public bool HasMuteExpired(int id) => !this.UserIsMuted(id) || this._mutes[id] - WibboEnvironment.GetUnixTimestamp() <= 0.0;
 
     public bool HasActiveTrade(RoomUser user)
     {
@@ -921,7 +875,7 @@ public class Room
         }
         else
         {
-            return this.HasActiveTrade(user.GetClient().GetUser().Id);
+            return this.HasActiveTrade(user.Client.GetUser().Id);
         }
     }
 
@@ -961,7 +915,7 @@ public class Room
             return;
         }
 
-        this.ActiveTrades.Add(new Trade(userOne.GetClient().GetUser().Id, userTwo.GetClient().GetUser().Id, this.Id));
+        this.ActiveTrades.Add(new Trade(userOne.Client.GetUser().Id, userTwo.Client.GetUser().Id, this.Id));
     }
 
     public void TryStopTrade(int userId)
@@ -974,14 +928,6 @@ public class Room
 
         userTrade.CloseTrade(userId);
         _ = this.ActiveTrades.Remove(userTrade);
-    }
-
-    public void SetMaxUsers(int maxUsers)
-    {
-        this.RoomData.UsersMax = maxUsers;
-
-        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        RoomDao.UpdateUsersMax(dbClient, this.Id, maxUsers);
     }
 
     public Task RunTask(Func<Task> callBack)

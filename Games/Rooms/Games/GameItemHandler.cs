@@ -218,27 +218,27 @@ public class GameItemHandler
             return false;
         }
 
-        if (user.GetClient() == null)
+        if (user.Client == null)
         {
             return false;
         }
 
-        if (user.GetClient().GetUser() == null)
+        if (user.Client.GetUser() == null)
         {
             return false;
         }
 
-        if (user.GetClient().GetUser().Rank > 5)
+        if (user.Client.GetUser().Rank > 5)
         {
             return false;
         }
 
-        if (user.GetClient().GetUser().MyGroups == null)
+        if (user.Client.GetUser().MyGroups == null)
         {
             return true;
         }
 
-        if (user.GetClient().GetUser().MyGroups.Contains(group.Id))
+        if (user.Client.GetUser().MyGroups.Contains(group.Id))
         {
             return false;
         }

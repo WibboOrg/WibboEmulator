@@ -52,15 +52,15 @@ internal class ApplyDecorationEvent : IPacketEvent
         switch (decorationKey)
         {
             case "floor":
-                room.RoomData.Floor = userItem.ExtraData;
+                room.Data.Floor = userItem.ExtraData;
                 WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_DECORATION_FLOOR, 0);
                 break;
             case "wallpaper":
-                room.RoomData.Wallpaper = userItem.ExtraData;
+                room.Data.Wallpaper = userItem.ExtraData;
                 WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_DECORATION_WALL, 0);
                 break;
             case "landscape":
-                room.RoomData.Landscape = userItem.ExtraData;
+                room.Data.Landscape = userItem.ExtraData;
                 break;
         }
 

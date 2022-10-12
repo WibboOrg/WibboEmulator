@@ -1,7 +1,7 @@
-﻿namespace WibboEmulator.Games.Rooms.Map;
+namespace WibboEmulator.Games.Rooms.Map;
 
 public enum SquareStateType
 {
-    OPEN,
-    BLOCKED,
+    Open,
+    Bloked,
 }

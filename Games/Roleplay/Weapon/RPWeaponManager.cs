@@ -2,6 +2,7 @@ namespace WibboEmulator.Games.Roleplay.Weapon;
 using System.Data;
 using WibboEmulator.Database.Daos.Roleplay;
 using WibboEmulator.Database.Interfaces;
+using WibboEmulator.Utilities;
 
 public class RPWeaponManager
 {
@@ -16,7 +17,7 @@ public class RPWeaponManager
 
     public RPWeapon GetWeaponCac(int id)
     {
-        var weapon = new RPWeapon(0, 1, 3, RPWeaponInteraction.NONE, 0, 1, 1);
+        var weapon = new RPWeapon(0, 1, 3, RPWeaponInteraction.None, 0, 1, 1);
         if (!this._weaponCac.ContainsKey(id))
         {
             return weapon;
@@ -28,7 +29,7 @@ public class RPWeaponManager
 
     public RPWeapon GetWeaponGun(int id)
     {
-        var weapon = new RPWeapon(0, 5, 10, RPWeaponInteraction.NONE, 164, 3, 10);
+        var weapon = new RPWeapon(0, 5, 10, RPWeaponInteraction.None, 164, 3, 10);
         if (!this._weaponGun.ContainsKey(id))
         {
             return weapon;
@@ -55,11 +56,11 @@ public class RPWeaponManager
 
                 if ((string)dataRow["type"] == "cac")
                 {
-                    this._weaponCac.Add(Convert.ToInt32(dataRow["id"]), new RPWeapon(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["domage_min"]), Convert.ToInt32(dataRow["domage_max"]), RPWeaponInteractions.GetTypeFromString((string)dataRow["interaction"]), Convert.ToInt32(dataRow["enable"]), Convert.ToInt32(dataRow["freeze_time"]), Convert.ToInt32(dataRow["distance"])));
+                    this._weaponCac.Add(Convert.ToInt32(dataRow["id"]), new RPWeapon(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["domage_min"]), Convert.ToInt32(dataRow["domage_max"]), ((string)dataRow["interaction"]).ToEnum(RPWeaponInteraction.None), Convert.ToInt32(dataRow["enable"]), Convert.ToInt32(dataRow["freeze_time"]), Convert.ToInt32(dataRow["distance"])));
                 }
                 else
                 {
-                    this._weaponGun.Add(Convert.ToInt32(dataRow["id"]), new RPWeapon(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["domage_min"]), Convert.ToInt32(dataRow["domage_max"]), RPWeaponInteractions.GetTypeFromString((string)dataRow["interaction"]), Convert.ToInt32(dataRow["enable"]), Convert.ToInt32(dataRow["freeze_time"]), Convert.ToInt32(dataRow["distance"])));
+                    this._weaponGun.Add(Convert.ToInt32(dataRow["id"]), new RPWeapon(Convert.ToInt32(dataRow["id"]), Convert.ToInt32(dataRow["domage_min"]), Convert.ToInt32(dataRow["domage_max"]), ((string)dataRow["interaction"]).ToEnum(RPWeaponInteraction.None), Convert.ToInt32(dataRow["enable"]), Convert.ToInt32(dataRow["freeze_time"]), Convert.ToInt32(dataRow["distance"])));
                 }
             }
         }

@@ -25,7 +25,7 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
         var name = splitData[0].ToString();
         var message = splitData[1].ToString();
 
-        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(message) || user == null || user.GetClient() == null)
+        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(message) || user == null || user.Client == null)
         {
             return false;
         }
@@ -41,28 +41,28 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
         var textMessage = message;
         textMessage = textMessage.Replace("#username#", user.GetUsername());
         textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());
-        textMessage = textMessage.Replace("#roomname#", this.RoomInstance.RoomData.Name.ToString());
+        textMessage = textMessage.Replace("#roomname#", this.RoomInstance.Data.Name.ToString());
         textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.VotedYesCount.ToString());
         textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.VotedNoCount.ToString());
-        textMessage = textMessage.Replace("#wpcount#", user.GetClient().GetUser() != null ? user.GetClient().GetUser().WibboPoints.ToString() : "0");
+        textMessage = textMessage.Replace("#wpcount#", user.Client.GetUser() != null ? user.Client.GetUser().WibboPoints.ToString() : "0");
 
         if (user.Roleplayer != null)
         {
             textMessage = textMessage.Replace("#money#", user.Roleplayer.Money.ToString());
         }
 
-        if (isWhisper && textMessage.Contains(" : ") && (this.RoomInstance.IsRoleplay || this.RoomInstance.RoomData.OwnerName == "LieuPublic"))
+        if (isWhisper && textMessage.Contains(" : ") && (this.RoomInstance.IsRoleplay || this.RoomInstance.Data.OwnerName == "LieuPublic"))
         {
             SendBotChoose(textMessage, user, bot.BotData);
         }
 
         if (isWhisper)
         {
-            user.GetClient().SendPacket(new WhisperComposer(bot.VirtualId, textMessage, 2));
+            user.Client.SendPacket(new WhisperComposer(bot.VirtualId, textMessage, 2));
         }
         else
         {
-            user.GetClient().SendPacket(new ChatComposer(bot.VirtualId, textMessage, 2));
+            user.Client.SendPacket(new ChatComposer(bot.VirtualId, textMessage, 2));
         }
 
         return false;
@@ -87,7 +87,7 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
             }.ToArray()
         };
 
-        user.GetClient().SendPacket(new BotChooseComposer(chooseList));
+        user.Client.SendPacket(new BotChooseComposer(chooseList));
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

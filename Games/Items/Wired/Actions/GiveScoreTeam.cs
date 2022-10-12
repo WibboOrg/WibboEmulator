@@ -17,7 +17,7 @@ public class GiveScoreTeam : WiredActionBase, IWiredEffect, IWired
 
         this.IntParams.Add(1);
         this.IntParams.Add(1);
-        this.IntParams.Add((int)TeamType.RED);
+        this.IntParams.Add((int)TeamType.Red);
     }
 
     private void OnGameStart(object sender, EventArgs e) => this._currentGameCount = 0;

@@ -7,7 +7,7 @@ internal class Pickall : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (room.RoomData.SellPrice > 0)
+        if (room.Data.SellPrice > 0)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.pickall", session.Langue));
             return;

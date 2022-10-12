@@ -1,7 +1,7 @@
-﻿namespace WibboEmulator.Games.Rooms.AI;
+namespace WibboEmulator.Games.Rooms.AI;
 
 public enum DatabaseUpdateState
 {
-    UPDATED,
-    NEEDS_UPDATE,
+    Updated,
+    NeedsUpdate,
 }

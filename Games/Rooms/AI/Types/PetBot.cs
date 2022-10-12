@@ -49,9 +49,9 @@ public class PetBot : BotAI
     public override void OnUserSay(RoomUser user, string message)
     {
         var roomUser = this.GetRoomUser();
-        roomUser.PetData.DBState = DatabaseUpdateState.NEEDS_UPDATE;
+        roomUser.PetData.DBState = DatabaseUpdateState.NeedsUpdate;
 
-        if (roomUser.PetData.OwnerId != user.GetClient().GetUser().Id)
+        if (roomUser.PetData.OwnerId != user.Client.GetUser().Id)
         {
             return;
         }
@@ -203,7 +203,7 @@ public class PetBot : BotAI
                     case 20:
                         break;
                     default:
-                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.unknowncommand", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
+                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.unknowncommand", roomUser.Room.Data.Langue).Split(new char[1] { ',' });
                         roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
                         break;
                 }
@@ -217,7 +217,7 @@ public class PetBot : BotAI
                 {
                     if (roomUser.PetData.Energy < 10)
                     {
-                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.tired", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
+                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.tired", roomUser.Room.Data.Langue).Split(new char[1] { ',' });
 
                         roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
                         roomUser.SetStatus("lay", roomUser.Z.ToString());
@@ -227,7 +227,7 @@ public class PetBot : BotAI
                     }
                     else
                     {
-                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.lazy", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
+                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.lazy", roomUser.Room.Data.Langue).Split(new char[1] { ',' });
 
                         roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
                         roomUser.PetData.PetEnergy(false);

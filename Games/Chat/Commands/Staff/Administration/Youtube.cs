@@ -39,17 +39,17 @@ internal class Youtube : IChatCommand
         var videoId = split[..11];
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(username);
-        if (roomUserByUserId == null || roomUserByUserId.GetClient() == null || roomUserByUserId.GetClient().GetUser() == null)
+        if (roomUserByUserId == null || roomUserByUserId.Client == null || roomUserByUserId.Client.GetUser() == null)
         {
             return;
         }
 
-        if (session.Langue != roomUserByUserId.GetClient().Langue)
+        if (session.Langue != roomUserByUserId.Client.Langue)
         {
-            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue.user", session.Langue), roomUserByUserId.GetClient().Langue));
+            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue.user", session.Langue), roomUserByUserId.Client.Langue));
             return;
         }
 
-        roomUserByUserId.GetClient().SendPacket(new YoutubeTvComposer(0, videoId));
+        roomUserByUserId.Client.SendPacket(new YoutubeTvComposer(0, videoId));
     }
 }

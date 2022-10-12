@@ -48,7 +48,7 @@ public class UserSays : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GetWiredHandler().GetRoom().OnUserSays -= this.OnUserSays;
+        this.RoomInstance.OnUserSays -= this.OnUserSays;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

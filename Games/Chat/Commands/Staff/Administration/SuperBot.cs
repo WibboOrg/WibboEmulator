@@ -35,16 +35,16 @@ internal class SuperBot : IChatCommand
                     return;
                 }
 
-                if (session.Langue != getUserRoom.GetClient().Langue)
+                if (session.Langue != getUserRoom.Client.Langue)
                 {
-                    session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue.user", session.Langue), getUserRoom.GetClient().Langue));
+                    session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue.user", session.Langue), getUserRoom.Client.Langue));
                     return;
                 }
 
                 _ = int.TryParse(parameters[2], out count);
                 for (var i = 0; i < count; i++)
                 {
-                    var superBot = room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, getUserRoom.GetClient().GetUser().Id, room.Id, BotAIType.SuperBot, false, getUserRoom.GetClient().GetUser().Username, "SuperBot", getUserRoom.GetClient().GetUser().Gender, getUserRoom.GetClient().GetUser().Look, getUserRoom.X, getUserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
+                    var superBot = room.GetRoomUserManager().DeploySuperBot(new RoomBot(-i, getUserRoom.Client.GetUser().Id, room.Id, BotAIType.SuperBot, false, getUserRoom.Client.GetUser().Username, "SuperBot", getUserRoom.Client.GetUser().Gender, getUserRoom.Client.GetUser().Look, getUserRoom.X, getUserRoom.Y, 0, 2, false, "", 0, false, 0, 0, 0));
                     superBot.BotData.FollowUser = getUserRoom.VirtualId;
                 }
             }

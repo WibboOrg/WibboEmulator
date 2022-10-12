@@ -22,7 +22,7 @@ internal class ForceMimic : IChatCommand
         }
 
         var currentRoom = roomUserByUserId.Room;
-        var clientByUsername = roomUserByUserId.GetClient();
+        var clientByUsername = roomUserByUserId.Client;
         if (currentRoom == null)
         {
             return;

@@ -1,9 +1,9 @@
-﻿namespace WibboEmulator.Games.Rooms.Jankens;
+namespace WibboEmulator.Games.Rooms.Jankens;
 
 public enum JankenType
 {
-    NONE,
-    ROCK,
-    PAPER,
-    SCISSORS,
+    None,
+    Rock,
+    Paper,
+    Scissors,
 }

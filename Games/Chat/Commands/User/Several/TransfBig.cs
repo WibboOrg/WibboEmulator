@@ -13,7 +13,7 @@ internal class TransfBig : IChatCommand
             return;
         }
 
-        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
+        if (userRoom.Team != TeamType.None || userRoom.InGame)
         {
             return;
         }

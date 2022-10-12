@@ -26,7 +26,7 @@ internal class LookToEvent : IPacketEvent
         {
             if (user.SetStep)
             {
-                var rotation = Rotation.RotationIverse(user.RotBody);
+                var rotation = Rotation.RotationInverse(user.RotBody);
                 user.SetRot(rotation, false, true);
             }
             return;

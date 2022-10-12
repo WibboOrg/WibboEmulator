@@ -22,7 +22,7 @@ internal class AutoFloor : IChatCommand
                 }
                 else
                 {
-                    if (room.GetGameMap().Model.SqState[x, y] == SquareStateType.BLOCKED || room.GetGameMap().GetCoordinatedItems(new Point(x, y)).Count == 0)
+                    if (room.GetGameMap().Model.SqState[x, y] == SquareStateType.Bloked || room.GetGameMap().GetCoordinatedItems(new Point(x, y)).Count == 0)
                     {
                         line += "x";
                     }
@@ -49,12 +49,12 @@ internal class AutoFloor : IChatCommand
 
         foreach (var user in usersToReturn)
         {
-            if (user == null || user.GetClient() == null)
+            if (user == null || user.Client == null)
             {
                 continue;
             }
 
-            user.GetClient().SendPacket(new RoomForwardComposer(room.Id));
+            user.Client.SendPacket(new RoomForwardComposer(room.Id));
         }
     }
 

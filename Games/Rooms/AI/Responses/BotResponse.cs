@@ -27,13 +27,9 @@ public class BotResponse
         {
             foreach (var vendingId in responseBeverages.Split(','))
             {
-                try
+                if (int.TryParse(vendingId, out var result))
                 {
-                    this.BeverageIds.Add(int.Parse(vendingId));
-                }
-                catch
-                {
-                    continue;
+                    this.BeverageIds.Add(result);
                 }
             }
         }

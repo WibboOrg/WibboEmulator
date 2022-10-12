@@ -211,7 +211,7 @@ public class RPTrocManager
         }
 
         var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
-        if (rpItem == null || rpItem.Category == RPItemCategory.QUETE || !rpItem.AllowStack)
+        if (rpItem == null || rpItem.Category == RPItemCategory.Quete || !rpItem.AllowStack)
         {
             return;
         }

@@ -43,7 +43,7 @@ internal class RemoveRightsEvent : IPacketEvent
             var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(userId);
             if (roomUserByUserId != null && !roomUserByUserId.IsBot)
             {
-                roomUserByUserId.GetClient().SendPacket(new YouAreControllerComposer(0));
+                roomUserByUserId.Client.SendPacket(new YouAreControllerComposer(0));
 
                 roomUserByUserId.RemoveStatus("flatctrl");
                 roomUserByUserId.SetStatus("flatctrl", "0");

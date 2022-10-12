@@ -5,7 +5,6 @@ using WibboEmulator;
 
 public class Writer
 {
-    private readonly object _sync = new();
     public static bool DisabledState { get; set; }
 
     public static void WriteLine(string line)

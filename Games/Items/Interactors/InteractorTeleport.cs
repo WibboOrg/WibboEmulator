@@ -84,7 +84,7 @@ public class InteractorTeleport : FurniInteractor
                 return;
             }
 
-            item.InteractingUser = roomUserByUserId.GetClient().GetUser().Id;
+            item.InteractingUser = roomUserByUserId.Client.GetUser().Id;
             item.ReqUpdate(2);
         }
         else
@@ -133,12 +133,12 @@ public class InteractorTeleport : FurniInteractor
                                 roomItem.ReqUpdate(2);
                             }
                         }
-                        else if (!roomUserTarget.IsBot && roomUserTarget != null && roomUserTarget.GetClient() != null && roomUserTarget.GetClient().GetUser() != null)
+                        else if (!roomUserTarget.IsBot && roomUserTarget != null && roomUserTarget.Client != null && roomUserTarget.Client.GetUser() != null)
                         {
-                            roomUserTarget.GetClient().GetUser().IsTeleporting = true;
-                            roomUserTarget.GetClient().GetUser().TeleportingRoomID = teleRoomId;
-                            roomUserTarget.GetClient().GetUser().TeleporterId = linkedTele;
-                            roomUserTarget.GetClient().SendPacket(new RoomForwardComposer(teleRoomId));
+                            roomUserTarget.Client.GetUser().IsTeleporting = true;
+                            roomUserTarget.Client.GetUser().TeleportingRoomID = teleRoomId;
+                            roomUserTarget.Client.GetUser().TeleporterId = linkedTele;
+                            roomUserTarget.Client.SendPacket(new RoomForwardComposer(teleRoomId));
                         }
                         item.InteractingUser = 0;
                     }

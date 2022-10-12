@@ -15,7 +15,7 @@ public class HighScorePoints : WiredActionBase, IWired, IWiredEffect
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        if (user == null || user.IsBot || user.GetClient() == null)
+        if (user == null || user.IsBot || user.Client == null)
         {
             return false;
         }
@@ -36,7 +36,7 @@ public class HighScorePoints : WiredActionBase, IWired, IWiredEffect
             scores.Add(listUsernameScore[0], user.WiredPoints);
         }
 
-        this.RoomInstance.SendPacket(new ObjectUpdateComposer(this.ItemInstance, this.RoomInstance.RoomData.OwnerId));
+        this.RoomInstance.SendPacket(new ObjectUpdateComposer(this.ItemInstance, this.RoomInstance.Data.OwnerId));
 
         return false;
     }

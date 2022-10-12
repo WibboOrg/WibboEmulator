@@ -362,9 +362,9 @@ public class RolePlayer
             user.IsLay = true;
             user.UpdateNeeded = true;
 
-            if (user.GetClient() != null)
+            if (user.Client != null)
             {
-                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.userdead", user.GetClient().Langue));
+                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.userdead", user.Client.Langue));
             }
 
             if (this.Money > 10)
@@ -384,9 +384,9 @@ public class RolePlayer
             {
                 if (this.SlowTimer == 0)
                 {
-                    if (user.GetClient() != null)
+                    if (user.Client != null)
                     {
-                        user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hitslow", user.GetClient().Langue));
+                        user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hitslow", user.Client.Langue));
                     }
                 }
                 this.SlowTimer = 6;
@@ -397,15 +397,15 @@ public class RolePlayer
                 this.AggroTimer = 30;
             }
 
-            if (user.GetClient() != null)
+            if (user.Client != null)
             {
                 if (whisper)
                 {
-                    user.OnChatMe(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", user.GetClient().Langue), this.Health, this.HealthMax, dmg), 0, true);
+                    user.OnChatMe(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", user.Client.Langue), this.Health, this.HealthMax, dmg), 0, true);
                 }
                 else
                 {
-                    user.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", user.GetClient().Langue), this.Health, this.HealthMax, dmg), 0, true);
+                    user.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", user.Client.Langue), this.Health, this.HealthMax, dmg), 0, true);
                 }
             }
         }
@@ -511,9 +511,9 @@ public class RolePlayer
             else
             {
                 this.SendPrison = false;
-                user.GetClient().GetUser().IsTeleporting = true;
-                user.GetClient().GetUser().TeleportingRoomID = rpManager.PrisonId;
-                user.GetClient().SendPacket(new RoomForwardComposer(rpManager.PrisonId));
+                user.Client.GetUser().IsTeleporting = true;
+                user.Client.GetUser().TeleportingRoomID = rpManager.PrisonId;
+                user.Client.SendPacket(new RoomForwardComposer(rpManager.PrisonId));
             }
         }
 
@@ -526,9 +526,9 @@ public class RolePlayer
             else
             {
                 this.Dead = false;
-                user.GetClient().GetUser().IsTeleporting = true;
-                user.GetClient().GetUser().TeleportingRoomID = rpManager.HopitalId;
-                user.GetClient().SendPacket(new RoomForwardComposer(rpManager.HopitalId));
+                user.Client.GetUser().IsTeleporting = true;
+                user.Client.GetUser().TeleportingRoomID = rpManager.HopitalId;
+                user.Client.SendPacket(new RoomForwardComposer(rpManager.HopitalId));
             }
         }
 

@@ -23,12 +23,12 @@ internal class GetPetInformationEvent : IPacketEvent
                 return;
             }
 
-            if (user.GetClient() == null || user.GetClient().GetUser() == null)
+            if (user.Client == null || user.Client.GetUser() == null)
             {
                 return;
             }
 
-            session.SendPacket(new PetInformationComposer(user.GetClient().GetUser()));
+            session.SendPacket(new PetInformationComposer(user.Client.GetUser()));
             return;
         }
 

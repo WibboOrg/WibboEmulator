@@ -7,7 +7,7 @@ internal class Pull : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
+        if (userRoom.Team != TeamType.None || userRoom.InGame)
         {
             return;
         }
@@ -23,17 +23,17 @@ internal class Pull : IChatCommand
         }
 
         var targetUser = room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
-        if (targetUser == null || targetUser.GetClient() == null || targetUser.GetClient().GetUser() == null)
+        if (targetUser == null || targetUser.Client == null || targetUser.Client.GetUser() == null)
         {
             return;
         }
 
-        if (targetUser.GetClient().GetUser().Id == session.GetUser().Id)
+        if (targetUser.Client.GetUser().Id == session.GetUser().Id)
         {
             return;
         }
 
-        if (targetUser.GetClient().GetUser().PremiumProtect && !session.GetUser().HasPermission("perm_mod"))
+        if (targetUser.Client.GetUser().PremiumProtect && !session.GetUser().HasPermission("perm_mod"))
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("premium.notallowed", session.Langue));
             return;

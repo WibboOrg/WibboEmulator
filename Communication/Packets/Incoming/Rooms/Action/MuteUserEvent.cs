@@ -17,7 +17,7 @@ internal class MuteUserEvent : IPacketEvent
             return;
         }
 
-        if ((room.RoomData.MuteFuse != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true))
+        if ((room.Data.MuteFuse != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true))
         {
             return;
         }
@@ -30,7 +30,7 @@ internal class MuteUserEvent : IPacketEvent
 
         var time = packet.PopInt() * 60;
 
-        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_mod"))
+        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.GetUser().HasPermission("perm_mod"))
         {
             return;
         }

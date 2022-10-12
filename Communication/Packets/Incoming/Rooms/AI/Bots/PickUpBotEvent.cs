@@ -37,7 +37,7 @@ internal class PickUpBotEvent : IPacketEvent
             }
 
             //Check some values first, please!
-            if (targetUser.GetClient() == null || targetUser.GetClient().GetUser() == null)
+            if (targetUser.Client == null || targetUser.Client.GetUser() == null)
             {
                 return;
             }

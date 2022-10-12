@@ -23,7 +23,7 @@ public static class PetUtility
     {
         var pet = new Pet(0, userId, 0, name, type, race, color, 0, 100, 100, 0, WibboEnvironment.GetUnixTimestamp(), 0, 0, 0.0, 0, 1, -1, false)
         {
-            DBState = DatabaseUpdateState.NEEDS_UPDATE
+            DBState = DatabaseUpdateState.NeedsUpdate
         };
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())

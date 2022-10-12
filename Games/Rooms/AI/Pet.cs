@@ -130,7 +130,7 @@ public class Pet
         this.Y = y;
         this.Z = z;
         this.PlacedInRoom = false;
-        this.DBState = DatabaseUpdateState.UPDATED;
+        this.DBState = DatabaseUpdateState.Updated;
         this.Saddle = havesaddle == 1 ? 9 : havesaddle == 2 ? 10 : 0;
         this.HairDye = hairdye;
         this.PetHair = petHair;
@@ -220,7 +220,7 @@ public class Pet
     {
         this.Respect++;
 
-        this.DBState = DatabaseUpdateState.NEEDS_UPDATE;
+        this.DBState = DatabaseUpdateState.NeedsUpdate;
 
         if (this.Expirience > 51900)
         {
@@ -238,7 +238,7 @@ public class Pet
             return;
         }
 
-        this.DBState = DatabaseUpdateState.NEEDS_UPDATE;
+        this.DBState = DatabaseUpdateState.NeedsUpdate;
 
         if (this.Room == null)
         {
@@ -281,6 +281,6 @@ public class Pet
             this.Energy = (this.Energy + randomUsage) % 100;
         }
 
-        this.DBState = DatabaseUpdateState.NEEDS_UPDATE;
+        this.DBState = DatabaseUpdateState.NeedsUpdate;
     }
 }

@@ -29,13 +29,13 @@ internal class RoomSell : IChatCommand
             return;
         }
 
-        if (room.RoomData.Group != null)
+        if (room.Data.Group != null)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.5", session.Langue));
             return;
         }
 
-        if (room.RoomData.SellPrice > 0)
+        if (room.Data.SellPrice > 0)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.6", session.Langue));
             return;
@@ -46,7 +46,7 @@ internal class RoomSell : IChatCommand
             RoomDao.UpdatePrice(dbClient, room.Id, price);
         }
 
-        room.RoomData.SellPrice = price;
+        room.Data.SellPrice = price;
 
         session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.valide", session.Langue), price));
 

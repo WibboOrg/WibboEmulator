@@ -42,7 +42,7 @@ internal class AddStickyNoteEvent : IPacketEvent
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            ItemDao.UpdateRoomIdAndUserId(dbClient, id, room.Id, room.RoomData.OwnerId);
+            ItemDao.UpdateRoomIdAndUserId(dbClient, id, room.Id, room.Data.OwnerId);
         }
 
         session.GetUser().GetInventoryComponent().RemoveItem(id);

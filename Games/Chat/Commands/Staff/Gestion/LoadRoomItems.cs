@@ -25,6 +25,6 @@ internal class LoadRoomItems : IChatCommand
         room.GetRoomItemHandler().LoadFurniture(roomId);
         room.GetGameMap().GenerateMaps(true);
         session.SendWhisper("Mobi de l'appart n° " + roomId + " chargé!");
-        session.SendPacket(new GetGuestRoomResultComposer(session, room.RoomData, false, true));
+        session.SendPacket(new GetGuestRoomResultComposer(session, room.Data, false, true));
     }
 }

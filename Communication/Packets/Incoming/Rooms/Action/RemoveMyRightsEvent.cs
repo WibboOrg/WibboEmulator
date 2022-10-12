@@ -37,7 +37,7 @@ internal class RemoveMyRightsEvent : IPacketEvent
                 user.RemoveStatus("flatctrl");
                 user.UpdateNeeded = true;
 
-                user.GetClient().SendPacket(new YouAreNotControllerComposer());
+                user.Client.SendPacket(new YouAreNotControllerComposer());
             }
 
             using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())

@@ -13,17 +13,17 @@ public class HasUserInGroup : WiredConditionBase, IWiredCondition, IWired
 
     public bool AllowsExecution(RoomUser user, Item item)
     {
-        if (user == null || user.IsBot || user.GetClient() == null || user.GetClient().GetUser() == null)
+        if (user == null || user.IsBot || user.Client == null || user.Client.GetUser() == null)
         {
             return false;
         }
 
-        if (this.RoomInstance.RoomData.Group == null)
+        if (this.RoomInstance.Data.Group == null)
         {
             return false;
         }
 
-        if (!user.GetClient().GetUser().MyGroups.Contains(this.RoomInstance.RoomData.Group.Id))
+        if (!user.Client.GetUser().MyGroups.Contains(this.RoomInstance.Data.Group.Id))
         {
             return false;
         }

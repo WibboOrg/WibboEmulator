@@ -236,15 +236,8 @@ public class WiredHandler
         if (this._conditionStacks.ContainsKey(coordinate))
         {
             var conditionStack = this._conditionStacks[coordinate];
-            var cycleCountCdt = 0;
-            foreach (var roomItem in conditionStack.ToArray())
+            foreach (var roomItem in conditionStack.Take(20).ToArray())
             {
-                cycleCountCdt++;
-                if (cycleCountCdt > 20)
-                {
-                    break;
-                }
-
                 if (roomItem == null || roomItem.WiredHandler == null)
                 {
                     continue;
@@ -261,9 +254,7 @@ public class WiredHandler
 
         if (this._specialRandom.Contains(coordinate))
         {
-            var countAct = actionStack.Count - 1;
-
-            var rdnWired = WibboEnvironment.GetRandomNumber(0, countAct);
+            var rdnWired = WibboEnvironment.GetRandomNumber(0, actionStack.Count - 1);
             var actRand = actionStack[rdnWired];
             ((IWiredEffect)actRand.WiredHandler).Handle(user, item);
         }
@@ -288,16 +279,8 @@ public class WiredHandler
         }
         else
         {
-            var cycleCount = 0;
-            foreach (var roomItem in actionStack.ToArray())
+            foreach (var roomItem in actionStack.Take(20).ToArray())
             {
-                cycleCount++;
-
-                if (cycleCount > 20)
-                {
-                    break;
-                }
-
                 if (roomItem != null && roomItem.WiredHandler != null)
                 {
                     ((IWiredEffect)roomItem.WiredHandler).Handle(user, item);

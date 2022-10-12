@@ -36,10 +36,10 @@ public class GameManager
 
     public Dictionary<int, Item> GetItems(TeamType team) => team switch
     {
-        TeamType.RED => this._redTeamItems,
-        TeamType.GREEN => this._greenTeamItems,
-        TeamType.BLUE => this._blueTeamItems,
-        TeamType.YELLOW => this._yellowTeamItems,
+        TeamType.Red => this._redTeamItems,
+        TeamType.Green => this._greenTeamItems,
+        TeamType.Blue => this._blueTeamItems,
+        TeamType.Yellow => this._yellowTeamItems,
         _ => new Dictionary<int, Item>(),
     };
 
@@ -94,20 +94,20 @@ public class GameManager
 
     public void Reset()
     {
-        this.AddPointToTeam(TeamType.BLUE, this.GetScoreForTeam(TeamType.BLUE) * -1, null);
-        this.AddPointToTeam(TeamType.GREEN, this.GetScoreForTeam(TeamType.GREEN) * -1, null);
-        this.AddPointToTeam(TeamType.RED, this.GetScoreForTeam(TeamType.RED) * -1, null);
-        this.AddPointToTeam(TeamType.YELLOW, this.GetScoreForTeam(TeamType.YELLOW) * -1, null);
+        this.AddPointToTeam(TeamType.Blue, this.GetScoreForTeam(TeamType.Blue) * -1, null);
+        this.AddPointToTeam(TeamType.Green, this.GetScoreForTeam(TeamType.Green) * -1, null);
+        this.AddPointToTeam(TeamType.Red, this.GetScoreForTeam(TeamType.Red) * -1, null);
+        this.AddPointToTeam(TeamType.Yellow, this.GetScoreForTeam(TeamType.Yellow) * -1, null);
     }
 
     private int GetScoreForTeam(TeamType team) => this.TeamPoints[(int)team];
 
     private Dictionary<int, Item> GetFurniItems(TeamType team) => team switch
     {
-        TeamType.RED => this._redTeamItems,
-        TeamType.GREEN => this._greenTeamItems,
-        TeamType.BLUE => this._blueTeamItems,
-        TeamType.YELLOW => this._yellowTeamItems,
+        TeamType.Red => this._redTeamItems,
+        TeamType.Green => this._greenTeamItems,
+        TeamType.Blue => this._blueTeamItems,
+        TeamType.Yellow => this._yellowTeamItems,
         _ => new Dictionary<int, Item>(),
     };
 
@@ -121,28 +121,28 @@ public class GameManager
     {
         switch (team)
         {
-            case TeamType.RED:
+            case TeamType.Red:
                 if (!this._redTeamItems.ContainsKey(item.Id))
                 {
                     this._redTeamItems.Add(item.Id, item);
                 }
 
                 break;
-            case TeamType.GREEN:
+            case TeamType.Green:
                 if (!this._greenTeamItems.ContainsKey(item.Id))
                 {
                     this._greenTeamItems.Add(item.Id, item);
                 }
 
                 break;
-            case TeamType.BLUE:
+            case TeamType.Blue:
                 if (!this._blueTeamItems.ContainsKey(item.Id))
                 {
                     this._blueTeamItems.Add(item.Id, item);
                 }
 
                 break;
-            case TeamType.YELLOW:
+            case TeamType.Yellow:
                 if (!this._yellowTeamItems.ContainsKey(item.Id))
                 {
                     this._yellowTeamItems.Add(item.Id, item);
@@ -156,16 +156,16 @@ public class GameManager
     {
         switch (team)
         {
-            case TeamType.RED:
+            case TeamType.Red:
                 _ = this._redTeamItems.Remove(item.Id);
                 break;
-            case TeamType.GREEN:
+            case TeamType.Green:
                 _ = this._greenTeamItems.Remove(item.Id);
                 break;
-            case TeamType.BLUE:
+            case TeamType.Blue:
                 _ = this._blueTeamItems.Remove(item.Id);
                 break;
-            case TeamType.YELLOW:
+            case TeamType.Yellow:
                 _ = this._yellowTeamItems.Remove(item.Id);
                 break;
         }
@@ -323,7 +323,6 @@ public class GameManager
 
     public void Destroy()
     {
-        Array.Clear(this.TeamPoints, 0, this.TeamPoints.Length);
         this._redTeamItems.Clear();
         this._blueTeamItems.Clear();
         this._greenTeamItems.Clear();

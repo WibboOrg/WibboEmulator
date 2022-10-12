@@ -42,7 +42,7 @@ public class GameClient
     public GameClient(string clientId, GameWebSocket connection)
     {
         this.ConnectionID = clientId;
-        this.Langue = Language.FRANCAIS;
+        this.Langue = Language.French;
         this._connection = connection;
 
         this._packetTimeout = new Dictionary<int, double>();
@@ -74,15 +74,15 @@ public class GameClient
 
                 WibboEnvironment.GetGame().GetGameClientManager().RegisterClient(this, user.Id, user.Username);
 
-                if (this.Langue == Language.FRANCAIS)
+                if (this.Langue == Language.French)
                 {
                     WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersFr++;
                 }
-                else if (this.Langue == Language.ANGLAIS)
+                else if (this.Langue == Language.English)
                 {
                     WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersEn++;
                 }
-                else if (this.Langue == Language.PORTUGAIS)
+                else if (this.Langue == Language.Portuguese)
                 {
                     WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersBr++;
                 }
@@ -338,15 +338,15 @@ public class GameClient
 
     public void Dispose()
     {
-        if (this.Langue == Language.FRANCAIS)
+        if (this.Langue == Language.French)
         {
             WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersFr--;
         }
-        else if (this.Langue == Language.ANGLAIS)
+        else if (this.Langue == Language.English)
         {
             WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersEn--;
         }
-        else if (this.Langue == Language.PORTUGAIS)
+        else if (this.Langue == Language.Portuguese)
         {
             WibboEnvironment.GetGame().GetGameClientManager().OnlineUsersBr--;
         }

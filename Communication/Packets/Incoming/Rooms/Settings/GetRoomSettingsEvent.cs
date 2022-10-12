@@ -20,6 +20,6 @@ internal class GetRoomSettingsEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new RoomSettingsDataComposer(room.RoomData));
+        session.SendPacket(new RoomSettingsDataComposer(room.Data));
     }
 }

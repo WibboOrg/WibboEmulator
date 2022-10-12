@@ -16,7 +16,7 @@ internal static class NavigatorHandler
                 message.WriteInteger(0);
                 break;
 
-            case NavigatorCategoryType.QUERY:
+            case NavigatorCategoryType.Query:
             {
                 if (searchData.ToLower().StartsWith("owner:"))
                 {
@@ -112,12 +112,12 @@ internal static class NavigatorHandler
                 break;
             }
 
-            case NavigatorCategoryType.FEATURED:
-            case NavigatorCategoryType.FEATURED_GAME:
-            case NavigatorCategoryType.FEATURED_NEW:
-            case NavigatorCategoryType.FEATURED_HELP_SECURITY:
-            case NavigatorCategoryType.FEATURED_RUN:
-            case NavigatorCategoryType.FEATURED_CASINO:
+            case NavigatorCategoryType.Featured:
+            case NavigatorCategoryType.FeaturedGame:
+            case NavigatorCategoryType.FeaturedNovelty:
+            case NavigatorCategoryType.FeaturedHelpSecurity:
+            case NavigatorCategoryType.FeaturedRun:
+            case NavigatorCategoryType.FeaturedCasino:
                 var rooms = new List<RoomData>();
                 var featured = WibboEnvironment.GetGame().GetNavigator().GetFeaturedRooms(session.Langue);
                 foreach (var featuredItem in featured.ToList())
@@ -151,7 +151,7 @@ internal static class NavigatorHandler
                 }
                 break;
 
-            case NavigatorCategoryType.POPULAR:
+            case NavigatorCategoryType.Popular:
             {
                 var popularRooms = new List<RoomData>();
 
@@ -165,7 +165,7 @@ internal static class NavigatorHandler
                 break;
             }
 
-            case NavigatorCategoryType.RECOMMENDED:
+            case NavigatorCategoryType.Recommended:
             {
                 var recommendedRooms = WibboEnvironment.GetGame().GetRoomManager().GetRecommendedRooms(fetchLimit);
 
@@ -177,7 +177,7 @@ internal static class NavigatorHandler
                 break;
             }
 
-            case NavigatorCategoryType.CATEGORY:
+            case NavigatorCategoryType.Category:
             {
                 var getRoomsByCategory = WibboEnvironment.GetGame().GetRoomManager().GetRoomsByCategory(searchResult.Id, fetchLimit);
 
@@ -189,7 +189,7 @@ internal static class NavigatorHandler
                 break;
             }
 
-            case NavigatorCategoryType.MY_ROOMS:
+            case NavigatorCategoryType.MyRooms:
 
                 var myRooms = new List<RoomData>();
 
@@ -214,7 +214,7 @@ internal static class NavigatorHandler
                 }
                 break;
 
-            case NavigatorCategoryType.MY_FAVORITES:
+            case NavigatorCategoryType.MyFavorites:
                 var favourites = new List<RoomData>();
                 foreach (var roomId in session.GetUser().FavoriteRooms)
                 {
@@ -239,7 +239,7 @@ internal static class NavigatorHandler
                 }
                 break;
 
-            case NavigatorCategoryType.MY_GROUPS:
+            case NavigatorCategoryType.MyGroups:
                 var myGroups = new List<RoomData>();
 
                 foreach (var groupId in session.GetUser().MyGroups.ToList())
@@ -288,7 +288,7 @@ internal static class NavigatorHandler
                 }
                 break;*/
 
-            case NavigatorCategoryType.MY_RIGHTS:
+            case NavigatorCategoryType.MyRights:
                 var myRights = new List<RoomData>();
 
                 foreach (var roomId in session.GetUser().RoomRightsList)

@@ -12,7 +12,7 @@ internal class GetGuestRoomResultComposer : ServerPacket
         this.WriteString(data.Name);
         this.WriteInteger(data.OwnerId);
         this.WriteString(data.OwnerName);
-        this.WriteInteger(session.GetUser().IsTeleporting ? 0 : data.State);
+        this.WriteInteger(session.GetUser().IsTeleporting ? 0 : (int)data.Access);
         this.WriteInteger(data.UsersNow);
         this.WriteInteger(data.UsersMax);
         this.WriteString(data.Description);

@@ -15,7 +15,7 @@ public class TeamLeave : WiredActionBase, IWired, IWiredEffect
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        if (user != null && !user.IsBot && user.GetClient() != null && user.Team != TeamType.NONE && user.Room != null)
+        if (user != null && !user.IsBot && user.Client != null && user.Team != TeamType.None && user.Room != null)
         {
             var managerForBanzai = user.Room.GetTeamManager();
             if (managerForBanzai == null)
@@ -26,9 +26,9 @@ public class TeamLeave : WiredActionBase, IWired, IWiredEffect
             managerForBanzai.OnUserLeave(user);
             user.Room.GetGameManager().UpdateGatesTeamCounts();
             user.ApplyEffect(0);
-            user.Team = TeamType.NONE;
+            user.Team = TeamType.None;
 
-            user.GetClient().SendPacket(new IsPlayingComposer(false));
+            user.Client.SendPacket(new IsPlayingComposer(false));
         }
 
         return true;

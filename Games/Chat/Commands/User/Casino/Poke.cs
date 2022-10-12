@@ -12,7 +12,7 @@ internal class Poke : IChatCommand
             return;
         }
 
-        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
+        if (userRoom.Team != TeamType.None || userRoom.InGame)
         {
             return;
         }
@@ -42,12 +42,12 @@ internal class Poke : IChatCommand
         }
 
         var targetUser = room.GetRoomUserManager().GetRoomUserByName(username);
-        if (targetUser == null || targetUser.GetClient() == null || targetUser.GetClient().GetUser() == null)
+        if (targetUser == null || targetUser.Client == null || targetUser.Client.GetUser() == null)
         {
             return;
         }
 
-        if (wpCount > targetUser.GetClient().GetUser().WibboPoints)
+        if (wpCount > targetUser.Client.GetUser().WibboPoints)
         {
             return;
         }

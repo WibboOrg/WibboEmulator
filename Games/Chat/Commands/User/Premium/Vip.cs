@@ -7,7 +7,7 @@ internal class Premium : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        if (userRoom.Team != TeamType.NONE || userRoom.InGame)
+        if (userRoom.Team != TeamType.None || userRoom.InGame)
         {
             return;
         }

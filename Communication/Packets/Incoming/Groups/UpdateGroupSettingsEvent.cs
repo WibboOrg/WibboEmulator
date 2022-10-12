@@ -59,7 +59,7 @@ internal class UpdateGroupSettingsEvent : IPacketEvent
 
         foreach (var user in room.GetRoomUserManager().GetRoomUsers().ToList())
         {
-            if (room.RoomData.OwnerId == user.UserId || group.IsAdmin(user.UserId) || !group.IsMember(user.UserId))
+            if (room.Data.OwnerId == user.UserId || group.IsAdmin(user.UserId) || !group.IsMember(user.UserId))
             {
                 continue;
             }
@@ -69,14 +69,14 @@ internal class UpdateGroupSettingsEvent : IPacketEvent
                 user.RemoveStatus("flatctrl");
                 user.UpdateNeeded = true;
 
-                user.GetClient().SendPacket(new YouAreControllerComposer(0));
+                user.Client.SendPacket(new YouAreControllerComposer(0));
             }
             else if (furniOptions == 0 && !user.ContainStatus("flatctrl"))
             {
                 user.SetStatus("flatctrl", "1");
                 user.UpdateNeeded = true;
 
-                user.GetClient().SendPacket(new YouAreControllerComposer(1));
+                user.Client.SendPacket(new YouAreControllerComposer(1));
             }
         }
 

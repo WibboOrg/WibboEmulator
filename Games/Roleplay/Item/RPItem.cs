@@ -12,17 +12,17 @@ public class RPItem
     public RPItemCategory Category { get; set; }
     public int UseType { get; set; }
 
-    public RPItem(int pId, string pName, string pDesc, int pPrice, string pType, int pValue, bool pAllowStack, RPItemCategory pCatagory)
+    public RPItem(int id, string name, string desc, int price, string type, int value, bool allowStack, RPItemCategory category)
     {
-        this.Id = pId;
-        this.Name = pName;
-        this.Title = pDesc;
-        this.Desc = GenerateDesc(pDesc, pType, pValue);
-        this.Price = pPrice;
-        this.Type = pType;
-        this.Value = pValue;
-        this.AllowStack = pAllowStack;
-        this.Category = pCatagory;
+        this.Id = id;
+        this.Name = name;
+        this.Title = desc;
+        this.Desc = GenerateDesc(desc, type, value);
+        this.Price = price;
+        this.Type = type;
+        this.Value = value;
+        this.AllowStack = allowStack;
+        this.Category = category;
         this.UseType = GetUseType(this.Type);
     }
 

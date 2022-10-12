@@ -378,7 +378,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             return false;
         }
 
-        if (user == null || user.GetClient() == null || user.GetClient().GetUser() == null)
+        if (user == null || user.Client == null || user.Client.GetUser() == null)
         {
             return false;
         }
@@ -677,7 +677,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "roomopen":
             case "roomnotopen":
             {
-                if (room.RoomData.State == 0)
+                if (room.Data.Access == RoomAccess.Open)
                 {
                     result = true;
                 }
@@ -687,7 +687,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "roomclose":
             case "roomnotclose":
             {
-                if (room.RoomData.State == 1)
+                if (room.Data.Access == RoomAccess.Doorbell)
                 {
                     result = true;
                 }
@@ -799,7 +799,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "missioncontais":
             case "notmissioncontais":
             {
-                if (!user.IsBot && user.GetClient().GetUser().Motto.Contains(value))
+                if (!user.IsBot && user.Client.GetUser().Motto.Contains(value))
                 {
                     result = true;
                 }
@@ -809,7 +809,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "mission":
             case "notmission":
             {
-                if (!user.IsBot && user.GetClient().GetUser().Motto == value)
+                if (!user.IsBot && user.Client.GetUser().Motto == value)
                 {
                     result = true;
                 }
@@ -821,7 +821,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 _ = int.TryParse(value, out var groupId);
 
-                if (!user.IsBot && user.GetClient().GetUser().FavouriteGroupId == groupId)
+                if (!user.IsBot && user.Client.GetUser().FavouriteGroupId == groupId)
                 {
                     result = true;
                 }
@@ -831,7 +831,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "usergirl":
             case "notusergirl":
             {
-                if (!user.IsBot && user.GetClient().GetUser().Gender.ToUpper() == "F")
+                if (!user.IsBot && user.Client.GetUser().Gender.ToUpper() == "F")
                 {
                     result = true;
                 }
@@ -841,7 +841,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "userboy":
             case "notuserboy":
             {
-                if (!user.IsBot && user.GetClient().GetUser().Gender.ToUpper() == "M")
+                if (!user.IsBot && user.Client.GetUser().Gender.ToUpper() == "M")
                 {
                     result = true;
                 }
@@ -881,7 +881,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "winteam":
             case "notwinteam":
             {
-                if (user.Team == TeamType.NONE)
+                if (user.Team == TeamType.None)
                 {
                     break;
                 }
@@ -990,7 +990,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.IsBot || (user.GetClient() != null && user.GetClient().GetUser() != null && user.GetClient().GetUser().MyGroups.Contains(groupId)))
+                if (user.IsBot || (user.Client != null && user.Client.GetUser() != null && user.Client.GetUser().MyGroups.Contains(groupId)))
                 {
                     result = true;
                 }
@@ -1000,7 +1000,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "userteam":
             case "usernotteam":
             {
-                if (user.Team != TeamType.NONE)
+                if (user.Team != TeamType.None)
                 {
                     result = true;
                 }
@@ -1070,12 +1070,12 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "badge":
             case "notbadge":
             {
-                if (user.IsBot || user.GetClient() == null || user.GetClient().GetUser() == null || user.GetClient().GetUser().GetBadgeComponent() == null)
+                if (user.IsBot || user.Client == null || user.Client.GetUser() == null || user.Client.GetUser().GetBadgeComponent() == null)
                 {
                     break;
                 }
 
-                if (user.GetClient().GetUser().GetBadgeComponent().HasBadge(value))
+                if (user.Client.GetUser().GetBadgeComponent().HasBadge(value))
                 {
                     result = true;
                 }
@@ -1099,7 +1099,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.GetClient().GetUser().Rank.ToString() == value)
+                if (user.Client.GetUser().Rank.ToString() == value)
                 {
                     result = true;
                 }
@@ -1113,7 +1113,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.GetClient().GetUser().Rank > Convert.ToInt32(value))
+                if (user.Client.GetUser().Rank > Convert.ToInt32(value))
                 {
                     result = true;
                 }
@@ -1127,7 +1127,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (user.GetClient().GetUser().Rank < Convert.ToInt32(value))
+                if (user.Client.GetUser().Rank < Convert.ToInt32(value))
                 {
                     result = true;
                 }

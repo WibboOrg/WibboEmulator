@@ -53,11 +53,11 @@ public class Freeze
 
     private void EndGame(RoomUser roomUser, TeamType winningTeam)
     {
-        if (roomUser.Team == winningTeam && winningTeam != TeamType.NONE)
+        if (roomUser.Team == winningTeam && winningTeam != TeamType.None)
         {
             this._roomInstance.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
         }
-        else if (roomUser.Team != TeamType.NONE)
+        else if (roomUser.Team != TeamType.None)
         {
             var firstTile = this.GetFirstTile(roomUser.X, roomUser.Y);
 
@@ -69,11 +69,11 @@ public class Freeze
             var managerForFreeze = this._roomInstance.GetTeamManager();
             managerForFreeze.OnUserLeave(roomUser);
 
-            roomUser.GetClient().SendPacket(new IsPlayingComposer(false));
+            roomUser.Client.SendPacket(new IsPlayingComposer(false));
 
             this._roomInstance.GetGameManager().UpdateGatesTeamCounts();
 
-            roomUser.Team = TeamType.NONE;
+            roomUser.Team = TeamType.None;
 
             if (this._roomInstance.GetGameItemHandler().GetExitTeleport() != null)
             {
@@ -134,7 +134,7 @@ public class Freeze
 
     public void OnWalkFreezeBlock(Item roomitem, RoomUser user)
     {
-        if (!this.IsGameActive || user.Team == TeamType.NONE)
+        if (!this.IsGameActive || user.Team == TeamType.None)
         {
             return;
         }
@@ -155,7 +155,7 @@ public class Freeze
 
     private void CountTeamPoint(RoomUser roomUser)
     {
-        if (roomUser == null || roomUser.GetClient() == null)
+        if (roomUser == null || roomUser.Client == null)
         {
             return;
         }
@@ -164,7 +164,7 @@ public class Freeze
 
         if (firstTile == null)
         {
-            this.EndGame(roomUser, TeamType.NONE);
+            this.EndGame(roomUser, TeamType.None);
             return;
         }
 
@@ -175,7 +175,7 @@ public class Freeze
 
         this._roomInstance.GetGameManager().AddPointToTeam(roomUser.Team, 40, null);
 
-        roomUser.GetClient().SendPacket(new UpdateFreezeLivesComposer(roomUser.VirtualId, roomUser.FreezeLives));
+        roomUser.Client.SendPacket(new UpdateFreezeLivesComposer(roomUser.VirtualId, roomUser.FreezeLives));
     }
 
     public void ThrowBall(Item item, RoomUser roomUserByUserId)
@@ -185,7 +185,7 @@ public class Freeze
             return;
         }
 
-        if (roomUserByUserId.Team == TeamType.NONE || !this.IsGameActive)
+        if (roomUserByUserId.Team == TeamType.None || !this.IsGameActive)
         {
             return;
         }
@@ -344,7 +344,7 @@ public class Freeze
                     this._roomInstance.GetGameManager().AddPointToTeam(user.Team, 10, user);
                 }
 
-                user.GetClient().SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
+                user.Client.SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
                 break;
             case FreezePowerUp.Snowballs:
                 user.CountFreezeBall += 1;
@@ -380,7 +380,7 @@ public class Freeze
 
     private void FreezeUser(RoomUser user)
     {
-        if (user.IsBot || user.ShieldActive || user.Team == TeamType.NONE || !this.IsGameActive)
+        if (user.IsBot || user.ShieldActive || user.Team == TeamType.None || !this.IsGameActive)
         {
             return;
         }
@@ -397,7 +397,7 @@ public class Freeze
             --user.FreezeLives;
             if (user.FreezeLives <= 0)
             {
-                user.GetClient().SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
+                user.Client.SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
 
                 user.ApplyEffect(0);
 
@@ -406,10 +406,10 @@ public class Freeze
                 var managerForFreeze = this._roomInstance.GetTeamManager();
                 managerForFreeze.OnUserLeave(user);
 
-                user.GetClient().SendPacket(new IsPlayingComposer(false));
+                user.Client.SendPacket(new IsPlayingComposer(false));
 
                 this._roomInstance.GetGameManager().UpdateGatesTeamCounts();
-                user.Team = TeamType.NONE;
+                user.Team = TeamType.None;
 
                 if (this._roomInstance.GetGameItemHandler().GetExitTeleport() != null)
                 {
@@ -448,7 +448,7 @@ public class Freeze
                 this._roomInstance.GetGameManager().AddPointToTeam(user.Team, -10, user);
                 user.ApplyEffect(12);
 
-                user.GetClient().SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
+                user.Client.SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
             }
         }
     }

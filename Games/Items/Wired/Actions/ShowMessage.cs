@@ -18,15 +18,15 @@ public class ShowMessage : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        if (user != null && !user.IsBot && user.GetClient() != null)
+        if (user != null && !user.IsBot && user.Client != null)
         {
             var textMessage = this.StringParam;
             textMessage = textMessage.Replace("#username#", user.GetUsername());
             textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());
-            textMessage = textMessage.Replace("#roomname#", this.RoomInstance.GetWiredHandler().GetRoom().RoomData.Name.ToString());
+            textMessage = textMessage.Replace("#roomname#", this.RoomInstance.GetWiredHandler().GetRoom().Data.Name.ToString());
             textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.GetWiredHandler().GetRoom().VotedYesCount.ToString());
             textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.GetWiredHandler().GetRoom().VotedNoCount.ToString());
-            textMessage = textMessage.Replace("#wpcount#", user.GetClient().GetUser() != null ? user.GetClient().GetUser().WibboPoints.ToString() : "0");
+            textMessage = textMessage.Replace("#wpcount#", user.Client.GetUser() != null ? user.Client.GetUser().WibboPoints.ToString() : "0");
 
             if (user.Roleplayer != null)
             {

@@ -14,12 +14,12 @@ internal class Unload : IChatCommand
 
         foreach (var user in usersToReturn)
         {
-            if (user == null || user.GetClient() == null)
+            if (user == null || user.Client == null)
             {
                 continue;
             }
 
-            user.GetClient().SendPacket(new RoomForwardComposer(room.Id));
+            user.Client.SendPacket(new RoomForwardComposer(room.Id));
         }
     }
 }

@@ -37,7 +37,7 @@ internal class RemoveAllRightsEvent : IPacketEvent
             {
                 if (!roomUserByUserId.IsBot)
                 {
-                    roomUserByUserId.GetClient().SendPacket(new YouAreControllerComposer(0));
+                    roomUserByUserId.Client.SendPacket(new YouAreControllerComposer(0));
 
                     roomUserByUserId.UpdateNeeded = true;
                 }

@@ -13,7 +13,7 @@ internal class HeightMapComposer : ServerPacket
         {
             for (var j = 0; j < map.MapSizeX; j++)
             {
-                if (map.SqState[j, i] == SquareStateType.BLOCKED)
+                if (map.SqState[j, i] == SquareStateType.Bloked)
                 {
                     this.WriteShort(-1);
                 }

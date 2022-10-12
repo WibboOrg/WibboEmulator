@@ -20,7 +20,7 @@ internal class ForceTransf : IChatCommand
             return;
         }
 
-        var clientByUsername = roomUserByUserId.GetClient();
+        var clientByUsername = roomUserByUserId.Client;
         if (clientByUsername == null)
         {
             return;

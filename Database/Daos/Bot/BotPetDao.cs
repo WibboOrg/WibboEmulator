@@ -14,7 +14,7 @@ internal class BotPetDao
         foreach (var petData in petList)
         {
             var pet = petData.PetData;
-            if (pet.DBState == DatabaseUpdateState.NEEDS_UPDATE)
+            if (pet.DBState == DatabaseUpdateState.NeedsUpdate)
             {
                 queryChunk.AddParameter(pet.PetId + "name", pet.Name);
                 queryChunk.AddParameter(pet.PetId + "race", pet.Race);
@@ -31,7 +31,7 @@ internal class BotPetDao
                 queryChunk.AddQuery("UPDATE `bot_pet` SET x = " + petData.X + ", Y = " + petData.Y + ", Z = " + petData.Z + " WHERE id = " + pet.PetId);
             }
 
-            pet.DBState = DatabaseUpdateState.UPDATED;
+            pet.DBState = DatabaseUpdateState.Updated;
         }
         queryChunk.Execute(dbClient);
         queryChunk.Dispose();

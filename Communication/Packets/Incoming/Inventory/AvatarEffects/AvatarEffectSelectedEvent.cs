@@ -42,7 +42,7 @@ internal class AvatarEffectSelectedEvent : IPacketEvent
             return;
         }
 
-        if (user.Team != TeamType.NONE || user.InGame)
+        if (user.Team != TeamType.None || user.InGame)
         {
             return;
         }

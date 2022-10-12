@@ -9,15 +9,15 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class TeamJoin : WiredActionBase, IWired, IWiredEffect
 {
-    public TeamJoin(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.IntParams.Add((int)TeamType.RED);
+    public TeamJoin(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.IntParams.Add((int)TeamType.Red);
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        if (user != null && !user.IsBot && user.GetClient() != null && user.Room != null)
+        if (user != null && !user.IsBot && user.Client != null && user.Room != null)
         {
             var managerForFreeze = user.Room.GetTeamManager();
 
-            if (user.Team != TeamType.NONE)
+            if (user.Team != TeamType.None)
             {
                 managerForFreeze.OnUserLeave(user);
             }
@@ -31,7 +31,7 @@ public class TeamJoin : WiredActionBase, IWired, IWiredEffect
             var effectId = (int)team + 39;
             user.ApplyEffect(effectId);
 
-            user.GetClient().SendPacket(new IsPlayingComposer(true));
+            user.Client.SendPacket(new IsPlayingComposer(true));
         }
 
         return false;

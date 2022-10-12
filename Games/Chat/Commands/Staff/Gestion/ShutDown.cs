@@ -4,8 +4,5 @@ using WibboEmulator.Games.Rooms;
 
 internal class ShutDown : IChatCommand
 {
-    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
-    {
-        _ = Task.Run(() => WibboEnvironment.PreformShutDown());
-    }
+    public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters) => _ = Task.Run(() => WibboEnvironment.PreformShutDown());
 }

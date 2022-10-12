@@ -7,14 +7,14 @@ internal class HideWireds : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        room.RoomData.HideWireds = !room.RoomData.HideWireds;
+        room.Data.HideWireds = !room.Data.HideWireds;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoomDao.UpdateHideWireds(dbClient, room.Id, room.RoomData.HideWireds);
+            RoomDao.UpdateHideWireds(dbClient, room.Id, room.Data.HideWireds);
         }
 
-        if (room.RoomData.HideWireds)
+        if (room.Data.HideWireds)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.hidewireds.true", session.Langue));
         }

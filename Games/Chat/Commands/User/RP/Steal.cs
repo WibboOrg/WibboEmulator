@@ -29,7 +29,7 @@ internal class Steal : IChatCommand
 
         var targetRoomUser = room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
 
-        if (targetRoomUser == null || targetRoomUser.GetClient() == null || targetRoomUser.GetClient().GetUser() == null)
+        if (targetRoomUser == null || targetRoomUser.Client == null || targetRoomUser.Client.GetUser() == null)
         {
             return;
         }
@@ -40,7 +40,7 @@ internal class Steal : IChatCommand
             return;
         }
 
-        if (targetRoomUser.GetClient().GetUser().Id == session.GetUser().Id)
+        if (targetRoomUser.Client.GetUser().Id == session.GetUser().Id)
         {
             return;
         }
@@ -65,7 +65,7 @@ internal class Steal : IChatCommand
             rp.SendUpdate();
             rpTwo.SendUpdate();
 
-            targetRoomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.receive", targetRoomUser.GetClient().Langue), numberMoney, userRoom.GetUsername()));
+            targetRoomUser.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.receive", targetRoomUser.Client.Langue), numberMoney, userRoom.GetUsername()));
 
             session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.send", session.Langue), numberMoney, targetRoomUser.GetUsername()));
             userRoom.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.vole.send.chat", session.Langue), targetRoomUser.GetUsername()), 0, true);

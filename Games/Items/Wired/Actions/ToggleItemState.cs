@@ -17,9 +17,9 @@ public class ToggleItemState : WiredActionBase, IWired, IWiredEffect
         {
             if (roomItem != null)
             {
-                if (user != null && user.GetClient() != null)
+                if (user != null && user.Client != null)
                 {
-                    roomItem.Interactor.OnTrigger(user.GetClient(), roomItem, 0, true, isReverse);
+                    roomItem.Interactor.OnTrigger(user.Client, roomItem, 0, true, isReverse);
                 }
                 else
                 {

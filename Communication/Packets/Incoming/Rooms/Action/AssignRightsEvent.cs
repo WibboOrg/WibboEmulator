@@ -58,7 +58,7 @@ internal class AssignRightsEvent : IPacketEvent
             roomUserByUserId.SetStatus("flatctrl", "1");
             roomUserByUserId.UpdateNeeded = true;
 
-            roomUserByUserId.GetClient().SendPacket(new YouAreControllerComposer(1));
+            roomUserByUserId.Client.SendPacket(new YouAreControllerComposer(1));
         }
     }
 }

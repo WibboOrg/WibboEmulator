@@ -23,7 +23,7 @@ internal class DeleteRoomEvent : IPacketEvent
             return;
         }
 
-        if (!(room.RoomData.OwnerName == session.GetUser().Username))
+        if (!(room.Data.OwnerName == session.GetUser().Username))
         {
             return;
         }

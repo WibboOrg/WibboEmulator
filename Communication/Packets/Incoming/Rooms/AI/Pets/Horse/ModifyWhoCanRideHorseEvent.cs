@@ -48,7 +48,7 @@ internal class ModifyWhoCanRideHorseEvent : IPacketEvent
                 var user = room.GetRoomUserManager().GetRoomUserByVirtualId(pet.HorseID);
                 if (user != null)
                 {
-                    if (room.CheckRights(user.GetClient(), true))
+                    if (room.CheckRights(user.Client, true))
                     {
                         user.RidingHorse = false;
                         user.HorseID = 0;

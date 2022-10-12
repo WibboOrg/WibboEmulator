@@ -20,12 +20,12 @@ internal class RoomBadge : IChatCommand
             {
                 if (!item_0.IsBot)
                 {
-                    if (item_0.GetClient() != null)
+                    if (item_0.Client != null)
                     {
-                        if (item_0.GetClient().GetUser() != null)
+                        if (item_0.Client.GetUser() != null)
                         {
-                            item_0.GetClient().GetUser().GetBadgeComponent().GiveBadge(badgeId, true);
-                            item_0.GetClient().SendPacket(new ReceiveBadgeComposer(badgeId));
+                            item_0.Client.GetUser().GetBadgeComponent().GiveBadge(badgeId, true);
+                            item_0.Client.SendPacket(new ReceiveBadgeComposer(badgeId));
                         }
                     }
                 }

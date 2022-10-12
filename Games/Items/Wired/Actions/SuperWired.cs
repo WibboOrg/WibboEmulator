@@ -226,7 +226,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             return;
         }
 
-        if (user == null || user.GetClient() == null)
+        if (user == null || user.Client == null)
         {
             return;
         }
@@ -632,11 +632,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 if (int.TryParse(value, out var roomId))
                 {
                     var roomDataTarget = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
-                    if (roomDataTarget != null && roomDataTarget.OwnerId == this.RoomInstance.RoomData.OwnerId)
+                    if (roomDataTarget != null && roomDataTarget.OwnerId == this.RoomInstance.Data.OwnerId)
                     {
-                        user.GetClient().GetUser().IsTeleporting = true;
-                        user.GetClient().GetUser().TeleportingRoomID = roomId;
-                        user.GetClient().SendPacket(new RoomForwardComposer(roomId));
+                        user.Client.GetUser().IsTeleporting = true;
+                        user.Client.GetUser().TeleportingRoomID = roomId;
+                        user.Client.SendPacket(new RoomForwardComposer(roomId));
                     }
                 }
                 break;
@@ -1093,9 +1093,9 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 foreach (var rUser in this.RoomInstance.GetRoomUserManager().GetUserList().ToList())
                 {
-                    if (rUser != null && !rUser.IsBot && !rUser.GetClient().GetUser().HasPermission("perm_no_kick") && this.RoomInstance.RoomData.OwnerId != rUser.UserId)
+                    if (rUser != null && !rUser.IsBot && !rUser.Client.GetUser().HasPermission("perm_no_kick") && this.RoomInstance.Data.OwnerId != rUser.UserId)
                     {
-                        this.RoomInstance.GetRoomUserManager().RemoveUserFromRoom(rUser.GetClient(), true, false);
+                        this.RoomInstance.GetRoomUserManager().RemoveUserFromRoom(rUser.Client, true, false);
                     }
                 }
                 break;
@@ -1111,7 +1111,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 {
                     if (rUser != null && !rUser.IsBot)
                     {
-                        rUser.GetClient().SendNotification(value);
+                        rUser.Client.SendNotification(value);
                     }
                 }
                 break;
@@ -1418,11 +1418,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (value == "true")
                 {
-                    this.RoomInstance.RoomIngameChat = true;
+                    this.RoomInstance.IngameChat = true;
                 }
                 else
                 {
-                    this.RoomInstance.RoomIngameChat = false;
+                    this.RoomInstance.IngameChat = false;
                 }
 
                 break;
@@ -1431,11 +1431,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (value == "close")
                 {
-                    this.RoomInstance.RoomData.State = 1;
+                    this.RoomInstance.Data.Access = RoomAccess.Doorbell;
                 }
                 else
                 {
-                    this.RoomInstance.RoomData.State = 0;
+                    this.RoomInstance.Data.Access = RoomAccess.Open;
                 }
 
                 break;
@@ -1569,7 +1569,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
     private static void UserCommand(string cmd, string value, RoomUser user)
     {
-        if (user == null || user.IsBot || user.GetClient() == null)
+        if (user == null || user.IsBot || user.Client == null)
         {
             return;
         }
@@ -1595,7 +1595,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 if (string.IsNullOrEmpty(value))
                 {
-                    user.GetClient().SendPacket(new BotChooseComposer(chooseList));
+                    user.Client.SendPacket(new BotChooseComposer(chooseList));
                     break;
                 }
 
@@ -1624,7 +1624,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     chooseList.Add(list.ToArray());
                 }
 
-                user.GetClient().SendPacket(new BotChooseComposer(chooseList));
+                user.Client.SendPacket(new BotChooseComposer(chooseList));
 
                 break;
             }
@@ -1633,7 +1633,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 var chooseList = new List<string[]>();
                 if (string.IsNullOrEmpty(value))
                 {
-                    user.GetClient().SendPacket(new BotChooseComposer(chooseList));
+                    user.Client.SendPacket(new BotChooseComposer(chooseList));
                     break;
                 }
 
@@ -1677,25 +1677,25 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     }
                 }
 
-                user.GetClient().SendPacket(new BotChooseComposer(chooseList));
+                user.Client.SendPacket(new BotChooseComposer(chooseList));
 
                 break;
             }
             case "stopsounduser":
             {
-                user.GetClient().SendPacket(new StopSoundComposer(value)); //Type = Trax
+                user.Client.SendPacket(new StopSoundComposer(value)); //Type = Trax
 
                 break;
             }
             case "playsounduser":
             {
-                user.GetClient().SendPacket(new PlaySoundComposer(value, 1)); //Type = furni
+                user.Client.SendPacket(new PlaySoundComposer(value, 1)); //Type = furni
 
                 break;
             }
             case "playmusicuser":
             {
-                user.GetClient().SendPacket(new PlaySoundComposer(value, 2, true)); //Type = Trax
+                user.Client.SendPacket(new PlaySoundComposer(value, 2, true)); //Type = Trax
 
                 break;
             }
@@ -1740,7 +1740,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "openpage":
             {
-                user.GetClient().SendPacket(new InClientLinkComposer("habbopages/" + value));
+                user.Client.SendPacket(new InClientLinkComposer("habbopages/" + value));
                 break;
             }
             case "rot":
@@ -1798,7 +1798,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "addpointteam":
             {
-                if (user.Team == TeamType.NONE)
+                if (user.Team == TeamType.None)
                 {
                     break;
                 }
@@ -2077,14 +2077,14 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "badge":
             {
-                user.GetClient().GetUser().GetBadgeComponent().GiveBadge(value, true);
-                user.GetClient().SendPacket(new ReceiveBadgeComposer(value));
+                user.Client.GetUser().GetBadgeComponent().GiveBadge(value, true);
+                user.Client.SendPacket(new ReceiveBadgeComposer(value));
                 break;
             }
             case "removebadge":
             {
-                user.GetClient().GetUser().GetBadgeComponent().RemoveBadge(value);
-                user.GetClient().SendPacket(new BadgesComposer(user.GetClient().GetUser().GetBadgeComponent().BadgeList));
+                user.Client.GetUser().GetBadgeComponent().RemoveBadge(value);
+                user.Client.SendPacket(new BadgesComposer(user.Client.GetUser().GetBadgeComponent().BadgeList));
                 break;
             }
 
@@ -2092,55 +2092,55 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (int.TryParse(value, out var roomId))
                 {
-                    user.GetClient().GetUser().IsTeleporting = true;
-                    user.GetClient().GetUser().TeleportingRoomID = roomId;
-                    user.GetClient().SendPacket(new RoomForwardComposer(roomId));
+                    user.Client.GetUser().IsTeleporting = true;
+                    user.Client.GetUser().TeleportingRoomID = roomId;
+                    user.Client.SendPacket(new RoomForwardComposer(roomId));
                 }
                 break;
             }
             case "alert":
             {
-                user.GetClient().SendNotification(value);
+                user.Client.SendNotification(value);
                 break;
             }
             case "achievement":
             {
-                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), value, 1);
+                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.Client, value, 1);
                 break;
             }
             case "winmovierun":
             {
-                if (user.IsBot || user.GetClient() == null || user.GetClient().GetUser() == null || user.GetClient().GetUser().Rank > 4)
+                if (user.IsBot || user.Client == null || user.Client.GetUser() == null || user.Client.GetUser().Rank > 4)
                 {
                     break;
                 }
 
 
-                if (user.GetUsername() == user.Room.RoomData.OwnerName)
+                if (user.GetUsername() == user.Room.Data.OwnerName)
                 {
                     break;
                 }
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                UserDao.UpdateAddRunPoints(dbClient, user.GetClient().GetUser().Id);
+                UserDao.UpdateAddRunPoints(dbClient, user.Client.GetUser().Id);
 
                 break;
             }
             case "givelot":
             {
-                if (user.IsBot || user.GetClient() == null || user.GetClient().GetUser() == null || user.GetClient().GetUser().Rank > 4)
+                if (user.IsBot || user.Client == null || user.Client.GetUser() == null || user.Client.GetUser().Rank > 4)
                 {
                     break;
                 }
 
-                if (user.GetUsername() == user.Room.RoomData.OwnerName)
+                if (user.GetUsername() == user.Room.Data.OwnerName)
                 {
                     break;
                 }
 
                 var allowedOwner = WibboEnvironment.GetSettings().GetData<string>("givelot.allowed.owner").Split(',');
 
-                if (!allowedOwner.Contains(user.Room.RoomData.OwnerName))
+                if (!allowedOwner.Contains(user.Room.Data.OwnerName))
                 {
                     break;
                 }
@@ -2161,30 +2161,30 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 var nbLot = WibboEnvironment.GetRandomNumber(1, 2);
 
-                if (user.GetClient().GetUser().Rank > 1)
+                if (user.Client.GetUser().Rank > 1)
                 {
                     nbLot = WibboEnvironment.GetRandomNumber(2, 3);
                 }
 
-                var items = ItemFactory.CreateMultipleItems(itemData, user.GetClient().GetUser(), "", nbLot);
+                var items = ItemFactory.CreateMultipleItems(itemData, user.Client.GetUser(), "", nbLot);
 
                 foreach (var purchasedItem in items)
                 {
-                    if (user.GetClient().GetUser().GetInventoryComponent().TryAddItem(purchasedItem))
+                    if (user.Client.GetUser().GetInventoryComponent().TryAddItem(purchasedItem))
                     {
-                        user.GetClient().SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
+                        user.Client.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
                     }
                 }
 
-                user.GetClient().SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", user.GetClient().Langue), nbLot));
+                user.Client.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", user.Client.Langue), nbLot));
 
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    UserDao.UpdateAddGamePoints(dbClient, user.GetClient().GetUser().Id);
+                    UserDao.UpdateAddGamePoints(dbClient, user.Client.GetUser().Id);
                 }
 
-                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.GetClient(), "ACH_Extrabox", 1);
-                ModerationManager.LogStaffEntry(1953042, user.Room.RoomData.OwnerName, user.RoomId, string.Empty, "givelot", "SuperWired givelot: " + user.GetUsername());
+                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.Client, "ACH_Extrabox", 1);
+                ModerationManager.LogStaffEntry(1953042, user.Room.Data.OwnerName, user.RoomId, string.Empty, "givelot", "SuperWired givelot: " + user.GetUsername());
 
                 break;
             }

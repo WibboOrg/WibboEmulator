@@ -25,7 +25,7 @@ internal class MoveObjectEvent : IPacketEvent
             return;
         }
 
-        if (room.RoomData.SellPrice > 0)
+        if (room.Data.SellPrice > 0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
             return;
@@ -53,7 +53,7 @@ internal class MoveObjectEvent : IPacketEvent
 
         if (!room.GetRoomItemHandler().SetFloorItem(session, roomItem, newX, newY, newRot, false, false, true))
         {
-            room.SendPacket(new ObjectUpdateComposer(roomItem, room.RoomData.OwnerId));
+            room.SendPacket(new ObjectUpdateComposer(roomItem, room.Data.OwnerId));
             return;
         }
     }

@@ -227,7 +227,7 @@ public class RoleBot
                 }
             }
 
-            bot.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", room.RoomData.Langue), this.Health, this.Config.Health, dmg), bot.IsPet ? 0 : 2, true);
+            bot.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", room.Data.Langue), this.Health, this.Config.Health, dmg), bot.IsPet ? 0 : 2, true);
         }
     }
 

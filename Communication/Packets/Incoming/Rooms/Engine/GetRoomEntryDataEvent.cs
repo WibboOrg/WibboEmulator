@@ -4,6 +4,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Notifications;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Chat;
 using WibboEmulator.Communication.Packets.Outgoing.Rooms.Engine;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 using WibboEmulator.Utilities;
 
 internal class GetRoomEntryDataEvent : IPacketEvent
@@ -27,7 +28,7 @@ internal class GetRoomEntryDataEvent : IPacketEvent
             return;
         }
 
-        if (room.RoomData.State == 1)
+        if (room.Data.Access == RoomAccess.Doorbell)
         {
             if (!session.GetUser().AllowDoorBell)
             {
@@ -48,7 +49,7 @@ internal class GetRoomEntryDataEvent : IPacketEvent
         room.SendObjects(session);
 
         session.SendPacket(new RoomEntryInfoComposer(room.Id, room.CheckRights(session, true)));
-        session.SendPacket(new RoomVisualizationSettingsComposer(room.RoomData.WallThickness, room.RoomData.FloorThickness, room.RoomData.Hidewall));
+        session.SendPacket(new RoomVisualizationSettingsComposer(room.Data.WallThickness, room.Data.FloorThickness, room.Data.HideWall));
 
         var thisUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
 
@@ -80,7 +81,7 @@ internal class GetRoomEntryDataEvent : IPacketEvent
             }
         }
 
-        if (room.RoomData.OwnerId != session.GetUser().Id)
+        if (room.Data.OwnerId != session.GetUser().Id)
         {
             _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RoomEntry", 1);
         }

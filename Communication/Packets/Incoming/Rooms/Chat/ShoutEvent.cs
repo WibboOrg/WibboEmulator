@@ -70,7 +70,7 @@ internal class ShoutEvent : IPacketEvent
         {
             if (!room.HasMuteExpired(session.GetUser().Id))
             {
-                user.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.muted", session.Langue));
+                user.Client.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.muted", session.Langue));
                 return;
             }
             else
@@ -93,7 +93,7 @@ internal class ShoutEvent : IPacketEvent
         if (timeSpan.TotalSeconds < session.GetUser().SpamProtectionTime && session.GetUser().SpamEnable)
         {
             var i = session.GetUser().SpamProtectionTime - timeSpan.Seconds;
-            user.GetClient().SendPacket(new FloodControlComposer(i));
+            user.Client.SendPacket(new FloodControlComposer(i));
             return;
         }
         else if (timeSpan.TotalSeconds < 4.0 && session.GetUser().FloodCount > 5 && !session.GetUser().HasPermission("perm_mod"))
@@ -101,7 +101,7 @@ internal class ShoutEvent : IPacketEvent
             session.GetUser().SpamProtectionTime = room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium") ? 5 : 15;
             session.GetUser().SpamEnable = true;
 
-            user.GetClient().SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
+            user.Client.SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
 
             return;
         }
@@ -112,7 +112,7 @@ internal class ShoutEvent : IPacketEvent
 
             session.GetUser().SpamProtectionTime = room.IsRoleplay || session.GetUser().HasPermission("perm_flood_premium") ? 5 : 15;
             session.GetUser().SpamEnable = true;
-            user.GetClient().SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
+            user.Client.SendPacket(new FloodControlComposer(session.GetUser().SpamProtectionTime - timeSpan.Seconds));
             return;
         }
         else

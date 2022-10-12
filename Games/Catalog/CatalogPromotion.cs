@@ -26,11 +26,11 @@ public class CatalogPromotion
 
     public string GetTitleByLangue(Language langue)
     {
-        if (langue == Language.ANGLAIS)
+        if (langue == Language.English)
         {
             return this.TitleEn;
         }
-        else if (langue == Language.PORTUGAIS)
+        else if (langue == Language.Portuguese)
         {
             return this.TitleBr;
         }

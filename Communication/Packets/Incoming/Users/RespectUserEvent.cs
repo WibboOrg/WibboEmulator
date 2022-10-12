@@ -26,18 +26,18 @@ internal class RespectUserEvent : IPacketEvent
         }
 
         var roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(packet.PopInt());
-        if (roomUserByUserIdTarget == null || roomUserByUserIdTarget.GetClient().GetUser().Id == session.GetUser().Id || roomUserByUserIdTarget.IsBot)
+        if (roomUserByUserIdTarget == null || roomUserByUserIdTarget.Client.GetUser().Id == session.GetUser().Id || roomUserByUserIdTarget.IsBot)
         {
             return;
         }
 
         WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SOCIAL_RESPECT, 0);
-        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserIdTarget.GetClient(), "ACH_RespectEarned", 1);
+        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserIdTarget.Client, "ACH_RespectEarned", 1);
         _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RespectGiven", 1);
         session.GetUser().DailyRespectPoints--;
-        roomUserByUserIdTarget.GetClient().GetUser().Respect++;
+        roomUserByUserIdTarget.Client.GetUser().Respect++;
 
-        room.SendPacket(new RespectNotificationComposer(roomUserByUserIdTarget.GetClient().GetUser().Id, roomUserByUserIdTarget.GetClient().GetUser().Respect));
+        room.SendPacket(new RespectNotificationComposer(roomUserByUserIdTarget.Client.GetUser().Id, roomUserByUserIdTarget.Client.GetUser().Respect));
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
 

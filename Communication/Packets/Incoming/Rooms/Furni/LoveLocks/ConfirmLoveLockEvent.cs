@@ -39,7 +39,7 @@ internal class ConfirmLoveLockEvent : IPacketEvent
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", session.Langue));
             return;
         }
-        else if (userOne.GetClient() == null || userTwo.GetClient() == null)
+        else if (userOne.Client == null || userTwo.Client == null)
         {
             item.InteractingUser = 0;
             item.InteractingUser2 = 0;
@@ -48,7 +48,7 @@ internal class ConfirmLoveLockEvent : IPacketEvent
         }
         else if (userOne == null)
         {
-            userTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", userTwo.GetClient().Langue));
+            userTwo.Client.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", userTwo.Client.Langue));
             userTwo.LLPartner = 0;
             item.InteractingUser = 0;
             item.InteractingUser2 = 0;
@@ -56,7 +56,7 @@ internal class ConfirmLoveLockEvent : IPacketEvent
         }
         else if (userTwo == null)
         {
-            userOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", userOne.GetClient().Langue));
+            userOne.Client.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.1", userOne.Client.Langue));
             userOne.LLPartner = 0;
             item.InteractingUser = 0;
             item.InteractingUser2 = 0;
@@ -64,10 +64,10 @@ internal class ConfirmLoveLockEvent : IPacketEvent
         }
         else if (item.ExtraData.Contains(Convert.ToChar(5).ToString()))
         {
-            userTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.2", userTwo.GetClient().Langue));
+            userTwo.Client.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.2", userTwo.Client.Langue));
             userTwo.LLPartner = 0;
 
-            userOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.2", userOne.GetClient().Langue));
+            userOne.Client.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.lovelock.error.2", userOne.Client.Langue));
             userOne.LLPartner = 0;
 
             item.InteractingUser = 0;
@@ -102,7 +102,7 @@ internal class ConfirmLoveLockEvent : IPacketEvent
             }
             else
             {
-                item.ExtraData = "1" + (char)5 + userOne.GetUsername() + (char)5 + userTwo.GetUsername() + (char)5 + userOne.GetClient().GetUser().Look + (char)5 + userTwo.GetClient().GetUser().Look + (char)5 + DateTime.Now.ToString("dd/MM/yyyy");
+                item.ExtraData = "1" + (char)5 + userOne.GetUsername() + (char)5 + userTwo.GetUsername() + (char)5 + userOne.Client.GetUser().Look + (char)5 + userTwo.Client.GetUser().Look + (char)5 + DateTime.Now.ToString("dd/MM/yyyy");
 
                 item.InteractingUser = 0;
                 item.InteractingUser2 = 0;
@@ -112,8 +112,8 @@ internal class ConfirmLoveLockEvent : IPacketEvent
 
                 item.UpdateState(true, true);
 
-                userOne.GetClient().SendPacket(new LoveLockDialogueCloseComposer(id));
-                userTwo.GetClient().SendPacket(new LoveLockDialogueCloseComposer(id));
+                userOne.Client.SendPacket(new LoveLockDialogueCloseComposer(id));
+                userTwo.Client.SendPacket(new LoveLockDialogueCloseComposer(id));
 
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
                 ItemDao.UpdateExtradata(dbClient, item.Id, item.ExtraData);

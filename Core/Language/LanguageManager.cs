@@ -5,10 +5,10 @@ using WibboEmulator.Database.Interfaces;
 
 public enum Language
 {
-    NONE,
-    FRANCAIS,
-    ANGLAIS,
-    PORTUGAIS,
+    None,
+    French,
+    English,
+    Portuguese,
 }
 
 public class LanguageManager
@@ -52,15 +52,15 @@ public class LanguageManager
 
     public string TryGetValue(string value, Language language)
     {
-        if (language == Language.FRANCAIS)
+        if (language == Language.French)
         {
             return this._valuesFr.ContainsKey(value) ? this._valuesFr[value] : "Pas de language locale trouver pour [" + value + "] (fr)";
         }
-        else if (language == Language.ANGLAIS)
+        else if (language == Language.English)
         {
             return this._valuesEn.ContainsKey(value) ? this._valuesEn[value] : "Pas de language locale trouver pour [" + value + "] (en)";
         }
-        else if (language == Language.PORTUGAIS)
+        else if (language == Language.Portuguese)
         {
             return this._valuesBr.ContainsKey(value) ? this._valuesBr[value] : "Pas de language locale trouver pour [" + value + "] (br)";
         }
@@ -72,9 +72,9 @@ public class LanguageManager
 
     public static Language ParseLanguage(string country) => country switch
     {
-        "fr" => Language.FRANCAIS,
-        "en" => Language.ANGLAIS,
-        "br" => Language.PORTUGAIS,
-        _ => Language.FRANCAIS,
+        "fr" => Language.French,
+        "en" => Language.English,
+        "br" => Language.Portuguese,
+        _ => Language.French,
     };
 }

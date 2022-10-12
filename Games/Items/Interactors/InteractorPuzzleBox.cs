@@ -74,7 +74,7 @@ public class InteractorPuzzleBox : FurniInteractor
             var oldY = item.Y;
             var oldZ = item.Z;
             var newZ = item.GetRoom().GetGameMap().SqAbsoluteHeight(newX, newY);
-            if (item.GetRoom().GetRoomItemHandler().SetFloorItem(roomUserByUserId.GetClient(), item, newX, newY, item.Rotation, false, false, false))
+            if (item.GetRoom().GetRoomItemHandler().SetFloorItem(roomUserByUserId.Client, item, newX, newY, item.Rotation, false, false, false))
             {
                 item.GetRoom().SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newX, newY, newZ, item.Id));
             }

@@ -1,15 +1,15 @@
-﻿namespace WibboEmulator.Games.Rooms;
+namespace WibboEmulator.Games.Rooms;
 
 public enum ItemEffectType
 {
-    NONE,
-    SWIM,
-    SWIMLOW,
-    SWIMHALLOWEEN,
-    ICESKATES,
-    NORMALSKATES,
-    PUBLICPOOL,
-    TRAMPOLINE,
-    TREADMILL,
-    CROSSTRAINER,
+    None,
+    Swim,
+    SwimLow,
+    SwimHalloween,
+    IceSkates,
+    NormalSkates,
+    PublicPool,
+    Trampoline,
+    Treadmill,
+    Crosstrainer
 }

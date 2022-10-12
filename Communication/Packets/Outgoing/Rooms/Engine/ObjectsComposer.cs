@@ -10,13 +10,13 @@ internal class ObjectsComposer : ServerPacket
     {
         this.WriteInteger(1);
 
-        this.WriteInteger(room.RoomData.OwnerId);
-        this.WriteString(room.RoomData.OwnerName);
+        this.WriteInteger(room.Data.OwnerId);
+        this.WriteString(room.Data.OwnerName);
 
         this.WriteInteger(items.Length);
         foreach (var item in items)
         {
-            this.WriteFloorItem(item, Convert.ToInt32(room.RoomData.OwnerId), room.RoomData.HideWireds);
+            this.WriteFloorItem(item, Convert.ToInt32(room.Data.OwnerId), room.Data.HideWireds);
         }
     }
 
@@ -25,13 +25,13 @@ internal class ObjectsComposer : ServerPacket
     {
         this.WriteInteger(1);
 
-        this.WriteInteger(room.RoomData.OwnerId);
-        this.WriteString(room.RoomData.OwnerName);
+        this.WriteInteger(room.Data.OwnerId);
+        this.WriteString(room.Data.OwnerName);
 
         this.WriteInteger(items.Length);
         foreach (var item in items)
         {
-            this.WriteFloorItem(item, Convert.ToInt32(room.RoomData.OwnerId));
+            this.WriteFloorItem(item, Convert.ToInt32(room.Data.OwnerId));
         }
     }
 

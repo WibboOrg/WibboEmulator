@@ -47,9 +47,9 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                     userRom.RemoveStatus("flatctrl");
                     userRom.UpdateNeeded = true;
 
-                    if (userRom.GetClient() != null)
+                    if (userRom.Client != null)
                     {
-                        userRom.GetClient().SendPacket(new YouAreControllerComposer(0));
+                        userRom.Client.SendPacket(new YouAreControllerComposer(0));
                     }
                 }
             }
@@ -81,9 +81,9 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                         userRoom.RemoveStatus("flatctrl");
                         userRoom.UpdateNeeded = true;
 
-                        if (userRoom.GetClient() != null)
+                        if (userRoom.Client != null)
                         {
-                            userRoom.GetClient().SendPacket(new YouAreControllerComposer(0));
+                            userRoom.Client.SendPacket(new YouAreControllerComposer(0));
                         }
                     }
                 }

@@ -82,12 +82,12 @@ internal class RpUseItemsEvent : IPacketEvent
         {
             case "openpage":
             {
-                user.GetClient().SendPacket(new InClientLinkComposer("habbopages/roleplay/" + rpItem.Value));
+                user.Client.SendPacket(new InClientLinkComposer("habbopages/roleplay/" + rpItem.Value));
                 break;
             }
             case "openguide":
             {
-                user.GetClient().SendPacket(new InClientLinkComposer("habbopages/westworld/westworld"));
+                user.Client.SendPacket(new InClientLinkComposer("habbopages/westworld/westworld"));
                 break;
             }
             case "hit":

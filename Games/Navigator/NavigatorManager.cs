@@ -93,7 +93,7 @@ public sealed class NavigatorManager
     {
         var categorys =
             from Cat in this._searchResultLists
-            where Cat.Value.CategoryType == NavigatorCategoryType.CATEGORY
+            where Cat.Value.CategoryType == NavigatorCategoryType.Category
             orderby Cat.Value.OrderId ascending
             select Cat.Value;
         return categorys.ToList();
@@ -103,7 +103,7 @@ public sealed class NavigatorManager
     {
         var categorys =
             from Cat in this._searchResultLists
-            where Cat.Value.CategoryType == NavigatorCategoryType.PROMOTION_CATEGORY
+            where Cat.Value.CategoryType == NavigatorCategoryType.PromotionCategory
             orderby Cat.Value.OrderId ascending
             select Cat.Value;
         return categorys.ToList();

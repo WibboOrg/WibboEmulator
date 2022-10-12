@@ -9,7 +9,7 @@ internal static class RoomAppender
         packet.WriteString(data.Name);
         packet.WriteInteger(data.OwnerId);
         packet.WriteString(data.OwnerName);
-        packet.WriteInteger(data.State);
+        packet.WriteInteger((int)data.Access);
         packet.WriteInteger(data.UsersNow);
         packet.WriteInteger(data.UsersMax);
         packet.WriteString(data.Description);

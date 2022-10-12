@@ -32,7 +32,7 @@ internal class PickUpPetEvent : IPacketEvent
 
         if (!room.GetRoomUserManager().TryGetPet(petId, out var pet))
         {
-            if ((!room.CheckRights(session) && room.RoomData.WhoCanKick != 2 && room.RoomData.Group == null) || (room.RoomData.Group != null && !room.CheckRights(session)))
+            if ((!room.CheckRights(session) && room.Data.WhoCanKick != 2 && room.Data.Group == null) || (room.Data.Group != null && !room.CheckRights(session)))
             {
                 return;
             }
@@ -43,7 +43,7 @@ internal class PickUpPetEvent : IPacketEvent
                 return;
             }
 
-            if (targetUser.GetClient() == null || targetUser.GetClient().GetUser() == null)
+            if (targetUser.Client == null || targetUser.Client.GetUser() == null)
             {
                 return;
             }
@@ -81,7 +81,7 @@ internal class PickUpPetEvent : IPacketEvent
         pet.RoomId = 0;
         petData.PlacedInRoom = false;
 
-        petData.DBState = DatabaseUpdateState.NEEDS_UPDATE;
+        petData.DBState = DatabaseUpdateState.NeedsUpdate;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {

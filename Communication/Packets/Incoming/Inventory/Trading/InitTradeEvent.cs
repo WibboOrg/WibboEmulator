@@ -16,12 +16,12 @@ internal class InitTradeEvent : IPacketEvent
 
         var roomUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
         var roomUserTarget = room.GetRoomUserManager().GetRoomUserByVirtualId(virtualId);
-        if (roomUser == null || roomUser.GetClient() == null || roomUser.GetClient().GetUser() == null)
+        if (roomUser == null || roomUser.Client == null || roomUser.Client.GetUser() == null)
         {
             return;
         }
 
-        if (roomUserTarget == null || roomUserTarget.GetClient() == null || roomUserTarget.GetClient().GetUser() == null)
+        if (roomUserTarget == null || roomUserTarget.Client == null || roomUserTarget.Client.GetUser() == null)
         {
             return;
         }
@@ -42,22 +42,22 @@ internal class InitTradeEvent : IPacketEvent
                 return;
             }
 
-            WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().AddTrade(room.RoomData.OwnerId, roomUser.UserId, roomUserTarget.UserId, roomUser.GetUsername(), roomUserTarget.GetUsername());
+            WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().AddTrade(room.Data.OwnerId, roomUser.UserId, roomUserTarget.UserId, roomUser.GetUsername(), roomUserTarget.GetUsername());
             return;
         }
 
-        if (room.RoomData.TrocStatus == 0)
+        if (room.Data.TrocStatus == 0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.1", session.Langue));
             return;
         }
-        else if (room.RoomData.TrocStatus == 1 && !room.CheckRights(session))
+        else if (room.Data.TrocStatus == 1 && !room.CheckRights(session))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.2", session.Langue));
             return;
         }
 
-        if (!roomUserTarget.GetClient().GetUser().AcceptTrading && session.GetUser().Rank < 3)
+        if (!roomUserTarget.Client.GetUser().AcceptTrading && session.GetUser().Rank < 3)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("user.tradedisabled", session.Langue));
         }

@@ -29,7 +29,7 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
             return;
         }
 
-        if (room.RoomData.SellPrice > 0)
+        if (room.Data.SellPrice > 0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.8", session.Langue));
             return;
@@ -138,12 +138,12 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
 
         foreach (var user in usersToReturn)
         {
-            if (user == null || user.GetClient() == null)
+            if (user == null || user.Client == null)
             {
                 continue;
             }
 
-            user.GetClient().SendPacket(new RoomForwardComposer(room.Id));
+            user.Client.SendPacket(new RoomForwardComposer(room.Id));
         }
     }
 

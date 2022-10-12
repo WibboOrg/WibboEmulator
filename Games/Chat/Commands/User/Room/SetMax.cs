@@ -1,4 +1,6 @@
 namespace WibboEmulator.Games.Chat.Commands.User.Room;
+
+using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms;
 
@@ -11,15 +13,21 @@ internal class SetMax : IChatCommand
             return;
         }
 
-        _ = int.TryParse(parameters[1], out var maxUsers);
+        if (int.TryParse(parameters[1], out var maxUsers))
+        {
+            return;
+        }
 
         if ((maxUsers > 75 || maxUsers <= 0) && !session.GetUser().HasPermission("perm_mod"))
         {
-            room.SetMaxUsers(75);
+            room.Data.UsersMax = 75;
         }
         else
         {
-            room.SetMaxUsers(maxUsers);
+            room.Data.UsersMax = maxUsers;
         }
+
+        using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+        RoomDao.UpdateUsersMax(dbClient, room.Id, maxUsers);
     }
 }

@@ -37,30 +37,30 @@ internal class RespectPetEvent : IPacketEvent
                 return;
             }
 
-            if (targetUser.GetClient() == null || targetUser.GetClient().GetUser() == null)
+            if (targetUser.Client == null || targetUser.Client.GetUser() == null)
             {
                 return;
             }
 
-            if (targetUser.GetClient().GetUser().Id == session.GetUser().Id)
+            if (targetUser.Client.GetUser().Id == session.GetUser().Id)
             {
                 return;
             }
 
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SOCIAL_RESPECT);
             _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RespectGiven", 1);
-            _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(targetUser.GetClient(), "ACH_RespectEarned", 1);
+            _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(targetUser.Client, "ACH_RespectEarned", 1);
 
             //Take away from pet respect points, just in-case users abuse this..
             session.GetUser().DailyPetRespectPoints -= 1;
-            targetUser.GetClient().GetUser().Respect += 1;
+            targetUser.Client.GetUser().Respect += 1;
 
             //Apply the effect.
             thisUser.CarryItemID = 999999999;
             thisUser.CarryTimer = 5;
 
             //Send the magic out.
-            room.SendPacket(new RespectPetNotificationComposer(targetUser.GetClient().GetUser(), targetUser));
+            room.SendPacket(new RespectPetNotificationComposer(targetUser.Client.GetUser(), targetUser));
             room.SendPacket(new CarryObjectComposer(thisUser.VirtualId, thisUser.CarryItemID));
             return;
         }

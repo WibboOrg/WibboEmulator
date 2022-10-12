@@ -22,7 +22,7 @@ public class BotFollowAvatar : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        if (user != null && !user.IsBot && user.GetClient() != null)
+        if (user != null && !user.IsBot && user.Client != null)
         {
             var isFollow = ((this.IntParams.Count > 0) ? this.IntParams[0] : 0) == 1;
             if (isFollow)

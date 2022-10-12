@@ -26,7 +26,7 @@ public class GiveScore : WiredActionBase, IWiredEffect, IWired
         var scoreToGive = (this.IntParams.Count > 0) ? this.IntParams[0] : 0;
         var maxCountPerGame = (this.IntParams.Count > 1) ? this.IntParams[1] : 0;
 
-        if (user == null || user.Team == TeamType.NONE || maxCountPerGame <= this._currentGameCount)
+        if (user == null || user.Team == TeamType.None || maxCountPerGame <= this._currentGameCount)
         {
             return false;
         }

@@ -14,18 +14,18 @@ internal class ForceControlUser : IChatCommand
         var username = parameters[1];
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(username);
-        if (roomUserByUserId == null || roomUserByUserId.GetClient() == null)
+        if (roomUserByUserId == null || roomUserByUserId.Client == null)
         {
             return;
         }
 
-        if (session.Langue != roomUserByUserId.GetClient().Langue)
+        if (session.Langue != roomUserByUserId.Client.Langue)
         {
-            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue.user", roomUserByUserId.GetClient().Langue), session.Langue));
+            session.SendWhisper(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.authorized.langue.user", roomUserByUserId.Client.Langue), session.Langue));
             return;
         }
 
-        session.GetUser().ControlUserId = roomUserByUserId.GetClient().GetUser().Id;
+        session.GetUser().ControlUserId = roomUserByUserId.Client.GetUser().Id;
 
     }
 }

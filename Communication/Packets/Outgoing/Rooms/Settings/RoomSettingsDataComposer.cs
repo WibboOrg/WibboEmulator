@@ -9,7 +9,7 @@ internal class RoomSettingsDataComposer : ServerPacket
         this.WriteInteger(room.Id);
         this.WriteString(room.Name);
         this.WriteString(room.Description);
-        this.WriteInteger(room.State);
+        this.WriteInteger((int)room.Access);
         this.WriteInteger(room.Category);
         this.WriteInteger(room.UsersMax);
         this.WriteInteger(((room.Model.MapSizeX * room.Model.MapSizeY) > 100) ? 50 : 25);
@@ -24,7 +24,7 @@ internal class RoomSettingsDataComposer : ServerPacket
         this.WriteInteger(room.AllowPets ? 1 : 0); // allows pets in room - pet system lacking, so always off
         this.WriteInteger(room.AllowPetsEating ? 1 : 0);// allows pets to eat your food - pet system lacking, so always off
         this.WriteInteger(room.AllowWalkthrough ? 1 : 0);
-        this.WriteInteger(room.Hidewall ? 1 : 0);
+        this.WriteInteger(room.HideWall ? 1 : 0);
         this.WriteInteger(room.WallThickness);
         this.WriteInteger(room.FloorThickness);
 

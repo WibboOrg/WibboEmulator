@@ -27,7 +27,7 @@ internal class PickupObjectEvent : IPacketEvent
             return;
         }
 
-        if (room.RoomData.SellPrice > 0)
+        if (room.Data.SellPrice > 0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
             return;

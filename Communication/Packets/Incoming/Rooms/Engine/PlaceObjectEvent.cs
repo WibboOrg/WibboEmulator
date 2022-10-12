@@ -29,7 +29,7 @@ internal class PlaceObjectEvent : IPacketEvent
             return;
         }
 
-        if (room.RoomData.SellPrice > 0)
+        if (room.Data.SellPrice > 0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
             return;
@@ -114,7 +114,7 @@ internal class PlaceObjectEvent : IPacketEvent
             {
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
+                    ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.Data.OwnerId);
                 }
 
                 session.GetUser().GetInventoryComponent().RemoveItem(itemId);
@@ -179,7 +179,7 @@ internal class PlaceObjectEvent : IPacketEvent
                 {
                     using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
+                        ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.Data.OwnerId);
                     }
 
                     session.GetUser().GetInventoryComponent().RemoveItem(itemId);

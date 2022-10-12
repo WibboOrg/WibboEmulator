@@ -44,11 +44,11 @@ public class RoomModel
                 {
                     if (square == 'x')
                     {
-                        this.SqState[x, y] = SquareStateType.BLOCKED;
+                        this.SqState[x, y] = SquareStateType.Bloked;
                     }
                     else
                     {
-                        this.SqState[x, y] = SquareStateType.OPEN;
+                        this.SqState[x, y] = SquareStateType.Open;
                         this.SqFloorHeight[x, y] = Parse(square);
                     }
                     x++;

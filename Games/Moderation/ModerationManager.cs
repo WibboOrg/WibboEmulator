@@ -8,6 +8,7 @@ using WibboEmulator.Database.Daos.Moderation;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.GameClients;
+using WibboEmulator.Games.Rooms;
 
 public class ModerationManager
 {
@@ -205,19 +206,19 @@ public class ModerationManager
             return;
         }
 
-        if ((room.RoomData.BanFuse != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true))
+        if ((room.Data.BanFuse != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true))
         {
             return;
         }
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(userReport.Id);
-        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_mod") || roomUserByUserId.GetClient().GetUser().HasPermission("perm_no_kick"))
+        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.GetUser().HasPermission("perm_mod") || roomUserByUserId.Client.GetUser().HasPermission("perm_no_kick"))
         {
             return;
         }
 
         room.AddBan(userReport.Id, 429496729);
-        room.GetRoomUserManager().RemoveUserFromRoom(roomUserByUserId.GetClient(), true, true);
+        room.GetRoomUserManager().RemoveUserFromRoom(roomUserByUserId.Client, true, true);
     }
 
     public ModerationTicket GetTicket(int ticketId)
@@ -339,18 +340,18 @@ public class ModerationManager
 
         if (lockRoom)
         {
-            room.RoomData.State = 1;
-            room.RoomData.Name = "Cet appart ne respecte par les conditions d'utilisation";
+            room.Data.Access = RoomAccess.Doorbell;
+            room.Data.Name = "Cet appart ne respecte par les conditions d'utilisation";
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             RoomDao.UpdateState(dbClient, room.Id);
         }
 
         if (inappropriateRoom)
         {
-            room.RoomData.Name = "Inapproprié pour l'hôtel";
-            room.RoomData.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
+            room.Data.Name = "Inapproprié pour l'hôtel";
+            room.Data.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
             room.ClearTags();
-            room.RoomData.Tags.Clear();
+            room.Data.Tags.Clear();
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             RoomDao.UpdateCaptionDescTags(dbClient, room.Id);
         }
@@ -360,7 +361,7 @@ public class ModerationManager
             room.OnRoomKick();
         }
 
-        room.SendPacket(new GetGuestRoomResultComposer(modSession, room.RoomData, false, false));
+        room.SendPacket(new GetGuestRoomResultComposer(modSession, room.Data, false, false));
     }
 
     public static void KickUser(GameClient modSession, int userId, string message, bool soft)

@@ -135,7 +135,7 @@ public class BattleBanzai
                         break;
                 }
             }
-            this.MovePuck(ball, user.GetClient(), goalX, goalY, user.Team);
+            this.MovePuck(ball, user.Client, goalX, goalY, user.Team);
             break;
         }
     }
@@ -163,7 +163,7 @@ public class BattleBanzai
         {
             roomItem.ExtraData = "1";
             roomItem.Value = 0;
-            roomItem.Team = TeamType.NONE;
+            roomItem.Team = TeamType.None;
             roomItem.UpdateState();
         }
 
@@ -196,11 +196,11 @@ public class BattleBanzai
 
     private void EndGame(RoomUser roomUser, TeamType winningTeam)
     {
-        if (roomUser.Team == winningTeam && winningTeam != TeamType.NONE)
+        if (roomUser.Team == winningTeam && winningTeam != TeamType.None)
         {
             this._roomInstance.SendPacket(new ActionComposer(roomUser.VirtualId, 1));
         }
-        else if (roomUser.Team != TeamType.NONE)
+        else if (roomUser.Team != TeamType.None)
         {
             var firstTile = this.GetFirstTile(roomUser.X, roomUser.Y);
 
@@ -214,13 +214,13 @@ public class BattleBanzai
                 Gamemap.TeleportToItem(roomUser, this._roomInstance.GetGameItemHandler().GetExitTeleport());
             }
 
-            var managerForBanzai = roomUser.GetClient().GetUser().CurrentRoom.GetTeamManager();
+            var managerForBanzai = roomUser.Client.GetUser().CurrentRoom.GetTeamManager();
             managerForBanzai.OnUserLeave(roomUser);
             this._roomInstance.GetGameManager().UpdateGatesTeamCounts();
             roomUser.ApplyEffect(0);
-            roomUser.Team = TeamType.NONE;
+            roomUser.Team = TeamType.None;
 
-            roomUser.GetClient().SendPacket(new IsPlayingComposer(false));
+            roomUser.Client.SendPacket(new IsPlayingComposer(false));
         }
     }
 
@@ -301,7 +301,7 @@ public class BattleBanzai
 
     public void HandleBanzaiTiles(Point coord, TeamType team, RoomUser user)
     {
-        if (!this._banzaiStarted || team == TeamType.NONE || this.BanzaiTiles.Count == 0)
+        if (!this._banzaiStarted || team == TeamType.None || this.BanzaiTiles.Count == 0)
         {
             return;
         }
@@ -330,7 +330,7 @@ public class BattleBanzai
 
     private void HandleMaxBanzaiTiles(Point coord, TeamType team, RoomUser user, TeamType oldteam)
     {
-        if (team == TeamType.NONE)
+        if (team == TeamType.None)
         {
             return;
         }

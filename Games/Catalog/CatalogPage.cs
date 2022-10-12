@@ -94,11 +94,11 @@ public class CatalogPage
 
     public string GetCaptionByLangue(Language langue)
     {
-        if (langue == Language.ANGLAIS)
+        if (langue == Language.English)
         {
             return this.CaptionEn;
         }
-        else if (langue == Language.PORTUGAIS)
+        else if (langue == Language.Portuguese)
         {
             return this.CaptionBr;
         }
@@ -108,11 +108,11 @@ public class CatalogPage
 
     public List<string> GetPageStrings2ByLangue(Language langue)
     {
-        if (langue == Language.ANGLAIS)
+        if (langue == Language.English)
         {
             return this._pageStrings2En;
         }
-        else if (langue == Language.PORTUGAIS)
+        else if (langue == Language.Portuguese)
         {
             return this._pageStrings2Br;
         }

@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Rooms.Jankens;
+namespace WibboEmulator.Games.Rooms.Jankens;
 
 public class Janken
 {
@@ -16,8 +16,8 @@ public class Janken
         this.UserOne = userid;
         this.UserTwo = dueluserid;
 
-        this.ChoiceOne = JankenType.NONE;
-        this.ChoiceTwo = JankenType.NONE;
+        this.ChoiceOne = JankenType.None;
+        this.ChoiceTwo = JankenType.None;
 
         this.Started = false;
         this.Timer = 0;

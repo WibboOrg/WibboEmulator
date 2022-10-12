@@ -9,21 +9,21 @@ internal class KickAll : IChatCommand
         var roomUserList = new List<RoomUser>();
         foreach (var user in room.GetRoomUserManager().GetUserList().ToList())
         {
-            if (!user.IsBot && !user.GetClient().GetUser().HasPermission("perm_no_kick") && session.GetUser().Id != user.GetClient().GetUser().Id)
+            if (!user.IsBot && !user.Client.GetUser().HasPermission("perm_no_kick") && session.GetUser().Id != user.Client.GetUser().Id)
             {
-                user.GetClient().SendNotification("Tu as été exclu de cet appart.");
+                user.Client.SendNotification("Tu as été exclu de cet appart.");
 
                 roomUserList.Add(user);
             }
         }
         foreach (var user in roomUserList)
         {
-            if (user == null || user.GetClient() == null)
+            if (user == null || user.Client == null)
             {
                 continue;
             }
 
-            room.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, false);
+            room.GetRoomUserManager().RemoveUserFromRoom(user.Client, true, false);
         }
     }
 }

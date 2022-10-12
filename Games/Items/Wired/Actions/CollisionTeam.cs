@@ -8,7 +8,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 
 public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
 {
-    public CollisionTeam(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.IntParams.Add((int)TeamType.RED);
+    public CollisionTeam(Item item, Room room) : base(item, room, (int)WiredActionType.JOIN_TEAM) => this.IntParams.Add((int)TeamType.Red);
 
     public override bool OnCycle(RoomUser user, Item item)
     {
@@ -25,19 +25,19 @@ public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
 
         var team = (TeamType)((this.IntParams.Count > 0) ? this.IntParams[0] : 0);
 
-        if (team == TeamType.BLUE)
+        if (team == TeamType.Blue)
         {
             listTeam.AddRange(managerForBanzai.BlueTeam);
         }
-        else if (team == TeamType.GREEN)
+        else if (team == TeamType.Green)
         {
             listTeam.AddRange(managerForBanzai.GreenTeam);
         }
-        else if (team == TeamType.RED)
+        else if (team == TeamType.Red)
         {
             listTeam.AddRange(managerForBanzai.RedTeam);
         }
-        else if (team == TeamType.YELLOW)
+        else if (team == TeamType.Yellow)
         {
             listTeam.AddRange(managerForBanzai.YellowTeam);
         }

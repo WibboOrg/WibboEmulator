@@ -71,7 +71,7 @@ public class InteractorLoveLock : FurniInteractor
                     return;
                 }
 
-                if (userOne.GetClient() == null || userTwo.GetClient() == null)
+                if (userOne.Client == null || userTwo.Client == null)
                 {
                     return;
                 }
@@ -79,11 +79,11 @@ public class InteractorLoveLock : FurniInteractor
                 userOne.CanWalk = false;
                 userTwo.CanWalk = false;
 
-                item.InteractingUser = userOne.GetClient().GetUser().Id;
-                item.InteractingUser2 = userTwo.GetClient().GetUser().Id;
+                item.InteractingUser = userOne.Client.GetUser().Id;
+                item.InteractingUser2 = userTwo.Client.GetUser().Id;
 
-                userOne.GetClient().SendPacket(new LoveLockDialogueComposer(item.Id));
-                userTwo.GetClient().SendPacket(new LoveLockDialogueComposer(item.Id));
+                userOne.Client.SendPacket(new LoveLockDialogueComposer(item.Id));
+                userTwo.Client.SendPacket(new LoveLockDialogueComposer(item.Id));
             }
         }
         else

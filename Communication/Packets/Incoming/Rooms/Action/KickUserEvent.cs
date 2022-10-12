@@ -17,7 +17,7 @@ internal class KickUserEvent : IPacketEvent
             return;
         }
 
-        if (room.RoomData.WhoCanKick != 2 && (room.RoomData.WhoCanKick != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true) && session.GetUser().Rank < 6)
+        if (room.Data.WhoCanKick != 2 && (room.Data.WhoCanKick != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true) && session.GetUser().Rank < 6)
         {
             return;
         }
@@ -25,11 +25,11 @@ internal class KickUserEvent : IPacketEvent
         var pId = packet.PopInt();
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(pId);
-        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.GetClient(), true) || roomUserByUserId.GetClient().GetUser().HasPermission("perm_mod") || roomUserByUserId.GetClient().GetUser().HasPermission("perm_no_kick"))
+        if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.GetUser().HasPermission("perm_mod") || roomUserByUserId.Client.GetUser().HasPermission("perm_no_kick"))
         {
             return;
         }
 
-        room.GetRoomUserManager().RemoveUserFromRoom(roomUserByUserId.GetClient(), true, true);
+        room.GetRoomUserManager().RemoveUserFromRoom(roomUserByUserId.Client, true, true);
     }
 }

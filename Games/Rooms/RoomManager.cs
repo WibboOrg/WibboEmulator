@@ -78,7 +78,7 @@ public class RoomManager
     {
         if (this.TryGetRoom(roomId, out var room))
         {
-            return room.RoomData;
+            return room.Data;
         }
 
         if (this.TryGetRoomData(roomId, out var roomData))
@@ -157,7 +157,7 @@ public class RoomManager
     {
         if (this.TryGetRoom(roomID, out var room))
         {
-            return room.RoomData;
+            return room.Data;
         }
         else
         {
@@ -211,14 +211,14 @@ public class RoomManager
     {
         var instanceMatches =
             (from RoomInstance in this._rooms.ToList()
-             where RoomInstance.Value.RoomData.UsersNow >= 0 &&
-             RoomInstance.Value.RoomData.State != 3 &&
-             RoomInstance.Value.RoomData.Group != null &&
-             (RoomInstance.Value.RoomData.OwnerName.StartsWith(query) ||
-             RoomInstance.Value.RoomData.Tags.Contains(query) ||
-             RoomInstance.Value.RoomData.Name.Contains(query))
-             orderby RoomInstance.Value.RoomData.UsersNow descending
-             select RoomInstance.Value.RoomData).Take(50);
+             where RoomInstance.Value.Data.UsersNow >= 0 &&
+             RoomInstance.Value.Data.Access != RoomAccess.Invisible &&
+             RoomInstance.Value.Data.Group != null &&
+             (RoomInstance.Value.Data.OwnerName.StartsWith(query) ||
+             RoomInstance.Value.Data.Tags.Contains(query) ||
+             RoomInstance.Value.Data.Name.Contains(query))
+             orderby RoomInstance.Value.Data.UsersNow descending
+             select RoomInstance.Value.Data).Take(50);
         return instanceMatches.ToList();
     }
 
@@ -226,25 +226,25 @@ public class RoomManager
     {
         var instanceMatches =
             (from RoomInstance in this._rooms.ToList()
-             where RoomInstance.Value.RoomData.UsersNow >= 0 &&
-             RoomInstance.Value.RoomData.State != 3 &&
-             RoomInstance.Value.RoomData.Tags.Contains(query)
-             orderby RoomInstance.Value.RoomData.UsersNow descending
-             select RoomInstance.Value.RoomData).Take(50);
+             where RoomInstance.Value.Data.UsersNow >= 0 &&
+             RoomInstance.Value.Data.Access != RoomAccess.Invisible &&
+             RoomInstance.Value.Data.Tags.Contains(query)
+             orderby RoomInstance.Value.Data.UsersNow descending
+             select RoomInstance.Value.Data).Take(50);
         return instanceMatches.ToList();
     }
 
-    public List<RoomData> GetPopularRooms(int category, int amount = 50, Language langue = Language.FRANCAIS)
+    public List<RoomData> GetPopularRooms(int category, int amount = 50, Language langue = Language.French)
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
-             where RoomInstance.Value != null && RoomInstance.Value.RoomData != null &&
-             RoomInstance.Value.RoomData.UsersNow > 0 &&
-             (category == -1 || RoomInstance.Value.RoomData.Category == category) &&
-             RoomInstance.Value.RoomData.State != 3 && RoomInstance.Value.RoomData.Langue == langue
-             orderby RoomInstance.Value.RoomData.Score descending
-             orderby RoomInstance.Value.RoomData.UsersNow descending
-             select RoomInstance.Value.RoomData).Take(amount);
+             where RoomInstance.Value != null && RoomInstance.Value.Data != null &&
+             RoomInstance.Value.Data.UsersNow > 0 &&
+             (category == -1 || RoomInstance.Value.Data.Category == category) &&
+             RoomInstance.Value.Data.Access != RoomAccess.Invisible && RoomInstance.Value.Data.Langue == langue
+             orderby RoomInstance.Value.Data.Score descending
+             orderby RoomInstance.Value.Data.UsersNow descending
+             select RoomInstance.Value.Data).Take(amount);
         return rooms.ToList();
     }
 
@@ -252,13 +252,13 @@ public class RoomManager
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
-             where RoomInstance.Value.RoomData.UsersNow >= 0 &&
-             RoomInstance.Value.RoomData.Score >= 0 &&
-             RoomInstance.Value.RoomData.State != 3 &&
-             RoomInstance.Value.RoomData.Id != currentRoomId
-             orderby RoomInstance.Value.RoomData.Score descending
-             orderby RoomInstance.Value.RoomData.UsersNow descending
-             select RoomInstance.Value.RoomData).Take(amount);
+             where RoomInstance.Value.Data.UsersNow >= 0 &&
+             RoomInstance.Value.Data.Score >= 0 &&
+             RoomInstance.Value.Data.Access != RoomAccess.Invisible &&
+             RoomInstance.Value.Data.Id != currentRoomId
+             orderby RoomInstance.Value.Data.Score descending
+             orderby RoomInstance.Value.Data.UsersNow descending
+             select RoomInstance.Value.Data).Take(amount);
         return rooms.ToList();
     }
 
@@ -266,9 +266,9 @@ public class RoomManager
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
-             where RoomInstance.Value.RoomData.State != 3
-             orderby RoomInstance.Value.RoomData.Score descending
-             select RoomInstance.Value.RoomData).Take(amount);
+             where RoomInstance.Value.Data.Access != RoomAccess.Invisible
+             orderby RoomInstance.Value.Data.Score descending
+             select RoomInstance.Value.Data).Take(amount);
         return rooms.ToList();
     }
 
@@ -276,11 +276,11 @@ public class RoomManager
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
-             where RoomInstance.Value.RoomData.Category == category &&
-             RoomInstance.Value.RoomData.UsersNow > 0 &&
-             RoomInstance.Value.RoomData.State != 3
-             orderby RoomInstance.Value.RoomData.UsersNow descending
-             select RoomInstance.Value.RoomData).Take(amount);
+             where RoomInstance.Value.Data.Category == category &&
+             RoomInstance.Value.Data.UsersNow > 0 &&
+             RoomInstance.Value.Data.Access != RoomAccess.Invisible
+             orderby RoomInstance.Value.Data.UsersNow descending
+             select RoomInstance.Value.Data).Take(amount);
         return rooms.ToList();
     }
 
@@ -288,11 +288,11 @@ public class RoomManager
     {
         var tags =
             (from RoomInstance in this._rooms.ToList()
-             where RoomInstance.Value.RoomData.UsersNow >= 0 &&
-             RoomInstance.Value.RoomData.State != 3
-             orderby RoomInstance.Value.RoomData.UsersNow descending
-             orderby RoomInstance.Value.RoomData.Score descending
-             select RoomInstance.Value.RoomData.Tags).Take(50);
+             where RoomInstance.Value.Data.UsersNow >= 0 &&
+             RoomInstance.Value.Data.Access != RoomAccess.Invisible
+             orderby RoomInstance.Value.Data.UsersNow descending
+             orderby RoomInstance.Value.Data.Score descending
+             select RoomInstance.Value.Data.Tags).Take(50);
 
         var tagValues = new Dictionary<string, int>();
 
@@ -322,10 +322,10 @@ public class RoomManager
     {
         var rooms =
             (from RoomInstance in this._rooms.ToList()
-             where RoomInstance.Value.RoomData.Group != null &&
-             RoomInstance.Value.RoomData.State != 3
-             orderby RoomInstance.Value.RoomData.Score descending
-             select RoomInstance.Value.RoomData).Take(amount);
+             where RoomInstance.Value.Data.Group != null &&
+             RoomInstance.Value.Data.Access != RoomAccess.Invisible
+             orderby RoomInstance.Value.Data.Score descending
+             select RoomInstance.Value.Data).Take(amount);
         return rooms.ToList();
     }
 
@@ -353,7 +353,7 @@ public class RoomManager
                 else
                 {
                     room.IsLagging++;
-                    if (room.IsLagging > 5)
+                    if (room.IsLagging > 20)
                     {
                         ExceptionLogger.LogThreadException("Room lagging", "Room cycle task for room " + room.Id);
 

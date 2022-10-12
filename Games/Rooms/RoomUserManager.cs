@@ -21,6 +21,7 @@ using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Games.Rooms.Map;
 using WibboEmulator.Games.Rooms.Map.Movement;
 using WibboEmulator.Games.Rooms.PathFinding;
+using WibboEmulator.Utilities;
 
 public class RoomUserManager
 {
@@ -53,7 +54,7 @@ public class RoomUserManager
 
     public void UserEnter(RoomUser thisUser) => this.OnUserEnter?.Invoke(thisUser, new());
 
-    public int GetRoomUserCount() => this._room.RoomData.UsersNow;
+    public int GetRoomUserCount() => this._room.Data.UsersNow;
 
     public RoomUser DeploySuperBot(RoomBot bot)
     {
@@ -259,10 +260,10 @@ public class RoomUserManager
             return;
         }
 
-        var pByte = this._room.GetGameMap().EffectMap[x, y];
-        if (pByte > 0)
+        var effectId = (int)this._room.GetGameMap().EffectMap[x, y];
+        if (effectId > 0)
         {
-            var itemEffectType = ByteToItemEffectType.Parse(pByte);
+            var itemEffectType = effectId.ToEnum(ItemEffectType.None);
             if (itemEffectType == user.CurrentItemEffect)
             {
                 return;
@@ -270,31 +271,31 @@ public class RoomUserManager
 
             switch (itemEffectType)
             {
-                case ItemEffectType.NONE:
+                case ItemEffectType.None:
                     user.ApplyEffect(0);
                     user.CurrentItemEffect = itemEffectType;
                     break;
-                case ItemEffectType.SWIM:
+                case ItemEffectType.Swim:
                     user.ApplyEffect(29);
-                    if (user.GetClient() != null)
+                    if (user.Client != null)
                     {
-                        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.GetClient(), QuestType.EXPLORE_FIND_ITEM, 1948);
+                        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.EXPLORE_FIND_ITEM, 1948);
                     }
 
                     user.CurrentItemEffect = itemEffectType;
                     break;
-                case ItemEffectType.SWIMLOW:
+                case ItemEffectType.SwimLow:
                     user.ApplyEffect(30);
                     user.CurrentItemEffect = itemEffectType;
                     break;
-                case ItemEffectType.SWIMHALLOWEEN:
+                case ItemEffectType.SwimHalloween:
                     user.ApplyEffect(37);
                     user.CurrentItemEffect = itemEffectType;
                     break;
-                case ItemEffectType.ICESKATES:
-                    if (user.GetClient() != null)
+                case ItemEffectType.IceSkates:
+                    if (user.Client != null)
                     {
-                        if (user.GetClient().GetUser().Gender == "M")
+                        if (user.Client.GetUser().Gender == "M")
                         {
                             user.ApplyEffect(38);
                         }
@@ -308,17 +309,17 @@ public class RoomUserManager
                         user.ApplyEffect(38);
                     }
 
-                    user.CurrentItemEffect = ItemEffectType.ICESKATES;
-                    if (user.GetClient() != null)
+                    user.CurrentItemEffect = ItemEffectType.IceSkates;
+                    if (user.Client != null)
                     {
-                        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.GetClient(), QuestType.EXPLORE_FIND_ITEM, 1413);
+                        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.EXPLORE_FIND_ITEM, 1413);
                     }
 
                     break;
-                case ItemEffectType.NORMALSKATES:
-                    if (user.GetClient() != null)
+                case ItemEffectType.NormalSkates:
+                    if (user.Client != null)
                     {
-                        if (user.GetClient().GetUser().Gender == "M")
+                        if (user.Client.GetUser().Gender == "M")
                         {
                             user.ApplyEffect(55);
                         }
@@ -333,21 +334,21 @@ public class RoomUserManager
                     }
 
                     user.CurrentItemEffect = itemEffectType;
-                    if (user.GetClient() != null)
+                    if (user.Client != null)
                     {
-                        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.GetClient(), QuestType.EXPLORE_FIND_ITEM, 2199);
+                        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.EXPLORE_FIND_ITEM, 2199);
                     }
 
                     break;
-                case ItemEffectType.TRAMPOLINE:
+                case ItemEffectType.Trampoline:
                     user.ApplyEffect(193);
                     user.CurrentItemEffect = itemEffectType;
                     break;
-                case ItemEffectType.TREADMILL:
+                case ItemEffectType.Treadmill:
                     user.ApplyEffect(194);
                     user.CurrentItemEffect = itemEffectType;
                     break;
-                case ItemEffectType.CROSSTRAINER:
+                case ItemEffectType.Crosstrainer:
                     user.ApplyEffect(195);
                     user.CurrentItemEffect = itemEffectType;
                     break;
@@ -356,13 +357,13 @@ public class RoomUserManager
         }
         else
         {
-            if (user.CurrentItemEffect == ItemEffectType.NONE || pByte != 0)
+            if (user.CurrentItemEffect == ItemEffectType.None || effectId != 0)
             {
                 return;
             }
 
             user.ApplyEffect(0);
-            user.CurrentItemEffect = ItemEffectType.NONE;
+            user.CurrentItemEffect = ItemEffectType.None;
         }
     }
 
@@ -431,7 +432,7 @@ public class RoomUserManager
 
         if (session.GetUser().IsTeleporting)
         {
-            var roomItem = this._room.GetRoomItemHandler().GetItem(user.GetClient().GetUser().TeleporterId);
+            var roomItem = this._room.GetRoomItemHandler().GetItem(user.Client.GetUser().TeleporterId);
             if (roomItem != null)
             {
                 Gamemap.TeleportToItem(user, roomItem);
@@ -441,11 +442,11 @@ public class RoomUserManager
             }
         }
 
-        if (user.GetClient() != null && user.GetClient().GetUser() != null)
+        if (user.Client != null && user.Client.GetUser() != null)
         {
-            user.GetClient().GetUser().IsTeleporting = false;
-            user.GetClient().GetUser().TeleporterId = 0;
-            user.GetClient().GetUser().TeleportingRoomID = 0;
+            user.Client.GetUser().IsTeleporting = false;
+            user.Client.GetUser().TeleporterId = 0;
+            user.Client.GetUser().TeleportingRoomID = 0;
         }
 
         if (!user.IsSpectator)
@@ -460,7 +461,7 @@ public class RoomUserManager
             {
                 foreach (var staffUser in roomUserByRank)
                 {
-                    if (staffUser != null && staffUser.GetClient() != null && staffUser.GetClient().GetUser() != null && staffUser.GetClient().GetUser().HasPermission("perm_show_invisible"))
+                    if (staffUser != null && staffUser.Client != null && staffUser.Client.GetUser() != null && staffUser.Client.GetUser().HasPermission("perm_show_invisible"))
                     {
                         staffUser.SendWhisperChat(user.GetUsername() + " est entré dans l'appart en mode invisible !", true);
                     }
@@ -548,14 +549,14 @@ public class RoomUserManager
             bot.BotAI.OnUserEnterRoom(user);
         }
 
-        if (!user.IsBot && this._room.RoomData.OwnerName != user.GetClient().GetUser().Username)
+        if (!user.IsBot && user.Client != null && this._room.Data.OwnerName != user.Client.GetUser().Username)
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.GetClient(), QuestType.SOCIAL_VISIT, 0);
+            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.SOCIAL_VISIT, 0);
         }
 
         if (!user.IsBot)
         {
-            if (session.GetUser().RolePlayId > 0 && this._room.RoomData.OwnerId != session.GetUser().RolePlayId)
+            if (session.GetUser().RolePlayId > 0 && this._room.Data.OwnerId != session.GetUser().RolePlayId)
             {
                 var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(session.GetUser().RolePlayId);
                 if (rpManager != null)
@@ -569,9 +570,9 @@ public class RoomUserManager
                 session.GetUser().RolePlayId = 0;
             }
 
-            if (this._room.IsRoleplay && this._room.RoomData.OwnerId != session.GetUser().RolePlayId)
+            if (this._room.IsRoleplay && this._room.Data.OwnerId != session.GetUser().RolePlayId)
             {
-                var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.RoomData.OwnerId);
+                var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.Data.OwnerId);
                 if (rpManager != null)
                 {
                     var rp = rpManager.GetPlayer(session.GetUser().Id);
@@ -581,7 +582,7 @@ public class RoomUserManager
                     }
                 }
 
-                session.GetUser().RolePlayId = this._room.RoomData.OwnerId;
+                session.GetUser().RolePlayId = this._room.Data.OwnerId;
             }
         }
 
@@ -625,7 +626,7 @@ public class RoomUserManager
                 _ = this._usersRank.Remove(user.UserId);
             }
 
-            if (user.Team != TeamType.NONE)
+            if (user.Team != TeamType.None)
             {
                 this._room.GetTeamManager().OnUserLeave(user);
                 this._room.GetGameManager().UpdateGatesTeamCounts();
@@ -672,7 +673,7 @@ public class RoomUserManager
                 {
                     foreach (var staffUser in roomUserByRank)
                     {
-                        if (staffUser != null && staffUser.GetClient() != null && staffUser.GetClient().GetUser() != null && staffUser.GetClient().GetUser().HasPermission("perm_show_invisible"))
+                        if (staffUser != null && staffUser.Client != null && staffUser.Client.GetUser() != null && staffUser.Client.GetUser().HasPermission("perm_show_invisible"))
                         {
                             staffUser.SendWhisperChat(user.GetUsername() + " était en mode invisible. Il vient de partir de l'appartement.", true);
                         }
@@ -712,7 +713,7 @@ public class RoomUserManager
 
     public void UpdateUserCount(int count)
     {
-        if (this._room.RoomData.UsersNow == count)
+        if (this._room.Data.UsersNow == count)
         {
             return;
         }
@@ -722,7 +723,7 @@ public class RoomUserManager
             RoomDao.UpdateUsersNow(dbClient, this._room.Id, count);
         }
 
-        this._room.RoomData.UsersNow = count;
+        this._room.Data.UsersNow = count;
     }
 
     public RoomUser GetRoomUserByVirtualId(int virtualId)
@@ -735,11 +736,11 @@ public class RoomUserManager
         return user;
     }
 
-    public RoomUser GetRoomUserByUserId(int pId)
+    public RoomUser GetRoomUserByUserId(int id)
     {
-        if (this._usersByUserID.ContainsKey(pId))
+        if (this._usersByUserID.ContainsKey(id))
         {
-            return this._usersByUserID[pId];
+            return this._usersByUserID[id];
         }
         else
         {
@@ -756,27 +757,27 @@ public class RoomUserManager
                 continue;
             }
 
-            if (user.GetClient() == null)
+            if (user.Client == null)
             {
                 continue;
             }
 
-            if (user.GetClient().GetUser() == null)
+            if (user.Client.GetUser() == null)
             {
                 continue;
             }
 
-            if (user.GetClient().GetConnection() == null)
+            if (user.Client.GetConnection() == null)
             {
                 continue;
             }
 
-            if (user.GetClient().MachineId != machineId)
+            if (user.Client.MachineId != machineId)
             {
                 continue;
             }
 
-            if (user.GetClient().GetUser().IP != webIP)
+            if (user.Client.GetUser().IP != webIP)
             {
                 continue;
             }
@@ -917,13 +918,13 @@ public class RoomUserManager
         }
     }
 
-    private bool IsValid(RoomUser user) => user.IsBot || (user.GetClient() != null && user.GetClient().GetUser() != null && user.GetClient().GetUser().CurrentRoomId == this._room.Id);
+    private bool IsValid(RoomUser user) => user.IsBot || (user.Client != null && user.Client.GetUser() != null && user.Client.GetUser().CurrentRoomId == this._room.Id);
 
     public bool TryGetPet(int petId, out RoomUser pet) => this._pets.TryGetValue(petId, out pet);
 
     public bool TryGetBot(int botId, out RoomUser bot) => this._bots.TryGetValue(botId, out bot);
 
-    public void UpdateUserStatus(RoomUser user, bool cyclegameitems)
+    public void UpdateUserStatus(RoomUser user, bool cycleGameItems)
     {
         if (user == null)
         {
@@ -966,7 +967,7 @@ public class RoomUserManager
                 continue;
             }
 
-            if (cyclegameitems)
+            if (cycleGameItems)
             {
                 if (roomItem.EffectId != 0 && !user.IsBot)
                 {
@@ -1014,7 +1015,7 @@ public class RoomUserManager
                     roomItem.UpdateState(false, true);
                     break;
                 case InteractionType.ARROW:
-                    if (!cyclegameitems || user.IsBot)
+                    if (!cycleGameItems || user.IsBot || user.Client == null)
                     {
                         break;
                     }
@@ -1025,20 +1026,20 @@ public class RoomUserManager
                     }
 
                     user.CanWalk = true;
-                    roomItem.InteractingUser = user.GetClient().GetUser().Id;
+                    roomItem.InteractingUser = user.Client.GetUser().Id;
                     roomItem.ReqUpdate(2);
                     break;
                 case InteractionType.BANZAIGATEBLUE:
                 case InteractionType.BANZAIGATERED:
                 case InteractionType.BANZAIGATEYELLOW:
                 case InteractionType.BANZAIGATEGREEN:
-                    if (cyclegameitems && !user.IsBot)
+                    if (cycleGameItems && !user.IsBot)
                     {
                         var effectId = (int)roomItem.Team + 32;
                         var managerForBanzai = this._room.GetTeamManager();
                         if (user.Team != roomItem.Team)
                         {
-                            if (user.Team != TeamType.NONE)
+                            if (user.Team != TeamType.None)
                             {
                                 managerForBanzai.OnUserLeave(user);
                             }
@@ -1052,9 +1053,9 @@ public class RoomUserManager
                                 user.ApplyEffect(effectId);
                             }
 
-                            if (user.GetClient() != null)
+                            if (user.Client != null)
                             {
-                                user.GetClient().SendPacket(new IsPlayingComposer(true));
+                                user.Client.SendPacket(new IsPlayingComposer(true));
                             }
                         }
                         else
@@ -1066,30 +1067,30 @@ public class RoomUserManager
                                 user.ApplyEffect(0);
                             }
 
-                            if (user.GetClient() != null)
+                            if (user.Client != null)
                             {
-                                user.GetClient().SendPacket(new IsPlayingComposer(false));
+                                user.Client.SendPacket(new IsPlayingComposer(false));
                             }
 
-                            user.Team = TeamType.NONE;
+                            user.Team = TeamType.None;
                             continue;
                         }
                     }
                     break;
                 case InteractionType.BANZAIBLO:
-                    if (cyclegameitems && user.Team != TeamType.NONE && !user.IsBot)
+                    if (cycleGameItems && user.Team != TeamType.None && !user.IsBot)
                     {
                         this._room.GetGameItemHandler().OnWalkableBanzaiBlo(user, roomItem);
                     }
                     break;
                 case InteractionType.BANZAIBLOB:
-                    if (cyclegameitems && user.Team != TeamType.NONE && !user.IsBot)
+                    if (cycleGameItems && user.Team != TeamType.None && !user.IsBot)
                     {
                         this._room.GetGameItemHandler().OnWalkableBanzaiBlob(user, roomItem);
                     }
                     break;
                 case InteractionType.BANZAITELE:
-                    if (cyclegameitems)
+                    if (cycleGameItems)
                     {
                         this._room.GetGameItemHandler().OnTeleportRoomUserEnter(user, roomItem);
                     }
@@ -1099,13 +1100,13 @@ public class RoomUserManager
                 case InteractionType.FREEZEREDGATE:
                 case InteractionType.FREEZEGREENGATE:
                 case InteractionType.FREEZEBLUEGATE:
-                    if (cyclegameitems && !user.IsBot)
+                    if (cycleGameItems && !user.IsBot)
                     {
                         var effectId = (int)roomItem.Team + 39;
                         var managerForFreeze = this._room.GetTeamManager();
                         if (user.Team != roomItem.Team)
                         {
-                            if (user.Team != TeamType.NONE)
+                            if (user.Team != TeamType.None)
                             {
                                 managerForFreeze.OnUserLeave(user);
                             }
@@ -1118,9 +1119,9 @@ public class RoomUserManager
                                 user.ApplyEffect(effectId);
                             }
 
-                            if (user.GetClient() != null)
+                            if (user.Client != null)
                             {
-                                user.GetClient().SendPacket(new IsPlayingComposer(true));
+                                user.Client.SendPacket(new IsPlayingComposer(true));
                             }
                         }
                         else
@@ -1132,30 +1133,30 @@ public class RoomUserManager
                                 user.ApplyEffect(0);
                             }
 
-                            if (user.GetClient() != null)
+                            if (user.Client != null)
                             {
-                                user.GetClient().SendPacket(new IsPlayingComposer(false));
+                                user.Client.SendPacket(new IsPlayingComposer(false));
                             }
 
-                            user.Team = TeamType.NONE;
+                            user.Team = TeamType.None;
                         }
                     }
                     break;
                 case InteractionType.FBGATE:
-                    if (cyclegameitems || string.IsNullOrEmpty(roomItem.ExtraData) || !roomItem.ExtraData.Contains(',') || user == null || user.IsBot || user.IsTransf || user.IsSpectator)
+                    if (cycleGameItems || string.IsNullOrEmpty(roomItem.ExtraData) || !roomItem.ExtraData.Contains(',') || user == null || user.IsBot || user.IsTransf || user.IsSpectator || user.Client == null)
                     {
                         break;
                     }
 
-                    if (user.GetClient().GetUser().LastMovFGate && user.GetClient().GetUser().BackupGender == user.GetClient().GetUser().Gender)
+                    if (user.Client.GetUser().LastMovFGate && user.Client.GetUser().BackupGender == user.Client.GetUser().Gender)
                     {
-                        user.GetClient().GetUser().LastMovFGate = false;
-                        user.GetClient().GetUser().Look = user.GetClient().GetUser().BackupLook;
+                        user.Client.GetUser().LastMovFGate = false;
+                        user.Client.GetUser().Look = user.Client.GetUser().BackupLook;
                     }
                     else
                     {
                         // mini Fix
-                        var gateLook = (user.GetClient().GetUser().Gender.ToUpper() == "M") ? roomItem.ExtraData.Split(',')[0] : roomItem.ExtraData.Split(',')[1];
+                        var gateLook = (user.Client.GetUser().Gender.ToUpper() == "M") ? roomItem.ExtraData.Split(',')[0] : roomItem.ExtraData.Split(',')[1];
                         if (gateLook == "")
                         {
                             break;
@@ -1174,7 +1175,7 @@ public class RoomUserManager
                         gateFullLook = gateFullLook[..^1];
 
                         // Generating New Look.
-                        var parts = user.GetClient().GetUser().Look.Split('.');
+                        var parts = user.Client.GetUser().Look.Split('.');
                         var newLook = "";
                         foreach (var part in parts)
                         {
@@ -1187,21 +1188,21 @@ public class RoomUserManager
                         }
                         newLook += gateFullLook;
 
-                        user.GetClient().GetUser().BackupLook = user.GetClient().GetUser().Look;
-                        user.GetClient().GetUser().BackupGender = user.GetClient().GetUser().Gender;
-                        user.GetClient().GetUser().Look = newLook;
-                        user.GetClient().GetUser().LastMovFGate = true;
+                        user.Client.GetUser().BackupLook = user.Client.GetUser().Look;
+                        user.Client.GetUser().BackupGender = user.Client.GetUser().Gender;
+                        user.Client.GetUser().Look = newLook;
+                        user.Client.GetUser().LastMovFGate = true;
                     }
 
-                    user.GetClient().SendPacket(new UserChangeComposer(user, true));
+                    user.Client.SendPacket(new UserChangeComposer(user, true));
 
-                    if (user.GetClient().GetUser().InRoom)
+                    if (user.Client.GetUser().InRoom)
                     {
                         this._room.SendPacket(new UserChangeComposer(user, false));
                     }
                     break;
                 case InteractionType.FREEZETILEBLOCK:
-                    if (!cyclegameitems)
+                    if (!cycleGameItems)
                     {
                         break;
                     }
@@ -1212,7 +1213,7 @@ public class RoomUserManager
                     break;
             }
         }
-        if (cyclegameitems)
+        if (cycleGameItems)
         {
             this._room.GetBanzai().HandleBanzaiTiles(user.Coordinate, user.Team, user);
         }
@@ -1265,14 +1266,7 @@ public class RoomUserManager
         {
             if (!this.IsValid(user))
             {
-                if (user.GetClient() != null && user.GetClient().GetUser() != null)
-                {
-                    this.RemoveUserFromRoom(user.GetClient(), false, false);
-                }
-                else
-                {
-                    this.RemoveRoomUser(user);
-                }
+                toRemove.Add(user);
             }
 
             if (user.IsDispose)
@@ -1287,7 +1281,7 @@ public class RoomUserManager
 
             if (this._room.IsRoleplay)
             {
-                var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.RoomData.OwnerId);
+                var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.Data.OwnerId);
                 if (rpManager != null)
                 {
                     if (user.IsBot)
@@ -1376,7 +1370,7 @@ public class RoomUserManager
                 user.MoveWithBall = false;
             }
 
-            if (user.IsWalking && !user.Freezed && !user.Freeze && !(this._room.FreezeRoom && user.GetClient() != null && user.GetClient().GetUser().Rank < 6))
+            if (user.IsWalking && !user.Freezed && !user.Freeze && !(this._room.FreezeRoom && user.Client != null && user.Client.GetUser().Rank < 6))
             {
                 this.CalculatePath(user);
 
@@ -1438,10 +1432,10 @@ public class RoomUserManager
     {
         var gameMap = this._room.GetGameMap();
 
-        var nextStep = Pathfinder.GetNextStep(user.X, user.Y, user.GoalX, user.GoalY, gameMap.GameMap, gameMap.ItemHeightMap, gameMap.UserOnMap, gameMap.SquareTaking, gameMap.Model.MapSizeX, gameMap.Model.MapSizeY, user.AllowOverride, gameMap.DiagonalEnabled, this._room.RoomData.AllowWalkthrough, gameMap.ObliqueDisable);
+        var nextStep = Pathfinder.GetNextStep(user.X, user.Y, user.GoalX, user.GoalY, gameMap.GameMap, gameMap.ItemHeightMap, gameMap.UserOnMap, gameMap.SquareTaking, gameMap.Model.MapSizeX, gameMap.Model.MapSizeY, user.AllowOverride, gameMap.DiagonalEnabled, this._room.Data.AllowWalkthrough, gameMap.ObliqueDisable);
         if (user.WalkSpeed)
         {
-            nextStep = Pathfinder.GetNextStep(nextStep.X, nextStep.Y, user.GoalX, user.GoalY, gameMap.GameMap, gameMap.ItemHeightMap, gameMap.UserOnMap, gameMap.SquareTaking, gameMap.Model.MapSizeX, gameMap.Model.MapSizeY, user.AllowOverride, gameMap.DiagonalEnabled, this._room.RoomData.AllowWalkthrough, gameMap.ObliqueDisable);
+            nextStep = Pathfinder.GetNextStep(nextStep.X, nextStep.Y, user.GoalX, user.GoalY, gameMap.GameMap, gameMap.ItemHeightMap, gameMap.UserOnMap, gameMap.SquareTaking, gameMap.Model.MapSizeX, gameMap.Model.MapSizeY, user.AllowOverride, gameMap.DiagonalEnabled, this._room.Data.AllowWalkthrough, gameMap.ObliqueDisable);
         }
 
         if (user.BreakWalkEnable && user.StopWalking)
@@ -1570,9 +1564,9 @@ public class RoomUserManager
                 {
                     rp.Money += itemTmp.Value;
                     rp.SendUpdate();
-                    if (user.GetClient() != null)
+                    if (user.Client != null)
                     {
-                        user.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.pickdollard", user.GetClient().Langue), itemTmp.Value));
+                        user.SendWhisperChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.pickdollard", user.Client.Langue), itemTmp.Value));
                     }
 
                     user.OnChat("*Récupère un objet au sol*");
@@ -1585,18 +1579,18 @@ public class RoomUserManager
                     {
                         if (!rpItem.AllowStack && rp.GetInventoryItem(rpItem.Id) != null)
                         {
-                            if (user.GetClient() != null)
+                            if (user.Client != null)
                             {
-                                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itemown", user.GetClient().Langue));
+                                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itemown", user.Client.Langue));
                             }
                         }
                         else
                         {
                             rp.AddInventoryItem(rpItem.Id);
 
-                            if (user.GetClient() != null)
+                            if (user.Client != null)
                             {
-                                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itempick", user.GetClient().Langue));
+                                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.itempick", user.Client.Langue));
                             }
                         }
                     }

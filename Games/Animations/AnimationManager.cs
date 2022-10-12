@@ -6,6 +6,7 @@ using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Moderation;
+using WibboEmulator.Games.Rooms;
 
 public class AnimationManager
 {
@@ -160,7 +161,7 @@ public class AnimationManager
                     var roomData = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(this._roomIdGame);
                     if (roomData != null)
                     {
-                        roomData.State = 1;
+                        roomData.Access = RoomAccess.Doorbell;
                     }
                 }
                 return;
@@ -209,7 +210,7 @@ public class AnimationManager
         this._notif = false;
         this._roomIdGame = roomId;
 
-        room.RoomData.State = 0;
+        room.Data.Access = RoomAccess.Open;
         room.CloseFullRoom = true;
 
         var alertMessage = "[center]" +
@@ -218,7 +219,7 @@ public class AnimationManager
             "[center]" +
             "🤖 [b][i][color=696969]Une nouvelle animation automatique débute ![/color][/i][/b] 🤖" +
             "[/center][br]" +
-            "➤ Rejoins-nous chez [color=696969][b]WibboGame[/b][/color] dans le jeu [color=696969][u][b]" + room.RoomData.Name + "[/b][/u][/color] pour une animation automatisée ![br]" +
+            "➤ Rejoins-nous chez [color=696969][b]WibboGame[/b][/color] dans le jeu [color=696969][u][b]" + room.Data.Name + "[/b][/u][/color] pour une animation automatisée ![br]" +
             "➤ Rejoins nous et tente de remporter des [b]RareBoxs[/b] ainsi qu'un [b]point au [u]TOP Gamer[/u][/b] ![br][br]" +
             "[center][img]https://cdn.wibbo.org/uploads/1659791208.png[/img]  - Jack et Daisy, [b][u][color=696969]Animateurs robotisés[/color][/u][/b] 🤖  -  [img]https://cdn.wibbo.org/uploads/1659791188.png[/img][/center]";
         var gameOwner = WibboEnvironment.GetSettings().GetData<string>("autogame.owner");

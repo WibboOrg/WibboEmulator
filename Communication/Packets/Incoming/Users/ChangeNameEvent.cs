@@ -74,16 +74,16 @@ internal class ChangeNameEvent : IPacketEvent
                 continue;
             }
 
-            roomOwner.RoomData.OwnerName = newUsername;
+            roomOwner.Data.OwnerName = newUsername;
 
             WibboEnvironment.GetGame().GetRoomManager().RoomDataRemove(roomId);
         }
 
         room.SendPacket(new UserNameChangeComposer(newUsername, roomUser.VirtualId));
 
-        if (session.GetUser().Id == room.RoomData.OwnerId)
+        if (session.GetUser().Id == room.Data.OwnerId)
         {
-            room.RoomData.OwnerName = newUsername;
+            room.Data.OwnerName = newUsername;
             room.SendPacket(new RoomInfoUpdatedComposer(room.Id));
         }
     }

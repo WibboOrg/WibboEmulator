@@ -12,12 +12,12 @@ internal class RoomRemoveSell : IChatCommand
             return;
         }
 
-        if (room.RoomData.SellPrice == 0)
+        if (room.Data.SellPrice == 0)
         {
             return;
         }
 
-        room.RoomData.SellPrice = 0;
+        room.Data.SellPrice = 0;
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {

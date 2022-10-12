@@ -6,24 +6,22 @@ using WibboEmulator.Games.Rooms.Map;
 
 public class RoomModelDynamic
 {
-    private RoomModel _staticModel;
-
     public int DoorX { get; set; }
     public int DoorY { get; set; }
     public double DoorZ { get; set; }
     public int DoorOrientation { get; set; }
     public string Heightmap { get; set; }
-
     public SquareStateType[,] SqState { get; set; }
     public short[,] SqFloorHeight { get; set; }
     public int MapSizeX { get; set; }
     public int MapSizeY { get; set; }
     public int WallHeight { get; set; }
 
-    private ServerPacket _serializedRelativeHeightmap;
     private bool _relativeSerialized;
-    private ServerPacket _serializedHeightmap;
     private bool _heightmapSerialized;
+    private ServerPacket _serializedRelativeHeightmap;
+    private ServerPacket _serializedHeightmap;
+    private RoomModel _staticModel;
 
     public RoomModelDynamic(RoomModel model)
     {
@@ -49,7 +47,7 @@ public class RoomModelDynamic
             {
                 if (index2 > this._staticModel.MapSizeX - 1 || index1 > this._staticModel.MapSizeY - 1)
                 {
-                    this.SqState[index2, index1] = SquareStateType.BLOCKED;
+                    this.SqState[index2, index1] = SquareStateType.Bloked;
                 }
                 else
                 {
@@ -102,7 +100,7 @@ public class RoomModelDynamic
                 {
                     _ = thatMessage.Append(Parse(Convert.ToInt16(this.DoorZ)));
                 }
-                else if (this.SqState[x, y] == SquareStateType.BLOCKED)
+                else if (this.SqState[x, y] == SquareStateType.Bloked)
                 {
                     _ = thatMessage.Append('x');
                 }
@@ -167,7 +165,7 @@ public class RoomModelDynamic
             {
                 if (index2 > this._staticModel.MapSizeX - 1 || index1 > this._staticModel.MapSizeY - 1)
                 {
-                    squareStateArray[index2, index1] = SquareStateType.BLOCKED;
+                    squareStateArray[index2, index1] = SquareStateType.Bloked;
                 }
                 else
                 {

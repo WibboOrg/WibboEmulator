@@ -221,28 +221,28 @@ public class Item : IEquatable<Item>
                 case InteractionType.BANZAISCOREGREEN:
                 case InteractionType.FREEZEGREENCOUNTER:
                 case InteractionType.FREEZEGREENGATE:
-                    this.Team = TeamType.GREEN;
+                    this.Team = TeamType.Green;
                     break;
                 case InteractionType.FOOTBALLCOUNTERYELLOW:
                 case InteractionType.BANZAIGATEYELLOW:
                 case InteractionType.BANZAISCOREYELLOW:
                 case InteractionType.FREEZEYELLOWCOUNTER:
                 case InteractionType.FREEZEYELLOWGATE:
-                    this.Team = TeamType.YELLOW;
+                    this.Team = TeamType.Yellow;
                     break;
                 case InteractionType.FOOTBALLCOUNTERBLUE:
                 case InteractionType.BANZAIGATEBLUE:
                 case InteractionType.BANZAISCOREBLUE:
                 case InteractionType.FREEZEBLUECOUNTER:
                 case InteractionType.FREEZEBLUEGATE:
-                    this.Team = TeamType.BLUE;
+                    this.Team = TeamType.Blue;
                     break;
                 case InteractionType.FOOTBALLCOUNTERRED:
                 case InteractionType.BANZAIGATERED:
                 case InteractionType.BANZAISCORERED:
                 case InteractionType.FREEZEREDCOUNTER:
                 case InteractionType.FREEZEREDGATE:
-                    this.Team = TeamType.RED;
+                    this.Team = TeamType.Red;
                     break;
                 case InteractionType.BANZAITELE:
                     this.ExtraData = "";
@@ -562,11 +562,11 @@ public class Item : IEquatable<Item>
 
         if (this.IsFloorItem)
         {
-            this.GetRoom().SendPacket(new ObjectUpdateComposer(this, this.GetRoom().RoomData.OwnerId));
+            this.GetRoom().SendPacket(new ObjectUpdateComposer(this, this.GetRoom().Data.OwnerId));
         }
         else
         {
-            this.GetRoom().SendPacket(new ItemUpdateComposer(this, this.GetRoom().RoomData.OwnerId));
+            this.GetRoom().SendPacket(new ItemUpdateComposer(this, this.GetRoom().Data.OwnerId));
         }
     }
 
@@ -582,28 +582,28 @@ public class Item : IEquatable<Item>
             case InteractionType.BANZAISCOREGREEN:
             case InteractionType.FREEZEGREENCOUNTER:
             case InteractionType.FREEZEGREENGATE:
-                this.Team = TeamType.GREEN;
+                this.Team = TeamType.Green;
                 break;
             case InteractionType.FOOTBALLCOUNTERYELLOW:
             case InteractionType.BANZAIGATEYELLOW:
             case InteractionType.BANZAISCOREYELLOW:
             case InteractionType.FREEZEYELLOWCOUNTER:
             case InteractionType.FREEZEYELLOWGATE:
-                this.Team = TeamType.YELLOW;
+                this.Team = TeamType.Yellow;
                 break;
             case InteractionType.FOOTBALLCOUNTERBLUE:
             case InteractionType.BANZAIGATEBLUE:
             case InteractionType.BANZAISCOREBLUE:
             case InteractionType.FREEZEBLUECOUNTER:
             case InteractionType.FREEZEBLUEGATE:
-                this.Team = TeamType.BLUE;
+                this.Team = TeamType.Blue;
                 break;
             case InteractionType.FOOTBALLCOUNTERRED:
             case InteractionType.BANZAIGATERED:
             case InteractionType.BANZAISCORERED:
             case InteractionType.FREEZEREDCOUNTER:
             case InteractionType.FREEZEREDGATE:
-                this.Team = TeamType.RED;
+                this.Team = TeamType.Red;
                 break;
             case InteractionType.BANZAITELE:
                 this.ExtraData = "";

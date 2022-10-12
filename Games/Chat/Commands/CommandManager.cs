@@ -161,11 +161,11 @@ public class CommandManager
         {
             if (chatCommand.UserGotAuthorization(client, room) && !notDoublons.Contains(chatCommand.Input))
             {
-                if (client.Langue == Language.ANGLAIS)
+                if (client.Langue == Language.English)
                 {
                     _ = stringBuilder.Append(":" + chatCommand.Input + " - " + chatCommand.DescriptionEn + "\r\r");
                 }
-                else if (client.Langue == Language.PORTUGAIS)
+                else if (client.Langue == Language.Portuguese)
                 {
                     _ = stringBuilder.Append(":" + chatCommand.Input + " - " + chatCommand.DescriptionBr + "\r\r");
                 }

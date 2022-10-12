@@ -374,15 +374,15 @@ public class User : IDisposable
             }
         }
 
-        if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.GetClient().GetUser().HasPermission("perm_enter_full_rooms") && !this.GetClient().GetUser().HasPermission("perm_enter_full_rooms"))
+        if (room.Data.UsersNow >= room.Data.UsersMax && !this.GetClient().GetUser().HasPermission("perm_enter_full_rooms") && !this.GetClient().GetUser().HasPermission("perm_enter_full_rooms"))
         {
             if (room.CloseFullRoom)
             {
-                room.RoomData.State = 1;
+                room.Data.Access = RoomAccess.Doorbell;
                 room.CloseFullRoom = false;
             }
 
-            if (this.GetClient().GetUser().Id != room.RoomData.OwnerId)
+            if (this.GetClient().GetUser().Id != room.Data.OwnerId)
             {
                 this.GetClient().SendPacket(new CantConnectComposer(1));
 
@@ -395,9 +395,9 @@ public class User : IDisposable
 
         if (!this.GetClient().GetUser().HasPermission("perm_access_apartments_all"))
         {
-            if (!(this.GetClient().GetUser().HasPermission("perm_access_apartments") && !ownerEnterNotAllowed.Contains(room.RoomData.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID == room.Id))
+            if (!(this.GetClient().GetUser().HasPermission("perm_access_apartments") && !ownerEnterNotAllowed.Contains(room.Data.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID == room.Id))
             {
-                if (room.RoomData.State == 1 && !overrideDoorbell && !room.CheckRights(this.GetClient()))
+                if (room.Data.Access == RoomAccess.Doorbell && !overrideDoorbell && !room.CheckRights(this.GetClient()))
                 {
                     if (room.UserCount == 0)
                     {
@@ -412,7 +412,7 @@ public class User : IDisposable
                     }
                     return;
                 }
-                else if (room.RoomData.State == 2 && password.ToLower() != room.RoomData.Password.ToLower())
+                else if (room.Data.Access == RoomAccess.Password && password.ToLower() != room.Data.Password.ToLower())
                 {
                     this.GetClient().SendPacket(new GenericErrorComposer(-100002));
                     this.GetClient().SendPacket(new CloseConnectionComposer());
@@ -421,7 +421,7 @@ public class User : IDisposable
             }
         }
 
-        if (room.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
+        if (room.Data.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
         {
             if (room.GetRoomUserManager().GetUserByTracker(this.IP, this.GetClient().MachineId) != null)
             {
@@ -455,20 +455,20 @@ public class User : IDisposable
             return false;
         }
 
-        session.SendPacket(new RoomReadyComposer(room.Id, room.RoomData.ModelName));
+        session.SendPacket(new RoomReadyComposer(room.Id, room.Data.ModelName));
 
-        if (room.RoomData.Wallpaper != "0.0")
+        if (room.Data.Wallpaper != "0.0")
         {
-            session.SendPacket(new RoomPropertyComposer("wallpaper", room.RoomData.Wallpaper));
+            session.SendPacket(new RoomPropertyComposer("wallpaper", room.Data.Wallpaper));
         }
 
-        if (room.RoomData.Floor != "0.0")
+        if (room.Data.Floor != "0.0")
         {
-            session.SendPacket(new RoomPropertyComposer("floor", room.RoomData.Floor));
+            session.SendPacket(new RoomPropertyComposer("floor", room.Data.Floor));
         }
 
-        session.SendPacket(new RoomPropertyComposer("landscape", room.RoomData.Landscape));
-        session.SendPacket(new RoomRatingComposer(room.RoomData.Score, !(session.GetUser().RatedRooms.Contains(room.Id) || room.RoomData.OwnerId == session.GetUser().Id)));
+        session.SendPacket(new RoomPropertyComposer("landscape", room.Data.Landscape));
+        session.SendPacket(new RoomRatingComposer(room.Data.Score, !(session.GetUser().RatedRooms.Contains(room.Id) || room.Data.OwnerId == session.GetUser().Id)));
 
         session.SendPacket(room.GetGameMap().Model.SerializeRelativeHeightmap());
         session.SendPacket(room.GetGameMap().Model.GetHeightmap());

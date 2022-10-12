@@ -12,23 +12,20 @@ using WibboEmulator.Games.Rooms.Utils;
 
 public class RoomUser : IEquatable<RoomUser>
 {
+    public GameClient Client { get; private set; }
     public int UserId { get; set; }
     public int VirtualId { get; set; }
     public int RoomId { get; set; }
     public int IdleTime { get; set; }
-
     public int X { get; set; }
     public int Y { get; set; }
     public double Z { get; set; }
     public int GoalX { get; set; }
     public int GoalY { get; set; }
-
     public bool SetStep { get; set; }
     public int SetX { get; set; }
     public int SetY { get; set; }
     public double SetZ { get; set; }
-
-    public int LastBubble { get; set; }
     public int CarryItemID { get; set; }
     public int CarryTimer { get; set; }
     public int RotHead { get; set; }
@@ -36,11 +33,7 @@ public class RoomUser : IEquatable<RoomUser>
     public bool CanWalk { get; set; }
     public bool AllowOverride { get; set; }
     public bool TeleportEnabled { get; set; }
-
     public bool AllowMoveToRoller { get; set; }
-
-    private GameClient _client;
-
     public RoomBot BotData { get; set; }
     public Pet PetData { get; set; }
     public BotAI BotAI { get; set; }
@@ -139,7 +132,7 @@ public class RoomUser : IEquatable<RoomUser>
 
     public bool IsDancing => this.DanceId >= 1;
 
-    public bool NeedsAutokick => !this.IsBot && (this.GetClient() == null || this.GetClient().GetUser() == null || (this.GetClient().GetUser().Rank < 2 && this.IdleTime >= 1200));
+    public bool NeedsAutokick => !this.IsBot && (this.Client == null || this.Client.GetUser() == null || (this.Client.GetUser().Rank < 2 && this.IdleTime >= 1200));
 
     public bool IsTrading => !this.IsBot && this.ContainStatus("trd");
 
@@ -154,7 +147,7 @@ public class RoomUser : IEquatable<RoomUser>
                 return null;
             }
 
-            var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(room.RoomData.OwnerId);
+            var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(room.Data.OwnerId);
             if (rpManager == null)
             {
                 return null;
@@ -187,13 +180,18 @@ public class RoomUser : IEquatable<RoomUser>
         this.Room = room;
         this.AllowOverride = false;
         this.CanWalk = true;
-        this.CurrentItemEffect = ItemEffectType.NONE;
+        this.CurrentItemEffect = ItemEffectType.None;
         this.BreakWalkEnable = false;
         this.AllowShoot = false;
         this.AllowBuyItems = new List<int>();
         this.IsDispose = false;
         this.AllowMoveTo = true;
         this.WhiperGroupUsers = new List<string>();
+
+        if (!this.IsBot)
+        {
+            this.Client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this.UserId);
+        }
     }
 
     public string GetUsername()
@@ -206,9 +204,9 @@ public class RoomUser : IEquatable<RoomUser>
         {
             return this.PetData.Name;
         }
-        else if (this.GetClient() != null && this.GetClient().GetUser() != null)
+        else if (this.Client != null && this.Client.GetUser() != null)
         {
-            return this.GetClient().GetUser().Username;
+            return this.Client.GetUser().Username;
         }
         else
         {
@@ -229,7 +227,7 @@ public class RoomUser : IEquatable<RoomUser>
                 return false;
             }
 
-            return this.GetUsername() == room.RoomData.OwnerName;
+            return this.GetUsername() == room.Data.OwnerName;
         }
     }
 
@@ -256,20 +254,20 @@ public class RoomUser : IEquatable<RoomUser>
         this.Statusses.Clear();
         this.IsDispose = true;
         this.Room = null;
-        this._client = null;
+        this.Client = null;
     }
 
-    public void SendWhisperChat(string message, bool info = true) => this.GetClient().SendPacket(new WhisperComposer(this.VirtualId, message, info ? 34 : 0));
+    public void SendWhisperChat(string message, bool info = true) => this.Client.SendPacket(new WhisperComposer(this.VirtualId, message, info ? 34 : 0));
 
     public void OnChatMe(string messageText, int color = 0, bool shout = false)
     {
         if (shout)
         {
-            this.GetClient().SendPacket(new ShoutComposer(this.VirtualId, messageText, color));
+            this.Client.SendPacket(new ShoutComposer(this.VirtualId, messageText, color));
         }
         else
         {
-            this.GetClient().SendPacket(new ChatComposer(this.VirtualId, messageText, color));
+            this.Client.SendPacket(new ChatComposer(this.VirtualId, messageText, color));
         }
     }
 
@@ -282,11 +280,11 @@ public class RoomUser : IEquatable<RoomUser>
 
         if (shout)
         {
-            room.SendPacketOnChat(new ShoutComposer(this.VirtualId, messageText, color), this, true, this.Team == TeamType.NONE && !this.IsBot);
+            room.SendPacketOnChat(new ShoutComposer(this.VirtualId, messageText, color), this, true, this.Team == TeamType.None && !this.IsBot);
         }
         else
         {
-            room.SendPacketOnChat(new ChatComposer(this.VirtualId, messageText, color), this, true, this.Team == TeamType.NONE && !this.IsBot);
+            room.SendPacketOnChat(new ChatComposer(this.VirtualId, messageText, color), this, true, this.Team == TeamType.None && !this.IsBot);
         }
     }
 
@@ -484,18 +482,6 @@ public class RoomUser : IEquatable<RoomUser>
 
             return true;
         }
-    }
-
-    public GameClient GetClient()
-    {
-        if (this.IsBot)
-        {
-            return null;
-        }
-
-        this._client ??= WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this.UserId);
-
-        return this._client;
     }
 
     public override bool Equals(object obj)

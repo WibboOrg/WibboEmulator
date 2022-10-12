@@ -11,19 +11,15 @@ public class Gamemap
 {
     private readonly Room _roomInstance;
     private readonly ConcurrentDictionary<Point, List<RoomUser>> _userMap;
+
     public bool DiagonalEnabled { get; set; }
     public bool ObliqueDisable { get; set; }
 
     public RoomModelDynamic Model { get; set; }
-
     public byte[,] EffectMap { get; private set; }
-
     public byte[,] GameMap { get; private set; }
-
     public double[,] ItemHeightMap { get; private set; }
-
     public byte[,] UserOnMap { get; private set; }
-
     public byte[,] SquareTaking { get; private set; }
     public ConcurrentDictionary<Point, List<Item>> CoordinatedItems { get; private set; }
 
@@ -33,13 +29,13 @@ public class Gamemap
         this.ObliqueDisable = true;
         this.DiagonalEnabled = true;
 
-        var mStaticModel = WibboEnvironment.GetGame().GetRoomManager().GetModel(room.RoomData.ModelName, room.Id);
-        if (mStaticModel == null)
+        var staticModel = WibboEnvironment.GetGame().GetRoomManager().GetModel(room.Data.ModelName, room.Id);
+        if (staticModel == null)
         {
             throw new ArgumentNullException("No modeldata found for roomID " + room.Id);
         }
 
-        this.Model = new RoomModelDynamic(mStaticModel);
+        this.Model = new RoomModelDynamic(staticModel);
 
         this.CoordinatedItems = new ConcurrentDictionary<Point, List<Item>>();
         this._userMap = new ConcurrentDictionary<Point, List<RoomUser>>();
@@ -142,7 +138,7 @@ public class Gamemap
             return true;
         }
 
-        return this._roomInstance.RoomData.AllowWalkthrough || this.SquareTaking[x, y] == 0;
+        return this._roomInstance.Data.AllowWalkthrough || this.SquareTaking[x, y] == 0;
     }
 
     public List<RoomUser> GetRoomUsers(Point coord)
@@ -198,7 +194,7 @@ public class Gamemap
         this.EffectMap[x, y] = 0;
         this.ItemHeightMap[x, y] = 0.0;
 
-        if (this.Model.SqState[x, y] == SquareStateType.OPEN)
+        if (this.Model.SqState[x, y] == SquareStateType.Open)
         {
             this.GameMap[x, y] = 1;
         }
@@ -275,7 +271,7 @@ public class Gamemap
                 this.GameMap[chr, line] = 0;
                 this.EffectMap[chr, line] = 0;
 
-                if (this.Model.SqState[chr, line] == SquareStateType.OPEN)
+                if (this.Model.SqState[chr, line] == SquareStateType.Open)
                 {
                     this.GameMap[chr, line] = 1;
                 }
@@ -480,7 +476,7 @@ public class Gamemap
             case InteractionType.BANZAIGATEGREEN:
             case InteractionType.FREEZEGREENCOUNTER:
             case InteractionType.FREEZEGREENGATE:
-                this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.GREEN);
+                this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.Green);
                 break;
             case InteractionType.FOOTBALLGOALYELLOW:
             case InteractionType.FOOTBALLCOUNTERYELLOW:
@@ -488,7 +484,7 @@ public class Gamemap
             case InteractionType.BANZAIGATEYELLOW:
             case InteractionType.FREEZEYELLOWCOUNTER:
             case InteractionType.FREEZEYELLOWGATE:
-                this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.YELLOW);
+                this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.Yellow);
                 break;
             case InteractionType.footballgoalblue:
             case InteractionType.FOOTBALLCOUNTERBLUE:
@@ -496,7 +492,7 @@ public class Gamemap
             case InteractionType.BANZAIGATEBLUE:
             case InteractionType.FREEZEBLUECOUNTER:
             case InteractionType.FREEZEBLUEGATE:
-                this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.BLUE);
+                this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.Blue);
                 break;
             case InteractionType.FOOTBALLGOALRED:
             case InteractionType.FOOTBALLCOUNTERRED:
@@ -504,7 +500,7 @@ public class Gamemap
             case InteractionType.BANZAIGATERED:
             case InteractionType.FREEZEREDCOUNTER:
             case InteractionType.FREEZEREDGATE:
-                this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.RED);
+                this._roomInstance.GetGameManager().RemoveFurnitureFromTeam(item, TeamType.Red);
                 break;
             case InteractionType.FREEZEEXIT:
                 this._roomInstance.GetGameItemHandler().RemoveExitTeleport(item);
@@ -585,7 +581,7 @@ public class Gamemap
             case InteractionType.BANZAIGATEGREEN:
             case InteractionType.FREEZEGREENCOUNTER:
             case InteractionType.FREEZEGREENGATE:
-                this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.GREEN);
+                this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.Green);
                 break;
             case InteractionType.FOOTBALLGOALYELLOW:
             case InteractionType.FOOTBALLCOUNTERYELLOW:
@@ -593,7 +589,7 @@ public class Gamemap
             case InteractionType.BANZAIGATEYELLOW:
             case InteractionType.FREEZEYELLOWCOUNTER:
             case InteractionType.FREEZEYELLOWGATE:
-                this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.YELLOW);
+                this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.Yellow);
                 break;
             case InteractionType.footballgoalblue:
             case InteractionType.FOOTBALLCOUNTERBLUE:
@@ -601,7 +597,7 @@ public class Gamemap
             case InteractionType.BANZAIGATEBLUE:
             case InteractionType.FREEZEBLUECOUNTER:
             case InteractionType.FREEZEBLUEGATE:
-                this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.BLUE);
+                this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.Blue);
                 break;
             case InteractionType.FOOTBALLGOALRED:
             case InteractionType.FOOTBALLCOUNTERRED:
@@ -609,7 +605,7 @@ public class Gamemap
             case InteractionType.BANZAIGATERED:
             case InteractionType.FREEZEREDCOUNTER:
             case InteractionType.FREEZEREDGATE:
-                this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.RED);
+                this._roomInstance.GetGameManager().AddFurnitureToTeam(item, TeamType.Red);
                 break;
         }
 
@@ -658,7 +654,7 @@ public class Gamemap
         }
         else
         {
-            return (this._roomInstance.RoomData.AllowWalkthrough || @override || this.UserOnMap[x, y] == 0) && CanWalkState(this.GameMap[x, y], @override);
+            return (this._roomInstance.Data.AllowWalkthrough || @override || this.UserOnMap[x, y] == 0) && CanWalkState(this.GameMap[x, y], @override);
         };
     }
 

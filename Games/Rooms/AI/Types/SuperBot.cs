@@ -44,7 +44,7 @@ public class SuperBot : BotAI
             return;
         }
 
-        var ownerUser = this.GetRoom().GetRoomUserManager().GetRoomUserByUserId((this.GetBotData().OwnerId == 0) ? this.GetRoom().RoomData.OwnerId : this.GetBotData().OwnerId);
+        var ownerUser = this.GetRoom().GetRoomUserManager().GetRoomUserByUserId((this.GetBotData().OwnerId == 0) ? this.GetRoom().Data.OwnerId : this.GetBotData().OwnerId);
         if (ownerUser == null)
         {
             this.GetRoom().GetRoomUserManager().RemoveBot(this.VirtualId, false);

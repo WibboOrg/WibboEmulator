@@ -16,12 +16,12 @@ internal class GiveLot : IChatCommand
         }
 
         var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(parts[1]);
-        if (roomUserByUserId == null || roomUserByUserId.GetClient() == null)
+        if (roomUserByUserId == null || roomUserByUserId.Client == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
             return;
         }
-        if (roomUserByUserId.GetUsername() == session.GetUser().Username || roomUserByUserId.GetClient().GetUser().IP == session.GetUser().IP)
+        if (roomUserByUserId.GetUsername() == session.GetUser().Username || roomUserByUserId.Client.GetUser().IP == session.GetUser().IP)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.error", session.Langue));
             ModerationManager.LogStaffEntry(session.GetUser().Id, session.GetUser().Username, 0, string.Empty, "notallowed", "Tentative de GiveLot: " + roomUserByUserId.GetUsername());
@@ -29,7 +29,7 @@ internal class GiveLot : IChatCommand
         }
 
         var lotCount = WibboEnvironment.GetRandomNumber(1, 2);
-        if (roomUserByUserId.GetClient().GetUser().Rank > 1)
+        if (roomUserByUserId.Client.GetUser().Rank > 1)
         {
             lotCount = WibboEnvironment.GetRandomNumber(2, 3);
         }
@@ -41,24 +41,24 @@ internal class GiveLot : IChatCommand
             return;
         }
 
-        var items = ItemFactory.CreateMultipleItems(itemData, roomUserByUserId.GetClient().GetUser(), "", lotCount);
+        var items = ItemFactory.CreateMultipleItems(itemData, roomUserByUserId.Client.GetUser(), "", lotCount);
 
         foreach (var purchasedItem in items)
         {
-            if (roomUserByUserId.GetClient().GetUser().GetInventoryComponent().TryAddItem(purchasedItem))
+            if (roomUserByUserId.Client.GetUser().GetInventoryComponent().TryAddItem(purchasedItem))
             {
-                roomUserByUserId.GetClient().SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
+                roomUserByUserId.Client.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
             }
         }
 
-        roomUserByUserId.GetClient().SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByUserId.GetClient().Langue), lotCount));
+        roomUserByUserId.Client.SendNotification(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("notif.givelot.sucess", roomUserByUserId.Client.Langue), lotCount));
         session.SendWhisper(roomUserByUserId.GetUsername() + " à reçu " + lotCount + " RareBox!");
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            UserDao.UpdateAddGamePoints(dbClient, roomUserByUserId.GetClient().GetUser().Id);
+            UserDao.UpdateAddGamePoints(dbClient, roomUserByUserId.Client.GetUser().Id);
         }
 
-        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserId.GetClient(), "ACH_Extrabox", 1);
+        _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(roomUserByUserId.Client, "ACH_Extrabox", 1);
     }
 }

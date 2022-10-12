@@ -6,7 +6,7 @@ public class InteractorBanzaiScoreCounter : FurniInteractor
 {
     public override void OnPlace(GameClient session, Item item)
     {
-        if (item.Team == TeamType.NONE)
+        if (item.Team == TeamType.None)
         {
             return;
         }

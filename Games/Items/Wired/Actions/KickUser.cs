@@ -13,11 +13,11 @@ public class KickUser : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        if (user != null && user.GetClient() != null)
+        if (user != null && user.Client != null)
         {
-            if (user.RoomId == this.RoomInstance.RoomData.Id)
+            if (user.RoomId == this.RoomInstance.Data.Id)
             {
-                this.RoomInstance.GetRoomUserManager().RemoveUserFromRoom(user.GetClient(), true, true);
+                this.RoomInstance.GetRoomUserManager().RemoveUserFromRoom(user.Client, true, true);
             }
         }
 
@@ -34,11 +34,11 @@ public class KickUser : WiredActionBase, IWired, IWiredCycleable, IWiredEffect
 
     public bool BeforeCycle(RoomUser user)
     {
-        if (user != null && user.GetClient() != null && user.GetClient().GetUser() != null)
+        if (user != null && user.Client != null && user.Client.GetUser() != null)
         {
-            if (user.GetClient().GetUser().HasPermission("perm_mod") || this.RoomInstance.RoomData.OwnerId == user.UserId)
+            if (user.Client.GetUser().HasPermission("perm_mod") || this.RoomInstance.Data.OwnerId == user.UserId)
             {
-                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("wired.kick.exception", user.GetClient().Langue));
+                user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("wired.kick.exception", user.Client.Langue));
 
                 return false;
             }

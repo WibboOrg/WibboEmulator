@@ -46,9 +46,9 @@ internal class UserInfo : IChatCommand
         if (user.CurrentRoom != null && !user.SpectatorMode)
         {
             _ = stringBuilder.Append("\r - Information sur l'appart  [" + user.CurrentRoom.Id + "] - \r");
-            _ = stringBuilder.Append("Propriétaire: " + user.CurrentRoom.RoomData.OwnerName + "\r");
-            _ = stringBuilder.Append("Nom: " + user.CurrentRoom.RoomData.Name + "\r");
-            _ = stringBuilder.Append("Utilisateurs: " + user.CurrentRoom.UserCount + "/" + user.CurrentRoom.RoomData.UsersMax + "\r");
+            _ = stringBuilder.Append("Propriétaire: " + user.CurrentRoom.Data.OwnerName + "\r");
+            _ = stringBuilder.Append("Nom: " + user.CurrentRoom.Data.Name + "\r");
+            _ = stringBuilder.Append("Utilisateurs: " + user.CurrentRoom.UserCount + "/" + user.CurrentRoom.Data.UsersMax + "\r");
         }
 
         if (session.GetUser().HasPermission("perm_god"))

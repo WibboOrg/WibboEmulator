@@ -21,17 +21,17 @@ internal class GetUserGroupBadgesEvent : IPacketEvent
         var badges = new Dictionary<int, string>();
         foreach (var user in room.GetRoomUserManager().GetRoomUsers().ToList())
         {
-            if (user.IsBot || user.GetClient() == null || user.GetClient().GetUser() == null)
+            if (user.IsBot || user.Client == null || user.Client.GetUser() == null)
             {
                 continue;
             }
 
-            if (user.GetClient().GetUser().FavouriteGroupId == 0 || badges.ContainsKey(user.GetClient().GetUser().FavouriteGroupId))
+            if (user.Client.GetUser().FavouriteGroupId == 0 || badges.ContainsKey(user.Client.GetUser().FavouriteGroupId))
             {
                 continue;
             }
 
-            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.GetClient().GetUser().FavouriteGroupId, out var group))
+            if (!WibboEnvironment.GetGame().GetGroupManager().TryGetGroup(user.Client.GetUser().FavouriteGroupId, out var group))
             {
                 continue;
             }
