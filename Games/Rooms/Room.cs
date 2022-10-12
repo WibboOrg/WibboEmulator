@@ -80,7 +80,8 @@ public class Room
     private readonly Dictionary<int, double> _bans;
     private readonly Dictionary<int, double> _mutes;
 
-    private int _saveFurnitureTimer;
+    private readonly TimeSpan _saveFurnitureTimer = TimeSpan.FromMinutes(2);
+    private DateTime _saveFurnitureTimerLast = DateTime.Now;
 
     public Room(RoomData data)
     {
@@ -90,7 +91,6 @@ public class Room
             this.Roleplay = new RoomRoleplay();
         }
 
-        this._saveFurnitureTimer = 0;
         this.Disposed = false;
         this._bans = new Dictionary<int, double>();
         this._mutes = new Dictionary<int, double>();
@@ -521,13 +521,10 @@ public class Room
                 this.GetJanken().OnCycle();
             }
 
-            if (this._saveFurnitureTimer < 240)
+            if (timeStarted > this._saveFurnitureTimerLast + this._saveFurnitureTimer)
             {
-                this._saveFurnitureTimer++;
-            }
-            else
-            {
-                this._saveFurnitureTimer = 0;
+                this._saveFurnitureTimerLast = timeStarted;
+
                 this.GetRoomItemHandler().SaveFurniture();
             }
 
