@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Communication.Packets.Outgoing.Users;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Users.Relationships;
+using WibboEmulator.Games.Users.Messenger;
 
 internal class GetRelationshipsEvent : IPacketEvent
 {
