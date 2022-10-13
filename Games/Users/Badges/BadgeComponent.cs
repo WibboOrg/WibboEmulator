@@ -31,8 +31,6 @@ public class BadgeComponent : IDisposable
         }
     }
 
-    public int Count => this.BadgeList.Count;
-
     public int EquippedCount
     {
         get

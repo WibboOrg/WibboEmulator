@@ -18,20 +18,19 @@ public class CatalogManager
     private readonly Dictionary<int, CatalogPromotion> _promotions;
     private readonly Dictionary<int, int> _itemsPage;
     private readonly List<string> _badges;
-    private readonly List<PetRace> _races = new();
+    private readonly List<PetRace> _races;
 
     public CatalogManager()
     {
         this._marketplace = new MarketplaceManager();
-
         this._voucherManager = new VoucherManager();
-
         this._pages = new Dictionary<int, CatalogPage>();
         this._botPresets = new Dictionary<int, CatalogBot>();
         this._items = new Dictionary<int, Dictionary<int, CatalogItem>>();
         this._promotions = new Dictionary<int, CatalogPromotion>();
         this._itemsPage = new Dictionary<int, int>();
         this._badges = new List<string>();
+        this._races = new List<PetRace>();
     }
 
     public void Init(IQueryAdapter dbClient, ItemDataManager itemDataManager)

@@ -3,6 +3,7 @@ namespace WibboEmulator.Games.Animations;
 using System.Data;
 using System.Diagnostics;
 using WibboEmulator.Communication.Packets.Outgoing.Notifications.NotifCustom;
+using WibboEmulator.Core.Language;
 using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Moderation;
@@ -213,25 +214,18 @@ public class AnimationManager
         room.Data.Access = RoomAccess.Open;
         room.CloseFullRoom = true;
 
-        var alertMessage = "[center]" +
-            "[size=large]🎮[b][u]ANIMATION AUTOMATIQUE[/u][/b] 🎮[/size]" +
-            "[/center]" +
-            "[center]" +
-            "🤖 [b][i][color=696969]Une nouvelle animation automatique débute ![/color][/i][/b] 🤖" +
-            "[/center][br]" +
-            "➤ Rejoins-nous chez [color=696969][b]WibboGame[/b][/color] dans le jeu [color=696969][u][b]" + room.Data.Name + "[/b][/u][/color] pour une animation automatisée ![br]" +
-            "➤ Rejoins nous et tente de remporter des [b]RareBoxs[/b] ainsi qu'un [b]point au [u]TOP Gamer[/u][/b] ![br][br]" +
-            "[center][img]https://cdn.wibbo.org/uploads/1659791208.png[/img]  - Jack et Daisy, [b][u][color=696969]Animateurs robotisés[/color][/u][/b] 🤖  -  [img]https://cdn.wibbo.org/uploads/1659791188.png[/img][/center]";
+        var alertMessage = string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("autogame.alert", Language.French), room.Data.Name);
+
         var gameOwner = WibboEnvironment.GetSettings().GetData<string>("autogame.owner");
 
         ModerationManager.LogStaffEntry(1953042, gameOwner, room.Id, string.Empty, "eventha", string.Format("JeuAuto EventHa: {0}", alertMessage));
 
         WibboEnvironment.GetGame().GetGameClientManager().SendMessage(new NotifAlertComposer(
-            "gameauto", // image
-            "Message d'animation", // title
-            alertMessage, // string_>alert
-            "Je veux y jouer !", // button
-            room.Id, //guide
+            "gameauto",
+            "Message d'animation",
+            alertMessage,
+            "Je veux y jouer !",
+            room.Id,
             ""
         ));
     }

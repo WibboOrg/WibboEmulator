@@ -783,5 +783,6 @@ public class RoomItemHandling
         this._rollerUsersMoved.Clear();
         this._rollerMessages.Clear();
         this._rollerItemsMoved.Clear();
+        this._roomItemUpdateQueue.Clear();
     }
 }

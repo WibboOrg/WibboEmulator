@@ -4,27 +4,17 @@ using WibboEmulator.Core.Language;
 public class CatalogPage
 {
     public int Id { get; set; }
-
     public int ParentId { get; set; }
-
     public bool Enabled { get; set; }
-
     public string Caption { get; set; }
     public string CaptionEn { get; set; }
     public string CaptionBr { get; set; }
-
     public string PageLink { get; set; }
-
     public int Icon { get; set; }
-
     public int MinimumRank { get; set; }
-
     public string Template { get; set; }
-
     public List<string> PageStrings1 { get; private set; }
-
     public Dictionary<int, CatalogItem> Items { get; private set; }
-
     public Dictionary<int, CatalogItem> ItemOffers { get; private set; }
 
     private readonly List<string> _pageStrings2;

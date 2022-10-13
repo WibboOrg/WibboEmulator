@@ -40,7 +40,7 @@ public class WardrobeComponent : IDisposable
         }
     }
 
-    internal void AddWardobe(string look, string gender, int slotId)
+    internal void AddWardrobe(string look, string gender, int slotId)
     {
         if (slotId < 1 || slotId > MAX_SLOT)
         {

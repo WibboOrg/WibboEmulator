@@ -42,12 +42,12 @@ internal class RedeemVoucherEvent : IPacketEvent
 
         voucher.UpdateUses();
 
-        if (voucher.Type == VoucherType.CREDIT)
+        if (voucher.Type == VoucherType.Credit)
         {
             session.GetUser().Credits += voucher.Value;
             session.SendPacket(new CreditBalanceComposer(session.GetUser().Credits));
         }
-        else if (voucher.Type == VoucherType.DUCKET)
+        else if (voucher.Type == VoucherType.Ducket)
         {
             session.GetUser().Duckets += voucher.Value;
             session.SendPacket(new ActivityPointNotificationComposer(session.GetUser().Duckets, voucher.Value));

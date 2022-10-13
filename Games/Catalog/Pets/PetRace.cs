@@ -12,12 +12,8 @@ public class PetRace
     }
 
     public int RaceId { get; set; }
-
     public int PrimaryColour { get; set; }
-
     public int SecondaryColour { get; set; }
-
     public bool HasPrimaryColour { get; set; }
-
     public bool HasSecondaryColour { get; set; }
 }

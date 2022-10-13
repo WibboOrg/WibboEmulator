@@ -1,5 +1,6 @@
 namespace WibboEmulator.Communication.Packets.Outgoing.Users;
-using WibboEmulator.Games.Users.Relationships;
+
+using WibboEmulator.Games.Users.Messenger;
 
 internal class GetRelationshipsComposer : ServerPacket
 {

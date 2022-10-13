@@ -1,11 +1,11 @@
-﻿namespace WibboEmulator.Games.Catalog.Vouchers;
+namespace WibboEmulator.Games.Catalog.Vouchers;
 
 public enum VoucherType
 {
-    CREDIT,
-    DUCKET,
-    BADGE,
-    WINWIN,
-    WIBBOPOINTS,
-    JETONS,
+    Credit,
+    Ducket,
+    Badge,
+    Winwin,
+    WibboPoint,
+    Jeton,
 }

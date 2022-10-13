@@ -1,7 +1,7 @@
 namespace WibboEmulator.Communication.Packets.Incoming.Users;
 using WibboEmulator.Database.Daos.Messenger;
 using WibboEmulator.Games.GameClients;
-using WibboEmulator.Games.Users.Relationships;
+using WibboEmulator.Games.Users.Messenger;
 
 internal class SetRelationshipEvent : IPacketEvent
 {

@@ -4,10 +4,8 @@ public class Janken
 {
     public int UserOne { get; set; }
     public int UserTwo { get; set; }
-
     public JankenType ChoiceOne { get; set; }
     public JankenType ChoiceTwo { get; set; }
-
     public bool Started { get; set; }
     public int Timer { get; set; }
 

@@ -4,21 +4,21 @@ public static class VoucherUtility
 {
     public static VoucherType GetType(string type) => type switch
     {
-        "ducket" => VoucherType.DUCKET,
-        "badge" => VoucherType.BADGE,
-        "winwin" => VoucherType.WINWIN,
-        "wibbopoints" => VoucherType.WIBBOPOINTS,
-        "jetons" => VoucherType.JETONS,
-        _ => VoucherType.CREDIT,
+        "ducket" => VoucherType.Ducket,
+        "badge" => VoucherType.Badge,
+        "winwin" => VoucherType.Winwin,
+        "wibbopoints" => VoucherType.WibboPoint,
+        "jetons" => VoucherType.Jeton,
+        _ => VoucherType.Credit,
     };
 
     public static string FromType(VoucherType type) => type switch
     {
-        VoucherType.DUCKET => "ducket",
-        VoucherType.BADGE => "badge",
-        VoucherType.WINWIN => "winwin",
-        VoucherType.WIBBOPOINTS => "wibbopoints",
-        VoucherType.JETONS => "jetons",
+        VoucherType.Ducket => "ducket",
+        VoucherType.Badge => "badge",
+        VoucherType.Winwin => "winwin",
+        VoucherType.WibboPoint => "wibbopoints",
+        VoucherType.Jeton => "jetons",
         _ => "credit",
     };
 }
