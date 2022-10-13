@@ -58,7 +58,7 @@ internal class CancelOfferEvent : IPacketEvent
 
         if (giveItem != null)
         {
-            _ = session.GetUser().GetInventoryComponent().TryAddItem(giveItem);
+            _ = session.GetUser().InventoryComponent.TryAddItem(giveItem);
             session.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
         }
 

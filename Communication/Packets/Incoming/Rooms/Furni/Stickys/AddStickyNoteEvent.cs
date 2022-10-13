@@ -22,7 +22,7 @@ internal class AddStickyNoteEvent : IPacketEvent
         var id = packet.PopInt();
         var str = packet.PopString();
 
-        var userItem = session.GetUser().GetInventoryComponent().GetItem(id);
+        var userItem = session.GetUser().InventoryComponent.GetItem(id);
         if (userItem == null)
         {
             return;
@@ -45,7 +45,8 @@ internal class AddStickyNoteEvent : IPacketEvent
             ItemDao.UpdateRoomIdAndUserId(dbClient, id, room.Id, room.RoomData.OwnerId);
         }
 
-        session.GetUser().GetInventoryComponent().RemoveItem(id);
+        session.GetUser().
+        InventoryComponent.RemoveItem(id);
     }
 
     private static string WallPositionCheck(string wallPosition)

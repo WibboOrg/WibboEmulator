@@ -23,17 +23,17 @@ public class ModerationTicket
     {
         get
         {
-            if (this.Status == TicketStatusType.OPEN)
+            if (this.Status == TicketStatusType.Open)
             {
                 return 1;
             }
 
-            if (this.Status is TicketStatusType.PICKED or TicketStatusType.ABUSIVE or TicketStatusType.INVALID or TicketStatusType.RESOLVED)
+            if (this.Status is TicketStatusType.Picked or TicketStatusType.Abusive or TicketStatusType.Invalid or TicketStatusType.Resolved)
             {
                 return 2;
             }
 
-            return this.Status == TicketStatusType.DELETED ? 3 : 0;
+            return this.Status == TicketStatusType.Deleted ? 3 : 0;
         }
     }
 
@@ -44,7 +44,7 @@ public class ModerationTicket
         this.Id = id;
         this.Score = score;
         this.Type = type;
-        this.Status = TicketStatusType.OPEN;
+        this.Status = TicketStatusType.Open;
         this.SenderId = senderId;
         this.ReportedId = reportedId;
         this.ModeratorId = 0;
@@ -70,7 +70,7 @@ public class ModerationTicket
 
     public void Pick(int moderatorId, bool updateInDb)
     {
-        this.Status = TicketStatusType.PICKED;
+        this.Status = TicketStatusType.Picked;
         this.ModeratorId = moderatorId;
         this.Timestamp = WibboEnvironment.GetUnixTimestamp();
 
@@ -93,8 +93,8 @@ public class ModerationTicket
 
         var str = newStatus switch
         {
-            TicketStatusType.ABUSIVE => "abusive",
-            TicketStatusType.INVALID => "invalid",
+            TicketStatusType.Abusive => "abusive",
+            TicketStatusType.Invalid => "invalid",
             _ => "resolved",
         };
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
@@ -103,7 +103,7 @@ public class ModerationTicket
 
     public void Release(bool updateInDb)
     {
-        this.Status = TicketStatusType.OPEN;
+        this.Status = TicketStatusType.Open;
 
         if (!updateInDb)
         {
@@ -116,7 +116,7 @@ public class ModerationTicket
 
     public void Delete(bool updateInDb)
     {
-        this.Status = TicketStatusType.DELETED;
+        this.Status = TicketStatusType.Deleted;
 
         if (!updateInDb)
         {

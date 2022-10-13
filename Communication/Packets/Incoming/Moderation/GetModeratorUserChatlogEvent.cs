@@ -24,7 +24,7 @@ internal class GetModeratorUserChatlogEvent : IPacketEvent
         }
         else
         {
-            var sortedMessages = clientByUserId.GetUser().GetChatMessageManager().GetSortedMessages(0);
+            var sortedMessages = clientByUserId.GetUser().ChatMessageManager.GetSortedMessages(0);
 
             session.SendPacket(new ModeratorUserChatlogComposer(userId, clientByUserId.GetUser().Username, session.GetUser().CurrentRoomId, sortedMessages));
         }

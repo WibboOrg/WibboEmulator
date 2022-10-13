@@ -13,7 +13,7 @@ internal class TradingRemoveItemEvent : IPacketEvent
         }
 
         var userTrade = room.GetUserTrade(session.GetUser().Id);
-        var userItem = session.GetUser().GetInventoryComponent().GetItem(packet.PopInt());
+        var userItem = session.GetUser().InventoryComponent.GetItem(packet.PopInt());
         if (userTrade == null || userItem == null)
         {
             return;

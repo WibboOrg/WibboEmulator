@@ -52,8 +52,8 @@ public class RolePlayer
         this.Munition = munition;
         this.Exp = pxp;
         this.PvpEnable = true;
-        this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(weaponCac);
-        this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(weaponGun);
+        this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponCac(weaponCac);
+        this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponGun(weaponGun);
 
         this.GunLoad = 6;
         this.GunLoadTimer = 0;
@@ -98,8 +98,8 @@ public class RolePlayer
         this.Level = 1;
         this.HealthMax = 100;
 
-        this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(0);
-        this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(0);
+        this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponCac(0);
+        this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponGun(0);
 
         this._inventory.Clear();
 
@@ -148,7 +148,7 @@ public class RolePlayer
 
     internal void AddInventoryItem(int itemId, int count = 1)
     {
-        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
+        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(itemId);
         if (rpItem == null)
         {
             return;
@@ -372,7 +372,7 @@ public class RolePlayer
                 var monaiePerdu = (int)Math.Floor((double)(this.Money / 100) * 20);
                 this.Money -= monaiePerdu;
 
-                _ = room.RoomItemHandling.AddTempItem(user.VirtualId, 5461, user.SetX, user.SetY, user.Z, "1", monaiePerdu, InteractionTypeTemp.MONEY);
+                _ = room.RoomItemHandling.AddTempItem(user.VirtualId, 5461, user.SetX, user.SetY, user.Z, "1", monaiePerdu, InteractionTypeTemp.Money);
             }
 
             user.OnChat("A été mis K.O. ! [" + this.Health + "/" + this.HealthMax + "]", 0, true);

@@ -16,7 +16,7 @@ internal class MakeOfferEvent : IPacketEvent
         _ = packet.PopInt();
         var itemId = packet.PopInt();
 
-        var item = session.GetUser().GetInventoryComponent().GetItem(itemId);
+        var item = session.GetUser().InventoryComponent.GetItem(itemId);
         if (item == null)
         {
             session.SendPacket(new MarketplaceMakeOfferResultComposer(0));
@@ -50,7 +50,8 @@ internal class MakeOfferEvent : IPacketEvent
 
         }
 
-        session.GetUser().GetInventoryComponent().RemoveItem(itemId);
+        session.GetUser().
+        InventoryComponent.RemoveItem(itemId);
         session.SendPacket(new MarketplaceMakeOfferResultComposer(1));
     }
 }

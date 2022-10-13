@@ -1,8 +1,8 @@
-﻿namespace WibboEmulator.Games.Navigator;
+namespace WibboEmulator.Games.Navigator;
 
 public enum NavigatorSearchAllowance
 {
-    NOTHING,
-    SHOW_MORE,
-    GO_BACK
+    Nothing,
+    ShowMore,
+    GoBack
 }

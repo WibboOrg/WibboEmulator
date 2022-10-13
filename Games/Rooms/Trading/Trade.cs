@@ -227,7 +227,7 @@ public class Trade
 
         foreach (var userItem in userOneItems)
         {
-            if (tradeUserOne.GetClient().GetUser().GetInventoryComponent().GetItem(userItem.Id) == null)
+            if (tradeUserOne.GetClient().GetUser().InventoryComponent.GetItem(userItem.Id) == null)
             {
                 tradeUserOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserOne.GetClient().Langue));
                 tradeUserTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserTwo.GetClient().Langue));
@@ -237,7 +237,7 @@ public class Trade
 
         foreach (var userItem in userTwoItems)
         {
-            if (tradeUserTwo.GetClient().GetUser().GetInventoryComponent().GetItem(userItem.Id) == null)
+            if (tradeUserTwo.GetClient().GetUser().InventoryComponent.GetItem(userItem.Id) == null)
             {
                 tradeUserOne.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserOne.GetClient().Langue));
                 tradeUserTwo.GetClient().SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("trade.failed", tradeUserTwo.GetClient().Langue));
@@ -247,14 +247,14 @@ public class Trade
 
         foreach (var userItem in userOneItems)
         {
-            tradeUserOne.GetClient().GetUser().GetInventoryComponent().RemoveItem(userItem.Id);
-            tradeUserTwo.GetClient().GetUser().GetInventoryComponent().AddItem(userItem);
+            tradeUserOne.GetClient().GetUser().InventoryComponent.RemoveItem(userItem.Id);
+            tradeUserTwo.GetClient().GetUser().InventoryComponent.AddItem(userItem);
         }
 
         foreach (var userItem in userTwoItems)
         {
-            tradeUserTwo.GetClient().GetUser().GetInventoryComponent().RemoveItem(userItem.Id);
-            tradeUserOne.GetClient().GetUser().GetInventoryComponent().AddItem(userItem);
+            tradeUserTwo.GetClient().GetUser().InventoryComponent.RemoveItem(userItem.Id);
+            tradeUserOne.GetClient().GetUser().InventoryComponent.AddItem(userItem);
         }
 
         tradeUserTwo.GetClient().SendPacket(new FurniListNotificationComposer(userOneItems, 1));

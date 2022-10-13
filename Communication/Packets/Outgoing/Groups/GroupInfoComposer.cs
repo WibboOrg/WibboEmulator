@@ -11,7 +11,7 @@ internal class GroupInfoComposer : ServerPacket
 
         this.WriteInteger(group.Id);
         this.WriteBoolean(true);
-        this.WriteInteger(group.GroupType == GroupType.OPEN ? 0 : group.GroupType == GroupType.LOCKED ? 1 : 2);
+        this.WriteInteger(group.GroupType == GroupType.Open ? 0 : group.GroupType == GroupType.Locked ? 1 : 2);
         this.WriteString(group.Name);
         this.WriteString(group.Description);
         this.WriteString(group.Badge);

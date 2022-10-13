@@ -57,12 +57,12 @@ public class AchievementManager
 
         var achievementData = this._achievements[achievementGroup];
 
-        var userData = session.GetUser().GetAchievementComponent().GetAchievementData(achievementGroup);
+        var userData = session.GetUser().AchievementComponent.GetAchievementData(achievementGroup);
 
         if (userData == null)
         {
             userData = new UserAchievement(achievementGroup, 0, 0);
-            session.GetUser().GetAchievementComponent().AddAchievement(userData);
+            session.GetUser().AchievementComponent.AddAchievement(userData);
         }
 
         var totalLevels = achievementData.Levels.Count;
@@ -98,7 +98,8 @@ public class AchievementManager
             _ = newProgress - targetLevelData.Requirement;
             newProgress = 0;
 
-            session.GetUser().GetBadgeComponent().GiveBadge(achievementGroup + targetLevel, true);
+            session.GetUser().
+            BadgeComponent.GiveBadge(achievementGroup + targetLevel, true);
             session.SendPacket(new ReceiveBadgeComposer(achievementGroup + targetLevel));
 
             if (newTarget > totalLevels)
@@ -141,7 +142,7 @@ public class AchievementManager
 
 
             var newLevelData = achievementData.Levels[newTarget];
-            session.SendPacket(new AchievementProgressedComposer(achievementData, newTarget, newLevelData, totalLevels, session.GetUser().GetAchievementComponent().GetAchievementData(achievementGroup)));
+            session.SendPacket(new AchievementProgressedComposer(achievementData, newTarget, newLevelData, totalLevels, session.GetUser().AchievementComponent.GetAchievementData(achievementGroup)));
 
             return true;
         }
@@ -159,7 +160,7 @@ public class AchievementManager
             }
 
             session.SendPacket(new AchievementProgressedComposer(achievementData, targetLevel, targetLevelData,
-            totalLevels, session.GetUser().GetAchievementComponent().GetAchievementData(achievementGroup)));
+            totalLevels, session.GetUser().AchievementComponent.GetAchievementData(achievementGroup)));
         }
 
         return false;

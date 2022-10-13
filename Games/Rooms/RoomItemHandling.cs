@@ -193,7 +193,7 @@ public class RoomItemHandling
     {
         foreach (var item in this._itemsTemp.Values)
         {
-            if (item.InteractionType is not InteractionTypeTemp.RPITEM and not InteractionTypeTemp.MONEY)
+            if (item.InteractionType is not InteractionTypeTemp.RpItem and not InteractionTypeTemp.Money)
             {
                 continue;
             }
@@ -479,7 +479,7 @@ public class RoomItemHandling
         }
     }
 
-    public ItemTemp AddTempItem(int itemId, int spriteId, int x, int y, double z, string extraData, int value = 0, InteractionTypeTemp pInteraction = InteractionTypeTemp.NONE, MovementDirection movement = MovementDirection.none, int pDistance = 0, int pTeamId = 0)
+    public ItemTemp AddTempItem(int itemId, int spriteId, int x, int y, double z, string extraData, int value = 0, InteractionTypeTemp pInteraction = InteractionTypeTemp.None, MovementDirection movement = MovementDirection.none, int pDistance = 0, int pTeamId = 0)
     {
         var id = this._itemTempoId--;
         var item = new ItemTemp(id, itemId, spriteId, x, y, z, extraData, movement, value, pInteraction, pDistance, pTeamId);

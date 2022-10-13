@@ -54,7 +54,8 @@ internal class OpenGiftEvent : IPacketEvent
                     UserPresentDao.Delete(dbClient, present.Id);
                 }
 
-                session.GetUser().GetInventoryComponent().RemoveItem(present.Id);
+                session.GetUser().
+                InventoryComponent.RemoveItem(present.Id);
                 return;
             }
 
@@ -68,7 +69,8 @@ internal class OpenGiftEvent : IPacketEvent
                     UserPresentDao.Delete(dbClient, present.Id);
                 }
 
-                session.GetUser().GetInventoryComponent().RemoveItem(present.Id);
+                session.GetUser().
+                InventoryComponent.RemoveItem(present.Id);
                 return;
             }
 
@@ -122,7 +124,7 @@ internal class OpenGiftEvent : IPacketEvent
                     ItemDao.UpdateResetRoomId(dbClient, present.Id);
                 }
 
-                _ = session.GetUser().GetInventoryComponent().TryAddItem(present);
+                _ = session.GetUser().InventoryComponent.TryAddItem(present);
 
                 itemIsInRoom = false;
             }
@@ -134,7 +136,7 @@ internal class OpenGiftEvent : IPacketEvent
                 ItemDao.UpdateResetRoomId(dbClient, present.Id);
             }
 
-            _ = session.GetUser().GetInventoryComponent().TryAddItem(present);
+            _ = session.GetUser().InventoryComponent.TryAddItem(present);
 
             itemIsInRoom = false;
         }

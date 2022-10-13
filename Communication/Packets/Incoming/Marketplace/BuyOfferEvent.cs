@@ -75,7 +75,7 @@ internal class BuyOfferEvent : IPacketEvent
             var giveItem = ItemFactory.CreateSingleItem(item, session.GetUser(), Convert.ToString(row["extra_data"]), Convert.ToInt32(row["furni_id"]), Convert.ToInt32(row["limited_number"]), Convert.ToInt32(row["limited_stack"]));
             if (giveItem != null)
             {
-                _ = session.GetUser().GetInventoryComponent().TryAddItem(giveItem);
+                _ = session.GetUser().InventoryComponent.TryAddItem(giveItem);
                 session.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
 
                 session.SendPacket(new PurchaseOKComposer());

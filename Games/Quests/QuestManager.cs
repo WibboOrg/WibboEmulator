@@ -9,20 +9,19 @@ using WibboEmulator.Games.GameClients;
 
 public class QuestManager
 {
-    private Dictionary<int, Quest> _quests;
-    private Dictionary<string, int> _questCount;
+    private readonly Dictionary<int, Quest> _quests;
+    private readonly Dictionary<string, int> _questCount;
 
-    public void Init(IQueryAdapter dbClient)
+    public QuestManager()
     {
         this._quests = new Dictionary<int, Quest>();
         this._questCount = new Dictionary<string, int>();
-
-        this.ReloadQuests(dbClient);
     }
 
-    public void ReloadQuests(IQueryAdapter dbClient)
+    public void Init(IQueryAdapter dbClient)
     {
         this._quests.Clear();
+        this._questCount.Clear();
 
         var table = EmulatorQuestDao.GetAll(dbClient);
         foreach (DataRow dataRow in table.Rows)
@@ -89,7 +88,7 @@ public class QuestManager
         var questProgress = session.GetUser().GetQuestProgress(quest.Id);
         var flag = false;
         int progress;
-        if (questType != QuestType.EXPLORE_FIND_ITEM)
+        if (questType != QuestType.ExploreFindItem)
         {
             progress = questProgress + 1;
             if (progress >= (long)quest.GoalData)

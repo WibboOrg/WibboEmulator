@@ -42,7 +42,7 @@ internal class InitTradeEvent : IPacketEvent
                 return;
             }
 
-            WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().AddTrade(room.RoomData.OwnerId, roomUser.UserId, roomUserTarget.UserId, roomUser.GetUsername(), roomUserTarget.GetUsername());
+            WibboEnvironment.GetGame().GetRoleplayManager().TrocManager.AddTrade(room.RoomData.OwnerId, roomUser.UserId, roomUserTarget.UserId, roomUser.GetUsername(), roomUserTarget.GetUsername());
             return;
         }
 

@@ -11,7 +11,7 @@ internal class GiveBadge : IChatCommand
         if (clientByUsername != null)
         {
             var badgeCode = parameters[2];
-            clientByUsername.GetUser().GetBadgeComponent().GiveBadge(badgeCode, true);
+            clientByUsername.GetUser().BadgeComponent.GiveBadge(badgeCode, true);
             clientByUsername.SendPacket(new ReceiveBadgeComposer(badgeCode));
         }
         else

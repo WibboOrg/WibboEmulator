@@ -71,12 +71,12 @@ public class MentionManager
             return false;
         }
 
-        if (targetClient.GetUser() == null || targetClient.GetUser().GetMessenger() == null)
+        if (targetClient.GetUser() == null || targetClient.GetUser().Messenger == null)
         {
             return false;
         }
 
-        if (!targetClient.GetUser().GetMessenger().FriendshipExists(session.GetUser().Id) && !session.GetUser().HasPermission("perm_mention"))
+        if (!targetClient.GetUser().Messenger.FriendshipExists(session.GetUser().Id) && !session.GetUser().HasPermission("perm_mention"))
         {
             session.SendPacket(RoomNotificationComposer.SendBubble("error", $"Tu as besoin d'être ami avec {targetUsername} pour pouvoir le taguer"));
             return false;
@@ -104,7 +104,7 @@ public class MentionManager
 
         session.GetUser().EveryoneTimer = DateTime.Now;
 
-        var onlineUsers = WibboEnvironment.GetGame().GetGameClientManager().GetClientsById(session.GetUser().GetMessenger().Friends.Keys);
+        var onlineUsers = WibboEnvironment.GetGame().GetGameClientManager().GetClientsById(session.GetUser().Messenger.Friends.Keys);
 
         if (onlineUsers == null)
         {
@@ -113,9 +113,9 @@ public class MentionManager
 
         foreach (var targetClient in onlineUsers)
         {
-            if (targetClient != null && targetClient.GetUser() != null && targetClient.GetUser().GetMessenger() != null)
+            if (targetClient != null && targetClient.GetUser() != null && targetClient.GetUser().Messenger != null)
             {
-                if (targetClient.GetUser().GetMessenger().FriendshipExists(session.GetUser().Id))
+                if (targetClient.GetUser().Messenger.FriendshipExists(session.GetUser().Id))
                 {
                     targetClient.SendPacket(new MentionComposer(session.GetUser().Id, session.GetUser().Username, session.GetUser().Look, message));
                 }

@@ -197,7 +197,8 @@ public class ModerationManager
             return;
         }
 
-        session.GetUser().GetMessenger().DestroyFriendship(userReport.Id);
+        session.GetUser().
+        Messenger.DestroyFriendship(userReport.Id);
 
         session.SendPacket(new IgnoreStatusComposer(1, userReport.Username));
 
@@ -242,7 +243,7 @@ public class ModerationManager
     public void PickTicket(GameClient session, int ticketId)
     {
         var ticket = this.GetTicket(ticketId);
-        if (ticket == null || ticket.Status != TicketStatusType.OPEN)
+        if (ticket == null || ticket.Status != TicketStatusType.Open)
         {
             return;
         }
@@ -254,7 +255,7 @@ public class ModerationManager
     public void ReleaseTicket(GameClient session, int ticketId)
     {
         var ticket = this.GetTicket(ticketId);
-        if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != session.GetUser().Id)
+        if (ticket == null || ticket.Status != TicketStatusType.Picked || ticket.ModeratorId != session.GetUser().Id)
         {
             return;
         }
@@ -266,7 +267,7 @@ public class ModerationManager
     public void CloseTicket(GameClient session, int ticketId, int result)
     {
         var ticket = this.GetTicket(ticketId);
-        if (ticket == null || ticket.Status != TicketStatusType.PICKED || ticket.ModeratorId != session.GetUser().Id)
+        if (ticket == null || ticket.Status != TicketStatusType.Picked || ticket.ModeratorId != session.GetUser().Id)
         {
             return;
         }
@@ -278,15 +279,15 @@ public class ModerationManager
         switch (result)
         {
             case 1:
-                newStatus = TicketStatusType.INVALID;
+                newStatus = TicketStatusType.Invalid;
                 messageAlert = "Es-tu certain d'avoir bien utilisé cet outil ? Nous voulons donner le meilleur des services mais nous devons aussi aider d'autres personnes dans l'urgence...";
                 break;
             case 2:
-                newStatus = TicketStatusType.ABUSIVE;
+                newStatus = TicketStatusType.Abusive;
                 messageAlert = "Merci de ne pas utiliser l'outil d'appel à l'aide pour rien. Tu risques l'exclusion.";
                 break;
             default:
-                newStatus = TicketStatusType.RESOLVED;
+                newStatus = TicketStatusType.Resolved;
                 messageAlert = "Merci, ton souci est résolu ou en cours de résolution. N'hésite pas à Ignorer la personne  ou à la supprimer de ta console s'il s'agit d'insultes.";
                 break;
         }
@@ -302,7 +303,7 @@ public class ModerationManager
     {
         foreach (var moderationTicket in this._tickets)
         {
-            if (moderationTicket.SenderId == id && moderationTicket.Status == TicketStatusType.OPEN)
+            if (moderationTicket.SenderId == id && moderationTicket.Status == TicketStatusType.Open)
             {
                 return true;
             }

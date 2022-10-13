@@ -185,16 +185,16 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
 
                 if (!extraData.StartsWith("perso_"))
                 {
-                    session.GetUser().GetBadgeComponent().RemoveBadge(extraData);
+                    session.GetUser().BadgeComponent.RemoveBadge(extraData);
                 }
 
-                session.SendPacket(new BadgesComposer(session.GetUser().GetBadgeComponent().BadgeList));
+                session.SendPacket(new BadgesComposer(session.GetUser().BadgeComponent.BadgeList));
 
                 break;
             }
 
             case InteractionType.BADGE_DISPLAY:
-                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(extraData) || !session.GetUser().GetBadgeComponent().HasBadge(extraData))
+                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(extraData) || !session.GetUser().BadgeComponent.HasBadge(extraData))
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
                     session.SendPacket(new PurchaseOKComposer());
@@ -206,7 +206,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
 
             case InteractionType.BADGE:
             {
-                if (session.GetUser().GetBadgeComponent().HasBadge(item.Badge))
+                if (session.GetUser().BadgeComponent.HasBadge(item.Badge))
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadge.error", session.Langue));
                     session.SendPacket(new PurchaseOKComposer());
@@ -341,7 +341,7 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
 
                 foreach (var purchasedItem in generatedGenericItems)
                 {
-                    if (session.GetUser().GetInventoryComponent().TryAddItem(purchasedItem))
+                    if (session.GetUser().InventoryComponent.TryAddItem(purchasedItem))
                     {
                         session.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
                     }
@@ -358,12 +358,12 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                 var bot = BotUtility.CreateBot(item.Data, session.GetUser().Id);
                 if (bot != null)
                 {
-                    if (!session.GetUser().GetInventoryComponent().TryAddBot(bot))
+                    if (!session.GetUser().InventoryComponent.TryAddBot(bot))
                     {
                         break;
                     }
 
-                    session.SendPacket(new BotInventoryComposer(session.GetUser().GetInventoryComponent().GetBots()));
+                    session.SendPacket(new BotInventoryComposer(session.GetUser().InventoryComponent.GetBots()));
                     session.SendPacket(new FurniListNotificationComposer(bot.Id, 5));
                 }
                 break;
@@ -375,13 +375,13 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
                 var generatedPet = PetUtility.CreatePet(session.GetUser().Id, petData[0], item.Data.SpriteId, petData[1], petData[2]);
                 if (generatedPet != null)
                 {
-                    if (!session.GetUser().GetInventoryComponent().TryAddPet(generatedPet))
+                    if (!session.GetUser().InventoryComponent.TryAddPet(generatedPet))
                     {
                         break;
                     }
 
                     session.SendPacket(new FurniListNotificationComposer(generatedPet.PetId, 3));
-                    session.SendPacket(new PetInventoryComposer(session.GetUser().GetInventoryComponent().GetPets()));
+                    session.SendPacket(new PetInventoryComposer(session.GetUser().InventoryComponent.GetPets()));
                 }
                 break;
             }
@@ -392,9 +392,9 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
             }
         }
 
-        if (!string.IsNullOrEmpty(item.Badge) && !session.GetUser().GetBadgeComponent().HasBadge(item.Badge))
+        if (!string.IsNullOrEmpty(item.Badge) && !session.GetUser().BadgeComponent.HasBadge(item.Badge))
         {
-            session.GetUser().GetBadgeComponent().GiveBadge(item.Badge, true);
+            session.GetUser().BadgeComponent.GiveBadge(item.Badge, true);
             session.SendPacket(new ReceiveBadgeComposer(item.Badge));
 
             session.SendPacket(new FurniListNotificationComposer(0, 4));

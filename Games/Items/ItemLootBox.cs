@@ -148,9 +148,9 @@ internal static class ItemLootBox
 
         var badgeCode = pageBadge.Items.ElementAt(WibboEnvironment.GetRandomNumber(0, pageBadge.Items.Count - 1)).Value.Badge;
 
-        if (!string.IsNullOrEmpty(badgeCode) && !session.GetUser().GetBadgeComponent().HasBadge(badgeCode))
+        if (!string.IsNullOrEmpty(badgeCode) && !session.GetUser().BadgeComponent.HasBadge(badgeCode))
         {
-            session.GetUser().GetBadgeComponent().GiveBadge(badgeCode, true);
+            session.GetUser().BadgeComponent.GiveBadge(badgeCode, true);
             session.SendPacket(new ReceiveBadgeComposer(badgeCode));
 
             var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
@@ -214,7 +214,7 @@ internal static class ItemLootBox
 
         foreach (var item in pageBadge.Items.OrderBy(a => Guid.NewGuid()).ToList())
         {
-            if (session.GetUser().GetBadgeComponent().HasBadge(item.Value.Badge))
+            if (session.GetUser().BadgeComponent.HasBadge(item.Value.Badge))
             {
                 continue;
             }
@@ -248,7 +248,7 @@ internal static class ItemLootBox
 
         if (!string.IsNullOrEmpty(badgeCode))
         {
-            session.GetUser().GetBadgeComponent().GiveBadge(badgeCode, true);
+            session.GetUser().BadgeComponent.GiveBadge(badgeCode, true);
             session.SendPacket(new ReceiveBadgeComposer(badgeCode));
         }
 
@@ -332,7 +332,7 @@ internal static class ItemLootBox
 
         if (!itemIsInRoom)
         {
-            _ = session.GetUser().GetInventoryComponent().TryAddItem(present);
+            _ = session.GetUser().InventoryComponent.TryAddItem(present);
         }
     }
 }

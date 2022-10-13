@@ -20,7 +20,7 @@ internal class ModeratorInitComposer : ServerPacket
             this.WriteString(ticket.SenderName); // sender name
             this.WriteInteger(ticket.ReportedId);
             this.WriteString(ticket.ReportedName);
-            this.WriteInteger((ticket.Status == TicketStatusType.PICKED) ? ticket.ModeratorId : 0); // mod id
+            this.WriteInteger((ticket.Status == TicketStatusType.Picked) ? ticket.ModeratorId : 0); // mod id
             this.WriteString(ticket.ModName); // mod name
             this.WriteString(ticket.Message); // issue message
             this.WriteInteger(0);

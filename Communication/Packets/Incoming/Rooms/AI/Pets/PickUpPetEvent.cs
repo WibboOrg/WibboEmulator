@@ -17,7 +17,7 @@ internal class PickUpPetEvent : IPacketEvent
             return;
         }
 
-        if (session == null || session.GetUser() == null || session.GetUser().GetInventoryComponent() == null)
+        if (session == null || session.GetUser() == null || session.GetUser().InventoryComponent == null)
         {
             return;
         }
@@ -93,18 +93,18 @@ internal class PickUpPetEvent : IPacketEvent
             var target = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(petData.OwnerId);
             if (target != null)
             {
-                _ = target.GetUser().GetInventoryComponent().TryAddPet(pet.PetData);
+                _ = target.GetUser().InventoryComponent.TryAddPet(pet.PetData);
                 room.RoomUserManager.RemoveBot(pet.VirtualId, false);
 
-                target.SendPacket(new PetInventoryComposer(target.GetUser().GetInventoryComponent().GetPets()));
+                target.SendPacket(new PetInventoryComposer(target.GetUser().InventoryComponent.GetPets()));
                 return;
             }
         }
         else
         {
-            _ = session.GetUser().GetInventoryComponent().TryAddPet(pet.PetData);
+            _ = session.GetUser().InventoryComponent.TryAddPet(pet.PetData);
             room.RoomUserManager.RemoveBot(pet.VirtualId, false);
-            session.SendPacket(new PetInventoryComposer(session.GetUser().GetInventoryComponent().GetPets()));
+            session.SendPacket(new PetInventoryComposer(session.GetUser().InventoryComponent.GetPets()));
         }
     }
 }

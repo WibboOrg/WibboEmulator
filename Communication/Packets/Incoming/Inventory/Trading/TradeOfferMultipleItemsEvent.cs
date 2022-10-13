@@ -22,7 +22,7 @@ internal class TradeOfferMultipleItemsEvent : IPacketEvent
         for (var i = 0; i < itemCount; i++)
         {
             var itemId = packet.PopInt();
-            var userItem = session.GetUser().GetInventoryComponent().GetItem(itemId);
+            var userItem = session.GetUser().InventoryComponent.GetItem(itemId);
             if (userItem == null)
             {
                 continue;

@@ -37,10 +37,10 @@ internal class ModeratorSupportTicketComposer : ServerPacket
             this.WriteString(ticket.ReportedName);
         }
 
-        this.WriteInteger(ticket.Status == TicketStatusType.PICKED ? ticket.ModeratorId : 0);
+        this.WriteInteger(ticket.Status == TicketStatusType.Picked ? ticket.ModeratorId : 0);
         if (userModerator != null)
         {
-            this.WriteString(ticket.Status == TicketStatusType.PICKED ? (ticket.ModName.Equals("") ? userModerator.Username : ticket.ModName) : "");
+            this.WriteString(ticket.Status == TicketStatusType.Picked ? (ticket.ModName.Equals("") ? userModerator.Username : ticket.ModName) : "");
         }
         else
         {

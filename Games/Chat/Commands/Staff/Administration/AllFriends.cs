@@ -18,19 +18,19 @@ internal class AllFriends : IChatCommand
                 continue;
             }
 
-            if (user.GetUser().GetMessenger() == null)
+            if (user.GetUser().Messenger == null)
             {
                 continue;
             }
 
-            if (!user.GetUser().GetMessenger().FriendshipExists(userRoom.UserId))
+            if (!user.GetUser().Messenger.FriendshipExists(userRoom.UserId))
             {
-                user.GetUser().GetMessenger().OnNewFriendship(userRoom.UserId);
+                user.GetUser().Messenger.OnNewFriendship(userRoom.UserId);
             }
 
-            if (!session.GetUser().GetMessenger().FriendshipExists(user.GetUser().Id))
+            if (!session.GetUser().Messenger.FriendshipExists(user.GetUser().Id))
             {
-                session.GetUser().GetMessenger().OnNewFriendship(user.GetUser().Id);
+                session.GetUser().Messenger.OnNewFriendship(user.GetUser().Id);
             }
         }
     }

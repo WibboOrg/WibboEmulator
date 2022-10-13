@@ -7,8 +7,8 @@ internal class EmptyPets : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        session.GetUser().GetInventoryComponent().ClearPets();
-        session.SendPacket(new PetInventoryComposer(session.GetUser().GetInventoryComponent().GetPets()));
+        session.GetUser().InventoryComponent.ClearPets();
+        session.SendPacket(new PetInventoryComposer(session.GetUser().InventoryComponent.GetPets()));
         session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("empty.cleared", session.Langue));
 
     }

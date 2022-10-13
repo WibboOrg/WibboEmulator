@@ -9,7 +9,7 @@ internal class RpTrocUpdateItemsComposer : ServerPacket
 
         foreach (var item in items)
         {
-            var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(item.Key);
+            var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(item.Key);
 
             this.WriteInteger(item.Key);
             this.WriteString((rpItem == null) ? "" : rpItem.Name);

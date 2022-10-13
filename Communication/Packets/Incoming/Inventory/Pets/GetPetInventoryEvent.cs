@@ -13,13 +13,14 @@ internal class GetPetInventoryEvent : IPacketEvent
             return;
         }
 
-        if (session.GetUser().GetInventoryComponent() == null)
+        if (session.GetUser().InventoryComponent == null)
         {
             return;
         }
 
-        session.GetUser().GetInventoryComponent().LoadInventory();
+        session.GetUser().
+        InventoryComponent.LoadInventory();
 
-        session.SendPacket(new PetInventoryComposer(session.GetUser().GetInventoryComponent().GetPets()));
+        session.SendPacket(new PetInventoryComposer(session.GetUser().InventoryComponent.GetPets()));
     }
 }

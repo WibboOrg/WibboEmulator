@@ -39,13 +39,13 @@ public class Group
         switch (type)
         {
             case 0:
-                this.GroupType = GroupType.OPEN;
+                this.GroupType = GroupType.Open;
                 break;
             case 1:
-                this.GroupType = GroupType.LOCKED;
+                this.GroupType = GroupType.Locked;
                 break;
             case 2:
-                this.GroupType = GroupType.PRIVATE;
+                this.GroupType = GroupType.Private;
                 break;
         }
 
@@ -180,7 +180,7 @@ public class Group
             _ = this._administrators.Remove(userId);
             this._members.Add(userId);
         }
-        else if (this.GroupType == GroupType.LOCKED)
+        else if (this.GroupType == GroupType.Locked)
         {
             GuildRequestDao.Insert(dbClient, this.Id, userId);
             if (!this._requests.Contains(userId))

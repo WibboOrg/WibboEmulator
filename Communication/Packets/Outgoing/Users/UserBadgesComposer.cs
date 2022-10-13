@@ -7,10 +7,10 @@ internal class UserBadgesComposer : ServerPacket
         : base(ServerPacketHeader.USER_BADGES_CURRENT)
     {
         this.WriteInteger(user.Id);
-        this.WriteInteger(user.GetBadgeComponent().EquippedCount);
+        this.WriteInteger(user.BadgeComponent.EquippedCount);
 
         var badgeCount = 0;
-        foreach (var badge in user.GetBadgeComponent().GetBadges().ToList())
+        foreach (var badge in user.BadgeComponent.GetBadges().ToList())
         {
             if (badge.Slot > 0)
             {

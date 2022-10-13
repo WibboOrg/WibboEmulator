@@ -28,9 +28,9 @@ internal class DeleteRoomEvent : IPacketEvent
             return;
         }
 
-        if (session.GetUser().GetInventoryComponent() != null)
+        if (session.GetUser().InventoryComponent != null)
         {
-            session.GetUser().GetInventoryComponent().AddItemArray(room.RoomItemHandling.RemoveAllFurniture(session));
+            session.GetUser().InventoryComponent.AddItemArray(room.RoomItemHandling.RemoveAllFurniture(session));
         }
 
         WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);

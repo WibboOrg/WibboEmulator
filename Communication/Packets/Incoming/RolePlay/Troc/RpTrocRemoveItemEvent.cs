@@ -32,6 +32,6 @@ internal class RpTrocRemoveItemEvent : IPacketEvent
             return;
         }
 
-        WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().RemoveItem(rp.TradeId, user.UserId, itemId);
+        WibboEnvironment.GetGame().GetRoleplayManager().TrocManager.RemoveItem(rp.TradeId, user.UserId, itemId);
     }
 }

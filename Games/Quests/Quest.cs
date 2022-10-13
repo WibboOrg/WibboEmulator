@@ -27,7 +27,7 @@ public class Quest
 
     public bool IsCompleted(int userProgress)
     {
-        if (this.GoalType != QuestType.EXPLORE_FIND_ITEM)
+        if (this.GoalType != QuestType.ExploreFindItem)
         {
             return userProgress >= (long)this.GoalData;
         }

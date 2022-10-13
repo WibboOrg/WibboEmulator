@@ -13,6 +13,6 @@ internal class GetBadgesEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new BadgesComposer(session.GetUser().GetBadgeComponent().BadgeList));
+        session.SendPacket(new BadgesComposer(session.GetUser().BadgeComponent.BadgeList));
     }
 }

@@ -24,7 +24,7 @@ internal class AddPhoto : IChatCommand
         var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + session.GetUser().Username + "\", \"s\":\"" + session.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
         var item = ItemFactory.CreateSingleItemNullable(itemData, session.GetUser(), extraData);
-        _ = session.GetUser().GetInventoryComponent().TryAddItem(item);
+        _ = session.GetUser().InventoryComponent.TryAddItem(item);
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {

@@ -61,19 +61,19 @@ internal class Update : IChatCommand
             }
             case "rpitems":
             {
-                WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().Init(dbClient);
+                WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.Init(dbClient);
                 session.SendWhisper("RP Items mis à jour");
                 break;
             }
             case "rpweapon":
             {
-                WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().Init(dbClient);
+                WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.Init(dbClient);
                 session.SendWhisper("RP Weapon mis à jour");
                 break;
             }
             case "rpenemy":
             {
-                WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().Init(dbClient);
+                WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.Init(dbClient);
                 session.SendWhisper("RP Enemy mis à jour");
                 break;
             }

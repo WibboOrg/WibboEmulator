@@ -25,8 +25,6 @@ using WibboEmulator.Games.Rooms.Wired;
 using WibboEmulator.Utilities;
 using WibboEmulator.Utilities.Events;
 
-public delegate void RoomUserSaysEvent(object sender, UserSaysEventArgs e, ref bool messageHandled);
-
 public class Room
 {
     private readonly CancellationTokenSource _cancellationTokenSource = new();
@@ -34,6 +32,9 @@ public class Room
 
     private readonly TimeSpan _saveFurnitureTimer = TimeSpan.FromMinutes(2);
     private DateTime _saveFurnitureTimerLast = DateTime.Now;
+
+    private readonly Dictionary<int, double> _bans;
+    private readonly Dictionary<int, double> _mutes;
 
     public MoodlightData MoodlightData { get; set; }
     public RoomData RoomData { get; set; }
@@ -51,9 +52,6 @@ public class Room
     public WiredHandler WiredHandler { get; }
     public ProjectileManager ProjectileManager { get; }
     public ChatlogManager ChatlogManager { get; }
-
-    private readonly Dictionary<int, double> _bans;
-    private readonly Dictionary<int, double> _mutes;
 
     public int Id => this.RoomData.Id;
     public int IsLagging { get; set; }
@@ -78,7 +76,7 @@ public class Room
 
     public int UserCount => this.RoomUserManager.GetRoomUserCount();
 
-    public event RoomUserSaysEvent OnUserSays;
+    public event EventHandler<UserSaysEventArgs> OnUserSays;
     public event EventHandler OnTrigger;
     public event EventHandler OnTriggerSelf;
     public event EventHandler OnUserCls;
@@ -132,10 +130,10 @@ public class Room
 
     public bool AllowsShous(RoomUser user, string message)
     {
-        var messageHandled = false;
-        this.OnUserSays?.Invoke(null, new UserSaysEventArgs(user, message), ref messageHandled);
+        var args = new UserSaysEventArgs(user, message);
+        this.OnUserSays?.Invoke(null, args);
 
-        return messageHandled;
+        return args.Result;
     }
 
     public void CollisionUser(RoomUser user)
@@ -415,10 +413,9 @@ public class Room
 
             var idleCount = 0;
 
-            this.
-            RoomUserManager.OnCycle(ref idleCount);
+            this.RoomUserManager.OnCycle(ref idleCount);
             this.RoomItemHandling.OnCycle();
-            this.RoomRoleplay.OnCycle();
+            this.RoomRoleplay?.OnCycle();
             this.ProjectileManager.OnCycle();
             this.GameItemHandler.OnCycle();
             this.WiredHandler.OnCycle();

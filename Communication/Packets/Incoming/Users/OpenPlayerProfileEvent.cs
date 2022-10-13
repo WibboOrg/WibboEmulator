@@ -23,9 +23,9 @@ internal class OpenPlayerProfileEvent : IPacketEvent
 
         var friendCount = 0;
 
-        if (targetData.GetMessenger() != null)
+        if (targetData.Messenger != null)
         {
-            friendCount = targetData.GetMessenger().Count;
+            friendCount = targetData.Messenger.Count;
         }
         else
         {

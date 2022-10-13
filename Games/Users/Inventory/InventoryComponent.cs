@@ -183,7 +183,7 @@ public class InventoryComponent : IDisposable
 
     public bool TryAddItem(Item item)
     {
-        this._userInstance.GetClient().SendPacket(new FurniListAddComposer(item));
+        this._userInstance.Client.SendPacket(new FurniListAddComposer(item));
 
         return this._userItems.TryAdd(item.Id, item);
     }
@@ -264,7 +264,8 @@ public class InventoryComponent : IDisposable
 
         _ = this._userItems.TryAdd(userItem.Id, userItem);
 
-        this._userInstance.GetClient().SendPacket(new FurniListAddComposer(userItem));
+        this._userInstance.
+        Client.SendPacket(new FurniListAddComposer(userItem));
 
         return userItem;
     }
@@ -308,6 +309,7 @@ public class InventoryComponent : IDisposable
 
         _ = this._userItems.TryAdd(userItem.Id, userItem);
 
-        this._userInstance.GetClient().SendPacket(new FurniListAddComposer(userItem));
+        this._userInstance.
+        Client.SendPacket(new FurniListAddComposer(userItem));
     }
 }

@@ -25,7 +25,7 @@ internal class ExtraBox : IChatCommand
         var items = ItemFactory.CreateMultipleItems(itemData, session.GetUser(), "", nbLot);
         foreach (var purchasedItem in items)
         {
-            if (session.GetUser().GetInventoryComponent().TryAddItem(purchasedItem))
+            if (session.GetUser().InventoryComponent.TryAddItem(purchasedItem))
             {
                 session.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
             }

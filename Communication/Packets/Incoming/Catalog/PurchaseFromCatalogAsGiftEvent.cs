@@ -209,17 +209,17 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
                 if (!data.StartsWith("perso_"))
                 {
-                    session.GetUser().GetBadgeComponent().RemoveBadge(data);
+                    session.GetUser().BadgeComponent.RemoveBadge(data);
                 }
 
-                session.SendPacket(new BadgesComposer(session.GetUser().GetBadgeComponent().BadgeList));
+                session.SendPacket(new BadgesComposer(session.GetUser().BadgeComponent.BadgeList));
 
                 itemExtraData = data;
                 break;
             }
 
             case InteractionType.BADGE_DISPLAY:
-                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(data) || !session.GetUser().GetBadgeComponent().HasBadge(data))
+                if (WibboEnvironment.GetGame().GetBadgeManager().HaveNotAllowed(data) || !session.GetUser().BadgeComponent.HasBadge(data))
                 {
                     session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.buybadgedisplay.error", session.Langue));
                     session.SendPacket(new PurchaseOKComposer());
@@ -244,7 +244,7 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             var receiver = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(user.Id);
             if (receiver != null)
             {
-                _ = receiver.GetUser().GetInventoryComponent().TryAddItem(giveItem);
+                _ = receiver.GetUser().InventoryComponent.TryAddItem(giveItem);
                 receiver.SendPacket(new FurniListNotificationComposer(giveItem.Id, 1));
                 receiver.SendPacket(new PurchaseOKComposer());
                 //Receiver.SendPacket(new FurniListUpdateComposer());

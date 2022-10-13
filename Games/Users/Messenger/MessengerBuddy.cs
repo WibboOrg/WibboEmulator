@@ -22,7 +22,7 @@ public class MessengerBuddy
     public void UpdateUser()
     {
         var client = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this.UserId);
-        if (client != null && client.GetUser() != null && client.GetUser().GetMessenger() != null && !client.GetUser().GetMessenger().AppearOffline)
+        if (client != null && client.GetUser() != null && client.GetUser().Messenger != null && !client.GetUser().Messenger.AppearOffline)
         {
             this.IsOnline = true;
             this.Look = client.GetUser().Look;

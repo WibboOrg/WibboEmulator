@@ -34,7 +34,7 @@ internal class PlaceBotEvent : IPacketEvent
             return;
         }
 
-        if (!session.GetUser().GetInventoryComponent().TryGetBot(botId, out var bot))
+        if (!session.GetUser().InventoryComponent.TryGetBot(botId, out var bot))
         {
             return;
         }
@@ -52,11 +52,11 @@ internal class PlaceBotEvent : IPacketEvent
 
         _ = room.RoomUserManager.DeployBot(new RoomBot(bot.Id, bot.OwnerId, room.Id, BotAIType.Generic, bot.WalkingEnabled, bot.Name, bot.Motto, bot.Gender, bot.Figure, x, y, 0, 2, bot.ChatEnabled, bot.ChatText, bot.ChatSeconds, bot.IsDancing, bot.Enable, bot.Handitem, bot.Status), null);
 
-        if (!session.GetUser().GetInventoryComponent().TryRemoveBot(botId, out _))
+        if (!session.GetUser().InventoryComponent.TryRemoveBot(botId, out _))
         {
             return;
         }
 
-        session.SendPacket(new BotInventoryComposer(session.GetUser().GetInventoryComponent().GetBots()));
+        session.SendPacket(new BotInventoryComposer(session.GetUser().InventoryComponent.GetBots()));
     }
 }

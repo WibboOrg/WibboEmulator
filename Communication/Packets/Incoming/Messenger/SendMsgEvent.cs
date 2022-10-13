@@ -7,7 +7,7 @@ internal class SendMsgEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session == null || session.GetUser() == null || session.GetUser().GetMessenger() == null)
+        if (session == null || session.GetUser() == null || session.GetUser().Messenger == null)
         {
             return;
         }
@@ -49,6 +49,7 @@ internal class SendMsgEvent : IPacketEvent
             return;
         }
 
-        session.GetUser().GetMessenger().SendInstantMessage(userId, message);
+        session.GetUser().
+        Messenger.SendInstantMessage(userId, message);
     }
 }

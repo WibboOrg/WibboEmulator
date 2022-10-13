@@ -15,7 +15,7 @@ public class UserSays : WiredTriggerBase, IWired
         this.IntParams.Add(0);
     }
 
-    private void OnUserSays(object sender, UserSaysEventArgs args, ref bool messageHandled)
+    private void OnUserSays(object sender, UserSaysEventArgs args)
     {
         var user = args.User;
         var message = args.Message;
@@ -30,7 +30,7 @@ public class UserSays : WiredTriggerBase, IWired
         if ((!isOwnerOnly && this.CanBeTriggered(message) && !string.IsNullOrEmpty(message)) || (isOwnerOnly && user.IsOwner() && this.CanBeTriggered(message) && !string.IsNullOrEmpty(message)))
         {
             this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
-            messageHandled = true;
+            args.Result = true;
         }
     }
 

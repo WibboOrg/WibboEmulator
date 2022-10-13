@@ -20,7 +20,7 @@ internal class JoinGroupEvent : IPacketEvent
             return;
         }
 
-        if (group.IsMember(session.GetUser().Id) || group.IsAdmin(session.GetUser().Id) || (group.HasRequest(session.GetUser().Id) && group.GroupType == GroupType.LOCKED) || group.GroupType == GroupType.PRIVATE)
+        if (group.IsMember(session.GetUser().Id) || group.IsAdmin(session.GetUser().Id) || (group.HasRequest(session.GetUser().Id) && group.GroupType == GroupType.Locked) || group.GroupType == GroupType.Private)
         {
             return;
         }
@@ -33,7 +33,7 @@ internal class JoinGroupEvent : IPacketEvent
 
         group.AddMember(session.GetUser().Id);
 
-        if (group.GroupType == GroupType.LOCKED)
+        if (group.GroupType == GroupType.Locked)
         {
             session.SendPacket(new GroupInfoComposer(group, session));
         }

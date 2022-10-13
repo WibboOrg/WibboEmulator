@@ -122,11 +122,11 @@ public class RoomUserManager
             RPEnemy enemy;
             if (bot.IsPet)
             {
-                enemy = WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().GetEnemyPet(bot.Id);
+                enemy = WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.GetEnemyPet(bot.Id);
             }
             else
             {
-                enemy = WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().GetEnemyBot(bot.Id);
+                enemy = WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.GetEnemyBot(bot.Id);
             }
 
             if (enemy != null)
@@ -279,7 +279,7 @@ public class RoomUserManager
                     user.ApplyEffect(29);
                     if (user.Client != null)
                     {
-                        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.EXPLORE_FIND_ITEM, 1948);
+                        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.ExploreFindItem, 1948);
                     }
 
                     user.CurrentItemEffect = itemEffectType;
@@ -312,7 +312,7 @@ public class RoomUserManager
                     user.CurrentItemEffect = ItemEffectType.IceSkates;
                     if (user.Client != null)
                     {
-                        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.EXPLORE_FIND_ITEM, 1413);
+                        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.ExploreFindItem, 1413);
                     }
 
                     break;
@@ -336,7 +336,7 @@ public class RoomUserManager
                     user.CurrentItemEffect = itemEffectType;
                     if (user.Client != null)
                     {
-                        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.EXPLORE_FIND_ITEM, 2199);
+                        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.ExploreFindItem, 2199);
                     }
 
                     break;
@@ -494,39 +494,39 @@ public class RoomUserManager
 
         if (!user.IsBot)
         {
-            if (session.GetUser().GetBadgeComponent().HasBadgeSlot("ADM")) // STAFF
+            if (session.GetUser().BadgeComponent.HasBadgeSlot("ADM")) // STAFF
             {
                 user.CurrentEffect = 540;
             }
-            else if (session.GetUser().GetBadgeComponent().HasBadgeSlot("PRWRD1")) // PROWIRED
+            else if (session.GetUser().BadgeComponent.HasBadgeSlot("PRWRD1")) // PROWIRED
             {
                 user.CurrentEffect = 580;
             }
-            else if (session.GetUser().GetBadgeComponent().HasBadgeSlot("GPHWIB")) // GRAPHISTE
+            else if (session.GetUser().BadgeComponent.HasBadgeSlot("GPHWIB")) // GRAPHISTE
             {
                 user.CurrentEffect = 557;
             }
-            else if (session.GetUser().GetBadgeComponent().HasBadgeSlot("wibbo.helpeur")) // HELPEUR
+            else if (session.GetUser().BadgeComponent.HasBadgeSlot("wibbo.helpeur")) // HELPEUR
             {
                 user.CurrentEffect = 544;
             }
-            else if (session.GetUser().GetBadgeComponent().HasBadgeSlot("WIBARC")) // ARCHI
+            else if (session.GetUser().BadgeComponent.HasBadgeSlot("WIBARC")) // ARCHI
             {
                 user.CurrentEffect = 546;
             }
-            else if (session.GetUser().GetBadgeComponent().HasBadgeSlot("CRPOFFI")) // CROUPIER
+            else if (session.GetUser().BadgeComponent.HasBadgeSlot("CRPOFFI")) // CROUPIER
             {
                 user.CurrentEffect = 570;
             }
-            else if (session.GetUser().GetBadgeComponent().HasBadgeSlot("ZEERSWS")) // WIBBOSTATIONORIGINERADIO
+            else if (session.GetUser().BadgeComponent.HasBadgeSlot("ZEERSWS")) // WIBBOSTATIONORIGINERADIO
             {
                 user.CurrentEffect = 552;
             }
-            else if (session.GetUser().GetBadgeComponent().HasBadgeSlot("WBASSO")) // ASSOCIER
+            else if (session.GetUser().BadgeComponent.HasBadgeSlot("WBASSO")) // ASSOCIER
             {
                 user.CurrentEffect = 576;
             }
-            else if (session.GetUser().GetBadgeComponent().HasBadgeSlot("WIBBOCOM")) // AGENT DE COMMUNICATION
+            else if (session.GetUser().BadgeComponent.HasBadgeSlot("WIBBOCOM")) // AGENT DE COMMUNICATION
             {
                 user.CurrentEffect = 581;
             }
@@ -551,7 +551,7 @@ public class RoomUserManager
 
         if (!user.IsBot && user.Client != null && this._room.RoomData.OwnerName != user.Client.GetUser().Username)
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.SOCIAL_VISIT, 0);
+            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.SocialVisit, 0);
         }
 
         if (!user.IsBot)
@@ -660,7 +660,7 @@ public class RoomUserManager
 
             if (user.Roleplayer != null)
             {
-                WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().RemoveTrade(user.Roleplayer.TradeId);
+                WibboEnvironment.GetGame().GetRoleplayManager().TrocManager.RemoveTrade(user.Roleplayer.TradeId);
             }
 
             if (user.IsSpectator)
@@ -1555,7 +1555,7 @@ public class RoomUserManager
             if (rp != null && !rp.Dead)
             {
                 var itemTmp = this._room.RoomItemHandling.GetFirstTempDrop(user.X, user.Y);
-                if (itemTmp != null && itemTmp.InteractionType == InteractionTypeTemp.MONEY)
+                if (itemTmp != null && itemTmp.InteractionType == InteractionTypeTemp.Money)
                 {
                     rp.Money += itemTmp.Value;
                     rp.SendUpdate();
@@ -1567,9 +1567,9 @@ public class RoomUserManager
                     user.OnChat("*Récupère un objet au sol*");
                     this._room.RoomItemHandling.RemoveTempItem(itemTmp.Id);
                 }
-                else if (itemTmp != null && itemTmp.InteractionType == InteractionTypeTemp.RPITEM)
+                else if (itemTmp != null && itemTmp.InteractionType == InteractionTypeTemp.RpItem)
                 {
-                    var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemTmp.Value);
+                    var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(itemTmp.Value);
                     if (rpItem != null)
                     {
                         if (!rpItem.AllowStack && rp.GetInventoryItem(rpItem.Id) != null)

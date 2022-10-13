@@ -14,27 +14,27 @@ public class QueryChunk
         this._parameters = new Dictionary<string, string>();
         this._queries = new StringBuilder();
         this._queryCount = 0;
-        this._endingType = EndingType.SEQUENTIAL;
+        this._endingType = EndingType.Sequential;
     }
 
     public QueryChunk(string startQuery)
     {
         this._parameters = new Dictionary<string, string>();
         this._queries = new StringBuilder(startQuery);
-        this._endingType = EndingType.CONTINUOUS;
+        this._endingType = EndingType.Continuous;
         this._queryCount = 0;
     }
 
     public void AddQuery(string query)
     {
-        ++this._queryCount;
+        this._queryCount++;
         _ = this._queries.Append(query);
         switch (this._endingType)
         {
-            case EndingType.SEQUENTIAL:
+            case EndingType.Sequential:
                 _ = this._queries.Append(';');
                 break;
-            case EndingType.CONTINUOUS:
+            case EndingType.Continuous:
                 _ = this._queries.Append(',');
                 break;
         }

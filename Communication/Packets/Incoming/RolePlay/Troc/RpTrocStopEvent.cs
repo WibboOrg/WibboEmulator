@@ -30,6 +30,6 @@ internal class RpTrocStopEvent : IPacketEvent
             return;
         }
 
-        WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().RemoveTrade(rp.TradeId);
+        WibboEnvironment.GetGame().GetRoleplayManager().TrocManager.RemoveTrade(rp.TradeId);
     }
 }

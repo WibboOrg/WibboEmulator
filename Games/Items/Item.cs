@@ -13,10 +13,11 @@ using WibboEmulator.Utilities.Events;
 
 public class Item : IEquatable<Item>
 {
+    private Room _roomInstance;
+
     public int Id { get; set; }
     public int RoomId { get; set; }
     public int BaseItem { get; set; }
-
     public string ExtraData { get; set; }
     public int GroupId { get; set; }
     public int Limited { get; set; }
@@ -31,30 +32,24 @@ public class Item : IEquatable<Item>
     public int InteractingUser { get; set; }
     public int InteractingUser2 { get; set; }
     public int EffectId { get; set; }
-
     public MovementState Movement { get; set; }
     public MovementDirection MovementDir { get; set; }
-
     public Dictionary<string, int> Scores { get; set; }
     public IWired WiredHandler { get; set; }
+    public ItemData Data { get; set; }
+    public FurniInteractor Interactor { get; set; }
+    public List<Point> GetAffectedTiles { get; private set; }
+    public int X { get; private set; }
+    public int Y { get; private set; }
+    public double Z { get; private set; }
+    public Point Coordinate => new(this.X, this.Y);
+    public double TotalHeight => this.Z + this.Height;
+    public bool IsWallItem { get; set; }
+    public bool IsFloorItem { get; set; }
 
     public event EventHandler<ItemTriggeredEventArgs> ItemTrigger;
     public event EventHandler<ItemTriggeredEventArgs> OnUserWalksOffFurni;
     public event EventHandler<ItemTriggeredEventArgs> OnUserWalksOnFurni;
-
-    private Room _roomInstance;
-
-    public List<Point> GetAffectedTiles { get; private set; }
-
-    public int X { get; private set; }
-
-    public int Y { get; private set; }
-
-    public double Z { get; private set; }
-
-    public Point Coordinate => new(this.X, this.Y);
-
-    public double TotalHeight => this.Z + this.Height;
 
     public double Height
     {
@@ -77,10 +72,6 @@ public class Item : IEquatable<Item>
             return this.Data.Height;
         }
     }
-
-    public bool IsWallItem { get; set; }
-
-    public bool IsFloorItem { get; set; }
 
     public Point SquareInFront
     {
@@ -174,9 +165,6 @@ public class Item : IEquatable<Item>
         }
     }
 
-    public ItemData Data { get; set; }
-    public FurniInteractor Interactor { get; set; }
-
     public Item(int id, int roomId, int baseItem, string extraData, int limitedNumber, int limitedStack, int x, int y, double z, int rot,
         string wallCoord, Room room)
     {
@@ -203,12 +191,9 @@ public class Item : IEquatable<Item>
             this.LimitedStack = limitedStack;
             this.Data = data;
             this.WallCoord = wallCoord;
-
             this.Scores = new Dictionary<string, int>();
-
             this.EffectId = this.Data.EffectId;
 
-            this._roomInstance = room;
             if (this.GetBaseItem() == null)
             {
                 ExceptionLogger.LogException("Unknown baseID: " + baseItem);
@@ -269,19 +254,19 @@ public class Item : IEquatable<Item>
                 return;
             }
 
+            this._roomInstance = room;
             this.GetAffectedTiles = GameMap.GetAffectedTiles(this.GetBaseItem().Length, this.GetBaseItem().Width, this.X, this.Y, rot);
-
             this.Interactor = ItemFactory.CreateInteractor(this);
         }
     }
 
-    public void SetState(int pX, int pY, double pZ, bool updateTiles = false)
+    public void SetState(int x, int y, double z, bool updateTiles = false)
     {
-        this.X = pX;
-        this.Y = pY;
-        if (!double.IsInfinity(pZ))
+        this.X = x;
+        this.Y = y;
+        if (!double.IsInfinity(z))
         {
-            this.Z = pZ;
+            this.Z = z;
         }
 
         if (updateTiles)
@@ -641,25 +626,9 @@ public class Item : IEquatable<Item>
 
     public Room GetRoom() => this._roomInstance;
 
-    public void UserWalksOnFurni(RoomUser user, Item item)
-    {
-        if (this.OnUserWalksOnFurni == null)
-        {
-            return;
-        }
+    public void UserWalksOnFurni(RoomUser user, Item item) => this.OnUserWalksOnFurni?.Invoke(this, new(user, item));
 
-        this.OnUserWalksOnFurni?.Invoke(this, new(user, item));
-    }
-
-    public void UserWalksOffFurni(RoomUser user, Item item)
-    {
-        if (this.OnUserWalksOffFurni == null)
-        {
-            return;
-        }
-
-        this.OnUserWalksOffFurni?.Invoke(this, new(user, item));
-    }
+    public void UserWalksOffFurni(RoomUser user, Item item) => this.OnUserWalksOffFurni?.Invoke(this, new(user, item));
 
     public override bool Equals(object obj) => this.Equals(obj as Item);
 

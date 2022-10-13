@@ -39,7 +39,7 @@ internal class AddPhotoCommand : IRCONCommand
         var extraData = "{\"w\":\"" + "/photos/" + photoId + ".png" + "\", \"n\":\"" + client.GetUser().Username + "\", \"s\":\"" + client.GetUser().Id + "\", \"u\":\"" + "0" + "\", \"t\":\"" + time + "000" + "\"}";
 
         var item = ItemFactory.CreateSingleItemNullable(itemData, client.GetUser(), extraData);
-        _ = client.GetUser().GetInventoryComponent().TryAddItem(item);
+        _ = client.GetUser().InventoryComponent.TryAddItem(item);
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {

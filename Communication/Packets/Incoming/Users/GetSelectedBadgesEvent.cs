@@ -16,7 +16,7 @@ internal class GetSelectedBadgesEvent : IPacketEvent
             return;
         }
 
-        if (user.GetBadgeComponent() == null)
+        if (user.BadgeComponent == null)
         {
             return;
         }

@@ -48,7 +48,7 @@ public class ProjectileManager
 
 
             Point newPoint;
-            if (item.InteractionType == InteractionTypeTemp.GRENADE)
+            if (item.InteractionType == InteractionTypeTemp.Grenade)
             {
                 newPoint = MovementUtility.GetMoveCoord(item.X, item.Y, 1, item.Movement);
                 newX = newPoint.X;
@@ -209,7 +209,7 @@ public class ProjectileManager
                     return;
                 }
 
-                rp.Hit(userTouch, item.Value, this._room, true, item.InteractionType == InteractionTypeTemp.PROJECTILE_BOT);
+                rp.Hit(userTouch, item.Value, this._room, true, item.InteractionType == InteractionTypeTemp.ProjectileBot);
             }
         }
         else
@@ -282,7 +282,7 @@ public class ProjectileManager
 
     public void AddProjectile(int id, int x, int y, double z, MovementDirection movement, int dmg = 0, int distance = 10, int teamId = -1, bool isBot = false)
     {
-        var item = this._room.RoomItemHandling.AddTempItem(id, 77151726, x, y, z, "1", dmg, isBot ? InteractionTypeTemp.PROJECTILE_BOT : InteractionTypeTemp.PROJECTILE, movement, distance, teamId);
+        var item = this._room.RoomItemHandling.AddTempItem(id, 77151726, x, y, z, "1", dmg, isBot ? InteractionTypeTemp.ProjectileBot : InteractionTypeTemp.Projectile, movement, distance, teamId);
 
         lock (this._projectileSync)
         {

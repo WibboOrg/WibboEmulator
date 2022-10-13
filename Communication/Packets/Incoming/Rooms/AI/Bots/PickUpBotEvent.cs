@@ -55,8 +55,8 @@ internal class PickUpBotEvent : IPacketEvent
             BotUserDao.UpdateRoomId(dbClient, botId);
         }
 
-        _ = session.GetUser().GetInventoryComponent().TryAddBot(new Bot(botUser.BotData.Id, botUser.BotData.OwnerId, botUser.BotData.Name, botUser.BotData.Motto, botUser.BotData.Look, botUser.BotData.Gender, botUser.BotData.WalkingEnabled, botUser.BotData.AutomaticChat, botUser.BotData.ChatText, botUser.BotData.SpeakingInterval, botUser.BotData.IsDancing, botUser.BotData.Enable, botUser.BotData.Handitem, botUser.BotData.Status));
-        session.SendPacket(new BotInventoryComposer(session.GetUser().GetInventoryComponent().GetBots()));
+        _ = session.GetUser().InventoryComponent.TryAddBot(new Bot(botUser.BotData.Id, botUser.BotData.OwnerId, botUser.BotData.Name, botUser.BotData.Motto, botUser.BotData.Look, botUser.BotData.Gender, botUser.BotData.WalkingEnabled, botUser.BotData.AutomaticChat, botUser.BotData.ChatText, botUser.BotData.SpeakingInterval, botUser.BotData.IsDancing, botUser.BotData.Enable, botUser.BotData.Handitem, botUser.BotData.Status));
+        session.SendPacket(new BotInventoryComposer(session.GetUser().InventoryComponent.GetBots()));
         room.RoomUserManager.RemoveBot(botUser.VirtualId, false);
     }
 }

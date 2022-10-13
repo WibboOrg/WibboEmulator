@@ -27,7 +27,7 @@ internal class PlacePetEvent : IPacketEvent
             return;
         }
 
-        if (!session.GetUser().GetInventoryComponent().TryGetPet(packet.PopInt(), out var pet))
+        if (!session.GetUser().InventoryComponent.TryGetPet(packet.PopInt(), out var pet))
         {
             return;
         }
@@ -70,12 +70,12 @@ internal class PlacePetEvent : IPacketEvent
             BotPetDao.UpdateRoomId(dbClient, pet.PetId, pet.RoomId);
         }
 
-        if (!session.GetUser().GetInventoryComponent().TryRemovePet(pet.PetId, out var toRemove))
+        if (!session.GetUser().InventoryComponent.TryRemovePet(pet.PetId, out var toRemove))
         {
             Console.WriteLine("Error whilst removing pet: " + toRemove.PetId);
             return;
         }
 
-        session.SendPacket(new PetInventoryComposer(session.GetUser().GetInventoryComponent().GetPets()));
+        session.SendPacket(new PetInventoryComposer(session.GetUser().InventoryComponent.GetPets()));
     }
 }

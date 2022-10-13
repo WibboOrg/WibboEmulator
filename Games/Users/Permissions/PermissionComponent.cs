@@ -13,15 +13,8 @@ public sealed class PermissionComponent : IDisposable
 
     public bool Init()
     {
-        if (this._permissions.Count > 0)
-        {
-            this._permissions.Clear();
-        }
-
-        if (this._commands.Count > 0)
-        {
-            this._commands.Clear();
-        }
+        this._permissions.Clear();
+        this._commands.Clear();
 
         return true;
     }

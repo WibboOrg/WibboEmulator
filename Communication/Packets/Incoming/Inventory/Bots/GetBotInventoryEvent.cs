@@ -13,6 +13,6 @@ internal class GetBotInventoryEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new BotInventoryComposer(session.GetUser().GetInventoryComponent().GetBots()));
+        session.SendPacket(new BotInventoryComposer(session.GetUser().InventoryComponent.GetBots()));
     }
 }

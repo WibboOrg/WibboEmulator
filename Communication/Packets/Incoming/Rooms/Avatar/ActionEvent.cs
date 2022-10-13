@@ -33,6 +33,6 @@ internal class ActionEvent : IPacketEvent
             room.SendPacket(new SleepComposer(roomUserByUserId.VirtualId, true));
         }
 
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SOCIAL_WAVE, 0);
+        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialWave, 0);
     }
 }

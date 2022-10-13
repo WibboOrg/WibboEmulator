@@ -61,7 +61,7 @@ internal class SendRoomInviteEvent : IPacketEvent
 
         foreach (var userId in targets)
         {
-            if (session.GetUser().GetMessenger().FriendshipExists(userId))
+            if (session.GetUser().Messenger.FriendshipExists(userId))
             {
                 var clientByUserId = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(userId);
                 if (clientByUserId == null || clientByUserId.GetUser().IgnoreRoomInvites)
@@ -69,7 +69,7 @@ internal class SendRoomInviteEvent : IPacketEvent
                     break;
                 }
 
-                if (clientByUserId.GetUser().GetMessenger().FriendshipExists(session.GetUser().Id))
+                if (clientByUserId.GetUser().Messenger.FriendshipExists(session.GetUser().Id))
                 {
                     clientByUserId.SendPacket(roomInvitePacket);
                 }

@@ -50,8 +50,8 @@ public class RoleBot
         this.Config = enemyConfig;
 
         this.Health = this.Config.Health;
-        this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(this.Config.WeaponGunId);
-        this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(this.Config.WeaponCacId);
+        this.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponGun(this.Config.WeaponGunId);
+        this.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponCac(this.Config.WeaponCacId);
     }
 
     private bool IsAllowZone(RoomUser bot)
@@ -187,15 +187,15 @@ public class RoleBot
 
             if (this.Config.MoneyDrop > 0)
             {
-                _ = room.RoomItemHandling.AddTempItem(bot.VirtualId, this.Config.DropScriptId, bot.SetX, bot.SetY, bot.Z, "1", this.Config.MoneyDrop, InteractionTypeTemp.MONEY);
+                _ = room.RoomItemHandling.AddTempItem(bot.VirtualId, this.Config.DropScriptId, bot.SetX, bot.SetY, bot.Z, "1", this.Config.MoneyDrop, InteractionTypeTemp.Money);
             }
 
             if (this.Config.LootItemId > 0)
             {
-                var item = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(this.Config.LootItemId);
+                var item = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(this.Config.LootItemId);
                 if (item != null)
                 {
-                    _ = room.RoomItemHandling.AddTempItem(bot.VirtualId, 3996, bot.SetX, bot.SetY, bot.Z, item.Name, this.Config.LootItemId, InteractionTypeTemp.RPITEM);
+                    _ = room.RoomItemHandling.AddTempItem(bot.VirtualId, 3996, bot.SetX, bot.SetY, bot.Z, item.Name, this.Config.LootItemId, InteractionTypeTemp.RpItem);
                 }
             }
 

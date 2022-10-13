@@ -12,19 +12,20 @@ using WibboEmulator.Games.Roleplay.Weapon;
 public class RoleplayManager
 {
     private readonly ConcurrentDictionary<int, RolePlayerManager> _rolePlay;
-    private readonly RPItemManager _roleplayItemManager;
-    private readonly RPWeaponManager _roleplayWeaponManager;
-    private readonly RPEnemyManager _roleplayEnemyManager;
-    private readonly RPTrocManager _roleplayTrocManager;
+
+    public RPTrocManager TrocManager { get; }
+    public RPWeaponManager WeaponManager { get; }
+    public RPItemManager ItemManager { get; }
+    public RPEnemyManager EnemyManager { get; }
 
     public RoleplayManager()
     {
         this._rolePlay = new ConcurrentDictionary<int, RolePlayerManager>();
 
-        this._roleplayItemManager = new RPItemManager();
-        this._roleplayWeaponManager = new RPWeaponManager();
-        this._roleplayEnemyManager = new RPEnemyManager();
-        this._roleplayTrocManager = new RPTrocManager();
+        this.ItemManager = new RPItemManager();
+        this.WeaponManager = new RPWeaponManager();
+        this.EnemyManager = new RPEnemyManager();
+        this.TrocManager = new RPTrocManager();
     }
 
     public RolePlayerManager GetRolePlay(int ownerId)
@@ -38,19 +39,11 @@ public class RoleplayManager
         return rp;
     }
 
-    public RPTrocManager GetTrocManager() => this._roleplayTrocManager;
-
-    public RPWeaponManager GetWeaponManager() => this._roleplayWeaponManager;
-
-    public RPItemManager GetItemManager() => this._roleplayItemManager;
-
-    public RPEnemyManager GetEnemyManager() => this._roleplayEnemyManager;
-
     public void Init(IQueryAdapter dbClient)
     {
-        this._roleplayItemManager.Init(dbClient);
-        this._roleplayWeaponManager.Init(dbClient);
-        this._roleplayEnemyManager.Init(dbClient);
+        this.ItemManager.Init(dbClient);
+        this.WeaponManager.Init(dbClient);
+        this.EnemyManager.Init(dbClient);
 
         var table = RoleplayDao.GetAll(dbClient);
         if (table != null)

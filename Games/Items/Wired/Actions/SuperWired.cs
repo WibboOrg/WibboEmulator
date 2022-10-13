@@ -261,11 +261,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 RPEnemy rpEnemyConfig;
                 if (!botOrPet.IsPet)
                 {
-                    rpEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().GetEnemyBot(botOrPet.BotData.Id);
+                    rpEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.GetEnemyBot(botOrPet.BotData.Id);
                 }
                 else
                 {
-                    rpEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().GetEnemyPet(botOrPet.BotData.Id);
+                    rpEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.GetEnemyPet(botOrPet.BotData.Id);
                 }
 
                 if (rpEnemyConfig == null)
@@ -558,14 +558,14 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 if (!botOrPet.IsPet)
                 {
-                    WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().RemoveEnemyBot(botOrPet.BotData.Id);
+                    WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.RemoveEnemyBot(botOrPet.BotData.Id);
                     botOrPet.BotData.RoleBot = null;
                     botOrPet.BotData.AiType = BotAIType.Generic;
                     _ = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
                 }
                 else
                 {
-                    WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().RemoveEnemyPet(botOrPet.BotData.Id);
+                    WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.RemoveEnemyPet(botOrPet.BotData.Id);
                     botOrPet.BotData.RoleBot = null;
                     botOrPet.BotData.AiType = BotAIType.Pet;
                     _ = botOrPet.BotData.GenerateBotAI(botOrPet.VirtualId);
@@ -582,7 +582,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 if (!botOrPet.IsPet)
                 {
-                    var rpEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().AddEnemyBot(botOrPet.BotData.Id);
+                    var rpEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.AddEnemyBot(botOrPet.BotData.Id);
                     if (rpEnemyConfig != null)
                     {
                         botOrPet.BotData.RoleBot = new RoleBot(rpEnemyConfig);
@@ -592,7 +592,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 }
                 else
                 {
-                    var rpEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().GetEnemyManager().AddEnemyPet(botOrPet.BotData.Id);
+                    var rpEnemyConfig = WibboEnvironment.GetGame().GetRoleplayManager().EnemyManager.AddEnemyPet(botOrPet.BotData.Id);
                     if (rpEnemyConfig != null)
                     {
                         botOrPet.BotData.RoleBot = new RoleBot(rpEnemyConfig);
@@ -645,7 +645,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 _ = int.TryParse(value, out var itemId);
 
-                var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
+                var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(itemId);
                 if (rpItem == null)
                 {
                     break;
@@ -658,7 +658,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 _ = int.TryParse(value, out var itemId);
 
-                var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
+                var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(itemId);
                 if (rpItem == null)
                 {
                     break;
@@ -707,7 +707,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                             continue;
                         }
 
-                        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(id);
+                        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(id);
                         if (rpItem == null)
                         {
                             continue;
@@ -724,7 +724,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         break;
                     }
 
-                    var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(id);
+                    var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(id);
                     if (rpItem == null)
                     {
                         break;
@@ -764,7 +764,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     count = 0;
                 }
 
-                rp.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(count);
+                rp.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponGun(count);
 
                 break;
             }
@@ -777,7 +777,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     count = 0;
                 }
 
-                rp.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(count);
+                rp.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponCac(count);
                 break;
             }
             case "pvp":
@@ -943,7 +943,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                _ = this.RoomInstance.RoomItemHandling.AddTempItem(user.VirtualId, valueNumber, user.SetX, user.SetY, user.Z, "1", 0, InteractionTypeTemp.RPITEM);
+                _ = this.RoomInstance.RoomItemHandling.AddTempItem(user.VirtualId, valueNumber, user.SetX, user.SetY, user.Z, "1", 0, InteractionTypeTemp.RpItem);
                 break;
             }
         }
@@ -2078,14 +2078,14 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "badge":
             {
-                user.Client.GetUser().GetBadgeComponent().GiveBadge(value, true);
+                user.Client.GetUser().BadgeComponent.GiveBadge(value, true);
                 user.Client.SendPacket(new ReceiveBadgeComposer(value));
                 break;
             }
             case "removebadge":
             {
-                user.Client.GetUser().GetBadgeComponent().RemoveBadge(value);
-                user.Client.SendPacket(new BadgesComposer(user.Client.GetUser().GetBadgeComponent().BadgeList));
+                user.Client.GetUser().BadgeComponent.RemoveBadge(value);
+                user.Client.SendPacket(new BadgesComposer(user.Client.GetUser().BadgeComponent.BadgeList));
                 break;
             }
 
@@ -2171,7 +2171,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 foreach (var purchasedItem in items)
                 {
-                    if (user.Client.GetUser().GetInventoryComponent().TryAddItem(purchasedItem))
+                    if (user.Client.GetUser().InventoryComponent.TryAddItem(purchasedItem))
                     {
                         user.Client.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
                     }

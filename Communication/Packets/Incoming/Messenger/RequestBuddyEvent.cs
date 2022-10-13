@@ -10,11 +10,11 @@ internal class RequestBuddyEvent : IPacketEvent
     {
         var userName = packet.PopString();
 
-        if (session.GetUser().GetMessenger() == null || !session.GetUser().GetMessenger().RequestBuddy(userName))
+        if (session.GetUser().Messenger == null || !session.GetUser().Messenger.RequestBuddy(userName))
         {
             return;
         }
 
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SOCIAL_FRIEND, 0);
+        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialFriend, 0);
     }
 }

@@ -210,7 +210,7 @@ public class RPTrocManager
             return;
         }
 
-        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
+        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(itemId);
         if (rpItem == null || rpItem.Category == RPItemCategory.Quete || !rpItem.AllowStack)
         {
             return;

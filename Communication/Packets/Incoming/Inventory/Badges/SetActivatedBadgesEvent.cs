@@ -20,12 +20,13 @@ internal class SetActivatedBadgesEvent : IPacketEvent
             return;
         }
 
-        if (session.GetUser().GetBadgeComponent() == null)
+        if (session.GetUser().BadgeComponent == null)
         {
             return;
         }
 
-        session.GetUser().GetBadgeComponent().ResetSlots();
+        session.GetUser().
+        BadgeComponent.ResetSlots();
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
@@ -42,18 +43,19 @@ internal class SetActivatedBadgesEvent : IPacketEvent
                 continue;
             }
 
-            if (!session.GetUser().GetBadgeComponent().HasBadge(badge) || slot < 1 || slot > 5)
+            if (!session.GetUser().BadgeComponent.HasBadge(badge) || slot < 1 || slot > 5)
             {
                 continue;
             }
 
-            session.GetUser().GetBadgeComponent().GetBadge(badge).Slot = slot;
+            session.GetUser().
+            BadgeComponent.GetBadge(badge).Slot = slot;
 
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             UserBadgeDao.UpdateSlot(dbClient, session.GetUser().Id, slot, badge);
         }
 
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.PROFILE_BADGE, 0);
+        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ProfileBadge, 0);
 
         if (!session.GetUser().InRoom)
         {

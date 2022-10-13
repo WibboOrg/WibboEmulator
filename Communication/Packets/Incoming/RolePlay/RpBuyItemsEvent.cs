@@ -48,7 +48,7 @@ internal class RpBuyItemsEvent : IPacketEvent
             return;
         }
 
-        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
+        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(itemId);
         if (rpItem == null)
         {
             return;

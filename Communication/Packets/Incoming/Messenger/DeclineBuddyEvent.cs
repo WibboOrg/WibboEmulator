@@ -7,7 +7,7 @@ internal class DeclineBuddyEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser().GetMessenger() == null)
+        if (session.GetUser().Messenger == null)
         {
             return;
         }
@@ -17,11 +17,11 @@ internal class DeclineBuddyEvent : IPacketEvent
 
         if (!deleteAllFriend && requestCount == 1)
         {
-            session.GetUser().GetMessenger().HandleRequest(packet.PopInt());
+            session.GetUser().Messenger.HandleRequest(packet.PopInt());
         }
         else
         {
-            session.GetUser().GetMessenger().HandleAllRequests();
+            session.GetUser().Messenger.HandleAllRequests();
         }
     }
 }

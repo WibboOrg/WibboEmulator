@@ -28,11 +28,11 @@ internal class UpdateGroupSettingsEvent : IPacketEvent
 
         group.GroupType = type switch
         {
-            1 => GroupType.LOCKED,
-            2 => GroupType.PRIVATE,
-            _ => GroupType.OPEN,
+            1 => GroupType.Locked,
+            2 => GroupType.Private,
+            _ => GroupType.Open,
         };
-        if (group.GroupType != GroupType.LOCKED)
+        if (group.GroupType != GroupType.Locked)
         {
             if (group.GetRequests.Count > 0)
             {
@@ -47,7 +47,7 @@ internal class UpdateGroupSettingsEvent : IPacketEvent
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            GuildDao.UpdateStateAndDeco(dbClient, group.Id, group.GroupType == GroupType.OPEN ? 0 : group.GroupType == GroupType.LOCKED ? 1 : 2, furniOptions);
+            GuildDao.UpdateStateAndDeco(dbClient, group.Id, group.GroupType == GroupType.Open ? 0 : group.GroupType == GroupType.Locked ? 1 : 2, furniOptions);
         }
 
         group.AdminOnlyDeco = furniOptions;

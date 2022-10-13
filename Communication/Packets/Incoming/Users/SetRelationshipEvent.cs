@@ -9,7 +9,7 @@ internal class SetRelationshipEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null || session.GetUser().GetMessenger() == null)
+        if (session.GetUser() == null || session.GetUser().Messenger == null)
         {
             return;
         }
@@ -22,27 +22,27 @@ internal class SetRelationshipEvent : IPacketEvent
             return;
         }
 
-        if (!session.GetUser().GetMessenger().FriendshipExists(user))
+        if (!session.GetUser().Messenger.FriendshipExists(user))
         {
             return;
         }
 
         if (type == 0)
         {
-            if (session.GetUser().GetMessenger().Relation.ContainsKey(user))
+            if (session.GetUser().Messenger.Relation.ContainsKey(user))
             {
-                _ = session.GetUser().GetMessenger().Relation.Remove(user);
+                _ = session.GetUser().Messenger.Relation.Remove(user);
             }
         }
         else
         {
-            if (session.GetUser().GetMessenger().Relation.ContainsKey(user))
+            if (session.GetUser().Messenger.Relation.ContainsKey(user))
             {
-                session.GetUser().GetMessenger().Relation[user].Type = type;
+                session.GetUser().Messenger.Relation[user].Type = type;
             }
             else
             {
-                session.GetUser().GetMessenger().Relation.Add(user, new Relationship(user, type));
+                session.GetUser().Messenger.Relation.Add(user, new Relationship(user, type));
             }
         }
 
@@ -51,7 +51,8 @@ internal class SetRelationshipEvent : IPacketEvent
             MessengerFriendshipDao.UpdateRelation(dbClient, type, session.GetUser().Id, user);
         }
 
-        session.GetUser().GetMessenger().RelationChanged(user, type);
-        session.GetUser().GetMessenger().UpdateFriend(user, true);
+        session.GetUser().
+        Messenger.RelationChanged(user, type);
+        session.GetUser().Messenger.UpdateFriend(user, true);
     }
 }

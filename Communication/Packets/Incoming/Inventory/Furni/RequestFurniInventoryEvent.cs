@@ -13,14 +13,15 @@ internal class RequestFurniInventoryEvent : IPacketEvent
             return;
         }
 
-        if (session.GetUser().GetInventoryComponent() == null)
+        if (session.GetUser().InventoryComponent == null)
         {
             return;
         }
 
-        session.GetUser().GetInventoryComponent().LoadInventory();
+        session.GetUser().
+        InventoryComponent.LoadInventory();
 
-        var items = session.GetUser().GetInventoryComponent().GetWallAndFloor;
+        var items = session.GetUser().InventoryComponent.GetWallAndFloor;
         session.SendPacket(new FurniListComposer(items.ToList(), 1, 0));
     }
 }

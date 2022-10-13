@@ -33,7 +33,7 @@ internal class ObjectAddComposer : ServerPacket
         this.WriteString(string.Format(/*lang=json*/ "{0:0.00}", item.Z));
         this.WriteString("");
 
-        if (item.InteractionType == InteractionTypeTemp.RPITEM)
+        if (item.InteractionType == InteractionTypeTemp.RpItem)
         {
             this.WriteInteger(0);
             this.WriteInteger(1);

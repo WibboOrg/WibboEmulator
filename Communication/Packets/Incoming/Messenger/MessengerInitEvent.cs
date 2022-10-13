@@ -8,15 +8,16 @@ internal class MessengerInitEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser() == null || session.GetUser().GetMessenger() == null)
+        if (session.GetUser() == null || session.GetUser().Messenger == null)
         {
             return;
         }
 
-        session.GetUser().GetMessenger().OnStatusChanged();
+        session.GetUser().
+        Messenger.OnStatusChanged();
 
         session.SendPacket(new MessengerInitComposer());
-        session.SendPacket(new BuddyListComposer(session.GetUser().GetMessenger().Friends));
-        session.GetUser().GetMessenger().ProcessOfflineMessages();
+        session.SendPacket(new BuddyListComposer(session.GetUser().Messenger.Friends));
+        session.GetUser().Messenger.ProcessOfflineMessages();
     }
 }

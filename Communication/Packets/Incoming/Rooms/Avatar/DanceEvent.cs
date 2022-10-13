@@ -34,6 +34,6 @@ internal class DanceEvent : IPacketEvent
 
         roomUserByUserId.DanceId = danceId;
         room.SendPacket(new DanceComposer(roomUserByUserId.VirtualId, danceId));
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SOCIAL_DANCE, 0);
+        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SocialDance, 0);
     }
 }

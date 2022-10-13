@@ -43,7 +43,7 @@ internal class RegenLTD : IChatCommand
                     continue;
                 }
 
-                if (session.GetUser().GetInventoryComponent().TryAddItem(newItem))
+                if (session.GetUser().InventoryComponent.TryAddItem(newItem))
                 {
                     session.SendPacket(new FurniListNotificationComposer(newItem.Id, 1));
                 }

@@ -92,7 +92,7 @@ public class InteractorGenericSwitch : FurniInteractor
     {
         if (session != null)
         {
-            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_SWITCH, 0);
+            WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniSwitch, 0);
         }
 
         if (!userHasRights || this._modes == 0)

@@ -10,7 +10,7 @@ internal class UserSearchEvent : IPacketEvent
 
     public void Parse(GameClient session, ClientPacket packet)
     {
-        if (session.GetUser().GetMessenger() == null)
+        if (session.GetUser().Messenger == null)
         {
             return;
         }
@@ -29,7 +29,7 @@ internal class UserSearchEvent : IPacketEvent
         {
             if (searchResult2.UserId != session.GetUser().Id)
             {
-                if (session.GetUser().GetMessenger().FriendshipExists(searchResult2.UserId))
+                if (session.GetUser().Messenger.FriendshipExists(searchResult2.UserId))
                 {
                     friend.Add(searchResult2);
                 }

@@ -24,7 +24,7 @@ internal class ApplyDecorationEvent : IPacketEvent
             return;
         }
 
-        var userItem = session.GetUser().GetInventoryComponent().GetItem(itemId);
+        var userItem = session.GetUser().InventoryComponent.GetItem(itemId);
         if (userItem == null)
         {
             return;
@@ -53,11 +53,11 @@ internal class ApplyDecorationEvent : IPacketEvent
         {
             case "floor":
                 room.RoomData.Floor = userItem.ExtraData;
-                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_DECORATION_FLOOR, 0);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniDecorationFloor, 0);
                 break;
             case "wallpaper":
                 room.RoomData.Wallpaper = userItem.ExtraData;
-                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_DECORATION_WALL, 0);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniDecorationWall, 0);
                 break;
             case "landscape":
                 room.RoomData.Landscape = userItem.ExtraData;
@@ -71,7 +71,8 @@ internal class ApplyDecorationEvent : IPacketEvent
             ItemDao.Delete(dbClient, userItem.Id);
         }
 
-        session.GetUser().GetInventoryComponent().RemoveItem(userItem.Id);
+        session.GetUser().
+        InventoryComponent.RemoveItem(userItem.Id);
         room.SendPacket(new RoomPropertyComposer(decorationKey, userItem.ExtraData));
     }
 }

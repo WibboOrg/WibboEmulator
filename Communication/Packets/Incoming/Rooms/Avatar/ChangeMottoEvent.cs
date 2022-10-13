@@ -44,7 +44,7 @@ internal class ChangeMottoEvent : IPacketEvent
             UserDao.UpdateMotto(dbClient, session.GetUser().Id, newMotto);
         }
 
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.PROFILE_CHANGE_MOTTO, 0);
+        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ProfileChangeMotto, 0);
 
         if (session.GetUser().InRoom)
         {

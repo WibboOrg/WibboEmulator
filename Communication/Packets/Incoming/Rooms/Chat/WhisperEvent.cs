@@ -89,7 +89,7 @@ internal class WhisperEvent : IPacketEvent
         if (timeSpan.TotalSeconds < session.GetUser().SpamProtectionTime && session.GetUser().SpamEnable)
         {
             var floodSeconds = session.GetUser().SpamProtectionTime - timeSpan.Seconds;
-            session.GetUser().GetClient().SendPacket(new FloodControlComposer(floodSeconds));
+            session.GetUser().Client.SendPacket(new FloodControlComposer(floodSeconds));
             return;
         }
         else if (timeSpan.TotalSeconds < 4.0 && session.GetUser().FloodCount > 5 && !session.GetUser().HasPermission("perm_mod"))
@@ -252,7 +252,8 @@ internal class WhisperEvent : IPacketEvent
                 }
             }
 
-            session.GetUser().GetChatMessageManager().AddMessage(user.UserId, user.GetUsername(), user.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, UnixTimestamp.GetNow());
+            session.GetUser().
+            ChatMessageManager.AddMessage(user.UserId, user.GetUsername(), user.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, UnixTimestamp.GetNow());
             room.ChatlogManager.AddMessage(user.UserId, user.GetUsername(), user.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, UnixTimestamp.GetNow());
         }
     }

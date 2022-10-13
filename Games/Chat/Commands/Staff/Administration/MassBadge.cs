@@ -23,7 +23,7 @@ internal class MassBadge : IChatCommand
         {
             if (client.GetUser() != null)
             {
-                client.GetUser().GetBadgeComponent().GiveBadge(badge, true);
+                client.GetUser().BadgeComponent.GiveBadge(badge, true);
                 client.SendPacket(new ReceiveBadgeComposer(badge));
                 client.SendNotification("Vous venez de recevoir le badge : " + badge + " !");
             }

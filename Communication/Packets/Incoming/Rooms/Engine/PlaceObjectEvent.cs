@@ -48,7 +48,7 @@ internal class PlaceObjectEvent : IPacketEvent
             return;
         }
 
-        var userItem = session.GetUser().GetInventoryComponent().GetItem(itemId);
+        var userItem = session.GetUser().InventoryComponent.GetItem(itemId);
         if (userItem == null)
         {
             return;
@@ -62,7 +62,7 @@ internal class PlaceObjectEvent : IPacketEvent
 
         if (userItem.GetBaseItem().InteractionType == InteractionType.BADGE_TROC)
         {
-            if (session.GetUser().GetBadgeComponent().HasBadge(userItem.ExtraData))
+            if (session.GetUser().BadgeComponent.HasBadge(userItem.ExtraData))
             {
                 session.SendNotification("Vous posséder déjà ce badge !");
                 return;
@@ -73,9 +73,11 @@ internal class PlaceObjectEvent : IPacketEvent
                 ItemDao.Delete(dbClient, itemId);
             }
 
-            session.GetUser().GetInventoryComponent().RemoveItem(itemId);
+            session.GetUser().
+            InventoryComponent.RemoveItem(itemId);
 
-            session.GetUser().GetBadgeComponent().GiveBadge(userItem.ExtraData, true);
+            session.GetUser().
+            BadgeComponent.GiveBadge(userItem.ExtraData, true);
             session.SendPacket(new ReceiveBadgeComposer(userItem.ExtraData));
 
             session.SendNotification("Vous avez reçu le badge: " + userItem.ExtraData + " !");
@@ -117,7 +119,8 @@ internal class PlaceObjectEvent : IPacketEvent
                     ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                 }
 
-                session.GetUser().GetInventoryComponent().RemoveItem(itemId);
+                session.GetUser().
+                InventoryComponent.RemoveItem(itemId);
 
                 if (WiredUtillity.TypeIsWired(userItem.GetBaseItem().InteractionType))
                 {
@@ -153,7 +156,7 @@ internal class PlaceObjectEvent : IPacketEvent
                     }
                 }
 
-                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_PLACE, 0);
+                WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FurniPlace, 0);
             }
             else
             {
@@ -182,7 +185,8 @@ internal class PlaceObjectEvent : IPacketEvent
                         ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                     }
 
-                    session.GetUser().GetInventoryComponent().RemoveItem(itemId);
+                    session.GetUser().
+                    InventoryComponent.RemoveItem(itemId);
                 }
             }
             else

@@ -1070,12 +1070,12 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "badge":
             case "notbadge":
             {
-                if (user.IsBot || user.Client == null || user.Client.GetUser() == null || user.Client.GetUser().GetBadgeComponent() == null)
+                if (user.IsBot || user.Client == null || user.Client.GetUser() == null || user.Client.GetUser().BadgeComponent == null)
                 {
                     break;
                 }
 
-                if (user.Client.GetUser().GetBadgeComponent().HasBadge(value))
+                if (user.Client.GetUser().BadgeComponent.HasBadge(value))
                 {
                     result = true;
                 }

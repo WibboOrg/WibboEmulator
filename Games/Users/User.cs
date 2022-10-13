@@ -24,14 +24,14 @@ using WibboEmulator.Games.Users.Wardrobes;
 
 public class User : IDisposable
 {
-    private GameClient _clientInstance;
-    private MessengerComponent _messengerComponent;
-    private BadgeComponent _badgeComponent;
-    private AchievementComponent _achievementComponent;
-    private InventoryComponent _inventoryComponent;
-    private WardrobeComponent _wardrobeComponent;
-    private ChatlogManager _chatMessageManager;
-    private PermissionComponent _permissions;
+    public GameClient Client { get; private set; }
+    public MessengerComponent Messenger { get; private set; }
+    public WardrobeComponent WardrobeComponent { get; private set; }
+    public AchievementComponent AchievementComponent { get; private set; }
+    public BadgeComponent BadgeComponent { get; private set; }
+    public InventoryComponent InventoryComponent { get; private set; }
+    public ChatlogManager ChatMessageManager { get; private set; }
+    public PermissionComponent Permissions { get; private set; }
 
     public int Id { get; set; }
     public string Username { get; set; }
@@ -226,22 +226,22 @@ public class User : IDisposable
 
     public void Init(GameClient client)
     {
-        this._clientInstance = client;
+        this.Client = client;
 
-        this._badgeComponent = new BadgeComponent(this);
-        this._achievementComponent = new AchievementComponent(this);
-        this._inventoryComponent = new InventoryComponent(this);
-        this._wardrobeComponent = new WardrobeComponent(this);
-        this._messengerComponent = new MessengerComponent(this);
-        this._chatMessageManager = new ChatlogManager();
-        this._permissions = new PermissionComponent();
+        this.BadgeComponent = new BadgeComponent(this);
+        this.AchievementComponent = new AchievementComponent(this);
+        this.InventoryComponent = new InventoryComponent(this);
+        this.WardrobeComponent = new WardrobeComponent(this);
+        this.Messenger = new MessengerComponent(this);
+        this.ChatMessageManager = new ChatlogManager();
+        this.Permissions = new PermissionComponent();
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-        this._badgeComponent.Init(dbClient);
-        this._wardrobeComponent.Init(dbClient);
-        this._achievementComponent.Init(dbClient);
-        this._messengerComponent.Init(dbClient, this.HideOnline);
-        this._chatMessageManager.LoadUserChatlogs(dbClient, this.Id);
+        this.BadgeComponent.Init(dbClient);
+        this.WardrobeComponent.Init(dbClient);
+        this.AchievementComponent.Init(dbClient);
+        this.Messenger.Init(dbClient, this.HideOnline);
+        this.ChatMessageManager.LoadUserChatlogs(dbClient, this.Id);
 
         var dUserRooms = RoomDao.GetAllByOwner(dbClient, this.Username);
         foreach (DataRow dRow in dUserRooms.Rows)
@@ -280,25 +280,25 @@ public class User : IDisposable
 
     public void PrepareRoom(int id, string password = "", bool overrideDoorbell = false)
     {
-        if (this.GetClient() == null || this.GetClient().GetUser() == null)
+        if (this.Client == null || this.Client.GetUser() == null)
         {
             return;
         }
 
-        if (this.GetClient().GetUser().InRoom)
+        if (this.Client.GetUser().InRoom)
         {
-            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.GetClient().GetUser().CurrentRoomId, out var oldRoom))
+            if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.Client.GetUser().CurrentRoomId, out var oldRoom))
             {
-                oldRoom.RoomUserManager.RemoveUserFromRoom(this.GetClient(), false, false);
+                oldRoom.RoomUserManager.RemoveUserFromRoom(this.Client, false, false);
             }
         }
 
-        if (this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID != id)
+        if (this.Client.GetUser().IsTeleporting && this.Client.GetUser().TeleportingRoomID != id)
         {
-            this.GetClient().GetUser().TeleportingRoomID = 0;
-            this.GetClient().GetUser().IsTeleporting = false;
-            this.GetClient().GetUser().TeleporterId = 0;
-            this.GetClient().SendPacket(new CloseConnectionComposer());
+            this.Client.GetUser().TeleportingRoomID = 0;
+            this.Client.GetUser().IsTeleporting = false;
+            this.Client.GetUser().TeleporterId = 0;
+            this.Client.SendPacket(new CloseConnectionComposer());
 
             return;
         }
@@ -323,7 +323,7 @@ public class User : IDisposable
                     WibboEnvironment.GetGame().GetGameClientManager().SendMessageStaff(RoomNotificationComposer.SendBubble("mention", $"Attention {this.Username} charge trop vite les apparts!"));
                     this.LoadRoomBlocked = true;
                 }
-                this.GetClient().SendPacket(new CloseConnectionComposer());
+                this.Client.SendPacket(new CloseConnectionComposer());
                 return;
             }
 
@@ -333,26 +333,27 @@ public class User : IDisposable
         var room = WibboEnvironment.GetGame().GetRoomManager().LoadRoom(id);
         if (room == null)
         {
-            this.GetClient().SendPacket(new CloseConnectionComposer());
+            this.Client.SendPacket(new CloseConnectionComposer());
             return;
         }
 
-        if (!this.GetClient().GetUser().HasPermission("perm_mod") && room.UserIsBanned(this.GetClient().GetUser().Id))
+        if (!this.Client.GetUser().HasPermission("perm_mod") && room.UserIsBanned(this.Client.GetUser().Id))
         {
-            if (room.HasBanExpired(this.GetClient().GetUser().Id))
+            if (room.HasBanExpired(this.Client.GetUser().Id))
             {
-                room.RemoveBan(this.GetClient().GetUser().Id);
+                room.RemoveBan(this.Client.GetUser().Id);
             }
             else
             {
-                this.GetClient().SendPacket(new CantConnectComposer(1));
+                this.Client.SendPacket(new CantConnectComposer(1));
 
-                this.GetClient().SendPacket(new CloseConnectionComposer());
+                this.
+                Client.SendPacket(new CloseConnectionComposer());
                 return;
             }
         }
 
-        if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.GetClient().GetUser().HasPermission("perm_enter_full_rooms") && !this.GetClient().GetUser().HasPermission("perm_enter_full_rooms"))
+        if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.Client.GetUser().HasPermission("perm_enter_full_rooms") && !this.Client.GetUser().HasPermission("perm_enter_full_rooms"))
         {
             if (room.CloseFullRoom)
             {
@@ -360,40 +361,41 @@ public class User : IDisposable
                 room.CloseFullRoom = false;
             }
 
-            if (this.GetClient().GetUser().Id != room.RoomData.OwnerId)
+            if (this.Client.GetUser().Id != room.RoomData.OwnerId)
             {
-                this.GetClient().SendPacket(new CantConnectComposer(1));
+                this.Client.SendPacket(new CantConnectComposer(1));
 
-                this.GetClient().SendPacket(new CloseConnectionComposer());
+                this.
+                Client.SendPacket(new CloseConnectionComposer());
                 return;
             }
         }
 
         var ownerEnterNotAllowed = WibboEnvironment.GetSettings().GetData<string>("room.owner.enter.not.allowed").Split(',');
 
-        if (!this.GetClient().GetUser().HasPermission("perm_access_apartments_all"))
+        if (!this.Client.GetUser().HasPermission("perm_access_apartments_all"))
         {
-            if (!(this.GetClient().GetUser().HasPermission("perm_access_apartments") && !ownerEnterNotAllowed.Contains(room.RoomData.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID == room.Id))
+            if (!(this.Client.GetUser().HasPermission("perm_access_apartments") && !ownerEnterNotAllowed.Contains(room.RoomData.OwnerName)) && !room.CheckRights(this.Client, true) && !(this.Client.GetUser().IsTeleporting && this.Client.GetUser().TeleportingRoomID == room.Id))
             {
-                if (room.RoomData.Access == RoomAccess.Doorbell && !overrideDoorbell && !room.CheckRights(this.GetClient()))
+                if (room.RoomData.Access == RoomAccess.Doorbell && !overrideDoorbell && !room.CheckRights(this.Client))
                 {
                     if (room.UserCount == 0)
                     {
-                        this.GetClient().SendPacket(new FlatAccessDeniedComposer(""));
+                        this.Client.SendPacket(new FlatAccessDeniedComposer(""));
                     }
                     else
                     {
-                        this.GetClient().SendPacket(new DoorbellComposer(""));
-                        room.SendPacket(new DoorbellComposer(this.GetClient().GetUser().Username), true);
-                        this.GetClient().GetUser().LoadingRoomId = id;
-                        this.GetClient().GetUser().AllowDoorBell = false;
+                        this.Client.SendPacket(new DoorbellComposer(""));
+                        room.SendPacket(new DoorbellComposer(this.Client.GetUser().Username), true);
+                        this.Client.GetUser().LoadingRoomId = id;
+                        this.Client.GetUser().AllowDoorBell = false;
                     }
                     return;
                 }
                 else if (room.RoomData.Access == RoomAccess.Password && password.ToLower() != room.RoomData.Password.ToLower())
                 {
-                    this.GetClient().SendPacket(new GenericErrorComposer(-100002));
-                    this.GetClient().SendPacket(new CloseConnectionComposer());
+                    this.Client.SendPacket(new GenericErrorComposer(-100002));
+                    this.Client.SendPacket(new CloseConnectionComposer());
                     return;
                 }
             }
@@ -401,28 +403,28 @@ public class User : IDisposable
 
         if (room.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
         {
-            if (room.RoomUserManager.GetUserByTracker(this.IP, this.GetClient().MachineId) != null)
+            if (room.RoomUserManager.GetUserByTracker(this.IP, this.Client.MachineId) != null)
             {
-                this.GetClient().SendPacket(new CloseConnectionComposer());
+                this.Client.SendPacket(new CloseConnectionComposer());
                 return;
             }
         }
 
         if (!this.EnterRoom(room))
         {
-            this.GetClient().SendPacket(new CloseConnectionComposer());
+            this.Client.SendPacket(new CloseConnectionComposer());
         }
         else
         {
-            this.GetClient().GetUser().LoadingRoomId = id;
-            this.GetClient().GetUser().AllowDoorBell = true;
+            this.Client.GetUser().LoadingRoomId = id;
+            this.Client.GetUser().AllowDoorBell = true;
         }
 
     }
 
     public bool EnterRoom(Room room)
     {
-        var session = this.GetClient();
+        var session = this.Client;
         if (session == null)
         {
             return false;
@@ -504,7 +506,7 @@ public class User : IDisposable
 
         if (this.InRoom && this.CurrentRoom != null)
         {
-            this.CurrentRoom.RoomUserManager.RemoveUserFromRoom(this._clientInstance, false, false);
+            this.CurrentRoom.RoomUserManager.RemoveUserFromRoom(this.Client, false, false);
         }
 
         if (this.RolePlayId > 0)
@@ -536,34 +538,34 @@ public class User : IDisposable
             WibboEnvironment.GetGame().GetHelpManager().RemoveGuide(this.Id);
         }
 
-        if (this._messengerComponent != null)
+        if (this.Messenger != null)
         {
-            this._messengerComponent.AppearOffline = true;
-            this._messengerComponent.Dispose();
+            this.Messenger.AppearOffline = true;
+            this.Messenger.Dispose();
         }
 
-        if (this._inventoryComponent != null)
+        if (this.InventoryComponent != null)
         {
-            this._inventoryComponent.Dispose();
-            this._inventoryComponent = null;
+            this.InventoryComponent.Dispose();
+            this.InventoryComponent = null;
         }
 
-        if (this._badgeComponent != null)
+        if (this.BadgeComponent != null)
         {
-            this._badgeComponent.Dispose();
-            this._badgeComponent = null;
+            this.BadgeComponent.Dispose();
+            this.BadgeComponent = null;
         }
 
-        if (this._wardrobeComponent != null)
+        if (this.WardrobeComponent != null)
         {
-            this._wardrobeComponent.Dispose();
-            this._wardrobeComponent = null;
+            this.WardrobeComponent.Dispose();
+            this.WardrobeComponent = null;
         }
 
-        if (this._achievementComponent != null)
+        if (this.AchievementComponent != null)
         {
-            this._achievementComponent.Dispose();
-            this._achievementComponent = null;
+            this.AchievementComponent.Dispose();
+            this.AchievementComponent = null;
         }
 
         if (this.UsersRooms != null)
@@ -581,26 +583,10 @@ public class User : IDisposable
             this.FavoriteRooms.Clear();
         }
 
-        this._clientInstance = null;
+        this.Client = null;
 
         GC.SuppressFinalize(this);
     }
-
-    public GameClient GetClient() => this._clientInstance;
-
-    public MessengerComponent GetMessenger() => this._messengerComponent;
-
-    public WardrobeComponent GetWardrobeComponent() => this._wardrobeComponent;
-
-    public AchievementComponent GetAchievementComponent() => this._achievementComponent;
-
-    public BadgeComponent GetBadgeComponent() => this._badgeComponent;
-
-    public InventoryComponent GetInventoryComponent() => this._inventoryComponent;
-
-    public ChatlogManager GetChatMessageManager() => this._chatMessageManager;
-
-    public PermissionComponent GetPermissions() => this._permissions;
 
     public int GetQuestProgress(int p)
     {

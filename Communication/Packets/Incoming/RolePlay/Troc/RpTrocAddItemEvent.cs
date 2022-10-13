@@ -32,6 +32,6 @@ internal class RpTrocAddItemEvent : IPacketEvent
             return;
         }
 
-        WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().AddItem(rp.TradeId, user.UserId, itemId);
+        WibboEnvironment.GetGame().GetRoleplayManager().TrocManager.AddItem(rp.TradeId, user.UserId, itemId);
     }
 }

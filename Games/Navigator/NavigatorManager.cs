@@ -7,7 +7,6 @@ using WibboEmulator.Database.Interfaces;
 public sealed class NavigatorManager
 {
     private readonly Dictionary<int, FeaturedRoom> _featuredRooms;
-
     private readonly Dictionary<int, TopLevelItem> _topLevelItems;
     private readonly Dictionary<int, SearchResultList> _searchResultLists;
 

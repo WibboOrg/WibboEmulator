@@ -41,10 +41,10 @@ public class ItemTemp : IEquatable<ItemTemp>
 
 public enum InteractionTypeTemp
 {
-    NONE,
-    PROJECTILE,
-    PROJECTILE_BOT,
-    GRENADE,
-    MONEY,
-    RPITEM,
+    None,
+    Projectile,
+    ProjectileBot,
+    Grenade,
+    Money,
+    RpItem
 }

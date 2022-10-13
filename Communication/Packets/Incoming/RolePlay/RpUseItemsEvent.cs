@@ -45,7 +45,7 @@ internal class RpUseItemsEvent : IPacketEvent
             return;
         }
 
-        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(itemId);
+        var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(itemId);
         if (rpItem == null)
         {
             return;
@@ -190,7 +190,7 @@ internal class RpUseItemsEvent : IPacketEvent
                     break;
                 }
 
-                rp.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponCac(rpItem.Value);
+                rp.WeaponCac = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponCac(rpItem.Value);
                 user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.changearmecac", session.Langue));
                 break;
             }
@@ -201,7 +201,7 @@ internal class RpUseItemsEvent : IPacketEvent
                     break;
                 }
 
-                rp.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().GetWeaponManager().GetWeaponGun(rpItem.Value);
+                rp.WeaponGun = WibboEnvironment.GetGame().GetRoleplayManager().WeaponManager.GetWeaponGun(rpItem.Value);
                 user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("rp.changearmefar", session.Langue));
                 break;
             }

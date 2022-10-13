@@ -26,7 +26,7 @@ internal class UpdateFigureDataEvent : IPacketEvent
 
         look = WibboEnvironment.GetFigureManager().ProcessFigure(look, gender, true);
 
-        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.PROFILE_CHANGE_LOOK, 0);
+        WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.ProfileChangeLook, 0);
 
         session.GetUser().Look = look;
         session.GetUser().Gender = gender.ToLower();

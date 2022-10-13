@@ -11,7 +11,7 @@ internal class LoadInventoryRpComposer : ServerPacket
 
         foreach (var item in items.Values)
         {
-            var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(item.ItemId);
+            var rpItem = WibboEnvironment.GetGame().GetRoleplayManager().ItemManager.GetItem(item.ItemId);
 
             this.WriteInteger(item.ItemId);
             this.WriteString(rpItem.Name);

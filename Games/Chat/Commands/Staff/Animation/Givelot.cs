@@ -45,7 +45,7 @@ internal class GiveLot : IChatCommand
 
         foreach (var purchasedItem in items)
         {
-            if (roomUserByUserId.Client.GetUser().GetInventoryComponent().TryAddItem(purchasedItem))
+            if (roomUserByUserId.Client.GetUser().InventoryComponent.TryAddItem(purchasedItem))
             {
                 roomUserByUserId.Client.SendPacket(new FurniListNotificationComposer(purchasedItem.Id, 1));
             }
