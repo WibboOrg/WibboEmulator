@@ -25,19 +25,19 @@ public class Escape : WiredActionBase, IWiredEffect, IWired
 
     private void HandleMovement(Item item)
     {
-        if (this.RoomInstance.GetRoomItemHandler().GetItem(item.Id) == null)
+        if (this.RoomInstance.RoomItemHandling.GetItem(item.Id) == null)
         {
             return;
         }
 
-        var roomUser = this.RoomInstance.GetGameMap().SquareHasUserNear(item.X, item.Y);
+        var roomUser = this.RoomInstance.GameMap.SquareHasUserNear(item.X, item.Y);
         if (roomUser != null)
         {
-            this.RoomInstance.GetWiredHandler().TriggerCollision(roomUser, item);
+            this.RoomInstance.WiredHandler.TriggerCollision(roomUser, item);
             return;
         }
 
-        item.Movement = this.RoomInstance.GetGameMap().GetEscapeMovement(item.X, item.Y, item.Movement);
+        item.Movement = this.RoomInstance.GameMap.GetEscapeMovement(item.X, item.Y, item.Movement);
         if (item.Movement == MovementState.none)
         {
             return;
@@ -50,7 +50,7 @@ public class Escape : WiredActionBase, IWiredEffect, IWired
             var oldX = item.X;
             var oldY = item.Y;
             var oldZ = item.Z;
-            if (this.RoomInstance.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
+            if (this.RoomInstance.RoomItemHandling.SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
             {
                 this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newPoint.X, newPoint.Y, item.Z, item.Id));
             }

@@ -20,7 +20,7 @@ public class ExecutePile : WiredActionBase, IWired, IWiredEffect, IWiredCycleabl
             {
                 if (coord != this.ItemInstance.Coordinate)
                 {
-                    this.RoomInstance.GetWiredHandler().ExecutePile(coord, user, item);
+                    this.RoomInstance.WiredHandler.ExecutePile(coord, user, item);
                 }
             }
         }

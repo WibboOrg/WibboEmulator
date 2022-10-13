@@ -35,7 +35,7 @@ internal class SaveBotActionEvent : IPacketEvent
             return;
         }
 
-        if (!room.GetRoomUserManager().TryGetBot(botId, out var bot))
+        if (!room.RoomUserManager.TryGetBot(botId, out var bot))
         {
             return;
         }

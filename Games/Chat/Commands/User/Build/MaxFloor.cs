@@ -16,24 +16,24 @@ internal class MaxFloor : IChatCommand
             maxSize = 75;
         }
 
-        for (var y = 0; y < (room.GetGameMap().Model.MapSizeY > maxSize ? room.GetGameMap().Model.MapSizeY : maxSize); y++)
+        for (var y = 0; y < (room.GameMap.Model.MapSizeY > maxSize ? room.GameMap.Model.MapSizeY : maxSize); y++)
         {
             var line = "";
-            for (var x = 0; x < (room.GetGameMap().Model.MapSizeX > maxSize ? room.GetGameMap().Model.MapSizeX : maxSize); x++)
+            for (var x = 0; x < (room.GameMap.Model.MapSizeX > maxSize ? room.GameMap.Model.MapSizeX : maxSize); x++)
             {
-                if (x >= room.GetGameMap().Model.MapSizeX || y >= room.GetGameMap().Model.MapSizeY)
+                if (x >= room.GameMap.Model.MapSizeX || y >= room.GameMap.Model.MapSizeY)
                 {
                     line += "0";
                 }
                 else
                 {
-                    if (room.GetGameMap().Model.SqState[x, y] == SquareStateType.Bloked)
+                    if (room.GameMap.Model.SqState[x, y] == SquareStateType.Bloked)
                     {
                         line += "0";//x
                     }
                     else
                     {
-                        line += ParseInverse(room.GetGameMap().Model.SqFloorHeight[x, y]);
+                        line += ParseInverse(room.GameMap.Model.SqFloorHeight[x, y]);
                     }
                 }
             }
@@ -44,11 +44,11 @@ internal class MaxFloor : IChatCommand
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoomModelCustomDao.Replace(dbClient, room.Id, room.GetGameMap().Model.DoorX, room.GetGameMap().Model.DoorY, room.GetGameMap().Model.DoorZ, room.GetGameMap().Model.DoorOrientation, map, room.GetGameMap().Model.WallHeight);
+            RoomModelCustomDao.Replace(dbClient, room.Id, room.GameMap.Model.DoorX, room.GameMap.Model.DoorY, room.GameMap.Model.DoorZ, room.GameMap.Model.DoorOrientation, map, room.GameMap.Model.WallHeight);
             RoomDao.UpdateModel(dbClient, room.Id);
         }
 
-        var usersToReturn = room.GetRoomUserManager().GetRoomUsers().ToList();
+        var usersToReturn = room.RoomUserManager.GetRoomUsers().ToList();
 
         WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
 

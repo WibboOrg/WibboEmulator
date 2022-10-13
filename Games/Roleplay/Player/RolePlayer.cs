@@ -372,7 +372,7 @@ public class RolePlayer
                 var monaiePerdu = (int)Math.Floor((double)(this.Money / 100) * 20);
                 this.Money -= monaiePerdu;
 
-                _ = room.GetRoomItemHandler().AddTempItem(user.VirtualId, 5461, user.SetX, user.SetY, user.Z, "1", monaiePerdu, InteractionTypeTemp.MONEY);
+                _ = room.RoomItemHandling.AddTempItem(user.VirtualId, 5461, user.SetX, user.SetY, user.Z, "1", monaiePerdu, InteractionTypeTemp.MONEY);
             }
 
             user.OnChat("A été mis K.O. ! [" + this.Health + "/" + this.HealthMax + "]", 0, true);

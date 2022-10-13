@@ -23,7 +23,7 @@ internal class Mimic : IChatCommand
         var targetUser = WibboEnvironment.GetGame().GetGameClientManager().GetClientByUsername(username);
         if (targetUser == null || targetUser.GetUser() == null)
         {
-            var bot = room.GetRoomUserManager().GetBotByName(username);
+            var bot = room.RoomUserManager.GetBotByName(username);
             if (bot == null || bot.BotData == null)
             {
                 return;

@@ -54,7 +54,7 @@ internal class FollowCommand : IRCONCommand
             return false;
         }
 
-        client.SendPacket(new GetGuestRoomResultComposer(client, room.Data, false, true));
+        client.SendPacket(new GetGuestRoomResultComposer(client, room.RoomData, false, true));
         return true;
     }
 }

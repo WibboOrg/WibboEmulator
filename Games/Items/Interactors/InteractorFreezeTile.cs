@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 
 public class InteractorFreezeTile : FurniInteractor
@@ -19,13 +19,13 @@ public class InteractorFreezeTile : FurniInteractor
         }
 
         var pName = session.GetUser().Username;
-        var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByName(pName);
+        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByName(pName);
         if (roomUserByUserId == null || roomUserByUserId.CountFreezeBall == 0 || roomUserByUserId.Freezed)
         {
             return;
         }
 
-        item.GetRoom().GetFreeze().ThrowBall(item, roomUserByUserId);
+        item.GetRoom().Freeze.ThrowBall(item, roomUserByUserId);
     }
 
     public override void OnTick(Item item)
@@ -35,7 +35,7 @@ public class InteractorFreezeTile : FurniInteractor
             return;
         }
 
-        var roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+        var roomUserTarget = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         if (roomUserTarget != null)
         {
             roomUserTarget.CountFreezeBall = 1;
@@ -43,7 +43,7 @@ public class InteractorFreezeTile : FurniInteractor
 
         item.ExtraData = "11000";
         item.UpdateState(false, true);
-        item.GetRoom().GetFreeze().OnFreezeTiles(item, item.FreezePowerUp, item.InteractingUser);
+        item.GetRoom().Freeze.OnFreezeTiles(item, item.FreezePowerUp, item.InteractingUser);
         item.InteractingUser = 0;
         item.InteractionCountHelper = 0;
     }

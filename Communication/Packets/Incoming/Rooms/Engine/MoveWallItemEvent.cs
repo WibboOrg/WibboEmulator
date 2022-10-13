@@ -21,13 +21,13 @@ internal class MoveWallItemEvent : IPacketEvent
         var id = packet.PopInt();
         var str = packet.PopString();
 
-        var roomItem = room.GetRoomItemHandler().GetItem(id);
+        var roomItem = room.RoomItemHandling.GetItem(id);
         if (roomItem == null)
         {
             return;
         }
 
-        if (room.Data.SellPrice > 0)
+        if (room.RoomData.SellPrice > 0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
             return;
@@ -35,9 +35,9 @@ internal class MoveWallItemEvent : IPacketEvent
 
         var wallCoordinate = WallPositionCheck(":" + str.Split(':')[1]);
         roomItem.WallCoord = wallCoordinate;
-        room.GetRoomItemHandler().UpdateItem(roomItem);
+        room.RoomItemHandling.UpdateItem(roomItem);
 
-        room.SendPacket(new ItemUpdateComposer(roomItem, room.Data.OwnerId));
+        room.SendPacket(new ItemUpdateComposer(roomItem, room.RoomData.OwnerId));
 
     }
 

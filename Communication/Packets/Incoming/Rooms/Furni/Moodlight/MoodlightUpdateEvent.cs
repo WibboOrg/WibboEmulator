@@ -18,7 +18,7 @@ internal class MoodlightUpdateEvent : IPacketEvent
             return;
         }
 
-        var roomItem = room.GetRoomItemHandler().GetItem(room.MoodlightData.ItemId);
+        var roomItem = room.RoomItemHandling.GetItem(room.MoodlightData.ItemId);
         if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
         {
             return;

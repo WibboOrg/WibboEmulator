@@ -32,7 +32,7 @@ internal class GiveAdminRightsEvent : IPacketEvent
 
         if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var room))
         {
-            var userRooom = room.GetRoomUserManager().GetRoomUserByUserId(userId);
+            var userRooom = room.RoomUserManager.GetRoomUserByUserId(userId);
             if (userRooom != null)
             {
                 if (!userRooom.ContainStatus("flatctrl"))

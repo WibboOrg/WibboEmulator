@@ -40,7 +40,6 @@ namespace WibboEmulator.WebSocketSharp.Net;
 
 using System;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 
 /// <summary>
 /// The exception that is thrown when a <see cref="Cookie"/> gets an error.

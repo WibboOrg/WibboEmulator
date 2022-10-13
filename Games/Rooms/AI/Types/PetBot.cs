@@ -76,7 +76,7 @@ public class PetBot : BotAI
                 {
                     case 0: //Libre
                         this.RemovePetStatus();
-                        var randomWalkableSquare = this.GetRoom().GetGameMap().GetRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
+                        var randomWalkableSquare = this.GetRoom().GameMap.GetRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
                         roomUser.MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
                         roomUser.PetData.AddExpirience(10);
                         break;
@@ -203,7 +203,7 @@ public class PetBot : BotAI
                     case 20:
                         break;
                     default:
-                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.unknowncommand", roomUser.Room.Data.Langue).Split(new char[1] { ',' });
+                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.unknowncommand", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
                         roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
                         break;
                 }
@@ -217,7 +217,7 @@ public class PetBot : BotAI
                 {
                     if (roomUser.PetData.Energy < 10)
                     {
-                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.tired", roomUser.Room.Data.Langue).Split(new char[1] { ',' });
+                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.tired", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
 
                         roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
                         roomUser.SetStatus("lay", roomUser.Z.ToString());
@@ -227,7 +227,7 @@ public class PetBot : BotAI
                     }
                     else
                     {
-                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.lazy", roomUser.Room.Data.Langue).Split(new char[1] { ',' });
+                        var strArray = WibboEnvironment.GetLanguageManager().TryGetValue("pet.lazy", roomUser.Room.RoomData.Langue).Split(new char[1] { ',' });
 
                         roomUser.OnChat(strArray[WibboEnvironment.GetRandomNumber(0, strArray.Length - 1)], 0, false);
                         roomUser.PetData.PetEnergy(false);
@@ -252,7 +252,7 @@ public class PetBot : BotAI
                 if (!this.GetRoomUser().RidingHorse && this.GetRoomUser().PetData.Type != 16)
                 {
                     this.RemovePetStatus();
-                    var randomWalkableSquare = this.GetRoom().GetGameMap().GetRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
+                    var randomWalkableSquare = this.GetRoom().GameMap.GetRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
                     this.GetRoomUser().MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
                 }
             }
@@ -279,14 +279,14 @@ public class PetBot : BotAI
 
         if (this.GetBotData().FollowUser != 0)
         {
-            var user = this.GetRoom().GetRoomUserManager().GetRoomUserByVirtualId(this.GetBotData().FollowUser);
+            var user = this.GetRoom().RoomUserManager.GetRoomUserByVirtualId(this.GetBotData().FollowUser);
             if (user == null)
             {
                 this.GetBotData().FollowUser = 0;
             }
             else
             {
-                if (!Gamemap.TilesTouching(this.GetRoomUser().X, this.GetRoomUser().Y, user.X, user.Y))
+                if (!GameMap.TilesTouching(this.GetRoomUser().X, this.GetRoomUser().Y, user.X, user.Y))
                 {
                     this.GetRoomUser().MoveTo(user.X, user.Y, true);
                 }

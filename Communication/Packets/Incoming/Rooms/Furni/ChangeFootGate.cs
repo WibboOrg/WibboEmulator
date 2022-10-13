@@ -18,7 +18,7 @@ internal class ChangeFootGate : IPacketEvent
             return;
         }
 
-        var item = room.GetRoomItemHandler().GetItem(id);
+        var item = room.RoomItemHandling.GetItem(id);
         if (item == null || item.GetBaseItem().InteractionType != InteractionType.FBGATE)
         {
             return;

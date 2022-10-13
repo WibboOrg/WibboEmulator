@@ -13,6 +13,6 @@ internal class GetOccupiedTilesEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new FloorPlanFloorMapComposer(room.GetGameMap().CoordinatedItems));
+        session.SendPacket(new FloorPlanFloorMapComposer(room.GameMap.CoordinatedItems));
     }
 }

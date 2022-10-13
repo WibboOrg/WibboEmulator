@@ -14,7 +14,7 @@ public class InteractorOneWayGate : FurniInteractor
             return;
         }
 
-        var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         if (roomUserByUserId != null)
         {
             roomUserByUserId.UnlockWalking();
@@ -32,7 +32,7 @@ public class InteractorOneWayGate : FurniInteractor
             return;
         }
 
-        var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         if (roomUserByUserId != null)
         {
             roomUserByUserId.UnlockWalking();
@@ -48,7 +48,7 @@ public class InteractorOneWayGate : FurniInteractor
             return;
         }
 
-        var roomUser = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (roomUser == null)
         {
             return;
@@ -65,12 +65,12 @@ public class InteractorOneWayGate : FurniInteractor
                 return;
             }
 
-            if (!item.GetRoom().GetGameMap().CanWalk(item.SquareBehind.X, item.SquareBehind.Y, roomUser.AllowOverride))
+            if (!item.GetRoom().GameMap.CanWalk(item.SquareBehind.X, item.SquareBehind.Y, roomUser.AllowOverride))
             {
                 return;
             }
 
-            var roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+            var roomUserTarget = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
             if (roomUserTarget != null)
             {
                 return;
@@ -96,7 +96,7 @@ public class InteractorOneWayGate : FurniInteractor
         RoomUser roomUserTarget = null;
         if (item.InteractingUser > 0)
         {
-            roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+            roomUserTarget = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         }
 
         if (roomUserTarget == null)
@@ -105,7 +105,7 @@ public class InteractorOneWayGate : FurniInteractor
             return;
         }
 
-        if (roomUserTarget.Coordinate == item.SquareBehind || !Gamemap.TilesTouching(item.X, item.Y, roomUserTarget.X, roomUserTarget.Y))
+        if (roomUserTarget.Coordinate == item.SquareBehind || !GameMap.TilesTouching(item.X, item.Y, roomUserTarget.X, roomUserTarget.Y))
         {
             roomUserTarget.UnlockWalking();
             item.ExtraData = "0";

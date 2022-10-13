@@ -25,7 +25,7 @@ internal class OpenGiftEvent : IPacketEvent
         }
 
         var presentId = packet.PopInt();
-        var present = room.GetRoomItemHandler().GetItem(presentId);
+        var present = room.RoomItemHandling.GetItem(presentId);
         if (present == null)
         {
             return;
@@ -46,7 +46,7 @@ internal class OpenGiftEvent : IPacketEvent
 
             if (data == null)
             {
-                room.GetRoomItemHandler().RemoveFurniture(null, present.Id);
+                room.RoomItemHandling.RemoveFurniture(null, present.Id);
 
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
@@ -60,7 +60,7 @@ internal class OpenGiftEvent : IPacketEvent
 
             if (!WibboEnvironment.GetGame().GetItemManager().GetItem(Convert.ToInt32(data["base_id"]), out _))
             {
-                room.GetRoomItemHandler().RemoveFurniture(null, present.Id);
+                room.RoomItemHandling.RemoveFurniture(null, present.Id);
 
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
@@ -100,7 +100,7 @@ internal class OpenGiftEvent : IPacketEvent
     {
         var itemIsInRoom = true;
 
-        room.GetRoomItemHandler().RemoveFurniture(session, present.Id);
+        room.RoomItemHandling.RemoveFurniture(session, present.Id);
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
@@ -115,7 +115,7 @@ internal class OpenGiftEvent : IPacketEvent
 
         if (present.Data.Type == 's')
         {
-            if (!room.GetRoomItemHandler().SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
+            if (!room.RoomItemHandling.SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
             {
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {

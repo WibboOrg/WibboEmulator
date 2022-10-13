@@ -28,9 +28,9 @@ internal class PickUpBotEvent : IPacketEvent
             return;
         }
 
-        if (!room.GetRoomUserManager().TryGetBot(botId, out var botUser))
+        if (!room.RoomUserManager.TryGetBot(botId, out var botUser))
         {
-            var targetUser = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(botId);
+            var targetUser = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(botId);
             if (targetUser == null)
             {
                 return;
@@ -57,6 +57,6 @@ internal class PickUpBotEvent : IPacketEvent
 
         _ = session.GetUser().GetInventoryComponent().TryAddBot(new Bot(botUser.BotData.Id, botUser.BotData.OwnerId, botUser.BotData.Name, botUser.BotData.Motto, botUser.BotData.Look, botUser.BotData.Gender, botUser.BotData.WalkingEnabled, botUser.BotData.AutomaticChat, botUser.BotData.ChatText, botUser.BotData.SpeakingInterval, botUser.BotData.IsDancing, botUser.BotData.Enable, botUser.BotData.Handitem, botUser.BotData.Status));
         session.SendPacket(new BotInventoryComposer(session.GetUser().GetInventoryComponent().GetBots()));
-        room.GetRoomUserManager().RemoveBot(botUser.VirtualId, false);
+        room.RoomUserManager.RemoveBot(botUser.VirtualId, false);
     }
 }

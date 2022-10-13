@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -19,7 +19,7 @@ public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
 
     private void HandleItems()
     {
-        var managerForBanzai = this.RoomInstance.GetTeamManager();
+        var managerForBanzai = this.RoomInstance.TeamManager;
 
         var listTeam = new List<RoomUser>();
 
@@ -58,7 +58,7 @@ public class CollisionTeam : WiredActionBase, IWiredEffect, IWired
                 continue;
             }
 
-            this.RoomInstance.GetWiredHandler().TriggerCollision(teamUser, null);
+            this.RoomInstance.WiredHandler.TriggerCollision(teamUser, null);
         }
     }
 

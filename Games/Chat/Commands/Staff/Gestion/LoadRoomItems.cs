@@ -22,9 +22,9 @@ internal class LoadRoomItems : IChatCommand
             return;
         }
 
-        room.GetRoomItemHandler().LoadFurniture(roomId);
-        room.GetGameMap().GenerateMaps(true);
+        room.RoomItemHandling.LoadFurniture(roomId);
+        room.GameMap.GenerateMaps(true);
         session.SendWhisper("Mobi de l'appart n° " + roomId + " chargé!");
-        session.SendPacket(new GetGuestRoomResultComposer(session, room.Data, false, true));
+        session.SendPacket(new GetGuestRoomResultComposer(session, room.RoomData, false, true));
     }
 }

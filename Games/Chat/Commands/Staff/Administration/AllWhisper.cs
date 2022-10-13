@@ -14,7 +14,7 @@ internal class AllWhisper : IChatCommand
 
         var message = CommandManager.MergeParams(parameters, 1);
 
-        foreach (var user in room.GetRoomUserManager().GetUserList().ToList())
+        foreach (var user in room.RoomUserManager.GetUserList().ToList())
         {
             if (user == null || user.Client == null)
             {

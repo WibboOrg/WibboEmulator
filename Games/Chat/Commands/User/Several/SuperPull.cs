@@ -11,7 +11,7 @@ internal class SuperPull : IChatCommand
             return;
         }
 
-        var targetUser = room.GetRoomUserManager().GetRoomUserByName(parameters[1]);
+        var targetUser = room.RoomUserManager.GetRoomUserByName(parameters[1]);
         if (targetUser == null)
         {
             return;
@@ -28,7 +28,7 @@ internal class SuperPull : IChatCommand
             return;
         }
 
-        if (userRoom.SetX - 1 == room.GetGameMap().Model.DoorX)
+        if (userRoom.SetX - 1 == room.GameMap.Model.DoorX)
         {
             return;
         }

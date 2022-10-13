@@ -16,7 +16,7 @@ internal class Cac : IChatCommand
             return;
         }
 
-        if (!room.Roleplay.Pvp)
+        if (!room.RoomRoleplay.Pvp)
         {
             return;
         }
@@ -43,11 +43,11 @@ internal class Cac : IChatCommand
             userRoom.FreezeEndCounter = rp.WeaponCac.FreezeTime;
         }
 
-        var targetRoomUser = room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
+        var targetRoomUser = room.RoomUserManager.GetRoomUserByName(parameters[1].ToString());
 
         if (targetRoomUser == null)
         {
-            var botOrPet = room.GetRoomUserManager().GetBotOrPetByName(parameters[1].ToString());
+            var botOrPet = room.RoomUserManager.GetBotOrPetByName(parameters[1].ToString());
             if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot == null)
             {
                 return;

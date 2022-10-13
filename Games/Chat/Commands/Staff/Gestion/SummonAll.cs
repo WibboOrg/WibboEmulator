@@ -17,10 +17,10 @@ internal class SummonAll : IChatCommand
                 }
 
                 client.GetUser().IsTeleporting = true;
-                client.GetUser().TeleportingRoomID = room.Data.Id;
+                client.GetUser().TeleportingRoomID = room.RoomData.Id;
                 client.GetUser().TeleporterId = 0;
 
-                client.SendPacket(new GetGuestRoomResultComposer(client, room.Data, false, true));
+                client.SendPacket(new GetGuestRoomResultComposer(client, room.RoomData, false, true));
             }
         }
     }

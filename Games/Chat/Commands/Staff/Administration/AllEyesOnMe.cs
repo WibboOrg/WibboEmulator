@@ -7,13 +7,13 @@ internal class AllEyesOnMe : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var thisUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var thisUser = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (thisUser == null)
         {
             return;
         }
 
-        var users = room.GetRoomUserManager().GetRoomUsers();
+        var users = room.RoomUserManager.GetRoomUsers();
         foreach (var u in users.ToList())
         {
             if (u == null || session.GetUser().Id == u.UserId)

@@ -41,7 +41,7 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                     return;
                 }
 
-                var userRom = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+                var userRom = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
                 if (userRom != null)
                 {
                     userRom.RemoveStatus("flatctrl");
@@ -75,7 +75,7 @@ internal class RemoveGroupMemberEvent : IPacketEvent
                         return;
                     }
 
-                    var userRoom = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+                    var userRoom = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
                     if (userRoom != null)
                     {
                         userRoom.RemoveStatus("flatctrl");
@@ -90,7 +90,7 @@ internal class RemoveGroupMemberEvent : IPacketEvent
 
                 if (session.GetUser().InRoom && session.GetUser().CurrentRoom != null)
                 {
-                    var userRoom = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+                    var userRoom = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
                     if (userRoom != null)
                     {
                         session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(group, userRoom.VirtualId));

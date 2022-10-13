@@ -20,13 +20,13 @@ internal class DeleteStickyNoteEvent : IPacketEvent
         }
 
         var itemId = packet.PopInt();
-        var roomItem = room.GetRoomItemHandler().GetItem(itemId);
+        var roomItem = room.RoomItemHandling.GetItem(itemId);
         if (roomItem == null || (roomItem.GetBaseItem().InteractionType != InteractionType.POSTIT && roomItem.GetBaseItem().InteractionType != InteractionType.PHOTO))
         {
             return;
         }
 
-        room.GetRoomItemHandler().RemoveFurniture(session, roomItem.Id);
+        room.RoomItemHandling.RemoveFurniture(session, roomItem.Id);
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
         ItemDao.Delete(dbClient, roomItem.Id);
     }

@@ -28,12 +28,12 @@ internal class GiveRoomScoreEvent : IPacketEvent
         switch (score)
         {
             case -1:
-                room.Data.Score--;
+                room.RoomData.Score--;
                 break;
             case 0:
                 return;
             case 1:
-                room.Data.Score++;
+                room.RoomData.Score++;
                 break;
             default:
                 return;
@@ -41,10 +41,10 @@ internal class GiveRoomScoreEvent : IPacketEvent
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            RoomDao.UpdateScore(dbClient, room.Id, room.Data.Score);
+            RoomDao.UpdateScore(dbClient, room.Id, room.RoomData.Score);
         }
 
         session.GetUser().RatedRooms.Add(room.Id);
-        session.SendPacket(new RoomRatingComposer(room.Data.Score, !(session.GetUser().RatedRooms.Contains(room.Id) || room.Data.OwnerId == session.GetUser().Id)));
+        session.SendPacket(new RoomRatingComposer(room.RoomData.Score, !(session.GetUser().RatedRooms.Contains(room.Id) || room.RoomData.OwnerId == session.GetUser().Id)));
     }
 }

@@ -13,7 +13,7 @@ internal class ForceEnableUser : IChatCommand
 
         var username = parameters[1];
 
-        var roomUserByUserId = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(username);
+        var roomUserByUserId = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByName(username);
         if (roomUserByUserId == null || roomUserByUserId.Client == null)
         {
             return;

@@ -28,7 +28,7 @@ public class BotClothes : WiredActionBase, IWired, IWiredEffect, IWiredCycleable
             return false;
         }
 
-        var bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(nameBot);
+        var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(nameBot);
         if (bot == null)
         {
             return false;

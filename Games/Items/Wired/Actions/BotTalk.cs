@@ -25,7 +25,7 @@ public class BotTalk : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(name);
+        var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(name);
         if (bot == null)
         {
             return false;
@@ -36,7 +36,7 @@ public class BotTalk : WiredActionBase, IWired, IWiredEffect
         {
             textMessage = textMessage.Replace("#username#", user.GetUsername());
             textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());
-            textMessage = textMessage.Replace("#roomname#", this.RoomInstance.Data.Name.ToString());
+            textMessage = textMessage.Replace("#roomname#", this.RoomInstance.RoomData.Name.ToString());
             textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.VotedYesCount.ToString());
             textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.VotedNoCount.ToString());
             textMessage = textMessage.Replace("#wpcount#", user.Client.GetUser() != null ? user.Client.GetUser().WibboPoints.ToString() : "0");

@@ -17,14 +17,14 @@ public class UserCommand : WiredTriggerBase, IWired
             return;
         }
 
-        this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, null);
+        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
     }
 
     public override void Dispose()
     {
         base.Dispose();
 
-        this.RoomInstance.GetWiredHandler().GetRoom().OnTrigger -= this.OnUserSays;
+        this.RoomInstance.OnTrigger -= this.OnUserSays;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

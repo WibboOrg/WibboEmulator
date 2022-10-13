@@ -12,7 +12,7 @@ internal class ConfigBot : IChatCommand
             return;
         }
 
-        var bot = room.GetRoomUserManager().GetBotByName(parameters[1]);
+        var bot = room.RoomUserManager.GetBotByName(parameters[1]);
         if (bot == null)
         {
             return;

@@ -22,7 +22,7 @@ internal class Push : IChatCommand
             return;
         }
 
-        var targetRoomUser = room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
+        var targetRoomUser = room.RoomUserManager.GetRoomUserByName(Convert.ToString(parameters[1]));
 
         if (targetRoomUser == null)
         {
@@ -43,7 +43,7 @@ internal class Push : IChatCommand
 
         if (!(Math.Abs(targetRoomUser.X - userRoom.X) >= 2) || Math.Abs(targetRoomUser.Y - userRoom.Y) >= 2)
         {
-            if (targetRoomUser.SetX - 1 == room.GetGameMap().Model.DoorX)
+            if (targetRoomUser.SetX - 1 == room.GameMap.Model.DoorX)
             {
                 return;
             }

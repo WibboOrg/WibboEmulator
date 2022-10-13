@@ -158,7 +158,7 @@ public class RoleBot
 
         if (this.Health <= dmg)
         {
-            var user = room.GetRoomUserManager().GetRoomUserByVirtualId(this.AggroVirtuelId);
+            var user = room.RoomUserManager.GetRoomUserByVirtualId(this.AggroVirtuelId);
             if (user != null && !user.IsBot)
             {
                 var rp = user.Roleplayer;
@@ -187,7 +187,7 @@ public class RoleBot
 
             if (this.Config.MoneyDrop > 0)
             {
-                _ = room.GetRoomItemHandler().AddTempItem(bot.VirtualId, this.Config.DropScriptId, bot.SetX, bot.SetY, bot.Z, "1", this.Config.MoneyDrop, InteractionTypeTemp.MONEY);
+                _ = room.RoomItemHandling.AddTempItem(bot.VirtualId, this.Config.DropScriptId, bot.SetX, bot.SetY, bot.Z, "1", this.Config.MoneyDrop, InteractionTypeTemp.MONEY);
             }
 
             if (this.Config.LootItemId > 0)
@@ -195,7 +195,7 @@ public class RoleBot
                 var item = WibboEnvironment.GetGame().GetRoleplayManager().GetItemManager().GetItem(this.Config.LootItemId);
                 if (item != null)
                 {
-                    _ = room.GetRoomItemHandler().AddTempItem(bot.VirtualId, 3996, bot.SetX, bot.SetY, bot.Z, item.Name, this.Config.LootItemId, InteractionTypeTemp.RPITEM);
+                    _ = room.RoomItemHandling.AddTempItem(bot.VirtualId, 3996, bot.SetX, bot.SetY, bot.Z, item.Name, this.Config.LootItemId, InteractionTypeTemp.RPITEM);
                 }
             }
 
@@ -227,7 +227,7 @@ public class RoleBot
                 }
             }
 
-            bot.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", room.Data.Langue), this.Health, this.Config.Health, dmg), bot.IsPet ? 0 : 2, true);
+            bot.OnChat(string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("rp.hit", room.RoomData.Langue), this.Health, this.Config.Health, dmg), bot.IsPet ? 0 : 2, true);
         }
     }
 
@@ -256,7 +256,7 @@ public class RoleBot
             this.GunCharger--;
             var dmg = WibboEnvironment.GetRandomNumber(this.WeaponGun.DmgMin, this.WeaponGun.DmgMax);
 
-            room.GetProjectileManager().AddProjectile(bot.VirtualId, bot.SetX, bot.SetY, bot.SetZ, movement, dmg, this.WeaponGun.Distance, this.Config.TeamId, true);
+            room.ProjectileManager.AddProjectile(bot.VirtualId, bot.SetX, bot.SetY, bot.SetZ, movement, dmg, this.WeaponGun.Distance, this.Config.TeamId, true);
         }
     }
 
@@ -300,7 +300,7 @@ public class RoleBot
 
     private void AggroCycle(RoomUser bot, Room room)
     {
-        var user = room.GetRoomUserManager().GetRoomUserByVirtualId(this.AggroVirtuelId);
+        var user = room.RoomUserManager.GetRoomUserByVirtualId(this.AggroVirtuelId);
         if (user == null || this.Dead)
         {
             this.ResetAggro();
@@ -542,7 +542,7 @@ public class RoleBot
         {
             for (var i = 1; i < distanceX; i++)
             {
-                if (!room.GetGameMap().CanStackItem(botX + i, botY, true) || room.GetGameMap().SqAbsoluteHeight(botX + i, botY) > (botZ + 0.5))
+                if (!room.GameMap.CanStackItem(botX + i, botY, true) || room.GameMap.SqAbsoluteHeight(botX + i, botY) > (botZ + 0.5))
                 {
                     return true;
                 }
@@ -552,7 +552,7 @@ public class RoleBot
         {
             for (var i = 1; i < distanceX; i++)
             {
-                if (!room.GetGameMap().CanStackItem(botX - i, botY, true) || room.GetGameMap().SqAbsoluteHeight(botX - i, botY) > (botZ + 0.5))
+                if (!room.GameMap.CanStackItem(botX - i, botY, true) || room.GameMap.SqAbsoluteHeight(botX - i, botY) > (botZ + 0.5))
                 {
                     return true;
                 }
@@ -562,7 +562,7 @@ public class RoleBot
         {
             for (var i = 1; i < distanceY; i++)
             {
-                if (!room.GetGameMap().CanStackItem(botX, botY + i, true) || room.GetGameMap().SqAbsoluteHeight(botX, botY + i) > (botZ + 0.5))
+                if (!room.GameMap.CanStackItem(botX, botY + i, true) || room.GameMap.SqAbsoluteHeight(botX, botY + i) > (botZ + 0.5))
                 {
                     return true;
                 }
@@ -572,7 +572,7 @@ public class RoleBot
         {
             for (var i = 1; i < distanceY; i++)
             {
-                if (!room.GetGameMap().CanStackItem(botX, botY - i, true) || room.GetGameMap().SqAbsoluteHeight(botX, botY - i) > (botZ + 0.5))
+                if (!room.GameMap.CanStackItem(botX, botY - i, true) || room.GameMap.SqAbsoluteHeight(botX, botY - i) > (botZ + 0.5))
                 {
                     return true;
                 }
@@ -583,7 +583,7 @@ public class RoleBot
         {
             for (var i = 1; i < distanceX; i++)
             {
-                if (!room.GetGameMap().CanStackItem(botX - i, botY - i, true) || room.GetGameMap().SqAbsoluteHeight(botX - i, botY - i) > (botZ + 0.5))
+                if (!room.GameMap.CanStackItem(botX - i, botY - i, true) || room.GameMap.SqAbsoluteHeight(botX - i, botY - i) > (botZ + 0.5))
                 {
                     return true;
                 }
@@ -593,7 +593,7 @@ public class RoleBot
         {
             for (var i = 1; i < distanceX; i++)
             {
-                if (!room.GetGameMap().CanStackItem(botX + i, botY - i, true) || room.GetGameMap().SqAbsoluteHeight(botX + i, botY - i) > (botZ + 0.5))
+                if (!room.GameMap.CanStackItem(botX + i, botY - i, true) || room.GameMap.SqAbsoluteHeight(botX + i, botY - i) > (botZ + 0.5))
                 {
                     return true;
                 }
@@ -603,7 +603,7 @@ public class RoleBot
         {
             for (var i = 1; i < distanceX; i++)
             {
-                if (!room.GetGameMap().CanStackItem(botX + i, botY + i, true) || room.GetGameMap().SqAbsoluteHeight(botX + i, botY + i) > (botZ + 0.5))
+                if (!room.GameMap.CanStackItem(botX + i, botY + i, true) || room.GameMap.SqAbsoluteHeight(botX + i, botY + i) > (botZ + 0.5))
                 {
                     return true;
                 }
@@ -613,7 +613,7 @@ public class RoleBot
         {
             for (var i = 1; i < distanceX; i++)
             {
-                if (!room.GetGameMap().CanStackItem(botX - i, botY + i, true) || room.GetGameMap().SqAbsoluteHeight(botX - i, botY + i) > (botZ + 0.5))
+                if (!room.GameMap.CanStackItem(botX - i, botY + i, true) || room.GameMap.SqAbsoluteHeight(botX - i, botY + i) > (botZ + 0.5))
                 {
                     return true;
                 }
@@ -647,7 +647,7 @@ public class RoleBot
             {
                 bot.RotHead = bot.BotData.Rot;
                 bot.RotBody = bot.BotData.Rot;
-                room.SendPacket(RoomItemHandling.TeleportUser(bot, new Point(bot.BotData.X, bot.BotData.Y), 0, room.GetGameMap().SqAbsoluteHeight(bot.BotData.X, bot.BotData.Y)));
+                room.SendPacket(RoomItemHandling.TeleportUser(bot, new Point(bot.BotData.X, bot.BotData.Y), 0, room.GameMap.SqAbsoluteHeight(bot.BotData.X, bot.BotData.Y)));
             }
         }
     }
@@ -738,7 +738,7 @@ public class RoleBot
 
     private void AggroSearch(RoomUser bot, Room room)
     {
-        var users = room.GetGameMap().GetNearUsers(new Point(bot.X, bot.Y), this.Config.AggroDistance);
+        var users = room.GameMap.GetNearUsers(new Point(bot.X, bot.Y), this.Config.AggroDistance);
         if (users == null)
         {
             return;

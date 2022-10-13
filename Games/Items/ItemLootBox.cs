@@ -153,7 +153,7 @@ internal static class ItemLootBox
             session.GetUser().GetBadgeComponent().GiveBadge(badgeCode, true);
             session.SendPacket(new ReceiveBadgeComposer(badgeCode));
 
-            var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
             if (roomUserByUserId != null)
             {
                 roomUserByUserId.SendWhisperChat("Tu as reçu le badge: " + badgeCode);
@@ -237,7 +237,7 @@ internal static class ItemLootBox
 
         session.SendPacket(new AchievementScoreComposer(session.GetUser().AchievementPoints));
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (roomUserByUserId != null)
         {
             session.SendPacket(new UserChangeComposer(roomUserByUserId, true));
@@ -280,7 +280,7 @@ internal static class ItemLootBox
             return;
         }
 
-        room.GetRoomItemHandler().RemoveFurniture(session, present.Id);
+        room.RoomItemHandling.RemoveFurniture(session, present.Id);
 
         var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
 
@@ -314,7 +314,7 @@ internal static class ItemLootBox
 
         if (present.Data.Type == 's')
         {
-            if (!room.GetRoomItemHandler().SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
+            if (!room.RoomItemHandling.SetFloorItem(session, present, present.X, present.Y, present.Rotation, true, false, true))
             {
                 ItemDao.UpdateResetRoomId(dbClient, present.Id);
 

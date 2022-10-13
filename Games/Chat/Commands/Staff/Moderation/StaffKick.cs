@@ -26,7 +26,7 @@ internal class StaffKick : IChatCommand
         }
         else
         {
-            room.GetRoomUserManager().RemoveUserFromRoom(targetUser, true, false);
+            room.RoomUserManager.RemoveUserFromRoom(targetUser, true, false);
 
             if (parameters.Length > 2)
             {

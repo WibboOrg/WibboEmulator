@@ -19,14 +19,14 @@ public class InteractorDice : FurniInteractor
             return;
         }
 
-        var roomUser = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
 
         if (roomUser == null)
         {
             return;
         }
 
-        if (Gamemap.TilesTouching(item.X, item.Y, roomUser.X, roomUser.Y))
+        if (GameMap.TilesTouching(item.X, item.Y, roomUser.X, roomUser.Y))
         {
             if (!(item.ExtraData != "-1"))
             {
@@ -67,7 +67,7 @@ public class InteractorDice : FurniInteractor
         item.ExtraData = numberDice.ToString();
         item.UpdateState();
 
-        var user = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+        var user = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         if (user != null)
         {
             if (!user.InGame)

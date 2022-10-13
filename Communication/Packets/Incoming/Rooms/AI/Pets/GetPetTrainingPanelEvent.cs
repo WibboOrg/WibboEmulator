@@ -15,7 +15,7 @@ internal class GetPetTrainingPanelEvent : IPacketEvent
 
         var petId = packet.PopInt();
 
-        if (!session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(petId, out var pet))
+        if (!session.GetUser().CurrentRoom.RoomUserManager.TryGetPet(petId, out var pet))
         {
             return;
         }

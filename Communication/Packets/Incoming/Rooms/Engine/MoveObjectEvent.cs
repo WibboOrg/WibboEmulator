@@ -19,13 +19,13 @@ internal class MoveObjectEvent : IPacketEvent
             return;
         }
 
-        var roomItem = room.GetRoomItemHandler().GetItem(packet.PopInt());
+        var roomItem = room.RoomItemHandling.GetItem(packet.PopInt());
         if (roomItem == null)
         {
             return;
         }
 
-        if (room.Data.SellPrice > 0)
+        if (room.RoomData.SellPrice > 0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
             return;
@@ -51,9 +51,9 @@ internal class MoveObjectEvent : IPacketEvent
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_STACK, 0);
         }
 
-        if (!room.GetRoomItemHandler().SetFloorItem(session, roomItem, newX, newY, newRot, false, false, true))
+        if (!room.RoomItemHandling.SetFloorItem(session, roomItem, newX, newY, newRot, false, false, true))
         {
-            room.SendPacket(new ObjectUpdateComposer(roomItem, room.Data.OwnerId));
+            room.SendPacket(new ObjectUpdateComposer(roomItem, room.RoomData.OwnerId));
             return;
         }
     }

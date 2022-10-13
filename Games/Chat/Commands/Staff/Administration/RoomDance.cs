@@ -20,7 +20,7 @@ internal class RoomDance : IChatCommand
             return;
         }
 
-        var users = room.GetRoomUserManager().GetRoomUsers();
+        var users = room.RoomUserManager.GetRoomUsers();
         if (users.Count > 0)
         {
             foreach (var user in users.ToList())

@@ -29,7 +29,7 @@ internal class RockPaperScissors : IChatCommand
             return;
         }
 
-        var roomUserTarget = room.GetRoomUserManager().GetRoomUserByName(username);
+        var roomUserTarget = room.RoomUserManager.GetRoomUserByName(username);
         if (roomUserTarget == null)
         {
             session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));
@@ -41,6 +41,6 @@ internal class RockPaperScissors : IChatCommand
             return;
         }
 
-        room.GetJanken().Start(userRoom, roomUserTarget);
+        room.JankenManager.Start(userRoom, roomUserTarget);
     }
 }

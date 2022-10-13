@@ -15,7 +15,7 @@ internal class RoomKick : IChatCommand
         _ = room.RunTask(async () =>
         {
             var userKick = new List<RoomUser>();
-            foreach (var user in room.GetRoomUserManager().GetUserList().ToList())
+            foreach (var user in room.RoomUserManager.GetUserList().ToList())
             {
                 if (user != null && !user.IsBot && !user.Client.GetUser().HasPermission("perm_mod") && user.Client.GetUser().Id != session.GetUser().Id)
                 {
@@ -28,8 +28,8 @@ internal class RoomKick : IChatCommand
                 user.AllowMoveTo = false;
                 user.IsWalking = true;
                 user.AllowOverride = true;
-                user.GoalX = room.GetGameMap().Model.DoorX;
-                user.GoalY = room.GetGameMap().Model.DoorY;
+                user.GoalX = room.GameMap.Model.DoorX;
+                user.GoalY = room.GameMap.Model.DoorY;
             }
 
             await Task.Delay(3000);
@@ -41,7 +41,8 @@ internal class RoomKick : IChatCommand
                     user.Client.SendNotification(messageAlert);
                 }
 
-                room.GetRoomUserManager().RemoveUserFromRoom(user.Client, true, false);
+                room.
+                RoomUserManager.RemoveUserFromRoom(user.Client, true, false);
             }
         });
     }

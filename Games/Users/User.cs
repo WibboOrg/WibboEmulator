@@ -25,6 +25,13 @@ using WibboEmulator.Games.Users.Wardrobes;
 public class User : IDisposable
 {
     private GameClient _clientInstance;
+    private MessengerComponent _messengerComponent;
+    private BadgeComponent _badgeComponent;
+    private AchievementComponent _achievementComponent;
+    private InventoryComponent _inventoryComponent;
+    private WardrobeComponent _wardrobeComponent;
+    private ChatlogManager _chatMessageManager;
+    private PermissionComponent _permissions;
 
     public int Id { get; set; }
     public string Username { get; set; }
@@ -54,11 +61,9 @@ public class User : IDisposable
     public List<int> ClientVolume { get; set; }
     public string MachineId { get; set; }
     public Language Langue { get; set; }
-
     public bool ForceOpenGift { get; set; }
     public int ForceUse { get; set; } = -1;
     public int ForceRot { get; set; } = -1;
-
     public List<int> RoomRightsList { get; set; }
     public List<int> FavoriteRooms { get; set; }
     public List<int> UsersRooms { get; set; }
@@ -67,20 +72,10 @@ public class User : IDisposable
     public List<int> MyGroups { get; set; }
     public Dictionary<int, int> Quests { get; set; }
     public Dictionary<double, int> Visits { get; set; }
-
-    private MessengerComponent _messengerComponent;
-    private BadgeComponent _badgeComponent;
-    private AchievementComponent _achievementComponent;
-    private InventoryComponent _inventoryComponent;
-    private WardrobeComponent _wardrobeComponent;
-    private ChatlogManager _chatMessageManager;
-    private PermissionComponent _permissions;
-
     public bool SpectatorMode { get; set; }
     public bool IsDisposed { get; set; }
     public bool HasFriendRequestsDisabled { get; set; }
     public int FavouriteGroupId { get; set; }
-
     public int FloodCount { get; set; }
     public DateTime FloodTime { get; set; }
     public bool SpamEnable { get; set; }
@@ -88,11 +83,9 @@ public class User : IDisposable
     public DateTime SpamFloodTime { get; set; }
     public DateTime EveryoneTimer { get; set; }
     public DateTime LastGiftPurchaseTime { get; set; }
-
     public bool LoadRoomBlocked { get; set; }
     public int LoadRoomCount { get; set; }
     public DateTime LastLoadedRoomTime { get; set; }
-
     public int CurrentQuestId { get; set; }
     public int LastCompleted { get; set; }
     public int LastQuestId { get; set; }
@@ -107,31 +100,23 @@ public class User : IDisposable
     public bool ViewMurmur { get; set; } = true;
     public bool HideOnline { get; set; }
     public string LastPhotoId { get; set; }
-
     public int GuideOtherUserId { get; set; }
     public bool OnDuty { get; set; }
-
     public int Mazo { get; set; }
     public int MazoHighScore { get; set; }
-
     public bool NewUser { get; set; }
     public bool Nuxenable { get; set; }
     public int PassedNuxCount { get; set; }
-
     public bool AllowDoorBell { get; set; }
     public bool CanChangeName { get; set; }
     public int GiftPurchasingWarnings { get; set; }
     public bool SessionGiftBlocked { get; set; }
-
     public int RolePlayId { get; set; }
     public double IgnoreAllExpireTime { get; set; }
-
     public bool IgnoreRoomInvites { get; set; }
     public bool CameraFollowDisabled { get; set; }
     public bool OldChat { get; set; }
-
     public bool IgnoreAll => this.IgnoreAllExpireTime > WibboEnvironment.GetUnixTimestamp();
-
     public bool InRoom => this.CurrentRoomId > 0;
 
     public Room CurrentRoom
@@ -217,15 +202,11 @@ public class User : IDisposable
         this.MyGroups = new List<int>();
         this.Quests = new Dictionary<int, int>();
         this.FavouriteGroupId = favoriteGroup;
-
         this.AccountCreated = accountCreated;
-
         this.CurrentQuestId = currentQuestID;
         this.AcceptTrading = accepttrading;
-
         this.OnlineTime = DateTime.Now;
         this.PremiumProtect = this.Rank > 1;
-
         this.ControlUserId = 0;
         this.IP = ip;
         this.SpectatorMode = false;
@@ -234,13 +215,10 @@ public class User : IDisposable
         this.HideOnline = hideOnline;
         this.MazoHighScore = mazoHighScore;
         this.Mazo = mazo;
-
         this.LastGiftPurchaseTime = DateTime.Now;
-
         this.Nuxenable = nuxenable;
         this.NewUser = nuxenable;
         this.Visits = new Dictionary<double, int>();
-
         this.IgnoreRoomInvites = ignoreRoomInvite;
         this.CameraFollowDisabled = cameraFollowDisabled;
         this.OldChat = false;
@@ -311,7 +289,7 @@ public class User : IDisposable
         {
             if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.GetClient().GetUser().CurrentRoomId, out var oldRoom))
             {
-                oldRoom.GetRoomUserManager().RemoveUserFromRoom(this.GetClient(), false, false);
+                oldRoom.RoomUserManager.RemoveUserFromRoom(this.GetClient(), false, false);
             }
         }
 
@@ -374,15 +352,15 @@ public class User : IDisposable
             }
         }
 
-        if (room.Data.UsersNow >= room.Data.UsersMax && !this.GetClient().GetUser().HasPermission("perm_enter_full_rooms") && !this.GetClient().GetUser().HasPermission("perm_enter_full_rooms"))
+        if (room.RoomData.UsersNow >= room.RoomData.UsersMax && !this.GetClient().GetUser().HasPermission("perm_enter_full_rooms") && !this.GetClient().GetUser().HasPermission("perm_enter_full_rooms"))
         {
             if (room.CloseFullRoom)
             {
-                room.Data.Access = RoomAccess.Doorbell;
+                room.RoomData.Access = RoomAccess.Doorbell;
                 room.CloseFullRoom = false;
             }
 
-            if (this.GetClient().GetUser().Id != room.Data.OwnerId)
+            if (this.GetClient().GetUser().Id != room.RoomData.OwnerId)
             {
                 this.GetClient().SendPacket(new CantConnectComposer(1));
 
@@ -395,9 +373,9 @@ public class User : IDisposable
 
         if (!this.GetClient().GetUser().HasPermission("perm_access_apartments_all"))
         {
-            if (!(this.GetClient().GetUser().HasPermission("perm_access_apartments") && !ownerEnterNotAllowed.Contains(room.Data.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID == room.Id))
+            if (!(this.GetClient().GetUser().HasPermission("perm_access_apartments") && !ownerEnterNotAllowed.Contains(room.RoomData.OwnerName)) && !room.CheckRights(this.GetClient(), true) && !(this.GetClient().GetUser().IsTeleporting && this.GetClient().GetUser().TeleportingRoomID == room.Id))
             {
-                if (room.Data.Access == RoomAccess.Doorbell && !overrideDoorbell && !room.CheckRights(this.GetClient()))
+                if (room.RoomData.Access == RoomAccess.Doorbell && !overrideDoorbell && !room.CheckRights(this.GetClient()))
                 {
                     if (room.UserCount == 0)
                     {
@@ -412,7 +390,7 @@ public class User : IDisposable
                     }
                     return;
                 }
-                else if (room.Data.Access == RoomAccess.Password && password.ToLower() != room.Data.Password.ToLower())
+                else if (room.RoomData.Access == RoomAccess.Password && password.ToLower() != room.RoomData.Password.ToLower())
                 {
                     this.GetClient().SendPacket(new GenericErrorComposer(-100002));
                     this.GetClient().SendPacket(new CloseConnectionComposer());
@@ -421,9 +399,9 @@ public class User : IDisposable
             }
         }
 
-        if (room.Data.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
+        if (room.RoomData.OwnerName == WibboEnvironment.GetSettings().GetData<string>("autogame.owner"))
         {
-            if (room.GetRoomUserManager().GetUserByTracker(this.IP, this.GetClient().MachineId) != null)
+            if (room.RoomUserManager.GetUserByTracker(this.IP, this.GetClient().MachineId) != null)
             {
                 this.GetClient().SendPacket(new CloseConnectionComposer());
                 return;
@@ -455,23 +433,23 @@ public class User : IDisposable
             return false;
         }
 
-        session.SendPacket(new RoomReadyComposer(room.Id, room.Data.ModelName));
+        session.SendPacket(new RoomReadyComposer(room.Id, room.RoomData.ModelName));
 
-        if (room.Data.Wallpaper != "0.0")
+        if (room.RoomData.Wallpaper != "0.0")
         {
-            session.SendPacket(new RoomPropertyComposer("wallpaper", room.Data.Wallpaper));
+            session.SendPacket(new RoomPropertyComposer("wallpaper", room.RoomData.Wallpaper));
         }
 
-        if (room.Data.Floor != "0.0")
+        if (room.RoomData.Floor != "0.0")
         {
-            session.SendPacket(new RoomPropertyComposer("floor", room.Data.Floor));
+            session.SendPacket(new RoomPropertyComposer("floor", room.RoomData.Floor));
         }
 
-        session.SendPacket(new RoomPropertyComposer("landscape", room.Data.Landscape));
-        session.SendPacket(new RoomRatingComposer(room.Data.Score, !(session.GetUser().RatedRooms.Contains(room.Id) || room.Data.OwnerId == session.GetUser().Id)));
+        session.SendPacket(new RoomPropertyComposer("landscape", room.RoomData.Landscape));
+        session.SendPacket(new RoomRatingComposer(room.RoomData.Score, !(session.GetUser().RatedRooms.Contains(room.Id) || room.RoomData.OwnerId == session.GetUser().Id)));
 
-        session.SendPacket(room.GetGameMap().Model.SerializeRelativeHeightmap());
-        session.SendPacket(room.GetGameMap().Model.GetHeightmap());
+        session.SendPacket(room.GameMap.Model.SerializeRelativeHeightmap());
+        session.SendPacket(room.GameMap.Model.GetHeightmap());
 
         return true;
     }
@@ -526,7 +504,7 @@ public class User : IDisposable
 
         if (this.InRoom && this.CurrentRoom != null)
         {
-            this.CurrentRoom.GetRoomUserManager().RemoveUserFromRoom(this._clientInstance, false, false);
+            this.CurrentRoom.RoomUserManager.RemoveUserFromRoom(this._clientInstance, false, false);
         }
 
         if (this.RolePlayId > 0)

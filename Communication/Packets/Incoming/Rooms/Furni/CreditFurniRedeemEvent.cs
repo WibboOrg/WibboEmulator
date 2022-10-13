@@ -28,7 +28,7 @@ internal class CreditFurniRedeemEvent : IPacketEvent
             return;
         }
 
-        var exchange = room.GetRoomItemHandler().GetItem(packet.PopInt());
+        var exchange = room.RoomItemHandling.GetItem(packet.PopInt());
         if (exchange == null)
         {
             return;
@@ -44,7 +44,8 @@ internal class CreditFurniRedeemEvent : IPacketEvent
             ItemDao.Delete(dbClient, exchange.Id);
         }
 
-        room.GetRoomItemHandler().RemoveFurniture(null, exchange.Id);
+        room.
+        RoomItemHandling.RemoveFurniture(null, exchange.Id);
 
         var value = int.Parse(exchange.GetBaseItem().ItemName.Split(new char[1] { '_' })[1]);
 
@@ -73,7 +74,7 @@ internal class CreditFurniRedeemEvent : IPacketEvent
                 session.GetUser().AchievementPoints += value;
                 session.SendPacket(new AchievementScoreComposer(session.GetUser().AchievementPoints));
 
-                var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+                var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
                 if (roomUserByUserId != null)
                 {
                     session.SendPacket(new UserChangeComposer(roomUserByUserId, true));

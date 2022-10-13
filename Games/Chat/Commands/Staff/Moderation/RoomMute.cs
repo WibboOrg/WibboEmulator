@@ -8,7 +8,7 @@ internal class RoomMute : IChatCommand
     {
         room.RoomMuted = !room.RoomMuted;
 
-        foreach (var user in room.GetRoomUserManager().GetRoomUsers())
+        foreach (var user in room.RoomUserManager.GetRoomUsers())
         {
             if (user == null)
             {

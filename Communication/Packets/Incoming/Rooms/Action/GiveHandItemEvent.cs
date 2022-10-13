@@ -17,13 +17,13 @@ internal class GiveHandItemEvent : IPacketEvent
             return;
         }
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (roomUserByUserId == null || roomUserByUserId.CarryItemID <= 0 || roomUserByUserId.CarryTimer <= 0)
         {
             return;
         }
 
-        var roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(packet.PopInt());
+        var roomUserByUserIdTarget = room.RoomUserManager.GetRoomUserByUserId(packet.PopInt());
         if (roomUserByUserIdTarget == null)
         {
             return;

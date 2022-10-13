@@ -6,7 +6,7 @@ internal class RegenMap : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        room.GetGameMap().GenerateMaps();
+        room.GameMap.GenerateMaps();
         session.SendWhisper("Rafraichissement de la map d'appartement");
     }
 }

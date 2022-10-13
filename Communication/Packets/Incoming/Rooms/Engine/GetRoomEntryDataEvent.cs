@@ -28,7 +28,7 @@ internal class GetRoomEntryDataEvent : IPacketEvent
             return;
         }
 
-        if (room.Data.Access == RoomAccess.Doorbell)
+        if (room.RoomData.Access == RoomAccess.Doorbell)
         {
             if (!session.GetUser().AllowDoorBell)
             {
@@ -40,18 +40,18 @@ internal class GetRoomEntryDataEvent : IPacketEvent
             }
         }
 
-        if (!room.GetRoomUserManager().AddAvatarToRoom(session))
+        if (!room.RoomUserManager.AddAvatarToRoom(session))
         {
-            room.GetRoomUserManager().RemoveUserFromRoom(session, false, false);
+            room.RoomUserManager.RemoveUserFromRoom(session, false, false);
             return;
         }
 
         room.SendObjects(session);
 
         session.SendPacket(new RoomEntryInfoComposer(room.Id, room.CheckRights(session, true)));
-        session.SendPacket(new RoomVisualizationSettingsComposer(room.Data.WallThickness, room.Data.FloorThickness, room.Data.HideWall));
+        session.SendPacket(new RoomVisualizationSettingsComposer(room.RoomData.WallThickness, room.RoomData.FloorThickness, room.RoomData.HideWall));
 
-        var thisUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var thisUser = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
 
         if (thisUser != null)
         {
@@ -59,7 +59,7 @@ internal class GetRoomEntryDataEvent : IPacketEvent
 
             if (!thisUser.IsSpectator)
             {
-                room.GetRoomUserManager().UserEnter(thisUser);
+                room.RoomUserManager.UserEnter(thisUser);
             }
         }
 
@@ -81,7 +81,7 @@ internal class GetRoomEntryDataEvent : IPacketEvent
             }
         }
 
-        if (room.Data.OwnerId != session.GetUser().Id)
+        if (room.RoomData.OwnerId != session.GetUser().Id)
         {
             _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_RoomEntry", 1);
         }

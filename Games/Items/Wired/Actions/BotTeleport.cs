@@ -19,7 +19,7 @@ public class BotTeleport : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(this.StringParam);
+        var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(this.StringParam);
         if (bot == null)
         {
             return false;
@@ -33,7 +33,7 @@ public class BotTeleport : WiredActionBase, IWired, IWiredEffect
 
         if (roomItem.Coordinate != bot.Coordinate)
         {
-            Gamemap.TeleportToItem(bot, roomItem);
+            GameMap.TeleportToItem(bot, roomItem);
         }
 
         return false;

@@ -30,7 +30,7 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(name);
+        var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(name);
         if (bot == null || bot.BotData == null)
         {
             return false;
@@ -41,7 +41,7 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
         var textMessage = message;
         textMessage = textMessage.Replace("#username#", user.GetUsername());
         textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());
-        textMessage = textMessage.Replace("#roomname#", this.RoomInstance.Data.Name.ToString());
+        textMessage = textMessage.Replace("#roomname#", this.RoomInstance.RoomData.Name.ToString());
         textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.VotedYesCount.ToString());
         textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.VotedNoCount.ToString());
         textMessage = textMessage.Replace("#wpcount#", user.Client.GetUser() != null ? user.Client.GetUser().WibboPoints.ToString() : "0");
@@ -51,7 +51,7 @@ public class BotTalkToAvatar : WiredActionBase, IWired, IWiredEffect
             textMessage = textMessage.Replace("#money#", user.Roleplayer.Money.ToString());
         }
 
-        if (isWhisper && textMessage.Contains(" : ") && (this.RoomInstance.IsRoleplay || this.RoomInstance.Data.OwnerName == "LieuPublic"))
+        if (isWhisper && textMessage.Contains(" : ") && (this.RoomInstance.IsRoleplay || this.RoomInstance.RoomData.OwnerName == "LieuPublic"))
         {
             SendBotChoose(textMessage, user, bot.BotData);
         }

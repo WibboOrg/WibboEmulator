@@ -131,7 +131,7 @@ public class AchievementManager
 
             if (session.GetUser().CurrentRoom != null)
             {
-                var roomUserByUserId = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+                var roomUserByUserId = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
                 if (roomUserByUserId != null)
                 {
                     session.SendPacket(new UserChangeComposer(roomUserByUserId, true));

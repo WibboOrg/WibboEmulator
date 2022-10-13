@@ -43,9 +43,9 @@ public class Freeze
 
         this.IsGameActive = false;
 
-        var winningTeam = this._roomInstance.GetGameManager().GetWinningTeam();
+        var winningTeam = this._roomInstance.GameManager.GetWinningTeam();
 
-        foreach (var user in this._roomInstance.GetTeamManager().GetAllPlayer())
+        foreach (var user in this._roomInstance.TeamManager.GetAllPlayer())
         {
             this.EndGame(user, winningTeam);
         }
@@ -66,18 +66,19 @@ public class Freeze
                 return;
             }
             roomUser.ApplyEffect(0);
-            var managerForFreeze = this._roomInstance.GetTeamManager();
+            var managerForFreeze = this._roomInstance.TeamManager;
             managerForFreeze.OnUserLeave(roomUser);
 
             roomUser.Client.SendPacket(new IsPlayingComposer(false));
 
-            this._roomInstance.GetGameManager().UpdateGatesTeamCounts();
+            this._roomInstance.
+            GameManager.UpdateGatesTeamCounts();
 
             roomUser.Team = TeamType.None;
 
-            if (this._roomInstance.GetGameItemHandler().GetExitTeleport() != null)
+            if (this._roomInstance.GameItemHandler.GetExitTeleport() != null)
             {
-                Gamemap.TeleportToItem(roomUser, this._roomInstance.GetGameItemHandler().GetExitTeleport());
+                GameMap.TeleportToItem(roomUser, this._roomInstance.GameItemHandler.GetExitTeleport());
             }
 
             roomUser.Freezed = false;
@@ -127,7 +128,7 @@ public class Freeze
             {
                 roomItem.ExtraData = "";
                 roomItem.UpdateState(false, true);
-                this._roomInstance.GetGameMap().UpdateMapForItem(roomItem);
+                this._roomInstance.GameMap.UpdateMapForItem(roomItem);
             }
         }
     }
@@ -147,7 +148,7 @@ public class Freeze
 
     private void CountTeamPoints()
     {
-        foreach (var user in this._roomInstance.GetTeamManager().GetAllPlayer())
+        foreach (var user in this._roomInstance.TeamManager.GetAllPlayer())
         {
             this.CountTeamPoint(user);
         }
@@ -173,7 +174,8 @@ public class Freeze
         roomUser.ShieldActive = false;
         roomUser.ShieldCounter = 11;
 
-        this._roomInstance.GetGameManager().AddPointToTeam(roomUser.Team, 40, null);
+        this._roomInstance.
+        GameManager.AddPointToTeam(roomUser.Team, 40, null);
 
         roomUser.Client.SendPacket(new UpdateFreezeLivesComposer(roomUser.VirtualId, roomUser.FreezeLives));
     }
@@ -219,7 +221,7 @@ public class Freeze
 
     private Item GetFirstTile(int x, int y)
     {
-        foreach (var roomItem in this._roomInstance.GetGameMap().GetCoordinatedItems(new Point(x, y)))
+        foreach (var roomItem in this._roomInstance.GameMap.GetCoordinatedItems(new Point(x, y)))
         {
             if (roomItem.GetBaseItem().InteractionType == InteractionType.FREEZETILE)
             {
@@ -231,7 +233,7 @@ public class Freeze
 
     public void OnFreezeTiles(Item item, FreezePowerUp powerUp, int userID)
     {
-        if (this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(userID) == null)
+        if (this._roomInstance.RoomUserManager.GetRoomUserByUserId(userID) == null)
         {
             return;
         }
@@ -321,7 +323,7 @@ public class Freeze
                 item.FreezePowerUp = FreezePowerUp.None;
                 break;
         }
-        this._roomInstance.GetGameMap().UpdateMapForItem(item);
+        this._roomInstance.GameMap.UpdateMapForItem(item);
         item.UpdateState(false, true);
     }
 
@@ -341,7 +343,7 @@ public class Freeze
                 if (user.FreezeLives < 3)
                 {
                     user.FreezeLives++;
-                    this._roomInstance.GetGameManager().AddPointToTeam(user.Team, 10, user);
+                    this._roomInstance.GameManager.AddPointToTeam(user.Team, 10, user);
                 }
 
                 user.Client.SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
@@ -369,7 +371,7 @@ public class Freeze
 
     private void HandleUserFreeze(Point point)
     {
-        var user = this._roomInstance.GetRoomUserManager().GetUserForSquare(point.X, point.Y);
+        var user = this._roomInstance.RoomUserManager.GetUserForSquare(point.X, point.Y);
         if (user == null || (user.IsWalking && user.SetX != point.X && user.SetY != point.Y))
         {
             return;
@@ -401,19 +403,21 @@ public class Freeze
 
                 user.ApplyEffect(0);
 
-                this._roomInstance.GetGameManager().AddPointToTeam(user.Team, -20, user);
+                this._roomInstance.
+                GameManager.AddPointToTeam(user.Team, -20, user);
 
-                var managerForFreeze = this._roomInstance.GetTeamManager();
+                var managerForFreeze = this._roomInstance.TeamManager;
                 managerForFreeze.OnUserLeave(user);
 
                 user.Client.SendPacket(new IsPlayingComposer(false));
 
-                this._roomInstance.GetGameManager().UpdateGatesTeamCounts();
+                this._roomInstance.
+                GameManager.UpdateGatesTeamCounts();
                 user.Team = TeamType.None;
 
-                if (this._roomInstance.GetGameItemHandler().GetExitTeleport() != null)
+                if (this._roomInstance.GameItemHandler.GetExitTeleport() != null)
                 {
-                    Gamemap.TeleportToItem(user, this._roomInstance.GetGameItemHandler().GetExitTeleport());
+                    GameMap.TeleportToItem(user, this._roomInstance.GameItemHandler.GetExitTeleport());
                 }
 
                 user.Freezed = false;
@@ -445,7 +449,7 @@ public class Freeze
             }
             else
             {
-                this._roomInstance.GetGameManager().AddPointToTeam(user.Team, -10, user);
+                this._roomInstance.GameManager.AddPointToTeam(user.Team, -10, user);
                 user.ApplyEffect(12);
 
                 user.Client.SendPacket(new UpdateFreezeLivesComposer(user.VirtualId, user.FreezeLives));
@@ -609,7 +613,7 @@ public class Freeze
         return list;
     }
 
-    private List<Item> GetItemsForSquare(Point point) => this._roomInstance.GetGameMap().GetCoordinatedItems(point);
+    private List<Item> GetItemsForSquare(Point point) => this._roomInstance.GameMap.GetCoordinatedItems(point);
 
     private static bool SquareGotFreezeTile(List<Item> items)
     {

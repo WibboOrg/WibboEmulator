@@ -211,10 +211,10 @@ public class AnimationManager
         this._notif = false;
         this._roomIdGame = roomId;
 
-        room.Data.Access = RoomAccess.Open;
+        room.RoomData.Access = RoomAccess.Open;
         room.CloseFullRoom = true;
 
-        var alertMessage = string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("autogame.alert", Language.French), room.Data.Name);
+        var alertMessage = string.Format(WibboEnvironment.GetLanguageManager().TryGetValue("autogame.alert", Language.French), room.RoomData.Name);
 
         var gameOwner = WibboEnvironment.GetSettings().GetData<string>("autogame.owner");
 

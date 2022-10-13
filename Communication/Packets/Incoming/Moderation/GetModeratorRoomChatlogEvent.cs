@@ -23,7 +23,7 @@ internal class GetModeratorRoomChatlogEvent : IPacketEvent
         }
 
         var listReverse = new List<ChatlogEntry>();
-        listReverse.AddRange(room.GetChatMessageManager().ListOfMessages);
+        listReverse.AddRange(room.ChatlogManager.ListOfMessages);
         listReverse.Reverse();
 
         session.SendPacket(new ModeratorRoomChatlogComposer(room, listReverse));

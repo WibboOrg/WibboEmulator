@@ -27,7 +27,7 @@ public class MoveRotate : WiredActionBase, IWiredEffect, IWired
 
     private void HandleMovement(Item item)
     {
-        if (this.RoomInstance.GetRoomItemHandler().GetItem(item.Id) == null)
+        if (this.RoomInstance.RoomItemHandling.GetItem(item.Id) == null)
         {
             return;
         }
@@ -43,7 +43,7 @@ public class MoveRotate : WiredActionBase, IWiredEffect, IWired
             var oldX = item.X;
             var oldY = item.Y;
             var oldZ = item.Z;
-            if (this.RoomInstance.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, newRot, false, false, newRot != item.Rotation))
+            if (this.RoomInstance.RoomItemHandling.SetFloorItem(null, item, newPoint.X, newPoint.Y, newRot, false, false, newRot != item.Rotation))
             {
                 this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newPoint.X, newPoint.Y, item.Z, item.Id));
             }

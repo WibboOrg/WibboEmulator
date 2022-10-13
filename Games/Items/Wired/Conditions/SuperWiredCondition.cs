@@ -242,7 +242,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (room.Roleplay.Minute >= valueInt)
+                if (room.RoomRoleplay.Minute >= valueInt)
                 {
                     result = true;
                 }
@@ -256,7 +256,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (room.Roleplay.Minute < valueInt)
+                if (room.RoomRoleplay.Minute < valueInt)
                 {
                     result = true;
                 }
@@ -270,7 +270,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (room.Roleplay.Minute == valueInt)
+                if (room.RoomRoleplay.Minute == valueInt)
                 {
                     result = true;
                 }
@@ -284,7 +284,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (room.Roleplay.Hour >= valueInt)
+                if (room.RoomRoleplay.Hour >= valueInt)
                 {
                     result = true;
                 }
@@ -298,7 +298,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (room.Roleplay.Hour < valueInt)
+                if (room.RoomRoleplay.Hour < valueInt)
                 {
                     result = true;
                 }
@@ -312,7 +312,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                if (room.Roleplay.Hour == valueInt)
+                if (room.RoomRoleplay.Hour == valueInt)
                 {
                     result = true;
                 }
@@ -327,7 +327,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                var botOrPet = room.GetRoomUserManager().GetBotOrPetByName(parameters[0]);
+                var botOrPet = room.RoomUserManager.GetBotOrPetByName(parameters[0]);
                 if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot == null)
                 {
                     break;
@@ -571,7 +571,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 result = true;
 
-                foreach (var userSearch in room.GetRoomUserManager().GetRoomUsers())
+                foreach (var userSearch in room.RoomUserManager.GetRoomUsers())
                 {
                     if (userSearch == null)
                     {
@@ -677,7 +677,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "roomopen":
             case "roomnotopen":
             {
-                if (room.Data.Access == RoomAccess.Open)
+                if (room.RoomData.Access == RoomAccess.Open)
                 {
                     result = true;
                 }
@@ -687,7 +687,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "roomclose":
             case "roomnotclose":
             {
-                if (room.Data.Access == RoomAccess.Doorbell)
+                if (room.RoomData.Access == RoomAccess.Doorbell)
                 {
                     result = true;
                 }
@@ -697,7 +697,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "teamallcount":
             case "teamallnotcount":
             {
-                var teamManager = room.GetTeamManager();
+                var teamManager = room.TeamManager;
 
                 _ = int.TryParse(value, out var count);
                 if (teamManager.GetAllPlayer().Count == count)
@@ -710,7 +710,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "teamredcount":
             case "teamrednotcount":
             {
-                var teamManager = room.GetTeamManager();
+                var teamManager = room.TeamManager;
 
                 _ = int.TryParse(value, out var count);
                 if (teamManager.RedTeam.Count == count)
@@ -723,7 +723,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "teamyellowcount":
             case "teamyellownotcount":
             {
-                var teamManager = room.GetTeamManager();
+                var teamManager = room.TeamManager;
 
                 _ = int.TryParse(value, out var count);
                 if (teamManager.YellowTeam.Count == count)
@@ -736,7 +736,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "teambluecount":
             case "teambluenotcount":
             {
-                var teamManager = room.GetTeamManager();
+                var teamManager = room.TeamManager;
 
                 _ = int.TryParse(value, out var count);
                 if (teamManager.BlueTeam.Count == count)
@@ -749,7 +749,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             case "teamgreencount":
             case "teamgreennotcount":
             {
-                var teamManager = room.GetTeamManager();
+                var teamManager = room.TeamManager;
 
                 _ = int.TryParse(value, out var count);
                 if (teamManager.GreenTeam.Count == count)
@@ -773,7 +773,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
             {
                 result = true;
 
-                foreach (var userSearch in room.GetRoomUserManager().GetRoomUsers())
+                foreach (var userSearch in room.RoomUserManager.GetRoomUsers())
                 {
                     if (userSearch == null)
                     {
@@ -886,7 +886,7 @@ public class SuperWiredCondition : WiredConditionBase, IWiredCondition, IWired
                     break;
                 }
 
-                var winningTeam = room.GetGameManager().GetWinningTeam();
+                var winningTeam = room.GameManager.GetWinningTeam();
                 if (user.Team == winningTeam)
                 {
                     result = true;

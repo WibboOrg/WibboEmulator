@@ -9,14 +9,14 @@ internal class AllWarp : IChatCommand
     {
         var messageList = new ServerPacketList();
 
-        foreach (var user in room.GetRoomUserManager().GetUserList().ToList())
+        foreach (var user in room.RoomUserManager.GetUserList().ToList())
         {
             if (user == null || user.IsBot)
             {
                 continue;
             }
 
-            messageList.Add(RoomItemHandling.TeleportUser(user, userRoom.Coordinate, 0, room.GetGameMap().SqAbsoluteHeight(userRoom.X, userRoom.Y)));
+            messageList.Add(RoomItemHandling.TeleportUser(user, userRoom.Coordinate, 0, room.GameMap.SqAbsoluteHeight(userRoom.X, userRoom.Y)));
         }
 
         room.SendMessage(messageList);

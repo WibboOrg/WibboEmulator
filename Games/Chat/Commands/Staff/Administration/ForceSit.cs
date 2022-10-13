@@ -11,7 +11,7 @@ internal class ForceSit : IChatCommand
             return;
         }
 
-        var user = room.GetRoomUserManager().GetRoomUserByName(parameters[1]);
+        var user = room.RoomUserManager.GetRoomUserByName(parameters[1]);
         if (user == null)
         {
             return;

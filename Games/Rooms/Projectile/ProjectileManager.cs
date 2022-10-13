@@ -65,7 +65,7 @@ public class ProjectileManager
 
                 if (item.Distance <= 0)
                 {
-                    usersTouch = this._room.GetGameMap().GetNearUsers(new Point(newPoint.X, newPoint.Y), 2);
+                    usersTouch = this._room.GameMap.GetNearUsers(new Point(newPoint.X, newPoint.Y), 2);
 
                     endProjectile = true;
                 }
@@ -78,7 +78,7 @@ public class ProjectileManager
                 {
                     newPoint = MovementUtility.GetMoveCoord(item.X, item.Y, i, item.Movement);
 
-                    usersTouch = this._room.GetGameMap().GetRoomUsers(newPoint);
+                    usersTouch = this._room.GameMap.GetRoomUsers(newPoint);
 
                     foreach (var userTouch in usersTouch)
                     {
@@ -88,7 +88,7 @@ public class ProjectileManager
                         }
                     }
 
-                    if (this._room.GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true) && (this._room.GetGameMap().SqAbsoluteHeight(newPoint.X, newPoint.Y) <= item.Z + 0.5))
+                    if (this._room.GameMap.CanStackItem(newPoint.X, newPoint.Y, true) && (this._room.GameMap.SqAbsoluteHeight(newPoint.X, newPoint.Y) <= item.Z + 0.5))
                     {
                         newX = newPoint.X;
                         newY = newPoint.Y;
@@ -214,7 +214,7 @@ public class ProjectileManager
         }
         else
         {
-            this._room.GetWiredHandler().TriggerCollision(userTouch, null);
+            this._room.WiredHandler.TriggerCollision(userTouch, null);
         }
     }
 
@@ -277,12 +277,12 @@ public class ProjectileManager
 
         _ = this._projectile.Remove(item);
 
-        this._room.GetRoomItemHandler().RemoveTempItem(item.Id);
+        this._room.RoomItemHandling.RemoveTempItem(item.Id);
     }
 
     public void AddProjectile(int id, int x, int y, double z, MovementDirection movement, int dmg = 0, int distance = 10, int teamId = -1, bool isBot = false)
     {
-        var item = this._room.GetRoomItemHandler().AddTempItem(id, 77151726, x, y, z, "1", dmg, isBot ? InteractionTypeTemp.PROJECTILE_BOT : InteractionTypeTemp.PROJECTILE, movement, distance, teamId);
+        var item = this._room.RoomItemHandling.AddTempItem(id, 77151726, x, y, z, "1", dmg, isBot ? InteractionTypeTemp.PROJECTILE_BOT : InteractionTypeTemp.PROJECTILE, movement, distance, teamId);
 
         lock (this._projectileSync)
         {

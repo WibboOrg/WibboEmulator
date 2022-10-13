@@ -12,7 +12,7 @@ internal class Pan : IChatCommand
             return;
         }
 
-        if (!room.Roleplay.Pvp)
+        if (!room.RoomRoleplay.Pvp)
         {
             return;
         }
@@ -66,7 +66,7 @@ internal class Pan : IChatCommand
             rp.GunLoad--;
 
             var dmg = WibboEnvironment.GetRandomNumber(rp.WeaponGun.DmgMin, rp.WeaponGun.DmgMax);
-            room.GetProjectileManager().AddProjectile(userRoom.VirtualId, userRoom.SetX, userRoom.SetY, userRoom.SetZ, movement, dmg, rp.WeaponGun.Distance);
+            room.ProjectileManager.AddProjectile(userRoom.VirtualId, userRoom.SetX, userRoom.SetY, userRoom.SetZ, movement, dmg, rp.WeaponGun.Distance);
         }
 
         rp.SendUpdate();

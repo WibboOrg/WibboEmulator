@@ -17,7 +17,7 @@ internal class MuteUserEvent : IPacketEvent
             return;
         }
 
-        if ((room.Data.MuteFuse != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true))
+        if ((room.RoomData.MuteFuse != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true))
         {
             return;
         }
@@ -26,7 +26,7 @@ internal class MuteUserEvent : IPacketEvent
 
         _ = packet.PopInt();
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(id);
 
         var time = packet.PopInt() * 60;
 

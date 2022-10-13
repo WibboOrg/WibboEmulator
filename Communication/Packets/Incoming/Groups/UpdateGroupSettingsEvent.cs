@@ -57,9 +57,9 @@ internal class UpdateGroupSettingsEvent : IPacketEvent
             return;
         }
 
-        foreach (var user in room.GetRoomUserManager().GetRoomUsers().ToList())
+        foreach (var user in room.RoomUserManager.GetRoomUsers().ToList())
         {
-            if (room.Data.OwnerId == user.UserId || group.IsAdmin(user.UserId) || !group.IsMember(user.UserId))
+            if (room.RoomData.OwnerId == user.UserId || group.IsAdmin(user.UserId) || !group.IsMember(user.UserId))
             {
                 continue;
             }

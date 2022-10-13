@@ -41,7 +41,7 @@ internal class StaffAlert : IChatCommand
                 continue;
             }
 
-            var user = staff.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(staff.GetUser().Id);
+            var user = staff.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(staff.GetUser().Id);
 
             user.Client.SendPacket(new WhisperComposer(user.VirtualId, "[STAFF ALERT] " + messageTxt + " - " + roomUser.GetUsername(), 23));
         }

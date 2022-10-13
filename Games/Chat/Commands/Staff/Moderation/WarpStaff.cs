@@ -17,18 +17,18 @@ internal class WarpStaff : IChatCommand
             return;
         }
 
-        var roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(targetUser.GetUser().Id);
+        var roomUserByUserIdTarget = room.RoomUserManager.GetRoomUserByUserId(targetUser.GetUser().Id);
         if (roomUserByUserIdTarget == null)
         {
             return;
         }
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (roomUserByUserId == null)
         {
             return;
         }
 
-        room.SendPacket(RoomItemHandling.TeleportUser(roomUserByUserIdTarget, roomUserByUserId.Coordinate, 0, room.GetGameMap().SqAbsoluteHeight(roomUserByUserId.X, roomUserByUserId.Y)));
+        room.SendPacket(RoomItemHandling.TeleportUser(roomUserByUserIdTarget, roomUserByUserId.Coordinate, 0, room.GameMap.SqAbsoluteHeight(roomUserByUserId.X, roomUserByUserId.Y)));
     }
 }

@@ -18,6 +18,6 @@ internal class Invisible : IChatCommand
             session.GetUser().HideInRoom = true;
         }
 
-        session.SendPacket(new GetGuestRoomResultComposer(session, room.Data, false, true));
+        session.SendPacket(new GetGuestRoomResultComposer(session, room.RoomData, false, true));
     }
 }

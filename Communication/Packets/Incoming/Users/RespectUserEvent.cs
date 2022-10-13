@@ -25,7 +25,7 @@ internal class RespectUserEvent : IPacketEvent
             return;
         }
 
-        var roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(packet.PopInt());
+        var roomUserByUserIdTarget = room.RoomUserManager.GetRoomUserByUserId(packet.PopInt());
         if (roomUserByUserIdTarget == null || roomUserByUserIdTarget.Client.GetUser().Id == session.GetUser().Id || roomUserByUserIdTarget.IsBot)
         {
             return;
@@ -39,7 +39,7 @@ internal class RespectUserEvent : IPacketEvent
 
         room.SendPacket(new RespectNotificationComposer(roomUserByUserIdTarget.Client.GetUser().Id, roomUserByUserIdTarget.Client.GetUser().Respect));
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
 
         room.SendPacket(new ActionComposer(roomUserByUserId.VirtualId, 7));
     }

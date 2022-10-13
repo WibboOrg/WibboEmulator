@@ -14,7 +14,7 @@ internal class ForceTransfStop : IChatCommand
 
         var username = parameters[1];
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(username);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByName(username);
         if (roomUserByUserId == null)
         {
             return;

@@ -51,7 +51,7 @@ internal class WhisperEvent : IPacketEvent
             message = WibboEnvironment.GetGame().GetChatManager().GetFilter().CheckMessage(message);
         }
 
-        var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
 
         if (user == null)
         {
@@ -180,7 +180,7 @@ internal class WhisperEvent : IPacketEvent
 
                 foreach (var username in user.WhiperGroupUsers.ToArray())
                 {
-                    var userWhiper = room.GetRoomUserManager().GetRoomUserByName(username);
+                    var userWhiper = room.RoomUserManager.GetRoomUserByName(username);
 
                     if (userWhiper == null || userWhiper.Client == null || userWhiper.Client.GetUser() == null)
                     {
@@ -197,7 +197,7 @@ internal class WhisperEvent : IPacketEvent
                     userWhiper.Client.SendPacket(new WhisperComposer(user.VirtualId, message, color));
                 }
 
-                var roomUserByRank = room.GetRoomUserManager().GetStaffRoomUser();
+                var roomUserByRank = room.RoomUserManager.GetStaffRoomUser();
                 if (roomUserByRank.Count <= 0)
                 {
                     return;
@@ -222,7 +222,7 @@ internal class WhisperEvent : IPacketEvent
                     return;
                 }
 
-                var userWhiper = room.GetRoomUserManager().GetRoomUserByName(toUser);
+                var userWhiper = room.RoomUserManager.GetRoomUserByName(toUser);
 
                 if (userWhiper == null || userWhiper.Client == null || userWhiper.Client.GetUser() == null)
                 {
@@ -236,7 +236,7 @@ internal class WhisperEvent : IPacketEvent
 
                 userWhiper.Client.SendPacket(new WhisperComposer(user.VirtualId, message, color));
 
-                var roomUserByRank = room.GetRoomUserManager().GetStaffRoomUser();
+                var roomUserByRank = room.RoomUserManager.GetStaffRoomUser();
                 if (roomUserByRank.Count <= 0)
                 {
                     return;
@@ -253,7 +253,7 @@ internal class WhisperEvent : IPacketEvent
             }
 
             session.GetUser().GetChatMessageManager().AddMessage(user.UserId, user.GetUsername(), user.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, UnixTimestamp.GetNow());
-            room.GetChatMessageManager().AddMessage(user.UserId, user.GetUsername(), user.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, UnixTimestamp.GetNow());
+            room.ChatlogManager.AddMessage(user.UserId, user.GetUsername(), user.RoomId, WibboEnvironment.GetLanguageManager().TryGetValue("moderation.whisper", session.Langue) + toUser + ": " + message, UnixTimestamp.GetNow());
         }
     }
 }

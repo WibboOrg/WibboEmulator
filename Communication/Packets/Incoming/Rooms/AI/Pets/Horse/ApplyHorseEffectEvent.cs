@@ -23,7 +23,7 @@ internal class ApplyHorseEffectEvent : IPacketEvent
         }
 
         var itemId = packet.PopInt();
-        var item = room.GetRoomItemHandler().GetItem(itemId);
+        var item = room.RoomItemHandling.GetItem(itemId);
         if (item == null)
         {
             return;
@@ -31,7 +31,7 @@ internal class ApplyHorseEffectEvent : IPacketEvent
 
         var petId = packet.PopInt();
 
-        if (!room.GetRoomUserManager().TryGetPet(petId, out var petUser))
+        if (!room.RoomUserManager.TryGetPet(petId, out var petUser))
         {
             return;
         }
@@ -51,7 +51,7 @@ internal class ApplyHorseEffectEvent : IPacketEvent
             }
 
             //We only want to use this if we're successful. 
-            room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
+            room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
         else if (item.Data.InteractionType == InteractionType.HORSE_SADDLE_2)
         {
@@ -63,7 +63,7 @@ internal class ApplyHorseEffectEvent : IPacketEvent
             }
 
             //We only want to use this if we're successful. 
-            room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
+            room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
         else if (item.Data.InteractionType == InteractionType.HORSE_HAIRSTYLE)
         {
@@ -80,7 +80,7 @@ internal class ApplyHorseEffectEvent : IPacketEvent
             }
 
             //We only want to use this if we're successful. 
-            room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
+            room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
         else if (item.Data.InteractionType == InteractionType.HORSE_HAIR_DYE)
         {
@@ -97,7 +97,7 @@ internal class ApplyHorseEffectEvent : IPacketEvent
             }
 
             //We only want to use this if we're successful. 
-            room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
+            room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
         else if (item.Data.InteractionType == InteractionType.HORSE_BODY_DYE)
         {
@@ -130,7 +130,7 @@ internal class ApplyHorseEffectEvent : IPacketEvent
             }
 
             //We only want to use this if we're successful. 
-            room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
+            room.RoomItemHandling.RemoveFurniture(session, item.Id);
         }
 
         room.SendPacket(new UsersComposer(petUser));

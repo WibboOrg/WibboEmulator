@@ -46,13 +46,13 @@ public class GameItemHandler
                 {
                     roomItem.ExtraData = "1";
                     roomItem.UpdateState();
-                    this._roomInstance.GetGameMap().UpdateMapForItem(roomItem);
+                    this._roomInstance.GameMap.UpdateMapForItem(roomItem);
                 }
-                else if (this._roomInstance.GetGameMap().CanStackItem(roomItem.X, roomItem.Y))
+                else if (this._roomInstance.GameMap.CanStackItem(roomItem.X, roomItem.Y))
                 {
                     roomItem.ExtraData = "0";
                     roomItem.UpdateState();
-                    this._roomInstance.GetGameMap().UpdateMapForItem(roomItem);
+                    this._roomInstance.GameMap.UpdateMapForItem(roomItem);
                 }
             }
         }
@@ -107,7 +107,8 @@ public class GameItemHandler
             return;
         }
 
-        this._roomInstance.GetGameManager().AddPointToTeam(user.Team, user);
+        this._roomInstance.
+        GameManager.AddPointToTeam(user.Team, user);
         item.ExtraData = "1";
         item.UpdateState();
     }
@@ -119,7 +120,8 @@ public class GameItemHandler
             return;
         }
 
-        this._roomInstance.GetGameManager().AddPointToTeam(user.Team, 5, user);
+        this._roomInstance.
+        GameManager.AddPointToTeam(user.Team, 5, user);
         item.ExtraData = "1";
         item.UpdateState();
     }

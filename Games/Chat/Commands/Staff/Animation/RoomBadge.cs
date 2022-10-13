@@ -14,7 +14,7 @@ internal class RoomBadge : IChatCommand
 
         var badgeId = parameters[1];
 
-        foreach (var item_0 in room.GetRoomUserManager().GetUserList().ToList())
+        foreach (var item_0 in room.RoomUserManager.GetUserList().ToList())
         {
             try
             {

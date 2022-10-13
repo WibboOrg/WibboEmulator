@@ -15,7 +15,7 @@ internal class GiveLot : IChatCommand
             return;
         }
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(parts[1]);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByName(parts[1]);
         if (roomUserByUserId == null || roomUserByUserId.Client == null)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("input.usernotfound", session.Langue));

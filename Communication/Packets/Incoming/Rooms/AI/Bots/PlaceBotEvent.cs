@@ -29,7 +29,7 @@ internal class PlaceBotEvent : IPacketEvent
         var x = packet.PopInt();
         var y = packet.PopInt();
 
-        if (!room.GetGameMap().CanWalk(x, y, false) || !room.GetGameMap().ValidTile(x, y))
+        if (!room.GameMap.CanWalk(x, y, false) || !room.GameMap.ValidTile(x, y))
         {
             return;
         }
@@ -39,7 +39,7 @@ internal class PlaceBotEvent : IPacketEvent
             return;
         }
 
-        if (room.GetRoomUserManager().BotPetCount >= 30)
+        if (room.RoomUserManager.BotPetCount >= 30)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.placebot.error", session.Langue));
             return;
@@ -50,7 +50,7 @@ internal class PlaceBotEvent : IPacketEvent
             BotUserDao.UpdatePosition(dbClient, bot.Id, room.Id, x, y);
         }
 
-        _ = room.GetRoomUserManager().DeployBot(new RoomBot(bot.Id, bot.OwnerId, room.Id, BotAIType.Generic, bot.WalkingEnabled, bot.Name, bot.Motto, bot.Gender, bot.Figure, x, y, 0, 2, bot.ChatEnabled, bot.ChatText, bot.ChatSeconds, bot.IsDancing, bot.Enable, bot.Handitem, bot.Status), null);
+        _ = room.RoomUserManager.DeployBot(new RoomBot(bot.Id, bot.OwnerId, room.Id, BotAIType.Generic, bot.WalkingEnabled, bot.Name, bot.Motto, bot.Gender, bot.Figure, x, y, 0, 2, bot.ChatEnabled, bot.ChatText, bot.ChatSeconds, bot.IsDancing, bot.Enable, bot.Handitem, bot.Status), null);
 
         if (!session.GetUser().GetInventoryComponent().TryRemoveBot(botId, out _))
         {

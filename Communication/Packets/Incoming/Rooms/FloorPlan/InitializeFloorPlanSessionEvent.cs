@@ -13,6 +13,6 @@ internal class InitializeFloorPlanSessionEvent : IPacketEvent
             return;
         }
 
-        session.SendPacket(new FloorPlanSendDoorComposer(room.GetGameMap().Model.DoorX, room.GetGameMap().Model.DoorY, room.GetGameMap().Model.DoorOrientation));
+        session.SendPacket(new FloorPlanSendDoorComposer(room.GameMap.Model.DoorX, room.GameMap.Model.DoorY, room.GameMap.Model.DoorOrientation));
     }
 }

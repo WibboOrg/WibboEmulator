@@ -147,7 +147,7 @@ public class RoomUser : IEquatable<RoomUser>
                 return null;
             }
 
-            var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(room.Data.OwnerId);
+            var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(room.RoomData.OwnerId);
             if (rpManager == null)
             {
                 return null;
@@ -227,7 +227,7 @@ public class RoomUser : IEquatable<RoomUser>
                 return false;
             }
 
-            return this.GetUsername() == room.Data.OwnerName;
+            return this.GetUsername() == room.RoomData.OwnerName;
         }
     }
 
@@ -297,7 +297,7 @@ public class RoomUser : IEquatable<RoomUser>
             return;
         }
 
-        if (!room.GetGameMap().CanWalkState(pX, pY, pOverride) || this.Freeze || !this.AllowMoveTo)
+        if (!room.GameMap.CanWalkState(pX, pY, pOverride) || this.Freeze || !this.AllowMoveTo)
         {
             return;
         }
@@ -305,7 +305,7 @@ public class RoomUser : IEquatable<RoomUser>
         this.Unidle();
         if (this.TeleportEnabled)
         {
-            room.SendPacket(RoomItemHandling.TeleportUser(this, new Point(pX, pY), 0, room.GetGameMap().SqAbsoluteHeight(pX, pY)));
+            room.SendPacket(RoomItemHandling.TeleportUser(this, new Point(pX, pY), 0, room.GameMap.SqAbsoluteHeight(pX, pY)));
         }
         else
         {
@@ -333,7 +333,7 @@ public class RoomUser : IEquatable<RoomUser>
 
         if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room))
         {
-            room.GetGameMap().AddTakingSquare(pX, pY);
+            room.GameMap.AddTakingSquare(pX, pY);
         }
     }
 
@@ -341,7 +341,7 @@ public class RoomUser : IEquatable<RoomUser>
     {
         if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(this.RoomId, out var room))
         {
-            room.GetGameMap().UpdateUserMovement(this.Coordinate, new Point(pX, pY), this);
+            room.GameMap.UpdateUserMovement(this.Coordinate, new Point(pX, pY), this);
         }
 
         this.X = pX;

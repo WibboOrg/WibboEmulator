@@ -50,7 +50,7 @@ internal class DeleteGroupEvent : IPacketEvent
 
         if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(group.RoomId, out var room))
         {
-            room.Data.Group = null;
+            room.RoomData.Group = null;
             WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
         }
     }

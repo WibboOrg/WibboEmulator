@@ -14,8 +14,8 @@ internal class InitTradeEvent : IPacketEvent
 
         var virtualId = packet.PopInt();
 
-        var roomUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
-        var roomUserTarget = room.GetRoomUserManager().GetRoomUserByVirtualId(virtualId);
+        var roomUser = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserTarget = room.RoomUserManager.GetRoomUserByVirtualId(virtualId);
         if (roomUser == null || roomUser.Client == null || roomUser.Client.GetUser() == null)
         {
             return;
@@ -29,29 +29,29 @@ internal class InitTradeEvent : IPacketEvent
         if (room.IsRoleplay)
         {
             var rp = roomUser.Roleplayer;
-            if (rp == null || rp.TradeId > 0 || rp.Dead || rp.SendPrison || (rp.PvpEnable && room.Roleplay.Pvp) || rp.AggroTimer > 0)
+            if (rp == null || rp.TradeId > 0 || rp.Dead || rp.SendPrison || (rp.PvpEnable && room.RoomRoleplay.Pvp) || rp.AggroTimer > 0)
             {
                 roomUser.SendWhisperChat("Vous devez être en zone safe pour pouvoir troquer");
                 return;
             }
 
             var rpTarget = roomUserTarget.Roleplayer;
-            if (rpTarget == null || rpTarget.TradeId > 0 || rpTarget.Dead || rpTarget.SendPrison || (rpTarget.PvpEnable && room.Roleplay.Pvp) || rpTarget.AggroTimer > 0)
+            if (rpTarget == null || rpTarget.TradeId > 0 || rpTarget.Dead || rpTarget.SendPrison || (rpTarget.PvpEnable && room.RoomRoleplay.Pvp) || rpTarget.AggroTimer > 0)
             {
                 roomUser.SendWhisperChat("Ce joueur ne peut pas troc");
                 return;
             }
 
-            WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().AddTrade(room.Data.OwnerId, roomUser.UserId, roomUserTarget.UserId, roomUser.GetUsername(), roomUserTarget.GetUsername());
+            WibboEnvironment.GetGame().GetRoleplayManager().GetTrocManager().AddTrade(room.RoomData.OwnerId, roomUser.UserId, roomUserTarget.UserId, roomUser.GetUsername(), roomUserTarget.GetUsername());
             return;
         }
 
-        if (room.Data.TrocStatus == 0)
+        if (room.RoomData.TrocStatus == 0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.1", session.Langue));
             return;
         }
-        else if (room.Data.TrocStatus == 1 && !room.CheckRights(session))
+        else if (room.RoomData.TrocStatus == 1 && !room.CheckRights(session))
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.trade.error.2", session.Langue));
             return;

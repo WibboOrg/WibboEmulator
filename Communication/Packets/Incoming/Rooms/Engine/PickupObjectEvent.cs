@@ -21,19 +21,20 @@ internal class PickupObjectEvent : IPacketEvent
             return;
         }
 
-        var item = room.GetRoomItemHandler().GetItem(itemId);
+        var item = room.RoomItemHandling.GetItem(itemId);
         if (item == null)
         {
             return;
         }
 
-        if (room.Data.SellPrice > 0)
+        if (room.RoomData.SellPrice > 0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
             return;
         }
 
-        room.GetRoomItemHandler().RemoveFurniture(session, item.Id);
+        room.
+        RoomItemHandling.RemoveFurniture(session, item.Id);
         session.GetUser().GetInventoryComponent().AddItem(item);
         WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.FURNI_PICK, 0);
     }

@@ -34,7 +34,7 @@ internal class SetZ : IChatCommand
 
         if (result >= 0)
         {
-            session.SendPacket(room.GetGameMap().Model.SetHeightMap(result > 63 ? 63 : result));
+            session.SendPacket(room.GameMap.Model.SetHeightMap(result > 63 ? 63 : result));
         }
     }
 }

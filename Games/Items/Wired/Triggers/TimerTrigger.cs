@@ -12,22 +12,22 @@ public class TimerTrigger : WiredTriggerBase, IWired, IWiredCycleable
 
     public TimerTrigger(Item item, Room room) : base(item, room, (int)WiredTriggerType.TRIGGER_ONCE)
     {
-        this.RoomInstance.GetWiredHandler().TrgTimer += this.OnResetTimer;
+        this.RoomInstance.WiredHandler.TrgTimer += this.OnResetTimer;
 
         this.IntParams.Add(0);
     }
 
-    public void OnResetTimer(object sender, EventArgs e) => this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, null, null));
+    public void OnResetTimer(object sender, EventArgs e) => this.RoomInstance.WiredHandler.RequestCycle(new WiredCycle(this, null, null));
 
     public bool OnCycle(RoomUser user, Item item)
     {
-        this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, null, null);
+        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, null, null);
         return false;
     }
 
     public override void Dispose()
     {
-        this.RoomInstance.GetWiredHandler().TrgTimer -= this.OnResetTimer;
+        this.RoomInstance.WiredHandler.TrgTimer -= this.OnResetTimer;
 
         base.Dispose();
     }

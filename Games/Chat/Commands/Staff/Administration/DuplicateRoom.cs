@@ -19,7 +19,7 @@ internal class DuplicateRoom : IChatCommand
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            room.GetRoomItemHandler().SaveFurniture();
+            room.RoomItemHandling.SaveFurniture();
 
             roomId = RoomDao.InsertDuplicate(dbClient, oldRoomId, session.GetUser().Username);
 

@@ -16,7 +16,7 @@ internal class RoomEnable : IChatCommand
             return;
         }
 
-        foreach (var user in room.GetRoomUserManager().GetUserList().ToList())
+        foreach (var user in room.RoomUserManager.GetUserList().ToList())
         {
             if (!user.IsBot)
             {

@@ -12,7 +12,7 @@ public class Soccer
 
     public void HandleFootballGameItems(Point ballItemCoord)
     {
-        foreach (var roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.Red).Values)
+        foreach (var roomItem in this._roomInstance.GameManager.GetItems(TeamType.Red).Values)
         {
             foreach (var threeDcoord in roomItem.GetAffectedTiles)
             {
@@ -23,7 +23,7 @@ public class Soccer
                 }
             }
         }
-        foreach (var roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.Green).Values)
+        foreach (var roomItem in this._roomInstance.GameManager.GetItems(TeamType.Green).Values)
         {
             foreach (var threeDcoord in roomItem.GetAffectedTiles)
             {
@@ -34,7 +34,7 @@ public class Soccer
                 }
             }
         }
-        foreach (var roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.Blue).Values)
+        foreach (var roomItem in this._roomInstance.GameManager.GetItems(TeamType.Blue).Values)
         {
             foreach (var threeDcoord in roomItem.GetAffectedTiles)
             {
@@ -45,7 +45,7 @@ public class Soccer
                 }
             }
         }
-        foreach (var roomItem in this._roomInstance.GetGameManager().GetItems(TeamType.Yellow).Values)
+        foreach (var roomItem in this._roomInstance.GameManager.GetItems(TeamType.Yellow).Values)
         {
             foreach (var threeDcoord in roomItem.GetAffectedTiles)
             {
@@ -60,7 +60,7 @@ public class Soccer
 
     private void AddPointToScoreCounters(TeamType team)
     {
-        foreach (var roomItem in this._roomInstance.GetGameManager().GetItems(team).Values)
+        foreach (var roomItem in this._roomInstance.GameManager.GetItems(team).Values)
         {
             switch (roomItem.GetBaseItem().InteractionType)
             {
@@ -96,7 +96,7 @@ public class Soccer
             return;
         }
 
-        var roomItemForSquare = this._roomInstance.GetGameMap().GetCoordinatedItems(new Point(user.SetX, user.SetY));
+        var roomItemForSquare = this._roomInstance.GameMap.GetCoordinatedItems(new Point(user.SetX, user.SetY));
 
         var moveBall = false;
 
@@ -159,7 +159,7 @@ public class Soccer
                     user.AllowBall = true;
                 }
 
-                if (ball.GetRoom().GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true))
+                if (ball.GetRoom().GameMap.CanStackItem(newPoint.X, newPoint.Y, true))
                 {
                     this.MoveBall(ball, newPoint.X, newPoint.Y);
                 }
@@ -191,8 +191,8 @@ public class Soccer
 
         item.UpdateState(false, true);
 
-        var z = this._roomInstance.GetGameMap().SqAbsoluteHeight(newX, newY);
-        this._roomInstance.GetRoomItemHandler().PositionReset(item, newX, newY, z);
+        var z = this._roomInstance.GameMap.SqAbsoluteHeight(newX, newY);
+        this._roomInstance.RoomItemHandling.PositionReset(item, newX, newY, z);
 
         this.HandleFootballGameItems(new Point(newX, newY));
     }

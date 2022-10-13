@@ -50,7 +50,7 @@ public class InteractorManiqui : FurniInteractor
             return;
         }
 
-        var roomUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var roomUser = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (roomUser == null)
         {
             return;

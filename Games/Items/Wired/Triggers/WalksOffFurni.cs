@@ -17,7 +17,7 @@ public class WalksOffFurni : WiredTriggerBase, IWired, IWiredCycleable
     {
         if (user != null)
         {
-            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, item);
+            this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, item);
         }
 
         return false;
@@ -27,11 +27,11 @@ public class WalksOffFurni : WiredTriggerBase, IWired, IWiredCycleable
     {
         if (this.DelayCycle > 0)
         {
-            this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, args.User, args.Item));
+            this.RoomInstance.WiredHandler.RequestCycle(new WiredCycle(this, args.User, args.Item));
         }
         else
         {
-            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
+            this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
         }
     }
 

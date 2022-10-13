@@ -20,11 +20,11 @@ internal class SetMax : IChatCommand
 
         if ((maxUsers > 75 || maxUsers <= 0) && !session.GetUser().HasPermission("perm_mod"))
         {
-            room.Data.UsersMax = 75;
+            room.RoomData.UsersMax = 75;
         }
         else
         {
-            room.Data.UsersMax = maxUsers;
+            room.RoomData.UsersMax = maxUsers;
         }
 
         using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();

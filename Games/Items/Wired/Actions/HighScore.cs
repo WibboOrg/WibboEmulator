@@ -33,7 +33,7 @@ public class HighScore : WiredActionBase, IWired, IWiredEffect
             scores.Add(listUsernameScore[0], 1);
         }
 
-        this.RoomInstance.SendPacket(new ObjectUpdateComposer(this.ItemInstance, this.RoomInstance.Data.OwnerId));
+        this.RoomInstance.SendPacket(new ObjectUpdateComposer(this.ItemInstance, this.RoomInstance.RoomData.OwnerId));
 
         return false;
     }

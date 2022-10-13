@@ -17,7 +17,7 @@ public class FurniHasNoUser : WiredConditionBase, IWiredCondition, IWired
         {
             foreach (var coord in itemList.GetAffectedTiles)
             {
-                if (this.RoomInstance.GetGameMap().GetRoomUsers(coord).Count != 0)
+                if (this.RoomInstance.GameMap.GetRoomUsers(coord).Count != 0)
                 {
                     return false;
                 }

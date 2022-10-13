@@ -20,7 +20,7 @@ public class InteractorPuzzleBox : FurniInteractor
             return;
         }
 
-        var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         var point1 = new Point(item.Coordinate.X + 1, item.Coordinate.Y);
         var point2 = new Point(item.Coordinate.X - 1, item.Coordinate.Y);
         var point3 = new Point(item.Coordinate.X, item.Coordinate.Y + 1);
@@ -65,7 +65,7 @@ public class InteractorPuzzleBox : FurniInteractor
                 newY = item.Coordinate.Y + 1;
             }
 
-            if (!item.GetRoom().GetGameMap().CanStackItem(newX, newY))
+            if (!item.GetRoom().GameMap.CanStackItem(newX, newY))
             {
                 return;
             }
@@ -73,8 +73,8 @@ public class InteractorPuzzleBox : FurniInteractor
             var oldX = item.X;
             var oldY = item.Y;
             var oldZ = item.Z;
-            var newZ = item.GetRoom().GetGameMap().SqAbsoluteHeight(newX, newY);
-            if (item.GetRoom().GetRoomItemHandler().SetFloorItem(roomUserByUserId.Client, item, newX, newY, item.Rotation, false, false, false))
+            var newZ = item.GetRoom().GameMap.SqAbsoluteHeight(newX, newY);
+            if (item.GetRoom().RoomItemHandling.SetFloorItem(roomUserByUserId.Client, item, newX, newY, item.Rotation, false, false, false))
             {
                 item.GetRoom().SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newX, newY, newZ, item.Id));
             }

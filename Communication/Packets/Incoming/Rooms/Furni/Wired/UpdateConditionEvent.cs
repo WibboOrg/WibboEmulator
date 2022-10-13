@@ -22,7 +22,7 @@ internal class UpdateConditionEvent : IPacketEvent
 
         var itemId = packet.PopInt();
 
-        var item = room.GetRoomItemHandler().GetItem(itemId);
+        var item = room.RoomItemHandling.GetItem(itemId);
         if (item == null)
         {
             return;

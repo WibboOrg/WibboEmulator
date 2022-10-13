@@ -18,12 +18,12 @@ public class HasUserNotInGroup : WiredConditionBase, IWiredCondition, IWired
             return false;
         }
 
-        if (this.RoomInstance.Data.Group == null)
+        if (this.RoomInstance.RoomData.Group == null)
         {
             return false;
         }
 
-        if (user.Client.GetUser().MyGroups.Contains(this.RoomInstance.Data.Group.Id))
+        if (user.Client.GetUser().MyGroups.Contains(this.RoomInstance.RoomData.Group.Id))
         {
             return false;
         }

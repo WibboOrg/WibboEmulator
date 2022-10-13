@@ -11,7 +11,7 @@ internal class Freeze : IChatCommand
             return;
         }
 
-        var targetUser = userRoom.Room.GetRoomUserManager().GetRoomUserByName(parameters[1]);
+        var targetUser = userRoom.Room.RoomUserManager.GetRoomUserByName(parameters[1]);
         if (targetUser == null)
         {
             return;

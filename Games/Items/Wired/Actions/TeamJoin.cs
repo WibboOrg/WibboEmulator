@@ -15,7 +15,7 @@ public class TeamJoin : WiredActionBase, IWired, IWiredEffect
     {
         if (user != null && !user.IsBot && user.Client != null && user.Room != null)
         {
-            var managerForFreeze = user.Room.GetTeamManager();
+            var managerForFreeze = user.Room.TeamManager;
 
             if (user.Team != TeamType.None)
             {
@@ -26,7 +26,7 @@ public class TeamJoin : WiredActionBase, IWired, IWiredEffect
 
             user.Team = team;
             managerForFreeze.AddUser(user);
-            user.Room.GetGameManager().UpdateGatesTeamCounts();
+            user.Room.GameManager.UpdateGatesTeamCounts();
 
             var effectId = (int)team + 39;
             user.ApplyEffect(effectId);

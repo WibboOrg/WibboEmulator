@@ -8,7 +8,7 @@ internal class Unload : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        var usersToReturn = room.GetRoomUserManager().GetRoomUsers().ToList();
+        var usersToReturn = room.RoomUserManager.GetRoomUsers().ToList();
 
         WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
 

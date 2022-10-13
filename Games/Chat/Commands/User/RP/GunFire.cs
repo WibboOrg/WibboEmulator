@@ -48,6 +48,6 @@ internal class GunFire : IChatCommand
             userRoom.FreezeEndCounter = 2;
         }
 
-        room.GetProjectileManager().AddProjectile(userRoom.VirtualId, userRoom.SetX, userRoom.SetY, userRoom.SetZ, movement);
+        room.ProjectileManager.AddProjectile(userRoom.VirtualId, userRoom.SetX, userRoom.SetY, userRoom.SetZ, movement);
     }
 }

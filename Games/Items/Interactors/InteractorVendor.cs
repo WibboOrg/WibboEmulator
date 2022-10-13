@@ -34,13 +34,13 @@ public class InteractorVendor : FurniInteractor
             return;
         }
 
-        var roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserTarget = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (roomUserTarget == null)
         {
             return;
         }
 
-        if (!Gamemap.TilesTouching(roomUserTarget.X, roomUserTarget.Y, item.X, item.Y))
+        if (!GameMap.TilesTouching(roomUserTarget.X, roomUserTarget.Y, item.X, item.Y))
         {
             roomUserTarget.MoveTo(item.SquareInFront);
         }
@@ -61,7 +61,7 @@ public class InteractorVendor : FurniInteractor
             return;
         }
 
-        var roomUserTarget = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+        var roomUserTarget = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         if (roomUserTarget != null)
         {
             var handitemId = item.GetBaseItem().VendingIds[WibboEnvironment.GetRandomNumber(0, item.GetBaseItem().VendingIds.Count - 1)];

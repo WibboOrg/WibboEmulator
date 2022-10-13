@@ -285,7 +285,7 @@ public class GameClient
             return;
         }
 
-        var user = this.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByName(this.GetUser().Username);
+        var user = this.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByName(this.GetUser().Username);
         if (user == null)
         {
             return;

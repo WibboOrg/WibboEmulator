@@ -19,7 +19,7 @@ internal class ConfirmLoveLockEvent : IPacketEvent
             return;
         }
 
-        var item = room.GetRoomItemHandler().GetItem(id);
+        var item = room.RoomItemHandling.GetItem(id);
 
         if (item == null || item.GetBaseItem() == null || item.GetBaseItem().InteractionType != InteractionType.LOVELOCK)
         {
@@ -29,8 +29,8 @@ internal class ConfirmLoveLockEvent : IPacketEvent
         var userOneId = item.InteractingUser;
         var userTwoId = item.InteractingUser2;
 
-        var userOne = room.GetRoomUserManager().GetRoomUserByUserId(userOneId);
-        var userTwo = room.GetRoomUserManager().GetRoomUserByUserId(userTwoId);
+        var userOne = room.RoomUserManager.GetRoomUserByUserId(userOneId);
+        var userTwo = room.RoomUserManager.GetRoomUserByUserId(userTwoId);
 
         if (userOne == null || userTwo == null)
         {

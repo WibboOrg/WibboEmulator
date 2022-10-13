@@ -31,7 +31,7 @@ internal class RemoveMyRightsEvent : IPacketEvent
 
         if (room.UsersWithRights.Contains(session.GetUser().Id))
         {
-            var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            var user = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
             if (user != null && !user.IsBot)
             {
                 user.RemoveStatus("flatctrl");

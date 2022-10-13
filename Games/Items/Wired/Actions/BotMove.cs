@@ -16,7 +16,7 @@ public class BotMove : WiredActionBase, IWired, IWiredEffect
             return false;
         }
 
-        var bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(this.StringParam);
+        var bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName(this.StringParam);
         if (bot == null)
         {
             return false;

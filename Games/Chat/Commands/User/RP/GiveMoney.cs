@@ -27,7 +27,7 @@ internal class GiveMoney : IChatCommand
             return;
         }
 
-        var targetRoomUser = room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
+        var targetRoomUser = room.RoomUserManager.GetRoomUserByName(parameters[1].ToString());
 
         if (targetRoomUser == null || targetRoomUser.Client == null || targetRoomUser.Client.GetUser() == null)
         {

@@ -15,7 +15,7 @@ internal class Lay : IChatCommand
         {
             if (userRoom.RotBody == 4 || userRoom.RotBody == 0 || userRoom.IsTransf)
             {
-                if (room.GetGameMap().CanWalk(userRoom.X, userRoom.Y + 1))
+                if (room.GameMap.CanWalk(userRoom.X, userRoom.Y + 1))
                 {
                     userRoom.RotBody = 0;
                 }
@@ -26,7 +26,7 @@ internal class Lay : IChatCommand
             }
             else
             {
-                if (!room.GetGameMap().CanWalk(userRoom.X + 1, userRoom.Y))
+                if (!room.GameMap.CanWalk(userRoom.X + 1, userRoom.Y))
                 {
                     return;
                 }

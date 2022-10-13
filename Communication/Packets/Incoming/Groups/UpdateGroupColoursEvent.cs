@@ -46,7 +46,7 @@ internal class UpdateGroupColoursEvent : IPacketEvent
         session.SendPacket(new GroupInfoComposer(group, session));
         if (session.GetUser().CurrentRoom != null)
         {
-            foreach (var item in session.GetUser().CurrentRoom.GetRoomItemHandler().GetFloor.ToList())
+            foreach (var item in session.GetUser().CurrentRoom.RoomItemHandling.GetFloor.ToList())
             {
                 if (item == null || item.GetBaseItem() == null)
                 {
@@ -58,7 +58,7 @@ internal class UpdateGroupColoursEvent : IPacketEvent
                     continue;
                 }
 
-                session.GetUser().CurrentRoom.SendPacket(new ObjectUpdateComposer(item, session.GetUser().CurrentRoom.Data.OwnerId));
+                session.GetUser().CurrentRoom.SendPacket(new ObjectUpdateComposer(item, session.GetUser().CurrentRoom.RoomData.OwnerId));
             }
         }
     }

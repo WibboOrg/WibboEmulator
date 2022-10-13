@@ -25,9 +25,9 @@ internal class Summon : IChatCommand
 
         var currentRoom = session.GetUser().CurrentRoom;
         targetUser.GetUser().IsTeleporting = true;
-        targetUser.GetUser().TeleportingRoomID = currentRoom.Data.Id;
+        targetUser.GetUser().TeleportingRoomID = currentRoom.RoomData.Id;
         targetUser.GetUser().TeleporterId = 0;
 
-        targetUser.SendPacket(new GetGuestRoomResultComposer(targetUser, currentRoom.Data, false, true));
+        targetUser.SendPacket(new GetGuestRoomResultComposer(targetUser, currentRoom.RoomData, false, true));
     }
 }

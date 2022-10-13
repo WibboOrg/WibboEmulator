@@ -16,7 +16,7 @@ internal class Prison : IChatCommand
             return;
         }
 
-        if (!room.Roleplay.Pvp)
+        if (!room.RoomRoleplay.Pvp)
         {
             return;
         }
@@ -32,7 +32,7 @@ internal class Prison : IChatCommand
             return;
         }
 
-        var targetRoomUser = room.GetRoomUserManager().GetRoomUserByName(parameters[1].ToString());
+        var targetRoomUser = room.RoomUserManager.GetRoomUserByName(parameters[1].ToString());
 
         if (targetRoomUser == null)
         {

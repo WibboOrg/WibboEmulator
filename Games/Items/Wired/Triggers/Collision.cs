@@ -8,7 +8,7 @@ using WibboEmulator.Utilities.Events;
 
 public class Collision : WiredTriggerBase, IWired
 {
-    public Collision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION) => this.RoomInstance.GetWiredHandler().TrgCollision += this.OnFurniCollision;
+    public Collision(Item item, Room room) : base(item, room, (int)WiredTriggerType.COLLISION) => this.RoomInstance.WiredHandler.TrgCollision += this.OnFurniCollision;
 
     private void OnFurniCollision(object obj, ItemTriggeredEventArgs args)
     {
@@ -17,14 +17,14 @@ public class Collision : WiredTriggerBase, IWired
             return;
         }
 
-        this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
+        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, args.Item);
     }
 
     public override void Dispose()
     {
         base.Dispose();
 
-        this.RoomInstance.GetWiredHandler().TrgCollision -= this.OnFurniCollision;
+        this.RoomInstance.WiredHandler.TrgCollision -= this.OnFurniCollision;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient)

@@ -24,7 +24,7 @@ internal class ChangeNameEvent : IPacketEvent
             return;
         }
 
-        var roomUser = room.GetRoomUserManager().GetRoomUserByName(session.GetUser().Username);
+        var roomUser = room.RoomUserManager.GetRoomUserByName(session.GetUser().Username);
         if (roomUser == null)
         {
             return;
@@ -60,7 +60,7 @@ internal class ChangeNameEvent : IPacketEvent
         }
 
         _ = WibboEnvironment.GetGame().GetGameClientManager().UpdateClientUsername(session.ConnectionID, session.GetUser().Username, newUsername);
-        _ = room.GetRoomUserManager().UpdateClientUsername(roomUser, session.GetUser().Username, newUsername);
+        _ = room.RoomUserManager.UpdateClientUsername(roomUser, session.GetUser().Username, newUsername);
         session.GetUser().Username = newUsername;
         session.GetUser().CanChangeName = false;
 
@@ -74,16 +74,16 @@ internal class ChangeNameEvent : IPacketEvent
                 continue;
             }
 
-            roomOwner.Data.OwnerName = newUsername;
+            roomOwner.RoomData.OwnerName = newUsername;
 
             WibboEnvironment.GetGame().GetRoomManager().RoomDataRemove(roomId);
         }
 
         room.SendPacket(new UserNameChangeComposer(newUsername, roomUser.VirtualId));
 
-        if (session.GetUser().Id == room.Data.OwnerId)
+        if (session.GetUser().Id == room.RoomData.OwnerId)
         {
-            room.Data.OwnerName = newUsername;
+            room.RoomData.OwnerName = newUsername;
             room.SendPacket(new RoomInfoUpdatedComposer(room.Id));
         }
     }

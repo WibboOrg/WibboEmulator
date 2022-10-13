@@ -6,7 +6,7 @@ internal class HidePyramide : IChatCommand
 {
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
-        foreach (var item in room.GetRoomItemHandler().GetFloor.ToList())
+        foreach (var item in room.RoomItemHandling.GetFloor.ToList())
         {
             if (item == null || item.GetBaseItem() == null)
             {
@@ -20,7 +20,7 @@ internal class HidePyramide : IChatCommand
 
             item.ExtraData = item.ExtraData == "0" ? "1" : "0";
             item.UpdateState();
-            item.GetRoom().GetGameMap().UpdateMapForItem(item);
+            item.GetRoom().GameMap.UpdateMapForItem(item);
         }
 
         session.SendWhisper(WibboEnvironment.GetLanguageManager().TryGetValue("cmd.pyramide", session.Langue));

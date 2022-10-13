@@ -70,7 +70,7 @@ public struct AuthorizationCommands
             return 0;
         }
 
-        if (this.MinRank > 2 && session.GetUser().Rank < 13 && room.Data.Langue != session.Langue)
+        if (this.MinRank > 2 && session.GetUser().Rank < 13 && room.RoomData.Langue != session.Langue)
         {
             return 5;
         }

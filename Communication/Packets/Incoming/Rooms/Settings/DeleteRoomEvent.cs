@@ -23,14 +23,14 @@ internal class DeleteRoomEvent : IPacketEvent
             return;
         }
 
-        if (!(room.Data.OwnerName == session.GetUser().Username))
+        if (!(room.RoomData.OwnerName == session.GetUser().Username))
         {
             return;
         }
 
         if (session.GetUser().GetInventoryComponent() != null)
         {
-            session.GetUser().GetInventoryComponent().AddItemArray(room.GetRoomItemHandler().RemoveAllFurniture(session));
+            session.GetUser().GetInventoryComponent().AddItemArray(room.RoomItemHandling.RemoveAllFurniture(session));
         }
 
         WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);

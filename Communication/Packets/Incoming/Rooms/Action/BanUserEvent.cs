@@ -17,7 +17,7 @@ internal class BanUserEvent : IPacketEvent
             return;
         }
 
-        if ((room.Data.BanFuse != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true))
+        if ((room.RoomData.BanFuse != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true))
         {
             return;
         }
@@ -27,7 +27,7 @@ internal class BanUserEvent : IPacketEvent
         _ = packet.PopInt();
         var str = packet.PopString();
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(pId);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(pId);
         int time;
         if (str.Equals("RWUAM_BAN_USER_HOUR"))
         {
@@ -52,6 +52,6 @@ internal class BanUserEvent : IPacketEvent
         }
 
         room.AddBan(pId, time);
-        room.GetRoomUserManager().RemoveUserFromRoom(roomUserByUserId.Client, true, true);
+        room.RoomUserManager.RemoveUserFromRoom(roomUserByUserId.Client, true, true);
     }
 }

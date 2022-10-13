@@ -22,7 +22,7 @@ internal class Pull : IChatCommand
             return;
         }
 
-        var targetUser = room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
+        var targetUser = room.RoomUserManager.GetRoomUserByName(Convert.ToString(parameters[1]));
         if (targetUser == null || targetUser.Client == null || targetUser.Client.GetUser() == null)
         {
             return;
@@ -39,7 +39,7 @@ internal class Pull : IChatCommand
             return;
         }
 
-        if (userRoom.SetX - 1 == room.GetGameMap().Model.DoorX)
+        if (userRoom.SetX - 1 == room.GameMap.Model.DoorX)
         {
             return;
         }

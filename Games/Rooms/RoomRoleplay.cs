@@ -1,7 +1,10 @@
 namespace WibboEmulator.Games.Rooms;
 
+using WibboEmulator.Games.Items;
+
 public class RoomRoleplay
 {
+    private readonly Room _roomInstance;
     public bool Pvp { get; set; }
     public int Hour { get; set; }
     public int Minute { get; set; }
@@ -9,8 +12,10 @@ public class RoomRoleplay
     public bool CycleHourEffect { get; set; }
     public bool TimeSpeed { get; set; }
 
-    public RoomRoleplay()
+    public RoomRoleplay(Room room)
     {
+        this._roomInstance = room;
+
         this.Pvp = true;
         this.CycleHourEffect = true;
         this.TimeSpeed = false;
@@ -19,7 +24,24 @@ public class RoomRoleplay
         this.Intensity = -1;
     }
 
-    internal bool Cycle()
+    public void OnCycle()
+    {
+        if (this._roomInstance.RoomData.OwnerName == "WibboParty")
+        {
+            return;
+        }
+
+        if (!this.Cycle())
+        {
+            return;
+        }
+
+        this.UpdateRpMoodLight();
+        this.UpdateRpToner();
+        this.UpdateRpBlock();
+    }
+
+    private bool Cycle()
     {
         var now = DateTime.Now;
 
@@ -100,5 +122,81 @@ public class RoomRoleplay
         }
 
         return true;
+    }
+
+    private void UpdateRpBlock()
+    {
+        var roomItems = this._roomInstance.RoomItemHandling.GetFloor.Where(i => i.GetBaseItem().Id == 99138022).ToList();
+        if (roomItems == null)
+        {
+            return;
+        }
+
+        var useNum = 0;
+        if (this.Intensity == 50)
+        {
+            useNum = 0;
+        }
+        else if (this.Intensity == 75)
+        {
+            useNum = 1;
+        }
+        else if (this.Intensity == 100)
+        {
+            useNum = 2;
+        }
+        else if (this.Intensity == 150)
+        {
+            useNum = 3;
+        }
+        else if (this.Intensity == 200)
+        {
+            useNum = 4;
+        }
+        else if (this.Intensity == 255)
+        {
+            useNum = 5;
+        }
+
+        foreach (var roomItem in roomItems)
+        {
+            roomItem.ExtraData = useNum.ToString();
+            roomItem.UpdateState();
+        }
+    }
+
+    private void UpdateRpMoodLight()
+    {
+        if (this._roomInstance.MoodlightData == null)
+        {
+            return;
+        }
+
+        var roomItem = this._roomInstance.RoomItemHandling.GetItem(this._roomInstance.MoodlightData.ItemId);
+        if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.MOODLIGHT)
+        {
+            return;
+        }
+
+        this._roomInstance.MoodlightData.Enabled = true;
+        this._roomInstance.MoodlightData.CurrentPreset = 1;
+        this._roomInstance.MoodlightData.UpdatePreset(1, "#000000", this.Intensity, false);
+        roomItem.ExtraData = this._roomInstance.MoodlightData.GenerateExtraData();
+        roomItem.UpdateState();
+    }
+
+    private void UpdateRpToner()
+    {
+        var roomItem = this._roomInstance.RoomItemHandling.GetFloor.FirstOrDefault(i => i.GetBaseItem().InteractionType == InteractionType.TONER);
+        if (roomItem == null)
+        {
+            return;
+        }
+
+        var teinte = 135;
+        var saturation = 180;
+        var luminosite = (int)Math.Floor((double)this.Intensity / 2);
+        roomItem.ExtraData = "on," + teinte + "," + saturation + "," + luminosite;
+        roomItem.UpdateState(true, true);
     }
 }

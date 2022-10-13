@@ -7,7 +7,7 @@ using WibboEmulator.Games.Rooms;
 
 public class EntersRoom : WiredTriggerBase, IWired
 {
-    public EntersRoom(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_ENTERS_ROOM) => this.RoomInstance.GetRoomUserManager().OnUserEnter += this.OnUserEnter;
+    public EntersRoom(Item item, Room room) : base(item, room, (int)WiredTriggerType.AVATAR_ENTERS_ROOM) => this.RoomInstance.RoomUserManager.OnUserEnter += this.OnUserEnter;
 
     private void OnUserEnter(object sender, EventArgs e)
     {
@@ -22,9 +22,9 @@ public class EntersRoom : WiredTriggerBase, IWired
             return;
         }
 
-        if (this.RoomInstance.GetWiredHandler() != null)
+        if (this.RoomInstance.WiredHandler != null)
         {
-            this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, null);
+            this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
         }
     }
 
@@ -32,7 +32,8 @@ public class EntersRoom : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GetRoomUserManager().OnUserEnter -= this.OnUserEnter;
+        this.RoomInstance.
+        RoomUserManager.OnUserEnter -= this.OnUserEnter;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, this.StringParam, false, null);

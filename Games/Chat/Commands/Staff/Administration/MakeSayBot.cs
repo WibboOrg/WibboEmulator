@@ -12,7 +12,7 @@ internal class MakeSayBot : IChatCommand
         }
 
         var username = parameters[1];
-        var bot = room.GetRoomUserManager().GetBotOrPetByName(username);
+        var bot = room.RoomUserManager.GetBotOrPetByName(username);
         if (bot == null)
         {
             return;

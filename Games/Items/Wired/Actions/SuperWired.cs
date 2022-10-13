@@ -98,7 +98,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             case "stopsounduser":
             case "stopsoundroom":
             case "forcesound":
-                if (this.RoomInstance.GetWiredHandler().GetRoom().IsRoleplay)
+                if (this.RoomInstance.IsRoleplay)
                 {
                     return;
                 }
@@ -241,7 +241,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
         {
             case "rpsendtimeuser":
             {
-                user.SendWhisperChat("Il est " + this.RoomInstance.Roleplay.Hour + " heures et " + this.RoomInstance.Roleplay.Minute + " minutes");
+                user.SendWhisperChat("Il est " + this.RoomInstance.RoomRoleplay.Hour + " heures et " + this.RoomInstance.RoomRoleplay.Minute + " minutes");
                 break;
             }
             case "setenemy":
@@ -252,7 +252,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                var botOrPet = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(parameters[0]);
+                var botOrPet = this.RoomInstance.RoomUserManager.GetBotOrPetByName(parameters[0]);
                 if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot == null)
                 {
                     break;
@@ -550,7 +550,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "removeenemy":
             {
-                var botOrPet = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(value);
+                var botOrPet = this.RoomInstance.RoomUserManager.GetBotOrPetByName(value);
                 if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot == null)
                 {
                     break;
@@ -574,7 +574,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "addenemy":
             {
-                var botOrPet = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(value);
+                var botOrPet = this.RoomInstance.RoomUserManager.GetBotOrPetByName(value);
                 if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot != null)
                 {
                     break;
@@ -604,7 +604,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "enemyaggrostop":
             {
-                var botOrPet = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(value);
+                var botOrPet = this.RoomInstance.RoomUserManager.GetBotOrPetByName(value);
                 if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot == null)
                 {
                     break;
@@ -616,7 +616,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "enemyaggrostart":
             {
-                var botOrPet = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName(value);
+                var botOrPet = this.RoomInstance.RoomUserManager.GetBotOrPetByName(value);
                 if (botOrPet == null || botOrPet.BotData == null || botOrPet.BotData.RoleBot == null)
                 {
                     break;
@@ -632,7 +632,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 if (int.TryParse(value, out var roomId))
                 {
                     var roomDataTarget = WibboEnvironment.GetGame().GetRoomManager().GenerateRoomData(roomId);
-                    if (roomDataTarget != null && roomDataTarget.OwnerId == this.RoomInstance.Data.OwnerId)
+                    if (roomDataTarget != null && roomDataTarget.OwnerId == this.RoomInstance.RoomData.OwnerId)
                     {
                         user.Client.GetUser().IsTeleporting = true;
                         user.Client.GetUser().TeleportingRoomID = roomId;
@@ -784,11 +784,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (value == "true")
                 {
-                    this.RoomInstance.Roleplay.Pvp = true;
+                    this.RoomInstance.RoomRoleplay.Pvp = true;
                 }
                 else
                 {
-                    this.RoomInstance.Roleplay.Pvp = false;
+                    this.RoomInstance.RoomRoleplay.Pvp = false;
                 }
 
                 break;
@@ -943,7 +943,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                _ = this.RoomInstance.GetRoomItemHandler().AddTempItem(user.VirtualId, valueNumber, user.SetX, user.SetY, user.Z, "1", 0, InteractionTypeTemp.RPITEM);
+                _ = this.RoomInstance.RoomItemHandling.AddTempItem(user.VirtualId, valueNumber, user.SetX, user.SetY, user.Z, "1", 0, InteractionTypeTemp.RPITEM);
                 break;
             }
         }
@@ -1091,11 +1091,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             }
             case "roomkick":
             {
-                foreach (var rUser in this.RoomInstance.GetRoomUserManager().GetUserList().ToList())
+                foreach (var rUser in this.RoomInstance.RoomUserManager.GetUserList().ToList())
                 {
-                    if (rUser != null && !rUser.IsBot && !rUser.Client.GetUser().HasPermission("perm_no_kick") && this.RoomInstance.Data.OwnerId != rUser.UserId)
+                    if (rUser != null && !rUser.IsBot && !rUser.Client.GetUser().HasPermission("perm_no_kick") && this.RoomInstance.RoomData.OwnerId != rUser.UserId)
                     {
-                        this.RoomInstance.GetRoomUserManager().RemoveUserFromRoom(rUser.Client, true, false);
+                        this.RoomInstance.RoomUserManager.RemoveUserFromRoom(rUser.Client, true, false);
                     }
                 }
                 break;
@@ -1107,7 +1107,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                foreach (var rUser in this.RoomInstance.GetRoomUserManager().GetUserList().ToList())
+                foreach (var rUser in this.RoomInstance.RoomUserManager.GetUserList().ToList())
                 {
                     if (rUser != null && !rUser.IsBot)
                     {
@@ -1140,7 +1140,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                var bot = this.RoomInstance.GetRoomUserManager().GetBotByName(parameters[0]);
+                var bot = this.RoomInstance.RoomUserManager.GetBotByName(parameters[0]);
                 if (bot == null)
                 {
                     return;
@@ -1279,11 +1279,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 if (value == "true")
                 {
-                    this.RoomInstance.Roleplay.TimeSpeed = true;
+                    this.RoomInstance.RoomRoleplay.TimeSpeed = true;
                 }
                 else
                 {
-                    this.RoomInstance.Roleplay.TimeSpeed = false;
+                    this.RoomInstance.RoomRoleplay.TimeSpeed = false;
                 }
 
                 break;
@@ -1297,11 +1297,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 if (value == "true")
                 {
-                    this.RoomInstance.Roleplay.CycleHourEffect = true;
+                    this.RoomInstance.RoomRoleplay.CycleHourEffect = true;
                 }
                 else
                 {
-                    this.RoomInstance.Roleplay.CycleHourEffect = false;
+                    this.RoomInstance.RoomRoleplay.CycleHourEffect = false;
                 }
 
                 break;
@@ -1312,11 +1312,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 RoomUser bot;
                 if (WibboEnvironment.GetRandomNumber(0, 1) == 1)
                 {
-                    bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName("Jack");
+                    bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName("Jack");
                 }
                 else
                 {
-                    bot = this.RoomInstance.GetRoomUserManager().GetBotOrPetByName("Daisy");
+                    bot = this.RoomInstance.RoomUserManager.GetBotOrPetByName("Daisy");
                 }
 
                 if (bot == null)
@@ -1431,11 +1431,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (value == "close")
                 {
-                    this.RoomInstance.Data.Access = RoomAccess.Doorbell;
+                    this.RoomInstance.RoomData.Access = RoomAccess.Doorbell;
                 }
                 else
                 {
-                    this.RoomInstance.Data.Access = RoomAccess.Open;
+                    this.RoomInstance.RoomData.Access = RoomAccess.Open;
                 }
 
                 break;
@@ -1460,18 +1460,18 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                this.RoomInstance.GetRoomItemHandler().SetSpeed(speed);
+                this.RoomInstance.RoomItemHandling.SetSpeed(speed);
                 break;
             }
             case "roomdiagonal":
             {
                 if (value == "true")
                 {
-                    this.RoomInstance.GetGameMap().DiagonalEnabled = true;
+                    this.RoomInstance.GameMap.DiagonalEnabled = true;
                 }
                 else
                 {
-                    this.RoomInstance.GetGameMap().DiagonalEnabled = false;
+                    this.RoomInstance.GameMap.DiagonalEnabled = false;
                 }
 
                 break;
@@ -1480,11 +1480,11 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
             {
                 if (value == "true")
                 {
-                    this.RoomInstance.GetGameMap().ObliqueDisable = true;
+                    this.RoomInstance.GameMap.ObliqueDisable = true;
                 }
                 else
                 {
-                    this.RoomInstance.GetGameMap().ObliqueDisable = false;
+                    this.RoomInstance.GameMap.ObliqueDisable = false;
                 }
 
                 break;
@@ -1514,7 +1514,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 item.ExtraData = count.ToString();
                 item.UpdateState();
-                this.RoomInstance.GetGameMap().UpdateMapForItem(item);
+                this.RoomInstance.GameMap.UpdateMapForItem(item);
 
                 break;
             }
@@ -1545,7 +1545,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
 
                 item.ExtraData = newCount.ToString();
                 item.UpdateState();
-                this.RoomInstance.GetGameMap().UpdateMapForItem(item);
+                this.RoomInstance.GameMap.UpdateMapForItem(item);
 
                 break;
             }
@@ -1644,7 +1644,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                         var list = pChoose.Split(';').ToList();
                         if (list.Count == 3)
                         {
-                            var botOrPet = user.Room.GetRoomUserManager().GetBotByName(list[0]);
+                            var botOrPet = user.Room.RoomUserManager.GetBotByName(list[0]);
                             if (botOrPet != null && botOrPet.BotData != null)
                             {
                                 list.Add(botOrPet.BotData.Look);
@@ -1663,7 +1663,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     var list = value.Split(';').ToList();
                     if (list.Count == 3)
                     {
-                        var botOrPet = user.Room.GetRoomUserManager().GetBotByName(list[0]);
+                        var botOrPet = user.Room.RoomUserManager.GetBotByName(list[0]);
                         if (botOrPet != null && botOrPet.BotData != null)
                         {
                             list.Add(botOrPet.BotData.Look);
@@ -1810,7 +1810,8 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                user.Room.GetGameManager().AddPointToTeam(user.Team, count, user);
+                user.Room.
+                GameManager.AddPointToTeam(user.Team, count, user);
                 break;
             }
             case "ingame":
@@ -2116,7 +2117,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 }
 
 
-                if (user.GetUsername() == user.Room.Data.OwnerName)
+                if (user.GetUsername() == user.Room.RoomData.OwnerName)
                 {
                     break;
                 }
@@ -2133,14 +2134,14 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                     break;
                 }
 
-                if (user.GetUsername() == user.Room.Data.OwnerName)
+                if (user.GetUsername() == user.Room.RoomData.OwnerName)
                 {
                     break;
                 }
 
                 var allowedOwner = WibboEnvironment.GetSettings().GetData<string>("givelot.allowed.owner").Split(',');
 
-                if (!allowedOwner.Contains(user.Room.Data.OwnerName))
+                if (!allowedOwner.Contains(user.Room.RoomData.OwnerName))
                 {
                     break;
                 }
@@ -2184,7 +2185,7 @@ public class SuperWired : WiredActionBase, IWired, IWiredEffect
                 }
 
                 _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(user.Client, "ACH_Extrabox", 1);
-                ModerationManager.LogStaffEntry(1953042, user.Room.Data.OwnerName, user.RoomId, string.Empty, "givelot", "SuperWired givelot: " + user.GetUsername());
+                ModerationManager.LogStaffEntry(1953042, user.Room.RoomData.OwnerName, user.RoomId, string.Empty, "givelot", "SuperWired givelot: " + user.GetUsername());
 
                 break;
             }

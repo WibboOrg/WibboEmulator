@@ -76,7 +76,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
                     {
                         roomItem.ExtraData = itemPosReset.ExtraData;
                         roomItem.UpdateState();
-                        this.RoomInstance.GetGameMap().UpdateMapForItem(roomItem);
+                        this.RoomInstance.GameMap.UpdateMapForItem(roomItem);
                     }
                 }
             }
@@ -85,7 +85,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
             {
                 if (itemPosReset.Rot != roomItem.Rotation)
                 {
-                    this.RoomInstance.GetRoomItemHandler().RotReset(roomItem, itemPosReset.Rot);
+                    this.RoomInstance.RoomItemHandling.RotReset(roomItem, itemPosReset.Rot);
                 }
             }
 
@@ -93,7 +93,7 @@ public class PositionReset : WiredActionBase, IWired, IWiredEffect
             {
                 if (itemPosReset.X != roomItem.X || itemPosReset.Y != roomItem.Y || itemPosReset.Z != roomItem.Z)
                 {
-                    this.RoomInstance.GetRoomItemHandler().PositionReset(roomItem, itemPosReset.X, itemPosReset.Y, itemPosReset.Z);
+                    this.RoomInstance.RoomItemHandling.PositionReset(roomItem, itemPosReset.X, itemPosReset.Y, itemPosReset.Z);
                 }
             }
         }

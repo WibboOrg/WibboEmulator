@@ -14,7 +14,7 @@ internal class SetSpeed : IChatCommand
 
         if (int.TryParse(parameters[1], out var setSpeedCount))
         {
-            room.GetRoomItemHandler().SetSpeed(setSpeedCount);
+            room.RoomItemHandling.SetSpeed(setSpeedCount);
         }
         else
         {

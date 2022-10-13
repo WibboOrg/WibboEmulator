@@ -13,7 +13,7 @@ public class TimerReset : WiredActionBase, IWiredEffect, IWired
 
     public override bool OnCycle(RoomUser user, Item item)
     {
-        this.RoomInstance.GetWiredHandler().TriggerTimer();
+        this.RoomInstance.WiredHandler.TriggerTimer();
         this.RoomInstance.LastTimerReset = DateTime.Now;
 
         return false;

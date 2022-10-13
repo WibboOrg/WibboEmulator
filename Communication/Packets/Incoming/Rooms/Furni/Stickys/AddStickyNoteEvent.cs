@@ -35,14 +35,14 @@ internal class AddStickyNoteEvent : IPacketEvent
 
         var wallCoord = WallPositionCheck(":" + str.Split(':')[1]);
         var roomItem = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallCoord, room);
-        if (!room.GetRoomItemHandler().SetWallItem(session, roomItem))
+        if (!room.RoomItemHandling.SetWallItem(session, roomItem))
         {
             return;
         }
 
         using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
         {
-            ItemDao.UpdateRoomIdAndUserId(dbClient, id, room.Id, room.Data.OwnerId);
+            ItemDao.UpdateRoomIdAndUserId(dbClient, id, room.Id, room.RoomData.OwnerId);
         }
 
         session.GetUser().GetInventoryComponent().RemoveItem(id);

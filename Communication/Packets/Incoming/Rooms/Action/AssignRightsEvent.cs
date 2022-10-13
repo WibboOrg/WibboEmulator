@@ -48,7 +48,7 @@ internal class AssignRightsEvent : IPacketEvent
 
             session.SendPacket(new FlatControllerAddedComposer(room.Id, userId, userRight.Username));
 
-            var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(userId);
+            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(userId);
             if (roomUserByUserId == null || roomUserByUserId.IsBot)
             {
                 return;

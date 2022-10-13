@@ -8,7 +8,7 @@ using WibboEmulator.Utilities.Events;
 
 public class BotReadchedAvatar : WiredTriggerBase, IWired
 {
-    public BotReadchedAvatar(Item item, Room room) : base(item, room, (int)WiredTriggerType.BOT_REACHED_AVATAR) => this.RoomInstance.GetWiredHandler().TrgBotCollision += this.OnCollision;
+    public BotReadchedAvatar(Item item, Room room) : base(item, room, (int)WiredTriggerType.BOT_REACHED_AVATAR) => this.RoomInstance.WiredHandler.TrgBotCollision += this.OnCollision;
 
     private void OnCollision(object obj, ItemTriggeredEventArgs args)
     {
@@ -22,7 +22,7 @@ public class BotReadchedAvatar : WiredTriggerBase, IWired
             return;
         }
 
-        this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, args.User, null);
+        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, args.User, null);
     }
 
 
@@ -30,7 +30,7 @@ public class BotReadchedAvatar : WiredTriggerBase, IWired
     {
         base.Dispose();
 
-        this.RoomInstance.GetWiredHandler().TrgBotCollision -= this.OnCollision;
+        this.RoomInstance.WiredHandler.TrgBotCollision -= this.OnCollision;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.ItemInstance.Id, string.Empty, this.StringParam, false, null);

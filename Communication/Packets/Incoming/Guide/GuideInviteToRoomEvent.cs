@@ -23,8 +23,8 @@ internal class GuideInviteToRoomEvent : IPacketEvent
         }
         else
         {
-            requester.SendPacket(new OnGuideSessionInvitedToGuideRoomComposer(room.Id, room.Data.Name));
-            session.SendPacket(new OnGuideSessionInvitedToGuideRoomComposer(room.Id, room.Data.Name));
+            requester.SendPacket(new OnGuideSessionInvitedToGuideRoomComposer(room.Id, room.RoomData.Name));
+            session.SendPacket(new OnGuideSessionInvitedToGuideRoomComposer(room.Id, room.RoomData.Name));
         }
     }
 }

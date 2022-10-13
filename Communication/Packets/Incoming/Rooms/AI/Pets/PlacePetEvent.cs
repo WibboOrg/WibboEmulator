@@ -21,7 +21,7 @@ internal class PlacePetEvent : IPacketEvent
             return;
         }
 
-        if (room.GetRoomUserManager().BotPetCount >= 30)
+        if (room.RoomUserManager.BotPetCount >= 30)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("notif.placepet.error", session.Langue));
             return;
@@ -45,14 +45,14 @@ internal class PlacePetEvent : IPacketEvent
         var x = packet.PopInt();
         var y = packet.PopInt();
 
-        if (!room.GetGameMap().CanWalk(x, y, false))
+        if (!room.GameMap.CanWalk(x, y, false))
         {
             return;
         }
 
-        if (room.GetRoomUserManager().TryGetPet(pet.PetId, out var oldPet))
+        if (room.RoomUserManager.TryGetPet(pet.PetId, out var oldPet))
         {
-            room.GetRoomUserManager().RemoveBot(oldPet.VirtualId, false);
+            room.RoomUserManager.RemoveBot(oldPet.VirtualId, false);
         }
 
         pet.X = x;
@@ -61,7 +61,7 @@ internal class PlacePetEvent : IPacketEvent
         pet.PlacedInRoom = true;
         pet.RoomId = room.Id;
 
-        _ = room.GetRoomUserManager().DeployBot(new RoomBot(pet.PetId, pet.OwnerId, pet.RoomId, BotAIType.Pet, true, pet.Name, "", "", pet.Look, x, y, 0, 0, false, "", 0, false, 0, 0, 0), pet);
+        _ = room.RoomUserManager.DeployBot(new RoomBot(pet.PetId, pet.OwnerId, pet.RoomId, BotAIType.Pet, true, pet.Name, "", "", pet.Look, x, y, 0, 0, false, "", 0, false, 0, 0, 0), pet);
 
         pet.DBState = DatabaseUpdateState.NeedsUpdate;
 

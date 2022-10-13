@@ -15,7 +15,7 @@ internal class UseFurnitureEvent : IPacketEvent
 
         var id = packet.PopInt();
 
-        var roomItem = room.GetRoomItemHandler().GetItem(id);
+        var roomItem = room.RoomItemHandling.GetItem(id);
         if (roomItem == null)
         {
             return;
@@ -83,6 +83,6 @@ internal class UseFurnitureEvent : IPacketEvent
         var request = packet.PopInt();
 
         roomItem.Interactor.OnTrigger(session, roomItem, request, userHasRights, false);
-        roomItem.OnTrigger(room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id));
+        roomItem.OnTrigger(room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id));
     }
 }

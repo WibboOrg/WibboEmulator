@@ -206,19 +206,19 @@ public class ModerationManager
             return;
         }
 
-        if ((room.Data.BanFuse != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true))
+        if ((room.RoomData.BanFuse != 1 || !room.CheckRights(session)) && !room.CheckRights(session, true))
         {
             return;
         }
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(userReport.Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(userReport.Id);
         if (roomUserByUserId == null || roomUserByUserId.IsBot || room.CheckRights(roomUserByUserId.Client, true) || roomUserByUserId.Client.GetUser().HasPermission("perm_mod") || roomUserByUserId.Client.GetUser().HasPermission("perm_no_kick"))
         {
             return;
         }
 
         room.AddBan(userReport.Id, 429496729);
-        room.GetRoomUserManager().RemoveUserFromRoom(roomUserByUserId.Client, true, true);
+        room.RoomUserManager.RemoveUserFromRoom(roomUserByUserId.Client, true, true);
     }
 
     public ModerationTicket GetTicket(int ticketId)
@@ -340,18 +340,18 @@ public class ModerationManager
 
         if (lockRoom)
         {
-            room.Data.Access = RoomAccess.Doorbell;
-            room.Data.Name = "Cet appart ne respecte par les conditions d'utilisation";
+            room.RoomData.Access = RoomAccess.Doorbell;
+            room.RoomData.Name = "Cet appart ne respecte par les conditions d'utilisation";
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             RoomDao.UpdateState(dbClient, room.Id);
         }
 
         if (inappropriateRoom)
         {
-            room.Data.Name = "Inapproprié pour l'hôtel";
-            room.Data.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
+            room.RoomData.Name = "Inapproprié pour l'hôtel";
+            room.RoomData.Description = "Malheureusement, cet appartement ne peut figurer dans le navigateur, car il ne respecte pas notre Wibbo Attitude ainsi que nos conditions générales d'utilisations.";
             room.ClearTags();
-            room.Data.Tags.Clear();
+            room.RoomData.Tags.Clear();
             using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
             RoomDao.UpdateCaptionDescTags(dbClient, room.Id);
         }
@@ -361,7 +361,7 @@ public class ModerationManager
             room.OnRoomKick();
         }
 
-        room.SendPacket(new GetGuestRoomResultComposer(modSession, room.Data, false, false));
+        room.SendPacket(new GetGuestRoomResultComposer(modSession, room.RoomData, false, false));
     }
 
     public static void KickUser(GameClient modSession, int userId, string message, bool soft)
@@ -383,7 +383,8 @@ public class ModerationManager
                 return;
             }
 
-            room.GetRoomUserManager().RemoveUserFromRoom(clientByUserId, true, false);
+            room.
+            RoomUserManager.RemoveUserFromRoom(clientByUserId, true, false);
 
             if (soft)
             {

@@ -19,7 +19,7 @@ internal class GetUserGroupBadgesEvent : IPacketEvent
         }
 
         var badges = new Dictionary<int, string>();
-        foreach (var user in room.GetRoomUserManager().GetRoomUsers().ToList())
+        foreach (var user in room.RoomUserManager.GetRoomUsers().ToList())
         {
             if (user.IsBot || user.Client == null || user.Client.GetUser() == null)
             {

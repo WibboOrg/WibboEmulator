@@ -64,7 +64,7 @@ public class BartenderBot : BotAI
         {
             if (this.GetBotData().WalkingEnabled && this.GetBotData().FollowUser == 0)
             {
-                var randomWalkableSquare = this.GetRoom().GetGameMap().GetRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
+                var randomWalkableSquare = this.GetRoom().GameMap.GetRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
                 this.GetRoomUser().MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
             }
             this._actionTimer = WibboEnvironment.GetRandomNumber(10, 60);
@@ -76,14 +76,14 @@ public class BartenderBot : BotAI
 
         if (this.GetBotData().FollowUser != 0)
         {
-            var user = this.GetRoom().GetRoomUserManager().GetRoomUserByVirtualId(this.GetBotData().FollowUser);
+            var user = this.GetRoom().RoomUserManager.GetRoomUserByVirtualId(this.GetBotData().FollowUser);
             if (user == null)
             {
                 this.GetBotData().FollowUser = 0;
             }
             else
             {
-                if (!Gamemap.TilesTouching(this.GetRoomUser().X, this.GetRoomUser().Y, user.X, user.Y))
+                if (!GameMap.TilesTouching(this.GetRoomUser().X, this.GetRoomUser().Y, user.X, user.Y))
                 {
                     this.GetRoomUser().MoveTo(user.X, user.Y, true);
                 }

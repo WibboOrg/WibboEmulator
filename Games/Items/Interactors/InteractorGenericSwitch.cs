@@ -21,7 +21,7 @@ public class InteractorGenericSwitch : FurniInteractor
     {
         if (item.InteractingUser != 0)
         {
-            var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+            var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
             if (roomUserByUserId != null)
             {
                 roomUserByUserId.CanWalk = true;
@@ -31,7 +31,7 @@ public class InteractorGenericSwitch : FurniInteractor
         }
         if (item.InteractingUser2 != 0)
         {
-            var roomUserByUserIdTwo = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser2);
+            var roomUserByUserIdTwo = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
             if (roomUserByUserIdTwo != null)
             {
                 roomUserByUserIdTwo.CanWalk = true;
@@ -57,7 +57,7 @@ public class InteractorGenericSwitch : FurniInteractor
     {
         if (item.InteractingUser != 0)
         {
-            var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+            var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
             if (roomUserByUserId != null)
             {
                 roomUserByUserId.CanWalk = true;
@@ -67,7 +67,7 @@ public class InteractorGenericSwitch : FurniInteractor
         }
         if (item.InteractingUser2 != 0)
         {
-            var roomUserByUserIdTwo = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser2);
+            var roomUserByUserIdTwo = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser2);
             if (roomUserByUserIdTwo != null)
             {
                 roomUserByUserIdTwo.CanWalk = true;
@@ -149,10 +149,10 @@ public class InteractorGenericSwitch : FurniInteractor
                 return;
             }
 
-            var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
             if (roomUserByUserId != null)
             {
-                item.GetRoom().GetRoomUserManager().UpdateUserStatus(roomUserByUserId, false);
+                item.GetRoom().RoomUserManager.UpdateUserStatus(roomUserByUserId, false);
             }
         }
     }

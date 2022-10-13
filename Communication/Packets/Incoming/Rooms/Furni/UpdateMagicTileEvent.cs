@@ -24,7 +24,7 @@ internal class UpdateMagicTileEvent : IPacketEvent
                 return;
             }
 
-            var item = room.GetRoomItemHandler().GetItem(itemId);
+            var item = room.RoomItemHandling.GetItem(itemId);
             if (item != null && item.GetBaseItem().InteractionType == InteractionType.PILEMAGIC)
             {
                 if (heightToSet > 5000)
@@ -40,7 +40,7 @@ internal class UpdateMagicTileEvent : IPacketEvent
 
                 item.SetState(item.X, item.Y, totalZ);
 
-                room.SendPacket(new ObjectUpdateComposer(item, room.Data.OwnerId));
+                room.SendPacket(new ObjectUpdateComposer(item, room.RoomData.OwnerId));
             }
         }
     }

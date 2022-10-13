@@ -24,7 +24,7 @@ internal class RemoveSaddleFromHorseEvent : IPacketEvent
             return;
         }
 
-        if (!room.GetRoomUserManager().TryGetPet(packet.PopInt(), out var petUser))
+        if (!room.RoomUserManager.TryGetPet(packet.PopInt(), out var petUser))
         {
             return;
         }

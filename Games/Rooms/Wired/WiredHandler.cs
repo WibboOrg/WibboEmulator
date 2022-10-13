@@ -18,14 +18,13 @@ public class WiredHandler
 
     private ConcurrentQueue<WiredCycle> _requestingUpdates;
 
-    private readonly Room _room;
     private bool _doCleanup;
 
     public event EventHandler<ItemTriggeredEventArgs> TrgBotCollision;
     public event EventHandler<ItemTriggeredEventArgs> TrgCollision;
     public event EventHandler TrgTimer;
 
-    public WiredHandler(Room room)
+    public WiredHandler()
     {
         this._actionStacks = new ConcurrentDictionary<Point, List<Item>>();
         this._conditionStacks = new ConcurrentDictionary<Point, List<Item>>();
@@ -35,8 +34,6 @@ public class WiredHandler
 
         this._specialRandom = new List<Point>();
         this._specialUnseen = new Dictionary<Point, int>();
-
-        this._room = room;
     }
 
     public void AddFurniture(Item item)
@@ -290,8 +287,6 @@ public class WiredHandler
     }
 
     public void RequestCycle(WiredCycle handler) => this._requestingUpdates.Enqueue(handler);
-
-    public Room GetRoom() => this._room;
 
     public void Destroy()
     {

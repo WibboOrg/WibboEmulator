@@ -12,7 +12,7 @@ internal class SitEvent : IPacketEvent
             return;
         }
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);        if (roomUserByUserId == null)
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);        if (roomUserByUserId == null)
         {
             return;
         }

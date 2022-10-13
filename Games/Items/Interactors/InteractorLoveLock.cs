@@ -30,7 +30,7 @@ public class InteractorLoveLock : FurniInteractor
 
         if (session != null)
         {
-            user = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            user = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         }
 
         if (user == null)
@@ -38,7 +38,7 @@ public class InteractorLoveLock : FurniInteractor
             return;
         }
 
-        if (Gamemap.TilesTouching(item.X, item.Y, user.X, user.Y))
+        if (GameMap.TilesTouching(item.X, item.Y, user.X, user.Y))
         {
             if (item.ExtraData == null || item.ExtraData.Length <= 1 || !item.ExtraData.Contains(Convert.ToChar(5).ToString()))
             {
@@ -63,8 +63,8 @@ public class InteractorLoveLock : FurniInteractor
                         return;
                 }
 
-                var userOne = item.GetRoom().GetRoomUserManager().GetUserForSquare(pointOne.X, pointOne.Y);
-                var userTwo = item.GetRoom().GetRoomUserManager().GetUserForSquare(pointTwo.X, pointTwo.Y);
+                var userOne = item.GetRoom().RoomUserManager.GetUserForSquare(pointOne.X, pointOne.Y);
+                var userTwo = item.GetRoom().RoomUserManager.GetUserForSquare(pointTwo.X, pointTwo.Y);
 
                 if (userOne == null || userTwo == null)
                 {

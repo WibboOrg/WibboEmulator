@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Interactors;
+namespace WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.GameClients;
 
 public class InteractorFreezeBlock : FurniInteractor
@@ -19,13 +19,13 @@ public class InteractorFreezeBlock : FurniInteractor
         }
 
         var name = session.GetUser().Username;
-        var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByName(name);
+        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByName(name);
         if (roomUserByUserId == null || roomUserByUserId.CountFreezeBall == 0 || roomUserByUserId.Freezed)
         {
             return;
         }
 
-        item.GetRoom().GetFreeze().ThrowBall(item, roomUserByUserId);
+        item.GetRoom().Freeze.ThrowBall(item, roomUserByUserId);
     }
 
     public override void OnTick(Item item)

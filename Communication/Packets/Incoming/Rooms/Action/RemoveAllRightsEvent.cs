@@ -32,7 +32,7 @@ internal class RemoveAllRightsEvent : IPacketEvent
 
         foreach (var num in room.UsersWithRights)
         {
-            var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(num);
+            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(num);
             if (roomUserByUserId != null)
             {
                 if (!roomUserByUserId.IsBot)

@@ -11,7 +11,7 @@ public class InteractorScoreCounter : FurniInteractor
             return;
         }
 
-        item.ExtraData = item.GetRoom().GetGameManager().Points[(int)item.Team].ToString();
+        item.ExtraData = item.GetRoom().GameManager.Points[(int)item.Team].ToString();
         item.UpdateState(false, true);
     }
 

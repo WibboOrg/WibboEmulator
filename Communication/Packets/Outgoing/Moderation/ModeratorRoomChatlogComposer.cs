@@ -14,11 +14,11 @@ internal class ModeratorRoomChatlogComposer : ServerPacket
 
         this.WriteString("roomName");
         this.WriteByte(2);
-        this.WriteString(room.Data.Name);
+        this.WriteString(room.RoomData.Name);
 
         this.WriteString("roomId");
         this.WriteByte(1);
-        this.WriteInteger(room.Data.Id);
+        this.WriteInteger(room.RoomData.Id);
 
         this.WriteShort(chatlogs.Count);
         foreach (var chat in chatlogs)

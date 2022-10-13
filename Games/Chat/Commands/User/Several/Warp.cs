@@ -17,12 +17,12 @@ internal class Warp : IChatCommand
             return;
         }
 
-        var roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByUserId(targetUser.GetUser().Id);
+        var roomUserByUserIdTarget = room.RoomUserManager.GetRoomUserByUserId(targetUser.GetUser().Id);
         if (roomUserByUserIdTarget == null)
         {
             return;
         }
 
-        room.SendPacket(RoomItemHandling.TeleportUser(roomUserByUserIdTarget, userRoom.Coordinate, 0, room.GetGameMap().SqAbsoluteHeight(userRoom.X, userRoom.Y)));
+        room.SendPacket(RoomItemHandling.TeleportUser(roomUserByUserIdTarget, userRoom.Coordinate, 0, room.GameMap.SqAbsoluteHeight(userRoom.X, userRoom.Y)));
     }
 }

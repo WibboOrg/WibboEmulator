@@ -27,7 +27,7 @@ internal class OpenBotActionEvent : IPacketEvent
             return;
         }
 
-        if (!room.GetRoomUserManager().TryGetBot(botId, out var botUser))
+        if (!room.RoomUserManager.TryGetBot(botId, out var botUser))
         {
             return;
         }

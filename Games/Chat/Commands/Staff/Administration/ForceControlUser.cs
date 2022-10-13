@@ -13,7 +13,7 @@ internal class ForceControlUser : IChatCommand
 
         var username = parameters[1];
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByName(username);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByName(username);
         if (roomUserByUserId == null || roomUserByUserId.Client == null)
         {
             return;

@@ -21,7 +21,7 @@ internal class ModifyWhoCanRideHorseEvent : IPacketEvent
 
         var petId = packet.PopInt();
 
-        if (!room.GetRoomUserManager().TryGetPet(petId, out var pet))
+        if (!room.RoomUserManager.TryGetPet(petId, out var pet))
         {
             return;
         }
@@ -45,7 +45,7 @@ internal class ModifyWhoCanRideHorseEvent : IPacketEvent
             if (pet.RidingHorse)
             {
                 pet.RidingHorse = false;
-                var user = room.GetRoomUserManager().GetRoomUserByVirtualId(pet.HorseID);
+                var user = room.RoomUserManager.GetRoomUserByVirtualId(pet.HorseID);
                 if (user != null)
                 {
                     if (room.CheckRights(user.Client, true))

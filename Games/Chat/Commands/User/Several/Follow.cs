@@ -27,7 +27,7 @@ internal class Follow : IChatCommand
             var currentRoom = targetUser.GetUser().CurrentRoom;
             if (currentRoom != null)
             {
-                session.SendPacket(new GetGuestRoomResultComposer(session, currentRoom.Data, false, true));
+                session.SendPacket(new GetGuestRoomResultComposer(session, currentRoom.RoomData, false, true));
             }
         }
     }

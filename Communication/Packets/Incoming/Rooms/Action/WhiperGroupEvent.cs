@@ -12,7 +12,7 @@ internal class WhiperGroupEvent : IPacketEvent
             return;
         }
 
-        var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (roomUserByUserId == null)
         {
             return;
@@ -20,7 +20,7 @@ internal class WhiperGroupEvent : IPacketEvent
 
         var name = packet.PopString();
 
-        var roomUserByUserTarget = room.GetRoomUserManager().GetRoomUserByName(name);
+        var roomUserByUserTarget = room.RoomUserManager.GetRoomUserByName(name);
         if (roomUserByUserTarget == null)
         {
             return;

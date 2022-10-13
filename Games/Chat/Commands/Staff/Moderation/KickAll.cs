@@ -7,7 +7,7 @@ internal class KickAll : IChatCommand
     public void Execute(GameClient session, Room room, RoomUser userRoom, string[] parameters)
     {
         var roomUserList = new List<RoomUser>();
-        foreach (var user in room.GetRoomUserManager().GetUserList().ToList())
+        foreach (var user in room.RoomUserManager.GetUserList().ToList())
         {
             if (!user.IsBot && !user.Client.GetUser().HasPermission("perm_no_kick") && session.GetUser().Id != user.Client.GetUser().Id)
             {
@@ -23,7 +23,8 @@ internal class KickAll : IChatCommand
                 continue;
             }
 
-            room.GetRoomUserManager().RemoveUserFromRoom(user.Client, true, false);
+            room.
+            RoomUserManager.RemoveUserFromRoom(user.Client, true, false);
         }
     }
 }

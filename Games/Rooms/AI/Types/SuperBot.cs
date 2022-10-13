@@ -44,10 +44,10 @@ public class SuperBot : BotAI
             return;
         }
 
-        var ownerUser = this.GetRoom().GetRoomUserManager().GetRoomUserByUserId((this.GetBotData().OwnerId == 0) ? this.GetRoom().Data.OwnerId : this.GetBotData().OwnerId);
+        var ownerUser = this.GetRoom().RoomUserManager.GetRoomUserByUserId((this.GetBotData().OwnerId == 0) ? this.GetRoom().RoomData.OwnerId : this.GetBotData().OwnerId);
         if (ownerUser == null)
         {
-            this.GetRoom().GetRoomUserManager().RemoveBot(this.VirtualId, false);
+            this.GetRoom().RoomUserManager.RemoveBot(this.VirtualId, false);
 
             return;
         }
@@ -56,7 +56,7 @@ public class SuperBot : BotAI
         {
             if (this.GetBotData().FollowUser == 0)
             {
-                var randomWalkableSquare = this.GetRoom().GetGameMap().GetRandomWalkableSquare(this.GetRoomUser().GoalX, this.GetRoomUser().GoalY);
+                var randomWalkableSquare = this.GetRoom().GameMap.GetRandomWalkableSquare(this.GetRoomUser().GoalX, this.GetRoomUser().GoalY);
                 this.GetRoomUser().MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
             }
 
@@ -90,14 +90,14 @@ public class SuperBot : BotAI
 
         if (this.GetBotData().FollowUser > 0)
         {
-            var user = this.GetRoom().GetRoomUserManager().GetRoomUserByVirtualId(this.GetBotData().FollowUser);
+            var user = this.GetRoom().RoomUserManager.GetRoomUserByVirtualId(this.GetBotData().FollowUser);
             if (user == null)
             {
                 this.GetBotData().FollowUser = 0;
             }
             else
             {
-                if (!Gamemap.TilesTouching(this.GetRoomUser().X, this.GetRoomUser().Y, user.X, user.Y))
+                if (!GameMap.TilesTouching(this.GetRoomUser().X, this.GetRoomUser().Y, user.X, user.Y))
                 {
                     var newX = user.X;
                     var newY = user.Y;

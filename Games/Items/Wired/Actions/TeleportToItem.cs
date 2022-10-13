@@ -27,12 +27,12 @@ public class TeleportToItem : WiredActionBase, IWired, IWiredCycleable, IWiredEf
 
             if (roomItem.Coordinate != user.Coordinate)
             {
-                Gamemap.TeleportToItem(user, roomItem);
+                GameMap.TeleportToItem(user, roomItem);
             }
         }
         else if (this.Items.Count == 1)
         {
-            Gamemap.TeleportToItem(user, Enumerable.First(this.Items));
+            GameMap.TeleportToItem(user, Enumerable.First(this.Items));
         }
 
         user.ApplyEffect(user.CurrentEffect, true);

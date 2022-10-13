@@ -20,7 +20,7 @@ internal class SetMannequinFigureEvent : IPacketEvent
             return;
         }
 
-        var roomItem = room.GetRoomItemHandler().GetItem(itemId);
+        var roomItem = room.RoomItemHandling.GetItem(itemId);
         if (roomItem == null || roomItem.GetBaseItem().InteractionType != InteractionType.MANNEQUIN)
         {
             return;

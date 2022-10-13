@@ -31,7 +31,7 @@ internal class MoveAvatarKeyboardEvent : IPacketEvent
             return;
         }
 
-        var user = currentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var user = currentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
 
         if (user == null || (!user.CanWalk && !user.TeleportEnabled))
         {

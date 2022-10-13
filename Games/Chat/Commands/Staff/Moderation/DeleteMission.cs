@@ -37,7 +37,7 @@ internal class DeleteMission : IChatCommand
                 return;
             }
 
-            var roomUserByUserId = currentRoom2.GetRoomUserManager().GetRoomUserByUserId(targetUser.GetUser().Id);
+            var roomUserByUserId = currentRoom2.RoomUserManager.GetRoomUserByUserId(targetUser.GetUser().Id);
             if (roomUserByUserId == null)
             {
                 return;

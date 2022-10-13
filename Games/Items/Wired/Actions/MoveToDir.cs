@@ -40,17 +40,17 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
 
     private void HandleMovement(Item item)
     {
-        if (this.RoomInstance.GetRoomItemHandler().GetItem(item.Id) == null)
+        if (this.RoomInstance.RoomItemHandling.GetItem(item.Id) == null)
         {
             return;
         }
 
         var newPoint = MovementUtility.HandleMovementDir(item.X, item.Y, this._moveToDirMovement);
 
-        var roomUser = this.RoomInstance.GetRoomUserManager().GetUserForSquare(newPoint.X, newPoint.Y);
+        var roomUser = this.RoomInstance.RoomUserManager.GetUserForSquare(newPoint.X, newPoint.Y);
         if (roomUser != null)
         {
-            this.RoomInstance.GetWiredHandler().TriggerCollision(roomUser, item);
+            this.RoomInstance.WiredHandler.TriggerCollision(roomUser, item);
             return;
         }
 
@@ -60,7 +60,7 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
         var oldX = item.X;
         var oldY = item.Y;
         var oldZ = item.Z;
-        if (this.RoomInstance.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
+        if (this.RoomInstance.RoomItemHandling.SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
         {
             this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newPoint.X, newPoint.Y, item.Z, item.Id));
             return;
@@ -77,42 +77,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
             {
                 if (this._moveToDirMovement == MovementDirection.right)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
@@ -120,42 +120,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.left)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
@@ -163,42 +163,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.up)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
@@ -206,42 +206,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.down)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
@@ -249,42 +249,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.upleft)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
@@ -292,42 +292,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.upright)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
@@ -336,42 +336,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.downright)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
@@ -379,42 +379,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.downleft)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
@@ -427,22 +427,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
             {
                 if (this._moveToDirMovement == MovementDirection.right)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
@@ -450,22 +450,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.left)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
@@ -473,22 +473,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.up)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
@@ -496,22 +496,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.down)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
@@ -519,22 +519,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.upleft)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
@@ -542,22 +542,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.upright)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
@@ -566,22 +566,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.downright)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
@@ -589,22 +589,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.downleft)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
@@ -617,42 +617,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
             {
                 if (this._moveToDirMovement == MovementDirection.right)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
@@ -660,42 +660,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.left)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
@@ -703,42 +703,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.up)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
@@ -746,42 +746,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.down)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
@@ -789,42 +789,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.upleft)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
@@ -832,42 +832,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.upright)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
@@ -875,42 +875,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.downright)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
@@ -918,42 +918,42 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.downleft)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
@@ -966,22 +966,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
             {
                 if (this._moveToDirMovement == MovementDirection.right)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
@@ -989,22 +989,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.left)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
@@ -1012,22 +1012,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.up)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
@@ -1035,22 +1035,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.down)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y)) // derecha
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y)) // derecha
                     {
                         this._moveToDirMovement = MovementDirection.right;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y - 1)) // arriba
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y - 1)) // arriba
                     {
                         this._moveToDirMovement = MovementDirection.up;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y)) // izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y)) // izq
                     {
                         this._moveToDirMovement = MovementDirection.left;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X, item.Y + 1)) // abajo
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X, item.Y + 1)) // abajo
                     {
                         this._moveToDirMovement = MovementDirection.down;
                         break;
@@ -1058,22 +1058,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.upleft)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
@@ -1081,22 +1081,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.upright)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
@@ -1104,22 +1104,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.downright)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
@@ -1127,22 +1127,22 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
                 }
                 else if (this._moveToDirMovement == MovementDirection.downleft)
                 {
-                    if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
+                    if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y + 1)) // abajo derecha
                     {
                         this._moveToDirMovement = MovementDirection.downright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X + 1, item.Y - 1)) // arriba derecha
                     {
                         this._moveToDirMovement = MovementDirection.upright;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y - 1)) // arriba izq
                     {
                         this._moveToDirMovement = MovementDirection.upleft;
                         break;
                     }
-                    else if (this.RoomInstance.GetGameMap().CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
+                    else if (this.RoomInstance.GameMap.CanStackItem(item.X - 1, item.Y + 1)) // abajo izq
                     {
                         this._moveToDirMovement = MovementDirection.downleft;
                         break;
@@ -1202,7 +1202,7 @@ public class MoveToDir : WiredActionBase, IWiredEffect, IWired
             oldY = item.Y;
             oldZ = item.Z;
 
-            if (this.RoomInstance.GetRoomItemHandler().SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
+            if (this.RoomInstance.RoomItemHandling.SetFloorItem(null, item, newPoint.X, newPoint.Y, item.Rotation, false, false, false))
             {
                 this.RoomInstance.SendPacket(new SlideObjectBundleComposer(oldX, oldY, oldZ, newPoint.X, newPoint.Y, item.Z, item.Id));
             }

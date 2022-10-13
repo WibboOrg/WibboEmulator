@@ -21,7 +21,7 @@ internal class RideHorseEvent : IPacketEvent
             return;
         }
 
-        var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (user == null)
         {
             return;
@@ -30,7 +30,7 @@ internal class RideHorseEvent : IPacketEvent
         var petId = packet.PopInt();
         var type = packet.PopBoolean();
 
-        if (!room.GetRoomUserManager().TryGetPet(petId, out var pet))
+        if (!room.RoomUserManager.TryGetPet(petId, out var pet))
         {
             return;
         }
@@ -73,8 +73,8 @@ internal class RideHorseEvent : IPacketEvent
 
                 var newX2 = pet.X;
                 var newY2 = pet.Y;
-                room.SendPacket(RoomItemHandling.TeleportUser(user, new Point(newX2, newY2), 0, room.GetGameMap().SqAbsoluteHeight(newX2, newY2) + 1));
-                room.SendPacket(RoomItemHandling.TeleportUser(pet, new Point(newX2, newY2), 0, room.GetGameMap().SqAbsoluteHeight(newX2, newY2)));
+                room.SendPacket(RoomItemHandling.TeleportUser(user, new Point(newX2, newY2), 0, room.GameMap.SqAbsoluteHeight(newX2, newY2) + 1));
+                room.SendPacket(RoomItemHandling.TeleportUser(pet, new Point(newX2, newY2), 0, room.GameMap.SqAbsoluteHeight(newX2, newY2)));
 
                 user.MoveTo(newX2, newY2);
 

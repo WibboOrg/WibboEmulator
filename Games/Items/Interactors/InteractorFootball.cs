@@ -20,7 +20,7 @@ public class InteractorFootball : FurniInteractor
             return;
         }
 
-        var user = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var user = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
 
         if (user == null)
         {
@@ -95,15 +95,15 @@ public class InteractorFootball : FurniInteractor
 
         item.InteractionCountHelper = 0;
 
-        if (!item.GetRoom().GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true))
+        if (!item.GetRoom().GameMap.CanStackItem(newPoint.X, newPoint.Y, true))
         {
             item.GetNewDir(newPoint.X, newPoint.Y);
             newPoint = item.GetMoveCoord(goalX, goalY, 1);
         }
 
-        if (item.GetRoom().GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true))
+        if (item.GetRoom().GameMap.CanStackItem(newPoint.X, newPoint.Y, true))
         {
-            item.GetRoom().GetSoccer().MoveBall(item, newPoint.X, newPoint.Y);
+            item.GetRoom().Soccer.MoveBall(item, newPoint.X, newPoint.Y);
         }
 
         if (!user.MoveWithBall && !fromAfar && item.InteractionCountHelper == 0 && !item.GetRoom().OldFoot)
@@ -157,7 +157,7 @@ public class InteractorFootball : FurniInteractor
         }
 
 
-        if (length != 1 && !item.GetRoom().GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true))
+        if (length != 1 && !item.GetRoom().GameMap.CanStackItem(newPoint.X, newPoint.Y, true))
         {
             item.GetNewDir(newX, newY);
             item.InteractionCountHelper--;
@@ -167,17 +167,17 @@ public class InteractorFootball : FurniInteractor
         {
             newPoint = item.GetMoveCoord(oldX, oldY, i);
 
-            if (item.InteractionCountHelper <= 3 && item.GetRoom().GetGameMap().SquareHasUsers(newPoint.X, newPoint.Y))
+            if (item.InteractionCountHelper <= 3 && item.GetRoom().GameMap.SquareHasUsers(newPoint.X, newPoint.Y))
             {
                 item.InteractionCountHelper = 0;
                 break;
             }
 
-            if (item.GetRoom().GetGameMap().CanStackItem(newPoint.X, newPoint.Y, true))
+            if (item.GetRoom().GameMap.CanStackItem(newPoint.X, newPoint.Y, true))
             {
                 newX = newPoint.X;
                 newY = newPoint.Y;
-                item.GetRoom().GetSoccer().HandleFootballGameItems(new Point(newPoint.X, newPoint.Y));
+                item.GetRoom().Soccer.HandleFootballGameItems(new Point(newPoint.X, newPoint.Y));
             }
             else
             {
@@ -186,9 +186,9 @@ public class InteractorFootball : FurniInteractor
                 break;
             }
 
-            if (!item.GetRoom().GetGameMap().SquareTakingOpen(newPoint.X, newPoint.Y))
+            if (!item.GetRoom().GameMap.SquareTakingOpen(newPoint.X, newPoint.Y))
             {
-                var users = item.GetRoom().GetGameMap().GetNearUsers(new Point(newPoint.X, newPoint.Y), 1);
+                var users = item.GetRoom().GameMap.GetNearUsers(new Point(newPoint.X, newPoint.Y), 1);
                 if (users != null)
                 {
                     var breakMe = false;
@@ -224,8 +224,8 @@ public class InteractorFootball : FurniInteractor
             item.InteractionCountHelper--;
         }
 
-        var z = item.GetRoom().GetGameMap().SqAbsoluteHeight(newX, newY);
-        item.GetRoom().GetRoomItemHandler().PositionReset(item, newX, newY, z);
+        var z = item.GetRoom().GameMap.SqAbsoluteHeight(newX, newY);
+        item.GetRoom().RoomItemHandling.PositionReset(item, newX, newY, z);
 
         item.UpdateCounter = 1;
     }

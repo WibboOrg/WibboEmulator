@@ -30,14 +30,14 @@ internal class PickUpPetEvent : IPacketEvent
 
         var petId = packet.PopInt();
 
-        if (!room.GetRoomUserManager().TryGetPet(petId, out var pet))
+        if (!room.RoomUserManager.TryGetPet(petId, out var pet))
         {
-            if ((!room.CheckRights(session) && room.Data.WhoCanKick != 2 && room.Data.Group == null) || (room.Data.Group != null && !room.CheckRights(session)))
+            if ((!room.CheckRights(session) && room.RoomData.WhoCanKick != 2 && room.RoomData.Group == null) || (room.RoomData.Group != null && !room.CheckRights(session)))
             {
                 return;
             }
 
-            var targetUser = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(petId);
+            var targetUser = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(petId);
             if (targetUser == null)
             {
                 return;
@@ -63,7 +63,7 @@ internal class PickUpPetEvent : IPacketEvent
 
         if (pet.RidingHorse)
         {
-            var userRiding = room.GetRoomUserManager().GetRoomUserByVirtualId(pet.HorseID);
+            var userRiding = room.RoomUserManager.GetRoomUserByVirtualId(pet.HorseID);
             if (userRiding != null)
             {
                 userRiding.RidingHorse = false;
@@ -94,7 +94,7 @@ internal class PickUpPetEvent : IPacketEvent
             if (target != null)
             {
                 _ = target.GetUser().GetInventoryComponent().TryAddPet(pet.PetData);
-                room.GetRoomUserManager().RemoveBot(pet.VirtualId, false);
+                room.RoomUserManager.RemoveBot(pet.VirtualId, false);
 
                 target.SendPacket(new PetInventoryComposer(target.GetUser().GetInventoryComponent().GetPets()));
                 return;
@@ -103,7 +103,7 @@ internal class PickUpPetEvent : IPacketEvent
         else
         {
             _ = session.GetUser().GetInventoryComponent().TryAddPet(pet.PetData);
-            room.GetRoomUserManager().RemoveBot(pet.VirtualId, false);
+            room.RoomUserManager.RemoveBot(pet.VirtualId, false);
             session.SendPacket(new PetInventoryComposer(session.GetUser().GetInventoryComponent().GetPets()));
         }
     }

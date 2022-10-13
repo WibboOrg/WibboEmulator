@@ -11,7 +11,7 @@ internal class Trigger : IChatCommand
             return;
         }
 
-        var targetRoomUser = room.GetRoomUserManager().GetRoomUserByName(Convert.ToString(parameters[1]));
+        var targetRoomUser = room.RoomUserManager.GetRoomUserByName(Convert.ToString(parameters[1]));
 
         if (targetRoomUser == null || targetRoomUser.Client == null || targetRoomUser.Client.GetUser() == null)
         {

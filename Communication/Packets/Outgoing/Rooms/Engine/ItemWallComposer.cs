@@ -8,14 +8,14 @@ internal class ItemWallComposer : ServerPacket
         : base(ServerPacketHeader.ITEM_WALL)
     {
         this.WriteInteger(1); // total Owners
-        this.WriteInteger(room.Data.OwnerId);
-        this.WriteString(room.Data.OwnerName);
+        this.WriteInteger(room.RoomData.OwnerId);
+        this.WriteString(room.RoomData.OwnerName);
 
         this.WriteInteger(items.Length);
 
         foreach (var item in items)
         {
-            this.WriteWallItem(item, room.Data.OwnerId);
+            this.WriteWallItem(item, room.RoomData.OwnerId);
         }
     }
 

@@ -41,7 +41,7 @@ internal class Poke : IChatCommand
             return;
         }
 
-        var targetUser = room.GetRoomUserManager().GetRoomUserByName(username);
+        var targetUser = room.RoomUserManager.GetRoomUserByName(username);
         if (targetUser == null || targetUser.Client == null || targetUser.Client.GetUser() == null)
         {
             return;

@@ -240,22 +240,22 @@ public class GameManager
         {
             case InteractionType.BANZAIGATEBLUE:
             case InteractionType.FREEZEBLUEGATE:
-                item.ExtraData = this._roomInstance.GetTeamManager().BlueTeam.Count.ToString();
+                item.ExtraData = this._roomInstance.TeamManager.BlueTeam.Count.ToString();
                 item.UpdateState();
                 break;
             case InteractionType.BANZAIGATERED:
             case InteractionType.FREEZEREDGATE:
-                item.ExtraData = this._roomInstance.GetTeamManager().RedTeam.Count.ToString();
+                item.ExtraData = this._roomInstance.TeamManager.RedTeam.Count.ToString();
                 item.UpdateState();
                 break;
             case InteractionType.BANZAIGATEGREEN:
             case InteractionType.FREEZEGREENGATE:
-                item.ExtraData = this._roomInstance.GetTeamManager().GreenTeam.Count.ToString();
+                item.ExtraData = this._roomInstance.TeamManager.GreenTeam.Count.ToString();
                 item.UpdateState();
                 break;
             case InteractionType.BANZAIGATEYELLOW:
             case InteractionType.FREEZEYELLOWGATE:
-                item.ExtraData = this._roomInstance.GetTeamManager().YellowTeam.Count.ToString();
+                item.ExtraData = this._roomInstance.TeamManager.YellowTeam.Count.ToString();
                 item.UpdateState();
                 break;
         }
@@ -303,16 +303,16 @@ public class GameManager
 
     public void StopGame()
     {
-        this._roomInstance.GetBanzai().BanzaiEnd();
-        this._roomInstance.GetFreeze().StopGame();
+        this._roomInstance.BattleBanzai.BanzaiEnd();
+        this._roomInstance.Freeze.StopGame();
 
         this.OnGameEnd?.Invoke(this, new());
     }
 
     public void StartGame()
     {
-        this._roomInstance.GetBanzai().BanzaiStart();
-        this._roomInstance.GetFreeze().StartGame();
+        this._roomInstance.BattleBanzai.BanzaiStart();
+        this._roomInstance.Freeze.StartGame();
 
         this.OnGameStart?.Invoke(this, new());
 

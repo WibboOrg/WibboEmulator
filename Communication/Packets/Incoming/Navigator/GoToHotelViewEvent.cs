@@ -21,6 +21,7 @@ internal class GoToHotelViewEvent : IPacketEvent
             return;
         }
 
-        room.GetRoomUserManager().RemoveUserFromRoom(session, false, false);
+        room.
+        RoomUserManager.RemoveUserFromRoom(session, false, false);
     }
 }

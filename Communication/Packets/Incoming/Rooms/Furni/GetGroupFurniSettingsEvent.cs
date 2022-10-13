@@ -17,7 +17,7 @@ internal class GetGroupFurniSettingsEvent : IPacketEvent
         var itemId = packet.PopInt();
         var groupId = packet.PopInt();
 
-        var item = session.GetUser().CurrentRoom.GetRoomItemHandler().GetItem(itemId);
+        var item = session.GetUser().CurrentRoom.RoomItemHandling.GetItem(itemId);
         if (item == null)
         {
             return;

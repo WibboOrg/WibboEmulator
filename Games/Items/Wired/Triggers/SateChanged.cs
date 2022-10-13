@@ -27,7 +27,7 @@ public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
     {
         if (this.Delay > 0)
         {
-            this.RoomInstance.GetWiredHandler().RequestCycle(new WiredCycle(this, e.User, e.Item));
+            this.RoomInstance.WiredHandler.RequestCycle(new WiredCycle(this, e.User, e.Item));
         }
         else
         {
@@ -35,7 +35,7 @@ public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
         }
     }
 
-    private void OnTriggered(RoomUser user, Item item) => this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, item);
+    private void OnTriggered(RoomUser user, Item item) => this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, item);
 
     public override void LoadItems(bool inDatabase = false)
     {

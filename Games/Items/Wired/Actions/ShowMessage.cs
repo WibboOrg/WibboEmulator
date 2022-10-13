@@ -1,4 +1,4 @@
-﻿namespace WibboEmulator.Games.Items.Wired.Actions;
+namespace WibboEmulator.Games.Items.Wired.Actions;
 using System.Data;
 using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
@@ -23,9 +23,9 @@ public class ShowMessage : WiredActionBase, IWired, IWiredEffect
             var textMessage = this.StringParam;
             textMessage = textMessage.Replace("#username#", user.GetUsername());
             textMessage = textMessage.Replace("#point#", user.WiredPoints.ToString());
-            textMessage = textMessage.Replace("#roomname#", this.RoomInstance.GetWiredHandler().GetRoom().Data.Name.ToString());
-            textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.GetWiredHandler().GetRoom().VotedYesCount.ToString());
-            textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.GetWiredHandler().GetRoom().VotedNoCount.ToString());
+            textMessage = textMessage.Replace("#roomname#", this.RoomInstance.RoomData.Name.ToString());
+            textMessage = textMessage.Replace("#vote_yes#", this.RoomInstance.VotedYesCount.ToString());
+            textMessage = textMessage.Replace("#vote_no#", this.RoomInstance.VotedNoCount.ToString());
             textMessage = textMessage.Replace("#wpcount#", user.Client.GetUser() != null ? user.Client.GetUser().WibboPoints.ToString() : "0");
 
             if (user.Roleplayer != null)

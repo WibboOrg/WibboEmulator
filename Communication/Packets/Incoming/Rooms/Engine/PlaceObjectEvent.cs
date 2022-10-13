@@ -29,7 +29,7 @@ internal class PlaceObjectEvent : IPacketEvent
             return;
         }
 
-        if (room.Data.SellPrice > 0)
+        if (room.RoomData.SellPrice > 0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.7", session.Langue));
             return;
@@ -110,11 +110,11 @@ internal class PlaceObjectEvent : IPacketEvent
             }
 
             var item = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, x, y, 0.0, rotation, "", room);
-            if (room.GetRoomItemHandler().SetFloorItem(session, item, x, y, rotation, true, false, true))
+            if (room.RoomItemHandling.SetFloorItem(session, item, x, y, rotation, true, false, true))
             {
                 using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                 {
-                    ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.Data.OwnerId);
+                    ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                 }
 
                 session.GetUser().GetInventoryComponent().RemoveItem(itemId);
@@ -175,11 +175,11 @@ internal class PlaceObjectEvent : IPacketEvent
             if (TrySetWallItem(correctedData, out var wallPos))
             {
                 var roomItem = new Item(userItem.Id, room.Id, userItem.BaseItem, userItem.ExtraData, userItem.Limited, userItem.LimitedStack, 0, 0, 0.0, 0, wallPos, room);
-                if (room.GetRoomItemHandler().SetWallItem(session, roomItem))
+                if (room.RoomItemHandling.SetWallItem(session, roomItem))
                 {
                     using (var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor())
                     {
-                        ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.Data.OwnerId);
+                        ItemDao.UpdateRoomIdAndUserId(dbClient, itemId, room.Id, room.RoomData.OwnerId);
                     }
 
                     session.GetUser().GetInventoryComponent().RemoveItem(itemId);

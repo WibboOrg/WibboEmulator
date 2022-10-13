@@ -17,14 +17,14 @@ public class TeamLeave : WiredActionBase, IWired, IWiredEffect
     {
         if (user != null && !user.IsBot && user.Client != null && user.Team != TeamType.None && user.Room != null)
         {
-            var managerForBanzai = user.Room.GetTeamManager();
+            var managerForBanzai = user.Room.TeamManager;
             if (managerForBanzai == null)
             {
                 return false;
             }
 
             managerForBanzai.OnUserLeave(user);
-            user.Room.GetGameManager().UpdateGatesTeamCounts();
+            user.Room.GameManager.UpdateGatesTeamCounts();
             user.ApplyEffect(0);
             user.Team = TeamType.None;
 

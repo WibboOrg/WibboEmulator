@@ -20,7 +20,7 @@ internal class GetModeratorRoomInfoEvent : IPacketEvent
         var ownerInRoom = false;
         if (WibboEnvironment.GetGame().GetRoomManager().TryGetRoom(data.Id, out var room))
         {
-            if (room.GetRoomUserManager().GetRoomUserByName(data.OwnerName) != null)
+            if (room.RoomUserManager.GetRoomUserByName(data.OwnerName) != null)
             {
                 ownerInRoom = true;
             }

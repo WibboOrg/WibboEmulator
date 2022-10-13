@@ -29,7 +29,7 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
             return;
         }
 
-        if (room.Data.SellPrice > 0)
+        if (room.RoomData.SellPrice > 0)
         {
             session.SendNotification(WibboEnvironment.GetLanguageManager().TryGetValue("roomsell.error.8", session.Langue));
             return;
@@ -132,7 +132,7 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
             RoomDao.UpdateModelWallThickFloorThick(dbClient, room.Id, wallThick, floorThick);
         }
 
-        var usersToReturn = room.GetRoomUserManager().GetRoomUsers().ToList();
+        var usersToReturn = room.RoomUserManager.GetRoomUsers().ToList();
 
         WibboEnvironment.GetGame().GetRoomManager().UnloadRoom(room);
 

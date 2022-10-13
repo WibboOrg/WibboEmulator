@@ -112,7 +112,7 @@ public class WiredBase
         var listItem = new List<Item>();
         foreach (var itemId in this.StuffIds)
         {
-            var item = this.RoomInstance.GetRoomItemHandler().GetItem(itemId);
+            var item = this.RoomInstance.RoomItemHandling.GetItem(itemId);
             if (item != null && item.GetBaseItem().Type == 's')
             {
                 listItem.Add(item);

@@ -50,7 +50,7 @@ internal class UpdateFigureDataEvent : IPacketEvent
             return;
         }
 
-        var roomUserByUserId = currentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var roomUserByUserId = currentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (roomUserByUserId == null)
         {
             return;

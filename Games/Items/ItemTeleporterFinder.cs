@@ -25,12 +25,12 @@ public static class ItemTeleporterFinder
             return 0;
         }
 
-        if (room.GetRoomItemHandler() == null)
+        if (room.RoomItemHandling == null)
         {
             return 0;
         }
 
-        if (room.GetRoomItemHandler().GetItem(teleId) != null)
+        if (room.RoomItemHandling.GetItem(teleId) != null)
         {
             return room.Id;
         }
@@ -55,7 +55,7 @@ public static class ItemTeleporterFinder
             return false;
         }
 
-        var roomItem = room.GetRoomItemHandler().GetItem(linkedTele);
+        var roomItem = room.RoomItemHandling.GetItem(linkedTele);
         return (roomItem != null && (roomItem.GetBaseItem().InteractionType == InteractionType.TELEPORT || roomItem.GetBaseItem().InteractionType == InteractionType.ARROW)) || GetTeleRoomId(linkedTele, room) != 0;
     }
 }

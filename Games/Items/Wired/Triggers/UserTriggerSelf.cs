@@ -17,14 +17,14 @@ public class UserTriggerSelf : WiredTriggerBase, IWired
             return;
         }
 
-        this.RoomInstance.GetWiredHandler().ExecutePile(this.ItemInstance.Coordinate, user, null);
+        this.RoomInstance.WiredHandler.ExecutePile(this.ItemInstance.Coordinate, user, null);
     }
 
     public override void Dispose()
     {
         base.Dispose();
 
-        this.RoomInstance.GetWiredHandler().GetRoom().OnTriggerSelf -= this.OnUserSays;
+        this.RoomInstance.OnTriggerSelf -= this.OnUserSays;
     }
 
     public void SaveToDatabase(IQueryAdapter dbClient) => WiredUtillity.SaveTriggerItem(dbClient, this.Id, string.Empty, string.Empty, false, null);

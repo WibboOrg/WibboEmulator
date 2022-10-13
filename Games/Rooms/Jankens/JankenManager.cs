@@ -87,8 +87,8 @@ public class JankenManager
                 {
                     party.Started = false;
 
-                    var roomuserOne = this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(party.UserOne);
-                    var roomuserTwo = this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(party.UserTwo);
+                    var roomuserOne = this._roomInstance.RoomUserManager.GetRoomUserByUserId(party.UserOne);
+                    var roomuserTwo = this._roomInstance.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
 
                     if (roomuserOne != null)
                     {
@@ -183,8 +183,8 @@ public class JankenManager
 
     private bool EndGame(Janken party)
     {
-        var roomuserOne = this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(party.UserOne);
-        var roomuserTwo = this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(party.UserTwo);
+        var roomuserOne = this._roomInstance.RoomUserManager.GetRoomUserByUserId(party.UserOne);
+        var roomuserTwo = this._roomInstance.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
         if (roomuserOne == null && roomuserTwo == null)
         {
             return true;
@@ -304,8 +304,8 @@ public class JankenManager
 
         if (!party.Started)
         {
-            var roomuserOne = this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(party.UserOne);
-            var roomuserTwo = this._roomInstance.GetRoomUserManager().GetRoomUserByUserId(party.UserTwo);
+            var roomuserOne = this._roomInstance.RoomUserManager.GetRoomUserByUserId(party.UserOne);
+            var roomuserTwo = this._roomInstance.RoomUserManager.GetRoomUserByUserId(party.UserTwo);
 
             if (roomuserOne != null)
             {

@@ -15,9 +15,9 @@ internal class GetPetInformationEvent : IPacketEvent
 
         var petId = packet.PopInt();
 
-        if (!session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(petId, out var pet))
+        if (!session.GetUser().CurrentRoom.RoomUserManager.TryGetPet(petId, out var pet))
         {
-            var user = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(petId);
+            var user = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(petId);
             if (user == null)
             {
                 return;

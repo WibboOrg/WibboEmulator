@@ -54,7 +54,7 @@ public class RoomUserManager
 
     public void UserEnter(RoomUser thisUser) => this.OnUserEnter?.Invoke(thisUser, new());
 
-    public int GetRoomUserCount() => this._room.Data.UsersNow;
+    public int GetRoomUserCount() => this._room.RoomData.UsersNow;
 
     public RoomUser DeploySuperBot(RoomBot bot)
     {
@@ -236,8 +236,8 @@ public class RoomUserManager
 
         this._room.SendPacket(new UserRemoveComposer(roomUserByVirtualId.VirtualId));
 
-        this._room.GetGameMap().RemoveTakingSquare(roomUserByVirtualId.SetX, roomUserByVirtualId.SetY);
-        this._room.GetGameMap().RemoveUserFromMap(roomUserByVirtualId, new Point(roomUserByVirtualId.X, roomUserByVirtualId.Y));
+        this._room.GameMap.RemoveTakingSquare(roomUserByVirtualId.SetX, roomUserByVirtualId.SetY);
+        this._room.GameMap.RemoveUserFromMap(roomUserByVirtualId, new Point(roomUserByVirtualId.X, roomUserByVirtualId.Y));
 
         _ = this._users.TryRemove(roomUserByVirtualId.VirtualId, out _);
 
@@ -255,12 +255,12 @@ public class RoomUserManager
             return;
         }
 
-        if (!this._room.GetGameMap().ValidTile(x, y))
+        if (!this._room.GameMap.ValidTile(x, y))
         {
             return;
         }
 
-        var effectId = (int)this._room.GetGameMap().EffectMap[x, y];
+        var effectId = (int)this._room.GameMap.EffectMap[x, y];
         if (effectId > 0)
         {
             var itemEffectType = effectId.ToEnum(ItemEffectType.None);
@@ -367,11 +367,11 @@ public class RoomUserManager
         }
     }
 
-    public List<RoomUser> GetUsersForSquare(int x, int y) => this._room.GetGameMap().GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot).ToList();
+    public List<RoomUser> GetUsersForSquare(int x, int y) => this._room.GameMap.GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot).ToList();
 
-    public RoomUser GetUserForSquare(int x, int y) => Enumerable.FirstOrDefault(this._room.GetGameMap().GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot));
+    public RoomUser GetUserForSquare(int x, int y) => Enumerable.FirstOrDefault(this._room.GameMap.GetRoomUsers(new Point(x, y)).OrderBy(u => u.IsBot));
 
-    public RoomUser GetUserForSquareNotBot(int x, int y) => this._room.GetGameMap().GetRoomUsers(new Point(x, y)).FirstOrDefault(u => !u.IsBot);
+    public RoomUser GetUserForSquareNotBot(int x, int y) => this._room.GameMap.GetRoomUsers(new Point(x, y)).FirstOrDefault(u => !u.IsBot);
 
     public bool AddAvatarToRoom(GameClient session)
     {
@@ -421,7 +421,7 @@ public class RoomUserManager
         _ = this._usersByUsername.TryAdd(username.ToLower(), user);
         _ = this._usersByUserID.TryAdd(userId, user);
 
-        var roomModel = this._room.GetGameMap().Model;
+        var roomModel = this._room.GameMap.Model;
         if (roomModel == null)
         {
             return false;
@@ -432,10 +432,10 @@ public class RoomUserManager
 
         if (session.GetUser().IsTeleporting)
         {
-            var roomItem = this._room.GetRoomItemHandler().GetItem(user.Client.GetUser().TeleporterId);
+            var roomItem = this._room.RoomItemHandling.GetItem(user.Client.GetUser().TeleporterId);
             if (roomItem != null)
             {
-                Gamemap.TeleportToItem(user, roomItem);
+                GameMap.TeleportToItem(user, roomItem);
 
                 roomItem.InteractingUser2 = session.GetUser().Id;
                 roomItem.ReqUpdate(1);
@@ -456,7 +456,7 @@ public class RoomUserManager
 
         if (user.IsSpectator)
         {
-            var roomUserByRank = this._room.GetRoomUserManager().GetStaffRoomUser();
+            var roomUserByRank = this._room.RoomUserManager.GetStaffRoomUser();
             if (roomUserByRank.Count > 0)
             {
                 foreach (var staffUser in roomUserByRank)
@@ -549,14 +549,14 @@ public class RoomUserManager
             bot.BotAI.OnUserEnterRoom(user);
         }
 
-        if (!user.IsBot && user.Client != null && this._room.Data.OwnerName != user.Client.GetUser().Username)
+        if (!user.IsBot && user.Client != null && this._room.RoomData.OwnerName != user.Client.GetUser().Username)
         {
             WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(user.Client, QuestType.SOCIAL_VISIT, 0);
         }
 
         if (!user.IsBot)
         {
-            if (session.GetUser().RolePlayId > 0 && this._room.Data.OwnerId != session.GetUser().RolePlayId)
+            if (session.GetUser().RolePlayId > 0 && this._room.RoomData.OwnerId != session.GetUser().RolePlayId)
             {
                 var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(session.GetUser().RolePlayId);
                 if (rpManager != null)
@@ -570,9 +570,9 @@ public class RoomUserManager
                 session.GetUser().RolePlayId = 0;
             }
 
-            if (this._room.IsRoleplay && this._room.Data.OwnerId != session.GetUser().RolePlayId)
+            if (this._room.IsRoleplay && this._room.RoomData.OwnerId != session.GetUser().RolePlayId)
             {
-                var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.Data.OwnerId);
+                var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.RoomData.OwnerId);
                 if (rpManager != null)
                 {
                     var rp = rpManager.GetPlayer(session.GetUser().Id);
@@ -582,7 +582,7 @@ public class RoomUserManager
                     }
                 }
 
-                session.GetUser().RolePlayId = this._room.Data.OwnerId;
+                session.GetUser().RolePlayId = this._room.RoomData.OwnerId;
             }
         }
 
@@ -628,16 +628,13 @@ public class RoomUserManager
 
             if (user.Team != TeamType.None)
             {
-                this._room.GetTeamManager().OnUserLeave(user);
-                this._room.GetGameManager().UpdateGatesTeamCounts();
+                this._room.TeamManager.OnUserLeave(user);
+                this._room.GameManager.UpdateGatesTeamCounts();
 
                 session.SendPacket(new IsPlayingComposer(false));
             }
 
-            if (this._room.GotJanken())
-            {
-                this._room.GetJanken().RemovePlayer(user);
-            }
+            this._room.JankenManager.RemovePlayer(user);
 
             if (user.RidingHorse)
             {
@@ -668,7 +665,7 @@ public class RoomUserManager
 
             if (user.IsSpectator)
             {
-                var roomUserByRank = this._room.GetRoomUserManager().GetStaffRoomUser();
+                var roomUserByRank = this._room.RoomUserManager.GetStaffRoomUser();
                 if (roomUserByRank.Count > 0)
                 {
                     foreach (var staffUser in roomUserByRank)
@@ -703,8 +700,8 @@ public class RoomUserManager
 
     private void RemoveRoomUser(RoomUser user)
     {
-        this._room.GetGameMap().RemoveTakingSquare(user.SetX, user.SetY);
-        this._room.GetGameMap().RemoveUserFromMap(user, new Point(user.X, user.Y));
+        this._room.GameMap.RemoveTakingSquare(user.SetX, user.SetY);
+        this._room.GameMap.RemoveUserFromMap(user, new Point(user.X, user.Y));
 
         this._room.SendPacket(new UserRemoveComposer(user.VirtualId));
 
@@ -713,7 +710,7 @@ public class RoomUserManager
 
     public void UpdateUserCount(int count)
     {
-        if (this._room.Data.UsersNow == count)
+        if (this._room.RoomData.UsersNow == count)
         {
             return;
         }
@@ -723,7 +720,7 @@ public class RoomUserManager
             RoomDao.UpdateUsersNow(dbClient, this._room.Id, count);
         }
 
-        this._room.Data.UsersNow = count;
+        this._room.RoomData.UsersNow = count;
     }
 
     public RoomUser GetRoomUserByVirtualId(int virtualId)
@@ -951,9 +948,9 @@ public class RoomUserManager
             user.UpdateNeeded = true;
         }
 
-        var roomItemForSquare = this._room.GetGameMap().GetCoordinatedItems(new Point(user.X, user.Y)).OrderBy(p => p.Z).ToList();
+        var roomItemForSquare = this._room.GameMap.GetCoordinatedItems(new Point(user.X, user.Y)).OrderBy(p => p.Z).ToList();
 
-        var newZ = !user.RidingHorse || user.IsPet ? this._room.GetGameMap().SqAbsoluteHeight(user.X, user.Y, roomItemForSquare) : this._room.GetGameMap().SqAbsoluteHeight(user.X, user.Y, roomItemForSquare) + 1.0;
+        var newZ = !user.RidingHorse || user.IsPet ? this._room.GameMap.SqAbsoluteHeight(user.X, user.Y, roomItemForSquare) : this._room.GameMap.SqAbsoluteHeight(user.X, user.Y, roomItemForSquare) + 1.0;
         if (newZ != user.Z)
         {
             user.Z = newZ;
@@ -1036,7 +1033,7 @@ public class RoomUserManager
                     if (cycleGameItems && !user.IsBot)
                     {
                         var effectId = (int)roomItem.Team + 32;
-                        var managerForBanzai = this._room.GetTeamManager();
+                        var managerForBanzai = this._room.TeamManager;
                         if (user.Team != roomItem.Team)
                         {
                             if (user.Team != TeamType.None)
@@ -1047,7 +1044,8 @@ public class RoomUserManager
                             user.Team = roomItem.Team;
                             managerForBanzai.AddUser(user);
 
-                            this._room.GetGameManager().UpdateGatesTeamCounts();
+                            this._room.
+                            GameManager.UpdateGatesTeamCounts();
                             if (user.CurrentEffect != effectId)
                             {
                                 user.ApplyEffect(effectId);
@@ -1061,7 +1059,7 @@ public class RoomUserManager
                         else
                         {
                             managerForBanzai.OnUserLeave(user);
-                            this._room.GetGameManager().UpdateGatesTeamCounts();
+                            this._room.GameManager.UpdateGatesTeamCounts();
                             if (user.CurrentEffect == effectId)
                             {
                                 user.ApplyEffect(0);
@@ -1080,19 +1078,19 @@ public class RoomUserManager
                 case InteractionType.BANZAIBLO:
                     if (cycleGameItems && user.Team != TeamType.None && !user.IsBot)
                     {
-                        this._room.GetGameItemHandler().OnWalkableBanzaiBlo(user, roomItem);
+                        this._room.GameItemHandler.OnWalkableBanzaiBlo(user, roomItem);
                     }
                     break;
                 case InteractionType.BANZAIBLOB:
                     if (cycleGameItems && user.Team != TeamType.None && !user.IsBot)
                     {
-                        this._room.GetGameItemHandler().OnWalkableBanzaiBlob(user, roomItem);
+                        this._room.GameItemHandler.OnWalkableBanzaiBlob(user, roomItem);
                     }
                     break;
                 case InteractionType.BANZAITELE:
                     if (cycleGameItems)
                     {
-                        this._room.GetGameItemHandler().OnTeleportRoomUserEnter(user, roomItem);
+                        this._room.GameItemHandler.OnTeleportRoomUserEnter(user, roomItem);
                     }
 
                     break;
@@ -1103,7 +1101,7 @@ public class RoomUserManager
                     if (cycleGameItems && !user.IsBot)
                     {
                         var effectId = (int)roomItem.Team + 39;
-                        var managerForFreeze = this._room.GetTeamManager();
+                        var managerForFreeze = this._room.TeamManager;
                         if (user.Team != roomItem.Team)
                         {
                             if (user.Team != TeamType.None)
@@ -1113,7 +1111,7 @@ public class RoomUserManager
 
                             user.Team = roomItem.Team;
                             managerForFreeze.AddUser(user);
-                            this._room.GetGameManager().UpdateGatesTeamCounts();
+                            this._room.GameManager.UpdateGatesTeamCounts();
                             if (user.CurrentEffect != effectId)
                             {
                                 user.ApplyEffect(effectId);
@@ -1127,7 +1125,7 @@ public class RoomUserManager
                         else
                         {
                             managerForFreeze.OnUserLeave(user);
-                            this._room.GetGameManager().UpdateGatesTeamCounts();
+                            this._room.GameManager.UpdateGatesTeamCounts();
                             if (user.CurrentEffect == effectId)
                             {
                                 user.ApplyEffect(0);
@@ -1207,7 +1205,7 @@ public class RoomUserManager
                         break;
                     }
 
-                    this._room.GetFreeze().OnWalkFreezeBlock(roomItem, user);
+                    this._room.Freeze.OnWalkFreezeBlock(roomItem, user);
                     break;
                 default:
                     break;
@@ -1215,7 +1213,7 @@ public class RoomUserManager
         }
         if (cycleGameItems)
         {
-            this._room.GetBanzai().HandleBanzaiTiles(user.Coordinate, user.Team, user);
+            this._room.BattleBanzai.HandleBanzaiTiles(user.Coordinate, user.Team, user);
         }
 
         if (user.IsSit || user.IsLay)
@@ -1281,7 +1279,7 @@ public class RoomUserManager
 
             if (this._room.IsRoleplay)
             {
-                var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.Data.OwnerId);
+                var rpManager = WibboEnvironment.GetGame().GetRoleplayManager().GetRolePlay(this._room.RoomData.OwnerId);
                 if (rpManager != null)
                 {
                     if (user.IsBot)
@@ -1342,10 +1340,7 @@ public class RoomUserManager
                 }
             }
 
-            if (this._room.GotFreeze())
-            {
-                this._room.GetFreeze().CycleUser(user);
-            }
+            this._room.Freeze.CycleUser(user);
 
             if (user.SetStep)
             {
@@ -1430,12 +1425,12 @@ public class RoomUserManager
 
     private void CalculatePath(RoomUser user)
     {
-        var gameMap = this._room.GetGameMap();
+        var gameMap = this._room.GameMap;
 
-        var nextStep = Pathfinder.GetNextStep(user.X, user.Y, user.GoalX, user.GoalY, gameMap.GameMap, gameMap.ItemHeightMap, gameMap.UserOnMap, gameMap.SquareTaking, gameMap.Model.MapSizeX, gameMap.Model.MapSizeY, user.AllowOverride, gameMap.DiagonalEnabled, this._room.Data.AllowWalkthrough, gameMap.ObliqueDisable);
+        var nextStep = Pathfinder.GetNextStep(user.X, user.Y, user.GoalX, user.GoalY, gameMap.MapGame, gameMap.ItemHeightMap, gameMap.UserOnMap, gameMap.SquareTaking, gameMap.Model.MapSizeX, gameMap.Model.MapSizeY, user.AllowOverride, gameMap.DiagonalEnabled, this._room.RoomData.AllowWalkthrough, gameMap.ObliqueDisable);
         if (user.WalkSpeed)
         {
-            nextStep = Pathfinder.GetNextStep(nextStep.X, nextStep.Y, user.GoalX, user.GoalY, gameMap.GameMap, gameMap.ItemHeightMap, gameMap.UserOnMap, gameMap.SquareTaking, gameMap.Model.MapSizeX, gameMap.Model.MapSizeY, user.AllowOverride, gameMap.DiagonalEnabled, this._room.Data.AllowWalkthrough, gameMap.ObliqueDisable);
+            nextStep = Pathfinder.GetNextStep(nextStep.X, nextStep.Y, user.GoalX, user.GoalY, gameMap.MapGame, gameMap.ItemHeightMap, gameMap.UserOnMap, gameMap.SquareTaking, gameMap.Model.MapSizeX, gameMap.Model.MapSizeY, user.AllowOverride, gameMap.DiagonalEnabled, this._room.RoomData.AllowWalkthrough, gameMap.ObliqueDisable);
         }
 
         if (user.BreakWalkEnable && user.StopWalking)
@@ -1452,7 +1447,7 @@ public class RoomUserManager
                 roomUserByVirtualId.RemoveStatus("mv");
             }
         }
-        else if ((nextStep.X == user.X && nextStep.Y == user.Y) || this._room.GetGameItemHandler().CheckGroupGate(user, new Point(nextStep.X, nextStep.Y)))
+        else if ((nextStep.X == user.X && nextStep.Y == user.Y) || this._room.GameItemHandler.CheckGroupGate(user, new Point(nextStep.X, nextStep.Y)))
         {
             user.IsWalking = false;
             this.UpdateUserStatus(user, false);
@@ -1488,8 +1483,8 @@ public class RoomUserManager
                 user.IsLay = false;
             }
 
-            this._room.GetSoccer().OnUserWalk(user, nextStep.X == user.GoalX && nextStep.Y == user.GoalY);
-            this._room.GetBanzai().OnUserWalk(user);
+            this._room.Soccer.OnUserWalk(user, nextStep.X == user.GoalX && nextStep.Y == user.GoalY);
+            this._room.BattleBanzai.OnUserWalk(user);
         }
     }
 
@@ -1498,7 +1493,7 @@ public class RoomUserManager
         var nextX = nextStep.X;
         var nextY = nextStep.Y;
 
-        var nextZ = this._room.GetGameMap().SqAbsoluteHeight(nextX, nextY);
+        var nextZ = this._room.GameMap.SqAbsoluteHeight(nextX, nextY);
         if (user.RidingHorse && !user.IsPet)
         {
             nextZ += 1;
@@ -1528,16 +1523,16 @@ public class RoomUserManager
         user.SetY = nextY;
         user.SetZ = nextZ;
 
-        this._room.GetGameMap().AddTakingSquare(nextX, nextY);
+        this._room.GameMap.AddTakingSquare(nextX, nextY);
 
         this.UpdateUserEffect(user, user.SetX, user.SetY);
     }
 
     private bool SetStepForUser(RoomUser user)
     {
-        this._room.GetGameMap().UpdateUserMovement(user.Coordinate, new Point(user.SetX, user.SetY), user);
+        this._room.GameMap.UpdateUserMovement(user.Coordinate, new Point(user.SetX, user.SetY), user);
 
-        var coordinatedItems = this._room.GetGameMap().GetCoordinatedItems(new Point(user.X, user.Y)).ToList();
+        var coordinatedItems = this._room.GameMap.GetCoordinatedItems(new Point(user.X, user.Y)).ToList();
 
         user.X = user.SetX;
         user.Y = user.SetY;
@@ -1547,10 +1542,10 @@ public class RoomUserManager
 
         if (user.IsBot)
         {
-            var botCollisionUser = this._room.GetGameMap().LookHasUserNearNotBot(user.X, user.Y);
+            var botCollisionUser = this._room.GameMap.LookHasUserNearNotBot(user.X, user.Y);
             if (botCollisionUser != null)
             {
-                this._room.GetWiredHandler().TriggerBotCollision(botCollisionUser, user.BotData.Name);
+                this._room.WiredHandler.TriggerBotCollision(botCollisionUser, user.BotData.Name);
             }
         }
 
@@ -1559,7 +1554,7 @@ public class RoomUserManager
             var rp = user.Roleplayer;
             if (rp != null && !rp.Dead)
             {
-                var itemTmp = this._room.GetRoomItemHandler().GetFirstTempDrop(user.X, user.Y);
+                var itemTmp = this._room.RoomItemHandling.GetFirstTempDrop(user.X, user.Y);
                 if (itemTmp != null && itemTmp.InteractionType == InteractionTypeTemp.MONEY)
                 {
                     rp.Money += itemTmp.Value;
@@ -1570,7 +1565,7 @@ public class RoomUserManager
                     }
 
                     user.OnChat("*Récupère un objet au sol*");
-                    this._room.GetRoomItemHandler().RemoveTempItem(itemTmp.Id);
+                    this._room.RoomItemHandling.RemoveTempItem(itemTmp.Id);
                 }
                 else if (itemTmp != null && itemTmp.InteractionType == InteractionTypeTemp.RPITEM)
                 {
@@ -1596,7 +1591,7 @@ public class RoomUserManager
                     }
 
                     user.OnChat("*Récupère un objet au sol*");
-                    this._room.GetRoomItemHandler().RemoveTempItem(itemTmp.Id);
+                    this._room.RoomItemHandling.RemoveTempItem(itemTmp.Id);
                 }
             }
         }
@@ -1659,7 +1654,7 @@ public class RoomUserManager
         }
 
         this.UpdateUserStatus(user, true);
-        this._room.GetGameMap().RemoveTakingSquare(user.SetX, user.SetY);
+        this._room.GameMap.RemoveTakingSquare(user.SetX, user.SetY);
 
         user.SetStep = false;
         user.AllowMoveToRoller = false;

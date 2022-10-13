@@ -22,7 +22,7 @@ internal class EditTvYoutubeEvent : IPacketEvent
             return;
         }
 
-        var item = room.GetRoomItemHandler().GetItem(itemId);
+        var item = room.RoomItemHandling.GetItem(itemId);
         if (item == null || item.GetBaseItem().InteractionType != InteractionType.TVYOUTUBE)
         {
             return;

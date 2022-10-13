@@ -12,7 +12,7 @@ internal class DiceOffEvent : IPacketEvent
             return;
         }
 
-        var roomItem = room.GetRoomItemHandler().GetItem(packet.PopInt());
+        var roomItem = room.RoomItemHandling.GetItem(packet.PopInt());
         if (roomItem == null)
         {
             return;
@@ -25,6 +25,6 @@ internal class DiceOffEvent : IPacketEvent
         }
 
         roomItem.Interactor.OnTrigger(session, roomItem, -1, userHasRights, false);
-        roomItem.OnTrigger(room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id));
+        roomItem.OnTrigger(room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id));
     }
 }

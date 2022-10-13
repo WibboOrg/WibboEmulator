@@ -39,7 +39,7 @@ internal class SetGroupFavouriteEvent : IPacketEvent
             {
                 session.GetUser().CurrentRoom.SendPacket(new UserGroupBadgesComposer(group));
 
-                var user = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+                var user = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
                 if (user != null)
                 {
                     session.GetUser().CurrentRoom.SendPacket(new UpdateFavouriteGroupComposer(group, user.VirtualId));

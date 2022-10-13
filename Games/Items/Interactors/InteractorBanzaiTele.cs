@@ -30,10 +30,10 @@ public class InteractorBanzaiTele : FurniInteractor
 
         item.UpdateCounter = 1;
 
-        var roomUserByUserId = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(item.InteractingUser);
+        var roomUserByUserId = item.GetRoom().RoomUserManager.GetRoomUserByUserId(item.InteractingUser);
         if (roomUserByUserId != null)
         {
-            Gamemap.TeleportToItem(roomUserByUserId, item);
+            GameMap.TeleportToItem(roomUserByUserId, item);
             roomUserByUserId.SetRot(WibboEnvironment.GetRandomNumber(0, 7), false);
             roomUserByUserId.CanWalk = true;
         }

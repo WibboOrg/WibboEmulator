@@ -26,7 +26,7 @@ public class TradeUser
             return null;
         }
 
-        return room.GetRoomUserManager().GetRoomUserByUserId(this.UserId);
+        return room.RoomUserManager.GetRoomUserByUserId(this.UserId);
     }
 
     public GameClient GetClient() => WibboEnvironment.GetGame().GetGameClientManager().GetClientByUserID(this.UserId);

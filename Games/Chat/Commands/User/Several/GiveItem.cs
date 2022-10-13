@@ -16,7 +16,7 @@ internal class GiveItem : IChatCommand
             return;
         }
 
-        var roomUserByUserIdTarget = room.GetRoomUserManager().GetRoomUserByName(parameters[1]);
+        var roomUserByUserIdTarget = room.RoomUserManager.GetRoomUserByName(parameters[1]);
         if (roomUserByUserIdTarget == null)
         {
             return;

@@ -13,7 +13,7 @@ internal class MoveAvatarEvent : IPacketEvent
             return;
         }
 
-        var user = currentRoom.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().ControlUserId == 0 ? session.GetUser().Id : session.GetUser().ControlUserId);
+        var user = currentRoom.RoomUserManager.GetRoomUserByUserId(session.GetUser().ControlUserId == 0 ? session.GetUser().Id : session.GetUser().ControlUserId);
         if (user == null || (!user.CanWalk && !user.TeleportEnabled))
         {
             return;

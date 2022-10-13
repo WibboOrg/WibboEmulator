@@ -38,7 +38,7 @@ internal class LetUserInEvent : IPacketEvent
             return;
         }
 
-        var user = room.GetRoomUserManager().GetRoomUserByUserId(clientByUsername.GetUser().Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(clientByUsername.GetUser().Id);
 
         if (user != null)
         {

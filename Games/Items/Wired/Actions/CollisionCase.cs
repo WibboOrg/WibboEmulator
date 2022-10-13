@@ -23,15 +23,15 @@ public class CollisionCase : WiredActionBase, IWiredEffect, IWired
 
     private void HandleMovement(Item item)
     {
-        if (this.RoomInstance.GetRoomItemHandler().GetItem(item.Id) == null)
+        if (this.RoomInstance.RoomItemHandling.GetItem(item.Id) == null)
         {
             return;
         }
 
-        var roomUser = this.RoomInstance.GetRoomUserManager().GetUserForSquare(item.X, item.Y);
+        var roomUser = this.RoomInstance.RoomUserManager.GetUserForSquare(item.X, item.Y);
         if (roomUser != null)
         {
-            this.RoomInstance.GetWiredHandler().TriggerCollision(roomUser, item);
+            this.RoomInstance.WiredHandler.TriggerCollision(roomUser, item);
             return;
         }
     }

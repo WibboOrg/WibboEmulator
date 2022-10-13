@@ -21,7 +21,7 @@ internal class ShoutEvent : IPacketEvent
             return;
         }
 
-        var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (user == null)
         {
             return;
@@ -57,9 +57,9 @@ internal class ShoutEvent : IPacketEvent
             return;
         }
 
-        if (room.GetJanken().PlayerStarted(user))
+        if (room.JankenManager.PlayerStarted(user))
         {
-            if (!room.GetJanken().PickChoice(user, message))
+            if (!room.JankenManager.PickChoice(user, message))
             {
                 user.SendWhisperChat(WibboEnvironment.GetLanguageManager().TryGetValue("janken.choice", session.Langue));
             }
@@ -159,7 +159,7 @@ internal class ShoutEvent : IPacketEvent
 
             if (message.StartsWith(":", StringComparison.CurrentCulture) && WibboEnvironment.GetGame().GetChatManager().GetCommands().Parse(session, user, room, message))
             {
-                room.GetChatMessageManager().AddMessage(session.GetUser().Id, session.GetUser().Username, room.Id, string.Format("{0} a utilisé la commande {1}", session.GetUser().Username, message), UnixTimestamp.GetNow());
+                room.ChatlogManager.AddMessage(session.GetUser().Id, session.GetUser().Username, room.Id, string.Format("{0} a utilisé la commande {1}", session.GetUser().Username, message), UnixTimestamp.GetNow());
                 return;
             }
 
@@ -172,7 +172,7 @@ internal class ShoutEvent : IPacketEvent
 
                 WibboEnvironment.GetGame().GetQuestManager().ProgressUserQuest(session, QuestType.SOCIAL_CHAT, 0);
                 session.GetUser().GetChatMessageManager().AddMessage(session.GetUser().Id, session.GetUser().Username, room.Id, message, UnixTimestamp.GetNow());
-                room.GetChatMessageManager().AddMessage(session.GetUser().Id, session.GetUser().Username, room.Id, message, UnixTimestamp.GetNow());
+                room.ChatlogManager.AddMessage(session.GetUser().Id, session.GetUser().Username, room.Id, message, UnixTimestamp.GetNow());
 
                 if (user.TransfBot)
                 {

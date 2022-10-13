@@ -50,7 +50,7 @@ public class InteractorSwitch : FurniInteractor
         RoomUser roomUser = null;
         if (session != null)
         {
-            roomUser = item.GetRoom().GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+            roomUser = item.GetRoom().RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         }
 
         if (roomUser == null)
@@ -58,7 +58,7 @@ public class InteractorSwitch : FurniInteractor
             return;
         }
 
-        if (!Gamemap.TilesTouching(item.X, item.Y, roomUser.X, roomUser.Y))
+        if (!GameMap.TilesTouching(item.X, item.Y, roomUser.X, roomUser.Y))
         {
             return;
         }

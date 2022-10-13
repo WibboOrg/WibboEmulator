@@ -22,7 +22,7 @@ internal class RpUseItemsEvent : IPacketEvent
             return;
         }
 
-        var user = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var user = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (user == null)
         {
             return;
@@ -103,7 +103,7 @@ internal class RpUseItemsEvent : IPacketEvent
             }
             case "showtime":
             {
-                user.SendWhisperChat("Il est " + room.Roleplay.Hour + " heures et " + room.Roleplay.Minute + " minutes");
+                user.SendWhisperChat("Il est " + room.RoomRoleplay.Hour + " heures et " + room.RoomRoleplay.Minute + " minutes");
                 break;
             }
             case "money":

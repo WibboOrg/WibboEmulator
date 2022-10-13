@@ -40,7 +40,7 @@ internal class RemoveRightsEvent : IPacketEvent
                 userIds.Add(userId);
             }
 
-            var roomUserByUserId = room.GetRoomUserManager().GetRoomUserByUserId(userId);
+            var roomUserByUserId = room.RoomUserManager.GetRoomUserByUserId(userId);
             if (roomUserByUserId != null && !roomUserByUserId.IsBot)
             {
                 roomUserByUserId.Client.SendPacket(new YouAreControllerComposer(0));

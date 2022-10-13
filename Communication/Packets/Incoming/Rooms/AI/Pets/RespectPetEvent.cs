@@ -21,7 +21,7 @@ internal class RespectPetEvent : IPacketEvent
             return;
         }
 
-        var thisUser = room.GetRoomUserManager().GetRoomUserByUserId(session.GetUser().Id);
+        var thisUser = room.RoomUserManager.GetRoomUserByUserId(session.GetUser().Id);
         if (thisUser == null)
         {
             return;
@@ -29,9 +29,9 @@ internal class RespectPetEvent : IPacketEvent
 
         var petId = packet.PopInt();
 
-        if (!session.GetUser().CurrentRoom.GetRoomUserManager().TryGetPet(petId, out var pet))
+        if (!session.GetUser().CurrentRoom.RoomUserManager.TryGetPet(petId, out var pet))
         {
-            var targetUser = session.GetUser().CurrentRoom.GetRoomUserManager().GetRoomUserByUserId(petId);
+            var targetUser = session.GetUser().CurrentRoom.RoomUserManager.GetRoomUserByUserId(petId);
             if (targetUser == null)
             {
                 return;
