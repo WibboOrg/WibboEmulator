@@ -14,24 +14,18 @@ internal class RoomBadge : IChatCommand
 
         var badgeId = parameters[1];
 
-        foreach (var item_0 in room.RoomUserManager.GetUserList().ToList())
+        foreach (var user in room.RoomUserManager.GetUserList().ToList())
         {
-            try
+            if (!user.IsBot)
             {
-                if (!item_0.IsBot)
+                if (user.Client != null)
                 {
-                    if (item_0.Client != null)
+                    if (user.Client.GetUser() != null)
                     {
-                        if (item_0.Client.GetUser() != null)
-                        {
-                            item_0.Client.GetUser().BadgeComponent.GiveBadge(badgeId, true);
-                            item_0.Client.SendPacket(new ReceiveBadgeComposer(badgeId));
-                        }
+                        user.Client.GetUser().BadgeComponent.GiveBadge(badgeId, true);
+                        user.Client.SendPacket(new ReceiveBadgeComposer(badgeId));
                     }
                 }
-            }
-            catch
-            {
             }
         }
 

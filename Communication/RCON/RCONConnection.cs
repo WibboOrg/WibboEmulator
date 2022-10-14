@@ -52,9 +52,12 @@ public class RCONConnection
     {
         try
         {
-            this._socket.Shutdown(SocketShutdown.Both);
-            this._socket.Close();
-            this._socket.Dispose();
+            if (this._socket != null)
+            {
+                this._socket.Shutdown(SocketShutdown.Both);
+                this._socket.Close();
+                this._socket.Dispose();
+            }
         }
         catch
         {

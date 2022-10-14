@@ -121,20 +121,17 @@ public class MoodlightData
     public string GenerateExtraData()
     {
         var preset = this.GetPreset(this.CurrentPreset);
-        var sb = new StringBuilder();
+        var sb = new StringBuilder()
+        .Append(this.Enabled ? 2 : 1)
+        .Append(',')
+        .Append(this.CurrentPreset)
+        .Append(',')
+        .Append(preset.BackgroundOnly ? 2 : 1)
+        .Append(',')
+        .Append(preset.ColorCode)
+        .Append(',')
+        .Append(preset.ColorIntensity);
 
-        _ = sb.Append(this.Enabled ? 2 : 1);
-
-        _ = sb.Append(',');
-        _ = sb.Append(this.CurrentPreset);
-        _ = sb.Append(',');
-
-        _ = sb.Append(preset.BackgroundOnly ? 2 : 1);
-
-        _ = sb.Append(',');
-        _ = sb.Append(preset.ColorCode);
-        _ = sb.Append(',');
-        _ = sb.Append(preset.ColorIntensity);
         return sb.ToString();
     }
 }

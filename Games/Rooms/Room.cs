@@ -11,6 +11,7 @@ using WibboEmulator.Database.Daos.Room;
 using WibboEmulator.Games.Chat.Logs;
 using WibboEmulator.Games.GameClients;
 using WibboEmulator.Games.Rooms.AI;
+using WibboEmulator.Games.Rooms.Events;
 using WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Rooms.Games.Banzai;
 using WibboEmulator.Games.Rooms.Games.Football;
@@ -23,7 +24,6 @@ using WibboEmulator.Games.Rooms.Projectile;
 using WibboEmulator.Games.Rooms.Trading;
 using WibboEmulator.Games.Rooms.Wired;
 using WibboEmulator.Utilities;
-using WibboEmulator.Utilities.Events;
 
 public class Room
 {

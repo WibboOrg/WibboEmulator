@@ -4,8 +4,8 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Events;
 using WibboEmulator.Games.Rooms.Wired;
-using WibboEmulator.Utilities.Events;
 
 public class SateChanged : WiredTriggerBase, IWired, IWiredCycleable
 {

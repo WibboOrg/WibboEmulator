@@ -94,7 +94,10 @@ internal class SaveFloorPlanModelEvent : IPacketEvent
         {
             doorZ = Parse(modelData[doorY][doorX]);
         }
-        catch { }
+        catch
+        {
+            //ignored
+        }
 
         if (wallThick > 1)
         {

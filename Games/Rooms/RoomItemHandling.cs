@@ -469,8 +469,7 @@ public class RoomItemHandling
                 this._updateItems.Clear();
             }
 
-            this._roomInstance.
-            RoomUserManager.SavePets(dbClient);
+            this._roomInstance.RoomUserManager.SavePets(dbClient);
             this._roomInstance.RoomUserManager.SaveBots(dbClient);
         }
         catch (Exception ex)

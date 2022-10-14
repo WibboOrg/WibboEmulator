@@ -245,25 +245,19 @@ public class PetBot : BotAI
     {
         if (this._actionTimer <= 0)
         {
-            try
+            this.RemovePetStatus();
+            this._actionTimer = WibboEnvironment.GetRandomNumber(10, 60);
+
+            if (!this.GetRoomUser().RidingHorse && this.GetRoomUser().PetData.Type != 16)
             {
                 this.RemovePetStatus();
-                this._actionTimer = WibboEnvironment.GetRandomNumber(10, 60);
-                if (!this.GetRoomUser().RidingHorse && this.GetRoomUser().PetData.Type != 16)
-                {
-                    this.RemovePetStatus();
-                    var randomWalkableSquare = this.GetRoom().GameMap.GetRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
-                    this.GetRoomUser().MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
-                }
-            }
-            catch (Exception ex)
-            {
-                ExceptionLogger.HandleException(ex, "PetBot.OnTimerTick");
+                var randomWalkableSquare = this.GetRoom().GameMap.GetRandomWalkableSquare(this.GetBotData().X, this.GetBotData().Y);
+                this.GetRoomUser().MoveTo(randomWalkableSquare.X, randomWalkableSquare.Y);
             }
         }
         else
         {
-            --this._actionTimer;
+            this._actionTimer--;
         }
 
         if (this._energyTimer <= 0)
@@ -274,7 +268,7 @@ public class PetBot : BotAI
         }
         else
         {
-            --this._energyTimer;
+            this._energyTimer--;
         }
 
         if (this.GetBotData().FollowUser != 0)

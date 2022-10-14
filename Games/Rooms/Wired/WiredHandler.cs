@@ -4,7 +4,7 @@ using System.Drawing;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Items.Wired;
 using WibboEmulator.Games.Items.Wired.Interfaces;
-using WibboEmulator.Utilities.Events;
+using WibboEmulator.Games.Rooms.Events;
 
 public class WiredHandler
 {

@@ -1,7 +1,7 @@
 namespace WibboEmulator.Games.Rooms.Games;
 using WibboEmulator.Games.Items;
+using WibboEmulator.Games.Rooms.Events;
 using WibboEmulator.Games.Rooms.Games.Teams;
-using WibboEmulator.Utilities.Events;
 
 public class GameManager
 {
@@ -67,20 +67,20 @@ public class GameManager
 
     public void AddPointToTeam(TeamType team, int points, RoomUser user)
     {
-        var points1 = this.TeamPoints[(int)team] += points;
-        if (points1 < 0)
+        var totalPoints = this.TeamPoints[(int)team] += points;
+        if (totalPoints < 0)
         {
-            points1 = 0;
+            totalPoints = 0;
         }
 
-        if (points1 > 999)
+        if (totalPoints > 999)
         {
-            points1 = 999;
+            totalPoints = 999;
         }
 
-        this.TeamPoints[(int)team] = points1;
+        this.TeamPoints[(int)team] = totalPoints;
 
-        this.OnScoreChanged?.Invoke(null, new TeamScoreChangedEventArgs(points1, team, user));
+        this.OnScoreChanged?.Invoke(null, new TeamScoreChangedEventArgs(totalPoints, team, user));
 
         foreach (var roomItem in this.GetFurniItems(team).Values)
         {

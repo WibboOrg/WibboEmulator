@@ -1,4 +1,4 @@
-namespace WibboEmulator.Utilities.Events;
+namespace WibboEmulator.Games.Rooms.Events;
 using WibboEmulator.Games.Items;
 using WibboEmulator.Games.Rooms;
 

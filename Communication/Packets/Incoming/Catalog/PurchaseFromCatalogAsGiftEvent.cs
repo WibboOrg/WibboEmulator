@@ -126,36 +126,38 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
 
             case InteractionType.PET:
 
-                try
-                {
-                    var bits = data.Split('\n');
-                    var petName = bits[0];
-                    var race = bits[1];
-                    var color = bits[2];
+                var bits = data.Split('\n');
 
-                    _ = int.Parse(race); // to trigger any possible errors
-
-                    if (PetUtility.CheckPetName(petName))
-                    {
-                        return;
-                    }
-
-                    if (race.Length > 2)
-                    {
-                        return;
-                    }
-
-                    if (color.Length != 6)
-                    {
-                        return;
-                    }
-
-                    _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_PetLover", 1);
-                }
-                catch
+                if (bits.Length != 3)
                 {
                     return;
                 }
+
+                var petName = bits[0];
+                var race = bits[1];
+                var color = bits[2];
+
+                if (!int.TryParse(race, out _))
+                {
+                    return;
+                }
+
+                if (PetUtility.CheckPetName(petName))
+                {
+                    return;
+                }
+
+                if (race.Length > 2)
+                {
+                    return;
+                }
+
+                if (color.Length != 6)
+                {
+                    return;
+                }
+
+                _ = WibboEnvironment.GetGame().GetAchievementManager().ProgressAchievement(session, "ACH_PetLover", 1);
 
                 break;
 
@@ -163,21 +165,14 @@ internal class PurchaseFromCatalogAsGiftEvent : IPacketEvent
             case InteractionType.WALLPAPER:
             case InteractionType.LANDSCAPE:
 
-                double number = 0;
-                try
+                double number;
+                if (string.IsNullOrEmpty(data))
                 {
-                    if (string.IsNullOrEmpty(data))
-                    {
-                        number = 0;
-                    }
-                    else
-                    {
-                        number = double.Parse(data);
-                    }
+                    number = 0;
                 }
-                catch
+                else
                 {
-
+                    _ = double.TryParse(data, out number);
                 }
 
                 itemExtraData = number.ToString().Replace(',', '.');

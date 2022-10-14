@@ -31,14 +31,10 @@ internal class ForceSit : IChatCommand
                     return;
                 }
 
-                try
-                {
-                    user.SetStatus("sit", "1.0");
-                    user.Z -= 0.35;
-                    user.IsSit = true;
-                    user.UpdateNeeded = true;
-                }
-                catch { }
+                user.SetStatus("sit", "1.0");
+                user.Z -= 0.35;
+                user.IsSit = true;
+                user.UpdateNeeded = true;
             }
             else
             {

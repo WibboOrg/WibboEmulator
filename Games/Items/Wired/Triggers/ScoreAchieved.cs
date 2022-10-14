@@ -4,7 +4,7 @@ using WibboEmulator.Database.Interfaces;
 using WibboEmulator.Games.Items.Wired.Bases;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
-using WibboEmulator.Utilities.Events;
+using WibboEmulator.Games.Rooms.Events;
 
 public class ScoreAchieved : WiredTriggerBase, IWired
 {

@@ -58,7 +58,6 @@ public class RoomModel
         catch (Exception ex)
         {
             Console.WriteLine("Error during room modeldata loading for model " + id + ": " + ex);
-            //throw ex;
         }
     }
 

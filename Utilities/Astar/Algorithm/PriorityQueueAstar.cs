@@ -13,7 +13,6 @@ public class PriorityQueueAstar<T, TX> where T : IWeightAddable<TX>
 
     protected virtual int OnCompare(int i, int j) => this.Comparer.Compare(this.InnerList[i], this.InnerList[j]);
 
-
     private int BinarySearch(T value)
     {
         int low = 0, high = this.InnerList.Count - 1;

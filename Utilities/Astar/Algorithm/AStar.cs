@@ -397,69 +397,6 @@ public class AStarSolver<TPathNode> where TPathNode : IPathNode
         }
     }
 
-    //private class OpenCloseMap
-    //{
-    //    private PathNode[,] m_Map;
-    //    public int Width { get; private set; }
-    //    public int Height { get; private set; }
-    //    public int Count { get; private set; }
-
-    //    public PathNode this[Int32 x, Int32 y]
-    //    {
-    //        get
-    //        {
-    //            return m_Map[x, y];
-    //        }
-    //    }
-
-    //    public PathNode this[PathNode Node]
-    //    {
-    //        get
-    //        {
-    //            return m_Map[Node.X, Node.Y];
-    //        }
-
-    //    }
-
-    //    public bool IsEmpty
-    //    {
-    //        get
-    //        {
-    //            return Count == 0;
-    //        }
-    //    }
-
-    //    public OpenCloseMap(int inWidth, int inHeight)
-    //    {
-    //        m_Map = new PathNode[inWidth, inHeight];
-    //        Width = inWidth;
-    //        Height = inHeight;
-    //    }
-
-    //    public void Add(PathNode inValue)
-    //    {
-    //        PathNode item = m_Map[inValue.X, inValue.Y];
-    //        Count++;
-    //        m_Map[inValue.X, inValue.Y] = inValue;
-    //    }
-
-    //    public bool Contains(PathNode inValue)
-    //    {
-    //        PathNode item = m_Map[inValue.X, inValue.Y];
-
-    //        if (item == null)
-    //            return false;
-    //        return true;
-    //    }
-
-    //    public void Remove(PathNode inValue)
-    //    {
-    //        PathNode item = m_Map[inValue.X, inValue.Y];
-    //        Count--;
-    //        m_Map[inValue.X, inValue.Y] = null;
-    //    }
-    //}
-
     public class PathNode : IPathNode, IComparer<PathNode>, IWeightAddable<double>
     {
         public static readonly PathNode Comparer = new(0, 0, default);

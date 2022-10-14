@@ -12,13 +12,12 @@ internal class LootboxInfo : IChatCommand
         var epicCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(3);
         var legendaryCount = WibboEnvironment.GetGame().GetLootManager().GetRarityCounter(4);
 
-        var stringBuilder = new StringBuilder();
-
-        _ = stringBuilder.Append("- Information sur le nombre de rare distribuer ce mois-ci -\r");
-        _ = stringBuilder.Append("Basique: " + basicCount + "\r");
-        _ = stringBuilder.Append("Commun: " + communCount + "\r");
-        _ = stringBuilder.Append("Epique: " + epicCount + "\r");
-        _ = stringBuilder.Append("Legendaire: " + legendaryCount + "\r");
+        var stringBuilder = new StringBuilder()
+        .Append("- Information sur le nombre de rare distribuer ce mois-ci -\r")
+        .Append("Basique: " + basicCount + "\r")
+        .Append("Commun: " + communCount + "\r")
+        .Append("Epique: " + epicCount + "\r")
+        .Append("Legendaire: " + legendaryCount + "\r");
 
         session.SendNotification(stringBuilder.ToString());
     }

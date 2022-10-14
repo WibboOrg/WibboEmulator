@@ -137,22 +137,14 @@ internal class PurchaseFromCatalogEvent : IPacketEvent
             case InteractionType.WALLPAPER:
             case InteractionType.LANDSCAPE:
 
-                double number = 0;
-
-                try
+                double number;
+                if (string.IsNullOrEmpty(extraData))
                 {
-                    if (string.IsNullOrEmpty(extraData))
-                    {
-                        number = 0;
-                    }
-                    else
-                    {
-                        number = double.Parse(extraData);
-                    }
+                    number = 0;
                 }
-                catch (Exception e)
+                else
                 {
-                    ExceptionLogger.LogException(e.ToString());
+                    _ = double.TryParse(extraData, out number);
                 }
 
                 extraData = number.ToString().Replace(',', '.');

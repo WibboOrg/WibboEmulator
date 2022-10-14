@@ -51,14 +51,9 @@ public class ItemData
         {
             foreach (var vendingId in vendingIds.Split(','))
             {
-                try
+                if (int.TryParse(vendingId, out var result))
                 {
-                    this.VendingIds.Add(int.Parse(vendingId));
-                }
-                catch
-                {
-                    Console.WriteLine("Error with Item " + this.ItemName + " - Vending Ids");
-                    continue;
+                    this.VendingIds.Add(result);
                 }
             }
         }
@@ -69,24 +64,23 @@ public class ItemData
 
         this.AdjustableHeights = new List<double>();
 
-        try
+        if (adjustableHeights.Contains(','))
         {
-            if (adjustableHeights.Contains(','))
+            foreach (var h in adjustableHeights.Split(','))
             {
-                foreach (var h in adjustableHeights.Split(','))
+                if (double.TryParse(h, out var result))
                 {
-                    this.AdjustableHeights.Add(double.Parse(h));
+                    this.AdjustableHeights.Add(result);
                 }
             }
-
-            else if (!string.IsNullOrEmpty(adjustableHeights) && double.Parse(adjustableHeights) > 0)
-            {
-                this.AdjustableHeights.Add(double.Parse(adjustableHeights));
-            }
         }
-        catch (Exception e)
+
+        else if (!string.IsNullOrEmpty(adjustableHeights) && double.Parse(adjustableHeights) > 0)
         {
-            Console.WriteLine("ID ( " + this.Id + " ) : " + e);
+            if (double.TryParse(adjustableHeights, out var result))
+            {
+                this.AdjustableHeights.Add(result);
+            }
         }
 
         this.EffectId = effectId;

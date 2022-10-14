@@ -41,9 +41,6 @@ public class ServerStatusUpdater
 
                 var uptime = DateTime.Now - WibboEnvironment.ServerStarted;
 
-                //Console.Title = "Butterfly | Démarré depuis : " + Uptime.Days + " jour(s) " + Uptime.Hours + " heures " + Uptime.Minutes + " minutes | "
-                //+ UsersOnline + " Joueur(s) en ligne " + " | " + RoomsLoaded + " Appartement(s) en ligne";
-
                 using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
                 EmulatorStatsDao.Insert(dbClient, usersOnline, roomsLoaded);
                 EmulatorStatusDao.UpdateScore(dbClient, usersOnline, roomsLoaded, _userPeak);

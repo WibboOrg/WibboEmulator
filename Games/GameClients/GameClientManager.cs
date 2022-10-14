@@ -259,49 +259,37 @@ public class GameClientManager
 
                     _ = stringBuilder.Append(UserDao.BuildUpdateQuery(client.GetUser().Id, client.GetUser().Duckets, client.GetUser().Credits));
                     _ = stringBuilder.Append(UserStatsDao.BuildUpdateQuery(client.GetUser().Id, client.GetUser().FavouriteGroupId, timeOnlineSec, client.GetUser().CurrentQuestId, client.GetUser().Respect, client.GetUser().DailyRespectPoints, client.GetUser().DailyPetRespectPoints));
-
                 }
                 catch
                 {
                 }
             }
         }
-        try
+
+        if (stringBuilder.Length > 0)
         {
-            if (stringBuilder.Length > 0)
-            {
-                using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
-                dbClient.RunQuery(stringBuilder.ToString());
-            }
+            using var dbClient = WibboEnvironment.GetDatabaseManager().GetQueryReactor();
+            dbClient.RunQuery(stringBuilder.ToString());
         }
-        catch (Exception ex)
-        {
-            ExceptionLogger.HandleException(ex, "GameClientManager.CloseAll()");
-        }
+
         Console.WriteLine("Done saving users inventory!");
         Console.WriteLine("Closing server connections...");
-        try
+
+        foreach (var client in this.GetClients.ToList())
         {
-            foreach (var client in this.GetClients.ToList())
+
+            if (client == null || client.GetConnection() == null)
             {
-
-                if (client == null || client.GetConnection() == null)
-                {
-                    continue;
-                }
-
-                try
-                {
-                    client.GetConnection().Disconnect();
-                }
-                catch
-                {
-                }
+                continue;
             }
-        }
-        catch (Exception ex)
-        {
-            ExceptionLogger.LogCriticalException(ex.ToString());
+
+            try
+            {
+                client.GetConnection().Disconnect();
+            }
+            catch
+            {
+            }
         }
         this._clients.Clear();
         Console.WriteLine("Connections closed!");

@@ -5,11 +5,11 @@ using WibboEmulator.Core;
 using WibboEmulator.Games.Items.Interactors;
 using WibboEmulator.Games.Items.Wired.Interfaces;
 using WibboEmulator.Games.Rooms;
+using WibboEmulator.Games.Rooms.Events;
 using WibboEmulator.Games.Rooms.Games.Freeze;
 using WibboEmulator.Games.Rooms.Games.Teams;
 using WibboEmulator.Games.Rooms.Map;
 using WibboEmulator.Games.Rooms.Map.Movement;
-using WibboEmulator.Utilities.Events;
 
 public class Item : IEquatable<Item>
 {

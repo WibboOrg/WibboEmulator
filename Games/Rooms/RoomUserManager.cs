@@ -594,108 +594,101 @@ public class RoomUserManager
 
     public void RemoveUserFromRoom(GameClient session, bool notifyClient, bool notifyKick)
     {
-        try
+        if (session == null)
         {
-            if (session == null)
-            {
-                return;
-            }
+            return;
+        }
 
-            if (session.GetUser() == null)
-            {
-                return;
-            }
+        if (session.GetUser() == null)
+        {
+            return;
+        }
 
-            if (notifyClient)
+        if (notifyClient)
+        {
+            if (notifyKick)
             {
-                if (notifyKick)
+                session.SendPacket(new GenericErrorComposer(4008));
+            }
+            session.SendPacket(new CloseConnectionComposer());
+        }
+
+        var user = this.GetRoomUserByUserId(session.GetUser().Id);
+        if (user == null)
+        {
+            return;
+        }
+
+        if (this._usersRank.Contains(user.UserId))
+        {
+            _ = this._usersRank.Remove(user.UserId);
+        }
+
+        if (user.Team != TeamType.None)
+        {
+            this._room.TeamManager.OnUserLeave(user);
+            this._room.GameManager.UpdateGatesTeamCounts();
+
+            session.SendPacket(new IsPlayingComposer(false));
+        }
+
+        this._room.JankenManager.RemovePlayer(user);
+
+        if (user.RidingHorse)
+        {
+            user.RidingHorse = false;
+            var roomUserByVirtualId = this.GetRoomUserByVirtualId(user.HorseID);
+            if (roomUserByVirtualId != null)
+            {
+                roomUserByVirtualId.RidingHorse = false;
+                roomUserByVirtualId.HorseID = 0;
+            }
+        }
+
+        if (user.IsSit || user.IsLay)
+        {
+            user.IsSit = false;
+            user.IsLay = false;
+        }
+
+        if (this._room.HasActiveTrade(session.GetUser().Id))
+        {
+            this._room.TryStopTrade(session.GetUser().Id);
+        }
+
+        if (user.Roleplayer != null)
+        {
+            WibboEnvironment.GetGame().GetRoleplayManager().TrocManager.RemoveTrade(user.Roleplayer.TradeId);
+        }
+
+        if (user.IsSpectator)
+        {
+            var roomUserByRank = this._room.RoomUserManager.GetStaffRoomUser();
+            if (roomUserByRank.Count > 0)
+            {
+                foreach (var staffUser in roomUserByRank)
                 {
-                    session.SendPacket(new GenericErrorComposer(4008));
-                }
-                session.SendPacket(new CloseConnectionComposer());
-            }
-
-            var user = this.GetRoomUserByUserId(session.GetUser().Id);
-            if (user == null)
-            {
-                return;
-            }
-
-            if (this._usersRank.Contains(user.UserId))
-            {
-                _ = this._usersRank.Remove(user.UserId);
-            }
-
-            if (user.Team != TeamType.None)
-            {
-                this._room.TeamManager.OnUserLeave(user);
-                this._room.GameManager.UpdateGatesTeamCounts();
-
-                session.SendPacket(new IsPlayingComposer(false));
-            }
-
-            this._room.JankenManager.RemovePlayer(user);
-
-            if (user.RidingHorse)
-            {
-                user.RidingHorse = false;
-                var roomUserByVirtualId = this.GetRoomUserByVirtualId(user.HorseID);
-                if (roomUserByVirtualId != null)
-                {
-                    roomUserByVirtualId.RidingHorse = false;
-                    roomUserByVirtualId.HorseID = 0;
-                }
-            }
-
-            if (user.IsSit || user.IsLay)
-            {
-                user.IsSit = false;
-                user.IsLay = false;
-            }
-
-            if (this._room.HasActiveTrade(session.GetUser().Id))
-            {
-                this._room.TryStopTrade(session.GetUser().Id);
-            }
-
-            if (user.Roleplayer != null)
-            {
-                WibboEnvironment.GetGame().GetRoleplayManager().TrocManager.RemoveTrade(user.Roleplayer.TradeId);
-            }
-
-            if (user.IsSpectator)
-            {
-                var roomUserByRank = this._room.RoomUserManager.GetStaffRoomUser();
-                if (roomUserByRank.Count > 0)
-                {
-                    foreach (var staffUser in roomUserByRank)
+                    if (staffUser != null && staffUser.Client != null && staffUser.Client.GetUser() != null && staffUser.Client.GetUser().HasPermission("perm_show_invisible"))
                     {
-                        if (staffUser != null && staffUser.Client != null && staffUser.Client.GetUser() != null && staffUser.Client.GetUser().HasPermission("perm_show_invisible"))
-                        {
-                            staffUser.SendWhisperChat(user.GetUsername() + " était en mode invisible. Il vient de partir de l'appartement.", true);
-                        }
+                        staffUser.SendWhisperChat(user.GetUsername() + " était en mode invisible. Il vient de partir de l'appartement.", true);
                     }
                 }
             }
-
-            session.GetUser().CurrentRoomId = 0;
-            session.GetUser().LoadingRoomId = 0;
-
-            session.GetUser().ForceUse = -1;
-
-            this.RemoveRoomUser(user);
-
-            user.Freeze = true;
-            user.FreezeEndCounter = 0;
-            user.Dispose();
-
-            _ = this._usersByUserID.TryRemove(user.UserId, out user);
-            _ = this._usersByUsername.TryRemove(session.GetUser().Username.ToLower(), out user);
         }
-        catch (Exception ex)
-        {
-            ExceptionLogger.LogCriticalException("Error during removing user (" + session.ConnectionID + ") from room:" + ex.ToString());
-        }
+
+        session.GetUser().CurrentRoomId = 0;
+        session.GetUser().LoadingRoomId = 0;
+
+        session.GetUser().ForceUse = -1;
+
+        this.RemoveRoomUser(user);
+
+        user.Freeze = true;
+        user.FreezeEndCounter = 0;
+        user.Dispose();
+
+        _ = this._usersByUserID.TryRemove(user.UserId, out user);
+        _ = this._usersByUsername.TryRemove(session.GetUser().Username.ToLower(), out user);
     }
 
     private void RemoveRoomUser(RoomUser user)

@@ -122,24 +122,17 @@ public class WebSocketManager
 
     private int GetAmountOfConnectionFromIp(string ip)
     {
-        try
+        if (ip == "127.0.0.1")
         {
-            if (ip == "127.0.0.1")
-            {
-                return 0;
-            }
-
-            if (this._ipConnectionsCount.ContainsKey(ip))
-            {
-                _ = this._ipConnectionsCount.TryGetValue(ip, out var count);
-                return count;
-            }
-            else
-            {
-                return 0;
-            }
+            return 0;
         }
-        catch
+
+        if (this._ipConnectionsCount.ContainsKey(ip))
+        {
+            _ = this._ipConnectionsCount.TryGetValue(ip, out var count);
+            return count;
+        }
+        else
         {
             return 0;
         }

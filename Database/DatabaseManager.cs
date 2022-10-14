@@ -1,4 +1,6 @@
 namespace WibboEmulator.Database;
+
+using System.Data;
 using MySql.Data.MySqlClient;
 using WibboEmulator.Core;
 using WibboEmulator.Database.Interfaces;
@@ -64,4 +66,6 @@ public sealed class DatabaseManager
             return null;
         }
     }
+
+    public IDbConnection Connection() => new MySqlConnection(this._connectionStr);
 }
